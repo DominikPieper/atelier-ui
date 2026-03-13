@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:nx.dev)",
+      "WebFetch(domain:angular.dev)",
+      "Bash(npx nx g @nx/angular:library llm-components --interactive=false)",
+      "Bash(npx nx lint llm-components)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:www.npmjs.com)",
+      "Bash(node -e \"const p = require\\(''angular-eslint''\\); const rules = Object.keys\\(p.tsPlugin?.rules || {}\\); console.log\\(''TS rules:'', JSON.stringify\\(rules, null, 2\\)\\); const tplRules = Object.keys\\(p.templatePlugin?.rules || {}\\); console.log\\(''Template rules:'', JSON.stringify\\(tplRules, null, 2\\)\\);\")",
+      "mcp__angular-cli__list_projects"
+    ]
+  }
+}
