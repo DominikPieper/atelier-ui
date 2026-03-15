@@ -262,6 +262,48 @@ Selectors: `llm-radio-group`, `llm-radio`
 
 Arrow key navigation (Up/Left = previous, Down/Right = next) is handled automatically by the group. The group propagates `name` to all child radios.
 
+### LlmSelect + LlmOption
+
+Selectors: `llm-select`, `llm-option`
+`LlmSelect` implements: `FormValueControl<string>` from `@angular/forms/signals`
+
+#### LlmSelect
+
+| Input | Type | Default |
+|---|---|---|
+| `value` | `model<string>` | `''` |
+| `placeholder` | `string` | `''` |
+| `disabled` | `boolean` | `false` |
+| `invalid` | `boolean` | `false` |
+| `required` | `boolean` | `false` |
+| `touched` | `model<boolean>` | `false` |
+| `errors` | `readonly WithOptionalField<ValidationError>[]` | `[]` |
+| `name` | `string` | `''` |
+
+#### LlmOption
+
+| Input | Type | Default |
+|---|---|---|
+| `optionValue` | `string` | required |
+| `disabled` | `boolean` | `false` |
+
+```html
+<!-- Standalone usage -->
+<llm-select [(value)]="country" placeholder="Select a country">
+  <llm-option optionValue="us">United States</llm-option>
+  <llm-option optionValue="ca">Canada</llm-option>
+  <llm-option optionValue="uk" [disabled]="true">United Kingdom (unavailable)</llm-option>
+</llm-select>
+
+<!-- With Signal Forms -->
+<llm-select [formField]="form.country" placeholder="Select a country">
+  <llm-option optionValue="us">United States</llm-option>
+  <llm-option optionValue="ca">Canada</llm-option>
+</llm-select>
+```
+
+Keyboard navigation: ArrowDown/Up (navigate options), Enter/Space (select or open), Escape (close), Home/End (first/last enabled option), printable char (type-ahead with 500ms reset). Uses native Popover API with `popover="manual"`.
+
 ### Scaffold new components
 
 ```bash

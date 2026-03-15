@@ -21,12 +21,14 @@ const preview: Preview = {
     },
   },
   decorators: [
-    (story) => ({
-      ...story(),
-      styles: [
-        `:host { font-family: var(--ui-font-family); color: var(--ui-color-text); }`,
-      ],
-    }),
+    (story, context) => {
+      const isDark = context.globals['backgrounds']?.value === '#1a1a2e';
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      return {
+        ...story(),
+        styles: [`:host { font-family: var(--ui-font-family); color: var(--ui-color-text); }`],
+      };
+    },
   ],
 };
 
