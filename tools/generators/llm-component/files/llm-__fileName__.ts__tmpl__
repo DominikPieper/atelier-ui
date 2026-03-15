@@ -1,0 +1,31 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+} from '@angular/core';
+
+/**
+ * TODO: Describe `<%= selector %>` and its purpose.
+ *
+ * Usage:
+ * ```html
+ * <<%= selector %> variant="default"></<%= selector %>>
+ * ```
+ */
+@Component({
+  selector: '<%= selector %>',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `<ng-content />`,
+  styleUrl: './llm-<%= fileName %>.css',
+  host: {
+    '[class]': 'hostClasses()',
+  },
+})
+export class <%= className %> {
+  /** Visual variant. */
+  variant = input<'default'>('default');
+
+  protected hostClasses = computed(() => `variant-${this.variant()}`);
+}

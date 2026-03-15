@@ -9,7 +9,37 @@
       "WebFetch(domain:github.com)",
       "WebFetch(domain:www.npmjs.com)",
       "Bash(node -e \"const p = require\\(''angular-eslint''\\); const rules = Object.keys\\(p.tsPlugin?.rules || {}\\); console.log\\(''TS rules:'', JSON.stringify\\(rules, null, 2\\)\\); const tplRules = Object.keys\\(p.templatePlugin?.rules || {}\\); console.log\\(''Template rules:'', JSON.stringify\\(tplRules, null, 2\\)\\);\")",
-      "mcp__angular-cli__list_projects"
+      "mcp__angular-cli__list_projects",
+      "mcp__nx-mcp__nx_docs",
+      "WebFetch(domain:storybook.js.org)",
+      "WebFetch(domain:analogjs.org)",
+      "Bash(npm install --save-dev storybook @storybook/angular @storybook/addon-essentials @analogjs/storybook-angular)",
+      "Bash(npm view @analogjs/storybook-angular peerDependencies dependencies)",
+      "Bash(npm view @storybook/angular@latest peerDependencies)",
+      "Bash(npm install --save-dev storybook @storybook/angular @storybook/addon-essentials @analogjs/storybook-angular @angular/platform-browser-dynamic@\"~21.1.0\" @angular/animations@\"~21.1.0\" @angular-devkit/build-angular@\"~21.1.0\" zone.js)",
+      "Bash(npm view @storybook/addon-essentials versions --json)",
+      "Bash(python3 -c \"import sys,json; v=json.load\\(sys.stdin\\); print\\(''\\\\n''.join\\([x for x in v if x.startswith\\(''10.''\\)]\\)\\)\")",
+      "Bash(npm view @storybook/addon-essentials@\">=10.0.0\" version)",
+      "Bash(npm view @storybook/addon-essentials dist-tags)",
+      "Bash(npm view storybook@10.2.18 dependencies)",
+      "Bash(npm install --save-dev storybook@latest @storybook/angular@latest @analogjs/storybook-angular@latest @angular/platform-browser-dynamic@\"~21.1.0\" @angular/animations@\"~21.1.0\" @angular-devkit/build-angular@\"~21.1.0\" zone.js)",
+      "Bash(npx nx show project llm-components)",
+      "Bash(npx nx test llm-components)",
+      "Bash(npx nx build-storybook llm-components)",
+      "Bash(npm install --save-dev @testing-library/angular @testing-library/jest-dom)",
+      "Bash(mkdir -p /Users/dominikpieper/Projects/angular-llm-components/libs)",
+      "Bash(mv /Users/dominikpieper/Projects/angular-llm-components/llm-components /Users/dominikpieper/Projects/angular-llm-components/libs/llm-components)",
+      "Bash(npx nx:*)",
+      "Bash(cat:*)",
+      "Bash(npm install:*)",
+      "mcp__angular-cli__search_documentation",
+      "Bash(node -e \"try { const f = require\\(''@angular/forms/signals''\\); console.log\\(''Available exports:'', Object.keys\\(f\\).join\\('', ''\\)\\); } catch\\(e\\) { console.log\\(''Error:'', e.message\\); }\")",
+      "Bash(node -e \"require\\(''@angular/compiler''\\); const s = require\\(''@angular/forms/signals''\\); console.log\\(''FormField type:'', typeof s.FormField\\); console.log\\(''Has FORM_FIELD:'', ''FORM_FIELD'' in s\\);\")",
+      "Bash(node -e \":*)"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "nx-mcp",
+    "angular-cli"
+  ]
 }

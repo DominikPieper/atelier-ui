@@ -1,0 +1,93 @@
+import type { Meta, StoryObj } from '@storybook/angular';
+import { argsToTemplate } from '@storybook/angular';
+import { LlmInput } from './llm-input';
+
+const meta: Meta<LlmInput> = {
+  title: 'Components/LlmInput',
+  component: LlmInput,
+  tags: ['autodocs'],
+  render: (args) => ({
+    props: args,
+    template: `<llm-input ${argsToTemplate(args)} />`,
+  }),
+  argTypes: {
+    type: {
+      control: 'select',
+      options: ['text', 'email', 'password', 'number', 'tel', 'url'],
+    },
+    placeholder: { control: 'text' },
+    disabled: { control: 'boolean' },
+    readonly: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    required: { control: 'boolean' },
+  },
+  args: {
+    type: 'text',
+    placeholder: 'Enter text...',
+    disabled: false,
+    readonly: false,
+    invalid: false,
+    required: false,
+  },
+};
+
+export default meta;
+type Story = StoryObj<LlmInput>;
+
+export const Default: Story = {};
+
+export const Email: Story = {
+  args: { type: 'email', placeholder: 'you@example.com' },
+};
+
+export const Password: Story = {
+  args: { type: 'password', placeholder: 'Enter password' },
+};
+
+export const Disabled: Story = {
+  args: { disabled: true, placeholder: 'Cannot edit' },
+};
+
+export const Readonly: Story = {
+  args: { readonly: true },
+  render: (args) => ({
+    props: args,
+    template: `<llm-input ${argsToTemplate(args)} value="Read-only value" />`,
+  }),
+};
+
+export const WithErrors: Story = {
+  args: { invalid: true },
+  render: (args) => ({
+    props: {
+      ...args,
+      errors: [
+        { kind: 'required', message: 'This field is required' },
+        { kind: 'email', message: 'Please enter a valid email address' },
+      ],
+    },
+    template: `<llm-input ${argsToTemplate(args)} [errors]="errors" [touched]="true" />`,
+  }),
+};
+
+export const AllTypes: Story = {
+  render: () => ({
+    template: `
+      <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 320px;">
+        <llm-input type="text" placeholder="Text input" />
+        <llm-input type="email" placeholder="Email input" />
+        <llm-input type="password" placeholder="Password input" />
+        <llm-input type="number" placeholder="Number input" />
+        <llm-input type="tel" placeholder="Tel input" />
+        <llm-input type="url" placeholder="URL input" />
+      </div>
+    `,
+  }),
+};
+
+export const Playground: Story = {
+  render: (args) => ({
+    props: args,
+    template: `<llm-input ${argsToTemplate(args)} />`,
+  }),
+};

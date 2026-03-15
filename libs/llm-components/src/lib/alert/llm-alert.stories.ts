@@ -1,0 +1,97 @@
+import type { Meta, StoryObj } from '@storybook/angular';
+import { argsToTemplate } from '@storybook/angular';
+import { LlmAlert } from './llm-alert';
+
+const meta: Meta<LlmAlert> = {
+  title: 'Components/LlmAlert',
+  component: LlmAlert,
+  tags: ['autodocs'],
+  render: (args) => ({
+    props: args,
+    template: `<llm-alert ${argsToTemplate(args)}>This is an alert message.</llm-alert>`,
+  }),
+  argTypes: {
+    variant: {
+      control: 'select',
+      options: ['info', 'success', 'warning', 'danger'],
+    },
+    dismissible: {
+      control: 'boolean',
+    },
+    dismissed: { action: 'dismissed' },
+  },
+  args: {
+    variant: 'info',
+    dismissible: false,
+  },
+};
+
+export default meta;
+type Story = StoryObj<LlmAlert>;
+
+export const Default: Story = {};
+
+export const Success: Story = {
+  render: (args) => ({
+    props: args,
+    template: `<llm-alert ${argsToTemplate(args)}>Your changes were saved successfully.</llm-alert>`,
+  }),
+  args: { variant: 'success' },
+};
+
+export const Warning: Story = {
+  render: (args) => ({
+    props: args,
+    template: `<llm-alert ${argsToTemplate(args)}>Your session expires in 5 minutes.</llm-alert>`,
+  }),
+  args: { variant: 'warning' },
+};
+
+export const Danger: Story = {
+  render: (args) => ({
+    props: args,
+    template: `<llm-alert ${argsToTemplate(args)}>An error occurred. Please try again.</llm-alert>`,
+  }),
+  args: { variant: 'danger' },
+};
+
+export const Dismissible: Story = {
+  render: (args) => ({
+    props: args,
+    template: `<llm-alert ${argsToTemplate(args)}>This alert can be dismissed.</llm-alert>`,
+  }),
+  args: { variant: 'warning', dismissible: true },
+};
+
+export const AllVariants: Story = {
+  render: () => ({
+    template: `
+      <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <llm-alert variant="info">Info: Here is some useful information.</llm-alert>
+        <llm-alert variant="success">Success: Your changes were saved.</llm-alert>
+        <llm-alert variant="warning">Warning: Your session expires soon.</llm-alert>
+        <llm-alert variant="danger">Error: Something went wrong.</llm-alert>
+      </div>
+    `,
+  }),
+};
+
+export const AllDismissible: Story = {
+  render: () => ({
+    template: `
+      <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <llm-alert variant="info" [dismissible]="true">Info: Here is some useful information.</llm-alert>
+        <llm-alert variant="success" [dismissible]="true">Success: Your changes were saved.</llm-alert>
+        <llm-alert variant="warning" [dismissible]="true">Warning: Your session expires soon.</llm-alert>
+        <llm-alert variant="danger" [dismissible]="true">Error: Something went wrong.</llm-alert>
+      </div>
+    `,
+  }),
+};
+
+export const Playground: Story = {
+  render: (args) => ({
+    props: args,
+    template: `<llm-alert ${argsToTemplate(args)}>Playground alert message.</llm-alert>`,
+  }),
+};

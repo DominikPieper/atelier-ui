@@ -46,3 +46,5 @@ Thumbs.db
 __screenshots__/
 
 vitest.config.*.timestamp*
+
+storybook-static

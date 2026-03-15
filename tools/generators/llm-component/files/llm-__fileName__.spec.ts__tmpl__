@@ -1,0 +1,17 @@
+import { render, screen } from '@testing-library/angular';
+import { <%= className %> } from './llm-<%= fileName %>';
+
+describe('<%= className %>', () => {
+  it('renders without error with default inputs', async () => {
+    await render('<<%= selector %>>Content</<%= selector %>>', { imports: [<%= className %>] });
+    expect(screen.getByText('Content')).toBeInTheDocument();
+  });
+
+  it('applies default variant class to host', async () => {
+    const { container } = await render(
+      '<<%= selector %> variant="default">Label</<%= selector %>>',
+      { imports: [<%= className %>] }
+    );
+    expect(container.querySelector('<%= selector %>')).toHaveClass('variant-default');
+  });
+});

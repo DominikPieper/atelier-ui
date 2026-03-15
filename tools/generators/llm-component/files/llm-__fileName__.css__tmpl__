@@ -1,0 +1,7 @@
+:host {
+  display: block;
+}
+
+:host(.variant-default) {
+  /* TODO: Add styles using design tokens */
+}

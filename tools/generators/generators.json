@@ -1,0 +1,9 @@
+{
+  "generators": {
+    "llm-component": {
+      "factory": "./llm-component/index",
+      "schema": "./llm-component/schema.json",
+      "description": "Scaffold a new LLM-optimized Angular component following the library conventions."
+    }
+  }
+}

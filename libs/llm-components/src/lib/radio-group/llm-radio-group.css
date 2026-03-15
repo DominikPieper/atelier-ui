@@ -1,0 +1,21 @@
+:host {
+  display: block;
+  font-family: var(--ui-font-family);
+}
+
+:host(.is-disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Error messages */
+.errors {
+  margin-top: var(--ui-spacing-1);
+}
+
+.error-message {
+  margin: 0;
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-color-error-text);
+  line-height: var(--ui-line-height-normal);
+}

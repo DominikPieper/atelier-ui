@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "",
+    "types": ["node"]
+  },
+  "include": [
+    "../src/**/*.stories.ts",
+    "../src/**/*.stories.tsx",
+    "../src/**/*.mdx",
+    "./preview.ts",
+    "./main.ts"
+  ],
+  "exclude": ["../src/**/*.spec.ts", "../src/**/*.test.ts"]
+}

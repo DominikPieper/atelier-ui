@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@angular-llm-components/llm-components": ["llm-components/src/index.ts"]
+      "@angular-llm-components/llm-components": ["libs/llm-components/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

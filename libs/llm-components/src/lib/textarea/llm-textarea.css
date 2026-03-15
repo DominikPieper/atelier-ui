@@ -1,0 +1,85 @@
+:host {
+  display: block;
+  font-family: var(--ui-font-family);
+  font-size: var(--ui-font-size-md);
+}
+
+textarea {
+  display: block;
+  width: 100%;
+  padding: 0.625rem var(--ui-spacing-3);
+  font-size: inherit;
+  font-family: inherit;
+  line-height: var(--ui-line-height-normal);
+  color: var(--ui-color-text);
+  background-color: var(--ui-color-input-bg);
+  border: 1px solid var(--ui-color-input-border);
+  border-radius: var(--ui-radius-md);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: border-color var(--ui-transition-fast),
+              box-shadow var(--ui-transition-fast),
+              background-color var(--ui-transition-fast);
+  outline: none;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 80px;
+}
+
+textarea::placeholder {
+  color: var(--ui-color-placeholder);
+}
+
+textarea:hover:not(:disabled):not(:read-only) {
+  border-color: var(--ui-color-input-border-hover);
+}
+
+textarea:focus {
+  border-color: var(--ui-color-input-border-focus);
+  background-color: var(--ui-color-input-bg-focus);
+  box-shadow: var(--ui-focus-ring);
+}
+
+/* Invalid state */
+:host(.is-invalid) textarea {
+  border-color: var(--ui-color-input-border-invalid);
+}
+
+:host(.is-invalid) textarea:focus {
+  border-color: var(--ui-color-input-border-invalid);
+  box-shadow: 0 0 0 2px var(--ui-color-surface), 0 0 0 4px var(--ui-color-danger);
+}
+
+/* Disabled state */
+:host(.is-disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+:host(.is-disabled) textarea {
+  cursor: not-allowed;
+}
+
+/* Readonly state */
+:host(.is-readonly) textarea {
+  background-color: var(--ui-color-surface-sunken);
+  cursor: default;
+  box-shadow: none;
+}
+
+/* Auto-resize: hide manual resize handle when autoResize is active */
+:host(.is-auto-resize) textarea {
+  resize: none;
+  overflow: hidden;
+}
+
+/* Error messages */
+.errors {
+  margin-top: var(--ui-spacing-1);
+}
+
+.error-message {
+  margin: 0;
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-color-error-text);
+  line-height: var(--ui-line-height-normal);
+}

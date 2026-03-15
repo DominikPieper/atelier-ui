@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__angular-cli__list_projects",
+      "Bash(find:*)",
+      "Bash(npx nx:*)",
+      "Bash(ls:*)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "nx-mcp",
+    "angular-cli"
+  ]
+}

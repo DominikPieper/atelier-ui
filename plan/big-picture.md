@@ -14,13 +14,13 @@ Design for a developer who has perfect pattern recognition but zero ability to l
 
 ## 1. Maximally Predictable API Surface
 
-Every component must follow identical patterns. If `UiButton` takes `[variant]`, `[size]`, and `[disabled]`, then `UiCard`, `UiAlert`, and `UiBadge` must use the same property names for the same concepts.
+Every component must follow identical patterns. If `LlmButton` takes `[variant]`, `[size]`, and `[disabled]`, then `LlmCard`, `LlmAlert`, and `LlmBadge` must use the same property names for the same concepts.
 
 **Rules:**
 
 - Use the same input name for the same concept across all components (`variant`, `size`, `disabled`).
 - Use string literal union types everywhere — never enums, never numeric codes.
-- Provide sensible defaults for every input so bare usage always works: `<ui-button>Click</ui-button>`.
+- Provide sensible defaults for every input so bare usage always works: `<llm-button>Click</llm-button>`.
 
 ```typescript
 // Good: predictable, narrow, self-documenting
@@ -45,22 +45,26 @@ Use Angular 21 signal primitives exclusively. No `@Input()` / `@Output()` decora
 - `output()` for all event outputs.
 - `model()` for two-way bound state.
 - `computed()` and `effect()` internally — never exposed as public API.
+- Form controls implement `FormValueControl<T>` or `FormCheckboxControl` from `@angular/forms/signals` — never legacy `ControlValueAccessor`.
 
 ```typescript
 @Component({
-  selector: 'ui-toggle',
+  selector: 'llm-toggle',
   standalone: true,
   template: `...`,
 })
-export class UiToggle {
-  /** Whether the toggle is on. Supports two-way binding via [(checked)]. */
+export class LlmToggle implements FormCheckboxControl {
+  /** Whether the toggle is on. Bound by [formField] directive. */
   checked = model(false);
 
   /** Visual variant. */
   variant = input<'default' | 'success' | 'danger'>('default');
 
-  /** Emitted after the toggle state changes. */
-  changed = output<boolean>();
+  /** Form state: disabled by the form system. */
+  disabled = input(false);
+
+  /** Form state: whether the field has validation errors. */
+  invalid = input(false);
 }
 ```
 
@@ -98,16 +102,16 @@ Prefer content projection and structural composition over config objects. LLMs a
 
 ```html
 <!-- Good: composition via content projection -->
-<ui-card>
-  <ui-card-header>Title</ui-card-header>
-  <ui-card-content>Body text here.</ui-card-content>
-  <ui-card-footer>
-    <ui-button variant="primary">Save</ui-button>
-  </ui-card-footer>
-</ui-card>
+<llm-card>
+  <llm-card-header>Title</llm-card-header>
+  <llm-card-content>Body text here.</llm-card-content>
+  <llm-card-footer>
+    <llm-button variant="primary">Save</llm-button>
+  </llm-card-footer>
+</llm-card>
 
 <!-- Bad: opaque config object -->
-<ui-card [config]="{ header: { title: '...' }, footer: { actions: [...] } }" />
+<llm-card [config]="{ header: { title: '...' }, footer: { actions: [...] } }" />
 ```
 
 ---
@@ -185,16 +189,16 @@ Every component must be standalone and directly importable. No `NgModule` indire
 **Rules:**
 
 - Every component sets `standalone: true`.
-- Imports are granular: `import { UiButton } from '@scope/ui'`.
+- Imports are granular: `import { LlmButton } from '@angular-llm-components/llm-components'`.
 - No barrel re-exports that pull in the entire library.
 
 ```typescript
 // Good: direct, granular import
-import { UiButton, UiCard, UiCardHeader, UiCardContent } from '@scope/ui';
+import { LlmButton, LlmCard, LlmCardHeader, LlmCardContent } from '@angular-llm-components/llm-components';
 
 @Component({
   standalone: true,
-  imports: [UiButton, UiCard, UiCardHeader, UiCardContent],
+  imports: [LlmButton, LlmCard, LlmCardHeader, LlmCardContent],
   // ...
 })
 export class MyPage {}
@@ -218,18 +222,18 @@ When the LLM has access to source (via LSP, context file, or pasted types), JSDo
  *
  * Usage:
  * ```html
- * <ui-dialog [(open)]="showDialog">
- *   <ui-dialog-header>Confirm Action</ui-dialog-header>
- *   <ui-dialog-content>Are you sure?</ui-dialog-content>
- *   <ui-dialog-footer>
- *     <ui-button variant="secondary" (click)="showDialog.set(false)">Cancel</ui-button>
- *     <ui-button variant="primary" (click)="confirm()">Confirm</ui-button>
- *   </ui-dialog-footer>
- * </ui-dialog>
+ * <llm-dialog [(open)]="showDialog">
+ *   <llm-dialog-header>Confirm Action</llm-dialog-header>
+ *   <llm-dialog-content>Are you sure?</llm-dialog-content>
+ *   <llm-dialog-footer>
+ *     <llm-button variant="secondary" (click)="showDialog.set(false)">Cancel</llm-button>
+ *     <llm-button variant="primary" (click)="confirm()">Confirm</llm-button>
+ *   </llm-dialog-footer>
+ * </llm-dialog>
  * ```
  */
 @Component({ ... })
-export class UiDialog {
+export class LlmDialog {
   /** Controls dialog visibility. Supports two-way binding via [(open)]. */
   open = model(false);
 
@@ -243,7 +247,85 @@ export class UiDialog {
 
 ---
 
-## 8. Behavior: Follow WAI-ARIA Patterns
+## 8. Form Integration: Angular Signal Forms
+
+Form controls integrate with Angular 21's Signal Forms (`@angular/forms/signals`). This replaces `ControlValueAccessor` entirely and aligns with our signal-only reactivity model.
+
+**Rules:**
+
+- Value-based controls (input, textarea, select) implement `FormValueControl<T>` and expose a `value = model<T>(...)` signal.
+- Boolean toggle controls (checkbox, toggle) implement `FormCheckboxControl` and expose a `checked = model(false)` signal.
+- Controls must **not** implement both interfaces. `FormValueControl` must not have `checked`; `FormCheckboxControl` must not have `value`.
+- Optional state signals (`disabled`, `invalid`, `errors`, `touched`, `required`, `readonly`, `hidden`) are declared as `input()` signals. The `[formField]` directive binds them automatically.
+- Validation logic lives in the form schema, never inside the control. Controls only display validation results.
+- The `touched` signal uses `model()` (not `input()`) so the control can set it on blur.
+
+```typescript
+// Value control pattern
+@Component({
+  selector: 'llm-input',
+  standalone: true,
+  template: `
+    <input
+      [type]="type()"
+      [value]="value()"
+      (input)="value.set($event.target.value)"
+      [disabled]="disabled()"
+      [attr.aria-invalid]="invalid()"
+      (blur)="touched.set(true)"
+    />
+  `,
+})
+export class LlmInput implements FormValueControl<string> {
+  value = model('');
+  type = input<'text' | 'email' | 'password' | 'number' | 'tel' | 'url'>('text');
+  disabled = input(false);
+  invalid = input(false);
+  errors = input<readonly WithOptionalFieldTree<ValidationError>[]>([]);
+  touched = model(false);
+  required = input(false);
+}
+
+// Checkbox control pattern
+@Component({
+  selector: 'llm-checkbox',
+  standalone: true,
+  template: `
+    <label>
+      <input type="checkbox" [checked]="checked()" (change)="checked.set(!checked())" />
+      <ng-content />
+    </label>
+  `,
+})
+export class LlmCheckbox implements FormCheckboxControl {
+  checked = model(false);
+  disabled = input(false);
+  touched = model(false);
+}
+```
+
+**Consumer usage with Signal Forms:**
+
+```typescript
+@Component({
+  imports: [FormField, LlmInput, LlmCheckbox],
+  template: `
+    <llm-input [formField]="loginForm.email" placeholder="Email" />
+    <llm-checkbox [formField]="loginForm.rememberMe">Remember me</llm-checkbox>
+  `,
+})
+export class LoginPage {
+  loginModel = signal({ email: '', rememberMe: false });
+  loginForm = form(this.loginModel, (schema) => {
+    required(schema.email, { message: 'Email is required' });
+    email(schema.email, { message: 'Enter a valid email' });
+  });
+}
+```
+
+---
+
+## 9. Behavior: Follow WAI-ARIA Patterns
 
 The LLM has deep familiarity with ARIA roles, keyboard interactions, and accessibility patterns from web standards. Following ARIA patterns means the LLM can correctly infer expected behavior.
 
@@ -252,21 +334,25 @@ The LLM has deep familiarity with ARIA roles, keyboard interactions, and accessi
 - Every interactive component implements the corresponding WAI-ARIA design pattern.
 - Use native HTML elements where possible (`<button>`, `<dialog>`, `<input>`).
 - Keyboard interactions follow ARIA authoring practices (arrow keys for menus, Escape to close overlays, Tab for focus order).
+- Use `aria-label` or `aria-labelledby` explicitly when the purpose is not visually clear from the context.
 - Never invent custom interaction models.
 
-| Component     | ARIA Pattern            | Key Behaviors                           |
-|---------------|-------------------------|-----------------------------------------|
-| `UiDialog`    | Dialog (modal)          | Focus trap, Escape to close, backdrop   |
-| `UiTabs`      | Tabs                    | Arrow keys to switch, roving tabindex   |
-| `UiMenu`      | Menu / Menubar          | Arrow keys, Enter to select, Escape     |
-| `UiTooltip`   | Tooltip                 | Focus/hover trigger, `role="tooltip"`   |
-| `UiAccordion` | Accordion               | Enter/Space to toggle, `aria-expanded`  |
-| `UiSelect`    | Listbox                 | Arrow keys, type-ahead, `aria-selected` |
-| `UiToggle`    | Switch                  | Space to toggle, `role="switch"`        |
+| Component       | ARIA Pattern            | Key Behaviors                           |
+|-----------------|-------------------------|-----------------------------------------|
+| `LlmDialog`     | Dialog (modal)          | Focus trap, Escape to close, backdrop   |
+| `LlmTabs`       | Tabs                    | Arrow keys to switch, roving tabindex   |
+| `LlmMenu`       | Menu / Menubar          | Arrow keys, Enter to select, Escape     |
+| `LlmTooltip`    | Tooltip                 | Focus/hover trigger, `role="tooltip"`   |
+| `LlmAccordion`  | Accordion               | Enter/Space to toggle, `aria-expanded`  |
+| `LlmSelect`     | Listbox                 | Arrow keys, type-ahead, `aria-selected` |
+| `LlmToggle`     | Switch                  | Space to toggle, `role="switch"`        |
+| `LlmInput`      | Textbox                 | Native `<input>`, `aria-invalid`        |
+| `LlmCheckbox`   | Checkbox                | Space to toggle, `aria-checked`         |
+| `LlmRadio`      | Radio Group             | Arrow keys within group, `aria-checked` |
 
 ---
 
-## 9. LLM Context File (CLAUDE.md / llm-context.md)
+## 10. LLM Context File (CLAUDE.md / llm-context.md)
 
 Ship a compressed API reference file designed to be dropped into a system prompt or Claude Code's project context. This is the single most impactful artifact for LLM code generation quality.
 
@@ -279,9 +365,9 @@ Ship a compressed API reference file designed to be dropped into a system prompt
 **Example format:**
 
 ````markdown
-## UiButton
+## LlmButton
 
-Selector: `ui-button`
+Selector: `llm-button`
 
 | Input      | Type                                      | Default     |
 |------------|-------------------------------------------|-------------|
@@ -291,13 +377,13 @@ Selector: `ui-button`
 | `loading`  | `boolean`                                 | `false`     |
 
 ```html
-<ui-button variant="primary" size="md" (click)="save()">Save</ui-button>
+<llm-button variant="primary" size="md" (click)="save()">Save</llm-button>
 ```
 
-## UiCard
+## LlmCard
 
-Selector: `ui-card`
-Sub-components: `ui-card-header`, `ui-card-content`, `ui-card-footer`
+Selector: `llm-card`
+Sub-components: `llm-card-header`, `llm-card-content`, `llm-card-footer`
 
 | Input     | Type                                       | Default     |
 |-----------|--------------------------------------------|-------------|
@@ -305,10 +391,10 @@ Sub-components: `ui-card-header`, `ui-card-content`, `ui-card-footer`
 | `padding` | `'none' \| 'sm' \| 'md' \| 'lg'`         | `'md'`      |
 
 ```html
-<ui-card variant="elevated">
-  <ui-card-header>Title</ui-card-header>
-  <ui-card-content>Content goes here.</ui-card-content>
-</ui-card>
+<llm-card variant="elevated">
+  <llm-card-header>Title</llm-card-header>
+  <llm-card-content>Content goes here.</llm-card-content>
+</llm-card>
 ```
 ````
 
@@ -321,12 +407,13 @@ Ordered by impact on LLM code generation quality:
 1. **Consistent API patterns** across all components
 2. **Signal-only reactivity** (`input`, `output`, `model` — nothing else)
 3. **Narrow TypeScript types** (literal unions with defaults)
-4. **Composition via content projection** (no config objects)
-5. **Standalone imports** (no NgModule indirection)
-6. **Inline JSDoc with examples** on every public member
-7. **LLM context cheat sheet file** (compressed API reference)
-8. **CSS custom properties** for theming (design tokens, not utility classes)
-9. **ARIA-based behavior** (familiar, standards-aligned interaction patterns)
+4. **Signal Forms integration** (`FormValueControl` / `FormCheckboxControl` — no CVA)
+5. **Composition via content projection** (no config objects)
+6. **Standalone imports** (no NgModule indirection)
+7. **Inline JSDoc with examples** on every public member
+8. **LLM context cheat sheet file** (compressed API reference)
+9. **CSS custom properties** for theming (design tokens, not utility classes)
+10. **ARIA-based behavior** (familiar, standards-aligned interaction patterns)
 
 ---
 
@@ -342,3 +429,6 @@ Ordered by impact on LLM code generation quality:
 | Undocumented internal state | LLM can't infer correct behavior from types alone |
 | Custom keyboard interaction patterns | LLM defaults to ARIA patterns; custom ones get misgenerated |
 | Deep component hierarchies with implicit context | LLM loses track of injected dependencies and context |
+| Implicit A11y | If ARIA roles aren't explicitly used, the LLM may fail to generate accessible markup. |
+| Legacy `ControlValueAccessor` for form controls | Signal Forms (`FormValueControl`/`FormCheckboxControl`) is simpler and signal-native |
+| Validation logic inside controls | Validation belongs in the form schema; controls only display results |

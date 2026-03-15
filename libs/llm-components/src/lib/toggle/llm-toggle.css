@@ -1,0 +1,117 @@
+:host {
+  display: block;
+  font-family: var(--ui-font-family);
+  font-size: var(--ui-font-size-md);
+}
+
+label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ui-spacing-2);
+  cursor: pointer;
+  user-select: none;
+  color: var(--ui-color-text);
+  line-height: var(--ui-line-height-normal);
+}
+
+/* Hide native checkbox visually but keep it accessible */
+input[type='checkbox'] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Track — pill-shaped container */
+.track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 1.5rem;
+  border-radius: var(--ui-radius-full);
+  border: 1.5px solid var(--ui-color-input-border);
+  background-color: var(--ui-color-input-bg);
+  transition: background-color var(--ui-transition-fast),
+              border-color var(--ui-transition-fast),
+              box-shadow var(--ui-transition-fast);
+  cursor: pointer;
+}
+
+/* Thumb — circular slider */
+.thumb {
+  position: absolute;
+  left: 0.125rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: var(--ui-radius-full);
+  background-color: var(--ui-color-input-border);
+  box-shadow: var(--ui-shadow-xs);
+  transition: transform var(--ui-transition-fast),
+              background-color var(--ui-transition-fast);
+}
+
+/* Hover state */
+label:hover:not(:has(input:disabled)) .track {
+  border-color: var(--ui-color-input-border-hover);
+}
+
+/* Focus ring on track when native input is focused */
+input[type='checkbox']:focus-visible + .track {
+  box-shadow: var(--ui-focus-ring);
+  border-color: var(--ui-color-input-border-focus);
+}
+
+/* Checked state — track */
+:host(.is-checked) .track {
+  background-color: var(--ui-color-primary);
+  border-color: var(--ui-color-primary);
+}
+
+/* Checked state — thumb slides right */
+:host(.is-checked) .thumb {
+  transform: translateX(1.25rem);
+  background-color: var(--ui-color-surface);
+}
+
+/* Invalid state — track border */
+:host(.is-invalid) .track {
+  border-color: var(--ui-color-input-border-invalid);
+}
+
+:host(.is-invalid) input[type='checkbox']:focus-visible + .track {
+  border-color: var(--ui-color-input-border-invalid);
+  box-shadow: 0 0 0 2px var(--ui-color-surface), 0 0 0 4px var(--ui-color-danger);
+}
+
+/* Disabled state */
+:host(.is-disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+:host(.is-disabled) label {
+  cursor: not-allowed;
+}
+
+:host(.is-disabled) .track {
+  cursor: not-allowed;
+}
+
+/* Error messages */
+.errors {
+  margin-top: var(--ui-spacing-1);
+}
+
+.error-message {
+  margin: 0;
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-color-error-text);
+  line-height: var(--ui-line-height-normal);
+}

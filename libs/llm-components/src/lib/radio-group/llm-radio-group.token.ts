@@ -1,0 +1,12 @@
+import { InjectionToken } from '@angular/core';
+import type { Signal, WritableSignal } from '@angular/core';
+
+export interface LlmRadioGroupContext {
+  readonly value: WritableSignal<string>;
+  readonly name: Signal<string>;
+  readonly disabled: Signal<boolean>;
+  select(v: string): void;
+  markTouched(): void;
+}
+
+export const LLM_RADIO_GROUP = new InjectionToken<LlmRadioGroupContext>('LLM_RADIO_GROUP');
