@@ -6,7 +6,7 @@ import {
   model,
 } from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
-import { type ValidationError, type WithOptionalField } from '@angular/forms/signals';
+import { type ValidationError, type WithOptionalFieldTree } from '@angular/forms/signals';
 
 let nextId = 0;
 
@@ -70,7 +70,7 @@ export class LlmInput implements FormValueControl<string> {
   invalid = input(false);
 
   /** Validation errors from the form system. Bound by [formField] directive. */
-  errors = input<readonly WithOptionalField<ValidationError>[]>([]);
+  errors = input<readonly WithOptionalFieldTree<ValidationError>[]>([]);
 
   /** Whether the user has interacted with the input. Bound by [formField] directive. */
   touched = model(false);

@@ -1,0 +1,38 @@
+/* ── Toast Container (LlmToastContainer) ── */
+
+:host {
+  position: fixed;
+  z-index: var(--ui-z-toast, 400);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-spacing-2);
+  pointer-events: none;
+  max-width: min(24rem, calc(100vw - 2rem));
+  box-sizing: border-box;
+}
+
+:host(.position-bottom-right) {
+  bottom: var(--ui-spacing-4);
+  right: var(--ui-spacing-4);
+  align-items: flex-end;
+}
+
+:host(.position-bottom-center) {
+  bottom: var(--ui-spacing-4);
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+}
+
+:host(.position-top-right) {
+  top: var(--ui-spacing-4);
+  right: var(--ui-spacing-4);
+  align-items: flex-end;
+}
+
+:host(.position-top-center) {
+  top: var(--ui-spacing-4);
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+}

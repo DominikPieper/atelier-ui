@@ -64,6 +64,46 @@
 
 ## Component API Reference
 
+### LlmAvatar + LlmAvatarGroup
+
+Selectors: `llm-avatar`, `llm-avatar-group`
+
+Fallback order: image → initials (from `name`) → generic icon placeholder.
+
+#### LlmAvatar
+
+| Input | Type | Default | Notes |
+|---|---|---|---|
+| `src` | `string` | `''` | Image URL |
+| `alt` | `string` | `''` | Alt text / aria-label |
+| `name` | `string` | `''` | Used for initials fallback and aria-label |
+| `size` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | |
+| `shape` | `'circle' \| 'square'` | `'circle'` | |
+| `status` | `'online' \| 'offline' \| 'away' \| 'busy' \| ''` | `''` | Dot indicator |
+
+#### LlmAvatarGroup
+
+| Input | Type | Default |
+|---|---|---|
+| `max` | `number` | `5` |
+| `size` | same as LlmAvatar size | `'md'` |
+
+```html
+<!-- Standalone image avatar -->
+<llm-avatar src="https://example.com/photo.jpg" alt="Jane Doe" size="md" status="online" />
+
+<!-- Initials fallback -->
+<llm-avatar name="John Smith" size="lg" shape="square" />
+
+<!-- Group with overflow -->
+<llm-avatar-group [max]="3" size="md">
+  <llm-avatar src="..." name="Alice" />
+  <llm-avatar src="..." name="Bob" />
+  <llm-avatar src="..." name="Carol" />
+  <llm-avatar src="..." name="Dave" />
+</llm-avatar-group>
+```
+
 ### LlmButton
 
 Selector: `llm-button`
@@ -130,7 +170,7 @@ Implements: `FormValueControl<string>` from `@angular/forms/signals`
 | `invalid` | `boolean` | `false` |
 | `required` | `boolean` | `false` |
 | `touched` | `model<boolean>` | `false` |
-| `errors` | `readonly WithOptionalField<ValidationError>[]` | `[]` |
+| `errors` | `readonly WithOptionalFieldTree<ValidationError>[]` | `[]` |
 | `name` | `string` | `''` |
 
 ```html
@@ -156,7 +196,7 @@ Implements: `FormValueControl<string>` from `@angular/forms/signals`
 | `invalid` | `boolean` | `false` |
 | `required` | `boolean` | `false` |
 | `touched` | `model<boolean>` | `false` |
-| `errors` | `readonly WithOptionalField<ValidationError>[]` | `[]` |
+| `errors` | `readonly WithOptionalFieldTree<ValidationError>[]` | `[]` |
 | `name` | `string` | `''` |
 | `autoResize` | `boolean` | `false` |
 
@@ -184,7 +224,7 @@ Implements: `FormCheckboxControl` from `@angular/forms/signals`
 | `disabled` | `boolean` | `false` |
 | `invalid` | `boolean` | `false` |
 | `required` | `boolean` | `false` |
-| `errors` | `readonly WithOptionalField<ValidationError>[]` | `[]` |
+| `errors` | `readonly WithOptionalFieldTree<ValidationError>[]` | `[]` |
 | `name` | `string` | `''` |
 
 ```html
@@ -210,7 +250,7 @@ Implements: `FormCheckboxControl` from `@angular/forms/signals`
 | `disabled` | `boolean` | `false` |
 | `invalid` | `boolean` | `false` |
 | `required` | `boolean` | `false` |
-| `errors` | `readonly WithOptionalField<ValidationError>[]` | `[]` |
+| `errors` | `readonly WithOptionalFieldTree<ValidationError>[]` | `[]` |
 | `name` | `string` | `''` |
 
 ```html
@@ -236,7 +276,7 @@ Selectors: `llm-radio-group`, `llm-radio`
 | `invalid` | `boolean` | `false` |
 | `required` | `boolean` | `false` |
 | `name` | `string` | `''` |
-| `errors` | `readonly WithOptionalField<ValidationError>[]` | `[]` |
+| `errors` | `readonly WithOptionalFieldTree<ValidationError>[]` | `[]` |
 
 #### LlmRadio
 
@@ -277,7 +317,7 @@ Selectors: `llm-select`, `llm-option`
 | `invalid` | `boolean` | `false` |
 | `required` | `boolean` | `false` |
 | `touched` | `model<boolean>` | `false` |
-| `errors` | `readonly WithOptionalField<ValidationError>[]` | `[]` |
+| `errors` | `readonly WithOptionalFieldTree<ValidationError>[]` | `[]` |
 | `name` | `string` | `''` |
 
 #### LlmOption
@@ -304,6 +344,409 @@ Selectors: `llm-select`, `llm-option`
 
 Keyboard navigation: ArrowDown/Up (navigate options), Enter/Space (select or open), Escape (close), Home/End (first/last enabled option), printable char (type-ahead with 500ms reset). Uses native Popover API with `popover="manual"`.
 
+### LlmAlert
+
+Selector: `llm-alert`
+
+| Input | Type | Default |
+|---|---|---|
+| `variant` | `'info' \| 'success' \| 'warning' \| 'danger'` | `'info'` |
+| `dismissible` | `boolean` | `false` |
+
+| Output | Description |
+|---|---|
+| `dismissed` | Emitted when the dismiss button is clicked |
+
+```html
+<llm-alert variant="success">Your changes were saved.</llm-alert>
+<llm-alert variant="warning" [dismissible]="true" (dismissed)="onDismiss()">
+  Your session expires soon.
+</llm-alert>
+<llm-alert variant="danger">Something went wrong.</llm-alert>
+```
+
+### LlmDialog
+
+Selector: `llm-dialog`
+Sub-components: `llm-dialog-header`, `llm-dialog-content`, `llm-dialog-footer`
+
+Uses the native `<dialog>` element with `showModal()`. Includes focus trap, Escape to close, backdrop click to close, and entry/exit animation via `@starting-style`.
+
+#### LlmDialog
+
+| Input | Type | Default |
+|---|---|---|
+| `open` | `model<boolean>` | `false` |
+| `closeOnBackdrop` | `boolean` | `true` |
+| `size` | `'sm' \| 'md' \| 'lg' \| 'xl' \| 'full'` | `'md'` |
+| `aria-label` | `string` | `''` |
+| `aria-labelledby` | `string` | `''` |
+
+```html
+<!-- Basic usage -->
+<llm-button (click)="isOpen = true">Open</llm-button>
+<llm-dialog [(open)]="isOpen">
+  <llm-dialog-header>Confirm Action</llm-dialog-header>
+  <llm-dialog-content>
+    Are you sure you want to proceed?
+  </llm-dialog-content>
+  <llm-dialog-footer>
+    <llm-button variant="outline" (click)="isOpen = false">Cancel</llm-button>
+    <llm-button variant="primary" (click)="isOpen = false">Confirm</llm-button>
+  </llm-dialog-footer>
+</llm-dialog>
+
+<!-- No backdrop close -->
+<llm-dialog [(open)]="isOpen" [closeOnBackdrop]="false">
+  <llm-dialog-header>Required Action</llm-dialog-header>
+  <llm-dialog-content>You must respond to this dialog.</llm-dialog-content>
+  <llm-dialog-footer>
+    <llm-button variant="primary" (click)="isOpen = false">OK</llm-button>
+  </llm-dialog-footer>
+</llm-dialog>
+```
+
+`llm-dialog-header` automatically receives an `id` used as `aria-labelledby` on the `<dialog>`. Tab cycling is trapped within the dialog. Focus returns to the triggering element on close.
+
+### LlmTabGroup + LlmTab
+
+Selectors: `llm-tab-group`, `llm-tab`
+
+Accessible tabbed interface with roving tabindex and automatic activation.
+
+#### LlmTabGroup
+
+| Input | Type | Default |
+|---|---|---|
+| `selectedIndex` | `model<number>` | `0` |
+| `variant` | `'default' \| 'pills'` | `'default'` |
+
+#### LlmTab
+
+| Input | Type | Default |
+|---|---|---|
+| `label` | `string` | required |
+| `disabled` | `boolean` | `false` |
+
+```html
+<!-- Basic usage -->
+<llm-tab-group [(selectedIndex)]="activeTab">
+  <llm-tab label="Account">Account settings here.</llm-tab>
+  <llm-tab label="Notifications">Notification prefs here.</llm-tab>
+  <llm-tab label="Billing" [disabled]="true">Billing info here.</llm-tab>
+</llm-tab-group>
+
+<!-- Pills variant -->
+<llm-tab-group variant="pills">
+  <llm-tab label="All">All items.</llm-tab>
+  <llm-tab label="Active">Active items.</llm-tab>
+</llm-tab-group>
+```
+
+Keyboard navigation: ArrowRight/Left (navigate and activate, wraps), Home/End (first/last enabled tab), arrow keys skip disabled tabs. Uses `role="tablist"` / `role="tab"` / `role="tabpanel"` with `aria-selected`, `aria-controls`, `aria-labelledby`.
+
+### LlmAccordionGroup + LlmAccordionItem
+
+Selectors: `llm-accordion-group`, `llm-accordion-item`
+Directive: `llmAccordionHeader`
+
+#### LlmAccordionGroup
+
+| Input | Type | Default |
+|---|---|---|
+| `multi` | `boolean` | `false` |
+| `variant` | `'default' \| 'bordered' \| 'separated'` | `'default'` |
+
+#### LlmAccordionItem
+
+| Input | Type | Default |
+|---|---|---|
+| `expanded` | `model<boolean>` | `false` |
+| `disabled` | `boolean` | `false` |
+
+Content projection: `[llmAccordionHeader]` for header text, default slot for body.
+
+```html
+<!-- Basic usage -->
+<llm-accordion-group>
+  <llm-accordion-item [(expanded)]="faqOpen">
+    <span llmAccordionHeader>Question 1</span>
+    Answer content here.
+  </llm-accordion-item>
+  <llm-accordion-item>
+    <span llmAccordionHeader>Question 2</span>
+    Another answer.
+  </llm-accordion-item>
+</llm-accordion-group>
+
+<!-- Multi-expand with separated variant -->
+<llm-accordion-group [multi]="true" variant="separated">
+  <llm-accordion-item>
+    <span llmAccordionHeader>Section A</span>
+    Content A.
+  </llm-accordion-item>
+  <llm-accordion-item>
+    <span llmAccordionHeader>Section B</span>
+    Content B.
+  </llm-accordion-item>
+</llm-accordion-group>
+```
+
+Keyboard navigation: ArrowUp/Down (navigate headers, wraps), Home/End (first/last enabled item), Enter/Space (toggle via native button). Arrow keys skip disabled items. Uses `aria-expanded`, `aria-controls`, `role="region"`, `aria-labelledby`. CSS grid animation (`0fr` → `1fr`) for smooth expand/collapse.
+
+### LlmMenu + LlmMenuItem
+
+Selectors: `llm-menu`, `llm-menu-item`, `llm-menu-separator`
+Directive: `[llmMenuTriggerFor]`
+
+Built on `@angular/cdk/menu` — CDK handles keyboard navigation, focus management, ARIA roles, overlay positioning, and nested submenus.
+
+#### LlmMenuTrigger (Directive)
+
+| Input | Type | Default |
+|---|---|---|
+| `llmMenuTriggerFor` | `TemplateRef` | required |
+
+#### LlmMenu
+
+| Input | Type | Default |
+|---|---|---|
+| `variant` | `'default' \| 'compact'` | `'default'` |
+
+#### LlmMenuItem
+
+| Input | Type | Default |
+|---|---|---|
+| `disabled` | `boolean` | `false` |
+
+| Output | Description |
+|---|---|
+| `triggered` | Emitted when the item is activated (click or Enter) |
+
+```html
+<!-- Basic menu -->
+<llm-button [llmMenuTriggerFor]="actions">Actions</llm-button>
+<ng-template #actions>
+  <llm-menu>
+    <llm-menu-item (triggered)="onCopy()">Copy</llm-menu-item>
+    <llm-menu-item (triggered)="onPaste()">Paste</llm-menu-item>
+    <llm-menu-separator />
+    <llm-menu-item [disabled]="true">Delete</llm-menu-item>
+  </llm-menu>
+</ng-template>
+
+<!-- Nested submenu -->
+<llm-menu-item [llmMenuTriggerFor]="exportMenu">Export</llm-menu-item>
+<ng-template #exportMenu>
+  <llm-menu>
+    <llm-menu-item (triggered)="exportPdf()">PDF</llm-menu-item>
+    <llm-menu-item (triggered)="exportCsv()">CSV</llm-menu-item>
+  </llm-menu>
+</ng-template>
+```
+
+Keyboard navigation: ArrowDown/Up (navigate items), Enter/Space (activate), Escape (close), ArrowRight (open submenu), ArrowLeft (close submenu), Home/End (first/last item), type-ahead. All handled by CDK.
+
+### LlmTooltip
+
+Selector: `[llmTooltip]` (attribute directive)
+
+Built on `@angular/cdk/overlay` for viewport-aware positioning.
+
+| Input | Type | Default |
+|---|---|---|
+| `llmTooltip` | `string` | required |
+| `llmTooltipPosition` | `'above' \| 'below' \| 'left' \| 'right'` | `'above'` |
+| `llmTooltipDisabled` | `boolean` | `false` |
+| `llmTooltipShowDelay` | `number` | `300` |
+| `llmTooltipHideDelay` | `number` | `0` |
+
+```html
+<llm-button llmTooltip="Save your changes">Save</llm-button>
+<llm-button llmTooltip="Copy to clipboard" llmTooltipPosition="right">Copy</llm-button>
+<llm-button [llmTooltip]="helpText" [llmTooltipDisabled]="!showHelp">Info</llm-button>
+```
+
+Shows on hover/focus, hides on mouseleave/focusout/Escape. Sets `aria-describedby` on the host and `role="tooltip"` on the tooltip content. Falls back to opposite side if clipped by viewport.
+
+### LlmToast + LlmToastService
+
+Selectors: `llm-toast`, `llm-toast-container`
+Service: `LlmToastService` (providedIn: 'root')
+
+Transient notifications that auto-dismiss. Service-based imperative API — place `<llm-toast-container>` once in the app root.
+
+**Why this component:** Every app needs "action completed" / "error occurred" messages. Alert is inline-only. Toast handles transient feedback without disrupting layout. Service-based API is natural for LLM-generated code (`inject(LlmToastService)`).
+
+#### LlmToastService
+
+```typescript
+const toast = inject(LlmToastService);
+toast.show('Saved!', { variant: 'success' });
+toast.show('Error occurred', { variant: 'danger', duration: 8000 });
+toast.show('Persistent message', { duration: 0 }); // no auto-dismiss
+toast.dismiss(id); // dismiss by id
+toast.clear(); // dismiss all
+```
+
+#### LlmToastContainer
+
+| Input | Type | Default |
+|---|---|---|
+| `position` | `'top-right' \| 'top-center' \| 'bottom-right' \| 'bottom-center'` | `'bottom-right'` |
+
+#### ToastOptions
+
+| Option | Type | Default |
+|---|---|---|
+| `variant` | `'default' \| 'success' \| 'warning' \| 'danger' \| 'info'` | `'default'` |
+| `duration` | `number` | `5000` (0 = no auto-dismiss) |
+| `dismissible` | `boolean` | `true` |
+
+```html
+<!-- Place once in app root -->
+<llm-toast-container position="bottom-right" />
+```
+
+Uses `role="status"` + `aria-live="polite"`. Enter animation with `prefers-reduced-motion` support.
+
+### LlmSkeleton
+
+Selector: `llm-skeleton`
+
+Loading placeholder that mimics content shape while data loads. Pure CSS component — zero JS logic, extremely lightweight.
+
+**Why this component:** Loading states are universal but LLMs consistently forget them. Having a dedicated, discoverable component prompts AI-generated apps to include loading states. Composes from three primitives (text, circular, rectangular) to build any loading layout.
+
+| Input | Type | Default |
+|---|---|---|
+| `variant` | `'text' \| 'circular' \| 'rectangular'` | `'text'` |
+| `width` | `string` | `'100%'` |
+| `height` | `string` | `''` (auto per variant) |
+| `animated` | `boolean` | `true` |
+
+```html
+<!-- Text lines -->
+<llm-skeleton variant="text" />
+<llm-skeleton variant="text" width="60%" />
+
+<!-- Avatar placeholder -->
+<llm-skeleton variant="circular" width="40px" />
+
+<!-- Image/card placeholder -->
+<llm-skeleton variant="rectangular" height="200px" />
+
+<!-- Card skeleton composition -->
+<div style="display: flex; gap: 1rem; align-items: center;">
+  <llm-skeleton variant="circular" width="48px" />
+  <div style="flex: 1; display: flex; flex-direction: column; gap: 0.5rem;">
+    <llm-skeleton variant="text" width="40%" />
+    <llm-skeleton variant="text" />
+    <llm-skeleton variant="text" width="80%" />
+  </div>
+</div>
+```
+
+Sets `aria-hidden="true"`. Shimmer animation respects `prefers-reduced-motion`.
+
+---
+
+## Composition Cookbook
+
+Storybook stories under "Cookbook" showing how to compose multiple components into real page layouts. Each pattern was chosen based on frequency in AI-generated applications.
+
+### Login Form
+**Why:** #1 most frequently AI-generated page. Shows Card + form control composition, validation, loading state.
+```html
+<llm-card variant="elevated" padding="lg">
+  <llm-card-header>Sign in</llm-card-header>
+  <llm-card-content>
+    <llm-input type="email" placeholder="you@example.com" />
+    <llm-input type="password" placeholder="Password" />
+    <llm-checkbox>Remember me</llm-checkbox>
+  </llm-card-content>
+  <llm-card-footer>
+    <llm-button variant="primary" [loading]="loading()">Sign in</llm-button>
+  </llm-card-footer>
+</llm-card>
+```
+
+### Settings Page
+**Why:** Exercises the most components simultaneously. Core SaaS pattern.
+```html
+<llm-tab-group [(selectedIndex)]="activeTab">
+  <llm-tab label="Account">
+    <llm-input type="text" placeholder="Name" />
+    <llm-input type="email" placeholder="Email" />
+  </llm-tab>
+  <llm-tab label="Notifications">
+    <llm-toggle [(checked)]="emailNotifs">Email notifications</llm-toggle>
+    <llm-toggle [(checked)]="pushNotifs">Push notifications</llm-toggle>
+  </llm-tab>
+  <llm-tab label="Privacy">
+    <llm-select [(value)]="visibility" placeholder="Profile visibility">
+      <llm-option optionValue="public">Public</llm-option>
+      <llm-option optionValue="private">Private</llm-option>
+    </llm-select>
+  </llm-tab>
+</llm-tab-group>
+<llm-button variant="primary" (click)="save()">Save changes</llm-button>
+```
+
+### Confirmation Dialog
+**Why:** Required in every CRUD app. Shows trigger→dialog→action flow.
+```html
+<llm-button (click)="isOpen = true">Delete</llm-button>
+<llm-dialog [(open)]="isOpen" size="sm">
+  <llm-dialog-header>Confirm Delete</llm-dialog-header>
+  <llm-dialog-content>Are you sure? This cannot be undone.</llm-dialog-content>
+  <llm-dialog-footer>
+    <llm-button variant="outline" (click)="isOpen = false">Cancel</llm-button>
+    <llm-button variant="primary" (click)="onConfirm()">Delete</llm-button>
+  </llm-dialog-footer>
+</llm-dialog>
+```
+
+### Data List with Actions
+**Why:** Core dashboard/admin pattern. Badge + Menu + Tooltip composition.
+```html
+@for (item of items; track item.id) {
+  <llm-card variant="outlined" padding="md">
+    <llm-card-content>
+      <span>{{ item.name }}</span>
+      <llm-badge [variant]="item.statusVariant">{{ item.status }}</llm-badge>
+      <llm-button [llmMenuTriggerFor]="actions" llmTooltip="More actions">...</llm-button>
+      <ng-template #actions>
+        <llm-menu>
+          <llm-menu-item (triggered)="edit(item)">Edit</llm-menu-item>
+          <llm-menu-separator />
+          <llm-menu-item (triggered)="delete(item)">Delete</llm-menu-item>
+        </llm-menu>
+      </ng-template>
+    </llm-card-content>
+  </llm-card>
+}
+```
+
+### Notification Center
+**Why:** Common in monitoring dashboards. Accordion + Alert composition.
+```html
+<llm-accordion-group [multi]="true" variant="separated">
+  <llm-accordion-item [expanded]="true">
+    <span llmAccordionHeader>
+      Errors <llm-badge variant="danger">{{ errors.length }}</llm-badge>
+    </span>
+    @for (err of errors(); track err.id) {
+      <llm-alert variant="danger" [dismissible]="true" (dismissed)="dismiss(err.id)">
+        {{ err.message }}
+      </llm-alert>
+    }
+  </llm-accordion-item>
+</llm-accordion-group>
+```
+
+---
+
 ### Scaffold new components
 
 ```bash
@@ -317,7 +760,7 @@ Auto-exports from `libs/llm-components/src/index.ts`.
 ### Import pattern
 
 ```typescript
-import { LlmButton, LlmCard, LlmCardHeader, LlmCardContent, LlmCardFooter, LlmBadge, LlmInput, LlmTextarea, LlmCheckbox, LlmToggle, LlmRadio, LlmRadioGroup }
+import { LlmAvatar, LlmAvatarGroup, LlmButton, LlmCard, LlmCardHeader, LlmCardContent, LlmCardFooter, LlmBadge, LlmInput, LlmTextarea, LlmCheckbox, LlmToggle, LlmRadio, LlmRadioGroup, LlmAlert, LlmSelect, LlmOption, LlmDialog, LlmDialogHeader, LlmDialogContent, LlmDialogFooter, LlmTabGroup, LlmTab, LlmAccordionGroup, LlmAccordionItem, LlmAccordionHeader, LlmMenu, LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger, LlmTooltip, LlmToast, LlmToastContainer, LlmToastService, LlmSkeleton }
   from '@angular-llm-components/llm-components';
 ```
 

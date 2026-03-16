@@ -49,7 +49,7 @@ input:focus {
 
 /* Disabled state */
 :host(.is-disabled) {
-  opacity: 0.5;
+  opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }
 

@@ -2,7 +2,7 @@
   display: inline-block;
   position: relative;
   font-family: var(--ui-font-family);
-  font-size: var(--ui-font-size-sm);
+  font-size: var(--ui-font-size-md);
 }
 
 /* Trigger button */
@@ -35,7 +35,7 @@
 }
 
 .trigger:disabled {
-  opacity: 0.5;
+  opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }
 
@@ -89,6 +89,14 @@
   z-index: var(--ui-z-dropdown);
   max-height: 16rem;
   overflow-y: auto;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity var(--ui-transition-normal), transform var(--ui-transition-normal);
+}
+
+.panel[popover]:popover-open {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Options (rendered inside llm-option) */
@@ -111,7 +119,7 @@ llm-option [role="option"].is-selected {
 }
 
 llm-option [role="option"].is-disabled {
-  opacity: 0.5;
+  opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }
 

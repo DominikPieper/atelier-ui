@@ -19,19 +19,19 @@
 /* Variants */
 :host(.variant-info) {
   background-color: color-mix(in srgb, var(--ui-color-info) 10%, transparent);
-  color: color-mix(in srgb, var(--ui-color-info) 70%, #000);
+  color: var(--ui-color-info);
   border-color: color-mix(in srgb, var(--ui-color-info) 25%, transparent);
 }
 
 :host(.variant-success) {
   background-color: color-mix(in srgb, var(--ui-color-success) 10%, transparent);
-  color: color-mix(in srgb, var(--ui-color-success) 70%, #000);
+  color: var(--ui-color-success);
   border-color: color-mix(in srgb, var(--ui-color-success) 25%, transparent);
 }
 
 :host(.variant-warning) {
   background-color: color-mix(in srgb, var(--ui-color-warning) 10%, transparent);
-  color: color-mix(in srgb, var(--ui-color-warning) 80%, #000);
+  color: var(--ui-color-warning);
   border-color: color-mix(in srgb, var(--ui-color-warning) 25%, transparent);
 }
 

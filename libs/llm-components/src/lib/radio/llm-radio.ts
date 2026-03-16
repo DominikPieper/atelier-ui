@@ -2,10 +2,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
   inject,
   input,
+  OnDestroy,
+  OnInit,
 } from '@angular/core';
-import { LLM_RADIO_GROUP } from '../radio-group/llm-radio-group.token';
+import { LLM_RADIO_GROUP, type RadioItem } from '../radio-group/llm-radio-group.token';
 
 let nextId = 0;
 
@@ -44,7 +47,7 @@ let nextId = 0;
     '[class]': 'hostClasses()',
   },
 })
-export class LlmRadio {
+export class LlmRadio implements RadioItem, OnInit, OnDestroy {
   /** The value this radio option represents within the group. */
   readonly radioValue = input.required<string>();
 
@@ -55,13 +58,16 @@ export class LlmRadio {
   private readonly group = inject(LLM_RADIO_GROUP, { optional: true });
 
   /** @internal */
+  private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** @internal */
   protected readonly inputId = `llm-radio-${nextId++}`;
 
   /** @internal */
   protected readonly isChecked = computed(() => this.group?.value() === this.radioValue());
 
   /** @internal */
-  protected readonly isDisabled = computed(() => this.disabled() || (this.group?.disabled() ?? false));
+  readonly isDisabled = computed(() => this.disabled() || (this.group?.disabled() ?? false));
 
   /** @internal */
   protected readonly effectiveName = computed(() => this.group?.name() ?? '');
@@ -73,6 +79,19 @@ export class LlmRadio {
     if (this.isDisabled()) classes.push('is-disabled');
     return classes.join(' ');
   });
+
+  /** @internal — for FocusKeyManager */
+  focusInput(): void {
+    this.el.nativeElement.querySelector<HTMLInputElement>('input')?.focus();
+  }
+
+  ngOnInit(): void {
+    this.group?.registerItem(this);
+  }
+
+  ngOnDestroy(): void {
+    this.group?.unregisterItem(this);
+  }
 
   /** @internal */
   protected onChange(): void {

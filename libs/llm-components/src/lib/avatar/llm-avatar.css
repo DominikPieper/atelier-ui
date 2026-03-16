@@ -1,0 +1,106 @@
+/* === LlmAvatar === */
+
+:host {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  font-family: var(--ui-font-family);
+  font-weight: var(--ui-font-weight-semibold);
+  background-color: color-mix(in srgb, var(--ui-color-primary) 12%, var(--ui-color-surface-sunken));
+  color: var(--ui-color-primary);
+  user-select: none;
+}
+
+/* Sizes */
+:host(.size-xs) { width: 24px; height: 24px; font-size: 0.625rem; }
+:host(.size-sm) { width: 32px; height: 32px; font-size: var(--ui-font-size-xs); }
+:host(.size-md) { width: 40px; height: 40px; font-size: var(--ui-font-size-sm); }
+:host(.size-lg) { width: 48px; height: 48px; font-size: var(--ui-font-size-md); }
+:host(.size-xl) { width: 64px; height: 64px; font-size: var(--ui-font-size-lg); }
+
+/* Shapes */
+:host(.shape-circle) { border-radius: var(--ui-radius-full); }
+:host(.shape-square) { border-radius: var(--ui-radius-md); }
+
+/* Image */
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Initials */
+.initials {
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+/* Fallback icon */
+.icon {
+  width: 55%;
+  height: 55%;
+  opacity: 0.6;
+}
+
+/* Status dot */
+.status-dot {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 25%;
+  height: 25%;
+  min-width: 6px;
+  min-height: 6px;
+  max-width: 14px;
+  max-height: 14px;
+  border-radius: var(--ui-radius-full);
+  border: 2px solid var(--ui-color-surface);
+  box-sizing: content-box;
+}
+
+.status-dot.status-online  { background-color: var(--ui-color-success); }
+.status-dot.status-offline { background-color: var(--ui-color-text-muted); }
+.status-dot.status-away    { background-color: var(--ui-color-warning); }
+.status-dot.status-busy    { background-color: var(--ui-color-danger); }
+
+/* === LlmAvatarGroup === */
+
+:host(.group) {
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  overflow: visible;
+  padding-inline-start: 4px;
+}
+
+/* Overlap ring applied to avatars inside a group via :host-context */
+:host-context(llm-avatar-group) {
+  box-shadow: 0 0 0 2px var(--ui-color-surface);
+  margin-inline-start: -8px;
+}
+
+/* Overflow count badge */
+.overflow-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-color: var(--ui-color-surface-sunken);
+  color: var(--ui-color-text-muted);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-full);
+  font-family: var(--ui-font-family);
+  font-weight: var(--ui-font-weight-semibold);
+  box-shadow: 0 0 0 2px var(--ui-color-surface);
+  margin-inline-start: -8px;
+}
+
+.overflow-badge.size-xs { width: 24px; height: 24px; font-size: 0.5625rem; }
+.overflow-badge.size-sm { width: 32px; height: 32px; font-size: var(--ui-font-size-xs); }
+.overflow-badge.size-md { width: 40px; height: 40px; font-size: var(--ui-font-size-sm); }
+.overflow-badge.size-lg { width: 48px; height: 48px; font-size: var(--ui-font-size-sm); }
+.overflow-badge.size-xl { width: 64px; height: 64px; font-size: var(--ui-font-size-md); }

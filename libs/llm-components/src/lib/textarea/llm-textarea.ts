@@ -2,14 +2,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  ElementRef,
-  effect,
   input,
   model,
-  viewChild,
 } from '@angular/core';
+import { TextFieldModule } from '@angular/cdk/text-field';
 import type { FormValueControl } from '@angular/forms/signals';
-import { type ValidationError, type WithOptionalField } from '@angular/forms/signals';
+import { type ValidationError, type WithOptionalFieldTree } from '@angular/forms/signals';
 
 let nextId = 0;
 
@@ -25,10 +23,10 @@ let nextId = 0;
 @Component({
   selector: 'llm-textarea',
   standalone: true,
+  imports: [TextFieldModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <textarea
-      #textareaEl
       [value]="value()"
       (input)="onInput($event)"
       (blur)="touched.set(true)"
@@ -40,6 +38,8 @@ let nextId = 0;
       [attr.aria-invalid]="invalid() || null"
       [attr.aria-required]="required() || null"
       [attr.aria-describedby]="showErrors() ? errorId : null"
+      [cdkTextareaAutosize]="autoResize()"
+      [cdkAutosizeMinRows]="rows()"
     ></textarea>
     @if (showErrors()) {
       <div class="errors" [id]="errorId" aria-live="polite">
@@ -74,7 +74,7 @@ export class LlmTextarea implements FormValueControl<string> {
   invalid = input(false);
 
   /** Validation errors from the form system. Bound by [formField] directive. */
-  errors = input<readonly WithOptionalField<ValidationError>[]>([]);
+  errors = input<readonly WithOptionalFieldTree<ValidationError>[]>([]);
 
   /** Whether the user has interacted with the textarea. Bound by [formField] directive. */
   touched = model(false);
@@ -87,9 +87,6 @@ export class LlmTextarea implements FormValueControl<string> {
 
   /** Whether to auto-resize the textarea height to fit its content. */
   autoResize = input(false);
-
-  /** @internal */
-  protected readonly textareaEl = viewChild<ElementRef<HTMLTextAreaElement>>('textareaEl');
 
   /** @internal */
   protected readonly errorId = `llm-textarea-errors-${nextId++}`;
@@ -109,18 +106,6 @@ export class LlmTextarea implements FormValueControl<string> {
     if (this.autoResize()) classes.push('is-auto-resize');
     return classes.join(' ');
   });
-
-  constructor() {
-    effect(() => {
-      if (!this.autoResize()) return;
-      const el = this.textareaEl()?.nativeElement;
-      if (!el) return;
-      // Read value to track signal
-      this.value();
-      el.style.height = 'auto';
-      el.style.height = `${el.scrollHeight}px`;
-    });
-  }
 
   /** @internal */
   protected onInput(event: Event) {

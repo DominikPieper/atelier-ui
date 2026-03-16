@@ -55,7 +55,7 @@ input[type='radio']:checked::after {
   width: 0.45rem;
   height: 0.45rem;
   border-radius: 50%;
-  background-color: #fff;
+  background-color: var(--ui-color-on-primary);
   animation: llm-radio-pop var(--ui-duration-normal) var(--ui-ease-spring);
 }
 
@@ -73,7 +73,7 @@ input[type='radio']:checked::after {
 
 /* Disabled state */
 :host(.is-disabled) {
-  opacity: 0.5;
+  opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }
 

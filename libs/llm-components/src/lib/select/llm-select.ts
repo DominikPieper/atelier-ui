@@ -9,9 +9,37 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
+import { ActiveDescendantKeyManager, Highlightable } from '@angular/cdk/a11y';
 import type { FormValueControl } from '@angular/forms/signals';
-import { type ValidationError, type WithOptionalField } from '@angular/forms/signals';
+import { type ValidationError, type WithOptionalFieldTree } from '@angular/forms/signals';
 import { LLM_SELECT, type LlmSelectContext } from './llm-select.token';
+
+/** @internal — Wrapper item for ActiveDescendantKeyManager integration. */
+class SelectOptionItem implements Highlightable {
+  disabled: boolean;
+
+  constructor(
+    readonly id: string,
+    readonly value: string,
+    readonly labelText: string,
+    disabled: boolean,
+    private readonly activeOptionId: import('@angular/core').WritableSignal<string | null>,
+  ) {
+    this.disabled = disabled;
+  }
+
+  getLabel(): string {
+    return this.labelText;
+  }
+
+  setActiveStyles(): void {
+    this.activeOptionId.set(this.id);
+  }
+
+  setInactiveStyles(): void {
+    // Handled by key manager — no-op here
+  }
+}
 
 let nextId = 0;
 
@@ -41,7 +69,6 @@ let nextId = 0;
       type="button"
       class="trigger"
       [id]="triggerId"
-      [attr.popovertarget]="panelId"
       [attr.aria-expanded]="isOpen()"
       aria-haspopup="listbox"
       [attr.aria-controls]="panelId"
@@ -106,7 +133,7 @@ export class LlmSelect implements FormValueControl<string>, LlmSelectContext {
   readonly name = input('');
 
   /** Validation errors from the form system. Bound by [formField] directive. */
-  readonly errors = input<readonly WithOptionalField<ValidationError>[]>([]);
+  readonly errors = input<readonly WithOptionalFieldTree<ValidationError>[]>([]);
 
   /** @internal */
   readonly activeOptionId = signal<string | null>(null);
@@ -151,9 +178,9 @@ export class LlmSelect implements FormValueControl<string>, LlmSelectContext {
     return classes.join(' ');
   });
 
-  /** @internal — type-ahead buffer */
-  private typeaheadBuffer = '';
-  private typeaheadTimer: ReturnType<typeof setTimeout> | null = null;
+  /** @internal */
+  private keyManager: ActiveDescendantKeyManager<SelectOptionItem> | null = null;
+
   private outsideClickHandler: ((e: MouseEvent) => void) | null = null;
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
@@ -206,44 +233,17 @@ export class LlmSelect implements FormValueControl<string>, LlmSelectContext {
   protected onKeydown(event: KeyboardEvent): void {
     if (this.disabled()) return;
 
-    const enabledOptions = this.optionsList().filter((o) => !o.disabled);
-    if (enabledOptions.length === 0) return;
-
     switch (event.key) {
-      case 'ArrowDown':
-      case 'ArrowRight': {
-        event.preventDefault();
-        if (!this.isOpen()) {
-          this.open();
-          return;
-        }
-        const currentIdx = enabledOptions.findIndex((o) => o.id === this.activeOptionId());
-        const nextIdx = currentIdx < enabledOptions.length - 1 ? currentIdx + 1 : 0;
-        this.activeOptionId.set(enabledOptions[nextIdx].id);
-        break;
-      }
-      case 'ArrowUp':
-      case 'ArrowLeft': {
-        event.preventDefault();
-        if (!this.isOpen()) {
-          this.open();
-          return;
-        }
-        const currentIdx = enabledOptions.findIndex((o) => o.id === this.activeOptionId());
-        const prevIdx = currentIdx > 0 ? currentIdx - 1 : enabledOptions.length - 1;
-        this.activeOptionId.set(enabledOptions[prevIdx].id);
-        break;
-      }
       case 'Enter':
       case ' ': {
         event.preventDefault();
         if (!this.isOpen()) {
           this.open();
-          return;
-        }
-        const active = enabledOptions.find((o) => o.id === this.activeOptionId());
-        if (active) {
-          this.select(active.value);
+        } else {
+          const activeItem = this.keyManager?.activeItem as SelectOptionItem | null | undefined;
+          if (activeItem) {
+            this.select(activeItem.value);
+          }
         }
         break;
       }
@@ -252,44 +252,15 @@ export class LlmSelect implements FormValueControl<string>, LlmSelectContext {
         this.close();
         break;
       }
-      case 'Home': {
-        event.preventDefault();
-        if (!this.isOpen()) this.open();
-        this.activeOptionId.set(enabledOptions[0]?.id ?? null);
-        break;
-      }
-      case 'End': {
-        event.preventDefault();
-        if (!this.isOpen()) this.open();
-        this.activeOptionId.set(enabledOptions[enabledOptions.length - 1]?.id ?? null);
-        break;
-      }
       default: {
-        if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
-          this.handleTypeahead(event.key, enabledOptions);
+        const isNav = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key);
+        const isTypeahead = event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey;
+        if ((isNav || isTypeahead) && !this.isOpen()) {
+          this.open();
+          if (isNav) return; // open() already sets active item
         }
+        this.keyManager?.onKeydown(event);
       }
-    }
-  }
-
-  private handleTypeahead(
-    char: string,
-    enabledOptions: { id: string; value: string; labelText: string; disabled: boolean }[]
-  ): void {
-    if (!this.isOpen()) this.open();
-    this.typeaheadBuffer += char.toLowerCase();
-
-    if (this.typeaheadTimer !== null) clearTimeout(this.typeaheadTimer);
-    this.typeaheadTimer = setTimeout(() => {
-      this.typeaheadBuffer = '';
-      this.typeaheadTimer = null;
-    }, 500);
-
-    const match = enabledOptions.find((o) =>
-      o.labelText.toLowerCase().startsWith(this.typeaheadBuffer)
-    );
-    if (match) {
-      this.activeOptionId.set(match.id);
     }
   }
 
@@ -299,10 +270,23 @@ export class LlmSelect implements FormValueControl<string>, LlmSelectContext {
     (panel.nativeElement as HTMLElement & { showPopover(): void }).showPopover();
     this.isOpen.set(true);
 
+    // (Re)create key manager with current options
+    const items = this.optionsList().map(
+      (o) => new SelectOptionItem(o.id, o.value, o.labelText, o.disabled, this.activeOptionId),
+    );
+    this.keyManager = new ActiveDescendantKeyManager(items)
+      .withWrap()
+      .withTypeAhead(500)
+      .withHomeAndEnd()
+      .withVerticalOrientation();
+
     // Set active option to currently selected or first enabled
-    const enabledOptions = this.optionsList().filter((o) => !o.disabled);
-    const selectedOption = enabledOptions.find((o) => o.value === this.value());
-    this.activeOptionId.set(selectedOption?.id ?? enabledOptions[0]?.id ?? null);
+    const selectedIdx = items.findIndex((i) => i.value === this.value() && !i.disabled);
+    const firstEnabledIdx = items.findIndex((i) => !i.disabled);
+    const activeIdx = selectedIdx >= 0 ? selectedIdx : firstEnabledIdx;
+    if (activeIdx >= 0) {
+      this.keyManager.setActiveItem(activeIdx);
+    }
 
     // Outside click listener
     this.outsideClickHandler = (e: MouseEvent) => {
@@ -323,6 +307,7 @@ export class LlmSelect implements FormValueControl<string>, LlmSelectContext {
     }
     this.isOpen.set(false);
     this.activeOptionId.set(null);
+    this.keyManager = null;
 
     if (this.outsideClickHandler) {
       document.removeEventListener('click', this.outsideClickHandler);

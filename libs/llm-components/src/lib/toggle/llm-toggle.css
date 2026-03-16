@@ -92,7 +92,7 @@ input[type='checkbox']:focus-visible + .track {
 
 /* Disabled state */
 :host(.is-disabled) {
-  opacity: 0.5;
+  opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }
 

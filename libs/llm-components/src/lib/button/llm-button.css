@@ -36,7 +36,7 @@
 :host(.variant-primary:hover:not(.is-disabled)) {
   background-color: var(--ui-color-primary-hover);
   border-color: var(--ui-color-primary-hover);
-  box-shadow: var(--ui-shadow-sm);
+  box-shadow: var(--ui-shadow-md);
   transform: translateY(-1px);
 }
 
@@ -44,7 +44,7 @@
   background-color: var(--ui-color-primary-active);
   border-color: var(--ui-color-primary-active);
   box-shadow: var(--ui-shadow-xs);
-  transform: translateY(0);
+  transform: scale(0.97);
 }
 
 :host(.variant-secondary) {
@@ -57,7 +57,7 @@
 :host(.variant-secondary:hover:not(.is-disabled)) {
   background-color: var(--ui-color-secondary-hover);
   border-color: var(--ui-color-secondary-hover);
-  box-shadow: var(--ui-shadow-sm);
+  box-shadow: var(--ui-shadow-md);
   transform: translateY(-1px);
 }
 
@@ -65,7 +65,7 @@
   background-color: var(--ui-color-secondary-active);
   border-color: var(--ui-color-secondary-active);
   box-shadow: var(--ui-shadow-xs);
-  transform: translateY(0);
+  transform: scale(0.97);
 }
 
 :host(.variant-outline) {
@@ -82,7 +82,7 @@
 
 :host(.variant-outline:active:not(.is-disabled)) {
   background-color: color-mix(in srgb, var(--ui-color-primary) 12%, transparent);
-  transform: translateY(0);
+  transform: scale(0.97);
 }
 
 /* Sizes */
@@ -103,7 +103,7 @@
 
 /* Disabled */
 :host(.is-disabled) {
-  opacity: 0.5;
+  opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
   pointer-events: none;
 }

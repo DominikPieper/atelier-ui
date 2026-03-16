@@ -2,14 +2,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  ElementRef,
-  inject,
   input,
   model,
+  signal,
 } from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
-import { type ValidationError, type WithOptionalField } from '@angular/forms/signals';
-import { LLM_RADIO_GROUP, type LlmRadioGroupContext } from './llm-radio-group.token';
+import { type ValidationError, type WithOptionalFieldTree } from '@angular/forms/signals';
+import { LLM_RADIO_GROUP, type LlmRadioGroupContext, type RadioItem } from './llm-radio-group.token';
 
 let nextId = 0;
 
@@ -76,13 +75,13 @@ export class LlmRadioGroup implements FormValueControl<string>, LlmRadioGroupCon
   readonly name = input('');
 
   /** Validation errors from the form system. Bound by [formField] directive. */
-  readonly errors = input<readonly WithOptionalField<ValidationError>[]>([]);
+  readonly errors = input<readonly WithOptionalFieldTree<ValidationError>[]>([]);
 
   /** @internal */
   protected readonly errorId = `llm-radio-group-errors-${nextId++}`;
 
   /** @internal */
-  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly items = signal<RadioItem[]>([]);
 
   /** @internal */
   protected readonly showErrors = computed(
@@ -110,36 +109,38 @@ export class LlmRadioGroup implements FormValueControl<string>, LlmRadioGroupCon
     this.touched.set(true);
   }
 
+  /** @internal — called by LlmRadio on init */
+  registerItem(item: RadioItem): void {
+    this.items.update((list) => [...list, item]);
+  }
+
+  /** @internal — called by LlmRadio on destroy */
+  unregisterItem(item: RadioItem): void {
+    this.items.update((list) => list.filter((i) => i !== item));
+  }
+
   /** @internal */
   protected onKeydown(event: KeyboardEvent): void {
-    const inputs = Array.from(
-      this.elementRef.nativeElement.querySelectorAll<HTMLInputElement>(
-        'input[type="radio"]:not(:disabled)'
-      )
-    );
-    if (inputs.length === 0) return;
+    const key = event.key;
+    if (key !== 'ArrowDown' && key !== 'ArrowRight' && key !== 'ArrowUp' && key !== 'ArrowLeft') return;
 
-    const currentIdx = inputs.indexOf(document.activeElement as HTMLInputElement);
+    event.preventDefault();
+    const radioItems = this.items();
+    const enabled = radioItems.filter((item) => !item.isDisabled());
+    if (enabled.length === 0) return;
 
-    let nextIdx: number;
-    switch (event.key) {
-      case 'ArrowDown':
-      case 'ArrowRight':
-        event.preventDefault();
-        nextIdx = currentIdx < inputs.length - 1 ? currentIdx + 1 : 0;
-        break;
-      case 'ArrowUp':
-      case 'ArrowLeft':
-        event.preventDefault();
-        nextIdx = currentIdx > 0 ? currentIdx - 1 : inputs.length - 1;
-        break;
-      default:
-        return;
+    const currentPos = enabled.findIndex((i) => i.radioValue() === this.value());
+    const isNext = key === 'ArrowDown' || key === 'ArrowRight';
+    const n = enabled.length;
+    const nextPos = isNext
+      ? (currentPos + 1) % n
+      : (currentPos - 1 + n) % n;
+
+    const target = enabled[nextPos];
+    if (target) {
+      target.focusInput();
+      this.value.set(target.radioValue());
+      this.touched.set(true);
     }
-
-    const target = inputs[nextIdx];
-    target.focus();
-    this.select(target.value);
-    this.touched.set(true);
   }
 }

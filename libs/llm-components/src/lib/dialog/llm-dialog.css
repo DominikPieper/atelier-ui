@@ -1,0 +1,165 @@
+/* ── Host ──────────────────────────────────────────────────────────────── */
+llm-dialog {
+  display: contents;
+}
+
+/* ── Native <dialog> reset + base ──────────────────────────────────────── */
+dialog {
+  all: unset;
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  display: none; /* hidden by default; showModal() moves to top layer */
+  flex-direction: column;
+  max-height: calc(100dvh - var(--ui-spacing-8));
+  border-radius: var(--ui-radius-lg);
+  background: var(--ui-color-surface);
+  box-shadow: var(--ui-shadow-xl, 0 20px 60px rgba(0, 0, 0, 0.3));
+  color: var(--ui-color-text);
+  overflow: hidden;
+
+  /* Open/close animation */
+  opacity: 0;
+  transform: scale(0.95);
+  transition:
+    opacity var(--ui-duration-slow) var(--ui-ease-out, ease-out),
+    transform var(--ui-duration-slow) var(--ui-ease-out, ease-out),
+    display var(--ui-duration-slow) allow-discrete,
+    overlay var(--ui-duration-slow) allow-discrete;
+}
+
+dialog[open] {
+  display: flex;
+  opacity: 1;
+  transform: scale(1);
+}
+
+@starting-style {
+  dialog[open] {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+/* ── Backdrop ────────────────────────────────────────────────────────────── */
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  transition:
+    opacity var(--ui-duration-slow) var(--ui-ease-out, ease-out),
+    display var(--ui-duration-slow) allow-discrete,
+    overlay var(--ui-duration-slow) allow-discrete;
+}
+
+@starting-style {
+  dialog[open]::backdrop {
+    opacity: 0;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  dialog::backdrop {
+    background: rgba(0, 0, 0, 0.7);
+  }
+}
+
+[data-theme='dark'] dialog::backdrop {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* ── Panel (inner wrapper) ───────────────────────────────────────────────── */
+.panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: inherit;
+  overflow: hidden;
+}
+
+/* ── Size variants ───────────────────────────────────────────────────────── */
+.size-sm {
+  width: min(24rem, 90vw);
+}
+
+.size-md {
+  width: min(36rem, 90vw);
+}
+
+.size-lg {
+  width: min(48rem, 90vw);
+}
+
+.size-xl {
+  width: min(64rem, 90vw);
+}
+
+.size-full {
+  width: 100vw;
+  height: 100dvh;
+  max-height: 100dvh;
+  border-radius: 0;
+  margin: 0;
+}
+
+/* ── Sub-components ──────────────────────────────────────────────────────── */
+llm-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--ui-spacing-4) var(--ui-spacing-5);
+  border-bottom: 1px solid var(--ui-color-border);
+  font-size: var(--ui-font-size-xl);
+  font-weight: 600;
+  letter-spacing: var(--ui-letter-spacing-tight);
+  color: var(--ui-color-text);
+  flex-shrink: 0;
+}
+
+llm-dialog-content {
+  display: block;
+  padding: var(--ui-spacing-5);
+  overflow-y: auto;
+  flex: 1;
+  color: var(--ui-color-text);
+}
+
+llm-dialog-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ui-spacing-2);
+  padding: var(--ui-spacing-4) var(--ui-spacing-5);
+  border-top: 1px solid var(--ui-color-border);
+  flex-shrink: 0;
+}
+
+/* ── Close button (inside llm-dialog-header) ──────────────────────────────── */
+.close-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  margin-left: var(--ui-spacing-3);
+  background: transparent;
+  border: none;
+  border-radius: var(--ui-radius-sm);
+  cursor: pointer;
+  color: var(--ui-color-text-muted);
+  transition:
+    background-color var(--ui-transition-fast),
+    color var(--ui-transition-fast);
+  line-height: 1;
+}
+
+.close-btn:hover {
+  background-color: var(--ui-color-surface-sunken);
+  color: var(--ui-color-text);
+}
+
+.close-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
+}

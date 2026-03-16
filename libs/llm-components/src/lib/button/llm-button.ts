@@ -27,6 +27,7 @@ import {
   `,
   styleUrl: './llm-button.css',
   host: {
+    role: 'button',
     '[class]': 'hostClasses()',
     '[attr.aria-disabled]': 'isDisabled()',
     '[attr.disabled]': 'isDisabled() ? true : null',

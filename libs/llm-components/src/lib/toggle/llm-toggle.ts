@@ -6,7 +6,7 @@ import {
   model,
 } from '@angular/core';
 import type { FormCheckboxControl } from '@angular/forms/signals';
-import { type ValidationError, type WithOptionalField } from '@angular/forms/signals';
+import { type ValidationError, type WithOptionalFieldTree } from '@angular/forms/signals';
 
 let nextId = 0;
 
@@ -79,7 +79,7 @@ export class LlmToggle implements FormCheckboxControl {
   readonly name = input('');
 
   /** Validation errors from the form system. Bound by [formField] directive. */
-  readonly errors = input<readonly WithOptionalField<ValidationError>[]>([]);
+  readonly errors = input<readonly WithOptionalFieldTree<ValidationError>[]>([]);
 
   /** @internal */
   protected readonly inputId = `llm-toggle-${nextId++}`;

@@ -24,14 +24,14 @@ This document outlines the development phases, existing status, and future backl
 | `LlmTextarea` | Done | P0 | `FormValueControl`, autoResize, matched input styling |
 | `LlmCheckbox` | Done | P0 | `FormCheckboxControl`, spring pop animation |
 | `LlmRadio` | Done | P0 | `FormValueControl` (via group), pop animation |
-| `LlmToggle` | Not Started | P1 | Switch, `FormCheckboxControl` |
-| `LlmAlert` | Not Started | P1 | Inline notification |
-| `LlmSelect` | Not Started | P1 | Complex input with dropdown, `FormValueControl` |
-| `LlmDialog` | Not Started | P2 | Overlay/Modal |
-| `LlmTabs` | Not Started | P2 | Navigation |
-| `LlmAccordion` | Not Started | P2 | Content organization |
-| `LlmMenu` | Not Started | P2 | Complex navigation |
-| `LlmTooltip` | Not Started | P3 | Hover info |
+| `LlmToggle` | Done | P1 | Switch, `FormCheckboxControl` |
+| `LlmAlert` | Done | P1 | Inline notification |
+| `LlmSelect` | Done | P1 | Complex input with dropdown, `FormValueControl` |
+| `LlmDialog` | Done | P2 | Overlay/Modal, native `<dialog>`, focus trap, animations |
+| `LlmTabs` | Done | P2 | Tabbed interface, roving tabindex, arrow nav, default + pills variants |
+| `LlmAccordion` | Done | P2 | Collapsible sections, single/multi mode, 3 variants, CSS grid animation |
+| `LlmMenu` | Done | P2 | CDK Menu wrapper, nested submenus, keyboard nav |
+| `LlmTooltip` | Done | P3 | CDK Overlay directive, viewport-aware positioning |
 
 ---
 
@@ -62,26 +62,26 @@ This document outlines the development phases, existing status, and future backl
 2. **Component CSS refresh**: Button hover lift/press, card surface hierarchy, input sunken→bright-on-focus, checkbox/radio spring-pop animations, badge bordered tints.
 3. **Storybook enhancement**: Font loading, themed backgrounds, Kitchen Sink showcase story.
 
-## Phase 2b: More Inputs & Feedback — NEXT
+## Phase 2b: More Inputs & Feedback — COMPLETE
 *Focus: Richer input controls and system feedback, built with the refreshed design from day one.*
 
 1. **`LlmToggle`**: Implements `FormCheckboxControl`. `role="switch"`, `checked` model. Animated knob.
 2. **`LlmAlert`**: Inline notification. `variant` = `info | success | warning | danger`. Optional `dismissible` input.
 
-## Phase 3: Dark Mode + Select
+## Phase 3: Dark Mode + Select — COMPLETE
 *Focus: Dark mode while the design system is fresh; Select needs overlay research.*
 
 1. **Dark mode tokens**: `prefers-color-scheme` media query + explicit `data-theme="dark"` support. All existing components get dark mode for free through token overrides.
 2. **`LlmSelect`**: Implements `FormValueControl<string>`. Dropdown with keyboard nav, type-ahead, `aria-selected`. Options via content projection (`<llm-option>`). Requires overlay positioning decision (Popover API recommended).
 
-## Phase 4: Overlays & Navigation
+## Phase 4: Overlays & Navigation — COMPLETE
 *Focus: Managing complex UI states. All built with light + dark mode from the start.*
 
-1. **`LlmDialog`**: Accessible modal using native `<dialog>`. Focus trap, Escape to close, backdrop click.
-2. **`LlmTabs`**: Accessible tabbed interface. Arrow keys, roving tabindex.
-3. **`LlmAccordion`**: Collapsible content sections. `aria-expanded`.
-4. **`LlmMenu`**: Dropdown and context menus. Arrow keys, Escape.
-5. **`LlmTooltip`**: Hover/focus-based info. `role="tooltip"`.
+1. **`LlmDialog`**: ✅ Done. Accessible modal using native `<dialog>`. Focus trap, Escape to close, backdrop click.
+2. **`LlmTabs`**: ✅ Done. Accessible tabbed interface. Arrow keys, roving tabindex, default + pills variants.
+3. **`LlmAccordion`**: ✅ Done. Collapsible content sections. Single/multi mode, 3 variants, CSS grid animation.
+4. **`LlmMenu`**: ✅ Done. Thin wrapper over `@angular/cdk/menu` (`CdkMenu`, `CdkMenuItem`, `CdkMenuTrigger`). Full keyboard nav, nested submenus, focus management, and ARIA — all handled by CDK. Library provides styling via design tokens.
+5. **`LlmTooltip`**: ✅ Done. Attribute directive using `@angular/cdk/overlay` (`createOverlayRef`, `createFlexibleConnectedPositionStrategy`) for viewport-aware positioning. Show on hover/focus, `aria-describedby` linking, configurable delays.
 
 ## Phase 5: Publishing & Tooling
 *Focus: Make the library consumable and self-documenting.*
@@ -93,8 +93,40 @@ This document outlines the development phases, existing status, and future backl
 
 ---
 
+## Backlog: CDK Refactoring
+
+> **`@angular/cdk` v21.2.2 is installed** but currently unused. Several existing components have manual implementations of patterns that CDK provides out of the box. Refactoring to CDK would reduce code, improve accessibility correctness, and lower maintenance burden.
+
+### High Impact (significant code reduction)
+
+| Component | CDK Module | Current Manual Code | CDK Replacement | Est. Reduction |
+|-----------|-----------|-------------------|-----------------|----------------|
+| `LlmSelect` | `@angular/cdk/a11y` | ~125 lines: 11-case switch for keyboard nav, type-ahead with 500ms debounce, wrap-around logic | `ActiveDescendantKeyManager` handles arrow nav, wrap, Home/End, type-ahead natively | ~80 lines |
+| `LlmDialog` | `@angular/cdk/a11y` | ~25 lines: manual focus trap (Tab/Shift+Tab wrapping, focusable element query) | `cdkTrapFocus` directive | ~20 lines |
+| `LlmAccordion` | `@angular/cdk/accordion` | Manual expand state tracking via Set, single/multi logic, item registration | `CdkAccordion` + `CdkAccordionItem` with `multi` input and `expanded` state | ~30 lines |
+
+### Medium Impact
+
+| Component | CDK Module | Current Manual Code | CDK Replacement | Est. Reduction |
+|-----------|-----------|-------------------|-----------------|----------------|
+| `LlmTabs` | `@angular/cdk/a11y` | ~40 lines: roving tabindex + keyboard nav | `FocusKeyManager` with wrap, skip disabled, Home/End | ~25 lines |
+| `LlmRadioGroup` | `@angular/cdk/a11y` | ~20 lines: arrow key navigation | `FocusKeyManager` with horizontal/vertical mode | ~15 lines |
+
+### Low Impact (optional)
+
+| Component | CDK Module | Current Manual Code | CDK Replacement | Est. Reduction |
+|-----------|-----------|-------------------|-----------------|----------------|
+| `LlmTextarea` | `@angular/cdk/text-field` | Manual autoResize with ResizeObserver | `cdkTextareaAutosize` directive | ~10 lines |
+
+### Verification Approach
+- After each refactor: run existing tests (`nx test llm-components`) to ensure no regressions
+- Storybook visual check for each touched component
+- Confirm CDK imports resolve correctly via build check (`nx build llm-components`)
+
+---
+
 ## Open Architectural Questions
 
 - ~~**CVA + Signals**: Resolved — use Angular 21 Signal Forms (`FormValueControl` / `FormCheckboxControl`). No CVA needed.~~
 - **Dark mode token structure**: Single set of tokens with CSS media query overrides, or separate token files per theme?
-- **Overlay positioning**: CSS Popover API recommended for dropdowns/tooltips/menus. Research needed for Phase 4.
+- **Overlay positioning**: CSS Popover API used for `LlmSelect`. For `LlmMenu` and `LlmTooltip`, use `@angular/cdk/overlay` + `@angular/cdk/menu` instead — they provide positioning, scroll handling, and viewport boundary detection that the Popover API doesn't cover well for complex cases.

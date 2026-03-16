@@ -51,7 +51,8 @@ llm-card-header {
   font-size: var(--ui-font-size-lg);
   font-weight: var(--ui-font-weight-semibold);
   color: var(--ui-color-text);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid var(--ui-color-border);
+  letter-spacing: var(--ui-letter-spacing-tight);
 }
 
 llm-card-content {
@@ -64,5 +65,5 @@ llm-card-footer {
   display: flex;
   align-items: center;
   gap: var(--ui-spacing-2);
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-top: 1px solid var(--ui-color-border);
 }

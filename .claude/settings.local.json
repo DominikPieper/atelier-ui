@@ -35,11 +35,16 @@
       "mcp__angular-cli__search_documentation",
       "Bash(node -e \"try { const f = require\\(''@angular/forms/signals''\\); console.log\\(''Available exports:'', Object.keys\\(f\\).join\\('', ''\\)\\); } catch\\(e\\) { console.log\\(''Error:'', e.message\\); }\")",
       "Bash(node -e \"require\\(''@angular/compiler''\\); const s = require\\(''@angular/forms/signals''\\); console.log\\(''FormField type:'', typeof s.FormField\\); console.log\\(''Has FORM_FIELD:'', ''FORM_FIELD'' in s\\);\")",
-      "Bash(node -e \":*)"
+      "Bash(node -e \":*)",
+      "mcp__localhost-4400__get-storybook-story-instructions",
+      "mcp__localhost-4400__preview-stories",
+      "Bash(nx generate:*)"
     ]
   },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "nx-mcp",
-    "angular-cli"
+    "angular-cli",
+    "localhost-4400"
   ]
 }
