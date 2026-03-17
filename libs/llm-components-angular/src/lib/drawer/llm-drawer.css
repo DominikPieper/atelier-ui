@@ -1,0 +1,228 @@
+/* ── Host ──────────────────────────────────────────────────────────────────── */
+llm-drawer {
+  display: contents;
+}
+
+/* ── Native <dialog> base ──────────────────────────────────────────────────── */
+dialog {
+  all: unset;
+  position: fixed;
+  display: none;
+  flex-direction: column;
+  background: var(--ui-color-surface);
+  box-shadow: var(--ui-shadow-xl, 0 20px 60px rgba(0, 0, 0, 0.3));
+  color: var(--ui-color-text);
+  overflow: hidden;
+  transition:
+    transform var(--ui-duration-slow) var(--ui-ease-out, ease-out),
+    display var(--ui-duration-slow) allow-discrete,
+    overlay var(--ui-duration-slow) allow-discrete;
+}
+
+dialog[open] {
+  display: flex;
+  transform: translate(0, 0) !important;
+}
+
+/* ── Backdrop ──────────────────────────────────────────────────────────────── */
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  transition:
+    opacity var(--ui-duration-slow) var(--ui-ease-out, ease-out),
+    display var(--ui-duration-slow) allow-discrete,
+    overlay var(--ui-duration-slow) allow-discrete;
+}
+
+@starting-style {
+  dialog[open]::backdrop {
+    opacity: 0;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  dialog::backdrop {
+    background: rgba(0, 0, 0, 0.7);
+  }
+}
+
+[data-theme='dark'] dialog::backdrop {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* ── Panel (inner wrapper) ─────────────────────────────────────────────────── */
+.panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* POSITION VARIANTS                                                           */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Right ─────────────────────────────────────────────────────────────────── */
+:host(.position-right) dialog {
+  inset: 0 0 0 auto;
+  height: 100dvh;
+  transform: translateX(100%);
+}
+
+@starting-style {
+  :host(.position-right) dialog[open] {
+    transform: translateX(100%);
+  }
+}
+
+/* ── Left ──────────────────────────────────────────────────────────────────── */
+:host(.position-left) dialog {
+  inset: 0 auto 0 0;
+  height: 100dvh;
+  transform: translateX(-100%);
+}
+
+@starting-style {
+  :host(.position-left) dialog[open] {
+    transform: translateX(-100%);
+  }
+}
+
+/* ── Top ───────────────────────────────────────────────────────────────────── */
+:host(.position-top) dialog {
+  inset: 0 0 auto 0;
+  width: 100vw;
+  transform: translateY(-100%);
+}
+
+@starting-style {
+  :host(.position-top) dialog[open] {
+    transform: translateY(-100%);
+  }
+}
+
+/* ── Bottom ────────────────────────────────────────────────────────────────── */
+:host(.position-bottom) dialog {
+  inset: auto 0 0 0;
+  width: 100vw;
+  transform: translateY(100%);
+}
+
+@starting-style {
+  :host(.position-bottom) dialog[open] {
+    transform: translateY(100%);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* SIZE VARIANTS (left/right = width; top/bottom = height)                    */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Left / Right widths */
+:host(.position-right.size-sm) dialog,
+:host(.position-left.size-sm) dialog {
+  width: 20rem;
+}
+
+:host(.position-right.size-md) dialog,
+:host(.position-left.size-md) dialog {
+  width: 28rem;
+}
+
+:host(.position-right.size-lg) dialog,
+:host(.position-left.size-lg) dialog {
+  width: 40rem;
+}
+
+:host(.position-right.size-full) dialog,
+:host(.position-left.size-full) dialog {
+  width: 100vw;
+}
+
+/* Top / Bottom heights */
+:host(.position-top.size-sm) dialog,
+:host(.position-bottom.size-sm) dialog {
+  height: 12rem;
+}
+
+:host(.position-top.size-md) dialog,
+:host(.position-bottom.size-md) dialog {
+  height: 20rem;
+}
+
+:host(.position-top.size-lg) dialog,
+:host(.position-bottom.size-lg) dialog {
+  height: 32rem;
+}
+
+:host(.position-top.size-full) dialog,
+:host(.position-bottom.size-full) dialog {
+  height: 100dvh;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* SUB-COMPONENTS                                                              */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+llm-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--ui-spacing-4) var(--ui-spacing-5);
+  border-bottom: 1px solid var(--ui-color-border);
+  font-size: var(--ui-font-size-xl);
+  font-weight: 600;
+  letter-spacing: var(--ui-letter-spacing-tight);
+  color: var(--ui-color-text);
+  flex-shrink: 0;
+}
+
+llm-drawer-content {
+  display: block;
+  padding: var(--ui-spacing-5);
+  overflow-y: auto;
+  flex: 1;
+  color: var(--ui-color-text);
+}
+
+llm-drawer-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ui-spacing-2);
+  padding: var(--ui-spacing-4) var(--ui-spacing-5);
+  border-top: 1px solid var(--ui-color-border);
+  flex-shrink: 0;
+}
+
+/* ── Close button ──────────────────────────────────────────────────────────── */
+.close-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  margin-left: var(--ui-spacing-3);
+  background: transparent;
+  border: none;
+  border-radius: var(--ui-radius-sm);
+  cursor: pointer;
+  color: var(--ui-color-text-muted);
+  transition:
+    background-color var(--ui-transition-fast),
+    color var(--ui-transition-fast);
+  line-height: 1;
+}
+
+.close-btn:hover {
+  background-color: var(--ui-color-surface-sunken);
+  color: var(--ui-color-text);
+}
+
+.close-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
+}

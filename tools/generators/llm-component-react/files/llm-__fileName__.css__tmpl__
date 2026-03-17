@@ -1,0 +1,11 @@
+/* ── <%= className %> ──────────────────────────────────────────────────── */
+
+.llm-<%= fileName %> {
+  display: block;
+  font-family: var(--ui-font-family);
+}
+
+/* Variants */
+.llm-<%= fileName %>.variant-default {
+  /* default styles */
+}

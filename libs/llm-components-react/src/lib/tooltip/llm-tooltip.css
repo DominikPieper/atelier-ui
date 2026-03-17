@@ -1,0 +1,80 @@
+/* Tooltip wrapper — inline container */
+.llm-tooltip-wrapper {
+  display: inline-block;
+  position: relative;
+}
+
+/* Tooltip content */
+.llm-tooltip {
+  position: absolute;
+  z-index: var(--ui-z-tooltip, 200);
+  display: block;
+  padding: var(--ui-spacing-1) var(--ui-spacing-2);
+  background: var(--ui-color-text);
+  color: var(--ui-color-surface);
+  font-family: var(--ui-font-family);
+  font-size: var(--ui-font-size-xs);
+  line-height: var(--ui-line-height-normal);
+  border-radius: var(--ui-radius-sm);
+  box-shadow: var(--ui-shadow-md);
+  max-width: 20rem;
+  word-wrap: break-word;
+  pointer-events: none;
+  white-space: nowrap;
+
+  /* Entry animation */
+  animation: llm-tooltip-enter var(--ui-duration-fast) var(--ui-ease-out) forwards;
+}
+
+/* Positioning */
+.llm-tooltip.position-above {
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.llm-tooltip.position-below {
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.llm-tooltip.position-left {
+  right: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.llm-tooltip.position-right {
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@keyframes llm-tooltip-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateX(-50%);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateX(-50%);
+  }
+}
+
+/* Left/right don't need translateX in animation */
+.llm-tooltip.position-left,
+.llm-tooltip.position-right {
+  animation: llm-tooltip-enter-side var(--ui-duration-fast) var(--ui-ease-out) forwards;
+}
+
+@keyframes llm-tooltip-enter-side {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-50%);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(-50%);
+  }
+}

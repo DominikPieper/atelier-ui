@@ -1,0 +1,49 @@
+.llm-skeleton {
+  display: block;
+  background: var(--ui-color-border);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Variant shapes */
+.llm-skeleton.variant-text {
+  border-radius: var(--ui-radius-sm);
+}
+
+.llm-skeleton.variant-circular {
+  border-radius: var(--ui-radius-full, 9999px);
+}
+
+.llm-skeleton.variant-rectangular {
+  border-radius: var(--ui-radius-md);
+}
+
+/* Shimmer animation */
+.llm-skeleton.is-animated::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .llm-skeleton.is-animated::after {
+    animation: none;
+  }
+}

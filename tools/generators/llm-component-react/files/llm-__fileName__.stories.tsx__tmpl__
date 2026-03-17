@@ -1,0 +1,17 @@
+import type { Meta, StoryObj } from '@storybook/react';
+import { <%= className %> } from './llm-<%= fileName %>';
+
+const meta: Meta<typeof <%= className %>> = {
+  title: 'Components/<%= className %>',
+  component: <%= className %>,
+  tags: ['autodocs'],
+  argTypes: {
+    variant: { control: 'select', options: ['default'] },
+  },
+  args: { variant: 'default', children: '<%= className %>' },
+};
+
+export default meta;
+type Story = StoryObj<typeof <%= className %>>;
+
+export const Default: Story = {};

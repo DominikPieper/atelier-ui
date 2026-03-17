@@ -1,0 +1,81 @@
+.llm-select {
+  display: inline-block;
+  position: relative;
+  font-family: var(--ui-font-family);
+  font-size: var(--ui-font-size-md);
+}
+
+.llm-select label {
+  display: block;
+  margin-bottom: var(--ui-spacing-1);
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-color-text);
+  font-weight: var(--ui-font-weight-medium);
+}
+
+/* Select wrapper — holds native select + arrow icon */
+.llm-select .select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.llm-select select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--ui-spacing-2) var(--ui-spacing-3);
+  padding-inline-end: calc(var(--ui-spacing-3) + 1.25rem);
+  background: var(--ui-color-input-bg);
+  border: 1px solid var(--ui-color-input-border);
+  border-radius: var(--ui-radius-md);
+  color: var(--ui-color-text);
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition:
+    border-color var(--ui-transition-fast),
+    box-shadow var(--ui-transition-fast);
+}
+
+.llm-select select:hover:not(:disabled) {
+  border-color: var(--ui-color-input-border-hover);
+}
+
+.llm-select select:focus-visible {
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
+  border-color: var(--ui-color-input-border-focus);
+}
+
+.llm-select select:disabled {
+  opacity: var(--ui-opacity-disabled);
+  cursor: not-allowed;
+}
+
+.llm-select.is-invalid select {
+  border-color: var(--ui-color-input-border-invalid);
+}
+
+/* Arrow icon */
+.llm-select .select-arrow {
+  position: absolute;
+  inset-inline-end: var(--ui-spacing-3);
+  pointer-events: none;
+  font-size: var(--ui-font-size-xs);
+  color: var(--ui-color-text-muted);
+}
+
+/* Error display */
+.llm-select .errors {
+  margin-top: var(--ui-spacing-1);
+}
+
+.llm-select .error-message {
+  margin: 0;
+  font-size: var(--ui-font-size-xs);
+  color: var(--ui-color-error-text);
+}

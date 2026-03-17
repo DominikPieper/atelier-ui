@@ -13,7 +13,7 @@
     },
     "directory": {
       "type": "string",
-      "description": "Target directory relative to libs/llm-components/src/lib/. Defaults to the component name."
+      "description": "Target directory relative to libs/llm-components-angular/src/lib/. Defaults to the component name."
     }
   },
   "required": ["name"]

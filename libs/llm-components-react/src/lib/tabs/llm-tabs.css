@@ -1,0 +1,117 @@
+.llm-tab-group {
+  display: block;
+  font-family: var(--ui-font-family);
+}
+
+/* ─── Tab list ─── */
+.llm-tab-group .tablist {
+  display: flex;
+  gap: var(--ui-spacing-1);
+  border-bottom: 1px solid var(--ui-color-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.llm-tab-group .tablist::-webkit-scrollbar {
+  display: none;
+}
+
+/* ─── Tab button ─── */
+.llm-tab-group .tablist button {
+  all: unset;
+  box-sizing: border-box;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: var(--ui-spacing-2) var(--ui-spacing-4);
+  font-size: var(--ui-font-size-sm);
+  font-weight: var(--ui-font-weight-medium);
+  color: var(--ui-color-text-secondary);
+  cursor: pointer;
+  transition: var(--ui-transition-fast);
+  transition-property: color, background-color;
+  border-radius: var(--ui-radius-md) var(--ui-radius-md) 0 0;
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Active indicator (underline) */
+.llm-tab-group .tablist button::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: transparent;
+  border-radius: var(--ui-radius-full);
+  transition: background var(--ui-transition-fast);
+}
+
+.llm-tab-group .tablist button.is-active {
+  color: var(--ui-color-primary);
+}
+
+.llm-tab-group .tablist button.is-active::after {
+  background: var(--ui-color-primary);
+}
+
+/* Hover */
+.llm-tab-group .tablist button:hover:not(.is-disabled):not(.is-active) {
+  color: var(--ui-color-text);
+  background: var(--ui-color-surface-alt);
+}
+
+/* Focus */
+.llm-tab-group .tablist button:focus-visible {
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
+  border-radius: var(--ui-radius-md);
+}
+
+/* Disabled */
+.llm-tab-group .tablist button.is-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ─── Tab panel ─── */
+.llm-tab-group [role="tabpanel"] {
+  padding: var(--ui-spacing-4) 0;
+}
+
+.llm-tab-group [role="tabpanel"]:focus-visible {
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
+  border-radius: var(--ui-radius-md);
+}
+
+/* ─── Pills variant ─── */
+.llm-tab-group.variant-pills .tablist {
+  border-bottom: none;
+  gap: var(--ui-spacing-2);
+  padding: var(--ui-spacing-1);
+  background: var(--ui-color-surface-alt);
+  border-radius: var(--ui-radius-lg);
+}
+
+.llm-tab-group.variant-pills .tablist button {
+  border-radius: var(--ui-radius-md);
+  padding: var(--ui-spacing-1) var(--ui-spacing-4);
+  font-size: var(--ui-font-size-sm);
+}
+
+.llm-tab-group.variant-pills .tablist button::after {
+  display: none;
+}
+
+.llm-tab-group.variant-pills .tablist button.is-active {
+  background: var(--ui-color-surface);
+  color: var(--ui-color-text);
+  box-shadow: var(--ui-shadow-sm);
+}
+
+.llm-tab-group.variant-pills .tablist button:hover:not(.is-disabled):not(.is-active) {
+  background: transparent;
+  color: var(--ui-color-text);
+}

@@ -1,0 +1,33 @@
+import { HTMLAttributes, ReactNode } from 'react';
+import './llm-<%= fileName %>.css';
+
+/**
+ * TODO: Describe `<%= className %>` and its purpose.
+ *
+ * Usage:
+ * ```tsx
+ * <<%= className %> variant="default">Content</<%= className %>>
+ * ```
+ */
+export interface <%= className %>Props extends HTMLAttributes<HTMLDivElement> {
+  /** Visual variant. */
+  variant?: 'default';
+  children?: ReactNode;
+}
+
+export function <%= className %>({
+  variant = 'default',
+  children,
+  className,
+  ...rest
+}: <%= className %>Props) {
+  const classes = ['llm-<%= fileName %>', `variant-${variant}`, className]
+    .filter(Boolean)
+    .join(' ');
+
+  return (
+    <div className={classes} {...rest}>
+      {children}
+    </div>
+  );
+}

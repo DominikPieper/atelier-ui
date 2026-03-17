@@ -1,0 +1,169 @@
+import {
+  useEffect,
+  useRef,
+  useId,
+  createContext,
+  useContext,
+  ReactNode,
+  HTMLAttributes,
+  MouseEvent,
+} from 'react';
+import './llm-dialog.css';
+
+interface DialogContextValue {
+  headerId: string;
+  close: () => void;
+}
+
+const DialogContext = createContext<DialogContextValue>({
+  headerId: '',
+  close: () => {},
+});
+
+export interface LlmDialogProps {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  closeOnBackdrop?: boolean;
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  'aria-label'?: string;
+  'aria-labelledby'?: string;
+  children?: ReactNode;
+}
+
+export function LlmDialog({
+  open = false,
+  onOpenChange,
+  closeOnBackdrop = true,
+  size = 'md',
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledby,
+  children,
+}: LlmDialogProps) {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const headerId = useId();
+  const triggerElRef = useRef<Element | null>(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (open) {
+      triggerElRef.current = document.activeElement;
+      if (!dialog.open) dialog.showModal();
+    } else {
+      if (dialog.open) dialog.close();
+      (triggerElRef.current as HTMLElement | null)?.focus();
+      triggerElRef.current = null;
+    }
+  }, [open]);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    const onClose = () => onOpenChange?.(false);
+    const onCancel = (e: Event) => {
+      e.preventDefault();
+      onOpenChange?.(false);
+    };
+    dialog.addEventListener('close', onClose);
+    dialog.addEventListener('cancel', onCancel);
+    return () => {
+      dialog.removeEventListener('close', onClose);
+      dialog.removeEventListener('cancel', onCancel);
+    };
+  }, [onOpenChange]);
+
+  const handleBackdropClick = (e: MouseEvent<HTMLDialogElement>) => {
+    if (!closeOnBackdrop) return;
+    if (e.target === dialogRef.current) {
+      onOpenChange?.(false);
+    }
+  };
+
+  const effectiveAriaLabelledby = ariaLabel ? undefined : (ariaLabelledby ?? headerId);
+
+  return (
+    <DialogContext.Provider value={{ headerId, close: () => onOpenChange?.(false) }}>
+      <dialog
+        ref={dialogRef}
+        className={`llm-dialog${open ? ' is-open' : ''}`}
+        aria-label={ariaLabel || undefined}
+        aria-labelledby={effectiveAriaLabelledby}
+        aria-modal="true"
+        onClick={handleBackdropClick}
+      >
+        <div className={`panel size-${size}`} onClick={(e) => e.stopPropagation()}>
+          {children}
+        </div>
+      </dialog>
+    </DialogContext.Provider>
+  );
+}
+
+export function LlmDialogHeader({
+  children,
+  className,
+  ...rest
+}: HTMLAttributes<HTMLDivElement> & { children?: ReactNode }) {
+  const ctx = useContext(DialogContext);
+  return (
+    <div
+      id={ctx.headerId}
+      className={['llm-dialog-header', className].filter(Boolean).join(' ')}
+      {...rest}
+    >
+      {children}
+      <button
+        className="close-btn"
+        type="button"
+        aria-label="Close dialog"
+        onClick={ctx.close}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+  );
+}
+
+export function LlmDialogContent({
+  children,
+  className,
+  ...rest
+}: HTMLAttributes<HTMLDivElement> & { children?: ReactNode }) {
+  return (
+    <div
+      className={['llm-dialog-content', className].filter(Boolean).join(' ')}
+      {...rest}
+    >
+      {children}
+    </div>
+  );
+}
+
+export function LlmDialogFooter({
+  children,
+  className,
+  ...rest
+}: HTMLAttributes<HTMLDivElement> & { children?: ReactNode }) {
+  return (
+    <div
+      className={['llm-dialog-footer', className].filter(Boolean).join(' ')}
+      {...rest}
+    >
+      {children}
+    </div>
+  );
+}

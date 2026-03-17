@@ -1,0 +1,68 @@
+.llm-card {
+  display: block;
+  border-radius: var(--ui-radius-xl);
+  background-color: var(--ui-color-surface);
+  overflow: hidden;
+}
+
+.llm-card.variant-elevated {
+  box-shadow: var(--ui-shadow-md);
+  border: 1px solid var(--ui-color-border);
+}
+
+.llm-card.variant-outlined {
+  border: 1px solid var(--ui-color-border);
+  background-color: var(--ui-color-surface);
+}
+
+.llm-card.variant-flat {
+  background-color: var(--ui-color-surface-sunken);
+}
+
+/* Padding on .llm-card directly affects all slots */
+.llm-card.padding-none .llm-card-header,
+.llm-card.padding-none .llm-card-content,
+.llm-card.padding-none .llm-card-footer {
+  padding: 0;
+}
+
+.llm-card.padding-sm .llm-card-header,
+.llm-card.padding-sm .llm-card-content,
+.llm-card.padding-sm .llm-card-footer {
+  padding: var(--ui-spacing-3);
+}
+
+.llm-card.padding-md .llm-card-header,
+.llm-card.padding-md .llm-card-content,
+.llm-card.padding-md .llm-card-footer {
+  padding: var(--ui-spacing-4);
+}
+
+.llm-card.padding-lg .llm-card-header,
+.llm-card.padding-lg .llm-card-content,
+.llm-card.padding-lg .llm-card-footer {
+  padding: var(--ui-spacing-6);
+}
+
+/* Sub-component layouts */
+.llm-card-header {
+  display: block;
+  font-size: var(--ui-font-size-lg);
+  font-weight: var(--ui-font-weight-semibold);
+  color: var(--ui-color-text);
+  border-bottom: 1px solid var(--ui-color-border);
+  letter-spacing: var(--ui-letter-spacing-tight);
+}
+
+.llm-card-content {
+  display: block;
+  color: var(--ui-color-text);
+  line-height: var(--ui-line-height-normal);
+}
+
+.llm-card-footer {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-spacing-2);
+  border-top: 1px solid var(--ui-color-border);
+}

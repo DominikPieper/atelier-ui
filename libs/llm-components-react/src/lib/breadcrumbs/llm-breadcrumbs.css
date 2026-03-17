@@ -1,0 +1,62 @@
+/* LlmBreadcrumbs */
+.llm-breadcrumbs {
+  display: block;
+  font-family: var(--ui-font-family);
+}
+
+.breadcrumbs-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-color-text-muted);
+}
+
+/* LlmBreadcrumbItem */
+.llm-breadcrumb-item {
+  display: flex;
+  align-items: center;
+}
+
+/* Separator chevron — CSS generated, not read by screen readers */
+.llm-breadcrumb-item::after {
+  content: '›';
+  margin: 0 var(--ui-spacing-2);
+  color: var(--ui-color-border-hover);
+  font-size: var(--ui-font-size-md);
+  line-height: 1;
+}
+
+.llm-breadcrumb-item.is-current::after {
+  display: none;
+}
+
+/* Links (navigable breadcrumbs) */
+.llm-breadcrumb-item .breadcrumb-link {
+  color: var(--ui-color-text-muted);
+  text-decoration: none;
+  border-radius: var(--ui-radius-sm);
+  padding: 0.125rem 0.25rem;
+  margin: -0.125rem -0.25rem;
+  transition: color var(--ui-transition-fast);
+}
+
+.llm-breadcrumb-item .breadcrumb-link:hover {
+  color: var(--ui-color-text);
+  text-decoration: underline;
+}
+
+.llm-breadcrumb-item .breadcrumb-link:focus-visible {
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
+}
+
+/* Current item (plain text) */
+.llm-breadcrumb-item .breadcrumb-current {
+  color: var(--ui-color-text);
+  font-weight: var(--ui-font-weight-semibold);
+}

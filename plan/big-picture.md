@@ -189,12 +189,12 @@ Every component must be standalone and directly importable. No `NgModule` indire
 **Rules:**
 
 - Every component sets `standalone: true`.
-- Imports are granular: `import { LlmButton } from '@angular-llm-components/llm-components'`.
+- Imports are granular: `import { LlmButton } from '@llm-components/llm-components-angular'`.
 - No barrel re-exports that pull in the entire library.
 
 ```typescript
 // Good: direct, granular import
-import { LlmButton, LlmCard, LlmCardHeader, LlmCardContent } from '@angular-llm-components/llm-components';
+import { LlmButton, LlmCard, LlmCardHeader, LlmCardContent } from '@llm-components/llm-components-angular';
 
 @Component({
   standalone: true,
@@ -432,3 +432,87 @@ Ordered by impact on LLM code generation quality:
 | Implicit A11y | If ARIA roles aren't explicitly used, the LLM may fail to generate accessible markup. |
 | Legacy `ControlValueAccessor` for form controls | Signal Forms (`FormValueControl`/`FormCheckboxControl`) is simpler and signal-native |
 | Validation logic inside controls | Validation belongs in the form schema; controls only display results |
+
+---
+
+## React Library (`libs/llm-components-react`)
+
+### Rationale
+
+The same LLM-optimized design principles that make the Angular library predictable apply directly to React. Identical prop names (`variant`, `size`, `disabled`, `loading`), identical variant unions (`'primary' | 'secondary' | 'outline'`), and the same `--ui-*` CSS token system mean LLMs can transfer knowledge between the two libraries without additional context.
+
+React represents the other dominant frontend framework. Providing a parallel library enables AI-generated apps to use the same design system regardless of whether the user picked Angular or React.
+
+### Framework Differences and How They Are Handled
+
+| Angular pattern | React equivalent |
+|---|---|
+| `input()` / `model()` signals | Regular props with optional callback (`onValueChange`) |
+| Angular injection tokens | React Context (`createContext` / `useContext`) |
+| `Injectable` service (`LlmToastService`) | Custom hook (`useLlmToast()`) + `LlmToastProvider` |
+| `FormValueControl` / `FormCheckboxControl` | Props with controlled/uncontrolled pattern |
+| CDK `Overlay` for tooltip/select | `useState` + `useRef` + `useEffect` |
+| CDK Menu keyboard nav | Custom keyboard handler in `LlmMenuTrigger` |
+| `:host` CSS selector | `.llm-<component>` class on the root element |
+| Content projection (`<ng-content>`) | `children: ReactNode` prop |
+| Sub-components as Angular elements | Named function exports (`LlmCardHeader`, `LlmCardContent`, etc.) |
+
+### CSS Sharing Strategy
+
+The CSS files in `libs/llm-components-react` are adapted copies of the Angular CSS. The only transformation applied is replacing `:host` selectors with class-based equivalents:
+
+```css
+/* Angular */
+:host(.variant-primary) { ... }
+
+/* React */
+.llm-button.variant-primary { ... }
+```
+
+All design tokens (`--ui-*`) are identical — both libraries import from their own copy of `tokens.css`, which is a mirror of the same file.
+
+### Import Pattern
+
+```typescript
+import { LlmButton, LlmCard, LlmCardHeader, LlmCardContent, LlmCardFooter,
+         LlmBadge, LlmInput, LlmTextarea, LlmCheckbox, LlmToggle,
+         LlmRadio, LlmRadioGroup, LlmAlert, LlmSelect, LlmOption,
+         LlmDialog, LlmDialogHeader, LlmDialogContent, LlmDialogFooter,
+         LlmTabGroup, LlmTab, LlmAccordionGroup, LlmAccordionItem, LlmAccordionHeader,
+         LlmMenu, LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger,
+         LlmTooltip, LlmToast, LlmToastContainer, LlmToastProvider, useLlmToast,
+         LlmSkeleton, LlmAvatar, LlmAvatarGroup, LlmProgress,
+         LlmBreadcrumbs, LlmBreadcrumbItem, LlmPagination,
+         LlmDrawer, LlmDrawerHeader, LlmDrawerContent, LlmDrawerFooter }
+  from '@llm-components/llm-components-react';
+```
+
+```css
+@import '@llm-components/llm-components-react/styles/tokens.css';
+```
+
+### Toast Hook Pattern
+
+Because React has no dependency injection, the toast service is replaced by a hook:
+
+```tsx
+// In your app root
+<LlmToastProvider>
+  <App />
+  <LlmToastContainer position="bottom-right" />
+</LlmToastProvider>
+
+// Anywhere inside the tree
+const { show, dismiss, clear } = useLlmToast();
+show('Saved!', { variant: 'success' });
+```
+
+### Scaffold New React Components
+
+```bash
+nx generate @llm-components/generators:llm-component-react --name=<name>
+# e.g.: nx generate @llm-components/generators:llm-component-react --name=date-picker
+```
+
+Generated files: `llm-<name>.tsx`, `llm-<name>.css`, `llm-<name>.spec.tsx`, `llm-<name>.stories.tsx`
+Auto-exports from `libs/llm-components-react/src/index.ts`.

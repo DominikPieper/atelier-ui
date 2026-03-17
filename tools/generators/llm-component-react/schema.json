@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "id": "llm-component-react",
+  "title": "LLM React Component Generator",
+  "description": "Scaffold a new LLM-optimized React component following the library conventions.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Component name in kebab-case (e.g. 'tooltip', 'date-picker'). The 'llm-' prefix is added automatically.",
+      "$default": { "$source": "argv", "index": 0 }
+    },
+    "directory": {
+      "type": "string",
+      "description": "Target directory relative to libs/llm-components-react/src/lib/. Defaults to the component name."
+    }
+  },
+  "required": ["name"]
+}

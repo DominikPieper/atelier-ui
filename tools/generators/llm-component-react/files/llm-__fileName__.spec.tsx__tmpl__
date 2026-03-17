@@ -1,0 +1,14 @@
+import { render, screen } from '@testing-library/react';
+import { <%= className %> } from './llm-<%= fileName %>';
+
+describe('<%= className %>', () => {
+  it('renders without error', () => {
+    render(<<%= className %>>Content</<%= className %>>);
+    expect(screen.getByText('Content')).toBeInTheDocument();
+  });
+
+  it('applies default variant class', () => {
+    const { container } = render(<<%= className %>>Content</<%= className %>>);
+    expect(container.firstChild).toHaveClass('variant-default');
+  });
+});

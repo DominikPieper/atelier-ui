@@ -750,24 +750,87 @@ Storybook stories under "Cookbook" showing how to compose multiple components in
 ### Scaffold new components
 
 ```bash
-nx generate @angular-llm-components/generators:llm-component --name=<name>
-# e.g.: nx generate @angular-llm-components/generators:llm-component --name=alert
+nx generate @llm-components/generators:llm-component --name=<name>
+# e.g.: nx generate @llm-components/generators:llm-component --name=alert
 ```
 
 Generated files: `llm-<name>.ts`, `llm-<name>.css`, `llm-<name>.spec.ts`, `llm-<name>.stories.ts`
-Auto-exports from `libs/llm-components/src/index.ts`.
+Auto-exports from `libs/llm-components-angular/src/index.ts`.
 
 ### Import pattern
 
 ```typescript
 import { LlmAvatar, LlmAvatarGroup, LlmButton, LlmCard, LlmCardHeader, LlmCardContent, LlmCardFooter, LlmBadge, LlmInput, LlmTextarea, LlmCheckbox, LlmToggle, LlmRadio, LlmRadioGroup, LlmAlert, LlmSelect, LlmOption, LlmDialog, LlmDialogHeader, LlmDialogContent, LlmDialogFooter, LlmTabGroup, LlmTab, LlmAccordionGroup, LlmAccordionItem, LlmAccordionHeader, LlmMenu, LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger, LlmTooltip, LlmToast, LlmToastContainer, LlmToastService, LlmSkeleton }
-  from '@angular-llm-components/llm-components';
+  from '@llm-components/llm-components-angular';
 ```
 
 ### Design tokens
 
 ```css
-@import '@angular-llm-components/llm-components/styles/tokens.css';
+@import '@llm-components/llm-components-angular/styles/tokens.css';
 ```
 
 All tokens use the `--ui-*` prefix. Key tokens: `--ui-color-primary`, `--ui-color-secondary`, `--ui-color-danger`, `--ui-color-surface`, `--ui-color-border`, `--ui-color-text`, `--ui-radius-sm/md/lg`, `--ui-spacing-1..8`, `--ui-shadow-sm/md`.
+
+---
+
+## React Library (`@llm-components/llm-components-react`)
+
+Same components, same prop names, same `--ui-*` tokens — just React JSX instead of Angular templates.
+
+### Scaffold new React components
+
+```bash
+nx generate @llm-components/generators:llm-component-react --name=<name>
+# e.g.: nx generate @llm-components/generators:llm-component-react --name=date-picker
+```
+
+Generated files: `llm-<name>.tsx`, `llm-<name>.css`, `llm-<name>.spec.tsx`, `llm-<name>.stories.tsx`
+Auto-exports from `libs/llm-components-react/src/index.ts`.
+
+### Import pattern (React)
+
+```typescript
+import { LlmButton, LlmCard, LlmCardHeader, LlmCardContent, LlmCardFooter,
+         LlmBadge, LlmInput, LlmTextarea, LlmCheckbox, LlmToggle,
+         LlmRadio, LlmRadioGroup, LlmAlert, LlmSelect, LlmOption,
+         LlmDialog, LlmDialogHeader, LlmDialogContent, LlmDialogFooter,
+         LlmTabGroup, LlmTab, LlmAccordionGroup, LlmAccordionItem, LlmAccordionHeader,
+         LlmMenu, LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger,
+         LlmTooltip, LlmSkeleton, LlmAvatar, LlmAvatarGroup, LlmProgress,
+         LlmBreadcrumbs, LlmBreadcrumbItem, LlmPagination,
+         LlmDrawer, LlmDrawerHeader, LlmDrawerContent, LlmDrawerFooter,
+         LlmToastProvider, LlmToastContainer, LlmToast, useLlmToast }
+  from '@llm-components/llm-components-react';
+```
+
+### Design tokens (React)
+
+```css
+@import '@llm-components/llm-components-react/styles/tokens.css';
+```
+
+### Toast (React) — hook pattern instead of service
+
+```tsx
+// App root
+<LlmToastProvider>
+  <App />
+  <LlmToastContainer position="bottom-right" />
+</LlmToastProvider>
+
+// Any component
+const { show } = useLlmToast();
+show('Saved!', { variant: 'success' });
+show('Error', { variant: 'danger', duration: 8000 });
+```
+
+### Key prop differences from Angular
+
+| Concept | Angular | React |
+|---|---|---|
+| Two-way binding | `[(value)]="email"` | `value={email} onValueChange={setEmail}` |
+| Checkbox binding | `[(checked)]="accepted"` | `checked={accepted} onCheckedChange={setAccepted}` |
+| Tab selection | `[(selectedIndex)]="tab"` | `selectedIndex={tab} onSelectedIndexChange={setTab}` |
+| Dialog open | `[(open)]="isOpen"` | `open={isOpen} onOpenChange={setIsOpen}` |
+| Toast service | `inject(LlmToastService)` | `useLlmToast()` |

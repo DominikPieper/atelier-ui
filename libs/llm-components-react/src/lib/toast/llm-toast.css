@@ -1,0 +1,135 @@
+/* ── Toast Container ── */
+.llm-toast-container {
+  position: fixed;
+  z-index: var(--ui-z-toast, 400);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-spacing-2);
+  pointer-events: none;
+  max-width: min(24rem, calc(100vw - 2rem));
+  box-sizing: border-box;
+}
+
+.llm-toast-container.position-bottom-right {
+  bottom: var(--ui-spacing-4);
+  right: var(--ui-spacing-4);
+  align-items: flex-end;
+}
+
+.llm-toast-container.position-bottom-center {
+  bottom: var(--ui-spacing-4);
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+}
+
+.llm-toast-container.position-top-right {
+  top: var(--ui-spacing-4);
+  right: var(--ui-spacing-4);
+  align-items: flex-end;
+}
+
+.llm-toast-container.position-top-center {
+  top: var(--ui-spacing-4);
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+}
+
+/* ── Individual Toast ── */
+.llm-toast {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-spacing-3);
+  padding: var(--ui-spacing-3) var(--ui-spacing-4);
+  border-radius: var(--ui-radius-md);
+  border-left: 3px solid transparent;
+  font-family: var(--ui-font-family);
+  font-size: var(--ui-font-size-sm);
+  line-height: var(--ui-line-height-normal);
+  box-shadow: var(--ui-shadow-md);
+  background-color: var(--ui-color-surface-raised, var(--ui-color-surface));
+  color: var(--ui-color-text);
+  pointer-events: auto;
+  min-width: 16rem;
+  max-width: 100%;
+  box-sizing: border-box;
+  animation: toast-enter 0.3s ease-out;
+}
+
+/* ── Variant borders & tints ── */
+.llm-toast.variant-default {
+  border-left-color: var(--ui-color-border);
+}
+
+.llm-toast.variant-success {
+  border-left-color: var(--ui-color-success);
+  background-color: color-mix(in srgb, var(--ui-color-success) 8%, var(--ui-color-surface-raised, var(--ui-color-surface)));
+}
+
+.llm-toast.variant-warning {
+  border-left-color: var(--ui-color-warning);
+  background-color: color-mix(in srgb, var(--ui-color-warning) 8%, var(--ui-color-surface-raised, var(--ui-color-surface)));
+}
+
+.llm-toast.variant-danger {
+  border-left-color: var(--ui-color-danger);
+  background-color: color-mix(in srgb, var(--ui-color-danger) 8%, var(--ui-color-surface-raised, var(--ui-color-surface)));
+}
+
+.llm-toast.variant-info {
+  border-left-color: var(--ui-color-info);
+  background-color: color-mix(in srgb, var(--ui-color-info) 8%, var(--ui-color-surface-raised, var(--ui-color-surface)));
+}
+
+/* ── Message ── */
+.llm-toast .message {
+  flex: 1;
+}
+
+/* ── Dismiss button ── */
+.llm-toast .dismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0.125rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--ui-radius-sm);
+  cursor: pointer;
+  color: var(--ui-color-text-muted, currentColor);
+  opacity: 0.7;
+  transition: opacity var(--ui-transition-fast, 150ms), background-color var(--ui-transition-fast, 150ms);
+  line-height: 1;
+}
+
+.llm-toast .dismiss:hover {
+  opacity: 1;
+  background-color: color-mix(in srgb, currentColor 10%, transparent);
+}
+
+.llm-toast .dismiss:focus-visible {
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
+  opacity: 1;
+}
+
+/* ── Enter animation ── */
+@keyframes toast-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .llm-toast {
+    animation: none;
+  }
+}

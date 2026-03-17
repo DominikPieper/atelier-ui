@@ -38,7 +38,17 @@
       "Bash(node -e \":*)",
       "mcp__localhost-4400__get-storybook-story-instructions",
       "mcp__localhost-4400__preview-stories",
-      "Bash(nx generate:*)"
+      "Bash(nx generate:*)",
+      "Bash(nx test:*)",
+      "Bash(grep -r llm-components /Users/dominikpieper/Projects/angular-llm-components --include=*.md --include=*.yml --include=*.yaml)",
+      "Bash(git mv:*)",
+      "Bash(node:*)",
+      "Bash(for f:*)",
+      "Bash(do echo:*)",
+      "Read(//Users/dominikpieper/Projects/angular-llm-components/**)",
+      "Bash(done)",
+      "Bash(npx vitest:*)",
+      "Bash(grep:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

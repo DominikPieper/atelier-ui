@@ -10,9 +10,13 @@
       "command": "npx",
       "args": ["-y", "@angular/cli", "mcp"]
     },
-    "localhost-4400": {
+    "storybook-angular": {
       "type": "http",
       "url": "http://localhost:4400/mcp"
+    },
+    "storybook-react": {
+      "type": "http",
+      "url": "http://localhost:4401/mcp"
     }
   }
 }
