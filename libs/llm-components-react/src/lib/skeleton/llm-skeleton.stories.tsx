@@ -1,6 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { LlmSkeleton } from './llm-skeleton';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmSkeleton> = {
   title: 'Components/LlmSkeleton',
   component: LlmSkeleton,
@@ -10,6 +16,9 @@ const meta: Meta<typeof LlmSkeleton> = {
     animated: { control: 'boolean' },
   },
   args: { variant: 'text', animated: true },
+  parameters: {
+    design: figmaNode('3-857'),
+  },
 };
 
 export default meta;
@@ -18,6 +27,18 @@ type Story = StoryObj<typeof LlmSkeleton>;
 export const Default: Story = {};
 export const Circular: Story = { args: { variant: 'circular', width: '48px' } };
 export const Rectangular: Story = { args: { variant: 'rectangular', height: '200px' } };
+export const TextLines: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxWidth: '320px' }}>
+      <LlmSkeleton variant="text" />
+      <LlmSkeleton variant="text" width="80%" />
+      <LlmSkeleton variant="text" width="60%" />
+    </div>
+  ),
+};
+
+export const NoAnimation: Story = { args: { variant: 'rectangular', height: '200px', animated: false } };
+
 export const CardLayout: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>

@@ -2,10 +2,19 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { LlmPagination } from './llm-pagination';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmPagination> = {
   title: 'Components/LlmPagination',
   component: LlmPagination,
   tags: ['autodocs'],
+  parameters: {
+    design: figmaNode('3-1048'),
+  },
 };
 
 export default meta;

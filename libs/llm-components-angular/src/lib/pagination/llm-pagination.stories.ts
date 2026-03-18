@@ -3,6 +3,12 @@ import { signal } from '@angular/core';
 import { expect, userEvent } from 'storybook/test';
 import { LlmPagination } from './llm-pagination';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmPagination> = {
   title: 'Components/LlmPagination',
   component: LlmPagination,
@@ -18,6 +24,9 @@ const meta: Meta<LlmPagination> = {
     pageCount: 10,
     siblingCount: 1,
     showFirstLast: true,
+  },
+  parameters: {
+    design: figmaNode('3-1048'),
   },
 };
 

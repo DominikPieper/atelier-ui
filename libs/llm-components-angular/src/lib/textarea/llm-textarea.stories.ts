@@ -2,6 +2,12 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { LlmTextarea } from './llm-textarea';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmTextarea> = {
   title: 'Components/LlmTextarea',
   component: LlmTextarea,
@@ -27,6 +33,9 @@ const meta: Meta<LlmTextarea> = {
     invalid: false,
     required: false,
     autoResize: false,
+  },
+  parameters: {
+    design: figmaNode('3-798'),
   },
 };
 

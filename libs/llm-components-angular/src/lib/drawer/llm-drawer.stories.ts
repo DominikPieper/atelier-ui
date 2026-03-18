@@ -7,6 +7,12 @@ import { LlmDrawer, LlmDrawerContent, LlmDrawerFooter, LlmDrawerHeader } from '.
 
 const ALL_IMPORTS = [LlmDrawer, LlmDrawerHeader, LlmDrawerContent, LlmDrawerFooter, LlmButton];
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmDrawer> = {
   title: 'Components/LlmDrawer',
   component: LlmDrawer,
@@ -26,6 +32,9 @@ const meta: Meta<LlmDrawer> = {
     position: 'right',
     size: 'md',
     closeOnBackdrop: true,
+  },
+  parameters: {
+    design: figmaNode('3-1111'),
   },
 };
 

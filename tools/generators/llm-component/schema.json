@@ -3,7 +3,7 @@
   "cli": "nx",
   "id": "llm-component",
   "title": "LLM Component Generator",
-  "description": "Scaffold a new LLM-optimized Angular component following library conventions.",
+  "description": "Scaffold a new LLM-optimized component. By default scaffolds both Angular and React implementations.",
   "type": "object",
   "properties": {
     "name": {
@@ -13,7 +13,13 @@
     },
     "directory": {
       "type": "string",
-      "description": "Target directory relative to libs/llm-components-angular/src/lib/. Defaults to the component name."
+      "description": "Target directory relative to each library's src/lib/. Defaults to the component name."
+    },
+    "framework": {
+      "type": "string",
+      "enum": ["angular", "react", "both"],
+      "default": "both",
+      "description": "Which framework(s) to scaffold. Defaults to 'both' (Angular + React)."
     }
   },
   "required": ["name"]

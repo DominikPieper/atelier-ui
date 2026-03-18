@@ -3,12 +3,12 @@
     "llm-component": {
       "factory": "./llm-component/index",
       "schema": "./llm-component/schema.json",
-      "description": "Scaffold a new LLM-optimized Angular component following the library conventions."
+      "description": "Scaffold a new LLM-optimized component (Angular + React by default). Use --framework=angular|react to target one framework only."
     },
     "llm-component-react": {
       "factory": "./llm-component-react/index",
       "schema": "./llm-component-react/schema.json",
-      "description": "Scaffold a new LLM-optimized React component following the library conventions."
+      "description": "Scaffold a React-only LLM-optimized component. Prefer llm-component with --framework=react instead."
     }
   }
 }

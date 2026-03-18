@@ -3,6 +3,12 @@ import { argsToTemplate } from '@storybook/angular';
 import { LlmCard, LlmCardContent, LlmCardFooter, LlmCardHeader } from './llm-card';
 import { LlmButton } from '../button/llm-button';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmCard> = {
   title: 'Components/LlmCard',
   component: LlmCard,
@@ -52,6 +58,9 @@ const meta: Meta<LlmCard> = {
       };
     },
   ],
+  parameters: {
+    design: figmaNode('3-338'),
+  },
 };
 
 export default meta;
@@ -95,6 +104,32 @@ export const AllVariants: Story = {
         <llm-card variant="flat" style="width: 240px;">
           <llm-card-header>Flat</llm-card-header>
           <llm-card-content>No shadow or border.</llm-card-content>
+        </llm-card>
+      </div>
+    `,
+  }),
+};
+
+export const AllPadding: Story = {
+  render: () => ({
+    moduleMetadata: { imports: [LlmCard, LlmCardHeader, LlmCardContent] },
+    template: `
+      <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: flex-start;">
+        <llm-card variant="outlined" padding="none" style="width: 200px;">
+          <llm-card-header>None</llm-card-header>
+          <llm-card-content>padding="none"</llm-card-content>
+        </llm-card>
+        <llm-card variant="outlined" padding="sm" style="width: 200px;">
+          <llm-card-header>Small</llm-card-header>
+          <llm-card-content>padding="sm"</llm-card-content>
+        </llm-card>
+        <llm-card variant="outlined" padding="md" style="width: 200px;">
+          <llm-card-header>Medium</llm-card-header>
+          <llm-card-content>padding="md"</llm-card-content>
+        </llm-card>
+        <llm-card variant="outlined" padding="lg" style="width: 200px;">
+          <llm-card-header>Large</llm-card-header>
+          <llm-card-content>padding="lg"</llm-card-content>
         </llm-card>
       </div>
     `,

@@ -1,6 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { LlmAvatar, LlmAvatarGroup } from './llm-avatar';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmAvatar> = {
   title: 'Components/LlmAvatar',
   component: LlmAvatar,
@@ -11,6 +17,9 @@ const meta: Meta<typeof LlmAvatar> = {
     status: { control: 'select', options: ['', 'online', 'offline', 'away', 'busy'] },
   },
   args: { size: 'md', shape: 'circle', status: '' },
+  parameters: {
+    design: figmaNode('3-930'),
+  },
 };
 
 export default meta;

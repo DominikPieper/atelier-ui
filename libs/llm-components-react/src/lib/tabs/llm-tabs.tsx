@@ -71,7 +71,7 @@ export function LlmTabGroup({
     .filter(Boolean)
     .join(' ');
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
     const enabledIndices = tabs
       .map((t, i) => (!t.disabled ? i : -1))
       .filter((i) => i >= 0);

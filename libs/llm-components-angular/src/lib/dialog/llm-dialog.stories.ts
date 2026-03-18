@@ -15,6 +15,12 @@ const ALL_IMPORTS = [
   LlmButton,
 ];
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmDialog> = {
   title: 'Components/LlmDialog',
   component: LlmDialog,
@@ -29,6 +35,9 @@ const meta: Meta<LlmDialog> = {
   args: {
     size: 'md',
     closeOnBackdrop: true,
+  },
+  parameters: {
+    design: figmaNode('3-522'),
   },
 };
 

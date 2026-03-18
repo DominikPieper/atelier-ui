@@ -1,6 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { LlmTextarea } from './llm-textarea';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmTextarea> = {
   title: 'Components/LlmTextarea',
   component: LlmTextarea,
@@ -13,6 +19,9 @@ const meta: Meta<typeof LlmTextarea> = {
     rows: { control: 'number' },
   },
   args: { placeholder: 'Enter text here...', rows: 3 },
+  parameters: {
+    design: figmaNode('3-798'),
+  },
 };
 
 export default meta;

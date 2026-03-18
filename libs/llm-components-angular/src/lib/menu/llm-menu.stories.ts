@@ -2,6 +2,12 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { LlmMenu, LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger } from './llm-menu';
 import { LlmButton } from '../button/llm-button';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmMenu> = {
   title: 'Components/LlmMenu',
   component: LlmMenu,
@@ -14,6 +20,9 @@ const meta: Meta<LlmMenu> = {
   },
   args: {
     variant: 'default',
+  },
+  parameters: {
+    design: figmaNode('3-633'),
   },
 };
 

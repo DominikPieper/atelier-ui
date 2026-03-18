@@ -1,9 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { LlmToastProvider, LlmToastContainer, useLlmToast } from './llm-toast';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta = {
   title: 'Components/LlmToast',
   tags: ['autodocs'],
+  parameters: {
+    design: figmaNode('3-982'),
+  },
 };
 
 export default meta;
@@ -76,6 +85,49 @@ export const TopCenter: Story = {
       <ToastDemo position="top-center" />
     </LlmToastProvider>
   ),
+};
+
+export const AutoDismiss: Story = {
+  render: () => {
+    function AutoDismissDemo() {
+      const { show } = useLlmToast();
+      return (
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <button onClick={() => show('Auto-dismissed in 2 seconds', { variant: 'info', duration: 2000 })}>
+            Show (2s)
+          </button>
+          <LlmToastContainer position="bottom-right" />
+        </div>
+      );
+    }
+    return (
+      <LlmToastProvider>
+        <AutoDismissDemo />
+      </LlmToastProvider>
+    );
+  },
+};
+
+export const Persistent: Story = {
+  render: () => {
+    function PersistentDemo() {
+      const { show, clear } = useLlmToast();
+      return (
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <button onClick={() => show('This stays until dismissed', { variant: 'warning', duration: 0 })}>
+            Show persistent
+          </button>
+          <button onClick={clear}>Clear all</button>
+          <LlmToastContainer position="bottom-right" />
+        </div>
+      );
+    }
+    return (
+      <LlmToastProvider>
+        <PersistentDemo />
+      </LlmToastProvider>
+    );
+  },
 };
 
 export const AllVariants: Story = {

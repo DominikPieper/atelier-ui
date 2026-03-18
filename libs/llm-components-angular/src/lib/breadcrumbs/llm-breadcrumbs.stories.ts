@@ -4,10 +4,19 @@ import { LlmBreadcrumbs, LlmBreadcrumbItem } from './llm-breadcrumbs';
 
 const ALL_IMPORTS = [LlmBreadcrumbs, LlmBreadcrumbItem];
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmBreadcrumbs> = {
   title: 'Components/LlmBreadcrumbs',
   component: LlmBreadcrumbs,
   tags: ['autodocs'],
+  parameters: {
+    design: figmaNode('3-1021'),
+  },
 };
 
 export default meta;

@@ -2,6 +2,12 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { LlmButton } from './llm-button';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmButton> = {
   title: 'Components/LlmButton',
   component: LlmButton,
@@ -28,6 +34,9 @@ const meta: Meta<LlmButton> = {
     disabled: false,
     loading: false,
   },
+  parameters: {
+    design: figmaNode('3-119'),
+  },
 };
 
 export default meta;
@@ -37,14 +46,17 @@ export const Default: Story = {};
 
 export const Primary: Story = {
   args: { variant: 'primary' },
+  parameters: { design: figmaNode('3-63') },
 };
 
 export const Secondary: Story = {
   args: { variant: 'secondary' },
+  parameters: { design: figmaNode('3-84') },
 };
 
 export const Outline: Story = {
   args: { variant: 'outline' },
+  parameters: { design: figmaNode('3-105') },
 };
 
 export const Small: Story = {
@@ -61,10 +73,12 @@ export const Large: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
+  parameters: { design: figmaNode('3-65') },
 };
 
 export const Loading: Story = {
   args: { loading: true },
+  parameters: { design: figmaNode('3-67') },
 };
 
 export const AllVariants: Story = {

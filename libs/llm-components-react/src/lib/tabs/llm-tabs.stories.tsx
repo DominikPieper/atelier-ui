@@ -2,6 +2,12 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { LlmTabGroup, LlmTab } from './llm-tabs';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmTabGroup> = {
   title: 'Components/LlmTabGroup',
   component: LlmTabGroup,
@@ -11,6 +17,9 @@ const meta: Meta<typeof LlmTabGroup> = {
     selectedIndex: { control: 'number' },
   },
   args: { variant: 'default' },
+  parameters: {
+    design: figmaNode('3-540'),
+  },
 };
 
 export default meta;

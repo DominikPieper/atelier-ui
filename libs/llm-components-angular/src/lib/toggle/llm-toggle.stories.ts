@@ -2,6 +2,12 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { LlmToggle } from './llm-toggle';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmToggle> = {
   title: 'Components/LlmToggle',
   component: LlmToggle,
@@ -21,6 +27,9 @@ const meta: Meta<LlmToggle> = {
     disabled: false,
     invalid: false,
     required: false,
+  },
+  parameters: {
+    design: figmaNode('3-775'),
   },
 };
 

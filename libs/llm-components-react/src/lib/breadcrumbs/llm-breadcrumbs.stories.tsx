@@ -1,10 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { LlmBreadcrumbs, LlmBreadcrumbItem } from './llm-breadcrumbs';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmBreadcrumbs> = {
   title: 'Components/LlmBreadcrumbs',
   component: LlmBreadcrumbs,
   tags: ['autodocs'],
+  parameters: {
+    design: figmaNode('3-1021'),
+  },
 };
 
 export default meta;
@@ -45,6 +54,16 @@ export const SingleItem: Story = {
   render: () => (
     <LlmBreadcrumbs>
       <LlmBreadcrumbItem>Home</LlmBreadcrumbItem>
+    </LlmBreadcrumbs>
+  ),
+};
+
+export const NoLinks: Story = {
+  render: () => (
+    <LlmBreadcrumbs>
+      <LlmBreadcrumbItem>Home</LlmBreadcrumbItem>
+      <LlmBreadcrumbItem>Settings</LlmBreadcrumbItem>
+      <LlmBreadcrumbItem>Profile</LlmBreadcrumbItem>
     </LlmBreadcrumbs>
   ),
 };

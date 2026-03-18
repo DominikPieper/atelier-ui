@@ -2,6 +2,12 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { LlmRadioGroup } from '../radio-group/llm-radio-group';
 import { LlmRadio } from './llm-radio';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmRadio> = {
   title: 'Components/LlmRadio',
   component: LlmRadio,
@@ -21,6 +27,9 @@ const meta: Meta<LlmRadio> = {
   },
   args: {
     disabled: false,
+  },
+  parameters: {
+    design: figmaNode('3-822'),
   },
 };
 

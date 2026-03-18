@@ -2,6 +2,12 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { LlmDialog, LlmDialogHeader, LlmDialogContent, LlmDialogFooter } from './llm-dialog';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmDialog> = {
   title: 'Components/LlmDialog',
   component: LlmDialog,
@@ -12,6 +18,9 @@ const meta: Meta<typeof LlmDialog> = {
     size: { control: 'select', options: ['sm', 'md', 'lg', 'xl', 'full'] },
   },
   args: { size: 'md', closeOnBackdrop: true },
+  parameters: {
+    design: figmaNode('3-522'),
+  },
 };
 
 export default meta;

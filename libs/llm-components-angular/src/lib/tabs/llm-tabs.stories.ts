@@ -5,6 +5,12 @@ import { LlmButton } from '../button/llm-button';
 import { LlmBadge } from '../badge/llm-badge';
 import { LlmCard, LlmCardContent } from '../card/llm-card';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmTabGroup> = {
   title: 'Components/LlmTabGroup',
   component: LlmTabGroup,
@@ -17,6 +23,9 @@ const meta: Meta<LlmTabGroup> = {
   },
   args: {
     variant: 'default',
+  },
+  parameters: {
+    design: figmaNode('3-540'),
   },
 };
 

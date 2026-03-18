@@ -1,6 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { LlmAccordionGroup, LlmAccordionItem, LlmAccordionHeader } from './llm-accordion';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmAccordionGroup> = {
   title: 'Components/LlmAccordionGroup',
   component: LlmAccordionGroup,
@@ -10,6 +16,9 @@ const meta: Meta<typeof LlmAccordionGroup> = {
     variant: { control: 'select', options: ['default', 'bordered', 'separated'] },
   },
   args: { multi: false, variant: 'default' },
+  parameters: {
+    design: figmaNode('3-576'),
+  },
 };
 
 export default meta;

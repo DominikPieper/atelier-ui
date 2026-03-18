@@ -1,0 +1,7 @@
+{
+  "name": "llm-components-spec",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/llm-components-spec/src",
+  "projectType": "library",
+  "tags": ["type:spec"]
+}

@@ -2,6 +2,12 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { LlmTooltip } from './llm-tooltip';
 import { LlmButton } from '../button/llm-button';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmTooltip> = {
   title: 'Components/LlmTooltip',
   component: LlmTooltip,
@@ -20,6 +26,9 @@ const meta: Meta<LlmTooltip> = {
     llmTooltipShowDelay: 300,
     llmTooltipHideDelay: 0,
     llmTooltipDisabled: false,
+  },
+  parameters: {
+    design: figmaNode('3-696'),
   },
 };
 

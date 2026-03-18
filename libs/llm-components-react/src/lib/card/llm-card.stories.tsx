@@ -1,6 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { LlmCard, LlmCardHeader, LlmCardContent, LlmCardFooter } from './llm-card';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmCard> = {
   title: 'Components/LlmCard',
   component: LlmCard,
@@ -10,6 +16,9 @@ const meta: Meta<typeof LlmCard> = {
     padding: { control: 'select', options: ['none', 'sm', 'md', 'lg'] },
   },
   args: { variant: 'elevated', padding: 'md' },
+  parameters: {
+    design: figmaNode('3-338'),
+  },
 };
 
 export default meta;

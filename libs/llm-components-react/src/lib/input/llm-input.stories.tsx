@@ -1,6 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { LlmInput } from './llm-input';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmInput> = {
   title: 'Components/LlmInput',
   component: LlmInput,
@@ -15,6 +21,9 @@ const meta: Meta<typeof LlmInput> = {
     readOnly: { control: 'boolean' },
   },
   args: { type: 'text', placeholder: 'Enter value' },
+  parameters: {
+    design: figmaNode('3-285'),
+  },
 };
 
 export default meta;
@@ -56,6 +65,10 @@ export const Email: Story = {
 
 export const Number: Story = {
   args: { type: 'number', label: 'Quantity', placeholder: '0' },
+};
+
+export const Required: Story = {
+  args: { required: true, label: 'Full name', placeholder: 'Enter your full name' },
 };
 
 export const AllStates: Story = {

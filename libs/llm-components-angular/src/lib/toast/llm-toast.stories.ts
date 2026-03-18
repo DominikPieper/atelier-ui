@@ -107,6 +107,12 @@ class ToastPersistentWrapper {
   }
 }
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 /* ── Individual toast meta (for autodocs) ── */
 const meta: Meta<LlmToast> = {
   title: 'Components/LlmToast',
@@ -124,6 +130,9 @@ const meta: Meta<LlmToast> = {
     variant: 'default',
     dismissible: true,
     message: 'This is a toast notification.',
+  },
+  parameters: {
+    design: figmaNode('3-982'),
   },
 };
 

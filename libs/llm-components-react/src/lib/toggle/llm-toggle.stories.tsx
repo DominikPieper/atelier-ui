@@ -2,6 +2,12 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { LlmToggle } from './llm-toggle';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmToggle> = {
   title: 'Components/LlmToggle',
   component: LlmToggle,
@@ -12,6 +18,9 @@ const meta: Meta<typeof LlmToggle> = {
     invalid: { control: 'boolean' },
   },
   args: { checked: false, disabled: false, invalid: false },
+  parameters: {
+    design: figmaNode('3-775'),
+  },
 };
 
 export default meta;

@@ -1,6 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { LlmAlert } from './llm-alert';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmAlert> = {
   title: 'Components/LlmAlert',
   component: LlmAlert,
@@ -13,6 +19,9 @@ const meta: Meta<typeof LlmAlert> = {
     variant: 'info',
     dismissible: false,
     children: 'Alert message here.',
+  },
+  parameters: {
+    design: figmaNode('3-723'),
   },
 };
 

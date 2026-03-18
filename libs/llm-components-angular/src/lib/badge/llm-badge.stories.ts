@@ -2,6 +2,12 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { LlmBadge } from './llm-badge';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmBadge> = {
   title: 'Components/LlmBadge',
   component: LlmBadge,
@@ -23,6 +29,9 @@ const meta: Meta<LlmBadge> = {
   args: {
     variant: 'default',
     size: 'md',
+  },
+  parameters: {
+    design: figmaNode('3-456'),
   },
 };
 

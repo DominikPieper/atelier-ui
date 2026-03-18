@@ -1,4 +1,4 @@
-import { HTMLAttributes, ReactNode, AnchorHTMLAttributes, Children, isValidElement } from 'react';
+import { HTMLAttributes, ReactNode, AnchorHTMLAttributes, Children, isValidElement, cloneElement } from 'react';
 import './llm-breadcrumbs.css';
 
 export interface LlmBreadcrumbsProps extends HTMLAttributes<HTMLElement> {
@@ -12,7 +12,7 @@ export function LlmBreadcrumbs({ children, className, ...rest }: LlmBreadcrumbsP
   const childArray = Children.toArray(children);
   const enhancedChildren = childArray.map((child, index) => {
     if (isValidElement(child) && index === childArray.length - 1) {
-      return { ...child, props: { ...child.props, current: true } };
+      return cloneElement(child, { current: true } as object);
     }
     return child;
   });

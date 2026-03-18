@@ -3,6 +3,12 @@ import { argsToTemplate } from '@storybook/angular';
 import { LlmOption } from './llm-option';
 import { LlmSelect } from './llm-select';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmSelect> = {
   title: 'Components/LlmSelect',
   component: LlmSelect,
@@ -29,6 +35,9 @@ const meta: Meta<LlmSelect> = {
     disabled: false,
     invalid: false,
     required: false,
+  },
+  parameters: {
+    design: figmaNode('3-493'),
   },
 };
 

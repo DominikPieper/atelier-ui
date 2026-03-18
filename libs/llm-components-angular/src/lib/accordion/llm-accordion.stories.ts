@@ -3,6 +3,12 @@ import { LlmAccordionGroup, LlmAccordionItem, LlmAccordionHeader } from './llm-a
 
 const IMPORTS = [LlmAccordionGroup, LlmAccordionItem, LlmAccordionHeader];
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmAccordionGroup> = {
   title: 'Components/LlmAccordionGroup',
   component: LlmAccordionGroup,
@@ -15,6 +21,9 @@ const meta: Meta<LlmAccordionGroup> = {
   },
   args: {
     variant: 'default',
+  },
+  parameters: {
+    design: figmaNode('3-576'),
   },
 };
 

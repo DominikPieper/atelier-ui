@@ -2,6 +2,12 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { LlmSkeleton } from './llm-skeleton';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmSkeleton> = {
   title: 'Components/LlmSkeleton',
   component: LlmSkeleton,
@@ -24,6 +30,9 @@ const meta: Meta<LlmSkeleton> = {
     width: '100%',
     height: '',
     animated: true,
+  },
+  parameters: {
+    design: figmaNode('3-857'),
   },
 };
 

@@ -2,6 +2,12 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { LlmCheckbox } from './llm-checkbox';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmCheckbox> = {
   title: 'Components/LlmCheckbox',
   component: LlmCheckbox,
@@ -23,6 +29,9 @@ const meta: Meta<LlmCheckbox> = {
     invalid: false,
     required: false,
     indeterminate: false,
+  },
+  parameters: {
+    design: figmaNode('3-754'),
   },
 };
 

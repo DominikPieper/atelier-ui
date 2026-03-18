@@ -2,6 +2,12 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { LlmAlert } from './llm-alert';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmAlert> = {
   title: 'Components/LlmAlert',
   component: LlmAlert,
@@ -23,6 +29,9 @@ const meta: Meta<LlmAlert> = {
   args: {
     variant: 'info',
     dismissible: false,
+  },
+  parameters: {
+    design: figmaNode('3-723'),
   },
 };
 

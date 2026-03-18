@@ -2,6 +2,12 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { LlmCheckbox } from './llm-checkbox';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmCheckbox> = {
   title: 'Components/LlmCheckbox',
   component: LlmCheckbox,
@@ -13,6 +19,9 @@ const meta: Meta<typeof LlmCheckbox> = {
     indeterminate: { control: 'boolean' },
   },
   args: { checked: false, disabled: false, invalid: false, indeterminate: false },
+  parameters: {
+    design: figmaNode('3-754'),
+  },
 };
 
 export default meta;

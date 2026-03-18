@@ -2,6 +2,12 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { LlmInput } from './llm-input';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmInput> = {
   title: 'Components/LlmInput',
   component: LlmInput,
@@ -28,6 +34,9 @@ const meta: Meta<LlmInput> = {
     readonly: false,
     invalid: false,
     required: false,
+  },
+  parameters: {
+    design: figmaNode('3-285'),
   },
 };
 
@@ -83,6 +92,10 @@ export const AllTypes: Story = {
       </div>
     `,
   }),
+};
+
+export const Required: Story = {
+  args: { required: true, placeholder: 'Required field' },
 };
 
 export const Playground: Story = {

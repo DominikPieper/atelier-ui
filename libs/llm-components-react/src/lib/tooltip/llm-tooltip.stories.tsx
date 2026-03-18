@@ -2,10 +2,19 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { LlmTooltip } from './llm-tooltip';
 import { LlmButton } from '../button/llm-button';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmTooltip> = {
   title: 'Components/LlmTooltip',
   component: LlmTooltip,
   tags: ['autodocs'],
+  parameters: {
+    design: figmaNode('3-696'),
+  },
 };
 
 export default meta;

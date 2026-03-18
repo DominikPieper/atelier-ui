@@ -4,6 +4,7 @@ import {
   computed,
   input,
 } from '@angular/core';
+import type { LlmButtonVariant, LlmButtonSize } from '@llm-components/llm-components-spec';
 
 /**
  * Accessible button component with visual variants and sizes.
@@ -35,10 +36,10 @@ import {
 })
 export class LlmButton {
   /** Visual style of the button. */
-  variant = input<'primary' | 'secondary' | 'outline'>('primary');
+  variant = input<LlmButtonVariant>('primary');
 
   /** Size of the button. */
-  size = input<'sm' | 'md' | 'lg'>('md');
+  size = input<LlmButtonSize>('md');
 
   /** Disables the button, preventing interaction. */
   disabled = input(false);

@@ -1,6 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { LlmButton } from './llm-button';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmButton> = {
   title: 'Components/LlmButton',
   component: LlmButton,
@@ -12,19 +18,22 @@ const meta: Meta<typeof LlmButton> = {
     loading: { control: 'boolean' },
   },
   args: { variant: 'primary', size: 'md', disabled: false, loading: false, children: 'Button' },
+  parameters: {
+    design: figmaNode('3-119'),
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof LlmButton>;
 
 export const Default: Story = {};
-export const Primary: Story = { args: { variant: 'primary' } };
-export const Secondary: Story = { args: { variant: 'secondary' } };
-export const Outline: Story = { args: { variant: 'outline' } };
-export const Small: Story = { args: { size: 'sm' } };
-export const Large: Story = { args: { size: 'lg' } };
-export const Disabled: Story = { args: { disabled: true } };
-export const Loading: Story = { args: { loading: true } };
+export const Primary: Story = { args: { variant: 'primary' }, parameters: { design: figmaNode('3-63') } };
+export const Secondary: Story = { args: { variant: 'secondary' }, parameters: { design: figmaNode('3-84') } };
+export const Outline: Story = { args: { variant: 'outline' }, parameters: { design: figmaNode('3-105') } };
+export const Small: Story = { args: { size: 'sm' }, parameters: { design: figmaNode('3-56') } };
+export const Large: Story = { args: { size: 'lg' }, parameters: { design: figmaNode('3-70') } };
+export const Disabled: Story = { args: { disabled: true }, parameters: { design: figmaNode('3-65') } };
+export const Loading: Story = { args: { loading: true }, parameters: { design: figmaNode('3-67') } };
 export const AllVariants: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
