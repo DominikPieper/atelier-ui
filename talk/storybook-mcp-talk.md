@@ -1,33 +1,33 @@
-# Storybook MCPs: The Future of Frontend Engineering
+# Storybook MCPs: Die Zukunft des Frontend Engineerings
 
-**Format:** 30-minute conference talk
-
----
-
-## Section 1: The Problem — The Context Gap
-
-AI-generated Storybook stories have a consistent set of failure modes. An AI model only knows what fits inside its "context window" (its short-term memory). If it can't see your specific codebase, it guesses. This leads to code that compiles and runs, but tells you nothing.
-
-### The "happy path only" trap
-Ask an AI to write a story for a button and you get one story. Missing: `Disabled`, `Loading`, `Error` — every state that actually breaks in production.
-
-### The version tax
-Storybook 9 changed import paths (e.g., `storybook/test` vs `@storybook/test`). AI models guess based on old training data and fail.
-
-### The Hallucination tax
-"Hallucination" is when the AI confidently invents code or APIs that don't actually exist in your project. It generates generic Tailwind or Material UI because it doesn't know your internal library exists. It creates "new" components instead of using your established ones.
+**Format:** 30-minütiger Konferenzvortrag
 
 ---
 
-## Section 2: What is Storybook and what is a Story?
+## Abschnitt 1: Das Problem — Die Context Gap
 
-Before diving into how AI interacts with Storybook, let's establish what it is. Storybook is a frontend workshop for building UI components and pages in isolation.
+KI-generierte Storybook Stories weisen immer wieder die gleichen Fehlermuster auf. Ein KI-Modell weiß nur, was in sein "Context-Window" (sein Kurzzeitgedächtnis) passt. Wenn es deine spezifische Codebase nicht sehen kann, rät es. Das führt zu Code, der zwar kompilierbar ist und läuft, dir aber nichts sagt.
 
-### What is a "Story"?
-A "story" captures a single, specific state of a UI component. Instead of clicking through a complex application to see what a button looks like when it's disabled, you write a story for it.
+### Die "Happy Path Only" Falle
+Bitte eine KI, eine Story für einen Button zu schreiben, und du erhältst genau eine Story. Es fehlen: `Disabled`, `Loading`, `Error` — also jeder State, der in der Produktion tatsächlich kaputtgeht.
 
-### Example: The LLMButton
-Here is what a story looks like in code. We define the default component, and then export different "stories" (states) like `Primary`, `Small`, or `Disabled`:
+### Die Version Tax
+Storybook 9 hat die Import-Pfade geändert (z. B. `storybook/test` vs. `@storybook/test`). KI-Modelle raten basierend auf alten Trainingsdaten und scheitern.
+
+### Die Hallucination Tax
+"Hallucination" (Halluzination) ist, wenn die KI selbstbewusst Code oder APIs erfindet, die in deinem Projekt gar nicht existieren. Sie generiert generisches Tailwind oder Material UI, weil sie nicht weiß, dass deine interne Bibliothek existiert. Sie erstellt "neue" Components, anstatt deine etablierten zu verwenden.
+
+---
+
+## Abschnitt 2: Was ist Storybook und was ist eine Story?
+
+Bevor wir uns ansehen, wie KI mit Storybook interagiert, klären wir, was es überhaupt ist. Storybook ist ein Frontend-Workshop, um UI Components und Seiten isoliert voneinander zu bauen.
+
+### Was ist eine "Story"?
+Eine "Story" fängt einen einzelnen, spezifischen State einer UI Component ein. Anstatt dich durch eine komplexe Anwendung zu klicken, um zu sehen, wie ein Button aussieht, wenn er deaktiviert ist, schreibst du eine Story dafür.
+
+### Beispiel: Der LLMButton
+So sieht eine Story im Code aus. Wir definieren die Standard-Component und exportieren dann verschiedene "Stories" (States) wie `Primary`, `Small` oder `Disabled`:
 
 ```tsx
 import type { Meta, StoryObj } from '@storybook/react';
@@ -56,77 +56,77 @@ export const Loading: Story = {
   args: { loading: true } 
 };
 ```
-By isolating components, we give both humans and AI a clear sandbox to build, test, and document UI.
+Durch das Isolieren von Components geben wir sowohl Menschen als auch KI eine klare Sandbox, um UIs zu bauen, zu testen und zu dokumentieren.
 
 ---
 
-## Section 3: What is MCP?
+## Abschnitt 3: Was ist MCP?
 
-Model Context Protocol (MCP) is the **"USB-C port for AI context"**. It replaces brittle, custom API integrations with a unified, bi-directional communication layer.
+Das Model Context Protocol (MCP) ist der **"USB-C-Anschluss für AI Context"**. Es ersetzt fehleranfällige, maßgeschneiderte API-Integrationen durch einen einheitlichen, bidirektionalen Communication Layer.
 
 ![MCP Architecture](./mcp-architecture.png)
 
-### The Architecture: Client-Server-Host
+### Die Architektur: Client-Server-Host
 
-- **AI Host:** The main application (e.g., Claude Desktop, Cursor) that coordinates the user session.
-- **MCP Client:** The standard-compliant component within the host.
-- **MCP Server:** A lightweight service that exposes capabilities through **Tools**, **Resources**, and **Prompts**.
+- **AI Host:** Die Hauptanwendung (z. B. Claude Desktop, Cursor), die die User Session koordiniert.
+- **MCP Client:** Die standardkonforme Component innerhalb des Hosts.
+- **MCP Server:** Ein leichtgewichtiger Service, der Funktionen durch **Tools**, **Resources** und **Prompts** bereitstellt.
 
-- **Stdio Transport:** Local, zero-network communication.
-- **JSON-RPC 2.0:** Deterministic, structured messaging.
-- **Local-First:** Your source code never leaves your machine.
+- **Stdio Transport:** Lokale Kommunikation ohne Netzwerk.
+- **JSON-RPC 2.0:** Deterministisches, strukturiertes Messaging.
+- **Local-First:** Dein Source Code verlässt niemals deinen Rechner.
 
 ---
 
-## Section 4: The Full Design-to-Code Cycle
+## Abschnitt 4: Der gesamte Design-to-Code Cycle
 
-True power comes from combining **Design Intent** with **Implementation Reality**.
+Die wahre Stärke entsteht durch die Kombination von **Design Intent** (Design-Absicht) mit der **Implementation Reality** (Implementierungsrealität).
 
 ![Full Design-to-Code Cycle](./complete-workflow.png)
 
-### The Bridge: Intent vs. Reality
+### Die Brücke: Intent vs. Reality
 
-1. **Extraction (Figma MCP):** Figma is the industry-standard collaborative tool where designers visually create the UI. The AI connects to it and reads raw tokens and auto-layout directly. No more guessing from screenshots.
-2. **Discovery (Storybook MCP):** The AI scans your component library to see what's already built.
-3. **Generation:** The AI maps Figma "intent" to your "real" components.
-4. **Validation:** The AI runs tests and captures screenshots to ensure parity.
+1. **Extraction (Figma MCP):** Figma ist das branchenübliche Kollaborationstool, in dem Designer die UI visuell erstellen. Die KI verbindet sich damit und liest direkte, rohe Tokens und Auto-Layout aus. Kein Raten anhand von Screenshots mehr.
+2. **Discovery (Storybook MCP):** Die KI scannt deine Component Library, um zu sehen, was bereits gebaut wurde.
+3. **Generation:** Die KI mappt den Figma-"Intent" auf deine "echten" Components.
+4. **Validation:** Die KI führt Tests aus und macht Screenshots, um die Parity (Gleichheit) sicherzustellen.
 
 ---
 
-## Section 5: Figma Console MCP — The Design Truth
+## Abschnitt 5: Figma Console MCP — Die Design Truth
 
 ![Figma Console MCP](./figma-mcp.png)
 
-The Figma Console MCP gives the AI a direct API into your design files.
+Das Figma Console MCP gibt der KI eine direkte API zu deinen Design-Dateien.
 
 ### Design Discovery API (`figma_get_design_system_kit`)
-The AI extracts the entire design system in one optimized call:
-- **Tokens:** Named variables for design choices (e.g., `color-brand-blue = #0052cc`) that keep design and code in sync for colors, spacing, and typography.
-- **Components:** Metadata, properties, and variants.
-- **Styles:** Effect and grid definitions.
+Die KI extrahiert das gesamte Design System in einem optimierten Call:
+- **Tokens:** Benannte Variablen für Designentscheidungen (z. B. `color-brand-blue = #0052cc`), die Design und Code für Farben, Spacing und Typografie synchron halten.
+- **Components:** Metadata, Properties und Variants.
+- **Styles:** Effect- und Grid-Definitionen.
 
 ### Implementation Support (`figma_get_component_for_development`)
-Returns technical specs optimized for coding:
-- **Layout:** Exact CSS-like values for padding, gap, and size.
-- **Typography:** Font weight, family, and line height.
-- **Image Preview:** A 2x PNG rendering for visual reference.
+Gibt technische Specs zurück, die fürs Coding optimiert sind:
+- **Layout:** Exakte, CSS-ähnliche Werte für Padding, Gap und Size.
+- **Typography:** Font Weight, Family und Line Height.
+- **Image Preview:** Ein 2x PNG-Rendering als visuelle Referenz.
 
 ### Audit & Validation (`figma_check_design_parity`)
-The AI compares the design system truth against your code:
-- **Parity Score:** 0-100% match.
-- **Discrepancy Report:** Missing props, color mismatches, or layout drifts.
-- **Actionable Fixes:** Suggested code or design changes to restore parity.
+Die KI vergleicht die Design System Truth mit deinem Code:
+- **Parity Score:** 0-100% Übereinstimmung.
+- **Discrepancy Report:** Fehlende Props, Farbabweichungen oder Layout-Drifts.
+- **Actionable Fixes:** Vorgeschlagene Code- oder Design-Änderungen, um die Parity wiederherzustellen.
 
 ---
 
-## Section 6: Storybook MCP — The Implementation Truth
+## Abschnitt 6: Storybook MCP — Die Implementation Truth
 
 ![Storybook MCP](./storybook-mcp.png)
 
-The Storybook MCP ensures the AI never hallucinates an API.
+Das Storybook MCP stellt sicher, dass die KI niemals eine API halluziniert.
 
 ### Discovery API (`list-all-documentation`)
-The AI starts by scanning the entire system to find established components:
+Die KI beginnt damit, das gesamte System zu scannen, um etablierte Components zu finden:
 ```text
 - LlmAlert (components-llmalert)
 - LlmAvatar (components-llmavatar)
@@ -136,7 +136,7 @@ The AI starts by scanning the entire system to find established components:
 ```
 
 ### Documentation API (`get-documentation`)
-Once a component is selected, the AI reads its **living specification**:
+Sobald eine Component ausgewählt ist, liest die KI ihre **Living Specification**:
 ```markdown
 # LlmButton (components-llmbutton)
 
@@ -147,15 +147,16 @@ Once a component is selected, the AI reads its **living specification**:
 ...
 
 ## Real Usage Examples (from existing stories)
+```
 ```typescript
 <LlmButton variant="primary" size="md">Button</LlmButton>
 ```
 
 ---
 
-## Section 7: Mandatory Guardrails (`get-storybook-story-instructions`)
+## Abschnitt 7: Mandatory Guardrails (`get-storybook-story-instructions`)
 
-This tool provides the **rules of engagement**. It prevents the "version tax" by telling the AI exactly what you have installed.
+Dieses Tool liefert die **Rules of Engagement** (Einsatzregeln). Es verhindert die "Version Tax", indem es der KI genau mitteilt, was du installiert hast.
 
 ### Version-Specific Guidance
 ```diff
@@ -168,52 +169,52 @@ This tool provides the **rules of engagement**. It prevents the "version tax" by
 ```
 
 ### Critical Implementation Rules
-- **Mocking Strategy:** When simulating external data or services so a component can run in isolation (mocking), relative imports must use **file extensions**.
-- **Play Function Syntax:** Do NOT use `within(canvas)`; `canvas` already has query methods.
-- **Coverage Goals:** Happy path, Error, Loading, and Empty states are **required**.
+- **Mocking Strategy:** Wenn externe Daten oder Services simuliert werden, damit eine Component isoliert ausgeführt werden kann (Mocking), müssen relative Imports **File Extensions** (Dateiendungen) verwenden.
+- **Play Function Syntax:** Verwende NICHT `within(canvas)`; `canvas` verfügt bereits über Query-Methoden.
+- **Coverage Goals:** Happy Path, Error, Loading und Empty States sind **erforderlich**.
 
 ---
 
-## Section 8: Autonomous Verification Loop (`run-story-tests`)
+## Abschnitt 8: Autonomous Verification Loop (`run-story-tests`)
 
 ![Autonomous Verification Loop](./autonomous-loop.png)
 
-Stop switching windows to check if it works.
+Hör auf, zwischen Fenstern zu wechseln, um zu prüfen, ob es funktioniert.
 
-- **The Verification Loop:** If a `play` function fails, the AI sees the stack trace and fixes the bug automatically.
-- **Interactive A11y (Accessibility):** Runs accessibility audits (`a11y: true`) during development to ensure the UI is usable for everyone (like screen reader users). It fixes semantic issues (like missing form labels) instantly.
-
----
-
-## Section 9: Closing the Loop (`preview-stories`)
-
-The feedback loop belongs inside the chat.
-
-- **Props & Globals Override:** Preview "Dark Mode" or "Loading" without writing a new story.
-- **Visual Confidence:** The AI includes clickable preview URLs in every response. One click to confirm, zero context switching.
+- **The Verification Loop:** Wenn eine `play`-Funktion fehlschlägt, sieht die KI den Stack Trace und behebt den Bug automatisch.
+- **Interactive A11y (Accessibility):** Führt Accessibility Audits (`a11y: true`) während der Entwicklung durch, um sicherzustellen, dass die UI für alle nutzbar ist (wie z. B. für Screen-Reader-Nutzer). Es behebt semantische Probleme (wie fehlende Form-Labels) sofort.
 
 ---
 
-## Section 10: Maintaining Parity at Scale
+## Abschnitt 9: Closing the Loop (`preview-stories`)
 
-How do we stop visual drift?
+Die Feedback Loop gehört in den Chat.
 
-- **Continuous Auditing:** Use `figma_check_design_parity` to detect when code and design diverge.
-- **Automated Fixes:** The AI generates reports with the exact code changes needed to match the latest design system update.
+- **Props & Globals Override:** Preview "Dark Mode" oder "Loading", ohne eine neue Story schreiben zu müssen.
+- **Visual Confidence:** Die KI packt anklickbare Preview URLs in jede Antwort. Ein Klick zur Bestätigung, kein Context-Switching.
 
 ---
 
-## Section 11: Real Examples (Angular/React)
+## Abschnitt 10: Maintaining Parity at Scale
+
+Wie stoppen wir den visuellen Drift?
+
+- **Continuous Auditing:** Nutze `figma_check_design_parity`, um zu erkennen, wenn Code und Design auseinanderlaufen.
+- **Automated Fixes:** Die KI generiert Reports mit den exakten Code Changes, die benötigt werden, um mit dem neuesten Design System Update übereinzustimmen.
+
+---
+
+## Abschnitt 11: Real Examples (Angular/React)
 
 ### Angular Wrapper Pattern
-For complex DI or services, the AI learns to use the Wrapper @Component pattern:
+Für komplexe DI (Dependency Injection) oder Services lernt die KI, das Wrapper `@Component` Pattern zu verwenden:
 ```typescript
 @Component({ template: `<toast-story-wrapper />` })
 class ToastStoryWrapper { ... }
 ```
 
 ### React Controlled State
-The AI uses `useState` in story renders to handle complex interactions:
+Die KI nutzt `useState` in Story-Rendern, um komplexe Interaktionen zu handhaben:
 ```tsx
 const [open, setOpen] = useState(false);
 return <LlmDialog open={open} onOpenChange={setOpen} />;
@@ -221,18 +222,18 @@ return <LlmDialog open={open} onOpenChange={setOpen} />;
 
 ---
 
-## Section 12: The Senior Developer's New Role
+## Abschnitt 12: Die neue Rolle des Senior Developers
 
-If the AI does the "translation," what do you do?
+Wenn die KI die "Übersetzung" übernimmt, was machst du dann noch?
 
-1. **Review Intent:** Is the Figma design architecturally sound?
-2. **Review High-Level Logic:** Does the generated component follow your team's patterns?
-3. **Orchestrate complexity:** Handle the 10% of cases the AI can't reach.
-4. **System Maintenance:** Maintain the MCP servers and generator templates.
+1. **Review Intent:** Ist das Figma Design architektonisch solide?
+2. **Review High-Level Logic:** Folgt die generierte Component den Patterns deines Teams?
+3. **Orchestrate complexity:** Kümmere dich um die 10% der Fälle, die die KI nicht abdecken kann.
+4. **System Maintenance:** Pflege die MCP Server und Generator Templates.
 
 ---
 
-## Section 13: The Full Enforced Workflow (Summary)
+## Abschnitt 13: The Full Enforced Workflow (Summary)
 
 ```
 User: "Implement the login form from Figma"
@@ -252,11 +253,11 @@ AI: "Verified. Preview: [Link]. No A11y issues found."
 
 ---
 
-## Section 14: Closing & Resources
+## Abschnitt 14: Closing & Resources
 
-- **Install `@storybook/mcp`** — Get version-correct imports today.
-- **Install `figma-console-mcp`** — Connect your AI to your design truth.
-- **Add the `CLAUDE.md` rule** — Make it mandatory, not optional.
+- **Installiere `@storybook/mcp`** — Erhalte noch heute versionskorrekte Imports.
+- **Installiere `figma-console-mcp`** — Verbinde deine KI mit deiner Design Truth.
+- **Füge die `CLAUDE.md` Regel hinzu** — Mach es mandatory (verpflichtend), nicht optional.
 
-### Questions?
-Find the full source code and these MCP tools in the `angular-llm-components` repo.
+### Fragen?
+Du findest den gesamten Source Code und diese MCP Tools im `angular-llm-components` Repo.
