@@ -51,6 +51,22 @@
 - Use `list_projects` and `nx_docs` as a first step to understand the workspace before making changes.
 - Prefer MCP tools (e.g., `get_best_practices`, `search_documentation`, `find_examples`) over guessing Angular/Nx conventions.
 
+### Storybook MCP Workflows
+
+**When creating or editing components/stories:**
+1. Call `get-storybook-story-instructions` before writing any code
+2. After any change, call `preview-stories` and include the returned URLs in your response
+3. Run `run-story-tests` after each change — fix failures before reporting completion
+
+**When reading component docs:**
+1. Call `list-all-documentation` once at session start to get valid IDs
+2. Use `get-documentation` with those IDs — never guess IDs or invent props
+3. If a prop isn't documented, say so rather than inventing it
+
+**Which MCP to use:**
+- Angular components → `storybook-angular` MCP
+- React components → `storybook-react` MCP
+
 ## Core Principles
 
 - **Simplicity First**: Make every change as simple as possible. Impact minimal code.

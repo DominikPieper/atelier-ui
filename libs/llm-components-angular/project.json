@@ -4,7 +4,7 @@
   "sourceRoot": "libs/llm-components-angular/src",
   "prefix": "llm",
   "projectType": "library",
-  "tags": [],
+  "tags": ["framework:angular", "type:ui-lib"],
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",

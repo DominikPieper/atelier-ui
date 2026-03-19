@@ -12,6 +12,10 @@ const config: StorybookConfig = {
     name: '@analogjs/storybook-angular',
     options: {},
   },
+  docs: {},
+  features: {
+    experimentalComponentManifest: true,
+  } as StorybookConfig['features'],
 };
 
 export default config;

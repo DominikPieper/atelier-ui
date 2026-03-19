@@ -1,0 +1,45 @@
+{
+  "mcp": {
+    "servers": {
+      "nx-mcp": {
+        "command": "npx",
+        "args": [
+          "nx",
+          "mcp"
+        ],
+        "trust": true
+      },
+      "angular-cli": {
+        "command": "npx",
+        "args": [
+          "-y",
+          "@angular/cli",
+          "mcp"
+        ],
+        "trust": true
+      },
+      "storybook-angular": {
+        "url": "http://localhost:4400/mcp",
+        "type": "http",
+        "trust": true
+      },
+      "storybook-react": {
+        "url": "http://localhost:4401/mcp",
+        "type": "http",
+        "trust": true
+      },
+      "figma-console": {
+        "command": "npx",
+        "args": [
+          "-y",
+          "figma-console-mcp@latest"
+        ],
+        "env": {
+          "FIGMA_ACCESS_TOKEN": "FIGMA_TOKEN_REMOVED",
+          "ENABLE_MCP_APPS": "true"
+        },
+        "trust": true
+      }
+    }
+  }
+}

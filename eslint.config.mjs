@@ -17,8 +17,12 @@ export default [
           allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$'],
           depConstraints: [
             {
-              sourceTag: '*',
-              onlyDependOnLibsWithTags: ['*'],
+              sourceTag: 'framework:angular',
+              onlyDependOnLibsWithTags: ['framework:angular', 'type:spec'],
+            },
+            {
+              sourceTag: 'framework:react',
+              onlyDependOnLibsWithTags: ['framework:react', 'type:spec'],
             },
           ],
         },

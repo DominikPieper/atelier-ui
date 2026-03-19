@@ -55,9 +55,10 @@ let nextId = 0;
       aria-modal="true"
       [cdkTrapFocus]="open()"
       (cancel)="onCancel($event)"
+      (close)="open.set(false)"
       (click)="onBackdropClick($event)"
     >
-      <div class="panel">
+      <div class="panel" (click)="$event.stopPropagation()">
         <ng-content />
       </div>
     </dialog>

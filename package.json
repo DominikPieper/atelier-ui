@@ -23,6 +23,15 @@
     "react-dom": "^19.2.4",
     "rxjs": "~7.8.0"
   },
+  "overrides": {
+    "@analogjs/storybook-angular": {
+      "@storybook/angular": "^10.3.0-beta.2",
+      "storybook": "^10.3.0-beta.2"
+    },
+    "@storybook/addon-designs": {
+      "storybook": "^10.3.0-beta.2"
+    }
+  },
   "devDependencies": {
     "@analogjs/storybook-angular": "^2.3.1",
     "@analogjs/vite-plugin-angular": "~2.3.1",
@@ -51,11 +60,11 @@
     "@nx/workspace": "22.5.4",
     "@playwright/test": "^1.36.0",
     "@schematics/angular": "~21.1.0",
-    "@storybook/addon-a11y": "^10.2.19",
+    "@storybook/addon-a11y": "^10.3.0-beta.2",
     "@storybook/addon-mcp": "^0.4.1",
-    "@storybook/addon-vitest": "^10.2.19",
-    "@storybook/angular": "^10.2.19",
-    "@storybook/react-vite": "^10.2.19",
+    "@storybook/addon-vitest": "^10.3.0-beta.2",
+    "@storybook/angular": "^10.3.0-beta.2",
+    "@storybook/react-vite": "^10.3.0-beta.2",
     "@swc-node/register": "~1.11.1",
     "@swc/core": "~1.15.5",
     "@swc/helpers": "~0.5.18",
@@ -78,7 +87,7 @@
     "jsdom": "^27.1.0",
     "nx": "22.5.4",
     "prettier": "~3.6.2",
-    "storybook": "^10.2.19",
+    "storybook": "^10.3.0-beta.2",
     "tslib": "^2.3.0",
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.40.0",

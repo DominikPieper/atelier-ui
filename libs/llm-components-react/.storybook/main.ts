@@ -12,6 +12,10 @@ const config: StorybookConfig = {
     name: '@storybook/react-vite',
     options: {},
   },
+  docs: {},
+  features: {
+    experimentalComponentManifest: true,
+  } as StorybookConfig['features'],
 };
 
 export default config;
