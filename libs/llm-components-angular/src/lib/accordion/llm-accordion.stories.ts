@@ -51,6 +51,7 @@ export const Default: Story = {
       </llm-accordion-group>
     `,
   }),
+  parameters: { design: figmaNode('55-124') },
 };
 
 export const MultiExpand: Story = {
@@ -119,6 +120,7 @@ export const Bordered: Story = {
       </llm-accordion-group>
     `,
   }),
+  parameters: { design: figmaNode('55-125') },
 };
 
 export const Separated: Story = {
@@ -141,6 +143,7 @@ export const Separated: Story = {
       </llm-accordion-group>
     `,
   }),
+  parameters: { design: figmaNode('55-126') },
 };
 
 export const PreExpanded: Story = {

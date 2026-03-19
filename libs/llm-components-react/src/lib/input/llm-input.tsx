@@ -1,16 +1,46 @@
 import { InputHTMLAttributes } from 'react';
+import type { LlmInputSpec } from '@llm-components/llm-components-spec';
 import './llm-input.css';
 
-export interface LlmInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
+/**
+ * Properties for the LlmInput component.
+ */
+export interface LlmInputProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'readOnly'>,
+    LlmInputSpec {
+  /**
+   * The type of input to render.
+   */
   type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
+  /**
+   * The current value of the input.
+   */
   value?: string;
+  /**
+   * Callback triggered when the value changes.
+   */
   onValueChange?: (value: string) => void;
+  /**
+   * Whether the input is in an invalid state.
+   */
   invalid?: boolean;
+  /**
+   * Array of error messages to display.
+   */
   errors?: string[];
+  /**
+   * The label for the input.
+   */
   label?: string;
+  /**
+   * Whether the input is read-only.
+   */
   readOnly?: boolean;
 }
 
+/**
+ * A versatile input component for text entry.
+ */
 export function LlmInput({
   type = 'text',
   value,
@@ -19,13 +49,15 @@ export function LlmInput({
   invalid = false,
   errors = [],
   disabled = false,
-  readOnly = false,
+  readOnly: reactReadOnly,
+  readonly: specReadOnly,
   required = false,
   label,
   className,
   id,
   ...rest
 }: LlmInputProps) {
+  const readOnly = reactReadOnly ?? specReadOnly ?? false;
   const inputId =
     id || (label ? `input-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined);
   const classes = [

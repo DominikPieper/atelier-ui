@@ -52,6 +52,7 @@ function DialogDemo({ size = 'md', closeOnBackdrop = true }: { size?: 'sm' | 'md
 
 export const Default: Story = {
   render: () => <DialogDemo />,
+  parameters: { design: figmaNode('55-93') },
 };
 
 export const SmallSize: Story = {

@@ -66,6 +66,7 @@ export const Default: Story = {
     await userEvent.click(canvas.getByRole('button', { name: 'Cancel' }));
     await expect(dialog).not.toHaveAttribute('open');
   },
+  parameters: { design: figmaNode('55-95') },
 };
 
 export const Left: Story = {
@@ -86,6 +87,7 @@ export const Left: Story = {
     `,
   }),
   args: { position: 'left' },
+  parameters: { design: figmaNode('55-96') },
 };
 
 export const Top: Story = {
@@ -127,6 +129,7 @@ export const Bottom: Story = {
     `,
   }),
   args: { position: 'bottom' },
+  parameters: { design: figmaNode('55-97') },
 };
 
 export const SizeVariants: Story = {

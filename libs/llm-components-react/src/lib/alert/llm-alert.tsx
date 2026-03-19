@@ -1,13 +1,34 @@
 import { HTMLAttributes, ReactNode } from 'react';
+import type { LlmAlertSpec } from '@llm-components/llm-components-spec';
 import './llm-alert.css';
 
-export interface LlmAlertProps extends HTMLAttributes<HTMLDivElement> {
+/**
+ * Properties for the LlmAlert component.
+ */
+export interface LlmAlertProps
+  extends HTMLAttributes<HTMLDivElement>,
+    LlmAlertSpec {
+  /**
+   * The visual style variant of the alert.
+   */
   variant?: 'info' | 'success' | 'warning' | 'danger';
+  /**
+   * Whether the alert can be dismissed by the user.
+   */
   dismissible?: boolean;
+  /**
+   * Callback triggered when the alert is dismissed.
+   */
   onDismissed?: () => void;
+  /**
+   * The content to be rendered inside the alert.
+   */
   children?: ReactNode;
 }
 
+/**
+ * An alert component for displaying important messages.
+ */
 export function LlmAlert({
   variant = 'info',
   dismissible = false,

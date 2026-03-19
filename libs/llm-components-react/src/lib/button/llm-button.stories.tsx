@@ -27,13 +27,13 @@ export default meta;
 type Story = StoryObj<typeof LlmButton>;
 
 export const Default: Story = {};
-export const Primary: Story = { args: { variant: 'primary' }, parameters: { design: figmaNode('3-63') } };
-export const Secondary: Story = { args: { variant: 'secondary' }, parameters: { design: figmaNode('3-84') } };
-export const Outline: Story = { args: { variant: 'outline' }, parameters: { design: figmaNode('3-105') } };
-export const Small: Story = { args: { size: 'sm' }, parameters: { design: figmaNode('3-56') } };
-export const Large: Story = { args: { size: 'lg' }, parameters: { design: figmaNode('3-70') } };
-export const Disabled: Story = { args: { disabled: true }, parameters: { design: figmaNode('3-65') } };
-export const Loading: Story = { args: { loading: true }, parameters: { design: figmaNode('3-67') } };
+export const Primary: Story = { args: { variant: 'primary' }, parameters: { design: figmaNode('49-47') } };
+export const Secondary: Story = { args: { variant: 'secondary' }, parameters: { design: figmaNode('49-71') } };
+export const Outline: Story = { args: { variant: 'outline' }, parameters: { design: figmaNode('49-95') } };
+export const Small: Story = { args: { size: 'sm' }, parameters: { design: figmaNode('49-39') } };
+export const Large: Story = { args: { size: 'lg' }, parameters: { design: figmaNode('49-55') } };
+export const Disabled: Story = { args: { disabled: true }, parameters: { design: figmaNode('49-51') } };
+export const Loading: Story = { args: { loading: true }, parameters: { design: figmaNode('49-53') } };
 export const AllVariants: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>

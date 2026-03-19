@@ -27,6 +27,7 @@ export const Default: Story = {
       <LlmBreadcrumbItem>Widget X</LlmBreadcrumbItem>
     </LlmBreadcrumbs>
   ),
+  parameters: { design: figmaNode('55-138') },
 };
 
 export const TwoLevels: Story = {

@@ -1,16 +1,38 @@
 import { TextareaHTMLAttributes, useRef, useEffect } from 'react';
+import type { LlmTextareaSpec } from '@llm-components/llm-components-spec';
 import './llm-textarea.css';
 
-export interface LlmTextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+/**
+ * Properties for the LlmTextarea component.
+ */
+export interface LlmTextareaProps
+  extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'readOnly'>,
+    LlmTextareaSpec {
+  /**
+   * Current value of the textarea.
+   */
   value?: string;
-  onValueChange?: (value: string) => void;
-  invalid?: boolean;
-  errors?: string[];
-  label?: string;
-  autoResize?: boolean;
+  /**
+   * Whether the textarea is read-only.
+   */
   readOnly?: boolean;
+  /**
+   * Callback fired when the value changes.
+   */
+  onValueChange?: (value: string) => void;
+  /**
+   * List of error messages to display.
+   */
+  errors?: string[];
+  /**
+   * Label text for the textarea.
+   */
+  label?: string;
 }
 
+/**
+ * A multi-line text input component that supports automatic resizing and validation states.
+ */
 export function LlmTextarea({
   value,
   onChange,
@@ -18,7 +40,8 @@ export function LlmTextarea({
   invalid = false,
   errors = [],
   disabled = false,
-  readOnly = false,
+  readOnly: reactReadOnly,
+  readonly: specReadOnly,
   required = false,
   label,
   autoResize = false,
@@ -27,6 +50,7 @@ export function LlmTextarea({
   id,
   ...rest
 }: LlmTextareaProps) {
+  const readOnly = reactReadOnly ?? specReadOnly ?? false;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const inputId =
     id || (label ? `textarea-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined);

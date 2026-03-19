@@ -44,6 +44,7 @@ export const Default: Story = {
       </div>
     `,
   }),
+  parameters: { design: figmaNode('55-48') },
 };
 
 export const Positions: Story = {

@@ -70,10 +70,12 @@ function DrawerDemo({
 
 export const Default: Story = {
   render: () => <DrawerDemo />,
+  parameters: { design: figmaNode('55-95') },
 };
 
 export const LeftPosition: Story = {
   render: () => <DrawerDemo position="left" label="Open Left Drawer" />,
+  parameters: { design: figmaNode('55-96') },
 };
 
 export const TopPosition: Story = {
@@ -82,6 +84,7 @@ export const TopPosition: Story = {
 
 export const BottomPosition: Story = {
   render: () => <DrawerDemo position="bottom" label="Open Bottom Drawer" />,
+  parameters: { design: figmaNode('55-97') },
 };
 
 export const SmallSize: Story = {

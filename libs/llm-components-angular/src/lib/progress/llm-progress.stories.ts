@@ -46,6 +46,7 @@ export const Default: Story = {
     imports: [LlmProgress],
     template: `<llm-progress ${argsToTemplate(args)} />`,
   }),
+  parameters: { design: figmaNode('55-104') },
 };
 
 export const SizeVariants: Story = {
@@ -121,4 +122,5 @@ export const FullValue: Story = {
     imports: [LlmProgress],
     template: `<llm-progress [value]="100" variant="success" style="max-width: 32rem; display: block;" />`,
   }),
+  parameters: { design: figmaNode('55-110') },
 };

@@ -46,17 +46,17 @@ export const Default: Story = {};
 
 export const Primary: Story = {
   args: { variant: 'primary' },
-  parameters: { design: figmaNode('3-63') },
+  parameters: { design: figmaNode('49-47') },
 };
 
 export const Secondary: Story = {
   args: { variant: 'secondary' },
-  parameters: { design: figmaNode('3-84') },
+  parameters: { design: figmaNode('49-71') },
 };
 
 export const Outline: Story = {
   args: { variant: 'outline' },
-  parameters: { design: figmaNode('3-105') },
+  parameters: { design: figmaNode('49-95') },
 };
 
 export const Small: Story = {
@@ -73,12 +73,12 @@ export const Large: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  parameters: { design: figmaNode('3-65') },
+  parameters: { design: figmaNode('49-51') },
 };
 
 export const Loading: Story = {
   args: { loading: true },
-  parameters: { design: figmaNode('3-67') },
+  parameters: { design: figmaNode('49-53') },
 };
 
 export const AllVariants: Story = {

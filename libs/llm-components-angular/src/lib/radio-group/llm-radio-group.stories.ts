@@ -44,7 +44,9 @@ const meta: Meta<LlmRadioGroup> = {
 export default meta;
 type Story = StoryObj<LlmRadioGroup>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: { design: figmaNode('55-131') },
+};
 
 export const WithSelection: Story = {
   render: (args) => ({
@@ -58,10 +60,12 @@ export const WithSelection: Story = {
       </llm-radio-group>
     `,
   }),
+  parameters: { design: figmaNode('55-132') },
 };
 
 export const Disabled: Story = {
   args: { disabled: true },
+  parameters: { design: figmaNode('55-136') },
 };
 
 export const Invalid: Story = {

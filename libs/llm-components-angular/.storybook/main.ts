@@ -7,6 +7,7 @@ const config: StorybookConfig = {
     '@storybook/addon-vitest',
     '@storybook/addon-a11y',
     '@storybook/addon-designs',
+    '@storybook/addon-docs',
   ],
   framework: {
     name: '@analogjs/storybook-angular',

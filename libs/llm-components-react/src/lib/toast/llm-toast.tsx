@@ -6,25 +6,23 @@ import {
   useRef,
   ReactNode,
 } from 'react';
+import type {
+  LlmToastVariant,
+  LlmToastOptions,
+  LlmToastContainerPosition,
+} from '@llm-components/llm-components-spec';
 import './llm-toast.css';
 
-export type ToastVariant = 'default' | 'success' | 'warning' | 'danger' | 'info';
-
-export interface ToastOptions {
-  variant?: ToastVariant;
-  /** Duration in ms before auto-dismiss. 0 = no auto-dismiss. Default 5000. */
-  duration?: number;
-  /** Whether the toast shows a dismiss button. Default true. */
-  dismissible?: boolean;
-}
-
-export interface ToastData extends Required<ToastOptions> {
+/**
+ * Internal data structure for a toast message.
+ */
+export interface ToastData extends Required<LlmToastOptions> {
   id: string;
   message: string;
 }
 
 interface ToastContextValue {
-  show: (message: string, options?: ToastOptions) => string;
+  show: (message: string, options?: LlmToastOptions) => string;
   dismiss: (id: string) => void;
   clear: () => void;
   toasts: ToastData[];
@@ -37,10 +35,13 @@ const ToastContext = createContext<ToastContextValue>({
   toasts: [],
 });
 
+/**
+ * Context provider that manages the toast state.
+ */
 export function LlmToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<ToastData[]>([]);
   const timersRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
-  let toastId = useRef(0);
+  const toastId = useRef(0);
 
   const dismiss = useCallback((id: string) => {
     const timer = timersRef.current.get(id);
@@ -52,7 +53,7 @@ export function LlmToastProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const show = useCallback(
-    (message: string, options: ToastOptions = {}): string => {
+    (message: string, options: LlmToastOptions = {}): string => {
       const id = `llm-toast-${toastId.current++}`;
       const toast: ToastData = {
         id,
@@ -90,8 +91,14 @@ export function useLlmToast() {
   return { show: ctx.show, dismiss: ctx.dismiss, clear: ctx.clear };
 }
 
+/**
+ * Properties for the LlmToastContainer component.
+ */
 export interface LlmToastContainerProps {
-  position?: 'top-right' | 'top-center' | 'bottom-right' | 'bottom-center';
+  /**
+   * Position of the toast container in the viewport.
+   */
+  position?: LlmToastContainerPosition;
 }
 
 /**
@@ -111,11 +118,23 @@ export function LlmToastContainer({ position = 'bottom-right' }: LlmToastContain
   );
 }
 
+/**
+ * Properties for the LlmToastItem component.
+ */
 export interface LlmToastItemProps {
+  /**
+   * The toast data to display.
+   */
   data: ToastData;
+  /**
+   * Callback fired when the toast is dismissed.
+   */
   onDismiss: (id: string) => void;
 }
 
+/**
+ * An individual toast notification item.
+ */
 export function LlmToastItem({ data, onDismiss }: LlmToastItemProps) {
   const classes = `llm-toast variant-${data.variant}`;
   return (

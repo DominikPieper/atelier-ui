@@ -2,10 +2,19 @@ import { ButtonHTMLAttributes, ReactNode, forwardRef } from 'react';
 import type { LlmButtonSpec } from '@llm-components/llm-components-spec';
 import './llm-button.css';
 
+/**
+ * Properties for the LlmButton component.
+ */
 export interface LlmButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, LlmButtonSpec {
+  /**
+   * The content to be rendered inside the button.
+   */
   children?: ReactNode;
 }
 
+/**
+ * A versatile button component that supports various styles, sizes, and states.
+ */
 export const LlmButton = forwardRef<HTMLButtonElement, LlmButtonProps>(function LlmButton(
   {
     variant = 'primary',

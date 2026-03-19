@@ -69,6 +69,7 @@ export const Default: Story = {
     await userEvent.click(canvas.getByRole('button', { name: 'Cancel' }));
     await expect(dialog).not.toHaveAttribute('open');
   },
+  parameters: { design: figmaNode('55-93') },
 };
 
 export const PreOpened: Story = {

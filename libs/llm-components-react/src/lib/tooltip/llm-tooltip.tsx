@@ -1,21 +1,26 @@
 import { useState, useRef, useEffect, ReactNode } from 'react';
+import type { LlmTooltipSpec } from '@llm-components/llm-components-spec';
 import './llm-tooltip.css';
 
-export interface LlmTooltipProps {
-  content: string;
-  position?: 'above' | 'below' | 'left' | 'right';
-  disabled?: boolean;
-  showDelay?: number;
-  hideDelay?: number;
+/**
+ * Properties for the LlmTooltip component.
+ */
+export interface LlmTooltipProps extends LlmTooltipSpec {
+  /**
+   * The content to trigger the tooltip.
+   */
   children: ReactNode;
 }
 
+/**
+ * A tooltip component that displays additional information when the trigger is hovered or focused.
+ */
 export function LlmTooltip({
-  content,
-  position = 'above',
-  disabled = false,
-  showDelay = 300,
-  hideDelay = 0,
+  llmTooltip,
+  llmTooltipPosition = 'above',
+  llmTooltipDisabled = false,
+  llmTooltipShowDelay = 300,
+  llmTooltipHideDelay = 0,
   children,
 }: LlmTooltipProps) {
   const [visible, setVisible] = useState(false);
@@ -25,7 +30,7 @@ export function LlmTooltip({
   const tooltipId = useRef(`tooltip-${Math.random().toString(36).slice(2)}`);
 
   const show = () => {
-    if (disabled || !content) return;
+    if (llmTooltipDisabled || !llmTooltip) return;
     if (hideTimer.current) {
       clearTimeout(hideTimer.current);
       hideTimer.current = null;
@@ -34,7 +39,7 @@ export function LlmTooltip({
       showTimer.current = setTimeout(() => {
         showTimer.current = null;
         setVisible(true);
-      }, showDelay);
+      }, llmTooltipShowDelay);
     }
   };
 
@@ -46,7 +51,7 @@ export function LlmTooltip({
     hideTimer.current = setTimeout(() => {
       hideTimer.current = null;
       setVisible(false);
-    }, hideDelay);
+    }, llmTooltipHideDelay);
   };
 
   // Set aria-describedby on the child element
@@ -86,13 +91,13 @@ export function LlmTooltip({
       onBlur={hide}
     >
       {children}
-      {visible && !disabled && content && (
+      {visible && !llmTooltipDisabled && llmTooltip && (
         <div
           id={tooltipId.current}
           role="tooltip"
-          className={`llm-tooltip position-${position}`}
+          className={`llm-tooltip position-${llmTooltipPosition}`}
         >
-          {content}
+          {llmTooltip}
         </div>
       )}
     </span>

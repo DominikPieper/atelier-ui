@@ -23,11 +23,12 @@ type Story = StoryObj<typeof LlmTooltip>;
 export const Default: Story = {
   render: () => (
     <div style={{ padding: '4rem', display: 'flex', justifyContent: 'center' }}>
-      <LlmTooltip content="Save your changes">
+      <LlmTooltip llmTooltip="Save your changes">
         <LlmButton>Save</LlmButton>
       </LlmTooltip>
     </div>
   ),
+  parameters: { design: figmaNode('55-48') },
 };
 
 export const Positions: Story = {
@@ -41,16 +42,16 @@ export const Positions: Story = {
         justifyContent: 'center',
       }}
     >
-      <LlmTooltip content="Above tooltip" position="above">
+      <LlmTooltip llmTooltip="Above tooltip" llmTooltipPosition="above">
         <LlmButton variant="outline">Above</LlmButton>
       </LlmTooltip>
-      <LlmTooltip content="Below tooltip" position="below">
+      <LlmTooltip llmTooltip="Below tooltip" llmTooltipPosition="below">
         <LlmButton variant="outline">Below</LlmButton>
       </LlmTooltip>
-      <LlmTooltip content="Left tooltip" position="left">
+      <LlmTooltip llmTooltip="Left tooltip" llmTooltipPosition="left">
         <LlmButton variant="outline">Left</LlmButton>
       </LlmTooltip>
-      <LlmTooltip content="Right tooltip" position="right">
+      <LlmTooltip llmTooltip="Right tooltip" llmTooltipPosition="right">
         <LlmButton variant="outline">Right</LlmButton>
       </LlmTooltip>
     </div>
@@ -60,7 +61,7 @@ export const Positions: Story = {
 export const Disabled: Story = {
   render: () => (
     <div style={{ padding: '4rem', display: 'flex', justifyContent: 'center' }}>
-      <LlmTooltip content="This tooltip is disabled" disabled>
+      <LlmTooltip llmTooltip="This tooltip is disabled" llmTooltipDisabled>
         <LlmButton variant="secondary">No tooltip</LlmButton>
       </LlmTooltip>
     </div>
@@ -70,7 +71,7 @@ export const Disabled: Story = {
 export const CustomDelay: Story = {
   render: () => (
     <div style={{ padding: '4rem', display: 'flex', justifyContent: 'center' }}>
-      <LlmTooltip content="Slow tooltip (1s delay)" showDelay={1000}>
+      <LlmTooltip llmTooltip="Slow tooltip (1s delay)" llmTooltipShowDelay={1000}>
         <LlmButton variant="outline">Slow tooltip</LlmButton>
       </LlmTooltip>
     </div>

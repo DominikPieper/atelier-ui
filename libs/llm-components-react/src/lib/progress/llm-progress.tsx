@@ -1,14 +1,38 @@
 import { HTMLAttributes } from 'react';
+import type { LlmProgressSpec } from '@llm-components/llm-components-spec';
 import './llm-progress.css';
 
-export interface LlmProgressProps extends HTMLAttributes<HTMLDivElement> {
+/**
+ * Properties for the LlmProgress component.
+ */
+export interface LlmProgressProps
+  extends HTMLAttributes<HTMLDivElement>,
+    LlmProgressSpec {
+  /**
+   * The current progress value.
+   */
   value?: number;
+  /**
+   * The maximum progress value.
+   */
   max?: number;
+  /**
+   * The visual style variant of the progress bar.
+   */
   variant?: 'default' | 'success' | 'warning' | 'danger';
+  /**
+   * The size of the progress bar.
+   */
   size?: 'sm' | 'md' | 'lg';
+  /**
+   * Whether the progress bar is in an indeterminate state.
+   */
   indeterminate?: boolean;
 }
 
+/**
+ * A progress bar component for displaying task progress.
+ */
 export function LlmProgress({
   value = 0,
   max = 100,

@@ -45,6 +45,7 @@ export const Default: Story = {
       </ng-template>
     `,
   }),
+  parameters: { design: figmaNode('55-128') },
 };
 
 export const WithDisabledItems: Story = {
@@ -82,6 +83,7 @@ export const Compact: Story = {
       </ng-template>
     `,
   }),
+  parameters: { design: figmaNode('55-129') },
 };
 
 export const NestedSubmenus: Story = {

@@ -25,7 +25,7 @@ const meta: Meta<typeof LlmAvatar> = {
 export default meta;
 type Story = StoryObj<typeof LlmAvatar>;
 
-export const Default: Story = { args: { name: 'Jane Doe' } };
+export const Default: Story = { args: { name: 'Jane Doe' }, parameters: { design: figmaNode('55-148') } };
 export const WithImage: Story = { args: { src: 'https://i.pravatar.cc/150?img=1', alt: 'User', size: 'lg' } };
 export const Initials: Story = { args: { name: 'John Smith', size: 'lg' } };
 export const WithStatus: Story = { args: { name: 'Alice', status: 'online' } };

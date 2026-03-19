@@ -5,7 +5,7 @@ import { LlmTooltip } from './llm-tooltip';
 describe('LlmTooltip', () => {
   it('does not show tooltip initially', () => {
     render(
-      <LlmTooltip content="Save your changes" showDelay={0}>
+      <LlmTooltip llmTooltip="Save your changes" llmTooltipShowDelay={0}>
         <button>Save</button>
       </LlmTooltip>
     );
@@ -15,7 +15,7 @@ describe('LlmTooltip', () => {
   it('shows tooltip on hover after delay', async () => {
     const user = userEvent.setup();
     render(
-      <LlmTooltip content="Save your changes" showDelay={0}>
+      <LlmTooltip llmTooltip="Save your changes" llmTooltipShowDelay={0}>
         <button>Save</button>
       </LlmTooltip>
     );
@@ -30,7 +30,7 @@ describe('LlmTooltip', () => {
   it('hides tooltip on mouse leave', async () => {
     const user = userEvent.setup();
     render(
-      <LlmTooltip content="Save your changes" showDelay={0} hideDelay={0}>
+      <LlmTooltip llmTooltip="Save your changes" llmTooltipShowDelay={0} llmTooltipHideDelay={0}>
         <button>Save</button>
       </LlmTooltip>
     );
@@ -45,7 +45,7 @@ describe('LlmTooltip', () => {
   it('does not show tooltip when disabled', async () => {
     const user = userEvent.setup();
     render(
-      <LlmTooltip content="Save your changes" disabled showDelay={0}>
+      <LlmTooltip llmTooltip="Save your changes" llmTooltipDisabled llmTooltipShowDelay={0}>
         <button>Save</button>
       </LlmTooltip>
     );
@@ -57,7 +57,7 @@ describe('LlmTooltip', () => {
   it('applies position class based on position prop', async () => {
     const user = userEvent.setup();
     render(
-      <LlmTooltip content="Help text" position="right" showDelay={0}>
+      <LlmTooltip llmTooltip="Help text" llmTooltipPosition="right" llmTooltipShowDelay={0}>
         <button>Info</button>
       </LlmTooltip>
     );
@@ -69,7 +69,7 @@ describe('LlmTooltip', () => {
   it('has role="tooltip" on the tooltip element', async () => {
     const user = userEvent.setup();
     render(
-      <LlmTooltip content="Tooltip text" showDelay={0}>
+      <LlmTooltip llmTooltip="Tooltip text" llmTooltipShowDelay={0}>
         <button>Hover me</button>
       </LlmTooltip>
     );

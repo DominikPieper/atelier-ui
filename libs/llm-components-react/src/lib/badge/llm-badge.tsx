@@ -1,12 +1,30 @@
 import { HTMLAttributes, ReactNode } from 'react';
+import type { LlmBadgeSpec } from '@llm-components/llm-components-spec';
 import './llm-badge.css';
 
-export interface LlmBadgeProps extends HTMLAttributes<HTMLSpanElement> {
+/**
+ * Properties for the LlmBadge component.
+ */
+export interface LlmBadgeProps
+  extends HTMLAttributes<HTMLSpanElement>,
+    LlmBadgeSpec {
+  /**
+   * The visual style variant of the badge.
+   */
   variant?: 'default' | 'success' | 'warning' | 'danger' | 'info';
+  /**
+   * The size of the badge.
+   */
   size?: 'sm' | 'md';
+  /**
+   * The content to be rendered inside the badge.
+   */
   children?: ReactNode;
 }
 
+/**
+ * A badge component for displaying small amounts of information or status.
+ */
 export function LlmBadge({
   variant = 'default',
   size = 'md',

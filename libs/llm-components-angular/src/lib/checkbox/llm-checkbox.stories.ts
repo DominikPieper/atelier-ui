@@ -38,14 +38,18 @@ const meta: Meta<LlmCheckbox> = {
 export default meta;
 type Story = StoryObj<LlmCheckbox>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: { design: figmaNode('55-32') },
+};
 
 export const Checked: Story = {
   args: { checked: true },
+  parameters: { design: figmaNode('55-33') },
 };
 
 export const Disabled: Story = {
   args: { disabled: true },
+  parameters: { design: figmaNode('55-35') },
 };
 
 export const DisabledChecked: Story = {
@@ -78,6 +82,7 @@ export const Indeterminate: Story = {
     props: args,
     template: `<llm-checkbox ${argsToTemplate(args)}>Select all</llm-checkbox>`,
   }),
+  parameters: { design: figmaNode('55-34') },
 };
 
 export const Playground: Story = {

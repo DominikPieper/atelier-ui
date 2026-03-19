@@ -44,7 +44,9 @@ const meta: Meta<LlmSelect> = {
 export default meta;
 type Story = StoryObj<LlmSelect>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: { design: figmaNode('55-88') },
+};
 
 export const WithSelection: Story = {
   render: (args) => ({
@@ -63,6 +65,7 @@ export const WithSelection: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
+  parameters: { design: figmaNode('55-91') },
 };
 
 export const Invalid: Story = {

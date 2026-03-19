@@ -39,7 +39,9 @@ const meta: Meta<LlmSkeleton> = {
 export default meta;
 type Story = StoryObj<LlmSkeleton>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: { design: figmaNode('55-99') },
+};
 
 export const TextLines: Story = {
   render: () => ({
@@ -63,6 +65,7 @@ export const Circular: Story = {
     variant: 'circular',
     width: '40px',
   },
+  parameters: { design: figmaNode('55-100') },
 };
 
 export const Rectangular: Story = {
@@ -75,6 +78,7 @@ export const Rectangular: Story = {
     width: '100%',
     height: '200px',
   },
+  parameters: { design: figmaNode('55-101') },
 };
 
 export const CardSkeleton: Story = {

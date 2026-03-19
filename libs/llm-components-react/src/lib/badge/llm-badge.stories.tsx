@@ -24,12 +24,12 @@ const meta: Meta<typeof LlmBadge> = {
 export default meta;
 type Story = StoryObj<typeof LlmBadge>;
 
-export const Default: Story = {};
-export const Success: Story = { args: { variant: 'success', children: 'Success' } };
-export const Warning: Story = { args: { variant: 'warning', children: 'Warning' } };
-export const Danger: Story = { args: { variant: 'danger', children: 'Error' } };
-export const Info: Story = { args: { variant: 'info', children: 'Info' } };
-export const Small: Story = { args: { variant: 'default', size: 'sm', children: 'New' } };
+export const Default: Story = { parameters: { design: figmaNode('55-12') } };
+export const Success: Story = { args: { variant: 'success', children: 'Success' }, parameters: { design: figmaNode('55-13') } };
+export const Warning: Story = { args: { variant: 'warning', children: 'Warning' }, parameters: { design: figmaNode('55-14') } };
+export const Danger: Story = { args: { variant: 'danger', children: 'Error' }, parameters: { design: figmaNode('55-15') } };
+export const Info: Story = { args: { variant: 'info', children: 'Info' }, parameters: { design: figmaNode('55-16') } };
+export const Small: Story = { args: { variant: 'default', size: 'sm', children: 'New' }, parameters: { design: figmaNode('55-17') } };
 
 export const AllVariants: Story = {
   render: () => (

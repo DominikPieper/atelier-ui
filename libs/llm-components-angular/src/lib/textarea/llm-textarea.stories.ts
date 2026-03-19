@@ -42,7 +42,9 @@ const meta: Meta<LlmTextarea> = {
 export default meta;
 type Story = StoryObj<LlmTextarea>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: { design: figmaNode('55-82') },
+};
 
 export const WithPlaceholder: Story = {
   args: { placeholder: 'Tell us about yourself...' },
@@ -54,6 +56,7 @@ export const TallRows: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true, placeholder: 'Cannot edit' },
+  parameters: { design: figmaNode('55-86') },
 };
 
 export const Readonly: Story = {

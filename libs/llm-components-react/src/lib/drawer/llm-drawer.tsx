@@ -8,6 +8,7 @@ import {
   HTMLAttributes,
   MouseEvent,
 } from 'react';
+import type { LlmDrawerSpec } from '@llm-components/llm-components-spec';
 import './llm-drawer.css';
 
 interface DrawerContextValue {
@@ -20,15 +21,39 @@ const DrawerContext = createContext<DrawerContextValue>({
   close: () => {},
 });
 
-export interface LlmDrawerProps {
+/**
+ * Properties for the LlmDrawer component.
+ */
+export interface LlmDrawerProps extends LlmDrawerSpec {
+  /**
+   * Whether the drawer is open.
+   */
   open?: boolean;
+  /**
+   * Callback triggered when the open state changes.
+   */
   onOpenChange?: (open: boolean) => void;
+  /**
+   * The position of the drawer on the screen.
+   */
   position?: 'left' | 'right' | 'top' | 'bottom';
+  /**
+   * The size of the drawer.
+   */
   size?: 'sm' | 'md' | 'lg' | 'full';
+  /**
+   * Whether to close the drawer when clicking on the backdrop.
+   */
   closeOnBackdrop?: boolean;
+  /**
+   * The content of the drawer.
+   */
   children?: ReactNode;
 }
 
+/**
+ * A drawer component that slides in from the edge of the screen.
+ */
 export function LlmDrawer({
   open = false,
   onOpenChange,
@@ -104,11 +129,19 @@ export function LlmDrawer({
   );
 }
 
+/**
+ * The header component for an LlmDrawer.
+ */
 export function LlmDrawerHeader({
   children,
   className,
   ...rest
-}: HTMLAttributes<HTMLDivElement> & { children?: ReactNode }) {
+}: HTMLAttributes<HTMLDivElement> & {
+  /**
+   * The content of the drawer header.
+   */
+  children?: ReactNode;
+}) {
   const ctx = useContext(DrawerContext);
   return (
     <div
@@ -143,11 +176,19 @@ export function LlmDrawerHeader({
   );
 }
 
+/**
+ * The main content component for an LlmDrawer.
+ */
 export function LlmDrawerContent({
   children,
   className,
   ...rest
-}: HTMLAttributes<HTMLDivElement> & { children?: ReactNode }) {
+}: HTMLAttributes<HTMLDivElement> & {
+  /**
+   * The main content of the drawer.
+   */
+  children?: ReactNode;
+}) {
   return (
     <div
       className={['llm-drawer-content', className].filter(Boolean).join(' ')}
@@ -158,11 +199,19 @@ export function LlmDrawerContent({
   );
 }
 
+/**
+ * The footer component for an LlmDrawer.
+ */
 export function LlmDrawerFooter({
   children,
   className,
   ...rest
-}: HTMLAttributes<HTMLDivElement> & { children?: ReactNode }) {
+}: HTMLAttributes<HTMLDivElement> & {
+  /**
+   * The content of the drawer footer.
+   */
+  children?: ReactNode;
+}) {
   return (
     <div
       className={['llm-drawer-footer', className].filter(Boolean).join(' ')}

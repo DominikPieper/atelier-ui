@@ -36,18 +36,23 @@ const meta: Meta<LlmToggle> = {
 export default meta;
 type Story = StoryObj<LlmToggle>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: { design: figmaNode('55-37') },
+};
 
 export const Checked: Story = {
   args: { checked: true },
+  parameters: { design: figmaNode('55-38') },
 };
 
 export const Disabled: Story = {
   args: { disabled: true },
+  parameters: { design: figmaNode('55-39') },
 };
 
 export const DisabledChecked: Story = {
   args: { disabled: true, checked: true },
+  parameters: { design: figmaNode('55-40') },
 };
 
 export const Invalid: Story = {

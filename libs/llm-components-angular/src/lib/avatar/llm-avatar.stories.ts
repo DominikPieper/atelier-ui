@@ -48,7 +48,9 @@ const meta: Meta<LlmAvatar> = {
 export default meta;
 type Story = StoryObj<LlmAvatar>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: { design: figmaNode('55-148') },
+};
 
 export const WithInitials: Story = {
   render: (args) => ({

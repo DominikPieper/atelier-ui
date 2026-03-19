@@ -8,6 +8,10 @@ import {
   HTMLAttributes,
   KeyboardEvent,
 } from 'react';
+import type {
+  LlmAccordionGroupSpec,
+  LlmAccordionItemSpec,
+} from '@llm-components/llm-components-spec';
 import './llm-accordion.css';
 
 interface AccordionGroupContextValue {
@@ -28,12 +32,29 @@ const AccordionGroupContext = createContext<AccordionGroupContextValue>({
   handleKeydown: () => {},
 });
 
-export interface LlmAccordionGroupProps extends HTMLAttributes<HTMLDivElement> {
+/**
+ * Properties for the LlmAccordionGroup component.
+ */
+export interface LlmAccordionGroupProps
+  extends HTMLAttributes<HTMLDivElement>,
+    LlmAccordionGroupSpec {
+  /**
+   * Whether multiple items can be expanded simultaneously.
+   */
   multi?: boolean;
+  /**
+   * The visual style variant of the accordion.
+   */
   variant?: 'default' | 'bordered' | 'separated';
+  /**
+   * The accordion items to be rendered.
+   */
   children?: ReactNode;
 }
 
+/**
+ * A container component that manages a group of accordion items.
+ */
 export function LlmAccordionGroup({
   multi = false,
   variant = 'default',
@@ -105,13 +126,33 @@ export function LlmAccordionGroup({
   );
 }
 
-export interface LlmAccordionItemProps extends HTMLAttributes<HTMLDivElement> {
+/**
+ * Properties for the LlmAccordionItem component.
+ */
+export interface LlmAccordionItemProps
+  extends HTMLAttributes<HTMLDivElement>,
+    LlmAccordionItemSpec {
+  /**
+   * Whether the item is currently expanded.
+   */
   expanded?: boolean;
+  /**
+   * Callback triggered when the expanded state changes.
+   */
   onExpandedChange?: (expanded: boolean) => void;
+  /**
+   * Whether the accordion item is disabled.
+   */
   disabled?: boolean;
+  /**
+   * The content of the accordion item, typically including an LlmAccordionHeader.
+   */
   children?: ReactNode;
 }
 
+/**
+ * An individual item within an accordion group.
+ */
 export function LlmAccordionItem({
   expanded: externalExpanded,
   onExpandedChange,
@@ -217,11 +258,19 @@ export function LlmAccordionItem({
   );
 }
 
+/**
+ * The header component for an LlmAccordionItem.
+ */
 export function LlmAccordionHeader({
   children,
   className,
   ...rest
-}: HTMLAttributes<HTMLSpanElement> & { children?: ReactNode }) {
+}: HTMLAttributes<HTMLSpanElement> & {
+  /**
+   * The content to be rendered in the header.
+   */
+  children?: ReactNode;
+}) {
   return (
     <span
       className={['accordion-header-content', className].filter(Boolean).join(' ')}

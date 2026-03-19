@@ -33,6 +33,7 @@ export const Default: Story = {
       </llm-breadcrumbs>
     `,
   }),
+  parameters: { design: figmaNode('55-138') },
 };
 
 export const SingleItem: Story = {

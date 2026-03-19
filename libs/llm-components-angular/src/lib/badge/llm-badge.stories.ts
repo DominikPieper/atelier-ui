@@ -38,7 +38,9 @@ const meta: Meta<LlmBadge> = {
 export default meta;
 type Story = StoryObj<LlmBadge>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: { design: figmaNode('55-12') },
+};
 
 export const Success: Story = {
   render: (args) => ({
@@ -46,6 +48,7 @@ export const Success: Story = {
     template: `<llm-badge ${argsToTemplate(args)}>Active</llm-badge>`,
   }),
   args: { variant: 'success' },
+  parameters: { design: figmaNode('55-13') },
 };
 
 export const Warning: Story = {
@@ -54,6 +57,7 @@ export const Warning: Story = {
     template: `<llm-badge ${argsToTemplate(args)}>Pending</llm-badge>`,
   }),
   args: { variant: 'warning' },
+  parameters: { design: figmaNode('55-14') },
 };
 
 export const Danger: Story = {
@@ -62,6 +66,7 @@ export const Danger: Story = {
     template: `<llm-badge ${argsToTemplate(args)}>Error</llm-badge>`,
   }),
   args: { variant: 'danger' },
+  parameters: { design: figmaNode('55-15') },
 };
 
 export const Info: Story = {
@@ -70,10 +75,12 @@ export const Info: Story = {
     template: `<llm-badge ${argsToTemplate(args)}>Info</llm-badge>`,
   }),
   args: { variant: 'info' },
+  parameters: { design: figmaNode('55-16') },
 };
 
 export const Small: Story = {
   args: { size: 'sm' },
+  parameters: { design: figmaNode('55-17') },
 };
 
 export const Medium: Story = {

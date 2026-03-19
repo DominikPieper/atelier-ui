@@ -28,26 +28,33 @@ const meta: Meta<typeof LlmAlert> = {
 export default meta;
 type Story = StoryObj<typeof LlmAlert>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: { design: figmaNode('55-23') },
+};
 
 export const Info: Story = {
   args: { variant: 'info', children: 'This is an informational message.' },
+  parameters: { design: figmaNode('55-23') },
 };
 
 export const Success: Story = {
   args: { variant: 'success', children: 'Changes saved successfully.' },
+  parameters: { design: figmaNode('55-25') },
 };
 
 export const Warning: Story = {
   args: { variant: 'warning', children: 'Your session expires soon.' },
+  parameters: { design: figmaNode('55-27') },
 };
 
 export const Danger: Story = {
   args: { variant: 'danger', children: 'Something went wrong.' },
+  parameters: { design: figmaNode('55-29') },
 };
 
 export const Dismissible: Story = {
   args: { dismissible: true, variant: 'warning', children: 'Dismiss me.' },
+  parameters: { design: figmaNode('55-28') },
 };
 
 export const AllVariants: Story = {

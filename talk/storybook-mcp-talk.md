@@ -123,7 +123,7 @@ Die KI vergleicht die Design System Truth mit deinem Code:
 
 ![Storybook MCP](./storybook-mcp.png)
 
-Das Storybook MCP stellt sicher, dass die KI niemals eine API halluziniert.
+Das Storybook MCP stellt sicher, dass die KI möglichst keine API halluziniert.
 
 ### Discovery API (`list-all-documentation`)
 Die KI beginnt damit, das gesamte System zu scannen, um etablierte Components zu finden:

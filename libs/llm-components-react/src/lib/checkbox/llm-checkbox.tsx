@@ -1,16 +1,49 @@
 import { InputHTMLAttributes, ReactNode, useRef, useEffect, useId } from 'react';
+import type { LlmCheckboxSpec } from '@llm-components/llm-components-spec';
 import './llm-checkbox.css';
 
+/**
+ * Properties for the LlmCheckbox component.
+ */
 export interface LlmCheckboxProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'checked' | 'onChange'> {
+  extends Omit<
+      InputHTMLAttributes<HTMLInputElement>,
+      'type' | 'checked' | 'onChange' | 'readOnly'
+    >,
+    LlmCheckboxSpec {
+  /**
+   * Whether the checkbox is checked.
+   */
   checked?: boolean;
+  /**
+   * Callback triggered when the checked state changes.
+   */
   onCheckedChange?: (checked: boolean) => void;
+  /**
+   * Whether the checkbox is in an indeterminate state.
+   */
   indeterminate?: boolean;
+  /**
+   * Whether the checkbox is in an invalid state.
+   */
   invalid?: boolean;
+  /**
+   * Array of error messages to display.
+   */
   errors?: string[];
+  /**
+   * Whether the checkbox is read-only.
+   */
+  readOnly?: boolean;
+  /**
+   * The content to be rendered as the label for the checkbox.
+   */
   children?: ReactNode;
 }
 
+/**
+ * A checkbox component for selecting one or more options.
+ */
 export function LlmCheckbox({
   checked = false,
   onCheckedChange,
@@ -18,6 +51,8 @@ export function LlmCheckbox({
   invalid = false,
   errors = [],
   disabled = false,
+  readOnly: reactReadOnly,
+  readonly: specReadOnly,
   required = false,
   children,
   className,
@@ -25,6 +60,7 @@ export function LlmCheckbox({
   name,
   ...rest
 }: LlmCheckboxProps) {
+  const readOnly = reactReadOnly ?? specReadOnly ?? false;
   const inputRef = useRef<HTMLInputElement>(null);
   const generatedId = useId();
   const inputId = id || `checkbox-${generatedId}`;
@@ -56,6 +92,7 @@ export function LlmCheckbox({
           checked={checked}
           onChange={(e) => onCheckedChange?.(e.target.checked)}
           disabled={disabled}
+          readOnly={readOnly}
           required={required}
           aria-invalid={invalid || undefined}
           aria-required={required || undefined}

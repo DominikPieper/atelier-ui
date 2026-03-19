@@ -28,10 +28,12 @@ type Story = StoryObj<typeof LlmToggle>;
 
 export const Default: Story = {
   args: { children: 'Enable notifications' },
+  parameters: { design: figmaNode('55-37') },
 };
 
 export const Checked: Story = {
   args: { checked: true, children: 'Enabled' },
+  parameters: { design: figmaNode('55-38') },
 };
 
 export const Unchecked: Story = {
@@ -40,10 +42,12 @@ export const Unchecked: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true, children: 'Disabled toggle' },
+  parameters: { design: figmaNode('55-39') },
 };
 
 export const DisabledChecked: Story = {
   args: { disabled: true, checked: true, children: 'Disabled (on)' },
+  parameters: { design: figmaNode('55-40') },
 };
 
 export const Invalid: Story = {

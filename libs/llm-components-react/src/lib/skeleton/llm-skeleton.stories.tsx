@@ -24,9 +24,9 @@ const meta: Meta<typeof LlmSkeleton> = {
 export default meta;
 type Story = StoryObj<typeof LlmSkeleton>;
 
-export const Default: Story = {};
-export const Circular: Story = { args: { variant: 'circular', width: '48px' } };
-export const Rectangular: Story = { args: { variant: 'rectangular', height: '200px' } };
+export const Default: Story = { parameters: { design: figmaNode('55-99') } };
+export const Circular: Story = { args: { variant: 'circular', width: '48px' }, parameters: { design: figmaNode('55-100') } };
+export const Rectangular: Story = { args: { variant: 'rectangular', height: '200px' }, parameters: { design: figmaNode('55-101') } };
 export const TextLines: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxWidth: '320px' }}>

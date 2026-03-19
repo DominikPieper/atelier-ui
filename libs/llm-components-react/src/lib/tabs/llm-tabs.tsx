@@ -9,6 +9,10 @@ import {
   Children,
   isValidElement,
 } from 'react';
+import type {
+  LlmTabGroupSpec,
+  LlmTabSpec,
+} from '@llm-components/llm-components-spec';
 import './llm-tabs.css';
 
 interface TabInfo {
@@ -30,13 +34,33 @@ const TabGroupContext = createContext<TabGroupContextValue>({
   tabs: [],
 });
 
-export interface LlmTabGroupProps extends HTMLAttributes<HTMLDivElement> {
+/**
+ * Properties for the LlmTabGroup component.
+ */
+export interface LlmTabGroupProps
+  extends HTMLAttributes<HTMLDivElement>,
+    LlmTabGroupSpec {
+  /**
+   * The index of the currently selected tab.
+   */
   selectedIndex?: number;
+  /**
+   * Callback triggered when the selected tab index changes.
+   */
   onSelectedIndexChange?: (index: number) => void;
+  /**
+   * The visual style variant of the tabs.
+   */
   variant?: 'default' | 'pills';
+  /**
+   * The LlmTab components to be rendered.
+   */
   children?: ReactNode;
 }
 
+/**
+ * A component for organizing content into multiple tabs.
+ */
 export function LlmTabGroup({
   selectedIndex: externalIndex,
   onSelectedIndexChange,
@@ -148,12 +172,27 @@ export function LlmTabGroup({
   );
 }
 
-export interface LlmTabProps {
+/**
+ * Properties for the LlmTab component.
+ */
+export interface LlmTabProps extends LlmTabSpec {
+  /**
+   * The label to display on the tab button.
+   */
   label: string;
+  /**
+   * Whether the tab is disabled.
+   */
   disabled?: boolean;
+  /**
+   * The content to be rendered when the tab is selected.
+   */
   children?: ReactNode;
 }
 
+/**
+ * An individual tab component for use within LlmTabGroup.
+ */
 export function LlmTab({ children }: LlmTabProps) {
   return <>{children}</>;
 }

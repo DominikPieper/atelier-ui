@@ -43,18 +43,23 @@ const meta: Meta<LlmInput> = {
 export default meta;
 type Story = StoryObj<LlmInput>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: { design: figmaNode('55-66') },
+};
 
 export const Email: Story = {
   args: { type: 'email', placeholder: 'you@example.com' },
+  parameters: { design: figmaNode('55-71') },
 };
 
 export const Password: Story = {
   args: { type: 'password', placeholder: 'Enter password' },
+  parameters: { design: figmaNode('55-76') },
 };
 
 export const Disabled: Story = {
   args: { disabled: true, placeholder: 'Cannot edit' },
+  parameters: { design: figmaNode('55-70') },
 };
 
 export const Readonly: Story = {

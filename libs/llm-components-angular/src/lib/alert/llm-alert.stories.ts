@@ -38,7 +38,9 @@ const meta: Meta<LlmAlert> = {
 export default meta;
 type Story = StoryObj<LlmAlert>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: { design: figmaNode('55-23') },
+};
 
 export const Success: Story = {
   render: (args) => ({
@@ -46,6 +48,7 @@ export const Success: Story = {
     template: `<llm-alert ${argsToTemplate(args)}>Your changes were saved successfully.</llm-alert>`,
   }),
   args: { variant: 'success' },
+  parameters: { design: figmaNode('55-25') },
 };
 
 export const Warning: Story = {
@@ -54,6 +57,7 @@ export const Warning: Story = {
     template: `<llm-alert ${argsToTemplate(args)}>Your session expires in 5 minutes.</llm-alert>`,
   }),
   args: { variant: 'warning' },
+  parameters: { design: figmaNode('55-27') },
 };
 
 export const Danger: Story = {
@@ -62,6 +66,7 @@ export const Danger: Story = {
     template: `<llm-alert ${argsToTemplate(args)}>An error occurred. Please try again.</llm-alert>`,
   }),
   args: { variant: 'danger' },
+  parameters: { design: figmaNode('55-29') },
 };
 
 export const Dismissible: Story = {
@@ -70,6 +75,7 @@ export const Dismissible: Story = {
     template: `<llm-alert ${argsToTemplate(args)}>This alert can be dismissed.</llm-alert>`,
   }),
   args: { variant: 'warning', dismissible: true },
+  parameters: { design: figmaNode('55-28') },
 };
 
 export const AllVariants: Story = {

@@ -1,12 +1,39 @@
 import { HTMLAttributes, ReactNode, Children, useState, useEffect } from 'react';
+import type {
+  LlmAvatarSpec,
+  LlmAvatarGroupSpec,
+} from '@llm-components/llm-components-spec';
 import './llm-avatar.css';
 
-export interface LlmAvatarProps extends HTMLAttributes<HTMLDivElement> {
+/**
+ * Properties for the LlmAvatar component.
+ */
+export interface LlmAvatarProps
+  extends HTMLAttributes<HTMLDivElement>,
+    LlmAvatarSpec {
+  /**
+   * The URL of the image to display.
+   */
   src?: string;
+  /**
+   * Accessible text for the avatar image.
+   */
   alt?: string;
+  /**
+   * The name of the person/entity, used for initials if no image is provided.
+   */
   name?: string;
+  /**
+   * The size of the avatar.
+   */
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  /**
+   * The shape of the avatar.
+   */
   shape?: 'circle' | 'square';
+  /**
+   * The status indicator to display on the avatar.
+   */
   status?: 'online' | 'offline' | 'away' | 'busy' | '';
 }
 
@@ -19,6 +46,9 @@ function getInitials(name: string): string {
     .join('');
 }
 
+/**
+ * An avatar component for displaying user profile pictures or initials.
+ */
 export function LlmAvatar({
   src = '',
   alt = '',
@@ -58,12 +88,29 @@ export function LlmAvatar({
   );
 }
 
-export interface LlmAvatarGroupProps extends HTMLAttributes<HTMLDivElement> {
+/**
+ * Properties for the LlmAvatarGroup component.
+ */
+export interface LlmAvatarGroupProps
+  extends HTMLAttributes<HTMLDivElement>,
+    LlmAvatarGroupSpec {
+  /**
+   * The maximum number of avatars to show before displaying an overflow badge.
+   */
   max?: number;
+  /**
+   * The size of the avatars in the group.
+   */
   size?: LlmAvatarProps['size'];
+  /**
+   * The avatars to be rendered in the group.
+   */
   children?: ReactNode;
 }
 
+/**
+ * A container for grouping multiple avatars.
+ */
 export function LlmAvatarGroup({
   max = 5,
   size = 'md',

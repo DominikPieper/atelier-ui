@@ -32,6 +32,7 @@ export const Default: Story = {
       <LlmCardFooter>Footer content</LlmCardFooter>
     </LlmCard>
   ),
+  parameters: { design: figmaNode('55-59') },
 };
 
 export const Elevated: Story = {
@@ -41,6 +42,7 @@ export const Elevated: Story = {
       <LlmCardContent>This card has a shadow.</LlmCardContent>
     </LlmCard>
   ),
+  parameters: { design: figmaNode('55-59') },
 };
 
 export const Outlined: Story = {
@@ -50,6 +52,7 @@ export const Outlined: Story = {
       <LlmCardContent>This card has a border only.</LlmCardContent>
     </LlmCard>
   ),
+  parameters: { design: figmaNode('55-60') },
 };
 
 export const Flat: Story = {
@@ -59,6 +62,7 @@ export const Flat: Story = {
       <LlmCardContent>This card has a sunken background.</LlmCardContent>
     </LlmCard>
   ),
+  parameters: { design: figmaNode('55-61') },
 };
 
 export const NoPadding: Story = {

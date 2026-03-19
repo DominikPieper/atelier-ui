@@ -1,16 +1,49 @@
 import { ReactNode, SelectHTMLAttributes, OptionHTMLAttributes } from 'react';
+import type {
+  LlmSelectSpec,
+  LlmOptionSpec,
+} from '@llm-components/llm-components-spec';
 import './llm-select.css';
 
+/**
+ * Properties for the LlmSelect component.
+ */
 export interface LlmSelectProps
-  extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'value' | 'onChange'> {
+  extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'value' | 'onChange'>,
+    LlmSelectSpec {
+  /**
+   * The current value of the select.
+   */
   value?: string;
+  /**
+   * Callback triggered when the value changes.
+   */
   onValueChange?: (value: string) => void;
+  /**
+   * Placeholder text to display when no value is selected.
+   */
   placeholder?: string;
+  /**
+   * Whether the select is in an invalid state.
+   */
   invalid?: boolean;
+  /**
+   * Array of error messages to display.
+   */
   errors?: string[];
+  /**
+   * The label for the select.
+   */
   label?: string;
+  /**
+   * Whether the select is read-only.
+   */
+  readOnly?: boolean;
 }
 
+/**
+ * A select component for choosing an option from a list.
+ */
 export function LlmSelect({
   value = '',
   onValueChange,
@@ -18,6 +51,8 @@ export function LlmSelect({
   invalid = false,
   errors = [],
   disabled = false,
+  readOnly: reactReadOnly,
+  readonly: specReadOnly,
   required = false,
   label,
   children,
@@ -25,12 +60,14 @@ export function LlmSelect({
   id,
   ...rest
 }: LlmSelectProps) {
+  const readOnly = reactReadOnly ?? specReadOnly ?? false;
   const selectId =
     id || (label ? `select-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined);
   const classes = [
     'llm-select',
     invalid && 'is-invalid',
     disabled && 'is-disabled',
+    readOnly && 'is-readonly',
     className,
   ]
     .filter(Boolean)
@@ -73,11 +110,25 @@ export function LlmSelect({
   );
 }
 
-export interface LlmOptionProps extends OptionHTMLAttributes<HTMLOptionElement> {
+/**
+ * Properties for the LlmOption component.
+ */
+export interface LlmOptionProps
+  extends OptionHTMLAttributes<HTMLOptionElement>,
+    LlmOptionSpec {
+  /**
+   * The value of the option.
+   */
   optionValue: string;
+  /**
+   * The content to be rendered inside the option.
+   */
   children?: ReactNode;
 }
 
+/**
+ * An individual option component for use within LlmSelect.
+ */
 export function LlmOption({ optionValue, children, ...rest }: LlmOptionProps) {
   return (
     <option value={optionValue} {...rest}>

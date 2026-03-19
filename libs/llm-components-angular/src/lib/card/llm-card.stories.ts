@@ -66,18 +66,23 @@ const meta: Meta<LlmCard> = {
 export default meta;
 type Story = StoryObj<LlmCard>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: { design: figmaNode('55-59') },
+};
 
 export const Elevated: Story = {
   args: { variant: 'elevated' },
+  parameters: { design: figmaNode('55-59') },
 };
 
 export const Outlined: Story = {
   args: { variant: 'outlined' },
+  parameters: { design: figmaNode('55-60') },
 };
 
 export const Flat: Story = {
   args: { variant: 'flat' },
+  parameters: { design: figmaNode('55-61') },
 };
 
 export const PaddingSmall: Story = {

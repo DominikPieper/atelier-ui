@@ -1,4 +1,5 @@
 import { HTMLAttributes, useMemo } from 'react';
+import type { LlmPaginationSpec } from '@llm-components/llm-components-spec';
 import './llm-pagination.css';
 
 type PageItem =
@@ -37,14 +38,37 @@ function buildPageItems(page: number, pageCount: number, siblingCount: number): 
   return items;
 }
 
-export interface LlmPaginationProps extends Omit<HTMLAttributes<HTMLElement>, 'onChange'> {
+/**
+ * Properties for the LlmPagination component.
+ */
+export interface LlmPaginationProps
+  extends Omit<HTMLAttributes<HTMLElement>, 'onChange'>,
+    LlmPaginationSpec {
+  /**
+   * The currently active page.
+   */
   page?: number;
+  /**
+   * The total number of pages.
+   */
   pageCount?: number;
+  /**
+   * The number of pages to show on either side of the current page.
+   */
   siblingCount?: number;
+  /**
+   * Whether to show buttons for first and last pages.
+   */
   showFirstLast?: boolean;
+  /**
+   * Callback triggered when the page changes.
+   */
   onPageChange?: (page: number) => void;
 }
 
+/**
+ * A pagination component for navigating through paged content.
+ */
 export function LlmPagination({
   page = 1,
   pageCount = 1,

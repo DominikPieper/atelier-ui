@@ -56,6 +56,7 @@ export const Default: Story = {
       'page'
     );
   },
+  parameters: { design: figmaNode('55-142') },
 };
 
 export const MiddlePage: Story = {
@@ -67,6 +68,7 @@ export const MiddlePage: Story = {
     `,
   }),
   args: { page: 5, pageCount: 10 },
+  parameters: { design: figmaNode('55-143') },
 };
 
 export const FewPages: Story = {

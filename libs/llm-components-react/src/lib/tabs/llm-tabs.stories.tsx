@@ -39,6 +39,7 @@ export const Default: Story = {
       </LlmTab>
     </LlmTabGroup>
   ),
+  parameters: { design: figmaNode('55-120') },
 };
 
 export const Pills: Story = {
@@ -56,6 +57,7 @@ export const Pills: Story = {
       </LlmTab>
     </LlmTabGroup>
   ),
+  parameters: { design: figmaNode('55-122') },
 };
 
 export const WithDisabledTab: Story = {

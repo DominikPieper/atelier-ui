@@ -145,6 +145,7 @@ export const Default: Story = {
     template: `<toast-story-wrapper />`,
     moduleMetadata: { imports: [ToastStoryWrapper] },
   }),
+  parameters: { design: figmaNode('55-42') },
 };
 
 export const AllVariants: Story = {

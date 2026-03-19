@@ -29,10 +29,12 @@ type Story = StoryObj<typeof LlmCheckbox>;
 
 export const Default: Story = {
   args: { children: 'I agree to the terms and conditions' },
+  parameters: { design: figmaNode('55-32') },
 };
 
 export const Checked: Story = {
   args: { checked: true, children: 'Checked checkbox' },
+  parameters: { design: figmaNode('55-33') },
 };
 
 export const Unchecked: Story = {
@@ -41,10 +43,12 @@ export const Unchecked: Story = {
 
 export const Indeterminate: Story = {
   args: { indeterminate: true, children: 'Select all (indeterminate)' },
+  parameters: { design: figmaNode('55-34') },
 };
 
 export const Disabled: Story = {
   args: { disabled: true, children: 'Disabled checkbox' },
+  parameters: { design: figmaNode('55-35') },
 };
 
 export const DisabledChecked: Story = {

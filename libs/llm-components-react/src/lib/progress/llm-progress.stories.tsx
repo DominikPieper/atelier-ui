@@ -26,8 +26,8 @@ const meta: Meta<typeof LlmProgress> = {
 export default meta;
 type Story = StoryObj<typeof LlmProgress>;
 
-export const Default: Story = {};
-export const Success: Story = { args: { variant: 'success', value: 100 } };
+export const Default: Story = { parameters: { design: figmaNode('55-104') } };
+export const Success: Story = { args: { variant: 'success', value: 100 }, parameters: { design: figmaNode('55-110') } };
 export const Warning: Story = { args: { variant: 'warning', value: 60 } };
 export const Danger: Story = { args: { variant: 'danger', value: 30 } };
 export const Small: Story = { args: { size: 'sm' } };

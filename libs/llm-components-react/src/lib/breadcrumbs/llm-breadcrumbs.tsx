@@ -1,10 +1,20 @@
 import { HTMLAttributes, ReactNode, AnchorHTMLAttributes, Children, isValidElement, cloneElement } from 'react';
+import type { LlmBreadcrumbItemSpec } from '@llm-components/llm-components-spec';
 import './llm-breadcrumbs.css';
 
+/**
+ * Properties for the LlmBreadcrumbs component.
+ */
 export interface LlmBreadcrumbsProps extends HTMLAttributes<HTMLElement> {
+  /**
+   * The breadcrumb items to be rendered.
+   */
   children?: ReactNode;
 }
 
+/**
+ * A breadcrumbs component for displaying a navigation trail.
+ */
 export function LlmBreadcrumbs({ children, className, ...rest }: LlmBreadcrumbsProps) {
   const classes = ['llm-breadcrumbs', className].filter(Boolean).join(' ');
 
@@ -26,12 +36,29 @@ export function LlmBreadcrumbs({ children, className, ...rest }: LlmBreadcrumbsP
   );
 }
 
-export interface LlmBreadcrumbItemProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+/**
+ * Properties for the LlmBreadcrumbItem component.
+ */
+export interface LlmBreadcrumbItemProps
+  extends AnchorHTMLAttributes<HTMLAnchorElement>,
+    LlmBreadcrumbItemSpec {
+  /**
+   * The URL the breadcrumb points to.
+   */
   href?: string;
+  /**
+   * Whether this is the current page.
+   */
   current?: boolean;
+  /**
+   * The content to be rendered inside the breadcrumb item.
+   */
   children?: ReactNode;
 }
 
+/**
+ * An individual breadcrumb item.
+ */
 export function LlmBreadcrumbItem({
   href,
   current = false,

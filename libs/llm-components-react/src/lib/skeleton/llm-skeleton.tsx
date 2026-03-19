@@ -1,10 +1,28 @@
 import { CSSProperties, HTMLAttributes } from 'react';
+import type { LlmSkeletonSpec } from '@llm-components/llm-components-spec';
 import './llm-skeleton.css';
 
-export interface LlmSkeletonProps extends HTMLAttributes<HTMLDivElement> {
+/**
+ * Properties for the LlmSkeleton component.
+ */
+export interface LlmSkeletonProps
+  extends HTMLAttributes<HTMLDivElement>,
+    LlmSkeletonSpec {
+  /**
+   * The visual style variant of the skeleton.
+   */
   variant?: 'text' | 'circular' | 'rectangular';
+  /**
+   * The width of the skeleton.
+   */
   width?: string;
+  /**
+   * The height of the skeleton.
+   */
   height?: string;
+  /**
+   * Whether the skeleton should be animated.
+   */
   animated?: boolean;
 }
 
@@ -22,6 +40,9 @@ function computeHeight(variant: string, width: string, height?: string): string 
   }
 }
 
+/**
+ * A placeholder component used to represent content while it's loading.
+ */
 export function LlmSkeleton({
   variant = 'text',
   width = '100%',

@@ -8,6 +8,7 @@ import {
   HTMLAttributes,
   MouseEvent,
 } from 'react';
+import type { LlmDialogSpec } from '@llm-components/llm-components-spec';
 import './llm-dialog.css';
 
 interface DialogContextValue {
@@ -20,16 +21,43 @@ const DialogContext = createContext<DialogContextValue>({
   close: () => {},
 });
 
-export interface LlmDialogProps {
+/**
+ * Properties for the LlmDialog component.
+ */
+export interface LlmDialogProps extends LlmDialogSpec {
+  /**
+   * Whether the dialog is open.
+   */
   open?: boolean;
+  /**
+   * Callback triggered when the open state changes.
+   */
   onOpenChange?: (open: boolean) => void;
+  /**
+   * Whether to close the dialog when clicking on the backdrop.
+   */
   closeOnBackdrop?: boolean;
+  /**
+   * The size of the dialog.
+   */
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  /**
+   * Accessible label for the dialog.
+   */
   'aria-label'?: string;
+  /**
+   * Accessible label provided by another element.
+   */
   'aria-labelledby'?: string;
+  /**
+   * The content of the dialog.
+   */
   children?: ReactNode;
 }
 
+/**
+ * A dialog (modal) component for displaying content on top of the main UI.
+ */
 export function LlmDialog({
   open = false,
   onOpenChange,
@@ -99,11 +127,19 @@ export function LlmDialog({
   );
 }
 
+/**
+ * The header component for an LlmDialog.
+ */
 export function LlmDialogHeader({
   children,
   className,
   ...rest
-}: HTMLAttributes<HTMLDivElement> & { children?: ReactNode }) {
+}: HTMLAttributes<HTMLDivElement> & {
+  /**
+   * The content of the dialog header.
+   */
+  children?: ReactNode;
+}) {
   const ctx = useContext(DialogContext);
   return (
     <div
@@ -138,11 +174,19 @@ export function LlmDialogHeader({
   );
 }
 
+/**
+ * The main content component for an LlmDialog.
+ */
 export function LlmDialogContent({
   children,
   className,
   ...rest
-}: HTMLAttributes<HTMLDivElement> & { children?: ReactNode }) {
+}: HTMLAttributes<HTMLDivElement> & {
+  /**
+   * The main content of the dialog.
+   */
+  children?: ReactNode;
+}) {
   return (
     <div
       className={['llm-dialog-content', className].filter(Boolean).join(' ')}
@@ -153,11 +197,19 @@ export function LlmDialogContent({
   );
 }
 
+/**
+ * The footer component for an LlmDialog.
+ */
 export function LlmDialogFooter({
   children,
   className,
   ...rest
-}: HTMLAttributes<HTMLDivElement> & { children?: ReactNode }) {
+}: HTMLAttributes<HTMLDivElement> & {
+  /**
+   * The content of the dialog footer.
+   */
+  children?: ReactNode;
+}) {
   return (
     <div
       className={['llm-dialog-footer', className].filter(Boolean).join(' ')}

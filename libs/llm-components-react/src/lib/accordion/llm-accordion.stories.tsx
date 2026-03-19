@@ -41,6 +41,7 @@ export const Default: Story = {
       </LlmAccordionItem>
     </LlmAccordionGroup>
   ),
+  parameters: { design: figmaNode('55-124') },
 };
 
 export const MultiExpand: Story = {
@@ -77,6 +78,7 @@ export const Bordered: Story = {
       </LlmAccordionItem>
     </LlmAccordionGroup>
   ),
+  parameters: { design: figmaNode('55-125') },
 };
 
 export const Separated: Story = {
@@ -97,6 +99,7 @@ export const Separated: Story = {
       </LlmAccordionItem>
     </LlmAccordionGroup>
   ),
+  parameters: { design: figmaNode('55-126') },
 };
 
 export const WithDisabledItem: Story = {
