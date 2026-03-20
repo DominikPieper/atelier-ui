@@ -97,7 +97,9 @@
       "mcp__figma-console__figma_lint_design",
       "Bash(convert --version)",
       "Bash(magick --version)",
-      "Bash(pip3 install:*)"
+      "Bash(pip3 install:*)",
+      "Bash(npm pack:*)",
+      "Bash(npm view:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
