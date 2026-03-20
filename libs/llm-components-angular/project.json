@@ -4,13 +4,18 @@
   "sourceRoot": "libs/llm-components-angular/src",
   "prefix": "llm",
   "projectType": "library",
-  "tags": ["framework:angular", "type:ui-lib"],
+  "tags": [
+    "framework:angular",
+    "type:ui-lib"
+  ],
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
-        "reportsDirectory": "../../coverage/llm-components-angular"
+        "reportsDirectory": "{projectRoot}/../../coverage/llm-components-angular"
       }
     },
     "lint": {
@@ -24,7 +29,9 @@
     },
     "build-storybook": {
       "executor": "nx:run-commands",
-      "outputs": ["{workspaceRoot}/dist/storybook/llm-components-angular"],
+      "outputs": [
+        "{workspaceRoot}/dist/storybook/llm-components-angular"
+      ],
       "options": {
         "command": "npx storybook build --config-dir libs/llm-components-angular/.storybook --output-dir dist/storybook/llm-components-angular"
       }

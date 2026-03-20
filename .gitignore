@@ -48,3 +48,5 @@ __screenshots__/
 vitest.config.*.timestamp*
 
 storybook-static
+.claude/worktrees
+.claude/settings.local.json

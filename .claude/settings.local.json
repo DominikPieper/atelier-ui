@@ -83,7 +83,21 @@
       "mcp__storybook-angular__run-story-tests",
       "mcp__figma-console__figma_get_design_system_kit",
       "Bash(git stash:*)",
-      "mcp__storybook-react__run-story-tests"
+      "mcp__storybook-react__run-story-tests",
+      "mcp__figma-console__figma_get_design_system_summary",
+      "mcp__figma-console__figma_get_styles",
+      "mcp__figma-console__figma_audit_design_system",
+      "mcp__figma-console__figma_get_library_components",
+      "mcp__figma-console__ds_dashboard_refresh",
+      "mcp__figma-console__figma_create_variable_collection",
+      "WebFetch(domain:conciso.de)",
+      "Bash(python3 -m json.tool)",
+      "Bash(python3:*)",
+      "Bash(md5:*)",
+      "mcp__figma-console__figma_lint_design",
+      "Bash(convert --version)",
+      "Bash(magick --version)",
+      "Bash(pip3 install:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

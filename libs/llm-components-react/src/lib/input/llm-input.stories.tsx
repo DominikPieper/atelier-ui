@@ -72,6 +72,14 @@ export const Number: Story = {
   args: { type: 'number', label: 'Quantity', placeholder: '0' },
 };
 
+export const Tel: Story = {
+  args: { type: 'tel', label: 'Phone number', placeholder: '+1 (555) 000-0000' },
+};
+
+export const Url: Story = {
+  args: { type: 'url', label: 'Website', placeholder: 'https://example.com' },
+};
+
 export const Required: Story = {
   args: { required: true, label: 'Full name', placeholder: 'Enter your full name' },
 };

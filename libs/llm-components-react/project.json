@@ -3,14 +3,23 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/llm-components-react/src",
   "projectType": "library",
-  "tags": ["framework:react", "type:ui-lib"],
+  "tags": [
+    "framework:react",
+    "type:ui-lib"
+  ],
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": { "reportsDirectory": "../../coverage/llm-components-react" }
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
+      "options": {
+        "reportsDirectory": "{projectRoot}/../../coverage/llm-components-react"
+      }
     },
-    "lint": { "executor": "@nx/eslint:lint" },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
     "storybook": {
       "executor": "nx:run-commands",
       "options": {
@@ -19,7 +28,9 @@
     },
     "build-storybook": {
       "executor": "nx:run-commands",
-      "outputs": ["{workspaceRoot}/dist/storybook/llm-components-react"],
+      "outputs": [
+        "{workspaceRoot}/dist/storybook/llm-components-react"
+      ],
       "options": {
         "command": "npx storybook build --config-dir libs/llm-components-react/.storybook --output-dir dist/storybook/llm-components-react"
       }

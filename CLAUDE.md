@@ -78,6 +78,16 @@
 
 ---
 
+## Component Documentation
+
+**Do not add component API documentation to this file.** Use the Storybook MCP servers instead:
+- Angular components → `storybook-angular` MCP (`list-all-documentation`, `get-documentation`)
+- React components → `storybook-react` MCP (`list-all-documentation`, `get-documentation`)
+
+The Storybook MCP servers are the authoritative source for component props, variants, and usage examples. Always query them rather than relying on inline docs here.
+
+---
+
 ## Component API Reference
 
 ### LlmAvatar + LlmAvatarGroup
