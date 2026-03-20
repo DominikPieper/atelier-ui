@@ -105,7 +105,7 @@ function Showcase() {
           <h1 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: '0.25rem', letterSpacing: '-0.02em' }}>
             Component Showcase
           </h1>
-          <p style={{ color: 'var(--ui-color-text-secondary, #6b7280)', fontSize: '0.9rem' }}>
+          <p style={{ color: 'var(--ui-color-text-muted)', fontSize: '0.9rem' }}>
             All available React components at a glance.
           </p>
         </header>

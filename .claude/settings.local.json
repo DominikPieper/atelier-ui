@@ -76,7 +76,14 @@
       "mcp__figma-console__figma_capture_screenshot",
       "mcp__figma-console__figma_arrange_component_set",
       "mcp__figma-console__figma_delete_node",
-      "mcp__figma-console__figma_get_component_details"
+      "mcp__figma-console__figma_get_component_details",
+      "Bash(find /Users/dominikpieper/Projects/angular-llm-components -type f \\\\\\(-name *figma* -o -name *Figma* \\\\\\))",
+      "mcp__figma-console__figma_batch_update_variables",
+      "mcp__figma-console__figma_batch_create_variables",
+      "mcp__storybook-angular__run-story-tests",
+      "mcp__figma-console__figma_get_design_system_kit",
+      "Bash(git stash:*)",
+      "mcp__storybook-react__run-story-tests"
     ]
   },
   "enableAllProjectMcpServers": true,

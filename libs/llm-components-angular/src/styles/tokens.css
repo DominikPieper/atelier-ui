@@ -26,10 +26,10 @@
   --ui-line-height-normal: 1.5;
 
   /* Colors — Primary */
-  --ui-color-primary: #2563eb;
-  --ui-color-primary-hover: #1d4ed8;
-  --ui-color-primary-active: #1e40af;
-  --ui-color-primary-light: rgba(37, 99, 235, 0.08);
+  --ui-color-primary: #00bebe;
+  --ui-color-primary-hover: #009696;
+  --ui-color-primary-active: #007070;
+  --ui-color-primary-light: rgba(0, 190, 190, 0.08);
 
   /* Colors — Secondary */
   --ui-color-secondary: #64748b;
@@ -56,10 +56,17 @@
   /* Colors — Text */
   --ui-color-text: #0f172a;
   --ui-color-text-muted: #64748b;
-  --ui-color-text-on-primary: #ffffff;
+  --ui-color-text-on-primary: #0f172a;
+  --ui-color-text-on-secondary: #ffffff;
   --ui-color-text-on-danger: #ffffff;
   --ui-color-text-on-success: #ffffff;
-  --ui-color-on-primary: #ffffff;
+  --ui-color-on-primary: #0f172a;
+
+  /* Colors — Brand palette */
+  --ui-color-brand-corporate: #00bebe;
+  --ui-color-brand-agile: #00d296;
+  --ui-color-brand-architecture: #009696;
+  --ui-color-brand-development: #00b4ff;
   --ui-opacity-disabled: 0.5;
 
   /* Border radius */
@@ -129,10 +136,10 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --ui-color-primary: #3b82f6;
-    --ui-color-primary-hover: #60a5fa;
-    --ui-color-primary-active: #93c5fd;
-    --ui-color-primary-light: rgba(59, 130, 246, 0.15);
+    --ui-color-primary: #00d0d0;
+    --ui-color-primary-hover: #00bebe;
+    --ui-color-primary-active: #009696;
+    --ui-color-primary-light: rgba(0, 190, 190, 0.15);
 
     --ui-color-secondary: #94a3b8;
     --ui-color-secondary-hover: #cbd5e1;
@@ -155,7 +162,7 @@
 
     --ui-color-text: #f1f5f9;
     --ui-color-text-muted: #94a3b8;
-    --ui-color-on-primary: #ffffff;
+    --ui-color-on-primary: #0f172a;
 
     --ui-color-input-border: #3d3d50;
     --ui-color-input-border-hover: #5a5a72;
@@ -174,10 +181,10 @@
 }
 
 [data-theme="dark"] {
-  --ui-color-primary: #3b82f6;
-  --ui-color-primary-hover: #60a5fa;
-  --ui-color-primary-active: #93c5fd;
-  --ui-color-primary-light: rgba(59, 130, 246, 0.15);
+  --ui-color-primary: #00d0d0;
+  --ui-color-primary-hover: #00bebe;
+  --ui-color-primary-active: #009696;
+  --ui-color-primary-light: rgba(0, 190, 190, 0.15);
 
   --ui-color-secondary: #94a3b8;
   --ui-color-secondary-hover: #cbd5e1;
@@ -200,7 +207,7 @@
 
   --ui-color-text: #f1f5f9;
   --ui-color-text-muted: #94a3b8;
-  --ui-color-on-primary: #ffffff;
+  --ui-color-on-primary: #0f172a;
 
   --ui-color-input-border: #3d3d50;
   --ui-color-input-border-hover: #5a5a72;

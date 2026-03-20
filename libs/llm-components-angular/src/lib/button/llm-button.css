@@ -49,7 +49,7 @@
 
 :host(.variant-secondary) {
   background-color: var(--ui-color-secondary);
-  color: var(--ui-color-text-on-primary);
+  color: var(--ui-color-text-on-secondary);
   border-color: var(--ui-color-secondary);
   box-shadow: var(--ui-shadow-xs);
 }

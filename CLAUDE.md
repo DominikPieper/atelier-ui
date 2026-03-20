@@ -788,6 +788,15 @@ import { LlmAvatar, LlmAvatarGroup, LlmButton, LlmCard, LlmCardHeader, LlmCardCo
 
 All tokens use the `--ui-*` prefix. Key tokens: `--ui-color-primary`, `--ui-color-secondary`, `--ui-color-danger`, `--ui-color-surface`, `--ui-color-border`, `--ui-color-text`, `--ui-radius-sm/md/lg`, `--ui-spacing-1..8`, `--ui-shadow-sm/md`.
 
+Brand color tokens:
+
+| Token | Value | Notes |
+|---|---|---|
+| `--ui-color-brand-corporate` | `#00bebe` | Corporate (= primary) |
+| `--ui-color-brand-agile` | `#00d296` | Agile Advisory |
+| `--ui-color-brand-architecture` | `#009696` | Viable Architecture (= primary-hover) |
+| `--ui-color-brand-development` | `#00b4ff` | Pragmatic Development |
+
 ---
 
 ## React Library (`@llm-components/llm-components-react`)
