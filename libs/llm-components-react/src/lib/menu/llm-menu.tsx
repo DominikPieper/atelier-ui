@@ -11,7 +11,7 @@ import {
 import type {
   LlmMenuSpec,
   LlmMenuItemSpec,
-} from '@llm-components/llm-components-spec';
+} from '@atelier-ui/spec';
 import './llm-menu.css';
 
 interface MenuContextValue {

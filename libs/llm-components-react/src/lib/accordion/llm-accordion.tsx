@@ -11,7 +11,7 @@ import {
 import type {
   LlmAccordionGroupSpec,
   LlmAccordionItemSpec,
-} from '@llm-components/llm-components-spec';
+} from '@atelier-ui/spec';
 import './llm-accordion.css';
 
 interface AccordionGroupContextValue {

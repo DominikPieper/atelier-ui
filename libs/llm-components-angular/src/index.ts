@@ -1,5 +1,5 @@
 // Design tokens stylesheet — consumers should import:
-// @import '@llm-components/llm-components-angular/styles/tokens.css';
+// @import '@atelier-ui/angular/styles/tokens.css';
 
 export { LlmButton } from './lib/button/llm-button';
 export {

@@ -1,5 +1,5 @@
 import { HTMLAttributes, ReactNode, AnchorHTMLAttributes, Children, isValidElement, cloneElement } from 'react';
-import type { LlmBreadcrumbItemSpec } from '@llm-components/llm-components-spec';
+import type { LlmBreadcrumbItemSpec } from '@atelier-ui/spec';
 import './llm-breadcrumbs.css';
 
 /**

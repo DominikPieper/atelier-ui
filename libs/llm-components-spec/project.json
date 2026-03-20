@@ -3,5 +3,16 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/llm-components-spec/src",
   "projectType": "library",
-  "tags": ["type:spec"]
+  "tags": ["type:spec"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{workspaceRoot}/dist/libs/llm-components-spec"],
+      "options": {
+        "outputPath": "dist/libs/llm-components-spec",
+        "main": "libs/llm-components-spec/src/index.ts",
+        "tsConfig": "libs/llm-components-spec/tsconfig.lib.json"
+      }
+    }
+  }
 }

@@ -37,7 +37,7 @@ import {
   LlmDrawerHeader,
   LlmDrawerContent,
   LlmDrawerFooter,
-} from '@llm-components/llm-components-react';
+} from '@atelier-ui/react';
 import { componentDocs, COMPONENT_CATEGORIES } from '../../component-data';
 
 export const Route = createFileRoute('/components/$name')({
@@ -192,7 +192,7 @@ function generateImport(name: string): string {
   const imports = importMap[name] ?? [];
   if (imports.length === 0) return '';
 
-  return `import { ${imports.join(', ')} } from '@llm-components/llm-components-react';`;
+  return `import { ${imports.join(', ')} } from '@atelier-ui/react';`;
 }
 
 // Interactive demos for each component
@@ -545,8 +545,8 @@ function ComponentDemo({ name }: { name: string }) {
             </LlmAccordionItem>
             <LlmAccordionItem>
               <LlmAccordionHeader>How do I install it?</LlmAccordionHeader>
-              Run <code>npm install @llm-components/llm-components-react</code> and
-              import the styles from <code>@llm-components/llm-components-react/styles/tokens.css</code>.
+              Run <code>npm install @atelier-ui/react</code> and
+              import the styles from <code>@atelier-ui/react/styles/tokens.css</code>.
             </LlmAccordionItem>
             <LlmAccordionItem disabled={true}>
               <LlmAccordionHeader>Disabled item</LlmAccordionHeader>

@@ -1,5 +1,5 @@
 {
-  "name": "@llm-components/generators",
+  "name": "@atelier-ui/generators",
   "version": "0.0.1",
   "generators": "./generators.json"
 }

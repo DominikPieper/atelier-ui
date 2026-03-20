@@ -303,7 +303,7 @@ function Showcase() {
             </LlmAccordionItem>
             <LlmAccordionItem>
               <LlmAccordionHeader>How do I get started?</LlmAccordionHeader>
-              Import any component from <code>@llm-components/llm-components-react</code>.
+              Import any component from <code>@atelier-ui/react</code>.
             </LlmAccordionItem>
             <LlmAccordionItem disabled>
               <LlmAccordionHeader>Disabled section</LlmAccordionHeader>

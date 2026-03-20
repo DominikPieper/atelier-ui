@@ -2,7 +2,7 @@ import { ReactNode, SelectHTMLAttributes, OptionHTMLAttributes } from 'react';
 import type {
   LlmSelectSpec,
   LlmOptionSpec,
-} from '@llm-components/llm-components-spec';
+} from '@atelier-ui/spec';
 import './llm-select.css';
 
 /**

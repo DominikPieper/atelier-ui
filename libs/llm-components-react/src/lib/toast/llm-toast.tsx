@@ -10,7 +10,7 @@ import type {
   LlmToastVariant,
   LlmToastOptions,
   LlmToastContainerPosition,
-} from '@llm-components/llm-components-spec';
+} from '@atelier-ui/spec';
 import './llm-toast.css';
 
 /**

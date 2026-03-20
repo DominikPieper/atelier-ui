@@ -1,5 +1,5 @@
 import { HTMLAttributes } from 'react';
-import type { LlmProgressSpec } from '@llm-components/llm-components-spec';
+import type { LlmProgressSpec } from '@atelier-ui/spec';
 import './llm-progress.css';
 
 /**

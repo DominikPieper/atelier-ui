@@ -1,5 +1,5 @@
 import { createContext, useContext, InputHTMLAttributes, ReactNode } from 'react';
-import type { LlmRadioGroupSpec } from '@llm-components/llm-components-spec';
+import type { LlmRadioGroupSpec } from '@atelier-ui/spec';
 import './llm-radio-group.css';
 
 /**

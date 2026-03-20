@@ -8,7 +8,7 @@ import {
   HTMLAttributes,
   MouseEvent,
 } from 'react';
-import type { LlmDrawerSpec } from '@llm-components/llm-components-spec';
+import type { LlmDrawerSpec } from '@atelier-ui/spec';
 import './llm-drawer.css';
 
 interface DrawerContextValue {

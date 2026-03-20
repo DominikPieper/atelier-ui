@@ -4,7 +4,7 @@ import {
   computed,
   input,
 } from '@angular/core';
-import type { LlmButtonVariant, LlmButtonSize } from '@llm-components/llm-components-spec';
+import type { LlmButtonVariant, LlmButtonSize } from '@atelier-ui/spec';
 
 /**
  * Accessible button component with visual variants and sizes.

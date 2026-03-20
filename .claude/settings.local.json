@@ -99,7 +99,8 @@
       "Bash(magick --version)",
       "Bash(pip3 install:*)",
       "Bash(npm pack:*)",
-      "Bash(npm view:*)"
+      "Bash(npm view:*)",
+      "Bash(xargs sed:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

@@ -1,5 +1,5 @@
 import { InputHTMLAttributes, ReactNode, useId } from 'react';
-import type { LlmToggleSpec } from '@llm-components/llm-components-spec';
+import type { LlmToggleSpec } from '@atelier-ui/spec';
 import './llm-toggle.css';
 
 /**

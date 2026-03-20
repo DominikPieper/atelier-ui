@@ -1,5 +1,5 @@
 import { ButtonHTMLAttributes, ReactNode, forwardRef } from 'react';
-import type { LlmButtonSpec } from '@llm-components/llm-components-spec';
+import type { LlmButtonSpec } from '@atelier-ui/spec';
 import './llm-button.css';
 
 /**

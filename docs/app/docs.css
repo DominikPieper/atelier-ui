@@ -65,8 +65,13 @@ body {
   transition: opacity 0.15s;
 }
 
-.docs-topbar-link:hover {
+.docs-topbar-link:hover,
+.docs-topbar-link.active {
   opacity: 1;
+}
+
+.docs-topbar-link.active {
+  font-weight: 500;
 }
 
 .docs-topbar-badge {
@@ -344,7 +349,11 @@ body {
 }
 
 .docs-hero-title {
-  font-size: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ui-spacing-4, 1rem);
+  font-size: 3.5rem;
   font-weight: 800;
   margin: 0 0 var(--ui-spacing-4, 1rem);
   background: linear-gradient(
@@ -356,6 +365,12 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   line-height: 1.2;
+}
+
+.docs-hero-logo {
+  height: 4rem;
+  width: auto;
+  -webkit-text-fill-color: initial;
 }
 
 .docs-hero-subtitle {

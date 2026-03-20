@@ -189,12 +189,12 @@ Every component must be standalone and directly importable. No `NgModule` indire
 **Rules:**
 
 - Every component sets `standalone: true`.
-- Imports are granular: `import { LlmButton } from '@llm-components/llm-components-angular'`.
+- Imports are granular: `import { LlmButton } from '@atelier-ui/angular'`.
 - No barrel re-exports that pull in the entire library.
 
 ```typescript
 // Good: direct, granular import
-import { LlmButton, LlmCard, LlmCardHeader, LlmCardContent } from '@llm-components/llm-components-angular';
+import { LlmButton, LlmCard, LlmCardHeader, LlmCardContent } from '@atelier-ui/angular';
 
 @Component({
   standalone: true,
@@ -484,11 +484,11 @@ import { LlmButton, LlmCard, LlmCardHeader, LlmCardContent, LlmCardFooter,
          LlmSkeleton, LlmAvatar, LlmAvatarGroup, LlmProgress,
          LlmBreadcrumbs, LlmBreadcrumbItem, LlmPagination,
          LlmDrawer, LlmDrawerHeader, LlmDrawerContent, LlmDrawerFooter }
-  from '@llm-components/llm-components-react';
+  from '@atelier-ui/react';
 ```
 
 ```css
-@import '@llm-components/llm-components-react/styles/tokens.css';
+@import '@atelier-ui/react/styles/tokens.css';
 ```
 
 ### Toast Hook Pattern
@@ -510,8 +510,8 @@ show('Saved!', { variant: 'success' });
 ### Scaffold New React Components
 
 ```bash
-nx generate @llm-components/generators:llm-component-react --name=<name>
-# e.g.: nx generate @llm-components/generators:llm-component-react --name=date-picker
+nx generate @atelier-ui/generators:llm-component-react --name=<name>
+# e.g.: nx generate @atelier-ui/generators:llm-component-react --name=date-picker
 ```
 
 Generated files: `llm-<name>.tsx`, `llm-<name>.css`, `llm-<name>.spec.tsx`, `llm-<name>.stories.tsx`

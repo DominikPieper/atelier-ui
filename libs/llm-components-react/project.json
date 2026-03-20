@@ -8,6 +8,16 @@
     "type:ui-lib"
   ],
   "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{workspaceRoot}/dist/libs/llm-components-react"],
+      "options": {
+        "outputPath": "dist/libs/llm-components-react",
+        "main": "libs/llm-components-react/src/index.ts",
+        "tsConfig": "libs/llm-components-react/tsconfig.lib.json",
+        "assets": ["libs/llm-components-react/*.md"]
+      }
+    },
     "test": {
       "executor": "@nx/vitest:test",
       "outputs": [

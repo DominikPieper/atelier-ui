@@ -12,7 +12,7 @@ import {
 import type {
   LlmTabGroupSpec,
   LlmTabSpec,
-} from '@llm-components/llm-components-spec';
+} from '@atelier-ui/spec';
 import './llm-tabs.css';
 
 interface TabInfo {

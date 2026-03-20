@@ -1,5 +1,5 @@
 /**
- * @llm-components/llm-components-spec
+ * @atelier-ui/spec
  *
  * Framework-agnostic TypeScript interfaces defining the public API contract
  * for every llm-components component. Both the Angular and React libraries

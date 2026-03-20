@@ -9,6 +9,13 @@
     "type:ui-lib"
   ],
   "targets": {
+    "build": {
+      "executor": "@nx/angular:package",
+      "outputs": ["{workspaceRoot}/dist/libs/llm-components-angular"],
+      "options": {
+        "project": "libs/llm-components-angular/ng-package.json"
+      }
+    },
     "test": {
       "executor": "@nx/vitest:test",
       "outputs": [

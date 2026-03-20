@@ -3,7 +3,7 @@
  * Import this stylesheet once at the application root to activate the token layer.
  *
  * Usage:
- *   @import '@llm-components/llm-components-angular/styles/tokens.css';
+ *   @import '@atelier-ui/angular/styles/tokens.css';
  */
 
 :root {

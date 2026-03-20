@@ -1,5 +1,5 @@
 import { InputHTMLAttributes } from 'react';
-import type { LlmInputSpec } from '@llm-components/llm-components-spec';
+import type { LlmInputSpec } from '@atelier-ui/spec';
 import './llm-input.css';
 
 /**

@@ -9,10 +9,28 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RoadmapRouteImport } from './routes/roadmap'
+import { Route as PhilosophyRouteImport } from './routes/philosophy'
+import { Route as DesignPrinciplesRouteImport } from './routes/design-principles'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ComponentsIndexRouteImport } from './routes/components/index'
 import { Route as ComponentsNameRouteImport } from './routes/components/$name'
 
+const RoadmapRoute = RoadmapRouteImport.update({
+  id: '/roadmap',
+  path: '/roadmap',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PhilosophyRoute = PhilosophyRouteImport.update({
+  id: '/philosophy',
+  path: '/philosophy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignPrinciplesRoute = DesignPrinciplesRouteImport.update({
+  id: '/design-principles',
+  path: '/design-principles',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -31,36 +49,88 @@ const ComponentsNameRoute = ComponentsNameRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/design-principles': typeof DesignPrinciplesRoute
+  '/philosophy': typeof PhilosophyRoute
+  '/roadmap': typeof RoadmapRoute
   '/components/$name': typeof ComponentsNameRoute
   '/components/': typeof ComponentsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/design-principles': typeof DesignPrinciplesRoute
+  '/philosophy': typeof PhilosophyRoute
+  '/roadmap': typeof RoadmapRoute
   '/components/$name': typeof ComponentsNameRoute
   '/components': typeof ComponentsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/design-principles': typeof DesignPrinciplesRoute
+  '/philosophy': typeof PhilosophyRoute
+  '/roadmap': typeof RoadmapRoute
   '/components/$name': typeof ComponentsNameRoute
   '/components/': typeof ComponentsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/components/$name' | '/components/'
+  fullPaths:
+    | '/'
+    | '/design-principles'
+    | '/philosophy'
+    | '/roadmap'
+    | '/components/$name'
+    | '/components/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/components/$name' | '/components'
-  id: '__root__' | '/' | '/components/$name' | '/components/'
+  to:
+    | '/'
+    | '/design-principles'
+    | '/philosophy'
+    | '/roadmap'
+    | '/components/$name'
+    | '/components'
+  id:
+    | '__root__'
+    | '/'
+    | '/design-principles'
+    | '/philosophy'
+    | '/roadmap'
+    | '/components/$name'
+    | '/components/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DesignPrinciplesRoute: typeof DesignPrinciplesRoute
+  PhilosophyRoute: typeof PhilosophyRoute
+  RoadmapRoute: typeof RoadmapRoute
   ComponentsNameRoute: typeof ComponentsNameRoute
   ComponentsIndexRoute: typeof ComponentsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/roadmap': {
+      id: '/roadmap'
+      path: '/roadmap'
+      fullPath: '/roadmap'
+      preLoaderRoute: typeof RoadmapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/philosophy': {
+      id: '/philosophy'
+      path: '/philosophy'
+      fullPath: '/philosophy'
+      preLoaderRoute: typeof PhilosophyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/design-principles': {
+      id: '/design-principles'
+      path: '/design-principles'
+      fullPath: '/design-principles'
+      preLoaderRoute: typeof DesignPrinciplesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -87,6 +157,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DesignPrinciplesRoute: DesignPrinciplesRoute,
+  PhilosophyRoute: PhilosophyRoute,
+  RoadmapRoute: RoadmapRoute,
   ComponentsNameRoute: ComponentsNameRoute,
   ComponentsIndexRoute: ComponentsIndexRoute,
 }

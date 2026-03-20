@@ -158,7 +158,7 @@ All sections are on the `Components` page. Each section is named after the compo
 1. Create a new Section on the Components page
 2. Build frames for all variants/states using `UI Tokens` variables
 3. Screenshot with `figma_take_screenshot` — iterate until correct
-4. Run generator: `nx generate @llm-components/generators:llm-component --name=<name>`
+4. Run generator: `nx generate @atelier-ui/generators:llm-component --name=<name>`
 5. Implement Angular + React simultaneously, referencing Figma values
 6. Verify parity with Storybook screenshot
 

@@ -776,8 +776,8 @@ Storybook stories under "Cookbook" showing how to compose multiple components in
 ### Scaffold new components
 
 ```bash
-nx generate @llm-components/generators:llm-component --name=<name>
-# e.g.: nx generate @llm-components/generators:llm-component --name=alert
+nx generate @atelier-ui/generators:llm-component --name=<name>
+# e.g.: nx generate @atelier-ui/generators:llm-component --name=alert
 ```
 
 Generated files: `llm-<name>.ts`, `llm-<name>.css`, `llm-<name>.spec.ts`, `llm-<name>.stories.ts`
@@ -787,13 +787,13 @@ Auto-exports from `libs/llm-components-angular/src/index.ts`.
 
 ```typescript
 import { LlmAvatar, LlmAvatarGroup, LlmButton, LlmCard, LlmCardHeader, LlmCardContent, LlmCardFooter, LlmBadge, LlmInput, LlmTextarea, LlmCheckbox, LlmToggle, LlmRadio, LlmRadioGroup, LlmAlert, LlmSelect, LlmOption, LlmDialog, LlmDialogHeader, LlmDialogContent, LlmDialogFooter, LlmTabGroup, LlmTab, LlmAccordionGroup, LlmAccordionItem, LlmAccordionHeader, LlmMenu, LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger, LlmTooltip, LlmToast, LlmToastContainer, LlmToastService, LlmSkeleton }
-  from '@llm-components/llm-components-angular';
+  from '@atelier-ui/angular';
 ```
 
 ### Design tokens
 
 ```css
-@import '@llm-components/llm-components-angular/styles/tokens.css';
+@import '@atelier-ui/angular/styles/tokens.css';
 ```
 
 All tokens use the `--ui-*` prefix. Key tokens: `--ui-color-primary`, `--ui-color-secondary`, `--ui-color-danger`, `--ui-color-surface`, `--ui-color-border`, `--ui-color-text`, `--ui-radius-sm/md/lg`, `--ui-spacing-1..8`, `--ui-shadow-sm/md`.
@@ -809,15 +809,15 @@ Brand color tokens:
 
 ---
 
-## React Library (`@llm-components/llm-components-react`)
+## React Library (`@atelier-ui/react`)
 
 Same components, same prop names, same `--ui-*` tokens — just React JSX instead of Angular templates.
 
 ### Scaffold new React components
 
 ```bash
-nx generate @llm-components/generators:llm-component-react --name=<name>
-# e.g.: nx generate @llm-components/generators:llm-component-react --name=date-picker
+nx generate @atelier-ui/generators:llm-component-react --name=<name>
+# e.g.: nx generate @atelier-ui/generators:llm-component-react --name=date-picker
 ```
 
 Generated files: `llm-<name>.tsx`, `llm-<name>.css`, `llm-<name>.spec.tsx`, `llm-<name>.stories.tsx`
@@ -836,13 +836,13 @@ import { LlmButton, LlmCard, LlmCardHeader, LlmCardContent, LlmCardFooter,
          LlmBreadcrumbs, LlmBreadcrumbItem, LlmPagination,
          LlmDrawer, LlmDrawerHeader, LlmDrawerContent, LlmDrawerFooter,
          LlmToastProvider, LlmToastContainer, LlmToast, useLlmToast }
-  from '@llm-components/llm-components-react';
+  from '@atelier-ui/react';
 ```
 
 ### Design tokens (React)
 
 ```css
-@import '@llm-components/llm-components-react/styles/tokens.css';
+@import '@atelier-ui/react/styles/tokens.css';
 ```
 
 ### Toast (React) — hook pattern instead of service

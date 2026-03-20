@@ -1,0 +1,10 @@
+{
+  "name": "@atelier-ui/angular",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/core": "^21.0.0",
+    "@angular/common": "^21.0.0",
+    "@angular/forms": "^21.0.0",
+    "@atelier-ui/spec": "*"
+  }
+}

@@ -291,7 +291,7 @@ import { LlmTooltip } from '../tooltip/llm-tooltip';
             </llm-accordion-item>
             <llm-accordion-item>
               <span llmAccordionHeader>How do I get started?</span>
-              Import any component from <code>@llm-components/llm-components-angular</code>.
+              Import any component from <code>@atelier-ui/angular</code>.
             </llm-accordion-item>
             <llm-accordion-item [disabled]="true">
               <span llmAccordionHeader>Disabled section</span>
