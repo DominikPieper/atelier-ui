@@ -6,15 +6,21 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
-# @storybook/mcp is ESM-only — nft bundler preserves module format
-[functions."storybook-react-mcp"]
-  node_bundler = "nft"
+[edge_functions]
+  directory = "netlify/edge-functions"
 
-[functions."storybook-angular-mcp"]
-  node_bundler = "nft"
+# Storybook MCP — edge functions support streaming (required for MCP SSE transport)
+[[edge_functions]]
+  function = "storybook-react-mcp"
+  path = "/mcp/storybook-react"
 
-[functions."storybook-vue-mcp"]
-  node_bundler = "nft"
+[[edge_functions]]
+  function = "storybook-angular-mcp"
+  path = "/mcp/storybook-angular"
+
+[[edge_functions]]
+  function = "storybook-vue-mcp"
+  path = "/mcp/storybook-vue"
 
 # Storybook — let Netlify serve their static files directly
 [[redirects]]
@@ -31,22 +37,6 @@
   from = "/storybook-vue"
   to = "/storybook-vue/"
   status = 301
-
-# Storybook MCP endpoints
-[[redirects]]
-  from = "/mcp/storybook-react"
-  to = "/.netlify/functions/storybook-react-mcp"
-  status = 200
-
-[[redirects]]
-  from = "/mcp/storybook-angular"
-  to = "/.netlify/functions/storybook-angular-mcp"
-  status = 200
-
-[[redirects]]
-  from = "/mcp/storybook-vue"
-  to = "/.netlify/functions/storybook-vue-mcp"
-  status = 200
 
 # Docs SPA fallback — must come last
 [[redirects]]
