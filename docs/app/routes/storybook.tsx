@@ -9,12 +9,16 @@ const SITE_URL = 'https://atelier-ui.netlify.app';
 const MCP_CONFIG = `{
   "mcpServers": {
     "storybook-react": {
-      "transport": "http",
-      "url": "${SITE_URL}/mcp/storybook-react"
+      "command": "npx",
+      "args": ["-y", "@storybook/mcp", "--url", "${SITE_URL}/storybook-react"]
     },
     "storybook-angular": {
-      "transport": "http",
-      "url": "${SITE_URL}/mcp/storybook-angular"
+      "command": "npx",
+      "args": ["-y", "@storybook/mcp", "--url", "${SITE_URL}/storybook-angular"]
+    },
+    "storybook-vue": {
+      "command": "npx",
+      "args": ["-y", "@storybook/mcp", "--url", "${SITE_URL}/storybook-vue"]
     }
   }
 }`;
@@ -58,12 +62,26 @@ function StorybookPage() {
           </div>
           <div className="docs-storybook-card-arrow">Open →</div>
         </a>
+
+        <a
+          href="/storybook-vue/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="docs-storybook-card"
+        >
+          <img src="/storybook-logo.svg" alt="Storybook" className="docs-storybook-logo" />
+          <div className="docs-storybook-card-name">Vue</div>
+          <div className="docs-storybook-card-desc">
+            Storybook for <code>@atelier-ui/vue</code>
+          </div>
+          <div className="docs-storybook-card-arrow">Open →</div>
+        </a>
       </div>
 
       <div className="docs-section" style={{ marginTop: '3rem' }}>
         <h2 className="docs-section-title">MCP Server</h2>
         <p style={{ marginBottom: '1.25rem', color: 'var(--ui-color-text-muted)' }}>
-          Both Storybook instances expose an{' '}
+          All three Storybook instances support{' '}
           <a
             href="https://modelcontextprotocol.io"
             target="_blank"
@@ -71,8 +89,9 @@ function StorybookPage() {
           >
             MCP
           </a>{' '}
-          endpoint so AI coding assistants can read component documentation directly from the
-          production deployment — no local Storybook server required.
+          so AI coding assistants can read component documentation directly. The{' '}
+          <code>@storybook/mcp</code> CLI runs locally and reads from the deployed Storybook —
+          no local Storybook server required.
         </p>
 
         <div className="docs-mcp-steps">
@@ -119,11 +138,15 @@ function StorybookPage() {
                 <tbody>
                   <tr>
                     <td><code>@atelier-ui/react</code></td>
-                    <td><code>{SITE_URL}/mcp/storybook-react</code></td>
+                    <td><code>{SITE_URL}/storybook-react</code></td>
                   </tr>
                   <tr>
                     <td><code>@atelier-ui/angular</code></td>
-                    <td><code>{SITE_URL}/mcp/storybook-angular</code></td>
+                    <td><code>{SITE_URL}/storybook-angular</code></td>
+                  </tr>
+                  <tr>
+                    <td><code>@atelier-ui/vue</code></td>
+                    <td><code>{SITE_URL}/storybook-vue</code></td>
                   </tr>
                 </tbody>
               </table>

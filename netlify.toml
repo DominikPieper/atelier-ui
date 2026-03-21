@@ -6,22 +6,6 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
-[edge_functions]
-  directory = "netlify/edge-functions"
-
-# Storybook MCP — edge functions support streaming (required for MCP SSE transport)
-[[edge_functions]]
-  function = "storybook-react-mcp"
-  path = "/mcp/storybook-react"
-
-[[edge_functions]]
-  function = "storybook-angular-mcp"
-  path = "/mcp/storybook-angular"
-
-[[edge_functions]]
-  function = "storybook-vue-mcp"
-  path = "/mcp/storybook-vue"
-
 # Storybook — let Netlify serve their static files directly
 [[redirects]]
   from = "/storybook-react"
