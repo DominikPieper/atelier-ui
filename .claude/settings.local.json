@@ -103,7 +103,9 @@
       "Bash(xargs sed:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(curl -sL \"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.png\")",
+      "Bash(xxd)"
     ]
   },
   "enableAllProjectMcpServers": true,
