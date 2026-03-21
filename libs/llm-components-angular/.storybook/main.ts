@@ -1,4 +1,5 @@
 import { StorybookConfig } from '@analogjs/storybook-angular';
+import type { InlineConfig } from 'vite';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
@@ -18,6 +19,12 @@ const config: StorybookConfig = {
   features: {
     experimentalComponentManifest: true,
   } as StorybookConfig['features'],
+  viteFinal: async (config: InlineConfig) => {
+    if (process.env['CI'] || process.env['BUILD_STORYBOOK']) {
+      config.base = '/storybook-angular/';
+    }
+    return config;
+  },
 };
 
 export default config;

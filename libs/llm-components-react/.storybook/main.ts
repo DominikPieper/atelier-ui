@@ -1,4 +1,5 @@
 import { StorybookConfig } from '@storybook/react-vite';
+import type { InlineConfig } from 'vite';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
@@ -25,6 +26,12 @@ const config: StorybookConfig = {
   features: {
     experimentalComponentManifest: true,
   } as StorybookConfig['features'],
+  viteFinal: async (config: InlineConfig) => {
+    if (process.env['CI'] || process.env['BUILD_STORYBOOK']) {
+      config.base = '/storybook-react/';
+    }
+    return config;
+  },
 };
 
 export default config;
