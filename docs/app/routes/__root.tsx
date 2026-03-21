@@ -11,8 +11,25 @@ export const Route = createRootRoute({
   component: RootLayout,
 });
 
+function useDarkMode() {
+  const [dark, setDark] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const stored = localStorage.getItem('docs-theme');
+    if (stored) return stored === 'dark';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    localStorage.setItem('docs-theme', dark ? 'dark' : 'light');
+  }, [dark]);
+
+  return [dark, () => setDark((d) => !d)] as const;
+}
+
 function RootLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [dark, toggleDark] = useDarkMode();
   const routerState = useRouterState();
 
   // Close sidebar on navigation
@@ -22,7 +39,7 @@ function RootLayout() {
 
   return (
     <div className="docs-shell">
-      <TopBar onMenuToggle={() => setSidebarOpen((o) => !o)} />
+      <TopBar onMenuToggle={() => setSidebarOpen((o) => !o)} dark={dark} onThemeToggle={toggleDark} />
       <div
         className={`docs-sidebar-backdrop${sidebarOpen ? ' docs-sidebar-backdrop--visible' : ''}`}
         onClick={() => setSidebarOpen(false)}
@@ -35,7 +52,7 @@ function RootLayout() {
   );
 }
 
-function TopBar({ onMenuToggle }: { onMenuToggle: () => void }) {
+function TopBar({ onMenuToggle, dark, onThemeToggle }: { onMenuToggle: () => void; dark: boolean; onThemeToggle: () => void }) {
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
   const isComponents = currentPath.startsWith('/components');
@@ -63,6 +80,13 @@ function TopBar({ onMenuToggle }: { onMenuToggle: () => void }) {
         <Link to="/components" className={`docs-topbar-link${isComponents ? ' active' : ''}`}>
           Components
         </Link>
+        <button
+          className="docs-theme-btn"
+          onClick={onThemeToggle}
+          aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {dark ? '☀️' : '🌙'}
+        </button>
       </div>
     </header>
   );
