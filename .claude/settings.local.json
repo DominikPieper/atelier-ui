@@ -100,7 +100,10 @@
       "Bash(pip3 install:*)",
       "Bash(npm pack:*)",
       "Bash(npm view:*)",
-      "Bash(xargs sed:*)"
+      "Bash(xargs sed:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
