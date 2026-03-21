@@ -544,6 +544,67 @@ body {
   color: var(--ui-color-text-muted, #64748b);
 }
 
+/* Storybook page */
+.docs-storybook-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--ui-spacing-5, 1.25rem);
+}
+
+.docs-storybook-card {
+  background: var(--ui-color-surface, #fff);
+  border: 1px solid var(--ui-color-border, #e5e7eb);
+  border-radius: var(--ui-radius-md, 8px);
+  padding: var(--ui-spacing-8, 2rem);
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--ui-spacing-3, 0.75rem);
+  transition: box-shadow 0.15s, border-color 0.15s, transform 0.15s;
+}
+
+.docs-storybook-card:hover {
+  border-color: var(--ui-color-primary, #00bebe);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--ui-color-primary, #00bebe) 15%, transparent);
+  transform: translateY(-2px);
+}
+
+.docs-storybook-logo {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  border-radius: var(--ui-radius-sm, 4px);
+}
+
+.docs-storybook-card-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ui-color-text, #0f172a);
+}
+
+.docs-storybook-card-desc {
+  font-size: 0.875rem;
+  color: var(--ui-color-text-muted, #64748b);
+  line-height: 1.5;
+}
+
+.docs-storybook-card-desc code {
+  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+  font-size: 0.8rem;
+  color: var(--ui-color-primary, #00bebe);
+}
+
+.docs-storybook-card-arrow {
+  margin-top: auto;
+  padding-top: var(--ui-spacing-2, 0.5rem);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ui-color-primary, #00bebe);
+}
+
 /* Theme toggle button */
 .docs-theme-btn {
   display: flex;

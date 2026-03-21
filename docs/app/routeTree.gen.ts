@@ -9,7 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as RoadmapRouteImport } from './routes/roadmap'
+import { Route as StorybookRouteImport } from './routes/storybook'
 import { Route as PhilosophyRouteImport } from './routes/philosophy'
 import { Route as InstallRouteImport } from './routes/install'
 import { Route as DesignPrinciplesRouteImport } from './routes/design-principles'
@@ -17,9 +17,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ComponentsIndexRouteImport } from './routes/components/index'
 import { Route as ComponentsNameRouteImport } from './routes/components/$name'
 
-const RoadmapRoute = RoadmapRouteImport.update({
-  id: '/roadmap',
-  path: '/roadmap',
+const StorybookRoute = StorybookRouteImport.update({
+  id: '/storybook',
+  path: '/storybook',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PhilosophyRoute = PhilosophyRouteImport.update({
@@ -58,7 +58,7 @@ export interface FileRoutesByFullPath {
   '/design-principles': typeof DesignPrinciplesRoute
   '/install': typeof InstallRoute
   '/philosophy': typeof PhilosophyRoute
-  '/roadmap': typeof RoadmapRoute
+  '/storybook': typeof StorybookRoute
   '/components/$name': typeof ComponentsNameRoute
   '/components/': typeof ComponentsIndexRoute
 }
@@ -67,7 +67,7 @@ export interface FileRoutesByTo {
   '/design-principles': typeof DesignPrinciplesRoute
   '/install': typeof InstallRoute
   '/philosophy': typeof PhilosophyRoute
-  '/roadmap': typeof RoadmapRoute
+  '/storybook': typeof StorybookRoute
   '/components/$name': typeof ComponentsNameRoute
   '/components': typeof ComponentsIndexRoute
 }
@@ -77,7 +77,7 @@ export interface FileRoutesById {
   '/design-principles': typeof DesignPrinciplesRoute
   '/install': typeof InstallRoute
   '/philosophy': typeof PhilosophyRoute
-  '/roadmap': typeof RoadmapRoute
+  '/storybook': typeof StorybookRoute
   '/components/$name': typeof ComponentsNameRoute
   '/components/': typeof ComponentsIndexRoute
 }
@@ -88,7 +88,7 @@ export interface FileRouteTypes {
     | '/design-principles'
     | '/install'
     | '/philosophy'
-    | '/roadmap'
+    | '/storybook'
     | '/components/$name'
     | '/components/'
   fileRoutesByTo: FileRoutesByTo
@@ -97,7 +97,7 @@ export interface FileRouteTypes {
     | '/design-principles'
     | '/install'
     | '/philosophy'
-    | '/roadmap'
+    | '/storybook'
     | '/components/$name'
     | '/components'
   id:
@@ -106,7 +106,7 @@ export interface FileRouteTypes {
     | '/design-principles'
     | '/install'
     | '/philosophy'
-    | '/roadmap'
+    | '/storybook'
     | '/components/$name'
     | '/components/'
   fileRoutesById: FileRoutesById
@@ -116,18 +116,18 @@ export interface RootRouteChildren {
   DesignPrinciplesRoute: typeof DesignPrinciplesRoute
   InstallRoute: typeof InstallRoute
   PhilosophyRoute: typeof PhilosophyRoute
-  RoadmapRoute: typeof RoadmapRoute
+  StorybookRoute: typeof StorybookRoute
   ComponentsNameRoute: typeof ComponentsNameRoute
   ComponentsIndexRoute: typeof ComponentsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/roadmap': {
-      id: '/roadmap'
-      path: '/roadmap'
-      fullPath: '/roadmap'
-      preLoaderRoute: typeof RoadmapRouteImport
+    '/storybook': {
+      id: '/storybook'
+      path: '/storybook'
+      fullPath: '/storybook'
+      preLoaderRoute: typeof StorybookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/philosophy': {
@@ -180,7 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   DesignPrinciplesRoute: DesignPrinciplesRoute,
   InstallRoute: InstallRoute,
   PhilosophyRoute: PhilosophyRoute,
-  RoadmapRoute: RoadmapRoute,
+  StorybookRoute: StorybookRoute,
   ComponentsNameRoute: ComponentsNameRoute,
   ComponentsIndexRoute: ComponentsIndexRoute,
 }
