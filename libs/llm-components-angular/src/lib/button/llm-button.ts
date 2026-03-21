@@ -21,7 +21,6 @@ import type { LlmButtonVariant, LlmButtonSize } from '@atelier-ui/spec';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <!-- eslint-disable -->
     @if (loading()) {
       <span class="spinner" aria-hidden="true"></span>
     }

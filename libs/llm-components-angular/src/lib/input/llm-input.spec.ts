@@ -143,7 +143,7 @@ describe('LlmInput', () => {
         }
       );
       // Trigger touch by blurring the input
-      const input = container.querySelector('input')!;
+      const input = container.querySelector('input') as HTMLInputElement;
       await user.click(input);
       await user.tab();
 
@@ -164,7 +164,7 @@ describe('LlmInput', () => {
           },
         }
       );
-      const input = container.querySelector('input')!;
+      const input = container.querySelector('input') as HTMLInputElement;
       await user.click(input);
       await user.tab();
 
@@ -183,7 +183,7 @@ describe('LlmInput', () => {
           },
         }
       );
-      const input = container.querySelector('input')!;
+      const input = container.querySelector('input') as HTMLInputElement;
       await user.click(input);
       await user.tab();
 
@@ -200,7 +200,7 @@ describe('LlmInput', () => {
       const { container } = await render('<llm-input />', {
         imports: [LlmInput],
       });
-      const input = container.querySelector('input')!;
+      const input = container.querySelector('input') as HTMLInputElement;
       await user.click(input);
       await user.tab();
 
@@ -258,7 +258,7 @@ describe('LlmInput', () => {
           },
         }
       );
-      const input = container.querySelector('input')!;
+      const input = container.querySelector('input') as HTMLInputElement;
       await user.click(input);
       await user.tab();
 

@@ -6,7 +6,7 @@ describe('LlmSkeleton', () => {
     const { container } = await render('<llm-skeleton />', {
       imports: [LlmSkeleton],
     });
-    const el = container.querySelector('llm-skeleton')!;
+    const el = container.querySelector('llm-skeleton') as HTMLElement;
     expect(el).toHaveClass('variant-text');
   });
 

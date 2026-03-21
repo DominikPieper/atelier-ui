@@ -6,6 +6,7 @@ const ALL_IMPORTS = [LlmDialog, LlmDialogHeader, LlmDialogContent, LlmDialogFoot
 
 // Polyfill HTMLDialogElement for jsdom
 beforeAll(() => {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, @typescript-eslint/strict-boolean-expressions
   if (!HTMLDialogElement.prototype.showModal) {
     HTMLDialogElement.prototype.showModal = function () {
       this.setAttribute('open', '');
@@ -112,8 +113,8 @@ describe('LlmDialog', () => {
         </llm-dialog>`,
         { imports: ALL_IMPORTS }
       );
-      const dialog = container.querySelector('dialog')!;
-      const header = container.querySelector('llm-dialog-header')!;
+      const dialog = container.querySelector('dialog') as HTMLDialogElement;
+      const header = container.querySelector('llm-dialog-header') as HTMLElement;
       expect(dialog.getAttribute('aria-labelledby')).toBeTruthy();
       expect(dialog.getAttribute('aria-labelledby')).toBe(header.getAttribute('id'));
     });

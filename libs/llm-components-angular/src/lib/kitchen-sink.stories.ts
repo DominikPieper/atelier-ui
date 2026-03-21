@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { LlmButton } from './button/llm-button';
 import {
   LlmCard,
@@ -15,8 +15,10 @@ import { LlmRadioGroup } from './radio-group/llm-radio-group';
 import { LlmRadio } from './radio/llm-radio';
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'kitchen-sink-demo',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     LlmButton,
     LlmCard,
@@ -31,6 +33,7 @@ import { LlmRadio } from './radio/llm-radio';
     LlmRadio,
   ],
   template: `
+    <!-- eslint-disable @angular-eslint/template/label-has-associated-control -->
     <div class="kitchen-sink">
       <h1 class="page-title">Account Settings</h1>
       <p class="page-subtitle">Manage your profile and preferences.</p>

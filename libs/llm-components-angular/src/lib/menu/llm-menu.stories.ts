@@ -36,7 +36,7 @@ export const Default: Story = {
     template: `
       <llm-button [llmMenuTriggerFor]="menu">Actions</llm-button>
       <ng-template #menu>
-        <llm-menu variant="${args['variant'] || 'default'}">
+        <llm-menu variant="${args['variant']}">
           <llm-menu-item>Copy</llm-menu-item>
           <llm-menu-item>Paste</llm-menu-item>
           <llm-menu-separator />

@@ -9,7 +9,8 @@
     "../src/**/*.stories.tsx",
     "../src/**/*.mdx",
     "./preview.ts",
-    "./main.ts"
+    "./main.ts",
+    "./manager.ts"
   ],
   "exclude": ["../src/**/*.spec.ts", "../src/**/*.test.ts"]
 }

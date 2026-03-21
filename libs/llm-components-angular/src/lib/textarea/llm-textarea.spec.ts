@@ -138,7 +138,7 @@ describe('LlmTextarea', () => {
           },
         }
       );
-      const textarea = container.querySelector('textarea')!;
+      const textarea = container.querySelector('textarea') as HTMLTextAreaElement;
       await user.click(textarea);
       await user.tab();
 
@@ -159,7 +159,7 @@ describe('LlmTextarea', () => {
           },
         }
       );
-      const textarea = container.querySelector('textarea')!;
+      const textarea = container.querySelector('textarea') as HTMLTextAreaElement;
       await user.click(textarea);
       await user.tab();
 
@@ -178,7 +178,7 @@ describe('LlmTextarea', () => {
           },
         }
       );
-      const textarea = container.querySelector('textarea')!;
+      const textarea = container.querySelector('textarea') as HTMLTextAreaElement;
       await user.click(textarea);
       await user.tab();
 
@@ -195,7 +195,7 @@ describe('LlmTextarea', () => {
       const { container } = await render('<llm-textarea />', {
         imports: [LlmTextarea],
       });
-      const textarea = container.querySelector('textarea')!;
+      const textarea = container.querySelector('textarea') as HTMLTextAreaElement;
       await user.click(textarea);
       await user.tab();
 
@@ -251,7 +251,7 @@ describe('LlmTextarea', () => {
           },
         }
       );
-      const textarea = container.querySelector('textarea')!;
+      const textarea = container.querySelector('textarea') as HTMLTextAreaElement;
       await user.click(textarea);
       await user.tab();
 

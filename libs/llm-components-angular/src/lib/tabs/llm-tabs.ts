@@ -88,6 +88,7 @@ export class LlmTabGroup implements LlmTabGroupContext {
   /** @internal */
   protected selectTab(index: number): void {
     const tab = this.tabs()[index];
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, @typescript-eslint/strict-boolean-expressions
     if (tab && !tab.disabled) {
       this.selectedIndex.set(index);
     }
@@ -125,6 +126,7 @@ export class LlmTabGroup implements LlmTabGroupContext {
     if (targetEntry) {
       this.selectedIndex.set(targetEntry.i);
       const buttons = this.elementRef.nativeElement.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       buttons[targetEntry.i]?.focus();
     }
   }

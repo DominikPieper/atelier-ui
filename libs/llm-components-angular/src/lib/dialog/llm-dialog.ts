@@ -47,6 +47,7 @@ let nextId = 0;
     },
   ],
   template: `
+    <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
     <dialog
       #dialogEl
       [attr.aria-label]="ariaLabel() || null"
@@ -56,7 +57,7 @@ let nextId = 0;
       (cancel)="onCancel($event)"
       (click)="onBackdropClick($event)"
     >
-      <div class="panel" [class]="panelClass()">
+      <div [class]="panelClass()">
         <ng-content />
       </div>
     </dialog>
@@ -89,7 +90,7 @@ export class LlmDialog {
   protected readonly dialogRef = viewChild<ElementRef<HTMLDialogElement>>('dialogEl');
   private readonly triggerEl = signal<HTMLElement | null>(null);
 
-  protected readonly panelClass = computed(() => `size-${this.size()}`);
+  protected readonly panelClass = computed(() => `panel size-${this.size()}`);
   protected readonly hostClasses = computed(() => (this.open() ? 'is-open' : ''));
 
   constructor() {

@@ -49,6 +49,7 @@ let nextId = 0;
     },
   ],
   template: `
+    <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
     <dialog
       #dialogEl
       [attr.aria-labelledby]="headerId"
@@ -58,6 +59,7 @@ let nextId = 0;
       (close)="open.set(false)"
       (click)="onBackdropClick($event)"
     >
+      <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
       <div class="panel" (click)="$event.stopPropagation()">
         <ng-content />
       </div>

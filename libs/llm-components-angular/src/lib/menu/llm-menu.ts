@@ -55,6 +55,7 @@ export class LlmMenuTrigger {}
   selector: 'llm-menu',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
   encapsulation: ViewEncapsulation.None,
   hostDirectives: [CdkMenu],
   template: `<ng-content />`,

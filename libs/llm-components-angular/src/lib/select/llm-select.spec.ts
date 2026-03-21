@@ -12,8 +12,8 @@ const SELECT_TEMPLATE = `
 `;
 
 // Polyfill popover API for jsdom
-function polyfillPopover() {
-  if (!HTMLElement.prototype.hasOwnProperty('showPopover')) {
+function polyfillPopover(): void {
+  if (!Object.prototype.hasOwnProperty.call(HTMLElement.prototype, 'showPopover')) {
     Object.defineProperty(HTMLElement.prototype, 'showPopover', {
       configurable: true,
       value() {
@@ -63,6 +63,7 @@ describe('LlmSelect', () => {
       imports: [LlmSelect, LlmOption],
       componentProperties: { value: 'b' },
     });
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     expect(container.querySelector('.trigger-text')?.textContent?.trim()).toBe('Option B');
   });
 

@@ -118,7 +118,6 @@ export class LlmAvatar {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <!-- eslint-disable -->
     <ng-content />
     @if (overflowCount() > 0) {
       <span [class]="'overflow-badge size-' + size()">+{{ overflowCount() }}</span>

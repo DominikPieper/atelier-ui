@@ -442,7 +442,6 @@ class SettingsPageComponent {
     LlmAlert,
   ],
   template: `
-    <!-- eslint-disable -->
     <div class="wrapper">
       <div class="demo-area">
         <h2 class="demo-title">Danger Zone</h2>
@@ -554,7 +553,6 @@ class ConfirmationDialogComponent {
     LlmTooltip,
   ],
   template: `
-    <!-- eslint-disable -->
     <div class="wrapper">
       <div class="list-header">
         <h2 class="list-title">Projects</h2>
@@ -719,7 +717,6 @@ class DataListComponent {
     LlmButton,
   ],
   template: `
-    <!-- eslint-disable -->
     <div class="wrapper">
       <div class="header">
         <h2 class="header-title">Notifications</h2>

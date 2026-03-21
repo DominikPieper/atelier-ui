@@ -108,7 +108,7 @@ export class LlmTextarea implements FormValueControl<string> {
   });
 
   /** @internal */
-  protected onInput(event: Event) {
+  protected onInput(event: Event): void {
     const target = event.target as HTMLTextAreaElement;
     this.value.set(target.value);
   }

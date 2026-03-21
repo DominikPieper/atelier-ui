@@ -79,7 +79,6 @@ export class LlmBreadcrumbs {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <!-- eslint-disable -->
     <li class="item">
       <a
         [attr.href]="href() && !isCurrent() ? href() : null"

@@ -100,7 +100,7 @@ export class LlmInput implements FormValueControl<string> {
   });
 
   /** @internal */
-  protected onInput(event: Event) {
+  protected onInput(event: Event): void {
     const target = event.target as HTMLInputElement;
     this.value.set(target.value);
   }

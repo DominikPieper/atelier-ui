@@ -1,12 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { LlmToast, LlmToastContainer, LlmToastService, ToastVariant } from './llm-toast';
 import { LlmButton } from '../button/llm-button';
 
 /* ── Wrapper component for stories that need the service ── */
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'toast-story-wrapper',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [LlmToastContainer, LlmButton],
   template: `
     <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
@@ -39,8 +41,10 @@ class ToastStoryWrapper {
 }
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'toast-all-variants-wrapper',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [LlmToastContainer, LlmButton],
   template: `
     <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
@@ -67,8 +71,10 @@ class ToastAllVariantsWrapper {
 }
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'toast-auto-dismiss-wrapper',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [LlmToastContainer, LlmButton],
   template: `
     <llm-button variant="primary" (click)="showQuick()">Show Toast (2s auto-dismiss)</llm-button>
@@ -87,8 +93,10 @@ class ToastAutoDismissWrapper {
 }
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'toast-persistent-wrapper',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [LlmToastContainer, LlmButton],
   template: `
     <llm-button variant="primary" (click)="showPersistent()">Show Persistent Toast</llm-button>
@@ -200,7 +208,9 @@ export const Playground: Story = {
     variant: 'default',
     dismissible: true,
     message: 'Playground toast notification.',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     position: 'bottom-right' as any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     duration: 5000 as any,
   },
 };

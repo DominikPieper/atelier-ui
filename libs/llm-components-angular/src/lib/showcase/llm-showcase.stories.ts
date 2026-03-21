@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
 import { LlmAccordionGroup, LlmAccordionItem, LlmAccordionHeader } from '../accordion/llm-accordion';
 import { LlmAlert } from '../alert/llm-alert';
@@ -29,6 +29,7 @@ import { LlmTooltip } from '../tooltip/llm-tooltip';
 @Component({
   selector: 'llm-showcase-all',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     LlmAccordionGroup, LlmAccordionItem, LlmAccordionHeader,
     LlmAlert,
@@ -453,7 +454,7 @@ class ShowcaseAllComponent {
   readonly page = signal(3);
   readonly tabIndex = signal(0);
 
-  showToast(message: string, variant: 'success' | 'danger' | 'info' | 'warning') {
+  showToast(message: string, variant: 'success' | 'danger' | 'info' | 'warning'): void {
     this.toast.show(message, { variant });
   }
 }

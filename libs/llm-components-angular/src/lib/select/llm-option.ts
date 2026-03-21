@@ -25,6 +25,7 @@ let nextOptionId = 0;
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
+    <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
     <div
       role="option"
       [attr.id]="optionId"
@@ -63,7 +64,8 @@ export class LlmOption implements OnInit, OnDestroy {
   protected readonly isActive = computed(() => this.context.activeOptionId() === this.optionId);
 
   ngOnInit(): void {
-    const labelText = this.elementRef.nativeElement.textContent?.trim() ?? '';
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    const labelText = (this.elementRef.nativeElement.textContent ?? '').trim();
     this.context.registerOption(this.optionId, this.optionValue(), labelText, this.disabled());
   }
 

@@ -26,6 +26,7 @@ let nextTooltipId = 0;
   selector: 'llm-tooltip-content',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
   encapsulation: ViewEncapsulation.None,
   template: `{{ text() }}`,
   styleUrl: './llm-tooltip.css',

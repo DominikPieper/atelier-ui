@@ -137,6 +137,7 @@ export class LlmRadioGroup implements FormValueControl<string>, LlmRadioGroupCon
       : (currentPos - 1 + n) % n;
 
     const target = enabled[nextPos];
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, @typescript-eslint/strict-boolean-expressions
     if (target) {
       target.focusInput();
       this.value.set(target.radioValue());

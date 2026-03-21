@@ -35,7 +35,7 @@ type Story = StoryObj<LlmPagination>;
 
 export const Default: Story = {
   render: (args) => ({
-    props: { ...args, page: signal(args.page ?? 1) },
+    props: { ...args, page: signal(args.page) },
     imports: [LlmPagination],
     template: `
       <llm-pagination

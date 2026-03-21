@@ -94,11 +94,20 @@ export default tseslint.config(
       '@angular-eslint/template/prefer-self-closing-tags': 'error',
       '@angular-eslint/template/use-track-by-function': 'error',
       '@angular-eslint/template/no-any': 'error',
-      '@angular-eslint/template/no-call-expression': 'error',
+      // Disabled: this library uses Angular Signals throughout; signal reads (value(), disabled()
+      // etc.) are intentional calls in templates and not a performance concern with OnPush.
+      '@angular-eslint/template/no-call-expression': 'off',
       '@angular-eslint/template/banana-in-box': 'error',
       '@angular-eslint/template/no-non-null-assertion': 'error',
       '@angular-eslint/template/prefer-control-flow': 'error',
       '@angular-eslint/template/prefer-ngsrc': 'error',
+    },
+  },
+  {
+    // Inline templates in .ts files are processed by the angular-template parser;
+    // disable the same rule there too.
+    rules: {
+      '@angular-eslint/template/no-call-expression': 'off',
     },
   },
 );

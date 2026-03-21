@@ -210,7 +210,7 @@ export class LlmSelect implements FormValueControl<string>, LlmSelectContext {
   /** @internal */
   protected onTriggerClick(): void {
     if (this.disabled()) return;
-    this.isOpen() ? this.close() : this.open();
+    if (this.isOpen()) { this.close(); } else { this.open(); }
   }
 
   /** @internal */

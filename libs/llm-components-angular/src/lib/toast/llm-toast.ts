@@ -75,7 +75,7 @@ export class LlmToastService {
   /** Dismiss a single toast by id. */
   dismiss(id: string): void {
     const timer = this.timers.get(id);
-    if (timer) {
+    if (timer !== undefined) {
       clearTimeout(timer);
       this.timers.delete(id);
     }
