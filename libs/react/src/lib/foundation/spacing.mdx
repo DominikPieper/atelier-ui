@@ -1,0 +1,68 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Foundation/Spacing" />
+
+# Spacing
+
+Spacing tokens use a numeric scale mapped to `rem` values. Use these via `var(--ui-spacing-*)` in CSS.
+
+## Scale
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: '24px 0' }}>
+  {[
+    { token: '--ui-spacing-1', rem: '0.25rem', px: '4px' },
+    { token: '--ui-spacing-2', rem: '0.5rem', px: '8px' },
+    { token: '--ui-spacing-3', rem: '0.75rem', px: '12px' },
+    { token: '--ui-spacing-4', rem: '1rem', px: '16px' },
+    { token: '--ui-spacing-5', rem: '1.25rem', px: '20px' },
+    { token: '--ui-spacing-6', rem: '1.5rem', px: '24px' },
+    { token: '--ui-spacing-8', rem: '2rem', px: '32px' },
+    { token: '--ui-spacing-10', rem: '2.5rem', px: '40px' },
+    { token: '--ui-spacing-12', rem: '3rem', px: '48px' },
+    { token: '--ui-spacing-16', rem: '4rem', px: '64px' },
+  ].map(({ token, rem, px }) => (
+    <div key={token} style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+      <code style={{ width: '180px', fontSize: '13px', color: '#64748b', flexShrink: 0 }}>{token}</code>
+      <div style={{ width: px, height: '24px', background: '#00bebe', borderRadius: '3px', flexShrink: 0 }} />
+      <span style={{ fontSize: '13px', color: '#64748b' }}>{rem} — {px}</span>
+    </div>
+  ))}
+</div>
+
+## Border Radius
+
+<div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', padding: '24px 0' }}>
+  {[
+    { token: '--ui-radius-sm', value: '0.375rem', label: 'sm' },
+    { token: '--ui-radius-md', value: '0.5rem', label: 'md' },
+    { token: '--ui-radius-lg', value: '0.75rem', label: 'lg' },
+    { token: '--ui-radius-xl', value: '1rem', label: 'xl' },
+    { token: '--ui-radius-full', value: '9999px', label: 'full' },
+  ].map(({ token, value, label }) => (
+    <div key={token} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+      <div style={{ width: '64px', height: '64px', background: '#00bebe', borderRadius: value }} />
+      <code style={{ fontSize: '12px', color: '#64748b' }}>{token}</code>
+      <span style={{ fontSize: '12px', color: '#9ca3af' }}>{value}</span>
+    </div>
+  ))}
+</div>
+
+## Shadows
+
+| Token | Value |
+|---|---|
+| `--ui-shadow-xs` | `0 1px 2px 0 rgba(0,0,0,0.03)` |
+| `--ui-shadow-sm` | `0 1px 3px rgba(0,0,0,0.06), 0 1px 2px -1px rgba(0,0,0,0.06)` |
+| `--ui-shadow-md` | `0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05)` |
+| `--ui-shadow-lg` | `0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04)` |
+| `--ui-shadow-xl` | `0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04)` |
+
+## Z-Index
+
+| Token | Value |
+|---|---|
+| `--ui-z-base` | `0` |
+| `--ui-z-dropdown` | `100` |
+| `--ui-z-overlay` | `200` |
+| `--ui-z-modal` | `300` |
+| `--ui-z-toast` | `400` |

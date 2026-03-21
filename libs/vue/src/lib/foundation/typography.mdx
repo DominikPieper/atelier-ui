@@ -1,0 +1,63 @@
+import { Meta, Typeset } from '@storybook/blocks';
+
+<Meta title="Foundation/Typography" />
+
+export const fontFamily = "'Inter', 'Montserrat', ui-sans-serif, system-ui, sans-serif";
+export const fontSizes = [12, 14, 16, 18, 20, 24];
+
+# Typography
+
+The design system uses **Inter** as its primary typeface, with Montserrat as an alternate heading option.
+
+```css
+font-family: var(--ui-font-family);
+```
+
+## Type Scale
+
+<Typeset
+  fontSizes={fontSizes}
+  fontWeight={400}
+  sampleText="The quick brown fox jumps over the lazy dog"
+  fontFamily={fontFamily}
+/>
+
+## Font Weights
+
+<Typeset fontSizes={[16]} fontWeight={400} sampleText="Normal (400) — The quick brown fox jumps over the lazy dog" fontFamily={fontFamily} />
+<Typeset fontSizes={[16]} fontWeight={500} sampleText="Medium (500) — The quick brown fox jumps over the lazy dog" fontFamily={fontFamily} />
+<Typeset fontSizes={[16]} fontWeight={600} sampleText="Semi Bold (600) — The quick brown fox jumps over the lazy dog" fontFamily={fontFamily} />
+
+## Size Tokens
+
+| Token | Value | px |
+|---|---|---|
+| `--ui-font-size-xs` | `0.75rem` | 12px |
+| `--ui-font-size-sm` | `0.875rem` | 14px |
+| `--ui-font-size-md` | `1rem` | 16px |
+| `--ui-font-size-lg` | `1.125rem` | 18px |
+| `--ui-font-size-xl` | `1.25rem` | 20px |
+| `--ui-font-size-2xl` | `1.5rem` | 24px |
+
+## Weight Tokens
+
+| Token | Value |
+|---|---|
+| `--ui-font-weight-normal` | `400` |
+| `--ui-font-weight-medium` | `500` |
+| `--ui-font-weight-semibold` | `600` |
+
+## Line Height Tokens
+
+| Token | Value |
+|---|---|
+| `--ui-line-height-tight` | `1.25` |
+| `--ui-line-height-normal` | `1.5` |
+
+## Letter Spacing Tokens
+
+| Token | Value |
+|---|---|
+| `--ui-letter-spacing-tight` | `-0.01em` |
+| `--ui-letter-spacing-normal` | `0` |
+| `--ui-letter-spacing-wide` | `0.01em` |
