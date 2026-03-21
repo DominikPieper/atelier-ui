@@ -1,6 +1,15 @@
 {
   "name": "@atelier-ui/vue",
   "version": "0.0.1",
+  "description": "Atelier UI component library for Vue 3 — LLM-optimised, accessible, design-token-driven",
+  "keywords": ["vue", "vue3", "ui", "components", "design-system", "atelier-ui", "llm"],
+  "author": "Atelier UI",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dominikpieper/angular-llm-components.git",
+    "directory": "libs/vue"
+  },
   "peerDependencies": {
     "vue": "^3.0.0",
     "@atelier-ui/spec": "*"
