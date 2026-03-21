@@ -41,15 +41,21 @@
 
 ## Priority 5: Publishing & Tooling
 
-- [ ] Auto-generated API reference script
+- [x] Auto-generated API reference script — not needed; Storybook MCP is the source of truth
 - [x] npm packaging (build targets + package.json already configured; publish workflow added at `.github/workflows/publish.yml`)
 - [x] Versioning (triggered by GitHub Release)
 - [ ] Set `NPM_TOKEN` secret in GitHub repo settings before first publish
-- [ ] Demo app / docs site deployment
+- [x] Demo app / docs site deployment — netlify.toml configured; connect repo to Netlify site to go live
+
+## Priority 6: Vue Library Gaps
+
+- [x] Add `LlmRadio` stories file (only component missing stories in `libs/vue`)
+- [x] Add `@atelier-ui/vue` to publish workflow (`.github/workflows/publish.yml` only covers angular + react)
 
 ## Verification ✅
 
 - [x] `nx test llm-components` — 332 tests pass across 18 suites
+- [x] `nx test vue` — 146 tests pass across 22 suites
 - [x] No build target configured (library consumed directly)
 - [ ] Storybook visual check (light + dark mode) — manual step
 

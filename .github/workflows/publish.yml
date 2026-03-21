@@ -25,7 +25,7 @@ jobs:
       - run: npm ci
 
       - name: Build libraries
-        run: npx nx run-many -t build --projects=angular,react
+        run: npx nx run-many -t build --projects=angular,react,vue
 
       - name: Publish @atelier-ui/angular
         run: npm publish dist/libs/angular --provenance --access public
@@ -34,5 +34,10 @@ jobs:
 
       - name: Publish @atelier-ui/react
         run: npm publish dist/libs/react --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish @atelier-ui/vue
+        run: npm publish dist/libs/vue --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
