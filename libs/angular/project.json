@@ -4,6 +4,13 @@
   "sourceRoot": "libs/angular/src",
   "prefix": "llm",
   "projectType": "library",
+  "release": {
+    "version": {
+      "manifestRootsToUpdate": ["dist/{projectRoot}"],
+      "currentVersionResolver": "git-tag",
+      "fallbackCurrentVersionResolver": "disk"
+    }
+  },
   "tags": [
     "framework:angular",
     "type:ui-lib"
@@ -11,12 +18,24 @@
   "targets": {
     "build": {
       "executor": "@nx/angular:package",
-      "outputs": ["{workspaceRoot}/dist/libs/angular"],
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
       "options": {
         "project": "libs/angular/ng-package.json",
         "tsConfig": "libs/angular/tsconfig.lib.json"
       },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/angular/tsconfig.lib.prod.json"
+        },
+        "development": {}
+      },
+      "defaultConfiguration": "production",
       "dependsOn": ["^build"]
+    },
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/{projectRoot}"
+      }
     },
     "test": {
       "executor": "@nx/vitest:test",
