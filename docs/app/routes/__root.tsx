@@ -19,9 +19,11 @@ function useDarkMode() {
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
 
+  // Always set data-theme so explicit selectors are in control, not the media query
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-    localStorage.setItem('docs-theme', dark ? 'dark' : 'light');
+    const theme = dark ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('docs-theme', theme);
   }, [dark]);
 
   return [dark, () => setDark((d) => !d)] as const;
