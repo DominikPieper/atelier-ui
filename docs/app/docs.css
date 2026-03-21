@@ -605,6 +605,58 @@ body {
   color: var(--ui-color-primary, #00bebe);
 }
 
+/* MCP steps */
+.docs-mcp-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-spacing-6, 1.5rem);
+}
+
+.docs-mcp-step {
+  display: flex;
+  gap: var(--ui-spacing-5, 1.25rem);
+  align-items: flex-start;
+}
+
+.docs-mcp-step-number {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--ui-color-primary, #00bebe);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.15rem;
+}
+
+.docs-mcp-step-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.docs-mcp-step-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--ui-color-text, #0f172a);
+  margin-bottom: var(--ui-spacing-2, 0.5rem);
+}
+
+.docs-mcp-step-desc {
+  color: var(--ui-color-text-muted, #64748b);
+  margin-bottom: var(--ui-spacing-3, 0.75rem);
+  line-height: 1.6;
+}
+
+.docs-mcp-step-desc code {
+  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+  font-size: 0.8rem;
+  color: var(--ui-color-primary, #00bebe);
+}
+
 /* Theme toggle button */
 .docs-theme-btn {
   display: flex;
