@@ -121,7 +121,6 @@ function Sidebar({ open }: { open: boolean }) {
               label="Design Principles"
               currentPath={currentPath}
             />
-            <NavLink to="/roadmap" label="Roadmap" currentPath={currentPath} />
           </div>
         </>
       ) : (

@@ -117,37 +117,6 @@ function HomePage() {
               accessibility by default.
             </div>
           </Link>
-
-          <Link
-            to="/roadmap"
-            className="docs-component-card"
-            style={{ padding: '2rem', height: 'auto' }}
-          >
-            <div
-              className="docs-feature-icon"
-              style={{ marginBottom: '1rem', fontSize: '2rem' }}
-            >
-              🚀
-            </div>
-            <div
-              className="docs-feature-title"
-              style={{
-                fontSize: '1.25rem',
-                fontWeight: 600,
-                color: 'var(--ui-color-text)',
-                marginBottom: '0.5rem',
-              }}
-            >
-              Roadmap
-            </div>
-            <div
-              className="docs-feature-desc"
-              style={{ color: 'var(--ui-color-text-muted)' }}
-            >
-              See what has been built and what's coming next, including CDK
-              refactoring and packaging.
-            </div>
-          </Link>
         </div>
       </div>
     </>
