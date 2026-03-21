@@ -6,6 +6,6 @@ addons.setConfig({
     base: 'light',
     brandTitle: 'Atelier UI · Angular',
     brandImage: '/artelier-logo.png',
-    brandUrl: 'https://github.com/conciso/llm-components',
+    brandUrl: 'https://github.com/DominikPieper/atelier-ui',
   }),
 });
