@@ -1,82 +1,126 @@
-# AngularLlmComponents
+# Atelier UI
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+> **Not for production. This is a showcase only.**
+>
+> This repository demonstrates how LLMs, Storybook, and Figma can work together to build a UI component system. The components are not intended for use in real production systems and are not maintained as a stable library.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+---
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+## What is this?
 
-## Finish your CI setup
+**Atelier UI** is an LLM-optimized UI component library for **Angular** and **React** — built as a showcase for a modern, AI-assisted design-to-code workflow using [Storybook](https://storybook.js.org), [Figma](https://figma.com), and [Claude](https://claude.ai).
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/c3L2PWkVj7)
+The idea: structure and document components in a way that allows an LLM to use them correctly on its own — with predictable APIs, consistent naming conventions, and well-considered defaults.
 
+---
 
-## Run tasks
+## Packages
 
-To run the dev server for your app, use:
+| Package | Description |
+|---|---|
+| `@atelier-ui/angular` | Angular component library |
+| `@atelier-ui/react` | React component library |
 
-```sh
-npx nx serve demo
+Both libraries share the same design tokens (`--ui-*`), the same component names, and the same API philosophy.
+
+---
+
+## Components
+
+22 components available in both libraries:
+
+**Form & Input**
+`Button` · `Input` · `Textarea` · `Checkbox` · `Toggle` · `Radio` · `Select`
+
+**Feedback & Status**
+`Alert` · `Badge` · `Toast` · `Skeleton` · `Progress`
+
+**Overlay & Navigation**
+`Dialog` · `Drawer` · `Menu` · `Tooltip` · `Tabs` · `Accordion`
+
+**Layout & Structure**
+`Card` · `Avatar` · `Breadcrumbs` · `Pagination`
+
+---
+
+## Tech Stack
+
+- **Monorepo**: [Nx](https://nx.dev)
+- **Angular library**: Angular 21, Signals, Angular CDK, ng-packagr
+- **React library**: React 19, TypeScript, Vite
+- **Design**: Figma with a custom token system
+- **Documentation**: Storybook 10 (Angular + React), TanStack Router docs app
+- **Testing**: Vitest + Angular Testing Library
+- **CI**: GitHub Actions
+- **Deploy**: Netlify (docs app)
+
+---
+
+## Local Development
+
+```bash
+# Install dependencies
+npm install
+
+# Start Storybook (Angular)
+npx nx run llm-components-angular:storybook
+
+# Start Storybook (React)
+npx nx run llm-components-react:storybook
+
+# Start docs app
+npx nx run docs:serve
+
+# Run tests
+npx nx run-many -t test
+
+# Build everything
+npx nx run-many -t build
 ```
 
-To create a production bundle:
+---
 
-```sh
-npx nx build demo
+## Project Structure
+
+```
+├── libs/
+│   ├── llm-components-angular/   # @atelier-ui/angular
+│   └── llm-components-react/     # @atelier-ui/react
+├── docs/                         # Docs app (TanStack Router + React)
+├── images/                       # Shared assets
+├── .github/workflows/
+│   ├── ci.yml                    # Lint, test, build on every push
+│   └── publish.yml               # npm publish on GitHub Release
+└── netlify.toml                  # Docs deploy configuration
 ```
 
-To see all available targets to run for a project, run:
+---
 
-```sh
-npx nx show project demo
+## Design Tokens
+
+All tokens use the `--ui-*` prefix:
+
+```css
+@import '@atelier-ui/angular/styles/tokens.css';
+/* or */
+@import '@atelier-ui/react/styles/tokens.css';
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+Key tokens: `--ui-color-primary`, `--ui-color-danger`, `--ui-color-surface`, `--ui-color-border`, `--ui-color-text`, `--ui-radius-sm/md/lg`, `--ui-spacing-1..8`, `--ui-shadow-sm/md`
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+---
 
-## Add new projects
+## Why "LLM-optimized"?
 
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
+The components are deliberately designed so that an LLM can use them correctly:
 
-Use the plugin's generator to create new projects.
+- **Consistent API patterns** — same prop names in Angular and React (`variant`, `size`, `disabled`)
+- **Self-documenting selectors** — `llm-button`, `llm-dialog`, `llm-accordion-item`
+- **Clear composability** — sub-components follow a predictable schema (`llm-card` + `llm-card-header` + `llm-card-content` + `llm-card-footer`)
+- **Storybook as a knowledge source** — Autodocs + MCP server allow Claude to query component APIs directly
 
-To generate a new application, use:
+---
 
-```sh
-npx nx g @nx/angular:app demo
-```
+## A Note on Usage
 
-To generate a new library, use:
-
-```sh
-npx nx g @nx/angular:lib mylib
-```
-
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
-
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+This repository is a **learning and demonstration project**. There are no stability guarantees, no semver support, and no production maintenance cycle. If you need a real UI library, take a look at [shadcn/ui](https://ui.shadcn.com), [Angular Material](https://material.angular.io), or [PrimeNG](https://primeng.org).
