@@ -13,6 +13,17 @@
   to = "/storybook-angular/"
   status = 301
 
+# Storybook MCP endpoints
+[[redirects]]
+  from = "/mcp/storybook-react"
+  to = "/.netlify/functions/storybook-react-mcp"
+  status = 200
+
+[[redirects]]
+  from = "/mcp/storybook-angular"
+  to = "/.netlify/functions/storybook-angular-mcp"
+  status = 200
+
 # Docs SPA fallback — must come last
 [[redirects]]
   from = "/*"
