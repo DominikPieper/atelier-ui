@@ -1,0 +1,14 @@
+import { render, screen } from '@testing-library/vue';
+import <%= className %> from './<%= className %>.vue';
+
+describe('<%= className %>', () => {
+  it('renders without error', () => {
+    render(<%= className %>, { slots: { default: 'Content' } });
+    expect(screen.getByText('Content')).toBeInTheDocument();
+  });
+
+  it('applies the default variant class', () => {
+    const { container } = render(<%= className %>, { slots: { default: 'Content' } });
+    expect(container.firstChild).toHaveClass('llm-<%= fileName %>', 'variant-default');
+  });
+});

@@ -1,0 +1,21 @@
+.llm-radio-group {
+  display: block;
+  font-family: var(--ui-font-family);
+}
+
+.llm-radio-group.is-disabled {
+  opacity: var(--ui-opacity-disabled);
+  cursor: not-allowed;
+}
+
+/* Error messages */
+.llm-radio-group .errors {
+  margin-top: var(--ui-spacing-1);
+}
+
+.llm-radio-group .error-message {
+  margin: 0;
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-color-error-text);
+  line-height: var(--ui-line-height-normal);
+}

@@ -1,0 +1,106 @@
+/* === LlmAvatar === */
+
+.llm-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  font-family: var(--ui-font-family);
+  font-weight: var(--ui-font-weight-semibold);
+  background-color: color-mix(in srgb, var(--ui-color-primary) 12%, var(--ui-color-surface-sunken));
+  color: var(--ui-color-primary);
+  user-select: none;
+}
+
+/* Sizes */
+.llm-avatar.size-xs { width: 24px; height: 24px; font-size: 0.625rem; }
+.llm-avatar.size-sm { width: 32px; height: 32px; font-size: var(--ui-font-size-xs); }
+.llm-avatar.size-md { width: 40px; height: 40px; font-size: var(--ui-font-size-sm); }
+.llm-avatar.size-lg { width: 48px; height: 48px; font-size: var(--ui-font-size-md); }
+.llm-avatar.size-xl { width: 64px; height: 64px; font-size: var(--ui-font-size-lg); }
+
+/* Shapes */
+.llm-avatar.shape-circle { border-radius: var(--ui-radius-full); }
+.llm-avatar.shape-square { border-radius: var(--ui-radius-md); }
+
+/* Image */
+.llm-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Initials */
+.llm-avatar .initials {
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+/* Fallback icon */
+.llm-avatar .icon {
+  width: 55%;
+  height: 55%;
+  opacity: 0.6;
+}
+
+/* Status dot */
+.llm-avatar .status-dot {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 25%;
+  height: 25%;
+  min-width: 6px;
+  min-height: 6px;
+  max-width: 14px;
+  max-height: 14px;
+  border-radius: var(--ui-radius-full);
+  border: 2px solid var(--ui-color-surface);
+  box-sizing: content-box;
+}
+
+.llm-avatar .status-dot.status-online  { background-color: var(--ui-color-success); }
+.llm-avatar .status-dot.status-offline { background-color: var(--ui-color-text-muted); }
+.llm-avatar .status-dot.status-away    { background-color: var(--ui-color-warning); }
+.llm-avatar .status-dot.status-busy    { background-color: var(--ui-color-danger); }
+
+/* === LlmAvatarGroup === */
+
+.llm-avatar-group {
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  overflow: visible;
+  padding-inline-start: 4px;
+}
+
+/* Overlap ring applied to avatars inside a group */
+.llm-avatar-group > .llm-avatar {
+  box-shadow: 0 0 0 2px var(--ui-color-surface);
+  margin-inline-start: -8px;
+}
+
+/* Overflow count badge */
+.overflow-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-color: var(--ui-color-surface-sunken);
+  color: var(--ui-color-text-muted);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-full);
+  font-family: var(--ui-font-family);
+  font-weight: var(--ui-font-weight-semibold);
+  box-shadow: 0 0 0 2px var(--ui-color-surface);
+  margin-inline-start: -8px;
+}
+
+.overflow-badge.size-xs { width: 24px; height: 24px; font-size: 0.5625rem; }
+.overflow-badge.size-sm { width: 32px; height: 32px; font-size: var(--ui-font-size-xs); }
+.overflow-badge.size-md { width: 40px; height: 40px; font-size: var(--ui-font-size-sm); }
+.overflow-badge.size-lg { width: 48px; height: 48px; font-size: var(--ui-font-size-sm); }
+.overflow-badge.size-xl { width: 64px; height: 64px; font-size: var(--ui-font-size-md); }

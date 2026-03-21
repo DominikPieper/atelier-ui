@@ -110,7 +110,9 @@
       "Bash(git -C /Users/dominikpieper/Projects/angular-llm-components push)",
       "Bash(ls /Users/dominikpieper/Projects/angular-llm-components/libs/llm-components-angular/*.json)",
       "Bash(npx ng-packagr:*)",
-      "Bash(nx graph:*)"
+      "Bash(nx graph:*)",
+      "Bash(for dir:*)",
+      "Read(//Users/dominikpieper/Projects/angular-llm-components/libs/vue/src/lib/**)"
     ]
   },
   "enableAllProjectMcpServers": true,

@@ -1,0 +1,8 @@
+{
+  "name": "@atelier-ui/vue",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "vue": "^3.0.0",
+    "@atelier-ui/spec": "*"
+  }
+}

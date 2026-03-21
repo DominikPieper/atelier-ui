@@ -9,6 +9,11 @@
       "factory": "./llm-component-react/index",
       "schema": "./llm-component-react/schema.json",
       "description": "Scaffold a React-only LLM-optimized component. Prefer llm-component with --framework=react instead."
+    },
+    "llm-component-vue": {
+      "factory": "./llm-component-vue/index",
+      "schema": "./llm-component-vue/schema.json",
+      "description": "Scaffold a Vue 3 LLM-optimized component."
     }
   }
 }

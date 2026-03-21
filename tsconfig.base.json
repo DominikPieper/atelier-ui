@@ -23,6 +23,9 @@
       ],
       "@atelier-ui/spec": [
         "libs/spec/src/index.ts"
+      ],
+      "@atelier-ui/vue": [
+        "libs/vue/src/index.ts"
       ]
     }
   },
