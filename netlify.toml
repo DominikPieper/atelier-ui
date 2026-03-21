@@ -2,6 +2,10 @@
   command = "npx nx run docs:prerender && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/llm-components-react/.storybook --output-dir dist/docs/storybook-react && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/llm-components-angular/.storybook --output-dir dist/docs/storybook-angular"
   publish = "dist/docs"
 
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
 # Storybook — let Netlify serve their static files directly
 [[redirects]]
   from = "/storybook-react"

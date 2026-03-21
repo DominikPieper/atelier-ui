@@ -10,6 +10,7 @@
     "tools/generators"
   ],
   "dependencies": {
+    "@storybook/mcp": "^0.6.1",
     "@angular/aria": "^21.2.2",
     "@angular/cdk": "^21.2.2",
     "@angular/common": "~21.2.4",
@@ -66,7 +67,6 @@
     "@storybook/addon-mcp": "^0.4.2",
     "@storybook/addon-vitest": "^10.3.1",
     "@storybook/angular": "^10.3.1",
-    "@storybook/mcp": "^0.6.1",
     "@storybook/react-vite": "^10.3.1",
     "@swc-node/register": "~1.11.1",
     "@swc/core": "~1.15.5",
