@@ -73,7 +73,7 @@ function TopBar({ onMenuToggle, dark, onThemeToggle }: { onMenuToggle: () => voi
           className="docs-logo-img"
           height="32"
         />
-        Atelier
+        <span className="docs-logo-text">Atelier</span>
       </Link>
       <div className="docs-topbar-links">
         <Link to="/" className={`docs-topbar-link${!isComponents ? ' active' : ''}`}>
