@@ -3,6 +3,13 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/vue/src",
   "projectType": "library",
+  "release": {
+    "version": {
+      "manifestRootsToUpdate": ["dist/{projectRoot}"],
+      "currentVersionResolver": "git-tag",
+      "fallbackCurrentVersionResolver": "disk"
+    }
+  },
   "tags": [
     "framework:vue",
     "type:ui-lib"
@@ -10,10 +17,16 @@
   "targets": {
     "build": {
       "executor": "nx:run-commands",
-      "outputs": ["{workspaceRoot}/dist/libs/vue"],
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
       "options": {
         "command": "vite build --config libs/vue/vite.config.mts",
         "cwd": "{workspaceRoot}"
+      },
+      "dependsOn": ["^build"]
+    },
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/{projectRoot}"
       }
     },
     "test": {

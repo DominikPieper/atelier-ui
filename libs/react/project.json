@@ -3,6 +3,13 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/react/src",
   "projectType": "library",
+  "release": {
+    "version": {
+      "manifestRootsToUpdate": ["dist/{projectRoot}"],
+      "currentVersionResolver": "git-tag",
+      "fallbackCurrentVersionResolver": "disk"
+    }
+  },
   "tags": [
     "framework:react",
     "type:ui-lib"
@@ -10,12 +17,18 @@
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
-      "outputs": ["{workspaceRoot}/dist/libs/react"],
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
       "options": {
-        "outputPath": "dist/libs/react",
+        "outputPath": "dist/{projectRoot}",
         "main": "libs/react/src/index.ts",
         "tsConfig": "libs/react/tsconfig.lib.json",
         "assets": ["libs/react/*.md"]
+      },
+      "dependsOn": ["^build"]
+    },
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/{projectRoot}"
       }
     },
     "test": {
