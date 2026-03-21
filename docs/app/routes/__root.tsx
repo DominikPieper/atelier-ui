@@ -1,21 +1,33 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import {
   createRootRoute,
   Link,
   Outlet,
   useRouterState,
 } from '@tanstack/react-router';
-import { ALL_COMPONENTS, COMPONENT_CATEGORIES } from '../component-data';
+import { COMPONENT_CATEGORIES } from '../component-data';
 
 export const Route = createRootRoute({
   component: RootLayout,
 });
 
 function RootLayout() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const routerState = useRouterState();
+
+  // Close sidebar on navigation
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [routerState.location.pathname]);
+
   return (
     <div className="docs-shell">
-      <TopBar />
-      <Sidebar />
+      <TopBar onMenuToggle={() => setSidebarOpen((o) => !o)} />
+      <div
+        className={`docs-sidebar-backdrop${sidebarOpen ? ' docs-sidebar-backdrop--visible' : ''}`}
+        onClick={() => setSidebarOpen(false)}
+      />
+      <Sidebar open={sidebarOpen} />
       <main className="docs-main">
         <Outlet />
       </main>
@@ -23,13 +35,18 @@ function RootLayout() {
   );
 }
 
-function TopBar() {
+function TopBar({ onMenuToggle }: { onMenuToggle: () => void }) {
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
   const isComponents = currentPath.startsWith('/components');
 
   return (
     <header className="docs-topbar">
+      <button className="docs-menu-btn" onClick={onMenuToggle} aria-label="Toggle navigation">
+        <span />
+        <span />
+        <span />
+      </button>
       <Link to="/" className="docs-logo">
         <img
           src="/logo.png"
@@ -51,13 +68,13 @@ function TopBar() {
   );
 }
 
-function Sidebar() {
+function Sidebar({ open }: { open: boolean }) {
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
   const isComponents = currentPath.startsWith('/components');
 
   return (
-    <nav className="docs-sidebar">
+    <nav className={`docs-sidebar${open ? ' docs-sidebar--open' : ''}`}>
       {!isComponents ? (
         <>
           <div className="docs-nav-section">

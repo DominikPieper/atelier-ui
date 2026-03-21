@@ -545,3 +545,116 @@ body {
   text-align: center;
   opacity: 0.5;
 }
+
+/* Hamburger button — hidden on desktop, shown on mobile */
+.docs-menu-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  border-radius: var(--ui-radius-sm, 4px);
+}
+
+.docs-menu-btn:hover {
+  background: var(--ui-color-surface, #f8f9fa);
+}
+
+.docs-menu-btn span {
+  display: block;
+  height: 2px;
+  background: var(--ui-color-text, #1a1a1a);
+  border-radius: 2px;
+  transition: opacity 0.15s;
+}
+
+/* Sidebar backdrop — mobile overlay */
+.docs-sidebar-backdrop {
+  display: none;
+}
+
+/* ── Mobile ─────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  /* Collapse to single column */
+  .docs-shell {
+    grid-template-columns: 1fr;
+  }
+
+  /* Sidebar becomes off-canvas drawer */
+  .docs-sidebar {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 260px;
+    height: calc(100vh - 60px);
+    z-index: 200;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .docs-sidebar--open {
+    transform: translateX(0);
+  }
+
+  /* Backdrop */
+  .docs-sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    top: 60px;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 150;
+  }
+
+  .docs-sidebar-backdrop--visible {
+    display: block;
+  }
+
+  /* Show hamburger */
+  .docs-menu-btn {
+    display: flex;
+  }
+
+  /* Main content */
+  .docs-main {
+    padding: var(--ui-spacing-6, 1.5rem) var(--ui-spacing-4, 1rem);
+  }
+
+  /* Hero */
+  .docs-hero-title {
+    font-size: 2rem;
+    gap: var(--ui-spacing-2, 0.5rem);
+  }
+
+  .docs-hero-logo {
+    height: 2.5rem;
+  }
+
+  .docs-hero {
+    padding: var(--ui-spacing-6, 1.5rem) 0;
+  }
+
+  /* Props table — allow type cells to wrap */
+  .docs-prop-type {
+    white-space: normal;
+  }
+
+  /* Demo canvas — tighter padding */
+  .docs-demo-canvas {
+    padding: var(--ui-spacing-4, 1rem);
+  }
+}
+
+/* ── Desktop: ensure hamburger stays hidden ─────────────── */
+@media (min-width: 768px) {
+  .docs-menu-btn {
+    display: none !important;
+  }
+}
