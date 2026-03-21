@@ -17,6 +17,7 @@ const __dirname = dirname(__filename);
 
 const ROUTES = [
   '/',
+  '/install',
   '/components',
   '/components/button',
   '/components/card',

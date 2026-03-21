@@ -1,0 +1,8 @@
+[build]
+  command = "npx nx run docs:prerender"
+  publish = "dist/docs"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

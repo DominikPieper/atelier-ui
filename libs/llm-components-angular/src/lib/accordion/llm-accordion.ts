@@ -38,7 +38,7 @@ let nextId = 0;
   styleUrl: './llm-accordion.css',
   hostDirectives: [{ directive: CdkAccordion, inputs: ['multi'] }],
   host: {
-    '[class]': 'hostClasses()',
+    '[class]': 'hostClassesValue',
     role: 'presentation',
   },
   providers: [{ provide: LLM_ACCORDION_GROUP, useExisting: LlmAccordionGroup }],
@@ -52,6 +52,11 @@ export class LlmAccordionGroup implements LlmAccordionGroupContext {
 
   /** @internal */
   protected readonly hostClasses = computed(() => `variant-${this.variant()}`);
+
+  /** @internal */
+  get hostClassesValue(): string {
+    return this.hostClasses();
+  }
 
   /** @internal */
   private readonly items = signal<AccordionItem[]>([]);
@@ -128,17 +133,17 @@ export class LlmAccordionHeader {}
         type="button"
         class="accordion-trigger"
         [id]="triggerId"
-        [attr.aria-expanded]="isExpanded()"
+        [attr.aria-expanded]="isExpandedValue"
         [attr.aria-controls]="panelId"
-        [attr.aria-disabled]="disabled() || null"
-        [class.is-disabled]="disabled()"
+        [attr.aria-disabled]="ariaDisabled"
+        [class.is-disabled]="isDisabled"
         (click)="onToggle()"
         (keydown)="onKeydown($event)"
       >
         <ng-content select="[llmAccordionHeader]" />
         <svg
           class="chevron"
-          [class.is-expanded]="isExpanded()"
+          [class.is-expanded]="isExpandedValue"
           width="16"
           height="16"
           viewBox="0 0 16 16"
@@ -157,7 +162,7 @@ export class LlmAccordionHeader {}
     </h3>
     <div
       class="accordion-panel-wrapper"
-      [class.is-expanded]="isExpanded()"
+      [class.is-expanded]="isExpandedValue"
     >
       <div
         role="region"
@@ -201,6 +206,21 @@ export class LlmAccordionItem implements AccordionItem, OnInit, OnDestroy {
 
   /** @internal */
   protected readonly isExpanded = signal(false);
+
+  /** @internal */
+  get isExpandedValue(): boolean {
+    return this.isExpanded();
+  }
+
+  /** @internal */
+  get isDisabled(): boolean {
+    return this.disabled();
+  }
+
+  /** @internal */
+  get ariaDisabled(): boolean | null {
+    return this.disabled() || null;
+  }
 
   constructor() {
     this.cdkItem.expandedChange.subscribe((expanded: boolean) => {

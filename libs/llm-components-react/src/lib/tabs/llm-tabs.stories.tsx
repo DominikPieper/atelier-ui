@@ -77,7 +77,7 @@ export const WithDisabledTab: Story = {
 };
 
 export const Controlled: Story = {
-  render: () => {
+  render: function Render() {
     const [index, setIndex] = useState(0);
     return (
       <div>

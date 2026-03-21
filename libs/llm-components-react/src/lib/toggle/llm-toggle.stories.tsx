@@ -59,7 +59,7 @@ export const Invalid: Story = {
 };
 
 export const Interactive: Story = {
-  render: () => {
+  render: function InteractiveRender() {
     const [checked, setChecked] = useState(false);
     return (
       <LlmToggle checked={checked} onCheckedChange={setChecked}>
@@ -70,7 +70,7 @@ export const Interactive: Story = {
 };
 
 export const SettingsPanel: Story = {
-  render: () => {
+  render: function SettingsPanelRender() {
     const [email, setEmail] = useState(true);
     const [push, setPush] = useState(false);
     const [sms, setSms] = useState(false);

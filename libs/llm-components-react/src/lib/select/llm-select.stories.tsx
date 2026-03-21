@@ -21,7 +21,7 @@ export default meta;
 type Story = StoryObj<typeof LlmSelect>;
 
 export const Default: Story = {
-  render: () => {
+  render: function Render() {
     const [value, setValue] = useState('');
     return (
       <LlmSelect value={value} onValueChange={setValue} placeholder="Select a country">
@@ -35,7 +35,7 @@ export const Default: Story = {
 };
 
 export const WithLabel: Story = {
-  render: () => {
+  render: function Render() {
     const [value, setValue] = useState('');
     return (
       <LlmSelect
@@ -53,7 +53,7 @@ export const WithLabel: Story = {
 };
 
 export const WithValue: Story = {
-  render: () => {
+  render: function Render() {
     const [value, setValue] = useState('ca');
     return (
       <LlmSelect value={value} onValueChange={setValue}>
@@ -91,7 +91,7 @@ export const Invalid: Story = {
 };
 
 export const DisabledOption: Story = {
-  render: () => {
+  render: function Render() {
     const [value, setValue] = useState('');
     return (
       <LlmSelect value={value} onValueChange={setValue} placeholder="Select a country">

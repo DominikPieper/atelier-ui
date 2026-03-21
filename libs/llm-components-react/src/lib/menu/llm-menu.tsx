@@ -18,7 +18,7 @@ interface MenuContextValue {
   close: () => void;
 }
 
-const MenuContext = createContext<MenuContextValue>({ close: () => {} });
+const MenuContext = createContext<MenuContextValue>({ close: () => undefined });
 
 /**
  * Properties for the LlmMenu component.

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-unnecessary-condition */
 import { render, screen, fireEvent } from '@testing-library/angular';
 import { LlmAvatar, LlmAvatarGroup } from './llm-avatar';
 

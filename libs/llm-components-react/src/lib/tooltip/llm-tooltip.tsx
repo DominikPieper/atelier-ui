@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, ReactNode } from 'react';
+import { useState, useRef, useEffect, ReactNode, useId } from 'react';
 import type { LlmTooltipSpec } from '@atelier-ui/spec';
 import './llm-tooltip.css';
 
@@ -27,7 +27,8 @@ export function LlmTooltip({
   const showTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const wrapperRef = useRef<HTMLSpanElement>(null);
-  const tooltipId = useRef(`tooltip-${Math.random().toString(36).slice(2)}`);
+  const id = useId();
+  const tooltipId = `tooltip-${id}`;
 
   const show = () => {
     if (llmTooltipDisabled || !llmTooltip) return;
@@ -58,11 +59,11 @@ export function LlmTooltip({
   useEffect(() => {
     const el = wrapperRef.current?.firstElementChild as HTMLElement | null;
     if (el && visible) {
-      el.setAttribute('aria-describedby', tooltipId.current);
+      el.setAttribute('aria-describedby', tooltipId);
     } else if (el) {
       el.removeAttribute('aria-describedby');
     }
-  }, [visible]);
+  }, [visible, tooltipId]);
 
   // Handle Escape key to dismiss
   useEffect(() => {
@@ -93,7 +94,7 @@ export function LlmTooltip({
       {children}
       {visible && !llmTooltipDisabled && llmTooltip && (
         <div
-          id={tooltipId.current}
+          id={tooltipId}
           role="tooltip"
           className={`llm-tooltip position-${llmTooltipPosition}`}
         >

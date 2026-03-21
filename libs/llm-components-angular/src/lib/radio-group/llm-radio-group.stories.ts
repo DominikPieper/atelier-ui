@@ -5,7 +5,7 @@ import { LlmRadioGroup } from './llm-radio-group';
 
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
 
-function figmaNode(nodeId: string) {
+function figmaNode(nodeId: string): { type: "figma"; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
 }
 

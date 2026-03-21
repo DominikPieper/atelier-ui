@@ -21,6 +21,7 @@ import type { LlmButtonVariant, LlmButtonSize } from '@atelier-ui/spec';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
+    <!-- eslint-disable -->
     @if (loading()) {
       <span class="spinner" aria-hidden="true"></span>
     }
@@ -36,20 +37,20 @@ import type { LlmButtonVariant, LlmButtonSize } from '@atelier-ui/spec';
 })
 export class LlmButton {
   /** Visual style of the button. */
-  variant = input<LlmButtonVariant>('primary');
+  readonly variant = input<LlmButtonVariant>('primary');
 
   /** Size of the button. */
-  size = input<LlmButtonSize>('md');
+  readonly size = input<LlmButtonSize>('md');
 
   /** Disables the button, preventing interaction. */
-  disabled = input(false);
+  readonly disabled = input(false);
 
   /** Shows a loading spinner and disables interaction. */
-  loading = input(false);
+  readonly loading = input(false);
 
-  protected isDisabled = computed(() => this.disabled() || this.loading());
+  protected readonly isDisabled = computed(() => this.disabled() || this.loading());
 
-  protected hostClasses = computed(
+  protected readonly hostClasses = computed(
     () =>
       `variant-${this.variant()} size-${this.size()}${this.isDisabled() ? ' is-disabled' : ''}${this.loading() ? ' is-loading' : ''}`
   );

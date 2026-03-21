@@ -30,8 +30,8 @@ interface ToastContextValue {
 
 const ToastContext = createContext<ToastContextValue>({
   show: () => '',
-  dismiss: () => {},
-  clear: () => {},
+  dismiss: () => undefined,
+  clear: () => undefined,
   toasts: [],
 });
 

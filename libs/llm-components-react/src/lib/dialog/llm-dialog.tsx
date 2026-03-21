@@ -18,7 +18,7 @@ interface DialogContextValue {
 
 const DialogContext = createContext<DialogContextValue>({
   headerId: '',
-  close: () => {},
+  close: () => undefined,
 });
 
 /**

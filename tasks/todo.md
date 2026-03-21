@@ -24,19 +24,21 @@
 - [x] LlmTabs → Kept manual (DOM buttons not FocusableOption; CDK adds complexity, not simplicity)
 - [x] LlmRadioGroup → Kept manual (native radio inputs; CDK FocusKeyManager is for custom items)
 
-## Priority 4: Additional Components *(future)*
+## Priority 4: Additional Components ✅ Complete
 
-- [ ] LlmAvatar
-- [ ] LlmDrawer
-- [ ] LlmBreadcrumbs
-- [ ] LlmPagination
-- [ ] LlmProgress
+- [x] LlmAvatar
+- [x] LlmDrawer
+- [x] LlmBreadcrumbs
+- [x] LlmPagination
+- [x] LlmProgress
 
-## Priority 5: Publishing & Tooling *(future)*
+## Priority 5: Publishing & Tooling
 
 - [ ] Auto-generated API reference script
-- [ ] npm packaging + versioning
-- [ ] Demo app
+- [x] npm packaging (build targets + package.json already configured; publish workflow added at `.github/workflows/publish.yml`)
+- [x] Versioning (triggered by GitHub Release)
+- [ ] Set `NPM_TOKEN` secret in GitHub repo settings before first publish
+- [ ] Demo app / docs site deployment
 
 ## Verification ✅
 

@@ -22,7 +22,7 @@ export default meta;
 type Story = StoryObj<typeof LlmRadioGroup>;
 
 export const Default: Story = {
-  render: () => {
+  render: function Render() {
     const [value, setValue] = useState('free');
     return (
       <LlmRadioGroup value={value} onValueChange={setValue} name="plan">
@@ -46,7 +46,7 @@ export const Disabled: Story = {
 };
 
 export const IndividualDisabled: Story = {
-  render: () => {
+  render: function Render() {
     const [value, setValue] = useState('free');
     return (
       <LlmRadioGroup value={value} onValueChange={setValue} name="plan-individual">
@@ -80,7 +80,7 @@ export const WithErrors: Story = {
 };
 
 export const Required: Story = {
-  render: () => {
+  render: function Render() {
     const [value, setValue] = useState('');
     return (
       <LlmRadioGroup value={value} onValueChange={setValue} name="plan-required" required>

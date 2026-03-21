@@ -63,54 +63,58 @@ export const Invalid: Story = {
   },
 };
 
+const InteractiveComponent = () => {
+  const [checked, setChecked] = useState(false);
+  return (
+    <LlmCheckbox checked={checked} onCheckedChange={setChecked}>
+      {checked ? 'Checked!' : 'Click to check'}
+    </LlmCheckbox>
+  );
+};
+
 export const Interactive: Story = {
-  render: () => {
-    const [checked, setChecked] = useState(false);
-    return (
-      <LlmCheckbox checked={checked} onCheckedChange={setChecked}>
-        {checked ? 'Checked!' : 'Click to check'}
+  render: () => <InteractiveComponent />,
+};
+
+const SelectAllComponent = () => {
+  const [items, setItems] = useState([
+    { id: 1, label: 'Item A', checked: false },
+    { id: 2, label: 'Item B', checked: true },
+    { id: 3, label: 'Item C', checked: false },
+  ]);
+
+  const allChecked = items.every((i) => i.checked);
+  const someChecked = items.some((i) => i.checked) && !allChecked;
+
+  const toggleAll = (checked: boolean) =>
+    setItems(items.map((i) => ({ ...i, checked })));
+  const toggleItem = (id: number, checked: boolean) =>
+    setItems(items.map((i) => (i.id === id ? { ...i, checked } : i)));
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+      <LlmCheckbox
+        checked={allChecked}
+        indeterminate={someChecked}
+        onCheckedChange={toggleAll}
+      >
+        Select all
       </LlmCheckbox>
-    );
-  },
+      <div style={{ marginLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        {items.map((item) => (
+          <LlmCheckbox
+            key={item.id}
+            checked={item.checked}
+            onCheckedChange={(c) => toggleItem(item.id, c)}
+          >
+            {item.label}
+          </LlmCheckbox>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export const SelectAll: Story = {
-  render: () => {
-    const [items, setItems] = useState([
-      { id: 1, label: 'Item A', checked: false },
-      { id: 2, label: 'Item B', checked: true },
-      { id: 3, label: 'Item C', checked: false },
-    ]);
-
-    const allChecked = items.every((i) => i.checked);
-    const someChecked = items.some((i) => i.checked) && !allChecked;
-
-    const toggleAll = (checked: boolean) =>
-      setItems(items.map((i) => ({ ...i, checked })));
-    const toggleItem = (id: number, checked: boolean) =>
-      setItems(items.map((i) => (i.id === id ? { ...i, checked } : i)));
-
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-        <LlmCheckbox
-          checked={allChecked}
-          indeterminate={someChecked}
-          onCheckedChange={toggleAll}
-        >
-          Select all
-        </LlmCheckbox>
-        <div style={{ marginLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          {items.map((item) => (
-            <LlmCheckbox
-              key={item.id}
-              checked={item.checked}
-              onCheckedChange={(c) => toggleItem(item.id, c)}
-            >
-              {item.label}
-            </LlmCheckbox>
-          ))}
-        </div>
-      </div>
-    );
-  },
+  render: () => <SelectAllComponent />,
 };

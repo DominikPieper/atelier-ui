@@ -94,7 +94,7 @@ export function LlmPagination({
 
   return (
     <nav className={classes} aria-label="Pagination" {...rest}>
-      <ul role="list" className="page-list">
+      <ul className="page-list">
         {showFirstLast && (
           <li>
             <button

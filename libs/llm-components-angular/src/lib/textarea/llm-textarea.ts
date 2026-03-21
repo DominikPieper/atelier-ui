@@ -56,48 +56,48 @@ let nextId = 0;
 })
 export class LlmTextarea implements FormValueControl<string> {
   /** The current textarea value. Supports [(value)] two-way binding. */
-  value = model('');
+  readonly value = model('');
 
   /** Number of visible text rows. */
-  rows = input(3);
+  readonly rows = input(3);
 
   /** Placeholder text shown when the textarea is empty. */
-  placeholder = input('');
+  readonly placeholder = input('');
 
   /** Whether the textarea is disabled. Bound by [formField] directive. */
-  disabled = input(false);
+  readonly disabled = input(false);
 
   /** Whether the textarea is read-only. Bound by [formField] directive. */
-  readonly = input(false);
+  readonly readonly = input(false);
 
   /** Whether the textarea has validation errors. Bound by [formField] directive. */
-  invalid = input(false);
+  readonly invalid = input(false);
 
   /** Validation errors from the form system. Bound by [formField] directive. */
-  errors = input<readonly WithOptionalFieldTree<ValidationError>[]>([]);
+  readonly errors = input<readonly WithOptionalFieldTree<ValidationError>[]>([]);
 
   /** Whether the user has interacted with the textarea. Bound by [formField] directive. */
-  touched = model(false);
+  readonly touched = model(false);
 
   /** Whether the textarea is required. Bound by [formField] directive. */
-  required = input(false);
+  readonly required = input(false);
 
   /** The textarea's name attribute. Bound by [formField] directive. */
-  name = input('');
+  readonly name = input('');
 
   /** Whether to auto-resize the textarea height to fit its content. */
-  autoResize = input(false);
+  readonly autoResize = input(false);
 
   /** @internal */
   protected readonly errorId = `llm-textarea-errors-${nextId++}`;
 
   /** @internal */
-  protected showErrors = computed(
+  protected readonly showErrors = computed(
     () => this.touched() && this.invalid() && this.errors().length > 0
   );
 
   /** @internal */
-  protected hostClasses = computed(() => {
+  protected readonly hostClasses = computed(() => {
     const classes: string[] = [];
     if (this.disabled()) classes.push('is-disabled');
     if (this.invalid()) classes.push('is-invalid');

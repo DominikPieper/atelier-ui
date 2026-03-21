@@ -72,7 +72,7 @@ export const NoBackdropClose: Story = {
 };
 
 export const ConfirmationDialog: Story = {
-  render: () => {
+  render: function Render() {
     const [open, setOpen] = useState(false);
     return (
       <>

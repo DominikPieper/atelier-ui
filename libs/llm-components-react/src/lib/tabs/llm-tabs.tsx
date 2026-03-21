@@ -29,7 +29,7 @@ interface TabGroupContextValue {
 
 const TabGroupContext = createContext<TabGroupContextValue>({
   selectedIndex: 0,
-  setSelectedIndex: () => {},
+  setSelectedIndex: () => undefined,
   variant: 'default',
   tabs: [],
 });

@@ -63,6 +63,7 @@ function Sidebar() {
           <div className="docs-nav-section">
             <div className="docs-nav-heading">Getting Started</div>
             <NavLink to="/" label="Overview" currentPath={currentPath} />
+            <NavLink to="/install" label="Installation" currentPath={currentPath} />
           </div>
 
           <div className="docs-nav-section">

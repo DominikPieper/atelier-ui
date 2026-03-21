@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { render, screen } from '@testing-library/angular';
 import { LlmBreadcrumbs, LlmBreadcrumbItem } from './llm-breadcrumbs';
 

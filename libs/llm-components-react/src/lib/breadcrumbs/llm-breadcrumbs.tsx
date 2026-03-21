@@ -29,7 +29,7 @@ export function LlmBreadcrumbs({ children, className, ...rest }: LlmBreadcrumbsP
 
   return (
     <nav className={classes} aria-label="Breadcrumb" {...rest}>
-      <ol role="list" className="breadcrumbs-list">
+      <ol className="breadcrumbs-list">
         {enhancedChildren}
       </ol>
     </nav>

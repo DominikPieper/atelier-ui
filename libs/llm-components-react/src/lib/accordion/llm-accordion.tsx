@@ -4,6 +4,8 @@ import {
   useState,
   useRef,
   useId,
+  useLayoutEffect,
+  useCallback,
   ReactNode,
   HTMLAttributes,
   KeyboardEvent,
@@ -26,10 +28,10 @@ interface AccordionGroupContextValue {
 const AccordionGroupContext = createContext<AccordionGroupContextValue>({
   multi: false,
   openItems: new Set(),
-  toggleItem: () => {},
-  registerItem: () => {},
-  unregisterItem: () => {},
-  handleKeydown: () => {},
+  toggleItem: () => { /* noop */ },
+  registerItem: () => { /* noop */ },
+  unregisterItem: () => { /* noop */ },
+  handleKeydown: () => { /* noop */ },
 });
 
 /**
@@ -69,7 +71,7 @@ export function LlmAccordionGroup({
     .filter(Boolean)
     .join(' ');
 
-  const toggleItem = (id: string) => {
+  const toggleItem = useCallback((id: string) => {
     setOpenItems((prev) => {
       const next = new Set(prev);
       if (next.has(id)) {
@@ -80,17 +82,17 @@ export function LlmAccordionGroup({
       }
       return next;
     });
-  };
+  }, [multi]);
 
-  const registerItem = (id: string, ref: React.RefObject<HTMLButtonElement | null>, disabled: boolean) => {
+  const registerItem = useCallback((id: string, ref: React.RefObject<HTMLButtonElement | null>, disabled: boolean) => {
     itemsRef.current = [...itemsRef.current.filter((i) => i.id !== id), { id, triggerRef: ref, disabled }];
-  };
+  }, []);
 
-  const unregisterItem = (id: string) => {
+  const unregisterItem = useCallback((id: string) => {
     itemsRef.current = itemsRef.current.filter((i) => i.id !== id);
-  };
+  }, []);
 
-  const handleKeydown = (e: KeyboardEvent, currentId: string) => {
+  const handleKeydown = useCallback((e: KeyboardEvent, currentId: string) => {
     const enabled = itemsRef.current.filter((i) => !i.disabled);
     if (enabled.length === 0) return;
 
@@ -113,7 +115,7 @@ export function LlmAccordionGroup({
     }
 
     target?.triggerRef.current?.focus();
-  };
+  }, []);
 
   return (
     <AccordionGroupContext.Provider
@@ -167,10 +169,13 @@ export function LlmAccordionItem({
   const panelId = `${id}-panel`;
   const triggerRef = useRef<HTMLButtonElement>(null);
 
+  const { registerItem, unregisterItem } = ctx;
+
   // Register/unregister with parent
-  // Using a layout-effect-like pattern via ref callback would be ideal,
-  // but for simplicity we register inline (idempotent due to filter+push)
-  ctx.registerItem(id, triggerRef, disabled);
+  useLayoutEffect(() => {
+    registerItem(id, triggerRef, disabled);
+    return () => unregisterItem(id);
+  }, [id, triggerRef, disabled, registerItem, unregisterItem]);
 
   const isControlled = externalExpanded !== undefined;
   const isExpanded = isControlled ? externalExpanded : ctx.openItems.has(id);

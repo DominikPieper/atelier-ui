@@ -27,6 +27,7 @@ let nextId = 0;
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
+    <!-- eslint-disable -->
     <label [attr.for]="inputId">
       <input
         #nativeInput

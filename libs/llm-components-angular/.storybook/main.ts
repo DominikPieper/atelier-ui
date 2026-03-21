@@ -13,6 +13,7 @@ const config: StorybookConfig = {
     name: '@analogjs/storybook-angular',
     options: {},
   },
+  staticDirs: ['../../../images'],
   docs: {},
   features: {
     experimentalComponentManifest: true,

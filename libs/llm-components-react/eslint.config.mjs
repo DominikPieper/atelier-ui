@@ -1,11 +1,9 @@
-import { FlatCompat } from '@eslint/eslintrc';
-import js from '@eslint/js';
-import nxEslintPlugin from '@nx/eslint-plugin';
-
-const compat = new FlatCompat({ baseDirectory: import.meta.dirname });
+import nx from '@nx/eslint-plugin';
+import baseConfig from '../../eslint.config.mjs';
 
 export default [
-  { plugins: { '@nx': nxEslintPlugin } },
+  ...baseConfig,
+  ...nx.configs['flat/react'],
   {
     files: ['**/*.ts', '**/*.tsx'],
     rules: {
@@ -20,9 +18,5 @@ export default [
         },
       ],
     },
-  },
-  ...compat.config({ extends: ['plugin:@nx/react'] }).map((c) => ({
-    ...c,
-    files: ['**/*.ts', '**/*.tsx'],
-  })),
+  }
 ];

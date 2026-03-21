@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RoadmapRouteImport } from './routes/roadmap'
 import { Route as PhilosophyRouteImport } from './routes/philosophy'
+import { Route as InstallRouteImport } from './routes/install'
 import { Route as DesignPrinciplesRouteImport } from './routes/design-principles'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ComponentsIndexRouteImport } from './routes/components/index'
@@ -24,6 +25,11 @@ const RoadmapRoute = RoadmapRouteImport.update({
 const PhilosophyRoute = PhilosophyRouteImport.update({
   id: '/philosophy',
   path: '/philosophy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstallRoute = InstallRouteImport.update({
+  id: '/install',
+  path: '/install',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DesignPrinciplesRoute = DesignPrinciplesRouteImport.update({
@@ -50,6 +56,7 @@ const ComponentsNameRoute = ComponentsNameRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/design-principles': typeof DesignPrinciplesRoute
+  '/install': typeof InstallRoute
   '/philosophy': typeof PhilosophyRoute
   '/roadmap': typeof RoadmapRoute
   '/components/$name': typeof ComponentsNameRoute
@@ -58,6 +65,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/design-principles': typeof DesignPrinciplesRoute
+  '/install': typeof InstallRoute
   '/philosophy': typeof PhilosophyRoute
   '/roadmap': typeof RoadmapRoute
   '/components/$name': typeof ComponentsNameRoute
@@ -67,6 +75,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/design-principles': typeof DesignPrinciplesRoute
+  '/install': typeof InstallRoute
   '/philosophy': typeof PhilosophyRoute
   '/roadmap': typeof RoadmapRoute
   '/components/$name': typeof ComponentsNameRoute
@@ -77,6 +86,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/design-principles'
+    | '/install'
     | '/philosophy'
     | '/roadmap'
     | '/components/$name'
@@ -85,6 +95,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/design-principles'
+    | '/install'
     | '/philosophy'
     | '/roadmap'
     | '/components/$name'
@@ -93,6 +104,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/design-principles'
+    | '/install'
     | '/philosophy'
     | '/roadmap'
     | '/components/$name'
@@ -102,6 +114,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DesignPrinciplesRoute: typeof DesignPrinciplesRoute
+  InstallRoute: typeof InstallRoute
   PhilosophyRoute: typeof PhilosophyRoute
   RoadmapRoute: typeof RoadmapRoute
   ComponentsNameRoute: typeof ComponentsNameRoute
@@ -122,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/philosophy'
       fullPath: '/philosophy'
       preLoaderRoute: typeof PhilosophyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/install': {
+      id: '/install'
+      path: '/install'
+      fullPath: '/install'
+      preLoaderRoute: typeof InstallRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/design-principles': {
@@ -158,6 +178,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DesignPrinciplesRoute: DesignPrinciplesRoute,
+  InstallRoute: InstallRoute,
   PhilosophyRoute: PhilosophyRoute,
   RoadmapRoute: RoadmapRoute,
   ComponentsNameRoute: ComponentsNameRoute,

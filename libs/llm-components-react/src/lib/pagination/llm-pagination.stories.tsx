@@ -21,7 +21,7 @@ export default meta;
 type Story = StoryObj<typeof LlmPagination>;
 
 export const Default: Story = {
-  render: () => {
+  render: function Render() {
     const [page, setPage] = useState(1);
     return <LlmPagination page={page} pageCount={10} onPageChange={setPage} />;
   },
@@ -29,7 +29,7 @@ export const Default: Story = {
 };
 
 export const MiddlePage: Story = {
-  render: () => {
+  render: function Render() {
     const [page, setPage] = useState(5);
     return <LlmPagination page={page} pageCount={10} onPageChange={setPage} />;
   },
@@ -37,21 +37,21 @@ export const MiddlePage: Story = {
 };
 
 export const LastPage: Story = {
-  render: () => {
+  render: function Render() {
     const [page, setPage] = useState(10);
     return <LlmPagination page={page} pageCount={10} onPageChange={setPage} />;
   },
 };
 
 export const FewPages: Story = {
-  render: () => {
+  render: function Render() {
     const [page, setPage] = useState(1);
     return <LlmPagination page={page} pageCount={3} onPageChange={setPage} />;
   },
 };
 
 export const WithoutFirstLast: Story = {
-  render: () => {
+  render: function Render() {
     const [page, setPage] = useState(3);
     return (
       <LlmPagination page={page} pageCount={10} showFirstLast={false} onPageChange={setPage} />
@@ -60,7 +60,7 @@ export const WithoutFirstLast: Story = {
 };
 
 export const WideSiblingCount: Story = {
-  render: () => {
+  render: function Render() {
     const [page, setPage] = useState(5);
     return <LlmPagination page={page} pageCount={20} siblingCount={2} onPageChange={setPage} />;
   },

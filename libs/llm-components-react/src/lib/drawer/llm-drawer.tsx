@@ -18,7 +18,7 @@ interface DrawerContextValue {
 
 const DrawerContext = createContext<DrawerContextValue>({
   headerId: '',
-  close: () => {},
+  close: () => undefined,
 });
 
 /**

@@ -438,7 +438,7 @@ import { LlmTooltip } from '../tooltip/llm-tooltip';
   `],
 })
 class ShowcaseAllComponent {
-  private toast = inject(LlmToastService);
+  private readonly toast = inject(LlmToastService);
 
   readonly cardVariants = ['elevated', 'outlined', 'flat'] as const;
 

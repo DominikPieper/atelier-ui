@@ -42,8 +42,8 @@ export const RadioGroupContext = createContext<RadioGroupContextValue>({
   disabled: false,
   readOnly: false,
   invalid: false,
-  onSelect: () => {},
-  onBlur: () => {},
+  onSelect: () => undefined,
+  onBlur: () => undefined,
 });
 
 /**
@@ -127,7 +127,7 @@ export function LlmRadioGroup({
         readOnly,
         invalid,
         onSelect: (v) => !disabled && !readOnly && onValueChange?.(v),
-        onBlur: () => {},
+        onBlur: () => undefined,
       }}
     >
       <div

@@ -52,45 +52,45 @@ let nextId = 0;
 })
 export class LlmInput implements FormValueControl<string> {
   /** The current input value. Bound by [formField] directive. Supports [(value)] two-way binding. */
-  value = model('');
+  readonly value = model('');
 
   /** The type of input field. */
-  type = input<'text' | 'email' | 'password' | 'number' | 'tel' | 'url'>('text');
+  readonly type = input<'text' | 'email' | 'password' | 'number' | 'tel' | 'url'>('text');
 
   /** Placeholder text shown when the input is empty. */
-  placeholder = input('');
+  readonly placeholder = input('');
 
   /** Whether the input is disabled. Bound by [formField] directive. */
-  disabled = input(false);
+  readonly disabled = input(false);
 
   /** Whether the input is read-only. Bound by [formField] directive. */
-  readonly = input(false);
+  readonly readonly = input(false);
 
   /** Whether the input has validation errors. Bound by [formField] directive. */
-  invalid = input(false);
+  readonly invalid = input(false);
 
   /** Validation errors from the form system. Bound by [formField] directive. */
-  errors = input<readonly WithOptionalFieldTree<ValidationError>[]>([]);
+  readonly errors = input<readonly WithOptionalFieldTree<ValidationError>[]>([]);
 
   /** Whether the user has interacted with the input. Bound by [formField] directive. */
-  touched = model(false);
+  readonly touched = model(false);
 
   /** Whether the input is required. Bound by [formField] directive. */
-  required = input(false);
+  readonly required = input(false);
 
   /** The input's name attribute. Bound by [formField] directive. */
-  name = input('');
+  readonly name = input('');
 
   /** @internal */
   protected readonly errorId = `llm-input-errors-${nextId++}`;
 
   /** @internal */
-  protected showErrors = computed(
+  protected readonly showErrors = computed(
     () => this.touched() && this.invalid() && this.errors().length > 0
   );
 
   /** @internal */
-  protected hostClasses = computed(() => {
+  protected readonly hostClasses = computed(() => {
     const classes: string[] = [];
     if (this.disabled()) classes.push('is-disabled');
     if (this.invalid()) classes.push('is-invalid');

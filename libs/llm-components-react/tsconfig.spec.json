@@ -17,6 +17,7 @@
     "src/**/*.test.tsx",
     "src/**/*.spec.ts",
     "src/**/*.test.ts",
+    "src/**/*.stories.tsx",
     "src/**/*.d.ts"
   ],
   "files": ["src/test-setup.ts"]

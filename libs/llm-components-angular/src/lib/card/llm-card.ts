@@ -32,12 +32,12 @@ import {
 })
 export class LlmCard {
   /** Visual style of the card. */
-  variant = input<'elevated' | 'outlined' | 'flat'>('elevated');
+  readonly variant = input<'elevated' | 'outlined' | 'flat'>('elevated');
 
   /** Internal padding of the card. */
-  padding = input<'none' | 'sm' | 'md' | 'lg'>('md');
+  readonly padding = input<'none' | 'sm' | 'md' | 'lg'>('md');
 
-  protected hostClasses = computed(
+  protected readonly hostClasses = computed(
     () => `variant-${this.variant()} padding-${this.padding()}`
   );
 }

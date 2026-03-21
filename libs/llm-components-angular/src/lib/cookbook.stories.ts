@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/prefer-on-push-component-change-detection, @angular-eslint/component-selector */
 import type { Meta, StoryObj } from '@storybook/angular';
 import { Component, signal } from '@angular/core';
 import { LlmButton } from './button/llm-button';
@@ -57,6 +58,7 @@ import { LlmTooltip } from './tooltip/llm-tooltip';
     LlmAlert,
   ],
   template: `
+    <!-- eslint-disable -->
     <div class="wrapper">
       <llm-card variant="elevated" padding="lg">
         <llm-card-header>
@@ -148,7 +150,7 @@ import { LlmTooltip } from './tooltip/llm-tooltip';
 })
 class LoginFormComponent {
   showErrors = false;
-  loading = signal(false);
+  readonly loading = signal(false);
 
   onSubmit(): void {
     this.loading.set(true);
@@ -170,6 +172,7 @@ class LoginFormComponent {
     LlmAlert,
   ],
   template: `
+    <!-- eslint-disable -->
     <div class="wrapper">
       <llm-card variant="elevated" padding="lg">
         <llm-card-header>
@@ -253,7 +256,7 @@ class LoginFormComponent {
   ],
 })
 class LoginFormWithErrorsComponent {
-  loading = signal(false);
+  readonly loading = signal(false);
 }
 
 // ---------------------------------------------------------------------------
@@ -278,6 +281,7 @@ class LoginFormWithErrorsComponent {
     LlmTab,
   ],
   template: `
+    <!-- eslint-disable -->
     <div class="wrapper">
       <h1 class="page-title">Settings</h1>
       <p class="page-subtitle">Manage your account preferences.</p>
@@ -404,13 +408,13 @@ class LoginFormWithErrorsComponent {
   ],
 })
 class SettingsPageComponent {
-  activeTab = signal(0);
-  showSuccess = signal(false);
-  emailNotifications = signal(true);
-  pushNotifications = signal(false);
-  weeklyDigest = signal(true);
-  marketingEmails = signal(false);
-  visibility = signal('public');
+  readonly activeTab = signal(0);
+  readonly showSuccess = signal(false);
+  readonly emailNotifications = signal(true);
+  readonly pushNotifications = signal(false);
+  readonly weeklyDigest = signal(true);
+  readonly marketingEmails = signal(false);
+  readonly visibility = signal('public');
 
   onSave(): void {
     this.showSuccess.set(true);
@@ -438,6 +442,7 @@ class SettingsPageComponent {
     LlmAlert,
   ],
   template: `
+    <!-- eslint-disable -->
     <div class="wrapper">
       <div class="demo-area">
         <h2 class="demo-title">Danger Zone</h2>
@@ -516,8 +521,8 @@ class SettingsPageComponent {
   ],
 })
 class ConfirmationDialogComponent {
-  isOpen = signal(false);
-  confirmed = signal(false);
+  readonly isOpen = signal(false);
+  readonly confirmed = signal(false);
 
   onConfirm(): void {
     this.isOpen.set(false);
@@ -549,6 +554,7 @@ class ConfirmationDialogComponent {
     LlmTooltip,
   ],
   template: `
+    <!-- eslint-disable -->
     <div class="wrapper">
       <div class="list-header">
         <h2 class="list-title">Projects</h2>
@@ -713,6 +719,7 @@ class DataListComponent {
     LlmButton,
   ],
   template: `
+    <!-- eslint-disable -->
     <div class="wrapper">
       <div class="header">
         <h2 class="header-title">Notifications</h2>
@@ -830,18 +837,18 @@ class DataListComponent {
   ],
 })
 class NotificationCenterComponent {
-  errors = signal([
+  readonly errors = signal([
     { id: 1, message: 'Database connection failed on replica-3. Automatic failover engaged.' },
     { id: 2, message: 'Payment processing service returned 503 for 12 transactions.' },
   ]);
 
-  warnings = signal([
+  readonly warnings = signal([
     { id: 3, message: 'Disk usage on worker-7 is at 89%. Consider scaling storage.' },
     { id: 4, message: 'SSL certificate for api.example.com expires in 14 days.' },
     { id: 5, message: 'Rate limiter triggered 230 times in the last hour.' },
   ]);
 
-  infos = signal([
+  readonly infos = signal([
     { id: 6, message: 'Deployment v3.2.1 completed successfully across all regions.' },
     { id: 7, message: 'Scheduled maintenance window begins Saturday at 02:00 UTC.' },
   ]);

@@ -60,11 +60,13 @@ export function LlmAvatar({
   ...rest
 }: LlmAvatarProps) {
   const [imgError, setImgError] = useState(false);
+  const [prevSrc, setPrevSrc] = useState(src);
 
   // Reset imgError when src changes
-  useEffect(() => {
+  if (src !== prevSrc) {
+    setPrevSrc(src);
     setImgError(false);
-  }, [src]);
+  }
 
   const classes = ['llm-avatar', `size-${size}`, `shape-${shape}`, className]
     .filter(Boolean).join(' ');

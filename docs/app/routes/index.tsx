@@ -23,7 +23,7 @@ function HomePage() {
           <Link to="/components" className="docs-btn docs-btn-primary">
             Browse Components →
           </Link>
-          <a href="https://github.com" className="docs-btn docs-btn-outline">
+          <a href="https://github.com/conciso/llm-components" className="docs-btn docs-btn-outline">
             GitHub
           </a>
         </div>

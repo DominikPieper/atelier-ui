@@ -28,12 +28,12 @@ import {
 })
 export class LlmBadge {
   /** Semantic color variant of the badge. */
-  variant = input<'default' | 'success' | 'warning' | 'danger' | 'info'>('default');
+  readonly variant = input<'default' | 'success' | 'warning' | 'danger' | 'info'>('default');
 
   /** Size of the badge. */
-  size = input<'sm' | 'md'>('md');
+  readonly size = input<'sm' | 'md'>('md');
 
-  protected hostClasses = computed(
+  protected readonly hostClasses = computed(
     () => `variant-${this.variant()} size-${this.size()}`
   );
 }
