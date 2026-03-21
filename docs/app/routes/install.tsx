@@ -230,7 +230,7 @@ function InstallPage() {
       {/* Angular */}
       <div className="docs-section">
         <div style={sectionHeadingStyle}>
-          <img src="/angular-logo.jpg" alt="Angular" style={logoStyle} />
+          <img src="/angular-logo.svg" alt="Angular" style={logoStyle} />
           <h2 className="docs-section-title" style={{ margin: 0 }}>
             Angular
           </h2>
@@ -258,7 +258,7 @@ function InstallPage() {
       {/* React */}
       <div className="docs-section">
         <div style={sectionHeadingStyle}>
-          <img src="/react-logo.png" alt="React" style={logoStyle} />
+          <img src="/react-logo.svg" alt="React" style={logoStyle} />
           <h2 className="docs-section-title" style={{ margin: 0 }}>
             React
           </h2>
@@ -298,7 +298,7 @@ function InstallPage() {
       {/* Vue */}
       <div className="docs-section">
         <div style={sectionHeadingStyle}>
-          <img src="/vue-logo.jpeg" alt="Vue" style={logoStyle} />
+          <img src="/vue-logo.svg" alt="Vue" style={logoStyle} />
           <h2 className="docs-section-title" style={{ margin: 0 }}>
             Vue
             <span style={comingSoonBadge}>Coming Soon</span>
