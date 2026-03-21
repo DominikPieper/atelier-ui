@@ -9,7 +9,7 @@ interface LlmComponentReactSchema {
 export default async function generator(tree: Tree, options: LlmComponentReactSchema) {
   const componentNames = names(options.name);
   const dir = options.directory ?? options.name;
-  const libRoot = 'libs/llm-components-react/src/lib';
+  const libRoot = 'libs/react/src/lib';
   const componentDir = `${libRoot}/${dir}`;
 
   // Generate component files from templates
@@ -22,7 +22,7 @@ export default async function generator(tree: Tree, options: LlmComponentReactSc
   });
 
   // Append export to index.ts
-  const indexPath = 'libs/llm-components-react/src/index.ts';
+  const indexPath = 'libs/react/src/index.ts';
   const currentContent = tree.read(indexPath, 'utf-8') ?? '';
   const exportLine = `export * from './lib/${dir}/llm-${componentNames.fileName}';\n`;
 

@@ -25,14 +25,14 @@ jobs:
       - run: npm ci
 
       - name: Build libraries
-        run: npx nx run-many -t build --projects=llm-components-angular,llm-components-react
+        run: npx nx run-many -t build --projects=angular,react
 
       - name: Publish @atelier-ui/angular
-        run: npm publish dist/libs/llm-components-angular --provenance --access public
+        run: npm publish dist/libs/angular --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish @atelier-ui/react
-        run: npm publish dist/libs/llm-components-react --provenance --access public
+        run: npm publish dist/libs/react --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

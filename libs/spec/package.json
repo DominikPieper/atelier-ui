@@ -1,0 +1,12 @@
+{
+  "name": "@atelier-ui/spec",
+  "version": "0.0.1",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    }
+  },
+  "types": "./src/index.d.ts",
+  "main": "./src/index.js"
+}

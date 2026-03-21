@@ -13,7 +13,7 @@
     },
     "directory": {
       "type": "string",
-      "description": "Target directory relative to libs/llm-components-react/src/lib/. Defaults to the component name."
+      "description": "Target directory relative to libs/react/src/lib/. Defaults to the component name."
     }
   },
   "required": ["name"]

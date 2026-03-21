@@ -14,7 +14,7 @@ export default async function generator(tree: Tree, options: LlmComponentSchema)
   const dir = options.directory ?? options.name;
 
   if (framework === 'angular' || framework === 'both') {
-    const angularDir = `libs/llm-components-angular/src/lib/${dir}`;
+    const angularDir = `libs/angular/src/lib/${dir}`;
 
     generateFiles(tree, path.join(__dirname, 'files'), angularDir, {
       ...componentNames,
@@ -23,7 +23,7 @@ export default async function generator(tree: Tree, options: LlmComponentSchema)
       tmpl: '',
     });
 
-    const indexPath = 'libs/llm-components-angular/src/index.ts';
+    const indexPath = 'libs/angular/src/index.ts';
     const currentContent = tree.read(indexPath, 'utf-8') ?? '';
     const exportLine = `export { Llm${componentNames.className} } from './lib/${dir}/llm-${componentNames.fileName}';\n`;
     if (!currentContent.includes(exportLine.trim())) {
@@ -32,7 +32,7 @@ export default async function generator(tree: Tree, options: LlmComponentSchema)
   }
 
   if (framework === 'react' || framework === 'both') {
-    const reactDir = `libs/llm-components-react/src/lib/${dir}`;
+    const reactDir = `libs/react/src/lib/${dir}`;
     const reactFilesDir = path.join(__dirname, '../llm-component-react/files');
 
     generateFiles(tree, reactFilesDir, reactDir, {
@@ -42,7 +42,7 @@ export default async function generator(tree: Tree, options: LlmComponentSchema)
       tmpl: '',
     });
 
-    const indexPath = 'libs/llm-components-react/src/index.ts';
+    const indexPath = 'libs/react/src/index.ts';
     const currentContent = tree.read(indexPath, 'utf-8') ?? '';
     const exportLine = `export * from './lib/${dir}/llm-${componentNames.fileName}';\n`;
     if (!currentContent.includes(exportLine.trim())) {

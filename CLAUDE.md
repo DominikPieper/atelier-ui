@@ -781,7 +781,7 @@ nx generate @atelier-ui/generators:llm-component --name=<name>
 ```
 
 Generated files: `llm-<name>.ts`, `llm-<name>.css`, `llm-<name>.spec.ts`, `llm-<name>.stories.ts`
-Auto-exports from `libs/llm-components-angular/src/index.ts`.
+Auto-exports from `libs/angular/src/index.ts`.
 
 ### Import pattern
 
@@ -821,7 +821,7 @@ nx generate @atelier-ui/generators:llm-component-react --name=<name>
 ```
 
 Generated files: `llm-<name>.tsx`, `llm-<name>.css`, `llm-<name>.spec.tsx`, `llm-<name>.stories.tsx`
-Auto-exports from `libs/llm-components-react/src/index.ts`.
+Auto-exports from `libs/react/src/index.ts`.
 
 ### Import pattern (React)
 

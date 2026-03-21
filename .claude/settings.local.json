@@ -105,7 +105,12 @@
       "Bash(git commit:*)",
       "Bash(git push:*)",
       "Bash(curl -sL \"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.png\")",
-      "Bash(xxd)"
+      "Bash(xxd)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(git -C /Users/dominikpieper/Projects/angular-llm-components push)",
+      "Bash(ls /Users/dominikpieper/Projects/angular-llm-components/libs/llm-components-angular/*.json)",
+      "Bash(npx ng-packagr:*)",
+      "Bash(nx graph:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

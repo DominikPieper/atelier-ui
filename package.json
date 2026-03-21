@@ -10,7 +10,6 @@
     "tools/generators"
   ],
   "dependencies": {
-    "@storybook/mcp": "^0.6.1",
     "@angular/aria": "^21.2.2",
     "@angular/cdk": "^21.2.2",
     "@angular/common": "~21.2.4",
@@ -20,6 +19,7 @@
     "@angular/platform-browser": "~21.2.4",
     "@angular/router": "~21.2.4",
     "@storybook/addon-designs": "^11.1.2",
+    "@storybook/mcp": "^0.6.1",
     "@tanstack/react-router": "^1.168.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
@@ -93,6 +93,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "jsdom": "^27.1.0",
+    "ng-packagr": "^21.2.1",
     "nx": "22.6.0",
     "prettier": "~3.6.2",
     "storybook": "^10.3.1",

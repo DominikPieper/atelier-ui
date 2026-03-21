@@ -32,6 +32,13 @@
 - [x] LlmPagination
 - [x] LlmProgress
 
+## Known Issues
+
+- [ ] **Fix `llm-components-angular` build error**: `Cannot find module '@atelier-ui/spec'` during ng-packagr compilation.
+  - **Root cause**: `@nx/angular:package` executor doesn't invoke Nx's `createTmpTsConfig` path remapping (source → dist) for `@atelier-ui/spec` dependency.
+  - **Fix**: Switch executor in `libs/llm-components-angular/project.json` from `@nx/angular:package` to `@nx/angular:ng-packagr-lite`, which uses Nx's full buildable libs infrastructure and properly remaps paths.
+  - `dependsOn: ["^build"]` is already in place (added during investigation).
+
 ## Priority 5: Publishing & Tooling
 
 - [ ] Auto-generated API reference script

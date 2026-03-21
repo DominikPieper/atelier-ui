@@ -14,8 +14,8 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '../..');
-const ANGULAR_LIB = path.join(ROOT, 'libs/llm-components-angular/src/lib');
-const REACT_LIB = path.join(ROOT, 'libs/llm-components-react/src/lib');
+const ANGULAR_LIB = path.join(ROOT, 'libs/angular/src/lib');
+const REACT_LIB = path.join(ROOT, 'libs/react/src/lib');
 
 /** @returns {Set<string>} */
 function getComponentDirs(dir) {

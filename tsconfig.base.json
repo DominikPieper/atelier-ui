@@ -16,13 +16,13 @@
     "baseUrl": ".",
     "paths": {
       "@atelier-ui/angular": [
-        "libs/llm-components-angular/src/index.ts"
+        "libs/angular/src/index.ts"
       ],
       "@atelier-ui/react": [
-        "libs/llm-components-react/src/index.ts"
+        "libs/react/src/index.ts"
       ],
       "@atelier-ui/spec": [
-        "libs/llm-components-spec/src/index.ts"
+        "libs/spec/src/index.ts"
       ]
     }
   },

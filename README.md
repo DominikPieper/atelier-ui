@@ -63,10 +63,10 @@ Both libraries share the same design tokens (`--ui-*`), the same component names
 npm install
 
 # Start Storybook (Angular)
-npx nx run llm-components-angular:storybook
+npx nx run angular:storybook
 
 # Start Storybook (React)
-npx nx run llm-components-react:storybook
+npx nx run react:storybook
 
 # Start docs app
 npx nx run docs:serve
@@ -84,8 +84,8 @@ npx nx run-many -t build
 
 ```
 ├── libs/
-│   ├── llm-components-angular/   # @atelier-ui/angular
-│   └── llm-components-react/     # @atelier-ui/react
+│   ├── angular/   # @atelier-ui/angular
+│   └── react/     # @atelier-ui/react
 ├── docs/                         # Docs app (TanStack Router + React)
 ├── images/                       # Shared assets
 ├── .github/workflows/
