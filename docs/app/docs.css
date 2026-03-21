@@ -7,17 +7,24 @@
 body {
   margin: 0;
   font-family: system-ui, -apple-system, sans-serif;
-  background: var(--ui-color-surface, #f8f9fa);
-  color: var(--ui-color-text, #1a1a1a);
+  background: #f8f9fa;
+  color: #0f172a;
   line-height: 1.6;
 }
 
 /* Shell Layout */
+/* Pin docs shell to light-mode values — dark mode not yet supported here */
 .docs-shell {
   display: grid;
   grid-template-rows: 60px 1fr;
   grid-template-columns: 260px 1fr;
   min-height: 100vh;
+  --ui-color-text: #0f172a;
+  --ui-color-text-muted: #64748b;
+  --ui-color-surface: #f8f9fa;
+  --ui-color-border: #e5e7eb;
+  --ui-color-primary: #00bebe;
+  --ui-color-brand-architecture: #009696;
 }
 
 /* Top Bar */
