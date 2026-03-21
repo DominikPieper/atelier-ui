@@ -22,7 +22,7 @@ function StorybookPage() {
           rel="noopener noreferrer"
           className="docs-storybook-card"
         >
-          <img src="/react-logo.png" alt="React" className="docs-storybook-logo" />
+          <img src="/storybook-logo.png" alt="Storybook" className="docs-storybook-logo" />
           <div className="docs-storybook-card-name">React</div>
           <div className="docs-storybook-card-desc">
             Storybook for <code>@atelier-ui/react</code>
@@ -36,7 +36,7 @@ function StorybookPage() {
           rel="noopener noreferrer"
           className="docs-storybook-card"
         >
-          <img src="/angular-logo.jpg" alt="Angular" className="docs-storybook-logo" />
+          <img src="/storybook-logo.png" alt="Storybook" className="docs-storybook-logo" />
           <div className="docs-storybook-card-name">Angular</div>
           <div className="docs-storybook-card-desc">
             Storybook for <code>@atelier-ui/angular</code>
