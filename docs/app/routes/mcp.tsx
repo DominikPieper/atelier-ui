@@ -604,9 +604,9 @@ function tokenizeJson(code: string): Token[] {
       tokens.push({ text: str, color: code[k] === ':' ? '#00bebe' : '#059669' });
       i = j + 1; continue;
     }
-    if (/[0-9\-]/.test(ch)) {
+    if (/[0-9-]/.test(ch)) {
       let j = i;
-      while (j < code.length && /[0-9.\-e+]/.test(code[j])) j++;
+      while (j < code.length && /[0-9.e+-]/.test(code[j])) j++;
       tokens.push({ text: code.slice(i, j), color: '#7c3aed' }); i = j; continue;
     }
     if (code.slice(i, i + 4) === 'true')  { tokens.push({ text: 'true',  color: '#7c3aed' }); i += 4; continue; }
@@ -637,10 +637,10 @@ function McpPage() {
   const [responseVisible, setResponseVisible] = useState(false);
   const callTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const activeTool = TOOL_DEFS.find(t => t.name === selectedTool)!;
+  const activeTool = TOOL_DEFS.find(t => t.name === selectedTool) ?? TOOL_DEFS[0];
 
   function selectTool(name: string) {
-    const tool = TOOL_DEFS.find(t => t.name === name)!;
+    const tool = TOOL_DEFS.find(t => t.name === name) ?? TOOL_DEFS[0];
     setSelectedTool(name);
     setParams({ ...tool.defaultParams });
     setResponse(null);
