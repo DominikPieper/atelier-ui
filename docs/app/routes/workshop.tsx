@@ -46,7 +46,7 @@ function WorkshopPage() {
 ? Which framework(s) do you want to use?
   ◉ Angular
   ◉ React
-  ◯ Vue`}</Code>
+  ◉ Vue`}</Code>
         <p style={muted}>
           You can also pass the workspace name directly to skip the first prompt:
         </p>
@@ -122,8 +122,8 @@ npx nx serve workshop-angular`}</Code>
       <div className="docs-section">
         <h2 className="docs-section-title">MCP configuration</h2>
         <p style={muted}>
-          The generated <code>.claude/settings.json</code> wires up hosted MCP servers for
-          each selected framework. For example, if you selected Angular and React:
+          The generated <code>.claude/settings.json</code> wires up the Nx MCP and hosted
+          Storybook MCP servers for each selected framework. For example, if you selected all three:
         </p>
         <Code>{`{
   "mcpServers": {
@@ -139,6 +139,10 @@ npx nx serve workshop-angular`}</Code>
     "storybook-react": {
       "type": "http",
       "url": "${SITE_URL}/storybook-react/mcp"
+    },
+    "storybook-vue": {
+      "type": "http",
+      "url": "${SITE_URL}/storybook-vue/mcp"
     }
   }
 }`}</Code>
@@ -159,7 +163,7 @@ npx nx serve workshop-angular`}</Code>
         <p style={muted}>
           Additional options can be passed as flags:
         </p>
-        <Code>npx create-nx-workspace my-workshop --preset=@atelier-ui/create-workspace --frameworks=angular,react</Code>
+        <Code>npx create-nx-workspace my-workshop --preset=@atelier-ui/create-workspace --frameworks=angular,react,vue</Code>
       </div>
     </div>
   );
