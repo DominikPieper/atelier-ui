@@ -20,6 +20,7 @@ interface ToolDef {
   name: string;
   signature: string;
   description: string;
+  workshopTip: string;
   params: ToolParam[];
   defaultParams: Record<string, string>;
 }
@@ -37,6 +38,7 @@ const TOOL_DEFS: ToolDef[] = [
     name: 'get_component_docs',
     signature: '(component: string)',
     description: 'Returns the full API for a component — inputs, outputs, types, defaults, and integration notes.',
+    workshopTip: 'Called when a user asks about a specific component. The AI gets exact prop names, types, and defaults — so it writes correct code instead of guessing the API.',
     params: [{ name: 'component', type: 'string', description: 'Component slug', suggestions: ALL_COMPONENT_SLUGS }],
     defaultParams: { component: 'button' },
   },
@@ -44,6 +46,7 @@ const TOOL_DEFS: ToolDef[] = [
     name: 'list_components',
     signature: '()',
     description: 'Returns all available components grouped by category.',
+    workshopTip: 'Called at the start of a session or when the user asks "what components are available?". Gives the AI a full map of the library before diving into specifics.',
     params: [],
     defaultParams: {},
   },
@@ -51,6 +54,7 @@ const TOOL_DEFS: ToolDef[] = [
     name: 'search_components',
     signature: '(query: string)',
     description: 'Fuzzy-search components by keyword. Returns matching names and descriptions.',
+    workshopTip: 'Called when the user expresses an intent ("I need a form input", "show me overlay components") rather than naming a specific component. Helps the AI match need to component.',
     params: [{ name: 'query', type: 'string', description: 'Search term', suggestions: ['form', 'inputs', 'overlay', 'navigation', 'display', 'feedback', 'modal', 'button'] }],
     defaultParams: { query: 'form' },
   },
@@ -58,6 +62,7 @@ const TOOL_DEFS: ToolDef[] = [
     name: 'get_stories',
     signature: '(component: string)',
     description: 'Returns Storybook story metadata for a component — names, descriptions, and variant previews.',
+    workshopTip: 'Called when the user wants usage examples. The AI reads the story names and descriptions to show real-world patterns instead of inventing examples.',
     params: [{ name: 'component', type: 'string', description: 'Component slug', suggestions: ['button', 'dialog', 'alert', 'card', 'select', 'tabs', 'input', 'badge'] }],
     defaultParams: { component: 'button' },
   },
@@ -65,6 +70,7 @@ const TOOL_DEFS: ToolDef[] = [
     name: 'get_theming_guide',
     signature: '()',
     description: 'Returns the full CSS custom property reference, token categories, and dark mode setup.',
+    workshopTip: 'Called when the user asks about customising colors, spacing, or dark mode. The AI gets the exact token names and values — no hallucinated CSS variable names.',
     params: [],
     defaultParams: {},
   },
@@ -695,6 +701,20 @@ function McpPage() {
         </code>
       </div>
 
+      {/* Protocol flow */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', background: 'var(--ui-color-surface-raised)', border: '1px solid var(--ui-color-border)', borderRadius: 'var(--ui-radius-md)', overflow: 'hidden', marginBottom: '1.5rem' }}>
+        {([
+          { n: '①', label: 'AI identifies need', desc: 'The model decides a tool call will give a more reliable answer than its training data alone.' },
+          { n: '②', label: 'Calls the MCP server', desc: 'A structured request is sent — tool name plus typed parameters, no ambiguity.' },
+          { n: '③', label: 'Receives structured JSON', desc: 'Exact prop names, types, and defaults come back. No hallucinated APIs.' },
+        ] as const).map((s, i) => (
+          <div key={i} style={{ padding: '0.85rem 1rem', borderRight: i < 2 ? '1px solid var(--ui-color-border)' : 'none' }}>
+            <div style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--ui-color-primary)', marginBottom: '0.25rem' }}>{s.n} {s.label}</div>
+            <div style={{ fontSize: '0.72rem', color: 'var(--ui-color-text-muted)', lineHeight: '1.45' }}>{s.desc}</div>
+          </div>
+        ))}
+      </div>
+
       <div className="mcp-grid">
         {/* Tool list */}
         <div style={{ background: 'var(--ui-color-surface-raised)', border: '1px solid var(--ui-color-border)', borderRadius: 'var(--ui-radius-md)', overflow: 'hidden' }}>
@@ -721,6 +741,9 @@ function McpPage() {
             </div>
             <div style={{ fontSize: '0.85rem', color: 'var(--ui-color-text-muted)', lineHeight: '1.5' }}>
               {activeTool.description}
+            </div>
+            <div style={{ marginTop: '0.75rem', padding: '0.5rem 0.75rem', background: 'rgba(0,190,190,0.04)', border: '1px solid rgba(0,190,190,0.15)', borderRadius: 'var(--ui-radius-sm)', fontSize: '0.75rem', color: 'var(--ui-color-text-muted)', lineHeight: '1.5' }}>
+              💡 {activeTool.workshopTip}
             </div>
           </div>
 
@@ -774,10 +797,29 @@ function McpPage() {
           {/* Response */}
           {response && (
             <div style={{ opacity: responseVisible ? 1 : 0, transform: responseVisible ? 'translateY(0)' : 'translateY(6px)', transition: 'opacity 0.3s ease, transform 0.3s ease' }}>
-              <div style={{ fontSize: '0.68rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#059669', marginBottom: '0.4rem' }}>
-                tool_result
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.4rem' }}>
+                <div style={{ fontSize: '0.68rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#059669' }}>
+                  tool_result
+                </div>
+                {/* JSON color legend */}
+                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  {([
+                    { color: '#00bebe', label: 'keys' },
+                    { color: '#059669', label: 'strings' },
+                    { color: '#7c3aed', label: 'numbers / booleans' },
+                    { color: '#6c7086', label: 'structure' },
+                  ] as const).map(({ color, label }) => (
+                    <span key={label} style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.68rem', color: 'var(--ui-color-text-muted)' }}>
+                      <span style={{ width: '8px', height: '8px', borderRadius: '2px', background: color, flexShrink: 0 }} />
+                      {label}
+                    </span>
+                  ))}
+                </div>
               </div>
               <CodeBlock code={JSON.stringify(response, null, 2)} />
+              <div style={{ marginTop: '0.75rem', padding: '0.6rem 0.85rem', background: 'var(--ui-color-surface-raised)', border: '1px solid var(--ui-color-border)', borderRadius: 'var(--ui-radius-sm)', fontSize: '0.75rem', color: 'var(--ui-color-text-muted)', lineHeight: '1.5' }}>
+                <strong style={{ color: 'var(--ui-color-text)', fontWeight: '600' }}>What the AI does next:</strong> this JSON is injected into the model's context. It reads the exact field names, types, and defaults — and uses them verbatim when generating code. No guessing, no hallucinated prop names.
+              </div>
             </div>
           )}
         </div>
