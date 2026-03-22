@@ -42,7 +42,7 @@ This document outlines the development phases, existing status, and future backl
 2. **`LlmButton`**: `variant`, `size`, `disabled`, `loading` signals. Native `<button>`, ARIA.
 3. **`LlmBadge`**: `variant`, `size` signals. `role="status"`.
 4. **`LlmCard`**: `variant`, `padding` + sub-components (`llm-card-header/content/footer`).
-5. **Nx Generator**: `nx generate @angular-llm-components/generators:llm-component --name=<name>`
+5. **Nx Generator**: `nx generate @atelier-ui/generators:llm-component --name=<name>`
 6. **LLM Context**: `CLAUDE.md` Component API Reference section.
 
 ## Phase 2a: Form Foundation (Signal Forms) — COMPLETE

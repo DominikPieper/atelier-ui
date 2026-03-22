@@ -260,4 +260,4 @@ AI: "Verified. Preview: [Link]. No A11y issues found."
 - **Füge die `CLAUDE.md` Regel hinzu** — Mach es mandatory (verpflichtend), nicht optional.
 
 ### Fragen?
-Du findest den gesamten Source Code und diese MCP Tools im `angular-llm-components` Repo.
+Du findest den gesamten Source Code und diese MCP Tools im `atelier-ui` Repo.
