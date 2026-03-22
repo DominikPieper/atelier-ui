@@ -26,7 +26,7 @@ jobs:
       - run: npm ci
 
       - name: Build libraries
-        run: npx nx run-many -t build --projects=spec,angular,react,vue,create-workspace,create-atelier-ui-workspace
+        run: npx nx run-many -t build --projects=spec,angular,react,vue,create-workspace,create-atelier-ui-workspace --skip-nx-cache
 
       - name: Publish @atelier-ui/spec
         run: npm publish dist/libs/spec --provenance --access public
