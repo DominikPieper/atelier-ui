@@ -28,7 +28,7 @@ describe('preset generator', () => {
     await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
 
     const settings = readJson(tree, '.claude/settings.json');
-    expect(settings.mcpServers['nx']).toBeDefined();
+    expect(settings.mcpServers['nx-mcp']).toBeDefined();
     expect(settings.mcpServers['storybook-angular']).toBeDefined();
     expect(settings.mcpServers['storybook-react']).toBeUndefined();
     expect(settings.mcpServers['storybook-vue']).toBeUndefined();

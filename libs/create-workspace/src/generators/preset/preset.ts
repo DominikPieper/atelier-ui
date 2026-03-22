@@ -77,10 +77,11 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
   const installTask = addDependenciesToPackageJson(tree, deps, {});
 
   // Write .claude/settings.json with MCP servers for selected frameworks
-  const mcpServers: Record<string, { type: string; url: string }> = {
-    nx: {
-      type: 'http',
-      url: 'https://mcp.nx.app/sse',
+  const mcpServers: Record<string, unknown> = {
+    'nx-mcp': {
+      type: 'stdio',
+      command: 'npx',
+      args: ['nx', 'mcp'],
     },
   };
   for (const framework of frameworks) {

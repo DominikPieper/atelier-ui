@@ -127,9 +127,10 @@ npx nx serve workshop-angular`}</Code>
         </p>
         <Code>{`{
   "mcpServers": {
-    "nx": {
-      "type": "http",
-      "url": "https://mcp.nx.app/sse"
+    "nx-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["nx", "mcp"]
     },
     "storybook-angular": {
       "type": "http",
