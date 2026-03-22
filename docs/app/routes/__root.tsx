@@ -107,6 +107,7 @@ function Sidebar({ open }: { open: boolean }) {
             <div className="docs-nav-heading">Get Started</div>
             <NavLink to="/" label="Overview" currentPath={currentPath} />
             <NavLink to="/workshop" label="Workshop Setup" currentPath={currentPath} />
+            <NavLink to="/exercises" label="Exercises" currentPath={currentPath} />
           </div>
 
           <div className="docs-nav-section">
@@ -118,7 +119,7 @@ function Sidebar({ open }: { open: boolean }) {
           <div className="docs-nav-section">
             <div className="docs-nav-heading">The Library</div>
             <NavLink to="/install" label="Installation" currentPath={currentPath} />
-            <NavLink to="/design-principles" label="Design Principles" currentPath={currentPath} />
+            <NavLink to="/design-principles" label="LLM-Optimized APIs" currentPath={currentPath} />
           </div>
         </>
       ) : (

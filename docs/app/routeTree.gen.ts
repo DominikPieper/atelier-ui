@@ -11,9 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorkshopRouteImport } from './routes/workshop'
 import { Route as StorybookRouteImport } from './routes/storybook'
-import { Route as PhilosophyRouteImport } from './routes/philosophy'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as InstallRouteImport } from './routes/install'
+import { Route as ExercisesRouteImport } from './routes/exercises'
 import { Route as DesignPrinciplesRouteImport } from './routes/design-principles'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ComponentsIndexRouteImport } from './routes/components/index'
@@ -29,11 +29,6 @@ const StorybookRoute = StorybookRouteImport.update({
   path: '/storybook',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PhilosophyRoute = PhilosophyRouteImport.update({
-  id: '/philosophy',
-  path: '/philosophy',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const McpRoute = McpRouteImport.update({
   id: '/mcp',
   path: '/mcp',
@@ -42,6 +37,11 @@ const McpRoute = McpRouteImport.update({
 const InstallRoute = InstallRouteImport.update({
   id: '/install',
   path: '/install',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExercisesRoute = ExercisesRouteImport.update({
+  id: '/exercises',
+  path: '/exercises',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DesignPrinciplesRoute = DesignPrinciplesRouteImport.update({
@@ -68,9 +68,9 @@ const ComponentsNameRoute = ComponentsNameRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/design-principles': typeof DesignPrinciplesRoute
+  '/exercises': typeof ExercisesRoute
   '/install': typeof InstallRoute
   '/mcp': typeof McpRoute
-  '/philosophy': typeof PhilosophyRoute
   '/storybook': typeof StorybookRoute
   '/workshop': typeof WorkshopRoute
   '/components/$name': typeof ComponentsNameRoute
@@ -79,9 +79,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/design-principles': typeof DesignPrinciplesRoute
+  '/exercises': typeof ExercisesRoute
   '/install': typeof InstallRoute
   '/mcp': typeof McpRoute
-  '/philosophy': typeof PhilosophyRoute
   '/storybook': typeof StorybookRoute
   '/workshop': typeof WorkshopRoute
   '/components/$name': typeof ComponentsNameRoute
@@ -91,9 +91,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/design-principles': typeof DesignPrinciplesRoute
+  '/exercises': typeof ExercisesRoute
   '/install': typeof InstallRoute
   '/mcp': typeof McpRoute
-  '/philosophy': typeof PhilosophyRoute
   '/storybook': typeof StorybookRoute
   '/workshop': typeof WorkshopRoute
   '/components/$name': typeof ComponentsNameRoute
@@ -104,9 +104,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/design-principles'
+    | '/exercises'
     | '/install'
     | '/mcp'
-    | '/philosophy'
     | '/storybook'
     | '/workshop'
     | '/components/$name'
@@ -115,9 +115,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/design-principles'
+    | '/exercises'
     | '/install'
     | '/mcp'
-    | '/philosophy'
     | '/storybook'
     | '/workshop'
     | '/components/$name'
@@ -126,9 +126,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/design-principles'
+    | '/exercises'
     | '/install'
     | '/mcp'
-    | '/philosophy'
     | '/storybook'
     | '/workshop'
     | '/components/$name'
@@ -138,9 +138,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DesignPrinciplesRoute: typeof DesignPrinciplesRoute
+  ExercisesRoute: typeof ExercisesRoute
   InstallRoute: typeof InstallRoute
   McpRoute: typeof McpRoute
-  PhilosophyRoute: typeof PhilosophyRoute
   StorybookRoute: typeof StorybookRoute
   WorkshopRoute: typeof WorkshopRoute
   ComponentsNameRoute: typeof ComponentsNameRoute
@@ -163,13 +163,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StorybookRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/philosophy': {
-      id: '/philosophy'
-      path: '/philosophy'
-      fullPath: '/philosophy'
-      preLoaderRoute: typeof PhilosophyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/mcp': {
       id: '/mcp'
       path: '/mcp'
@@ -182,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/install'
       fullPath: '/install'
       preLoaderRoute: typeof InstallRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/exercises': {
+      id: '/exercises'
+      path: '/exercises'
+      fullPath: '/exercises'
+      preLoaderRoute: typeof ExercisesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/design-principles': {
@@ -218,9 +218,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DesignPrinciplesRoute: DesignPrinciplesRoute,
+  ExercisesRoute: ExercisesRoute,
   InstallRoute: InstallRoute,
   McpRoute: McpRoute,
-  PhilosophyRoute: PhilosophyRoute,
   StorybookRoute: StorybookRoute,
   WorkshopRoute: WorkshopRoute,
   ComponentsNameRoute: ComponentsNameRoute,
