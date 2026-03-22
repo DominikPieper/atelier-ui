@@ -6,6 +6,22 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
+# MCP endpoints — must come before Storybook redirects
+[[redirects]]
+  from = "/storybook-react/mcp"
+  to = "/.netlify/functions/storybook-react-mcp"
+  status = 200
+
+[[redirects]]
+  from = "/storybook-angular/mcp"
+  to = "/.netlify/functions/storybook-angular-mcp"
+  status = 200
+
+[[redirects]]
+  from = "/storybook-vue/mcp"
+  to = "/.netlify/functions/storybook-vue-mcp"
+  status = 200
+
 # Storybook — let Netlify serve their static files directly
 [[redirects]]
   from = "/storybook-react"

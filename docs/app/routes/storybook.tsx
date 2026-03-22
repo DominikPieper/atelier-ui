@@ -9,16 +9,16 @@ const SITE_URL = 'https://atelier-ui.netlify.app';
 const MCP_CONFIG = `{
   "mcpServers": {
     "storybook-react": {
-      "command": "npx",
-      "args": ["-y", "@storybook/mcp", "--url", "${SITE_URL}/storybook-react"]
+      "type": "http",
+      "url": "${SITE_URL}/storybook-react/mcp"
     },
     "storybook-angular": {
-      "command": "npx",
-      "args": ["-y", "@storybook/mcp", "--url", "${SITE_URL}/storybook-angular"]
+      "type": "http",
+      "url": "${SITE_URL}/storybook-angular/mcp"
     },
     "storybook-vue": {
-      "command": "npx",
-      "args": ["-y", "@storybook/mcp", "--url", "${SITE_URL}/storybook-vue"]
+      "type": "http",
+      "url": "${SITE_URL}/storybook-vue/mcp"
     }
   }
 }`;
@@ -81,7 +81,7 @@ function StorybookPage() {
       <div className="docs-section" style={{ marginTop: '3rem' }}>
         <h2 className="docs-section-title">MCP Server</h2>
         <p style={{ marginBottom: '1.25rem', color: 'var(--ui-color-text-muted)' }}>
-          All three Storybook instances support{' '}
+          All three Storybook instances expose a hosted{' '}
           <a
             href="https://modelcontextprotocol.io"
             target="_blank"
@@ -89,9 +89,8 @@ function StorybookPage() {
           >
             MCP
           </a>{' '}
-          so AI coding assistants can read component documentation directly. The{' '}
-          <code>@storybook/mcp</code> CLI runs locally and reads from the deployed Storybook —
-          no local Storybook server required.
+          endpoint so AI coding assistants can read component documentation directly — no local
+          setup required, just point your AI assistant at the URL.
         </p>
 
         <div className="docs-mcp-steps">
@@ -138,15 +137,15 @@ function StorybookPage() {
                 <tbody>
                   <tr>
                     <td><code>@atelier-ui/react</code></td>
-                    <td><code>{SITE_URL}/storybook-react</code></td>
+                    <td><code>{SITE_URL}/storybook-react/mcp</code></td>
                   </tr>
                   <tr>
                     <td><code>@atelier-ui/angular</code></td>
-                    <td><code>{SITE_URL}/storybook-angular</code></td>
+                    <td><code>{SITE_URL}/storybook-angular/mcp</code></td>
                   </tr>
                   <tr>
                     <td><code>@atelier-ui/vue</code></td>
-                    <td><code>{SITE_URL}/storybook-vue</code></td>
+                    <td><code>{SITE_URL}/storybook-vue/mcp</code></td>
                   </tr>
                 </tbody>
               </table>
