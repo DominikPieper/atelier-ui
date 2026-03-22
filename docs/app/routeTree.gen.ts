@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WorkshopRouteImport } from './routes/workshop'
 import { Route as StorybookRouteImport } from './routes/storybook'
 import { Route as PhilosophyRouteImport } from './routes/philosophy'
 import { Route as InstallRouteImport } from './routes/install'
@@ -17,6 +18,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ComponentsIndexRouteImport } from './routes/components/index'
 import { Route as ComponentsNameRouteImport } from './routes/components/$name'
 
+const WorkshopRoute = WorkshopRouteImport.update({
+  id: '/workshop',
+  path: '/workshop',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StorybookRoute = StorybookRouteImport.update({
   id: '/storybook',
   path: '/storybook',
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/install': typeof InstallRoute
   '/philosophy': typeof PhilosophyRoute
   '/storybook': typeof StorybookRoute
+  '/workshop': typeof WorkshopRoute
   '/components/$name': typeof ComponentsNameRoute
   '/components/': typeof ComponentsIndexRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/install': typeof InstallRoute
   '/philosophy': typeof PhilosophyRoute
   '/storybook': typeof StorybookRoute
+  '/workshop': typeof WorkshopRoute
   '/components/$name': typeof ComponentsNameRoute
   '/components': typeof ComponentsIndexRoute
 }
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/install': typeof InstallRoute
   '/philosophy': typeof PhilosophyRoute
   '/storybook': typeof StorybookRoute
+  '/workshop': typeof WorkshopRoute
   '/components/$name': typeof ComponentsNameRoute
   '/components/': typeof ComponentsIndexRoute
 }
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/install'
     | '/philosophy'
     | '/storybook'
+    | '/workshop'
     | '/components/$name'
     | '/components/'
   fileRoutesByTo: FileRoutesByTo
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/install'
     | '/philosophy'
     | '/storybook'
+    | '/workshop'
     | '/components/$name'
     | '/components'
   id:
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/install'
     | '/philosophy'
     | '/storybook'
+    | '/workshop'
     | '/components/$name'
     | '/components/'
   fileRoutesById: FileRoutesById
@@ -117,6 +129,7 @@ export interface RootRouteChildren {
   InstallRoute: typeof InstallRoute
   PhilosophyRoute: typeof PhilosophyRoute
   StorybookRoute: typeof StorybookRoute
+  WorkshopRoute: typeof WorkshopRoute
   ComponentsNameRoute: typeof ComponentsNameRoute
   ComponentsIndexRoute: typeof ComponentsIndexRoute
 }
@@ -128,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/storybook'
       fullPath: '/storybook'
       preLoaderRoute: typeof StorybookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/workshop': {
+      id: '/workshop'
+      path: '/workshop'
+      fullPath: '/workshop'
+      preLoaderRoute: typeof WorkshopRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/philosophy': {
@@ -181,6 +201,7 @@ const rootRouteChildren: RootRouteChildren = {
   InstallRoute: InstallRoute,
   PhilosophyRoute: PhilosophyRoute,
   StorybookRoute: StorybookRoute,
+  WorkshopRoute: WorkshopRoute,
   ComponentsNameRoute: ComponentsNameRoute,
   ComponentsIndexRoute: ComponentsIndexRoute,
 }
