@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorkshopRouteImport } from './routes/workshop'
 import { Route as StorybookRouteImport } from './routes/storybook'
 import { Route as PhilosophyRouteImport } from './routes/philosophy'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as InstallRouteImport } from './routes/install'
 import { Route as DesignPrinciplesRouteImport } from './routes/design-principles'
 import { Route as IndexRouteImport } from './routes/index'
@@ -31,6 +32,11 @@ const StorybookRoute = StorybookRouteImport.update({
 const PhilosophyRoute = PhilosophyRouteImport.update({
   id: '/philosophy',
   path: '/philosophy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InstallRoute = InstallRouteImport.update({
@@ -63,6 +69,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/design-principles': typeof DesignPrinciplesRoute
   '/install': typeof InstallRoute
+  '/mcp': typeof McpRoute
   '/philosophy': typeof PhilosophyRoute
   '/storybook': typeof StorybookRoute
   '/workshop': typeof WorkshopRoute
@@ -73,6 +80,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/design-principles': typeof DesignPrinciplesRoute
   '/install': typeof InstallRoute
+  '/mcp': typeof McpRoute
   '/philosophy': typeof PhilosophyRoute
   '/storybook': typeof StorybookRoute
   '/workshop': typeof WorkshopRoute
@@ -84,6 +92,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/design-principles': typeof DesignPrinciplesRoute
   '/install': typeof InstallRoute
+  '/mcp': typeof McpRoute
   '/philosophy': typeof PhilosophyRoute
   '/storybook': typeof StorybookRoute
   '/workshop': typeof WorkshopRoute
@@ -96,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/design-principles'
     | '/install'
+    | '/mcp'
     | '/philosophy'
     | '/storybook'
     | '/workshop'
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/design-principles'
     | '/install'
+    | '/mcp'
     | '/philosophy'
     | '/storybook'
     | '/workshop'
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '/'
     | '/design-principles'
     | '/install'
+    | '/mcp'
     | '/philosophy'
     | '/storybook'
     | '/workshop'
@@ -127,6 +139,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DesignPrinciplesRoute: typeof DesignPrinciplesRoute
   InstallRoute: typeof InstallRoute
+  McpRoute: typeof McpRoute
   PhilosophyRoute: typeof PhilosophyRoute
   StorybookRoute: typeof StorybookRoute
   WorkshopRoute: typeof WorkshopRoute
@@ -136,13 +149,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/storybook': {
-      id: '/storybook'
-      path: '/storybook'
-      fullPath: '/storybook'
-      preLoaderRoute: typeof StorybookRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/workshop': {
       id: '/workshop'
       path: '/workshop'
@@ -150,11 +156,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkshopRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/storybook': {
+      id: '/storybook'
+      path: '/storybook'
+      fullPath: '/storybook'
+      preLoaderRoute: typeof StorybookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/philosophy': {
       id: '/philosophy'
       path: '/philosophy'
       fullPath: '/philosophy'
       preLoaderRoute: typeof PhilosophyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/install': {
@@ -199,6 +219,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DesignPrinciplesRoute: DesignPrinciplesRoute,
   InstallRoute: InstallRoute,
+  McpRoute: McpRoute,
   PhilosophyRoute: PhilosophyRoute,
   StorybookRoute: StorybookRoute,
   WorkshopRoute: WorkshopRoute,
