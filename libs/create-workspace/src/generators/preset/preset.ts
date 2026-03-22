@@ -71,7 +71,83 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
       } as Parameters<typeof vueAppGenerator>[1]);
       deps['@atelier-ui/vue'] = 'latest';
     }
+
+    // Inject CSS tokens import into the app's global stylesheet
+    const stylesPath = `${appName}/src/styles.css`;
+    const existing = tree.exists(stylesPath) ? (tree.read(stylesPath, 'utf-8') ?? '') : '';
+    tree.write(
+      stylesPath,
+      `@import '@atelier-ui/${framework}/styles/tokens.css';\n\n${existing}`,
+    );
   }
+
+  // Write CLAUDE.md with framework-specific guidance
+  const frameworkSections = frameworks
+    .map((f) => {
+      if (f === 'angular') {
+        return `### Angular (\`@atelier-ui/angular\`)
+- Selectors: \`llm-button\`, \`llm-input\`, \`llm-dialog\`, …
+- Import: \`import { LlmButtonComponent } from '@atelier-ui/angular';\`
+- Add to \`@Component({ imports: [LlmButtonComponent] })\`
+- Form controls implement Signal Forms (\`FormValueControl\` / \`FormCheckboxControl\`)`;
+      }
+      if (f === 'react') {
+        return `### React (\`@atelier-ui/react\`)
+- Elements: \`<LlmButton>\`, \`<LlmInput>\`, \`<LlmDialog>\`, …
+- Import: \`import { LlmButton } from '@atelier-ui/react';\`
+- Event handlers follow \`onXxx\` / \`onXxxChange\` convention
+- Toast: use \`useLlmToast()\` hook inside \`<LlmToastProvider>\``;
+      }
+      if (f === 'vue') {
+        return `### Vue (\`@atelier-ui/vue\`)
+- Elements: \`<LlmButton>\`, \`<LlmInput>\`, \`<LlmDialog>\`, …
+- Import: \`import { LlmButton } from '@atelier-ui/vue';\`
+- Two-way binding: \`v-model\` and \`v-model:value\` where applicable
+- Toast: use \`useLlmToast()\` composable`;
+      }
+      return '';
+    })
+    .join('\n\n');
+
+  tree.write(
+    'CLAUDE.md',
+    `# Atelier UI Workshop
+
+This workspace contains Atelier UI component library apps for hands-on AI development training.
+
+## MCP Tools — always use these before writing component code
+
+The MCP servers are pre-configured in \`.claude/settings.json\` and connect automatically.
+
+| Tool | When to call it |
+|---|---|
+| \`get_component_docs(component)\` | Before using any component — returns exact props, types, defaults |
+| \`list_components()\` | To see all 22 available components grouped by category |
+| \`search_components(query)\` | When you know the intent ("form input") but not the component name |
+| \`get_stories(component)\` | To see real usage examples and variants |
+| \`get_theming_guide()\` | Before customising colors, spacing, or dark mode |
+
+**Rule:** call the MCP server first, then write code. Never guess prop names.
+
+## Component Libraries
+
+${frameworkSections}
+
+## Global styles
+
+CSS design tokens are imported in each app's \`src/styles.css\`.
+All \`--ui-*\` custom properties are available globally (colors, spacing, radius, typography, shadows).
+
+## Apps
+
+${frameworks.map((f) => `- \`workshop-${f}\` — run with \`npx nx serve workshop-${f}\``).join('\n')}
+
+## Reference
+
+- Component browser + exercises: ${SITE_URL}
+- MCP Playground (inspect tool responses): ${SITE_URL}/mcp
+`,
+  );
 
   // Install selected @atelier-ui/* packages
   const installTask = addDependenciesToPackageJson(tree, deps, {});
