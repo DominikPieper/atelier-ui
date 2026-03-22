@@ -104,30 +104,22 @@ function Sidebar({ open }: { open: boolean }) {
       {!isComponents ? (
         <>
           <div className="docs-nav-section">
-            <div className="docs-nav-heading">Getting Started</div>
+            <div className="docs-nav-heading">Get Started</div>
             <NavLink to="/" label="Overview" currentPath={currentPath} />
-            <NavLink to="/install" label="Installation" currentPath={currentPath} />
+            <NavLink to="/workshop" label="Workshop Setup" currentPath={currentPath} />
           </div>
 
           <div className="docs-nav-section">
-            <div className="docs-nav-heading">Concepts</div>
-            <NavLink
-              to="/philosophy"
-              label="Core Philosophy"
-              currentPath={currentPath}
-            />
-            <NavLink
-              to="/design-principles"
-              label="Design Principles"
-              currentPath={currentPath}
-            />
-          </div>
-
-          <div className="docs-nav-section">
-            <div className="docs-nav-heading">More</div>
-            <NavLink to="/storybook" label="Storybook" currentPath={currentPath} />
-            <NavLink to="/workshop" label="Workshop" currentPath={currentPath} />
+            <div className="docs-nav-heading">Tools</div>
             <NavLink to="/mcp" label="MCP Playground" currentPath={currentPath} />
+            <NavLink to="/storybook" label="Storybook" currentPath={currentPath} />
+          </div>
+
+          <div className="docs-nav-section">
+            <div className="docs-nav-heading">The Library</div>
+            <NavLink to="/install" label="Installation" currentPath={currentPath} />
+            <NavLink to="/philosophy" label="Core Philosophy" currentPath={currentPath} />
+            <NavLink to="/design-principles" label="Design Principles" currentPath={currentPath} />
           </div>
         </>
       ) : (
