@@ -1,0 +1,74 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Introduction" />
+
+# Atelier UI — React
+
+A workshop toolkit for hands-on AI development training. 22 LLM-optimized components, zero runtime dependencies, and a built-in MCP server so your AI assistant can look up exact prop names instead of guessing them.
+
+**Package:** `@atelier-ui/react` &nbsp;·&nbsp; **Elements:** `LlmButton`, `LlmDialog`, … &nbsp;·&nbsp; **Style:** CSS custom properties
+
+---
+
+## Quick start
+
+```bash
+npm install @atelier-ui/react
+```
+
+```css
+/* index.css or global stylesheet */
+@import '@atelier-ui/react/styles/tokens.css';
+```
+
+```tsx
+import { LlmButton } from '@atelier-ui/react';
+
+export function MyComponent() {
+  return <LlmButton variant="primary">Save</LlmButton>;
+}
+```
+
+---
+
+## What's inside
+
+| Category | Components |
+|---|---|
+| **Inputs** | Button, Input, Textarea, Checkbox, Toggle, Select, RadioGroup |
+| **Display** | Badge, Card, Avatar, Skeleton, Progress |
+| **Navigation** | Breadcrumbs, Tabs, Pagination, Menu |
+| **Overlay** | Dialog, Drawer, Tooltip, Toast |
+| **Layout** | Accordion, Alert |
+
+All event handlers follow the `onXxx` / `onXxxChange` convention. Toast exposes a `useLlmToast` hook.
+
+---
+
+## Navigating this Storybook
+
+- **Introduction** — you are here
+- **Showcase → All Components** — every component on one page, great for a quick overview
+- **Foundation** — design tokens: colors, spacing, typography
+- **[Component category] → [Component]** — individual stories with Controls panel for live editing
+
+Use the **Controls** panel (bottom of the canvas) to tweak props live. Each story documents the full props API.
+
+---
+
+## MCP server
+
+The MCP server is hosted and pre-configured in workshop workspaces. Add it manually to any project:
+
+```json
+{
+  "mcpServers": {
+    "storybook-react": {
+      "type": "http",
+      "url": "https://atelier-ui.netlify.app/storybook-react/mcp"
+    }
+  }
+}
+```
+
+Once connected, your AI assistant can call `get_component_docs`, `search_components`, `get_stories`, and `get_theming_guide` — getting exact element names, prop types, and defaults without hallucinating the API.

@@ -1,0 +1,76 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Introduction" />
+
+# Atelier UI — Angular
+
+A workshop toolkit for hands-on AI development training. 22 LLM-optimized components, zero runtime dependencies, and a built-in MCP server so your AI assistant can look up exact prop names instead of guessing them.
+
+**Package:** `@atelier-ui/angular` &nbsp;·&nbsp; **Selectors:** `llm-button`, `llm-dialog`, … &nbsp;·&nbsp; **Style:** standalone components + CSS custom properties
+
+---
+
+## Quick start
+
+```bash
+npm install @atelier-ui/angular
+```
+
+```ts
+// angular.json → styles
+"styles": ["node_modules/@atelier-ui/angular/styles/tokens.css"]
+```
+
+```ts
+import { LlmButtonComponent } from '@atelier-ui/angular';
+
+@Component({
+  imports: [LlmButtonComponent],
+  template: `<llm-button variant="primary">Save</llm-button>`,
+})
+export class MyComponent {}
+```
+
+---
+
+## What's inside
+
+| Category | Components |
+|---|---|
+| **Inputs** | Button, Input, Textarea, Checkbox, Toggle, Select, RadioGroup |
+| **Display** | Badge, Card, Avatar, Skeleton, Progress |
+| **Navigation** | Breadcrumbs, Tabs, Pagination, Menu |
+| **Overlay** | Dialog, Drawer, Tooltip, Toast |
+| **Layout** | Accordion, Alert |
+
+All components are Signal Forms–ready and export reactive form controls where relevant.
+
+---
+
+## Navigating this Storybook
+
+- **Introduction** — you are here
+- **Showcase → All Components** — every component on one page, great for a quick overview
+- **Foundation** — design tokens: colors, spacing, typography
+- **[Component category] → [Component]** — individual stories with Controls panel for live editing
+
+Use the **Controls** panel (bottom of the canvas) to tweak props live. Each story documents the full input/output API.
+
+---
+
+## MCP server
+
+The MCP server is hosted and pre-configured in workshop workspaces. Add it manually to any project:
+
+```json
+{
+  "mcpServers": {
+    "storybook-angular": {
+      "type": "http",
+      "url": "https://atelier-ui.netlify.app/storybook-angular/mcp"
+    }
+  }
+}
+```
+
+Once connected, your AI assistant can call `get_component_docs`, `search_components`, `get_stories`, and `get_theming_guide` — getting exact selectors, inputs, outputs, and defaults without hallucinating the API.
