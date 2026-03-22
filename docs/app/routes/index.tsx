@@ -119,7 +119,6 @@ function HomePage() {
         </p>
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
           <Link to="/install" className="docs-btn docs-btn-outline">Installation</Link>
-          <Link to="/philosophy" className="docs-btn docs-btn-outline">Core Philosophy</Link>
           <Link to="/components" className="docs-btn docs-btn-outline">Browse Components →</Link>
         </div>
       </div>
