@@ -1,6 +1,15 @@
 {
   "name": "@atelier-ui/spec",
   "version": "0.0.1",
+  "description": "Framework-agnostic TypeScript interfaces for the Atelier UI component API contract",
+  "keywords": ["atelier-ui", "typescript", "spec", "interfaces"],
+  "author": "Atelier UI",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dominikpieper/angular-llm-components.git",
+    "directory": "libs/spec"
+  },
   "exports": {
     ".": {
       "types": "./src/index.d.ts",
