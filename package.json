@@ -21,6 +21,7 @@
     "@storybook/addon-designs": "^11.1.2",
     "@storybook/mcp": "^0.6.1",
     "@tanstack/react-router": "^1.168.0",
+    "create-nx-workspace": "22.6.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "rxjs": "~7.8.0",
@@ -119,10 +120,14 @@
     "tsx": "^4.0.0",
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.40.0",
+    "verdaccio": "^6.0.5",
     "vite": "^7.0.0",
     "vite-plugin-dts": "^4.5.4",
     "vitest": "^4.0.8",
     "vue-tsc": "^3.2.6",
     "zone.js": "^0.16.1"
+  },
+  "nx": {
+    "includedScripts": []
   }
 }

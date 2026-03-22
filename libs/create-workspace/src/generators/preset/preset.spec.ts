@@ -1,20 +1,30 @@
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
-import { Tree, readProjectConfiguration } from '@nx/devkit';
-
+import { Tree, readJson } from '@nx/devkit';
 import { presetGenerator } from './preset';
-import { PresetGeneratorSchema } from './schema';
+
+jest.mock('@nx/angular/generators', () => ({
+  applicationGenerator: jest.fn().mockResolvedValue(() => undefined),
+}));
 
 describe('preset generator', () => {
   let tree: Tree;
-  const options: PresetGeneratorSchema = { name: 'test' };
 
   beforeEach(() => {
     tree = createTreeWithEmptyWorkspace();
   });
 
-  it('should run successfully', async () => {
-    await presetGenerator(tree, options);
-    const config = readProjectConfiguration(tree, 'test');
-    expect(config).toBeDefined();
+  it('writes .claude/settings.json with MCP config', async () => {
+    await presetGenerator(tree, { name: 'my-workspace' });
+
+    const settings = readJson(tree, '.claude/settings.json');
+    expect(settings.mcpServers['storybook-angular']).toBeDefined();
+    expect(settings.mcpServers['storybook-angular'].type).toBe('http');
+    expect(settings.mcpServers['storybook-angular'].url).toContain('storybook-angular/mcp');
+  });
+
+  it('writes README.md', async () => {
+    await presetGenerator(tree, { name: 'my-workspace' });
+
+    expect(tree.exists('README.md')).toBe(true);
   });
 });
