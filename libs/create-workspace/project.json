@@ -41,11 +41,7 @@
             "glob": "executors.json",
             "output": "."
           },
-          {
-            "input": "./libs/create-workspace/src/generators/preset/files",
-            "glob": "**/*",
-            "output": "./src/generators/preset/files"
-          }
+
         ]
       }
     },

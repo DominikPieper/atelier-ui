@@ -12,10 +12,10 @@
         "index": 0
       }
     },
-    "appName": {
+    "frameworks": {
       "type": "string",
-      "description": "Name of the Angular application to create",
-      "default": "workshop"
+      "description": "Comma-separated list of frameworks to scaffold: angular,react,vue",
+      "default": "angular"
     }
   },
   "required": ["name"]

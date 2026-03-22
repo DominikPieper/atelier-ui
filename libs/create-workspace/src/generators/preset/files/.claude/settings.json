@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "storybook-angular": {
-      "type": "http",
-      "url": "https://atelier-ui.netlify.app/storybook-angular/mcp"
-    }
-  }
-}
