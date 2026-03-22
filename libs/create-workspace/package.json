@@ -1,0 +1,24 @@
+{
+  "name": "@atelier-ui/create-workspace",
+  "version": "0.0.1",
+  "description": "Nx preset for Atelier UI workshop workspaces",
+  "keywords": ["nx", "preset", "atelier-ui", "angular", "workshop"],
+  "author": "Atelier UI",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dominikpieper/angular-llm-components.git",
+    "directory": "libs/create-workspace"
+  },
+  "type": "commonjs",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "generators": "./generators.json",
+  "dependencies": {
+    "@nx/devkit": "22.6.1",
+    "tslib": "^2.3.0"
+  },
+  "peerDependencies": {
+    "@nx/angular": ">=22.0.0"
+  }
+}

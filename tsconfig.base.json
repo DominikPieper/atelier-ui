@@ -18,7 +18,8 @@
       "@atelier-ui/angular": ["libs/angular/src/index.ts"],
       "@atelier-ui/react": ["libs/react/src/index.ts"],
       "@atelier-ui/spec": ["libs/spec/src/index.ts"],
-      "@atelier-ui/vue": ["libs/vue/src/index.ts"]
+      "@atelier-ui/vue": ["libs/vue/src/index.ts"],
+      "@atelier-ui/create-workspace": ["libs/create-workspace/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

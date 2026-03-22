@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "$id": "Preset",
+  "title": "Atelier UI Workshop Preset",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Workspace name",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "appName": {
+      "type": "string",
+      "description": "Name of the Angular application to create",
+      "default": "workshop"
+    }
+  },
+  "required": ["name"]
+}
