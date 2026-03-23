@@ -3,12 +3,11 @@ import {
   ensurePackage,
   formatFiles,
   installPackagesTask,
+  NX_VERSION,
   runTasksInSerial,
   Tree,
   writeJson,
 } from '@nx/devkit';
-import { applicationGenerator as angularAppGenerator } from '@nx/angular/generators';
-import { applicationGenerator as reactAppGenerator } from '@nx/react';
 import { PresetGeneratorSchema } from './schema';
 
 const SITE_URL = 'https://atelier-ui.netlify.app';
@@ -29,6 +28,11 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
     const appName = `workshop-${framework}`;
 
     if (framework === 'angular') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { applicationGenerator: angularAppGenerator } = await ensurePackage<any>(
+        '@nx/angular',
+        NX_VERSION,
+      );
       await angularAppGenerator(tree, {
         name: appName,
         directory: appName,
@@ -43,6 +47,11 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
     }
 
     if (framework === 'react') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { applicationGenerator: reactAppGenerator } = await ensurePackage<any>(
+        '@nx/react',
+        NX_VERSION,
+      );
       await reactAppGenerator(tree, {
         name: appName,
         directory: appName,
@@ -59,7 +68,7 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { applicationGenerator: vueAppGenerator } = await ensurePackage<any>(
         '@nx/vue',
-        'latest',
+        NX_VERSION,
       );
       await vueAppGenerator(tree, {
         name: appName,
