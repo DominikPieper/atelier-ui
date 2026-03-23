@@ -117,33 +117,35 @@ export const Bordered: Story = {
 // ---------------------------------------------------------------------------
 // Sortable
 // ---------------------------------------------------------------------------
-export const Sortable: Story = {
-  render: () => {
-    const [nameSort, setNameSort] = useState<LlmSortDirection>(null);
-    const [roleSort, setRoleSort] = useState<LlmSortDirection>(null);
+function SortableStory() {
+  const [nameSort, setNameSort] = useState<LlmSortDirection>(null);
+  const [roleSort, setRoleSort] = useState<LlmSortDirection>(null);
 
-    return (
-      <>
-        <LlmTable>
-          <LlmThead>
-            <LlmTr>
-              <LlmTh sortable sortDirection={nameSort} onSort={(d) => { setNameSort(d); setRoleSort(null); }}>Name</LlmTh>
-              <LlmTh sortable sortDirection={roleSort} onSort={(d) => { setRoleSort(d); setNameSort(null); }}>Role</LlmTh>
-              <LlmTh>Email</LlmTh>
-            </LlmTr>
-          </LlmThead>
-          <LlmTbody>
-            <LlmTr><LlmTd>Alice Müller</LlmTd><LlmTd>Engineer</LlmTd><LlmTd>alice@example.com</LlmTd></LlmTr>
-            <LlmTr><LlmTd>Bob Schmidt</LlmTd><LlmTd>Designer</LlmTd><LlmTd>bob@example.com</LlmTd></LlmTr>
-            <LlmTr><LlmTd>Carol Wagner</LlmTd><LlmTd>Manager</LlmTd><LlmTd>carol@example.com</LlmTd></LlmTr>
-          </LlmTbody>
-        </LlmTable>
-        <p style={{ marginTop: '1rem', fontSize: '0.875rem', color: '#64748b' }}>
-          Sort: name={nameSort ?? 'none'}, role={roleSort ?? 'none'}
-        </p>
-      </>
-    );
-  },
+  return (
+    <>
+      <LlmTable>
+        <LlmThead>
+          <LlmTr>
+            <LlmTh sortable sortDirection={nameSort} onSort={(d) => { setNameSort(d); setRoleSort(null); }}>Name</LlmTh>
+            <LlmTh sortable sortDirection={roleSort} onSort={(d) => { setRoleSort(d); setNameSort(null); }}>Role</LlmTh>
+            <LlmTh>Email</LlmTh>
+          </LlmTr>
+        </LlmThead>
+        <LlmTbody>
+          <LlmTr><LlmTd>Alice Müller</LlmTd><LlmTd>Engineer</LlmTd><LlmTd>alice@example.com</LlmTd></LlmTr>
+          <LlmTr><LlmTd>Bob Schmidt</LlmTd><LlmTd>Designer</LlmTd><LlmTd>bob@example.com</LlmTd></LlmTr>
+          <LlmTr><LlmTd>Carol Wagner</LlmTd><LlmTd>Manager</LlmTd><LlmTd>carol@example.com</LlmTd></LlmTr>
+        </LlmTbody>
+      </LlmTable>
+      <p style={{ marginTop: '1rem', fontSize: '0.875rem', color: '#64748b' }}>
+        Sort: name={nameSort ?? 'none'}, role={roleSort ?? 'none'}
+      </p>
+    </>
+  );
+}
+
+export const Sortable: Story = {
+  render: () => <SortableStory />,
 };
 
 // ---------------------------------------------------------------------------
@@ -155,52 +157,54 @@ const SELECTABLE_ROWS = [
   { id: '3', name: 'Carol Wagner', role: 'Manager' },
 ];
 
-export const Selectable: Story = {
-  render: () => {
-    const [selection, setSelection] = useState<Set<string>>(new Set());
+function SelectableStory() {
+  const [selection, setSelection] = useState<Set<string>>(new Set());
 
-    const allSelected = SELECTABLE_ROWS.every((r) => selection.has(r.id));
+  const allSelected = SELECTABLE_ROWS.every((r) => selection.has(r.id));
 
-    function toggleAll(checked: boolean) {
-      setSelection(checked ? new Set(SELECTABLE_ROWS.map((r) => r.id)) : new Set());
-    }
+  function toggleAll(checked: boolean) {
+    setSelection(checked ? new Set(SELECTABLE_ROWS.map((r) => r.id)) : new Set());
+  }
 
-    function toggle(id: string, checked: boolean) {
-      setSelection((prev) => {
-        const next = new Set(prev);
-        if (checked) next.add(id);
-        else next.delete(id);
-        return next;
-      });
-    }
+  function toggle(id: string, checked: boolean) {
+    setSelection((prev) => {
+      const next = new Set(prev);
+      if (checked) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+  }
 
-    return (
-      <LlmTable>
-        <LlmThead>
-          <LlmTr>
-            <LlmTh>
-              <LlmCheckbox checked={allSelected} onCheckedChange={toggleAll} />
-            </LlmTh>
-            <LlmTh>Name</LlmTh>
-            <LlmTh>Role</LlmTh>
+  return (
+    <LlmTable>
+      <LlmThead>
+        <LlmTr>
+          <LlmTh>
+            <LlmCheckbox checked={allSelected} onCheckedChange={toggleAll} />
+          </LlmTh>
+          <LlmTh>Name</LlmTh>
+          <LlmTh>Role</LlmTh>
+        </LlmTr>
+      </LlmThead>
+      <LlmTbody>
+        {SELECTABLE_ROWS.map((row) => (
+          <LlmTr
+            key={row.id}
+            selectable
+            selected={selection.has(row.id)}
+            onSelectedChange={(checked) => toggle(row.id, checked)}
+          >
+            <LlmTd>{row.name}</LlmTd>
+            <LlmTd>{row.role}</LlmTd>
           </LlmTr>
-        </LlmThead>
-        <LlmTbody>
-          {SELECTABLE_ROWS.map((row) => (
-            <LlmTr
-              key={row.id}
-              selectable
-              selected={selection.has(row.id)}
-              onSelectedChange={(checked) => toggle(row.id, checked)}
-            >
-              <LlmTd>{row.name}</LlmTd>
-              <LlmTd>{row.role}</LlmTd>
-            </LlmTr>
-          ))}
-        </LlmTbody>
-      </LlmTable>
-    );
-  },
+        ))}
+      </LlmTbody>
+    </LlmTable>
+  );
+}
+
+export const Selectable: Story = {
+  render: () => <SelectableStory />,
 };
 
 // ---------------------------------------------------------------------------
@@ -271,67 +275,69 @@ const KITCHEN_SINK_ROWS = [
   { id: '4', name: 'David Bauer', role: 'Engineer', status: 'active' },
 ];
 
-export const KitchenSink: Story = {
-  render: () => {
-    const [selection, setSelection] = useState<Set<string>>(new Set());
-    const [nameSort, setNameSort] = useState<LlmSortDirection>(null);
+function KitchenSinkStory() {
+  const [selection, setSelection] = useState<Set<string>>(new Set());
+  const [nameSort, setNameSort] = useState<LlmSortDirection>(null);
 
-    const allSelected = KITCHEN_SINK_ROWS.every((r) => selection.has(r.id));
+  const allSelected = KITCHEN_SINK_ROWS.every((r) => selection.has(r.id));
 
-    function toggleAll(checked: boolean) {
-      setSelection(checked ? new Set(KITCHEN_SINK_ROWS.map((r) => r.id)) : new Set());
-    }
+  function toggleAll(checked: boolean) {
+    setSelection(checked ? new Set(KITCHEN_SINK_ROWS.map((r) => r.id)) : new Set());
+  }
 
-    function toggle(id: string, checked: boolean) {
-      setSelection((prev) => {
-        const next = new Set(prev);
-        if (checked) next.add(id);
-        else next.delete(id);
-        return next;
-      });
-    }
+  function toggle(id: string, checked: boolean) {
+    setSelection((prev) => {
+      const next = new Set(prev);
+      if (checked) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+  }
 
-    return (
-      <div style={{ maxHeight: '300px', overflowY: 'auto', border: '1px solid #e5e7eb', borderRadius: '0.75rem' }}>
-        <LlmTable variant="striped" stickyHeader>
-          <LlmThead>
-            <LlmTr>
-              <LlmTh>
-                <LlmCheckbox checked={allSelected} onCheckedChange={toggleAll} />
-              </LlmTh>
-              <LlmTh sortable sortDirection={nameSort} onSort={setNameSort}>Name</LlmTh>
-              <LlmTh>Role</LlmTh>
-              <LlmTh align="center">Status</LlmTh>
-              <LlmTh align="end">Actions</LlmTh>
+  return (
+    <div style={{ maxHeight: '300px', overflowY: 'auto', border: '1px solid #e5e7eb', borderRadius: '0.75rem' }}>
+      <LlmTable variant="striped" stickyHeader>
+        <LlmThead>
+          <LlmTr>
+            <LlmTh>
+              <LlmCheckbox checked={allSelected} onCheckedChange={toggleAll} />
+            </LlmTh>
+            <LlmTh sortable sortDirection={nameSort} onSort={setNameSort}>Name</LlmTh>
+            <LlmTh>Role</LlmTh>
+            <LlmTh align="center">Status</LlmTh>
+            <LlmTh align="end">Actions</LlmTh>
+          </LlmTr>
+        </LlmThead>
+        <LlmTbody
+          empty={KITCHEN_SINK_ROWS.length === 0}
+          colSpan={5}
+          emptyContent="No results found."
+        >
+          {KITCHEN_SINK_ROWS.map((row) => (
+            <LlmTr
+              key={row.id}
+              selectable
+              selected={selection.has(row.id)}
+              onSelectedChange={(checked) => toggle(row.id, checked)}
+            >
+              <LlmTd>{row.name}</LlmTd>
+              <LlmTd>{row.role}</LlmTd>
+              <LlmTd align="center">
+                <LlmBadge variant={row.status === 'active' ? 'success' : 'default'}>{row.status}</LlmBadge>
+              </LlmTd>
+              <LlmTd align="end">
+                <LlmButton size="sm" variant="secondary">Edit</LlmButton>
+              </LlmTd>
             </LlmTr>
-          </LlmThead>
-          <LlmTbody
-            empty={KITCHEN_SINK_ROWS.length === 0}
-            colSpan={5}
-            emptyContent="No results found."
-          >
-            {KITCHEN_SINK_ROWS.map((row) => (
-              <LlmTr
-                key={row.id}
-                selectable
-                selected={selection.has(row.id)}
-                onSelectedChange={(checked) => toggle(row.id, checked)}
-              >
-                <LlmTd>{row.name}</LlmTd>
-                <LlmTd>{row.role}</LlmTd>
-                <LlmTd align="center">
-                  <LlmBadge variant={row.status === 'active' ? 'success' : 'default'}>{row.status}</LlmBadge>
-                </LlmTd>
-                <LlmTd align="end">
-                  <LlmButton size="sm" variant="secondary">Edit</LlmButton>
-                </LlmTd>
-              </LlmTr>
-            ))}
-          </LlmTbody>
-        </LlmTable>
-      </div>
-    );
-  },
+          ))}
+        </LlmTbody>
+      </LlmTable>
+    </div>
+  );
+}
+
+export const KitchenSink: Story = {
+  render: () => <KitchenSinkStory />,
 };
 
 // ---------------------------------------------------------------------------
