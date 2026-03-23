@@ -1,6 +1,6 @@
 {
   "name": "@atelier-ui/spec",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Framework-agnostic TypeScript interfaces for the Atelier UI component API contract",
   "keywords": ["atelier-ui", "typescript", "spec", "interfaces"],
   "author": "Atelier UI",

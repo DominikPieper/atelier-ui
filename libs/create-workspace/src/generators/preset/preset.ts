@@ -3,6 +3,8 @@ import {
   ensurePackage,
   formatFiles,
   NX_VERSION,
+  removeDependenciesFromPackageJson,
+  runTasksInSerial,
   Tree,
   writeJson,
 } from '@nx/devkit';
@@ -157,6 +159,14 @@ ${frameworks.map((f) => `- \`workshop-${f}\` — run with \`npx nx serve worksho
   // Install selected @atelier-ui/* packages
   const installTask = addDependenciesToPackageJson(tree, deps, {});
 
+  // Remove the preset package itself — create-nx-workspace adds it automatically
+  // but it's a build-time tool and should not be in the workspace's dependencies
+  const removePresetTask = removeDependenciesFromPackageJson(
+    tree,
+    ['@atelier-ui/create-workspace'],
+    [],
+  );
+
   // Write .claude/settings.json with MCP servers for selected frameworks
   const mcpServers: Record<string, unknown> = {
     'nx-mcp': {
@@ -198,7 +208,7 @@ Browse components at ${SITE_URL}
 
   await formatFiles(tree);
 
-  return installTask;
+  return runTasksInSerial(installTask, removePresetTask);
 }
 
 export default presetGenerator;
