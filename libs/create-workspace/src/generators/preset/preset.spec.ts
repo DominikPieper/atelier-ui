@@ -2,6 +2,10 @@ import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 import { Tree, readJson } from '@nx/devkit';
 import { presetGenerator } from './preset';
 
+jest.mock('@nx/angular/generators', () => ({
+  applicationGenerator: jest.fn().mockResolvedValue(() => undefined),
+}));
+
 jest.mock('@nx/devkit', () => ({
   ...jest.requireActual('@nx/devkit'),
   ensurePackage: jest.fn().mockResolvedValue({
