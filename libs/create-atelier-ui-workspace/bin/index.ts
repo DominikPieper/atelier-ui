@@ -6,7 +6,7 @@ import { createWorkspace } from 'create-nx-workspace';
 const enquirer = require('enquirer');
 
 async function main() {
-  let name = process.argv[2];
+  let name = process.argv.slice(2).find((arg) => !arg.startsWith('-'));
 
   if (!name) {
     const res = await enquirer.prompt({
