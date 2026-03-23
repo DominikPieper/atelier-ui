@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "check:sync": "node tools/scripts/check-sync.js"
+    "check:sync": "node tools/scripts/check-sync.js",
+    "check:docs": "node tools/scripts/check-docs-sync.js"
   },
   "private": true,
   "workspaces": [

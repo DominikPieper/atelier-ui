@@ -38,4 +38,5 @@ jobs:
       # - run: npx nx record -- echo Hello World
       # When you enable task distribution, run the e2e-ci task instead of e2e
       - run: node tools/scripts/check-sync.js
+      - run: node tools/scripts/check-docs-sync.js
       - run: npx nx run-many -t lint test build e2e

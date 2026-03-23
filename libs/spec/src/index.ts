@@ -219,6 +219,10 @@ export interface LlmSkeletonSpec {
 // ---------------------------------------------------------------------------
 // Breadcrumbs / BreadcrumbItem
 // ---------------------------------------------------------------------------
+export interface LlmBreadcrumbsSpec {
+  separator?: string;
+}
+
 export interface LlmBreadcrumbItemSpec {
   href?: string;
   current?: boolean;

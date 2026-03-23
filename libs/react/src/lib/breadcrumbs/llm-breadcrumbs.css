@@ -22,9 +22,9 @@
   align-items: center;
 }
 
-/* Separator chevron — CSS generated, not read by screen readers */
+/* Separator — CSS generated, not read by screen readers */
 .llm-breadcrumb-item::after {
-  content: '›';
+  content: var(--llm-separator, '/');
   margin: 0 var(--ui-spacing-2);
   color: var(--ui-color-border-hover);
   font-size: var(--ui-font-size-md);

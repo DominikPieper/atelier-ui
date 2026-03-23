@@ -56,6 +56,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'readonly', type: 'boolean', default: 'false', description: 'Makes the input read-only' },
       { name: 'invalid', type: 'boolean', default: 'false', description: 'Applies invalid/error styling' },
       { name: 'required', type: 'boolean', default: 'false', description: 'Marks field as required' },
+      { name: 'name', type: 'string', default: "''", description: 'HTML name attribute for form submission' },
     ],
     codeExample: `<LlmInput type="email" placeholder="you@example.com" />
 <LlmInput type="password" placeholder="Password" />
@@ -75,6 +76,8 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the textarea' },
       { name: 'readonly', type: 'boolean', default: 'false', description: 'Makes the textarea read-only' },
       { name: 'invalid', type: 'boolean', default: 'false', description: 'Applies invalid/error styling' },
+      { name: 'required', type: 'boolean', default: 'false', description: 'Marks field as required' },
+      { name: 'name', type: 'string', default: "''", description: 'HTML name attribute for form submission' },
       { name: 'autoResize', type: 'boolean', default: 'false', description: 'Grows height automatically as content grows' },
     ],
     codeExample: `<LlmTextarea placeholder="Tell us about yourself" rows={4} />
@@ -92,7 +95,10 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'onCheckedChange', type: '(checked: boolean) => void', default: '—', description: 'Called when the checked state changes' },
       { name: 'indeterminate', type: 'boolean', default: 'false', description: 'Shows a dash (indeterminate state)' },
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the checkbox' },
+      { name: 'readonly', type: 'boolean', default: 'false', description: 'Makes the checkbox read-only' },
       { name: 'invalid', type: 'boolean', default: 'false', description: 'Applies invalid/error styling' },
+      { name: 'required', type: 'boolean', default: 'false', description: 'Marks field as required' },
+      { name: 'name', type: 'string', default: "''", description: 'HTML name attribute for form submission' },
     ],
     codeExample: `<LlmCheckbox>I agree to the terms</LlmCheckbox>
 <LlmCheckbox checked={true}>Pre-checked</LlmCheckbox>
@@ -109,7 +115,10 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'checked', type: 'boolean', default: 'false', description: 'Controlled checked state' },
       { name: 'onCheckedChange', type: '(checked: boolean) => void', default: '—', description: 'Called when the checked state changes' },
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the toggle' },
+      { name: 'readonly', type: 'boolean', default: 'false', description: 'Makes the toggle read-only' },
       { name: 'invalid', type: 'boolean', default: 'false', description: 'Applies invalid/error styling' },
+      { name: 'required', type: 'boolean', default: 'false', description: 'Marks field as required' },
+      { name: 'name', type: 'string', default: "''", description: 'HTML name attribute for form submission' },
     ],
     codeExample: `<LlmToggle>Enable notifications</LlmToggle>
 <LlmToggle checked={true}>Active toggle</LlmToggle>
@@ -125,6 +134,9 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'value', type: 'string', default: "''", description: 'Currently selected value' },
       { name: 'onValueChange', type: '(value: string) => void', default: '—', description: 'Called when selection changes' },
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables all radios in the group' },
+      { name: 'readonly', type: 'boolean', default: 'false', description: 'Makes all radios in the group read-only' },
+      { name: 'invalid', type: 'boolean', default: 'false', description: 'Applies invalid/error styling' },
+      { name: 'required', type: 'boolean', default: 'false', description: 'Marks field as required' },
       { name: 'name', type: 'string', default: "''", description: 'HTML name attribute (propagated to radios)' },
     ],
     codeExample: `<LlmRadioGroup name="plan" value="free" onValueChange={(v) => console.log(v)}>
@@ -144,7 +156,10 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'onValueChange', type: '(value: string) => void', default: '—', description: 'Called when selection changes' },
       { name: 'placeholder', type: 'string', default: "''", description: 'Placeholder text when no option is selected' },
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the select' },
+      { name: 'readonly', type: 'boolean', default: 'false', description: 'Makes the select read-only' },
       { name: 'invalid', type: 'boolean', default: 'false', description: 'Applies invalid/error styling' },
+      { name: 'required', type: 'boolean', default: 'false', description: 'Marks field as required' },
+      { name: 'name', type: 'string', default: "''", description: 'HTML name attribute for form submission' },
     ],
     codeExample: `<LlmSelect placeholder="Select a country" onValueChange={(v) => console.log(v)}>
   <LlmOption optionValue="us">United States</LlmOption>
@@ -197,6 +212,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
     category: 'Display',
     props: [
       { name: 'src', type: 'string', default: "''", description: 'Image URL' },
+      { name: 'alt', type: 'string', default: "''", description: 'Alt text for the avatar image' },
       { name: 'name', type: 'string', default: "''", description: 'Used for initials fallback and aria-label' },
       { name: 'size', type: "'xs' | 'sm' | 'md' | 'lg' | 'xl'", default: "'md'", description: 'Size of the avatar' },
       { name: 'shape', type: "'circle' | 'square'", default: "'circle'", description: 'Shape of the avatar' },
@@ -239,6 +255,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'max', type: 'number', default: '100', description: 'Maximum value' },
       { name: 'indeterminate', type: 'boolean', default: 'false', description: 'Shows animated indeterminate state' },
       { name: 'variant', type: "'default' | 'success' | 'warning' | 'danger'", default: "'default'", description: 'Color variant' },
+      { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Size of the progress bar' },
     ],
     codeExample: `<LlmProgress value={25} />
 <LlmProgress value={60} variant="success" />
@@ -288,6 +305,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'pageCount', type: 'number', default: '1', description: 'Total number of pages' },
       { name: 'onPageChange', type: '(page: number) => void', default: '—', description: 'Called when the user navigates to a page' },
       { name: 'siblingCount', type: 'number', default: '1', description: 'Number of page buttons on each side of current page' },
+      { name: 'showFirstLast', type: 'boolean', default: 'true', description: 'Show first/last page jump buttons' },
     ],
     codeExample: `<LlmPagination
   page={3}
@@ -346,6 +364,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'onOpenChange', type: '(open: boolean) => void', default: '—', description: 'Called when open state changes' },
       { name: 'position', type: "'left' | 'right' | 'top' | 'bottom'", default: "'right'", description: 'Which edge the drawer slides from' },
       { name: 'size', type: "'sm' | 'md' | 'lg' | 'full'", default: "'md'", description: 'Width (or height for top/bottom)' },
+      { name: 'closeOnBackdrop', type: 'boolean', default: 'true', description: 'Close when clicking the backdrop' },
     ],
     codeExample: `<LlmButton onClick={() => setOpen(true)}>Open Drawer</LlmButton>
 <LlmDrawer open={open} onOpenChange={setOpen} position="right">
@@ -369,6 +388,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'llmTooltipPosition', type: "'above' | 'below' | 'left' | 'right'", default: "'above'", description: 'Preferred position' },
       { name: 'llmTooltipDisabled', type: 'boolean', default: 'false', description: 'Disables the tooltip' },
       { name: 'llmTooltipShowDelay', type: 'number', default: '300', description: 'Delay in ms before showing' },
+      { name: 'llmTooltipHideDelay', type: 'number', default: '0', description: 'Delay in ms before hiding' },
     ],
     codeExample: `<LlmTooltip tooltip="Save your changes">
   <LlmButton>Save</LlmButton>

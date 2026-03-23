@@ -8,6 +8,7 @@ import {
   input,
   signal,
 } from '@angular/core';
+import type { LlmBreadcrumbsSpec } from '@atelier-ui/spec';
 import { LLM_BREADCRUMBS } from './llm-breadcrumbs.token';
 
 /**
@@ -46,8 +47,15 @@ import { LLM_BREADCRUMBS } from './llm-breadcrumbs.token';
     </nav>
   `,
   styleUrl: './llm-breadcrumbs.css',
+  host: {
+    '[style.--llm-separator]': 'separatorCssVar()',
+  },
 })
 export class LlmBreadcrumbs {
+  readonly separator = input<LlmBreadcrumbsSpec['separator']>('/');
+
+  protected readonly separatorCssVar = computed(() => `'${this.separator()}'`);
+
   private readonly _itemIds = signal<number[]>([]);
   private _nextId = 0;
 

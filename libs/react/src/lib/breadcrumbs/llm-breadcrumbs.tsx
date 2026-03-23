@@ -1,11 +1,12 @@
 import { HTMLAttributes, ReactNode, AnchorHTMLAttributes, Children, isValidElement, cloneElement } from 'react';
-import type { LlmBreadcrumbItemSpec } from '@atelier-ui/spec';
+import type { CSSProperties } from 'react';
+import type { LlmBreadcrumbsSpec, LlmBreadcrumbItemSpec } from '@atelier-ui/spec';
 import './llm-breadcrumbs.css';
 
 /**
  * Properties for the LlmBreadcrumbs component.
  */
-export interface LlmBreadcrumbsProps extends HTMLAttributes<HTMLElement> {
+export interface LlmBreadcrumbsProps extends HTMLAttributes<HTMLElement>, LlmBreadcrumbsSpec {
   /**
    * The breadcrumb items to be rendered.
    */
@@ -15,7 +16,7 @@ export interface LlmBreadcrumbsProps extends HTMLAttributes<HTMLElement> {
 /**
  * A breadcrumbs component for displaying a navigation trail.
  */
-export function LlmBreadcrumbs({ children, className, ...rest }: LlmBreadcrumbsProps) {
+export function LlmBreadcrumbs({ children, separator = '/', className, style, ...rest }: LlmBreadcrumbsProps) {
   const classes = ['llm-breadcrumbs', className].filter(Boolean).join(' ');
 
   // Automatically mark the last child as current
@@ -28,7 +29,12 @@ export function LlmBreadcrumbs({ children, className, ...rest }: LlmBreadcrumbsP
   });
 
   return (
-    <nav className={classes} aria-label="Breadcrumb" {...rest}>
+    <nav
+      className={classes}
+      aria-label="Breadcrumb"
+      style={{ '--llm-separator': `'${separator}'`, ...style } as CSSProperties}
+      {...rest}
+    >
       <ol className="breadcrumbs-list">
         {enhancedChildren}
       </ol>
