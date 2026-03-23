@@ -1,8 +1,15 @@
 {
   "name": "@atelier-ui/angular",
-  "version": "0.0.3",
-  "description": "Atelier UI component library for Angular — LLM-optimised, accessible, design-token-driven",
-  "keywords": ["angular", "ui", "components", "design-system", "atelier-ui", "llm"],
+  "version": "0.0.4",
+  "description": "Atelier UI component library for Angular \u2014 LLM-optimised, accessible, design-token-driven",
+  "keywords": [
+    "angular",
+    "ui",
+    "components",
+    "design-system",
+    "atelier-ui",
+    "llm"
+  ],
   "author": "Atelier UI",
   "license": "MIT",
   "repository": {
@@ -13,7 +20,9 @@
   "peerDependencies": {
     "@angular/core": "^21.0.0",
     "@angular/common": "^21.0.0",
-    "@angular/forms": "^21.0.0",
+    "@angular/forms": "^21.0.0"
+  },
+  "dependencies": {
     "@atelier-ui/spec": "*"
   }
 }

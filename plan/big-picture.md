@@ -1,6 +1,6 @@
-# LLM-Optimized Angular UI Component Library — Design Guide
+# LLM-Optimized UI Component Library — Design Guide
 
-This document defines the architectural principles and conventions for building an Angular component library optimized for LLM-assisted code generation (specifically Claude) while remaining intuitive for human developers.
+This document defines the architectural principles and conventions for building a multi-framework component library (Angular, React, Vue) optimized for LLM-assisted code generation (specifically Claude) while remaining intuitive for human developers.
 
 ---
 
