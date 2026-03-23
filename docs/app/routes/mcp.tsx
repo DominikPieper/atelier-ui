@@ -1,13 +1,25 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
-import type { Framework } from './mcp.types';
+import type { Framework, McpTool } from './mcp.types';
 import { TOOL_DEFS } from './mcp.data';
 import { getToolResponse } from './mcp.utils';
 import { CodeBlock } from './mcp-code-block';
+import { fetchMcpTools, invokeMcpTool, LIVE_DEFAULT_PARAMS } from './mcp.client';
 
 export const Route = createFileRoute('/mcp')({
   component: McpPage,
 });
+
+// Build a signature string from a live tool's inputSchema
+function liveSignature(tool: McpTool): string {
+  const props = tool.inputSchema.properties ?? {};
+  const required = new Set(tool.inputSchema.required ?? []);
+  const parts = Object.entries(props).map(([name, p]) => {
+    const suffix = required.has(name) ? '' : '?';
+    return `${name}${suffix}: ${p.type}`;
+  });
+  return parts.length ? `(${parts.join(', ')})` : '()';
+}
 
 function McpPage() {
   const [framework, setFramework] = useState<Framework>('angular');
@@ -18,14 +30,45 @@ function McpPage() {
   const [response, setResponse] = useState<object | null>(null);
   const [calling, setCalling] = useState(false);
   const [responseVisible, setResponseVisible] = useState(false);
+  const [liveTools, setLiveTools] = useState<McpTool[] | null>(null);
+  const [serverOnline, setServerOnline] = useState(false);
   const callTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const activeTool = TOOL_DEFS.find(t => t.name === selectedTool) ?? TOOL_DEFS[0];
+  // Derived: active tool — live or mock
+  const activeLiveTool = liveTools?.find(t => t.name === selectedTool);
+  const activeMockTool = TOOL_DEFS.find(t => t.name === selectedTool) ?? TOOL_DEFS[0];
+
+  // Fetch real tools on mount and when framework changes
+  useEffect(() => {
+    let cancelled = false;
+    fetchMcpTools(framework)
+      .then(tools => {
+        if (cancelled) return;
+        setLiveTools(tools);
+        setServerOnline(true);
+        // Auto-select first real tool
+        if (tools.length > 0) {
+          const first = tools[0];
+          setSelectedTool(first.name);
+          setParams(LIVE_DEFAULT_PARAMS[first.name] ?? {});
+        }
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setLiveTools(null);
+        setServerOnline(false);
+      });
+    return () => { cancelled = true; };
+  }, [framework]);
 
   function selectTool(name: string) {
-    const tool = TOOL_DEFS.find(t => t.name === name) ?? TOOL_DEFS[0];
     setSelectedTool(name);
-    setParams({ ...tool.defaultParams });
+    if (serverOnline && liveTools) {
+      setParams(LIVE_DEFAULT_PARAMS[name] ?? {});
+    } else {
+      const tool = TOOL_DEFS.find(t => t.name === name) ?? TOOL_DEFS[0];
+      setParams({ ...tool.defaultParams });
+    }
     setRequest(null);
     setRequestVisible(false);
     setResponse(null);
@@ -46,21 +89,48 @@ function McpPage() {
     setResponse(null);
     setResponseVisible(false);
 
-    // Show the request immediately — the AI sends this before waiting for a response
     const req = Object.keys(params).length > 0
       ? { name: selectedTool, arguments: params }
       : { name: selectedTool };
     setRequest(req);
     requestAnimationFrame(() => requestAnimationFrame(() => setRequestVisible(true)));
 
-    callTimer.current = setTimeout(() => {
-      setResponse(getToolResponse(selectedTool, params, framework));
-      setCalling(false);
-      requestAnimationFrame(() => requestAnimationFrame(() => setResponseVisible(true)));
-    }, 350);
+    if (serverOnline) {
+      invokeMcpTool(framework, selectedTool, params)
+        .then(result => {
+          setResponse(result as object);
+          setCalling(false);
+          requestAnimationFrame(() => requestAnimationFrame(() => setResponseVisible(true)));
+        })
+        .catch(err => {
+          setResponse({ error: String(err) });
+          setCalling(false);
+          requestAnimationFrame(() => requestAnimationFrame(() => setResponseVisible(true)));
+        });
+    } else {
+      callTimer.current = setTimeout(() => {
+        setResponse(getToolResponse(selectedTool, params, framework));
+        setCalling(false);
+        requestAnimationFrame(() => requestAnimationFrame(() => setResponseVisible(true)));
+      }, 350);
+    }
   }
 
   useEffect(() => () => { if (callTimer.current) clearTimeout(callTimer.current); }, []);
+
+  // Which tools to render in sidebar
+  const toolList = liveTools ?? TOOL_DEFS.map(t => ({ name: t.name, description: t.description, inputSchema: { properties: {} } } as McpTool));
+
+  // Params list for the active tool
+  const activeParams: Array<{ name: string; type: string; description: string; suggestions: string[] }> =
+    activeLiveTool
+      ? Object.entries(activeLiveTool.inputSchema.properties ?? {}).map(([name, p]) => ({
+          name,
+          type: p.type,
+          description: p.description ?? '',
+          suggestions: p.enum ?? [],
+        }))
+      : activeMockTool.params;
 
   return (
     <div style={{ maxWidth: '980px', margin: '0 auto', padding: '2rem' }}>
@@ -94,6 +164,10 @@ function McpPage() {
         <code style={{ marginLeft: '0.25rem', fontSize: '0.78rem', color: 'var(--ui-color-text-muted)', fontFamily: 'monospace' }}>
           @atelier-ui/{framework}
         </code>
+        {/* Live / Demo badge */}
+        <span style={{ marginLeft: 'auto', fontSize: '0.72rem', fontWeight: '600', color: serverOnline ? '#059669' : 'var(--ui-color-text-muted)' }}>
+          {serverOnline ? '● Live' : '○ Demo'}
+        </span>
       </div>
 
       {/* Protocol flow */}
@@ -117,7 +191,7 @@ function McpPage() {
           <div style={{ padding: '0.6rem 0.75rem', borderBottom: '1px solid var(--ui-color-border)', fontSize: '0.68rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--ui-color-text-muted)' }}>
             Tools
           </div>
-          {TOOL_DEFS.map(tool => {
+          {toolList.map(tool => {
             const active = selectedTool === tool.name;
             return (
               <button key={tool.name} onClick={() => selectTool(tool.name)} className="mcp-tool-btn" style={{ display: 'block', width: '100%', textAlign: 'left', padding: '0.6rem 0.75rem', border: 'none', borderLeft: `3px solid ${active ? 'var(--ui-color-primary)' : 'transparent'}`, background: active ? 'rgba(0,190,190,0.06)' : 'transparent', color: active ? 'var(--ui-color-primary)' : 'var(--ui-color-text)', cursor: 'pointer', fontFamily: 'monospace', fontSize: '0.8rem', fontWeight: active ? '600' : '400', transition: 'all 0.1s' }}>
@@ -132,29 +206,33 @@ function McpPage() {
           {/* Tool header */}
           <div style={{ background: 'var(--ui-color-surface-raised)', border: '1px solid var(--ui-color-border)', borderRadius: 'var(--ui-radius-md)', padding: '1rem 1.25rem' }}>
             <div style={{ fontFamily: 'monospace', fontSize: '1rem', fontWeight: '600', color: 'var(--ui-color-primary)', marginBottom: '0.2rem' }}>
-              {activeTool.name}
-              <span style={{ color: 'var(--ui-color-text-muted)', fontWeight: '400' }}>{activeTool.signature}</span>
+              {selectedTool}
+              <span style={{ color: 'var(--ui-color-text-muted)', fontWeight: '400' }}>
+                {activeLiveTool ? liveSignature(activeLiveTool) : activeMockTool.signature}
+              </span>
             </div>
             <div style={{ fontSize: '0.85rem', color: 'var(--ui-color-text-muted)', lineHeight: '1.5' }}>
-              {activeTool.description}
+              {activeLiveTool ? activeLiveTool.description : activeMockTool.description}
             </div>
-            <div style={{ marginTop: '0.75rem', padding: '0.5rem 0.75rem', background: 'rgba(0,190,190,0.04)', border: '1px solid rgba(0,190,190,0.15)', borderRadius: 'var(--ui-radius-sm)', fontSize: '0.75rem', color: 'var(--ui-color-text-muted)', lineHeight: '1.5' }}>
-              💡 {activeTool.workshopTip}
-            </div>
+            {!activeLiveTool && (
+              <div style={{ marginTop: '0.75rem', padding: '0.5rem 0.75rem', background: 'rgba(0,190,190,0.04)', border: '1px solid rgba(0,190,190,0.15)', borderRadius: 'var(--ui-radius-sm)', fontSize: '0.75rem', color: 'var(--ui-color-text-muted)', lineHeight: '1.5' }}>
+                💡 {activeMockTool.workshopTip}
+              </div>
+            )}
           </div>
 
           {/* Parameters */}
-          {activeTool.params.length > 0 && (
+          {activeParams.length > 0 && (
             <div style={{ background: 'var(--ui-color-surface-raised)', border: '1px solid var(--ui-color-border)', borderRadius: 'var(--ui-radius-md)', padding: '1rem 1.25rem' }}>
               <div style={{ fontSize: '0.68rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--ui-color-text-muted)', marginBottom: '0.85rem' }}>
                 Parameters
               </div>
-              {activeTool.params.map(param => (
+              {activeParams.map(param => (
                 <div key={param.name}>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginBottom: '0.4rem', flexWrap: 'wrap' }}>
                     <span style={{ fontFamily: 'monospace', fontSize: '0.82rem', fontWeight: '600', color: 'var(--ui-color-text)' }}>{param.name}</span>
                     <span style={{ fontFamily: 'monospace', fontSize: '0.75rem', color: 'var(--ui-color-text-muted)' }}>{param.type}</span>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--ui-color-text-muted)' }}>— {param.description}</span>
+                    {param.description && <span style={{ fontSize: '0.75rem', color: 'var(--ui-color-text-muted)' }}>— {param.description}</span>}
                   </div>
                   <input
                     type="text"
@@ -164,16 +242,18 @@ function McpPage() {
                     style={{ display: 'block', width: '100%', boxSizing: 'border-box', padding: '0.45rem 0.75rem', borderRadius: 'var(--ui-radius-sm)', border: '1px solid var(--ui-color-input-border)', background: 'var(--ui-color-input-bg)', color: 'var(--ui-color-text)', fontFamily: 'monospace', fontSize: '0.85rem', transition: 'border-color 0.15s' }}
                     placeholder={param.suggestions[0] ?? ''}
                   />
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem', marginTop: '0.5rem' }}>
-                    {param.suggestions.map(s => {
-                      const active = params[param.name] === s;
-                      return (
-                        <button key={s} onClick={() => { setParams(p => ({ ...p, [param.name]: s })); setResponse(null); setResponseVisible(false); }} className="mcp-chip" style={{ padding: '0.15rem 0.5rem', borderRadius: '9999px', border: `1px solid ${active ? 'var(--ui-color-primary)' : 'var(--ui-color-border)'}`, background: active ? 'rgba(0,190,190,0.08)' : 'transparent', color: active ? 'var(--ui-color-primary)' : 'var(--ui-color-text-muted)', cursor: 'pointer', fontFamily: 'monospace', fontSize: '0.72rem', transition: 'all 0.1s' }}>
-                          {s}
-                        </button>
-                      );
-                    })}
-                  </div>
+                  {param.suggestions.length > 0 && (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem', marginTop: '0.5rem' }}>
+                      {param.suggestions.map(s => {
+                        const active = params[param.name] === s;
+                        return (
+                          <button key={s} onClick={() => { setParams(p => ({ ...p, [param.name]: s })); setResponse(null); setResponseVisible(false); }} className="mcp-chip" style={{ padding: '0.15rem 0.5rem', borderRadius: '9999px', border: `1px solid ${active ? 'var(--ui-color-primary)' : 'var(--ui-color-border)'}`, background: active ? 'rgba(0,190,190,0.08)' : 'transparent', color: active ? 'var(--ui-color-primary)' : 'var(--ui-color-text-muted)', cursor: 'pointer', fontFamily: 'monospace', fontSize: '0.72rem', transition: 'all 0.1s' }}>
+                            {s}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -200,7 +280,7 @@ function McpPage() {
             </div>
           )}
 
-          {/* tool_result — fades in after the simulated round-trip delay */}
+          {/* tool_result — fades in after response */}
           {response && (
             <div style={{ opacity: responseVisible ? 1 : 0, transform: responseVisible ? 'translateY(0)' : 'translateY(6px)', transition: 'opacity 0.3s ease, transform 0.3s ease' }}>
               <div style={{ fontSize: '0.68rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#059669', marginBottom: '0.4rem' }}>
