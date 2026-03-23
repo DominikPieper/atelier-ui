@@ -2,15 +2,17 @@
 
 > **Not for production. This is a showcase only.**
 >
-> This repository demonstrates how LLMs, Storybook, and Figma can work together to build a UI component system. The components are not intended for use in real production systems and are not maintained as a stable library.
+> This repository demonstrates how to build a UI component library optimized for LLM-assisted development — using MCP servers, Storybook, and a shared spec layer to give AI accurate, structured component knowledge at generation time.
 
 ---
 
 ## What is this?
 
-**Atelier UI** is an LLM-optimized UI component library for **Angular** and **React** — built as a showcase for a modern, AI-assisted design-to-code workflow using [Storybook](https://storybook.js.org), [Figma](https://figma.com), and [Claude](https://claude.ai).
+**Atelier UI** is a multi-framework UI component library for **Angular**, **React**, and **Vue** designed around one idea: structure and document components so that an LLM can use them correctly without guessing.
 
-The idea: structure and document components in a way that allows an LLM to use them correctly on its own — with predictable APIs, consistent naming conventions, and well-considered defaults.
+The same 22 components ship across all three frameworks with identical prop names, identical variant unions, and the same CSS design token system. A shared `@atelier-ui/spec` package enforces API parity at the TypeScript level — if a prop exists in the spec, it exists in every framework implementation.
+
+An MCP server exposes the full component library to AI assistants. Instead of relying on training data that may be outdated or hallucinated, the model calls the MCP server to get exact prop names, types, defaults, and usage examples for the component it needs — then generates code from that.
 
 ---
 
@@ -18,40 +20,91 @@ The idea: structure and document components in a way that allows an LLM to use t
 
 | Package | Description |
 |---|---|
-| `@atelier-ui/angular` | Angular component library |
-| `@atelier-ui/react` | React component library |
-
-Both libraries share the same design tokens (`--ui-*`), the same component names, and the same API philosophy.
+| `@atelier-ui/angular` | Angular 21 component library |
+| `@atelier-ui/react` | React 19 component library |
+| `@atelier-ui/vue` | Vue 3 component library |
+| `@atelier-ui/spec` | Shared TypeScript spec interfaces (framework-agnostic) |
 
 ---
 
 ## Components
 
-22 components available in both libraries:
+22 components across all three libraries:
 
-**Form & Input**
-`Button` · `Input` · `Textarea` · `Checkbox` · `Toggle` · `Radio` · `Select`
+**Inputs**
+`Button` · `Input` · `Textarea` · `Checkbox` · `Toggle` · `Radio Group` · `Select`
 
-**Feedback & Status**
-`Alert` · `Badge` · `Toast` · `Skeleton` · `Progress`
+**Display**
+`Badge` · `Card` · `Avatar` · `Skeleton` · `Progress`
 
-**Overlay & Navigation**
-`Dialog` · `Drawer` · `Menu` · `Tooltip` · `Tabs` · `Accordion`
+**Navigation**
+`Breadcrumbs` · `Tabs` · `Pagination` · `Menu`
 
-**Layout & Structure**
-`Card` · `Avatar` · `Breadcrumbs` · `Pagination`
+**Overlay**
+`Dialog` · `Drawer` · `Tooltip` · `Toast`
+
+**Layout**
+`Accordion` · `Alert`
+
+---
+
+## The MCP Server
+
+The primary integration point for AI tooling is the MCP server. When configured in Claude Code or another MCP-capable client, it exposes five tools:
+
+| Tool | What it returns |
+|---|---|
+| `list_components` | All 22 components organized by category |
+| `get_component_docs` | Full prop table with types, defaults, and examples for one component |
+| `search_components` | Components matching a keyword or use case |
+| `get_stories` | Storybook usage examples for a component |
+| `get_theming_guide` | CSS token system, dark mode setup, and override patterns |
+
+The MCP Playground in the docs site lets you call each tool interactively and see exactly what the model receives.
+
+---
+
+## The Spec Layer
+
+`@atelier-ui/spec` contains a TypeScript interface for every component:
+
+```typescript
+export interface LlmButtonSpec {
+  variant?: 'primary' | 'secondary' | 'outline';
+  size?: 'sm' | 'md' | 'lg';
+  disabled?: boolean;
+  loading?: boolean;
+}
+```
+
+Angular uses the union types as `input<T>()` type parameters. React extends the spec interface from the framework-specific props type. Vue uses `defineProps<T>()`. The TypeScript compiler enforces that all three match — drift between frameworks is caught at build time, not in production.
+
+A sync validator (`check:docs`) also verifies that everything in the spec is documented in `component-data.ts`. If a prop exists in the spec but is missing from the docs, CI fails.
+
+---
+
+## Design Principles
+
+**Predictable APIs.** Every component uses the same prop names for the same concepts (`variant`, `size`, `disabled`). String literal union types everywhere — no enums, no numeric codes.
+
+**Composition over configuration.** Sub-components follow an explicit naming pattern (`llm-card` + `llm-card-header` + `llm-card-content` + `llm-card-footer`). No complex config objects.
+
+**Design tokens, not utility classes.** All visual decisions are driven by `--ui-*` CSS custom properties. Theming is a token override, not a class swap.
+
+**ARIA-first behavior.** Every interactive component follows the corresponding WAI-ARIA design pattern. Keyboard interactions are standards-aligned so the LLM can infer them without additional documentation.
 
 ---
 
 ## Tech Stack
 
-- **Monorepo**: [Nx](https://nx.dev)
-- **Angular library**: Angular 21, Signals, Angular CDK, ng-packagr
-- **React library**: React 19, TypeScript, Vite
-- **Design**: Figma with a custom token system
+- **Monorepo**: Nx
+- **Angular library**: Angular 21, Signals, Signal Forms, Angular CDK
+- **React library**: React 19, TypeScript
+- **Vue library**: Vue 3, `<script setup>` + `defineProps`
+- **Spec**: `@atelier-ui/spec` — shared TypeScript interfaces
 - **Documentation**: Storybook 10 (Angular + React), TanStack Router docs app
 - **Testing**: Vitest + Angular Testing Library
-- **CI**: GitHub Actions
+- **CI**: GitHub Actions (lint, test, build, docs sync check)
 - **Deploy**: Netlify (docs app)
 
 ---
@@ -76,6 +129,9 @@ npx nx run-many -t test
 
 # Build everything
 npx nx run-many -t build
+
+# Validate spec ↔ docs parity
+npm run check:docs
 ```
 
 ---
@@ -84,43 +140,39 @@ npx nx run-many -t build
 
 ```
 ├── libs/
-│   ├── angular/   # @atelier-ui/angular
-│   └── react/     # @atelier-ui/react
-├── docs/                         # Docs app (TanStack Router + React)
-├── images/                       # Shared assets
+│   ├── angular/   # @atelier-ui/angular — Angular 21 components
+│   ├── react/     # @atelier-ui/react — React 19 components
+│   ├── vue/       # @atelier-ui/vue — Vue 3 components
+│   └── spec/      # @atelier-ui/spec — shared TypeScript spec interfaces
+├── docs/          # Docs app (TanStack Router + React) — MCP Playground, component reference
+├── tools/
+│   └── scripts/
+│       ├── check-sync.js       # Validates spec ↔ framework implementation parity
+│       └── check-docs-sync.js  # Validates spec ↔ component-data.ts parity
 ├── .github/workflows/
-│   ├── ci.yml                    # Lint, test, build on every push
-│   └── publish.yml               # npm publish on GitHub Release
-└── netlify.toml                  # Docs deploy configuration
+│   ├── ci.yml      # Lint, test, build, sync checks on every push
+│   └── publish.yml # npm publish on GitHub Release
+└── netlify.toml    # Docs deploy configuration
 ```
 
 ---
 
 ## Design Tokens
 
-All tokens use the `--ui-*` prefix:
-
 ```css
 @import '@atelier-ui/angular/styles/tokens.css';
 /* or */
 @import '@atelier-ui/react/styles/tokens.css';
+/* or */
+@import '@atelier-ui/vue/styles/tokens.css';
 ```
 
-Key tokens: `--ui-color-primary`, `--ui-color-danger`, `--ui-color-surface`, `--ui-color-border`, `--ui-color-text`, `--ui-radius-sm/md/lg`, `--ui-spacing-1..8`, `--ui-shadow-sm/md`
+Key tokens: `--ui-color-primary` · `--ui-color-surface` · `--ui-color-border` · `--ui-color-text` · `--ui-color-text-muted` · `--ui-radius-sm/md/lg` · `--ui-spacing-1..16` · `--ui-shadow-xs/sm/md/lg`
 
----
-
-## Why "LLM-optimized"?
-
-The components are deliberately designed so that an LLM can use them correctly:
-
-- **Consistent API patterns** — same prop names in Angular and React (`variant`, `size`, `disabled`)
-- **Self-documenting selectors** — `llm-button`, `llm-dialog`, `llm-accordion-item`
-- **Clear composability** — sub-components follow a predictable schema (`llm-card` + `llm-card-header` + `llm-card-content` + `llm-card-footer`)
-- **Storybook as a knowledge source** — Autodocs + MCP server allow Claude to query component APIs directly
+Dark mode is built in via `prefers-color-scheme`. Override explicitly with `data-theme="dark"` on `<html>`.
 
 ---
 
 ## A Note on Usage
 
-This repository is a **learning and demonstration project**. There are no stability guarantees, no semver support, and no production maintenance cycle. If you need a real UI library, take a look at [shadcn/ui](https://ui.shadcn.com), [Angular Material](https://material.angular.io), or [PrimeNG](https://primeng.org).
+This is a **learning and demonstration project** — no stability guarantees, no semver support, no production maintenance. If you need a real UI library: [shadcn/ui](https://ui.shadcn.com), [Angular Material](https://material.angular.io), or [PrimeNG](https://primeng.org).
