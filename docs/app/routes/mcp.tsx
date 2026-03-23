@@ -299,7 +299,7 @@ function McpPage() {
       <div style={{ marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid var(--ui-color-border)' }}>
         <h2 style={{ fontSize: '1.1rem', fontWeight: '700', marginBottom: '0.4rem' }}>Use with AI tools</h2>
         <p style={{ fontSize: '0.875rem', color: 'var(--ui-color-text-muted)', marginBottom: '1.5rem', lineHeight: '1.6' }}>
-          The <code>@atelier-ui/mcp</code> server package is coming. Once published, add it to your AI tool's config and every tool shown above works live — Claude, Cursor, and any MCP-compatible host.
+          The MCP servers are live. Add them to your AI tool's config and every tool shown above works directly — Claude, Cursor, and any MCP-compatible host.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
           <div>
@@ -308,9 +308,14 @@ function McpPage() {
             </div>
             <CodeBlock code={JSON.stringify({
               mcpServers: {
-                'atelier-ui': {
-                  command: 'npx',
-                  args: ['-y', '@atelier-ui/mcp'],
+                'atelier-ui-angular': {
+                  url: 'https://atelier-ui.netlify.app/storybook-angular/mcp',
+                },
+                'atelier-ui-react': {
+                  url: 'https://atelier-ui.netlify.app/storybook-react/mcp',
+                },
+                'atelier-ui-vue': {
+                  url: 'https://atelier-ui.netlify.app/storybook-vue/mcp',
                 },
               },
             }, null, 2)} />
@@ -321,10 +326,17 @@ function McpPage() {
             </div>
             <CodeBlock code={JSON.stringify({
               servers: {
-                'atelier-ui': {
-                  type: 'stdio',
-                  command: 'npx',
-                  args: ['-y', '@atelier-ui/mcp'],
+                'atelier-ui-angular': {
+                  type: 'http',
+                  url: 'https://atelier-ui.netlify.app/storybook-angular/mcp',
+                },
+                'atelier-ui-react': {
+                  type: 'http',
+                  url: 'https://atelier-ui.netlify.app/storybook-react/mcp',
+                },
+                'atelier-ui-vue': {
+                  type: 'http',
+                  url: 'https://atelier-ui.netlify.app/storybook-vue/mcp',
                 },
               },
             }, null, 2)} />
