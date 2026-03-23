@@ -107,7 +107,6 @@ function Sidebar({ open }: { open: boolean }) {
             <div className="docs-nav-heading">Get Started</div>
             <NavLink to="/" label="Overview" currentPath={currentPath} />
             <NavLink to="/workshop" label="Workshop Setup" currentPath={currentPath} />
-            <NavLink to="/exercises" label="Exercises" currentPath={currentPath} />
           </div>
 
           <div className="docs-nav-section">

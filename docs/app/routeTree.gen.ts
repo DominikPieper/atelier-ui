@@ -13,7 +13,6 @@ import { Route as WorkshopRouteImport } from './routes/workshop'
 import { Route as StorybookRouteImport } from './routes/storybook'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as InstallRouteImport } from './routes/install'
-import { Route as ExercisesRouteImport } from './routes/exercises'
 import { Route as DesignPrinciplesRouteImport } from './routes/design-principles'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ComponentsIndexRouteImport } from './routes/components/index'
@@ -37,11 +36,6 @@ const McpRoute = McpRouteImport.update({
 const InstallRoute = InstallRouteImport.update({
   id: '/install',
   path: '/install',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ExercisesRoute = ExercisesRouteImport.update({
-  id: '/exercises',
-  path: '/exercises',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DesignPrinciplesRoute = DesignPrinciplesRouteImport.update({
@@ -68,7 +62,6 @@ const ComponentsNameRoute = ComponentsNameRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/design-principles': typeof DesignPrinciplesRoute
-  '/exercises': typeof ExercisesRoute
   '/install': typeof InstallRoute
   '/mcp': typeof McpRoute
   '/storybook': typeof StorybookRoute
@@ -79,7 +72,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/design-principles': typeof DesignPrinciplesRoute
-  '/exercises': typeof ExercisesRoute
   '/install': typeof InstallRoute
   '/mcp': typeof McpRoute
   '/storybook': typeof StorybookRoute
@@ -91,7 +83,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/design-principles': typeof DesignPrinciplesRoute
-  '/exercises': typeof ExercisesRoute
   '/install': typeof InstallRoute
   '/mcp': typeof McpRoute
   '/storybook': typeof StorybookRoute
@@ -104,7 +95,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/design-principles'
-    | '/exercises'
     | '/install'
     | '/mcp'
     | '/storybook'
@@ -115,7 +105,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/design-principles'
-    | '/exercises'
     | '/install'
     | '/mcp'
     | '/storybook'
@@ -126,7 +115,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/design-principles'
-    | '/exercises'
     | '/install'
     | '/mcp'
     | '/storybook'
@@ -138,7 +126,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DesignPrinciplesRoute: typeof DesignPrinciplesRoute
-  ExercisesRoute: typeof ExercisesRoute
   InstallRoute: typeof InstallRoute
   McpRoute: typeof McpRoute
   StorybookRoute: typeof StorybookRoute
@@ -177,13 +164,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InstallRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/exercises': {
-      id: '/exercises'
-      path: '/exercises'
-      fullPath: '/exercises'
-      preLoaderRoute: typeof ExercisesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/design-principles': {
       id: '/design-principles'
       path: '/design-principles'
@@ -218,7 +198,6 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DesignPrinciplesRoute: DesignPrinciplesRoute,
-  ExercisesRoute: ExercisesRoute,
   InstallRoute: InstallRoute,
   McpRoute: McpRoute,
   StorybookRoute: StorybookRoute,
