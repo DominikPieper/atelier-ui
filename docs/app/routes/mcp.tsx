@@ -97,13 +97,14 @@ function McpPage() {
       </div>
 
       {/* Protocol flow */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', background: 'var(--ui-color-surface-raised)', border: '1px solid var(--ui-color-border)', borderRadius: 'var(--ui-radius-md)', overflow: 'hidden', marginBottom: '1.5rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', background: 'var(--ui-color-surface-raised)', border: '1px solid var(--ui-color-border)', borderRadius: 'var(--ui-radius-md)', overflow: 'hidden', marginBottom: '1.5rem' }}>
         {([
+          { n: '⓪', label: 'Client connects', desc: 'The host sends initialize with its capabilities. The server responds with its tool list. This negotiation happens once per session.' },
           { n: '①', label: 'AI identifies need', desc: 'The model decides a tool call will give a more reliable answer than its training data alone.' },
           { n: '②', label: 'Calls the MCP server', desc: 'A structured request is sent — tool name plus typed parameters, no ambiguity.' },
           { n: '③', label: 'Receives structured JSON', desc: 'Exact prop names, types, and defaults come back. No hallucinated APIs.' },
         ] as const).map((s, i) => (
-          <div key={i} style={{ padding: '0.85rem 1rem', borderRight: i < 2 ? '1px solid var(--ui-color-border)' : 'none' }}>
+          <div key={i} style={{ padding: '0.85rem 1rem', borderRight: i < 3 ? '1px solid var(--ui-color-border)' : 'none' }}>
             <div style={{ fontSize: '0.72rem', fontWeight: '700', color: 'var(--ui-color-primary)', marginBottom: '0.25rem' }}>{s.n} {s.label}</div>
             <div style={{ fontSize: '0.72rem', color: 'var(--ui-color-text-muted)', lineHeight: '1.45' }}>{s.desc}</div>
           </div>
@@ -205,12 +206,49 @@ function McpPage() {
               <div style={{ fontSize: '0.68rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#059669', marginBottom: '0.4rem' }}>
                 tool_result
               </div>
-              <CodeBlock code={JSON.stringify(response, null, 2)} />
+              <CodeBlock code={JSON.stringify(response, null, 2)} collapsible />
               <div style={{ marginTop: '0.75rem', padding: '0.6rem 0.85rem', background: 'var(--ui-color-surface-raised)', border: '1px solid var(--ui-color-border)', borderRadius: 'var(--ui-radius-sm)', fontSize: '0.75rem', color: 'var(--ui-color-text-muted)', lineHeight: '1.5' }}>
                 <strong style={{ color: 'var(--ui-color-text)', fontWeight: '600' }}>What the AI does next:</strong> this JSON is injected into the model's context. It reads the exact field names, types, and defaults — and uses them verbatim when generating code. No guessing, no hallucinated prop names.
               </div>
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Use with AI tools */}
+      <div style={{ marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid var(--ui-color-border)' }}>
+        <h2 style={{ fontSize: '1.1rem', fontWeight: '700', marginBottom: '0.4rem' }}>Use with AI tools</h2>
+        <p style={{ fontSize: '0.875rem', color: 'var(--ui-color-text-muted)', marginBottom: '1.5rem', lineHeight: '1.6' }}>
+          The <code>@atelier-ui/mcp</code> server package is coming. Once published, add it to your AI tool's config and every tool shown above works live — Claude, Cursor, and any MCP-compatible host.
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
+          <div>
+            <div style={{ fontSize: '0.75rem', fontWeight: '600', color: 'var(--ui-color-text-muted)', marginBottom: '0.5rem' }}>
+              Claude Desktop <span style={{ fontWeight: '400', fontFamily: 'monospace' }}>~/Library/Application Support/Claude/claude_desktop_config.json</span>
+            </div>
+            <CodeBlock code={JSON.stringify({
+              mcpServers: {
+                'atelier-ui': {
+                  command: 'npx',
+                  args: ['-y', '@atelier-ui/mcp'],
+                },
+              },
+            }, null, 2)} />
+          </div>
+          <div>
+            <div style={{ fontSize: '0.75rem', fontWeight: '600', color: 'var(--ui-color-text-muted)', marginBottom: '0.5rem' }}>
+              Cursor / VS Code <span style={{ fontWeight: '400', fontFamily: 'monospace' }}>.cursor/mcp.json &nbsp;·&nbsp; .vscode/mcp.json</span>
+            </div>
+            <CodeBlock code={JSON.stringify({
+              servers: {
+                'atelier-ui': {
+                  type: 'stdio',
+                  command: 'npx',
+                  args: ['-y', '@atelier-ui/mcp'],
+                },
+              },
+            }, null, 2)} />
+          </div>
         </div>
       </div>
     </div>

@@ -1,0 +1,212 @@
+/* ============================================================
+   llm-table.css — Shared styles for all table sub-components
+   ============================================================ */
+
+/* ---------------------------------------------------------------------------
+   Custom element display reset — CRITICAL for native table layout
+   Without display:contents, custom elements break thead/tbody/tr/th/td layout
+   --------------------------------------------------------------------------- */
+llm-thead,
+llm-tbody,
+llm-tr,
+llm-th,
+llm-td {
+  display: contents;
+}
+
+/* ---------------------------------------------------------------------------
+   Table host container
+   --------------------------------------------------------------------------- */
+llm-table {
+  display: block;
+  font-family: var(--ui-font-family);
+  color: var(--ui-color-text);
+}
+
+.llm-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+llm-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* ---------------------------------------------------------------------------
+   Header cells
+   --------------------------------------------------------------------------- */
+llm-table thead th {
+  font-size: var(--ui-font-size-xs);
+  font-weight: var(--ui-font-weight-semibold);
+  color: var(--ui-color-text-muted);
+  letter-spacing: var(--ui-letter-spacing-wide);
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--ui-color-border);
+  background-color: var(--ui-color-surface);
+  padding: var(--ui-spacing-3) var(--ui-spacing-4);
+  text-align: start;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------
+   Body cells
+   --------------------------------------------------------------------------- */
+llm-table tbody td {
+  border-bottom: 1px solid var(--ui-color-border);
+  padding: var(--ui-spacing-3) var(--ui-spacing-4);
+  vertical-align: middle;
+  background-color: var(--ui-color-surface);
+  transition: background-color var(--ui-transition-fast);
+}
+
+/* ---------------------------------------------------------------------------
+   Size variants
+   --------------------------------------------------------------------------- */
+llm-table.size-sm thead th,
+llm-table.size-sm tbody td {
+  padding: var(--ui-spacing-2) var(--ui-spacing-3);
+  font-size: var(--ui-font-size-xs);
+}
+
+llm-table.size-md thead th,
+llm-table.size-md tbody td {
+  padding: var(--ui-spacing-3) var(--ui-spacing-4);
+  font-size: var(--ui-font-size-sm);
+}
+
+llm-table.size-lg thead th,
+llm-table.size-lg tbody td {
+  padding: var(--ui-spacing-4) var(--ui-spacing-6);
+  font-size: var(--ui-font-size-md);
+}
+
+/* ---------------------------------------------------------------------------
+   Table variants
+   --------------------------------------------------------------------------- */
+
+/* Striped: alternate even row background */
+llm-table.variant-striped llm-tbody llm-tr:nth-child(even) td {
+  background-color: var(--ui-color-surface-sunken);
+}
+
+/* Bordered: all cell borders */
+llm-table.variant-bordered thead th,
+llm-table.variant-bordered tbody td {
+  border: 1px solid var(--ui-color-border);
+}
+
+/* ---------------------------------------------------------------------------
+   Alignment
+   --------------------------------------------------------------------------- */
+th.align-start,
+td.align-start {
+  text-align: start;
+}
+
+th.align-center,
+td.align-center {
+  text-align: center;
+}
+
+th.align-end,
+td.align-end {
+  text-align: end;
+}
+
+/* ---------------------------------------------------------------------------
+   Row hover and selection
+   (targets inner <tr> since display:contents on llm-tr blocks hover events)
+   --------------------------------------------------------------------------- */
+llm-table tbody tr:hover td {
+  background-color: var(--ui-color-surface-sunken);
+}
+
+llm-table tbody tr.is-selected td {
+  background-color: var(--ui-color-primary-light);
+}
+
+/* Keep selected color on hover */
+llm-table tbody tr.is-selected:hover td {
+  background-color: var(--ui-color-primary-light);
+}
+
+/* Selection checkbox cell — fixed narrow width */
+.llm-tr-select-cell {
+  width: 2.75rem;
+  text-align: center;
+}
+
+/* Strip default checkbox layout to center it in the cell */
+.llm-tr-select-cell llm-checkbox label {
+  justify-content: center;
+}
+
+/* ---------------------------------------------------------------------------
+   Sticky header
+   z-index:1 is intentional — above sibling rows but below dropdowns (z-index:100)
+   --------------------------------------------------------------------------- */
+llm-table.is-sticky-header thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  box-shadow: 0 1px 0 0 var(--ui-color-border);
+}
+
+/* ---------------------------------------------------------------------------
+   Sort button
+   --------------------------------------------------------------------------- */
+.llm-th-sort-btn {
+  all: unset;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ui-spacing-2);
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  font-weight: inherit;
+  width: 100%;
+}
+
+.llm-th-sort-btn:focus-visible {
+  outline: var(--ui-focus-ring);
+  border-radius: var(--ui-radius-sm);
+}
+
+.llm-th-sort-icon {
+  flex-shrink: 0;
+}
+
+.llm-th-sort-asc-arrow,
+.llm-th-sort-desc-arrow {
+  opacity: 0.25;
+  transition: opacity var(--ui-transition-fast);
+}
+
+th.is-sorted .llm-th-sort-icon {
+  color: var(--ui-color-primary);
+}
+
+th.sort-asc .llm-th-sort-asc-arrow {
+  opacity: 1;
+}
+
+th.sort-desc .llm-th-sort-desc-arrow {
+  opacity: 1;
+}
+
+/* ---------------------------------------------------------------------------
+   Empty state
+   --------------------------------------------------------------------------- */
+.llm-tbody-empty-cell {
+  text-align: center;
+  padding: var(--ui-spacing-12) var(--ui-spacing-4) !important;
+  color: var(--ui-color-text-muted);
+  font-size: var(--ui-font-size-md);
+  background-color: var(--ui-color-surface) !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Dark mode — inherited via --ui-* token overrides in tokens.css
+   --------------------------------------------------------------------------- */

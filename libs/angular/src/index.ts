@@ -69,3 +69,13 @@ export {
 } from './lib/drawer/llm-drawer';
 export { LLM_DRAWER } from './lib/drawer/llm-drawer.token';
 export type { LlmDrawerContext } from './lib/drawer/llm-drawer.token';
+export {
+  LlmTable,
+  LlmThead,
+  LlmTbody,
+  LlmTr,
+  LlmTh,
+  LlmTd,
+  LLM_TABLE,
+} from './lib/table/llm-table';
+export type { LlmTableContext, LlmSortDirection } from './lib/table/llm-table';

@@ -125,7 +125,8 @@
       "Bash(find /Users/dominikpieper/Projects/angular-llm-components/docs -name *.md)",
       "Bash(sed -i '' 's/# LLM-Optimized Angular UI Component Library — Design Guide/# LLM-Optimized UI Component Library — Design Guide/' /Users/dominikpieper/Projects/angular-llm-components/plan/big-picture.md)",
       "Bash(__NEW_LINE_e2b0c343b03357a6__ sed:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(ls:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

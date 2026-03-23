@@ -262,3 +262,39 @@ export interface LlmDrawerSpec {
   size?: LlmDrawerSize;
   closeOnBackdrop?: boolean;
 }
+
+// ---------------------------------------------------------------------------
+// Table
+// ---------------------------------------------------------------------------
+export type LlmTableVariant = 'default' | 'striped' | 'bordered';
+export type LlmTableSize = 'sm' | 'md' | 'lg';
+export type LlmSortDirection = 'asc' | 'desc' | null;
+export type LlmTableAlign = 'start' | 'center' | 'end';
+
+export interface LlmTableSpec {
+  variant?: LlmTableVariant;
+  size?: LlmTableSize;
+  stickyHeader?: boolean;
+}
+
+export interface LlmTbodySpec {
+  empty?: boolean;
+  colSpan?: number;
+}
+
+export interface LlmTrSpec {
+  selected?: boolean;
+  selectable?: boolean;
+  rowId?: string;
+}
+
+export interface LlmThSpec {
+  sortable?: boolean;
+  sortDirection?: LlmSortDirection;
+  align?: LlmTableAlign;
+  width?: string;
+}
+
+export interface LlmTdSpec {
+  align?: LlmTableAlign;
+}
