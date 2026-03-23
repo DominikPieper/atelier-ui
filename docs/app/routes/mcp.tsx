@@ -632,6 +632,8 @@ function McpPage() {
   const [framework, setFramework] = useState<Framework>('angular');
   const [selectedTool, setSelectedTool] = useState('get_component_docs');
   const [params, setParams] = useState<Record<string, string>>({ component: 'button' });
+  const [request, setRequest] = useState<object | null>(null);
+  const [requestVisible, setRequestVisible] = useState(false);
   const [response, setResponse] = useState<object | null>(null);
   const [calling, setCalling] = useState(false);
   const [responseVisible, setResponseVisible] = useState(false);
@@ -643,12 +645,16 @@ function McpPage() {
     const tool = TOOL_DEFS.find(t => t.name === name) ?? TOOL_DEFS[0];
     setSelectedTool(name);
     setParams({ ...tool.defaultParams });
+    setRequest(null);
+    setRequestVisible(false);
     setResponse(null);
     setResponseVisible(false);
   }
 
   function switchFramework(fw: Framework) {
     setFramework(fw);
+    setRequest(null);
+    setRequestVisible(false);
     setResponse(null);
     setResponseVisible(false);
   }
@@ -658,6 +664,14 @@ function McpPage() {
     setCalling(true);
     setResponse(null);
     setResponseVisible(false);
+
+    // Show the request immediately — the AI sends this before waiting for a response
+    const req = Object.keys(params).length > 0
+      ? { name: selectedTool, arguments: params }
+      : { name: selectedTool };
+    setRequest(req);
+    requestAnimationFrame(() => requestAnimationFrame(() => setRequestVisible(true)));
+
     callTimer.current = setTimeout(() => {
       setResponse(getToolResponse(selectedTool, params, framework));
       setCalling(false);
@@ -794,27 +808,38 @@ function McpPage() {
             </button>
           </div>
 
-          {/* Response */}
+          {/* JSON color legend — shown once either block is visible */}
+          {request && (
+            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+              {([
+                { color: '#00bebe', label: 'keys' },
+                { color: '#059669', label: 'strings' },
+                { color: '#7c3aed', label: 'numbers / booleans' },
+                { color: '#6c7086', label: 'structure' },
+              ] as const).map(({ color, label }) => (
+                <span key={label} style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.68rem', color: 'var(--ui-color-text-muted)' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '2px', background: color, flexShrink: 0 }} />
+                  {label}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* tool_call — appears immediately when Call is clicked */}
+          {request && (
+            <div style={{ opacity: requestVisible ? 1 : 0, transform: requestVisible ? 'translateY(0)' : 'translateY(6px)', transition: 'opacity 0.2s ease, transform 0.2s ease' }}>
+              <div style={{ fontSize: '0.68rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--ui-color-primary)', marginBottom: '0.4rem' }}>
+                tool_call
+              </div>
+              <CodeBlock code={JSON.stringify(request, null, 2)} />
+            </div>
+          )}
+
+          {/* tool_result — fades in after the simulated round-trip delay */}
           {response && (
             <div style={{ opacity: responseVisible ? 1 : 0, transform: responseVisible ? 'translateY(0)' : 'translateY(6px)', transition: 'opacity 0.3s ease, transform 0.3s ease' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.4rem' }}>
-                <div style={{ fontSize: '0.68rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#059669' }}>
-                  tool_result
-                </div>
-                {/* JSON color legend */}
-                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                  {([
-                    { color: '#00bebe', label: 'keys' },
-                    { color: '#059669', label: 'strings' },
-                    { color: '#7c3aed', label: 'numbers / booleans' },
-                    { color: '#6c7086', label: 'structure' },
-                  ] as const).map(({ color, label }) => (
-                    <span key={label} style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.68rem', color: 'var(--ui-color-text-muted)' }}>
-                      <span style={{ width: '8px', height: '8px', borderRadius: '2px', background: color, flexShrink: 0 }} />
-                      {label}
-                    </span>
-                  ))}
-                </div>
+              <div style={{ fontSize: '0.68rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#059669', marginBottom: '0.4rem' }}>
+                tool_result
               </div>
               <CodeBlock code={JSON.stringify(response, null, 2)} />
               <div style={{ marginTop: '0.75rem', padding: '0.6rem 0.85rem', background: 'var(--ui-color-surface-raised)', border: '1px solid var(--ui-color-border)', borderRadius: 'var(--ui-radius-sm)', fontSize: '0.75rem', color: 'var(--ui-color-text-muted)', lineHeight: '1.5' }}>
