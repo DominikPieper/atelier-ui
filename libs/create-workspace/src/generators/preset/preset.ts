@@ -2,9 +2,7 @@ import {
   addDependenciesToPackageJson,
   ensurePackage,
   formatFiles,
-  installPackagesTask,
   NX_VERSION,
-  runTasksInSerial,
   Tree,
   writeJson,
 } from '@nx/devkit';
@@ -200,7 +198,7 @@ Browse components at ${SITE_URL}
 
   await formatFiles(tree);
 
-  return runTasksInSerial(installTask, () => installPackagesTask(tree));
+  return installTask;
 }
 
 export default presetGenerator;

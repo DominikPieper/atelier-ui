@@ -2,14 +2,28 @@ import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 import { Tree, readJson } from '@nx/devkit';
 import { presetGenerator } from './preset';
 
-jest.mock('@nx/angular/generators', () => ({
-  applicationGenerator: jest.fn().mockResolvedValue(() => undefined),
-}));
+jest.mock('@nx/angular/generators', () => {
+  const real = jest.requireActual('@nx/angular/generators');
+  if (typeof real.applicationGenerator !== 'function') {
+    throw new Error('@nx/angular/generators does not export applicationGenerator as a function');
+  }
+  return { applicationGenerator: jest.fn().mockResolvedValue(undefined) };
+});
 
 jest.mock('@nx/devkit', () => ({
   ...jest.requireActual('@nx/devkit'),
-  ensurePackage: jest.fn().mockResolvedValue({
-    applicationGenerator: jest.fn().mockResolvedValue(() => undefined),
+  ensurePackage: jest.fn().mockImplementation((packageName: string) => {
+    try {
+      const real = jest.requireActual(packageName);
+      const mocked: Record<string, unknown> = { ...real };
+      if (typeof real.applicationGenerator === 'function') {
+        mocked['applicationGenerator'] = jest.fn().mockResolvedValue(undefined);
+      }
+      return Promise.resolve(mocked);
+    } catch {
+      // Package not installed in dev workspace — fall back to plain mock
+      return Promise.resolve({ applicationGenerator: jest.fn().mockResolvedValue(undefined) });
+    }
   }),
 }));
 
