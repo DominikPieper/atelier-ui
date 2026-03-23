@@ -16,6 +16,7 @@ export * from './lib/radio-group/llm-radio-group';
 export * from './lib/radio/llm-radio';
 export * from './lib/select/llm-select';
 export * from './lib/skeleton/llm-skeleton';
+export * from './lib/table/llm-table';
 export * from './lib/tabs/llm-tabs';
 export * from './lib/textarea/llm-textarea';
 export * from './lib/toast/llm-toast';
