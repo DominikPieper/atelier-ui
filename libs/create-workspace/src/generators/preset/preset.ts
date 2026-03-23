@@ -56,6 +56,7 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
         style: 'css',
         routing: true,
         bundler: 'vite',
+        linter: 'eslint',
         unitTestRunner: 'none',
         skipFormat: true,
       } as Parameters<typeof reactAppGenerator>[1]);
@@ -73,6 +74,7 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
         directory: appName,
         style: 'css',
         routing: true,
+        linter: 'eslint',
         unitTestRunner: 'none',
         skipFormat: true,
       } as Parameters<typeof vueAppGenerator>[1]);
