@@ -207,7 +207,7 @@ body {
 
 .docs-demo-code {
   border-top: 1px solid var(--ui-color-border, #e5e7eb);
-  background: #1e1e2e;
+  background: #28283c;
   padding: var(--ui-spacing-4, 1rem) var(--ui-spacing-5, 1.25rem);
 }
 

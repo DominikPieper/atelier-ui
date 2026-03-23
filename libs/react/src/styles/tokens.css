@@ -157,20 +157,20 @@
     --ui-color-warning: #fbbf24;
     --ui-color-info: #22d3ee;
 
-    --ui-color-surface: #1e1e2e;
-    --ui-color-surface-raised: #252535;
-    --ui-color-surface-sunken: #18181f;
+    --ui-color-surface: #28283c;
+    --ui-color-surface-raised: #2f2f45;
+    --ui-color-surface-sunken: #22222f;
 
-    --ui-color-border: #2e2e3e;
-    --ui-color-border-hover: #3d3d50;
+    --ui-color-border: #3a3a4f;
+    --ui-color-border-hover: #4a4a63;
 
     --ui-color-text: #f1f5f9;
     --ui-color-text-muted: #94a3b8;
     --ui-color-on-primary: #0f172a;
 
-    --ui-color-input-border: #3d3d50;
-    --ui-color-input-border-hover: #5a5a72;
-    --ui-color-placeholder: #5a5a72;
+    --ui-color-input-border: #4a4a63;
+    --ui-color-input-border-hover: #686880;
+    --ui-color-placeholder: #686880;
 
     --ui-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
     --ui-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3),
@@ -202,20 +202,20 @@
   --ui-color-warning: #fbbf24;
   --ui-color-info: #22d3ee;
 
-  --ui-color-surface: #1e1e2e;
-  --ui-color-surface-raised: #252535;
-  --ui-color-surface-sunken: #18181f;
+  --ui-color-surface: #28283c;
+  --ui-color-surface-raised: #2f2f45;
+  --ui-color-surface-sunken: #22222f;
 
-  --ui-color-border: #2e2e3e;
-  --ui-color-border-hover: #3d3d50;
+  --ui-color-border: #3a3a4f;
+  --ui-color-border-hover: #4a4a63;
 
   --ui-color-text: #f1f5f9;
   --ui-color-text-muted: #94a3b8;
   --ui-color-on-primary: #0f172a;
 
-  --ui-color-input-border: #3d3d50;
-  --ui-color-input-border-hover: #5a5a72;
-  --ui-color-placeholder: #5a5a72;
+  --ui-color-input-border: #4a4a63;
+  --ui-color-input-border-hover: #686880;
+  --ui-color-placeholder: #686880;
 
   --ui-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
   --ui-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3),
