@@ -22,19 +22,18 @@ async function main() {
     throw new Error('Please provide a name for the workspace');
   }
 
-  const { frameworks } = await enquirer.prompt({
-    type: 'multiselect',
-    name: 'frameworks',
-    message: 'Which framework(s) do you want to use?',
+  const { framework } = await enquirer.prompt({
+    type: 'select',
+    name: 'framework',
+    message: 'Which framework do you want to use?',
     choices: [
       { name: 'angular', message: 'Angular' },
       { name: 'react',   message: 'React' },
       { name: 'vue',     message: 'Vue' },
     ],
-    validate: (value: string[]) => value.length > 0 || 'Select at least one framework',
   });
 
-  console.log(`\nScaffolding Atelier UI workshop: ${name} (${(frameworks as string[]).join(', ')})\n`);
+  console.log(`\nScaffolding Atelier UI workshop: ${name} (${framework})\n`);
 
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const presetVersion = require('../package.json').version;
@@ -45,16 +44,16 @@ async function main() {
       name,
       nxCloud: 'skip',
       packageManager: 'npm',
-      frameworks: (frameworks as string[]).join(','),
+      frameworks: framework,
     },
   );
 
-  const appNames = (frameworks as string[]).map((f) => `workshop-${f}`).join(', ');
+  const appName = `workshop-${framework}`;
   console.log(`\n✓ Workspace created at: ${directory}`);
   console.log(`\nGet started:\n`);
   console.log(`  cd ${directory}`);
-  console.log(`  npx nx serve ${(frameworks as string[])[0] === 'angular' ? 'workshop-angular' : `workshop-${(frameworks as string[])[0]}`}`);
-  console.log(`\nApps scaffolded: ${appNames}\n`);
+  console.log(`  npx nx serve ${appName}`);
+  console.log(`\nApp scaffolded: ${appName}\n`);
 }
 
 main();
