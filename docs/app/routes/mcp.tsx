@@ -808,23 +808,6 @@ function McpPage() {
             </button>
           </div>
 
-          {/* JSON color legend — shown once either block is visible */}
-          {request && (
-            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-              {([
-                { color: '#00bebe', label: 'keys' },
-                { color: '#059669', label: 'strings' },
-                { color: '#7c3aed', label: 'numbers / booleans' },
-                { color: '#6c7086', label: 'structure' },
-              ] as const).map(({ color, label }) => (
-                <span key={label} style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.68rem', color: 'var(--ui-color-text-muted)' }}>
-                  <span style={{ width: '8px', height: '8px', borderRadius: '2px', background: color, flexShrink: 0 }} />
-                  {label}
-                </span>
-              ))}
-            </div>
-          )}
-
           {/* tool_call — appears immediately when Call is clicked */}
           {request && (
             <div style={{ opacity: requestVisible ? 1 : 0, transform: requestVisible ? 'translateY(0)' : 'translateY(6px)', transition: 'opacity 0.2s ease, transform 0.2s ease' }}>

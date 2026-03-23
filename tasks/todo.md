@@ -42,7 +42,6 @@
 ## Remaining
 
 - [ ] Storybook visual check — light + dark mode, manual pass on key components
-- [ ] Netlify auto-deploy on git push (currently manual trigger)
 - [ ] CI pipeline for tests on PRs
 - [ ] Facilitator guide — timing, learning arc, common pitfalls
 - [ ] True CLI e2e test — runs npx create-atelier-ui-workspace in a temp dir

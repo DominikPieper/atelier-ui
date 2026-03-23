@@ -112,7 +112,19 @@
       "Bash(npx ng-packagr:*)",
       "Bash(nx graph:*)",
       "Bash(for dir:*)",
-      "Read(//Users/dominikpieper/Projects/angular-llm-components/libs/vue/src/lib/**)"
+      "Read(//Users/dominikpieper/Projects/angular-llm-components/libs/vue/src/lib/**)",
+      "Bash(npm show:*)",
+      "Bash(curl -s -X POST https://atelier-ui.netlify.app/storybook-react/mcp -H \"Content-Type: application/json\" -d '{\"\"\"\"jsonrpc\"\"\"\":\"\"\"\"2.0\"\"\"\",\"\"\"\"id\"\"\"\":1,\"\"\"\"method\"\"\"\":\"\"\"\"initialize\"\"\"\",\"\"\"\"params\"\"\"\":{\"\"\"\"protocolVersion\"\"\"\":\"\"\"\"2024-11-05\"\"\"\",\"\"\"\"capabilities\"\"\"\":{},\"\"\"\"clientInfo\"\"\"\":{\"\"\"\"name\"\"\"\":\"\"\"\"test\"\"\"\",\"\"\"\"version\"\"\"\":\"\"\"\"1.0\"\"\"\"}}}')",
+      "Bash(for lib:*)",
+      "Bash(python3 -c \"import sys,json; d=sys.stdin.read\\(\\); parts=d.split\\(''''data: ''''\\); obj=json.loads\\(parts[-1]\\); content=obj[''''result''''][''''content''''][0][''''text'''']; items=json.loads\\(content\\); print\\(f''''{len\\(items\\)} components''''\\); [print\\('''' -'''', i[''''title'''']\\) for i in items[:4]]\" 2)",
+      "Bash(1 done:*)",
+      "Bash(curl -s -X POST https://atelier-ui.netlify.app/storybook-react/mcp -H \"Content-Type: application/json\" -d '{\"\"\"\"jsonrpc\"\"\"\":\"\"\"\"2.0\"\"\"\",\"\"\"\"id\"\"\"\":2,\"\"\"\"method\"\"\"\":\"\"\"\"tools/call\"\"\"\",\"\"\"\"params\"\"\"\":{\"\"\"\"name\"\"\"\":\"\"\"\"list-all-documentation\"\"\"\",\"\"\"\"arguments\"\"\"\":{}}}')",
+      "Bash(head -5 node -e \"const pkg = require\\(''''@nx/react/package.json''''\\); console.log\\(Object.keys\\(pkg.exports || {}\\).filter\\(k => k.includes\\(''''gen''''\\)\\)\\)\")",
+      "Bash(find /Users/dominikpieper/Projects/angular-llm-components -path */docs/* -name *.md)",
+      "Bash(find /Users/dominikpieper/Projects/angular-llm-components -name *.md)",
+      "Bash(find /Users/dominikpieper/Projects/angular-llm-components/docs -name *.md)",
+      "Bash(sed -i '' 's/# LLM-Optimized Angular UI Component Library — Design Guide/# LLM-Optimized UI Component Library — Design Guide/' /Users/dominikpieper/Projects/angular-llm-components/plan/big-picture.md)",
+      "Bash(__NEW_LINE_e2b0c343b03357a6__ sed:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
