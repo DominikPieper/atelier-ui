@@ -36,20 +36,20 @@ describe('preset generator', () => {
 
   // ─── MCP settings ──────────────────────────────────────────────────────────
 
-  it('writes .claude/settings.json with angular MCP only', async () => {
+  it('writes .mcp.json with angular MCP only', async () => {
     await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
 
-    const settings = readJson(tree, '.claude/settings.json');
+    const settings = readJson(tree, '.mcp.json');
     expect(settings.mcpServers['nx-mcp']).toBeDefined();
     expect(settings.mcpServers['storybook-angular']).toBeDefined();
     expect(settings.mcpServers['storybook-react']).toBeUndefined();
     expect(settings.mcpServers['storybook-vue']).toBeUndefined();
   });
 
-  it('writes .claude/settings.json with all three MCPs for multi-framework', async () => {
+  it('writes .mcp.json with all three MCPs for multi-framework', async () => {
     await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular,react,vue' });
 
-    const settings = readJson(tree, '.claude/settings.json');
+    const settings = readJson(tree, '.mcp.json');
     expect(settings.mcpServers['storybook-angular']).toBeDefined();
     expect(settings.mcpServers['storybook-react']).toBeDefined();
     expect(settings.mcpServers['storybook-vue']).toBeDefined();
@@ -58,7 +58,7 @@ describe('preset generator', () => {
   it('each MCP entry has type http and correct url', async () => {
     await presetGenerator(tree, { name: 'my-workspace', frameworks: 'react' });
 
-    const settings = readJson(tree, '.claude/settings.json');
+    const settings = readJson(tree, '.mcp.json');
     expect(settings.mcpServers['storybook-react'].type).toBe('http');
     expect(settings.mcpServers['storybook-react'].url).toContain('storybook-react/mcp');
   });
@@ -66,7 +66,7 @@ describe('preset generator', () => {
   it('nx-mcp uses stdio command', async () => {
     await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
 
-    const settings = readJson(tree, '.claude/settings.json');
+    const settings = readJson(tree, '.mcp.json');
     expect(settings.mcpServers['nx-mcp'].type).toBe('stdio');
     expect(settings.mcpServers['nx-mcp'].command).toBe('npx');
   });
