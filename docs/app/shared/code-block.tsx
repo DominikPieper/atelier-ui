@@ -1,5 +1,3 @@
-import React from 'react';
-
 // ─── Token type ───────────────────────────────────────────────────────────────
 
 export type Token = { text: string; color?: string };
@@ -108,7 +106,7 @@ function tokenizeTsLineContent(line: string, tokens: Token[]) {
 
 function tokenizeTsTypes(segment: string, tokens: Token[]) {
   // Split on | and string literals
-  const parts = segment.split(/(\'[^\']*\'|\"[^\"]*\"|[|])/);
+  const parts = segment.split(/('[^']*'|"[^"]*"|[|])/);
   for (const part of parts) {
     if (!part) continue;
     if ((part.startsWith("'") && part.endsWith("'")) || (part.startsWith('"') && part.endsWith('"'))) {

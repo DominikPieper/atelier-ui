@@ -1,4 +1,3 @@
-import React from 'react';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { ALL_COMPONENTS, COMPONENT_CATEGORIES, componentDocs } from '../../component-data';
 
