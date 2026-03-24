@@ -38,7 +38,7 @@ function CodeCompare({ bad, good, lang = 'jsx' }: { bad: string; good: string; l
         { label: 'Unpredictable', code: bad, accent: '#ef4444' },
         { label: 'LLM-optimized', code: good, accent: '#059669' },
       ].map(({ label, code, accent }) => (
-        <div key={label}>
+        <div key={label} style={{ minWidth: 0 }}>
           <div style={{ fontSize: '0.68rem', fontWeight: '600', color: accent, marginBottom: '0.35rem' }}>{label}</div>
           <CodeBlock lang={lang} code={code} />
         </div>
@@ -49,7 +49,7 @@ function CodeCompare({ bad, good, lang = 'jsx' }: { bad: string; good: string; l
 
 function DesignPrinciplesPage() {
   return (
-    <div className="docs-page" style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
+    <>
       <div className="docs-page-header">
         <h1 className="docs-page-title">LLM-Optimized API Design</h1>
         <p className="docs-page-description">
@@ -167,6 +167,6 @@ position: 'top' | 'bottom' | 'left' | 'right'`}
         </p>
         <Rule>The library design reduces guessing. The MCP server eliminates it.</Rule>
       </div>
-    </div>
+    </>
   );
 }
