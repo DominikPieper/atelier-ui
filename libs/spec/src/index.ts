@@ -120,6 +120,20 @@ export interface LlmOptionSpec {
 }
 
 // ---------------------------------------------------------------------------
+// Combobox
+// ---------------------------------------------------------------------------
+export interface LlmComboboxOption {
+  value: string;
+  label: string;
+  disabled?: boolean;
+}
+
+export interface LlmComboboxSpec extends LlmFormFieldSpec {
+  options?: LlmComboboxOption[];
+  placeholder?: string;
+}
+
+// ---------------------------------------------------------------------------
 // Alert
 // ---------------------------------------------------------------------------
 export type LlmAlertVariant = 'info' | 'success' | 'warning' | 'danger';

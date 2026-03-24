@@ -56,6 +56,9 @@ export { default as LlmPagination } from './lib/pagination/llm-pagination.vue';
 // Progress
 export { default as LlmProgress } from './lib/progress/llm-progress.vue';
 
+// Combobox
+export { default as LlmCombobox } from './lib/combobox/llm-combobox.vue';
+
 // Radio
 export { default as LlmRadioGroup } from './lib/radio-group/llm-radio-group.vue';
 export { default as LlmRadio } from './lib/radio/llm-radio.vue';

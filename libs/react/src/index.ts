@@ -15,6 +15,7 @@ export * from './lib/progress/llm-progress';
 export * from './lib/radio-group/llm-radio-group';
 export * from './lib/radio/llm-radio';
 export * from './lib/select/llm-select';
+export * from './lib/combobox/llm-combobox';
 export * from './lib/skeleton/llm-skeleton';
 export * from './lib/table/llm-table';
 export * from './lib/tabs/llm-tabs';

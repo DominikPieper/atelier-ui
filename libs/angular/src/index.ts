@@ -20,6 +20,7 @@ export { LlmToggle } from './lib/toggle/llm-toggle';
 export { LlmAlert } from './lib/alert/llm-alert';
 export { LlmSelect } from './lib/select/llm-select';
 export { LlmOption } from './lib/select/llm-option';
+export { LlmCombobox } from './lib/combobox/llm-combobox';
 export { LLM_SELECT } from './lib/select/llm-select.token';
 export type { LlmSelectContext } from './lib/select/llm-select.token';
 export {
