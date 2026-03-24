@@ -67,6 +67,14 @@ export { default as LlmOption } from './lib/select/llm-option.vue';
 // Skeleton
 export { default as LlmSkeleton } from './lib/skeleton/llm-skeleton.vue';
 
+// Table
+export { default as LlmTable } from './lib/table/llm-table.vue';
+export { default as LlmThead } from './lib/table/llm-thead.vue';
+export { default as LlmTbody } from './lib/table/llm-tbody.vue';
+export { default as LlmTr } from './lib/table/llm-tr.vue';
+export { default as LlmTh } from './lib/table/llm-th.vue';
+export { default as LlmTd } from './lib/table/llm-td.vue';
+
 // Tabs
 export { default as LlmTabGroup } from './lib/tabs/llm-tab-group.vue';
 export { default as LlmTab } from './lib/tabs/llm-tab.vue';
