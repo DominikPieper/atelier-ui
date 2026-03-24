@@ -1,5 +1,6 @@
 import React from 'react';
 import { createFileRoute } from '@tanstack/react-router';
+import { CodeBlock, type Lang } from '../shared/code-block';
 
 export const Route = createFileRoute('/design-principles')({
   component: DesignPrinciplesPage,
@@ -30,7 +31,7 @@ function Rule({ children }: { children: React.ReactNode }) {
   );
 }
 
-function CodeCompare({ bad, good }: { bad: string; good: string }) {
+function CodeCompare({ bad, good, lang = 'jsx' }: { bad: string; good: string; lang?: Lang }) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginTop: '0.75rem' }}>
       {[
@@ -39,11 +40,7 @@ function CodeCompare({ bad, good }: { bad: string; good: string }) {
       ].map(({ label, code, accent }) => (
         <div key={label}>
           <div style={{ fontSize: '0.68rem', fontWeight: '600', color: accent, marginBottom: '0.35rem' }}>{label}</div>
-          <div className="docs-demo-code" style={{ borderRadius: 'var(--ui-radius-sm)' }}>
-            <pre style={{ margin: 0, fontSize: '0.75rem', lineHeight: '1.55', color: '#cdd6f4', whiteSpace: 'pre-wrap' }}>
-              {code}
-            </pre>
-          </div>
+          <CodeBlock lang={lang} code={code} />
         </div>
       ))}
     </div>
@@ -105,6 +102,7 @@ function DesignPrinciplesPage() {
           the type and knows exactly what to write.
         </p>
         <CodeCompare
+          lang="ts"
           bad={`// What values are valid here?
 variant: string
 size: string

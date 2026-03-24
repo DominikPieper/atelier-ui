@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { CodeBlock } from '../../shared/code-block';
 import { createFileRoute, Link, notFound } from '@tanstack/react-router';
 import {
   LlmButton,
@@ -107,9 +108,7 @@ function ComponentDocPage() {
           <div className="docs-demo-canvas docs-demo-canvas--column">
             <ComponentDemo name={name} />
           </div>
-          <div className="docs-demo-code">
-            <pre>{doc.codeExample}</pre>
-          </div>
+          <CodeBlock lang="jsx" code={doc.codeExample} />
         </div>
       </div>
 
@@ -143,9 +142,7 @@ function ComponentDocPage() {
       {/* Import snippet */}
       <div className="docs-section">
         <h2 className="docs-section-title">Import</h2>
-        <div className="docs-demo-code" style={{ borderRadius: '8px' }}>
-          <pre>{generateImport(name)}</pre>
-        </div>
+        <CodeBlock lang="ts" code={generateImport(name)} />
       </div>
     </>
   );

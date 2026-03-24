@@ -1,20 +1,12 @@
+import React from 'react';
 import { createFileRoute } from '@tanstack/react-router';
+import { CodeBlock } from '../shared/code-block';
 
 export const Route = createFileRoute('/workshop')({
   component: WorkshopPage,
 });
 
 const SITE_URL = 'https://atelier-ui.netlify.app';
-
-function Code({ children }: { children: string }) {
-  return (
-    <div className="docs-demo-code" style={{ borderRadius: '8px', marginBottom: '1rem' }}>
-      <pre style={{ margin: 0, fontFamily: "'Menlo','Monaco','Courier New',monospace", fontSize: '0.8rem', lineHeight: 1.6, overflowX: 'auto', color: '#cdd6f4' }}>
-        {children}
-      </pre>
-    </div>
-  );
-}
 
 const muted: React.CSSProperties = {
   lineHeight: '1.6',
@@ -37,20 +29,20 @@ function WorkshopPage() {
       <div className="docs-section">
         <h2 className="docs-section-title">Quick start</h2>
         <p style={muted}>Run the following command, then follow the prompts:</p>
-        <Code>npx create-atelier-ui-workspace</Code>
+        <CodeBlock lang="shell" code="npx create-atelier-ui-workspace" />
         <p style={muted}>
           You will be asked for a workspace name and which frameworks you want to use.
           Select one or more from Angular, React, and Vue.
         </p>
-        <Code>{`? Workspace name: › my-workshop
+        <CodeBlock lang="text" code={`? Workspace name: › my-workshop
 ? Which framework(s) do you want to use?
   ◉ Angular
   ◉ React
-  ◉ Vue`}</Code>
+  ◉ Vue`} />
         <p style={muted}>
           You can also pass the workspace name directly to skip the first prompt:
         </p>
-        <Code>npx create-atelier-ui-workspace my-workshop</Code>
+        <CodeBlock lang="shell" code="npx create-atelier-ui-workspace my-workshop" />
       </div>
 
       {/* What gets created */}
@@ -108,9 +100,9 @@ function WorkshopPage() {
       <div className="docs-section">
         <h2 className="docs-section-title">After setup</h2>
         <p style={muted}>Install dependencies and serve an app:</p>
-        <Code>{`cd my-workshop
+        <CodeBlock lang="shell" code={`cd my-workshop
 npm install
-npx nx serve workshop-angular`}</Code>
+npx nx serve workshop-angular`} />
         <p style={muted}>
           Open the workspace in VS Code or any editor that supports Claude Code. The MCP
           servers connect automatically — your AI assistant can look up component props,
@@ -125,7 +117,7 @@ npx nx serve workshop-angular`}</Code>
           The generated <code>.claude/settings.json</code> wires up the Nx MCP and hosted
           Storybook MCP servers for each selected framework. For example, if you selected all three:
         </p>
-        <Code>{`{
+        <CodeBlock lang="json" code={`{
   "mcpServers": {
     "nx-mcp": {
       "type": "stdio",
@@ -145,7 +137,7 @@ npx nx serve workshop-angular`}</Code>
       "url": "${SITE_URL}/storybook-vue/mcp"
     }
   }
-}`}</Code>
+}`} />
         <p style={muted}>
           You can also add these manually to any existing project. See the{' '}
           <a href="/storybook">Storybook page</a> for all three MCP endpoint URLs.
@@ -159,11 +151,11 @@ npx nx serve workshop-angular`}</Code>
           If you prefer to integrate the preset into your own <code>create-nx-workspace</code>{' '}
           workflow, pass it via the <code>--preset</code> flag:
         </p>
-        <Code>npx create-nx-workspace my-workshop --preset=@atelier-ui/create-workspace</Code>
+        <CodeBlock lang="shell" code="npx create-nx-workspace my-workshop --preset=@atelier-ui/create-workspace" />
         <p style={muted}>
           Additional options can be passed as flags:
         </p>
-        <Code>npx create-nx-workspace my-workshop --preset=@atelier-ui/create-workspace --frameworks=angular,react,vue</Code>
+        <CodeBlock lang="shell" code="npx create-nx-workspace my-workshop --preset=@atelier-ui/create-workspace --frameworks=angular,react,vue" />
       </div>
     </div>
   );
