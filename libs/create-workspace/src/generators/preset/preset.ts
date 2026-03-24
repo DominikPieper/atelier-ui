@@ -126,7 +126,7 @@ This workspace contains Atelier UI component library apps for hands-on AI develo
 
 ## MCP Tools — always use these before writing component code
 
-The MCP servers are pre-configured in \`.claude/settings.json\` and connect automatically.
+The MCP servers are pre-configured in \`.mcp.json\` and connect automatically.
 
 | Tool | When to call it |
 |---|---|
@@ -183,7 +183,7 @@ ${frameworks.map((f) => `- \`workshop-${f}\` — run with \`npx nx serve worksho
       url: `${SITE_URL}/storybook-${framework}/mcp`,
     };
   }
-  writeJson(tree, '.claude/settings.json', { mcpServers });
+  writeJson(tree, '.mcp.json', { mcpServers });
 
   // Write README
   tree.write(
@@ -203,7 +203,7 @@ npx nx serve workshop-${frameworks[0]}
 
 ## MCP
 
-Claude Code MCP servers are pre-configured in \`.claude/settings.json\`.
+Claude Code MCP servers are pre-configured in \`.mcp.json\`.
 Browse components at ${SITE_URL}
 `,
   );
