@@ -120,6 +120,24 @@ export interface LlmOptionSpec {
 }
 
 // ---------------------------------------------------------------------------
+// Stepper
+// ---------------------------------------------------------------------------
+export interface LlmStepperSpec {
+  activeStep?: number;
+  orientation?: 'horizontal' | 'vertical';
+  linear?: boolean;
+}
+
+export interface LlmStepSpec {
+  label: string;
+  description?: string;
+  completed?: boolean;
+  error?: boolean;
+  optional?: boolean;
+  disabled?: boolean;
+}
+
+// ---------------------------------------------------------------------------
 // Combobox
 // ---------------------------------------------------------------------------
 export interface LlmComboboxOption {

@@ -21,5 +21,6 @@ export * from './lib/table/llm-table';
 export * from './lib/tabs/llm-tabs';
 export * from './lib/textarea/llm-textarea';
 export * from './lib/toast/llm-toast';
+export * from './lib/stepper/llm-stepper';
 export * from './lib/toggle/llm-toggle';
 export * from './lib/tooltip/llm-tooltip';

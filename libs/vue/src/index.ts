@@ -70,6 +70,10 @@ export { default as LlmOption } from './lib/select/llm-option.vue';
 // Skeleton
 export { default as LlmSkeleton } from './lib/skeleton/llm-skeleton.vue';
 
+// Stepper
+export { default as LlmStepper } from './lib/stepper/llm-stepper.vue';
+export { default as LlmStep } from './lib/stepper/llm-step.vue';
+
 // Table
 export { default as LlmTable } from './lib/table/llm-table.vue';
 export { default as LlmThead } from './lib/table/llm-thead.vue';

@@ -80,3 +80,6 @@ export {
   LLM_TABLE,
 } from './lib/table/llm-table';
 export type { LlmTableContext, LlmSortDirection } from './lib/table/llm-table';
+export { LlmStepper, LlmStep } from './lib/stepper/llm-stepper';
+export { LLM_STEPPER } from './lib/stepper/llm-stepper.token';
+export type { LlmStepperContext, StepInfo } from './lib/stepper/llm-stepper.token';

@@ -1,0 +1,169 @@
+.llm-stepper {
+  display: block;
+  font-family: var(--ui-font-family);
+}
+
+/* ─── Header ─── */
+.stepper-header {
+  display: flex;
+  align-items: center;
+}
+
+/* ─── Step item ─── */
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+}
+
+/* ─── Connector ─── */
+.step-connector {
+  flex: 1;
+  height: 2px;
+  background: var(--ui-color-border);
+  transition: background var(--ui-transition-fast);
+  min-width: var(--ui-spacing-4);
+}
+
+.step-connector.is-active {
+  background: var(--ui-color-primary);
+}
+
+/* ─── Step circle button ─── */
+.step-circle {
+  all: unset;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--ui-color-border);
+  background: var(--ui-color-surface);
+  color: var(--ui-color-text-muted);
+  font-size: var(--ui-font-size-sm);
+  font-weight: var(--ui-font-weight-semibold);
+  cursor: pointer;
+  transition: var(--ui-transition-fast);
+  transition-property: border-color, background-color, color, box-shadow;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.step-circle:focus-visible {
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
+}
+
+.step-circle:disabled {
+  cursor: not-allowed;
+}
+
+/* ─── Step text ─── */
+.step-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: var(--ui-spacing-2);
+  text-align: center;
+}
+
+.step-label {
+  font-size: var(--ui-font-size-sm);
+  font-weight: var(--ui-font-weight-medium);
+  color: var(--ui-color-text-muted);
+  white-space: nowrap;
+}
+
+.step-description {
+  font-size: var(--ui-font-size-xs);
+  color: var(--ui-color-text-muted);
+  margin-top: 2px;
+}
+
+.step-optional {
+  font-size: var(--ui-font-size-xs);
+  color: var(--ui-color-text-muted);
+  font-style: italic;
+  margin-top: 2px;
+}
+
+/* ─── Content ─── */
+.stepper-content {
+  margin-top: var(--ui-spacing-6);
+}
+
+.stepper-content [role="tabpanel"][hidden] {
+  display: none;
+}
+
+/* ─── Active state ─── */
+.step-item.is-active .step-circle {
+  border-color: var(--ui-color-primary);
+  color: var(--ui-color-primary);
+}
+
+.step-item.is-active .step-label {
+  color: var(--ui-color-text);
+}
+
+/* ─── Completed state ─── */
+.step-item.is-completed .step-circle {
+  border-color: var(--ui-color-primary);
+  background: var(--ui-color-primary);
+  color: #fff;
+}
+
+.step-item.is-completed .step-label {
+  color: var(--ui-color-text);
+}
+
+/* ─── Error state ─── */
+.step-item.is-error .step-circle {
+  border-color: var(--ui-color-danger);
+  background: var(--ui-color-danger);
+  color: #fff;
+}
+
+.step-item.is-error .step-label {
+  color: var(--ui-color-danger);
+}
+
+/* ─── Disabled state ─── */
+.step-item.is-disabled .step-circle {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.step-item.is-disabled .step-label {
+  opacity: 0.4;
+}
+
+/* ─── Vertical orientation ─── */
+.llm-stepper.orientation-vertical .stepper-header {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.llm-stepper.orientation-vertical .step-item {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--ui-spacing-3);
+}
+
+.llm-stepper.orientation-vertical .step-text {
+  align-items: flex-start;
+  text-align: left;
+  margin-top: 0;
+  padding-top: var(--ui-spacing-1);
+}
+
+.llm-stepper.orientation-vertical .step-connector {
+  flex: none;
+  width: 2px;
+  height: var(--ui-spacing-6);
+  margin-left: 15px;
+  min-width: 0;
+}
