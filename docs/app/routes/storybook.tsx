@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { CodeBlock } from '../shared/code-block';
 
 export const Route = createFileRoute('/storybook')({
   component: StorybookPage,
@@ -102,9 +103,7 @@ function StorybookPage() {
                 In your AI assistant's MCP configuration (e.g.{' '}
                 <code>.claude/settings.json</code> for Claude Code) add one or both servers:
               </p>
-              <div className="docs-demo-code" style={{ borderRadius: 'var(--ui-radius-md, 8px)', borderTop: 'none' }}>
-                <pre>{MCP_CONFIG}</pre>
-              </div>
+              <CodeBlock lang="json" code={MCP_CONFIG} />
             </div>
           </div>
 
@@ -116,9 +115,7 @@ function StorybookPage() {
                 Once connected, your AI assistant can look up component props, variants, and
                 usage examples directly from Storybook. For example:
               </p>
-              <div className="docs-demo-code" style={{ borderRadius: 'var(--ui-radius-md, 8px)', borderTop: 'none' }}>
-                <pre>{"Build a settings page using @atelier-ui/react components.\nUse the storybook-react MCP to check available props."}</pre>
-              </div>
+              <CodeBlock lang="text" code={"Build a settings page using @atelier-ui/react components.\nUse the storybook-react MCP to check available props."} />
             </div>
           </div>
 
