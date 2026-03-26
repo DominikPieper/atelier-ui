@@ -95,6 +95,29 @@
   },
   "analytics": false,
   "release": {
+    "releaseTagPattern": "v{version}",
+    "groups": {
+      "libraries": {
+        "projects": [
+          "angular",
+          "react",
+          "vue",
+          "spec",
+          "create-workspace",
+          "create-atelier-ui-workspace"
+        ],
+        "version": {
+          "conventionalCommits": true
+        }
+      }
+    },
+    "changelog": {
+      "projectChangelogs": true,
+      "workspaceChangelog": {
+        "createRelease": "github"
+      },
+      "automaticFromRef": true
+    },
     "version": {
       "preVersionCommand": "npx nx run-many -t build"
     }
