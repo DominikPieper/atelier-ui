@@ -56,8 +56,10 @@ describe('LlmDrawer', () => {
     // jsdom doesn't make <dialog> content accessible via role queries,
     // so we query by aria-label directly
     const closeBtn = container.querySelector<HTMLButtonElement>('button[aria-label="Close drawer"]');
-    expect(closeBtn).toBeInTheDocument();
-    await user.click(closeBtn!);
+    if (!closeBtn) {
+      throw new Error('Close button not found');
+    }
+    await user.click(closeBtn);
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 

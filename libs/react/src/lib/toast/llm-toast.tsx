@@ -7,7 +7,6 @@ import {
   ReactNode,
 } from 'react';
 import type {
-  LlmToastVariant,
   LlmToastOptions,
   LlmToastContainerPosition,
 } from '@atelier-ui/spec';

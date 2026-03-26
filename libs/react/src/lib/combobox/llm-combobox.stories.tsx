@@ -32,11 +32,13 @@ const meta: Meta<typeof LlmCombobox> = {
 export default meta;
 type Story = StoryObj<typeof LlmCombobox>;
 
+const LlmComboboxWrapper = (args: any) => {
+  const [value, setValue] = useState(args.value ?? '');
+  return <LlmCombobox {...args} value={value} onValueChange={setValue} />;
+};
+
 export const Default: Story = {
-  render: (args) => {
-    const [value, setValue] = useState('');
-    return <LlmCombobox {...args} value={value} onValueChange={setValue} />;
-  },
+  render: (args) => <LlmComboboxWrapper {...args} />,
   args: {
     options: FRUITS,
     placeholder: 'Search fruit…',
@@ -44,21 +46,16 @@ export const Default: Story = {
 };
 
 export const WithPreselection: Story = {
-  render: (args) => {
-    const [value, setValue] = useState('cherry');
-    return <LlmCombobox {...args} value={value} onValueChange={setValue} />;
-  },
+  render: (args) => <LlmComboboxWrapper {...args} />,
   args: {
     options: FRUITS,
+    value: 'cherry',
     placeholder: 'Search fruit…',
   },
 };
 
 export const Countries: Story = {
-  render: (args) => {
-    const [value, setValue] = useState('');
-    return <LlmCombobox {...args} value={value} onValueChange={setValue} />;
-  },
+  render: (args) => <LlmComboboxWrapper {...args} />,
   args: {
     options: COUNTRIES,
     placeholder: 'Search country…',
@@ -75,10 +72,7 @@ export const Disabled: Story = {
 };
 
 export const Invalid: Story = {
-  render: (args) => {
-    const [value, setValue] = useState('');
-    return <LlmCombobox {...args} value={value} onValueChange={setValue} />;
-  },
+  render: (args) => <LlmComboboxWrapper {...args} />,
   args: {
     options: FRUITS,
     invalid: true,
@@ -88,10 +82,7 @@ export const Invalid: Story = {
 };
 
 export const WithDisabledOption: Story = {
-  render: (args) => {
-    const [value, setValue] = useState('');
-    return <LlmCombobox {...args} value={value} onValueChange={setValue} />;
-  },
+  render: (args) => <LlmComboboxWrapper {...args} />,
   args: {
     options: FRUITS,
     placeholder: 'Search fruit… (Honeydew is disabled)',

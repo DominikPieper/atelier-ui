@@ -228,7 +228,7 @@ export function LlmCombobox({
               </li>
             ))
           ) : (
-            <li className="llm-combobox-no-results" role="option" aria-disabled="true">
+            <li className="llm-combobox-no-results" role="option" aria-selected={false} aria-disabled="true">
               No results found.
             </li>
           )}

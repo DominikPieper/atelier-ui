@@ -1,6 +1,5 @@
 import {
   createContext,
-  useContext,
   useState,
   useRef,
   ReactNode,
@@ -8,6 +7,7 @@ import {
   KeyboardEvent,
   Children,
   isValidElement,
+  ReactElement,
 } from 'react';
 import type {
   LlmTabGroupSpec,
@@ -86,10 +86,13 @@ export function LlmTabGroup({
         isValidElement(child) &&
         (child.type as { displayName?: string }).displayName === 'LlmTab'
     )
-    .map((child: any) => ({
-      label: child.props.label ?? '',
-      disabled: child.props.disabled ?? false,
-    }));
+    .map((child) => {
+      const element = child as ReactElement<LlmTabProps>;
+      return {
+        label: element.props.label ?? '',
+        disabled: element.props.disabled ?? false,
+      };
+    });
 
   const classes = ['llm-tab-group', `variant-${variant}`, className]
     .filter(Boolean)
@@ -155,18 +158,21 @@ export function LlmTabGroup({
             </button>
           ))}
         </div>
-        {panels.map((panel: any, i) => (
-          <div
-            key={i}
-            id={`llm-tab-panel-${i}`}
-            role="tabpanel"
-            aria-labelledby={`llm-tab-${i}`}
-            tabIndex={0}
-            hidden={i !== selectedIndex}
-          >
-            {panel.props.children}
-          </div>
-        ))}
+        {panels.map((panel, i) => {
+          const element = panel as ReactElement<LlmTabProps>;
+          return (
+            <div
+              key={i}
+              id={`llm-tab-panel-${i}`}
+              role="tabpanel"
+              aria-labelledby={`llm-tab-${i}`}
+              tabIndex={0}
+              hidden={i !== selectedIndex}
+            >
+              {element.props.children}
+            </div>
+          );
+        })}
       </div>
     </TabGroupContext.Provider>
   );
@@ -194,6 +200,6 @@ export interface LlmTabProps extends LlmTabSpec {
  * An individual tab component for use within LlmTabGroup.
  */
 export function LlmTab({ children }: LlmTabProps) {
-  return <>{children}</>;
+  return children;
 }
 LlmTab.displayName = 'LlmTab';

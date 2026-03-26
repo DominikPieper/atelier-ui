@@ -1,4 +1,4 @@
-import { HTMLAttributes, ReactNode, Children, useState, useEffect } from 'react';
+import { HTMLAttributes, ReactNode, Children, useState } from 'react';
 import type {
   LlmAvatarSpec,
   LlmAvatarGroupSpec,

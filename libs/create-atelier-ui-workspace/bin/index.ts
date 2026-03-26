@@ -2,7 +2,6 @@
 
 import { createWorkspace } from 'create-nx-workspace';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const enquirer = require('enquirer');
 
 async function main() {
@@ -35,7 +34,6 @@ async function main() {
 
   console.log(`\nScaffolding Atelier UI workshop: ${name} (${framework})\n`);
 
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const presetVersion = require('../package.json').version;
 
   const { directory } = await createWorkspace(

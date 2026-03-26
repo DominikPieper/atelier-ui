@@ -45,9 +45,9 @@ describe('LlmStepper', () => {
     it('renders step numbers', async () => {
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
       const tabs = screen.getAllByRole('tab');
-      expect(tabs[0].textContent?.trim()).toBe('1');
-      expect(tabs[1].textContent?.trim()).toBe('2');
-      expect(tabs[2].textContent?.trim()).toBe('3');
+      expect(tabs[0].textContent.trim()).toBe('1');
+      expect(tabs[1].textContent.trim()).toBe('2');
+      expect(tabs[2].textContent.trim()).toBe('3');
     });
   });
 

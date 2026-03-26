@@ -174,7 +174,7 @@ function ComponentDocPage() {
                 <h3 className="docs-ai-card-title" style={{ marginBottom: 0 }}>💬 Example Prompt</h3>
                 <button 
                   className="docs-btn docs-btn-outline docs-btn-sm"
-                  onClick={() => navigator.clipboard.writeText(doc.aiUsage!.promptSnippet)}
+                  onClick={() => doc.aiUsage && navigator.clipboard.writeText(doc.aiUsage.promptSnippet)}
                   style={{ padding: '4px 10px', fontSize: '0.75rem' }}
                 >
                   Copy Prompt

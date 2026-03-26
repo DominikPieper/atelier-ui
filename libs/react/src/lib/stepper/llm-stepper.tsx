@@ -7,6 +7,7 @@ import {
   Children,
   isValidElement,
   useMemo,
+  ReactElement,
 } from 'react';
 import type { LlmStepperSpec, LlmStepSpec } from '@atelier-ui/spec';
 import './llm-stepper.css';
@@ -86,14 +87,17 @@ export function LlmStepper({
             isValidElement(c) &&
             (c.type as { displayName?: string }).displayName === 'LlmStep'
         )
-        .map((c: any) => ({
-          label: c.props.label ?? '',
-          description: c.props.description,
-          completed: c.props.completed ?? false,
-          error: c.props.error ?? false,
-          optional: c.props.optional ?? false,
-          disabled: c.props.disabled ?? false,
-        })),
+        .map((c) => {
+          const element = c as ReactElement<LlmStepProps>;
+          return {
+            label: element.props.label ?? '',
+            description: element.props.description,
+            completed: element.props.completed ?? false,
+            error: element.props.error ?? false,
+            optional: element.props.optional ?? false,
+            disabled: element.props.disabled ?? false,
+          };
+        }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [children]
   );
@@ -196,18 +200,21 @@ export function LlmStepper({
           })}
         </div>
         <div className="stepper-content">
-          {stepPanels.map((panel: any, i) => (
-            <div
-              key={i}
-              id={`llm-step-panel-${i}`}
-              role="tabpanel"
-              aria-labelledby={`llm-step-${i}`}
-              tabIndex={0}
-              hidden={i !== activeStep}
-            >
-              {panel.props.children}
-            </div>
-          ))}
+          {stepPanels.map((panel, i) => {
+            const element = panel as ReactElement<LlmStepProps>;
+            return (
+              <div
+                key={i}
+                id={`llm-step-panel-${i}`}
+                role="tabpanel"
+                aria-labelledby={`llm-step-${i}`}
+                tabIndex={0}
+                hidden={i !== activeStep}
+              >
+                {element.props.children}
+              </div>
+            );
+          })}
         </div>
       </div>
     </StepperContext.Provider>
@@ -231,6 +238,6 @@ export interface LlmStepProps extends LlmStepSpec {
 }
 
 export function LlmStep({ children }: LlmStepProps) {
-  return <>{children}</>;
+  return children;
 }
 LlmStep.displayName = 'LlmStep';

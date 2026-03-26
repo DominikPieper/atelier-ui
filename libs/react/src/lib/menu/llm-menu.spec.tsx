@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LlmMenu, LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger } from './llm-menu';
-import { LlmButton } from '../button/llm-button';
 
 describe('LlmMenu', () => {
   it('renders with role="menu"', () => {

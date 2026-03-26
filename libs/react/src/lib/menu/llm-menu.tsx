@@ -107,7 +107,7 @@ export function LlmMenuItem({
  * A separator for dividing groups of menu items.
  */
 export function LlmMenuSeparator() {
-  return <hr className="llm-menu-separator" role="separator" />;
+  return <hr className="llm-menu-separator" />;
 }
 
 /**

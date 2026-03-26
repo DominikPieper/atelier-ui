@@ -30,7 +30,11 @@ function polyfillPopover(): void {
 beforeAll(() => polyfillPopover());
 
 function getInput(container: Element): HTMLInputElement {
-  return container.querySelector('input[type="text"]')!;
+  const input = container.querySelector('input[type="text"]');
+  if (!input) {
+    throw new Error('Input not found');
+  }
+  return input as HTMLInputElement;
 }
 
 describe('LlmCombobox', () => {
@@ -80,8 +84,8 @@ describe('LlmCombobox', () => {
     await user.click(getInput(container));
     await user.keyboard('an');
     const options = screen.getAllByRole('option');
-    expect(options.some((o) => o.textContent?.includes('Banana'))).toBe(true);
-    expect(options.every((o) => !o.textContent?.includes('Apple'))).toBe(true);
+    expect(options.some((o) => o.textContent.includes('Banana'))).toBe(true);
+    expect(options.every((o) => !o.textContent.includes('Apple'))).toBe(true);
   });
 
   it('shows "No results found." when nothing matches', async () => {
@@ -178,7 +182,12 @@ describe('LlmCombobox', () => {
     });
     const input = getInput(container);
     await user.click(input);
-    const grapeOption = screen.getAllByRole('option').find((o) => o.textContent?.includes('Grape'))!;
+    const grapeOption = screen
+      .getAllByRole('option')
+      .find((o) => o.textContent.includes('Grape'));
+    if (!grapeOption) {
+      throw new Error('Grape option not found');
+    }
     await user.click(grapeOption);
     expect(input.value).toBe(''); // disabled — input stays empty
   });

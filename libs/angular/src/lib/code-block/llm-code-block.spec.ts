@@ -6,7 +6,13 @@ const CODE = `const greeting = 'Hello, World!';\nconsole.log(greeting);`;
 
 const TEMPLATE = `<llm-code-block [code]="code" [language]="language" [filename]="filename" [copyable]="copyable" [showLineNumbers]="showLineNumbers" />`;
 
-function defaults() {
+function defaults(): {
+  code: string;
+  language: string;
+  filename: string;
+  copyable: boolean;
+  showLineNumbers: boolean;
+} {
   return { code: CODE, language: 'typescript', filename: '', copyable: true, showLineNumbers: false };
 }
 
@@ -59,8 +65,8 @@ describe('LlmCodeBlock', () => {
     });
     const lineNumbers = container.querySelectorAll('.code-line-number');
     expect(lineNumbers.length).toBe(2);
-    expect(lineNumbers[0].textContent?.trim()).toBe('1');
-    expect(lineNumbers[1].textContent?.trim()).toBe('2');
+    expect(lineNumbers[0].textContent.trim()).toBe('1');
+    expect(lineNumbers[1].textContent.trim()).toBe('2');
   });
 
   it('does not render line number elements when showLineNumbers is false', async () => {

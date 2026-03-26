@@ -441,7 +441,7 @@ function DataListDemo() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <span style={{ fontWeight: 600, fontSize: '0.9375rem' }}>{item.name}</span>
-                <LlmBadge variant={item.variant as any} size="sm">{item.status}</LlmBadge>
+                <LlmBadge variant={item.variant as 'success' | 'warning' | 'default'} size="sm">{item.status}</LlmBadge>
               </div>
               <div style={{ display: 'flex', gap: '8px' }}>
                 <LlmTooltip llmTooltip="View Details">
@@ -458,7 +458,7 @@ function DataListDemo() {
                   }
                 >
                   {({ onClick, ref }) => (
-                    <LlmButton variant="outline" size="sm" onClick={onClick} ref={ref as any}>...</LlmButton>
+                    <LlmButton variant="outline" size="sm" onClick={onClick} ref={ref as React.RefObject<HTMLButtonElement>}>...</LlmButton>
                   )}
                 </LlmMenuTrigger>
               </div>

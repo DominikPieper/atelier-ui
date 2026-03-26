@@ -151,7 +151,12 @@ describe('LlmCombobox', () => {
     const onChange = vi.fn();
     render(<LlmCombobox value="" onValueChange={onChange} options={OPTIONS} />);
     await user.click(screen.getByRole('combobox'));
-    const grapeOption = screen.getAllByRole('option').find((o) => o.textContent?.includes('Grape'))!;
+    const grapeOption = screen
+      .getAllByRole('option')
+      .find((o) => o.textContent?.includes('Grape'));
+    if (!grapeOption) {
+      throw new Error('Grape option not found');
+    }
     await user.click(grapeOption);
     expect(onChange).not.toHaveBeenCalled();
   });

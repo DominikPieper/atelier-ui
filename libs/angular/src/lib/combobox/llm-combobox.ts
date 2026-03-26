@@ -97,7 +97,7 @@ let nextId = 0;
         </li>
       }
       @if (filteredOptions().length === 0) {
-        <li class="no-results" role="option" aria-disabled="true">No results found.</li>
+        <li class="no-results" role="option" aria-selected="false" aria-disabled="true">No results found.</li>
       }
     </ul>
 

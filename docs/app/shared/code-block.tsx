@@ -199,7 +199,7 @@ function tokenizeJsxTag(tag: string, tokens: Token[]) {
 
   // Attributes
   // Match: name, [name], (name), @name, :name, v-name, *name
-  const ATTR_REGEX = /(\s+)([@:*(\[v-]?[A-Za-z0-9-]+[\])]?)(\s*=\s*)("[^"]*"|'[^']*'|\{[^}]*\})?/g;
+  const ATTR_REGEX = /(\s+)([@:*([v-]?[A-Za-z0-9-]+[\])]?)(\s*=\s*)("[^"]*"|'[^']*'|\{[^}]*\})?/g;
   let lastIdx = 0;
   let m: RegExpExecArray | null;
   while ((m = ATTR_REGEX.exec(inner)) !== null) {

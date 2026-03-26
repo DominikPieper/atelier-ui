@@ -28,18 +28,6 @@ const logoStyle: React.CSSProperties = {
   borderRadius: '6px',
 };
 
-const comingSoonBadge: React.CSSProperties = {
-  display: 'inline-block',
-  background: 'var(--ui-color-surface-raised)',
-  border: '1px solid var(--ui-color-border)',
-  borderRadius: 'var(--ui-radius-sm)',
-  padding: '0.2rem 0.6rem',
-  fontSize: '0.75rem',
-  color: 'var(--ui-color-text-muted)',
-  marginLeft: '0.5rem',
-  verticalAlign: 'middle',
-};
-
 function InstallPage() {
   return (
     <div
