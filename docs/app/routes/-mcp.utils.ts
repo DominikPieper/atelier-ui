@@ -1,5 +1,5 @@
-import type { Framework } from './mcp.types';
-import { COMP_DOCS, SEARCH_MAP, COMP_META, STORIES_MAP } from './mcp.data';
+import type { Framework } from './-mcp.types';
+import { COMP_DOCS, SEARCH_MAP, COMP_META, STORIES_MAP } from './-mcp.data';
 
 export type Token = { text: string; color?: string };
 
@@ -63,6 +63,9 @@ export function getToolResponse(toolName: string, params: Record<string, string>
     }
 
     case 'get_stories': {
+      if (fw === 'angular') {
+        return { error: 'Tool "get_stories" (preview-stories) is currently not available for Angular MCP server.' };
+      }
       const slug = (params.component ?? '').toLowerCase().replace(/\s+/g, '-');
       return STORIES_MAP[slug] ?? { component: params.component ?? '', stories: [], message: `No stories found for "${params.component ?? ''}"` };
     }

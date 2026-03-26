@@ -126,7 +126,16 @@
       "Bash(sed -i '' 's/# LLM-Optimized Angular UI Component Library — Design Guide/# LLM-Optimized UI Component Library — Design Guide/' /Users/dominikpieper/Projects/angular-llm-components/plan/big-picture.md)",
       "Bash(__NEW_LINE_e2b0c343b03357a6__ sed:*)",
       "Bash(npm run:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(find /Users/dominikpieper/Projects/angular-llm-components -type f \\\\\\(-name *.spec.ts -o -name *.test.ts \\\\\\) ! -path */node_modules/*)",
+      "Bash(while read:*)",
+      "Bash(do if:*)",
+      "Bash(then if:*)",
+      "Bash(then echo:*)",
+      "Bash(do sed:*)",
+      "Bash(grep -r '\"\"version\"\"' /Users/dominikpieper/Projects/angular-llm-components/libs --include=\"package.json\")",
+      "Bash(gh release:*)",
+      "Bash(find /Users/dominikpieper/Projects/angular-llm-components -name llms.txt -o -name *llm* -type f)"
     ]
   },
   "enableAllProjectMcpServers": true,

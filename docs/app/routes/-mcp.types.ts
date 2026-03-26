@@ -29,4 +29,5 @@ export interface ToolDef {
   workshopTip: string;
   params: ToolParam[];
   defaultParams: Record<string, string>;
+  supportedFrameworks?: Framework[];
 }

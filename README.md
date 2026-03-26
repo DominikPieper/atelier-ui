@@ -50,15 +50,19 @@ An MCP server exposes the full component library to AI assistants. Instead of re
 
 ## The MCP Server
 
-The primary integration point for AI tooling is the MCP server. When configured in Claude Code or another MCP-capable client, it exposes five tools:
+The primary integration point for AI tooling is the MCP server. When configured in Claude Code or another MCP-capable client, it exposes tools from the `@storybook/mcp` package.
 
-| Tool | What it returns |
-|---|---|
-| `list_components` | All 22 components organized by category |
-| `get_component_docs` | Full prop table with types, defaults, and examples for one component |
-| `search_components` | Components matching a keyword or use case |
-| `get_stories` | Storybook usage examples for a component |
-| `get_theming_guide` | CSS token system, dark mode setup, and override patterns |
+### Tool Support & Framework Parity
+
+| Tool | What it returns | Availability |
+|---|---|---|
+| `list-all-documentation` | All 22 components organized by category | All frameworks |
+| `get-documentation` | Full prop table with types, defaults, and examples | All frameworks |
+| `preview-stories` | Live preview URLs for component variants | React, Vue |
+| `run-story-tests` | Results of Vitest/Storybook interactions | React, Vue |
+| `get-storybook-story-instructions` | Prompt patterns for generating new stories | React, Vue |
+
+> **Note:** The Angular MCP server currently focuses on high-fidelity documentation and prop discovery. Full support for story previews and testing is currently available for the React and Vue implementations.
 
 The MCP Playground in the docs site lets you call each tool interactively and see exactly what the model receives.
 

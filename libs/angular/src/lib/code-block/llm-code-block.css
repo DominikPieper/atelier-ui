@@ -1,0 +1,112 @@
+/* ============================================================
+   llm-code-block.css
+   ============================================================ */
+
+:host {
+  display: block;
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-md);
+  overflow: hidden;
+  font-family: var(--ui-font-family);
+}
+
+/* ---------------------------------------------------------------------------
+   Header
+   --------------------------------------------------------------------------- */
+
+.code-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--ui-spacing-2) var(--ui-spacing-3);
+  background: var(--ui-color-surface-raised);
+  border-bottom: 1px solid var(--ui-color-border);
+  min-height: 2.25rem;
+}
+
+.code-block-label {
+  font-family: var(--ui-font-mono, 'Menlo', 'Monaco', 'Courier New', monospace);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--ui-color-text-muted);
+  text-transform: lowercase;
+  user-select: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Copy button
+   --------------------------------------------------------------------------- */
+
+.code-block-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-sm);
+  background: transparent;
+  color: var(--ui-color-text-muted);
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color var(--ui-transition-fast), background var(--ui-transition-fast), border-color var(--ui-transition-fast);
+  white-space: nowrap;
+}
+
+.code-block-copy:hover {
+  color: var(--ui-color-text);
+  background: var(--ui-color-surface);
+  border-color: var(--ui-color-input-border);
+}
+
+.code-block-copy:focus-visible {
+  outline: var(--ui-focus-ring);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+   Code body
+   --------------------------------------------------------------------------- */
+
+.code-block-body {
+  background: var(--ui-color-surface);
+  overflow-x: auto;
+}
+
+.code-block-pre {
+  margin: 0;
+  padding: var(--ui-spacing-4);
+  font-family: var(--ui-font-mono, 'Menlo', 'Monaco', 'Courier New', monospace);
+  font-size: var(--ui-font-size-sm);
+  line-height: 1.65;
+  color: var(--ui-color-text);
+  white-space: pre;
+  tab-size: 2;
+}
+
+/* ---------------------------------------------------------------------------
+   Line numbers
+   --------------------------------------------------------------------------- */
+
+.code-line {
+  display: flex;
+}
+
+.code-line-number {
+  display: inline-block;
+  min-width: 2rem;
+  padding-right: var(--ui-spacing-3);
+  color: var(--ui-color-text-muted);
+  text-align: right;
+  user-select: none;
+  border-right: 1px solid var(--ui-color-border);
+  margin-right: var(--ui-spacing-3);
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.code-line-text {
+  flex: 1;
+}

@@ -1,17 +1,9 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { ALL_COMPONENTS, COMPONENT_CATEGORIES, componentDocs } from '../../component-data';
+import { ALL_COMPONENTS, COMPONENT_CATEGORIES, componentDocs, CATEGORY_ICONS } from '../../component-data';
 
 export const Route = createFileRoute('/components/')({
   component: ComponentsPage,
 });
-
-const CATEGORY_ICONS: Record<string, string> = {
-  Inputs: '✏️',
-  Display: '🎨',
-  Navigation: '🧭',
-  Overlay: '🪟',
-  Layout: '📐',
-};
 
 function ComponentsPage() {
   return (
@@ -20,7 +12,7 @@ function ComponentsPage() {
         <h1 className="docs-page-title">Components</h1>
         <p className="docs-page-description">
           {ALL_COMPONENTS.length} components for building AI-generated applications.
-          Identical APIs for React and Angular.
+          Identical APIs across Angular, React, and Vue.
         </p>
       </div>
 
@@ -39,8 +31,15 @@ function ComponentsPage() {
                   params={{ name }}
                   className="docs-component-card"
                 >
-                  <div className="docs-component-card-name">
-                    {doc?.name ?? formatComponentName(name)}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <div className="docs-component-card-name">
+                      {doc?.name ?? formatComponentName(name)}
+                    </div>
+                    {doc?.status && (
+                      <span className={`docs-status-badge docs-status-badge--${doc.status}`}>
+                        {doc.status}
+                      </span>
+                    )}
                   </div>
                   <div className="docs-component-card-desc">
                     {doc?.description.slice(0, 80) ?? ''}

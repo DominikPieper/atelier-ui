@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
-import type { Framework, McpTool } from './mcp.types';
-import { TOOL_DEFS } from './mcp.data';
-import { getToolResponse } from './mcp.utils';
-import { CodeBlock } from './mcp-code-block';
-import { fetchMcpTools, invokeMcpTool, LIVE_DEFAULT_PARAMS } from './mcp.client';
+import type { Framework, McpTool } from './-mcp.types';
+import { TOOL_DEFS } from './-mcp.data';
+import { getToolResponse } from './-mcp.utils';
+import { CodeBlock } from './-mcp-code-block';
+import { fetchMcpTools, invokeMcpTool, LIVE_DEFAULT_PARAMS } from './-mcp.client';
 
 export const Route = createFileRoute('/mcp')({
   component: McpPage,
@@ -170,6 +170,16 @@ function McpPage() {
         </span>
       </div>
 
+      {/* Parity Warning */}
+      {framework === 'angular' && (
+        <div style={{ padding: '0.75rem 1rem', background: 'rgba(0,190,190,0.05)', border: '1px solid rgba(0,190,190,0.15)', borderRadius: 'var(--ui-radius-md)', marginBottom: '1.5rem', display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          <span style={{ fontSize: '1.25rem' }}>💡</span>
+          <p style={{ fontSize: '0.85rem', color: 'var(--ui-color-text-muted)', margin: 0, lineHeight: '1.5' }}>
+            <strong>Note:</strong> The Angular MCP server currently supports documentation tools only. Full support for story previews and testing is available for React and Vue.
+          </p>
+        </div>
+      )}
+
       {/* Protocol flow */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', background: 'var(--ui-color-surface-raised)', border: '1px solid var(--ui-color-border)', borderRadius: 'var(--ui-radius-md)', overflow: 'hidden', marginBottom: '1.5rem' }}>
         {([
@@ -193,9 +203,15 @@ function McpPage() {
           </div>
           {toolList.map(tool => {
             const active = selectedTool === tool.name;
+            const mockTool = TOOL_DEFS.find(t => t.name === tool.name);
+            const supported = !mockTool?.supportedFrameworks || mockTool.supportedFrameworks.includes(framework);
+
             return (
-              <button key={tool.name} onClick={() => selectTool(tool.name)} className="mcp-tool-btn" style={{ display: 'block', width: '100%', textAlign: 'left', padding: '0.6rem 0.75rem', border: 'none', borderLeft: `3px solid ${active ? 'var(--ui-color-primary)' : 'transparent'}`, background: active ? 'rgba(0,190,190,0.06)' : 'transparent', color: active ? 'var(--ui-color-primary)' : 'var(--ui-color-text)', cursor: 'pointer', fontFamily: 'monospace', fontSize: '0.8rem', fontWeight: active ? '600' : '400', transition: 'all 0.1s' }}>
-                {tool.name}
+              <button key={tool.name} onClick={() => selectTool(tool.name)} className="mcp-tool-btn" style={{ display: 'block', width: '100%', textAlign: 'left', padding: '0.6rem 0.75rem', border: 'none', borderLeft: `3px solid ${active ? 'var(--ui-color-primary)' : 'transparent'}`, background: active ? 'rgba(0,190,190,0.06)' : 'transparent', color: active ? 'var(--ui-color-primary)' : 'var(--ui-color-text)', cursor: 'pointer', fontFamily: 'monospace', fontSize: '0.8rem', fontWeight: active ? '600' : '400', transition: 'all 0.1s', opacity: supported ? 1 : 0.6 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span>{tool.name}</span>
+                  {!supported && <span style={{ fontSize: '0.6rem', background: 'var(--ui-color-surface-sunken)', padding: '0.1rem 0.35rem', borderRadius: '4px', textTransform: 'uppercase', letterSpacing: '0.02em' }}>Not supported</span>}
+                </div>
               </button>
             );
           })}

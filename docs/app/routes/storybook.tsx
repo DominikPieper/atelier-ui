@@ -122,6 +122,54 @@ function StorybookPage() {
           <div className="docs-mcp-step">
             <div className="docs-mcp-step-number">3</div>
             <div className="docs-mcp-step-body">
+              <div className="docs-mcp-step-title">Framework Parity</div>
+              <p className="docs-mcp-step-desc">
+                While all frameworks share the same documentation and prop lookup tools, some
+                Storybook features like story previews and test runs are currently only
+                available for React and Vue.
+              </p>
+              <table className="docs-props-table" style={{ marginTop: '0.85rem' }}>
+                <thead>
+                  <tr>
+                    <th>Feature</th>
+                    <th>React</th>
+                    <th>Vue</th>
+                    <th>Angular</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Prop Documentation</td>
+                    <td>✅ Full</td>
+                    <td>✅ Full</td>
+                    <td>✅ Full</td>
+                  </tr>
+                  <tr>
+                    <td>Component Search</td>
+                    <td>✅ Full</td>
+                    <td>✅ Full</td>
+                    <td>✅ Full</td>
+                  </tr>
+                  <tr>
+                    <td>Story Previews</td>
+                    <td>✅ Full</td>
+                    <td>✅ Full</td>
+                    <td>⏳ Limited</td>
+                  </tr>
+                  <tr>
+                    <td>Vitest Integration</td>
+                    <td>✅ Full</td>
+                    <td>✅ Full</td>
+                    <td>⏳ Planned</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="docs-mcp-step">
+            <div className="docs-mcp-step-number">4</div>
+            <div className="docs-mcp-step-body">
               <div className="docs-mcp-step-title">Endpoints</div>
               <p className="docs-mcp-step-desc">The MCP endpoints are available at:</p>
               <table className="docs-props-table" style={{ marginTop: '0.5rem' }}>

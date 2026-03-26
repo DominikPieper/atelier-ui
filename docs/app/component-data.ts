@@ -12,11 +12,32 @@ export interface ComponentDoc {
   category: string;
   props: PropRow[];
   codeExample: string;
+  status?: 'new' | 'updated' | 'stable';
+  aiUsage?: {
+    bestPractices: string[];
+    promptSnippet: string;
+    commonHallucinations: string[];
+  };
 }
+
+export const CATEGORY_ICONS: Record<string, string> = {
+  Inputs: '✏️',
+  Display: '🎨',
+  Navigation: '🧭',
+  Overlay: '🪟',
+  Layout: '📐',
+};
+
+export const SECTION_ICONS: Record<string, string> = {
+  'Get Started': '🚀',
+  Tools: '🛠️',
+  'The Library': '📚',
+  Overview: '🏠',
+};
 
 export const COMPONENT_CATEGORIES: Record<string, string[]> = {
   Inputs: ['button', 'input', 'textarea', 'checkbox', 'toggle', 'radio-group', 'select'],
-  Display: ['badge', 'card', 'avatar', 'skeleton', 'progress'],
+  Display: ['badge', 'card', 'avatar', 'skeleton', 'progress', 'code-block'],
   Navigation: ['breadcrumbs', 'tabs', 'pagination', 'menu'],
   Overlay: ['dialog', 'drawer', 'tooltip', 'toast'],
   Layout: ['accordion', 'alert'],
@@ -30,6 +51,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
     selector: 'LlmButton',
     description: 'A versatile button component with multiple variants and sizes. Supports loading and disabled states.',
     category: 'Inputs',
+    status: 'stable',
     props: [
       { name: 'variant', type: "'primary' | 'secondary' | 'outline'", default: "'primary'", description: 'Visual style variant' },
       { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Size of the button' },
@@ -41,6 +63,18 @@ export const componentDocs: Record<string, ComponentDoc> = {
 <LlmButton variant="outline">Outline</LlmButton>
 <LlmButton loading={true}>Loading</LlmButton>
 <LlmButton disabled={true}>Disabled</LlmButton>`,
+    aiUsage: {
+      bestPractices: [
+        'Always specify the "variant" to communicate the visual intent to the model.',
+        'Use the "loading" state instead of custom spinner implementations for consistency.',
+        'Specify the button "size" to ensure correct alignment in complex layouts.'
+      ],
+      promptSnippet: 'Create a primary LlmButton that says "Submit Form" and shows a loading state.',
+      commonHallucinations: [
+        'AI may use standard HTML "button" instead of "LlmButton".',
+        'AI may try to use "ghost" or "text" variants which are not yet supported.'
+      ]
+    }
   },
 
   input: {
@@ -62,6 +96,18 @@ export const componentDocs: Record<string, ComponentDoc> = {
 <LlmInput type="password" placeholder="Password" />
 <LlmInput invalid={true} placeholder="Invalid state" />
 <LlmInput disabled={true} placeholder="Disabled" />`,
+    aiUsage: {
+      bestPractices: [
+        'Explicitly state the "type" property to ensure correct mobile keyboards.',
+        'Always provide a meaningful "placeholder" to improve form scannability.',
+        'Use the "invalid" prop combined with LlmAlert for accessible error feedback.'
+      ],
+      promptSnippet: 'Create a required LlmInput for email with a placeholder "name@company.com".',
+      commonHallucinations: [
+        'AI often uses "onChange" (standard React/DOM) instead of "onValueChange".',
+        'AI may forget that "LlmInput" is a controlled component and needs state management.'
+      ]
+    }
   },
 
   textarea: {
@@ -166,6 +212,18 @@ export const componentDocs: Record<string, ComponentDoc> = {
   <LlmOption optionValue="ca">Canada</LlmOption>
   <LlmOption optionValue="uk" disabled={true}>United Kingdom (unavailable)</LlmOption>
 </LlmSelect>`,
+    aiUsage: {
+      bestPractices: [
+        'Always use "LlmOption" for items within the "LlmSelect".',
+        'Specify the "optionValue" for each option to ensure correct selection logic.',
+        'Use the "placeholder" prop to provide a default empty state.'
+      ],
+      promptSnippet: 'Create an LlmSelect for choosing a "Plan" with options "Basic", "Pro", and "Enterprise".',
+      commonHallucinations: [
+        'AI may use standard HTML "select" and "option" tags.',
+        'AI may try to use "items" or "options" prop instead of the composable child pattern.'
+      ]
+    }
   },
 
   badge: {
@@ -457,5 +515,24 @@ show('Persistent', { duration: 0 });`,
 <LlmAlert variant="success">Your changes were saved successfully.</LlmAlert>
 <LlmAlert variant="warning" dismissible={true}>Your session expires in 5 minutes.</LlmAlert>
 <LlmAlert variant="danger">Something went wrong. Please try again.</LlmAlert>`,
+  },
+
+  'code-block': {
+    name: 'Code Block',
+    selector: 'LlmCodeBlock',
+    description: 'Displays a block of code with an optional header, language label, filename, and copy-to-clipboard button. Designed for rendering LLM-generated code output, API examples, and inline snippets.',
+    category: 'Display',
+    status: 'new',
+    props: [
+      { name: 'code', type: 'string', default: "''", description: 'The code string to display' },
+      { name: 'language', type: 'string', default: "'text'", description: 'Language label shown in the header. Ignored when filename is set.' },
+      { name: 'filename', type: 'string', default: "''", description: 'Optional filename shown in the header instead of the language label' },
+      { name: 'copyable', type: 'boolean', default: 'true', description: 'Whether to show a copy-to-clipboard button' },
+      { name: 'showLineNumbers', type: 'boolean', default: 'false', description: 'Whether to display line numbers alongside the code' },
+    ],
+    codeExample: `<LlmCodeBlock code="const x = 1;" language="typescript" />
+<LlmCodeBlock code={tsCode} filename="app.ts" showLineNumbers={true} />
+<LlmCodeBlock code={shellCmd} language="shell" />
+<LlmCodeBlock code={jsonStr} filename="package.json" />`,
   },
 };

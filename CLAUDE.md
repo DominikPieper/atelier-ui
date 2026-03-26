@@ -65,7 +65,12 @@
 
 **Which MCP to use:**
 - Angular components → `storybook-angular` MCP
+  - *Supported Tools*: `list-all-documentation`, `get-documentation`
+  - *Status*: Documentation only; previews and tests coming soon.
 - React components → `storybook-react` MCP
+  - *Supported Tools*: Full support (`preview-stories`, `run-story-tests`, `get-storybook-story-instructions`, etc.)
+- Vue components → `storybook-vue` MCP
+  - *Supported Tools*: Full support (`preview-stories`, `run-story-tests`, etc.)
 
 ## Core Principles
 

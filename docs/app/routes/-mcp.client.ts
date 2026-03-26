@@ -1,4 +1,4 @@
-import type { Framework, McpTool } from './mcp.types';
+import type { Framework, McpTool } from './-mcp.types';
 
 export const MCP_URLS: Record<Framework, string> = {
   angular: 'https://atelier-ui.netlify.app/storybook-angular/mcp',

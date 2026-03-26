@@ -101,3 +101,6 @@ export { default as LlmToggle } from './lib/toggle/llm-toggle.vue';
 
 // Tooltip
 export { default as LlmTooltip } from './lib/tooltip/llm-tooltip.vue';
+
+// CodeBlock
+export { default as LlmCodeBlock } from './lib/code-block/llm-code-block.vue';

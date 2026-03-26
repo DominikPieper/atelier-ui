@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { tokenizeJson } from './mcp.utils';
+import { tokenizeJson } from './-mcp.utils';
 
 const COLLAPSE_LINES = 20;
 

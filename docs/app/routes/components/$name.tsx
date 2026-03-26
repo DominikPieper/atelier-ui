@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CodeBlock } from '../../shared/code-block';
+import { CodeBlock, MultiCodeBlock, CodeFile } from '../../shared/code-block';
 import { createFileRoute, Link, notFound } from '@tanstack/react-router';
 import {
   LlmButton,
@@ -38,6 +38,7 @@ import {
   LlmDrawerHeader,
   LlmDrawerContent,
   LlmDrawerFooter,
+  LlmCodeBlock,
 } from '@atelier-ui/react';
 import { componentDocs, COMPONENT_CATEGORIES } from '../../component-data';
 
@@ -142,8 +143,48 @@ function ComponentDocPage() {
       {/* Import snippet */}
       <div className="docs-section">
         <h2 className="docs-section-title">Import</h2>
-        <CodeBlock lang="ts" code={generateImport(name)} />
+        <MultiCodeBlock files={generateImport(name)} />
       </div>
+
+      {/* AI Usage */}
+      {doc.aiUsage && (
+        <div className="docs-section docs-ai-usage">
+          <h2 className="docs-section-title">Prototyping with AI</h2>
+          <div className="docs-ai-grid">
+            <div className="docs-ai-card docs-ai-best-practices">
+              <h3 className="docs-ai-card-title">✨ Best Practices</h3>
+              <ul className="docs-ai-list">
+                {doc.aiUsage.bestPractices.map((bp, i) => (
+                  <li key={i}>{bp}</li>
+                ))}
+              </ul>
+            </div>
+            
+            <div className="docs-ai-card docs-ai-hallucinations">
+              <h3 className="docs-ai-card-title">⚠️ Common Hallucinations</h3>
+              <ul className="docs-ai-list">
+                {doc.aiUsage.commonHallucinations.map((ch, i) => (
+                  <li key={i}>{ch}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="docs-ai-card docs-ai-prompt" style={{ gridColumn: '1 / -1' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                <h3 className="docs-ai-card-title" style={{ marginBottom: 0 }}>💬 Example Prompt</h3>
+                <button 
+                  className="docs-btn docs-btn-outline docs-btn-sm"
+                  onClick={() => navigator.clipboard.writeText(doc.aiUsage!.promptSnippet)}
+                  style={{ padding: '4px 10px', fontSize: '0.75rem' }}
+                >
+                  Copy Prompt
+                </button>
+              </div>
+              <p className="docs-ai-prompt-text">{doc.aiUsage.promptSnippet}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
@@ -160,7 +201,7 @@ function ComponentNotFound() {
   );
 }
 
-function generateImport(name: string): string {
+function generateImport(name: string): CodeFile[] {
   const importMap: Record<string, string[]> = {
     button: ['LlmButton'],
     input: ['LlmInput'],
@@ -184,12 +225,19 @@ function generateImport(name: string): string {
     toast: ['LlmToastProvider', 'LlmToastContainer', 'useLlmToast'],
     accordion: ['LlmAccordionGroup', 'LlmAccordionItem'],
     alert: ['LlmAlert'],
+    'code-block': ['LlmCodeBlock'],
   };
 
   const imports = importMap[name] ?? [];
-  if (imports.length === 0) return '';
+  if (imports.length === 0) return [];
 
-  return `import { ${imports.join(', ')} } from '@atelier-ui/react';`;
+  const symbols = imports.join(', ');
+
+  return [
+    { label: 'Angular', code: `import { ${symbols} } from '@atelier-ui/angular';`, lang: 'ts' },
+    { label: 'React', code: `import { ${symbols} } from '@atelier-ui/react';`, lang: 'ts' },
+    { label: 'Vue', code: `import { ${symbols} } from '@atelier-ui/vue';`, lang: 'ts' },
+  ];
 }
 
 // Interactive demos for each component
@@ -562,6 +610,22 @@ function ComponentDemo({ name }: { name: string }) {
             Your session expires in 5 minutes.
           </LlmAlert>
           <LlmAlert variant="danger">Something went wrong. Please try again.</LlmAlert>
+        </div>
+      );
+
+    case 'code-block':
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%' }}>
+          <LlmCodeBlock
+            language="typescript"
+            filename="greeting.ts"
+            code={`import { LlmButton } from '@atelier-ui/react';\n\nexport function GreetingButton({ name }: { name: string }) {\n  return (\n    <LlmButton variant="primary">\n      Hello, {name}!\n    </LlmButton>\n  );\n}`}
+          />
+          <LlmCodeBlock
+            language="typescript"
+            code={`const response = await fetch('/api/generate');\nconst { code } = await response.json();\nconsole.log(code);`}
+            showLineNumbers={true}
+          />
         </div>
       );
 

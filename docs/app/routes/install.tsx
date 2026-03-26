@@ -127,12 +127,25 @@ function InstallPage() {
           <img src="/vue-logo.svg" alt="Vue" style={logoStyle} />
           <h2 className="docs-section-title" style={{ margin: 0 }}>
             Vue
-            <span style={comingSoonBadge}>Coming Soon</span>
           </h2>
         </div>
-        <p style={mutedText}>
-          A Vue 3 port of Atelier UI is on the roadmap. Follow the project for updates.
-        </p>
+        <p style={mutedText}>Install the Vue component library from npm:</p>
+        <CodeBlock lang="shell" code="npm install @atelier-ui/vue" />
+        <p style={mutedText}>Import the components you need:</p>
+        <CodeBlock
+          lang="ts"
+          code={`import {
+  LlmButton, LlmCard, LlmCardHeader, LlmCardContent, LlmCardFooter,
+  LlmInput, LlmTextarea, LlmCheckbox, LlmToggle,
+  LlmBadge, LlmAlert, LlmSelect, LlmOption,
+  LlmDialog, LlmDialogHeader, LlmDialogContent, LlmDialogFooter,
+  LlmTabGroup, LlmTab, LlmAccordionGroup, LlmAccordionItem,
+  LlmMenu, LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger,
+  LlmTooltip, LlmSkeleton, LlmAvatar, LlmAvatarGroup
+} from '@atelier-ui/vue';`}
+        />
+        <p style={mutedText}>Import the design tokens in your global styles:</p>
+        <CodeBlock lang="css" code="@import '@atelier-ui/vue/styles/tokens.css';" />
       </div>
     </div>
   );

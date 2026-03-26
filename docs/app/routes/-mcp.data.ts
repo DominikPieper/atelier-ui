@@ -1,4 +1,4 @@
-import type { Framework, ToolDef } from './mcp.types';
+import type { Framework, ToolDef } from './-mcp.types';
 
 // ─── Tool Definitions ──────────────────────────────────────────────────────────
 
@@ -40,6 +40,7 @@ export const TOOL_DEFS: ToolDef[] = [
     workshopTip: 'Called when the user wants usage examples. The AI reads the story names and descriptions to show real-world patterns instead of inventing examples.',
     params: [{ name: 'component', type: 'string', description: 'Component slug', suggestions: ['button', 'dialog', 'alert', 'card', 'select', 'tabs', 'input', 'badge'] }],
     defaultParams: { component: 'button' },
+    supportedFrameworks: ['react', 'vue'],
   },
   {
     name: 'get_theming_guide',

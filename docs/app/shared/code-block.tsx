@@ -152,6 +152,17 @@ function tokenizeJsxLine(line: string, tokens: Token[]) {
     tokens.push({ text: line, color: C.muted });
     return;
   }
+
+  // Angular control flow: @if, @else, @for, @switch, etc.
+  const controlFlow = line.match(/^(\s*)(@(if|else|for|switch|case|default|empty))\b(.*)/);
+  if (controlFlow) {
+    const [, indent, kw, , rest] = controlFlow;
+    if (indent) tokens.push({ text: indent });
+    tokens.push({ text: kw, color: C.keyword });
+    tokens.push({ text: rest, color: C.text });
+    return;
+  }
+
   let rest = line;
   while (rest.length) {
     if (rest[0] === '<') {
@@ -170,19 +181,43 @@ function tokenizeJsxLine(line: string, tokens: Token[]) {
 
 function tokenizeJsxTag(tag: string, tokens: Token[]) {
   tokens.push({ text: '<', color: C.muted });
-  const inner = tag.slice(1, tag.endsWith('/>') ? -2 : -1).trimEnd();
+  let inner = tag.slice(1, tag.endsWith('/>') ? -2 : -1);
   const slash = tag.endsWith('/>') ? '/>' : '>';
-  const spaceIdx = inner.indexOf(' ');
-  const name = spaceIdx === -1 ? inner : inner.slice(0, spaceIdx);
-  const attrs = spaceIdx === -1 ? '' : inner.slice(spaceIdx);
-  const isClose = name.startsWith('/');
-  if (isClose) {
-    tokens.push({ text: '/', color: C.muted });
-    tokens.push({ text: name.slice(1), color: C.name });
-  } else {
-    tokens.push({ text: name, color: C.name });
+
+  // Tag name
+  const nameMatch = inner.match(/^\s*\/?[A-Za-z0-9-]+/);
+  if (nameMatch) {
+    const name = nameMatch[0].trim();
+    if (name.startsWith('/')) {
+      tokens.push({ text: '/', color: C.muted });
+      tokens.push({ text: name.slice(1), color: C.name });
+    } else {
+      tokens.push({ text: name, color: C.name });
+    }
+    inner = inner.slice(nameMatch[0].length);
   }
-  if (attrs) tokens.push({ text: attrs, color: C.text });
+
+  // Attributes
+  // Match: name, [name], (name), @name, :name, v-name, *name
+  const ATTR_REGEX = /(\s+)([@:*(\[v-]?[A-Za-z0-9-]+[\])]?)(\s*=\s*)("[^"]*"|'[^']*'|\{[^}]*\})?/g;
+  let lastIdx = 0;
+  let m: RegExpExecArray | null;
+  while ((m = ATTR_REGEX.exec(inner)) !== null) {
+    if (m.index > lastIdx) {
+      tokens.push({ text: inner.slice(lastIdx, m.index), color: C.text });
+    }
+    tokens.push({ text: m[1] }); // space
+    tokens.push({ text: m[2], color: C.keyword }); // attr name
+    if (m[3]) {
+      tokens.push({ text: m[3], color: C.muted }); // =
+      tokens.push({ text: m[4], color: C.string }); // value
+    }
+    lastIdx = ATTR_REGEX.lastIndex;
+  }
+  if (lastIdx < inner.length) {
+    tokens.push({ text: inner.slice(lastIdx), color: C.text });
+  }
+
   tokens.push({ text: slash, color: C.muted });
 }
 
@@ -216,12 +251,106 @@ function tokenizeJson(code: string): Token[] {
   return tokens;
 }
 
+function tokenizeMarkdown(code: string): Token[] {
+  const tokens: Token[] = [];
+  const lines = code.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (i > 0) tokens.push({ text: '\n' });
+
+    // Headers
+    if (line.startsWith('#')) {
+      tokens.push({ text: line, color: C.name });
+      continue;
+    }
+
+    // List items
+    if (line.trim().startsWith('- ') || line.trim().startsWith('* ') || /^\s*\d+\.\s/.test(line)) {
+      const match = line.match(/^(\s*[-*\d.]+\s)(.*)/);
+      if (match) {
+        tokens.push({ text: match[1], color: C.keyword });
+        tokens.push({ text: match[2], color: C.text });
+        continue;
+      }
+    }
+
+    // Blockquotes
+    if (line.trim().startsWith('>')) {
+      tokens.push({ text: line, color: C.muted });
+      continue;
+    }
+
+    // Framework Example Labels (Angular:, React:, Vue:)
+    const frameworkMatch = line.match(/^(\s*)(Angular|React|Vue|Import\s*\([^)]+\)|Props):(.*)/);
+    if (frameworkMatch) {
+      const [, indent, label, rest] = frameworkMatch;
+      if (indent) tokens.push({ text: indent });
+      tokens.push({ text: label + ':', color: C.keyword });
+      
+      // For the rest of the line, try to tokenize as JSX/TS if it looks like code
+      if (rest.includes('<') || rest.includes('import') || rest.includes('@')) {
+        tokenizeJsxLine(rest, tokens);
+      } else {
+        tokens.push({ text: rest, color: C.text });
+      }
+      continue;
+    }
+
+    // Separators
+    if (line.startsWith('---')) {
+      tokens.push({ text: line, color: C.muted });
+      continue;
+    }
+
+    // Inline code (backticks)
+    if (line.includes('`')) {
+      const parts = line.split(/(`[^`]+`)/);
+      for (const part of parts) {
+        if (!part) continue;
+        if (part.startsWith('`') && part.endsWith('`')) {
+          tokens.push({ text: part, color: C.string });
+        } else {
+          tokens.push({ text: part, color: C.text });
+        }
+      }
+      continue;
+    }
+
+    // Links [text](url)
+    if (line.includes('[') && line.includes('](')) {
+      const parts = line.split(/(\[[^\]]+\]\([^)]+\))/);
+      for (const part of parts) {
+        if (!part) continue;
+        if (part.startsWith('[') && part.includes('](')) {
+          const labelMatch = part.match(/\[([^\]]+)\]/);
+          const urlMatch = part.match(/\(([^)]+)\)/);
+          tokens.push({ text: '[', color: C.muted });
+          tokens.push({ text: labelMatch?.[1] || '', color: C.name });
+          tokens.push({ text: '](', color: C.muted });
+          tokens.push({ text: urlMatch?.[1] || '', color: C.string });
+          tokens.push({ text: ')', color: C.muted });
+        } else {
+          tokens.push({ text: part, color: C.text });
+        }
+      }
+      continue;
+    }
+
+    tokens.push({ text: line, color: C.text });
+  }
+  return tokens;
+}
+
 // ─── Main tokenize function ───────────────────────────────────────────────────
 
-export type Lang = 'ts' | 'shell' | 'css' | 'jsx' | 'json' | 'text';
+export type Lang = 'ts' | 'shell' | 'css' | 'jsx' | 'json' | 'text' | 'markdown';
 
 export function tokenize(code: string, lang: Lang): Token[] {
   const tokens: Token[] = [];
+
+  if (lang === 'markdown') {
+    return tokenizeMarkdown(code);
+  }
 
   if (lang === 'json') {
     return tokenizeJson(code);
@@ -273,6 +402,40 @@ export function CodeBlock({ code, lang }: { code: string; lang: Lang }) {
           </span>
         ))}
       </pre>
+    </div>
+  );
+}
+
+// ─── MultiCodeBlock component ─────────────────────────────────────────────────
+
+import { useState } from 'react';
+
+export type CodeFile = {
+  label: string;
+  code: string;
+  lang: Lang;
+};
+
+export function MultiCodeBlock({ files }: { files: CodeFile[] }) {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const activeFile = files[activeIdx];
+
+  if (!activeFile) return null;
+
+  return (
+    <div className="docs-multi-code">
+      <div className="docs-multi-code-tabs">
+        {files.map((file, i) => (
+          <button
+            key={i}
+            className={`docs-multi-code-tab${i === activeIdx ? ' active' : ''}`}
+            onClick={() => setActiveIdx(i)}
+          >
+            {file.label}
+          </button>
+        ))}
+      </div>
+      <CodeBlock code={activeFile.code} lang={activeFile.lang} />
     </div>
   );
 }

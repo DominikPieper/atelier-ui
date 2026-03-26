@@ -11,7 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorkshopRouteImport } from './routes/workshop'
 import { Route as StorybookRouteImport } from './routes/storybook'
+import { Route as PromptsRouteImport } from './routes/prompts'
+import { Route as PatternsRouteImport } from './routes/patterns'
 import { Route as McpRouteImport } from './routes/mcp'
+import { Route as LlmsRouteImport } from './routes/llms'
 import { Route as InstallRouteImport } from './routes/install'
 import { Route as DesignPrinciplesRouteImport } from './routes/design-principles'
 import { Route as IndexRouteImport } from './routes/index'
@@ -28,9 +31,24 @@ const StorybookRoute = StorybookRouteImport.update({
   path: '/storybook',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PromptsRoute = PromptsRouteImport.update({
+  id: '/prompts',
+  path: '/prompts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PatternsRoute = PatternsRouteImport.update({
+  id: '/patterns',
+  path: '/patterns',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const McpRoute = McpRouteImport.update({
   id: '/mcp',
   path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsRoute = LlmsRouteImport.update({
+  id: '/llms',
+  path: '/llms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InstallRoute = InstallRouteImport.update({
@@ -63,7 +81,10 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/design-principles': typeof DesignPrinciplesRoute
   '/install': typeof InstallRoute
+  '/llms': typeof LlmsRoute
   '/mcp': typeof McpRoute
+  '/patterns': typeof PatternsRoute
+  '/prompts': typeof PromptsRoute
   '/storybook': typeof StorybookRoute
   '/workshop': typeof WorkshopRoute
   '/components/$name': typeof ComponentsNameRoute
@@ -73,7 +94,10 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/design-principles': typeof DesignPrinciplesRoute
   '/install': typeof InstallRoute
+  '/llms': typeof LlmsRoute
   '/mcp': typeof McpRoute
+  '/patterns': typeof PatternsRoute
+  '/prompts': typeof PromptsRoute
   '/storybook': typeof StorybookRoute
   '/workshop': typeof WorkshopRoute
   '/components/$name': typeof ComponentsNameRoute
@@ -84,7 +108,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/design-principles': typeof DesignPrinciplesRoute
   '/install': typeof InstallRoute
+  '/llms': typeof LlmsRoute
   '/mcp': typeof McpRoute
+  '/patterns': typeof PatternsRoute
+  '/prompts': typeof PromptsRoute
   '/storybook': typeof StorybookRoute
   '/workshop': typeof WorkshopRoute
   '/components/$name': typeof ComponentsNameRoute
@@ -96,7 +123,10 @@ export interface FileRouteTypes {
     | '/'
     | '/design-principles'
     | '/install'
+    | '/llms'
     | '/mcp'
+    | '/patterns'
+    | '/prompts'
     | '/storybook'
     | '/workshop'
     | '/components/$name'
@@ -106,7 +136,10 @@ export interface FileRouteTypes {
     | '/'
     | '/design-principles'
     | '/install'
+    | '/llms'
     | '/mcp'
+    | '/patterns'
+    | '/prompts'
     | '/storybook'
     | '/workshop'
     | '/components/$name'
@@ -116,7 +149,10 @@ export interface FileRouteTypes {
     | '/'
     | '/design-principles'
     | '/install'
+    | '/llms'
     | '/mcp'
+    | '/patterns'
+    | '/prompts'
     | '/storybook'
     | '/workshop'
     | '/components/$name'
@@ -127,7 +163,10 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DesignPrinciplesRoute: typeof DesignPrinciplesRoute
   InstallRoute: typeof InstallRoute
+  LlmsRoute: typeof LlmsRoute
   McpRoute: typeof McpRoute
+  PatternsRoute: typeof PatternsRoute
+  PromptsRoute: typeof PromptsRoute
   StorybookRoute: typeof StorybookRoute
   WorkshopRoute: typeof WorkshopRoute
   ComponentsNameRoute: typeof ComponentsNameRoute
@@ -150,11 +189,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StorybookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/prompts': {
+      id: '/prompts'
+      path: '/prompts'
+      fullPath: '/prompts'
+      preLoaderRoute: typeof PromptsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/patterns': {
+      id: '/patterns'
+      path: '/patterns'
+      fullPath: '/patterns'
+      preLoaderRoute: typeof PatternsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/mcp': {
       id: '/mcp'
       path: '/mcp'
       fullPath: '/mcp'
       preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms': {
+      id: '/llms'
+      path: '/llms'
+      fullPath: '/llms'
+      preLoaderRoute: typeof LlmsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/install': {
@@ -199,7 +259,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DesignPrinciplesRoute: DesignPrinciplesRoute,
   InstallRoute: InstallRoute,
+  LlmsRoute: LlmsRoute,
   McpRoute: McpRoute,
+  PatternsRoute: PatternsRoute,
+  PromptsRoute: PromptsRoute,
   StorybookRoute: StorybookRoute,
   WorkshopRoute: WorkshopRoute,
   ComponentsNameRoute: ComponentsNameRoute,
