@@ -64,16 +64,17 @@ describe('LlmDialog', () => {
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
-  it('applies size class to panel', () => {
-    const { container } = render(<LlmDialog open={true} size="lg" />);
-    expect(container.querySelector('.panel')).toHaveClass('size-lg');
+  it('applies size class to dialog element', () => {
+    render(<LlmDialog open={true} size="lg" />);
+    expect(document.querySelector('dialog')).toHaveClass('size-lg');
   });
 
   it('applies correct size classes', () => {
     const sizes = ['sm', 'md', 'lg', 'xl', 'full'] as const;
     for (const size of sizes) {
-      const { container } = render(<LlmDialog open={true} size={size} />);
-      expect(container.querySelector('.panel')).toHaveClass(`size-${size}`);
+      const { unmount } = render(<LlmDialog open={true} size={size} />);
+      expect(document.querySelector('dialog')).toHaveClass(`size-${size}`);
+      unmount();
     }
   });
 
