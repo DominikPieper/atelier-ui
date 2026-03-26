@@ -17,9 +17,9 @@
     },
     "framework": {
       "type": "string",
-      "enum": ["angular", "react", "both"],
-      "default": "both",
-      "description": "Which framework(s) to scaffold. Defaults to 'both' (Angular + React)."
+      "enum": ["angular", "react", "vue", "both", "all"],
+      "default": "all",
+      "description": "Which framework(s) to scaffold. Defaults to 'all' (Angular + React + Vue)."
     }
   },
   "required": ["name"]

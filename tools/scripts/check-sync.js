@@ -16,9 +16,11 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '../..');
 const ANGULAR_LIB = path.join(ROOT, 'libs/angular/src/lib');
 const REACT_LIB = path.join(ROOT, 'libs/react/src/lib');
+const VUE_LIB = path.join(ROOT, 'libs/vue/src/lib');
 
 /** @returns {Set<string>} */
 function getComponentDirs(dir) {
+  if (!fs.existsSync(dir)) return new Set();
   return new Set(
     fs
       .readdirSync(dir)
@@ -28,28 +30,32 @@ function getComponentDirs(dir) {
 
 const angular = getComponentDirs(ANGULAR_LIB);
 const react = getComponentDirs(REACT_LIB);
+const vue = getComponentDirs(VUE_LIB);
 
 let errors = 0;
 
-for (const name of angular) {
-  if (!react.has(name)) {
-    console.error(`[DRIFT] '${name}' exists in Angular but is missing from React`);
+const allComponents = new Set([...angular, ...react, ...vue]);
+
+for (const name of allComponents) {
+  if (!angular.has(name)) {
+    console.error(`[DRIFT] '${name}' is missing from Angular`);
     errors++;
   }
-}
-
-for (const name of react) {
-  if (!angular.has(name)) {
-    console.error(`[DRIFT] '${name}' exists in React but is missing from Angular`);
+  if (!react.has(name)) {
+    console.error(`[DRIFT] '${name}' is missing from React`);
+    errors++;
+  }
+  if (!vue.has(name)) {
+    console.error(`[DRIFT] '${name}' is missing from Vue`);
     errors++;
   }
 }
 
 if (errors > 0) {
   console.error(
-    `\n${errors} sync issue(s) found. Mirror the missing component(s) in the other library.`
+    `\n${errors} sync issue(s) found. Mirror the missing component(s) in the other libraries.`
   );
   process.exit(1);
 } else {
-  console.log(`✓ Libraries are in sync (${angular.size} components each)`);
+  console.log(`✓ All libraries are in sync (${allComponents.size} components each)`);
 }

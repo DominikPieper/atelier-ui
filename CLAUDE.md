@@ -47,9 +47,14 @@
 
 ## MCP Servers
 
-- Always use the **Nx MCP server** and **Angular CLI MCP server** available in this project.
-- Use `list_projects` and `nx_docs` as a first step to understand the workspace before making changes.
-- Prefer MCP tools (e.g., `get_best_practices`, `search_documentation`, `find_examples`) over guessing Angular/Nx conventions.
+This project provides several MCP servers to assist in development. Always use the appropriate server for your task:
+
+- **Nx & Workspace Management**: Use the **Nx MCP server** for understanding project dependencies and running workspace tasks.
+- **Angular-Specific CLI**: Use the **Angular CLI MCP server** for Angular-specific best practices, API searches, and examples.
+- **Component Discovery & Docs**: Use the framework-specific **Storybook MCP servers** for exact component specs:
+  - `storybook-angular` MCP: High-fidelity documentation for Angular components.
+  - `storybook-react` MCP: Full support including previews and story tests for React.
+  - `storybook-vue` MCP: Full support including previews and story tests for Vue.
 
 ### Storybook MCP Workflows
 
