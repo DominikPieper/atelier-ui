@@ -113,13 +113,13 @@ export function LlmDialog({
     <DialogContext.Provider value={{ headerId, close: () => onOpenChange?.(false) }}>
       <dialog
         ref={dialogRef}
-        className={`llm-dialog${open ? ' is-open' : ''}`}
+        className={`llm-dialog size-${size}${open ? ' is-open' : ''}`}
         aria-label={ariaLabel || undefined}
         aria-labelledby={effectiveAriaLabelledby}
         aria-modal="true"
         onClick={handleBackdropClick}
       >
-        <div className={`panel size-${size}`} onClick={(e) => e.stopPropagation()}>
+        <div className="panel" onClick={(e) => e.stopPropagation()}>
           {children}
         </div>
       </dialog>

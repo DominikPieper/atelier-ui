@@ -61,6 +61,10 @@ export interface LlmRadioGroupProps
    */
   onValueChange?: (value: string) => void;
   /**
+   * The layout orientation of the radio group.
+   */
+  orientation?: 'horizontal' | 'vertical';
+  /**
    * The name of the radio group, applied to all child radio buttons.
    */
   name?: string;
@@ -96,6 +100,7 @@ export interface LlmRadioGroupProps
 export function LlmRadioGroup({
   value = '',
   onValueChange,
+  orientation = 'vertical',
   name = '',
   disabled = false,
   readOnly: reactReadOnly,
@@ -110,6 +115,7 @@ export function LlmRadioGroup({
   const readOnly = reactReadOnly ?? specReadOnly ?? false;
   const classes = [
     'llm-radio-group',
+    `orientation-${orientation}`,
     invalid && 'is-invalid',
     disabled && 'is-disabled',
     readOnly && 'is-readonly',

@@ -673,7 +673,7 @@ function DashboardDemo() {
                       <LlmMenuItem>View Metrics</LlmMenuItem>
                       <LlmMenuItem>View Logs</LlmMenuItem>
                       <LlmMenuSeparator />
-                      <LlmMenuItem variant="danger">Stop Service</LlmMenuItem>
+                      <LlmMenuItem onClick={() => undefined}>Stop Service</LlmMenuItem>
                     </LlmMenu>
                   }
                 >

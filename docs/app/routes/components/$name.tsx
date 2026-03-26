@@ -30,6 +30,15 @@ import {
   LlmBreadcrumbs,
   LlmBreadcrumbItem,
   LlmPagination,
+  LlmTable,
+  LlmThead,
+  LlmTbody,
+  LlmTr,
+  LlmTh,
+  LlmTd,
+  LlmStepper,
+  LlmStep,
+  LlmCombobox,
   LlmDialog,
   LlmDialogHeader,
   LlmDialogContent,
@@ -352,6 +361,29 @@ function ComponentDemo({ name }: { name: string }) {
         </div>
       );
 
+    case 'combobox':
+      return (
+        <div style={{ width: '100%', maxWidth: '300px' }}>
+          <LlmCombobox
+            placeholder="Search framework..."
+            options={[
+              { label: 'Angular', value: 'ng' },
+              { label: 'React', value: 'react' },
+              { label: 'Vue', value: 'vue' },
+              { label: 'Svelte', value: 'svelte' },
+              { label: 'Solid', value: 'solid' },
+            ]}
+            value={selectValue}
+            onValueChange={setSelectValue}
+          />
+          {selectValue && (
+            <p style={{ marginTop: '0.5rem', fontSize: '0.85rem', opacity: 0.7 }}>
+              Selected value: {selectValue}
+            </p>
+          )}
+        </div>
+      );
+
     case 'badge':
       return (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}>
@@ -382,6 +414,38 @@ function ComponentDemo({ name }: { name: string }) {
               <LlmButton variant="outline" size="sm">Action</LlmButton>
             </LlmCardFooter>
           </LlmCard>
+        </div>
+      );
+
+    case 'table':
+      return (
+        <div style={{ width: '100%', overflowX: 'auto' }}>
+          <LlmTable variant="striped" style={{ width: '100%', minWidth: '600px' }}>
+            <LlmThead>
+              <LlmTr>
+                <LlmTh>Name</LlmTh>
+                <LlmTh>Status</LlmTh>
+                <LlmTh>Role</LlmTh>
+              </LlmTr>
+            </LlmThead>
+            <LlmTbody>
+              <LlmTr selectable>
+                <LlmTd><span style={{ fontWeight: 600 }}>Jane Doe</span></LlmTd>
+                <LlmTd><LlmBadge variant="success" size="sm">Active</LlmBadge></LlmTd>
+                <LlmTd>Admin</LlmTd>
+              </LlmTr>
+              <LlmTr selectable>
+                <LlmTd><span style={{ fontWeight: 600 }}>John Smith</span></LlmTd>
+                <LlmTd><LlmBadge variant="warning" size="sm">Pending</LlmBadge></LlmTd>
+                <LlmTd>Editor</LlmTd>
+              </LlmTr>
+              <LlmTr selectable>
+                <LlmTd><span style={{ fontWeight: 600 }}>Alice Johnson</span></LlmTd>
+                <LlmTd><LlmBadge variant="success" size="sm">Active</LlmBadge></LlmTd>
+                <LlmTd>Viewer</LlmTd>
+              </LlmTr>
+            </LlmTbody>
+          </LlmTable>
         </div>
       );
 
@@ -483,6 +547,33 @@ function ComponentDemo({ name }: { name: string }) {
         </div>
       );
 
+    case 'stepper':
+      return (
+        <div style={{ width: '100%' }}>
+          <LlmStepper activeStep={tabIndex} onActiveStepChange={setTabIndex}>
+            <LlmStep label="Personal Info" description="Enter your name">
+              <div style={{ padding: '1.5rem 0' }}>
+                <LlmInput placeholder="Name" />
+              </div>
+            </LlmStep>
+            <LlmStep label="Account" description="Set your email">
+              <div style={{ padding: '1.5rem 0' }}>
+                <LlmInput type="email" placeholder="Email" />
+              </div>
+            </LlmStep>
+            <LlmStep label="Review" description="Confirm details">
+              <div style={{ padding: '1.5rem 0' }}>
+                <p style={{ fontSize: '0.875rem' }}>Please confirm your details.</p>
+              </div>
+            </LlmStep>
+          </LlmStepper>
+          <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
+            <LlmButton variant="outline" size="sm" onClick={() => setTabIndex(Math.max(0, tabIndex - 1))}>Back</LlmButton>
+            <LlmButton variant="primary" size="sm" onClick={() => setTabIndex(Math.min(2, tabIndex + 1))}>Next</LlmButton>
+          </div>
+        </div>
+      );
+
     case 'pagination':
       return (
         <LlmPagination
@@ -502,21 +593,36 @@ function ComponentDemo({ name }: { name: string }) {
 
     case 'dialog':
       return (
-        <div>
+        <div style={{ display: 'flex', gap: '1rem' }}>
           <LlmButton variant="primary" onClick={() => setDialogOpen(true)}>
-            Open Dialog
+            Open Standard Dialog
           </LlmButton>
-          <LlmDialog open={dialogOpen} onOpenChange={setDialogOpen} size="sm">
-            <LlmDialogHeader>Confirm Delete</LlmDialogHeader>
+          <LlmDialog open={dialogOpen} onOpenChange={setDialogOpen} size="md">
+            <LlmDialogHeader>Component Specification</LlmDialogHeader>
             <LlmDialogContent>
-              Are you sure you want to delete this item? This action cannot be undone.
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <p style={{ margin: 0, fontSize: '0.9375rem' }}>
+                  The <code>LlmDialog</code> uses the native <code>&lt;dialog&gt;</code> element 
+                  with standard-compliant accessibility features like focus trapping and 
+                  Escape key handling.
+                </p>
+                <div style={{ background: 'var(--ui-color-surface-sunken)', padding: '1rem', borderRadius: '8px' }}>
+                  <h4 style={{ margin: '0 0 8px', fontSize: '0.875rem' }}>Key Features:</h4>
+                  <ul style={{ margin: 0, paddingLeft: '1.25rem', fontSize: '0.875rem', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <li>Native modal behavior</li>
+                    <li>Built-in backdrop with blur</li>
+                    <li>Responsive size variants</li>
+                    <li>Automatic focus management</li>
+                  </ul>
+                </div>
+              </div>
             </LlmDialogContent>
             <LlmDialogFooter>
               <LlmButton variant="outline" onClick={() => setDialogOpen(false)}>
                 Cancel
               </LlmButton>
               <LlmButton variant="primary" onClick={() => setDialogOpen(false)}>
-                Delete
+                Got it
               </LlmButton>
             </LlmDialogFooter>
           </LlmDialog>
