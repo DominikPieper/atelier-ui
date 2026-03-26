@@ -36,9 +36,9 @@ export const SECTION_ICONS: Record<string, string> = {
 };
 
 export const COMPONENT_CATEGORIES: Record<string, string[]> = {
-  Inputs: ['button', 'input', 'textarea', 'checkbox', 'toggle', 'radio-group', 'select'],
-  Display: ['badge', 'card', 'avatar', 'skeleton', 'progress', 'code-block'],
-  Navigation: ['breadcrumbs', 'tabs', 'pagination', 'menu'],
+  Inputs: ['button', 'input', 'textarea', 'checkbox', 'toggle', 'radio-group', 'select', 'combobox'],
+  Display: ['badge', 'card', 'table', 'avatar', 'skeleton', 'progress', 'code-block'],
+  Navigation: ['breadcrumbs', 'tabs', 'stepper', 'pagination', 'menu'],
   Overlay: ['dialog', 'drawer', 'tooltip', 'toast'],
   Layout: ['accordion', 'alert'],
 };
@@ -226,6 +226,30 @@ export const componentDocs: Record<string, ComponentDoc> = {
     }
   },
 
+  combobox: {
+    name: 'Combobox',
+    selector: 'LlmCombobox',
+    description: 'A filterable autocomplete input. The user can type to narrow down a large list of options.',
+    category: 'Inputs',
+    status: 'new',
+    props: [
+      { name: 'value', type: 'string', default: "''", description: 'Controlled value' },
+      { name: 'onValueChange', type: '(value: string) => void', default: '—', description: 'Called when selection changes' },
+      { name: 'options', type: 'LlmComboboxOption[]', default: '[]', description: 'Array of { label, value } objects' },
+      { name: 'placeholder', type: 'string', default: "''", description: 'Placeholder text' },
+      { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the combobox' },
+      { name: 'invalid', type: 'boolean', default: 'false', description: 'Applies invalid/error styling' },
+    ],
+    codeExample: `<LlmCombobox 
+  placeholder="Search framework..." 
+  options={[
+    { label: 'Angular', value: 'ng' },
+    { label: 'React', value: 'react' },
+    { label: 'Vue', value: 'vue' }
+  ]} 
+/>`,
+  },
+
   badge: {
     name: 'Badge',
     selector: 'LlmBadge',
@@ -261,6 +285,36 @@ export const componentDocs: Record<string, ComponentDoc> = {
     <LlmButton variant="primary" size="sm">Action</LlmButton>
   </LlmCardFooter>
 </LlmCard>`,
+  },
+
+  table: {
+    name: 'Table',
+    selector: 'LlmTable',
+    description: 'A comprehensive data table component for displaying structured information. Supports sorting, row selection, sticky headers, and custom empty states.',
+    category: 'Display',
+    status: 'new',
+    props: [
+      { name: 'variant', type: "'default' | 'striped' | 'bordered'", default: "'default'", description: 'Row background styling' },
+      { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Vertical padding of cells' },
+      { name: 'stickyHeader', type: 'boolean', default: 'false', description: 'Makes header row stick to the top on scroll' },
+    ],
+    codeExample: `<LlmTable variant="striped">
+  <LlmThead>
+    <LlmTr>
+      <LlmTh sortable>Name</LlmTh>
+      <LlmTh>Status</LlmTh>
+    </LlmTr>
+  </LlmThead>
+  <LlmTbody empty={rows.length === 0} colSpan={2}>
+    {rows.map(row => (
+      <LlmTr key={row.id} selectable>
+        <LlmTd>{row.name}</LlmTd>
+        <LlmTd>{row.status}</LlmTd>
+      </LlmTr>
+    ))}
+    <div llmTableEmpty>No results found</div>
+  </LlmTbody>
+</LlmTable>`,
   },
 
   avatar: {
@@ -351,6 +405,24 @@ export const componentDocs: Record<string, ComponentDoc> = {
   <LlmTab label="Notifications">Notification preferences.</LlmTab>
   <LlmTab label="Billing" disabled={true}>Billing info.</LlmTab>
 </LlmTabGroup>`,
+  },
+
+  stepper: {
+    name: 'Stepper',
+    selector: 'LlmStepper + LlmStep',
+    description: 'A multi-step wizard for complex processes. Supports linear and non-linear navigation.',
+    category: 'Navigation',
+    status: 'new',
+    props: [
+      { name: 'activeStep', type: 'number', default: '0', description: 'Currently active step index' },
+      { name: 'linear', type: 'boolean', default: 'false', description: 'Forces user to complete steps in order' },
+      { name: 'orientation', type: "'horizontal' | 'vertical'", default: "'horizontal'", description: 'Stepper layout direction' },
+    ],
+    codeExample: `<LlmStepper activeStep={0}>
+  <LlmStep label="Basic Info">Step 1 content</LlmStep>
+  <LlmStep label="Verification">Step 2 content</LlmStep>
+  <LlmStep label="Complete">Step 3 content</LlmStep>
+</LlmStepper>`,
   },
 
   pagination: {

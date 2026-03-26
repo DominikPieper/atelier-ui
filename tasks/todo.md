@@ -3,9 +3,10 @@
 ## Shipped ✅
 
 ### Component libraries
-- 22 components across Angular, React, and Vue
+- 25+ components across Angular, React, and Vue
 - Signal Forms integration (Angular), prop/callback pattern (React), v-model (Vue)
 - CSS design tokens, dark mode, accessible by default
+- Includes complex components like LlmTable, LlmCombobox, and LlmStepper
 
 ### Storybook
 - All three frameworks with interactive Controls
@@ -27,7 +28,7 @@
 
 ### Docs site (atelier-ui.netlify.app)
 - Workshop-first homepage with 3 pillar cards
-- Workshop Setup, Exercises (4 levels), MCP Playground, Storybook, Installation
+- Workshop Setup, MCP Playground, Storybook, Installation
 - LLM-Optimized APIs page (why the library is structured this way)
 - MCP Playground with protocol flow, color legend, workshop tips per tool
 
@@ -45,4 +46,3 @@
 - [ ] CI pipeline for tests on PRs
 - [ ] Facilitator guide — timing, learning arc, common pitfalls
 - [ ] True CLI e2e test — runs npx create-atelier-ui-workspace in a temp dir
-- [ ] LlmDataTable component (strong workshop exercise candidate)

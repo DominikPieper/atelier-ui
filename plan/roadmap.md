@@ -32,6 +32,9 @@ This document outlines the development phases, existing status, and future backl
 | `LlmAccordion` | Done | P2 | Collapsible sections, single/multi mode, 3 variants, CSS grid animation |
 | `LlmMenu` | Done | P2 | CDK Menu wrapper, nested submenus, keyboard nav |
 | `LlmTooltip` | Done | P3 | CDK Overlay directive, viewport-aware positioning |
+| `LlmTable` | Done | P1 | Composable data table with sorting, selection, sticky header |
+| `LlmCombobox` | Done | P1 | Filterable autocomplete with popover |
+| `LlmStepper` | Done | P2 | Multi-step wizard |
 
 ---
 
@@ -83,10 +86,10 @@ This document outlines the development phases, existing status, and future backl
 4. **`LlmMenu`**: ✅ Done. Thin wrapper over `@angular/cdk/menu` (`CdkMenu`, `CdkMenuItem`, `CdkMenuTrigger`). Full keyboard nav, nested submenus, focus management, and ARIA — all handled by CDK. Library provides styling via design tokens.
 5. **`LlmTooltip`**: ✅ Done. Attribute directive using `@angular/cdk/overlay` (`createOverlayRef`, `createFlexibleConnectedPositionStrategy`) for viewport-aware positioning. Show on hover/focus, `aria-describedby` linking, configurable delays.
 
-## Phase 5: Publishing & Tooling
+## Phase 5: Publishing & Tooling — IN PROGRESS
 *Focus: Make the library consumable and self-documenting.*
 
-1. **Composition cookbook**: 5–10 pre-composed patterns (login form, settings page, data table layout, confirmation dialog, etc.) as Storybook stories and LLM context snippets.
+1. **Composition cookbook**: 6 pre-composed patterns (login form, settings page, confirmation dialog, data list, notification center, and management dashboard) as documentation examples and Storybook stories.
 2. **Auto-generated API reference**: Script/generator that produces the CLAUDE.md Component API Reference section from source type signatures + JSDoc.
 3. **npm packaging**: Versioning strategy, changelog generation, publish pipeline.
 4. **Demo app**: Standalone Angular app showcasing all components and composition patterns.

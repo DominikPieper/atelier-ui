@@ -26,6 +26,13 @@ import {
   LlmTooltip,
   LlmAccordionGroup,
   LlmAccordionItem,
+  LlmPagination,
+  LlmTable,
+  LlmThead,
+  LlmTbody,
+  LlmTr,
+  LlmTh,
+  LlmTd,
 } from '@atelier-ui/react';
 import { MultiCodeBlock, CodeFile } from '../shared/code-block';
 
@@ -601,6 +608,188 @@ const notificationsVue = `
 </LlmAccordionGroup>
 `;
 
+// ─── 6. Management Dashboard ────────────────────────────────────────────────
+
+function DashboardDemo() {
+  const [page, setPage] = useState(1);
+  const [sort, setSort] = useState<{ col: string, dir: 'asc' | 'desc' | null }>({ col: 'name', dir: 'asc' });
+
+  const items = [
+    { id: '101', name: 'billing-service', status: 'Healthy', version: 'v2.4.1', owner: 'Platform Team' },
+    { id: '102', name: 'auth-gateway', status: 'Warning', version: 'v1.1.0', owner: 'Security Team' },
+    { id: '103', name: 'data-pipeline', status: 'Healthy', version: 'v4.0.2', owner: 'Data Team' },
+    { id: '104', name: 'user-frontend', status: 'Error', version: 'v0.9.5', owner: 'Product Team' },
+  ];
+
+  return (
+    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '1rem' }}>
+        <div style={{ flex: 1, maxWidth: '300px' }}>
+          <label style={{ fontSize: '0.875rem', fontWeight: 500, marginBottom: '4px', display: 'block' }}>Search services</label>
+          <LlmInput placeholder="Search by name or owner..." />
+        </div>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <LlmButton variant="outline">Export CSV</LlmButton>
+          <LlmButton variant="primary">Deploy Service</LlmButton>
+        </div>
+      </div>
+
+      <LlmTable variant="striped" size="sm">
+        <LlmThead>
+          <LlmTr>
+            <LlmTh 
+              sortable 
+              sortDirection={sort.col === 'name' ? sort.dir : null} 
+              onSort={(d) => setSort({ col: 'name', dir: d })}
+            >
+              Service Name
+            </LlmTh>
+            <LlmTh>Status</LlmTh>
+            <LlmTh>Version</LlmTh>
+            <LlmTh>Owner</LlmTh>
+            <LlmTh width="48px"></LlmTh>
+          </LlmTr>
+        </LlmThead>
+        <LlmTbody empty={items.length === 0} colSpan={5}>
+          {items.map(item => (
+            <LlmTr key={item.id} selectable>
+              <LlmTd>
+                <span style={{ fontWeight: 600 }}>{item.name}</span>
+              </LlmTd>
+              <LlmTd>
+                <LlmBadge 
+                  variant={item.status === 'Healthy' ? 'success' : item.status === 'Warning' ? 'warning' : 'danger'} 
+                  size="sm"
+                >
+                  {item.status}
+                </LlmBadge>
+              </LlmTd>
+              <LlmTd><code>{item.version}</code></LlmTd>
+              <LlmTd>{item.owner}</LlmTd>
+              <LlmTd align="end">
+                <LlmMenuTrigger
+                  menu={
+                    <LlmMenu>
+                      <LlmMenuItem>View Metrics</LlmMenuItem>
+                      <LlmMenuItem>View Logs</LlmMenuItem>
+                      <LlmMenuSeparator />
+                      <LlmMenuItem variant="danger">Stop Service</LlmMenuItem>
+                    </LlmMenu>
+                  }
+                >
+                  {({ onClick, ref }) => (
+                    <LlmButton variant="outline" size="sm" onClick={onClick} ref={ref as React.RefObject<HTMLButtonElement>}>...</LlmButton>
+                  )}
+                </LlmMenuTrigger>
+              </LlmTd>
+            </LlmTr>
+          ))}
+        </LlmTbody>
+      </LlmTable>
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <p style={{ margin: 0, fontSize: '0.875rem', opacity: 0.7 }}>Showing 4 of 24 services</p>
+        <LlmPagination page={page} pageCount={6} onPageChange={setPage} />
+      </div>
+    </div>
+  );
+}
+
+const dashboardAngular = `
+<div class="toolbar">
+  <llm-input placeholder="Search services..." />
+  <div class="actions">
+    <llm-button variant="outline">Export</llm-button>
+    <llm-button variant="primary">Deploy</llm-button>
+  </div>
+</div>
+
+<llm-table variant="striped">
+  <llm-thead>
+    <llm-tr>
+      <llm-th sortable [sortDirection]="sortDir()" (sort)="onSort($event)">Name</llm-th>
+      <llm-th>Status</llm-th>
+      <llm-th>Version</llm-th>
+      <llm-th></llm-th>
+    </llm-tr>
+  </llm-thead>
+  <llm-tbody [empty]="items().length === 0" [colSpan]="4">
+    @for (item of items(); track item.id) {
+      <llm-tr selectable [selected]="selection.has(item.id)">
+        <llm-td><strong>{{ item.name }}</strong></llm-td>
+        <llm-td><llm-badge [variant]="item.statusVariant">{{ item.status }}</llm-badge></llm-td>
+        <llm-td><code>{{ item.version }}</code></llm-td>
+        <llm-td align="end">
+          <llm-button variant="outline" size="sm" [llmMenuTriggerFor]="m">...</llm-button>
+        </llm-td>
+      </llm-tr>
+    }
+  </llm-tbody>
+</llm-table>
+
+<div class="footer">
+  <llm-pagination [page]="page()" [pageCount]="6" (pageChange)="page.set($event)" />
+</div>
+`;
+
+const dashboardReact = `
+<div className="toolbar">
+  <LlmInput placeholder="Search..." />
+  <LlmButton variant="primary">Deploy</LlmButton>
+</div>
+
+<LlmTable variant="striped" size="sm">
+  <LlmThead>
+    <LlmTr>
+      <LlmTh sortable sortDirection={sortDir} onSort={setSortDir}>Name</LlmTh>
+      <LlmTh>Status</LlmTh>
+      <LlmTh>Version</LlmTh>
+      <LlmTh />
+    </LlmTr>
+  </LlmThead>
+  <LlmTbody>
+    {items.map(item => (
+      <LlmTr key={item.id} selectable>
+        <LlmTd><strong>{item.name}</strong></LlmTd>
+        <LlmTd><LlmBadge variant={item.variant}>{item.status}</LlmBadge></LlmTd>
+        <LlmTd><code>{item.version}</code></LlmTd>
+        <LlmTd align="end">
+          <LlmMenuTrigger menu={<LlmMenu>...</LlmMenu>}>
+            {({ onClick, ref }) => <LlmButton onClick={onClick} ref={ref}>...</LlmButton>}
+          </LlmMenuTrigger>
+        </LlmTd>
+      </LlmTr>
+    ))}
+  </LlmTbody>
+</LlmTable>
+
+<LlmPagination page={page} pageCount={6} onPageChange={setPage} />
+`;
+
+const dashboardVue = `
+<div class="toolbar">
+  <LlmInput v-model:value="search" />
+  <LlmButton variant="primary">Deploy</LlmButton>
+</div>
+
+<LlmTable variant="striped">
+  <LlmThead>
+    <LlmTr>
+      <LlmTh sortable v-model:sortDirection="sort">Name</LlmTh>
+      <LlmTh>Status</LlmTh>
+    </LlmTr>
+  </LlmThead>
+  <LlmTbody>
+    <LlmTr v-for="item in items" :key="item.id" selectable>
+      <LlmTd>{{ item.name }}</LlmTd>
+      <LlmTd><LlmBadge :variant="item.variant">{{ item.status }}</LlmBadge></LlmTd>
+    </LlmTr>
+  </LlmTbody>
+</LlmTable>
+
+<LlmPagination v-model:page="page" :pageCount="6" />
+`;
+
 // ─── Main Page ───────────────────────────────────────────────────────────────
 
 function PatternsPage() {
@@ -670,6 +859,16 @@ function PatternsPage() {
         vueCode={notificationsVue}
       >
         <NotificationCenterDemo />
+      </PatternSection>
+
+      <PatternSection
+        title="6. Management Dashboard"
+        description="The ultimate composition pattern. Combines Table (with sorting and selection), Pagination, Input (search), and Menu actions."
+        angularCode={dashboardAngular}
+        reactCode={dashboardReact}
+        vueCode={dashboardVue}
+      >
+        <DashboardDemo />
       </PatternSection>
     </div>
   );

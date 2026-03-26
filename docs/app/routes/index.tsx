@@ -67,7 +67,7 @@ function HomePage() {
             Storybook
           </div>
           <div style={{ color: 'var(--ui-color-text-muted)', lineHeight: 1.6, fontSize: '0.9rem' }}>
-            Browse all 22 components live with interactive controls and real
+            Browse components live with interactive controls and real
             usage examples — the reference participants reach for during exercises.
           </div>
         </Link>
@@ -95,7 +95,7 @@ function HomePage() {
           <div className="docs-stat-label">Frameworks</div>
         </div>
         <div className="docs-stat">
-          <div className="docs-stat-number">22</div>
+          <div className="docs-stat-number">25+</div>
           <div className="docs-stat-label">Components</div>
         </div>
         <div className="docs-stat">
@@ -112,7 +112,7 @@ function HomePage() {
       <div className="docs-section" style={{ padding: '0 1rem' }}>
         <h2 className="docs-section-title">The component library</h2>
         <p style={{ color: 'var(--ui-color-text-muted)', lineHeight: 1.65, marginBottom: '1.25rem', maxWidth: '600px' }}>
-          22 LLM-optimized components across Angular, React, and Vue — built
+          25+ LLM-optimized components across Angular, React, and Vue — built
           with predictable APIs, accessible defaults, and consistent design
           tokens. Designed to be easy for AI to reason about and humans to learn from.
         </p>
