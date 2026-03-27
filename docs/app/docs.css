@@ -599,6 +599,37 @@ body {
   color: #059669;
 }
 
+/* Framework Switcher */
+.docs-framework-switcher {
+  display: flex;
+  background: var(--ui-color-surface-sunken);
+  padding: 0.25rem;
+  border-radius: var(--ui-radius-md);
+  border: 1px solid var(--ui-color-border);
+}
+
+.docs-framework-btn {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: var(--ui-color-text-muted);
+  border-radius: calc(var(--ui-radius-md) - 0.125rem);
+  cursor: pointer;
+  transition: all var(--ui-transition-fast);
+}
+
+.docs-framework-btn:hover {
+  color: var(--ui-color-text);
+}
+
+.docs-framework-btn.is-active {
+  background: var(--ui-color-surface);
+  color: var(--ui-color-primary);
+  box-shadow: var(--ui-shadow-sm);
+}
+
 /* Category tags */
 .docs-category-tag {
   display: inline-flex;

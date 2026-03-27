@@ -64,6 +64,8 @@ export interface LlmCardSpec {
 // Input / Textarea (shared form field props)
 // ---------------------------------------------------------------------------
 export interface LlmFormFieldSpec {
+  value?: any;
+  onValueChange?: (value: any) => void;
   disabled?: boolean;
   readonly?: boolean;
   invalid?: boolean;
@@ -88,11 +90,13 @@ export interface LlmTextareaSpec extends LlmFormFieldSpec {
 // ---------------------------------------------------------------------------
 export interface LlmCheckboxSpec extends LlmFormFieldSpec {
   checked?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
   indeterminate?: boolean;
 }
 
 export interface LlmToggleSpec extends LlmFormFieldSpec {
   checked?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
 }
 
 // ---------------------------------------------------------------------------
@@ -166,6 +170,7 @@ export interface LlmAlertSpec {
 export type LlmDialogSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
 export interface LlmDialogSpec {
   open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   closeOnBackdrop?: boolean;
   size?: LlmDialogSize;
 }
@@ -176,6 +181,7 @@ export interface LlmDialogSpec {
 export type LlmTabGroupVariant = 'default' | 'pills';
 export interface LlmTabGroupSpec {
   selectedIndex?: number;
+  onSelectedIndexChange?: (index: number) => void;
   variant?: LlmTabGroupVariant;
 }
 
@@ -195,6 +201,7 @@ export interface LlmAccordionGroupSpec {
 
 export interface LlmAccordionItemSpec {
   expanded?: boolean;
+  onExpandedChange?: (expanded: boolean) => void;
   disabled?: boolean;
 }
 

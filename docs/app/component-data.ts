@@ -1,8 +1,16 @@
+export interface FrameworkPropOverrides {
+  name?: string;
+  type?: string;
+  default?: string;
+}
+
 export interface PropRow {
   name: string;
   type: string;
   default: string;
   description: string;
+  angular?: FrameworkPropOverrides;
+  vue?: FrameworkPropOverrides;
 }
 
 export interface ComponentDoc {
@@ -83,7 +91,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
     description: 'A text input field that integrates with Signal Forms. Supports all standard HTML input types, validation states, and error display.',
     category: 'Inputs',
     props: [
-      { name: 'value', type: 'string', default: "''", description: 'Controlled value (use with onValueChange)' },
+      { name: 'value', type: 'string', default: "''", description: 'Controlled value', angular: { name: '[(value)]' } },
       { name: 'type', type: "'text' | 'email' | 'password' | 'number' | 'tel' | 'url'", default: "'text'", description: 'Input type' },
       { name: 'placeholder', type: 'string', default: "''", description: 'Placeholder text' },
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the input' },
@@ -198,8 +206,8 @@ export const componentDocs: Record<string, ComponentDoc> = {
     description: 'A custom select dropdown built on the native Popover API. Supports keyboard navigation, type-ahead, and disabled options.',
     category: 'Inputs',
     props: [
-      { name: 'value', type: 'string', default: "''", description: 'Currently selected value' },
-      { name: 'onValueChange', type: '(value: string) => void', default: '—', description: 'Called when selection changes' },
+      { name: 'value', type: 'string', default: "''", description: 'Currently selected value', angular: { name: '[(value)]' } },
+      { name: 'onValueChange', type: '(value: string) => void', default: '—', description: 'Called when selection changes', angular: { name: '(valueChange)' } },
       { name: 'placeholder', type: 'string', default: "''", description: 'Placeholder text when no option is selected' },
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the select' },
       { name: 'readonly', type: 'boolean', default: 'false', description: 'Makes the select read-only' },

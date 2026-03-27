@@ -9,8 +9,21 @@ import {
   OnDestroy,
   OnInit,
   signal,
+  viewChildren,
 } from '@angular/core';
+import { FocusableOption, FocusKeyManager } from '@angular/cdk/a11y';
 import { LLM_TAB_GROUP, type LlmTabGroupContext, type TabInfo } from './llm-tabs.token';
+
+/** @internal — Wrapper for FocusKeyManager integration. */
+class TabFocusItem implements FocusableOption {
+  constructor(private readonly element: HTMLButtonElement) {}
+  focus(): void {
+    this.element.focus();
+  }
+  get disabled(): boolean {
+    return this.element.disabled || this.element.getAttribute('aria-disabled') === 'true';
+  }
+}
 
 let nextId = 0;
 
@@ -35,6 +48,7 @@ let nextId = 0;
     <div class="tablist" role="tablist">
       @for (tab of tabs(); track tab.id; let i = $index) {
         <button
+          #tabBtn
           type="button"
           role="tab"
           [id]="tab.tabId"
@@ -70,10 +84,13 @@ export class LlmTabGroup implements LlmTabGroupContext {
   readonly tabs = signal<TabInfo[]>([]);
 
   /** @internal */
-  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  protected readonly tabBtns = viewChildren<ElementRef<HTMLButtonElement>>('tabBtn');
 
   /** @internal */
   protected readonly hostClasses = computed(() => `variant-${this.variant()}`);
+
+  /** @internal */
+  private keyManager: FocusKeyManager<TabFocusItem> | null = null;
 
   /** @internal — called by LlmTab on init */
   registerTab(info: TabInfo): void {
@@ -96,38 +113,19 @@ export class LlmTabGroup implements LlmTabGroupContext {
 
   /** @internal */
   protected onTabKeydown(event: KeyboardEvent): void {
-    const tabs = this.tabs();
-    const enabled = tabs.map((tab, i) => ({ tab, i })).filter(({ tab }) => !tab.disabled);
-    if (enabled.length === 0) return;
-
-    const currentPos = enabled.findIndex(({ i }) => i === this.selectedIndex());
-    const n = enabled.length;
-    let targetEntry: { tab: TabInfo; i: number } | null = null;
-
-    switch (event.key) {
-      case 'ArrowRight':
-        event.preventDefault();
-        targetEntry = enabled[(currentPos + 1) % n];
-        break;
-      case 'ArrowLeft':
-        event.preventDefault();
-        targetEntry = enabled[(currentPos - 1 + n) % n];
-        break;
-      case 'Home':
-        event.preventDefault();
-        targetEntry = enabled[0];
-        break;
-      case 'End':
-        event.preventDefault();
-        targetEntry = enabled[n - 1];
-        break;
+    if (!this.keyManager) {
+      const items = this.tabBtns().map((btn) => new TabFocusItem(btn.nativeElement));
+      this.keyManager = new FocusKeyManager(items)
+        .withHorizontalOrientation('ltr')
+        .withWrap()
+        .withHomeAndEnd();
     }
 
-    if (targetEntry) {
-      this.selectedIndex.set(targetEntry.i);
-      const buttons = this.elementRef.nativeElement.querySelectorAll<HTMLButtonElement>('[role="tab"]');
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      buttons[targetEntry.i]?.focus();
+    this.keyManager.setActiveItem(this.selectedIndex());
+    this.keyManager.onKeydown(event);
+
+    if (this.keyManager.activeItemIndex !== -1 && this.keyManager.activeItemIndex !== this.selectedIndex()) {
+      this.selectedIndex.set(this.keyManager.activeItemIndex);
     }
   }
 }

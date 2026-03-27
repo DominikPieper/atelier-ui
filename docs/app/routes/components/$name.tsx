@@ -74,6 +74,7 @@ function getCategory(name: string): string {
 function ComponentDocPage() {
   const { name } = Route.useParams();
   const doc = componentDocs[name];
+  const [framework, setFramework] = useState<'angular' | 'react' | 'vue'>('angular');
 
   if (!doc) {
     throw notFound();
@@ -106,9 +107,34 @@ function ComponentDocPage() {
             {category}
           </span>
         </div>
-        <h1 className="docs-page-title">{doc.name}</h1>
-        <p className="docs-page-description">{doc.description}</p>
-        <code className="docs-selector-badge">{doc.selector}</code>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div>
+            <h1 className="docs-page-title">{doc.name}</h1>
+            <p className="docs-page-description">{doc.description}</p>
+            <code className="docs-selector-badge">{doc.selector}</code>
+          </div>
+          
+          <div className="docs-framework-switcher">
+            <button 
+              className={`docs-framework-btn ${framework === 'angular' ? 'is-active' : ''}`}
+              onClick={() => setFramework('angular')}
+            >
+              Angular
+            </button>
+            <button 
+              className={`docs-framework-btn ${framework === 'react' ? 'is-active' : ''}`}
+              onClick={() => setFramework('react')}
+            >
+              React
+            </button>
+            <button 
+              className={`docs-framework-btn ${framework === 'vue' ? 'is-active' : ''}`}
+              onClick={() => setFramework('vue')}
+            >
+              Vue
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Live demo */}
@@ -125,7 +151,7 @@ function ComponentDocPage() {
       {/* Props table */}
       {doc.props.length > 0 && (
         <div className="docs-section">
-          <h2 className="docs-section-title">API</h2>
+          <h2 className="docs-section-title">API ({framework.charAt(0).toUpperCase() + framework.slice(1)})</h2>
           <table className="docs-props-table">
             <thead>
               <tr>
@@ -136,14 +162,17 @@ function ComponentDocPage() {
               </tr>
             </thead>
             <tbody>
-              {doc.props.map((prop) => (
-                <tr key={prop.name}>
-                  <td><code className="docs-prop-name">{prop.name}</code></td>
-                  <td><code className="docs-prop-type">{prop.type}</code></td>
-                  <td><code className="docs-prop-default">{prop.default}</code></td>
-                  <td>{prop.description}</td>
-                </tr>
-              ))}
+              {doc.props.map((prop) => {
+                const override = prop[framework];
+                return (
+                  <tr key={prop.name}>
+                    <td><code className="docs-prop-name">{override?.name ?? prop.name}</code></td>
+                    <td><code className="docs-prop-type">{override?.type ?? prop.type}</code></td>
+                    <td><code className="docs-prop-default">{override?.default ?? prop.default}</code></td>
+                    <td>{prop.description}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

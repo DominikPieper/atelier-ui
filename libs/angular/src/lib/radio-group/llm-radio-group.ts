@@ -6,6 +6,7 @@ import {
   model,
   signal,
 } from '@angular/core';
+import { FocusKeyManager } from '@angular/cdk/a11y';
 import type { FormValueControl } from '@angular/forms/signals';
 import { type ValidationError, type WithOptionalFieldTree } from '@angular/forms/signals';
 import { LLM_RADIO_GROUP, type LlmRadioGroupContext, type RadioItem } from './llm-radio-group.token';
@@ -84,6 +85,9 @@ export class LlmRadioGroup implements FormValueControl<string>, LlmRadioGroupCon
   private readonly items = signal<RadioItem[]>([]);
 
   /** @internal */
+  private keyManager: FocusKeyManager<RadioItem> | null = null;
+
+  /** @internal */
   protected readonly showErrors = computed(
     () => this.touched() && this.invalid() && this.errors().length > 0
   );
@@ -121,25 +125,21 @@ export class LlmRadioGroup implements FormValueControl<string>, LlmRadioGroupCon
 
   /** @internal */
   protected onKeydown(event: KeyboardEvent): void {
-    const key = event.key;
-    if (key !== 'ArrowDown' && key !== 'ArrowRight' && key !== 'ArrowUp' && key !== 'ArrowLeft') return;
+    if (this.disabled()) return;
 
-    event.preventDefault();
-    const radioItems = this.items();
-    const enabled = radioItems.filter((item) => !item.isDisabled());
-    if (enabled.length === 0) return;
+    if (!this.keyManager) {
+      this.keyManager = new FocusKeyManager(this.items())
+        .withHorizontalOrientation('ltr')
+        .withVerticalOrientation()
+        .withWrap();
+    }
 
-    const currentPos = enabled.findIndex((i) => i.radioValue() === this.value());
-    const isNext = key === 'ArrowDown' || key === 'ArrowRight';
-    const n = enabled.length;
-    const nextPos = isNext
-      ? (currentPos + 1) % n
-      : (currentPos - 1 + n) % n;
+    const currentIdx = this.items().findIndex((i) => i.radioValue() === this.value());
+    this.keyManager.setActiveItem(currentIdx);
+    this.keyManager.onKeydown(event);
 
-    const target = enabled[nextPos];
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, @typescript-eslint/strict-boolean-expressions
-    if (target) {
-      target.focusInput();
+    if (this.keyManager.activeItemIndex !== -1 && this.keyManager.activeItemIndex !== currentIdx) {
+      const target = this.items()[this.keyManager.activeItemIndex];
       this.value.set(target.radioValue());
       this.touched.set(true);
     }

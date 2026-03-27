@@ -12,6 +12,7 @@ import {
   signal,
 } from '@angular/core';
 import { CdkAccordion, CdkAccordionItem } from '@angular/cdk/accordion';
+import { FocusKeyManager } from '@angular/cdk/a11y';
 import { LLM_ACCORDION_GROUP, type AccordionItem, type LlmAccordionGroupContext } from './llm-accordion.token';
 
 let nextId = 0;
@@ -61,6 +62,9 @@ export class LlmAccordionGroup implements LlmAccordionGroupContext {
   /** @internal */
   private readonly items = signal<AccordionItem[]>([]);
 
+  /** @internal */
+  private keyManager: FocusKeyManager<AccordionItem> | null = null;
+
   register(item: AccordionItem): void {
     this.items.update((list) => [...list, item]);
   }
@@ -70,34 +74,15 @@ export class LlmAccordionGroup implements LlmAccordionGroupContext {
   }
 
   handleKeydown(event: KeyboardEvent, item: AccordionItem): void {
-    const allItems = this.items();
-    const enabled = allItems.filter((i) => !i.isItemDisabled());
-    if (enabled.length === 0) return;
-
-    const pos = enabled.indexOf(item);
-    const n = enabled.length;
-    let target: AccordionItem | null = null;
-
-    switch (event.key) {
-      case 'ArrowDown':
-        event.preventDefault();
-        target = enabled[(pos + 1) % n];
-        break;
-      case 'ArrowUp':
-        event.preventDefault();
-        target = enabled[(pos - 1 + n) % n];
-        break;
-      case 'Home':
-        event.preventDefault();
-        target = enabled[0];
-        break;
-      case 'End':
-        event.preventDefault();
-        target = enabled[n - 1];
-        break;
+    if (!this.keyManager) {
+      this.keyManager = new FocusKeyManager(this.items())
+        .withVerticalOrientation()
+        .withWrap()
+        .withHomeAndEnd();
     }
 
-    target?.focusTrigger();
+    this.keyManager.setActiveItem(item);
+    this.keyManager.onKeydown(event);
   }
 }
 
@@ -242,13 +227,8 @@ export class LlmAccordionItem implements AccordionItem, OnInit, OnDestroy {
   }
 
   /** @internal — for FocusKeyManager */
-  focusTrigger(): void {
+  focus(): void {
     this.el.nativeElement.querySelector<HTMLButtonElement>('.accordion-trigger')?.focus();
-  }
-
-  /** @internal — for FocusKeyManager */
-  isItemDisabled(): boolean {
-    return this.disabled();
   }
 
   /** @internal */

@@ -9,9 +9,33 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
+import { ActiveDescendantKeyManager, Highlightable } from '@angular/cdk/a11y';
 import type { FormValueControl } from '@angular/forms/signals';
 import { type ValidationError, type WithOptionalFieldTree } from '@angular/forms/signals';
 import type { LlmComboboxOption } from '@atelier-ui/spec';
+
+/** @internal — Wrapper for ActiveDescendantKeyManager integration. */
+class ComboboxOptionItem implements Highlightable {
+  constructor(
+    readonly value: string,
+    readonly label: string,
+    readonly disabled: boolean,
+    private readonly index: number,
+    private readonly activeIndex: import('@angular/core').WritableSignal<number>,
+  ) {}
+
+  getLabel(): string {
+    return this.label;
+  }
+
+  setActiveStyles(): void {
+    this.activeIndex.set(this.index);
+  }
+
+  setInactiveStyles(): void {
+    // Handled by manager
+  }
+}
 
 let nextId = 0;
 
@@ -194,6 +218,9 @@ export class LlmCombobox implements FormValueControl<string> {
     return classes.join(' ');
   });
 
+  /** @internal */
+  private keyManager: ActiveDescendantKeyManager<ComboboxOptionItem> | null = null;
+
   private outsideClickHandler: ((e: MouseEvent) => void) | null = null;
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
@@ -207,6 +234,7 @@ export class LlmCombobox implements FormValueControl<string> {
     const q = (event.target as HTMLInputElement).value;
     this.query.set(q);
     this.activeIndex.set(-1);
+    this.keyManager = null; // reset manager for new filtered list
     if (q === '') {
       this.value.set('');
     }
@@ -220,12 +248,9 @@ export class LlmCombobox implements FormValueControl<string> {
 
   /** @internal */
   protected onBlur(): void {
-    // Revert query to selected label (or clear if nothing selected)
     const selectedOption = this.options().find((o) => o.value === this.value());
     this.query.set(selectedOption?.label ?? '');
     this.touched.set(true);
-    // close() is called via outside-click handler; blur alone doesn't close
-    // (mousedown on option fires before blur, so selection still works)
   }
 
   /** @internal */
@@ -241,28 +266,17 @@ export class LlmCombobox implements FormValueControl<string> {
   /** @internal */
   protected onKeydown(event: KeyboardEvent): void {
     if (this.disabled()) return;
-    const filtered = this.filteredOptions();
+
+    if (!this.keyManager) {
+      const items = this.filteredOptions().map((o, i) => new ComboboxOptionItem(o.value, o.label, !!o.disabled, i, this.activeIndex));
+      this.keyManager = new ActiveDescendantKeyManager(items).withWrap().withVerticalOrientation();
+    }
 
     switch (event.key) {
-      case 'ArrowDown': {
-        event.preventDefault();
-        if (!this.isOpen()) { this.open(); return; }
-        const next = this.activeIndex() + 1;
-        this.activeIndex.set(next >= filtered.length ? 0 : next);
-        break;
-      }
-      case 'ArrowUp': {
-        event.preventDefault();
-        if (!this.isOpen()) { this.open(); return; }
-        const prev = this.activeIndex() - 1;
-        this.activeIndex.set(prev < 0 ? filtered.length - 1 : prev);
-        break;
-      }
       case 'Enter': {
-        event.preventDefault();
-        const idx = this.activeIndex();
-        if (this.isOpen() && idx >= 0 && idx < filtered.length) {
-          this.onOptionSelect(filtered[idx]);
+        if (this.isOpen() && this.keyManager.activeItem) {
+          event.preventDefault();
+          this.onOptionSelect(this.keyManager.activeItem);
         }
         break;
       }
@@ -277,6 +291,13 @@ export class LlmCombobox implements FormValueControl<string> {
         this.close();
         break;
       }
+      default: {
+        if (!this.isOpen() && (event.key === 'ArrowDown' || event.key === 'ArrowUp')) {
+          this.open();
+        } else {
+          this.keyManager.onKeydown(event);
+        }
+      }
     }
   }
 
@@ -286,6 +307,7 @@ export class LlmCombobox implements FormValueControl<string> {
     (panel.nativeElement as HTMLElement & { showPopover(): void }).showPopover();
     this.isOpen.set(true);
     this.activeIndex.set(-1);
+    this.keyManager = null;
 
     this.outsideClickHandler = (e: MouseEvent) => {
       if (!this.elementRef.nativeElement.contains(e.target as Node)) {
@@ -305,6 +327,7 @@ export class LlmCombobox implements FormValueControl<string> {
     }
     this.isOpen.set(false);
     this.activeIndex.set(-1);
+    this.keyManager = null;
 
     if (this.outsideClickHandler) {
       document.removeEventListener('click', this.outsideClickHandler);

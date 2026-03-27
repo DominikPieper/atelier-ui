@@ -81,7 +81,12 @@ export class LlmRadio implements RadioItem, OnInit, OnDestroy {
   });
 
   /** @internal — for FocusKeyManager */
-  focusInput(): void {
+  get disabled(): boolean {
+    return this.isDisabled();
+  }
+
+  /** @internal — for FocusKeyManager */
+  focus(): void {
     this.el.nativeElement.querySelector<HTMLInputElement>('input')?.focus();
   }
 

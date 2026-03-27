@@ -102,18 +102,19 @@ This document outlines the development phases, existing status, and future backl
 
 ### High Impact (significant code reduction)
 
-| Component | CDK Module | Current Manual Code | CDK Replacement | Est. Reduction |
-|-----------|-----------|-------------------|-----------------|----------------|
-| `LlmSelect` | `@angular/cdk/a11y` | ~125 lines: 11-case switch for keyboard nav, type-ahead with 500ms debounce, wrap-around logic | `ActiveDescendantKeyManager` handles arrow nav, wrap, Home/End, type-ahead natively | ~80 lines |
-| `LlmDialog` | `@angular/cdk/a11y` | ~25 lines: manual focus trap (Tab/Shift+Tab wrapping, focusable element query) | `cdkTrapFocus` directive | ~20 lines |
-| `LlmAccordion` | `@angular/cdk/accordion` | Manual expand state tracking via Set, single/multi logic, item registration | `CdkAccordion` + `CdkAccordionItem` with `multi` input and `expanded` state | ~30 lines |
+| Component | CDK Module | Current Manual Code | CDK Replacement | Est. Reduction | Status |
+|-----------|-----------|-------------------|-----------------|----------------|--------|
+| `LlmSelect` | `@angular/cdk/a11y` | ~125 lines: 11-case switch for keyboard nav, type-ahead with 500ms debounce, wrap-around logic | `ActiveDescendantKeyManager` handles arrow nav, wrap, Home/End, type-ahead natively | ~80 lines | ✅ Done |
+| `LlmDialog` | `@angular/cdk/a11y` | ~25 lines: manual focus trap (Tab/Shift+Tab wrapping, focusable element query) | `cdkTrapFocus` directive | ~20 lines | ✅ Done |
+| `LlmAccordion` | `@angular/cdk/accordion` | Manual expand state tracking via Set, single/multi logic, item registration | `CdkAccordion` + `CdkAccordionItem` with `multi` input and `expanded` state | ~30 lines | ✅ Done |
 
 ### Medium Impact
 
-| Component | CDK Module | Current Manual Code | CDK Replacement | Est. Reduction |
-|-----------|-----------|-------------------|-----------------|----------------|
-| `LlmTabs` | `@angular/cdk/a11y` | ~40 lines: roving tabindex + keyboard nav | `FocusKeyManager` with wrap, skip disabled, Home/End | ~25 lines |
-| `LlmRadioGroup` | `@angular/cdk/a11y` | ~20 lines: arrow key navigation | `FocusKeyManager` with horizontal/vertical mode | ~15 lines |
+| Component | CDK Module | Current Manual Code | CDK Replacement | Est. Reduction | Status |
+|-----------|-----------|-------------------|-----------------|----------------|--------|
+| `LlmTabs` | `@angular/cdk/a11y` | ~40 lines: roving tabindex + keyboard nav | `FocusKeyManager` with wrap, skip disabled, Home/End | ~25 lines | ✅ Done |
+| `LlmRadioGroup` | `@angular/cdk/a11y` | ~20 lines: arrow key navigation | `FocusKeyManager` with horizontal/vertical mode | ~15 lines | ✅ Done |
+| `LlmCombobox` | `@angular/cdk/a11y` | Manual keyboard nav | `ActiveDescendantKeyManager` | ~40 lines | ✅ Done |
 
 ### Low Impact (optional)
 

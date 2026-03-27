@@ -90,10 +90,13 @@ This project provides several MCP servers to assist in development. Always use t
 
 ## Component Documentation
 
-**Do not add component API documentation to this file.** Use the Storybook MCP servers instead:
-- Angular components → `storybook-angular` MCP (`list-all-documentation`, `get-documentation`)
-- React components → `storybook-react` MCP (`list-all-documentation`, `get-documentation`)
+The primary documentation for the component library lives in the `docs/` application and the `libs/spec` library (which defines the framework-agnostic API contract).
 
-The Storybook MCP servers are the authoritative source for component props, variants, and usage examples. Always query them rather than relying on inline docs here.
+**Do not add component API documentation to this file.** Use the following sources instead:
+- **Interactive Docs**: Run the `docs` app (`nx serve docs`) for framework-specific API tables and live demos.
+- **Spec Library**: Refer to `libs/spec/src/index.ts` for the ground-truth API definitions.
+- **Storybook MCP**: Use the framework-specific Storybook MCP servers for live discovery during development:
+  - Angular components → `storybook-angular` MCP (`list-all-documentation`, `get-documentation`)
+  - React components → `storybook-react` MCP (`list-all-documentation`, `get-documentation`)
 
 ---

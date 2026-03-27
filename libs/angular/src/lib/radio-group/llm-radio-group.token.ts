@@ -1,10 +1,11 @@
 import { InjectionToken } from '@angular/core';
 import type { Signal, WritableSignal } from '@angular/core';
+import type { FocusableOption } from '@angular/cdk/a11y';
 
 /** @internal — shape required by LlmRadioGroup's FocusKeyManager */
-export interface RadioItem {
-  focusInput(): void;
-  isDisabled(): boolean;
+export interface RadioItem extends FocusableOption {
+  focus(): void; // matches FocusableOption
+  disabled?: boolean; // matches FocusableOption
   readonly radioValue: Signal<string>;
 }
 
