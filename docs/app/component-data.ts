@@ -92,6 +92,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
     category: 'Inputs',
     props: [
       { name: 'value', type: 'string', default: "''", description: 'Controlled value', angular: { name: '[(value)]' } },
+      { name: 'onValueChange', type: '(value: string) => void', default: '—', description: 'Called when the input value changes', angular: { name: '(valueChange)' } },
       { name: 'type', type: "'text' | 'email' | 'password' | 'number' | 'tel' | 'url'", default: "'text'", description: 'Input type' },
       { name: 'placeholder', type: 'string', default: "''", description: 'Placeholder text' },
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the input' },
@@ -125,6 +126,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
     category: 'Inputs',
     props: [
       { name: 'value', type: 'string', default: "''", description: 'Controlled value' },
+      { name: 'onValueChange', type: '(value: string) => void', default: '—', description: 'Called when the textarea value changes', angular: { name: '(valueChange)' } },
       { name: 'rows', type: 'number', default: '3', description: 'Initial number of visible rows' },
       { name: 'placeholder', type: 'string', default: "''", description: 'Placeholder text' },
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the textarea' },
@@ -147,6 +149,8 @@ export const componentDocs: Record<string, ComponentDoc> = {
     props: [
       { name: 'checked', type: 'boolean', default: 'false', description: 'Controlled checked state' },
       { name: 'onCheckedChange', type: '(checked: boolean) => void', default: '—', description: 'Called when the checked state changes' },
+      { name: 'value', type: 'boolean', default: 'false', description: 'Alias for checked (Signal Forms integration)', angular: { name: '[(value)]' } },
+      { name: 'onValueChange', type: '(checked: boolean) => void', default: '—', description: 'Alias for onCheckedChange (Signal Forms integration)', angular: { name: '(valueChange)' } },
       { name: 'indeterminate', type: 'boolean', default: 'false', description: 'Shows a dash (indeterminate state)' },
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the checkbox' },
       { name: 'readonly', type: 'boolean', default: 'false', description: 'Makes the checkbox read-only' },
@@ -168,6 +172,8 @@ export const componentDocs: Record<string, ComponentDoc> = {
     props: [
       { name: 'checked', type: 'boolean', default: 'false', description: 'Controlled checked state' },
       { name: 'onCheckedChange', type: '(checked: boolean) => void', default: '—', description: 'Called when the checked state changes' },
+      { name: 'value', type: 'boolean', default: 'false', description: 'Alias for checked (Signal Forms integration)', angular: { name: '[(value)]' } },
+      { name: 'onValueChange', type: '(checked: boolean) => void', default: '—', description: 'Alias for onCheckedChange (Signal Forms integration)', angular: { name: '(valueChange)' } },
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the toggle' },
       { name: 'readonly', type: 'boolean', default: 'false', description: 'Makes the toggle read-only' },
       { name: 'invalid', type: 'boolean', default: 'false', description: 'Applies invalid/error styling' },
