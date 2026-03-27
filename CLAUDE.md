@@ -98,5 +98,6 @@ The primary documentation for the component library lives in the `docs/` applica
 - **Storybook MCP**: Use the framework-specific Storybook MCP servers for live discovery during development:
   - Angular components → `storybook-angular` MCP (`list-all-documentation`, `get-documentation`)
   - React components → `storybook-react` MCP (`list-all-documentation`, `get-documentation`)
+  - Vue components → `storybook-vue` MCP (`list-all-documentation`, `get-documentation`)
 
 ---

@@ -37,7 +37,7 @@ function StorybookPage() {
 
       <div className="docs-storybook-grid">
         <a
-          href="/storybook-react/"
+          href={`${SITE_URL}/storybook-react/`}
           target="_blank"
           rel="noopener noreferrer"
           className="docs-storybook-card"
@@ -51,7 +51,7 @@ function StorybookPage() {
         </a>
 
         <a
-          href="/storybook-angular/"
+          href={`${SITE_URL}/storybook-angular/`}
           target="_blank"
           rel="noopener noreferrer"
           className="docs-storybook-card"
@@ -65,7 +65,7 @@ function StorybookPage() {
         </a>
 
         <a
-          href="/storybook-vue/"
+          href={`${SITE_URL}/storybook-vue/`}
           target="_blank"
           rel="noopener noreferrer"
           className="docs-storybook-card"
