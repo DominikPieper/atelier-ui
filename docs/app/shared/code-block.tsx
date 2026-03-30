@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 // ─── Token type ───────────────────────────────────────────────────────────────
 
 export type Token = { text: string; color?: string };
@@ -6,11 +8,11 @@ export type Token = { text: string; color?: string };
 // Matches the existing .docs-demo-code palette used across the app.
 
 const C = {
-  keyword:   '#7c3aed', // purple   — import, from, npx, npm, string, boolean
-  name:      '#00bebe', // teal     — component names, identifiers
-  string:    '#059669', // green    — string literals, package names
-  muted:     '#6c7086', // gray     — punctuation, flags, comments
-  text:      '#cdd6f4', // default  — plain text
+  keyword:   '#89ceff', // light blue — import, from, npx, npm, string, boolean
+  name:      '#44dada', // teal       — component names, identifiers
+  string:    '#a6d644', // lime green — string literals, package names
+  muted:     '#6b7a99', // gray       — punctuation, flags, comments
+  text:      '#d8e4f1', // default    — plain text
 } as const;
 
 // ─── Tokenizers ───────────────────────────────────────────────────────────────
@@ -392,23 +394,39 @@ export function tokenize(code: string, lang: Lang): Token[] {
 // ─── CodeBlock component ──────────────────────────────────────────────────────
 
 export function CodeBlock({ code, lang }: { code: string; lang: Lang }) {
+  const [copied, setCopied] = useState(false);
   const tokens = tokenize(code.trim(), lang);
+
+  function handleCopy() {
+    navigator.clipboard.writeText(code.trim()).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    });
+  }
+
   return (
-    <div className="docs-demo-code" style={{ borderRadius: '8px', marginBottom: '1rem' }}>
-      <pre style={{ margin: 0, fontFamily: "'Menlo','Monaco','Courier New',monospace", fontSize: '0.8rem', lineHeight: 1.6, overflowX: 'auto' }}>
-        {tokens.map((t, i) => (
-          <span key={i} style={{ color: t.color ?? C.text }}>
-            {t.text}
-          </span>
-        ))}
-      </pre>
+    <div className="docs-demo-code-wrap">
+      <div className="docs-demo-code" style={{ borderRadius: '8px', marginBottom: '1rem' }}>
+        <pre style={{ margin: 0, fontFamily: "'Menlo','Monaco','Courier New',monospace", fontSize: '0.8rem', lineHeight: 1.6, overflowX: 'auto' }}>
+          {tokens.map((t, i) => (
+            <span key={i} style={{ color: t.color ?? C.text }}>
+              {t.text}
+            </span>
+          ))}
+        </pre>
+      </div>
+      <button
+        className={`docs-copy-btn${copied ? ' docs-copy-btn--copied' : ''}`}
+        onClick={handleCopy}
+        title="Copy to clipboard"
+      >
+        {copied ? '✓' : 'Copy'}
+      </button>
     </div>
   );
 }
 
 // ─── MultiCodeBlock component ─────────────────────────────────────────────────
-
-import { useState } from 'react';
 
 export type CodeFile = {
   label: string;

@@ -33,16 +33,15 @@ function Rule({ children }: { children: React.ReactNode }) {
 
 function CodeCompare({ bad, good, lang = 'jsx' }: { bad: string; good: string; lang?: Lang }) {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginTop: '0.75rem' }}>
-      {[
-        { label: 'Unpredictable', code: bad, accent: '#ef4444' },
-        { label: 'LLM-optimized', code: good, accent: '#059669' },
-      ].map(({ label, code, accent }) => (
-        <div key={label} style={{ minWidth: 0 }}>
-          <div style={{ fontSize: '0.68rem', fontWeight: '600', color: accent, marginBottom: '0.35rem' }}>{label}</div>
-          <CodeBlock lang={lang} code={code} />
-        </div>
-      ))}
+    <div className="docs-comparison">
+      <div className="docs-comparison-bad">
+        <div className="docs-comparison-label">Unpredictable</div>
+        <CodeBlock lang={lang} code={bad} />
+      </div>
+      <div className="docs-comparison-good">
+        <div className="docs-comparison-label">LLM-optimized</div>
+        <CodeBlock lang={lang} code={good} />
+      </div>
     </div>
   );
 }
@@ -50,9 +49,21 @@ function CodeCompare({ bad, good, lang = 'jsx' }: { bad: string; good: string; l
 function DesignPrinciplesPage() {
   return (
     <>
-      <div className="docs-page-header">
-        <h1 className="docs-page-title">LLM-Optimized API Design</h1>
-        <p className="docs-page-description">
+      <div style={{ marginBottom: '2.5rem' }}>
+        <h1 style={{
+          fontSize: '2rem',
+          fontWeight: '800',
+          letterSpacing: '-0.04em',
+          lineHeight: 1.1,
+          margin: '0 0 0.6rem',
+          background: 'linear-gradient(135deg, var(--ui-color-primary) 0%, var(--docs-secondary, #89ceff) 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+        }}>
+          LLM-Optimized API Design
+        </h1>
+        <p style={{ fontSize: '0.9rem', color: 'var(--ui-color-text-muted)', margin: 0, maxWidth: '520px', lineHeight: '1.65' }}>
           Why Atelier UI is structured the way it is — and what makes a component
           library easy for AI to use correctly on the first attempt.
         </p>

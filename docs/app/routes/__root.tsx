@@ -145,6 +145,9 @@ function TopBar({ onMenuToggle, dark, onThemeToggle }: { onMenuToggle: () => voi
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
   const isComponents = currentPath.startsWith('/components');
+  const isMcp = currentPath === '/mcp';
+  const isWorkshop = currentPath === '/workshop';
+  const isDocs = !isComponents && !isMcp && !isWorkshop;
 
   return (
     <header className="docs-topbar">
@@ -162,24 +165,31 @@ function TopBar({ onMenuToggle, dark, onThemeToggle }: { onMenuToggle: () => voi
         />
         <span className="docs-logo-text">Atelier</span>
       </Link>
-      
-      <Search />
 
       <div className="docs-topbar-links">
-        <Link to="/" className={`docs-topbar-link${!isComponents ? ' active' : ''}`}>
-          Documentation
+        <Link to="/" className={`docs-topbar-link${isDocs ? ' active' : ''}`}>
+          Docs
         </Link>
         <Link to="/components" className={`docs-topbar-link${isComponents ? ' active' : ''}`}>
           Components
         </Link>
-        <button
-          className="docs-theme-btn"
-          onClick={onThemeToggle}
-          aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
-        >
-          {dark ? '☀️' : '🌙'}
-        </button>
+        <Link to="/mcp" className={`docs-topbar-link${isMcp ? ' active' : ''}`}>
+          MCP Explorer
+        </Link>
+        <Link to="/workshop" className={`docs-topbar-link${isWorkshop ? ' active' : ''}`}>
+          Workshop
+        </Link>
       </div>
+
+      <Search />
+
+      <button
+        className="docs-theme-btn"
+        onClick={onThemeToggle}
+        aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
+      >
+        {dark ? '☀️' : '🌙'}
+      </button>
     </header>
   );
 }
@@ -191,6 +201,11 @@ function Sidebar({ open }: { open: boolean }) {
 
   return (
     <nav className={`docs-sidebar${open ? ' docs-sidebar--open' : ''}`}>
+      <div className="docs-sidebar-header">
+        <div className="docs-sidebar-title">Technical Atelier</div>
+        <div className="docs-sidebar-version">v1.0.4-beta</div>
+      </div>
+
       {!isComponents ? (
         <>
           <div className="docs-nav-section">
@@ -198,8 +213,8 @@ function Sidebar({ open }: { open: boolean }) {
               <span className="docs-nav-heading-icon">{SECTION_ICONS['Get Started']}</span>
               Get Started
             </div>
-            <NavLink to="/" label="Overview" currentPath={currentPath} />
-            <NavLink to="/workshop" label="Workshop Setup" currentPath={currentPath} />
+            <NavLink to="/" icon="dashboard" label="Overview" currentPath={currentPath} />
+            <NavLink to="/workshop" icon="build_circle" label="Workshop Setup" currentPath={currentPath} />
           </div>
 
           <div className="docs-nav-section">
@@ -207,8 +222,8 @@ function Sidebar({ open }: { open: boolean }) {
               <span className="docs-nav-heading-icon">{SECTION_ICONS['Tools']}</span>
               Tools
             </div>
-            <NavLink to="/mcp" label="MCP Playground" currentPath={currentPath} />
-            <NavLink to="/storybook" label="Storybook" currentPath={currentPath} />
+            <NavLink to="/mcp" icon="smart_toy" label="MCP Playground" currentPath={currentPath} />
+            <NavLink to="/storybook" icon="book" label="Storybook" currentPath={currentPath} />
           </div>
 
           <div className="docs-nav-section">
@@ -216,11 +231,11 @@ function Sidebar({ open }: { open: boolean }) {
               <span className="docs-nav-heading-icon">{SECTION_ICONS['The Library']}</span>
               The Library
             </div>
-            <NavLink to="/install" label="Installation" currentPath={currentPath} />
-            <NavLink to="/design-principles" label="LLM-Optimized APIs" currentPath={currentPath} />
-            <NavLink to="/patterns" label="Cookbook Patterns" currentPath={currentPath} />
-            <NavLink to="/llms" label="llms.txt" currentPath={currentPath} />
-            <NavLink to="/prompts" label="Prompt Templates" currentPath={currentPath} />
+            <NavLink to="/install" icon="download" label="Installation" currentPath={currentPath} />
+            <NavLink to="/design-principles" icon="psychology" label="LLM-Optimized APIs" currentPath={currentPath} />
+            <NavLink to="/patterns" icon="menu_book" label="Cookbook Patterns" currentPath={currentPath} />
+            <NavLink to="/llms" icon="description" label="llms.txt" currentPath={currentPath} />
+            <NavLink to="/prompts" icon="chat" label="Prompt Templates" currentPath={currentPath} />
           </div>
         </>
       ) : (
@@ -232,6 +247,7 @@ function Sidebar({ open }: { open: boolean }) {
             </div>
             <NavLink
               to="/components"
+              icon="grid_view"
               label="All Components"
               currentPath={currentPath}
             />
@@ -263,15 +279,18 @@ function NavLink({
   to,
   label,
   currentPath,
+  icon,
 }: {
   to: string;
   label: string;
   currentPath: string;
+  icon?: string;
 }) {
   const isActive =
     currentPath === to || (to !== '/' && currentPath.startsWith(to));
   return (
     <Link to={to} className={`docs-nav-link${isActive ? ' active' : ''}`}>
+      {icon && <span className="docs-nav-link-icon material-symbols-outlined">{icon}</span>}
       {label}
     </Link>
   );

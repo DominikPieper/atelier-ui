@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { RouterProvider } from '@tanstack/react-router';
 import { router } from './router';
 import './tokens.css';
+import './docs-theme.css';
 import './docs.css';
 
 const rootEl = document.getElementById('root');

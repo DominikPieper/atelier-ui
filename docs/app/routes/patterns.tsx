@@ -40,11 +40,6 @@ export const Route = createFileRoute('/patterns')({
   component: PatternsPage,
 });
 
-const muted: React.CSSProperties = {
-  lineHeight: '1.6',
-  marginBottom: '1rem',
-  color: 'var(--ui-color-text-muted)',
-};
 
 function PatternSection({
   title,
@@ -53,6 +48,7 @@ function PatternSection({
   angularCode,
   reactCode,
   vueCode,
+  tags,
 }: {
   title: string;
   description: string;
@@ -60,7 +56,13 @@ function PatternSection({
   angularCode: string;
   reactCode: string;
   vueCode: string;
+  tags?: string[];
 }) {
+  // Split "1. Title" into number + label
+  const match = title.match(/^(\d+)\.\s+(.+)$/);
+  const num = match ? match[1].padStart(2, '0') : null;
+  const label = match ? match[2] : title;
+
   const files: CodeFile[] = [
     { label: 'Angular', code: angularCode, lang: 'jsx' },
     { label: 'React', code: reactCode, lang: 'jsx' },
@@ -68,14 +70,72 @@ function PatternSection({
   ];
 
   return (
-    <div className="docs-section">
-      <h2 className="docs-section-title">{title}</h2>
-      <p style={muted}>{description}</p>
-      <div className="docs-demo" style={{ marginBottom: '1.5rem' }}>
-        <div className="docs-demo-canvas docs-demo-canvas--column" style={{ background: 'var(--ui-color-surface-sunken)' }}>
+    <div style={{ marginBottom: '3rem' }}>
+      {/* Section heading row */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.85rem', marginBottom: '0.65rem' }}>
+        {num && (
+          <span style={{
+            fontFamily: 'monospace',
+            fontSize: '0.65rem',
+            fontWeight: '700',
+            color: 'var(--ui-color-primary)',
+            background: 'rgba(68,218,218,0.1)',
+            padding: '0.15rem 0.4rem',
+            borderRadius: '3px',
+            letterSpacing: '0.04em',
+            flexShrink: 0,
+            marginTop: '4px',
+          }}>
+            {num}
+          </span>
+        )}
+        <div>
+          <h2 style={{
+            fontSize: '1.1rem',
+            fontWeight: '800',
+            letterSpacing: '-0.03em',
+            margin: '0 0 0.3rem',
+            color: 'var(--ui-color-text)',
+          }}>
+            {label}
+          </h2>
+          <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--ui-color-text-muted)', lineHeight: '1.6' }}>
+            {description}
+          </p>
+          {tags && tags.length > 0 && (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem', marginTop: '0.5rem' }}>
+              {tags.map(tag => (
+                <span key={tag} style={{
+                  fontFamily: 'monospace',
+                  fontSize: '0.65rem',
+                  fontWeight: '600',
+                  color: 'var(--docs-secondary, #89ceff)',
+                  background: 'rgba(137,206,255,0.08)',
+                  padding: '0.1rem 0.4rem',
+                  borderRadius: '3px',
+                  letterSpacing: '0.02em',
+                }}>
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Demo canvas */}
+      <div style={{
+        background: 'var(--ui-color-surface-sunken)',
+        borderRadius: 'var(--ui-radius-md)',
+        padding: '2rem 1.5rem',
+        marginBottom: '1rem',
+        marginTop: '1rem',
+      }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {children}
         </div>
       </div>
+
       <MultiCodeBlock files={files} />
     </div>
   );
@@ -794,26 +854,57 @@ const dashboardVue = `
 
 function PatternsPage() {
   return (
-    <div className="docs-page" style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
-      <div className="docs-page-header">
-        <h1 className="docs-page-title">Cookbook Patterns</h1>
-        <p className="docs-page-description">
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2.5rem 2rem' }}>
+      {/* Header */}
+      <div style={{ marginBottom: '2.5rem' }}>
+        <h1 style={{
+          fontSize: '2rem',
+          fontWeight: '800',
+          letterSpacing: '-0.04em',
+          lineHeight: 1.1,
+          margin: '0 0 0.6rem',
+          background: 'linear-gradient(135deg, var(--ui-color-primary) 0%, var(--docs-secondary, #89ceff) 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+        }}>
+          Cookbook Patterns
+        </h1>
+        <p style={{ fontSize: '0.9rem', color: 'var(--ui-color-text-muted)', margin: 0, maxWidth: '560px', lineHeight: '1.65' }}>
           Composition patterns for common UI scenarios. These examples demonstrate how to combine
           atomic components into accessible, functional interfaces.
         </p>
       </div>
 
-      <div style={{ marginBottom: '3rem', padding: '1.5rem', background: 'var(--ui-color-primary-light)', border: '1px solid var(--ui-color-primary)', borderRadius: '8px' }}>
-        <h4 style={{ margin: '0 0 8px', color: 'var(--ui-color-primary)', fontWeight: 700 }}>Prototyping Hint</h4>
-        <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--ui-color-primary)', opacity: 0.9, lineHeight: 1.5 }}>
-          Share these patterns with your LLM to ensure it understands the intended composition logic.
-          Patterns provide higher-level context than atomic API references alone.
-        </p>
+      {/* AI hint callout */}
+      <div style={{
+        padding: '1rem 1.25rem',
+        background: 'rgba(68,218,218,0.05)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        border: '1px solid rgba(68,218,218,0.1)',
+        borderRadius: 'var(--ui-radius-md)',
+        marginBottom: '2.5rem',
+        display: 'flex',
+        gap: '0.85rem',
+        alignItems: 'flex-start',
+      }}>
+        <span style={{ fontSize: '1rem', flexShrink: 0, marginTop: '1px' }}>💡</span>
+        <div>
+          <p style={{ margin: '0 0 0.25rem', fontSize: '0.82rem', fontWeight: '700', color: 'var(--ui-color-text)' }}>
+            Prototyping hint
+          </p>
+          <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--ui-color-text-muted)', lineHeight: '1.6' }}>
+            Share these patterns with your LLM to ensure it understands the intended composition logic.
+            Patterns provide higher-level context than atomic API references alone.
+          </p>
+        </div>
       </div>
 
       <PatternSection
         title="1. Login Form"
         description="The most frequent AI-generated page. Shows Card composition, validation error display, and loading states."
+        tags={['LlmCard', 'LlmInput', 'LlmButton', 'LlmAlert', 'LlmCheckbox']}
         angularCode={loginAngular}
         reactCode={loginReact}
         vueCode={loginVue}
@@ -824,6 +915,7 @@ function PatternsPage() {
       <PatternSection
         title="2. Settings Page"
         description="Exercises tabs, form controls, and layout composition. The bread and butter of SaaS applications."
+        tags={['LlmTabGroup', 'LlmToggle', 'LlmSelect', 'LlmInput', 'LlmButton']}
         angularCode={settingsAngular}
         reactCode={settingsReact}
         vueCode={settingsVue}
@@ -833,7 +925,8 @@ function PatternsPage() {
 
       <PatternSection
         title="3. Confirmation Dialog"
-        description="Accessible modal flow for destructive actions. Shows trigger -> dialog -> action logic."
+        description="Accessible modal flow for destructive actions. Shows trigger → dialog → action logic."
+        tags={['LlmDialog', 'LlmAlert', 'LlmButton']}
         angularCode={confirmAngular}
         reactCode={confirmReact}
         vueCode={confirmVue}
@@ -844,6 +937,7 @@ function PatternsPage() {
       <PatternSection
         title="4. Data List with Actions"
         description="Core pattern for dashboards. Combines Card, Badge, Tooltip, and Menu for complex row-level interactions."
+        tags={['LlmCard', 'LlmBadge', 'LlmTooltip', 'LlmMenu', 'LlmButton']}
         angularCode={listAngular}
         reactCode={listReact}
         vueCode={listVue}
@@ -854,6 +948,7 @@ function PatternsPage() {
       <PatternSection
         title="5. Notification Center"
         description="Structural feedback grouping using Accordion and Alert. Useful for monitoring and admin tools."
+        tags={['LlmAccordionGroup', 'LlmAlert', 'LlmBadge']}
         angularCode={notificationsAngular}
         reactCode={notificationsReact}
         vueCode={notificationsVue}
@@ -863,7 +958,8 @@ function PatternsPage() {
 
       <PatternSection
         title="6. Management Dashboard"
-        description="The ultimate composition pattern. Combines Table (with sorting and selection), Pagination, Input (search), and Menu actions."
+        description="The ultimate composition pattern. Combines Table (with sorting), Pagination, Input search, and Menu actions."
+        tags={['LlmTable', 'LlmPagination', 'LlmInput', 'LlmMenu', 'LlmBadge']}
         angularCode={dashboardAngular}
         reactCode={dashboardReact}
         vueCode={dashboardVue}

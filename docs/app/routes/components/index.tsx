@@ -32,69 +32,44 @@ function ComponentsPage() {
     return result;
   }, [query, activeCategory]);
 
+  const visibleCount = Object.values(filteredCategories).reduce((sum, arr) => sum + arr.length, 0);
+
   return (
     <>
       <div className="docs-page-header">
-        <h1 className="docs-page-title">Components</h1>
+        <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+          <h1 className="docs-page-title">Components</h1>
+          <span className="docs-count-badge">{visibleCount} of {ALL_COMPONENTS.length}</span>
+        </div>
         <p className="docs-page-description">
-          {ALL_COMPONENTS.length} components for building AI-generated applications.
-          Identical APIs across Angular, React, and Vue.
+          Identical APIs across Angular, React, and Vue. Designed for AI-assisted development.
         </p>
       </div>
 
-      <div className="docs-filter-bar" style={{ marginBottom: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        <div style={{ position: 'relative', maxWidth: '400px', width: '100%' }}>
-          <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', opacity: 0.5 }}>🔍</span>
+      {/* Filter bar */}
+      <div className="docs-filter-bar">
+        <div className="docs-filter-search-wrap">
+          <span className="docs-filter-search-icon">🔍</span>
           <input
             type="text"
             placeholder="Search components..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '0.65rem 0.75rem 0.65rem 2.25rem',
-              borderRadius: 'var(--ui-radius-md)',
-              border: '1px solid var(--ui-color-border)',
-              background: 'var(--ui-color-surface-raised)',
-              color: 'var(--ui-color-text)',
-              fontSize: '0.9375rem',
-              outline: 'none',
-              transition: 'border-color 0.15s',
-            }}
+            className="docs-filter-search"
           />
         </div>
-        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+        <div className="docs-category-pills">
           <button
+            className={`docs-category-pill${!activeCategory ? ' active' : ''}`}
             onClick={() => setActiveCategory(null)}
-            style={{
-              padding: '0.35rem 0.85rem',
-              borderRadius: '9999px',
-              border: `1px solid ${!activeCategory ? 'var(--ui-color-primary)' : 'var(--ui-color-border)'}`,
-              background: !activeCategory ? 'var(--ui-color-primary-light)' : 'transparent',
-              color: !activeCategory ? 'var(--ui-color-primary)' : 'var(--ui-color-text-muted)',
-              fontSize: '0.8rem',
-              fontWeight: 500,
-              cursor: 'pointer',
-              transition: 'all 0.15s',
-            }}
           >
             All
           </button>
           {categories.map(cat => (
             <button
               key={cat}
+              className={`docs-category-pill${activeCategory === cat ? ' active' : ''}`}
               onClick={() => setActiveCategory(cat === activeCategory ? null : cat)}
-              style={{
-                padding: '0.35rem 0.85rem',
-                borderRadius: '9999px',
-                border: `1px solid ${activeCategory === cat ? 'var(--ui-color-primary)' : 'var(--ui-color-border)'}`,
-                background: activeCategory === cat ? 'var(--ui-color-primary-light)' : 'transparent',
-                color: activeCategory === cat ? 'var(--ui-color-primary)' : 'var(--ui-color-text-muted)',
-                fontSize: '0.8rem',
-                fontWeight: 500,
-                cursor: 'pointer',
-                transition: 'all 0.15s',
-              }}
             >
               {CATEGORY_ICONS[cat]} {cat}
             </button>
@@ -117,7 +92,10 @@ function ComponentsPage() {
                   params={{ name }}
                   className="docs-component-card"
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <div className="docs-component-card-icon">
+                    {CATEGORY_ICONS[doc?.category ?? ''] ?? '🧩'}
+                  </div>
+                  <div className="docs-component-card-header">
                     <div className="docs-component-card-name">
                       {doc?.name ?? formatComponentName(name)}
                     </div>
@@ -128,9 +106,10 @@ function ComponentsPage() {
                     )}
                   </div>
                   <div className="docs-component-card-desc">
-                    {doc?.description.slice(0, 80) ?? ''}
-                    {(doc?.description.length ?? 0) > 80 ? '…' : ''}
+                    {doc?.description.slice(0, 85) ?? ''}
+                    {(doc?.description.length ?? 0) > 85 ? '…' : ''}
                   </div>
+                  <span className="docs-component-card-cta">View docs →</span>
                 </Link>
               );
             })}
@@ -139,9 +118,9 @@ function ComponentsPage() {
       ))}
 
       {Object.keys(filteredCategories).length === 0 && (
-        <div style={{ textAlign: 'center', padding: '4rem 0', opacity: 0.5 }}>
-          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔍</div>
-          <p>No components found matching your search.</p>
+        <div className="docs-not-found">
+          <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🔍</div>
+          <p>No components found matching "{query}"</p>
         </div>
       )}
     </>

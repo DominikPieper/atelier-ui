@@ -3,7 +3,17 @@ import { tokenizeJson } from './-mcp.utils';
 
 const COLLAPSE_LINES = 20;
 
-export function CodeBlock({ code, collapsible }: { code: string; collapsible?: boolean }) {
+export function CodeBlock({
+  code,
+  collapsible,
+  label,
+  labelColor,
+}: {
+  code: string;
+  collapsible?: boolean;
+  label?: string;
+  labelColor?: string;
+}) {
   const tokens = tokenizeJson(code);
   const [copied, setCopied] = useState(false);
   const [collapsed, setCollapsed] = useState(true);
@@ -28,37 +38,69 @@ export function CodeBlock({ code, collapsible }: { code: string; collapsible?: b
   }
 
   return (
-    <div style={{ position: 'relative' }}>
-      <div className="docs-demo-code">
+    <div style={{ borderRadius: 'var(--ui-radius-md)', overflow: 'hidden' }}>
+      {/* Header bar with label + copy */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0.4rem 0.75rem',
+        background: 'var(--ui-color-surface)',
+        borderBottom: '1px solid rgba(64,72,93,0.2)',
+      }}>
+        <span style={{
+          fontSize: '0.68rem',
+          fontWeight: '700',
+          textTransform: 'uppercase',
+          letterSpacing: '0.08em',
+          fontFamily: 'monospace',
+          color: labelColor ?? 'var(--ui-color-primary)',
+        }}>
+          {label ?? 'json'}
+        </span>
+        <button
+          onClick={handleCopy}
+          title="Copy to clipboard"
+          style={{
+            padding: '0.15rem 0.5rem',
+            borderRadius: 'var(--ui-radius-sm)',
+            border: 'none',
+            background: 'transparent',
+            color: copied ? 'var(--ui-color-primary)' : 'var(--ui-color-text-muted)',
+            cursor: 'pointer',
+            fontSize: '0.68rem',
+            fontFamily: 'monospace',
+            transition: 'color 0.15s',
+          }}
+        >
+          {copied ? '✓ copied' : 'copy'}
+        </button>
+      </div>
+
+      {/* Code body */}
+      <div className="docs-demo-code" style={{ borderRadius: 0 }}>
         <pre>{visibleTokens.map((t, i) => <span key={i} style={{ color: t.color }}>{t.text}</span>)}</pre>
       </div>
-      <button
-        onClick={handleCopy}
-        title="Copy to clipboard"
-        style={{
-          position: 'absolute', top: '0.5rem', right: '0.5rem',
-          padding: '0.2rem 0.55rem', borderRadius: 'var(--ui-radius-sm)',
-          border: '1px solid var(--ui-color-border)',
-          background: 'var(--ui-color-surface-raised)',
-          color: copied ? '#059669' : 'var(--ui-color-text-muted)',
-          cursor: 'pointer', fontSize: '0.72rem', fontFamily: 'monospace',
-          transition: 'color 0.15s',
-        }}
-      >
-        {copied ? '✓ Copied' : 'Copy'}
-      </button>
+
       {shouldCollapse && (
         <button
           onClick={() => setCollapsed(c => !c)}
           style={{
-            display: 'block', width: '100%', marginTop: '0.25rem',
-            padding: '0.3rem', border: '1px solid var(--ui-color-border)',
-            borderRadius: 'var(--ui-radius-sm)', background: 'transparent',
-            color: 'var(--ui-color-text-muted)', cursor: 'pointer',
-            fontSize: '0.75rem', textAlign: 'center', transition: 'color 0.15s',
+            display: 'block',
+            width: '100%',
+            padding: '0.35rem',
+            border: 'none',
+            borderTop: '1px solid rgba(64,72,93,0.2)',
+            background: 'var(--ui-color-surface)',
+            color: 'var(--ui-color-text-muted)',
+            cursor: 'pointer',
+            fontSize: '0.72rem',
+            textAlign: 'center',
+            transition: 'color 0.15s',
+            fontFamily: 'monospace',
           }}
         >
-          {collapsed ? `▼ Show ${hiddenLines} more lines` : '▲ Collapse'}
+          {collapsed ? `▼  ${hiddenLines} more lines` : '▲  collapse'}
         </button>
       )}
     </div>

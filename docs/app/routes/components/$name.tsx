@@ -106,28 +106,38 @@ function ComponentDocPage() {
           >
             {category}
           </span>
+          {doc.status && (
+            <span className={`docs-status-badge docs-status-badge--${doc.status}`}>
+              {doc.status}
+            </span>
+          )}
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
             <h1 className="docs-page-title">{doc.name}</h1>
             <p className="docs-page-description">{doc.description}</p>
             <code className="docs-selector-badge">{doc.selector}</code>
+            {/* Meta chips */}
+            <div className="docs-meta-chips">
+              <span className="docs-meta-chip">WCAG AA</span>
+              <span className="docs-meta-chip">0 deps</span>
+            </div>
           </div>
-          
+
           <div className="docs-framework-switcher">
-            <button 
+            <button
               className={`docs-framework-btn ${framework === 'angular' ? 'is-active' : ''}`}
               onClick={() => setFramework('angular')}
             >
               Angular
             </button>
-            <button 
+            <button
               className={`docs-framework-btn ${framework === 'react' ? 'is-active' : ''}`}
               onClick={() => setFramework('react')}
             >
               React
             </button>
-            <button 
+            <button
               className={`docs-framework-btn ${framework === 'vue' ? 'is-active' : ''}`}
               onClick={() => setFramework('vue')}
             >
@@ -141,6 +151,9 @@ function ComponentDocPage() {
       <div className="docs-section">
         <h2 className="docs-section-title">Demo</h2>
         <div className="docs-demo">
+          <div className="docs-demo-header">
+            <span className="docs-demo-label">Live Preview</span>
+          </div>
           <div className="docs-demo-canvas docs-demo-canvas--column">
             <ComponentDemo name={name} />
           </div>
@@ -182,6 +195,18 @@ function ComponentDocPage() {
       <div className="docs-section">
         <h2 className="docs-section-title">Import</h2>
         <MultiCodeBlock files={generateImport(name)} />
+      </div>
+
+      {/* Storybook link */}
+      <div className="docs-section">
+        <a
+          href={`https://atelier-ui.netlify.app/storybook-react/?path=/docs/${name}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="docs-btn docs-btn-outline"
+        >
+          📖 Explore in Storybook →
+        </a>
       </div>
 
       {/* AI Usage */}
