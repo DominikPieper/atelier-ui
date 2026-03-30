@@ -8,7 +8,7 @@ import './llm-checkbox.css';
 export interface LlmCheckboxProps
   extends Omit<
       InputHTMLAttributes<HTMLInputElement>,
-      'type' | 'checked' | 'onChange' | 'readOnly'
+      'type' | 'checked' | 'onChange' | 'readOnly' | 'value'
     >,
     LlmCheckboxSpec {
   /**

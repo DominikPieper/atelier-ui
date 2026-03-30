@@ -52,7 +52,8 @@ export class LlmRadio implements RadioItem, OnInit, OnDestroy {
   readonly radioValue = input.required<string>();
 
   /** Whether this specific radio is individually disabled (stacked with group disabled). */
-  readonly disabled = input(false);
+  // eslint-disable-next-line @angular-eslint/no-input-rename
+  readonly disabledInput = input(false, { alias: 'disabled' });
 
   /** @internal */
   private readonly group = inject(LLM_RADIO_GROUP, { optional: true });
@@ -67,7 +68,7 @@ export class LlmRadio implements RadioItem, OnInit, OnDestroy {
   protected readonly isChecked = computed(() => this.group?.value() === this.radioValue());
 
   /** @internal */
-  readonly isDisabled = computed(() => this.disabled() || (this.group?.disabled() ?? false));
+  readonly isDisabled = computed(() => this.disabledInput() || (this.group?.disabled() ?? false));
 
   /** @internal */
   protected readonly effectiveName = computed(() => this.group?.name() ?? '');

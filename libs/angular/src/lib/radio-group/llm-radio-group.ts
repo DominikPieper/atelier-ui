@@ -138,8 +138,9 @@ export class LlmRadioGroup implements FormValueControl<string>, LlmRadioGroupCon
     this.keyManager.setActiveItem(currentIdx);
     this.keyManager.onKeydown(event);
 
-    if (this.keyManager.activeItemIndex !== -1 && this.keyManager.activeItemIndex !== currentIdx) {
-      const target = this.items()[this.keyManager.activeItemIndex];
+    const activeIdx = this.keyManager.activeItemIndex;
+    if (activeIdx !== null && activeIdx !== -1 && activeIdx !== currentIdx) {
+      const target = this.items()[activeIdx];
       this.value.set(target.radioValue());
       this.touched.set(true);
     }

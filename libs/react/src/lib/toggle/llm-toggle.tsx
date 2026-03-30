@@ -6,7 +6,7 @@ import './llm-toggle.css';
  * Properties for the LlmToggle component.
  */
 export interface LlmToggleProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'checked' | 'onChange' | 'readOnly'>,
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'checked' | 'onChange' | 'readOnly' | 'value'>,
     LlmToggleSpec {
   /**
    * Whether the toggle is read-only.

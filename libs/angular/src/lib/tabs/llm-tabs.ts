@@ -11,19 +11,7 @@ import {
   signal,
   viewChildren,
 } from '@angular/core';
-import { FocusableOption, FocusKeyManager } from '@angular/cdk/a11y';
 import { LLM_TAB_GROUP, type LlmTabGroupContext, type TabInfo } from './llm-tabs.token';
-
-/** @internal — Wrapper for FocusKeyManager integration. */
-class TabFocusItem implements FocusableOption {
-  constructor(private readonly element: HTMLButtonElement) {}
-  focus(): void {
-    this.element.focus();
-  }
-  get disabled(): boolean {
-    return this.element.disabled || this.element.getAttribute('aria-disabled') === 'true';
-  }
-}
 
 let nextId = 0;
 
@@ -89,9 +77,6 @@ export class LlmTabGroup implements LlmTabGroupContext {
   /** @internal */
   protected readonly hostClasses = computed(() => `variant-${this.variant()}`);
 
-  /** @internal */
-  private keyManager: FocusKeyManager<TabFocusItem> | null = null;
-
   /** @internal — called by LlmTab on init */
   registerTab(info: TabInfo): void {
     this.tabs.update((list) => [...list, info]);
@@ -113,20 +98,35 @@ export class LlmTabGroup implements LlmTabGroupContext {
 
   /** @internal */
   protected onTabKeydown(event: KeyboardEvent): void {
-    if (!this.keyManager) {
-      const items = this.tabBtns().map((btn) => new TabFocusItem(btn.nativeElement));
-      this.keyManager = new FocusKeyManager(items)
-        .withHorizontalOrientation('ltr')
-        .withWrap()
-        .withHomeAndEnd();
+    const allTabs = this.tabs();
+    const enabledIndices = allTabs.map((_, i) => i).filter((i) => !allTabs[i].disabled);
+    const len = enabledIndices.length;
+    if (len === 0) return;
+
+    const currentPosInEnabled = enabledIndices.indexOf(this.selectedIndex());
+
+    let targetIdx: number | null = null;
+
+    switch (event.key) {
+      case 'ArrowRight':
+        targetIdx = enabledIndices[(currentPosInEnabled + 1) % len];
+        break;
+      case 'ArrowLeft':
+        targetIdx = enabledIndices[(currentPosInEnabled - 1 + len) % len];
+        break;
+      case 'Home':
+        targetIdx = enabledIndices[0];
+        break;
+      case 'End':
+        targetIdx = enabledIndices[len - 1];
+        break;
+      default:
+        return;
     }
 
-    this.keyManager.setActiveItem(this.selectedIndex());
-    this.keyManager.onKeydown(event);
-
-    if (this.keyManager.activeItemIndex !== -1 && this.keyManager.activeItemIndex !== this.selectedIndex()) {
-      this.selectedIndex.set(this.keyManager.activeItemIndex);
-    }
+    event.preventDefault();
+    this.selectTab(targetIdx);
+    this.tabBtns()[targetIdx]?.nativeElement.focus();
   }
 }
 

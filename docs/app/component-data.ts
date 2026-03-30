@@ -10,6 +10,7 @@ export interface PropRow {
   default: string;
   description: string;
   angular?: FrameworkPropOverrides;
+  react?: FrameworkPropOverrides;
   vue?: FrameworkPropOverrides;
 }
 

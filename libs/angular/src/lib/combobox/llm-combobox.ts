@@ -9,33 +9,9 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { ActiveDescendantKeyManager, Highlightable } from '@angular/cdk/a11y';
 import type { FormValueControl } from '@angular/forms/signals';
 import { type ValidationError, type WithOptionalFieldTree } from '@angular/forms/signals';
 import type { LlmComboboxOption } from '@atelier-ui/spec';
-
-/** @internal — Wrapper for ActiveDescendantKeyManager integration. */
-class ComboboxOptionItem implements Highlightable {
-  constructor(
-    readonly value: string,
-    readonly label: string,
-    readonly disabled: boolean,
-    private readonly index: number,
-    private readonly activeIndex: import('@angular/core').WritableSignal<number>,
-  ) {}
-
-  getLabel(): string {
-    return this.label;
-  }
-
-  setActiveStyles(): void {
-    this.activeIndex.set(this.index);
-  }
-
-  setInactiveStyles(): void {
-    // Handled by manager
-  }
-}
 
 let nextId = 0;
 
@@ -218,9 +194,6 @@ export class LlmCombobox implements FormValueControl<string> {
     return classes.join(' ');
   });
 
-  /** @internal */
-  private keyManager: ActiveDescendantKeyManager<ComboboxOptionItem> | null = null;
-
   private outsideClickHandler: ((e: MouseEvent) => void) | null = null;
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
@@ -234,7 +207,6 @@ export class LlmCombobox implements FormValueControl<string> {
     const q = (event.target as HTMLInputElement).value;
     this.query.set(q);
     this.activeIndex.set(-1);
-    this.keyManager = null; // reset manager for new filtered list
     if (q === '') {
       this.value.set('');
     }
@@ -267,16 +239,13 @@ export class LlmCombobox implements FormValueControl<string> {
   protected onKeydown(event: KeyboardEvent): void {
     if (this.disabled()) return;
 
-    if (!this.keyManager) {
-      const items = this.filteredOptions().map((o, i) => new ComboboxOptionItem(o.value, o.label, !!o.disabled, i, this.activeIndex));
-      this.keyManager = new ActiveDescendantKeyManager(items).withWrap().withVerticalOrientation();
-    }
-
     switch (event.key) {
       case 'Enter': {
-        if (this.isOpen() && this.keyManager.activeItem) {
+        const activeIdx = this.activeIndex();
+        if (this.isOpen() && activeIdx >= 0) {
           event.preventDefault();
-          this.onOptionSelect(this.keyManager.activeItem);
+          const option = this.filteredOptions()[activeIdx];
+          this.onOptionSelect(option);
         }
         break;
       }
@@ -291,12 +260,24 @@ export class LlmCombobox implements FormValueControl<string> {
         this.close();
         break;
       }
-      default: {
-        if (!this.isOpen() && (event.key === 'ArrowDown' || event.key === 'ArrowUp')) {
+      case 'ArrowDown':
+      case 'ArrowUp': {
+        if (!this.isOpen()) {
           this.open();
-        } else {
-          this.keyManager.onKeydown(event);
+          break;
         }
+        event.preventDefault();
+        const opts = this.filteredOptions();
+        const enabledIndices = opts.map((_, i) => i).filter((i) => !opts[i].disabled);
+        if (enabledIndices.length === 0) break;
+        const currentPos = enabledIndices.indexOf(this.activeIndex());
+        const len = enabledIndices.length;
+        const nextPos =
+          event.key === 'ArrowDown'
+            ? (currentPos + 1) % len
+            : (currentPos - 1 + len) % len;
+        this.activeIndex.set(enabledIndices[nextPos]);
+        break;
       }
     }
   }
@@ -307,7 +288,6 @@ export class LlmCombobox implements FormValueControl<string> {
     (panel.nativeElement as HTMLElement & { showPopover(): void }).showPopover();
     this.isOpen.set(true);
     this.activeIndex.set(-1);
-    this.keyManager = null;
 
     this.outsideClickHandler = (e: MouseEvent) => {
       if (!this.elementRef.nativeElement.contains(e.target as Node)) {
@@ -327,7 +307,6 @@ export class LlmCombobox implements FormValueControl<string> {
     }
     this.isOpen.set(false);
     this.activeIndex.set(-1);
-    this.keyManager = null;
 
     if (this.outsideClickHandler) {
       document.removeEventListener('click', this.outsideClickHandler);

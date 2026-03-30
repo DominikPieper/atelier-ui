@@ -12,7 +12,6 @@ import {
   signal,
 } from '@angular/core';
 import { CdkAccordion, CdkAccordionItem } from '@angular/cdk/accordion';
-import { FocusKeyManager } from '@angular/cdk/a11y';
 import { LLM_ACCORDION_GROUP, type AccordionItem, type LlmAccordionGroupContext } from './llm-accordion.token';
 
 let nextId = 0;
@@ -62,9 +61,6 @@ export class LlmAccordionGroup implements LlmAccordionGroupContext {
   /** @internal */
   private readonly items = signal<AccordionItem[]>([]);
 
-  /** @internal */
-  private keyManager: FocusKeyManager<AccordionItem> | null = null;
-
   register(item: AccordionItem): void {
     this.items.update((list) => [...list, item]);
   }
@@ -74,15 +70,33 @@ export class LlmAccordionGroup implements LlmAccordionGroupContext {
   }
 
   handleKeydown(event: KeyboardEvent, item: AccordionItem): void {
-    if (!this.keyManager) {
-      this.keyManager = new FocusKeyManager(this.items())
-        .withVerticalOrientation()
-        .withWrap()
-        .withHomeAndEnd();
+    const enabledItems = this.items().filter((i) => !i.disabled);
+    const len = enabledItems.length;
+    if (len === 0) return;
+
+    const currentIdx = enabledItems.indexOf(item);
+
+    let targetItem: AccordionItem | null = null;
+
+    switch (event.key) {
+      case 'ArrowDown':
+        targetItem = enabledItems[(currentIdx + 1) % len];
+        break;
+      case 'ArrowUp':
+        targetItem = enabledItems[(currentIdx - 1 + len) % len];
+        break;
+      case 'Home':
+        targetItem = enabledItems[0];
+        break;
+      case 'End':
+        targetItem = enabledItems[len - 1];
+        break;
+      default:
+        return;
     }
 
-    this.keyManager.setActiveItem(item);
-    this.keyManager.onKeydown(event);
+    event.preventDefault();
+    targetItem.focus();
   }
 }
 
@@ -169,7 +183,13 @@ export class LlmAccordionItem implements AccordionItem, OnInit, OnDestroy {
   readonly expanded = model(false);
 
   /** Whether this item is disabled. */
-  readonly disabled = input(false);
+  // eslint-disable-next-line @angular-eslint/no-input-rename
+  readonly disabledInput = input(false, { alias: 'disabled' });
+
+  /** @internal — satisfies AccordionItem / FocusableOption interface */
+  get disabled(): boolean {
+    return this.disabledInput();
+  }
 
   /** @internal */
   readonly id = `llm-accordion-item-${nextId++}`;
@@ -199,12 +219,12 @@ export class LlmAccordionItem implements AccordionItem, OnInit, OnDestroy {
 
   /** @internal */
   get isDisabled(): boolean {
-    return this.disabled();
+    return this.disabledInput();
   }
 
   /** @internal */
   get ariaDisabled(): boolean | null {
-    return this.disabled() || null;
+    return this.disabledInput() || null;
   }
 
   constructor() {
@@ -233,7 +253,7 @@ export class LlmAccordionItem implements AccordionItem, OnInit, OnDestroy {
 
   /** @internal */
   protected onToggle(): void {
-    if (this.disabled()) return;
+    if (this.disabledInput()) return;
     this.cdkItem.toggle();
   }
 

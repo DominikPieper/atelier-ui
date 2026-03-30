@@ -135,7 +135,17 @@
       "Bash(do sed:*)",
       "Bash(grep -r '\"\"version\"\"' /Users/dominikpieper/Projects/angular-llm-components/libs --include=\"package.json\")",
       "Bash(gh release:*)",
-      "Bash(find /Users/dominikpieper/Projects/angular-llm-components -name llms.txt -o -name *llm* -type f)"
+      "Bash(find /Users/dominikpieper/Projects/angular-llm-components -name llms.txt -o -name *llm* -type f)",
+      "mcp__storybook-angular__list-all-documentation",
+      "Bash(npx node:*)",
+      "Bash(find /Users/dominikpieper/Projects/angular-llm-components -path */cdk/fesm* -name *.mjs)",
+      "Bash(find /Users/dominikpieper/Projects/angular-llm-components -path */cdk/fesm* -name *key*)",
+      "Bash(find /Users/dominikpieper/Projects/angular-llm-components -path */cdk/fesm* -name *a11y*)",
+      "Bash(find . -name *.log -o -name test-results*)",
+      "Bash(/tmp/analysis.txt:*)",
+      "Read(//tmp/**)",
+      "Bash(find /Users/dominikpieper/Projects/angular-llm-components -type f -name *.ts -path *cdk*)",
+      "Bash(find /Users/dominikpieper/Projects/angular-llm-components/apps -type f -name *.tsx -o -name *.ts)"
     ]
   },
   "enableAllProjectMcpServers": true,
