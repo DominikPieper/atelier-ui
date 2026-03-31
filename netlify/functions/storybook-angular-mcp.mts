@@ -1,7 +1,7 @@
 import { createStorybookMcpHandler } from '@storybook/mcp';
 import { basename } from 'node:path';
 
-const STORYBOOK_URL = 'https://atelier-ui.netlify.app/storybook-angular';
+const STORYBOOK_URL = 'https://atelier.pieper.io/storybook-angular';
 
 let cachedHandlerPromise: ReturnType<typeof createStorybookMcpHandler> | undefined;
 

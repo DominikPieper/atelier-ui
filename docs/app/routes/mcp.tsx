@@ -658,9 +658,9 @@ function McpPage() {
               labelColor="var(--ui-color-text-muted)"
               code={JSON.stringify({
                 mcpServers: {
-                  'atelier-ui-angular': { url: 'https://atelier-ui.netlify.app/storybook-angular/mcp' },
-                  'atelier-ui-react':   { url: 'https://atelier-ui.netlify.app/storybook-react/mcp' },
-                  'atelier-ui-vue':     { url: 'https://atelier-ui.netlify.app/storybook-vue/mcp' },
+                  'atelier-ui-angular': { url: 'https://atelier.pieper.io/storybook-angular/mcp' },
+                  'atelier-ui-react':   { url: 'https://atelier.pieper.io/storybook-react/mcp' },
+                  'atelier-ui-vue':     { url: 'https://atelier.pieper.io/storybook-vue/mcp' },
                 },
               }, null, 2)}
             />
@@ -677,9 +677,9 @@ function McpPage() {
               labelColor="var(--ui-color-text-muted)"
               code={JSON.stringify({
                 servers: {
-                  'atelier-ui-angular': { type: 'http', url: 'https://atelier-ui.netlify.app/storybook-angular/mcp' },
-                  'atelier-ui-react':   { type: 'http', url: 'https://atelier-ui.netlify.app/storybook-react/mcp' },
-                  'atelier-ui-vue':     { type: 'http', url: 'https://atelier-ui.netlify.app/storybook-vue/mcp' },
+                  'atelier-ui-angular': { type: 'http', url: 'https://atelier.pieper.io/storybook-angular/mcp' },
+                  'atelier-ui-react':   { type: 'http', url: 'https://atelier.pieper.io/storybook-react/mcp' },
+                  'atelier-ui-vue':     { type: 'http', url: 'https://atelier.pieper.io/storybook-vue/mcp' },
                 },
               }, null, 2)}
             />

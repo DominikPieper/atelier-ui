@@ -10,7 +10,7 @@ import {
 } from '@nx/devkit';
 import { PresetGeneratorSchema } from './schema';
 
-const SITE_URL = 'https://atelier-ui.netlify.app';
+const SITE_URL = 'https://atelier.pieper.io';
 
 type Framework = 'angular' | 'react' | 'vue';
 

@@ -6,7 +6,7 @@ export const Route = createFileRoute('/workshop')({
   component: WorkshopPage,
 });
 
-const SITE_URL = 'https://atelier-ui.netlify.app';
+const SITE_URL = 'https://atelier.pieper.io';
 
 const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
 type Framework = typeof FRAMEWORKS[number];

@@ -4,45 +4,45 @@
 
 Packages: @atelier-ui/angular | @atelier-ui/react | @atelier-ui/vue
 Version: 0.0.11
-Docs: https://atelier-ui.netlify.app
+Docs: https://atelier.pieper.io
 
 ## Full API Reference
 
-- [llms-full.txt](https://atelier-ui.netlify.app/llms-full.txt): Complete props, types, defaults, and usage examples for every component in all three frameworks. Paste this into your LLM context window.
+- [llms-full.txt](https://atelier.pieper.io/llms-full.txt): Complete props, types, defaults, and usage examples for every component in all three frameworks. Paste this into your LLM context window.
 
 ## Documentation
 
-- [Installation](https://atelier-ui.netlify.app/install): Setup guide for Angular, React, and Vue
-- [LLM-Optimized APIs](https://atelier-ui.netlify.app/design-principles): Why the APIs are designed for LLM consumption
-- [Components](https://atelier-ui.netlify.app/components): Interactive component catalog with live examples
-- [Storybook (Angular)](https://atelier-ui.netlify.app/storybook-angular): Angular component stories
-- [Storybook (React)](https://atelier-ui.netlify.app/storybook-react): React component stories
-- [Storybook (Vue)](https://atelier-ui.netlify.app/storybook-vue): Vue component stories
+- [Installation](https://atelier.pieper.io/install): Setup guide for Angular, React, and Vue
+- [LLM-Optimized APIs](https://atelier.pieper.io/design-principles): Why the APIs are designed for LLM consumption
+- [Components](https://atelier.pieper.io/components): Interactive component catalog with live examples
+- [Storybook (Angular)](https://atelier.pieper.io/storybook-angular): Angular component stories
+- [Storybook (React)](https://atelier.pieper.io/storybook-react): React component stories
+- [Storybook (Vue)](https://atelier.pieper.io/storybook-vue): Vue component stories
 
 ## Components
 
-- [Button](https://atelier-ui.netlify.app/components/button): variant (primary|secondary|outline), size (sm|md|lg), loading, disabled
-- [Input](https://atelier-ui.netlify.app/components/input): value, type, placeholder, disabled, invalid, readonly, required
-- [Textarea](https://atelier-ui.netlify.app/components/textarea): value, rows, placeholder, disabled, invalid, autoResize
-- [Checkbox](https://atelier-ui.netlify.app/components/checkbox): checked, onCheckedChange, indeterminate, disabled, invalid
-- [Toggle](https://atelier-ui.netlify.app/components/toggle): checked, onCheckedChange, disabled, invalid
-- [RadioGroup](https://atelier-ui.netlify.app/components/radio-group): value, onValueChange, disabled — children: LlmRadio[radioValue]
-- [Select](https://atelier-ui.netlify.app/components/select): value, onValueChange, placeholder, disabled, invalid — children: LlmOption[optionValue]
-- [Combobox](https://atelier-ui.netlify.app/components/combobox): value, onValueChange, options[{value,label,disabled}], placeholder, disabled, invalid
-- [Badge](https://atelier-ui.netlify.app/components/badge): variant (default|success|warning|danger|info), size (sm|md)
-- [Card](https://atelier-ui.netlify.app/components/card): variant (elevated|outlined|flat), padding (none|sm|md|lg) — with LlmCardHeader, LlmCardContent, LlmCardFooter
-- [Avatar](https://atelier-ui.netlify.app/components/avatar): src, alt, name, size (xs|sm|md|lg|xl), shape (circle|square), status (online|offline|away|busy)
-- [Skeleton](https://atelier-ui.netlify.app/components/skeleton): variant (text|circular|rectangular), width, height, animated
-- [Progress](https://atelier-ui.netlify.app/components/progress): value (0-100), max, indeterminate, variant (default|success|warning|danger), size (sm|md|lg)
-- [Breadcrumbs](https://atelier-ui.netlify.app/components/breadcrumbs): separator — children: LlmBreadcrumbItem[href, current]
-- [Tabs](https://atelier-ui.netlify.app/components/tabs): selectedIndex, onSelectedIndexChange, variant (default|pills) — children: LlmTab[label, disabled]
-- [Pagination](https://atelier-ui.netlify.app/components/pagination): page, pageCount, onPageChange, siblingCount, showFirstLast
-- [Menu](https://atelier-ui.netlify.app/components/menu): variant (default|compact) — with LlmMenuItem[disabled], LlmMenuTrigger, LlmMenuSeparator
-- [Dialog](https://atelier-ui.netlify.app/components/dialog): open, onOpenChange, size (sm|md|lg|xl|full), closeOnBackdrop — with LlmDialogHeader, LlmDialogContent, LlmDialogFooter
-- [Drawer](https://atelier-ui.netlify.app/components/drawer): open, onOpenChange, position (left|right|top|bottom), size (sm|md|lg|full), closeOnBackdrop
-- [Tooltip](https://atelier-ui.netlify.app/components/tooltip): tooltip (text), position (above|below|left|right), disabled, showDelay, hideDelay
-- [Toast](https://atelier-ui.netlify.app/components/toast): show(message, {variant, duration, dismissible}) via useLlmToast — wrap app in LlmToastProvider + LlmToastContainer
-- [Accordion](https://atelier-ui.netlify.app/components/accordion): multi, variant (default|bordered|separated) — children: LlmAccordionItem[expanded, disabled]
-- [Alert](https://atelier-ui.netlify.app/components/alert): variant (info|success|warning|danger), dismissible, onDismissed
-- [Stepper](https://atelier-ui.netlify.app/components/stepper): activeStep, orientation (horizontal|vertical), linear — children: LlmStep[label, description, completed, error, optional, disabled]
-- [CodeBlock](https://atelier-ui.netlify.app/components/code-block): code, language ('text'), filename, copyable (true), showLineNumbers (false)
+- [Button](https://atelier.pieper.io/components/button): variant (primary|secondary|outline), size (sm|md|lg), loading, disabled
+- [Input](https://atelier.pieper.io/components/input): value, type, placeholder, disabled, invalid, readonly, required
+- [Textarea](https://atelier.pieper.io/components/textarea): value, rows, placeholder, disabled, invalid, autoResize
+- [Checkbox](https://atelier.pieper.io/components/checkbox): checked, onCheckedChange, indeterminate, disabled, invalid
+- [Toggle](https://atelier.pieper.io/components/toggle): checked, onCheckedChange, disabled, invalid
+- [RadioGroup](https://atelier.pieper.io/components/radio-group): value, onValueChange, disabled — children: LlmRadio[radioValue]
+- [Select](https://atelier.pieper.io/components/select): value, onValueChange, placeholder, disabled, invalid — children: LlmOption[optionValue]
+- [Combobox](https://atelier.pieper.io/components/combobox): value, onValueChange, options[{value,label,disabled}], placeholder, disabled, invalid
+- [Badge](https://atelier.pieper.io/components/badge): variant (default|success|warning|danger|info), size (sm|md)
+- [Card](https://atelier.pieper.io/components/card): variant (elevated|outlined|flat), padding (none|sm|md|lg) — with LlmCardHeader, LlmCardContent, LlmCardFooter
+- [Avatar](https://atelier.pieper.io/components/avatar): src, alt, name, size (xs|sm|md|lg|xl), shape (circle|square), status (online|offline|away|busy)
+- [Skeleton](https://atelier.pieper.io/components/skeleton): variant (text|circular|rectangular), width, height, animated
+- [Progress](https://atelier.pieper.io/components/progress): value (0-100), max, indeterminate, variant (default|success|warning|danger), size (sm|md|lg)
+- [Breadcrumbs](https://atelier.pieper.io/components/breadcrumbs): separator — children: LlmBreadcrumbItem[href, current]
+- [Tabs](https://atelier.pieper.io/components/tabs): selectedIndex, onSelectedIndexChange, variant (default|pills) — children: LlmTab[label, disabled]
+- [Pagination](https://atelier.pieper.io/components/pagination): page, pageCount, onPageChange, siblingCount, showFirstLast
+- [Menu](https://atelier.pieper.io/components/menu): variant (default|compact) — with LlmMenuItem[disabled], LlmMenuTrigger, LlmMenuSeparator
+- [Dialog](https://atelier.pieper.io/components/dialog): open, onOpenChange, size (sm|md|lg|xl|full), closeOnBackdrop — with LlmDialogHeader, LlmDialogContent, LlmDialogFooter
+- [Drawer](https://atelier.pieper.io/components/drawer): open, onOpenChange, position (left|right|top|bottom), size (sm|md|lg|full), closeOnBackdrop
+- [Tooltip](https://atelier.pieper.io/components/tooltip): tooltip (text), position (above|below|left|right), disabled, showDelay, hideDelay
+- [Toast](https://atelier.pieper.io/components/toast): show(message, {variant, duration, dismissible}) via useLlmToast — wrap app in LlmToastProvider + LlmToastContainer
+- [Accordion](https://atelier.pieper.io/components/accordion): multi, variant (default|bordered|separated) — children: LlmAccordionItem[expanded, disabled]
+- [Alert](https://atelier.pieper.io/components/alert): variant (info|success|warning|danger), dismissible, onDismissed
+- [Stepper](https://atelier.pieper.io/components/stepper): activeStep, orientation (horizontal|vertical), linear — children: LlmStep[label, description, completed, error, optional, disabled]
+- [CodeBlock](https://atelier.pieper.io/components/code-block): code, language ('text'), filename, copyable (true), showLineNumbers (false)

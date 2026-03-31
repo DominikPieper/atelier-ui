@@ -12,15 +12,15 @@
     },
     "storybook-angular": {
       "type": "http",
-      "url": "https://atelier-ui.netlify.app/storybook-angular/mcp"
+      "url": "https://atelier.pieper.io/storybook-angular/mcp"
     },
     "storybook-react": {
       "type": "http",
-      "url": "https://atelier-ui.netlify.app/storybook-react/mcp"
+      "url": "https://atelier.pieper.io/storybook-react/mcp"
     },
     "storybook-vue": {
       "type": "http",
-      "url": "https://atelier-ui.netlify.app/storybook-vue/mcp"
+      "url": "https://atelier.pieper.io/storybook-vue/mcp"
     },
     "figma-console": {
       "command": "npx",

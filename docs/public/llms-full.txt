@@ -1,7 +1,7 @@
 # Atelier UI — Full API Reference
 
 > Complete component API for LLM consumption. 25 accessible components for Angular, React, and Vue with consistent prop naming across all frameworks.
-> Version 0.0.11 | https://atelier-ui.netlify.app
+> Version 0.0.11 | https://atelier.pieper.io
 
 ---
 

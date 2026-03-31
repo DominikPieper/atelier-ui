@@ -200,7 +200,7 @@ function ComponentDocPage() {
       {/* Storybook link */}
       <div className="docs-section">
         <a
-          href={`https://atelier-ui.netlify.app/storybook-react/?path=/docs/${name}`}
+          href={`https://atelier.pieper.io/storybook-react/?path=/docs/${name}`}
           target="_blank"
           rel="noopener noreferrer"
           className="docs-btn docs-btn-outline"

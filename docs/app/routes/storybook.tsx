@@ -5,7 +5,7 @@ export const Route = createFileRoute('/storybook')({
   component: StorybookPage,
 });
 
-const SITE_URL = 'https://atelier-ui.netlify.app';
+const SITE_URL = 'https://atelier.pieper.io';
 
 const MCP_CONFIG = `{
   "mcpServers": {

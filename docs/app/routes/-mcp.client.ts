@@ -1,9 +1,9 @@
 import type { Framework, McpTool } from './-mcp.types';
 
 export const MCP_URLS: Record<Framework, string> = {
-  angular: 'https://atelier-ui.netlify.app/storybook-angular/mcp',
-  react:   'https://atelier-ui.netlify.app/storybook-react/mcp',
-  vue:     'https://atelier-ui.netlify.app/storybook-vue/mcp',
+  angular: 'https://atelier.pieper.io/storybook-angular/mcp',
+  react:   'https://atelier.pieper.io/storybook-react/mcp',
+  vue:     'https://atelier.pieper.io/storybook-vue/mcp',
 };
 
 // Sensible first-call defaults for known Storybook MCP tools

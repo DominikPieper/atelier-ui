@@ -8,7 +8,7 @@ export const Route = createFileRoute('/prompts')({
 
 type Framework = 'react' | 'angular' | 'vue';
 
-const DOCS_URL = 'https://atelier-ui.netlify.app/llms-full.txt';
+const DOCS_URL = 'https://atelier.pieper.io/llms-full.txt';
 
 // ─── Prompt definitions ───────────────────────────────────────────────────────
 

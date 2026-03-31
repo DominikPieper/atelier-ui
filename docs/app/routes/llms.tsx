@@ -179,13 +179,13 @@ function LlmsPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
           <FileCard
             filename="llms.txt"
-            url="https://atelier-ui.netlify.app/llms.txt"
+            url="https://atelier.pieper.io/llms.txt"
             description="Short index: component list with one-line prop summaries and links to docs. Use this when your context window is limited or you just need component names and key props."
             size="~2 KB"
           />
           <FileCard
             filename="llms-full.txt"
-            url="https://atelier-ui.netlify.app/llms-full.txt"
+            url="https://atelier.pieper.io/llms-full.txt"
             description="Full reference: every component with all props (name, type, default, description), framework-specific usage examples for Angular, React and Vue, design token system, and accessibility notes."
             size="~12 KB"
           />
@@ -208,13 +208,13 @@ function LlmsPage() {
               n: 2,
               title: 'Reference via MCP',
               desc: 'The Atelier UI MCP server provides structured access to component docs so your LLM can look up components on demand without consuming your entire context window upfront.',
-              code: { lang: 'json' as Lang, src: `{\n  "mcpServers": {\n    "atelier-ui": {\n      "url": "https://atelier-ui.netlify.app/storybook-angular/mcp"\n    }\n  }\n}` },
+              code: { lang: 'json' as Lang, src: `{\n  "mcpServers": {\n    "atelier-ui": {\n      "url": "https://atelier.pieper.io/storybook-angular/mcp"\n    }\n  }\n}` },
             },
             {
               n: 3,
               title: 'Add to CLAUDE.md or .cursorrules',
               desc: <>For persistent project-level context, reference <code style={{ fontFamily: 'monospace' }}>llms.txt</code> from your project's AI instructions file so every session starts with component awareness.</>,
-              code: { lang: 'markdown' as Lang, src: `# UI Components\n\nThis project uses Atelier UI. Full API reference:\nhttps://atelier-ui.netlify.app/llms-full.txt\n\nKey import pattern:\nimport { LlmButton, LlmInput, LlmCard } from '@atelier-ui/react';` },
+              code: { lang: 'markdown' as Lang, src: `# UI Components\n\nThis project uses Atelier UI. Full API reference:\nhttps://atelier.pieper.io/llms-full.txt\n\nKey import pattern:\nimport { LlmButton, LlmInput, LlmCard } from '@atelier-ui/react';` },
             },
           ].map(({ n, title, desc, code }) => (
             <div key={n} style={{ display: 'flex', gap: '0.85rem', alignItems: 'flex-start' }}>
