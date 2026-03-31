@@ -209,7 +209,7 @@ function HomePage() {
         <div className="docs-terminal-body">
           <div>
             <span className="docs-term-prompt">➜</span>{' '}
-            <span className="docs-term-cmd">atelier</span> init --framework angular
+            <span className="docs-term-cmd">npx create-atelier-ui-workspace</span>
           </div>
           <div className="docs-term-muted">Initializing Atelier workspace...</div>
           <div className="docs-term-row">
