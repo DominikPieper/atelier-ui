@@ -194,6 +194,6 @@ describe('preset generator', () => {
     await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
-    expect(md).toContain('atelier-ui.netlify.app');
+    expect(md).toContain('atelier.pieper.io');
   });
 });
