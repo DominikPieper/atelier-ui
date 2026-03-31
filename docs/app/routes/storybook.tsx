@@ -61,7 +61,7 @@ function StepRow({ n, title, children }: { n: string; title: string; children: R
 
 function StorybookPage() {
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2.5rem 2rem' }}>
+    <div className="docs-inline-page">
       {/* Header */}
       <div style={{ marginBottom: '2.5rem' }}>
         <h1 style={{
@@ -83,7 +83,7 @@ function StorybookPage() {
       </div>
 
       {/* Framework cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.85rem', marginBottom: '3rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.85rem', marginBottom: '3rem' }}>
         {STORYBOOK_LINKS.map(({ name, pkg, href }) => {
           const color = FW_COLORS[name];
           return (

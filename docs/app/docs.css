@@ -462,6 +462,13 @@ body {
   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
 }
 
+/* Inline page wrapper — used by redesigned route pages */
+.docs-inline-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem;
+}
+
 /* Main Content */
 .docs-main {
   overflow-y: auto;
@@ -1476,6 +1483,13 @@ body {
   color: #a6d644;
 }
 
+/* ── Tablet ─────────────────────────────────────────────── */
+@media (max-width: 1023px) {
+  .docs-hero-title--v2 {
+    font-size: 3.5rem;
+  }
+}
+
 /* ── Mobile ─────────────────────────────────────────────── */
 @media (max-width: 767px) {
   .docs-logo-text {
@@ -1550,6 +1564,41 @@ body {
   /* Demo canvas — tighter padding */
   .docs-demo-canvas {
     padding: var(--ui-spacing-4, 1rem);
+  }
+
+  /* Topbar: hide nav links (sidebar drawer handles navigation) */
+  .docs-topbar-links {
+    display: none;
+  }
+
+  /* Search: hide ⌘K badge, allow full expansion */
+  .docs-search-kbd {
+    display: none;
+  }
+  .docs-search {
+    max-width: none;
+  }
+
+  /* Inline page wrappers: remove side padding (docs-main provides 1rem) */
+  .docs-inline-page {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* Stats asymmetric: collapse to single column */
+  .docs-stats-asymmetric {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  /* Framework bento: collapse to single column */
+  .docs-framework-bento {
+    grid-template-columns: 1fr;
+  }
+
+  /* Terminal: horizontal scroll for long lines */
+  .docs-terminal-body {
+    overflow-x: auto;
   }
 }
 
@@ -1651,11 +1700,7 @@ body {
   margin-bottom: 2rem;
 }
 
-@media (max-width: 700px) {
-  .docs-framework-bento {
-    grid-template-columns: 1fr;
-  }
-}
+
 
 .docs-framework-card {
   position: relative;
@@ -1739,13 +1784,6 @@ body {
   padding: 2rem 0;
   border-top: 1px solid var(--ui-color-border);
   margin-bottom: 2.5rem;
-}
-
-@media (max-width: 640px) {
-  .docs-stats-asymmetric {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
 }
 
 .docs-stats-overline {

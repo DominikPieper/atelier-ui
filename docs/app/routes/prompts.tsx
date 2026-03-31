@@ -319,7 +319,7 @@ function PromptsPage() {
   const [framework, setFramework] = useState<Framework>('react');
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2.5rem 2rem' }}>
+    <div className="docs-inline-page">
       {/* Header */}
       <div style={{ marginBottom: '2rem' }}>
         <h1 style={{

@@ -854,7 +854,7 @@ const dashboardVue = `
 
 function PatternsPage() {
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2.5rem 2rem' }}>
+    <div className="docs-inline-page">
       {/* Header */}
       <div style={{ marginBottom: '2.5rem' }}>
         <h1 style={{

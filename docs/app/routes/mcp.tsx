@@ -163,7 +163,7 @@ function McpPage() {
   const fwColor = FRAMEWORK_COLORS[framework];
 
   return (
-    <div style={{ maxWidth: '980px', margin: '0 auto', padding: '2.5rem 2rem' }}>
+    <div className="docs-inline-page" style={{ maxWidth: '980px' }}>
       <style>{`
         .mcp-grid { display: grid; grid-template-columns: 210px 1fr; gap: 1.5rem; align-items: start; }
         @media (max-width: 680px) { .mcp-grid { grid-template-columns: 1fr; } }
@@ -182,6 +182,40 @@ function McpPage() {
         @keyframes mcp-pulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.5; }
+        }
+
+        .mcp-protocol-steps {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 0;
+        }
+        .mcp-protocol-step-divider {
+          padding-right: 1rem;
+          padding-left: 1rem;
+          border-left: 1px solid rgba(64,72,93,0.25);
+        }
+        .mcp-protocol-step-first {
+          padding-right: 1rem;
+        }
+        .mcp-protocol-step-last {
+          padding-left: 1rem;
+          border-left: 1px solid rgba(64,72,93,0.25);
+        }
+        @media (max-width: 680px) {
+          .mcp-protocol-steps {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+          }
+          .mcp-protocol-step-divider,
+          .mcp-protocol-step-first,
+          .mcp-protocol-step-last {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            border-left: none !important;
+          }
+        }
+        @media (max-width: 420px) {
+          .mcp-protocol-steps { grid-template-columns: 1fr; }
         }
       `}</style>
 
@@ -293,21 +327,14 @@ function McpPage() {
       )}
 
       {/* ── Protocol flow ── */}
-      <div style={{
+      <div className="mcp-protocol-steps" style={{
         background: 'var(--ui-color-surface-sunken)',
         borderRadius: 'var(--ui-radius-md)',
         padding: '1.25rem 1.5rem',
         marginBottom: '1.75rem',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: '0',
       }}>
         {PROTOCOL_STEPS.map((s, i) => (
-          <div key={i} style={{
-            paddingRight: i < 3 ? '1rem' : '0',
-            paddingLeft: i > 0 ? '1rem' : '0',
-            borderLeft: i > 0 ? '1px solid rgba(64,72,93,0.25)' : 'none',
-          }}>
+          <div key={i} className={i === 0 ? 'mcp-protocol-step-first' : i === PROTOCOL_STEPS.length - 1 ? 'mcp-protocol-step-last' : 'mcp-protocol-step-divider'}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
               <span style={{
                 fontSize: '0.62rem',

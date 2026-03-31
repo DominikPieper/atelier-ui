@@ -126,7 +126,7 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 
 function LlmsPage() {
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2.5rem 2rem' }}>
+    <div className="docs-inline-page">
       {/* Header */}
       <div style={{ marginBottom: '2.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.6rem' }}>
