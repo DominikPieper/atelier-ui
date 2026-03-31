@@ -51,6 +51,7 @@ function RootLayout() {
       <main className="docs-main">
         <Outlet />
       </main>
+      <BottomNav />
     </div>
   );
 }
@@ -315,6 +316,36 @@ function NavLinkComponent({
     >
       {label}
     </Link>
+  );
+}
+
+function BottomNav() {
+  const routerState = useRouterState();
+  const currentPath = routerState.location.pathname;
+  const isComponents = currentPath.startsWith('/components');
+  const isMcp = currentPath === '/mcp';
+  const isWorkshop = currentPath === '/workshop';
+  const isDocs = !isComponents && !isMcp && !isWorkshop;
+
+  return (
+    <nav className="docs-bottom-nav">
+      <Link to="/" className={`docs-bottom-nav-item${isDocs ? ' active' : ''}`}>
+        <span className="docs-bottom-nav-icon material-symbols-outlined">menu_book</span>
+        <span className="docs-bottom-nav-label">Docs</span>
+      </Link>
+      <Link to="/components" className={`docs-bottom-nav-item${isComponents ? ' active' : ''}`}>
+        <span className="docs-bottom-nav-icon material-symbols-outlined">widgets</span>
+        <span className="docs-bottom-nav-label">Components</span>
+      </Link>
+      <Link to="/mcp" className={`docs-bottom-nav-item${isMcp ? ' active' : ''}`}>
+        <span className="docs-bottom-nav-icon material-symbols-outlined">smart_toy</span>
+        <span className="docs-bottom-nav-label">MCP</span>
+      </Link>
+      <Link to="/workshop" className={`docs-bottom-nav-item${isWorkshop ? ' active' : ''}`}>
+        <span className="docs-bottom-nav-icon material-symbols-outlined">build_circle</span>
+        <span className="docs-bottom-nav-label">Workshop</span>
+      </Link>
+    </nav>
   );
 }
 

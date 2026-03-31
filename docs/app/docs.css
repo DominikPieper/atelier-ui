@@ -115,6 +115,10 @@ body {
   margin-bottom: 0.5rem;
 }
 
+.docs-bottom-nav {
+  display: none;
+}
+
 .docs-sidebar-title {
   color: var(--ui-color-primary);
   font-weight: 700;
@@ -1553,7 +1557,7 @@ body {
   }
 
   .docs-hero {
-    padding: var(--ui-spacing-6, 1.5rem) 0;
+    padding: 0 0 var(--ui-spacing-6, 1.5rem);
   }
 
   /* Props table — allow type cells to wrap */
@@ -1569,6 +1573,53 @@ body {
   /* Topbar: hide nav links (sidebar drawer handles navigation) */
   .docs-topbar-links {
     display: none;
+  }
+
+  /* Bottom navigation bar */
+  .docs-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 210;
+    height: 56px;
+    padding-bottom: env(safe-area-inset-bottom);
+    background: var(--docs-glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--docs-topbar-border);
+  }
+
+  .docs-bottom-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    text-decoration: none;
+    color: var(--ui-color-text-subtle);
+    transition: color 0.15s;
+  }
+
+  .docs-bottom-nav-item.active {
+    color: var(--ui-color-primary);
+  }
+
+  .docs-bottom-nav-icon {
+    font-size: 1.375rem;
+  }
+
+  .docs-bottom-nav-label {
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  /* Push content above bottom nav */
+  .docs-main {
+    padding-bottom: calc(56px + 1.5rem);
   }
 
   /* Search: hide ⌘K badge, allow full expansion */
@@ -2198,5 +2249,11 @@ body {
   }
   .docs-command-bar-hint {
     display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .docs-command-bar {
+    bottom: calc(56px + 1rem);
   }
 }
