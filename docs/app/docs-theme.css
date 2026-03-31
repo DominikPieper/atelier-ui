@@ -6,6 +6,13 @@
 
 /* ── Dark mode: deep-sea navy palette ──────────────────────── */
 [data-theme='dark'] {
+  /* Code syntax tokens */
+  --docs-code-text:    #d8e4f1;
+  --docs-code-keyword: #89ceff;
+  --docs-code-name:    #44dada;
+  --docs-code-string:  #a6d644;
+  --docs-code-muted:   #6b7a99;
+
   /* Surfaces — dark navy replaces purple-dark */
   --ui-color-surface: #0d1a24;
   --ui-color-surface-raised: #16212a;
@@ -36,6 +43,13 @@
 
 /* ── Light mode: crisp slate palette ───────────────────────── */
 [data-theme='light'] {
+  /* Code syntax tokens */
+  --docs-code-text:    #1e293b;
+  --docs-code-keyword: #0369a1;
+  --docs-code-name:    #007a7a;
+  --docs-code-string:  #166534;
+  --docs-code-muted:   #64748b;
+
   --ui-color-surface: #ffffff;
   --ui-color-surface-raised: #f8fafc;
   --ui-color-surface-sunken: #f0f4f8;

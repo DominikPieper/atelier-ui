@@ -25,7 +25,7 @@ function StepRow({ n, title, children }: { n: string; title: string; children: R
         fontSize: '0.62rem',
         fontWeight: 700,
         color: 'var(--ui-color-primary)',
-        background: 'rgba(68,218,218,0.1)',
+        background: 'var(--ui-color-primary-light)',
         padding: '0.1rem 0.4rem',
         borderRadius: '3px',
         letterSpacing: '0.04em',
@@ -117,10 +117,10 @@ function WorkshopPage() {
           </p>
           <div style={{
             padding: '1rem 1.25rem',
-            background: 'rgba(68,218,218,0.05)',
+            background: 'var(--ui-color-primary-light)',
             backdropFilter: 'blur(12px)',
             WebkitBackdropFilter: 'blur(12px)',
-            border: '1px solid rgba(68,218,218,0.1)',
+            border: '1px solid var(--ui-color-border)',
             borderRadius: 'var(--ui-radius-md)',
           }}>
             <p style={{ margin: '0 0 0.35rem', fontSize: '0.82rem', fontWeight: '700', color: 'var(--ui-color-text)' }}>MCP auto-configuration</p>

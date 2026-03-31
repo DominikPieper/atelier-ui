@@ -617,7 +617,7 @@ body {
   margin: 0;
   font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
   font-size: 0.8rem;
-  color: #cdd6f4;
+  color: var(--docs-code-text, #1e293b);
   overflow-x: auto;
   line-height: 1.6;
 }

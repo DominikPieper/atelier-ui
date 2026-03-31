@@ -8,11 +8,11 @@ export type Token = { text: string; color?: string };
 // Matches the existing .docs-demo-code palette used across the app.
 
 const C = {
-  keyword:   '#89ceff', // light blue — import, from, npx, npm, string, boolean
-  name:      '#44dada', // teal       — component names, identifiers
-  string:    '#a6d644', // lime green — string literals, package names
-  muted:     '#6b7a99', // gray       — punctuation, flags, comments
-  text:      '#d8e4f1', // default    — plain text
+  keyword: 'var(--docs-code-keyword)',
+  name:    'var(--docs-code-name)',
+  string:  'var(--docs-code-string)',
+  muted:   'var(--docs-code-muted)',
+  text:    'var(--docs-code-text)',
 } as const;
 
 // ─── Tokenizers ───────────────────────────────────────────────────────────────
