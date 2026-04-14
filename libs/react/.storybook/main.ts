@@ -1,3 +1,5 @@
+import { fileURLToPath } from "node:url";
+import { dirname } from "node:path";
 import { StorybookConfig } from '@storybook/react-vite';
 import type { InlineConfig } from 'vite';
 
@@ -8,13 +10,13 @@ const config: StorybookConfig = {
   addons: [
     // MCP addon requires a running Node.js server — dev only
     ...(!isProduction ? ['@storybook/addon-mcp'] : []),
-    '@storybook/addon-vitest',
-    '@storybook/addon-a11y',
-    '@storybook/addon-designs',
-    '@storybook/addon-docs',
+    getAbsolutePath("@storybook/addon-vitest"),
+    getAbsolutePath("@storybook/addon-a11y"),
+    getAbsolutePath("@storybook/addon-designs"),
+    getAbsolutePath("@storybook/addon-docs"),
   ],
   framework: {
-    name: '@storybook/react-vite',
+    name: getAbsolutePath("@storybook/react-vite"),
     options: {},
   },
   staticDirs: ['../../../images'],
@@ -38,3 +40,7 @@ const config: StorybookConfig = {
 };
 
 export default config;
+
+function getAbsolutePath(value: string): any {
+  return dirname(fileURLToPath(import.meta.resolve(`${value}/package.json`)));
+}

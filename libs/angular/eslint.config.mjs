@@ -1,3 +1,6 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from "eslint-plugin-storybook";
+
 import nx from '@nx/eslint-plugin';
 import tseslint from 'typescript-eslint';
 import baseConfig from '../../eslint.config.mjs';
@@ -110,4 +113,5 @@ export default tseslint.config(
       '@angular-eslint/template/no-call-expression': 'off',
     },
   },
+  storybook.configs["flat/recommended"]
 );

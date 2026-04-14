@@ -14,14 +14,14 @@ const preview: Preview = {
       },
     },
     backgrounds: {
-      default: 'light',
-      values: [
-        { name: 'light', value: '#ffffff' },
-        { name: 'subtle', value: '#f5f5f5' },
-        { name: 'dark', value: '#1a1a2e' },
-      ],
+      options: {
+        light: { name: 'light', value: '#ffffff' },
+        subtle: { name: 'subtle', value: '#f5f5f5' },
+        dark: { name: 'dark', value: '#1a1a2e' }
+      }
     },
   },
+
   decorators: [
     (story, context) => {
       const isDark = context.globals['backgrounds']?.value === '#1a1a2e';
@@ -32,6 +32,12 @@ const preview: Preview = {
       };
     },
   ],
+
+  initialGlobals: {
+    backgrounds: {
+      value: 'light'
+    }
+  }
 };
 
 export default preview;

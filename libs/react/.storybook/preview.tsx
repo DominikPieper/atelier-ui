@@ -11,11 +11,21 @@ const preview: Preview = {
         { name: 'dark', value: '#1a1a2e' },
       ],
     },
+
+    a11y: {
+      // 'todo' - show a11y violations in the test UI only
+      // 'error' - fail CI on a11y violations
+      // 'off' - skip a11y checks entirely
+      test: 'todo',
+    },
   },
   decorators: [
     (Story, context) => {
       const isDark = context.globals['backgrounds']?.value === '#1a1a2e';
-      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      document.documentElement.setAttribute(
+        'data-theme',
+        isDark ? 'dark' : 'light',
+      );
       return <Story />;
     },
   ],
