@@ -882,7 +882,6 @@ export default meta;
 // --- Login Form ---
 
 export const LoginForm: StoryObj = {
-  name: 'Login Form',
   render: () => ({
     props: {},
     template: `<cookbook-login-form />`,
@@ -906,7 +905,6 @@ export const LoginFormWithValidationErrors: StoryObj = {
 // --- Settings Page ---
 
 export const SettingsPage: StoryObj = {
-  name: 'Settings Page',
   render: () => ({
     props: {},
     template: `<cookbook-settings-page />`,
@@ -919,7 +917,6 @@ export const SettingsPage: StoryObj = {
 // --- Confirmation Dialog ---
 
 export const ConfirmationDialog: StoryObj = {
-  name: 'Confirmation Dialog',
   render: () => ({
     props: {},
     template: `<cookbook-confirmation-dialog />`,
@@ -945,7 +942,6 @@ export const DataListWithActions: StoryObj = {
 // --- Notification Center ---
 
 export const NotificationCenter: StoryObj = {
-  name: 'Notification Center',
   render: () => ({
     props: {},
     template: `<cookbook-notification-center />`,

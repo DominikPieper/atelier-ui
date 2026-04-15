@@ -152,7 +152,7 @@ describe('LlmCombobox', () => {
     const user = userEvent.setup();
     const { emitted } = render(Controlled);
     await user.click(screen.getByRole('combobox'));
-    const grapeOption = screen.getAllByRole('option').find((o) => o.textContent?.includes('Grape'))!;
+    const grapeOption = screen.getAllByRole('option').find((o) => o.textContent?.includes('Grape')) as HTMLElement;
     await user.click(grapeOption);
     // Grape is disabled — no update:value should be emitted for 'grape'
     const updates = (emitted()['update:value'] ?? []) as string[][];

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LlmCodeBlock } from './llm-code-block';
 
 const SAMPLE_TS = `import { LlmButton } from '@atelier-ui/react';

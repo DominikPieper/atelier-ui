@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3';
+import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import LlmAvatarGroup from './llm-avatar-group.vue';
 import LlmAvatar from './llm-avatar.vue';
 

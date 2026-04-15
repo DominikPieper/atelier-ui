@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3';
+import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import LlmBreadcrumbs from './llm-breadcrumbs.vue';
 import LlmBreadcrumbItem from './llm-breadcrumb-item.vue';
 

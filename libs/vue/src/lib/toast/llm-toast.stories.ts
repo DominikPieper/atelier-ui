@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/vue3';
+import type { Meta } from '@storybook/vue3-vite';
 import { defineComponent } from 'vue';
 import LlmToastProvider from './llm-toast-provider.vue';
 import LlmToastContainer from './llm-toast-container.vue';

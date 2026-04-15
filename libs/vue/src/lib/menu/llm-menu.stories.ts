@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3';
+import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import LlmMenuTrigger from './llm-menu-trigger.vue';
 import LlmMenu from './llm-menu.vue';
 import LlmMenuItem from './llm-menu-item.vue';

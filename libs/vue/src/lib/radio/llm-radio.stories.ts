@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3';
+import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import { ref } from 'vue';
 import LlmRadio from './llm-radio.vue';
 import LlmRadioGroup from '../radio-group/llm-radio-group.vue';

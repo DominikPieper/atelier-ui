@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd, type LlmSortDirection } from './llm-table';
 import { LlmBadge } from '../badge/llm-badge';
 import { LlmButton } from '../button/llm-button';

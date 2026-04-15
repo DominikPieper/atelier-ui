@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3';
+import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import LlmTooltip from './llm-tooltip.vue';
 
 const meta: Meta<typeof LlmTooltip> = {

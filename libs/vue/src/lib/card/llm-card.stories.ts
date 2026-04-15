@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3';
+import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import LlmCard from './llm-card.vue';
 import LlmCardHeader from './llm-card-header.vue';
 import LlmCardContent from './llm-card-content.vue';

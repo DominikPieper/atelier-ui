@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3';
+import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import { ref } from 'vue';
 import LlmDrawer from './llm-drawer.vue';
 import LlmDrawerHeader from './llm-drawer-header.vue';

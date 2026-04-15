@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3';
+import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import LlmCodeBlock from './llm-code-block.vue';
 
 const SAMPLE_TS = `import { LlmButton } from '@atelier-ui/vue';

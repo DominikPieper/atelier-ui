@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { LlmRadioGroup } from './llm-radio-group';
 import { LlmRadio } from '../radio/llm-radio';

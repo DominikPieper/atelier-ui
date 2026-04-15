@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/vue3';
+import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import { ref } from 'vue';
 import LlmAccordionGroup from './llm-accordion-group.vue';
 import LlmAccordionItem from './llm-accordion-item.vue';

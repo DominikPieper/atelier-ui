@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { LlmAccordionGroup, LlmAccordionItem, LlmAccordionHeader } from '../accordion/llm-accordion';
 import { LlmAlert } from '../alert/llm-alert';

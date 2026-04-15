@@ -77,7 +77,7 @@ describe('LlmStepper', () => {
       const tab = screen.getAllByRole('tab')[0];
       const panelId = tab.getAttribute('aria-controls');
       expect(panelId).toBeTruthy();
-      const panel = document.getElementById(panelId!);
+      const panel = document.getElementById(panelId as string);
       expect(panel).not.toBeNull();
     });
   });

@@ -1,4 +1,4 @@
-import type { Meta } from '@storybook/vue3';
+import type { Meta } from '@storybook/vue3-vite';
 import { ref } from 'vue';
 import LlmCard from '../card/llm-card.vue';
 import LlmCardHeader from '../card/llm-card-header.vue';
