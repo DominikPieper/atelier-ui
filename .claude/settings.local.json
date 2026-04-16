@@ -154,7 +154,8 @@
       "Bash(curl:*)",
       "Bash(find /Users/dominikpieper/Projects/angular-llm-components/libs -type d \\\\\\(-name *nav* -o -name *header* -o -name *layout* \\\\\\))",
       "Bash(find /Users/dominikpieper/Projects/angular-llm-components/apps -type f -name *.json -o -name *.ts -o -name *.tsx)",
-      "Bash(xargs -I{} basename {} .tsx)"
+      "Bash(xargs -I{} basename {} .tsx)",
+      "Bash(nx run *)"
     ]
   },
   "enableAllProjectMcpServers": true,

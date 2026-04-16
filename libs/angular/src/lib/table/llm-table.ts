@@ -3,6 +3,7 @@ import {
   Component,
   InjectionToken,
   Signal,
+  ViewEncapsulation,
   computed,
   input,
   output,
@@ -65,6 +66,7 @@ export const LLM_TABLE = new InjectionToken<LlmTableContext>('LLM_TABLE');
     '[class]': 'hostClasses()',
   },
   providers: [{ provide: LLM_TABLE, useExisting: LlmTable }],
+  encapsulation: ViewEncapsulation.None
 })
 export class LlmTable implements LlmTableContext {
   /** Visual style of the table rows. */
@@ -106,6 +108,7 @@ export class LlmTable implements LlmTableContext {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<thead><ng-content /></thead>`,
   styleUrl: './llm-table.css',
+  host: { '[style.display]': '"contents"' },
 })
 export class LlmThead {}
 
@@ -144,6 +147,7 @@ export class LlmThead {}
     </tbody>
   `,
   styleUrl: './llm-table.css',
+  host: { '[style.display]': '"contents"' },
 })
 export class LlmTbody {
   /** When true, hides rows and shows the `[llmTableEmpty]` slot content instead. */
@@ -189,6 +193,7 @@ export class LlmTbody {
   styleUrl: './llm-table.css',
   host: {
     '[class]': 'hostClasses()',
+    '[style.display]': '"contents"',
   },
 })
 export class LlmTr {
@@ -262,6 +267,7 @@ export type LlmSortDirection = 'asc' | 'desc' | null;
     </th>
   `,
   styleUrl: './llm-table.css',
+  host: { '[style.display]': '"contents"' },
 })
 export class LlmTh {
   /** Whether this column is sortable. Renders a sort button when true. */
@@ -331,6 +337,7 @@ export class LlmTh {
     </td>
   `,
   styleUrl: './llm-table.css',
+  host: { '[style.display]': '"contents"' },
 })
 export class LlmTd {
   /** Text alignment of the cell content. */

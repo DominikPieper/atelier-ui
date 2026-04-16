@@ -37,7 +37,7 @@ type Story = StoryObj<LlmTooltip>;
 
 export const Default: Story = {
   render: () => ({
-    imports: [LlmButton],
+    moduleMetadata: { imports: [LlmButton] },
     template: `
       <div style="padding: 4rem; display: flex; justify-content: center;">
         <llm-button llmTooltip="Save your changes">Save</llm-button>
@@ -49,7 +49,7 @@ export const Default: Story = {
 
 export const Positions: Story = {
   render: () => ({
-    imports: [LlmButton],
+    moduleMetadata: { imports: [LlmButton] },
     template: `
       <div style="padding: 6rem; display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;">
         <llm-button llmTooltip="Tooltip above" llmTooltipPosition="above">Above</llm-button>
@@ -63,7 +63,7 @@ export const Positions: Story = {
 
 export const LongText: Story = {
   render: () => ({
-    imports: [LlmButton],
+    moduleMetadata: { imports: [LlmButton] },
     template: `
       <div style="padding: 4rem; display: flex; justify-content: center;">
         <llm-button
@@ -76,7 +76,7 @@ export const LongText: Story = {
 
 export const Disabled: Story = {
   render: () => ({
-    imports: [LlmButton],
+    moduleMetadata: { imports: [LlmButton] },
     template: `
       <div style="padding: 4rem; display: flex; gap: 2rem; justify-content: center;">
         <llm-button llmTooltip="This tooltip is active">Enabled</llm-button>
@@ -88,7 +88,7 @@ export const Disabled: Story = {
 
 export const CustomDelay: Story = {
   render: () => ({
-    imports: [LlmButton],
+    moduleMetadata: { imports: [LlmButton] },
     template: `
       <div style="padding: 4rem; display: flex; gap: 2rem; justify-content: center;">
         <llm-button llmTooltip="No delay" [llmTooltipShowDelay]="0">Instant</llm-button>
@@ -102,7 +102,7 @@ export const CustomDelay: Story = {
 export const Playground: Story = {
   render: (args) => ({
     props: { ...args, tooltipText: 'Tooltip content' },
-    imports: [LlmButton],
+    moduleMetadata: { imports: [LlmButton] },
     template: `
       <div style="padding: 6rem; display: flex; justify-content: center;">
         <llm-button

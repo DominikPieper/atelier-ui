@@ -21,7 +21,6 @@
   font-size: inherit;
   cursor: pointer;
   transition: border-color var(--ui-transition-fast), box-shadow var(--ui-transition-fast);
-  anchor-name: --select-trigger;
 }
 
 .trigger:hover:not(:disabled) {
@@ -73,20 +72,15 @@
   transform: rotate(180deg);
 }
 
-/* Dropdown panel */
-.panel[popover] {
-  position: absolute;
-  position-anchor: --select-trigger;
-  inset-block-start: anchor(bottom);
-  inset-inline-start: anchor(left);
-  min-width: anchor-size(width);
-  margin-block-start: var(--ui-spacing-1);
+/* Dropdown panel — hidden while resting in the component's DOM */
+.panel {
+  visibility: hidden;
+  pointer-events: none;
   padding: var(--ui-spacing-1) 0;
   background: var(--ui-color-surface-raised);
   border: 1px solid var(--ui-color-border);
   border-radius: var(--ui-radius-md);
   box-shadow: var(--ui-shadow-lg);
-  z-index: var(--ui-z-dropdown);
   max-height: 16rem;
   overflow-y: auto;
   opacity: 0;
@@ -94,7 +88,10 @@
   transition: opacity var(--ui-transition-normal), transform var(--ui-transition-normal);
 }
 
-.panel[popover]:popover-open {
+/* Visible when in the CDK overlay pane (class added by open(), removed by close()) */
+.panel.is-open {
+  visibility: visible;
+  pointer-events: auto;
   opacity: 1;
   transform: translateY(0);
 }

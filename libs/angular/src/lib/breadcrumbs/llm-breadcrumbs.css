@@ -1,5 +1,5 @@
 /* ── LlmBreadcrumbs host ──────────────────────────────────────────────────── */
-llm-breadcrumbs {
+:host(llm-breadcrumbs) {
   display: block;
   font-family: var(--ui-font-family);
 }
@@ -21,7 +21,7 @@ nav {
 }
 
 /* ── LlmBreadcrumbItem host ───────────────────────────────────────────────── */
-llm-breadcrumb-item {
+:host(llm-breadcrumb-item) {
   display: contents;
 }
 

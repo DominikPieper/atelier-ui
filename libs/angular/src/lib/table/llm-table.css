@@ -21,6 +21,9 @@ llm-table {
   display: block;
   font-family: var(--ui-font-family);
   color: var(--ui-color-text);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-md);
+  overflow: hidden;
 }
 
 .llm-table-wrapper {
@@ -194,6 +197,11 @@ th.sort-asc .llm-th-sort-asc-arrow {
 
 th.sort-desc .llm-th-sort-desc-arrow {
   opacity: 1;
+}
+
+/* Remove bottom border on the last body row to avoid double-border with wrapper */
+llm-table llm-tbody llm-tr:last-child td {
+  border-bottom: none;
 }
 
 /* ---------------------------------------------------------------------------

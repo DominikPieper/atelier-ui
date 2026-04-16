@@ -15,7 +15,7 @@ const meta: Meta<LlmSelect> = {
   tags: ['autodocs'],
   render: (args) => ({
     props: { ...args, value: '' },
-    imports: [LlmOption],
+    moduleMetadata: { imports: [LlmOption] },
     template: `
       <llm-select ${argsToTemplate(args)} [(value)]="value">
         <llm-option optionValue="us">United States</llm-option>
@@ -51,7 +51,7 @@ export const Default: Story = {
 export const WithSelection: Story = {
   render: (args) => ({
     props: { ...args, value: 'ca' },
-    imports: [LlmOption],
+    moduleMetadata: { imports: [LlmOption] },
     template: `
       <llm-select ${argsToTemplate(args)} [(value)]="value">
         <llm-option optionValue="us">United States</llm-option>
@@ -80,7 +80,7 @@ export const WithErrors: Story = {
       errors: [{ kind: 'required', message: 'Please select a country' }],
       touched: true,
     },
-    imports: [LlmOption],
+    moduleMetadata: { imports: [LlmOption] },
     template: `
       <llm-select ${argsToTemplate(args)} [(value)]="value" [errors]="errors" [touched]="touched">
         <llm-option optionValue="us">United States</llm-option>
@@ -95,7 +95,7 @@ export const WithErrors: Story = {
 export const WithDisabledOption: Story = {
   render: (args) => ({
     props: { ...args, value: '' },
-    imports: [LlmOption],
+    moduleMetadata: { imports: [LlmOption] },
     template: `
       <llm-select ${argsToTemplate(args)} [(value)]="value">
         <llm-option optionValue="us">United States</llm-option>
@@ -113,7 +113,7 @@ export const Required: Story = {
 export const Playground: Story = {
   render: (args) => ({
     props: { ...args, value: '' },
-    imports: [LlmOption],
+    moduleMetadata: { imports: [LlmOption] },
     template: `
       <llm-select ${argsToTemplate(args)} [(value)]="value">
         <llm-option optionValue="a">Option A</llm-option>

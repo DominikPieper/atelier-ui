@@ -1,5 +1,5 @@
 /* ── Host ──────────────────────────────────────────────────────────────── */
-llm-dialog {
+:host(llm-dialog) {
   display: contents;
 }
 
@@ -102,7 +102,7 @@ dialog::backdrop {
 }
 
 /* ── Sub-components ──────────────────────────────────────────────────────── */
-llm-dialog-header {
+:host(llm-dialog-header) {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -115,7 +115,7 @@ llm-dialog-header {
   flex-shrink: 0;
 }
 
-llm-dialog-content {
+:host(llm-dialog-content) {
   display: block;
   padding: var(--ui-spacing-5);
   overflow-y: auto;
@@ -123,7 +123,7 @@ llm-dialog-content {
   color: var(--ui-color-text);
 }
 
-llm-dialog-footer {
+:host(llm-dialog-footer) {
   display: flex;
   align-items: center;
   justify-content: flex-end;

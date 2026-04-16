@@ -36,7 +36,7 @@ type Story = StoryObj<LlmPagination>;
 export const Default: Story = {
   render: (args) => ({
     props: { ...args, page: signal(args.page) },
-    imports: [LlmPagination],
+    moduleMetadata: { imports: [LlmPagination] },
     template: `
       <llm-pagination
         [(page)]="page"
@@ -62,7 +62,7 @@ export const Default: Story = {
 export const MiddlePage: Story = {
   render: (args) => ({
     props: { ...args, page: signal(5) },
-    imports: [LlmPagination],
+    moduleMetadata: { imports: [LlmPagination] },
     template: `
       <llm-pagination [(page)]="page" [pageCount]="pageCount" [siblingCount]="siblingCount" [showFirstLast]="showFirstLast" />
     `,
@@ -74,7 +74,7 @@ export const MiddlePage: Story = {
 export const FewPages: Story = {
   render: (args) => ({
     props: { ...args, page: signal(2) },
-    imports: [LlmPagination],
+    moduleMetadata: { imports: [LlmPagination] },
     template: `
       <llm-pagination [(page)]="page" [pageCount]="pageCount" [siblingCount]="siblingCount" [showFirstLast]="showFirstLast" />
     `,
@@ -85,7 +85,7 @@ export const FewPages: Story = {
 export const ManyPages: Story = {
   render: (args) => ({
     props: { ...args, page: signal(50) },
-    imports: [LlmPagination],
+    moduleMetadata: { imports: [LlmPagination] },
     template: `
       <llm-pagination [(page)]="page" [pageCount]="pageCount" [siblingCount]="siblingCount" [showFirstLast]="showFirstLast" />
     `,
@@ -96,7 +96,7 @@ export const ManyPages: Story = {
 export const NoFirstLast: Story = {
   render: (args) => ({
     props: { ...args, page: signal(5) },
-    imports: [LlmPagination],
+    moduleMetadata: { imports: [LlmPagination] },
     template: `
       <llm-pagination [(page)]="page" [pageCount]="pageCount" [siblingCount]="siblingCount" [showFirstLast]="false" />
     `,
@@ -107,7 +107,7 @@ export const NoFirstLast: Story = {
 export const SinglePage: Story = {
   render: () => ({
     props: { page: signal(1) },
-    imports: [LlmPagination],
+    moduleMetadata: { imports: [LlmPagination] },
     template: `<llm-pagination [(page)]="page" [pageCount]="1" />`,
   }),
 };

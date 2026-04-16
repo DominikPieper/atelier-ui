@@ -16,7 +16,7 @@ const meta: Meta<LlmRadioGroup> = {
   decorators: [],
   render: (args) => ({
     props: { ...args, value: 'md' },
-    imports: [LlmRadio],
+    moduleMetadata: { imports: [LlmRadio] },
     template: `
       <llm-radio-group ${argsToTemplate(args)} [(value)]="value">
         <llm-radio radioValue="sm">Small</llm-radio>
@@ -51,7 +51,7 @@ export const Default: Story = {
 export const WithSelection: Story = {
   render: (args) => ({
     props: { ...args, value: 'lg' },
-    imports: [LlmRadio],
+    moduleMetadata: { imports: [LlmRadio] },
     template: `
       <llm-radio-group ${argsToTemplate(args)} [(value)]="value">
         <llm-radio radioValue="sm">Small</llm-radio>
@@ -80,7 +80,7 @@ export const WithErrors: Story = {
       errors: [{ kind: 'required', message: 'Please select a size' }],
       touched: true,
     },
-    imports: [LlmRadio],
+    moduleMetadata: { imports: [LlmRadio] },
     template: `
       <llm-radio-group ${argsToTemplate(args)} [(value)]="value" [errors]="errors" [touched]="touched">
         <llm-radio radioValue="sm">Small</llm-radio>
@@ -99,7 +99,7 @@ export const Required: Story = {
 export const WithDisabledOption: Story = {
   render: (args) => ({
     props: { ...args, value: 'sm' },
-    imports: [LlmRadio],
+    moduleMetadata: { imports: [LlmRadio] },
     template: `
       <llm-radio-group ${argsToTemplate(args)} [(value)]="value">
         <llm-radio radioValue="sm">Small</llm-radio>
@@ -113,7 +113,7 @@ export const WithDisabledOption: Story = {
 export const Playground: Story = {
   render: (args) => ({
     props: { ...args, value: '' },
-    imports: [LlmRadio],
+    moduleMetadata: { imports: [LlmRadio] },
     template: `
       <llm-radio-group ${argsToTemplate(args)} [(value)]="value">
         <llm-radio radioValue="a">Option A</llm-radio>

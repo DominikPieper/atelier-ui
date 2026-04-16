@@ -44,7 +44,7 @@ type Story = StoryObj<LlmDrawer>;
 export const Default: Story = {
   render: (args) => ({
     props: { ...args, open: signal(false) },
-    imports: ALL_IMPORTS,
+    moduleMetadata: { imports: ALL_IMPORTS },
     template: `
       <llm-button variant="primary" (click)="open.set(true)">Open Drawer</llm-button>
       <llm-drawer [(open)]="open" [position]="position" [size]="size" [closeOnBackdrop]="closeOnBackdrop">
@@ -72,7 +72,7 @@ export const Default: Story = {
 export const Left: Story = {
   render: (args) => ({
     props: { ...args, open: signal(false) },
-    imports: ALL_IMPORTS,
+    moduleMetadata: { imports: ALL_IMPORTS },
     template: `
       <llm-button variant="outline" (click)="open.set(true)">Open Left Drawer</llm-button>
       <llm-drawer [(open)]="open" position="left" [size]="size">
@@ -93,7 +93,7 @@ export const Left: Story = {
 export const Top: Story = {
   render: (args) => ({
     props: { ...args, open: signal(false) },
-    imports: ALL_IMPORTS,
+    moduleMetadata: { imports: ALL_IMPORTS },
     template: `
       <llm-button variant="outline" (click)="open.set(true)">Open Top Drawer</llm-button>
       <llm-drawer [(open)]="open" position="top" [size]="size">
@@ -113,7 +113,7 @@ export const Top: Story = {
 export const Bottom: Story = {
   render: (args) => ({
     props: { ...args, open: signal(false) },
-    imports: ALL_IMPORTS,
+    moduleMetadata: { imports: ALL_IMPORTS },
     template: `
       <llm-button variant="outline" (click)="open.set(true)">Open Bottom Drawer</llm-button>
       <llm-drawer [(open)]="open" position="bottom" [size]="size">
@@ -141,7 +141,7 @@ export const SizeVariants: Story = {
       lgOpen: signal(false),
       fullOpen: signal(false),
     },
-    imports: ALL_IMPORTS,
+    moduleMetadata: { imports: ALL_IMPORTS },
     template: `
       <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
         <llm-button variant="outline" size="sm" (click)="smOpen.set(true)">Small</llm-button>
@@ -180,7 +180,7 @@ export const SizeVariants: Story = {
 export const NoBackdropClose: Story = {
   render: (args) => ({
     props: { ...args, open: signal(false) },
-    imports: ALL_IMPORTS,
+    moduleMetadata: { imports: ALL_IMPORTS },
     template: `
       <llm-button variant="primary" (click)="open.set(true)">Open Drawer</llm-button>
       <llm-drawer [(open)]="open" [closeOnBackdrop]="false">
@@ -201,7 +201,7 @@ export const NoBackdropClose: Story = {
 export const WithForm: Story = {
   render: (args) => ({
     props: { ...args, open: signal(false), name: signal(''), email: signal('') },
-    imports: [...ALL_IMPORTS, LlmInput],
+    moduleMetadata: { imports: [...ALL_IMPORTS, LlmInput] },
     template: `
       <llm-button variant="primary" (click)="open.set(true)">Edit Profile</llm-button>
       <llm-drawer [(open)]="open" [size]="size">

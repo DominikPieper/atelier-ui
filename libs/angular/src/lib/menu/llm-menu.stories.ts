@@ -32,7 +32,7 @@ type Story = StoryObj<LlmMenu>;
 export const Default: Story = {
   render: (args) => ({
     props: args,
-    imports: [LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger, LlmButton],
+    moduleMetadata: { imports: [LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger, LlmButton] },
     template: `
       <llm-button [llmMenuTriggerFor]="menu">Actions</llm-button>
       <ng-template #menu>
@@ -50,7 +50,7 @@ export const Default: Story = {
 
 export const WithDisabledItems: Story = {
   render: () => ({
-    imports: [LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger, LlmButton],
+    moduleMetadata: { imports: [LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger, LlmButton] },
     template: `
       <llm-button [llmMenuTriggerFor]="menu">Edit</llm-button>
       <ng-template #menu>
@@ -69,7 +69,7 @@ export const WithDisabledItems: Story = {
 
 export const Compact: Story = {
   render: () => ({
-    imports: [LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger, LlmButton],
+    moduleMetadata: { imports: [LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger, LlmButton] },
     template: `
       <llm-button variant="outline" size="sm" [llmMenuTriggerFor]="menu">Options</llm-button>
       <ng-template #menu>
@@ -88,7 +88,7 @@ export const Compact: Story = {
 
 export const NestedSubmenus: Story = {
   render: () => ({
-    imports: [LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger, LlmButton],
+    moduleMetadata: { imports: [LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger, LlmButton] },
     template: `
       <llm-button [llmMenuTriggerFor]="mainMenu">File</llm-button>
       <ng-template #mainMenu>
@@ -114,7 +114,7 @@ export const NestedSubmenus: Story = {
 export const Playground: Story = {
   render: (args) => ({
     props: args,
-    imports: [LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger, LlmButton],
+    moduleMetadata: { imports: [LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger, LlmButton] },
     template: `
       <llm-button [llmMenuTriggerFor]="menu">Open Menu</llm-button>
       <ng-template #menu>

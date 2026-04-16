@@ -47,7 +47,7 @@ type Story = StoryObj<LlmDialog>;
 export const Default: Story = {
   render: (args) => ({
     props: { ...args, open: signal(false) },
-    imports: ALL_IMPORTS,
+    moduleMetadata: { imports: ALL_IMPORTS },
     template: `
       <llm-button variant="primary" (click)="open.set(true)">Open Dialog</llm-button>
       <llm-dialog [(open)]="open" [size]="size" [closeOnBackdrop]="closeOnBackdrop">
@@ -76,7 +76,7 @@ export const PreOpened: Story = {
   name: 'Pre-opened (no trigger)',
   render: (args) => ({
     props: { ...args, open: signal(true) },
-    imports: ALL_IMPORTS,
+    moduleMetadata: { imports: ALL_IMPORTS },
     template: `
       <llm-dialog [(open)]="open" [size]="size">
         <llm-dialog-header>Pre-opened Dialog</llm-dialog-header>
@@ -93,7 +93,7 @@ export const CloseButtonDismiss: Story = {
   name: 'Close via header X button',
   render: (args) => ({
     props: { ...args, open: signal(false) },
-    imports: ALL_IMPORTS,
+    moduleMetadata: { imports: ALL_IMPORTS },
     template: `
       <llm-button variant="primary" (click)="open.set(true)">Open Dialog</llm-button>
       <llm-dialog [(open)]="open" [size]="size" [closeOnBackdrop]="closeOnBackdrop">
@@ -121,7 +121,7 @@ export const EscapeToClose: Story = {
   name: 'Escape key closes dialog',
   render: (args) => ({
     props: { ...args, open: signal(false) },
-    imports: ALL_IMPORTS,
+    moduleMetadata: { imports: ALL_IMPORTS },
     template: `
       <llm-button variant="primary" (click)="open.set(true)">Open Dialog</llm-button>
       <llm-dialog [(open)]="open" [size]="size" [closeOnBackdrop]="closeOnBackdrop">
@@ -154,7 +154,7 @@ export const SizeVariants: Story = {
       xlOpen: signal(false),
       fullOpen: signal(false),
     },
-    imports: ALL_IMPORTS,
+    moduleMetadata: { imports: ALL_IMPORTS },
     template: `
       <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
         <llm-button variant="outline" size="sm" (click)="smOpen.set(true)">Small</llm-button>
@@ -205,7 +205,7 @@ export const WithForm: Story = {
       name: signal(''),
       country: signal(''),
     },
-    imports: [...ALL_IMPORTS, LlmInput, LlmSelect, LlmOption],
+    moduleMetadata: { imports: [...ALL_IMPORTS, LlmInput, LlmSelect, LlmOption] },
     template: `
       <llm-button variant="primary" (click)="open.set(true)">Open Form Dialog</llm-button>
       <llm-dialog [(open)]="open" [size]="size">
@@ -238,7 +238,7 @@ export const WithForm: Story = {
 export const LongContent: Story = {
   render: (args) => ({
     props: { ...args, open: signal(false) },
-    imports: ALL_IMPORTS,
+    moduleMetadata: { imports: ALL_IMPORTS },
     template: `
       <llm-button variant="primary" (click)="open.set(true)">Open Long Content Dialog</llm-button>
       <llm-dialog [(open)]="open" [size]="size">
@@ -267,7 +267,7 @@ export const LongContent: Story = {
 export const NoBackdropClose: Story = {
   render: (args) => ({
     props: { ...args, open: signal(false) },
-    imports: ALL_IMPORTS,
+    moduleMetadata: { imports: ALL_IMPORTS },
     template: `
       <llm-button variant="primary" (click)="open.set(true)">Open Dialog</llm-button>
       <llm-dialog [(open)]="open" [closeOnBackdrop]="false">

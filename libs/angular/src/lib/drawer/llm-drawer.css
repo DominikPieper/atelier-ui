@@ -1,5 +1,5 @@
 /* ── Host ──────────────────────────────────────────────────────────────────── */
-llm-drawer {
+:host(llm-drawer) {
   display: contents;
 }
 
@@ -165,7 +165,7 @@ dialog::backdrop {
 /* SUB-COMPONENTS                                                              */
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
-llm-drawer-header {
+:host(llm-drawer-header) {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -178,7 +178,7 @@ llm-drawer-header {
   flex-shrink: 0;
 }
 
-llm-drawer-content {
+:host(llm-drawer-content) {
   display: block;
   padding: var(--ui-spacing-5);
   overflow-y: auto;
@@ -186,7 +186,7 @@ llm-drawer-content {
   color: var(--ui-color-text);
 }
 
-llm-drawer-footer {
+:host(llm-drawer-footer) {
   display: flex;
   align-items: center;
   justify-content: flex-end;

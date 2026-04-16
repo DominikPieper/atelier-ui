@@ -2,6 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  Injector,
+  OnDestroy,
   computed,
   inject,
   input,
@@ -10,6 +12,13 @@ import {
   viewChild,
 } from '@angular/core';
 import { ActiveDescendantKeyManager, Highlightable } from '@angular/cdk/a11y';
+import {
+  createFlexibleConnectedPositionStrategy,
+  createOverlayRef,
+  createRepositionScrollStrategy,
+  type OverlayRef,
+} from '@angular/cdk/overlay';
+import { DomPortal } from '@angular/cdk/portal';
 import type { FormValueControl } from '@angular/forms/signals';
 import { type ValidationError, type WithOptionalFieldTree } from '@angular/forms/signals';
 import { LLM_SELECT, type LlmSelectContext } from './llm-select.token';
@@ -45,7 +54,7 @@ let nextId = 0;
 
 /**
  * Accessible dropdown select component for use with Angular Signal Forms.
- * Uses the native Popover API for the panel overlay.
+ * Uses the CDK Overlay for viewport-aware panel positioning.
  *
  * Usage:
  * ```html
@@ -85,11 +94,9 @@ let nextId = 0;
     <div
       #panel
       [id]="panelId"
-      popover="manual"
       role="listbox"
       class="panel"
       [attr.aria-labelledby]="triggerId"
-      (toggle)="onPanelToggle($event)"
     >
       <ng-content />
     </div>
@@ -110,7 +117,7 @@ let nextId = 0;
   },
   providers: [{ provide: LLM_SELECT, useExisting: LlmSelect }],
 })
-export class LlmSelect implements FormValueControl<string>, LlmSelectContext {
+export class LlmSelect implements FormValueControl<string>, LlmSelectContext, OnDestroy {
   /** The selected value. Bound by [formField] directive. Supports [(value)] two-way binding. */
   readonly value = model('');
 
@@ -181,8 +188,10 @@ export class LlmSelect implements FormValueControl<string>, LlmSelectContext {
   /** @internal */
   private keyManager: ActiveDescendantKeyManager<SelectOptionItem> | null = null;
 
+  private overlayRef: OverlayRef | null = null;
   private outsideClickHandler: ((e: MouseEvent) => void) | null = null;
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly injector = inject(Injector);
 
   /** @internal — called by LlmOption on init */
   registerOption(id: string, value: string, labelText: string, disabled: boolean): void {
@@ -221,15 +230,6 @@ export class LlmSelect implements FormValueControl<string>, LlmSelectContext {
   }
 
   /** @internal */
-  protected onPanelToggle(event: Event): void {
-    const toggleEvent = event as ToggleEvent;
-    if (toggleEvent.newState === 'closed') {
-      this.isOpen.set(false);
-      this.activeOptionId.set(null);
-    }
-  }
-
-  /** @internal */
   protected onKeydown(event: KeyboardEvent): void {
     if (this.disabled()) return;
 
@@ -264,10 +264,26 @@ export class LlmSelect implements FormValueControl<string>, LlmSelectContext {
     }
   }
 
+  ngOnDestroy(): void {
+    this.overlayRef?.dispose();
+    this.overlayRef = null;
+    if (this.outsideClickHandler) {
+      document.removeEventListener('click', this.outsideClickHandler);
+      this.outsideClickHandler = null;
+    }
+  }
+
   private open(): void {
     const panel = this.panelRef();
     if (!panel) return;
-    (panel.nativeElement as HTMLElement & { showPopover(): void }).showPopover();
+
+    if (!this.overlayRef) {
+      this.overlayRef = this.createOverlay();
+    }
+
+    this.overlayRef.attach(new DomPortal(panel.nativeElement));
+    panel.nativeElement.classList.add('is-open');
+    this.overlayRef.updatePosition();
     this.isOpen.set(true);
 
     // (Re)create key manager with current options
@@ -288,9 +304,13 @@ export class LlmSelect implements FormValueControl<string>, LlmSelectContext {
       this.keyManager.setActiveItem(activeIdx);
     }
 
-    // Outside click listener
+    // Outside click — check host AND panel (panel is in overlay container, outside host)
     this.outsideClickHandler = (e: MouseEvent) => {
-      if (!this.elementRef.nativeElement.contains(e.target as Node)) {
+      const target = e.target as Node;
+      if (
+        !this.elementRef.nativeElement.contains(target) &&
+        !panel.nativeElement.contains(target)
+      ) {
         this.close();
       }
     };
@@ -299,12 +319,10 @@ export class LlmSelect implements FormValueControl<string>, LlmSelectContext {
 
   private close(): void {
     const panel = this.panelRef();
-    if (!panel) return;
-    try {
-      (panel.nativeElement as HTMLElement & { hidePopover(): void }).hidePopover();
-    } catch {
-      // Panel may already be hidden
+    if (panel) {
+      panel.nativeElement.classList.remove('is-open');
     }
+    this.overlayRef?.detach();
     this.isOpen.set(false);
     this.activeOptionId.set(null);
     this.keyManager = null;
@@ -313,5 +331,28 @@ export class LlmSelect implements FormValueControl<string>, LlmSelectContext {
       document.removeEventListener('click', this.outsideClickHandler);
       this.outsideClickHandler = null;
     }
+  }
+
+  private createOverlay(): OverlayRef {
+    const triggerEl = this.elementRef.nativeElement.querySelector<HTMLElement>('.trigger')!;
+
+    const positionStrategy = createFlexibleConnectedPositionStrategy(
+      this.injector,
+      triggerEl,
+    )
+      .withPositions([
+        { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top', offsetY: 4 },
+        { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom', offsetY: -4 },
+      ])
+      .withFlexibleDimensions(false)
+      .withPush(true);
+
+    const scrollStrategy = createRepositionScrollStrategy(this.injector);
+
+    return createOverlayRef(this.injector, {
+      positionStrategy,
+      scrollStrategy,
+      minWidth: triggerEl.offsetWidth,
+    });
   }
 }

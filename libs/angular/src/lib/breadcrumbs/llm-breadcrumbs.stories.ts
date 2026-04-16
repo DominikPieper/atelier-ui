@@ -24,7 +24,7 @@ type Story = StoryObj<LlmBreadcrumbs>;
 
 export const Default: Story = {
   render: () => ({
-    imports: ALL_IMPORTS,
+    moduleMetadata: { imports: ALL_IMPORTS },
     template: `
       <llm-breadcrumbs>
         <llm-breadcrumb-item href="/home">Home</llm-breadcrumb-item>
@@ -38,7 +38,7 @@ export const Default: Story = {
 
 export const SingleItem: Story = {
   render: () => ({
-    imports: ALL_IMPORTS,
+    moduleMetadata: { imports: ALL_IMPORTS },
     template: `
       <llm-breadcrumbs>
         <llm-breadcrumb-item>Dashboard</llm-breadcrumb-item>
@@ -49,7 +49,7 @@ export const SingleItem: Story = {
 
 export const LongTrail: Story = {
   render: () => ({
-    imports: ALL_IMPORTS,
+    moduleMetadata: { imports: ALL_IMPORTS },
     template: `
       <llm-breadcrumbs>
         <llm-breadcrumb-item href="/">Home</llm-breadcrumb-item>
@@ -65,7 +65,7 @@ export const LongTrail: Story = {
 
 export const NoLinks: Story = {
   render: () => ({
-    imports: ALL_IMPORTS,
+    moduleMetadata: { imports: ALL_IMPORTS },
     template: `
       <llm-breadcrumbs>
         <llm-breadcrumb-item>Home</llm-breadcrumb-item>
@@ -96,7 +96,7 @@ export const Dynamic: Story = {
         );
       },
     },
-    imports: ALL_IMPORTS,
+    moduleMetadata: { imports: ALL_IMPORTS },
     template: `
       <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
         <button
