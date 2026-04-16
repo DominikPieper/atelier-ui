@@ -66,6 +66,7 @@ export const LLM_TABLE = new InjectionToken<LlmTableContext>('LLM_TABLE');
     '[class]': 'hostClasses()',
   },
   providers: [{ provide: LLM_TABLE, useExisting: LlmTable }],
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
   encapsulation: ViewEncapsulation.None
 })
 export class LlmTable implements LlmTableContext {

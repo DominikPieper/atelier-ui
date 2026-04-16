@@ -334,7 +334,8 @@ export class LlmSelect implements FormValueControl<string>, LlmSelectContext, On
   }
 
   private createOverlay(): OverlayRef {
-    const triggerEl = this.elementRef.nativeElement.querySelector<HTMLElement>('.trigger')!;
+    const triggerEl = this.elementRef.nativeElement.querySelector<HTMLElement>('.trigger');
+    if (!triggerEl) throw new Error('LlmSelect: trigger element not found');
 
     const positionStrategy = createFlexibleConnectedPositionStrategy(
       this.injector,
