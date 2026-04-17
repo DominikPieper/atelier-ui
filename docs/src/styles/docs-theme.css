@@ -1,0 +1,78 @@
+/**
+ * Docs-specific theme: "Digital Architect"
+ * Overrides the shared component library tokens for the docs chrome only.
+ */
+
+/* ── Dark mode: deep-sea navy palette ──────────────────────── */
+[data-theme='dark'] {
+  --docs-code-text:    #d8e4f1;
+  --docs-code-keyword: #89ceff;
+  --docs-code-name:    #44dada;
+  --docs-code-string:  #a6d644;
+  --docs-code-muted:   #6b7a99;
+
+  --ui-color-surface: #0d1a24;
+  --ui-color-surface-raised: #16212a;
+  --ui-color-surface-sunken: #09141d;
+
+  --ui-color-border: rgba(64, 72, 93, 0.35);
+  --ui-color-border-hover: rgba(64, 72, 93, 0.6);
+
+  --ui-color-primary: #44dada;
+  --ui-color-primary-hover: #2abcbc;
+  --ui-color-primary-active: #1a9a9a;
+  --ui-color-primary-light: rgba(68, 218, 218, 0.1);
+
+  --ui-color-text: #d8e4f1;
+  --ui-color-text-muted: #6b7a99;
+
+  --ui-color-input-bg: #09141d;
+  --ui-color-input-bg-focus: #0d1a24;
+  --ui-color-input-border: rgba(64, 72, 93, 0.5);
+  --ui-color-input-border-hover: rgba(68, 218, 218, 0.4);
+  --ui-color-input-border-focus: #44dada;
+  --ui-color-placeholder: #4a5568;
+}
+
+/* ── Light mode: crisp slate palette ───────────────────────── */
+[data-theme='light'] {
+  --docs-code-text:    #1e293b;
+  --docs-code-keyword: #0369a1;
+  --docs-code-name:    #007a7a;
+  --docs-code-string:  #166534;
+  --docs-code-muted:   #64748b;
+
+  --ui-color-surface: #ffffff;
+  --ui-color-surface-raised: #f8fafc;
+  --ui-color-surface-sunken: #f1f5fb;
+  --ui-color-border: #e2e8f0;
+  --ui-color-border-hover: #cbd5e1;
+  --ui-color-primary: #007a7a;
+  --ui-color-primary-hover: #006464;
+  --ui-color-primary-active: #004e4e;
+  --ui-color-primary-light: rgba(0, 122, 122, 0.08);
+  --ui-color-text: #0f172a;
+  --ui-color-text-muted: #64748b;
+}
+
+/* ── Docs-specific variables ───────────────────────────────── */
+:root {
+  --docs-font: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  --docs-font-code: 'JetBrains Mono', 'Fira Code', 'Menlo', monospace;
+  --docs-glass-bg: rgba(9, 20, 29, 0.88);
+  --docs-glass-blur: blur(20px);
+  --docs-topbar-border: rgba(68, 218, 218, 0.1);
+  --docs-secondary: #818cf8;
+  --docs-tertiary: #a6d644;
+  --docs-hero-gradient-start: #44dada;
+  --docs-hero-gradient-end: #818cf8;
+  --docs-topbar-height: 68px;
+}
+
+[data-theme='light'] {
+  --docs-glass-bg: rgba(255, 255, 255, 0.94);
+  --docs-topbar-border: #e2e8f0;
+  --docs-secondary: #6366f1;
+  --docs-hero-gradient-start: #007a7a;
+  --docs-hero-gradient-end: #6366f1;
+}

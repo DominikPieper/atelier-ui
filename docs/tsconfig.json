@@ -1,14 +1,15 @@
 {
-  "extends": "../tsconfig.base.json",
+  "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "moduleResolution": "bundler",
-    "target": "ES2022",
-    "module": "ESNext",
-    "strict": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "allowImportingTsExtensions": false
+    "baseUrl": "..",
+    "paths": {
+      "@atelier-ui/angular": ["libs/angular/src/index.ts"],
+      "@atelier-ui/react": ["libs/react/src/index.ts"],
+      "@atelier-ui/spec": ["libs/spec/src/index.ts"],
+      "@atelier-ui/vue": ["libs/vue/src/index.ts"],
+      "@atelier-ui/create-workspace": ["libs/create-workspace/src/index.ts"]
+    }
   },
-  "include": ["app/**/*", "prerender.ts", "vite.config.ts", "vite.ssr.config.ts"]
+  "include": ["src"],
+  "exclude": ["dist", "../node_modules"]
 }

@@ -1,0 +1,220 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout currentPath="/">
+  <!-- Hero -->
+  <section class="docs-hero-v2">
+    <div class="docs-hero-grid-bg"></div>
+    <div class="docs-hero-glow"></div>
+    <div class="docs-hero-glow-2"></div>
+
+    <div class="docs-hero-eyebrow">
+      <span>⚡</span> LLM-Optimized Component Library
+    </div>
+
+    <h1 class="docs-hero-wordmark">ATELIER</h1>
+
+    <p class="docs-hero-subtitle">
+      The ultimate developer atelier for constructing high-precision interfaces.
+      Identical APIs across Angular, React, and Vue — designed for AI-assisted development.
+    </p>
+
+    <div class="docs-hero-actions">
+      <a href="/workshop" class="docs-btn docs-btn-primary">
+        Launch Workshop →
+      </a>
+      <a href="/components" class="docs-btn docs-btn-outline">
+        Browse Components
+      </a>
+    </div>
+  </section>
+
+  <!-- Framework Strip -->
+  <div class="docs-home-section-heading">Frameworks</div>
+  <div class="docs-framework-strip">
+    <a href="/components" class="docs-framework-card" style="--fw-color: #dd0031">
+      <div class="docs-framework-card-top">
+        <div class="docs-framework-card-dot" style="background: #dd0031"></div>
+        <span class="docs-framework-card-label">Framework_01</span>
+      </div>
+      <h3 class="docs-framework-card-title">Angular Atelier</h3>
+      <div class="docs-framework-card-code">&lt;LlmButton variant="primary"<br />&nbsp;&nbsp;[disabled]="isLoading()"&gt;<br />&nbsp;&nbsp;Submit<br />&lt;/LlmButton&gt;</div>
+      <span class="docs-framework-card-cta" style="color: #dd0031">Initialize Package →</span>
+    </a>
+
+    <a href="/components" class="docs-framework-card" style="--fw-color: #61dafb">
+      <div class="docs-framework-card-top">
+        <div class="docs-framework-card-dot" style="background: #61dafb"></div>
+        <span class="docs-framework-card-label">Framework_02</span>
+      </div>
+      <h3 class="docs-framework-card-title">React Atelier</h3>
+      <div class="docs-framework-card-code">&lt;LlmButton variant="primary"<br />&nbsp;&nbsp;loading={"{isLoading}"}&gt;<br />&nbsp;&nbsp;Submit<br />&lt;/LlmButton&gt;</div>
+      <span class="docs-framework-card-cta" style="color: #61dafb">Initialize Package →</span>
+    </a>
+
+    <a href="/components" class="docs-framework-card" style="--fw-color: #42b883">
+      <div class="docs-framework-card-top">
+        <div class="docs-framework-card-dot" style="background: #42b883"></div>
+        <span class="docs-framework-card-label">Framework_03</span>
+      </div>
+      <h3 class="docs-framework-card-title">Vue Canvas</h3>
+      <div class="docs-framework-card-code">&lt;LlmButton variant="primary"<br />&nbsp;&nbsp;:loading="isLoading"&gt;<br />&nbsp;&nbsp;Submit<br />&lt;/LlmButton&gt;</div>
+      <span class="docs-framework-card-cta" style="color: #42b883">Initialize Package →</span>
+    </a>
+  </div>
+
+  <!-- Stats ribbon -->
+  <div class="docs-stats-ribbon">
+    <div class="docs-stat-item">
+      <span class="docs-stat-num">3</span>
+      <span class="docs-stat-lbl">Frameworks</span>
+    </div>
+    <div class="docs-stat-item">
+      <span class="docs-stat-num">25+</span>
+      <span class="docs-stat-lbl">Components</span>
+    </div>
+    <div class="docs-stat-item">
+      <span class="docs-stat-num">5</span>
+      <span class="docs-stat-lbl">MCP Tools</span>
+    </div>
+    <div class="docs-stat-item">
+      <span class="docs-stat-num">0</span>
+      <span class="docs-stat-lbl">Runtime Deps</span>
+    </div>
+  </div>
+
+  <!-- LLM-Optimized feature section -->
+  <div class="docs-home-section-heading">Built for AI</div>
+  <div class="docs-feature-grid">
+    <div class="docs-feature-card">
+      <span class="docs-feature-card-num">01</span>
+      <h3 class="docs-feature-card-title">Predictable API Surface</h3>
+      <p class="docs-feature-card-desc">
+        Same prop names across every component. <code>variant</code>, <code>size</code>, <code>disabled</code> — learn once, use everywhere.
+      </p>
+      <div class="docs-feature-card-code">&lt;LlmButton variant="primary" /&gt;<br />&lt;LlmBadge variant="success" /&gt;<br />&lt;LlmAlert variant="warning" /&gt;</div>
+    </div>
+
+    <div class="docs-feature-card">
+      <span class="docs-feature-card-num">02</span>
+      <h3 class="docs-feature-card-title">Signal-Based Reactivity</h3>
+      <p class="docs-feature-card-desc">
+        Angular 21+ signals as the single reactivity model. No decorator chaos, no observable wrapping.
+      </p>
+      <div class="docs-feature-card-code">const count = signal(0);<br /><br />// Directly in template:<br />&lt;LlmButton [disabled]="count() === 0"&gt;</div>
+    </div>
+
+    <div class="docs-feature-card">
+      <span class="docs-feature-card-num">03</span>
+      <h3 class="docs-feature-card-title">Self-Describing Types</h3>
+      <p class="docs-feature-card-desc">
+        Narrow literal union types are the documentation. The model infers correct usage from the type alone.
+      </p>
+      <div class="docs-feature-card-code">variant: 'primary'<br />&nbsp;&nbsp;| 'secondary'<br />&nbsp;&nbsp;| 'outline'<br /><br />size: 'sm' | 'md' | 'lg'</div>
+    </div>
+  </div>
+
+  <!-- Terminal showcase -->
+  <div class="docs-home-section-heading">Get Started</div>
+  <div class="docs-terminal">
+    <div class="docs-terminal-bar">
+      <div class="docs-terminal-dots">
+        <span class="docs-terminal-dot docs-terminal-dot--red"></span>
+        <span class="docs-terminal-dot docs-terminal-dot--yellow"></span>
+        <span class="docs-terminal-dot docs-terminal-dot--green"></span>
+      </div>
+      <span class="docs-terminal-title">terminal — atelier-init — 80x24</span>
+      <div style="width: 2.5rem"></div>
+    </div>
+    <div class="docs-terminal-body">
+      <div>
+        <span class="docs-term-prompt">➜</span>
+        <span class="docs-term-cmd">npx create-atelier-ui-workspace</span>
+      </div>
+      <div class="docs-term-muted">Initializing Atelier workspace...</div>
+      <div class="docs-term-row">
+        <span class="docs-term-tag">[STAGE]</span>
+        <span>Fetch Component Registry.</span>
+        <span class="docs-term-ok">DONE</span>
+      </div>
+      <div class="docs-term-row">
+        <span class="docs-term-tag">[STAGE]</span>
+        <span>Inject Design Tokens.......</span>
+        <span class="docs-term-ok">DONE</span>
+      </div>
+      <div class="docs-term-row">
+        <span class="docs-term-tag">[STAGE]</span>
+        <span>Wire MCP Server...........</span>
+        <span class="docs-term-running">RUNNING (87%)</span>
+      </div>
+      <div class="docs-terminal-success">
+        <div class="docs-term-success-msg">✓ Workspace created at ./my-workshop</div>
+        <div class="docs-term-muted">Start dev server: <span class="docs-term-cmd">nx serve my-workshop</span></div>
+      </div>
+      <div>
+        <span class="docs-term-prompt">➜</span>
+        <span class="docs-term-blink">█</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick nav grid -->
+  <div class="docs-home-section-heading">Explore</div>
+  <div class="docs-quicknav">
+    <a href="/install" class="docs-quicknav-card">
+      <div class="docs-quicknav-icon">
+        <span class="material-symbols-outlined">download</span>
+      </div>
+      <div>
+        <div class="docs-quicknav-label">Reference</div>
+        <div class="docs-quicknav-title">Installation</div>
+      </div>
+    </a>
+    <a href="/components" class="docs-quicknav-card">
+      <div class="docs-quicknav-icon">
+        <span class="material-symbols-outlined">widgets</span>
+      </div>
+      <div>
+        <div class="docs-quicknav-label">Browse</div>
+        <div class="docs-quicknav-title">Components</div>
+      </div>
+    </a>
+    <a href="/patterns" class="docs-quicknav-card">
+      <div class="docs-quicknav-icon">
+        <span class="material-symbols-outlined">menu_book</span>
+      </div>
+      <div>
+        <div class="docs-quicknav-label">Cookbook</div>
+        <div class="docs-quicknav-title">Patterns</div>
+      </div>
+    </a>
+    <a href="/mcp" class="docs-quicknav-card">
+      <div class="docs-quicknav-icon">
+        <span class="material-symbols-outlined">smart_toy</span>
+      </div>
+      <div>
+        <div class="docs-quicknav-label">AI Protocol</div>
+        <div class="docs-quicknav-title">MCP Explorer</div>
+      </div>
+    </a>
+    <a href="/workshop" class="docs-quicknav-card">
+      <div class="docs-quicknav-icon">
+        <span class="material-symbols-outlined">build_circle</span>
+      </div>
+      <div>
+        <div class="docs-quicknav-label">Setup</div>
+        <div class="docs-quicknav-title">Workshop</div>
+      </div>
+    </a>
+    <a href="/design-principles" class="docs-quicknav-card">
+      <div class="docs-quicknav-icon">
+        <span class="material-symbols-outlined">psychology</span>
+      </div>
+      <div>
+        <div class="docs-quicknav-label">Read</div>
+        <div class="docs-quicknav-title">LLM Design</div>
+      </div>
+    </a>
+  </div>
+</BaseLayout>

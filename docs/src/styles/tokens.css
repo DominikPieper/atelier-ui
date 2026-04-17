@@ -1,0 +1,2 @@
+/* Re-export design tokens from the component library */
+@import '../../../libs/react/src/styles/tokens.css';

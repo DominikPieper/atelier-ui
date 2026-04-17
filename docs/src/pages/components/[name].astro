@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ComponentDetail from '../../components/ComponentDetail';
+import { ALL_COMPONENTS, componentDocs } from '../../data/components';
+
+export function getStaticPaths() {
+  return ALL_COMPONENTS.map(name => ({ params: { name } }));
+}
+
+const { name } = Astro.params;
+const doc = componentDocs[name as string];
+const title = doc?.name ?? name;
+---
+
+<BaseLayout title={title} currentPath={`/components/${name}`}>
+  <ComponentDetail name={name as string} client:load />
+</BaseLayout>

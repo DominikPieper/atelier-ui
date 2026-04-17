@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PatternsPage from '../components/PatternsPage';
+---
+
+<BaseLayout title="Cookbook Patterns" currentPath="/patterns">
+  <nav slot="toc">
+    <a href="#pattern-1" class="docs-toc-link">Login Form</a>
+    <a href="#pattern-2" class="docs-toc-link">Settings Page</a>
+    <a href="#pattern-3" class="docs-toc-link">Confirmation Dialog</a>
+    <a href="#pattern-4" class="docs-toc-link">Notification Center</a>
+  </nav>
+
+  <PatternsPage client:load />
+</BaseLayout>

@@ -1,6 +1,6 @@
 # Atelier UI
 
-> LLM-optimized component library for Angular, React, and Vue. 26 accessible components with flat prop APIs, data-driven patterns, and consistent naming across all three frameworks.
+> LLM-optimized component library for Angular, React, and Vue. 25 accessible components with flat prop APIs, data-driven patterns, and consistent naming across all three frameworks.
 
 Packages: @atelier-ui/angular | @atelier-ui/react | @atelier-ui/vue
 Version: 0.0.11
@@ -31,7 +31,6 @@ Docs: https://atelier.pieper.io
 - [Combobox](https://atelier.pieper.io/components/combobox): value, onValueChange, options[{value,label,disabled}], placeholder, disabled, invalid
 - [Badge](https://atelier.pieper.io/components/badge): variant (default|success|warning|danger|info), size (sm|md)
 - [Card](https://atelier.pieper.io/components/card): variant (elevated|outlined|flat), padding (none|sm|md|lg) — with LlmCardHeader, LlmCardContent, LlmCardFooter
-- [Table](https://atelier.pieper.io/components/table): variant (default|striped|bordered), size (sm|md|lg), stickyHeader — with LlmThead, LlmTbody, LlmTr, LlmTh[sortable], LlmTd
 - [Avatar](https://atelier.pieper.io/components/avatar): src, alt, name, size (xs|sm|md|lg|xl), shape (circle|square), status (online|offline|away|busy)
 - [Skeleton](https://atelier.pieper.io/components/skeleton): variant (text|circular|rectangular), width, height, animated
 - [Progress](https://atelier.pieper.io/components/progress): value (0-100), max, indeterminate, variant (default|success|warning|danger), size (sm|md|lg)

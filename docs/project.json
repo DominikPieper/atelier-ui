@@ -3,48 +3,32 @@
   "$schema": "../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "root": "docs",
-  "sourceRoot": "docs/app",
-  "tags": ["framework:react", "type:docs"],
+  "sourceRoot": "docs/src",
+  "tags": ["type:docs"],
   "targets": {
     "build": {
-      "executor": "@nx/vite:build",
+      "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/dist/docs"],
       "options": {
-        "outputPath": "dist/docs",
-        "configFile": "docs/vite.config.ts"
-      },
-      "configurations": {
-        "development": {
-          "mode": "development"
-        },
-        "production": {
-          "mode": "production"
-        }
-      }
-    },
-    "prerender": {
-      "executor": "nx:run-commands",
-      "dependsOn": ["build"],
-      "options": {
-        "commands": [
-          "npx vite build --config docs/vite.ssr.config.ts",
-          "node dist/docs-ssr/ssr.js"
-        ],
-        "parallel": false,
-        "cwd": "{workspaceRoot}"
+        "command": "astro build",
+        "cwd": "docs"
       }
     },
     "serve": {
-      "executor": "@nx/vite:dev-server",
+      "executor": "nx:run-commands",
       "continuous": true,
       "options": {
-        "buildTarget": "docs:build:development",
-        "configFile": "docs/vite.config.ts",
-        "port": 4300
+        "command": "astro dev --port 4300",
+        "cwd": "docs"
       }
     },
-    "lint": {
-      "executor": "@nx/eslint:lint"
+    "preview": {
+      "executor": "nx:run-commands",
+      "continuous": true,
+      "options": {
+        "command": "astro preview --port 4300",
+        "cwd": "docs"
+      }
     }
   }
 }

@@ -1,0 +1,50 @@
+{
+  "name": "docs-old",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "root": "docs-old",
+  "sourceRoot": "docs-old/app",
+  "tags": ["framework:react", "type:docs"],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{workspaceRoot}/dist/docs"],
+      "options": {
+        "outputPath": "dist/docs",
+        "configFile": "docs/vite.config.ts"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      }
+    },
+    "prerender": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "commands": [
+          "npx vite build --config docs/vite.ssr.config.ts",
+          "node dist/docs-ssr/ssr.js"
+        ],
+        "parallel": false,
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "continuous": true,
+      "options": {
+        "buildTarget": "docs:build:development",
+        "configFile": "docs/vite.config.ts",
+        "port": 4300
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

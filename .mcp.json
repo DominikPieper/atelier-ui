@@ -1,5 +1,9 @@
 {
   "mcpServers": {
+    "Astro docs": {
+      "type": "http",
+      "url": "https://mcp.docs.astro.build/mcp"
+    },
     "nx-mcp": {
       "type": "stdio",
       "command": "npx",

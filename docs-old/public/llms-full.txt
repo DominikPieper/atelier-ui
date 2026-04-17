@@ -1,6 +1,6 @@
 # Atelier UI — Full API Reference
 
-> Complete component API for LLM consumption. 26 accessible components for Angular, React, and Vue with consistent prop naming across all frameworks.
+> Complete component API for LLM consumption. 25 accessible components for Angular, React, and Vue with consistent prop naming across all frameworks.
 > Version 0.0.11 | https://atelier.pieper.io
 
 ---
@@ -358,83 +358,6 @@ Each entry lists:
       <LlmCardHeader>Account Settings</LlmCardHeader>
       <LlmCardContent>Update your profile information.</LlmCardContent>
     </LlmCard>
-
----
-
-### LlmTable + sub-components
-
-  Import (Angular): import { LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd } from '@atelier-ui/angular'
-  Import (React):   import { LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd } from '@atelier-ui/react'
-  Import (Vue):     import { LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd } from '@atelier-ui/vue'
-
-  LlmTable props:
-    variant       'default' | 'striped' | 'bordered'   'default'   Row background styling
-    size          'sm' | 'md' | 'lg'                   'md'        Vertical padding of cells
-    stickyHeader  boolean                               false       Sticky header row on scroll
-
-  LlmTh props:
-    sortable  boolean   false   Enables sort indicator and click handler
-    sorted    'asc' | 'desc' | null   null   Current sort direction
-
-  LlmTr props:
-    selectable  boolean   false   Adds hover highlight and cursor pointer
-
-  LlmTbody props:
-    empty    boolean   false   Shows empty slot when true
-    colSpan  number    1       Column span for the empty state row
-
-  Angular:
-    <llm-table variant="striped">
-      <llm-thead>
-        <llm-tr>
-          <llm-th [sortable]="true" [sorted]="sortDir" (sortChange)="onSort($event)">Name</llm-th>
-          <llm-th>Status</llm-th>
-        </llm-tr>
-      </llm-thead>
-      <llm-tbody [empty]="rows.length === 0" [colSpan]="2">
-        <llm-tr *ngFor="let row of rows" [selectable]="true" (click)="select(row)">
-          <llm-td>{{ row.name }}</llm-td>
-          <llm-td>{{ row.status }}</llm-td>
-        </llm-tr>
-        <ng-template llmTableEmpty>No results found</ng-template>
-      </llm-tbody>
-    </llm-table>
-
-  React:
-    <LlmTable variant="striped">
-      <LlmThead>
-        <LlmTr>
-          <LlmTh sortable sorted={sortDir} onSortChange={setSort}>Name</LlmTh>
-          <LlmTh>Status</LlmTh>
-        </LlmTr>
-      </LlmThead>
-      <LlmTbody empty={rows.length === 0} colSpan={2}>
-        {rows.map(row => (
-          <LlmTr key={row.id} selectable onClick={() => select(row)}>
-            <LlmTd>{row.name}</LlmTd>
-            <LlmTd>{row.status}</LlmTd>
-          </LlmTr>
-        ))}
-        <div llmTableEmpty>No results found</div>
-      </LlmTbody>
-    </LlmTable>
-
-  Vue:
-    <LlmTable variant="striped">
-      <LlmThead>
-        <LlmTr>
-          <LlmTh :sortable="true" :sorted="sortDir" @sort-change="onSort">Name</LlmTh>
-          <LlmTh>Status</LlmTh>
-        </LlmTr>
-      </LlmThead>
-      <LlmTbody :empty="rows.length === 0" :col-span="2">
-        <LlmTr v-for="row in rows" :key="row.id" selectable @click="select(row)">
-          <LlmTd>{{ row.name }}</LlmTd>
-          <LlmTd>{{ row.status }}</LlmTd>
-        </LlmTr>
-        <template #empty>No results found</template>
-      </LlmTbody>
-    </LlmTable>
 
 ---
 

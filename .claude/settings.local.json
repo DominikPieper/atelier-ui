@@ -155,7 +155,14 @@
       "Bash(find /Users/dominikpieper/Projects/angular-llm-components/libs -type d \\\\\\(-name *nav* -o -name *header* -o -name *layout* \\\\\\))",
       "Bash(find /Users/dominikpieper/Projects/angular-llm-components/apps -type f -name *.json -o -name *.ts -o -name *.tsx)",
       "Bash(xargs -I{} basename {} .tsx)",
-      "Bash(nx run *)"
+      "Bash(nx run *)",
+      "Bash(xargs -I {} basename {})",
+      "Bash(wc -l /Users/dominikpieper/Projects/angular-llm-components/docs/app/routes/*.tsx)",
+      "mcp__Astro_docs__search_astro_docs",
+      "Bash(nx serve *)",
+      "Bash(echo \"Server starting in background, PID: $!\")",
+      "Bash(echo \"PID: $!\")",
+      "Bash(npx astro *)"
     ]
   },
   "enableAllProjectMcpServers": true,

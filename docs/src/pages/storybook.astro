@@ -1,0 +1,160 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const SITE_URL = 'https://atelier.pieper.io';
+
+const MCP_CONFIG = `{
+  "mcpServers": {
+    "storybook-react": {
+      "type": "http",
+      "url": "${SITE_URL}/storybook-react/mcp"
+    },
+    "storybook-angular": {
+      "type": "http",
+      "url": "${SITE_URL}/storybook-angular/mcp"
+    },
+    "storybook-vue": {
+      "type": "http",
+      "url": "${SITE_URL}/storybook-vue/mcp"
+    }
+  }
+}`;
+
+const STORYBOOK_LINKS = [
+  { name: 'React', pkg: '@atelier-ui/react', href: `${SITE_URL}/storybook-react/`, color: '#61dafb' },
+  { name: 'Angular', pkg: '@atelier-ui/angular', href: `${SITE_URL}/storybook-angular/`, color: '#e23237' },
+  { name: 'Vue', pkg: '@atelier-ui/vue', href: `${SITE_URL}/storybook-vue/`, color: '#42b883' },
+];
+---
+
+<BaseLayout title="Storybook" currentPath="/storybook">
+  <div class="docs-inline-page">
+    <div style="margin-bottom: 2.5rem">
+      <h1 class="docs-page-title" style="background: linear-gradient(135deg, var(--ui-color-primary) 0%, var(--docs-secondary, #89ceff) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; margin: 0 0 0.6rem">
+        Storybook
+      </h1>
+      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 520px; line-height: 1.65">
+        Interactive component explorers for Angular, React, and Vue. Browse stories, inspect props, and test accessibility in isolation.
+      </p>
+    </div>
+
+    <!-- Framework cards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.85rem; margin-bottom: 3rem">
+      {STORYBOOK_LINKS.map(({ name, pkg, href, color }) => (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={`display: flex; flex-direction: column; gap: 0.5rem; padding: 1.1rem 1.1rem 0.9rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); text-decoration: none; border-left: 3px solid ${color}; transition: background 0.12s`}
+          class="storybook-card"
+        >
+          <div style="display: flex; align-items: center; gap: 0.5rem">
+            <span style={`font-weight: 700; font-size: 0.95rem; color: ${color}`}>{name}</span>
+          </div>
+          <span style="font-family: monospace; font-size: 0.72rem; color: var(--ui-color-text-muted)">{pkg}</span>
+          <span style={`font-size: 0.75rem; color: ${color}; font-weight: 600; letter-spacing: 0.01em; margin-top: 0.1rem`}>Open →</span>
+        </a>
+      ))}
+    </div>
+
+    <!-- MCP section -->
+    <div>
+      <h2 style="font-size: 0.95rem; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 0.5rem; color: var(--ui-color-text)">MCP Server</h2>
+      <p style="margin: 0 0 1.75rem; font-size: 0.85rem; color: var(--ui-color-text-muted); line-height: 1.65">
+        All three Storybook instances expose a hosted MCP endpoint so AI coding assistants can read component documentation directly — no local setup required.
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 1.75rem">
+        <!-- Step 01 -->
+        <div style="display: flex; gap: 0.85rem; align-items: flex-start">
+          <span class="step-badge">01</span>
+          <div style="flex: 1">
+            <h3 style="margin: 0 0 0.4rem; font-size: 0.9rem; font-weight: 700; color: var(--ui-color-text)">Add the MCP server to your project</h3>
+            <p style="margin: 0 0 0.75rem; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
+              In your AI assistant's MCP configuration (e.g. <code>.claude/settings.json</code> for Claude Code) add one or more servers:
+            </p>
+            <div class="docs-code-block">
+              <div class="docs-code-block-header"><span class="docs-code-block-lang">json</span></div>
+              <pre><code>{MCP_CONFIG}</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 02 -->
+        <div style="display: flex; gap: 0.85rem; align-items: flex-start">
+          <span class="step-badge">02</span>
+          <div style="flex: 1">
+            <h3 style="margin: 0 0 0.4rem; font-size: 0.9rem; font-weight: 700; color: var(--ui-color-text)">Use it in your prompts</h3>
+            <p style="margin: 0 0 0.75rem; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
+              Once connected, your AI assistant can look up component props, variants, and usage examples directly from Storybook:
+            </p>
+            <div class="docs-code-block">
+              <div class="docs-code-block-header"><span class="docs-code-block-lang">text</span></div>
+              <pre><code>Build a settings page using @atelier-ui/react components.
+Use the storybook-react MCP to check available props.</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 03 -->
+        <div style="display: flex; gap: 0.85rem; align-items: flex-start">
+          <span class="step-badge">03</span>
+          <div style="flex: 1">
+            <h3 style="margin: 0 0 0.4rem; font-size: 0.9rem; font-weight: 700; color: var(--ui-color-text)">Framework Parity</h3>
+            <p style="margin: 0 0 0.75rem; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
+              All frameworks support prop documentation and component search. Story previews and Vitest integration are currently React and Vue only.
+            </p>
+            <table class="docs-props-table">
+              <thead>
+                <tr><th>Feature</th><th>React</th><th>Vue</th><th>Angular</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Prop Documentation</td><td>✅ Full</td><td>✅ Full</td><td>✅ Full</td></tr>
+                <tr><td>Component Search</td><td>✅ Full</td><td>✅ Full</td><td>✅ Full</td></tr>
+                <tr><td>Story Previews</td><td>✅ Full</td><td>✅ Full</td><td>⏳ Limited</td></tr>
+                <tr><td>Vitest Integration</td><td>✅ Full</td><td>✅ Full</td><td>⏳ Planned</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Step 04 -->
+        <div style="display: flex; gap: 0.85rem; align-items: flex-start">
+          <span class="step-badge">04</span>
+          <div style="flex: 1">
+            <h3 style="margin: 0 0 0.4rem; font-size: 0.9rem; font-weight: 700; color: var(--ui-color-text)">Endpoints</h3>
+            <table class="docs-props-table" style="margin-top: 0.25rem">
+              <thead>
+                <tr><th>Library</th><th>URL</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>@atelier-ui/react</code></td><td><code>{SITE_URL}/storybook-react/mcp</code></td></tr>
+                <tr><td><code>@atelier-ui/angular</code></td><td><code>{SITE_URL}/storybook-angular/mcp</code></td></tr>
+                <tr><td><code>@atelier-ui/vue</code></td><td><code>{SITE_URL}/storybook-vue/mcp</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .step-badge {
+    font-family: monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--ui-color-primary);
+    background: rgba(68, 218, 218, 0.1);
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .storybook-card:hover {
+    background: var(--ui-color-surface-raised) !important;
+    filter: brightness(1.05);
+  }
+</style>
