@@ -1,5 +1,5 @@
 [build]
-  command = "npx nx run docs:prerender && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/react/.storybook --output-dir dist/docs/storybook-react && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/angular/.storybook --output-dir dist/docs/storybook-angular && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/vue/.storybook --output-dir dist/docs/storybook-vue"
+  command = "npx nx run docs:build && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/react/.storybook --output-dir dist/docs/storybook-react && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/angular/.storybook --output-dir dist/docs/storybook-angular && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/vue/.storybook --output-dir dist/docs/storybook-vue"
   publish = "dist/docs"
 
 [functions]
@@ -37,9 +37,3 @@
   from = "/storybook-vue"
   to = "/storybook-vue/"
   status = 301
-
-# Docs SPA fallback — must come last
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
