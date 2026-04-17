@@ -2,7 +2,7 @@
 /**
  * check-docs-sync.js
  *
- * Validates that docs/app/component-data.ts is in sync with the spec interfaces
+ * Validates that docs/src/data/components.ts is in sync with the spec interfaces
  * in libs/spec/src/index.ts.
  *
  * Checks:
@@ -22,7 +22,7 @@ const ts = require('typescript');
 
 const ROOT = path.resolve(__dirname, '../..');
 const SPEC_FILE = path.join(ROOT, 'libs/spec/src/index.ts');
-const DOCS_FILE = path.join(ROOT, 'docs/app/component-data.ts');
+const DOCS_FILE = path.join(ROOT, 'docs/src/data/components.ts');
 
 /**
  * Maps spec interface names to their docs component key.
@@ -243,7 +243,7 @@ for (const key of Object.keys(docsMap)) {
 if (errors.length > 0) {
   errors.forEach((e) => console.error(`✗ ${e}`));
   console.error(
-    `\n${errors.length} issue(s) found. Update docs/app/component-data.ts to fix.`
+    `\n${errors.length} issue(s) found. Update docs/src/data/components.ts to fix.`
   );
   process.exit(1);
 } else {
