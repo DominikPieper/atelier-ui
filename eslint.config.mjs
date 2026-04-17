@@ -33,6 +33,10 @@ export default [{
             sourceTag: 'framework:vue',
             onlyDependOnLibsWithTags: ['framework:vue', 'type:spec'],
           },
+          {
+            sourceTag: 'type:docs',
+            onlyDependOnLibsWithTags: ['framework:angular', 'framework:react', 'framework:vue', 'type:spec'],
+          },
         ],
       },
     ],
