@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { Code } from 'astro-expressive-code/components';
 const SITE_URL = 'https://atelier.pieper.io';
 
 const MCP_CONFIG = `{
@@ -72,10 +73,7 @@ const STORYBOOK_LINKS = [
             <p style="margin: 0 0 0.75rem; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
               In your AI assistant's MCP configuration (e.g. <code>.claude/settings.json</code> for Claude Code) add one or more servers:
             </p>
-            <div class="docs-code-block">
-              <div class="docs-code-block-header"><span class="docs-code-block-lang">json</span></div>
-              <pre><code>{MCP_CONFIG}</code></pre>
-            </div>
+            <Code code={MCP_CONFIG} lang="json" />
           </div>
         </div>
 
@@ -87,11 +85,7 @@ const STORYBOOK_LINKS = [
             <p style="margin: 0 0 0.75rem; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
               Once connected, your AI assistant can look up component props, variants, and usage examples directly from Storybook:
             </p>
-            <div class="docs-code-block">
-              <div class="docs-code-block-header"><span class="docs-code-block-lang">text</span></div>
-              <pre><code>Build a settings page using @atelier-ui/react components.
-Use the storybook-react MCP to check available props.</code></pre>
-            </div>
+            <Code code={`Build a settings page using @atelier-ui/react components.\nUse the storybook-react MCP to check available props.`} lang="text" />
           </div>
         </div>
 

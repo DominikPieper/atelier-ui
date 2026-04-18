@@ -2,6 +2,12 @@
   command = "npx nx run docs:build && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/react/.storybook --output-dir dist/docs/storybook-react && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/angular/.storybook --output-dir dist/docs/storybook-angular && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/vue/.storybook --output-dir dist/docs/storybook-vue"
   publish = "dist/docs"
 
+# RFC 8288 Link headers for agent discovery
+[[headers]]
+  for = "/"
+  [headers.values]
+    Link = '''</llms.txt>; rel="describedby", </llms-full.txt>; rel="service-doc"'''
+
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"

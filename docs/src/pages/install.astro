@@ -1,8 +1,164 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import InstallTabs from '../components/InstallTabs';
+import { Code } from 'astro-expressive-code/components';
+
+const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
+const PKG_MANAGERS = ['npm', 'pnpm', 'yarn'] as const;
+
+const INSTALL_CMD: Record<string, Record<string, string>> = {
+  Angular: {
+    npm:  'npm install @atelier-ui/angular',
+    pnpm: 'pnpm add @atelier-ui/angular',
+    yarn: 'yarn add @atelier-ui/angular',
+  },
+  React: {
+    npm:  'npm install @atelier-ui/react',
+    pnpm: 'pnpm add @atelier-ui/react',
+    yarn: 'yarn add @atelier-ui/react',
+  },
+  Vue: {
+    npm:  'npm install @atelier-ui/vue',
+    pnpm: 'pnpm add @atelier-ui/vue',
+    yarn: 'yarn add @atelier-ui/vue',
+  },
+};
+
+const TOKEN_IMPORT: Record<string, string> = {
+  Angular: "@import '@atelier-ui/angular/styles/tokens.css';",
+  React:   "@import '@atelier-ui/react/styles/tokens.css';",
+  Vue:     "@import '@atelier-ui/vue/styles/tokens.css';",
+};
+
+const COMPONENT_IMPORT: Record<string, string> = {
+  Angular: `import {\n  LlmButton, LlmCard, LlmInput, LlmTextarea,\n  LlmCheckbox, LlmToggle, LlmBadge, LlmAlert,\n  LlmSelect, LlmOption, LlmDialog, LlmTabGroup,\n  LlmTab, LlmAccordionGroup, LlmMenu, LlmMenuItem,\n  LlmTooltip, LlmToast, LlmSkeleton, LlmAvatar\n} from '@atelier-ui/angular';`,
+  React:   `import {\n  LlmButton, LlmCard, LlmInput, LlmTextarea,\n  LlmCheckbox, LlmToggle, LlmBadge, LlmAlert,\n  LlmSelect, LlmOption, LlmDialog, LlmTabGroup,\n  LlmTab, LlmAccordionGroup, LlmMenu, LlmMenuItem,\n  LlmTooltip, LlmToastProvider, useLlmToast,\n  LlmSkeleton, LlmAvatar, LlmAvatarGroup\n} from '@atelier-ui/react';`,
+  Vue:     `import {\n  LlmButton, LlmCard, LlmInput, LlmTextarea,\n  LlmCheckbox, LlmToggle, LlmBadge, LlmAlert,\n  LlmSelect, LlmOption, LlmDialog, LlmTabGroup,\n  LlmTab, LlmAccordionGroup, LlmMenu, LlmMenuItem,\n  LlmTooltip, LlmSkeleton, LlmAvatar, LlmAvatarGroup\n} from '@atelier-ui/vue';`,
+};
 ---
 
 <BaseLayout title="Installation" currentPath="/install">
-  <InstallTabs client:load />
+  <div class="docs-inline-page">
+
+    <!-- Framework selector -->
+    <div class="docs-multi-code-tabs" style="border-radius: 8px; margin-bottom: 2rem; width: fit-content">
+      {FRAMEWORKS.map((fw, i) => (
+        <button class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`} data-fw-btn={fw}>{fw}</button>
+      ))}
+    </div>
+
+    <!-- Step 1: Install -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">1. Install the package</h2>
+      <div class="docs-multi-code-tabs" style="border-radius: 8px 8px 0 0; margin-bottom: 0">
+        {PKG_MANAGERS.map((pm, i) => (
+          <button class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`} data-pm-btn={pm}>{pm}</button>
+        ))}
+      </div>
+      {FRAMEWORKS.map((fw) =>
+        PKG_MANAGERS.map((pm, pi) => (
+          <div data-install={`${fw}-${pm}`} hidden={fw !== 'Angular' || pi !== 0}>
+            <Code code={INSTALL_CMD[fw][pm]} lang="shell" />
+          </div>
+        ))
+      )}
+    </div>
+
+    <!-- Step 2: Tokens -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">2. Import design tokens</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1rem">
+        Add the token stylesheet to your global styles file:
+      </p>
+      {FRAMEWORKS.map((fw, i) => (
+        <div data-fw-panel={fw} hidden={i !== 0}>
+          <Code code={TOKEN_IMPORT[fw]} lang="css" />
+        </div>
+      ))}
+      <div style="padding: 1rem 1.25rem; background: var(--ui-color-primary-light); border: 1px solid color-mix(in srgb, var(--ui-color-primary) 20%, transparent); border-radius: var(--ui-radius-md); margin-top: 1rem">
+        <p style="margin: 0 0 0.3rem; font-size: 0.82rem; font-weight: 700; color: var(--ui-color-text)">CSS Variables</p>
+        <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
+          Atelier UI uses CSS custom properties for all design tokens, enabling dynamic
+          theme switching between light and dark mode with zero JavaScript.
+        </p>
+      </div>
+    </div>
+
+    <!-- Step 3: Components -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">3. Import components</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1rem">
+        Import only the components you need — all are tree-shakeable:
+      </p>
+      {FRAMEWORKS.map((fw, i) => (
+        <div data-fw-panel={fw} hidden={i !== 0}>
+          <Code code={COMPONENT_IMPORT[fw]} lang="ts" />
+        </div>
+      ))}
+    </div>
+
+    <!-- What's included -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">What's included</h2>
+      <ul class="docs-checklist">
+        <li>25+ components with identical APIs across Angular, React, and Vue</li>
+        <li>CSS custom property token system — no runtime dependency</li>
+        <li>Dark and light mode built in</li>
+        <li>WCAG AA accessible defaults</li>
+        <li>LLM-optimized flat APIs — no deep nesting</li>
+        <li>MCP server for AI-assisted component discovery</li>
+      </ul>
+    </div>
+
+    <!-- Next steps -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 2.5rem">
+      {[
+        { to: '/workshop', label: 'Next', title: 'Workshop Setup', icon: '⚙' },
+        { to: '/components', label: 'Browse', title: 'Components', icon: '🧩' },
+        { to: '/design-principles', label: 'Read', title: 'LLM-Optimized APIs', icon: '🧠' },
+      ].map(({ to, label, title, icon }) => (
+        <a href={to} style="display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 1rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); text-decoration: none; color: inherit; border: 1px solid var(--ui-color-border)">
+          <span style="font-size: 1.25rem; flex-shrink: 0">{icon}</span>
+          <div>
+            <div style="font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ui-color-text-muted); margin-bottom: 0.15rem">{label}</div>
+            <div style="font-size: 0.88rem; font-weight: 700; color: var(--ui-color-text)">{title}</div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+  </div>
 </BaseLayout>
+
+<script>
+  function initInstallTabs() {
+    let activeFw = 'Angular';
+    let activePm = 'npm';
+
+    function update() {
+      document.querySelectorAll<HTMLElement>('[data-install]').forEach(el => {
+        el.hidden = el.dataset.install !== `${activeFw}-${activePm}`;
+      });
+      document.querySelectorAll<HTMLElement>('[data-fw-panel]').forEach(el => {
+        el.hidden = el.dataset.fwPanel !== activeFw;
+      });
+    }
+
+    document.querySelectorAll<HTMLButtonElement>('[data-fw-btn]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeFw = btn.dataset.fwBtn ?? activeFw;
+        document.querySelectorAll('[data-fw-btn]').forEach(b => b.classList.toggle('active', b === btn));
+        update();
+      });
+    });
+
+    document.querySelectorAll<HTMLButtonElement>('[data-pm-btn]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        activePm = btn.dataset.pmBtn ?? activePm;
+        document.querySelectorAll('[data-pm-btn]').forEach(b => b.classList.toggle('active', b === btn));
+        update();
+      });
+    });
+  }
+  document.addEventListener('astro:page-load', initInstallTabs);
+  initInstallTabs();
+</script>

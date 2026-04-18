@@ -71,6 +71,47 @@ describe('preset generator', () => {
     expect(settings.mcpServers['nx-mcp'].command).toBe('npx');
   });
 
+  it('nx-mcp args invoke nx mcp', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
+
+    const settings = readJson(tree, '.mcp.json');
+    expect(settings.mcpServers['nx-mcp'].args).toEqual(['nx', 'mcp']);
+  });
+
+  it('writes .mcp.json with react MCP only for react framework', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'react' });
+
+    const settings = readJson(tree, '.mcp.json');
+    expect(settings.mcpServers['storybook-react']).toBeDefined();
+    expect(settings.mcpServers['storybook-angular']).toBeUndefined();
+    expect(settings.mcpServers['storybook-vue']).toBeUndefined();
+  });
+
+  it('writes .mcp.json with vue MCP only for vue framework', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'vue' });
+
+    const settings = readJson(tree, '.mcp.json');
+    expect(settings.mcpServers['storybook-vue']).toBeDefined();
+    expect(settings.mcpServers['storybook-angular']).toBeUndefined();
+    expect(settings.mcpServers['storybook-react']).toBeUndefined();
+  });
+
+  it('storybook MCP URLs reference the correct framework path', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular,react,vue' });
+
+    const settings = readJson(tree, '.mcp.json');
+    expect(settings.mcpServers['storybook-angular'].url).toContain('storybook-angular/mcp');
+    expect(settings.mcpServers['storybook-react'].url).toContain('storybook-react/mcp');
+    expect(settings.mcpServers['storybook-vue'].url).toContain('storybook-vue/mcp');
+  });
+
+  it('multi-framework .mcp.json always includes nx-mcp', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'react,vue' });
+
+    const settings = readJson(tree, '.mcp.json');
+    expect(settings.mcpServers['nx-mcp']).toBeDefined();
+  });
+
   // ─── README ────────────────────────────────────────────────────────────────
 
   it('writes README.md', async () => {

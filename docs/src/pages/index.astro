@@ -2,6 +2,110 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
+<style>
+  .workflow-diagram {
+    display: flex;
+    align-items: stretch;
+    margin-bottom: 2.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    gap: 0;
+  }
+
+  .workflow-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.25rem 1rem;
+    background: var(--ui-color-surface-raised);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-lg);
+    gap: 0.5rem;
+    min-width: 120px;
+    flex: 1;
+  }
+
+  .workflow-node--highlight {
+    border-color: var(--ui-color-primary);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--ui-color-primary) 25%, transparent),
+                0 4px 20px color-mix(in srgb, var(--ui-color-primary) 12%, transparent);
+  }
+
+  .workflow-node-icon {
+    font-size: 1.5rem;
+    color: var(--ui-color-primary);
+    line-height: 1;
+    font-variation-settings: 'FILL' 1;
+  }
+
+  .workflow-node-title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--ui-color-text);
+    white-space: nowrap;
+  }
+
+  .workflow-node-desc {
+    font-size: 0.72rem;
+    color: var(--ui-color-text-muted);
+    line-height: 1.4;
+  }
+
+  .workflow-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    padding: 0 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .workflow-connector-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ui-color-text-muted);
+  }
+
+  .workflow-connector-arrow {
+    color: var(--ui-color-border-hover);
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+
+  @media (max-width: 640px) {
+    .workflow-diagram {
+      flex-direction: column;
+      align-items: stretch;
+      overflow-x: visible;
+    }
+
+    .workflow-node {
+      flex-direction: row;
+      text-align: left;
+      gap: 0.75rem;
+      min-width: unset;
+    }
+
+    .workflow-node-icon {
+      flex-shrink: 0;
+    }
+
+    .workflow-connector {
+      flex-direction: row;
+      padding: 0.25rem 0;
+      justify-content: center;
+    }
+
+    .workflow-connector-arrow {
+      transform: rotate(90deg);
+    }
+  }
+</style>
+
 <BaseLayout currentPath="/">
   <!-- Hero -->
   <section class="docs-hero-v2">
@@ -10,108 +114,106 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <div class="docs-hero-glow-2"></div>
 
     <div class="docs-hero-eyebrow">
-      <span>⚡</span> LLM-Optimized Component Library
+      <span>✦</span> AI Workshop for Component-Driven UIs
     </div>
 
     <h1 class="docs-hero-wordmark">ATELIER</h1>
 
     <p class="docs-hero-subtitle">
-      The ultimate developer atelier for constructing high-precision interfaces.
-      Identical APIs across Angular, React, and Vue — designed for AI-assisted development.
+      Build UIs with AI, Storybook, and Figma.
+      Design in Figma. Explore in Storybook. Ship with AI.
     </p>
 
     <div class="docs-hero-actions">
       <a href="/workshop" class="docs-btn docs-btn-primary">
-        Launch Workshop →
+        Start the Workshop →
       </a>
-      <a href="/components" class="docs-btn docs-btn-outline">
-        Browse Components
+      <a href="/figma" class="docs-btn docs-btn-outline">
+        View Figma File
       </a>
     </div>
   </section>
 
-  <!-- Framework Strip -->
-  <div class="docs-home-section-heading">Frameworks</div>
-  <div class="docs-framework-strip">
-    <a href="/components" class="docs-framework-card" style="--fw-color: #dd0031">
-      <div class="docs-framework-card-top">
-        <div class="docs-framework-card-dot" style="background: #dd0031"></div>
-        <span class="docs-framework-card-label">Framework_01</span>
-      </div>
-      <h3 class="docs-framework-card-title">Angular Atelier</h3>
-      <div class="docs-framework-card-code">&lt;LlmButton variant="primary"<br />&nbsp;&nbsp;[disabled]="isLoading()"&gt;<br />&nbsp;&nbsp;Submit<br />&lt;/LlmButton&gt;</div>
-      <span class="docs-framework-card-cta" style="color: #dd0031">Initialize Package →</span>
-    </a>
+  <!-- Workflow section -->
+  <div class="docs-home-section-heading">Workflow</div>
 
-    <a href="/components" class="docs-framework-card" style="--fw-color: #61dafb">
-      <div class="docs-framework-card-top">
-        <div class="docs-framework-card-dot" style="background: #61dafb"></div>
-        <span class="docs-framework-card-label">Framework_02</span>
-      </div>
-      <h3 class="docs-framework-card-title">React Atelier</h3>
-      <div class="docs-framework-card-code">&lt;LlmButton variant="primary"<br />&nbsp;&nbsp;loading={"{isLoading}"}&gt;<br />&nbsp;&nbsp;Submit<br />&lt;/LlmButton&gt;</div>
-      <span class="docs-framework-card-cta" style="color: #61dafb">Initialize Package →</span>
-    </a>
-
-    <a href="/components" class="docs-framework-card" style="--fw-color: #42b883">
-      <div class="docs-framework-card-top">
-        <div class="docs-framework-card-dot" style="background: #42b883"></div>
-        <span class="docs-framework-card-label">Framework_03</span>
-      </div>
-      <h3 class="docs-framework-card-title">Vue Canvas</h3>
-      <div class="docs-framework-card-code">&lt;LlmButton variant="primary"<br />&nbsp;&nbsp;:loading="isLoading"&gt;<br />&nbsp;&nbsp;Submit<br />&lt;/LlmButton&gt;</div>
-      <span class="docs-framework-card-cta" style="color: #42b883">Initialize Package →</span>
-    </a>
-  </div>
-
-  <!-- Stats ribbon -->
-  <div class="docs-stats-ribbon">
-    <div class="docs-stat-item">
-      <span class="docs-stat-num">3</span>
-      <span class="docs-stat-lbl">Frameworks</span>
+  <div class="workflow-diagram">
+    <div class="workflow-node">
+      <span class="workflow-node-icon material-symbols-outlined">palette</span>
+      <div class="workflow-node-title">Figma</div>
+      <div class="workflow-node-desc">Design tokens<br/>Component frames</div>
     </div>
-    <div class="docs-stat-item">
-      <span class="docs-stat-num">25+</span>
-      <span class="docs-stat-lbl">Components</span>
+    <div class="workflow-connector">
+      <span class="workflow-connector-label">inspect</span>
+      <span class="workflow-connector-arrow">→</span>
     </div>
-    <div class="docs-stat-item">
-      <span class="docs-stat-num">5</span>
-      <span class="docs-stat-lbl">MCP Tools</span>
+    <div class="workflow-node">
+      <span class="workflow-node-icon material-symbols-outlined">book</span>
+      <div class="workflow-node-title">Storybook</div>
+      <div class="workflow-node-desc">Props &amp; stories<br/>via MCP</div>
     </div>
-    <div class="docs-stat-item">
-      <span class="docs-stat-num">0</span>
-      <span class="docs-stat-lbl">Runtime Deps</span>
+    <div class="workflow-connector">
+      <span class="workflow-connector-label">prompt</span>
+      <span class="workflow-connector-arrow">→</span>
+    </div>
+    <div class="workflow-node workflow-node--highlight">
+      <span class="workflow-node-icon material-symbols-outlined">smart_toy</span>
+      <div class="workflow-node-title">AI · Claude</div>
+      <div class="workflow-node-desc">Reads both sources<br/>Writes code</div>
+    </div>
+    <div class="workflow-connector">
+      <span class="workflow-connector-label">ships</span>
+      <span class="workflow-connector-arrow">→</span>
+    </div>
+    <div class="workflow-node">
+      <span class="workflow-node-icon material-symbols-outlined">check_circle</span>
+      <div class="workflow-node-title">Component</div>
+      <div class="workflow-node-desc">Design-accurate<br/>Dark mode ready</div>
     </div>
   </div>
 
-  <!-- LLM-Optimized feature section -->
-  <div class="docs-home-section-heading">Built for AI</div>
   <div class="docs-feature-grid">
     <div class="docs-feature-card">
       <span class="docs-feature-card-num">01</span>
-      <h3 class="docs-feature-card-title">Predictable API Surface</h3>
+      <h3 class="docs-feature-card-title">Design in Figma</h3>
       <p class="docs-feature-card-desc">
-        Same prop names across every component. <code>variant</code>, <code>size</code>, <code>disabled</code> — learn once, use everywhere.
+        Figma is the single source of truth. Design tokens, component frames, and spacing — all defined here before code is written.
       </p>
-      <div class="docs-feature-card-code">&lt;LlmButton variant="primary" /&gt;<br />&lt;LlmBadge variant="success" /&gt;<br />&lt;LlmAlert variant="warning" /&gt;</div>
+      <a href="/figma" class="docs-btn docs-btn-outline" style="margin-top: auto; width: fit-content; font-size: 0.8rem; padding: 0.35rem 0.75rem">Explore Figma →</a>
     </div>
 
     <div class="docs-feature-card">
       <span class="docs-feature-card-num">02</span>
-      <h3 class="docs-feature-card-title">Signal-Based Reactivity</h3>
+      <h3 class="docs-feature-card-title">Explore in Storybook</h3>
       <p class="docs-feature-card-desc">
-        Angular 21+ signals as the single reactivity model. No decorator chaos, no observable wrapping.
+        Storybook is the live component library. Browse props, test states, and reference stories — AI reads it directly via MCP.
       </p>
-      <div class="docs-feature-card-code">const count = signal(0);<br /><br />// Directly in template:<br />&lt;LlmButton [disabled]="count() === 0"&gt;</div>
+      <a href="/storybook" class="docs-btn docs-btn-outline" style="margin-top: auto; width: fit-content; font-size: 0.8rem; padding: 0.35rem 0.75rem">Open Storybook →</a>
     </div>
 
     <div class="docs-feature-card">
       <span class="docs-feature-card-num">03</span>
-      <h3 class="docs-feature-card-title">Self-Describing Types</h3>
+      <h3 class="docs-feature-card-title">Build with AI</h3>
       <p class="docs-feature-card-desc">
-        Narrow literal union types are the documentation. The model infers correct usage from the type alone.
+        Claude Code connects Figma specs to Storybook components. Reference a Figma frame, ask AI, get production-ready component code.
       </p>
-      <div class="docs-feature-card-code">variant: 'primary'<br />&nbsp;&nbsp;| 'secondary'<br />&nbsp;&nbsp;| 'outline'<br /><br />size: 'sm' | 'md' | 'lg'</div>
+      <a href="/mcp" class="docs-btn docs-btn-outline" style="margin-top: auto; width: fit-content; font-size: 0.8rem; padding: 0.35rem 0.75rem">AI Tools →</a>
+    </div>
+  </div>
+
+  <!-- 3-pillar ribbon -->
+  <div class="docs-stats-ribbon" style="grid-template-columns: repeat(3, 1fr)">
+    <div class="docs-stat-item">
+      <span class="docs-stat-num" style="font-size: 1.25rem">Figma</span>
+      <span class="docs-stat-lbl">Design Source of Truth</span>
+    </div>
+    <div class="docs-stat-item">
+      <span class="docs-stat-num" style="font-size: 1.25rem">Storybook</span>
+      <span class="docs-stat-lbl">Live Component Explorer</span>
+    </div>
+    <div class="docs-stat-item">
+      <span class="docs-stat-num" style="font-size: 1.25rem">AI · MCP</span>
+      <span class="docs-stat-lbl">Connects Design to Code</span>
     </div>
   </div>
 
@@ -161,43 +263,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   <!-- Quick nav grid -->
   <div class="docs-home-section-heading">Explore</div>
-  <div class="docs-quicknav">
-    <a href="/install" class="docs-quicknav-card">
-      <div class="docs-quicknav-icon">
-        <span class="material-symbols-outlined">download</span>
-      </div>
-      <div>
-        <div class="docs-quicknav-label">Reference</div>
-        <div class="docs-quicknav-title">Installation</div>
-      </div>
-    </a>
-    <a href="/components" class="docs-quicknav-card">
-      <div class="docs-quicknav-icon">
-        <span class="material-symbols-outlined">widgets</span>
-      </div>
-      <div>
-        <div class="docs-quicknav-label">Browse</div>
-        <div class="docs-quicknav-title">Components</div>
-      </div>
-    </a>
-    <a href="/patterns" class="docs-quicknav-card">
-      <div class="docs-quicknav-icon">
-        <span class="material-symbols-outlined">menu_book</span>
-      </div>
-      <div>
-        <div class="docs-quicknav-label">Cookbook</div>
-        <div class="docs-quicknav-title">Patterns</div>
-      </div>
-    </a>
-    <a href="/mcp" class="docs-quicknav-card">
-      <div class="docs-quicknav-icon">
-        <span class="material-symbols-outlined">smart_toy</span>
-      </div>
-      <div>
-        <div class="docs-quicknav-label">AI Protocol</div>
-        <div class="docs-quicknav-title">MCP Explorer</div>
-      </div>
-    </a>
+  <div class="docs-quicknav" style="grid-template-columns: repeat(4, 1fr)">
     <a href="/workshop" class="docs-quicknav-card">
       <div class="docs-quicknav-icon">
         <span class="material-symbols-outlined">build_circle</span>
@@ -207,13 +273,31 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <div class="docs-quicknav-title">Workshop</div>
       </div>
     </a>
-    <a href="/design-principles" class="docs-quicknav-card">
+    <a href="/storybook" class="docs-quicknav-card">
       <div class="docs-quicknav-icon">
-        <span class="material-symbols-outlined">psychology</span>
+        <span class="material-symbols-outlined">book</span>
       </div>
       <div>
-        <div class="docs-quicknav-label">Read</div>
-        <div class="docs-quicknav-title">LLM Design</div>
+        <div class="docs-quicknav-label">Live Components</div>
+        <div class="docs-quicknav-title">Storybook</div>
+      </div>
+    </a>
+    <a href="/figma" class="docs-quicknav-card">
+      <div class="docs-quicknav-icon">
+        <span class="material-symbols-outlined">palette</span>
+      </div>
+      <div>
+        <div class="docs-quicknav-label">Design Tokens</div>
+        <div class="docs-quicknav-title">Figma</div>
+      </div>
+    </a>
+    <a href="/mcp" class="docs-quicknav-card">
+      <div class="docs-quicknav-icon">
+        <span class="material-symbols-outlined">smart_toy</span>
+      </div>
+      <div>
+        <div class="docs-quicknav-label">AI Protocol</div>
+        <div class="docs-quicknav-title">MCP Explorer</div>
       </div>
     </a>
   </div>

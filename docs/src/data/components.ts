@@ -39,6 +39,8 @@ export const CATEGORY_ICONS: Record<string, string> = {
 
 export const SECTION_ICONS: Record<string, string> = {
   'Get Started': '🚀',
+  'Workflow': '🔄',
+  'Reference': '📖',
   Tools: '🛠️',
   'The Library': '📚',
   Overview: '🏠',

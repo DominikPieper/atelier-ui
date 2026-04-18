@@ -18,7 +18,9 @@ const pageTitle = title !== 'Atelier UI' ? `${title} — Atelier UI` : 'Atelier 
 const isComponents = currentPath.startsWith('/components');
 const isMcp = currentPath === '/mcp';
 const isWorkshop = currentPath === '/workshop';
-const isDocs = !isComponents && !isMcp && !isWorkshop;
+const isStorybook = currentPath === '/storybook';
+const isFigma = currentPath === '/figma';
+const isDocs = !isComponents && !isMcp && !isWorkshop && !isStorybook && !isFigma;
 
 function isActive(path: string): boolean {
   if (path === '/') return currentPath === '/';
@@ -26,10 +28,10 @@ function isActive(path: string): boolean {
 }
 
 function isTopActive(path: string): boolean {
-  if (path === '/') return isDocs;
-  if (path === '/components') return isComponents;
-  if (path === '/mcp') return isMcp;
   if (path === '/workshop') return isWorkshop;
+  if (path === '/storybook') return isStorybook;
+  if (path === '/figma') return isFigma;
+  if (path === '/mcp') return isMcp;
   return false;
 }
 ---
@@ -40,9 +42,9 @@ function isTopActive(path: string): boolean {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{pageTitle}</title>
-  <meta name="description" content="LLM-optimized component library for Angular, React, and Vue." />
+  <meta name="description" content="Build UIs with AI, Storybook, and Figma — the Atelier workshop." />
   <meta property="og:title" content={pageTitle} />
-  <meta property="og:description" content="26 accessible components with identical APIs across Angular, React, and Vue. Designed for AI-assisted development." />
+  <meta property="og:description" content="AI-assisted UI development with Figma as design source of truth and Storybook as your live component explorer." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content={`https://atelier.pieper.io${currentPath}`} />
   <meta property="og:image" content="https://atelier.pieper.io/logo.png" />
@@ -86,10 +88,10 @@ function isTopActive(path: string): boolean {
       <div class="docs-topbar-sep"></div>
 
       <nav class="docs-topbar-links">
-        <a href="/" class={`docs-topbar-link${isTopActive('/') ? ' active' : ''}`}>Docs</a>
-        <a href="/components" class={`docs-topbar-link${isTopActive('/components') ? ' active' : ''}`}>Components</a>
-        <a href="/mcp" class={`docs-topbar-link${isTopActive('/mcp') ? ' active' : ''}`}>MCP Explorer</a>
-        <a href="/workshop" class={`docs-topbar-link${isTopActive('/workshop') ? ' active' : ''}`}>Workshop</a>
+        <a href="/workshop"  class={`docs-topbar-link${isTopActive('/workshop') ? ' active' : ''}`}>Workshop</a>
+        <a href="/storybook" class={`docs-topbar-link${isTopActive('/storybook') ? ' active' : ''}`}>Storybook</a>
+        <a href="/figma"     class={`docs-topbar-link${isTopActive('/figma') ? ' active' : ''}`}>Figma</a>
+        <a href="/mcp"       class={`docs-topbar-link${isTopActive('/mcp') ? ' active' : ''}`}>MCP Explorer</a>
       </nav>
 
       <Search client:load />
@@ -146,31 +148,35 @@ function isTopActive(path: string): boolean {
 
           <div class="docs-nav-section">
             <div class="docs-nav-heading">
-              <span class="docs-nav-heading-icon">{SECTION_ICONS['Tools']}</span>
-              Tools
+              <span class="docs-nav-heading-icon">{SECTION_ICONS['Workflow']}</span>
+              Workflow
             </div>
-            <a href="/mcp" class={`docs-nav-link${isActive('/mcp') ? ' active' : ''}`}>
-              <span class="docs-nav-link-icon material-symbols-outlined">smart_toy</span>
-              MCP Playground
+            <a href="/figma" class={`docs-nav-link${isActive('/figma') ? ' active' : ''}`}>
+              <span class="docs-nav-link-icon material-symbols-outlined">palette</span>
+              Figma
             </a>
             <a href="/storybook" class={`docs-nav-link${isActive('/storybook') ? ' active' : ''}`}>
               <span class="docs-nav-link-icon material-symbols-outlined">book</span>
               Storybook
             </a>
+            <a href="/mcp" class={`docs-nav-link${isActive('/mcp') ? ' active' : ''}`}>
+              <span class="docs-nav-link-icon material-symbols-outlined">smart_toy</span>
+              AI Tools
+            </a>
           </div>
 
           <div class="docs-nav-section">
             <div class="docs-nav-heading">
-              <span class="docs-nav-heading-icon">{SECTION_ICONS['The Library']}</span>
-              The Library
+              <span class="docs-nav-heading-icon">{SECTION_ICONS['Reference']}</span>
+              Reference
             </div>
+            <a href="/components" class={`docs-nav-link${isActive('/components') ? ' active' : ''}`}>
+              <span class="docs-nav-link-icon material-symbols-outlined">widgets</span>
+              Components
+            </a>
             <a href="/install" class={`docs-nav-link${isActive('/install') ? ' active' : ''}`}>
               <span class="docs-nav-link-icon material-symbols-outlined">download</span>
               Installation
-            </a>
-            <a href="/design-principles" class={`docs-nav-link${isActive('/design-principles') ? ' active' : ''}`}>
-              <span class="docs-nav-link-icon material-symbols-outlined">psychology</span>
-              LLM-Optimized APIs
             </a>
             <a href="/patterns" class={`docs-nav-link${isActive('/patterns') ? ' active' : ''}`}>
               <span class="docs-nav-link-icon material-symbols-outlined">menu_book</span>
@@ -238,21 +244,21 @@ function isTopActive(path: string): boolean {
 
     <!-- Bottom Nav (mobile) -->
     <nav class="docs-bottom-nav">
-      <a href="/" class={`docs-bottom-nav-item${isDocs ? ' active' : ''}`}>
-        <span class="docs-bottom-nav-icon material-symbols-outlined">menu_book</span>
-        <span class="docs-bottom-nav-label">Guide</span>
-      </a>
-      <a href="/components" class={`docs-bottom-nav-item${isComponents ? ' active' : ''}`}>
-        <span class="docs-bottom-nav-icon material-symbols-outlined">widgets</span>
-        <span class="docs-bottom-nav-label">Components</span>
-      </a>
-      <a href="/mcp" class={`docs-bottom-nav-item${isMcp ? ' active' : ''}`}>
-        <span class="docs-bottom-nav-icon material-symbols-outlined">smart_toy</span>
-        <span class="docs-bottom-nav-label">MCP</span>
-      </a>
-      <a href="/workshop" class={`docs-bottom-nav-item${isWorkshop ? ' active' : ''}`}>
+      <a href="/workshop"  class={`docs-bottom-nav-item${isWorkshop ? ' active' : ''}`}>
         <span class="docs-bottom-nav-icon material-symbols-outlined">build_circle</span>
         <span class="docs-bottom-nav-label">Workshop</span>
+      </a>
+      <a href="/storybook" class={`docs-bottom-nav-item${isStorybook ? ' active' : ''}`}>
+        <span class="docs-bottom-nav-icon material-symbols-outlined">book</span>
+        <span class="docs-bottom-nav-label">Storybook</span>
+      </a>
+      <a href="/figma"     class={`docs-bottom-nav-item${isFigma ? ' active' : ''}`}>
+        <span class="docs-bottom-nav-icon material-symbols-outlined">palette</span>
+        <span class="docs-bottom-nav-label">Figma</span>
+      </a>
+      <a href="/mcp"       class={`docs-bottom-nav-item${isMcp ? ' active' : ''}`}>
+        <span class="docs-bottom-nav-icon material-symbols-outlined">smart_toy</span>
+        <span class="docs-bottom-nav-label">MCP</span>
       </a>
     </nav>
   </div>

@@ -1,8 +1,269 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import WorkshopTabs from '../components/WorkshopTabs';
+import { Code } from 'astro-expressive-code/components';
+
+const SITE_URL = 'https://atelier.pieper.io';
+
+const SERVE_CMD = {
+  Angular: 'npx nx serve workshop-angular',
+  React: 'npx nx serve workshop-react',
+  Vue: 'npx nx serve workshop-vue',
+};
+
+const MCP_CONFIG = `{
+  "mcpServers": {
+    "nx-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["nx", "mcp"]
+    },
+    "storybook-angular": {
+      "type": "http",
+      "url": "${SITE_URL}/storybook-angular/mcp"
+    },
+    "storybook-react": {
+      "type": "http",
+      "url": "${SITE_URL}/storybook-react/mcp"
+    },
+    "storybook-vue": {
+      "type": "http",
+      "url": "${SITE_URL}/storybook-vue/mcp"
+    }
+  }
+}`;
 ---
 
 <BaseLayout title="Workshop Setup" currentPath="/workshop">
-  <WorkshopTabs client:load />
+  <div class="docs-inline-page">
+
+    <div style="margin-bottom: 2.5rem">
+      <h1 style="font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin: 0 0 0.6rem; background: linear-gradient(135deg, var(--ui-color-primary) 0%, var(--docs-secondary, #89ceff) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text">
+        Workshop Setup
+      </h1>
+      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 520px; line-height: 1.65">
+        Spin up a fully-configured Atelier UI workspace in one command — framework selection,
+        library install, and MCP server wired up automatically.
+      </p>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 1.75rem; margin-bottom: 2.5rem">
+
+      <!-- Step 01 -->
+      <div class="step-row">
+        <span class="step-badge">01</span>
+        <div>
+          <h3 class="step-title">Run the workspace generator</h3>
+          <p class="step-desc">Run the following command, then follow the prompts to choose your workspace name and frameworks:</p>
+          <Code code="npx create-atelier-ui-workspace" lang="shell" />
+          <Code code={`? Workspace name: › my-workshop\n? Which framework(s) do you want to use?\n  ◉ Angular\n  ◉ React\n  ◉ Vue`} lang="text" />
+          <p class="step-desc" style="margin-top: 0.75rem">Or pass the name directly to skip the first prompt:</p>
+          <Code code="npx create-atelier-ui-workspace my-workshop" lang="shell" />
+        </div>
+      </div>
+
+      <!-- Step 02 -->
+      <div class="step-row">
+        <span class="step-badge">02</span>
+        <div>
+          <h3 class="step-title">Install dependencies</h3>
+          <p class="step-desc">Navigate into your workspace and install npm dependencies:</p>
+          <Code code={`cd my-workshop\nnpm install`} lang="shell" />
+        </div>
+      </div>
+
+      <!-- Step 03 -->
+      <div class="step-row">
+        <span class="step-badge">03</span>
+        <div>
+          <h3 class="step-title">Serve your app</h3>
+          <p class="step-desc">Start the dev server for your chosen framework:</p>
+          <div class="docs-multi-code-tabs" style="border-radius: 8px 8px 0 0; margin-bottom: 0">
+            {Object.keys(SERVE_CMD).map((fw, i) => (
+              <button class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`} data-fw-btn={fw}>{fw}</button>
+            ))}
+          </div>
+          {Object.entries(SERVE_CMD).map(([fw, cmd], i) => (
+            <div data-fw-panel={fw} hidden={i !== 0}>
+              <Code code={cmd} lang="shell" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Step 04 -->
+      <div class="step-row">
+        <span class="step-badge">04</span>
+        <div>
+          <h3 class="step-title">Open in Claude Code</h3>
+          <p class="step-desc">
+            Open the workspace in VS Code or any editor with Claude Code. The MCP servers
+            connect automatically — your AI assistant can look up component props, variants,
+            and usage examples directly from Storybook without any extra setup.
+          </p>
+          <div style="padding: 1rem 1.25rem; background: var(--ui-color-primary-light); border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md)">
+            <p style="margin: 0 0 0.35rem; font-size: 0.82rem; font-weight: 700; color: var(--ui-color-text)">MCP auto-configuration</p>
+            <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
+              The generated <code>.claude/settings.json</code> wires up the Nx MCP and hosted
+              Storybook MCP servers for all selected frameworks automatically.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- What gets created -->
+    <div class="docs-section" style="margin-top: 2.5rem">
+      <h2 class="docs-section-title">What gets created</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem">
+        Based on your framework selection the preset scaffolds one app per framework,
+        installs the matching Atelier UI package, and pre-configures Claude Code's MCP servers.
+      </p>
+      <table class="docs-props-table" style="margin-bottom: 1.5rem">
+        <thead>
+          <tr><th>Framework</th><th>App</th><th>Package</th><th>MCP</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Angular</td><td><code>workshop-angular</code></td><td><code>@atelier-ui/angular</code></td><td><code>storybook-angular</code></td></tr>
+          <tr><td>React</td><td><code>workshop-react</code></td><td><code>@atelier-ui/react</code></td><td><code>storybook-react</code></td></tr>
+          <tr><td>Vue</td><td><code>workshop-vue</code></td><td><code>@atelier-ui/vue</code></td><td><code>storybook-vue</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MCP configuration -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">MCP configuration</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem">
+        The generated <code>.claude/settings.json</code> wires up the Nx MCP and hosted
+        Storybook MCP servers for each selected framework:
+      </p>
+      <Code code={MCP_CONFIG} lang="json" />
+    </div>
+
+    <!-- The Workflow -->
+    <div class="docs-section" style="margin-top: 2.5rem">
+      <h2 class="docs-section-title">The Workflow</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.75rem">
+        Once the workspace is running, this is how Figma, Storybook, and AI work together:
+      </p>
+      <div style="display: flex; flex-direction: column; gap: 1.75rem">
+
+        <div class="step-row">
+          <span class="step-badge">A</span>
+          <div>
+            <h3 class="step-title">Open Figma — find your component frame</h3>
+            <p class="step-desc">
+              The <a href="https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Components" target="_blank" rel="noopener noreferrer" style="color: var(--ui-color-primary)">Atelier Figma file</a> contains all component frames and design token variables. Find the section for the component you want to build and note the token names in the inspect panel.
+            </p>
+          </div>
+        </div>
+
+        <div class="step-row">
+          <span class="step-badge">B</span>
+          <div>
+            <h3 class="step-title">Reference design tokens in your prompt</h3>
+            <p class="step-desc">Include token names from Figma directly. AI will use the identical names in code:</p>
+            <Code code={`Build a settings card using LlmCard with variant="elevated".\nMatch the Figma spec: --ui-color-surface-raised background,\n--ui-spacing-6 padding, --ui-radius-lg border-radius.\nUse storybook-react MCP to check LlmCard props.`} lang="text" title="example prompt" />
+          </div>
+        </div>
+
+        <div class="step-row">
+          <span class="step-badge">C</span>
+          <div>
+            <h3 class="step-title">AI checks Storybook, writes component code</h3>
+            <p class="step-desc">
+              Claude Code reads the Storybook MCP for accurate prop names and usage examples, then generates code using the exact token values from Figma. The output is immediately usable — no prop guessing, no style overrides.
+            </p>
+          </div>
+        </div>
+
+        <div class="step-row">
+          <span class="step-badge">D</span>
+          <div>
+            <h3 class="step-title">Ship — the component matches the design</h3>
+            <p class="step-desc">
+              Because Figma variables and CSS custom properties share the same token names, there is no gap between what the designer specified and what ships. Light and dark mode work automatically.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bottom nav -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 2.5rem">
+      {[
+        { to: '/storybook', label: 'Next', title: 'Storybook', icon: '📖' },
+        { to: '/figma', label: 'Design', title: 'Figma File', icon: '🎨' },
+        { to: '/mcp', label: 'Tools', title: 'MCP Explorer', icon: '⬡' },
+      ].map(({ to, label, title, icon }) => (
+        <a href={to} style="display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 1rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); text-decoration: none; color: inherit; border: 1px solid var(--ui-color-border)">
+          <span style="font-size: 1.25rem; flex-shrink: 0">{icon}</span>
+          <div>
+            <div style="font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ui-color-text-muted); margin-bottom: 0.15rem">{label}</div>
+            <div style="font-size: 0.88rem; font-weight: 700; color: var(--ui-color-text)">{title}</div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+  </div>
 </BaseLayout>
+
+<style>
+  .step-badge {
+    font-family: monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--ui-color-primary);
+    background: rgba(68, 218, 218, 0.1);
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .step-row {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+  }
+
+  .step-title {
+    margin: 0 0 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--ui-color-text);
+  }
+
+  .step-desc {
+    margin: 0 0 0.75rem;
+    font-size: 0.82rem;
+    color: var(--ui-color-text-muted);
+    line-height: 1.6;
+  }
+
+  /* Remove bottom margin on last step-desc before a Code block */
+  .step-desc:last-child {
+    margin-bottom: 0;
+  }
+</style>
+
+<script>
+  function initWorkshopTabs() {
+    const buttons = document.querySelectorAll<HTMLButtonElement>('[data-fw-btn]');
+    const panels = document.querySelectorAll<HTMLElement>('[data-fw-panel]');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const fw = btn.dataset.fwBtn;
+        buttons.forEach(b => b.classList.toggle('active', b === btn));
+        panels.forEach(p => { p.hidden = p.dataset.fwPanel !== fw; });
+      });
+    });
+  }
+  document.addEventListener('astro:page-load', initWorkshopTabs);
+  initWorkshopTabs();
+</script>
