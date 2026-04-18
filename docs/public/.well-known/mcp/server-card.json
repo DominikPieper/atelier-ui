@@ -1,0 +1,15 @@
+{
+  "serverInfo": {
+    "name": "Atelier UI Storybook",
+    "version": "1.0.0",
+    "description": "Component documentation MCP servers for Angular, React, and Vue — props, usage examples, and story variants for 25+ UI components."
+  },
+  "transport": {
+    "endpoint": "https://atelier.pieper.io/storybook-react/mcp"
+  },
+  "capabilities": {
+    "tools": true,
+    "resources": false,
+    "prompts": false
+  }
+}
