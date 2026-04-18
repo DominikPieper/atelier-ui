@@ -8,6 +8,11 @@
   [headers.values]
     Link = '''</llms.txt>; rel="describedby", </llms-full.txt>; rel="service-doc"'''
 
+# Markdown for Agents — serve text/markdown when Accept: text/markdown is requested
+[[edge_functions]]
+  path = "/*"
+  function = "markdown-negotiation"
+
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
