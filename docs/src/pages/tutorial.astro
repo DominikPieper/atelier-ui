@@ -1,0 +1,316 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Code } from 'astro-expressive-code/components';
+
+const FRAMEWORKS = ['React', 'Angular', 'Vue'] as const;
+
+const EXAMPLE_PROMPT = `I've selected the "Settings / Card" frame in Figma.
+
+1. Use figma-console MCP (figma_get_component_for_development) to read
+   the component spec — I need the boundVariables and the visual reference.
+2. Use storybook-react MCP to look up LlmCard and LlmInput props.
+3. Generate the React component using:
+   - The Atelier UI components matched from Storybook
+   - The exact token names from boundVariables (they map 1-to-1 to CSS
+     custom properties — no conversion needed)`;
+
+const OUTPUT: Record<string, string> = {
+  React: `import { LlmCard, LlmInput, LlmButton } from '@atelier-ui/react';
+
+export function SettingsCard() {
+  return (
+    <LlmCard
+      variant="elevated"
+      style={{ padding: 'var(--ui-spacing-6)', display: 'flex', flexDirection: 'column', gap: 'var(--ui-spacing-4)' }}
+    >
+      <h2 style={{ fontSize: 'var(--ui-font-size-lg)', fontWeight: 600, color: 'var(--ui-color-text)', margin: 0 }}>
+        Account Settings
+      </h2>
+      <LlmInput label="Name" placeholder="Jane Smith" />
+      <LlmInput label="Email" type="email" placeholder="jane@example.com" />
+      <div>
+        <LlmButton variant="primary">Save Changes</LlmButton>
+      </div>
+    </LlmCard>
+  );
+}`,
+
+  Angular: `import { Component } from '@angular/core';
+import { LlmCard, LlmInput, LlmButton } from '@atelier-ui/angular';
+
+@Component({
+  selector: 'app-settings-card',
+  standalone: true,
+  imports: [LlmCard, LlmInput, LlmButton],
+  template: \`
+    <llm-card variant="elevated" style="padding: var(--ui-spacing-6); display: flex; flex-direction: column; gap: var(--ui-spacing-4)">
+      <h2 style="font-size: var(--ui-font-size-lg); font-weight: 600; color: var(--ui-color-text); margin: 0">
+        Account Settings
+      </h2>
+      <llm-input label="Name" placeholder="Jane Smith" />
+      <llm-input label="Email" type="email" placeholder="jane@example.com" />
+      <div>
+        <llm-button variant="primary">Save Changes</llm-button>
+      </div>
+    </llm-card>
+  \`,
+})
+export class SettingsCardComponent {}`,
+
+  Vue: `<script setup lang="ts">
+import { LlmCard, LlmInput, LlmButton } from '@atelier-ui/vue';
+</script>
+
+<template>
+  <LlmCard
+    variant="elevated"
+    style="padding: var(--ui-spacing-6); display: flex; flex-direction: column; gap: var(--ui-spacing-4)"
+  >
+    <h2 style="font-size: var(--ui-font-size-lg); font-weight: 600; color: var(--ui-color-text); margin: 0">
+      Account Settings
+    </h2>
+    <LlmInput label="Name" placeholder="Jane Smith" />
+    <LlmInput label="Email" type="email" placeholder="jane@example.com" />
+    <div>
+      <LlmButton variant="primary">Save Changes</LlmButton>
+    </div>
+  </LlmCard>
+</template>`,
+};
+
+const PARITY_PROMPT = `Run figma_check_design_parity on the settings card node
+against the component I just generated. Fix any discrepancies.`;
+
+const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns for a card frame:
+{
+  "name": "Settings / Card",
+  "boundVariables": {
+    "fills":         [{ "variable": "color/surface-raised" }],  // → --ui-color-surface-raised
+    "paddingTop":    { "variable": "spacing/6" },               // → --ui-spacing-6
+    "paddingLeft":   { "variable": "spacing/6" },               // → --ui-spacing-6
+    "itemSpacing":   { "variable": "spacing/4" },               // → --ui-spacing-4
+    "cornerRadius":  { "variable": "radius/lg" }                // → --ui-radius-lg
+  },
+  "image": "<2x rendered PNG — included automatically>"
+}`;
+---
+
+<BaseLayout title="Tutorial" currentPath="/tutorial">
+  <div class="docs-inline-page">
+
+    <div style="margin-bottom: 2.5rem">
+      <h1 style="font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin: 0 0 0.6rem; background: linear-gradient(135deg, var(--ui-color-primary) 0%, var(--docs-secondary, #89ceff) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text">
+        Tutorial
+      </h1>
+      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 520px; line-height: 1.65">
+        Use <strong style="color: var(--ui-color-text)">figma-console MCP</strong> to read a Figma component spec directly — design tokens included — then <strong style="color: var(--ui-color-text)">Storybook MCP</strong> to match Atelier UI components, and let Claude Code write token-exact code.
+      </p>
+    </div>
+
+    <!-- Why this is different -->
+    <div style="padding: 1rem 1.25rem; background: var(--ui-color-primary-light); border: 1px solid color-mix(in srgb, var(--ui-color-primary) 20%, transparent); border-radius: var(--ui-radius-md); margin-bottom: 2.5rem">
+      <p style="margin: 0 0 0.35rem; font-size: 0.82rem; font-weight: 700; color: var(--ui-color-text)">No manual token copying</p>
+      <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
+        The basic workshop workflow requires you to note token names from Figma's inspect panel. With the figma-console MCP, AI reads the component's <code>boundVariables</code> directly — every spacing, color, and radius value is already mapped to its CSS custom property name.
+      </p>
+    </div>
+
+    <!-- What figma-console MCP provides -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">What figma-console MCP provides</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
+        The key tool is <code>figma_get_component_for_development</code>. Given a node ID it returns:
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; margin-bottom: 1.25rem">
+        {[
+          { title: 'boundVariables', body: 'Each CSS property mapped to its Figma variable name — identical to the CSS custom property name in Atelier UI. No conversion needed.' },
+          { title: '2× rendered image', body: 'A screenshot of the component, included automatically. AI gets visual and structural context in a single call.' },
+          { title: 'Component tree', body: 'Full layout structure: padding, gap, constraints, text behaviour, and interaction states (reactions).' },
+        ].map(({ title, body }) => (
+          <div style="padding: 0.9rem 1rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); border: 1px solid var(--ui-color-border)">
+            <div style="font-family: monospace; font-size: 0.78rem; font-weight: 700; color: var(--ui-color-primary); margin-bottom: 0.35rem">{title}</div>
+            <div style="font-size: 0.78rem; color: var(--ui-color-text-muted); line-height: 1.6">{body}</div>
+          </div>
+        ))}
+      </div>
+      <Code code={BOUND_VARS_EXAMPLE} lang="js" title="figma_get_component_for_development — response shape" />
+    </div>
+
+    <!-- The workflow -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">The Workflow</h2>
+      <div style="display: flex; flex-direction: column; gap: 1.5rem">
+
+        <div class="step-row">
+          <span class="step-badge">A</span>
+          <div style="flex: 1">
+            <h3 class="step-title">Select the component in Figma</h3>
+            <p class="step-desc">Open the <a href="https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Components" target="_blank" rel="noopener noreferrer" style="color: var(--ui-color-primary)">Atelier Figma file</a> and click the frame you want to implement. Note the node ID from the URL or the inspect panel — you'll pass it to the MCP tool.</p>
+          </div>
+        </div>
+
+        <div class="step-row">
+          <span class="step-badge">B</span>
+          <div style="flex: 1">
+            <h3 class="step-title">AI reads the spec</h3>
+            <p class="step-desc">Claude Code calls <code>figma_get_component_for_development(nodeId)</code>. The response includes <code>boundVariables</code> listing every design token used in the frame, plus a rendered image for visual reference — no screenshots needed.</p>
+          </div>
+        </div>
+
+        <div class="step-row">
+          <span class="step-badge">C</span>
+          <div style="flex: 1">
+            <h3 class="step-title">AI matches to Atelier UI components</h3>
+            <p class="step-desc">Claude Code queries the Storybook MCP (<code>list-all-documentation</code> → <code>get-documentation</code>) for the matching component. It gets exact prop names and variants — no guessing.</p>
+          </div>
+        </div>
+
+        <div class="step-row">
+          <span class="step-badge">D</span>
+          <div style="flex: 1">
+            <h3 class="step-title">AI generates token-exact code</h3>
+            <p class="step-desc">With the Figma token names from <code>boundVariables</code> and the correct Atelier UI props from Storybook, the generated code uses the right component APIs and the exact CSS custom properties — no hardcoded values, no style overrides.</p>
+          </div>
+        </div>
+
+        <div class="step-row">
+          <span class="step-badge">E</span>
+          <div style="flex: 1">
+            <h3 class="step-title">Verify design parity (optional)</h3>
+            <p class="step-desc"><code>figma_check_design_parity</code> compares the generated code against the Figma spec and returns a parity score plus specific discrepancies. Pass the prompt below to close the loop.</p>
+            <Code code={PARITY_PROMPT} lang="text" title="parity check prompt" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Example prompt -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">Example Prompt</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1rem; font-size: 0.85rem">
+        A prompt that drives the full A–D workflow in one shot:
+      </p>
+      <Code code={EXAMPLE_PROMPT} lang="text" title="example prompt" />
+    </div>
+
+    <!-- Generated output -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">Generated Output</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
+        What Claude Code produces — using <code>LlmCard</code> and <code>LlmInput</code> from Atelier UI with tokens drawn directly from Figma <code>boundVariables</code>:
+      </p>
+      <div class="docs-multi-code-tabs" style="border-radius: 8px 8px 0 0; margin-bottom: 0; width: fit-content">
+        {FRAMEWORKS.map((fw, i) => (
+          <button class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`} data-fw-btn={fw}>{fw}</button>
+        ))}
+      </div>
+      {FRAMEWORKS.map((fw, i) => (
+        <div data-fw-panel={fw} hidden={i !== 0}>
+          <Code code={OUTPUT[fw]} lang={fw === 'Angular' ? 'ts' : 'tsx'} />
+        </div>
+      ))}
+    </div>
+
+    <!-- Tool reference -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">figma-console MCP — Tools Used</h2>
+      <table class="docs-props-table">
+        <thead>
+          <tr><th>Tool</th><th>When to use</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>figma_get_component_for_development</code></td>
+            <td>Main tool — reads component tree, boundVariables, and renders a 2× image. Use for any "build this component" task.</td>
+          </tr>
+          <tr>
+            <td><code>figma_get_component_for_development_deep</code></td>
+            <td>For complex, deeply nested components (depth &gt; 4) — resolves all boundVariables to actual token names.</td>
+          </tr>
+          <tr>
+            <td><code>figma_get_variables</code></td>
+            <td>Export all design tokens as CSS / Tailwind / TypeScript. Handles Light and Dark mode values.</td>
+          </tr>
+          <tr>
+            <td><code>figma_check_design_parity</code></td>
+            <td>Compare generated code against the Figma spec. Returns a parity score and actionable fix list.</td>
+          </tr>
+          <tr>
+            <td><code>figma_generate_component_doc</code></td>
+            <td>Generate structured component documentation (anatomy, tokens, variants) by merging Figma data with code-side info.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Bottom nav -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 2.5rem">
+      {[
+        { to: '/figma',    label: 'Design', title: 'Figma File',    icon: '🎨' },
+        { to: '/workshop', label: 'Setup',  title: 'Workshop',      icon: '⚙' },
+        { to: '/storybook',label: 'Explore',title: 'Storybook',     icon: '📖' },
+      ].map(({ to, label, title, icon }) => (
+        <a href={to} style="display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 1rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); text-decoration: none; color: inherit; border: 1px solid var(--ui-color-border)">
+          <span style="font-size: 1.25rem; flex-shrink: 0">{icon}</span>
+          <div>
+            <div style="font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ui-color-text-muted); margin-bottom: 0.15rem">{label}</div>
+            <div style="font-size: 0.88rem; font-weight: 700; color: var(--ui-color-text)">{title}</div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+  </div>
+</BaseLayout>
+
+<style>
+  .step-badge {
+    font-family: monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--ui-color-primary);
+    background: rgba(68, 218, 218, 0.1);
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .step-row {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+  }
+
+  .step-title {
+    margin: 0 0 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--ui-color-text);
+  }
+
+  .step-desc {
+    margin: 0 0 0.75rem;
+    font-size: 0.82rem;
+    color: var(--ui-color-text-muted);
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  function initTabs() {
+    const buttons = document.querySelectorAll<HTMLButtonElement>('[data-fw-btn]');
+    const panels  = document.querySelectorAll<HTMLElement>('[data-fw-panel]');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const fw = btn.dataset.fwBtn;
+        buttons.forEach(b => b.classList.toggle('active', b === btn));
+        panels.forEach(p => { p.hidden = p.dataset.fwPanel !== fw; });
+      });
+    });
+  }
+  document.addEventListener('astro:page-load', initTabs);
+  initTabs();
+</script>
