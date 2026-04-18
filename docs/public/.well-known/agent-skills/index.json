@@ -1,0 +1,26 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "storybook-angular",
+      "type": "skill-md",
+      "description": "Look up Atelier UI Angular component props, types, and usage examples via Storybook MCP",
+      "url": "https://atelier.pieper.io/.well-known/agent-skills/storybook-angular/SKILL.md",
+      "digest": "sha256:03a981848a66422ad210d4fb8795e6badc395a83f5d66796582ee810bfc68558"
+    },
+    {
+      "name": "storybook-react",
+      "type": "skill-md",
+      "description": "Look up Atelier UI React component props, types, and usage examples via Storybook MCP",
+      "url": "https://atelier.pieper.io/.well-known/agent-skills/storybook-react/SKILL.md",
+      "digest": "sha256:8975d4fa6795d38378102a7785135d83c6d56d179a3d3dc9cea18c593c147261"
+    },
+    {
+      "name": "storybook-vue",
+      "type": "skill-md",
+      "description": "Look up Atelier UI Vue component props, types, and usage examples via Storybook MCP",
+      "url": "https://atelier.pieper.io/.well-known/agent-skills/storybook-vue/SKILL.md",
+      "digest": "sha256:65064e24f114d473fc5cce431976ced038a3800dc6ca08da3eaf4a86eb7b5f58"
+    }
+  ]
+}
