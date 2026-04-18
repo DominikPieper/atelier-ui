@@ -2,3 +2,6 @@ User-agent: *
 Allow: /
 
 Sitemap: https://atelier.pieper.io/sitemap-index.xml
+
+# Content Signals — https://contentsignals.org/
+Content-Signal: ai-train=no, search=yes, ai-input=yes
