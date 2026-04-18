@@ -118,34 +118,50 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
     })
     .join('\n\n');
 
+  const mcpSection = frameworks
+    .map(
+      (f) =>
+        `### \`storybook-${f}\` MCP
+Before using any component:
+1. Call \`list-all-documentation\` to get valid component IDs
+2. Call \`get-documentation\` with the ID — never invent props
+3. Call \`get-documentation-for-story\` for a specific variant
+4. Do not use a component that is not in the docs`,
+    )
+    .join('\n\n');
+
   tree.write(
     'CLAUDE.md',
     `# Atelier UI Workshop
 
-This workspace contains Atelier UI component library apps for hands-on AI development training.
+This workspace uses Atelier UI for all UI components.
+Full API reference: ${SITE_URL}/llms-full.txt
 
-## MCP Tools — always use these before writing component code
+## MCP Servers
 
-The MCP servers are pre-configured in \`.mcp.json\` and connect automatically.
+The servers are pre-configured in \`.mcp.json\` and connect automatically.
 
-| Tool | When to call it |
-|---|---|
-| \`get_component_docs(component)\` | Before using any component — returns exact props, types, defaults |
-| \`list_components()\` | To see all 22 available components grouped by category |
-| \`search_components(query)\` | When you know the intent ("form input") but not the component name |
-| \`get_stories(component)\` | To see real usage examples and variants |
-| \`get_theming_guide()\` | Before customising colors, spacing, or dark mode |
-
-**Rule:** call the MCP server first, then write code. Never guess prop names.
+${mcpSection}
 
 ## Component Libraries
 
 ${frameworkSections}
 
-## Global styles
+## Design Tokens
 
-CSS design tokens are imported in each app's \`src/styles.css\`.
-All \`--ui-*\` custom properties are available globally (colors, spacing, radius, typography, shadows).
+All colors, spacing, and radii use CSS custom properties. Never use
+hardcoded hex values or pixel sizes — always reference a token.
+
+Key tokens:
+- Colors:   --ui-color-primary, --ui-color-text, --ui-color-surface-raised, --ui-color-border
+- Spacing:  --ui-spacing-4 (1rem), --ui-spacing-6 (1.5rem), --ui-spacing-8 (2rem)
+- Radius:   --ui-radius-sm (0.375rem), --ui-radius-md (0.5rem), --ui-radius-lg (0.75rem)
+
+## Rules
+- Prefer component props over custom CSS
+- When custom styling is needed, use --ui-color-* and --ui-spacing-* tokens
+- Do not install other UI component libraries alongside Atelier UI
+- Do not add inline hex colors or hardcoded spacing values
 
 ## Apps
 
@@ -153,8 +169,9 @@ ${frameworks.map((f) => `- \`workshop-${f}\` — run with \`npx nx serve worksho
 
 ## Reference
 
-- Component browser + exercises: ${SITE_URL}
+- Component browser + docs: ${SITE_URL}
 - MCP Playground (inspect tool responses): ${SITE_URL}/mcp
+- CLAUDE.md template: ${SITE_URL}/claude-md
 `,
   );
 

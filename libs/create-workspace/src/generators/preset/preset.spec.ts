@@ -175,15 +175,20 @@ describe('preset generator', () => {
     expect(tree.exists('CLAUDE.md')).toBe(true);
   });
 
-  it('CLAUDE.md includes all five MCP tools', async () => {
+  it('CLAUDE.md includes the three Storybook MCP tools', async () => {
     await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
-    expect(md).toContain('get_component_docs');
-    expect(md).toContain('list_components');
-    expect(md).toContain('search_components');
-    expect(md).toContain('get_stories');
-    expect(md).toContain('get_theming_guide');
+    expect(md).toContain('list-all-documentation');
+    expect(md).toContain('get-documentation');
+    expect(md).toContain('get-documentation-for-story');
+  });
+
+  it('CLAUDE.md references the correct MCP server name for the framework', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
+
+    const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+    expect(md).toContain('storybook-angular');
   });
 
   it('CLAUDE.md includes Angular-specific import pattern', async () => {
