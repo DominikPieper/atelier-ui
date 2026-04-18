@@ -1,0 +1,279 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Code } from 'astro-expressive-code/components';
+
+const SITE_URL = 'https://atelier.pieper.io';
+
+const FRAMEWORKS = ['React', 'Angular', 'Vue'] as const;
+
+const PKG: Record<string, string> = {
+  React:   '@atelier-ui/react',
+  Angular: '@atelier-ui/angular',
+  Vue:     '@atelier-ui/vue',
+};
+
+const MCP_NAME: Record<string, string> = {
+  React:   'storybook-react',
+  Angular: 'storybook-angular',
+  Vue:     'storybook-vue',
+};
+
+const IMPORT_EXAMPLE: Record<string, string> = {
+  React:   "import { LlmButton, LlmCard, LlmInput } from '@atelier-ui/react';",
+  Angular: "import { LlmButton, LlmCard, LlmInput } from '@atelier-ui/angular';",
+  Vue:     "import { LlmButton, LlmCard, LlmInput } from '@atelier-ui/vue';",
+};
+
+const TEMPLATE: Record<string, string> = {
+  React: `# UI Components — Atelier UI (React)
+
+This project uses Atelier UI for all UI components.
+Full API reference: ${SITE_URL}/llms-full.txt
+
+## Package
+\`${PKG.React}\`
+
+## MCP Server
+\`${MCP_NAME.React}\` is configured. Before using any component:
+1. Call \`list-all-documentation\` to get valid component IDs
+2. Call \`get-documentation\` with the ID — never invent props
+3. Do not use a component that is not in the docs
+
+## Component Imports
+\`\`\`tsx
+${IMPORT_EXAMPLE.React}
+\`\`\`
+
+## Design Tokens
+All colors, spacing, and radii use CSS custom properties. Never use
+hardcoded hex values or pixel sizes — always reference a token.
+
+Key tokens:
+- Colors:   --ui-color-primary, --ui-color-text, --ui-color-surface-raised, --ui-color-border
+- Spacing:  --ui-spacing-4 (1rem), --ui-spacing-6 (1.5rem), --ui-spacing-8 (2rem)
+- Radius:   --ui-radius-sm (0.375rem), --ui-radius-md (0.5rem), --ui-radius-lg (0.75rem)
+
+Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
+
+## Rules
+- Prefer component props over custom CSS
+- When custom styling is needed, use --ui-color-* and --ui-spacing-* tokens
+- Do not install other UI component libraries alongside Atelier UI
+- Do not add inline hex colors or hardcoded spacing values`,
+
+  Angular: `# UI Components — Atelier UI (Angular)
+
+This project uses Atelier UI for all UI components.
+Full API reference: ${SITE_URL}/llms-full.txt
+
+## Package
+\`${PKG.Angular}\`
+
+## MCP Server
+\`${MCP_NAME.Angular}\` is configured. Before using any component:
+1. Call \`list-all-documentation\` to get valid component IDs
+2. Call \`get-documentation\` with the ID — never invent props
+3. Do not use a component that is not in the docs
+
+## Component Imports
+\`\`\`ts
+${IMPORT_EXAMPLE.Angular}
+\`\`\`
+
+Angular components use the \`llm-*\` selector in templates:
+\`\`\`html
+<llm-button variant="primary" [loading]="isSaving">Save</llm-button>
+\`\`\`
+
+## Design Tokens
+All colors, spacing, and radii use CSS custom properties. Never use
+hardcoded hex values or pixel sizes — always reference a token.
+
+Key tokens:
+- Colors:   --ui-color-primary, --ui-color-text, --ui-color-surface-raised, --ui-color-border
+- Spacing:  --ui-spacing-4 (1rem), --ui-spacing-6 (1.5rem), --ui-spacing-8 (2rem)
+- Radius:   --ui-radius-sm (0.375rem), --ui-radius-md (0.5rem), --ui-radius-lg (0.75rem)
+
+Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
+
+## Rules
+- Prefer component props over custom CSS
+- When custom styling is needed, use --ui-color-* and --ui-spacing-* tokens
+- Do not install other UI component libraries alongside Atelier UI
+- Do not add inline hex colors or hardcoded spacing values`,
+
+  Vue: `# UI Components — Atelier UI (Vue)
+
+This project uses Atelier UI for all UI components.
+Full API reference: ${SITE_URL}/llms-full.txt
+
+## Package
+\`${PKG.Vue}\`
+
+## MCP Server
+\`${MCP_NAME.Vue}\` is configured. Before using any component:
+1. Call \`list-all-documentation\` to get valid component IDs
+2. Call \`get-documentation\` with the ID — never invent props
+3. Do not use a component that is not in the docs
+
+## Component Imports
+\`\`\`ts
+${IMPORT_EXAMPLE.Vue}
+\`\`\`
+
+## Design Tokens
+All colors, spacing, and radii use CSS custom properties. Never use
+hardcoded hex values or pixel sizes — always reference a token.
+
+Key tokens:
+- Colors:   --ui-color-primary, --ui-color-text, --ui-color-surface-raised, --ui-color-border
+- Spacing:  --ui-spacing-4 (1rem), --ui-spacing-6 (1.5rem), --ui-spacing-8 (2rem)
+- Radius:   --ui-radius-sm (0.375rem), --ui-radius-md (0.5rem), --ui-radius-lg (0.75rem)
+
+Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
+
+## Rules
+- Prefer component props over custom CSS
+- When custom styling is needed, use --ui-color-* and --ui-spacing-* tokens
+- Do not install other UI component libraries alongside Atelier UI
+- Do not add inline hex colors or hardcoded spacing values`,
+};
+---
+
+<BaseLayout title="CLAUDE.md Template" currentPath="/claude-md">
+  <div class="docs-inline-page">
+
+    <div style="margin-bottom: 2.5rem">
+      <h1 style="font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin: 0 0 0.6rem; background: linear-gradient(135deg, var(--ui-color-primary) 0%, var(--docs-secondary, #89ceff) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text">
+        CLAUDE.md Template
+      </h1>
+      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 520px; line-height: 1.65">
+        Drop this into your project root as <code>CLAUDE.md</code> to give Claude Code persistent context about Atelier UI — MCP servers, design tokens, and component conventions — so every session starts component-aware.
+      </p>
+    </div>
+
+    <!-- What is CLAUDE.md -->
+    <div style="padding: 1rem 1.25rem; background: var(--ui-color-primary-light); border: 1px solid color-mix(in srgb, var(--ui-color-primary) 20%, transparent); border-radius: var(--ui-radius-md); margin-bottom: 2rem">
+      <p style="margin: 0 0 0.3rem; font-size: 0.82rem; font-weight: 700; color: var(--ui-color-text)">What is CLAUDE.md?</p>
+      <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
+        <code>CLAUDE.md</code> is a project-level instructions file that Claude Code reads at the start of every session. It sets rules, conventions, and context so you never have to repeat "this project uses Atelier UI" in every prompt.
+      </p>
+    </div>
+
+    <!-- Framework selector -->
+    <div class="docs-multi-code-tabs" style="border-radius: 8px; margin-bottom: 1.5rem; width: fit-content">
+      {FRAMEWORKS.map((fw, i) => (
+        <button class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`} data-fw-btn={fw}>{fw}</button>
+      ))}
+    </div>
+
+    <!-- Templates -->
+    {FRAMEWORKS.map((fw, i) => (
+      <div data-fw-panel={fw} hidden={i !== 0}>
+        <Code code={TEMPLATE[fw]} lang="markdown" title="CLAUDE.md" />
+      </div>
+    ))}
+
+    <!-- How to use -->
+    <div class="docs-section" style="margin-top: 2.5rem">
+      <h2 class="docs-section-title">How to use it</h2>
+      <div style="display: flex; flex-direction: column; gap: 1.25rem">
+        <div class="step-row">
+          <span class="step-badge">01</span>
+          <div>
+            <h3 class="step-title">Copy the template above</h3>
+            <p class="step-desc">Choose your framework, then copy the CLAUDE.md content into a file at your project root.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <span class="step-badge">02</span>
+          <div>
+            <h3 class="step-title">Confirm MCP is configured</h3>
+            <p class="step-desc">
+              The template references the MCP server by name. Make sure the matching server is wired up in your
+              <code>.claude/settings.json</code> — the <a href="/workshop" style="color: var(--ui-color-primary)">Workshop Setup</a> does this automatically.
+            </p>
+          </div>
+        </div>
+        <div class="step-row">
+          <span class="step-badge">03</span>
+          <div>
+            <h3 class="step-title">Open the project in Claude Code</h3>
+            <p class="step-desc">
+              Claude Code picks up CLAUDE.md on session start. From here, every prompt has component awareness — no preamble needed.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom nav -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 2.5rem">
+      {[
+        { to: '/workshop', label: 'Setup',   title: 'Workshop',       icon: '⚙' },
+        { to: '/tokens',   label: 'Browse',  title: 'Design Tokens',  icon: '🎨' },
+        { to: '/prompts',  label: 'Use',     title: 'Prompt Templates', icon: '💬' },
+      ].map(({ to, label, title, icon }) => (
+        <a href={to} style="display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 1rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); text-decoration: none; color: inherit; border: 1px solid var(--ui-color-border)">
+          <span style="font-size: 1.25rem; flex-shrink: 0">{icon}</span>
+          <div>
+            <div style="font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ui-color-text-muted); margin-bottom: 0.15rem">{label}</div>
+            <div style="font-size: 0.88rem; font-weight: 700; color: var(--ui-color-text)">{title}</div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+  </div>
+</BaseLayout>
+
+<style>
+  .step-badge {
+    font-family: monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--ui-color-primary);
+    background: rgba(68, 218, 218, 0.1);
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .step-row {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+  }
+
+  .step-title {
+    margin: 0 0 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--ui-color-text);
+  }
+
+  .step-desc {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--ui-color-text-muted);
+    line-height: 1.6;
+  }
+</style>
+
+<script>
+  function initTabs() {
+    const buttons = document.querySelectorAll<HTMLButtonElement>('[data-fw-btn]');
+    const panels  = document.querySelectorAll<HTMLElement>('[data-fw-panel]');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const fw = btn.dataset.fwBtn;
+        buttons.forEach(b => b.classList.toggle('active', b === btn));
+        panels.forEach(p => { p.hidden = p.dataset.fwPanel !== fw; });
+      });
+    });
+  }
+  document.addEventListener('astro:page-load', initTabs);
+  initTabs();
+</script>

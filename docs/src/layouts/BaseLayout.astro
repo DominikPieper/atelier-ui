@@ -178,6 +178,10 @@ function isTopActive(path: string): boolean {
               <span class="docs-nav-link-icon material-symbols-outlined">download</span>
               Installation
             </a>
+            <a href="/tokens" class={`docs-nav-link${isActive('/tokens') ? ' active' : ''}`}>
+              <span class="docs-nav-link-icon material-symbols-outlined">palette</span>
+              Design Tokens
+            </a>
             <a href="/patterns" class={`docs-nav-link${isActive('/patterns') ? ' active' : ''}`}>
               <span class="docs-nav-link-icon material-symbols-outlined">menu_book</span>
               Cookbook Patterns
@@ -189,6 +193,10 @@ function isTopActive(path: string): boolean {
             <a href="/agent-skills" class={`docs-nav-link${isActive('/agent-skills') ? ' active' : ''}`}>
               <span class="docs-nav-link-icon material-symbols-outlined">robot_2</span>
               Agent Skills
+            </a>
+            <a href="/claude-md" class={`docs-nav-link${isActive('/claude-md') ? ' active' : ''}`}>
+              <span class="docs-nav-link-icon material-symbols-outlined">article</span>
+              CLAUDE.md
             </a>
             <a href="/prompts" class={`docs-nav-link${isActive('/prompts') ? ' active' : ''}`}>
               <span class="docs-nav-link-icon material-symbols-outlined">chat</span>
