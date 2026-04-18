@@ -1,0 +1,214 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Code } from 'astro-expressive-code/components';
+
+const SITE_URL = 'https://atelier.pieper.io';
+
+const LINK_HEADER = `Link: </llms.txt>; rel="describedby",\n      </llms-full.txt>; rel="service-doc",\n      </.well-known/api-catalog>; rel="api-catalog"`;
+
+const MARKDOWN_CURL = `curl -H "Accept: text/markdown" ${SITE_URL}/workshop`;
+
+const CONTENT_SIGNAL = `# Content Signals — https://contentsignals.org/\nContent-Signal: ai-train=no, search=yes, ai-input=yes`;
+
+const skills = [
+  {
+    n: '01',
+    name: 'storybook-angular',
+    label: 'Angular',
+    endpoint: `${SITE_URL}/storybook-angular/mcp`,
+    skill: `${SITE_URL}/.well-known/agent-skills/storybook-angular/SKILL.md`,
+  },
+  {
+    n: '02',
+    name: 'storybook-react',
+    label: 'React',
+    endpoint: `${SITE_URL}/storybook-react/mcp`,
+    skill: `${SITE_URL}/.well-known/agent-skills/storybook-react/SKILL.md`,
+  },
+  {
+    n: '03',
+    name: 'storybook-vue',
+    label: 'Vue',
+    endpoint: `${SITE_URL}/storybook-vue/mcp`,
+    skill: `${SITE_URL}/.well-known/agent-skills/storybook-vue/SKILL.md`,
+  },
+];
+---
+
+<BaseLayout title="Agent Skills" currentPath="/agent-skills">
+  <div class="docs-inline-page">
+
+    <div style="margin-bottom: 2.5rem">
+      <h1 style="font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin: 0 0 0.6rem; background: linear-gradient(135deg, var(--ui-color-primary) 0%, var(--docs-secondary, #89ceff) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text">
+        Agent Skills
+      </h1>
+      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 520px; line-height: 1.65">
+        Everything this site exposes so AI agents can discover, read, and interact with Atelier UI automatically.
+      </p>
+    </div>
+
+    <!-- Discovery endpoints quick-ref -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">Discovery Endpoints</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
+        All well-known and machine-readable files published at this domain:
+      </p>
+      <table class="docs-props-table">
+        <thead>
+          <tr><th>Path</th><th>Content-Type</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="/.well-known/api-catalog" style="color: var(--ui-color-primary); font-family: monospace; font-size: 0.82rem">/.well-known/api-catalog</a></td>
+            <td><code>application/linkset+json</code></td>
+            <td>RFC 9727 API catalog — lists MCP endpoints</td>
+          </tr>
+          <tr>
+            <td><a href="/.well-known/mcp/server-card.json" style="color: var(--ui-color-primary); font-family: monospace; font-size: 0.82rem">/.well-known/mcp/server-card.json</a></td>
+            <td><code>application/json</code></td>
+            <td>SEP-1649 MCP Server Card</td>
+          </tr>
+          <tr>
+            <td><a href="/.well-known/agent-skills/index.json" style="color: var(--ui-color-primary); font-family: monospace; font-size: 0.82rem">/.well-known/agent-skills/index.json</a></td>
+            <td><code>application/json</code></td>
+            <td>Agent Skills RFC v0.2.0 index</td>
+          </tr>
+          <tr>
+            <td><a href="/robots.txt" style="color: var(--ui-color-primary); font-family: monospace; font-size: 0.82rem">/robots.txt</a></td>
+            <td><code>text/plain</code></td>
+            <td>Content-Signal directives (ai-train, search, ai-input)</td>
+          </tr>
+          <tr>
+            <td><a href="/llms.txt" style="color: var(--ui-color-primary); font-family: monospace; font-size: 0.82rem">/llms.txt</a></td>
+            <td><code>text/plain</code></td>
+            <td>Short component API index (llms.txt standard)</td>
+          </tr>
+          <tr>
+            <td><a href="/llms-full.txt" style="color: var(--ui-color-primary); font-family: monospace; font-size: 0.82rem">/llms-full.txt</a></td>
+            <td><code>text/plain</code></td>
+            <td>Full component API reference with all props and examples</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- HTTP features -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">HTTP Agent Features</h2>
+      <div style="display: flex; flex-direction: column; gap: 1.75rem">
+
+        <div class="step-row">
+          <span class="step-badge">A</span>
+          <div style="flex: 1">
+            <h3 class="step-title">Link Headers (RFC 8288)</h3>
+            <p class="step-desc">
+              The homepage response includes a <code>Link</code> header advertising the component API reference, full docs, and the API catalog — so agents discover resources from the first HTTP response without crawling.
+            </p>
+            <Code code={LINK_HEADER} lang="http" />
+          </div>
+        </div>
+
+        <div class="step-row">
+          <span class="step-badge">B</span>
+          <div style="flex: 1">
+            <h3 class="step-title">Markdown for Agents</h3>
+            <p class="step-desc">
+              Any page can be requested as plain Markdown by sending <code>Accept: text/markdown</code>. The response will have <code>Content-Type: text/markdown</code> and an <code>x-markdown-tokens</code> count — no HTML parsing needed.
+            </p>
+            <Code code={MARKDOWN_CURL} lang="shell" />
+          </div>
+        </div>
+
+        <div class="step-row">
+          <span class="step-badge">C</span>
+          <div style="flex: 1">
+            <h3 class="step-title">Content Signals</h3>
+            <p class="step-desc">
+              <code>robots.txt</code> declares AI content usage preferences per the <a href="https://contentsignals.org/" target="_blank" rel="noopener noreferrer" style="color: var(--ui-color-primary)">Content Signals</a> draft standard: agents may use this content as inference input but not for model training.
+            </p>
+            <Code code={CONTENT_SIGNAL} lang="text" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MCP Skills -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">MCP Skills</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.75rem; font-size: 0.85rem">
+        Three Storybook MCP servers — one per framework — expose component documentation via the Model Context Protocol. Each skill is described in a SKILL.md file listed in the <a href="/.well-known/agent-skills/index.json" style="color: var(--ui-color-primary)">agent-skills index</a>.
+      </p>
+      <div style="display: flex; flex-direction: column; gap: 1.5rem">
+        {skills.map(({ n, name, label, endpoint, skill }) => (
+          <div class="step-row">
+            <span class="step-badge">{n}</span>
+            <div style="flex: 1">
+              <h3 class="step-title">{label} — <code style="font-size: 0.85em">{name}</code></h3>
+              <p class="step-desc" style="margin-bottom: 0.5rem">
+                MCP endpoint: <a href={endpoint} style="color: var(--ui-color-primary); font-family: monospace; font-size: 0.82rem">{endpoint}</a>
+              </p>
+              <p class="step-desc" style="margin-bottom: 0.75rem">
+                Available tools: <code>list-all-documentation</code>, <code>get-documentation</code>, <code>get-documentation-for-story</code>
+              </p>
+              <a href={skill} target="_blank" rel="noopener noreferrer" style="font-size: 0.75rem; font-family: monospace; color: var(--ui-color-text-muted); text-decoration: none; opacity: 0.7">{skill}</a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Bottom nav -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 2.5rem">
+      {[
+        { to: '/mcp',      label: 'Explore', title: 'MCP Explorer',  icon: '⬡' },
+        { to: '/llms',     label: 'Read',    title: 'llms.txt',      icon: '📄' },
+        { to: '/workshop', label: 'Start',   title: 'Workshop',      icon: '⚙' },
+      ].map(({ to, label, title, icon }) => (
+        <a href={to} style="display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 1rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); text-decoration: none; color: inherit; border: 1px solid var(--ui-color-border)">
+          <span style="font-size: 1.25rem; flex-shrink: 0">{icon}</span>
+          <div>
+            <div style="font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ui-color-text-muted); margin-bottom: 0.15rem">{label}</div>
+            <div style="font-size: 0.88rem; font-weight: 700; color: var(--ui-color-text)">{title}</div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+  </div>
+</BaseLayout>
+
+<style>
+  .step-badge {
+    font-family: monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--ui-color-primary);
+    background: rgba(68, 218, 218, 0.1);
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .step-row {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+  }
+
+  .step-title {
+    margin: 0 0 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--ui-color-text);
+  }
+
+  .step-desc {
+    margin: 0 0 0.75rem;
+    font-size: 0.82rem;
+    color: var(--ui-color-text-muted);
+    line-height: 1.6;
+  }
+</style>
