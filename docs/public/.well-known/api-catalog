@@ -1,0 +1,16 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://atelier.pieper.io/storybook-angular/mcp",
+      "service-doc": [{"href": "https://atelier.pieper.io/mcp"}]
+    },
+    {
+      "anchor": "https://atelier.pieper.io/storybook-react/mcp",
+      "service-doc": [{"href": "https://atelier.pieper.io/mcp"}]
+    },
+    {
+      "anchor": "https://atelier.pieper.io/storybook-vue/mcp",
+      "service-doc": [{"href": "https://atelier.pieper.io/mcp"}]
+    }
+  ]
+}

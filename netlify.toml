@@ -2,11 +2,18 @@
   command = "npx nx run docs:build && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/react/.storybook --output-dir dist/docs/storybook-react && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/angular/.storybook --output-dir dist/docs/storybook-angular && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/vue/.storybook --output-dir dist/docs/storybook-vue"
   publish = "dist/docs"
 
-# RFC 8288 Link headers for agent discovery
+# RFC 8288 Link headers for agent discovery (includes RFC 9727 api-catalog)
 [[headers]]
   for = "/"
   [headers.values]
-    Link = '''</llms.txt>; rel="describedby", </llms-full.txt>; rel="service-doc"'''
+    Link = '''</llms.txt>; rel="describedby", </llms-full.txt>; rel="service-doc", </.well-known/api-catalog>; rel="api-catalog"'''
+
+# RFC 9727 API catalog
+[[headers]]
+  for = "/.well-known/api-catalog"
+  [headers.values]
+    Content-Type = "application/linkset+json"
+    Access-Control-Allow-Origin = "*"
 
 # Markdown for Agents — serve text/markdown when Accept: text/markdown is requested
 [[edge_functions]]
