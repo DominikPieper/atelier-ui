@@ -1,0 +1,162 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Code } from 'astro-expressive-code/components';
+
+type Issue = {
+  id: string;
+  title: string;
+  symptom: string;
+  cause: string;
+  fix: string[];
+  codeFix?: string;
+  codeLang?: string;
+};
+
+const ISSUES: Issue[] = [
+  {
+    id: 'mcp-unreachable',
+    title: 'Storybook MCP server is unreachable',
+    symptom: 'Claude Code says "storybook-angular" (or react/vue) is disconnected, or no component docs are returned.',
+    cause: 'Your network blocks outbound HTTPS to atelier.pieper.io, or the server is temporarily down.',
+    fix: [
+      'Run `npm run preflight` — it pings each MCP endpoint and reports status codes.',
+      'Test manually with `curl -I https://atelier.pieper.io/storybook-angular/mcp`. You should see a 200 or 405.',
+      'If behind a corporate proxy, set `HTTPS_PROXY=http://your-proxy:port` before starting Claude Code.',
+    ],
+  },
+  {
+    id: 'mcp-not-loaded',
+    title: 'Claude Code does not pick up the MCP config',
+    symptom: 'The MCP servers are not listed in Claude Code, even though `.mcp.json` exists.',
+    cause: 'Claude Code was started before `.mcp.json` existed, or the workspace is opened above the project root.',
+    fix: [
+      'Close and reopen the project in Claude Code from the directory containing `.mcp.json`.',
+      'Check that `.mcp.json` is at the workspace root (not inside an app folder).',
+      'Run `claude doctor` to verify MCP discovery.',
+    ],
+  },
+  {
+    id: 'figma-403',
+    title: 'Figma returns 403 / invalid token',
+    symptom: 'figma-console MCP calls fail with "Forbidden" or "Invalid token".',
+    cause: '`FIGMA_ACCESS_TOKEN` is missing, expired, or does not have access to the target file.',
+    fix: [
+      'Verify the env var: `echo $FIGMA_ACCESS_TOKEN` (macOS/Linux) or `$env:FIGMA_ACCESS_TOKEN` (PowerShell).',
+      'Regenerate at https://www.figma.com/developers/api#access-tokens — scope: File content read.',
+      'Make sure you are a member of the Figma team that owns the file, or use the public workshop demo file.',
+    ],
+  },
+  {
+    id: 'node-too-old',
+    title: 'Node.js version too old',
+    symptom: '`npx create-atelier-ui-workspace` exits with `engines` or `Unsupported engine` errors.',
+    cause: 'Atelier UI requires Node 20.11+ for Angular 21 and Astro 5 support.',
+    fix: [
+      'Install `nvm` (https://github.com/nvm-sh/nvm) — then `nvm install 20 && nvm use 20`.',
+      'Verify with `node --version`. Must report v20.11.0 or newer.',
+      'Re-run `npm run preflight` to confirm.',
+    ],
+  },
+  {
+    id: 'npx-permission-denied',
+    title: 'Permission denied running `npx create-atelier-ui-workspace`',
+    symptom: '`EACCES` errors during install, or "command not found" for a freshly installed global.',
+    cause: 'npm is trying to write to a system-level directory that your user cannot access.',
+    fix: [
+      'Avoid `sudo npm install -g`. Instead, point npm at a user-owned prefix: see https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally.',
+      'Or use nvm — it installs Node + npm into your home directory by default.',
+      'On Windows, run the terminal as administrator for the first global install.',
+    ],
+  },
+  {
+    id: 'port-in-use',
+    title: 'Port 4200 / 6006 already in use',
+    symptom: '`EADDRINUSE` when running `nx serve` or `storybook`.',
+    cause: 'A previous dev server process is still running.',
+    fix: [
+      'macOS/Linux: `lsof -ti :4200 | xargs kill`.',
+      'Windows: `netstat -ano | findstr :4200` → then `taskkill /PID <pid> /F`.',
+      'Or run on a different port: `nx serve workshop-angular --port 4300`.',
+    ],
+  },
+  {
+    id: 'figma-token-missing-after-restart',
+    title: 'FIGMA_ACCESS_TOKEN vanishes after terminal restart',
+    symptom: '`echo $FIGMA_ACCESS_TOKEN` is empty in a new shell even though you set it yesterday.',
+    cause: '`export` only sets the variable for the current shell session — it does not persist.',
+    codeFix: `# macOS (zsh)\necho 'export FIGMA_ACCESS_TOKEN=figd_...' >> ~/.zshrc\nsource ~/.zshrc\n\n# Linux (bash)\necho 'export FIGMA_ACCESS_TOKEN=figd_...' >> ~/.bashrc\nsource ~/.bashrc`,
+    codeLang: 'shell',
+    fix: [
+      'Add the export line to your shell rc file (see snippet below).',
+      'Windows: use `[Environment]::SetEnvironmentVariable("FIGMA_ACCESS_TOKEN","figd_...","User")` once.',
+      'Codespaces: store it as a Codespaces secret in your GitHub settings.',
+    ],
+  },
+  {
+    id: 'windows-paths',
+    title: 'Windows-specific path / symlink errors',
+    symptom: '`EPERM`, symlink failures, or mysterious path-too-long errors during `npm install`.',
+    cause: 'Windows has stricter filesystem semantics than macOS/Linux — long paths and symlinks can fail.',
+    fix: [
+      'Enable long paths: `git config --system core.longpaths true` (admin PowerShell).',
+      'Prefer WSL2 for Node.js work — run everything inside a WSL2 Ubuntu shell.',
+      'If WSL is not an option, keep the workspace directory shallow (e.g. `C:\\dev\\my-workshop` instead of deeply nested).',
+    ],
+  },
+];
+---
+
+<BaseLayout title="Troubleshooting" currentPath="/troubleshooting">
+  <div class="docs-inline-page">
+
+    <div style="margin-bottom: 2rem">
+      <h1 style="font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin: 0 0 0.6rem; background: linear-gradient(135deg, var(--ui-color-primary) 0%, var(--docs-secondary, #89ceff) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text">
+        Troubleshooting
+      </h1>
+      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 640px; line-height: 1.65">
+        The most common issues when setting up the Atelier UI workshop — symptom, cause, and a fix in three steps or less.
+        Start with <code>npm run preflight</code>; it flags most of these automatically.
+      </p>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 1.5rem">
+      {ISSUES.map((issue) => (
+        <section id={issue.id} style="padding: 1.25rem 1.4rem; background: var(--ui-color-surface-raised); border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md)">
+          <h2 style="margin: 0 0 0.75rem; font-size: 1rem; font-weight: 700; color: var(--ui-color-text)">
+            {issue.title}
+          </h2>
+          <div style="display: grid; gap: 0.5rem; font-size: 0.85rem; line-height: 1.6">
+            <div>
+              <span style="font-size: 0.7rem; font-weight: 700; color: var(--ui-color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-right: 0.4rem">Symptom</span>
+              <span style="color: var(--ui-color-text)">{issue.symptom}</span>
+            </div>
+            <div>
+              <span style="font-size: 0.7rem; font-weight: 700; color: var(--ui-color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-right: 0.4rem">Cause</span>
+              <span style="color: var(--ui-color-text)">{issue.cause}</span>
+            </div>
+            <div>
+              <div style="font-size: 0.7rem; font-weight: 700; color: var(--ui-color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.4rem">Fix</div>
+              <ol style="margin: 0; padding-left: 1.2rem; color: var(--ui-color-text)">
+                {issue.fix.map((step) => (
+                  <li style="margin-bottom: 0.25rem">{step}</li>
+                ))}
+              </ol>
+            </div>
+            {issue.codeFix && (
+              <div style="margin-top: 0.5rem">
+                <Code code={issue.codeFix} lang={issue.codeLang ?? 'shell'} />
+              </div>
+            )}
+          </div>
+        </section>
+      ))}
+    </div>
+
+    <div style="margin-top: 2rem; padding: 1rem 1.25rem; background: var(--ui-color-primary-light); border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md)">
+      <p style="margin: 0; font-size: 0.85rem; color: var(--ui-color-text); line-height: 1.6">
+        Still stuck? Run <code>npm run preflight</code> and share its output — every line reports a specific fix.
+      </p>
+    </div>
+
+  </div>
+</BaseLayout>

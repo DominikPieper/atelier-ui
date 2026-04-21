@@ -10,6 +10,13 @@ const SERVE_CMD = {
   Vue: 'npx nx serve workshop-vue',
 };
 
+const PREREQ_CMD = {
+  macOS: `# 1. Node 20+ (use Homebrew or nvm)\nnode --version   # need v20.11 or newer\n\n# 2. Claude Code CLI\nnpm install -g @anthropic-ai/claude-code\nclaude --version\n\n# 3. Figma access token (or use the demo token)\nexport FIGMA_ACCESS_TOKEN=figd_...`,
+  Linux: `# 1. Node 20+ (nvm recommended)\nnode --version   # need v20.11 or newer\n\n# 2. Claude Code CLI\nnpm install -g @anthropic-ai/claude-code\nclaude --version\n\n# 3. Figma access token (or use the demo token)\nexport FIGMA_ACCESS_TOKEN=figd_...`,
+  Windows: `# Run in PowerShell (or use WSL for the macOS/Linux steps)\n\n# 1. Node 20+ (winget or nvm-windows)\nnode --version   # need v20.11 or newer\n\n# 2. Claude Code CLI\nnpm install -g @anthropic-ai/claude-code\nclaude --version\n\n# 3. Figma access token\n$env:FIGMA_ACCESS_TOKEN = "figd_..."`,
+  Codespaces: `# Everything is pre-installed.\n# 1. Fork this repo on GitHub\n# 2. Click "Code" → "Codespaces" → "Create codespace"\n# 3. Wait ~90s for postCreateCommand to finish\n# 4. Add FIGMA_ACCESS_TOKEN in\n#    Settings → Codespaces → Secrets`,
+};
+
 const MCP_CONFIG = `{
   "mcpServers": {
     "nx-mcp": {
@@ -46,6 +53,28 @@ const MCP_CONFIG = `{
       </p>
     </div>
 
+    <!-- Prerequisites -->
+    <div class="docs-section" style="margin-bottom: 2rem; padding: 1.25rem 1.4rem; background: var(--ui-color-surface-raised); border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md)">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.85rem">
+        <h2 class="docs-section-title" style="margin: 0; font-size: 1rem">Prerequisites</h2>
+        <a href="/troubleshooting" style="font-size: 0.78rem; color: var(--ui-color-primary); text-decoration: none">Troubleshooting →</a>
+      </div>
+      <p style="margin: 0 0 0.85rem; color: var(--ui-color-text-muted); font-size: 0.85rem; line-height: 1.55">
+        Pick your platform, run the commands below, then verify with <code>npm run preflight</code>
+        inside the scaffolded workspace. Need a Figma token? See <a href="/figma-token" style="color: var(--ui-color-primary)">/figma-token</a>.
+      </p>
+      <div class="docs-multi-code-tabs" style="border-radius: 8px 8px 0 0; margin-bottom: 0">
+        {Object.keys(PREREQ_CMD).map((platform, i) => (
+          <button class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`} data-plat-btn={platform}>{platform}</button>
+        ))}
+      </div>
+      {Object.entries(PREREQ_CMD).map(([platform, cmd], i) => (
+        <div data-plat-panel={platform} hidden={i !== 0}>
+          <Code code={cmd} lang="shell" />
+        </div>
+      ))}
+    </div>
+
     <div style="display: flex; flex-direction: column; gap: 1.75rem; margin-bottom: 2.5rem">
 
       <!-- Step 01 -->
@@ -65,9 +94,13 @@ const MCP_CONFIG = `{
       <div class="step-row">
         <span class="step-badge">02</span>
         <div>
-          <h3 class="step-title">Install dependencies</h3>
-          <p class="step-desc">Navigate into your workspace and install npm dependencies:</p>
-          <Code code={`cd my-workshop\nnpm install`} lang="shell" />
+          <h3 class="step-title">Install dependencies &amp; run preflight</h3>
+          <p class="step-desc">Navigate into your workspace, install deps, and verify your environment:</p>
+          <Code code={`cd my-workshop\nnpm install\nnpm run preflight`} lang="shell" />
+          <p class="step-desc" style="margin-top: 0.75rem">
+            <code>preflight</code> checks Node, Claude Code CLI, the Figma token, MCP reachability,
+            and port availability. If anything fails, each line prints a one-step fix.
+          </p>
         </div>
       </div>
 
@@ -253,14 +286,23 @@ const MCP_CONFIG = `{
 
 <script>
   function initWorkshopTabs() {
-    const buttons = document.querySelectorAll<HTMLButtonElement>('[data-fw-btn]');
-    const panels = document.querySelectorAll<HTMLElement>('[data-fw-panel]');
-
-    buttons.forEach(btn => {
+    const fwButtons = document.querySelectorAll<HTMLButtonElement>('[data-fw-btn]');
+    const fwPanels = document.querySelectorAll<HTMLElement>('[data-fw-panel]');
+    fwButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         const fw = btn.dataset.fwBtn;
-        buttons.forEach(b => b.classList.toggle('active', b === btn));
-        panels.forEach(p => { p.hidden = p.dataset.fwPanel !== fw; });
+        fwButtons.forEach(b => b.classList.toggle('active', b === btn));
+        fwPanels.forEach(p => { p.hidden = p.dataset.fwPanel !== fw; });
+      });
+    });
+
+    const platButtons = document.querySelectorAll<HTMLButtonElement>('[data-plat-btn]');
+    const platPanels = document.querySelectorAll<HTMLElement>('[data-plat-panel]');
+    platButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const plat = btn.dataset.platBtn;
+        platButtons.forEach(b => b.classList.toggle('active', b === btn));
+        platPanels.forEach(p => { p.hidden = p.dataset.platPanel !== plat; });
       });
     });
   }

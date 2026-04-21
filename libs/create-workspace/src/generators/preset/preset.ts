@@ -6,9 +6,16 @@ import {
   removeDependenciesFromPackageJson,
   runTasksInSerial,
   Tree,
+  updateJson,
   writeJson,
 } from '@nx/devkit';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { PresetGeneratorSchema } from './schema';
+
+function readTemplate(relativePath: string): string {
+  return readFileSync(join(__dirname, 'files', relativePath), 'utf-8');
+}
 
 const SITE_URL = 'https://atelier.pieper.io';
 
@@ -167,6 +174,17 @@ Key tokens:
 
 ${frameworks.map((f) => `- \`workshop-${f}\` — run with \`npx nx serve workshop-${f}\``).join('\n')}
 
+## Troubleshooting
+
+Run the preflight self-check to verify your environment:
+
+\`\`\`bash
+npm run preflight
+\`\`\`
+
+It checks Node, Claude CLI, \`FIGMA_ACCESS_TOKEN\`, MCP endpoint reachability, and port availability.
+Full troubleshooting guide: ${SITE_URL}/troubleshooting
+
 ## Reference
 
 - Component browser + docs: ${SITE_URL}
@@ -185,6 +203,20 @@ ${frameworks.map((f) => `- \`workshop-${f}\` — run with \`npx nx serve worksho
     ['@atelier-ui/create-workspace'],
     [],
   );
+
+  // Write preflight script + devcontainer into the scaffolded workspace
+  tree.write('tools/scripts/preflight.mjs', readTemplate('tools/scripts/preflight.mjs'));
+  tree.write('.devcontainer/devcontainer.json', readTemplate('.devcontainer/devcontainer.json'));
+  tree.write('.devcontainer/setup.sh', readTemplate('.devcontainer/setup.sh'));
+
+  // Add `preflight` npm script to the generated workspace's package.json
+  if (tree.exists('package.json')) {
+    updateJson(tree, 'package.json', (pkg) => {
+      pkg.scripts = pkg.scripts ?? {};
+      pkg.scripts.preflight = 'node tools/scripts/preflight.mjs';
+      return pkg;
+    });
+  }
 
   // Write .claude/settings.json with MCP servers for selected frameworks
   const mcpServers: Record<string, unknown> = {

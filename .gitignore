@@ -49,4 +49,8 @@ vitest.config.*.timestamp*
 
 storybook-static
 .claude/worktrees
+.claude/scheduled_tasks.lock
 .claude/settings.local.json.netlify/state.json
+
+# Astro build cache
+docs/.astro
