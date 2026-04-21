@@ -115,13 +115,16 @@ const FRAMEWORKS: Fw[] = ['react', 'angular', 'vue'];
 
     <div style="padding: 1rem 1.25rem; background: rgba(68,218,218,0.05); border: 1px solid rgba(68,218,218,0.1); border-radius: var(--ui-radius-md); margin-bottom: 2rem">
       <p style="margin: 0 0 0.5rem; font-size: 0.82rem; font-weight: 700; color: var(--ui-color-text)">How to use</p>
+      <p style="margin: 0 0 0.55rem; font-size: 0.78rem; color: var(--ui-color-text-muted); line-height: 1.55">
+        <strong style="color: var(--ui-color-text)">When you need this:</strong> use these prompts after the workshop, when you are starting fresh projects or working in an LLM client without MCP support. During the workshop itself you will mostly let Claude Code drive the Storybook MCP directly.
+      </p>
       <p style="margin: 0 0 0.65rem; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
         Each prompt fetches <code>llms-full.txt</code> first — the complete API reference. The LLM reads it before generating, so it uses the correct prop names and import paths without hallucinating.
       </p>
       <ol style="margin: 0; padding-left: 1.1rem; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.9">
         <li>Select your framework below.</li>
         <li>Click <strong style="color: var(--ui-color-text); font-family: monospace">copy prompt</strong> on any card.</li>
-        <li>Paste into your LLM of choice and send.</li>
+        <li>Paste into your LLM of choice (Claude, ChatGPT, Gemini, …) and send.</li>
       </ol>
     </div>
 

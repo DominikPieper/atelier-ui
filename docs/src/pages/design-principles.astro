@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Jargon from '../components/Jargon.astro';
 ---
 
 <BaseLayout title="LLM-Optimized APIs" currentPath="/design-principles">
@@ -133,9 +134,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         guess wrong. Atelier UI picks one and uses it everywhere.
       </p>
       <ul style="color: var(--ui-color-text-muted); padding-left: 1.5rem; display: flex; flex-direction: column; gap: 0.35rem; margin: 0.5rem 0 1rem">
-        <li><strong>Angular:</strong> Signals only — <code>input()</code>, <code>output()</code>, <code>model()</code>. No legacy <code>@Input</code>/<code>@Output</code> decorators.</li>
+        <li><strong>Angular:</strong> Signals only — <Jargon term="signal input"><code>input()</code></Jargon>, <code>output()</code>, <code>model()</code>. No legacy <code>@Input</code>/<code>@Output</code> decorators.</li>
         <li><strong>React:</strong> Props + callbacks. No class components, no legacy ref patterns.</li>
-        <li><strong>Vue:</strong> Composition API + <code>defineProps</code>/<code>defineEmits</code>. No Options API.</li>
+        <li><strong>Vue:</strong> <Jargon term="composition API">Composition API</Jargon> + <code>defineProps</code>/<code>defineEmits</code>. No Options API.</li>
       </ul>
       <div class="docs-rule">
         <span class="docs-rule-label">Rule</span>

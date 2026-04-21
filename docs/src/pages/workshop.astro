@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
+import Jargon from '../components/Jargon.astro';
 
 const SITE_URL = 'https://atelier.pieper.io';
 
@@ -49,7 +50,7 @@ const MCP_CONFIG = `{
       </h1>
       <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 520px; line-height: 1.65">
         Spin up a fully-configured Atelier UI workspace in one command — framework selection,
-        library install, and MCP server wired up automatically.
+        library install, and <Jargon term="MCP">MCP</Jargon> server wired up automatically.
       </p>
     </div>
 
@@ -101,6 +102,38 @@ const MCP_CONFIG = `{
             <code>preflight</code> checks Node, Claude Code CLI, the Figma token, MCP reachability,
             and port availability. If anything fails, each line prints a one-step fix.
           </p>
+
+          <figure class="preflight-mock">
+            <figcaption class="preflight-mock-title">
+              <span class="preflight-mock-dot preflight-mock-dot--r"></span>
+              <span class="preflight-mock-dot preflight-mock-dot--y"></span>
+              <span class="preflight-mock-dot preflight-mock-dot--g"></span>
+              <span class="preflight-mock-label">preflight — successful run</span>
+            </figcaption>
+            <pre class="preflight-mock-body">
+<span class="pre-prompt">➜</span> <span class="pre-cmd">npm run preflight</span>
+
+<span class="pre-muted">[preflight] Checking your environment…</span>
+
+  <span class="pre-ok">✓</span> Node <span class="pre-val">v20.11.0</span>
+  <span class="pre-ok">✓</span> npm <span class="pre-val">v10.2.4</span>
+  <span class="pre-ok">✓</span> git <span class="pre-val">v2.43.0</span>
+  <span class="pre-ok">✓</span> Claude Code CLI <span class="pre-val">v0.15.3</span>
+  <span class="pre-ok">✓</span> FIGMA_ACCESS_TOKEN <span class="pre-muted">(figd_AbCd…)</span>
+  <span class="pre-ok">✓</span> MCP · storybook-angular reachable
+  <span class="pre-ok">✓</span> MCP · storybook-react reachable
+  <span class="pre-ok">✓</span> MCP · storybook-vue reachable
+  <span class="pre-ok">✓</span> MCP · nx-mcp reachable
+  <span class="pre-ok">✓</span> Port 4200 available
+  <span class="pre-ok">✓</span> Port 4201 available
+  <span class="pre-ok">✓</span> Port 4202 available
+  <span class="pre-ok">✓</span> Port 6006 available
+
+<span class="pre-ok-strong">All checks passed. You are good to go.</span></pre>
+          </figure>
+          <p class="step-desc" style="margin-top: 0.6rem; font-size: 0.76rem">
+            On a failed run, each red <span style="color: var(--ui-color-danger); font-weight: 700">✗</span> line ends with a suggested fix and a link into <a href="/troubleshooting" style="color: var(--ui-color-primary)">/troubleshooting</a>.
+          </p>
         </div>
       </div>
 
@@ -145,40 +178,13 @@ const MCP_CONFIG = `{
 
     </div>
 
-    <!-- What gets created -->
+    <!-- The Workflow — what you do once everything is running -->
     <div class="docs-section" style="margin-top: 2.5rem">
-      <h2 class="docs-section-title">What gets created</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem">
-        Based on your framework selection the preset scaffolds one app per framework,
-        installs the matching Atelier UI package, and pre-configures Claude Code's MCP servers.
-      </p>
-      <table class="docs-props-table" style="margin-bottom: 1.5rem">
-        <thead>
-          <tr><th>Framework</th><th>App</th><th>Package</th><th>MCP</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Angular</td><td><code>workshop-angular</code></td><td><code>@atelier-ui/angular</code></td><td><code>storybook-angular</code></td></tr>
-          <tr><td>React</td><td><code>workshop-react</code></td><td><code>@atelier-ui/react</code></td><td><code>storybook-react</code></td></tr>
-          <tr><td>Vue</td><td><code>workshop-vue</code></td><td><code>@atelier-ui/vue</code></td><td><code>storybook-vue</code></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- MCP configuration -->
-    <div class="docs-section">
-      <h2 class="docs-section-title">MCP configuration</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem">
-        The generated <code>.claude/settings.json</code> wires up the Nx MCP and hosted
-        Storybook MCP servers for each selected framework:
-      </p>
-      <Code code={MCP_CONFIG} lang="json" />
-    </div>
-
-    <!-- The Workflow -->
-    <div class="docs-section" style="margin-top: 2.5rem">
-      <h2 class="docs-section-title">The Workflow</h2>
+      <h2 class="docs-section-title">The Workflow — once you are set up</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.75rem">
-        Once the workspace is running, this is how Figma, Storybook, and AI work together:
+        With the workspace running and MCP servers live, this is the loop you will use for every
+        component: read the design in Figma, reference tokens in your prompt, let Claude match
+        components against Storybook, ship.
       </p>
       <div style="display: flex; flex-direction: column; gap: 1.75rem">
 
@@ -222,6 +228,35 @@ const MCP_CONFIG = `{
         </div>
 
       </div>
+    </div>
+
+    <!-- What gets created -->
+    <div class="docs-section" style="margin-top: 2.5rem">
+      <h2 class="docs-section-title">What gets created</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem">
+        Based on your framework selection the preset scaffolds one app per framework,
+        installs the matching Atelier UI package, and pre-configures Claude Code's MCP servers.
+      </p>
+      <table class="docs-props-table" style="margin-bottom: 1.5rem">
+        <thead>
+          <tr><th>Framework</th><th>App</th><th>Package</th><th>MCP</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Angular</td><td><code>workshop-angular</code></td><td><code>@atelier-ui/angular</code></td><td><code>storybook-angular</code></td></tr>
+          <tr><td>React</td><td><code>workshop-react</code></td><td><code>@atelier-ui/react</code></td><td><code>storybook-react</code></td></tr>
+          <tr><td>Vue</td><td><code>workshop-vue</code></td><td><code>@atelier-ui/vue</code></td><td><code>storybook-vue</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MCP configuration -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">MCP configuration</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem">
+        The generated <code>.claude/settings.json</code> wires up the Nx MCP and hosted
+        Storybook MCP servers for each selected framework:
+      </p>
+      <Code code={MCP_CONFIG} lang="json" />
     </div>
 
     <!-- Bottom nav -->
@@ -282,6 +317,53 @@ const MCP_CONFIG = `{
   .step-desc:last-child {
     margin-bottom: 0;
   }
+
+  /* Preflight mockup — styled like a terminal card */
+  .preflight-mock {
+    margin: 0.85rem 0 0;
+    background: #0b0f16;
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+    overflow: hidden;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .preflight-mock-title {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 0.85rem;
+    background: #1a2031;
+    color: #9ca3af;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .preflight-mock-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .preflight-mock-dot--r { background: #ff5f56; }
+  .preflight-mock-dot--y { background: #ffbd2e; }
+  .preflight-mock-dot--g { background: #27c93f; }
+  .preflight-mock-label {
+    margin-left: 0.5rem;
+  }
+  .preflight-mock-body {
+    margin: 0;
+    padding: 0.85rem 1rem 1rem;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: #d1d5db;
+    white-space: pre-wrap;
+  }
+  .preflight-mock-body .pre-prompt { color: #00d0d0; font-weight: 700; }
+  .preflight-mock-body .pre-cmd { color: #f1f5f9; }
+  .preflight-mock-body .pre-muted { color: #6b7280; }
+  .preflight-mock-body .pre-ok { color: #34d399; font-weight: 700; }
+  .preflight-mock-body .pre-ok-strong { color: #34d399; font-weight: 700; }
+  .preflight-mock-body .pre-val { color: #89ceff; }
 </style>
 
 <script>

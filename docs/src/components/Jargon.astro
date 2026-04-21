@@ -1,0 +1,127 @@
+---
+import { GLOSSARY } from '../data/glossary';
+
+interface Props {
+  term: string;
+}
+
+const { term } = Astro.props;
+const entry = GLOSSARY[term];
+
+// If the slot is empty the visible label falls back to the term itself.
+const hasSlot = Astro.slots.has('default');
+---
+
+<span class="jargon" tabindex="0" role="button" aria-describedby={entry ? `jg-${term.replace(/\s+/g, '-')}` : undefined}>
+  {hasSlot ? <slot /> : term}
+  {entry && (
+    <span class="jargon-popup" id={`jg-${term.replace(/\s+/g, '-')}`} role="tooltip">
+      <strong class="jargon-term">{term}</strong>
+      <span class="jargon-def">{entry.definition}</span>
+      {entry.hint && <span class="jargon-hint">{entry.hint}</span>}
+    </span>
+  )}
+</span>
+
+<style>
+  .jargon {
+    position: relative;
+    border-bottom: 1px dotted var(--ui-color-primary);
+    cursor: help;
+    outline: none;
+    color: inherit;
+    font-variant-numeric: inherit;
+  }
+
+  .jargon:focus-visible {
+    outline: 2px solid var(--ui-color-primary);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  .jargon-popup {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 8px);
+    transform: translateX(-50%) translateY(4px);
+    width: max-content;
+    max-width: min(320px, calc(100vw - 2rem));
+    padding: 0.7rem 0.9rem;
+    background: var(--ui-color-surface-raised);
+    color: var(--ui-color-text);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.78rem;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: left;
+    white-space: normal;
+    letter-spacing: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity 150ms ease,
+      transform 150ms ease;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  /* Little triangle pointer */
+  .jargon-popup::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--ui-color-border);
+  }
+
+  .jargon:hover .jargon-popup,
+  .jargon:focus .jargon-popup,
+  .jargon:focus-within .jargon-popup {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .jargon-term {
+    font-weight: 700;
+    color: var(--ui-color-primary);
+    font-size: 0.78rem;
+  }
+
+  .jargon-def {
+    display: block;
+    color: var(--ui-color-text);
+  }
+
+  .jargon-hint {
+    display: block;
+    color: var(--ui-color-text-muted);
+    font-size: 0.72rem;
+    padding-top: 0.3rem;
+    border-top: 1px solid var(--ui-color-border);
+  }
+
+  /* Keep the tooltip inside narrow containers — left align instead of centering
+     when the element sits near a viewport edge. */
+  @media (max-width: 520px) {
+    .jargon-popup {
+      left: 0;
+      transform: translateY(4px);
+    }
+    .jargon:hover .jargon-popup,
+    .jargon:focus .jargon-popup,
+    .jargon:focus-within .jargon-popup {
+      transform: translateY(0);
+    }
+    .jargon-popup::after {
+      left: 1rem;
+      transform: none;
+    }
+  }
+</style>

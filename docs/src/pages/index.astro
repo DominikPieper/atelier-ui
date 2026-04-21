@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import DiagramFigure from '../components/DiagramFigure.astro';
+import Jargon from '../components/Jargon.astro';
 ---
 
 <style>
@@ -276,7 +277,7 @@ import DiagramFigure from '../components/DiagramFigure.astro';
       <span class="docs-feature-card-num">01</span>
       <h3 class="docs-feature-card-title">Design in Figma</h3>
       <p class="docs-feature-card-desc">
-        Figma is the single source of truth. Design tokens, component frames, and spacing — all defined here before code is written.
+        Figma is the single source of truth. <Jargon term="design tokens">Design tokens</Jargon>, component frames, and spacing — all defined here before code is written.
       </p>
       <a href="/figma" class="docs-btn docs-btn-outline" style="margin-top: auto; width: fit-content; font-size: 0.8rem; padding: 0.35rem 0.75rem">Explore Figma →</a>
     </div>
@@ -285,7 +286,7 @@ import DiagramFigure from '../components/DiagramFigure.astro';
       <span class="docs-feature-card-num">02</span>
       <h3 class="docs-feature-card-title">Explore in Storybook</h3>
       <p class="docs-feature-card-desc">
-        Storybook is the live component library. Browse props, test states, and reference stories — AI reads it directly via MCP.
+        Storybook is the live component library. Browse props, test states, and reference stories — AI reads it directly via <Jargon term="MCP">MCP</Jargon>.
       </p>
       <a href="/storybook" class="docs-btn docs-btn-outline" style="margin-top: auto; width: fit-content; font-size: 0.8rem; padding: 0.35rem 0.75rem">Open Storybook →</a>
     </div>

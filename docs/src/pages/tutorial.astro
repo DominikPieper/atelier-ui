@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import DiagramFigure from '../components/DiagramFigure.astro';
+import Jargon from '../components/Jargon.astro';
 
 const FRAMEWORKS = ['React', 'Angular', 'Vue'] as const;
 
@@ -104,7 +105,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         Tutorial
       </h1>
       <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 520px; line-height: 1.65">
-        Use <strong style="color: var(--ui-color-text)">figma-console MCP</strong> to read a Figma component spec directly — design tokens included — then <strong style="color: var(--ui-color-text)">Storybook MCP</strong> to match Atelier UI components, and let Claude Code write token-exact code.
+        Use <strong style="color: var(--ui-color-text)">figma-console <Jargon term="MCP">MCP</Jargon></strong> to read a Figma component spec directly — <Jargon term="design tokens">design tokens</Jargon> included — then <strong style="color: var(--ui-color-text)">Storybook MCP</strong> to match Atelier UI components, and let Claude Code write token-exact code.
       </p>
     </div>
 
@@ -112,7 +113,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
     <div style="padding: 1rem 1.25rem; background: var(--ui-color-primary-light); border: 1px solid color-mix(in srgb, var(--ui-color-primary) 20%, transparent); border-radius: var(--ui-radius-md); margin-bottom: 2.5rem">
       <p style="margin: 0 0 0.35rem; font-size: 0.82rem; font-weight: 700; color: var(--ui-color-text)">No manual token copying</p>
       <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
-        The basic workshop workflow requires you to note token names from Figma's inspect panel. With the figma-console MCP, AI reads the component's <code>boundVariables</code> directly — every spacing, color, and radius value is already mapped to its CSS custom property name.
+        The basic workshop workflow requires you to note token names from Figma's inspect panel. With the figma-console MCP, AI reads the component's <Jargon term="boundVariables"><code>boundVariables</code></Jargon> directly — every spacing, color, and radius value is already mapped to its CSS custom property name.
       </p>
     </div>
 
@@ -226,7 +227,42 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           <span class="step-badge">A</span>
           <div style="flex: 1">
             <h3 class="step-title">Select the component in Figma</h3>
-            <p class="step-desc">Open the <a href="https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Components" target="_blank" rel="noopener noreferrer" style="color: var(--ui-color-primary)">Atelier Figma file</a> and click the frame you want to implement. Note the node ID from the URL or the inspect panel — you'll pass it to the MCP tool.</p>
+            <p class="step-desc">Open the <a href="https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Components" target="_blank" rel="noopener noreferrer" style="color: var(--ui-color-primary)">Atelier Figma file</a> and click the frame you want to implement. The <Jargon term="node ID">node ID</Jargon> appears in the URL after <code>?node-id=</code> — copy that value, you’ll pass it to the MCP tool.</p>
+
+            <DiagramFigure caption="The node ID is the value after ?node-id= in the Figma URL. Colons (:) appear URL-encoded as %3A or as a single dash.">
+              <svg viewBox="0 0 880 160" role="img" aria-labelledby="url-title url-desc" preserveAspectRatio="xMidYMid meet">
+                <title id="url-title">Figma URL with the node-id parameter highlighted</title>
+                <desc id="url-desc">Screenshot mockup of a browser URL bar showing a Figma design URL. The node-id=695-313 parameter at the end is highlighted in cyan with a caption arrow pointing to it.</desc>
+
+                <defs>
+                  <marker id="url-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--accent"/>
+                  </marker>
+                </defs>
+
+                <!-- URL bar pill -->
+                <rect x="40" y="36" width="800" height="44" rx="22" ry="22" class="diagram-node"/>
+
+                <!-- Lock icon -->
+                <g transform="translate(62, 50)">
+                  <rect x="0" y="6" width="14" height="12" rx="2" ry="2" class="diagram-icon"/>
+                  <path d="M 3 6 V 3 A 4 4 0 0 1 11 3 V 6" class="diagram-icon"/>
+                </g>
+
+                <!-- URL text (broken into parts so we can highlight one segment) -->
+                <text x="96" y="64" font-size="13" class="diagram-mono diagram-muted">figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components</text>
+
+                <!-- Highlight box around the node-id parameter -->
+                <rect x="592" y="44" width="208" height="28" rx="6" ry="6"
+                      style="fill: color-mix(in srgb, var(--ui-color-primary) 18%, transparent); stroke: var(--ui-color-primary); stroke-width: 1.5;"/>
+                <text x="600" y="64" font-size="13" font-weight="700" class="diagram-mono" style="fill: var(--ui-color-primary)">?node-id=695-313</text>
+
+                <!-- Arrow and caption pointing to the node-id -->
+                <path d="M 696 110 L 696 76" class="diagram-connector diagram-connector--accent" marker-end="url(#url-arrow)"/>
+                <text x="696" y="132" text-anchor="middle" font-size="11" font-weight="600" style="fill: var(--ui-color-primary)">this is the node ID</text>
+                <text x="696" y="146" text-anchor="middle" font-size="10" class="diagram-muted">pass it to figma_get_component_for_development</text>
+              </svg>
+            </DiagramFigure>
           </div>
         </div>
 

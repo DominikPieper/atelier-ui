@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import DiagramFigure from '../components/DiagramFigure.astro';
+import Jargon from '../components/Jargon.astro';
 const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Components';
 ---
 
@@ -33,7 +34,7 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Com
         <tbody>
           <tr>
             <td><code>Tokens</code></td>
-            <td>Variable collection viewer — all 56 design tokens across Light and Dark modes</td>
+            <td>Variable collection viewer — all 56 <Jargon term="design tokens">design tokens</Jargon> across Light and Dark modes</td>
           </tr>
           <tr>
             <td><code>Components</code></td>
@@ -273,9 +274,55 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Com
           <div style="flex: 1">
             <h3 style="margin: 0 0 0.4rem; font-size: 0.9rem; font-weight: 700; color: var(--ui-color-text)">Note the token values from the variable panel</h3>
             <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
-              In the Figma inspect panel, hover over fills and spacing to see the variable names
-              (e.g. <code>color/primary</code>, <code>spacing/6</code>, <code>radius/lg</code>). These are the exact CSS token names to use.
+              In the Figma inspect panel (right sidebar, <strong>Design</strong> tab), hover over fills,
+              padding, or radius values to see the bound variable name
+              (e.g. <code>color/primary</code>, <code>spacing/6</code>, <code>radius/lg</code>). These are the exact
+              CSS token names you’ll use in code.
             </p>
+
+            <DiagramFigure caption="The right sidebar in Figma. Every property bound to a variable shows the variable name instead of a raw value — that name is your CSS custom property name.">
+              <svg viewBox="0 0 640 400" role="img" aria-labelledby="insp-title insp-desc" preserveAspectRatio="xMidYMid meet">
+                <title id="insp-title">Figma Design panel with variable bindings highlighted</title>
+                <desc id="insp-desc">A mockup of the Figma right-hand Design panel. Three properties are shown — Fill, Padding, Corner radius — each with its value on the left and its bound variable name on the right. The variable names color/primary, spacing/6, and radius/lg are highlighted.</desc>
+
+                <!-- Panel background -->
+                <rect x="24" y="24" width="592" height="352" rx="12" ry="12" class="diagram-node"/>
+
+                <!-- Panel header tabs -->
+                <text x="52" y="58" font-size="12" font-weight="700" style="fill: var(--ui-color-primary)">Design</text>
+                <text x="110" y="58" font-size="12" class="diagram-muted">Prototype</text>
+                <text x="178" y="58" font-size="12" class="diagram-muted">Inspect</text>
+                <line x1="44" y1="68" x2="80" y2="68" style="stroke: var(--ui-color-primary); stroke-width: 2;"/>
+
+                <!-- Selected frame label -->
+                <rect x="44" y="84" width="120" height="22" rx="4" ry="4" style="fill: color-mix(in srgb, var(--ui-color-primary) 14%, transparent); stroke: var(--ui-color-primary); stroke-width: 1;"/>
+                <text x="104" y="99" text-anchor="middle" font-size="11" font-weight="600" class="diagram-mono" style="fill: var(--ui-color-primary)">Settings Card</text>
+
+                <!-- Section: Fill -->
+                <text x="44" y="140" font-size="10" font-weight="700" class="diagram-eyebrow">Fill</text>
+                <rect x="44" y="150" width="32" height="32" rx="6" ry="6" style="fill: var(--ui-color-primary); stroke: none;"/>
+                <text x="90" y="162" font-size="11" class="diagram-mono diagram-muted">#00BEBE · 100%</text>
+                <rect x="260" y="146" width="300" height="36" rx="6" ry="6" style="fill: color-mix(in srgb, var(--ui-color-primary) 14%, transparent); stroke: var(--ui-color-primary); stroke-width: 1.25;"/>
+                <text x="276" y="169" font-size="12" font-weight="700" class="diagram-mono" style="fill: var(--ui-color-primary)">color/primary</text>
+
+                <!-- Section: Padding -->
+                <text x="44" y="214" font-size="10" font-weight="700" class="diagram-eyebrow">Padding</text>
+                <text x="44" y="244" font-size="13" class="diagram-mono" font-weight="600">24 px</text>
+                <rect x="260" y="224" width="300" height="36" rx="6" ry="6" style="fill: color-mix(in srgb, var(--ui-color-primary) 14%, transparent); stroke: var(--ui-color-primary); stroke-width: 1.25;"/>
+                <text x="276" y="247" font-size="12" font-weight="700" class="diagram-mono" style="fill: var(--ui-color-primary)">spacing/6</text>
+
+                <!-- Section: Corner radius -->
+                <text x="44" y="292" font-size="10" font-weight="700" class="diagram-eyebrow">Corner radius</text>
+                <text x="44" y="322" font-size="13" class="diagram-mono" font-weight="600">12 px</text>
+                <rect x="260" y="302" width="300" height="36" rx="6" ry="6" style="fill: color-mix(in srgb, var(--ui-color-primary) 14%, transparent); stroke: var(--ui-color-primary); stroke-width: 1.25;"/>
+                <text x="276" y="325" font-size="12" font-weight="700" class="diagram-mono" style="fill: var(--ui-color-primary)">radius/lg</text>
+
+                <!-- Right-hand caption -->
+                <text x="620" y="166" text-anchor="end" font-size="9" class="diagram-muted">bound variable</text>
+                <text x="620" y="244" text-anchor="end" font-size="9" class="diagram-muted">bound variable</text>
+                <text x="620" y="322" text-anchor="end" font-size="9" class="diagram-muted">bound variable</text>
+              </svg>
+            </DiagramFigure>
           </div>
         </div>
 

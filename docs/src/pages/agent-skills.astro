@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
+import Jargon from '../components/Jargon.astro';
 
 const SITE_URL = 'https://atelier.pieper.io';
 
@@ -47,11 +48,20 @@ const skills = [
       </p>
     </div>
 
+    <div style="margin-bottom: 2rem; padding: 0.85rem 1.1rem; background: color-mix(in srgb, var(--ui-color-primary) 6%, transparent); border: 1px solid color-mix(in srgb, var(--ui-color-primary) 20%, transparent); border-radius: var(--ui-radius-md); display: flex; gap: 0.75rem; align-items: flex-start">
+      <span style="font-size: 1rem; flex-shrink: 0; margin-top: 1px">💡</span>
+      <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
+        <strong style="color: var(--ui-color-text)">Good to know.</strong>
+        You do not need any of this for the workshop — your MCP servers already handle discovery.
+        This page documents the infrastructure (well-known files, RFC 9727, Link headers) so AI platforms and tool-builders can wire up Atelier UI without reading a single docs page.
+      </p>
+    </div>
+
     <!-- Discovery endpoints quick-ref -->
     <div class="docs-section">
       <h2 class="docs-section-title">Discovery Endpoints</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
-        All well-known and machine-readable files published at this domain:
+        All <Jargon term="well-known file">well-known</Jargon> and machine-readable files published at this domain:
       </p>
       <table class="docs-props-table">
         <thead>

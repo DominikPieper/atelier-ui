@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
+import DiagramFigure from '../components/DiagramFigure.astro';
 
 const FIGMA_FILE_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Components';
 ---
@@ -43,6 +44,68 @@ const FIGMA_FILE_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%
             <h3 class="step-title">Generate a new token</h3>
             <p class="step-desc">Name it <code>atelier-ui-workshop</code>. Set expiration to 30 days.
               Scope: <strong>File content → Read only</strong>. Copy the value (<code>figd_…</code>) — it is shown only once.</p>
+
+            <DiagramFigure caption="Figma Settings → Security → Personal access tokens. The 'Generate new token' button opens the dialog below.">
+              <svg viewBox="0 0 640 400" role="img" aria-labelledby="tok-set-title tok-set-desc" preserveAspectRatio="xMidYMid meet">
+                <title id="tok-set-title">Figma token settings mockup</title>
+                <desc id="tok-set-desc">A mockup of the Figma Settings dialog showing the Security tab active, the Personal access tokens section, and a dialog below where you name the token, set expiration to 30 days, and choose the 'File content – Read only' scope.</desc>
+
+                <!-- Outer Settings card -->
+                <rect x="20" y="16" width="600" height="176" rx="12" ry="12" class="diagram-node"/>
+
+                <!-- Breadcrumb / header -->
+                <text x="44" y="42" font-size="11" class="diagram-eyebrow">Figma · Settings</text>
+                <text x="44" y="64" font-size="14" font-weight="700">Security</text>
+
+                <!-- Section: Personal access tokens -->
+                <text x="44" y="94" font-size="12" font-weight="700">Personal access tokens</text>
+                <text x="44" y="112" font-size="11" class="diagram-muted">Used by scripts and integrations to read Figma files on your behalf.</text>
+
+                <!-- Generate button -->
+                <rect x="44" y="130" width="176" height="36" rx="8" ry="8" class="diagram-node diagram-node--accent"/>
+                <text x="132" y="153" text-anchor="middle" font-size="12" font-weight="700" style="fill: var(--ui-color-primary)">+ Generate new token</text>
+
+                <!-- Existing tokens row (dimmed to show this is where the new one will appear) -->
+                <rect x="240" y="132" width="356" height="32" rx="6" ry="6" style="fill: var(--ui-color-surface-sunken); stroke: var(--ui-color-border); stroke-width: 1;"/>
+                <text x="256" y="152" font-size="10" class="diagram-mono diagram-muted">no tokens yet</text>
+
+                <!-- Dialog card (the modal that opens after clicking) -->
+                <rect x="60" y="216" width="520" height="168" rx="12" ry="12" class="diagram-node"/>
+                <text x="84" y="244" font-size="12" font-weight="700">New personal access token</text>
+
+                <!-- Name field -->
+                <text x="84" y="270" font-size="10" class="diagram-eyebrow">Name</text>
+                <rect x="84" y="278" width="472" height="26" rx="5" ry="5" style="fill: var(--ui-color-surface-sunken); stroke: var(--ui-color-border); stroke-width: 1;"/>
+                <text x="96" y="295" font-size="11" class="diagram-mono">atelier-ui-workshop</text>
+
+                <!-- Expiration + Scope side by side -->
+                <text x="84" y="324" font-size="10" class="diagram-eyebrow">Expiration</text>
+                <rect x="84" y="332" width="152" height="26" rx="5" ry="5" style="fill: var(--ui-color-surface-sunken); stroke: var(--ui-color-border); stroke-width: 1;"/>
+                <text x="96" y="349" font-size="11" class="diagram-mono">30 days</text>
+
+                <text x="260" y="324" font-size="10" class="diagram-eyebrow">File content</text>
+                <rect x="260" y="332" width="200" height="26" rx="5" ry="5" style="fill: color-mix(in srgb, var(--ui-color-primary) 14%, transparent); stroke: var(--ui-color-primary); stroke-width: 1.5;"/>
+                <text x="272" y="349" font-size="11" font-weight="700" class="diagram-mono" style="fill: var(--ui-color-primary)">Read only</text>
+
+                <!-- Generate button bottom-right -->
+                <rect x="484" y="332" width="72" height="26" rx="5" ry="5" style="fill: var(--ui-color-primary); stroke: none;"/>
+                <text x="520" y="349" text-anchor="middle" font-size="11" font-weight="700" style="fill: var(--ui-color-on-primary)">Generate</text>
+              </svg>
+            </DiagramFigure>
+
+            <div style="margin-top: 1rem; padding: 0.75rem 1rem; background: var(--ui-color-surface-sunken); border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md); display: flex; flex-direction: column; gap: 0.45rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center">
+                <span style="font-size: 0.66rem; font-weight: 700; color: var(--ui-color-text-muted); letter-spacing: 0.08em; text-transform: uppercase">Your token value</span>
+                <span style="font-size: 0.66rem; color: var(--ui-color-text-muted); font-family: monospace">copy once</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 0.4rem; font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; overflow-x: auto; white-space: nowrap">
+                <span style="padding: 0.15rem 0.4rem; border-radius: 4px; background: color-mix(in srgb, var(--ui-color-primary) 18%, transparent); color: var(--ui-color-primary); font-weight: 700">figd_</span>
+                <span style="color: var(--ui-color-text)">AbCd1234-wXyZ5678-QrSt9012-mNoP3456</span>
+              </div>
+              <span style="font-size: 0.72rem; color: var(--ui-color-text-muted); line-height: 1.55">
+                Every Figma token starts with <code style="font-weight: 700; color: var(--ui-color-primary)">figd_</code> followed by ~36 characters. Copy the whole string — Figma hides it after you close the dialog.
+              </span>
+            </div>
           </div>
         </div>
         <div class="step-row">

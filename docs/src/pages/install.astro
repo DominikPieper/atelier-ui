@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import DiagramFigure from '../components/DiagramFigure.astro';
+import Jargon from '../components/Jargon.astro';
 
 const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
 const PKG_MANAGERS = ['npm', 'pnpm', 'yarn'] as const;
@@ -153,7 +154,7 @@ const COMPONENT_IMPORT: Record<string, string> = {
     <div class="docs-section">
       <h2 class="docs-section-title">3. Import components</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1rem">
-        Import only the components you need — all are tree-shakeable:
+        Import only the components you need — all are <Jargon term="tree-shakeable">tree-shakeable</Jargon>:
       </p>
       {FRAMEWORKS.map((fw, i) => (
         <div data-fw-panel={fw} hidden={i !== 0}>
