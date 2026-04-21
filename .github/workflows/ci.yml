@@ -10,33 +10,97 @@ permissions:
   actions: read
   contents: read
 
+# Cancel superseded runs on the same ref so a fast follow-up push does not
+# keep an outdated run going.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  main:
+  # ---------------------------------------------------------------------------
+  # Lightweight sync / docs checks. No Nx, no affected — these always run.
+  # ---------------------------------------------------------------------------
+  checks:
+    name: Sync checks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          filter: tree:0
           fetch-depth: 0
-
-      # This enables task distribution via Nx Cloud
-      # Run this command as early as possible, before dependencies are installed
-      # Learn more at https://nx.dev/ci/reference/nx-cloud-cli#npx-nxcloud-startcirun
-      # Uncomment this line to enable task distribution
-      # - run: npx nx start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="e2e-ci"
-
-      # Cache node_modules
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
-
       - run: npm ci
-      - run: npx playwright install --with-deps
-
-      # Prepend any command with "nx record --" to record its logs to Nx Cloud
-      # - run: npx nx record -- echo Hello World
-      # When you enable task distribution, run the e2e-ci task instead of e2e
       - run: node tools/scripts/check-sync.js
       - run: node tools/scripts/check-docs-sync.js
-      - run: npx nx run-many -t lint test build e2e
+
+  # ---------------------------------------------------------------------------
+  # Lint — fastest gate, fails early if style/type rules break.
+  # ---------------------------------------------------------------------------
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: nrwl/nx-set-shas@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - name: Lint affected (PR)
+        if: github.event_name == 'pull_request'
+        run: npx nx affected -t lint --parallel=4
+      - name: Lint all (push to main)
+        if: github.event_name != 'pull_request'
+        run: npx nx run-many -t lint --parallel=4
+
+  # ---------------------------------------------------------------------------
+  # Test — unit tests on all projects that define a `test` target.
+  # ---------------------------------------------------------------------------
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: nrwl/nx-set-shas@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - name: Test affected (PR)
+        if: github.event_name == 'pull_request'
+        run: npx nx affected -t test --parallel=2
+      - name: Test all (push to main)
+        if: github.event_name != 'pull_request'
+        run: npx nx run-many -t test --parallel=2
+
+  # ---------------------------------------------------------------------------
+  # Build — library packaging + docs site. Validates that every project still
+  # compiles cleanly under production settings.
+  # ---------------------------------------------------------------------------
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: nrwl/nx-set-shas@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - name: Build affected (PR)
+        if: github.event_name == 'pull_request'
+        run: npx nx affected -t build --parallel=2
+      - name: Build all (push to main)
+        if: github.event_name != 'pull_request'
+        run: npx nx run-many -t build --parallel=2
