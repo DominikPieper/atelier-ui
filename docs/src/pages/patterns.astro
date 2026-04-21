@@ -11,5 +11,17 @@ import PatternsPage from '../components/PatternsPage';
     <a href="#pattern-4" class="docs-toc-link">Notification Center</a>
   </nav>
 
+  <div style="max-width: 1000px; margin: 0 auto; padding: 0 1.5rem 0.5rem">
+    <div style="padding: 0.85rem 1.1rem; background: color-mix(in srgb, var(--ui-color-primary) 6%, transparent); border: 1px solid color-mix(in srgb, var(--ui-color-primary) 20%, transparent); border-radius: var(--ui-radius-md); display: flex; gap: 0.75rem; align-items: flex-start">
+      <span style="font-size: 1rem; flex-shrink: 0; margin-top: 1px">🧩</span>
+      <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
+        <strong style="color: var(--ui-color-text)">Why the composed API.</strong>
+        <code>LlmCard</code> breaks into <code>LlmCardHeader</code>, <code>LlmCardContent</code>, and <code>LlmCardFooter</code> instead of flat props like <code>header={'…'}</code> / <code>footer={'…'}</code>.
+        Composition wins three things an LLM cannot: you can drop sections you don’t need (no empty <code>footer</code> slot to null-guard), you can put any JSX/markup inside each part (buttons, badges, form controls), and screen readers get a real DOM landmark for each section instead of a flat container.
+        All Atelier UI container components follow the same pattern.
+      </p>
+    </div>
+  </div>
+
   <PatternsPage client:load />
 </BaseLayout>

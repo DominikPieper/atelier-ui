@@ -31,6 +31,38 @@ const TOKEN_IMPORT: Record<string, string> = {
   Vue:     "@import '@atelier-ui/vue/styles/tokens.css';",
 };
 
+// Where the token import lives per framework. Listed as file paths
+// the user can search for in their scaffolded app.
+const TOKEN_FILE: Record<string, { file: string; notes: string }> = {
+  Angular: {
+    file: 'src/styles.css',
+    notes: 'Referenced automatically by angular.json under architect.build.options.styles.',
+  },
+  React: {
+    file: 'src/index.css  (or src/App.css)',
+    notes: 'The file that is imported from src/main.tsx — any global stylesheet your app already loads on boot.',
+  },
+  Vue: {
+    file: 'src/assets/main.css  (or src/style.css)',
+    notes: 'The file imported from src/main.ts — Vite/Vue projects usually ship one global stylesheet.',
+  },
+};
+
+const COMPONENT_FILE: Record<string, { file: string; notes: string }> = {
+  Angular: {
+    file: 'any standalone component .ts file',
+    notes: 'Import into the component where you need it and add to the imports array — standalone, no NgModule registration.',
+  },
+  React: {
+    file: 'any component .tsx file',
+    notes: 'Standard named ES imports — the bundler tree-shakes unused components automatically.',
+  },
+  Vue: {
+    file: 'any <script setup> block',
+    notes: 'Import inside <script setup> in a .vue SFC, then use the component in the template.',
+  },
+};
+
 const COMPONENT_IMPORT: Record<string, string> = {
   Angular: `import {\n  LlmButton, LlmCard, LlmInput, LlmTextarea,\n  LlmCheckbox, LlmToggle, LlmBadge, LlmAlert,\n  LlmSelect, LlmOption, LlmDialog, LlmTabGroup,\n  LlmTab, LlmAccordionGroup, LlmMenu, LlmMenuItem,\n  LlmTooltip, LlmToast, LlmSkeleton, LlmAvatar\n} from '@atelier-ui/angular';`,
   React:   `import {\n  LlmButton, LlmCard, LlmInput, LlmTextarea,\n  LlmCheckbox, LlmToggle, LlmBadge, LlmAlert,\n  LlmSelect, LlmOption, LlmDialog, LlmTabGroup,\n  LlmTab, LlmAccordionGroup, LlmMenu, LlmMenuItem,\n  LlmTooltip, LlmToastProvider, useLlmToast,\n  LlmSkeleton, LlmAvatar, LlmAvatarGroup\n} from '@atelier-ui/react';`,
@@ -138,6 +170,11 @@ const COMPONENT_IMPORT: Record<string, string> = {
       </p>
       {FRAMEWORKS.map((fw, i) => (
         <div data-fw-panel={fw} hidden={i !== 0}>
+          <div class="docs-file-path">
+            <span class="docs-file-path-icon material-symbols-outlined">description</span>
+            <span class="docs-file-path-name">{TOKEN_FILE[fw].file}</span>
+            <span class="docs-file-path-notes">{TOKEN_FILE[fw].notes}</span>
+          </div>
           <Code code={TOKEN_IMPORT[fw]} lang="css" />
         </div>
       ))}
@@ -158,6 +195,11 @@ const COMPONENT_IMPORT: Record<string, string> = {
       </p>
       {FRAMEWORKS.map((fw, i) => (
         <div data-fw-panel={fw} hidden={i !== 0}>
+          <div class="docs-file-path">
+            <span class="docs-file-path-icon material-symbols-outlined">description</span>
+            <span class="docs-file-path-name">{COMPONENT_FILE[fw].file}</span>
+            <span class="docs-file-path-notes">{COMPONENT_FILE[fw].notes}</span>
+          </div>
           <Code code={COMPONENT_IMPORT[fw]} lang="ts" />
         </div>
       ))}
@@ -195,6 +237,49 @@ const COMPONENT_IMPORT: Record<string, string> = {
 
   </div>
 </BaseLayout>
+
+<style>
+  .docs-file-path {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    gap: 0.55rem;
+    align-items: center;
+    padding: 0.5rem 0.85rem;
+    margin-bottom: 0.25rem;
+    background: var(--ui-color-surface-sunken);
+    border: 1px solid var(--ui-color-border);
+    border-bottom: none;
+    border-top-left-radius: var(--ui-radius-md);
+    border-top-right-radius: var(--ui-radius-md);
+    font-size: 0.76rem;
+  }
+  .docs-file-path-icon {
+    font-size: 1rem;
+    color: var(--ui-color-primary);
+    font-variation-settings: 'FILL' 1;
+  }
+  .docs-file-path-name {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-weight: 700;
+    color: var(--ui-color-text);
+    font-size: 0.78rem;
+  }
+  .docs-file-path-notes {
+    color: var(--ui-color-text-muted);
+    font-size: 0.72rem;
+    line-height: 1.45;
+  }
+  @media (max-width: 640px) {
+    .docs-file-path {
+      grid-template-columns: auto 1fr;
+    }
+    .docs-file-path-notes {
+      grid-column: 1 / -1;
+      padding-top: 0.25rem;
+      border-top: 1px solid var(--ui-color-border);
+    }
+  }
+</style>
 
 <script>
   function initInstallTabs() {
