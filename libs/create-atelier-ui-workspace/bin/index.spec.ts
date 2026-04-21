@@ -8,7 +8,6 @@ jest.mock('create-nx-workspace', () => ({
 jest.mock('enquirer', () => ({ prompt: jest.fn() }), { virtual: true });
 
 const mockCreateWorkspace = createWorkspace as jest.MockedFunction<typeof createWorkspace>;
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const enquirer = require('enquirer') as { prompt: jest.Mock };
 
 describe('create-atelier-ui-workspace CLI', () => {

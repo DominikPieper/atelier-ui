@@ -13,7 +13,7 @@
   "type": "commonjs",
   "main": "./bin/index.js",
   "dependencies": {
-    "create-nx-workspace": "22.6.1",
+    "create-nx-workspace": "22.6.5",
     "enquirer": "^2.3.6",
     "tslib": "^2.3.0"
   },

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { ComponentProps } from 'react';
 import { useState } from 'react';
 import { LlmCombobox } from './llm-combobox';
 
@@ -32,7 +33,7 @@ const meta: Meta<typeof LlmCombobox> = {
 export default meta;
 type Story = StoryObj<typeof LlmCombobox>;
 
-const LlmComboboxWrapper = (args: any) => {
+const LlmComboboxWrapper = (args: ComponentProps<typeof LlmCombobox>) => {
   const [value, setValue] = useState(args.value ?? '');
   return <LlmCombobox {...args} value={value} onValueChange={setValue} />;
 };

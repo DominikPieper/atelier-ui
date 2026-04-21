@@ -36,7 +36,6 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
 
     if (framework === 'angular') {
       await ensurePackage('@nx/angular', NX_VERSION);
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { applicationGenerator: angularAppGenerator } = require('@nx/angular/generators');
       await angularAppGenerator(tree, {
         name: appName,

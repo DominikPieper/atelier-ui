@@ -63,6 +63,11 @@ export interface LlmCardSpec {
 // ---------------------------------------------------------------------------
 // Input / Textarea (shared form field props)
 // ---------------------------------------------------------------------------
+// `any` is intentional here: downstream form-field interfaces narrow `value`
+// to the concrete primitive they accept (string, number, boolean, Date, …).
+// Using `unknown` would force every downstream consumer to redeclare the
+// property, defeating the purpose of the shared spec.
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface LlmFormFieldSpec {
   value?: any;
   onValueChange?: (value: any) => void;
@@ -72,6 +77,7 @@ export interface LlmFormFieldSpec {
   required?: boolean;
   name?: string;
 }
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 export type LlmInputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
 export interface LlmInputSpec extends LlmFormFieldSpec {
