@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
+import DiagramFigure from '../components/DiagramFigure.astro';
 
 const FRAMEWORKS = ['React', 'Angular', 'Vue'] as const;
 
@@ -139,6 +140,86 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
     <!-- The workflow -->
     <div class="docs-section">
       <h2 class="docs-section-title">The Workflow</h2>
+
+      <DiagramFigure caption="Each step passes concrete data to the next. The dashed arrow closes the loop when parity checks surface discrepancies.">
+        <svg viewBox="0 0 960 260" role="img" aria-labelledby="tut-title tut-desc" preserveAspectRatio="xMidYMid meet">
+          <title id="tut-title">Figma-to-code sequence diagram</title>
+          <desc id="tut-desc">Five steps from selecting a frame in Figma to verifying design parity. Data flows from left to right: node ID, boundVariables, prop spec, generated code, parity score. A dashed loop returns discrepancies to the first step.</desc>
+
+          <defs>
+            <marker id="tut-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow"/>
+            </marker>
+            <marker id="tut-arrow-loop" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--muted-accent"/>
+            </marker>
+          </defs>
+
+          <!-- Connector line under the step circles -->
+          <line x1="96"  y1="100" x2="200" y2="100" class="diagram-connector" marker-end="url(#tut-arrow)"/>
+          <line x1="264" y1="100" x2="368" y2="100" class="diagram-connector" marker-end="url(#tut-arrow)"/>
+          <line x1="432" y1="100" x2="536" y2="100" class="diagram-connector" marker-end="url(#tut-arrow)"/>
+          <line x1="600" y1="100" x2="704" y2="100" class="diagram-connector" marker-end="url(#tut-arrow)"/>
+          <line x1="768" y1="100" x2="864" y2="100" class="diagram-connector" marker-end="url(#tut-arrow)"/>
+
+          <!-- Data labels on connectors -->
+          <text x="152" y="88" class="diagram-eyebrow" text-anchor="middle">node ID</text>
+          <text x="316" y="88" class="diagram-eyebrow" text-anchor="middle">boundVariables</text>
+          <text x="484" y="88" class="diagram-eyebrow" text-anchor="middle">prop spec</text>
+          <text x="652" y="88" class="diagram-eyebrow" text-anchor="middle">code</text>
+          <text x="816" y="88" class="diagram-eyebrow" text-anchor="middle">parity</text>
+
+          <!-- Loop-back: parity discrepancies fold back to step A -->
+          <path d="M 864 115 C 864 180 864 210 800 210 L 160 210 C 96 210 96 180 96 115"
+                class="diagram-connector diagram-connector--dashed"
+                marker-end="url(#tut-arrow-loop)"/>
+          <text x="480" y="240" class="diagram-eyebrow" text-anchor="middle">discrepancies · iterate</text>
+
+          <!-- Step circles with badges -->
+          <!-- A -->
+          <g>
+            <circle cx="64" cy="100" r="30" class="diagram-node"/>
+            <text x="64" y="107" text-anchor="middle" font-size="18" font-weight="700" style="fill: var(--ui-color-primary)">A</text>
+            <text x="64" y="158" text-anchor="middle" font-size="12" font-weight="700">Select</text>
+            <text x="64" y="176" text-anchor="middle" font-size="10" class="diagram-muted">Figma frame</text>
+          </g>
+          <!-- B -->
+          <g>
+            <circle cx="232" cy="100" r="30" class="diagram-node"/>
+            <text x="232" y="107" text-anchor="middle" font-size="18" font-weight="700" style="fill: var(--ui-color-primary)">B</text>
+            <text x="232" y="158" text-anchor="middle" font-size="12" font-weight="700">Read spec</text>
+            <text x="232" y="176" text-anchor="middle" font-size="10" class="diagram-mono diagram-muted">figma_get_component</text>
+          </g>
+          <!-- C -->
+          <g>
+            <circle cx="400" cy="100" r="30" class="diagram-node"/>
+            <text x="400" y="107" text-anchor="middle" font-size="18" font-weight="700" style="fill: var(--ui-color-primary)">C</text>
+            <text x="400" y="158" text-anchor="middle" font-size="12" font-weight="700">Match props</text>
+            <text x="400" y="176" text-anchor="middle" font-size="10" class="diagram-mono diagram-muted">storybook-* MCP</text>
+          </g>
+          <!-- D (accent — AI step) -->
+          <g>
+            <circle cx="568" cy="100" r="32" class="diagram-node diagram-node--accent"/>
+            <text x="568" y="107" text-anchor="middle" font-size="18" font-weight="700" style="fill: var(--ui-color-primary)">D</text>
+            <text x="568" y="158" text-anchor="middle" font-size="12" font-weight="700">Generate</text>
+            <text x="568" y="176" text-anchor="middle" font-size="10" class="diagram-muted">Claude writes code</text>
+          </g>
+          <!-- E -->
+          <g>
+            <circle cx="736" cy="100" r="30" class="diagram-node"/>
+            <text x="736" y="107" text-anchor="middle" font-size="18" font-weight="700" style="fill: var(--ui-color-primary)">E</text>
+            <text x="736" y="158" text-anchor="middle" font-size="12" font-weight="700">Verify</text>
+            <text x="736" y="176" text-anchor="middle" font-size="10" class="diagram-mono diagram-muted">check_design_parity</text>
+          </g>
+          <!-- Output chip -->
+          <g>
+            <rect x="870" y="82" width="82" height="36" rx="8" ry="8" class="diagram-node"/>
+            <text x="911" y="104" text-anchor="middle" font-size="10" font-weight="700" style="fill: var(--ui-color-success)">✓ shipped</text>
+            <text x="911" y="118" text-anchor="middle" font-size="9" class="diagram-muted">component</text>
+          </g>
+        </svg>
+      </DiagramFigure>
+
       <div style="display: flex; flex-direction: column; gap: 1.5rem">
 
         <div class="step-row">

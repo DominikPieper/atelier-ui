@@ -1,8 +1,97 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import McpExplorer from '../components/McpExplorer';
+import DiagramFigure from '../components/DiagramFigure.astro';
 ---
 
 <BaseLayout title="MCP Playground" currentPath="/mcp">
+  <div style="max-width: 1000px; margin: 0 auto; padding: 0 1.5rem">
+    <DiagramFigure caption="One AI client talks to three parallel Storybook MCP servers — one per framework. The JSON-RPC contract is identical; only the returned props change.">
+      <svg viewBox="0 0 960 340" role="img" aria-labelledby="mcp-title mcp-desc" preserveAspectRatio="xMidYMid meet">
+        <title id="mcp-title">MCP data flow from client to Storybook servers</title>
+        <desc id="mcp-desc">A client application sends user intent to Claude. Claude then issues JSON-RPC tools/list and tools/call requests to three parallel Storybook MCP servers — one each for Angular, React, and Vue. Each server returns exact component documentation.</desc>
+
+        <defs>
+          <marker id="mcp-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow"/>
+          </marker>
+          <marker id="mcp-arrow-accent" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--accent"/>
+          </marker>
+        </defs>
+
+        <!-- Connectors (behind nodes) -->
+        <!-- Client -> Claude -->
+        <line x1="220" y1="170" x2="308" y2="170" class="diagram-connector" marker-end="url(#mcp-arrow)"/>
+        <text x="264" y="158" class="diagram-eyebrow" text-anchor="middle">user intent</text>
+
+        <!-- Claude -> 3 Storybook MCPs (fan-out) -->
+        <path d="M 500 170 C 540 170 540 78  588 78"  class="diagram-connector diagram-connector--accent" marker-end="url(#mcp-arrow-accent)"/>
+        <path d="M 500 170 L 588 170" class="diagram-connector diagram-connector--accent" marker-end="url(#mcp-arrow-accent)"/>
+        <path d="M 500 170 C 540 170 540 262 588 262" class="diagram-connector diagram-connector--accent" marker-end="url(#mcp-arrow-accent)"/>
+        <text x="544" y="158" class="diagram-eyebrow" text-anchor="middle">JSON-RPC</text>
+
+        <!-- Node: Client -->
+        <g>
+          <rect x="40" y="118" width="180" height="104" rx="14" ry="14" class="diagram-node"/>
+          <g transform="translate(117, 136)">
+            <rect x="0" y="0" width="26" height="20" rx="3" ry="3" class="diagram-icon"/>
+            <path d="M 8 20 L 8 24 L 18 24 L 18 20" class="diagram-icon"/>
+          </g>
+          <text x="130" y="184" text-anchor="middle" font-size="13" font-weight="700">Client</text>
+          <text x="130" y="202" text-anchor="middle" font-size="10" class="diagram-muted">Claude · Cursor · VS Code</text>
+        </g>
+
+        <!-- Node: Claude Agent (accent) -->
+        <g>
+          <rect x="308" y="118" width="192" height="104" rx="14" ry="14" class="diagram-node diagram-node--accent"/>
+          <g transform="translate(392, 138)">
+            <rect x="0" y="0" width="24" height="20" rx="6" ry="6" class="diagram-icon"/>
+            <circle cx="8" cy="10" r="2" class="diagram-icon" style="fill: var(--ui-color-primary); stroke: none;"/>
+            <circle cx="16" cy="10" r="2" class="diagram-icon" style="fill: var(--ui-color-primary); stroke: none;"/>
+            <path d="M 12 -4 L 12 0" class="diagram-icon"/>
+          </g>
+          <text x="404" y="184" text-anchor="middle" font-size="13" font-weight="700">Claude · Agent</text>
+          <text x="404" y="202" text-anchor="middle" font-size="10" class="diagram-muted">picks server by framework</text>
+        </g>
+
+        <!-- Node: Storybook Angular -->
+        <g>
+          <rect x="588" y="40" width="332" height="76" rx="14" ry="14" class="diagram-node"/>
+          <rect x="604" y="56" width="40" height="44" rx="6" ry="6" style="fill: color-mix(in srgb, #e23237 22%, transparent); stroke: #e23237; stroke-width: 1.25;"/>
+          <text x="624" y="82" text-anchor="middle" font-size="13" font-weight="800" style="fill: #e23237">A</text>
+          <text x="660" y="70" font-size="12" font-weight="700">storybook-angular</text>
+          <text x="660" y="88" font-size="10" class="diagram-mono diagram-muted">/storybook-angular/mcp</text>
+          <text x="660" y="105" font-size="10" class="diagram-muted">list · get_documentation</text>
+        </g>
+
+        <!-- Node: Storybook React -->
+        <g>
+          <rect x="588" y="132" width="332" height="76" rx="14" ry="14" class="diagram-node"/>
+          <rect x="604" y="148" width="40" height="44" rx="6" ry="6" style="fill: color-mix(in srgb, #61dafb 22%, transparent); stroke: #61dafb; stroke-width: 1.25;"/>
+          <text x="624" y="174" text-anchor="middle" font-size="13" font-weight="800" style="fill: #61dafb">R</text>
+          <text x="660" y="162" font-size="12" font-weight="700">storybook-react</text>
+          <text x="660" y="180" font-size="10" class="diagram-mono diagram-muted">/storybook-react/mcp</text>
+          <text x="660" y="197" font-size="10" class="diagram-muted">+ previews + story tests</text>
+        </g>
+
+        <!-- Node: Storybook Vue -->
+        <g>
+          <rect x="588" y="224" width="332" height="76" rx="14" ry="14" class="diagram-node"/>
+          <rect x="604" y="240" width="40" height="44" rx="6" ry="6" style="fill: color-mix(in srgb, #42b883 22%, transparent); stroke: #42b883; stroke-width: 1.25;"/>
+          <text x="624" y="266" text-anchor="middle" font-size="13" font-weight="800" style="fill: #42b883">V</text>
+          <text x="660" y="254" font-size="12" font-weight="700">storybook-vue</text>
+          <text x="660" y="272" font-size="10" class="diagram-mono diagram-muted">/storybook-vue/mcp</text>
+          <text x="660" y="289" font-size="10" class="diagram-muted">+ previews + story tests</text>
+        </g>
+
+        <!-- Label: Identical protocol -->
+        <g transform="translate(348, 316)">
+          <rect x="0" y="0" width="264" height="22" rx="11" ry="11" class="diagram-node"/>
+          <text x="132" y="15" text-anchor="middle" font-size="10" font-weight="600" class="diagram-muted">same JSON-RPC contract · different frameworks</text>
+        </g>
+      </svg>
+    </DiagramFigure>
+  </div>
   <McpExplorer client:load />
 </BaseLayout>

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
+import DiagramFigure from '../components/DiagramFigure.astro';
 
 const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
 const PKG_MANAGERS = ['npm', 'pnpm', 'yarn'] as const;
@@ -45,6 +46,71 @@ const COMPONENT_IMPORT: Record<string, string> = {
         <button class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`} data-fw-btn={fw}>{fw}</button>
       ))}
     </div>
+
+    <DiagramFigure caption="Each step produces the artifact the next step consumes. No config files, no bundler plugins.">
+      <svg viewBox="0 0 880 220" role="img" aria-labelledby="ins-title ins-desc" preserveAspectRatio="xMidYMid meet">
+        <title id="ins-title">Three-step installation flow</title>
+        <desc id="ins-desc">First install the package, which updates package.json. Second import the token stylesheet into global CSS. Third import components into your code. Result: tree-shakeable UI ready to use.</desc>
+
+        <defs>
+          <marker id="ins-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow"/>
+          </marker>
+        </defs>
+
+        <!-- Step 1: Install package -->
+        <g>
+          <rect x="24" y="40" width="248" height="128" rx="14" ry="14" class="diagram-node"/>
+          <text x="48" y="68" font-size="11" font-weight="700" style="fill: var(--ui-color-primary)">STEP 1</text>
+          <g transform="translate(200, 52)">
+            <rect x="0" y="0" width="28" height="26" rx="3" ry="3" class="diagram-icon"/>
+            <path d="M 0 8 L 28 8" class="diagram-icon"/>
+            <path d="M 14 0 L 14 8" class="diagram-icon"/>
+          </g>
+          <text x="48" y="100" font-size="15" font-weight="700">Install package</text>
+          <text x="48" y="122" font-size="11" class="diagram-muted">Adds dependency to</text>
+          <text x="48" y="148" class="diagram-mono" font-size="12" style="fill: var(--ui-color-primary)">package.json</text>
+        </g>
+
+        <line x1="272" y1="104" x2="312" y2="104" class="diagram-connector" marker-end="url(#ins-arrow)"/>
+
+        <!-- Step 2: Import tokens -->
+        <g>
+          <rect x="312" y="40" width="248" height="128" rx="14" ry="14" class="diagram-node"/>
+          <text x="336" y="68" font-size="11" font-weight="700" style="fill: var(--ui-color-primary)">STEP 2</text>
+          <g transform="translate(488, 52)">
+            <circle cx="8" cy="8" r="6" class="diagram-icon" style="fill: var(--ui-color-primary); stroke: none;"/>
+            <circle cx="22" cy="8" r="6" class="diagram-icon" style="fill: var(--ui-color-secondary); stroke: none; opacity: 0.6;"/>
+            <circle cx="15" cy="22" r="6" class="diagram-icon" style="fill: var(--ui-color-primary); stroke: none; opacity: 0.4;"/>
+          </g>
+          <text x="336" y="100" font-size="15" font-weight="700">Import tokens</text>
+          <text x="336" y="122" font-size="11" class="diagram-muted">Adds CSS variables to</text>
+          <text x="336" y="148" class="diagram-mono" font-size="12" style="fill: var(--ui-color-primary)">styles.css</text>
+        </g>
+
+        <line x1="560" y1="104" x2="600" y2="104" class="diagram-connector" marker-end="url(#ins-arrow)"/>
+
+        <!-- Step 3: Import components -->
+        <g>
+          <rect x="600" y="40" width="248" height="128" rx="14" ry="14" class="diagram-node diagram-node--accent"/>
+          <text x="624" y="68" font-size="11" font-weight="700" style="fill: var(--ui-color-primary)">STEP 3</text>
+          <g transform="translate(776, 54)">
+            <path d="M 8 0 L 0 12 L 8 24" class="diagram-icon"/>
+            <path d="M 22 0 L 30 12 L 22 24" class="diagram-icon"/>
+            <path d="M 18 2 L 12 22" class="diagram-icon"/>
+          </g>
+          <text x="624" y="100" font-size="15" font-weight="700">Import components</text>
+          <text x="624" y="122" font-size="11" class="diagram-muted">Tree-shakeable named imports</text>
+          <text x="624" y="148" class="diagram-mono" font-size="12" style="fill: var(--ui-color-primary)">import &#123; Llm… &#125; from …</text>
+        </g>
+
+        <!-- Ready badge -->
+        <g transform="translate(368, 184)">
+          <rect x="0" y="0" width="144" height="28" rx="14" ry="14" style="fill: color-mix(in srgb, var(--ui-color-success) 15%, transparent); stroke: var(--ui-color-success); stroke-width: 1;"/>
+          <text x="72" y="18" text-anchor="middle" font-size="11" font-weight="700" style="fill: var(--ui-color-success)">✓ ready to build</text>
+        </g>
+      </svg>
+    </DiagramFigure>
 
     <!-- Step 1: Install -->
     <div class="docs-section">

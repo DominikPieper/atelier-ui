@@ -1,0 +1,141 @@
+---
+interface Props {
+  caption?: string;
+  align?: 'start' | 'center';
+  compact?: boolean;
+}
+
+const { caption, align = 'center', compact = false } = Astro.props;
+---
+
+<figure class:list={["diagram-figure", `diagram-figure--${align}`, compact && "diagram-figure--compact"]}>
+  <div class="diagram-figure-surface">
+    <slot />
+  </div>
+  {caption && <figcaption class="diagram-figure-caption">{caption}</figcaption>}
+</figure>
+
+<style>
+  .diagram-figure {
+    margin: 1.5rem 0 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .diagram-figure--start { align-items: flex-start; }
+  .diagram-figure--center { align-items: stretch; }
+
+  .diagram-figure-surface {
+    width: 100%;
+    padding: 1.5rem 1.25rem;
+    background:
+      radial-gradient(
+        ellipse at top,
+        color-mix(in srgb, var(--ui-color-primary) 6%, transparent),
+        transparent 60%
+      ),
+      var(--ui-color-surface-raised);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-lg);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .diagram-figure--compact .diagram-figure-surface {
+    padding: 1rem;
+  }
+
+  .diagram-figure-surface :global(svg) {
+    width: 100%;
+    height: auto;
+    display: block;
+    max-width: 100%;
+  }
+
+  .diagram-figure-caption {
+    font-size: 0.78rem;
+    color: var(--ui-color-text-muted);
+    line-height: 1.45;
+    padding: 0 0.25rem;
+    text-align: center;
+  }
+
+  .diagram-figure--start .diagram-figure-caption {
+    text-align: left;
+  }
+
+  /* Shared SVG typographic defaults so all diagrams look consistent */
+  .diagram-figure-surface :global(svg text) {
+    font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    fill: var(--ui-color-text);
+  }
+
+  .diagram-figure-surface :global(svg text.diagram-mono) {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  .diagram-figure-surface :global(svg text.diagram-muted) {
+    fill: var(--ui-color-text-muted);
+  }
+
+  .diagram-figure-surface :global(svg text.diagram-eyebrow) {
+    fill: var(--ui-color-text-muted);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .diagram-figure-surface :global(svg .diagram-node) {
+    fill: var(--ui-color-surface);
+    stroke: var(--ui-color-border);
+    stroke-width: 1.25;
+  }
+
+  .diagram-figure-surface :global(svg .diagram-node--accent) {
+    fill: color-mix(in srgb, var(--ui-color-primary) 10%, var(--ui-color-surface));
+    stroke: var(--ui-color-primary);
+    stroke-width: 1.5;
+  }
+
+  .diagram-figure-surface :global(svg .diagram-connector) {
+    fill: none;
+    stroke: var(--ui-color-border-hover);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+
+  .diagram-figure-surface :global(svg .diagram-connector--accent) {
+    stroke: var(--ui-color-primary);
+    stroke-width: 2;
+  }
+
+  /* Dashed connector is used for feedback loops — needs to read as
+     "alternative path" at a glance, not fade into the background. */
+  .diagram-figure-surface :global(svg .diagram-connector--dashed) {
+    stroke: color-mix(in srgb, var(--ui-color-primary) 55%, var(--ui-color-border-hover));
+    stroke-dasharray: 5 5;
+    stroke-width: 1.75;
+  }
+
+  .diagram-figure-surface :global(svg .diagram-arrow) {
+    fill: var(--ui-color-border-hover);
+  }
+
+  .diagram-figure-surface :global(svg .diagram-arrow--accent) {
+    fill: var(--ui-color-primary);
+  }
+
+  .diagram-figure-surface :global(svg .diagram-arrow--muted-accent) {
+    fill: color-mix(in srgb, var(--ui-color-primary) 55%, var(--ui-color-border-hover));
+  }
+
+  .diagram-figure-surface :global(svg .diagram-icon) {
+    fill: none;
+    stroke: var(--ui-color-primary);
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+</style>
