@@ -227,19 +227,25 @@ function testFramework(framework, registryUrl, npmrcPath) {
       'CLAUDE.md',
       '.mcp.json',
       `workshop-${framework}/src/styles.css`,
+      `workshop-${framework}/src/styles/tokens.css`,
       'tools/scripts/preflight.mjs',
     ];
     for (const rel of mustExist) {
       if (!existsSync(join(wsPath, rel))) throw new Error(`missing: ${rel}`);
     }
-    ok('scaffolded files present');
+    ok('scaffolded files present (including local tokens.css)');
 
     const stylesPath = join(wsPath, `workshop-${framework}/src/styles.css`);
     const styles = readFileSync(stylesPath, 'utf-8');
-    if (!styles.includes(`@import '@atelier-ui/${framework}/styles/tokens.css';`)) {
-      throw new Error(`tokens import missing in ${stylesPath}`);
+    if (!styles.includes(`@import './styles/tokens.css';`)) {
+      throw new Error(`relative tokens import missing in ${stylesPath}`);
     }
-    ok('tokens.css import present');
+    const tokensPath = join(wsPath, `workshop-${framework}/src/styles/tokens.css`);
+    const tokens = readFileSync(tokensPath, 'utf-8');
+    if (!tokens.includes('--ui-color-')) {
+      throw new Error(`tokens.css looks empty or corrupt at ${tokensPath}`);
+    }
+    ok('tokens.css written locally and imported relatively');
 
     run(`npx nx build workshop-${framework} --skip-nx-cache`, { cwd: wsPath });
     ok(`nx build workshop-${framework} green`);

@@ -87,13 +87,16 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
       deps['@atelier-ui/vue'] = 'latest';
     }
 
-    // Inject CSS tokens import into the app's global stylesheet
+    // Copy design tokens into the scaffolded app so attendees can edit them
+    // directly. They're not imported from the @atelier-ui/<fw> npm package
+    // because (a) those published packages don't ship tokens.css, and (b) a
+    // workshop attendee editing colors in node_modules is a bad experience.
+    tree.write(`${appName}/src/styles/tokens.css`, readTemplate('styles/tokens.css'));
+
+    // Prepend the tokens import to the app's global stylesheet
     const stylesPath = `${appName}/src/styles.css`;
     const existing = tree.exists(stylesPath) ? (tree.read(stylesPath, 'utf-8') ?? '') : '';
-    tree.write(
-      stylesPath,
-      `@import '@atelier-ui/${framework}/styles/tokens.css';\n\n${existing}`,
-    );
+    tree.write(stylesPath, `@import './styles/tokens.css';\n\n${existing}`);
   }
 
   // Write CLAUDE.md with framework-specific guidance

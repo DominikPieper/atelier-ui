@@ -121,40 +121,55 @@ describe('preset generator', () => {
 
   // ─── CSS tokens ────────────────────────────────────────────────────────────
 
-  it('injects angular CSS tokens import into styles.css', async () => {
+  const EXPECTED_IMPORT = "@import './styles/tokens.css';";
+
+  it('writes tokens.css into the scaffolded angular app', async () => {
     await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
 
-    const css = tree.read('workshop-angular/src/styles.css', 'utf-8');
-    expect(css).toContain("@import '@atelier-ui/angular/styles/tokens.css'");
+    const tokens = tree.read('workshop-angular/src/styles/tokens.css', 'utf-8') ?? '';
+    expect(tokens.length).toBeGreaterThan(0);
+    expect(tokens).toContain('--ui-color-');
   });
 
-  it('injects react CSS tokens import into styles.css', async () => {
+  it('writes tokens.css into the scaffolded react app', async () => {
     await presetGenerator(tree, { name: 'my-workspace', frameworks: 'react' });
 
-    const css = tree.read('workshop-react/src/styles.css', 'utf-8');
-    expect(css).toContain("@import '@atelier-ui/react/styles/tokens.css'");
+    const tokens = tree.read('workshop-react/src/styles/tokens.css', 'utf-8') ?? '';
+    expect(tokens.length).toBeGreaterThan(0);
+    expect(tokens).toContain('--ui-color-');
   });
 
-  it('injects vue CSS tokens import into styles.css', async () => {
+  it('writes tokens.css into the scaffolded vue app', async () => {
     await presetGenerator(tree, { name: 'my-workspace', frameworks: 'vue' });
 
-    const css = tree.read('workshop-vue/src/styles.css', 'utf-8');
-    expect(css).toContain("@import '@atelier-ui/vue/styles/tokens.css'");
+    const tokens = tree.read('workshop-vue/src/styles/tokens.css', 'utf-8') ?? '';
+    expect(tokens.length).toBeGreaterThan(0);
+    expect(tokens).toContain('--ui-color-');
   });
 
-  it('injects tokens import for each framework when all three selected', async () => {
+  it('injects a relative tokens import into styles.css for each framework', async () => {
     await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular,react,vue' });
 
-    expect(tree.read('workshop-angular/src/styles.css', 'utf-8')).toContain('@atelier-ui/angular');
-    expect(tree.read('workshop-react/src/styles.css', 'utf-8')).toContain('@atelier-ui/react');
-    expect(tree.read('workshop-vue/src/styles.css', 'utf-8')).toContain('@atelier-ui/vue');
+    for (const fw of ['angular', 'react', 'vue']) {
+      const css = tree.read(`workshop-${fw}/src/styles.css`, 'utf-8') ?? '';
+      expect(css).toContain(EXPECTED_IMPORT);
+    }
+  });
+
+  it('does not reference @atelier-ui/<fw>/styles (tokens are local)', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular,react,vue' });
+
+    for (const fw of ['angular', 'react', 'vue']) {
+      const css = tree.read(`workshop-${fw}/src/styles.css`, 'utf-8') ?? '';
+      expect(css).not.toContain(`@atelier-ui/${fw}/styles`);
+    }
   });
 
   it('tokens import is the first line of styles.css', async () => {
     await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
 
     const css = tree.read('workshop-angular/src/styles.css', 'utf-8') ?? '';
-    expect(css.trimStart()).toMatch(/^@import '@atelier-ui\/angular\/styles\/tokens\.css'/);
+    expect(css.trimStart()).toMatch(/^@import '\.\/styles\/tokens\.css'/);
   });
 
   it('preserves existing styles.css content after the import', async () => {
@@ -163,7 +178,7 @@ describe('preset generator', () => {
     await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
 
     const css = tree.read('workshop-angular/src/styles.css', 'utf-8') ?? '';
-    expect(css).toContain("@import '@atelier-ui/angular/styles/tokens.css'");
+    expect(css).toContain(EXPECTED_IMPORT);
     expect(css).toContain('/* existing styles */');
     expect(css.indexOf('@import')).toBeLessThan(css.indexOf('/* existing styles */'));
   });
