@@ -2,6 +2,7 @@
 .llm-accordion-group {
   display: block;
   font-family: var(--ui-font-family);
+  color: var(--ui-color-text);
 }
 
 /* ── Default variant — shared borders between items ──────────────────────── */
