@@ -1,76 +1,112 @@
-# Atelier UI
+# Atelier
 
-> **Not for production. This is a showcase only.**
+> **AI Workshop for Component-Driven UIs.**
 >
-> This repository demonstrates how to build a UI component library optimized for LLM-assisted development — using MCP servers, Storybook, and a shared spec layer to give AI accurate, structured component knowledge at generation time.
+> Design in Figma. Explore in Storybook. Ship with AI.
+
+Hosted workshop: **[atelier.pieper.io](https://atelier.pieper.io)**
 
 ---
 
-## What is this?
+## What this repo is
 
-**Atelier UI** is a multi-framework UI component library for **Angular**, **React**, and **Vue** designed around one idea: structure and document components so that an LLM can use them correctly without guessing.
+**Atelier** is a hands-on workshop that teaches how to build production-quality UI components using three connected tools:
 
-The same 22 components ship across all three frameworks with identical prop names, identical variant unions, and the same CSS design token system. A shared `@atelier-ui/spec` package enforces API parity at the TypeScript level — if a prop exists in the spec, it exists in every framework implementation.
+1. **Figma** — the single source of truth for design tokens and component frames.
+2. **Storybook** — a live explorer for every component, prop, and variant.
+3. **AI + MCP** — Claude reads Figma and Storybook through the Model Context Protocol and writes the code.
 
-An MCP server exposes the full component library to AI assistants. Instead of relying on training data that may be outdated or hallucinated, the model calls the MCP server to get exact prop names, types, defaults, and usage examples for the component it needs — then generates code from that.
+The repo ships everything needed to run the workshop end-to-end: an Astro-based docs site, three parallel component libraries (Angular, React, Vue) as teaching material, three Storybooks with MCP servers attached, and a one-command scaffolder for participants.
+
+> **Not a production UI library.** The `@atelier-ui/*` component packages exist to make the workshop concrete. They have no semver guarantees and are not maintained for third-party use. If you need a real library: [shadcn/ui](https://ui.shadcn.com), [Angular Material](https://material.angular.io), or [PrimeNG](https://primeng.org).
+
+---
+
+## The three pillars
+
+| Pillar | Role | Where it lives |
+|---|---|---|
+| **Figma** | Design tokens, component frames, spacing — defined before code. | Figma workspace + token sync (`docs/src/pages/figma.astro`, `figma-token.astro`) |
+| **Storybook** | Per-framework component explorer. Each Storybook exposes a hosted MCP endpoint. | `libs/{angular,react,vue}/.storybook/` → deployed to `/storybook-{angular,react,vue}` |
+| **AI + MCP** | Claude reads both sources, writes design-accurate code. | `@storybook/mcp` + `@storybook/addon-mcp`, hosted via Netlify functions |
+
+The workshop walks through the full loop: **inspect → prompt → ship → iterate.**
+
+---
+
+## Quick start — scaffold a workshop workspace
+
+```bash
+npx create-atelier-ui-workspace
+```
+
+Prompts for a workspace name and framework (`angular` / `react` / `vue`), then generates a ready-to-run Nx workspace with the component library installed and MCP wired up.
+
+```bash
+cd my-workshop
+npx nx serve workshop-<framework>
+```
+
+Full setup guide (prerequisites, Claude Code install, Figma access token, MCP config): [atelier.pieper.io/workshop](https://atelier.pieper.io/workshop).
+
+---
+
+## Hosted MCP endpoints
+
+Add these to your Claude Code MCP config to let the model read Storybook directly:
+
+```json
+{
+  "mcpServers": {
+    "storybook-angular": { "type": "http", "url": "https://atelier.pieper.io/storybook-angular/mcp" },
+    "storybook-react":   { "type": "http", "url": "https://atelier.pieper.io/storybook-react/mcp"   },
+    "storybook-vue":     { "type": "http", "url": "https://atelier.pieper.io/storybook-vue/mcp"     }
+  }
+}
+```
+
+| Tool | Returns | Availability |
+|---|---|---|
+| `list-all-documentation` | Every documented component, grouped by category | All frameworks |
+| `get-documentation` | Prop table, types, defaults, usage examples | All frameworks |
+| `preview-stories` | Live preview URLs for component variants | React, Vue |
+| `run-story-tests` | Vitest/Storybook interaction results | React, Vue |
+| `get-storybook-story-instructions` | Prompt patterns for generating new stories | React, Vue |
+
+Angular MCP currently focuses on documentation and prop discovery; previews and testing are React/Vue only.
 
 ---
 
 ## Packages
 
-| Package | Description |
+| Package | Purpose |
 |---|---|
-| `@atelier-ui/angular` | Angular 21 component library |
-| `@atelier-ui/react` | React 19 component library |
-| `@atelier-ui/vue` | Vue 3 component library |
-| `@atelier-ui/spec` | Shared TypeScript spec interfaces (framework-agnostic) |
+| `create-atelier-ui-workspace` | `npx` scaffolder — bootstraps a workshop workspace with framework choice |
+| `@atelier-ui/create-workspace` | Nx preset used by the scaffolder |
+| `@atelier-ui/angular` | Angular 21 component library (teaching artifact) |
+| `@atelier-ui/react` | React 19 component library (teaching artifact) |
+| `@atelier-ui/vue` | Vue 3 component library (teaching artifact) |
+| `@atelier-ui/spec` | Framework-agnostic TypeScript interfaces — enforces API parity across all three libraries |
 
 ---
 
 ## Components
 
-22 components across all three libraries:
+~26 components ship in all three libraries with identical prop names, identical variant unions, and the same `--ui-*` CSS token system.
 
-**Inputs**
-`Button` · `Input` · `Textarea` · `Checkbox` · `Toggle` · `Radio Group` · `Select`
+**Inputs** — Button · Input · Textarea · Checkbox · Toggle · Radio / RadioGroup · Select · Combobox
+**Display** — Badge · Card · Avatar · Skeleton · Progress · Table · CodeBlock
+**Navigation** — Breadcrumbs · Tabs · Pagination · Menu · Stepper
+**Overlay** — Dialog · Drawer · Tooltip · Toast
+**Feedback** — Accordion · Alert
 
-**Display**
-`Badge` · `Card` · `Avatar` · `Skeleton` · `Progress`
-
-**Navigation**
-`Breadcrumbs` · `Tabs` · `Pagination` · `Menu`
-
-**Overlay**
-`Dialog` · `Drawer` · `Tooltip` · `Toast`
-
-**Layout**
-`Accordion` · `Alert`
+Authoritative list: [`libs/angular/src/index.ts`](libs/angular/src/index.ts), [`libs/react/src/index.ts`](libs/react/src/index.ts), [`libs/vue/src/index.ts`](libs/vue/src/index.ts).
 
 ---
 
-## The MCP Server
+## The spec layer
 
-The primary integration point for AI tooling is the MCP server. When configured in Claude Code or another MCP-capable client, it exposes tools from the `@storybook/mcp` package.
-
-### Tool Support & Framework Parity
-
-| Tool | What it returns | Availability |
-|---|---|---|
-| `list-all-documentation` | All 22 components organized by category | All frameworks |
-| `get-documentation` | Full prop table with types, defaults, and examples | All frameworks |
-| `preview-stories` | Live preview URLs for component variants | React, Vue |
-| `run-story-tests` | Results of Vitest/Storybook interactions | React, Vue |
-| `get-storybook-story-instructions` | Prompt patterns for generating new stories | React, Vue |
-
-> **Note:** The Angular MCP server currently focuses on high-fidelity documentation and prop discovery. Full support for story previews and testing is currently available for the React and Vue implementations.
-
-The MCP Playground in the docs site lets you call each tool interactively and see exactly what the model receives.
-
----
-
-## The Spec Layer
-
-`@atelier-ui/spec` contains a TypeScript interface for every component:
+`@atelier-ui/spec` contains one TypeScript interface per component. All three framework libraries import from it so the compiler enforces parity.
 
 ```typescript
 export interface LlmButtonSpec {
@@ -81,54 +117,58 @@ export interface LlmButtonSpec {
 }
 ```
 
-Angular uses the union types as `input<T>()` type parameters. React extends the spec interface from the framework-specific props type. Vue uses `defineProps<T>()`. The TypeScript compiler enforces that all three match — drift between frameworks is caught at build time, not in production.
+- Angular uses the union types as `input<T>()` type parameters.
+- React extends the spec from framework-specific props types.
+- Vue uses `defineProps<T>()`.
 
-A sync validator (`check:docs`) also verifies that everything in the spec is documented in `component-data.ts`. If a prop exists in the spec but is missing from the docs, CI fails.
-
----
-
-## Design Principles
-
-**Predictable APIs.** Every component uses the same prop names for the same concepts (`variant`, `size`, `disabled`). String literal union types everywhere — no enums, no numeric codes.
-
-**Composition over configuration.** Sub-components follow an explicit naming pattern (`llm-card` + `llm-card-header` + `llm-card-content` + `llm-card-footer`). No complex config objects.
-
-**Design tokens, not utility classes.** All visual decisions are driven by `--ui-*` CSS custom properties. Theming is a token override, not a class swap.
-
-**ARIA-first behavior.** Every interactive component follows the corresponding WAI-ARIA design pattern. Keyboard interactions are standards-aligned so the LLM can infer them without additional documentation.
+`npm run check:docs` validates that every prop in the spec is documented in `component-data.ts`. CI fails on drift.
 
 ---
 
-## Tech Stack
+## Design principles
 
-- **Monorepo**: Nx
+**Predictable APIs.** Same prop names for the same concepts (`variant`, `size`, `disabled`). String literal unions — no enums, no numeric codes.
+
+**Composition over configuration.** Sub-components follow a naming pattern (`LlmCard` + `LlmCardHeader` + `LlmCardContent` + `LlmCardFooter`). No config objects.
+
+**Design tokens, not utility classes.** Everything visual is a `--ui-*` CSS custom property. Theming = token override. Dark mode ships via `prefers-color-scheme` with `data-theme="dark"` escape hatch.
+
+**ARIA-first behavior.** Every interactive component implements the matching WAI-ARIA pattern. Keyboard interactions are standards-aligned.
+
+Full design guide: [`plan/big-picture.md`](plan/big-picture.md).
+
+---
+
+## Tech stack
+
+- **Monorepo**: Nx 22
 - **Angular library**: Angular 21, Signals, Signal Forms, Angular CDK
-- **React library**: React 19, TypeScript
-- **Vue library**: Vue 3, `<script setup>` + `defineProps`
+- **React library**: React 19
+- **Vue library**: Vue 3 + `<script setup>`
 - **Spec**: `@atelier-ui/spec` — shared TypeScript interfaces
-- **Documentation**: Storybook 10 (Angular + React), TanStack Router docs app
-- **Testing**: Vitest + Angular Testing Library
-- **CI**: GitHub Actions (lint, test, build, docs sync check)
-- **Deploy**: Netlify (docs app)
+- **Docs site**: Astro 5 (`@astrojs/mdx`, `@astrojs/react`, `astro-expressive-code`)
+- **Storybook**: Storybook 10 (Angular + React + Vue)
+- **Testing**: Vitest + Angular/React/Vue Testing Library
+- **CI**: GitHub Actions — parallel lint / test / build / sync checks
+- **Deploy**: Netlify (docs + three Storybooks + three MCP endpoints)
 
 ---
 
-## Local Development
+## Local development
 
 ```bash
-# Install dependencies
+# Install
 npm install
 
-# Start Storybook (Angular)
-npx nx run angular:storybook
+# Docs site (Astro, port 4300)
+npx nx serve docs
 
-# Start Storybook (React)
-npx nx run react:storybook
+# Storybooks
+npx nx storybook angular
+npx nx storybook react
+npx nx storybook vue
 
-# Start docs app
-npx nx run docs:serve
-
-# Run tests
+# Tests
 npx nx run-many -t test
 
 # Build everything
@@ -136,47 +176,36 @@ npx nx run-many -t build
 
 # Validate spec ↔ docs parity
 npm run check:docs
+
+# Validate spec ↔ framework implementation parity
+npm run check:sync
 ```
 
 ---
 
-## Project Structure
+## Project structure
 
 ```
+├── docs/              # Astro docs site — the workshop content, deployed to atelier.pieper.io
 ├── libs/
-│   ├── angular/   # @atelier-ui/angular — Angular 21 components
-│   ├── react/     # @atelier-ui/react — React 19 components
-│   ├── vue/       # @atelier-ui/vue — Vue 3 components
-│   └── spec/      # @atelier-ui/spec — shared TypeScript spec interfaces
-├── docs/          # Docs app (TanStack Router + React) — MCP Playground, component reference
+│   ├── angular/                    # @atelier-ui/angular — component library
+│   ├── react/                      # @atelier-ui/react — component library
+│   ├── vue/                        # @atelier-ui/vue — component library
+│   ├── spec/                       # @atelier-ui/spec — shared TypeScript interfaces
+│   ├── create-atelier-ui-workspace/# npx scaffolder CLI
+│   └── create-workspace/           # @atelier-ui/create-workspace — Nx preset used by the scaffolder
+├── netlify/           # Netlify functions (MCP endpoints, markdown content negotiation)
+├── talk/              # Conference talk materials (Storybook MCPs: Die Zukunft des Frontend Engineerings)
+├── plan/              # Design guide, roadmap, Figma notes
 ├── tools/
-│   └── scripts/
-│       ├── check-sync.js       # Validates spec ↔ framework implementation parity
-│       └── check-docs-sync.js  # Validates spec ↔ component-data.ts parity
-├── .github/workflows/
-│   ├── ci.yml      # Lint, test, build, sync checks on every push
-│   └── publish.yml # npm publish on GitHub Release
-└── netlify.toml    # Docs deploy configuration
+│   ├── generators/    # Nx generators (e.g. llm-component, llm-component-react)
+│   └── scripts/       # check-sync.js, check-docs-sync.js, preflight.mjs
+├── .github/workflows/ # ci.yml, publish.yml
+└── netlify.toml       # Deploy config — docs + 3 Storybooks + MCP redirects
 ```
 
 ---
 
-## Design Tokens
+## Conference talk
 
-```css
-@import '@atelier-ui/angular/styles/tokens.css';
-/* or */
-@import '@atelier-ui/react/styles/tokens.css';
-/* or */
-@import '@atelier-ui/vue/styles/tokens.css';
-```
-
-Key tokens: `--ui-color-primary` · `--ui-color-surface` · `--ui-color-border` · `--ui-color-text` · `--ui-color-text-muted` · `--ui-radius-sm/md/lg` · `--ui-spacing-1..16` · `--ui-shadow-xs/sm/md/lg`
-
-Dark mode is built in via `prefers-color-scheme`. Override explicitly with `data-theme="dark"` on `<html>`.
-
----
-
-## A Note on Usage
-
-This is a **learning and demonstration project** — no stability guarantees, no semver support, no production maintenance. If you need a real UI library: [shadcn/ui](https://ui.shadcn.com), [Angular Material](https://material.angular.io), or [PrimeNG](https://primeng.org).
+The repo underpins the talk **"Storybook MCPs: Die Zukunft des Frontend Engineerings"** — see [`talk/storybook-mcp-talk.md`](talk/storybook-mcp-talk.md).
