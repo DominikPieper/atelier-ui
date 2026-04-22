@@ -14,8 +14,9 @@
 import { execSync, spawnSync } from 'node:child_process';
 import { createServer } from 'node:net';
 import { readFileSync, existsSync } from 'node:fs';
+import { homedir } from 'node:os';
 import { fileURLToPath } from 'node:url';
-import { dirname, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -175,13 +176,44 @@ function checkClaudeCli() {
   }
 }
 
-function checkFigmaToken() {
+async function checkFigmaSetup() {
+  // 1. Desktop Bridge plugin manifest — the primary channel.
+  const manifestPath = join(homedir(), '.figma-console-mcp', 'plugin', 'manifest.json');
+  if (existsSync(manifestPath)) {
+    ok('Figma Desktop Bridge plugin', `manifest at ${manifestPath}`);
+  } else {
+    warn(
+      'Figma Desktop Bridge plugin',
+      'manifest not found',
+      'Run `npx -y figma-console-mcp@latest --help` once, then Figma → Plugins → Development → Import plugin from manifest…',
+    );
+  }
+
+  // 2. Bridge WebSocket port range — at least one port must be usable.
+  const bridgePorts = [9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232];
+  let freeCount = 0;
+  for (const p of bridgePorts) {
+    if (await portFree(p)) freeCount += 1;
+  }
+  if (freeCount === bridgePorts.length) {
+    ok('Bridge port range 9223–9232', 'all free (MCP will bind on first launch)');
+  } else if (freeCount > 0) {
+    ok('Bridge port range 9223–9232', `${freeCount}/10 free (bridge connection OK)`);
+  } else {
+    warn(
+      'Bridge port range 9223–9232',
+      'entire range in use',
+      'Close unrelated processes holding these ports, or see /troubleshooting#figma-bridge-port-conflict',
+    );
+  }
+
+  // 3. REST token — optional, only affects metadata reads.
   const token = process.env.FIGMA_ACCESS_TOKEN;
   if (!token) {
     warn(
-      'FIGMA_ACCESS_TOKEN',
-      'not set',
-      'See https://atelier.pieper.io/figma-token — or use the workshop demo token',
+      'FIGMA_ACCESS_TOKEN (optional)',
+      'not set — REST reads disabled, plugin tools still work',
+      'See https://atelier.pieper.io/figma-token if you need metadata reads',
     );
     return;
   }
@@ -193,7 +225,7 @@ function checkFigmaToken() {
     );
     return;
   }
-  ok('FIGMA_ACCESS_TOKEN', `set (${token.length} chars)`);
+  ok('FIGMA_ACCESS_TOKEN', `set (${token.length} chars, REST reads enabled)`);
 }
 
 async function checkMcpEndpoints() {
@@ -251,7 +283,7 @@ async function main() {
   checkClaudeCli();
 
   header('Figma');
-  checkFigmaToken();
+  await checkFigmaSetup();
 
   header('MCP reachability');
   await checkMcpEndpoints();

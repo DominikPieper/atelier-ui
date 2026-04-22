@@ -15,7 +15,6 @@ const PREREQ_CMD = {
   macOS: `# 1. Node 20+ (use Homebrew or nvm)\nnode --version   # need v20.11 or newer\n\n# 2. Claude Code CLI\nnpm install -g @anthropic-ai/claude-code\nclaude --version\n\n# 3. Figma access token (or use the demo token)\nexport FIGMA_ACCESS_TOKEN=figd_...`,
   Linux: `# 1. Node 20+ (nvm recommended)\nnode --version   # need v20.11 or newer\n\n# 2. Claude Code CLI\nnpm install -g @anthropic-ai/claude-code\nclaude --version\n\n# 3. Figma access token (or use the demo token)\nexport FIGMA_ACCESS_TOKEN=figd_...`,
   Windows: `# Run in PowerShell (or use WSL for the macOS/Linux steps)\n\n# 1. Node 20+ (winget or nvm-windows)\nnode --version   # need v20.11 or newer\n\n# 2. Claude Code CLI\nnpm install -g @anthropic-ai/claude-code\nclaude --version\n\n# 3. Figma access token\n$env:FIGMA_ACCESS_TOKEN = "figd_..."`,
-  Codespaces: `# Everything is pre-installed.\n# 1. Fork this repo on GitHub\n# 2. Click "Code" → "Codespaces" → "Create codespace"\n# 3. Wait ~90s for postCreateCommand to finish\n# 4. Add FIGMA_ACCESS_TOKEN in\n#    Settings → Codespaces → Secrets`,
 };
 
 const MCP_CONFIG = `{
@@ -62,7 +61,8 @@ const MCP_CONFIG = `{
       </div>
       <p style="margin: 0 0 0.85rem; color: var(--ui-color-text-muted); font-size: 0.85rem; line-height: 1.55">
         Pick your platform, run the commands below, then verify with <code>npm run preflight</code>
-        inside the scaffolded workspace. Need a Figma token? See <a href="/figma-token" style="color: var(--ui-color-primary)">/figma-token</a>.
+        inside the scaffolded workspace. Connecting Figma? See <a href="/figma-token" style="color: var(--ui-color-primary)">Figma Setup</a>
+        — it walks through the Desktop Bridge plugin and the optional REST token.
       </p>
       <div class="docs-multi-code-tabs" style="border-radius: 8px 8px 0 0; margin-bottom: 0">
         {Object.keys(PREREQ_CMD).map((platform, i) => (

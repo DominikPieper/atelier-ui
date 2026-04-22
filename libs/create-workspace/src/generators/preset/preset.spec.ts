@@ -243,7 +243,7 @@ describe('preset generator', () => {
     expect(md).toContain('atelier.pieper.io');
   });
 
-  // ─── Preflight + Devcontainer ──────────────────────────────────────────────
+  // ─── Preflight ─────────────────────────────────────────────────────────────
 
   it('writes tools/scripts/preflight.mjs', async () => {
     await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
@@ -257,12 +257,6 @@ describe('preset generator', () => {
     await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
     const pkg = readJson(tree, 'package.json');
     expect(pkg.scripts.preflight).toBe('node tools/scripts/preflight.mjs');
-  });
-
-  it('writes .devcontainer/devcontainer.json and setup.sh', async () => {
-    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
-    expect(tree.exists('.devcontainer/devcontainer.json')).toBe(true);
-    expect(tree.exists('.devcontainer/setup.sh')).toBe(true);
   });
 
   it('CLAUDE.md references preflight in troubleshooting', async () => {

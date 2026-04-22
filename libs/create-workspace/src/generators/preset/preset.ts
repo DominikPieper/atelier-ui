@@ -203,10 +203,8 @@ Full troubleshooting guide: ${SITE_URL}/troubleshooting
     [],
   );
 
-  // Write preflight script + devcontainer into the scaffolded workspace
+  // Write preflight script into the scaffolded workspace
   tree.write('tools/scripts/preflight.mjs', readTemplate('tools/scripts/preflight.mjs'));
-  tree.write('.devcontainer/devcontainer.json', readTemplate('.devcontainer/devcontainer.json'));
-  tree.write('.devcontainer/setup.sh', readTemplate('.devcontainer/setup.sh'));
 
   // Add `preflight` npm script to the generated workspace's package.json
   if (tree.exists('package.json')) {
