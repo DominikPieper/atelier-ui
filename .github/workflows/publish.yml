@@ -28,6 +28,14 @@ jobs:
 
       - run: npm ci
 
+      - name: Configure git identity for nx release
+        # nx release commits version bumps + changelog entries before publishing.
+        # The runner has no git user configured by default, which fails the
+        # commit step on the first conventional-commit-triggered bump.
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+
       - name: Release and Publish
         run: npx nx release --yes
         env:
