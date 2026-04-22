@@ -1,5 +1,5 @@
 import { InputHTMLAttributes, ReactNode, useRef, useEffect, useId } from 'react';
-import type { LlmCheckboxSpec } from '@atelier-ui/spec';
+import type { LlmCheckboxSpec } from '../spec';
 import './llm-checkbox.css';
 
 /**

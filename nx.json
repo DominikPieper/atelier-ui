@@ -62,6 +62,9 @@
           "codeCoverage": true
         }
       }
+    },
+    "nx-release-publish": {
+      "dependsOn": ["build"]
     }
   },
   "plugins": [
@@ -102,7 +105,6 @@
           "angular",
           "react",
           "vue",
-          "spec",
           "create-workspace",
           "create-atelier-ui-workspace"
         ],
@@ -117,9 +119,6 @@
         "createRelease": "github"
       },
       "automaticFromRef": true
-    },
-    "version": {
-      "preVersionCommand": "npx nx run-many -t build"
     }
   }
 }

@@ -33,6 +33,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: node tools/scripts/check-sync.js
+      - run: node tools/scripts/sync-spec.mjs --check
       - run: node tools/scripts/check-docs-sync.js
 
   # ---------------------------------------------------------------------------

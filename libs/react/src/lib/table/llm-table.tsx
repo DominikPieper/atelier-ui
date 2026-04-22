@@ -6,7 +6,7 @@ import type {
   LlmThSpec,
   LlmTdSpec,
   LlmSortDirection,
-} from '@atelier-ui/spec';
+} from '../spec';
 import { LlmCheckbox } from '../checkbox/llm-checkbox';
 import './llm-table.css';
 

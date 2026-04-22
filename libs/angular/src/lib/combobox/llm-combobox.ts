@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
 import { type ValidationError, type WithOptionalFieldTree } from '@angular/forms/signals';
-import type { LlmComboboxOption } from '@atelier-ui/spec';
+import type { LlmComboboxOption } from '../spec';
 
 let nextId = 0;
 

@@ -8,7 +8,7 @@ import {
   input,
   signal,
 } from '@angular/core';
-import type { LlmBreadcrumbsSpec } from '@atelier-ui/spec';
+import type { LlmBreadcrumbsSpec } from '../spec';
 import { LLM_BREADCRUMBS } from './llm-breadcrumbs.token';
 
 /**

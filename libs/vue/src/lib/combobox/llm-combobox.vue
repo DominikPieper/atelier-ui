@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref, watch } from 'vue';
-import type { LlmComboboxOption } from '@atelier-ui/spec';
+import type { LlmComboboxOption } from '../spec';
 import './llm-combobox.css';
 
 defineOptions({ name: 'LlmCombobox' });

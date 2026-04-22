@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, ReactNode, useId } from 'react';
-import type { LlmTooltipSpec } from '@atelier-ui/spec';
+import type { LlmTooltipSpec } from '../spec';
 import './llm-tooltip.css';
 
 /**

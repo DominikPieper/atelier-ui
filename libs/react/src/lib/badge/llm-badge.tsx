@@ -1,5 +1,5 @@
 import { HTMLAttributes, ReactNode } from 'react';
-import type { LlmBadgeSpec } from '@atelier-ui/spec';
+import type { LlmBadgeSpec } from '../spec';
 import './llm-badge.css';
 
 /**

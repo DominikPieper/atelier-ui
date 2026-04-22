@@ -27,9 +27,7 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
     .map((f) => f.trim())
     .filter(Boolean) as Framework[];
 
-  const deps: Record<string, string> = {
-    '@atelier-ui/spec': 'latest',
-  };
+  const deps: Record<string, string> = {};
 
   for (const framework of frameworks) {
     const appName = `workshop-${framework}`;

@@ -1,5 +1,5 @@
 import { HTMLAttributes, ReactNode } from 'react';
-import type { LlmCardSpec } from '@atelier-ui/spec';
+import type { LlmCardSpec } from '../spec';
 import './llm-card.css';
 
 /**

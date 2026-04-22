@@ -1,5 +1,5 @@
 import { HTMLAttributes, useMemo } from 'react';
-import type { LlmPaginationSpec } from '@atelier-ui/spec';
+import type { LlmPaginationSpec } from '../spec';
 import './llm-pagination.css';
 
 type PageItem =

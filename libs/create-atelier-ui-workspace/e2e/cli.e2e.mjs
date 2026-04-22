@@ -42,6 +42,9 @@ import { join, resolve } from 'node:path';
 const ROOT = resolve(process.cwd());
 const DIST_PRESET = join(ROOT, 'dist/libs/create-workspace');
 const DIST_CLI = join(ROOT, 'dist/libs/create-atelier-ui-workspace');
+const DIST_ANGULAR = join(ROOT, 'dist/libs/angular');
+const DIST_REACT = join(ROOT, 'dist/libs/react');
+const DIST_VUE = join(ROOT, 'dist/libs/vue');
 
 const FRAMEWORKS = (process.env.E2E_FRAMEWORKS || 'angular,react,vue')
   .split(',')
@@ -78,14 +81,24 @@ function pack(distDir) {
 }
 
 function ensureBuilt() {
-  const presetMain = join(DIST_PRESET, 'src/index.js');
-  const cliMain = join(DIST_CLI, 'bin/index.js');
-  if (existsSync(presetMain) && existsSync(cliMain)) {
+  // Framework libs are packed and published to verdaccio so the e2e validates
+  // *our source*, not whatever @atelier-ui/{angular,react,vue}@latest is on
+  // npmjs — which can lag behind an unreleased fix (exactly the situation
+  // that motivated adding this.)
+  const needed = [
+    [join(DIST_PRESET, 'src/index.js'), 'create-workspace'],
+    [join(DIST_CLI, 'bin/index.js'), 'create-atelier-ui-workspace'],
+    [join(DIST_ANGULAR, 'package.json'), 'angular'],
+    [join(DIST_REACT, 'package.json'), 'react'],
+    [join(DIST_VUE, 'package.json'), 'vue'],
+  ];
+  const missing = needed.filter(([p]) => !existsSync(p)).map(([, n]) => n);
+  if (!missing.length) {
     ok('dist/ artifacts present');
     return;
   }
-  section('Building create-workspace + create-atelier-ui-workspace');
-  run('npx nx run-many -t build -p create-workspace create-atelier-ui-workspace');
+  section(`Building missing projects: ${missing.join(', ')}`);
+  run(`npx nx run-many -t build -p ${missing.join(' ')}`);
 }
 
 function getFreePort() {
@@ -125,10 +138,12 @@ async function startVerdaccio() {
   mkdirSync(storage, { recursive: true });
   writeFileSync(htpasswd, '');
 
-  // The preset and CLI packages are served LOCAL-ONLY (no proxy), so verdaccio
-  // accepts publishes of dev versions that conflict with what's on npmjs.org.
-  // Everything else proxies to npmjs so @atelier-ui/{angular,react,vue,spec}
-  // and @nx/* resolve from the real registry.
+  // All six @atelier-ui packages are served LOCAL-ONLY (no npmjs proxy) so
+  // the e2e validates the source in this branch — not whatever versions are
+  // currently published on npmjs. Without this, a fix to the framework libs
+  // couldn't be verified until after a real release, and a still-broken
+  // published version would mask a locally-good fix.
+  // Everything else (@nx/*, prettier, peer deps, etc.) proxies to npmjs.
   const config = `storage: ${storage}
 auth:
   htpasswd:
@@ -140,6 +155,18 @@ uplinks:
     timeout: 60s
 packages:
   '@atelier-ui/create-workspace':
+    access: $all
+    publish: $all
+    unpublish: $all
+  '@atelier-ui/angular':
+    access: $all
+    publish: $all
+    unpublish: $all
+  '@atelier-ui/react':
+    access: $all
+    publish: $all
+    unpublish: $all
+  '@atelier-ui/vue':
     access: $all
     publish: $all
     unpublish: $all
@@ -216,6 +243,9 @@ function testFramework(framework, registryUrl, npmrcPath) {
         NPM_CONFIG_REGISTRY: registryUrl,
         NPM_CONFIG_USERCONFIG: npmrcPath,
         NX_NO_CLOUD: 'true',
+        // If an ensurePackage ever fails again, surface npm's actual error
+        // instead of a bare `Command failed: npm install` swallowed by Nx.
+        NX_VERBOSE_LOGGING: 'true',
       },
     });
     if (res.status !== 0) throw new Error(`CLI exited with status ${res.status}`);
@@ -304,9 +334,15 @@ async function main() {
 
   section('Packing tarballs');
   const presetTarball = pack(DIST_PRESET);
-  ok(`preset: ${presetTarball}`);
+  ok(`preset:  ${presetTarball}`);
   const cliTarball = pack(DIST_CLI);
-  ok(`cli:    ${cliTarball}`);
+  ok(`cli:     ${cliTarball}`);
+  const angularTarball = pack(DIST_ANGULAR);
+  ok(`angular: ${angularTarball}`);
+  const reactTarball = pack(DIST_REACT);
+  ok(`react:   ${reactTarball}`);
+  const vueTarball = pack(DIST_VUE);
+  ok(`vue:     ${vueTarball}`);
 
   const registry = await startVerdaccio();
   const npmrcPath = join(registry.dir, '.npmrc');
@@ -323,6 +359,12 @@ async function main() {
     ok('preset published');
     publishToRegistry(cliTarball, registry.url, npmrcPath);
     ok('cli published');
+    publishToRegistry(angularTarball, registry.url, npmrcPath);
+    ok('angular published');
+    publishToRegistry(reactTarball, registry.url, npmrcPath);
+    ok('react published');
+    publishToRegistry(vueTarball, registry.url, npmrcPath);
+    ok('vue published');
 
     for (const fw of FRAMEWORKS) {
       try {

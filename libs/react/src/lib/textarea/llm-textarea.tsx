@@ -1,5 +1,5 @@
 import { TextareaHTMLAttributes, useRef, useEffect } from 'react';
-import type { LlmTextareaSpec } from '@atelier-ui/spec';
+import type { LlmTextareaSpec } from '../spec';
 import './llm-textarea.css';
 
 /**

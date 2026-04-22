@@ -13,11 +13,6 @@
         "main": "libs/spec/src/index.ts",
         "tsConfig": "libs/spec/tsconfig.lib.json"
       }
-    },
-    "nx-release-publish": {
-      "options": {
-        "packageRoot": "dist/libs/spec"
-      }
     }
   }
 }

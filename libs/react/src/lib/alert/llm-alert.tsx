@@ -1,5 +1,5 @@
 import { HTMLAttributes, ReactNode } from 'react';
-import type { LlmAlertSpec } from '@atelier-ui/spec';
+import type { LlmAlertSpec } from '../spec';
 import './llm-alert.css';
 
 /**

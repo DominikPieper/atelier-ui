@@ -2,7 +2,7 @@ import { HTMLAttributes, ReactNode, Children, useState } from 'react';
 import type {
   LlmAvatarSpec,
   LlmAvatarGroupSpec,
-} from '@atelier-ui/spec';
+} from '../spec';
 import './llm-avatar.css';
 
 /**

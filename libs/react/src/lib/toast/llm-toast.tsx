@@ -9,7 +9,7 @@ import {
 import type {
   LlmToastOptions,
   LlmToastContainerPosition,
-} from '@atelier-ui/spec';
+} from '../spec';
 import './llm-toast.css';
 
 /**

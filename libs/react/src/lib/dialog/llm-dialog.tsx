@@ -8,7 +8,7 @@ import {
   HTMLAttributes,
   MouseEvent,
 } from 'react';
-import type { LlmDialogSpec } from '@atelier-ui/spec';
+import type { LlmDialogSpec } from '../spec';
 import './llm-dialog.css';
 
 interface DialogContextValue {

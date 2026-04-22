@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { LlmComboboxOption, LlmComboboxSpec } from '@atelier-ui/spec';
+import type { LlmComboboxOption, LlmComboboxSpec } from '../spec';
 import './llm-combobox.css';
 
 export type { LlmComboboxOption };

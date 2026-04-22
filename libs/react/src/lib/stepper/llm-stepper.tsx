@@ -9,7 +9,7 @@ import {
   useMemo,
   ReactElement,
 } from 'react';
-import type { LlmStepperSpec, LlmStepSpec } from '@atelier-ui/spec';
+import type { LlmStepperSpec, LlmStepSpec } from '../spec';
 import './llm-stepper.css';
 
 interface StepInfo {

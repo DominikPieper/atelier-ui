@@ -13,7 +13,7 @@ import {
 import type {
   LlmAccordionGroupSpec,
   LlmAccordionItemSpec,
-} from '@atelier-ui/spec';
+} from '../spec';
 import './llm-accordion.css';
 
 interface AccordionGroupContextValue {

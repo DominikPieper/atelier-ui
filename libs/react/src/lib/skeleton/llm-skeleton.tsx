@@ -1,5 +1,5 @@
 import { CSSProperties, HTMLAttributes } from 'react';
-import type { LlmSkeletonSpec } from '@atelier-ui/spec';
+import type { LlmSkeletonSpec } from '../spec';
 import './llm-skeleton.css';
 
 /**

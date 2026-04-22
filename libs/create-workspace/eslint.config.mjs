@@ -9,7 +9,11 @@ export default [
         'error',
         {
           ignoredFiles: ['{projectRoot}/eslint.config.{js,cjs,mjs,ts,cts,mts}'],
-          ignoredDependencies: ['@nx/angular', '@nx/react'],
+          // `prettier` isn't referenced by preset source — it's a transitive
+          // that create-nx-workspace installs into the scaffolded workspace so
+          // @nx/js:init's ensurePackage('prettier') short-circuits instead of
+          // spawning a fragile `npm install` mid-preset.
+          ignoredDependencies: ['@nx/angular', '@nx/react', 'prettier'],
         },
       ],
     },
