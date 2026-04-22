@@ -129,12 +129,12 @@
 
 /* ─── Disabled state ─── */
 .step-item.is-disabled .step-circle {
-  opacity: 0.4;
+  opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }
 
 .step-item.is-disabled .step-label {
-  opacity: 0.4;
+  opacity: var(--ui-opacity-disabled);
 }
 
 /* ─── Vertical orientation ─── */

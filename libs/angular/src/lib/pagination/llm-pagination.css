@@ -64,7 +64,7 @@ nav {
 /* ── Disabled ─────────────────────────────────────────────────────────────── */
 .page-btn.is-disabled,
 .page-btn:disabled {
-  opacity: 0.4;
+  opacity: var(--ui-opacity-disabled);
   pointer-events: none;
   cursor: default;
 }

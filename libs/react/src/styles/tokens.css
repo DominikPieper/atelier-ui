@@ -167,6 +167,9 @@
     --ui-color-text: #f1f5f9;
     --ui-color-text-muted: #94a3b8;
     --ui-color-on-primary: #0f172a;
+    --ui-color-text-on-secondary: #0f172a;
+
+    --ui-opacity-disabled: 0.65;
 
     --ui-color-input-border: #4a4a63;
     --ui-color-input-border-hover: #686880;
@@ -212,6 +215,9 @@
   --ui-color-text: #f1f5f9;
   --ui-color-text-muted: #94a3b8;
   --ui-color-on-primary: #0f172a;
+  --ui-color-text-on-secondary: #0f172a;
+
+  --ui-opacity-disabled: 0.65;
 
   --ui-color-input-border: #4a4a63;
   --ui-color-input-border-hover: #686880;

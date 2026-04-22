@@ -71,7 +71,7 @@
 
 /* Disabled */
 .tablist button.is-disabled {
-  opacity: 0.4;
+  opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }
 
