@@ -114,7 +114,7 @@ jobs:
   cli-e2e:
     name: CLI e2e
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v5
         with:
@@ -126,5 +126,8 @@ jobs:
           cache: 'npm'
       - run: npm ci
       # Always use `affected` — e2e is slow (~5 min per framework) so skipping
-      # unrelated commits matters even on main.
-      - run: npx nx affected -t e2e --parallel=1
+      # unrelated commits matters even on main. `--output-style=stream` disables
+      # Nx's terminal collation so the child-process output lands in the CI log
+      # live; without it a hung e2e produces a completely empty log until the
+      # job timeout fires.
+      - run: npx nx affected -t e2e --parallel=1 --output-style=stream

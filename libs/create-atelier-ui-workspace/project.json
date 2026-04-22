@@ -40,7 +40,11 @@
         "command": "node libs/create-atelier-ui-workspace/e2e/cli.e2e.mjs",
         "cwd": "{workspaceRoot}"
       },
-      "dependsOn": ["^build", "build"]
+      "dependsOn": [
+        "^build",
+        "build",
+        { "target": "build", "projects": ["angular", "react", "vue"] }
+      ]
     }
   },
   "implicitDependencies": ["create-workspace"]
