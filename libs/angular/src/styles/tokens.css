@@ -26,9 +26,9 @@
   --ui-line-height-normal: 1.5;
 
   /* Colors — Primary */
-  --ui-color-primary: #00bebe;
-  --ui-color-primary-hover: #009696;
-  --ui-color-primary-active: #007070;
+  --ui-color-primary: #007070;
+  --ui-color-primary-hover: #005858;
+  --ui-color-primary-active: #003f3f;
   --ui-color-primary-light: rgba(0, 190, 190, 0.08);
 
   /* Colors — Secondary */
@@ -127,7 +127,7 @@
   --ui-color-input-border-hover: #9ca3af;
   --ui-color-input-border-focus: var(--ui-color-primary);
   --ui-color-input-border-invalid: var(--ui-color-danger);
-  --ui-color-placeholder: #9ca3af;
+  --ui-color-placeholder: #6b7280;
   --ui-color-error-text: var(--ui-color-danger);
 
   /* Z-index scale */
@@ -236,9 +236,9 @@
 
 /* Explicit light theme — declared last so it wins over prefers-color-scheme: dark */
 [data-theme="light"] {
-  --ui-color-primary: #00bebe;
-  --ui-color-primary-hover: #009696;
-  --ui-color-primary-active: #007070;
+  --ui-color-primary: #007070;
+  --ui-color-primary-hover: #005858;
+  --ui-color-primary-active: #003f3f;
   --ui-color-primary-light: rgba(0, 190, 190, 0.08);
   --ui-color-secondary: #64748b;
   --ui-color-secondary-hover: #475569;
@@ -259,7 +259,7 @@
   --ui-color-on-primary: #0f172a;
   --ui-color-input-border: #d1d5db;
   --ui-color-input-border-hover: #9ca3af;
-  --ui-color-placeholder: #9ca3af;
+  --ui-color-placeholder: #6b7280;
   --ui-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
   --ui-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
   --ui-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
