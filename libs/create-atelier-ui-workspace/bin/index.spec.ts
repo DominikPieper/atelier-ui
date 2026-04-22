@@ -98,4 +98,65 @@ describe('create-atelier-ui-workspace CLI', () => {
     expect(logged).toContain('cd /tmp/my-workspace');
     expect(logged).toContain('npx nx serve workshop-angular');
   });
+
+  it('accepts --framework=<value> flag and skips the framework prompt', async () => {
+    process.argv = ['node', 'index.js', 'test-ws', '--framework=react'];
+
+    await main();
+
+    const promptCalls: Array<{ name: string }> = enquirer.prompt.mock.calls.map(
+      (c: [{ name: string }]) => c[0],
+    );
+    expect(promptCalls.every((p) => p.name !== 'framework')).toBe(true);
+    expect(mockCreateWorkspace).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({ frameworks: 'react' }),
+    );
+  });
+
+  it('accepts --framework <value> with a space separator', async () => {
+    process.argv = ['node', 'index.js', 'test-ws', '--framework', 'vue'];
+
+    await main();
+
+    expect(mockCreateWorkspace).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({ frameworks: 'vue' }),
+    );
+  });
+
+  it('throws on invalid --framework value', async () => {
+    process.argv = ['node', 'index.js', 'test-ws', '--framework=svelte'];
+
+    await expect(main()).rejects.toThrow(/Invalid --framework value/);
+  });
+
+  it('uses ATELIER_PRESET_SPEC env var as the preset spec when set', async () => {
+    const original = process.env.ATELIER_PRESET_SPEC;
+    process.env.ATELIER_PRESET_SPEC = 'file:/tmp/my-preset.tgz';
+    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular'];
+
+    try {
+      await main();
+      expect(mockCreateWorkspace).toHaveBeenCalledWith(
+        'file:/tmp/my-preset.tgz',
+        expect.any(Object),
+      );
+    } finally {
+      if (original === undefined) delete process.env.ATELIER_PRESET_SPEC;
+      else process.env.ATELIER_PRESET_SPEC = original;
+    }
+  });
+
+  it('defaults preset spec to the published package name when env var unset', async () => {
+    delete process.env.ATELIER_PRESET_SPEC;
+    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular'];
+
+    await main();
+
+    expect(mockCreateWorkspace).toHaveBeenCalledWith(
+      expect.stringMatching(/^@atelier-ui\/create-workspace@\d/),
+      expect.any(Object),
+    );
+  });
 });

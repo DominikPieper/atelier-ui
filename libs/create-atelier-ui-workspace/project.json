@@ -33,6 +33,14 @@
       "options": {
         "jestConfig": "libs/create-atelier-ui-workspace/jest.config.cts"
       }
+    },
+    "e2e": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node libs/create-atelier-ui-workspace/e2e/cli.e2e.mjs",
+        "cwd": "{workspaceRoot}"
+      },
+      "dependsOn": ["^build", "build"]
     }
   },
   "implicitDependencies": ["create-workspace"]
