@@ -148,19 +148,6 @@ body {
   text-transform: uppercase;
 }
 
-.docs-sidebar-version {
-  display: inline-block;
-  color: var(--ui-color-primary);
-  background: var(--ui-color-primary-light);
-  border: 1px solid color-mix(in srgb, var(--ui-color-primary) 25%, transparent);
-  font-size: 0.62rem;
-  font-weight: 600;
-  padding: 1px 6px;
-  border-radius: 9999px;
-  letter-spacing: 0.02em;
-  margin-top: 4px;
-}
-
 .docs-sidebar-close {
   display: none;
   background: transparent;
