@@ -104,3 +104,26 @@ jobs:
       - name: Build all (push to main)
         if: github.event_name != 'pull_request'
         run: npx nx run-many -t build --parallel=2
+
+  # ---------------------------------------------------------------------------
+  # CLI e2e — spins up local verdaccio, publishes the preset + CLI tarballs,
+  # scaffolds a workspace per framework and builds it. Slow (~5 min) so it is
+  # only gated when create-workspace or create-atelier-ui-workspace is affected.
+  # ---------------------------------------------------------------------------
+  cli-e2e:
+    name: CLI e2e
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: nrwl/nx-set-shas@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      # Always use `affected` — e2e is slow (~5 min per framework) so skipping
+      # unrelated commits matters even on main.
+      - run: npx nx affected -t e2e --parallel=1
