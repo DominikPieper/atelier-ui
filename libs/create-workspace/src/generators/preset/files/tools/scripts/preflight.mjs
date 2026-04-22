@@ -111,15 +111,15 @@ function loadMcpEndpoints() {
 
 // ── Checks ───────────────────────────────────────────────────────────
 function checkNode() {
-  const required = { major: 20, minor: 11, patch: 0 };
+  const required = { major: 22, minor: 12, patch: 0 };
   const actual = parseMajorMinor(process.version);
   if (isAtLeast(actual, required)) {
     ok('Node.js', process.version);
   } else {
     fail(
       'Node.js',
-      `found ${process.version}, need >= 20.11.0`,
-      'Install via https://nodejs.org or use `nvm install 20 && nvm use 20`',
+      `found ${process.version}, need >= 22.12.0`,
+      'Install via https://nodejs.org or use `nvm install 22 && nvm use 22`',
     );
   }
 }
