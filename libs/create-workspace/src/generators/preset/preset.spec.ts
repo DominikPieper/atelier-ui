@@ -2,17 +2,32 @@ import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 import { Tree, readJson } from '@nx/devkit';
 import { presetGenerator } from './preset';
 
+// Capture the framework application-generator mocks at module scope so tests
+// can assert on the options object the preset hands to each generator (in
+// particular, that `e2eTestRunner: 'none'` is always passed — otherwise the
+// generator spawns `npm install @nx/playwright` mid-preset, which is the
+// failure mode that crashed `npx create-atelier-ui-workspace`).
+const angularAppMock = jest.fn().mockResolvedValue(undefined);
+const reactAppMock = jest.fn().mockResolvedValue(undefined);
+const vueAppMock = jest.fn().mockResolvedValue(undefined);
+
 jest.mock('@nx/angular/generators', () => {
   const real = jest.requireActual('@nx/angular/generators');
   if (typeof real.applicationGenerator !== 'function') {
     throw new Error('@nx/angular/generators does not export applicationGenerator as a function');
   }
-  return { applicationGenerator: jest.fn().mockResolvedValue(undefined) };
+  return { applicationGenerator: angularAppMock };
 });
 
 jest.mock('@nx/devkit', () => ({
   ...jest.requireActual('@nx/devkit'),
   ensurePackage: jest.fn().mockImplementation((packageName: string) => {
+    if (packageName === '@nx/react') {
+      return Promise.resolve({ applicationGenerator: reactAppMock });
+    }
+    if (packageName === '@nx/vue') {
+      return Promise.resolve({ applicationGenerator: vueAppMock });
+    }
     try {
       const real = jest.requireActual(packageName);
       const mocked: Record<string, unknown> = { ...real };
@@ -32,6 +47,9 @@ describe('preset generator', () => {
 
   beforeEach(() => {
     tree = createTreeWithEmptyWorkspace();
+    angularAppMock.mockClear();
+    reactAppMock.mockClear();
+    vueAppMock.mockClear();
   });
 
   // ─── MCP settings ──────────────────────────────────────────────────────────
@@ -347,5 +365,30 @@ describe('preset generator', () => {
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
     expect(md).toContain('npm run preflight');
     expect(md).toContain('/troubleshooting');
+  });
+
+  // ─── Framework application generator args ─────────────────────────────────
+
+  // Regression: in Nx 22, @nx/{angular,react,vue}:application default
+  // e2eTestRunner to 'playwright', which triggers ensurePackage('@nx/playwright')
+  // mid-preset. That spawns `npm install` and, when it fails, aborts the whole
+  // scaffold with `Failed to apply preset: @atelier-ui/create-workspace`.
+  // The workshop never runs e2e tests, so we explicitly opt out — this test
+  // guards against anyone silently dropping that flag in the future.
+  it('passes e2eTestRunner: none to every framework application generator', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular,react,vue' });
+
+    expect(angularAppMock).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ e2eTestRunner: 'none' }),
+    );
+    expect(reactAppMock).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ e2eTestRunner: 'none' }),
+    );
+    expect(vueAppMock).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ e2eTestRunner: 'none' }),
+    );
   });
 });

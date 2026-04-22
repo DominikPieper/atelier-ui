@@ -45,6 +45,7 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
         standalone: true,
         ssr: false,
         skipTests: true,
+        e2eTestRunner: 'none',
         skipFormat: true,
       });
       deps['@atelier-ui/angular'] = 'latest';
@@ -64,6 +65,7 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
         bundler: 'vite',
         linter: 'eslint',
         unitTestRunner: 'none',
+        e2eTestRunner: 'none',
         skipFormat: true,
       } as Parameters<typeof reactAppGenerator>[1]);
       deps['@atelier-ui/react'] = 'latest';
@@ -82,6 +84,7 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
         routing: true,
         linter: 'eslint',
         unitTestRunner: 'none',
+        e2eTestRunner: 'none',
         skipFormat: true,
       } as Parameters<typeof vueAppGenerator>[1]);
       deps['@atelier-ui/vue'] = 'latest';
