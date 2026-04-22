@@ -1,7 +1,6 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 import { Font } from 'astro:assets';
-import { Image } from 'astro:assets';
 import logo from '../assets/logo.png';
 import '../styles/tokens.css';
 import '../styles/docs-theme.css';
@@ -166,7 +165,7 @@ const breadcrumbSchema = {
       </button>
 
       <a href="/" class="docs-logo">
-        <Image src={logo} alt="Atelier" class="docs-logo-img" width={56} height={54} densities={[1, 2]} />
+        <img src={logo.src} alt="Atelier" class="docs-logo-img" width={56} height={54} />
         <span class="docs-logo-text">Atelier</span>
       </a>
 
