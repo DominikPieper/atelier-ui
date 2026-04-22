@@ -205,7 +205,10 @@ function testFramework(framework, registryUrl, npmrcPath) {
     ok('CLI installed from verdaccio');
 
     const wsName = `workshop-${framework}-ws`;
-    const res = spawnSync(cliBin, [wsName, `--framework=${framework}`], {
+    // --no-figma keeps the CLI non-interactive (the figma MCP prompt would
+    // otherwise hang because stdio is inherited). The opt-in path is covered
+    // by unit tests in preset.spec.ts and index.spec.ts.
+    const res = spawnSync(cliBin, [wsName, `--framework=${framework}`, '--no-figma'], {
       cwd: scratch,
       stdio: 'inherit',
       env: {

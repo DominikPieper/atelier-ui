@@ -112,6 +112,54 @@ describe('preset generator', () => {
     expect(settings.mcpServers['nx-mcp']).toBeDefined();
   });
 
+  // ─── figma-console MCP (opt-in) ────────────────────────────────────────────
+
+  it('omits figma-console by default', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
+
+    const settings = readJson(tree, '.mcp.json');
+    expect(settings.mcpServers['figma-console']).toBeUndefined();
+  });
+
+  it('omits figma-console when figmaMcp=false', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular', figmaMcp: false });
+
+    const settings = readJson(tree, '.mcp.json');
+    expect(settings.mcpServers['figma-console']).toBeUndefined();
+  });
+
+  it('includes figma-console when figmaMcp=true', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular', figmaMcp: true });
+
+    const settings = readJson(tree, '.mcp.json');
+    expect(settings.mcpServers['figma-console']).toBeDefined();
+    expect(settings.mcpServers['figma-console'].command).toBe('npx');
+    expect(settings.mcpServers['figma-console'].args).toEqual([
+      '-y',
+      'figma-console-mcp@latest',
+    ]);
+    expect(settings.mcpServers['figma-console'].env.FIGMA_ACCESS_TOKEN).toBe(
+      '${FIGMA_ACCESS_TOKEN:-}',
+    );
+  });
+
+  it('CLAUDE.md includes Figma setup link when figmaMcp=true', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular', figmaMcp: true });
+
+    const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+    expect(md).toContain('Figma Setup');
+    expect(md).toContain('atelier.pieper.io/figma-token');
+    expect(md).toContain('Desktop Bridge');
+  });
+
+  it('CLAUDE.md omits the Figma setup section when figmaMcp is not set', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
+
+    const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+    expect(md).not.toContain('Figma Setup');
+    expect(md).not.toContain('atelier.pieper.io/figma-token');
+  });
+
   // ─── README ────────────────────────────────────────────────────────────────
 
   it('writes README.md', async () => {

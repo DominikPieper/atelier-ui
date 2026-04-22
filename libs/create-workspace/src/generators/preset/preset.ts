@@ -186,7 +186,21 @@ npm run preflight
 
 It checks Node, Claude CLI, \`FIGMA_ACCESS_TOKEN\`, MCP endpoint reachability, and port availability.
 Full troubleshooting guide: ${SITE_URL}/troubleshooting
+${
+  options.figmaMcp
+    ? `
+## Figma Setup
 
+The \`figma-console\` MCP is enabled in \`.mcp.json\`. It needs the Figma Desktop Bridge
+plugin installed in the Figma desktop app before the server can respond.
+
+Setup guide: ${SITE_URL}/figma-token
+
+A \`FIGMA_ACCESS_TOKEN\` is optional — only required for REST-backed reads (screenshots,
+file exports). The Desktop Bridge covers creation and inspection without a token.
+`
+    : ''
+}
 ## Reference
 
 - Component browser + docs: ${SITE_URL}
@@ -230,6 +244,18 @@ Full troubleshooting guide: ${SITE_URL}/troubleshooting
     mcpServers[`storybook-${framework}`] = {
       type: 'http',
       url: `${SITE_URL}/storybook-${framework}/mcp`,
+    };
+  }
+  if (options.figmaMcp) {
+    // Desktop Bridge plugin (installed separately). FIGMA_ACCESS_TOKEN is
+    // optional — only needed for REST-backed reads. See ${SITE_URL}/figma-token.
+    mcpServers['figma-console'] = {
+      command: 'npx',
+      args: ['-y', 'figma-console-mcp@latest'],
+      env: {
+        FIGMA_ACCESS_TOKEN: '${FIGMA_ACCESS_TOKEN:-}',
+        ENABLE_MCP_APPS: 'true',
+      },
     };
   }
   writeJson(tree, '.mcp.json', { mcpServers });

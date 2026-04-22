@@ -16,6 +16,11 @@
       "type": "string",
       "description": "Comma-separated list of frameworks to scaffold: angular,react,vue",
       "default": "angular"
+    },
+    "figmaMcp": {
+      "type": "boolean",
+      "description": "Add the figma-console-mcp server (Figma Desktop Bridge) to .mcp.json",
+      "default": false
     }
   },
   "required": ["name"]

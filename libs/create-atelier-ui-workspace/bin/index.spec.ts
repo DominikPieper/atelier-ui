@@ -27,7 +27,7 @@ describe('create-atelier-ui-workspace CLI', () => {
   });
 
   it('uses name from argv and skips name prompt', async () => {
-    process.argv = ['node', 'index.js', 'my-app'];
+    process.argv = ['node', 'index.js', 'my-app', '--no-figma'];
     enquirer.prompt.mockResolvedValueOnce({ framework: 'angular' });
 
     await main();
@@ -43,7 +43,7 @@ describe('create-atelier-ui-workspace CLI', () => {
   });
 
   it('prompts for name when not in argv', async () => {
-    process.argv = ['node', 'index.js'];
+    process.argv = ['node', 'index.js', '--no-figma'];
     enquirer.prompt
       .mockResolvedValueOnce({ name: 'prompted-name' })
       .mockResolvedValueOnce({ framework: 'react' });
@@ -64,7 +64,7 @@ describe('create-atelier-ui-workspace CLI', () => {
   });
 
   it('calls createWorkspace with nxCloud skip and npm package manager', async () => {
-    process.argv = ['node', 'index.js', 'test-ws'];
+    process.argv = ['node', 'index.js', 'test-ws', '--no-figma'];
     enquirer.prompt.mockResolvedValueOnce({ framework: 'vue' });
 
     await main();
@@ -76,7 +76,7 @@ describe('create-atelier-ui-workspace CLI', () => {
   });
 
   it('passes selected framework as frameworks option', async () => {
-    process.argv = ['node', 'index.js', 'test-ws'];
+    process.argv = ['node', 'index.js', 'test-ws', '--no-figma'];
     enquirer.prompt.mockResolvedValueOnce({ framework: 'react' });
 
     await main();
@@ -88,7 +88,7 @@ describe('create-atelier-ui-workspace CLI', () => {
   });
 
   it('logs success messages with directory and serve command', async () => {
-    process.argv = ['node', 'index.js', 'test-ws'];
+    process.argv = ['node', 'index.js', 'test-ws', '--no-figma'];
     enquirer.prompt.mockResolvedValueOnce({ framework: 'angular' });
 
     await main();
@@ -100,7 +100,7 @@ describe('create-atelier-ui-workspace CLI', () => {
   });
 
   it('accepts --framework=<value> flag and skips the framework prompt', async () => {
-    process.argv = ['node', 'index.js', 'test-ws', '--framework=react'];
+    process.argv = ['node', 'index.js', 'test-ws', '--framework=react', '--no-figma'];
 
     await main();
 
@@ -115,7 +115,7 @@ describe('create-atelier-ui-workspace CLI', () => {
   });
 
   it('accepts --framework <value> with a space separator', async () => {
-    process.argv = ['node', 'index.js', 'test-ws', '--framework', 'vue'];
+    process.argv = ['node', 'index.js', 'test-ws', '--framework', 'vue', '--no-figma'];
 
     await main();
 
@@ -126,7 +126,7 @@ describe('create-atelier-ui-workspace CLI', () => {
   });
 
   it('throws on invalid --framework value', async () => {
-    process.argv = ['node', 'index.js', 'test-ws', '--framework=svelte'];
+    process.argv = ['node', 'index.js', 'test-ws', '--framework=svelte', '--no-figma'];
 
     await expect(main()).rejects.toThrow(/Invalid --framework value/);
   });
@@ -134,7 +134,7 @@ describe('create-atelier-ui-workspace CLI', () => {
   it('uses ATELIER_PRESET_SPEC env var as the preset spec when set', async () => {
     const original = process.env.ATELIER_PRESET_SPEC;
     process.env.ATELIER_PRESET_SPEC = 'file:/tmp/my-preset.tgz';
-    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular'];
+    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular', '--no-figma'];
 
     try {
       await main();
@@ -150,7 +150,7 @@ describe('create-atelier-ui-workspace CLI', () => {
 
   it('defaults preset spec to the published package name when env var unset', async () => {
     delete process.env.ATELIER_PRESET_SPEC;
-    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular'];
+    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular', '--no-figma'];
 
     await main();
 
@@ -158,5 +158,72 @@ describe('create-atelier-ui-workspace CLI', () => {
       expect.stringMatching(/^@atelier-ui\/create-workspace@\d/),
       expect.any(Object),
     );
+  });
+
+  // ─── figma-console MCP prompt / flags ──────────────────────────────────────
+
+  it('accepts --figma flag and skips the figma prompt', async () => {
+    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular', '--figma'];
+
+    await main();
+
+    const promptNames = enquirer.prompt.mock.calls.map((c: [{ name: string }]) => c[0].name);
+    expect(promptNames).not.toContain('figma');
+    expect(mockCreateWorkspace).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({ figmaMcp: true }),
+    );
+  });
+
+  it('accepts --no-figma flag and passes figmaMcp=false', async () => {
+    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular', '--no-figma'];
+
+    await main();
+
+    const promptNames = enquirer.prompt.mock.calls.map((c: [{ name: string }]) => c[0].name);
+    expect(promptNames).not.toContain('figma');
+    expect(mockCreateWorkspace).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({ figmaMcp: false }),
+    );
+  });
+
+  it('prompts for figma inclusion when neither flag is set and links to setup docs', async () => {
+    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular'];
+    enquirer.prompt.mockResolvedValueOnce({ figma: true });
+
+    await main();
+
+    type FigmaPromptConfig = { name: string; message: string; type: string; initial: unknown };
+    const figmaPrompt = enquirer.prompt.mock.calls
+      .map((c: [FigmaPromptConfig]) => c[0])
+      .find((p: FigmaPromptConfig) => p.name === 'figma');
+    if (!figmaPrompt) throw new Error('figma prompt not invoked');
+    expect(figmaPrompt.type).toBe('confirm');
+    expect(figmaPrompt.initial).toBe(true);
+    expect(figmaPrompt.message).toContain('atelier.pieper.io/figma-token');
+    expect(mockCreateWorkspace).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({ figmaMcp: true }),
+    );
+  });
+
+  it('logs the Figma setup URL in the success output when figma is enabled', async () => {
+    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular', '--figma'];
+
+    await main();
+
+    const logged = consoleLogSpy.mock.calls.flat().join('\n');
+    expect(logged).toContain('atelier.pieper.io/figma-token');
+    expect(logged).toMatch(/Figma MCP enabled/);
+  });
+
+  it('does not log the Figma setup URL when figma is disabled', async () => {
+    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular', '--no-figma'];
+
+    await main();
+
+    const logged = consoleLogSpy.mock.calls.flat().join('\n');
+    expect(logged).not.toContain('atelier.pieper.io/figma-token');
   });
 });
