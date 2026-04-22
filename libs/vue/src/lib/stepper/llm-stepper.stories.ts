@@ -4,10 +4,17 @@ import LlmStepper from './llm-stepper.vue';
 import LlmStep from './llm-step.vue';
 import LlmButton from '../button/llm-button.vue';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmStepper> = {
   title: 'Components/LlmStepper',
   component: LlmStepper,
   tags: ['autodocs'],
+  parameters: { design: figmaNode('421-505') },
 };
 
 export default meta;
@@ -43,6 +50,7 @@ export const Default: Story = {
       </LlmStepper>
     `,
   }),
+  parameters: { design: figmaNode('421-407') },
 };
 
 export const WithCompletedSteps: Story = {
@@ -56,6 +64,7 @@ export const WithCompletedSteps: Story = {
       </LlmStepper>
     `,
   }),
+  parameters: { design: figmaNode('421-427') },
 };
 
 export const WithErrorStep: Story = {
@@ -69,6 +78,7 @@ export const WithErrorStep: Story = {
       </LlmStepper>
     `,
   }),
+  parameters: { design: figmaNode('421-446') },
 };
 
 export const WithOptionalStep: Story = {
@@ -82,6 +92,7 @@ export const WithOptionalStep: Story = {
       </LlmStepper>
     `,
   }),
+  parameters: { design: figmaNode('421-465') },
 };
 
 export const Vertical: Story = {
@@ -114,4 +125,5 @@ export const Vertical: Story = {
       </LlmStepper>
     `,
   }),
+  parameters: { design: figmaNode('421-485') },
 };

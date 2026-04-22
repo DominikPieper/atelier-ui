@@ -2,6 +2,12 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { LlmStepper, LlmStep } from './llm-stepper';
 import { LlmButton } from '../button/llm-button';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmStepper> = {
   title: 'Components/LlmStepper',
   component: LlmStepper,
@@ -19,6 +25,7 @@ const meta: Meta<LlmStepper> = {
     linear: false,
     activeStep: 0,
   },
+  parameters: { design: figmaNode('421-505') },
 };
 
 export default meta;
@@ -51,6 +58,7 @@ export const Default: Story = {
       </llm-stepper>
     `,
   }),
+  parameters: { design: figmaNode('421-407') },
 };
 
 export const WithCompletedSteps: Story = {
@@ -64,6 +72,7 @@ export const WithCompletedSteps: Story = {
       </llm-stepper>
     `,
   }),
+  parameters: { design: figmaNode('421-427') },
 };
 
 export const WithErrorStep: Story = {
@@ -77,6 +86,7 @@ export const WithErrorStep: Story = {
       </llm-stepper>
     `,
   }),
+  parameters: { design: figmaNode('421-446') },
 };
 
 export const WithOptionalStep: Story = {
@@ -90,6 +100,7 @@ export const WithOptionalStep: Story = {
       </llm-stepper>
     `,
   }),
+  parameters: { design: figmaNode('421-465') },
 };
 
 export const Vertical: Story = {
@@ -119,4 +130,5 @@ export const Vertical: Story = {
       </llm-stepper>
     `,
   }),
+  parameters: { design: figmaNode('421-485') },
 };

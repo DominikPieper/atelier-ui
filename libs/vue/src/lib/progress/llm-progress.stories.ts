@@ -1,6 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import LlmProgress from './llm-progress.vue';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmProgress> = {
   title: 'Components/LlmProgress',
   component: LlmProgress,
@@ -19,12 +25,15 @@ const meta: Meta<typeof LlmProgress> = {
     size: 'md',
     indeterminate: false,
   },
+  parameters: { design: figmaNode('420-153') },
 };
 
 export default meta;
 type Story = StoryObj<typeof LlmProgress>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: { design: figmaNode('420-87') },
+};
 
 export const AllVariants: Story = {
   render: () => ({
@@ -41,4 +50,5 @@ export const AllVariants: Story = {
       </div>
     `,
   }),
+  parameters: { design: figmaNode('420-153') },
 };

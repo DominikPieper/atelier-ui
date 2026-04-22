@@ -5,6 +5,12 @@ import LlmDrawerHeader from './llm-drawer-header.vue';
 import LlmDrawerContent from './llm-drawer-content.vue';
 import LlmDrawerFooter from './llm-drawer-footer.vue';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmDrawer> = {
   title: 'Components/LlmDrawer',
   component: LlmDrawer,
@@ -20,6 +26,7 @@ const meta: Meta<typeof LlmDrawer> = {
     size: 'md',
     closeOnBackdrop: true,
   },
+  parameters: { design: figmaNode('421-398') },
 };
 
 export default meta;
@@ -49,6 +56,7 @@ export const Default: Story = {
       </div>
     `,
   }),
+  parameters: { design: figmaNode('421-342') },
 };
 
 export const AllPositions: Story = {
@@ -86,6 +94,7 @@ export const AllPositions: Story = {
       </div>
     `,
   }),
+  parameters: { design: figmaNode('421-398') },
 };
 
 export const NoBackdropClose: Story = {
@@ -110,4 +119,5 @@ export const NoBackdropClose: Story = {
       </div>
     `,
   }),
+  parameters: { design: figmaNode('421-342') },
 };

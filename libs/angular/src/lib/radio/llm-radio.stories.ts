@@ -29,14 +29,16 @@ const meta: Meta<LlmRadio> = {
     disabled: false,
   },
   parameters: {
-    design: figmaNode('55-137'),
+    design: figmaNode('420-185'),
   },
 };
 
 export default meta;
 type Story = StoryObj<LlmRadio>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  parameters: { design: figmaNode('420-165') },
+};
 
 export const Disabled: Story = {
   render: () => ({
@@ -49,6 +51,7 @@ export const Disabled: Story = {
       </llm-radio-group>
     `,
   }),
+  parameters: { design: figmaNode('420-174') },
 };
 
 export const Checked: Story = {
@@ -62,6 +65,7 @@ export const Checked: Story = {
       </llm-radio-group>
     `,
   }),
+  parameters: { design: figmaNode('420-169') },
 };
 
 export const Playground: Story = {

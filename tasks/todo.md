@@ -47,6 +47,49 @@
 - [ ] Facilitator guide — timing, learning arc, common pitfalls
 - [x] ~~True CLI e2e test~~ — shipped as `nx run create-atelier-ui-workspace:e2e`, wired into CI as an affected-gated job
 
+## Review — Figma designs for the last 7 components + parity pass (2026-04-22)
+
+Closed the Figma design gap for the 7 components that existed in code but had no design: `code-block`, `combobox`, `drawer`, `progress`, `radio` (standalone), `stepper`, `table`. All new component sets live on the Atelier UI `Components` page, bind every fill/stroke/text to UI Tokens so Light + Dark modes render automatically, and are linked back into Storybook via `parameters.design` on the meta and per-named story across Angular, React, and Vue.
+
+**Figma node-ids (captured this run):**
+
+| Component | Section | Component set | Key variants |
+|---|---|---|---|
+| LlmProgress | `3:875` | `420:153` | default-md-determinate `420:87`, default-md-indeterminate `420:90`, success-md `420:105`, warning-md `420:123`, danger-md `420:141`, size-sm `420:81`, size-lg `420:93` |
+| LlmRadio *(new)* | `420:182` | `420:185` | unchecked `420:165`, checked `420:169`, disabled `420:174`, invalid `420:178` |
+| LlmCodeBlock *(new)* | `420:283` | `420:286` | default `420:186`, with-filename `420:209`, with-line-numbers `420:232`, no-copy `420:263` |
+| LlmCombobox *(new)* | `421:336` | `421:339` | default `421:291`, open `421:295`, filtered `421:313`, selected `421:324`, disabled `421:328`, invalid `421:332` |
+| LlmDrawer | `3:1111` | `421:398` | right `421:342`, left `421:356`, top `421:370`, bottom `421:384` |
+| LlmStepper *(new)* | `421:404` | `421:505` | default `421:407`, completed `421:427`, error `421:446`, optional `421:465`, vertical `421:485` |
+| LlmTable | `158:39` | `421:1183` | default-md `421:884`, striped `421:923`, bordered `421:962`, sortable `421:1002`, selectable `421:1051`, sticky `421:1090`, empty `421:1103`, size-sm `421:1142`, size-lg `421:1181` |
+
+**Files touched — stories (21):** `libs/{angular,react,vue}/src/lib/{progress,radio,code-block,combobox,drawer,stepper,table}/*.stories.{ts,tsx}` — meta + per-story `parameters.design`, `figmaNode()` helper added to files that lacked it (all 7 Vue stories, Combobox/CodeBlock/Table in Angular+React, Stepper+Drawer+Progress in React+Vue).
+
+**Files touched — code (3):** `libs/{angular,react,vue}/src/lib/stepper/llm-stepper.css` — replaced hard-coded `color: #fff` on `.step-item.is-completed .step-circle` with `var(--ui-color-on-primary)` (matches the Figma design-token binding) and on `.is-error` with `var(--ui-color-text-on-danger, #ffffff)` (semantic). All other Progress/Radio/CodeBlock/Combobox/Drawer/Table styles were already 100% token-bound and matched the new designs — no further code changes needed.
+
+**Parity notes (minor, non-blocking):**
+- Combobox input text: Figma 14px vs code `--ui-font-size-md` (16). Kept code at 16 to match Input/Select.
+- Drawer header font-size: Figma 18px vs code `--ui-font-size-xl` (20). Kept code at 20 for token consistency.
+- CodeBlock mono body: Figma 13px vs code `--ui-font-size-sm` (14). Kept code at 14.
+- Radio stroke: Figma binds to `color/border` (#E5E7EB); code uses `--ui-color-input-border` (#D1D5DB). Both semantic, different shades.
+- Table header tracking: Figma letter-spacing 6% vs code `--ui-letter-spacing-wide` (1%). Kept code using the token.
+
+**Verified:** `nx run-many -t lint,test -p angular,react,vue` all green (3/3 lint, 27/27 test files, 492/492 tests, drawer `play` functions intact).
+
+**Visual polish pass (same day, after user review):** screenshot-verified each of the 7 component sets via the Desktop-Bridge `figma_capture_screenshot` path (REST screenshots 403 without a token) and fixed five layout bugs:
+- Combobox `open` / `filtered` variants had invisible dropdown panels — outer component and inner `panel` frame were pinned at h=40 / h=1 because `.resize()` flipped their primary-axis sizing back to FIXED. Toggled both back to AUTO.
+- CodeBlock variants were all pinned at h=200 regardless of code length (same root cause). Freed the primary axis, now heights hug content.
+- Table inner `LlmTable / *` containers had the same pinning; freed.
+- Stepper step circles rendered as narrow vertical pills because switching `layoutMode` to `HORIZONTAL` after `.resize(32, 32)` reverted both axes to AUTO and shrunk-wrapped the text. Set both sizing modes back to FIXED at 32×32.
+- Stepper connectors were 2px rectangles placed with counter=MIN, so they sat at the top of the step items instead of aligned with the 32px circle midpoints. Wrapped each connector in a 40×32 (horizontal) / 32×24 (vertical) frame with the bar centered.
+- Combobox option rows had `primaryAxisAlignItems='SPACE_BETWEEN'` which centered the single-text rows; switched to `MIN` and gave the "selected option" label `layoutGrow=1` so the ✓ still pushes right.
+- Drawer content paragraphs were clipped in the narrow left/right panels (220px); set `textAutoResize='HEIGHT'` with a fixed width so text wraps.
+- CodeBlock `no-copy` header had the same single-child SPACE_BETWEEN issue (centered "typescript" label); switched header to `MIN`.
+
+All component sets re-stacked with 40px vertical gaps so sections no longer overlap. Node-ids above are unchanged — only layout properties and a few wrapper frames were added.
+
+**Page alignment**: 7 sections redistributed into the same 3-column grid the existing 20 sections use (col 0 x=0, col 1 x=1588, col 2 x=3200), starting at y=3050 (40px below the last existing section). Final layout — Row 0: Progress | Radio | CodeBlock · Row 1: Combobox | Drawer | Stepper · Row 2: Table. Zero collisions with the existing sections. Node-ids still unchanged.
+
 ## Review — CLI e2e + tokens.css packaging fix (2026-04-22)
 
 Shipped a real end-to-end test for `npx create-atelier-ui-workspace` and, in the process, caught a workshop-blocker that the previous unit tests couldn't see.

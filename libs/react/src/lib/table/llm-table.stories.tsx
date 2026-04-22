@@ -5,6 +5,12 @@ import { LlmBadge } from '../badge/llm-badge';
 import { LlmButton } from '../button/llm-button';
 import { LlmCheckbox } from '../checkbox/llm-checkbox';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmTable> = {
   title: 'Components/LlmTable',
   component: LlmTable,
@@ -19,6 +25,7 @@ const meta: Meta<typeof LlmTable> = {
     size: 'md',
     stickyHeader: false,
   },
+  parameters: { design: figmaNode('421-1183') },
 };
 
 export default meta;
@@ -56,6 +63,7 @@ export const Default: Story = {
       </LlmTbody>
     </LlmTable>
   ),
+  parameters: { design: figmaNode('421-884') },
 };
 
 // ---------------------------------------------------------------------------
@@ -80,12 +88,14 @@ export const Striped: Story = {
       </LlmTbody>
     </LlmTable>
   ),
+  parameters: { design: figmaNode('421-923') },
 };
 
 // ---------------------------------------------------------------------------
 // Bordered
 // ---------------------------------------------------------------------------
 export const Bordered: Story = {
+  parameters: { design: figmaNode('421-962') },
   render: () => (
     <LlmTable variant="bordered">
       <LlmThead>
@@ -146,6 +156,7 @@ function SortableStory() {
 
 export const Sortable: Story = {
   render: () => <SortableStory />,
+  parameters: { design: figmaNode('421-1002') },
 };
 
 // ---------------------------------------------------------------------------
@@ -205,12 +216,14 @@ function SelectableStory() {
 
 export const Selectable: Story = {
   render: () => <SelectableStory />,
+  parameters: { design: figmaNode('421-1051') },
 };
 
 // ---------------------------------------------------------------------------
 // Sticky Header
 // ---------------------------------------------------------------------------
 export const StickyHeader: Story = {
+  parameters: { design: figmaNode('421-1090') },
   render: () => (
     <div style={{ maxHeight: '220px', overflowY: 'auto', border: '1px solid #e5e7eb', borderRadius: '0.5rem' }}>
       <LlmTable stickyHeader>
@@ -239,6 +252,7 @@ export const StickyHeader: Story = {
 // Empty State
 // ---------------------------------------------------------------------------
 export const EmptyState: Story = {
+  parameters: { design: figmaNode('421-1103') },
   render: () => (
     <LlmTable>
       <LlmThead>
@@ -338,12 +352,14 @@ function KitchenSinkStory() {
 
 export const KitchenSink: Story = {
   render: () => <KitchenSinkStory />,
+  parameters: { design: figmaNode('421-1183') },
 };
 
 // ---------------------------------------------------------------------------
 // Playground
 // ---------------------------------------------------------------------------
 export const Playground: Story = {
+  parameters: { design: figmaNode('421-1183') },
   render: (args) => (
     <LlmTable {...args}>
       <LlmThead>

@@ -1,6 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LlmProgress } from './llm-progress';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmProgress> = {
   title: 'Components/LlmProgress',
   component: LlmProgress,
@@ -12,18 +18,39 @@ const meta: Meta<typeof LlmProgress> = {
     indeterminate: { control: 'boolean' },
   },
   args: { value: 50, max: 100, variant: 'default', size: 'md', indeterminate: false },
+  parameters: { design: figmaNode('420-153') },
 };
 
 export default meta;
 type Story = StoryObj<typeof LlmProgress>;
 
-export const Default: Story = {};
-export const Success: Story = { args: { variant: 'success', value: 100 } };
-export const Warning: Story = { args: { variant: 'warning', value: 60 } };
-export const Danger: Story = { args: { variant: 'danger', value: 30 } };
-export const Small: Story = { args: { size: 'sm' } };
-export const Large: Story = { args: { size: 'lg' } };
-export const Indeterminate: Story = { args: { indeterminate: true } };
+export const Default: Story = {
+  parameters: { design: figmaNode('420-87') },
+};
+export const Success: Story = {
+  args: { variant: 'success', value: 100 },
+  parameters: { design: figmaNode('420-105') },
+};
+export const Warning: Story = {
+  args: { variant: 'warning', value: 60 },
+  parameters: { design: figmaNode('420-123') },
+};
+export const Danger: Story = {
+  args: { variant: 'danger', value: 30 },
+  parameters: { design: figmaNode('420-141') },
+};
+export const Small: Story = {
+  args: { size: 'sm' },
+  parameters: { design: figmaNode('420-81') },
+};
+export const Large: Story = {
+  args: { size: 'lg' },
+  parameters: { design: figmaNode('420-93') },
+};
+export const Indeterminate: Story = {
+  args: { indeterminate: true },
+  parameters: { design: figmaNode('420-90') },
+};
 export const AllVariants: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '400px' }}>
@@ -33,6 +60,7 @@ export const AllVariants: Story = {
       <LlmProgress value={30} variant="danger" />
     </div>
   ),
+  parameters: { design: figmaNode('420-153') },
 };
 export const AllSizes: Story = {
   render: () => (
@@ -42,4 +70,5 @@ export const AllSizes: Story = {
       <LlmProgress value={60} size="lg" />
     </div>
   ),
+  parameters: { design: figmaNode('420-153') },
 };

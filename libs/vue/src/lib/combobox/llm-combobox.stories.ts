@@ -23,6 +23,12 @@ const COUNTRIES = [
   { value: 'jp', label: 'Japan' },
 ];
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmCombobox> = {
   title: 'Components/LlmCombobox',
   component: LlmCombobox,
@@ -33,6 +39,7 @@ const meta: Meta<typeof LlmCombobox> = {
     required: { control: 'boolean' },
     placeholder: { control: 'text' },
   },
+  parameters: { design: figmaNode('421-339') },
 };
 
 export default meta;
@@ -51,6 +58,7 @@ export const Default: Story = {
     options: FRUITS,
     placeholder: 'Search fruit…',
   },
+  parameters: { design: figmaNode('421-291') },
 };
 
 export const WithPreselection: Story = {
@@ -62,6 +70,7 @@ export const WithPreselection: Story = {
     },
     template: `<LlmCombobox v-model:value="value" :options="options" placeholder="Search fruit…" />`,
   }),
+  parameters: { design: figmaNode('421-324') },
 };
 
 export const Countries: Story = {
@@ -73,6 +82,7 @@ export const Countries: Story = {
     },
     template: `<LlmCombobox v-model:value="value" :options="options" placeholder="Search country…" />`,
   }),
+  parameters: { design: figmaNode('421-291') },
 };
 
 export const Disabled: Story = {
@@ -81,6 +91,7 @@ export const Disabled: Story = {
     setup() { return { options: FRUITS }; },
     template: `<LlmCombobox value="banana" :options="options" :disabled="true" placeholder="Search fruit…" />`,
   }),
+  parameters: { design: figmaNode('421-328') },
 };
 
 export const Invalid: Story = {
@@ -100,6 +111,7 @@ export const Invalid: Story = {
       />
     `,
   }),
+  parameters: { design: figmaNode('421-332') },
 };
 
 export const WithDisabledOption: Story = {
@@ -111,4 +123,5 @@ export const WithDisabledOption: Story = {
     },
     template: `<LlmCombobox v-model:value="value" :options="options" placeholder="Search fruit… (Honeydew disabled)" />`,
   }),
+  parameters: { design: figmaNode('421-295') },
 };

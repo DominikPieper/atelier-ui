@@ -14,7 +14,7 @@ const meta: Meta<typeof LlmRadio> = {
   component: LlmRadio,
   tags: ['autodocs'],
   parameters: {
-    design: figmaNode('55-137'),
+    design: figmaNode('420-185'),
   },
 };
 
@@ -32,6 +32,7 @@ export const Default: Story = {
       </LlmRadioGroup>
     );
   },
+  parameters: { design: figmaNode('420-165') },
 };
 
 export const Disabled: Story = {
@@ -41,6 +42,7 @@ export const Disabled: Story = {
       <LlmRadio radioValue="pro">Pro</LlmRadio>
     </LlmRadioGroup>
   ),
+  parameters: { design: figmaNode('420-174') },
 };
 
 export const IndividualDisabled: Story = {
@@ -56,4 +58,5 @@ export const IndividualDisabled: Story = {
       </LlmRadioGroup>
     );
   },
+  parameters: { design: figmaNode('420-174') },
 };

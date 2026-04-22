@@ -7,6 +7,12 @@ import LlmTr from './llm-tr.vue';
 import LlmTh from './llm-th.vue';
 import LlmTd from './llm-td.vue';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmTable> = {
   title: 'Components/LlmTable',
   component: LlmTable,
@@ -16,6 +22,7 @@ const meta: Meta<typeof LlmTable> = {
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
     stickyHeader: { control: 'boolean' },
   },
+  parameters: { design: figmaNode('421-1183') },
 };
 
 export default meta;
@@ -28,6 +35,7 @@ const sampleData = [
 ];
 
 export const Default: Story = {
+  parameters: { design: figmaNode('421-884') },
   render: (args) => ({
     components: { LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd },
     setup() {
@@ -55,6 +63,7 @@ export const Default: Story = {
 };
 
 export const Striped: Story = {
+  parameters: { design: figmaNode('421-923') },
   render: () => ({
     components: { LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd },
     setup() { return { data: sampleData }; },
@@ -76,6 +85,7 @@ export const Striped: Story = {
 };
 
 export const Bordered: Story = {
+  parameters: { design: figmaNode('421-962') },
   render: () => ({
     components: { LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd },
     setup() { return { data: sampleData }; },
@@ -97,6 +107,7 @@ export const Bordered: Story = {
 };
 
 export const Sortable: Story = {
+  parameters: { design: figmaNode('421-1002') },
   render: () => ({
     components: { LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd },
     setup() {
@@ -130,6 +141,7 @@ export const Sortable: Story = {
 };
 
 export const Selectable: Story = {
+  parameters: { design: figmaNode('421-1051') },
   render: () => ({
     components: { LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd },
     setup() {
@@ -165,6 +177,7 @@ export const Selectable: Story = {
 };
 
 export const EmptyState: Story = {
+  parameters: { design: figmaNode('421-1103') },
   render: () => ({
     components: { LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd },
     template: `
@@ -181,6 +194,7 @@ export const EmptyState: Story = {
 };
 
 export const StickyHeader: Story = {
+  parameters: { design: figmaNode('421-1090') },
   render: () => ({
     components: { LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd },
     setup() {

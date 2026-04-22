@@ -21,6 +21,12 @@ const SAMPLE_JSON = `{
 const SAMPLE_SHELL = `npm install @atelier-ui/react
 npx nx generate @atelier-ui/generators:llm-component-react --name=my-widget`;
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmCodeBlock> = {
   title: 'Components/LlmCodeBlock',
   component: LlmCodeBlock,
@@ -32,6 +38,7 @@ const meta: Meta<typeof LlmCodeBlock> = {
     filename: { control: 'text' },
     code: { control: 'text' },
   },
+  parameters: { design: figmaNode('420-286') },
 };
 
 export default meta;
@@ -49,6 +56,7 @@ export const Default: Story = {
       <LlmCodeBlock {...args} />
     </div>
   ),
+  parameters: { design: figmaNode('420-186') },
 };
 
 export const WithFilename: Story = {
@@ -64,6 +72,7 @@ export const WithFilename: Story = {
       <LlmCodeBlock {...args} />
     </div>
   ),
+  parameters: { design: figmaNode('420-209') },
 };
 
 export const WithLineNumbers: Story = {
@@ -79,6 +88,7 @@ export const WithLineNumbers: Story = {
       <LlmCodeBlock {...args} />
     </div>
   ),
+  parameters: { design: figmaNode('420-232') },
 };
 
 export const Json: Story = {
@@ -93,6 +103,7 @@ export const Json: Story = {
       <LlmCodeBlock {...args} />
     </div>
   ),
+  parameters: { design: figmaNode('420-209') },
 };
 
 export const Shell: Story = {
@@ -106,6 +117,7 @@ export const Shell: Story = {
       <LlmCodeBlock {...args} />
     </div>
   ),
+  parameters: { design: figmaNode('420-186') },
 };
 
 export const NoCopyButton: Story = {
@@ -119,4 +131,5 @@ export const NoCopyButton: Story = {
       <LlmCodeBlock {...args} />
     </div>
   ),
+  parameters: { design: figmaNode('420-263') },
 };

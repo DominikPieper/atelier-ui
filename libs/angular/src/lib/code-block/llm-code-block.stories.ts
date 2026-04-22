@@ -21,6 +21,12 @@ const SAMPLE_JSON = `{
 const SAMPLE_SHELL = `npm install @atelier-ui/angular
 npx nx generate @atelier-ui/generators:llm-component-angular --name=my-widget`;
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmCodeBlock> = {
   title: 'Components/LlmCodeBlock',
   component: LlmCodeBlock,
@@ -31,6 +37,9 @@ const meta: Meta<LlmCodeBlock> = {
     language: { control: 'text' },
     filename: { control: 'text' },
     code: { control: 'text' },
+  },
+  parameters: {
+    design: figmaNode('420-286'),
   },
 };
 
@@ -49,6 +58,7 @@ export const Default: Story = {
     props: args,
     template: `<llm-code-block ${argsToTemplate(args)} style="max-width:600px" />`,
   }),
+  parameters: { design: figmaNode('420-186') },
 };
 
 export const WithFilename: Story = {
@@ -63,6 +73,7 @@ export const WithFilename: Story = {
     props: args,
     template: `<llm-code-block ${argsToTemplate(args)} style="max-width:600px" />`,
   }),
+  parameters: { design: figmaNode('420-209') },
 };
 
 export const WithLineNumbers: Story = {
@@ -77,6 +88,7 @@ export const WithLineNumbers: Story = {
     props: args,
     template: `<llm-code-block ${argsToTemplate(args)} style="max-width:600px" />`,
   }),
+  parameters: { design: figmaNode('420-232') },
 };
 
 export const Json: Story = {
@@ -91,6 +103,7 @@ export const Json: Story = {
     props: args,
     template: `<llm-code-block ${argsToTemplate(args)} style="max-width:600px" />`,
   }),
+  parameters: { design: figmaNode('420-209') },
 };
 
 export const Shell: Story = {
@@ -105,6 +118,7 @@ export const Shell: Story = {
     props: args,
     template: `<llm-code-block ${argsToTemplate(args)} style="max-width:600px" />`,
   }),
+  parameters: { design: figmaNode('420-186') },
 };
 
 export const NoCopyButton: Story = {
@@ -119,4 +133,5 @@ export const NoCopyButton: Story = {
     props: args,
     template: `<llm-code-block ${argsToTemplate(args)} style="max-width:600px" />`,
   }),
+  parameters: { design: figmaNode('420-263') },
 };

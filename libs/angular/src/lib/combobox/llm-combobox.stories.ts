@@ -23,6 +23,12 @@ const COUNTRIES = [
   { value: 'jp', label: 'Japan' },
 ];
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmCombobox> = {
   title: 'Components/LlmCombobox',
   component: LlmCombobox,
@@ -33,6 +39,7 @@ const meta: Meta<LlmCombobox> = {
     required: { control: 'boolean' },
     placeholder: { control: 'text' },
   },
+  parameters: { design: figmaNode('421-339') },
 };
 
 export default meta;
@@ -49,6 +56,7 @@ export const Default: Story = {
     props: args,
     template: `<llm-combobox ${argsToTemplate(args)} />`,
   }),
+  parameters: { design: figmaNode('421-291') },
 };
 
 export const WithPreselection: Story = {
@@ -61,6 +69,7 @@ export const WithPreselection: Story = {
     props: args,
     template: `<llm-combobox ${argsToTemplate(args)} />`,
   }),
+  parameters: { design: figmaNode('421-324') },
 };
 
 export const Countries: Story = {
@@ -72,6 +81,7 @@ export const Countries: Story = {
     props: args,
     template: `<llm-combobox ${argsToTemplate(args)} />`,
   }),
+  parameters: { design: figmaNode('421-291') },
 };
 
 export const Disabled: Story = {
@@ -85,6 +95,7 @@ export const Disabled: Story = {
     props: args,
     template: `<llm-combobox ${argsToTemplate(args)} />`,
   }),
+  parameters: { design: figmaNode('421-328') },
 };
 
 export const Invalid: Story = {
@@ -97,6 +108,7 @@ export const Invalid: Story = {
     props: args,
     template: `<llm-combobox ${argsToTemplate(args)} />`,
   }),
+  parameters: { design: figmaNode('421-332') },
 };
 
 export const WithDisabledOption: Story = {
@@ -108,4 +120,5 @@ export const WithDisabledOption: Story = {
     props: args,
     template: `<llm-combobox ${argsToTemplate(args)} />`,
   }),
+  parameters: { design: figmaNode('421-295') },
 };

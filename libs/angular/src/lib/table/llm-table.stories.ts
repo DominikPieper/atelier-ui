@@ -6,6 +6,12 @@ import { LlmCheckbox } from '../checkbox/llm-checkbox';
 
 const TABLE_IMPORTS = [LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd];
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmTable> = {
   title: 'Components/LlmTable',
   component: LlmTable,
@@ -20,6 +26,7 @@ const meta: Meta<LlmTable> = {
     size: 'md',
     stickyHeader: false,
   },
+  parameters: { design: figmaNode('421-1183') },
 };
 
 export default meta;
@@ -61,6 +68,7 @@ export const Default: Story = {
       </llm-table>
     `,
   }),
+  parameters: { design: figmaNode('421-884') },
 };
 
 // ---------------------------------------------------------------------------
@@ -88,6 +96,7 @@ export const Striped: Story = {
       </llm-table>
     `,
   }),
+  parameters: { design: figmaNode('421-923') },
 };
 
 // ---------------------------------------------------------------------------
@@ -123,6 +132,7 @@ export const Bordered: Story = {
       </llm-table>
     `,
   }),
+  parameters: { design: figmaNode('421-962') },
 };
 
 // ---------------------------------------------------------------------------
@@ -163,6 +173,7 @@ export const Sortable: Story = {
       </p>
     `,
   }),
+  parameters: { design: figmaNode('421-1002') },
 };
 
 // ---------------------------------------------------------------------------
@@ -214,6 +225,7 @@ export const Selectable: Story = {
       `,
     };
   },
+  parameters: { design: figmaNode('421-1051') },
 };
 
 // ---------------------------------------------------------------------------
@@ -245,6 +257,7 @@ export const StickyHeader: Story = {
       </div>
     `,
   }),
+  parameters: { design: figmaNode('421-1090') },
 };
 
 // ---------------------------------------------------------------------------
@@ -275,6 +288,7 @@ export const EmptyState: Story = {
       </llm-table>
     `,
   }),
+  parameters: { design: figmaNode('421-1103') },
 };
 
 // ---------------------------------------------------------------------------
@@ -342,6 +356,7 @@ export const KitchenSink: Story = {
       `,
     };
   },
+  parameters: { design: figmaNode('421-1183') },
 };
 
 // ---------------------------------------------------------------------------
@@ -368,4 +383,5 @@ export const Playground: Story = {
       </llm-table>
     `,
   }),
+  parameters: { design: figmaNode('421-1183') },
 };

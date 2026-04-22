@@ -3,6 +3,12 @@ import { ref } from 'vue';
 import LlmRadio from './llm-radio.vue';
 import LlmRadioGroup from '../radio-group/llm-radio-group.vue';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmRadio> = {
   title: 'Components/LlmRadio',
   component: LlmRadio,
@@ -15,6 +21,7 @@ const meta: Meta<typeof LlmRadio> = {
     radioValue: 'option',
     disabled: false,
   },
+  parameters: { design: figmaNode('420-185') },
 };
 
 export default meta;
@@ -35,6 +42,7 @@ export const Default: Story = {
       </LlmRadioGroup>
     `,
   }),
+  parameters: { design: figmaNode('420-165') },
 };
 
 export const Disabled: Story = {
@@ -52,4 +60,5 @@ export const Disabled: Story = {
       </LlmRadioGroup>
     `,
   }),
+  parameters: { design: figmaNode('420-174') },
 };

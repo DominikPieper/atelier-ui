@@ -3,10 +3,17 @@ import { useState } from 'react';
 import { LlmStepper, LlmStep, useLlmStepper } from './llm-stepper';
 import { LlmButton } from '../button/llm-button';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmStepper> = {
   title: 'Components/LlmStepper',
   component: LlmStepper,
   tags: ['autodocs'],
+  parameters: { design: figmaNode('421-505') },
 };
 
 export default meta;
@@ -40,6 +47,7 @@ function NavigableStepper({ orientation = 'horizontal' as const, linear = false 
 
 export const Default: Story = {
   render: () => <NavigableStepper />,
+  parameters: { design: figmaNode('421-407') },
 };
 
 export const WithCompletedSteps: Story = {
@@ -50,6 +58,7 @@ export const WithCompletedSteps: Story = {
       <LlmStep label="Review">Review content</LlmStep>
     </LlmStepper>
   ),
+  parameters: { design: figmaNode('421-427') },
 };
 
 export const WithErrorStep: Story = {
@@ -60,6 +69,7 @@ export const WithErrorStep: Story = {
       <LlmStep label="Review">Review content</LlmStep>
     </LlmStepper>
   ),
+  parameters: { design: figmaNode('421-446') },
 };
 
 export const WithOptionalStep: Story = {
@@ -70,10 +80,12 @@ export const WithOptionalStep: Story = {
       <LlmStep label="Review">Review content</LlmStep>
     </LlmStepper>
   ),
+  parameters: { design: figmaNode('421-465') },
 };
 
 export const Vertical: Story = {
   render: () => <NavigableStepper orientation="vertical" />,
+  parameters: { design: figmaNode('421-485') },
 };
 
 function StepWithHook({ label, children }: { label: string; children: React.ReactNode }) {
@@ -97,4 +109,5 @@ export const WithHook: Story = {
       <StepWithHook label="Step 3">Third step content.</StepWithHook>
     </LlmStepper>
   ),
+  parameters: { design: figmaNode('421-407') },
 };

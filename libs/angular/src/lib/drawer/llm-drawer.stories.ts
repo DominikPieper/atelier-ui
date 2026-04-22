@@ -7,6 +7,12 @@ import { LlmDrawer, LlmDrawerContent, LlmDrawerFooter, LlmDrawerHeader } from '.
 
 const ALL_IMPORTS = [LlmDrawer, LlmDrawerHeader, LlmDrawerContent, LlmDrawerFooter, LlmButton];
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<LlmDrawer> = {
   title: 'Components/LlmDrawer',
   component: LlmDrawer,
@@ -27,6 +33,7 @@ const meta: Meta<LlmDrawer> = {
     size: 'md',
     closeOnBackdrop: true,
   },
+  parameters: { design: figmaNode('421-398') },
 };
 
 export default meta;
@@ -56,7 +63,8 @@ export const Default: Story = {
     await expect(dialog).toBeVisible();
     await userEvent.click(canvas.getByRole('button', { name: 'Cancel' }));
     await expect(dialog).not.toHaveAttribute('open');
-  }
+  },
+  parameters: { design: figmaNode('421-342') },
 };
 
 export const Left: Story = {
@@ -76,7 +84,8 @@ export const Left: Story = {
       </llm-drawer>
     `,
   }),
-  args: { position: 'left' }
+  args: { position: 'left' },
+  parameters: { design: figmaNode('421-356') },
 };
 
 export const Top: Story = {
@@ -97,6 +106,7 @@ export const Top: Story = {
     `,
   }),
   args: { position: 'top' },
+  parameters: { design: figmaNode('421-370') },
 };
 
 export const Bottom: Story = {
@@ -117,7 +127,8 @@ export const Bottom: Story = {
       </llm-drawer>
     `,
   }),
-  args: { position: 'bottom' }
+  args: { position: 'bottom' },
+  parameters: { design: figmaNode('421-384') },
 };
 
 export const SizeVariants: Story = {
@@ -163,6 +174,7 @@ export const SizeVariants: Story = {
       </llm-drawer>
     `,
   }),
+  parameters: { design: figmaNode('421-398') },
 };
 
 export const NoBackdropClose: Story = {
@@ -184,6 +196,7 @@ export const NoBackdropClose: Story = {
     `,
   }),
   args: { closeOnBackdrop: false },
+  parameters: { design: figmaNode('421-342') },
 };
 
 export const WithForm: Story = {
@@ -213,4 +226,5 @@ export const WithForm: Story = {
       </llm-drawer>
     `,
   }),
+  parameters: { design: figmaNode('421-342') },
 };
