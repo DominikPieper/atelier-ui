@@ -10,8 +10,11 @@ export function getStaticPaths() {
 const { name } = Astro.params;
 const doc = componentDocs[name as string];
 const title = doc?.name ?? name;
+const description = doc?.description
+  ? `${doc.description} Framework-agnostic component with Angular, React, and Vue adapters.`
+  : `${title} — framework-agnostic UI component with Angular, React, and Vue adapters.`;
 ---
 
-<BaseLayout title={title} currentPath={`/components/${name}`}>
+<BaseLayout title={title} description={description} currentPath={`/components/${name}`}>
   <ComponentDetail name={name as string} client:load />
 </BaseLayout>

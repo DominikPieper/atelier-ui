@@ -1,0 +1,68 @@
+---
+import arrow_back from '@material-symbols/svg-400/outlined/arrow_back.svg?raw';
+import article from '@material-symbols/svg-400/outlined/article.svg?raw';
+import book from '@material-symbols/svg-400/outlined/book.svg?raw';
+import build_circle from '@material-symbols/svg-400/outlined/build_circle.svg?raw';
+import cable from '@material-symbols/svg-400/outlined/cable.svg?raw';
+import chat from '@material-symbols/svg-400/outlined/chat.svg?raw';
+import check_circle from '@material-symbols/svg-400/outlined/check_circle.svg?raw';
+import dashboard from '@material-symbols/svg-400/outlined/dashboard.svg?raw';
+import description from '@material-symbols/svg-400/outlined/description.svg?raw';
+import download from '@material-symbols/svg-400/outlined/download.svg?raw';
+import grid_view from '@material-symbols/svg-400/outlined/grid_view.svg?raw';
+import help from '@material-symbols/svg-400/outlined/help.svg?raw';
+import menu_book from '@material-symbols/svg-400/outlined/menu_book.svg?raw';
+import palette from '@material-symbols/svg-400/outlined/palette.svg?raw';
+import robot_2 from '@material-symbols/svg-400/outlined/robot_2.svg?raw';
+import school from '@material-symbols/svg-400/outlined/school.svg?raw';
+import smart_toy from '@material-symbols/svg-400/outlined/smart_toy.svg?raw';
+import widgets from '@material-symbols/svg-400/outlined/widgets.svg?raw';
+
+const ICONS = {
+  arrow_back,
+  article,
+  book,
+  build_circle,
+  cable,
+  chat,
+  check_circle,
+  dashboard,
+  description,
+  download,
+  grid_view,
+  help,
+  menu_book,
+  palette,
+  robot_2,
+  school,
+  smart_toy,
+  widgets,
+} as const;
+
+export type IconName = keyof typeof ICONS;
+
+interface Props {
+  name: IconName;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+const raw = ICONS[name];
+
+// Material Symbols ship as 24x24 SVGs with their own viewBox; strip the outer
+// <svg> tag and rebuild with our own attributes so `currentColor` + sizing
+// inherit from CSS (matches prior .material-symbols-outlined behavior).
+const viewBoxMatch = raw.match(/viewBox="([^"]+)"/);
+const viewBox = viewBoxMatch ? viewBoxMatch[1] : '0 0 24 24';
+const inner = raw.replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
+---
+
+<svg
+  class={className}
+  viewBox={viewBox}
+  xmlns="http://www.w3.org/2000/svg"
+  fill="currentColor"
+  aria-hidden="true"
+  focusable="false"
+  set:html={inner}
+/>

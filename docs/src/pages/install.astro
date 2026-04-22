@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import DiagramFigure from '../components/DiagramFigure.astro';
 import Jargon from '../components/Jargon.astro';
+import Icon from '../components/Icon.astro';
 
 const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
 const PKG_MANAGERS = ['npm', 'pnpm', 'yarn'] as const;
@@ -70,7 +71,11 @@ const COMPONENT_IMPORT: Record<string, string> = {
 };
 ---
 
-<BaseLayout title="Installation" currentPath="/install">
+<BaseLayout
+  title="Installation"
+  description="Install Atelier UI for Angular, React, or Vue — package commands for npm, pnpm, and yarn, plus token and component imports."
+  currentPath="/install"
+>
   <div class="docs-inline-page">
 
     <!-- Framework selector -->
@@ -171,7 +176,7 @@ const COMPONENT_IMPORT: Record<string, string> = {
       {FRAMEWORKS.map((fw, i) => (
         <div data-fw-panel={fw} hidden={i !== 0}>
           <div class="docs-file-path">
-            <span class="docs-file-path-icon material-symbols-outlined">description</span>
+            <Icon name="description" class="docs-file-path-icon" />
             <span class="docs-file-path-name">{TOKEN_FILE[fw].file}</span>
             <span class="docs-file-path-notes">{TOKEN_FILE[fw].notes}</span>
           </div>
@@ -196,7 +201,7 @@ const COMPONENT_IMPORT: Record<string, string> = {
       {FRAMEWORKS.map((fw, i) => (
         <div data-fw-panel={fw} hidden={i !== 0}>
           <div class="docs-file-path">
-            <span class="docs-file-path-icon material-symbols-outlined">description</span>
+            <Icon name="description" class="docs-file-path-icon" />
             <span class="docs-file-path-name">{COMPONENT_FILE[fw].file}</span>
             <span class="docs-file-path-notes">{COMPONENT_FILE[fw].notes}</span>
           </div>
@@ -255,11 +260,12 @@ const COMPONENT_IMPORT: Record<string, string> = {
   }
   .docs-file-path-icon {
     font-size: 1rem;
+    width: 1em;
+    height: 1em;
     color: var(--ui-color-primary);
-    font-variation-settings: 'FILL' 1;
   }
   .docs-file-path-name {
-    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
     font-weight: 700;
     color: var(--ui-color-text);
     font-size: 0.78rem;

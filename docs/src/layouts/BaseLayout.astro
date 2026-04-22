@@ -1,28 +1,46 @@
 ---
 import { ClientRouter } from 'astro:transitions';
+import { Font } from 'astro:assets';
 import { Image } from 'astro:assets';
 import logo from '../assets/logo.png';
 import '../styles/tokens.css';
 import '../styles/docs-theme.css';
 import '../styles/global.css';
 import Search from '../components/Search';
+import Icon from '../components/Icon.astro';
 import { COMPONENT_CATEGORIES, CATEGORY_ICONS, SECTION_ICONS } from '../data/components';
 
 interface Props {
   title?: string;
+  description?: string;
+  ogTitle?: string;
+  ogImage?: string;
   currentPath: string;
 }
 
-const { title = 'Atelier UI', currentPath } = Astro.props;
+const SITE_URL = 'https://atelier.pieper.io';
+const SITE_NAME = 'Atelier UI';
+const DEFAULT_DESCRIPTION =
+  'Build UIs with AI, Storybook, and Figma — the Atelier workshop. Framework-agnostic component library with Angular, React, and Vue adapters.';
+
+const {
+  title = SITE_NAME,
+  description = DEFAULT_DESCRIPTION,
+  ogTitle,
+  ogImage = `${SITE_URL}/logo.png`,
+  currentPath,
+} = Astro.props;
+
 const hasToc = Astro.slots.has('toc');
-const pageTitle = title !== 'Atelier UI' ? `${title} — Atelier UI` : 'Atelier UI';
+const pageTitle = title !== SITE_NAME ? `${title} — ${SITE_NAME}` : SITE_NAME;
+const canonicalUrl = `${SITE_URL}${currentPath}`;
+const shareTitle = ogTitle ?? pageTitle;
 
 const isComponents = currentPath.startsWith('/components');
 const isMcp = currentPath === '/mcp';
 const isWorkshop = currentPath === '/workshop';
 const isStorybook = currentPath === '/storybook';
 const isFigma = currentPath === '/figma';
-const isDocs = !isComponents && !isMcp && !isWorkshop && !isStorybook && !isFigma;
 
 function isActive(path: string): boolean {
   if (path === '/') return currentPath === '/';
@@ -36,6 +54,64 @@ function isTopActive(path: string): boolean {
   if (path === '/mcp') return isMcp;
   return false;
 }
+
+// Breadcrumb labels mirror the sidebar nav so JSON-LD crumbs match UI.
+const BREADCRUMB_LABELS: Record<string, string> = {
+  workshop: 'Workshop Setup',
+  'figma-token': 'Figma Setup',
+  troubleshooting: 'Troubleshooting',
+  figma: 'Figma',
+  tutorial: 'Figma to Code',
+  storybook: 'Storybook',
+  mcp: 'AI Tools',
+  components: 'Components',
+  install: 'Installation',
+  tokens: 'Design Tokens',
+  patterns: 'Cookbook Patterns',
+  llms: 'llms.txt',
+  'agent-skills': 'Agent Skills',
+  'claude-md': 'CLAUDE.md',
+  prompts: 'Prompt Templates',
+  'design-principles': 'Design Principles',
+};
+
+function titleCase(slug: string): string {
+  return (
+    BREADCRUMB_LABELS[slug] ??
+    slug
+      .split('-')
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ')
+  );
+}
+
+const pathSegments = currentPath.split('/').filter(Boolean);
+const breadcrumbItems = [
+  { name: 'Home', url: SITE_URL + '/' },
+  ...pathSegments.map((segment, i) => ({
+    name: titleCase(segment),
+    url: SITE_URL + '/' + pathSegments.slice(0, i + 1).join('/'),
+  })),
+];
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE_NAME,
+  url: SITE_URL,
+  description: DEFAULT_DESCRIPTION,
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumbItems.map((item, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: item.name,
+    item: item.url,
+  })),
+};
 ---
 
 <!DOCTYPE html>
@@ -43,22 +119,29 @@ function isTopActive(path: string): boolean {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0b1220" media="(prefers-color-scheme: dark)" />
   <title>{pageTitle}</title>
-  <meta name="description" content="Build UIs with AI, Storybook, and Figma — the Atelier workshop." />
-  <meta property="og:title" content={pageTitle} />
-  <meta property="og:description" content="AI-assisted UI development with Figma as design source of truth and Storybook as your live component explorer." />
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalUrl} />
+  <meta property="og:title" content={shareTitle} />
+  <meta property="og:description" content={description} />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content={`https://atelier.pieper.io${currentPath}`} />
-  <meta property="og:image" content="https://atelier.pieper.io/logo.png" />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:site_name" content={SITE_NAME} />
   <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content={shareTitle} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
   <link rel="icon" href="/logo.ico" sizes="any" />
   <link rel="icon" href="/logo.png" type="image/png" />
   <link rel="sitemap" href="/sitemap-index.xml" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <Font cssVariable="--font-sans" preload />
+  <Font cssVariable="--font-mono" />
   <ClientRouter />
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
   <!-- Prevent flash of wrong theme & preserve across View Transitions -->
   <script is:inline>
     (function() {
@@ -96,13 +179,13 @@ function isTopActive(path: string): boolean {
         <a href="/mcp"       class={`docs-topbar-link${isTopActive('/mcp') ? ' active' : ''}`}>MCP Explorer</a>
       </nav>
 
-      <Search client:load />
+      <Search client:idle />
 
       <button class="docs-theme-btn" id="theme-btn" aria-label="Toggle theme">
-        <svg id="theme-icon-moon" class="docs-theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg id="theme-icon-moon" class="docs-theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
         </svg>
-        <svg id="theme-icon-sun" class="docs-theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+        <svg id="theme-icon-sun" class="docs-theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" style="display:none">
           <circle cx="12" cy="12" r="5"/>
           <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
           <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
@@ -124,7 +207,7 @@ function isTopActive(path: string): boolean {
             <div class="docs-sidebar-version">v1.0.4-beta</div>
           </div>
           <button class="docs-sidebar-close" id="sidebar-close" aria-label="Close navigation">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
               <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
             </svg>
           </button>
@@ -139,19 +222,19 @@ function isTopActive(path: string): boolean {
               Get Started
             </div>
             <a href="/" class={`docs-nav-link${isActive('/') ? ' active' : ''}`}>
-              <span class="docs-nav-link-icon material-symbols-outlined">dashboard</span>
+              <Icon name="dashboard" class="docs-nav-link-icon" />
               Overview
             </a>
             <a href="/workshop" class={`docs-nav-link${isActive('/workshop') ? ' active' : ''}`}>
-              <span class="docs-nav-link-icon material-symbols-outlined">build_circle</span>
+              <Icon name="build_circle" class="docs-nav-link-icon" />
               Workshop Setup
             </a>
             <a href="/figma-token" class={`docs-nav-link${isActive('/figma-token') ? ' active' : ''}`}>
-              <span class="docs-nav-link-icon material-symbols-outlined">cable</span>
+              <Icon name="cable" class="docs-nav-link-icon" />
               Figma Setup
             </a>
             <a href="/troubleshooting" class={`docs-nav-link${isActive('/troubleshooting') ? ' active' : ''}`}>
-              <span class="docs-nav-link-icon material-symbols-outlined">help</span>
+              <Icon name="help" class="docs-nav-link-icon" />
               Troubleshooting
             </a>
           </div>
@@ -162,19 +245,19 @@ function isTopActive(path: string): boolean {
               Workflow
             </div>
             <a href="/figma" class={`docs-nav-link${isActive('/figma') ? ' active' : ''}`}>
-              <span class="docs-nav-link-icon material-symbols-outlined">palette</span>
+              <Icon name="palette" class="docs-nav-link-icon" />
               Figma
             </a>
             <a href="/tutorial" class={`docs-nav-link${isActive('/tutorial') ? ' active' : ''}`}>
-              <span class="docs-nav-link-icon material-symbols-outlined">school</span>
+              <Icon name="school" class="docs-nav-link-icon" />
               Figma to Code
             </a>
             <a href="/storybook" class={`docs-nav-link${isActive('/storybook') ? ' active' : ''}`}>
-              <span class="docs-nav-link-icon material-symbols-outlined">book</span>
+              <Icon name="book" class="docs-nav-link-icon" />
               Storybook
             </a>
             <a href="/mcp" class={`docs-nav-link${isActive('/mcp') ? ' active' : ''}`}>
-              <span class="docs-nav-link-icon material-symbols-outlined">smart_toy</span>
+              <Icon name="smart_toy" class="docs-nav-link-icon" />
               AI Tools
             </a>
           </div>
@@ -185,35 +268,35 @@ function isTopActive(path: string): boolean {
               Reference
             </div>
             <a href="/components" class={`docs-nav-link${isActive('/components') ? ' active' : ''}`}>
-              <span class="docs-nav-link-icon material-symbols-outlined">widgets</span>
+              <Icon name="widgets" class="docs-nav-link-icon" />
               Components
             </a>
             <a href="/install" class={`docs-nav-link${isActive('/install') ? ' active' : ''}`}>
-              <span class="docs-nav-link-icon material-symbols-outlined">download</span>
+              <Icon name="download" class="docs-nav-link-icon" />
               Installation
             </a>
             <a href="/tokens" class={`docs-nav-link${isActive('/tokens') ? ' active' : ''}`}>
-              <span class="docs-nav-link-icon material-symbols-outlined">palette</span>
+              <Icon name="palette" class="docs-nav-link-icon" />
               Design Tokens
             </a>
             <a href="/patterns" class={`docs-nav-link${isActive('/patterns') ? ' active' : ''}`}>
-              <span class="docs-nav-link-icon material-symbols-outlined">menu_book</span>
+              <Icon name="menu_book" class="docs-nav-link-icon" />
               Cookbook Patterns
             </a>
             <a href="/llms" class={`docs-nav-link${isActive('/llms') ? ' active' : ''}`}>
-              <span class="docs-nav-link-icon material-symbols-outlined">description</span>
+              <Icon name="description" class="docs-nav-link-icon" />
               llms.txt
             </a>
             <a href="/agent-skills" class={`docs-nav-link${isActive('/agent-skills') ? ' active' : ''}`}>
-              <span class="docs-nav-link-icon material-symbols-outlined">robot_2</span>
+              <Icon name="robot_2" class="docs-nav-link-icon" />
               Agent Skills
             </a>
             <a href="/claude-md" class={`docs-nav-link${isActive('/claude-md') ? ' active' : ''}`}>
-              <span class="docs-nav-link-icon material-symbols-outlined">article</span>
+              <Icon name="article" class="docs-nav-link-icon" />
               CLAUDE.md
             </a>
             <a href="/prompts" class={`docs-nav-link${isActive('/prompts') ? ' active' : ''}`}>
-              <span class="docs-nav-link-icon material-symbols-outlined">chat</span>
+              <Icon name="chat" class="docs-nav-link-icon" />
               Prompt Templates
             </a>
           </div>
@@ -226,11 +309,11 @@ function isTopActive(path: string): boolean {
               Overview
             </div>
             <a href="/" class="docs-nav-link docs-nav-link--back">
-              <span class="docs-nav-link-icon material-symbols-outlined">arrow_back</span>
+              <Icon name="arrow_back" class="docs-nav-link-icon" />
               Back to Docs
             </a>
             <a href="/components" class={`docs-nav-link${currentPath === '/components' ? ' active' : ''}`}>
-              <span class="docs-nav-link-icon material-symbols-outlined">grid_view</span>
+              <Icon name="grid_view" class="docs-nav-link-icon" />
               All Components
             </a>
           </div>
@@ -271,19 +354,19 @@ function isTopActive(path: string): boolean {
     <!-- Bottom Nav (mobile) -->
     <nav class="docs-bottom-nav">
       <a href="/workshop"  class={`docs-bottom-nav-item${isWorkshop ? ' active' : ''}`}>
-        <span class="docs-bottom-nav-icon material-symbols-outlined">build_circle</span>
+        <Icon name="build_circle" class="docs-bottom-nav-icon" />
         <span class="docs-bottom-nav-label">Workshop</span>
       </a>
       <a href="/storybook" class={`docs-bottom-nav-item${isStorybook ? ' active' : ''}`}>
-        <span class="docs-bottom-nav-icon material-symbols-outlined">book</span>
+        <Icon name="book" class="docs-bottom-nav-icon" />
         <span class="docs-bottom-nav-label">Storybook</span>
       </a>
       <a href="/figma"     class={`docs-bottom-nav-item${isFigma ? ' active' : ''}`}>
-        <span class="docs-bottom-nav-icon material-symbols-outlined">palette</span>
+        <Icon name="palette" class="docs-bottom-nav-icon" />
         <span class="docs-bottom-nav-label">Figma</span>
       </a>
       <a href="/mcp"       class={`docs-bottom-nav-item${isMcp ? ' active' : ''}`}>
-        <span class="docs-bottom-nav-icon material-symbols-outlined">smart_toy</span>
+        <Icon name="smart_toy" class="docs-bottom-nav-icon" />
         <span class="docs-bottom-nav-label">MCP</span>
       </a>
     </nav>
@@ -291,7 +374,7 @@ function isTopActive(path: string): boolean {
 
   <!-- Scroll to top button -->
   <button class="docs-scroll-top" id="scroll-top" aria-label="Scroll to top">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
       <polyline points="18 15 12 9 6 15"/>
     </svg>
   </button>

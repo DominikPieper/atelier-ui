@@ -67,12 +67,12 @@ const { caption, align = 'center', compact = false } = Astro.props;
 
   /* Shared SVG typographic defaults so all diagrams look consistent */
   .diagram-figure-surface :global(svg text) {
-    font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
     fill: var(--ui-color-text);
   }
 
   .diagram-figure-surface :global(svg text.diagram-mono) {
-    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
   }
 
   .diagram-figure-surface :global(svg text.diagram-muted) {

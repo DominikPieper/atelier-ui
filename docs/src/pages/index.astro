@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import DiagramFigure from '../components/DiagramFigure.astro';
 import Jargon from '../components/Jargon.astro';
+import Icon from '../components/Icon.astro';
 ---
 
 <style>
@@ -47,9 +48,10 @@ import Jargon from '../components/Jargon.astro';
 
   .workflow-node-icon {
     font-size: 1.5rem;
+    width: 1em;
+    height: 1em;
     color: var(--ui-color-primary);
     line-height: 1;
-    font-variation-settings: 'FILL' 1;
   }
 
   .workflow-node-title {
@@ -119,7 +121,10 @@ import Jargon from '../components/Jargon.astro';
   }
 </style>
 
-<BaseLayout currentPath="/">
+<BaseLayout
+  description="Atelier UI — build UIs with AI, Storybook, and Figma. A framework-agnostic component library with Angular, React, and Vue adapters, designed for LLM-assisted development."
+  currentPath="/"
+>
   <!-- Hero -->
   <section class="docs-hero-v2">
     <div class="docs-hero-grid-bg"></div>
@@ -239,7 +244,7 @@ import Jargon from '../components/Jargon.astro';
 
   <div class="workflow-diagram">
     <div class="workflow-node">
-      <span class="workflow-node-icon material-symbols-outlined">palette</span>
+      <Icon name="palette" class="workflow-node-icon" />
       <div class="workflow-node-title">Figma</div>
       <div class="workflow-node-desc">Design tokens<br/>Component frames</div>
     </div>
@@ -248,7 +253,7 @@ import Jargon from '../components/Jargon.astro';
       <span class="workflow-connector-arrow">→</span>
     </div>
     <div class="workflow-node">
-      <span class="workflow-node-icon material-symbols-outlined">book</span>
+      <Icon name="book" class="workflow-node-icon" />
       <div class="workflow-node-title">Storybook</div>
       <div class="workflow-node-desc">Props &amp; stories<br/>via MCP</div>
     </div>
@@ -257,7 +262,7 @@ import Jargon from '../components/Jargon.astro';
       <span class="workflow-connector-arrow">→</span>
     </div>
     <div class="workflow-node workflow-node--highlight">
-      <span class="workflow-node-icon material-symbols-outlined">smart_toy</span>
+      <Icon name="smart_toy" class="workflow-node-icon" />
       <div class="workflow-node-title">AI · Claude</div>
       <div class="workflow-node-desc">Reads both sources<br/>Writes code</div>
     </div>
@@ -266,7 +271,7 @@ import Jargon from '../components/Jargon.astro';
       <span class="workflow-connector-arrow">→</span>
     </div>
     <div class="workflow-node">
-      <span class="workflow-node-icon material-symbols-outlined">check_circle</span>
+      <Icon name="check_circle" class="workflow-node-icon" />
       <div class="workflow-node-title">Component</div>
       <div class="workflow-node-desc">Design-accurate<br/>Dark mode ready</div>
     </div>
@@ -366,7 +371,7 @@ import Jargon from '../components/Jargon.astro';
   <div class="docs-quicknav" style="grid-template-columns: repeat(4, 1fr)">
     <a href="/workshop" class="docs-quicknav-card">
       <div class="docs-quicknav-icon">
-        <span class="material-symbols-outlined">build_circle</span>
+        <Icon name="build_circle" />
       </div>
       <div>
         <div class="docs-quicknav-label">Setup</div>
@@ -375,7 +380,7 @@ import Jargon from '../components/Jargon.astro';
     </a>
     <a href="/storybook" class="docs-quicknav-card">
       <div class="docs-quicknav-icon">
-        <span class="material-symbols-outlined">book</span>
+        <Icon name="book" />
       </div>
       <div>
         <div class="docs-quicknav-label">Live Components</div>
@@ -384,7 +389,7 @@ import Jargon from '../components/Jargon.astro';
     </a>
     <a href="/figma" class="docs-quicknav-card">
       <div class="docs-quicknav-icon">
-        <span class="material-symbols-outlined">palette</span>
+        <Icon name="palette" />
       </div>
       <div>
         <div class="docs-quicknav-label">Design Tokens</div>
@@ -393,7 +398,7 @@ import Jargon from '../components/Jargon.astro';
     </a>
     <a href="/mcp" class="docs-quicknav-card">
       <div class="docs-quicknav-icon">
-        <span class="material-symbols-outlined">smart_toy</span>
+        <Icon name="smart_toy" />
       </div>
       <div>
         <div class="docs-quicknav-label">AI Protocol</div>
