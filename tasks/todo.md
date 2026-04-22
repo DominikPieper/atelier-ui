@@ -43,9 +43,22 @@
 ## Remaining
 
 - [ ] Storybook visual check — light + dark mode, manual pass on key components
-- [ ] CI pipeline for tests on PRs
+- [x] ~~CI pipeline for tests on PRs~~ — shipped (`.github/workflows/ci.yml`: parallel lint/test/build/checks on `nx affected`)
 - [ ] Facilitator guide — timing, learning arc, common pitfalls
 - [ ] True CLI e2e test — runs npx create-atelier-ui-workspace in a temp dir
+
+## Review — Figma Desktop Bridge pivot (2026-04-22)
+
+Primary Figma channel switched from the REST API (`FIGMA_ACCESS_TOKEN`) to the Figma Desktop Bridge plugin shipped by `figma-console-mcp`. Token becomes optional (REST reads only).
+
+- `tools/scripts/preflight.mjs` (and the preset template copy) — `checkFigmaToken()` → `checkFigmaSetup()`: checks `~/.figma-console-mcp/plugin/manifest.json`, probes Bridge ports 9223–9232, treats `FIGMA_ACCESS_TOKEN` as optional.
+- `.mcp.json` — `FIGMA_TOKEN_REMOVED` → `${FIGMA_ACCESS_TOKEN:-}` so no token is baked into the committed file.
+- `.devcontainer/` (root and preset template) removed — Figma Desktop is required for the Bridge plugin and doesn't run in Codespaces. Preset generator no longer writes the devcontainer; the related test is dropped (28/28 green, was 29).
+- `docs/src/pages/figma-token.astro` — rewritten to walk the Desktop Bridge plugin install path; REST token coverage kept as the optional section.
+- `docs/src/pages/workshop.astro` — Codespaces prerequisite tab removed; link text points at "Figma Setup".
+- `docs/src/layouts/BaseLayout.astro` — sidebar "Figma Token" → "Figma Setup" (icon `key` → `cable`).
+
+Verified: preflight exits 0 (14 ok, 1 warn for optional FIGMA token — expected), `nx test create-workspace` 28/28, `nx build docs` 43 pages, `nx affected -t lint` clean.
 
 ## Review — Zero-Friction Setup (2026-04-21)
 
