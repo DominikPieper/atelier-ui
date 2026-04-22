@@ -1,8 +1,13 @@
 {
   "name": "@atelier-ui/spec",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Framework-agnostic TypeScript interfaces for the Atelier UI component API contract",
-  "keywords": ["atelier-ui", "typescript", "spec", "interfaces"],
+  "keywords": [
+    "atelier-ui",
+    "typescript",
+    "spec",
+    "interfaces"
+  ],
   "author": "Atelier UI",
   "license": "MIT",
   "repository": {
