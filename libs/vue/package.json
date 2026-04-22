@@ -1,6 +1,6 @@
 {
   "name": "@atelier-ui/vue",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Atelier UI component library for Vue 3 — LLM-optimised, accessible, design-token-driven",
   "keywords": [
     "vue",

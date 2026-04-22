@@ -1,3 +1,14 @@
+## 0.0.15 (2026-04-22)
+
+### 🩹 Fixes
+
+- **tokens:** darken primary + placeholder for WCAG AA contrast ([#00](https://github.com/DominikPieper/atelier-ui/issues/00), [#9](https://github.com/DominikPieper/atelier-ui/issues/9), [#0](https://github.com/DominikPieper/atelier-ui/issues/0), [#007070](https://github.com/DominikPieper/atelier-ui/issues/007070), [#009696](https://github.com/DominikPieper/atelier-ui/issues/009696), [#005858](https://github.com/DominikPieper/atelier-ui/issues/005858), [#003](https://github.com/DominikPieper/atelier-ui/issues/003), [#6](https://github.com/DominikPieper/atelier-ui/issues/6))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.0.14 (2026-04-22)
 
 ### 🩹 Fixes
