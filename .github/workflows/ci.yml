@@ -29,7 +29,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version: 24
           cache: 'npm'
       - run: npm ci
       - run: node tools/scripts/check-sync.js
@@ -48,7 +48,7 @@ jobs:
       - uses: nrwl/nx-set-shas@v4
       - uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version: 24
           cache: 'npm'
       - run: npm ci
       - name: Lint affected (PR)
@@ -95,7 +95,7 @@ jobs:
       - uses: nrwl/nx-set-shas@v4
       - uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version: 24
           cache: 'npm'
       - run: npm ci
       - name: Build affected (PR)
@@ -121,7 +121,7 @@ jobs:
       - uses: nrwl/nx-set-shas@v4
       - uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version: 24
           cache: 'npm'
       - run: npm ci
       # Always use `affected` — e2e is slow (~5 min per framework) so skipping
