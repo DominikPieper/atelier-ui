@@ -32,7 +32,7 @@ const meta: Meta<LlmSkeleton> = {
     animated: true,
   },
   parameters: {
-    design: figmaNode('3-857'),
+    design: figmaNode('55-102'),
   },
 };
 

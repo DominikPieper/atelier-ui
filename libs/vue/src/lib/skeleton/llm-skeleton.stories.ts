@@ -1,6 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import LlmSkeleton from './llm-skeleton.vue';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmSkeleton> = {
   title: 'Components/LlmSkeleton',
   component: LlmSkeleton,
@@ -15,6 +21,9 @@ const meta: Meta<typeof LlmSkeleton> = {
     variant: 'text',
     width: '100%',
     animated: true,
+  },
+  parameters: {
+    design: figmaNode('55-102'),
   },
 };
 

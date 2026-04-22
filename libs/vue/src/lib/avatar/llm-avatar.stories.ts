@@ -1,6 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import LlmAvatar from './llm-avatar.vue';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmAvatar> = {
   title: 'Components/LlmAvatar',
   component: LlmAvatar,
@@ -17,6 +23,9 @@ const meta: Meta<typeof LlmAvatar> = {
     name: '',
     src: '',
     alt: '',
+  },
+  parameters: {
+    design: figmaNode('55-151'),
   },
 };
 

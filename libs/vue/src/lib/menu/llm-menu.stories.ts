@@ -1,5 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import LlmMenuTrigger from './llm-menu-trigger.vue';
+
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
 import LlmMenu from './llm-menu.vue';
 import LlmMenuItem from './llm-menu-item.vue';
 import LlmMenuSeparator from './llm-menu-separator.vue';
@@ -13,6 +19,9 @@ const meta: Meta<typeof LlmMenu> = {
   },
   args: {
     variant: 'default',
+  },
+  parameters: {
+    design: figmaNode('55-130'),
   },
 };
 

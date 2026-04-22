@@ -1,5 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import LlmAvatarGroup from './llm-avatar-group.vue';
+
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
 import LlmAvatar from './llm-avatar.vue';
 
 const meta: Meta<typeof LlmAvatarGroup> = {
@@ -13,6 +19,9 @@ const meta: Meta<typeof LlmAvatarGroup> = {
   args: {
     max: 3,
     size: 'md',
+  },
+  parameters: {
+    design: figmaNode('55-151'),
   },
 };
 

@@ -35,7 +35,7 @@ const meta: Meta<LlmTextarea> = {
     autoResize: false,
   },
   parameters: {
-    design: figmaNode('3-798'),
+    design: figmaNode('55-87'),
   },
 };
 

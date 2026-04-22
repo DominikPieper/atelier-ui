@@ -2,12 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { LlmDrawer, LlmDrawerHeader, LlmDrawerContent, LlmDrawerFooter } from './llm-drawer';
 
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
-
-function figmaNode(nodeId: string) {
-  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
-}
-
 const meta: Meta<typeof LlmDrawer> = {
   title: 'Components/LlmDrawer',
   component: LlmDrawer,
@@ -19,9 +13,6 @@ const meta: Meta<typeof LlmDrawer> = {
     closeOnBackdrop: { control: 'boolean' },
   },
   args: { position: 'right', size: 'md', closeOnBackdrop: true },
-  parameters: {
-    design: figmaNode('3-1111'),
-  },
 };
 
 export default meta;
@@ -69,13 +60,11 @@ function DrawerDemo({
 }
 
 export const Default: Story = {
-  render: () => <DrawerDemo />,
-  parameters: { design: figmaNode('55-95') },
+  render: () => <DrawerDemo />
 };
 
 export const LeftPosition: Story = {
-  render: () => <DrawerDemo position="left" label="Open Left Drawer" />,
-  parameters: { design: figmaNode('55-96') },
+  render: () => <DrawerDemo position="left" label="Open Left Drawer" />
 };
 
 export const TopPosition: Story = {
@@ -83,8 +72,7 @@ export const TopPosition: Story = {
 };
 
 export const BottomPosition: Story = {
-  render: () => <DrawerDemo position="bottom" label="Open Bottom Drawer" />,
-  parameters: { design: figmaNode('55-97') },
+  render: () => <DrawerDemo position="bottom" label="Open Bottom Drawer" />
 };
 
 export const SmallSize: Story = {

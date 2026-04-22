@@ -1,6 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import LlmBadge from './llm-badge.vue';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmBadge> = {
   title: 'Components/LlmBadge',
   component: LlmBadge,
@@ -12,6 +18,9 @@ const meta: Meta<typeof LlmBadge> = {
   args: {
     variant: 'default',
     size: 'md',
+  },
+  parameters: {
+    design: figmaNode('55-22'),
   },
 };
 

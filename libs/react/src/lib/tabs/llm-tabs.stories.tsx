@@ -18,7 +18,7 @@ const meta: Meta<typeof LlmTabGroup> = {
   },
   args: { variant: 'default' },
   parameters: {
-    design: figmaNode('3-540'),
+    design: figmaNode('55-123'),
   },
 };
 

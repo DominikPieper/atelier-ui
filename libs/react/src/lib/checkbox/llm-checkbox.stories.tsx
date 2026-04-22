@@ -20,7 +20,7 @@ const meta: Meta<typeof LlmCheckbox> = {
   },
   args: { checked: false, disabled: false, invalid: false, indeterminate: false },
   parameters: {
-    design: figmaNode('3-754'),
+    design: figmaNode('55-36'),
   },
 };
 

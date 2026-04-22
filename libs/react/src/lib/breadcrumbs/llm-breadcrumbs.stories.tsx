@@ -12,7 +12,7 @@ const meta: Meta<typeof LlmBreadcrumbs> = {
   component: LlmBreadcrumbs,
   tags: ['autodocs'],
   parameters: {
-    design: figmaNode('3-1021'),
+    design: figmaNode('55-141'),
   },
 };
 

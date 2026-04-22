@@ -37,7 +37,7 @@ const meta: Meta<LlmDialog> = {
     closeOnBackdrop: true,
   },
   parameters: {
-    design: figmaNode('3-522'),
+    design: figmaNode('55-94'),
   },
 };
 

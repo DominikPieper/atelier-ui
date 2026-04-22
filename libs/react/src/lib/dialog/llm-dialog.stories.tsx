@@ -19,7 +19,7 @@ const meta: Meta<typeof LlmDialog> = {
   },
   args: { size: 'md', closeOnBackdrop: true },
   parameters: {
-    design: figmaNode('3-522'),
+    design: figmaNode('55-94'),
   },
 };
 

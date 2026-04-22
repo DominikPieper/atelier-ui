@@ -1,6 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import { ref } from 'vue';
 import LlmTabGroup from './llm-tab-group.vue';
+
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
 import LlmTab from './llm-tab.vue';
 
 const meta: Meta<typeof LlmTabGroup> = {
@@ -14,6 +20,9 @@ const meta: Meta<typeof LlmTabGroup> = {
   args: {
     variant: 'default',
     selectedIndex: 0,
+  },
+  parameters: {
+    design: figmaNode('55-123'),
   },
 };
 

@@ -19,7 +19,7 @@ const meta: Meta<typeof LlmToggle> = {
   },
   args: { checked: false, disabled: false, invalid: false },
   parameters: {
-    design: figmaNode('3-775'),
+    design: figmaNode('55-41'),
   },
 };
 

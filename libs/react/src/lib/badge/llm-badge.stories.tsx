@@ -17,7 +17,7 @@ const meta: Meta<typeof LlmBadge> = {
   },
   args: { variant: 'default', size: 'md', children: 'Badge' },
   parameters: {
-    design: figmaNode('3-456'),
+    design: figmaNode('55-22'),
   },
 };
 

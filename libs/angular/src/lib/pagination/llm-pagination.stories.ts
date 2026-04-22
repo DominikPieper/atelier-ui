@@ -26,7 +26,7 @@ const meta: Meta<LlmPagination> = {
     showFirstLast: true,
   },
   parameters: {
-    design: figmaNode('3-1048'),
+    design: figmaNode('55-145'),
   },
 };
 

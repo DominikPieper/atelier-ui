@@ -59,7 +59,7 @@ const meta: Meta<LlmCard> = {
     },
   ],
   parameters: {
-    design: figmaNode('3-338'),
+    design: figmaNode('55-65'),
   },
 };
 

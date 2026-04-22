@@ -23,7 +23,7 @@ const meta: Meta<LlmAccordionGroup> = {
     variant: 'default',
   },
   parameters: {
-    design: figmaNode('3-576'),
+    design: figmaNode('55-127'),
   },
 };
 

@@ -1,6 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import { ref } from 'vue';
 import LlmAccordionGroup from './llm-accordion-group.vue';
+
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
 import LlmAccordionItem from './llm-accordion-item.vue';
 import LlmAccordionHeader from './llm-accordion-header.vue';
 
@@ -15,6 +21,9 @@ const meta: Meta<typeof LlmAccordionGroup> = {
   args: {
     variant: 'default',
     multi: false,
+  },
+  parameters: {
+    design: figmaNode('55-127'),
   },
 };
 

@@ -31,7 +31,7 @@ const meta: Meta<LlmAlert> = {
     dismissible: false,
   },
   parameters: {
-    design: figmaNode('3-723'),
+    design: figmaNode('55-31'),
   },
 };
 

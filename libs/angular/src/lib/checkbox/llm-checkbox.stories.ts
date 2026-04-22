@@ -31,7 +31,7 @@ const meta: Meta<LlmCheckbox> = {
     indeterminate: false,
   },
   parameters: {
-    design: figmaNode('3-754'),
+    design: figmaNode('55-36'),
   },
 };
 

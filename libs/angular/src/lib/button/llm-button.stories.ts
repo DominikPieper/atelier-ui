@@ -35,7 +35,7 @@ const meta: Meta<LlmButton> = {
     loading: false,
   },
   parameters: {
-    design: figmaNode('3-119'),
+    design: figmaNode('129-20'),
   },
 };
 
@@ -46,39 +46,40 @@ export const Default: Story = {};
 
 export const Primary: Story = {
   args: { variant: 'primary' },
-  parameters: { design: figmaNode('49-47') },
+  parameters: { design: figmaNode('129-4') },
 };
 
 export const Secondary: Story = {
   args: { variant: 'secondary' },
-  parameters: { design: figmaNode('49-71') },
+  parameters: { design: figmaNode('129-10') },
 };
 
 export const Outline: Story = {
   args: { variant: 'outline' },
-  parameters: { design: figmaNode('49-95') },
+  parameters: { design: figmaNode('129-16') },
 };
 
 export const Small: Story = {
   args: { size: 'sm' },
+  parameters: { design: figmaNode('129-2') },
 };
 
 export const Medium: Story = {
   args: { size: 'md' },
+  parameters: { design: figmaNode('129-4') },
 };
 
 export const Large: Story = {
   args: { size: 'lg' },
+  parameters: { design: figmaNode('129-6') },
 };
 
 export const Disabled: Story = {
   args: { disabled: true },
-  parameters: { design: figmaNode('49-51') },
 };
 
 export const Loading: Story = {
   args: { loading: true },
-  parameters: { design: figmaNode('49-53') },
 };
 
 export const AllVariants: Story = {

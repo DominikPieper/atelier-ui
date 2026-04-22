@@ -1,6 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import LlmTooltip from './llm-tooltip.vue';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmTooltip> = {
   title: 'Components/LlmTooltip',
   component: LlmTooltip,
@@ -17,6 +23,9 @@ const meta: Meta<typeof LlmTooltip> = {
     llmTooltipDisabled: false,
     llmTooltipShowDelay: 300,
     llmTooltipHideDelay: 0,
+  },
+  parameters: {
+    design: figmaNode('55-52'),
   },
 };
 

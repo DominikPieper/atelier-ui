@@ -29,7 +29,7 @@ const meta: Meta<LlmToggle> = {
     required: false,
   },
   parameters: {
-    design: figmaNode('3-775'),
+    design: figmaNode('55-41'),
   },
 };
 

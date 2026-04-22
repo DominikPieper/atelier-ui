@@ -37,7 +37,7 @@ const meta: Meta<LlmRadioGroup> = {
     required: false,
   },
   parameters: {
-    design: figmaNode('3-822'),
+    design: figmaNode('55-137'),
   },
 };
 

@@ -7,12 +7,6 @@ import { LlmDrawer, LlmDrawerContent, LlmDrawerFooter, LlmDrawerHeader } from '.
 
 const ALL_IMPORTS = [LlmDrawer, LlmDrawerHeader, LlmDrawerContent, LlmDrawerFooter, LlmButton];
 
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
-
-function figmaNode(nodeId: string): { type: "figma"; url: string } {
-  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
-}
-
 const meta: Meta<LlmDrawer> = {
   title: 'Components/LlmDrawer',
   component: LlmDrawer,
@@ -32,9 +26,6 @@ const meta: Meta<LlmDrawer> = {
     position: 'right',
     size: 'md',
     closeOnBackdrop: true,
-  },
-  parameters: {
-    design: figmaNode('3-1111'),
   },
 };
 
@@ -65,8 +56,7 @@ export const Default: Story = {
     await expect(dialog).toBeVisible();
     await userEvent.click(canvas.getByRole('button', { name: 'Cancel' }));
     await expect(dialog).not.toHaveAttribute('open');
-  },
-  parameters: { design: figmaNode('55-95') },
+  }
 };
 
 export const Left: Story = {
@@ -86,8 +76,7 @@ export const Left: Story = {
       </llm-drawer>
     `,
   }),
-  args: { position: 'left' },
-  parameters: { design: figmaNode('55-96') },
+  args: { position: 'left' }
 };
 
 export const Top: Story = {
@@ -128,8 +117,7 @@ export const Bottom: Story = {
       </llm-drawer>
     `,
   }),
-  args: { position: 'bottom' },
-  parameters: { design: figmaNode('55-97') },
+  args: { position: 'bottom' }
 };
 
 export const SizeVariants: Story = {

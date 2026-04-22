@@ -13,7 +13,7 @@ const meta: Meta<typeof LlmMenu> = {
   component: LlmMenu,
   tags: ['autodocs'],
   parameters: {
-    design: figmaNode('3-633'),
+    design: figmaNode('55-130'),
   },
 };
 

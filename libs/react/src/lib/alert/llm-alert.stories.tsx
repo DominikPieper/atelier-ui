@@ -21,7 +21,7 @@ const meta: Meta<typeof LlmAlert> = {
     children: 'Alert message here.',
   },
   parameters: {
-    design: figmaNode('3-723'),
+    design: figmaNode('55-31'),
   },
 };
 

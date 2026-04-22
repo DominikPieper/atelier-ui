@@ -1,6 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import { ref } from 'vue';
 import LlmSelect from './llm-select.vue';
+
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
 import LlmOption from './llm-option.vue';
 
 const meta: Meta<typeof LlmSelect> = {
@@ -18,6 +24,9 @@ const meta: Meta<typeof LlmSelect> = {
     invalid: false,
     disabled: false,
     required: false,
+  },
+  parameters: {
+    design: figmaNode('55-92'),
   },
 };
 

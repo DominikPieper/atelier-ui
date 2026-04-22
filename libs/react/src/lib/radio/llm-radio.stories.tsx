@@ -14,7 +14,7 @@ const meta: Meta<typeof LlmRadio> = {
   component: LlmRadio,
   tags: ['autodocs'],
   parameters: {
-    design: figmaNode('3-822'),
+    design: figmaNode('55-137'),
   },
 };
 

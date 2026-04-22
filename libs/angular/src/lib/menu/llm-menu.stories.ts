@@ -22,7 +22,7 @@ const meta: Meta<LlmMenu> = {
     variant: 'default',
   },
   parameters: {
-    design: figmaNode('3-633'),
+    design: figmaNode('55-130'),
   },
 };
 

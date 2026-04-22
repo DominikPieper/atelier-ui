@@ -20,7 +20,7 @@ const meta: Meta<typeof LlmTextarea> = {
   },
   args: { placeholder: 'Enter text here...', rows: 3 },
   parameters: {
-    design: figmaNode('3-798'),
+    design: figmaNode('55-87'),
   },
 };
 

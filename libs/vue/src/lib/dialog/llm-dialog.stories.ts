@@ -1,6 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import { ref } from 'vue';
 import LlmDialog from './llm-dialog.vue';
+
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
 import LlmDialogHeader from './llm-dialog-header.vue';
 import LlmDialogContent from './llm-dialog-content.vue';
 import LlmDialogFooter from './llm-dialog-footer.vue';
@@ -17,6 +23,9 @@ const meta: Meta<typeof LlmDialog> = {
     open: false,
     size: 'md',
     closeOnBackdrop: true,
+  },
+  parameters: {
+    design: figmaNode('55-94'),
   },
 };
 

@@ -13,7 +13,7 @@ const meta: Meta<typeof LlmSelect> = {
   component: LlmSelect,
   tags: ['autodocs'],
   parameters: {
-    design: figmaNode('3-493'),
+    design: figmaNode('55-92'),
   },
 };
 

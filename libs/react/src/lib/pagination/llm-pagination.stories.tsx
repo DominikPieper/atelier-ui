@@ -13,7 +13,7 @@ const meta: Meta<typeof LlmPagination> = {
   component: LlmPagination,
   tags: ['autodocs'],
   parameters: {
-    design: figmaNode('3-1048'),
+    design: figmaNode('55-145'),
   },
 };
 

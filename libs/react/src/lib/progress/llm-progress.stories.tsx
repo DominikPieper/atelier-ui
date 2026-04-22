@@ -1,12 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LlmProgress } from './llm-progress';
 
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
-
-function figmaNode(nodeId: string) {
-  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
-}
-
 const meta: Meta<typeof LlmProgress> = {
   title: 'Components/LlmProgress',
   component: LlmProgress,
@@ -18,16 +12,13 @@ const meta: Meta<typeof LlmProgress> = {
     indeterminate: { control: 'boolean' },
   },
   args: { value: 50, max: 100, variant: 'default', size: 'md', indeterminate: false },
-  parameters: {
-    design: figmaNode('3-875'),
-  },
 };
 
 export default meta;
 type Story = StoryObj<typeof LlmProgress>;
 
-export const Default: Story = { parameters: { design: figmaNode('55-104') } };
-export const Success: Story = { args: { variant: 'success', value: 100 }, parameters: { design: figmaNode('55-110') } };
+export const Default: Story = {};
+export const Success: Story = { args: { variant: 'success', value: 100 } };
 export const Warning: Story = { args: { variant: 'warning', value: 60 } };
 export const Danger: Story = { args: { variant: 'danger', value: 30 } };
 export const Small: Story = { args: { size: 'sm' } };

@@ -1,5 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import LlmCard from './llm-card.vue';
+
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
 import LlmCardHeader from './llm-card-header.vue';
 import LlmCardContent from './llm-card-content.vue';
 import LlmCardFooter from './llm-card-footer.vue';
@@ -15,6 +21,9 @@ const meta: Meta<typeof LlmCard> = {
   args: {
     variant: 'elevated',
     padding: 'md',
+  },
+  parameters: {
+    design: figmaNode('55-65'),
   },
 };
 

@@ -22,7 +22,7 @@ const meta: Meta<typeof LlmInput> = {
   },
   args: { type: 'text', placeholder: 'Enter value' },
   parameters: {
-    design: figmaNode('3-285'),
+    design: figmaNode('129-33'),
   },
 };
 
@@ -30,7 +30,7 @@ export default meta;
 type Story = StoryObj<typeof LlmInput>;
 
 export const Default: Story = {
-  parameters: { design: figmaNode('55-66') },
+  parameters: { design: figmaNode('129-23') },
 };
 
 export const WithLabel: Story = {
@@ -39,7 +39,7 @@ export const WithLabel: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true, value: 'Disabled value', placeholder: '' },
-  parameters: { design: figmaNode('55-70') },
+  parameters: { design: figmaNode('129-31') },
 };
 
 export const ReadOnly: Story = {
@@ -60,12 +60,10 @@ export const InvalidWithMultipleErrors: Story = {
 
 export const Password: Story = {
   args: { type: 'password', label: 'Password', placeholder: '••••••••' },
-  parameters: { design: figmaNode('55-76') },
 };
 
 export const Email: Story = {
   args: { type: 'email', label: 'Email', placeholder: 'you@example.com' },
-  parameters: { design: figmaNode('55-71') },
 };
 
 export const Number: Story = {

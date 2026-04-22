@@ -1,12 +1,21 @@
 import type { Meta } from '@storybook/vue3-vite';
 import { defineComponent } from 'vue';
 import LlmToastProvider from './llm-toast-provider.vue';
+
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
 import LlmToastContainer from './llm-toast-container.vue';
 import { useLlmToast } from './llm-toast';
 
 const meta: Meta = {
   title: 'Components/LlmToast',
   tags: ['autodocs'],
+  parameters: {
+    design: figmaNode('55-47'),
+  },
 };
 
 export default meta;

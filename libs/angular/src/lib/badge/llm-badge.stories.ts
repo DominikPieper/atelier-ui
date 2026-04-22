@@ -31,7 +31,7 @@ const meta: Meta<LlmBadge> = {
     size: 'md',
   },
   parameters: {
-    design: figmaNode('3-456'),
+    design: figmaNode('55-22'),
   },
 };
 

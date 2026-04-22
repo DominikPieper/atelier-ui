@@ -140,7 +140,7 @@ const meta: Meta<LlmToast> = {
     message: 'This is a toast notification.',
   },
   parameters: {
-    design: figmaNode('3-982'),
+    design: figmaNode('55-47'),
   },
 };
 

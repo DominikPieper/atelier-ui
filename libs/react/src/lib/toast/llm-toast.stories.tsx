@@ -11,7 +11,7 @@ const meta: Meta = {
   title: 'Components/LlmToast',
   tags: ['autodocs'],
   parameters: {
-    design: figmaNode('3-982'),
+    design: figmaNode('55-47'),
   },
 };
 

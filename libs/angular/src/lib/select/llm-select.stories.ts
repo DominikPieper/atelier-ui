@@ -37,7 +37,7 @@ const meta: Meta<LlmSelect> = {
     required: false,
   },
   parameters: {
-    design: figmaNode('3-493'),
+    design: figmaNode('55-92'),
   },
 };
 

@@ -17,7 +17,7 @@ const meta: Meta<typeof LlmCard> = {
   },
   args: { variant: 'elevated', padding: 'md' },
   parameters: {
-    design: figmaNode('3-338'),
+    design: figmaNode('55-65'),
   },
 };
 

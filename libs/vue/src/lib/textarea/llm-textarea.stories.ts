@@ -2,6 +2,12 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import { ref } from 'vue';
 import LlmTextarea from './llm-textarea.vue';
 
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+
+function figmaNode(nodeId: string) {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
 const meta: Meta<typeof LlmTextarea> = {
   title: 'Components/LlmTextarea',
   component: LlmTextarea,
@@ -20,6 +26,9 @@ const meta: Meta<typeof LlmTextarea> = {
     disabled: false,
     autoResize: false,
     required: false,
+  },
+  parameters: {
+    design: figmaNode('55-87'),
   },
 };
 

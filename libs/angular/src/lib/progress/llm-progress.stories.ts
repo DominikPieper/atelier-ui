@@ -2,12 +2,6 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { LlmProgress } from './llm-progress';
 
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
-
-function figmaNode(nodeId: string): { type: "figma"; url: string } {
-  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
-}
-
 const meta: Meta<LlmProgress> = {
   title: 'Components/LlmProgress',
   component: LlmProgress,
@@ -32,9 +26,6 @@ const meta: Meta<LlmProgress> = {
     size: 'md',
     indeterminate: false,
   },
-  parameters: {
-    design: figmaNode('3-875'),
-  },
 };
 
 export default meta;
@@ -45,8 +36,7 @@ export const Default: Story = {
     props: args,
     imports: [LlmProgress],
     template: `<llm-progress ${argsToTemplate(args)} />`,
-  }),
-  parameters: { design: figmaNode('55-104') },
+  })
 };
 
 export const SizeVariants: Story = {
@@ -121,6 +111,5 @@ export const FullValue: Story = {
   render: () => ({
     imports: [LlmProgress],
     template: `<llm-progress [value]="100" variant="success" style="max-width: 32rem; display: block;" />`,
-  }),
-  parameters: { design: figmaNode('55-110') },
+  })
 };

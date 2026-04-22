@@ -13,7 +13,7 @@ const meta: Meta<typeof LlmTooltip> = {
   component: LlmTooltip,
   tags: ['autodocs'],
   parameters: {
-    design: figmaNode('3-696'),
+    design: figmaNode('55-52'),
   },
 };
 

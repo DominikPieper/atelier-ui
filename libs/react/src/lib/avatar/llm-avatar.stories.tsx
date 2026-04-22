@@ -18,7 +18,7 @@ const meta: Meta<typeof LlmAvatar> = {
   },
   args: { size: 'md', shape: 'circle', status: '' },
   parameters: {
-    design: figmaNode('3-930'),
+    design: figmaNode('55-151'),
   },
 };
 

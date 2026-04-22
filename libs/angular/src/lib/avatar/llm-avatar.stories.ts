@@ -41,7 +41,7 @@ const meta: Meta<LlmAvatar> = {
     status: '',
   },
   parameters: {
-    design: figmaNode('3-930'),
+    design: figmaNode('55-151'),
   },
 };
 
