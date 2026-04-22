@@ -223,14 +223,15 @@ file exports). The Desktop Bridge covers creation and inspection without a token
   // Write preflight script into the scaffolded workspace
   tree.write('tools/scripts/preflight.mjs', readTemplate('tools/scripts/preflight.mjs'));
 
-  // Add `preflight` npm script to the generated workspace's package.json
-  if (tree.exists('package.json')) {
-    updateJson(tree, 'package.json', (pkg) => {
-      pkg.scripts = pkg.scripts ?? {};
-      pkg.scripts.preflight = 'node tools/scripts/preflight.mjs';
-      return pkg;
-    });
-  }
+  // Add `preflight` npm script to the generated workspace's package.json.
+  // create-nx-workspace guarantees package.json exists before the preset runs,
+  // so we write unconditionally — a missing package.json here should fail loudly,
+  // not silently drop the npm script the workshop docs tell attendees to run.
+  updateJson(tree, 'package.json', (pkg) => {
+    pkg.scripts = pkg.scripts ?? {};
+    pkg.scripts.preflight = 'node tools/scripts/preflight.mjs';
+    return pkg;
+  });
 
   // Write .claude/settings.json with MCP servers for selected frameworks
   const mcpServers: Record<string, unknown> = {

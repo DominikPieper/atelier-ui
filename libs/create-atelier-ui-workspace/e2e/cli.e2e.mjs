@@ -250,6 +250,38 @@ function testFramework(framework, registryUrl, npmrcPath) {
     }
     ok('tokens.css written locally and imported relatively');
 
+    // Docs tell attendees to run `npm run preflight` after `npm install`
+    // (docs/src/pages/workshop.astro step 02). Assert the npm script is
+    // actually wired into the generated package.json — the existing file-
+    // existence check above would pass even if the script entry was skipped.
+    const pkgPath = join(wsPath, 'package.json');
+    const pkgJson = JSON.parse(readFileSync(pkgPath, 'utf-8'));
+    const expectedPreflight = 'node tools/scripts/preflight.mjs';
+    if (pkgJson.scripts?.preflight !== expectedPreflight) {
+      throw new Error(
+        `package.json scripts.preflight = ${JSON.stringify(pkgJson.scripts?.preflight)}, expected ${JSON.stringify(expectedPreflight)}`,
+      );
+    }
+    ok('package.json scripts.preflight wired correctly');
+
+    // Smoke-test the npm script entrypoint resolves. Preflight will report
+    // warnings/errors in this scratch environment (no Figma, no Claude CLI,
+    // etc.) — we only care that `npm run preflight` doesn't exit with
+    // "missing script: preflight". Any other non-zero exit is tolerated.
+    const preflightRes = spawnSync('npm', ['run', 'preflight'], {
+      cwd: wsPath,
+      stdio: 'pipe',
+      env: process.env,
+    });
+    const preflightOutput = [
+      preflightRes.stdout?.toString() ?? '',
+      preflightRes.stderr?.toString() ?? '',
+    ].join('\n');
+    if (preflightOutput.toLowerCase().includes('missing script: preflight')) {
+      throw new Error('npm run preflight failed: script not registered');
+    }
+    ok('npm run preflight entrypoint resolves');
+
     run(`npx nx build workshop-${framework} --skip-nx-cache`, { cwd: wsPath });
     ok(`nx build workshop-${framework} green`);
     passed = true;

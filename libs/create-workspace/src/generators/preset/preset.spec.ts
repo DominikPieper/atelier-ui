@@ -316,10 +316,30 @@ describe('preset generator', () => {
   });
 
   it('adds preflight npm script to package.json', async () => {
-    tree.write('package.json', JSON.stringify({ name: 'my-workspace', scripts: {} }));
+    // No manual tree.write — rely on createTreeWithEmptyWorkspace's default
+    // package.json so this test exercises the same path the real Nx preset
+    // flow takes. If the preset ever silently skips the write again, this
+    // assertion fails loudly.
     await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
     const pkg = readJson(tree, 'package.json');
     expect(pkg.scripts.preflight).toBe('node tools/scripts/preflight.mjs');
+  });
+
+  it('preserves existing scripts when adding preflight', async () => {
+    // Simulate an Nx-scaffolded package.json that already has build/test scripts
+    // — the preflight entry must be added without clobbering siblings.
+    tree.write(
+      'package.json',
+      JSON.stringify({
+        name: 'my-workspace',
+        scripts: { build: 'nx build', test: 'nx test' },
+      }),
+    );
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.scripts.preflight).toBe('node tools/scripts/preflight.mjs');
+    expect(pkg.scripts.build).toBe('nx build');
+    expect(pkg.scripts.test).toBe('nx test');
   });
 
   it('CLAUDE.md references preflight in troubleshooting', async () => {
