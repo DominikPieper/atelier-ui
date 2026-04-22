@@ -1,5 +1,7 @@
 ---
 import { ClientRouter } from 'astro:transitions';
+import { Image } from 'astro:assets';
+import logo from '../assets/logo.png';
 import '../styles/tokens.css';
 import '../styles/docs-theme.css';
 import '../styles/global.css';
@@ -81,7 +83,7 @@ function isTopActive(path: string): boolean {
       </button>
 
       <a href="/" class="docs-logo">
-        <img src="/logo.png" alt="Atelier" class="docs-logo-img" height="28" />
+        <Image src={logo} alt="Atelier" class="docs-logo-img" width={56} height={54} densities={[1, 2]} />
         <span class="docs-logo-text">Atelier</span>
       </a>
 
