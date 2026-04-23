@@ -4,6 +4,13 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'libs/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'nx.json'
+      - 'tsconfig.base.json'
+      - '.github/workflows/publish.yml'
   release:
     types: [published]
   workflow_dispatch:
