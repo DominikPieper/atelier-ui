@@ -1,3 +1,14 @@
+## 0.0.23 (2026-04-23)
+
+### 🚀 Features
+
+- **cookbook:** API-docs drift gate + 6th pattern across all 3 frameworks ([f78af67](https://github.com/DominikPieper/atelier-ui/commit/f78af67))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.22 (2026-04-23)
 
 ### 🚀 Features

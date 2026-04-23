@@ -1,3 +1,19 @@
+## 0.0.23 (2026-04-23)
+
+### 🚀 Features
+
+- **cookbook:** API-docs drift gate + 6th pattern across all 3 frameworks ([f78af67](https://github.com/DominikPieper/atelier-ui/commit/f78af67))
+- **figma:** add hover/active/loading variants to 9 interactive components ([b90a792](https://github.com/DominikPieper/atelier-ui/commit/b90a792))
+
+### 🔥 Performance
+
+- **docs:** shrink logo PNGs 585 KB → 37 KB via sips resize ([355353a](https://github.com/DominikPieper/atelier-ui/commit/355353a))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.22 (2026-04-23)
 
 ### 🚀 Features
