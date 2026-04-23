@@ -47,6 +47,41 @@
 - [ ] Facilitator guide — timing, learning arc, common pitfalls
 - [x] ~~True CLI e2e test~~ — shipped as `nx run create-atelier-ui-workspace:e2e`, wired into CI as an affected-gated job
 
+## Open — Figma/a11y review follow-ups (2026-04-23)
+
+Snapshot of what's still open after the multi-round review + cleanup work (commits `80f57d0` through `b53ac6e`, releases `v0.0.15` → `v0.0.19`). Grouped by effort so they can be picked up individually.
+
+### Quick wins (each < 30 min)
+
+- [ ] **Fix dark-mode `on-primary` inconsistency** — `libs/*/styles/tokens.css`: `[data-theme="dark"]` sets `--ui-color-on-primary: #ffffff` (line ~217), but `@media (prefers-color-scheme: dark)` sets `#0f172a` (line ~169). In dark mode primary is `#00d0d0` (light teal), so white-on-light-teal fails AA — the `@media` value is the correct one; the `[data-theme]` block should match.
+- [ ] **Add `A11y:` block to LlmBadge description** — component-level audit reports `annotations: 50/100` because `hasA11yNotes: false`. Any short note in the existing description starting with `A11y:` will flip the score to 100.
+- [ ] **Invalid-state icon on LlmTextarea** — flagged by `wcag-color-only`. Same pattern we used for Badge/Alert: drop a ✕ / ⚠ glyph in the invalid state via a `::before` pseudo-element on `.variant-invalid` or similar.
+- [ ] **Drop decorative `⌟` corner glyphs in Combobox** — these were placeholder visual scaffolding in the design file. Now bound to `color/text` so they pass contrast but they're purely decorative and rendering them as real text is confusing. Remove or replace with `aria-hidden` divider.
+
+### Moderate (1–3 h each)
+
+- [ ] **Create a type ramp** — file has **zero** text styles (`figma_get_text_styles → []`), which drives ~36 `no-text-style` warnings. Minimal set to define: `heading-lg` · `heading-md` · `heading-sm` · `body-lg` · `body` · `body-sm` · `caption` · `button-label` · `mono`. Then rebind text nodes across the 27 component sets to the matching style. High hygiene payoff; unlocks consistent typography overrides via Figma modes.
+- [ ] **Add hover/active/loading variants** to interactive components — the component-level audit recommends them on Button, Input, TabGroup, Checkbox, Toggle, RadioGroup, Table, Radio, Select, Combobox. Each needs one more state entry in the `state` axis with appropriate visual treatment (bg/border shift for hover, pressed-in for active, spinner glyph for loading). Reuse the focus-variant pattern from commit `b53ac6e` / the `figma_execute` script from this session.
+- [ ] **Replace the remaining ~40 hardcoded hex values** — mostly non-semantic pinks/violets/light grays in demo decoration. Safe to sweep by adding a `color/decorative-*` or just rebinding each to the nearest existing token. Low urgency (no lint criticals).
+- [ ] **Move icon indicators from CSS pseudo-elements to the component templates** — current implementation (`::before` on variant class) works and is screen-reader-friendly because the Unicode glyph announces semantically. But consumers can't override the icon and themed mode-swapping of the glyph isn't possible. Longer-term: emit `<span aria-hidden="true" class="variant-icon">✓</span>` from the component template, keeping CSS as the styling lever. Needs a template edit across 3 frameworks per affected component (Badge + Alert today).
+
+### Larger workstreams
+
+- [ ] **Adopt an icon system for the component library** — current decision (commit `b53ac6e`) is Unicode glyphs for the 4 semantic-severity icons specifically, because they're self-labelling for screen readers and don't need a dependency. If the library wants to add icon slots to Menu / Select / nav components in general, the natural upgrade path is `@material-symbols/svg-400` (already installed for docs). That's a design-system decision, not a lint-driven fix.
+- [ ] **Rework `wcag-color-only` remaining flags for Badge/Alert** — the page-level lint in `figma-console` reports 16 color-only criticals because its heuristic only compares the variant's root-level fill against the default's root fill. It doesn't inspect child SVGs or pseudo-element icons. Component-level audit correctly reports `colorDifferentiation: 100`. Real WCAG 1.4.1 is satisfied. Options if we want the page-level lint also green: add a distinguishing outline style per variant (dashed/dotted), or a distinct corner shape. Cosmetic lint-appeasement; zero a11y benefit beyond what we've already shipped.
+
+### Marginal / likely won't-fix
+
+- [ ] **14 `wcag-text-size` below-12px warnings** — all intentional UI chrome: pagination arrows `▲▼`, font-size labels "xs/sm", badge "Default" placeholder, Alert `Backdrop (rgba(0,0,0,0.5))` documentation label. Not content text. WCAG 1.4.4 requires supporting 200% zoom, not a specific size floor; the code uses rem/em correctly. Could bump to 12px if we want the lint quiet.
+- [ ] **Docs site: resize `docs/src/assets/logo.png` + `docs/public/logo.png`** (context: commit `ae5c718`). Currently 585 KB PNG at 1056×1012 rendered at 56×54. The Astro 6 `<Image>` cold-build bug forced us to serve the original unoptimized; a 224×216 resize would be strictly better for Lighthouse and would re-enable the `<Image>` path if the cold-build bug gets fixed upstream.
+- [ ] **Pre-existing lint errors in `docs/.astro/*.d.ts`** — generated Astro type files use `/// <reference>` which the repo's eslint flags. Add `docs/.astro/**` to the docs eslint ignore list.
+
+### Pointers back
+
+- All session commits: `git log --oneline 6cf4f74..` (on `main`, from before `v0.0.12` up through `v0.0.19`).
+- Figma file: `Atelier UI` (`QMnDD8uZQPldPrlCwZZ58T`) — `Components` page. Lint via `figma_lint_design`; component audit via `figma_audit_component_accessibility`.
+- Session lint deltas (before / after): `wcag-contrast` 25 → 0; `wcag-focus-indicator` 6 → 0; `wcag-disabled-no-context` 8 → 0; `wcag-color-only` 13 → 16* (*page-level heuristic; component-level is clean).
+
 ## Review — Figma designs for the last 7 components + parity pass (2026-04-22)
 
 Closed the Figma design gap for the 7 components that existed in code but had no design: `code-block`, `combobox`, `drawer`, `progress`, `radio` (standalone), `stepper`, `table`. All new component sets live on the Atelier UI `Components` page, bind every fill/stroke/text to UI Tokens so Light + Dark modes render automatically, and are linked back into Storybook via `parameters.design` on the meta and per-named story across Angular, React, and Vue.
