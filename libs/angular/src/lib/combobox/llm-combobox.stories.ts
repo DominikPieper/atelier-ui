@@ -30,7 +30,7 @@ function figmaNode(nodeId: string): { type: 'figma'; url: string } {
 }
 
 const meta: Meta<LlmCombobox> = {
-  title: 'Components/LlmCombobox',
+  title: 'Components/Inputs/LlmCombobox',
   component: LlmCombobox,
   tags: ['autodocs'],
   argTypes: {

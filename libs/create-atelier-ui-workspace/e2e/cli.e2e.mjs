@@ -192,9 +192,14 @@ log:
 `;
   writeFileSync(configPath, config);
 
+  // detached: true puts verdaccio in its own process group so we can signal
+  // the whole tree later. `npx -y verdaccio@5` spawns an intermediate wrapper
+  // that doesn't forward SIGTERM to the node process running verdaccio, which
+  // is why the CI job used to hang on a zombie verdaccio until the 30-minute
+  // timeout fired.
   const proc = spawn('npx', ['-y', 'verdaccio@5', '--config', configPath], {
     stdio: ['ignore', 'pipe', 'pipe'],
-    detached: false,
+    detached: true,
   });
   proc.stdout.on('data', (d) => process.stdout.write(`[verdaccio] ${d}`));
   proc.stderr.on('data', (d) => process.stderr.write(`[verdaccio] ${d}`));
@@ -208,6 +213,34 @@ log:
   await waitForRegistry(url);
   ok(`verdaccio listening at ${url}`);
   return { url, proc, dir };
+}
+
+async function stopVerdaccio(registry) {
+  if (!registry?.proc) return;
+  const { proc } = registry;
+  if (proc.exitCode !== null || proc.signalCode !== null) return;
+
+  const exited = new Promise((resolvePromise) => {
+    if (proc.exitCode !== null || proc.signalCode !== null) resolvePromise();
+    else proc.once('exit', () => resolvePromise());
+  });
+
+  // Negative pid → signal the whole process group created by detached: true.
+  // This reaches the real verdaccio process even when npx's wrapper would
+  // otherwise swallow the signal.
+  try {
+    process.kill(-proc.pid, 'SIGTERM');
+  } catch {
+    try { proc.kill('SIGTERM'); } catch { /* already gone */ }
+  }
+
+  const timeout = new Promise((resolvePromise) => setTimeout(resolvePromise, 5000));
+  await Promise.race([exited, timeout]);
+
+  if (proc.exitCode === null && proc.signalCode === null) {
+    try { process.kill(-proc.pid, 'SIGKILL'); } catch { /* noop */ }
+    try { proc.kill('SIGKILL'); } catch { /* noop */ }
+  }
 }
 
 function publishToRegistry(tarballPath, registryUrl, npmrcPath) {
@@ -375,11 +408,7 @@ async function main() {
       }
     }
   } finally {
-    try {
-      registry.proc.kill('SIGTERM');
-    } catch {
-      /* noop */
-    }
+    await stopVerdaccio(registry);
     if (!KEEP_SCRATCH) {
       rmSync(registry.dir, { recursive: true, force: true });
     }
@@ -396,7 +425,14 @@ async function main() {
   console.log(`\nAll ${FRAMEWORKS.length} framework(s) green.`);
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+main()
+  .then(() => {
+    // Force exit even if some library left a handle open (verdaccio's pipes,
+    // dangling sockets from `npm publish`, etc.) — without this the job used
+    // to sit idle until the 30-min CI timeout fired.
+    process.exit(0);
+  })
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });

@@ -13,7 +13,7 @@ function figmaNode(nodeId: string): { type: 'figma'; url: string } {
 }
 
 const meta: Meta<LlmTable> = {
-  title: 'Components/LlmTable',
+  title: 'Components/Display/LlmTable',
   component: LlmTable,
   tags: ['autodocs'],
   argTypes: {
@@ -173,7 +173,7 @@ export const Sortable: Story = {
       </p>
     `,
   }),
-  parameters: { design: figmaNode('421-1002') },
+  parameters: { design: figmaNode('421-884') },
 };
 
 // ---------------------------------------------------------------------------
@@ -225,7 +225,7 @@ export const Selectable: Story = {
       `,
     };
   },
-  parameters: { design: figmaNode('421-1051') },
+  parameters: { design: figmaNode('421-884') },
 };
 
 // ---------------------------------------------------------------------------
@@ -257,7 +257,7 @@ export const StickyHeader: Story = {
       </div>
     `,
   }),
-  parameters: { design: figmaNode('421-1090') },
+  parameters: { design: figmaNode('421-884') },
 };
 
 // ---------------------------------------------------------------------------

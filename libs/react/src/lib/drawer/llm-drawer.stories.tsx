@@ -9,7 +9,7 @@ function figmaNode(nodeId: string): { type: 'figma'; url: string } {
 }
 
 const meta: Meta<typeof LlmDrawer> = {
-  title: 'Components/LlmDrawer',
+  title: 'Components/Overlay/LlmDrawer',
   component: LlmDrawer,
   tags: ['autodocs'],
   argTypes: {

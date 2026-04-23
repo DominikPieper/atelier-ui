@@ -11,7 +11,7 @@ import LlmMenuItem from './llm-menu-item.vue';
 import LlmMenuSeparator from './llm-menu-separator.vue';
 
 const meta: Meta<typeof LlmMenu> = {
-  title: 'Components/LlmMenu',
+  title: 'Components/Navigation/LlmMenu',
   component: LlmMenu,
   tags: ['autodocs'],
   argTypes: {

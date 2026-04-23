@@ -10,7 +10,7 @@ function figmaNode(nodeId: string) {
 }
 
 const meta: Meta<typeof LlmRadioGroup> = {
-  title: 'Components/LlmRadioGroup',
+  title: 'Components/Inputs/LlmRadioGroup',
   component: LlmRadioGroup,
   tags: ['autodocs'],
   parameters: {

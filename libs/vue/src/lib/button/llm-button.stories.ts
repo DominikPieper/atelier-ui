@@ -8,9 +8,14 @@ function figmaNode(nodeId: string) {
 }
 
 const meta: Meta<typeof LlmButton> = {
-  title: 'Components/LlmButton',
+  title: 'Components/Inputs/LlmButton',
   component: LlmButton,
   tags: ['autodocs'],
+  render: (args) => ({
+    components: { LlmButton },
+    setup() { return { args }; },
+    template: '<LlmButton v-bind="args">Button</LlmButton>',
+  }),
   argTypes: {
     variant: { control: 'select', options: ['primary', 'secondary', 'outline'] },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
@@ -31,12 +36,44 @@ const meta: Meta<typeof LlmButton> = {
 export default meta;
 type Story = StoryObj<typeof LlmButton>;
 
-export const Default: Story = {
-  render: (args) => ({
-    components: { LlmButton },
-    setup() { return { args }; },
-    template: '<LlmButton v-bind="args">Button</LlmButton>',
-  }),
+export const Default: Story = {};
+
+export const Primary: Story = {
+  args: { variant: 'primary' },
+  parameters: { design: figmaNode('129-4') },
+};
+
+export const Secondary: Story = {
+  args: { variant: 'secondary' },
+  parameters: { design: figmaNode('129-10') },
+};
+
+export const Outline: Story = {
+  args: { variant: 'outline' },
+  parameters: { design: figmaNode('129-16') },
+};
+
+export const Small: Story = {
+  args: { size: 'sm' },
+  parameters: { design: figmaNode('129-2') },
+};
+
+export const Medium: Story = {
+  args: { size: 'md' },
+  parameters: { design: figmaNode('129-4') },
+};
+
+export const Large: Story = {
+  args: { size: 'lg' },
+  parameters: { design: figmaNode('129-6') },
+};
+
+export const Disabled: Story = {
+  args: { disabled: true },
+};
+
+export const Loading: Story = {
+  args: { loading: true },
 };
 
 export const AllVariants: Story = {
@@ -47,11 +84,28 @@ export const AllVariants: Story = {
         <LlmButton variant="primary">Primary</LlmButton>
         <LlmButton variant="secondary">Secondary</LlmButton>
         <LlmButton variant="outline">Outline</LlmButton>
-        <LlmButton variant="primary" size="sm">Small</LlmButton>
-        <LlmButton variant="primary" size="lg">Large</LlmButton>
-        <LlmButton variant="primary" :disabled="true">Disabled</LlmButton>
-        <LlmButton variant="primary" :loading="true">Loading</LlmButton>
       </div>
     `,
+  }),
+};
+
+export const AllSizes: Story = {
+  render: () => ({
+    components: { LlmButton },
+    template: `
+      <div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap">
+        <LlmButton size="sm">Small</LlmButton>
+        <LlmButton size="md">Medium</LlmButton>
+        <LlmButton size="lg">Large</LlmButton>
+      </div>
+    `,
+  }),
+};
+
+export const Playground: Story = {
+  render: (args) => ({
+    components: { LlmButton },
+    setup() { return { args }; },
+    template: '<LlmButton v-bind="args">Playground</LlmButton>',
   }),
 };

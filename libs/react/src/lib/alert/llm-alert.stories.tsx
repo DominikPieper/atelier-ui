@@ -8,7 +8,7 @@ function figmaNode(nodeId: string) {
 }
 
 const meta: Meta<typeof LlmAlert> = {
-  title: 'Components/LlmAlert',
+  title: 'Components/Feedback/LlmAlert',
   component: LlmAlert,
   tags: ['autodocs'],
   argTypes: {

@@ -1,16 +1,21 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import { ref } from 'vue';
 import LlmTabGroup from './llm-tab-group.vue';
+import LlmTab from './llm-tab.vue';
+import LlmInput from '../input/llm-input.vue';
+import LlmButton from '../button/llm-button.vue';
+import LlmBadge from '../badge/llm-badge.vue';
+import LlmCard from '../card/llm-card.vue';
+import LlmCardContent from '../card/llm-card-content.vue';
 
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
 }
-import LlmTab from './llm-tab.vue';
 
 const meta: Meta<typeof LlmTabGroup> = {
-  title: 'Components/LlmTabGroup',
+  title: 'Components/Navigation/LlmTabGroup',
   component: LlmTabGroup,
   tags: ['autodocs'],
   argTypes: {
@@ -32,46 +37,120 @@ type Story = StoryObj<typeof LlmTabGroup>;
 export const Default: Story = {
   render: (args) => ({
     components: { LlmTabGroup, LlmTab },
-    setup() {
-      return { args };
-    },
+    setup() { return { args }; },
     template: `
       <LlmTabGroup v-bind="args">
         <LlmTab label="Account">
-          <div style="padding:1rem">Account settings content.</div>
+          <div style="padding:1rem">
+            <h3>Account Settings</h3>
+            <p>Manage your account details and preferences.</p>
+          </div>
         </LlmTab>
         <LlmTab label="Notifications">
-          <div style="padding:1rem">Notification preferences content.</div>
+          <div style="padding:1rem">
+            <h3>Notification Preferences</h3>
+            <p>Choose how you'd like to be notified.</p>
+          </div>
         </LlmTab>
-        <LlmTab label="Billing">
-          <div style="padding:1rem">Billing information content.</div>
+        <LlmTab label="Security">
+          <div style="padding:1rem">
+            <h3>Security Settings</h3>
+            <p>Update your password and security options.</p>
+          </div>
         </LlmTab>
+      </LlmTabGroup>
+    `,
+  }),
+  parameters: { design: figmaNode('55-120') },
+};
+
+export const WithDisabledTab: Story = {
+  render: (args) => ({
+    components: { LlmTabGroup, LlmTab },
+    setup() { return { args }; },
+    template: `
+      <LlmTabGroup v-bind="args">
+        <LlmTab label="Active">This tab is active.</LlmTab>
+        <LlmTab label="Disabled" :disabled="true">This content is hidden.</LlmTab>
+        <LlmTab label="Also Active">This tab is also active.</LlmTab>
       </LlmTabGroup>
     `,
   }),
 };
 
-export const Pills: Story = {
+export const PillsVariant: Story = {
   render: () => ({
     components: { LlmTabGroup, LlmTab },
     template: `
       <LlmTabGroup variant="pills">
-        <LlmTab label="All">All items.</LlmTab>
-        <LlmTab label="Active">Active items.</LlmTab>
-        <LlmTab label="Archived">Archived items.</LlmTab>
+        <LlmTab label="All">Showing all items.</LlmTab>
+        <LlmTab label="Active">Showing active items only.</LlmTab>
+        <LlmTab label="Archived">Showing archived items.</LlmTab>
+      </LlmTabGroup>
+    `,
+  }),
+  parameters: { design: figmaNode('55-122') },
+};
+
+export const ManyTabs: Story = {
+  render: (args) => ({
+    components: { LlmTabGroup, LlmTab },
+    setup() { return { args }; },
+    template: `
+      <LlmTabGroup v-bind="args">
+        <LlmTab label="Overview">Overview content</LlmTab>
+        <LlmTab label="Analytics">Analytics content</LlmTab>
+        <LlmTab label="Reports">Reports content</LlmTab>
+        <LlmTab label="Notifications">Notifications content</LlmTab>
+        <LlmTab label="Integrations">Integrations content</LlmTab>
+        <LlmTab label="API Keys">API Keys content</LlmTab>
+        <LlmTab label="Billing">Billing content</LlmTab>
+        <LlmTab label="Team">Team content</LlmTab>
       </LlmTabGroup>
     `,
   }),
 };
 
-export const WithDisabledTab: Story = {
-  render: () => ({
+export const PreSelectedTab: Story = {
+  args: { selectedIndex: 2 },
+  render: (args) => ({
     components: { LlmTabGroup, LlmTab },
+    setup() { return { args }; },
     template: `
-      <LlmTabGroup>
-        <LlmTab label="Available">Available content.</LlmTab>
-        <LlmTab label="Disabled" :disabled="true">This content is not reachable.</LlmTab>
-        <LlmTab label="Also Available">Also available content.</LlmTab>
+      <LlmTabGroup v-bind="args">
+        <LlmTab label="First">First panel</LlmTab>
+        <LlmTab label="Second">Second panel</LlmTab>
+        <LlmTab label="Third">Third panel — pre-selected!</LlmTab>
+      </LlmTabGroup>
+    `,
+  }),
+};
+
+export const WithRichContent: Story = {
+  render: (args) => ({
+    components: { LlmTabGroup, LlmTab, LlmInput, LlmButton, LlmBadge, LlmCard, LlmCardContent },
+    setup() { return { args }; },
+    template: `
+      <LlmTabGroup v-bind="args">
+        <LlmTab label="Profile">
+          <div style="display:flex;flex-direction:column;gap:12px;max-width:400px;padding:1rem">
+            <LlmInput placeholder="Display name" />
+            <LlmInput type="email" placeholder="Email address" />
+            <LlmButton variant="primary" size="sm">Save Changes</LlmButton>
+          </div>
+        </LlmTab>
+        <LlmTab label="Status">
+          <div style="padding:1rem">
+            <LlmCard variant="flat">
+              <LlmCardContent>
+                <div style="display:flex;gap:8px;align-items:center">
+                  <LlmBadge variant="success">Online</LlmBadge>
+                  <span>All systems operational</span>
+                </div>
+              </LlmCardContent>
+            </LlmCard>
+          </div>
+        </LlmTab>
       </LlmTabGroup>
     `,
   }),

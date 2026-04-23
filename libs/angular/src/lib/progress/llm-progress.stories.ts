@@ -9,7 +9,7 @@ function figmaNode(nodeId: string): { type: 'figma'; url: string } {
 }
 
 const meta: Meta<LlmProgress> = {
-  title: 'Components/LlmProgress',
+  title: 'Components/Display/LlmProgress',
   component: LlmProgress,
   tags: ['autodocs'],
   argTypes: {
@@ -110,7 +110,7 @@ export const Indeterminate: Story = {
       </div>
     `,
   }),
-  parameters: { design: figmaNode('420-90') },
+  parameters: { design: figmaNode('420-87') },
 };
 
 export const ZeroValue: Story = {

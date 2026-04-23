@@ -9,7 +9,7 @@ function figmaNode(nodeId: string) {
 }
 
 const meta: Meta<typeof LlmSelect> = {
-  title: 'Components/LlmSelect',
+  title: 'Components/Inputs/LlmSelect',
   component: LlmSelect,
   tags: ['autodocs'],
   parameters: {

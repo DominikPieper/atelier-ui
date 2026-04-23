@@ -9,7 +9,7 @@ function figmaNode(nodeId: string): { type: "figma"; url: string } {
 }
 
 const meta: Meta<LlmRadio> = {
-  title: 'Components/LlmRadio',
+  title: 'Components/Inputs/LlmRadio',
   component: LlmRadio,
   tags: ['autodocs'],
   render: (args) => ({

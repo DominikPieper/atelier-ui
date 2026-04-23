@@ -11,7 +11,7 @@ function figmaNode(nodeId: string): { type: "figma"; url: string } {
 }
 
 const meta: Meta<LlmBreadcrumbs> = {
-  title: 'Components/LlmBreadcrumbs',
+  title: 'Components/Navigation/LlmBreadcrumbs',
   component: LlmBreadcrumbs,
   tags: ['autodocs'],
   parameters: {

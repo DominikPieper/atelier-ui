@@ -8,7 +8,7 @@ function figmaNode(nodeId: string) {
 }
 
 const meta: Meta<typeof LlmSkeleton> = {
-  title: 'Components/LlmSkeleton',
+  title: 'Components/Display/LlmSkeleton',
   component: LlmSkeleton,
   tags: ['autodocs'],
   argTypes: {

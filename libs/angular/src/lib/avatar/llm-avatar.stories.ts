@@ -11,7 +11,7 @@ function figmaNode(nodeId: string): { type: "figma"; url: string } {
 }
 
 const meta: Meta<LlmAvatar> = {
-  title: 'Components/LlmAvatar',
+  title: 'Components/Display/LlmAvatar',
   component: LlmAvatar,
   tags: ['autodocs'],
   render: (args) => ({

@@ -9,7 +9,7 @@ function figmaNode(nodeId: string) {
 }
 
 const meta: Meta<typeof LlmTabGroup> = {
-  title: 'Components/LlmTabGroup',
+  title: 'Components/Navigation/LlmTabGroup',
   component: LlmTabGroup,
   tags: ['autodocs'],
   argTypes: {

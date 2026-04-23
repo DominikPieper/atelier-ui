@@ -9,7 +9,7 @@ function figmaNode(nodeId: string): { type: "figma"; url: string } {
 }
 
 const meta: Meta<LlmInput> = {
-  title: 'Components/LlmInput',
+  title: 'Components/Inputs/LlmInput',
   component: LlmInput,
   tags: ['autodocs'],
   render: (args) => ({

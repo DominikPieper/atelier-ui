@@ -9,7 +9,7 @@ function figmaNode(nodeId: string): { type: 'figma'; url: string } {
 }
 
 const meta: Meta<LlmStepper> = {
-  title: 'Components/LlmStepper',
+  title: 'Components/Navigation/LlmStepper',
   component: LlmStepper,
   tags: ['autodocs'],
   argTypes: {

@@ -10,7 +10,7 @@ function figmaNode(nodeId: string): { type: "figma"; url: string } {
 }
 
 const meta: Meta<LlmCard> = {
-  title: 'Components/LlmCard',
+  title: 'Components/Display/LlmCard',
   component: LlmCard,
   tags: ['autodocs'],
   render: (args) => ({

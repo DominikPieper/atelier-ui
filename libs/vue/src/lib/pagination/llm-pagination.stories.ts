@@ -9,9 +9,22 @@ function figmaNode(nodeId: string) {
 }
 
 const meta: Meta<typeof LlmPagination> = {
-  title: 'Components/LlmPagination',
+  title: 'Components/Navigation/LlmPagination',
   component: LlmPagination,
   tags: ['autodocs'],
+  render: (args) => ({
+    components: { LlmPagination },
+    setup() {
+      const page = ref(args.page ?? 1);
+      return { args, page };
+    },
+    template: `
+      <LlmPagination v-bind="args" :page="page" @pageChange="page = $event" />
+      <p style="margin-top:1rem;font-size:0.875rem;color:var(--ui-color-text-muted)">
+        Current page: {{ page }}
+      </p>
+    `,
+  }),
   argTypes: {
     page: { control: { type: 'number', min: 1 } },
     pageCount: { control: { type: 'number', min: 1 } },
@@ -33,14 +46,28 @@ export default meta;
 type Story = StoryObj<typeof LlmPagination>;
 
 export const Default: Story = {
-  render: (args) => ({
-    components: { LlmPagination },
-    setup() {
-      const page = ref(args.page ?? 1);
-      return { args, page };
-    },
-    template: '<LlmPagination v-bind="args" :page="page" @pageChange="page = $event" />',
-  }),
+  parameters: { design: figmaNode('55-142') },
+};
+
+export const MiddlePage: Story = {
+  args: { page: 5, pageCount: 10 },
+  parameters: { design: figmaNode('55-143') },
+};
+
+export const FewPages: Story = {
+  args: { page: 2, pageCount: 3 },
+};
+
+export const ManyPages: Story = {
+  args: { page: 50, pageCount: 100, siblingCount: 2 },
+};
+
+export const NoFirstLast: Story = {
+  args: { page: 5, pageCount: 10, showFirstLast: false },
+};
+
+export const SinglePage: Story = {
+  args: { page: 1, pageCount: 1 },
 };
 
 export const AllVariants: Story = {

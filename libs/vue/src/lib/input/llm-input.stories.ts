@@ -9,11 +9,20 @@ function figmaNode(nodeId: string) {
 }
 
 const meta: Meta<typeof LlmInput> = {
-  title: 'Components/LlmInput',
+  title: 'Components/Inputs/LlmInput',
   component: LlmInput,
   tags: ['autodocs'],
+  render: (args) => ({
+    components: { LlmInput },
+    setup() {
+      const value = ref('');
+      return { args, value };
+    },
+    template: '<LlmInput v-bind="args" v-model:value="value" />',
+  }),
   argTypes: {
     type: { control: 'select', options: ['text', 'email', 'password', 'number', 'tel', 'url'] },
+    placeholder: { control: 'text' },
     invalid: { control: 'boolean' },
     disabled: { control: 'boolean' },
     readonly: { control: 'boolean' },
@@ -21,9 +30,10 @@ const meta: Meta<typeof LlmInput> = {
   },
   args: {
     type: 'text',
-    placeholder: 'Enter value...',
+    placeholder: 'Enter text...',
     invalid: false,
     disabled: false,
+    readonly: false,
     required: false,
   },
   parameters: {
@@ -35,14 +45,64 @@ export default meta;
 type Story = StoryObj<typeof LlmInput>;
 
 export const Default: Story = {
+  parameters: { design: figmaNode('129-23') },
+};
+
+export const Email: Story = {
+  args: { type: 'email', placeholder: 'you@example.com' },
+};
+
+export const Password: Story = {
+  args: { type: 'password', placeholder: 'Enter password' },
+};
+
+export const Disabled: Story = {
+  args: { disabled: true, placeholder: 'Cannot edit' },
+  parameters: { design: figmaNode('129-31') },
+};
+
+export const Readonly: Story = {
+  args: { readonly: true },
+  render: (args) => ({
+    components: { LlmInput },
+    setup() { return { args }; },
+    template: '<LlmInput v-bind="args" value="Read-only value" />',
+  }),
+};
+
+export const WithErrors: Story = {
+  args: { invalid: true },
   render: (args) => ({
     components: { LlmInput },
     setup() {
-      const value = ref('');
-      return { args, value };
+      const errors = [
+        'This field is required',
+        'Please enter a valid email address',
+      ];
+      return { args, errors };
     },
-    template: '<LlmInput v-bind="args" v-model:value="value" />',
+    template: '<LlmInput v-bind="args" :errors="errors" />',
   }),
+};
+
+export const AllTypes: Story = {
+  render: () => ({
+    components: { LlmInput },
+    template: `
+      <div style="display:flex;flex-direction:column;gap:1rem;max-width:320px">
+        <LlmInput type="text" placeholder="Text input" />
+        <LlmInput type="email" placeholder="Email input" />
+        <LlmInput type="password" placeholder="Password input" />
+        <LlmInput type="number" placeholder="Number input" />
+        <LlmInput type="tel" placeholder="Tel input" />
+        <LlmInput type="url" placeholder="URL input" />
+      </div>
+    `,
+  }),
+};
+
+export const Required: Story = {
+  args: { required: true, placeholder: 'Required field' },
 };
 
 export const AllVariants: Story = {
@@ -62,5 +122,13 @@ export const AllVariants: Story = {
         <LlmInput placeholder="Read only" :readonly="true" value="Read only value" />
       </div>
     `,
+  }),
+};
+
+export const Playground: Story = {
+  render: (args) => ({
+    components: { LlmInput },
+    setup() { return { args }; },
+    template: '<LlmInput v-bind="args" />',
   }),
 };

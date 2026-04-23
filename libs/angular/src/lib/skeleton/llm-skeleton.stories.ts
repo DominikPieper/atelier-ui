@@ -9,7 +9,7 @@ function figmaNode(nodeId: string): { type: "figma"; url: string } {
 }
 
 const meta: Meta<LlmSkeleton> = {
-  title: 'Components/LlmSkeleton',
+  title: 'Components/Display/LlmSkeleton',
   component: LlmSkeleton,
   tags: ['autodocs'],
   render: (args) => ({

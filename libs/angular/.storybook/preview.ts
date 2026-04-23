@@ -20,6 +20,15 @@ const preview: Preview = {
         dark: { name: 'dark', value: '#1a1a2e' }
       }
     },
+    options: {
+      storySort: {
+        order: [
+          'Showcase', '*',
+          'Components', ['Inputs', 'Display', 'Navigation', 'Overlay', 'Feedback'],
+          'Cookbook',
+        ],
+      },
+    },
   },
 
   decorators: [
