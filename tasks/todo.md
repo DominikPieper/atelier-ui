@@ -56,7 +56,7 @@ Snapshot of what's still open after the multi-round review + cleanup work (commi
 - [x] ~~**Fix dark-mode `on-primary` inconsistency**~~ — shipped 2026-04-23. `[data-theme="dark"]` block in all 4 tokens.css copies (angular, react, vue, preset) now matches the `@media (prefers-color-scheme: dark)` value `#0f172a`. Affects Checkbox / Stepper / Radio glyphs rendered on `#00d0d0` primary in dark mode.
 - [ ] **Add `A11y:` block to LlmBadge description** — component-level audit reports `annotations: 50/100` because `hasA11yNotes: false`. Any short note in the existing description starting with `A11y:` will flip the score to 100.
 - [x] ~~**Invalid-state icon on LlmTextarea**~~ — shipped 2026-04-23. `✕` glyph via `::before` on a `.textarea-field` wrapper in all 3 frameworks (wrapper needed because `<textarea>` is a replaced element and R/V have an optional label above it). Same pattern as Alert's `.content::before`. Note: LlmInput has the identical latent flag — follow-up.
-- [ ] **Drop decorative `⌟` corner glyphs in Combobox** — these were placeholder visual scaffolding in the design file. Now bound to `color/text` so they pass contrast but they're purely decorative and rendering them as real text is confusing. Remove or replace with `aria-hidden` divider.
+- [x] ~~**Drop decorative `⌟` corner glyphs**~~ — Figma-only; shipped 2026-04-23. Correction: the glyphs were on the **LlmTextarea** component set (5 variants: default/filled/focus/invalid/disabled), not LlmCombobox as originally written. All 5 text nodes removed via `figma_execute` on Bridge; before/after screenshots confirmed clean bottom-right corners. Component set `55:87`; removed nodes `3:804 / 3:808 / 3:812 / 3:816 / 3:821`.
 
 ### Moderate (1–3 h each)
 
