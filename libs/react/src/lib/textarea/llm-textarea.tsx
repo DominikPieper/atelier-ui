@@ -87,20 +87,22 @@ export function LlmTextarea({
   return (
     <div className={classes}>
       {label && <label htmlFor={inputId}>{label}</label>}
-      <textarea
-        ref={textareaRef}
-        id={inputId}
-        value={value}
-        onChange={handleChange}
-        disabled={disabled}
-        readOnly={readOnly}
-        required={required}
-        rows={rows}
-        aria-invalid={invalid || undefined}
-        aria-required={required || undefined}
-        aria-describedby={errors.length > 0 ? errorId : undefined}
-        {...rest}
-      />
+      <div className="textarea-field">
+        <textarea
+          ref={textareaRef}
+          id={inputId}
+          value={value}
+          onChange={handleChange}
+          disabled={disabled}
+          readOnly={readOnly}
+          required={required}
+          rows={rows}
+          aria-invalid={invalid || undefined}
+          aria-required={required || undefined}
+          aria-describedby={errors.length > 0 ? errorId : undefined}
+          {...rest}
+        />
+      </div>
       {errors.length > 0 && (
         <div className="errors" id={errorId} aria-live="polite">
           {errors.map((err, i) => (

@@ -26,21 +26,23 @@ let nextId = 0;
   imports: [TextFieldModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <textarea
-      [value]="value()"
-      (input)="onInput($event)"
-      (blur)="touched.set(true)"
-      [disabled]="disabled()"
-      [readOnly]="readonly()"
-      [placeholder]="placeholder()"
-      [rows]="rows()"
-      [attr.name]="name() || null"
-      [attr.aria-invalid]="invalid() || null"
-      [attr.aria-required]="required() || null"
-      [attr.aria-describedby]="showErrors() ? errorId : null"
-      [cdkTextareaAutosize]="autoResize()"
-      [cdkAutosizeMinRows]="rows()"
-    ></textarea>
+    <div class="textarea-field">
+      <textarea
+        [value]="value()"
+        (input)="onInput($event)"
+        (blur)="touched.set(true)"
+        [disabled]="disabled()"
+        [readOnly]="readonly()"
+        [placeholder]="placeholder()"
+        [rows]="rows()"
+        [attr.name]="name() || null"
+        [attr.aria-invalid]="invalid() || null"
+        [attr.aria-required]="required() || null"
+        [attr.aria-describedby]="showErrors() ? errorId : null"
+        [cdkTextareaAutosize]="autoResize()"
+        [cdkAutosizeMinRows]="rows()"
+      ></textarea>
+    </div>
     @if (showErrors()) {
       <div class="errors" [id]="errorId" aria-live="polite">
         @for (error of errors(); track error.kind) {

@@ -53,9 +53,9 @@ Snapshot of what's still open after the multi-round review + cleanup work (commi
 
 ### Quick wins (each < 30 min)
 
-- [ ] **Fix dark-mode `on-primary` inconsistency** — `libs/*/styles/tokens.css`: `[data-theme="dark"]` sets `--ui-color-on-primary: #ffffff` (line ~217), but `@media (prefers-color-scheme: dark)` sets `#0f172a` (line ~169). In dark mode primary is `#00d0d0` (light teal), so white-on-light-teal fails AA — the `@media` value is the correct one; the `[data-theme]` block should match.
+- [x] ~~**Fix dark-mode `on-primary` inconsistency**~~ — shipped 2026-04-23. `[data-theme="dark"]` block in all 4 tokens.css copies (angular, react, vue, preset) now matches the `@media (prefers-color-scheme: dark)` value `#0f172a`. Affects Checkbox / Stepper / Radio glyphs rendered on `#00d0d0` primary in dark mode.
 - [ ] **Add `A11y:` block to LlmBadge description** — component-level audit reports `annotations: 50/100` because `hasA11yNotes: false`. Any short note in the existing description starting with `A11y:` will flip the score to 100.
-- [ ] **Invalid-state icon on LlmTextarea** — flagged by `wcag-color-only`. Same pattern we used for Badge/Alert: drop a ✕ / ⚠ glyph in the invalid state via a `::before` pseudo-element on `.variant-invalid` or similar.
+- [x] ~~**Invalid-state icon on LlmTextarea**~~ — shipped 2026-04-23. `✕` glyph via `::before` on a `.textarea-field` wrapper in all 3 frameworks (wrapper needed because `<textarea>` is a replaced element and R/V have an optional label above it). Same pattern as Alert's `.content::before`. Note: LlmInput has the identical latent flag — follow-up.
 - [ ] **Drop decorative `⌟` corner glyphs in Combobox** — these were placeholder visual scaffolding in the design file. Now bound to `color/text` so they pass contrast but they're purely decorative and rendering them as real text is confusing. Remove or replace with `aria-hidden` divider.
 
 ### Moderate (1–3 h each)

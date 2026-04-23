@@ -65,19 +65,21 @@ function onInput(event: Event) {
 <template>
   <div class="llm-textarea" :class="{ 'is-invalid': invalid, 'is-disabled': disabled }">
     <label v-if="label" :for="textareaId" class="textarea-label">{{ label }}</label>
-    <textarea
-      :id="textareaId"
-      ref="textareaRef"
-      :value="value"
-      :rows="rows"
-      :placeholder="placeholder"
-      :disabled="disabled"
-      :readonly="readonly"
-      :required="required"
-      :name="name"
-      :aria-invalid="invalid || undefined"
-      @input="onInput"
-    />
+    <div class="textarea-field">
+      <textarea
+        :id="textareaId"
+        ref="textareaRef"
+        :value="value"
+        :rows="rows"
+        :placeholder="placeholder"
+        :disabled="disabled"
+        :readonly="readonly"
+        :required="required"
+        :name="name"
+        :aria-invalid="invalid || undefined"
+        @input="onInput"
+      />
+    </div>
     <ul v-if="errors.length" class="errors" aria-live="polite">
       <li v-for="(error, i) in errors" :key="i" class="error">{{ error }}</li>
     </ul>

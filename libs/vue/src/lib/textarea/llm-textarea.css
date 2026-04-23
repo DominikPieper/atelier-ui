@@ -39,14 +39,31 @@
   box-shadow: var(--ui-focus-ring);
 }
 
+.llm-textarea .textarea-field {
+  position: relative;
+}
+
 /* Invalid state */
 .llm-textarea.is-invalid textarea {
   border-color: var(--ui-color-input-border-invalid);
+  padding-right: 2rem;
 }
 
 .llm-textarea.is-invalid textarea:focus {
   border-color: var(--ui-color-input-border-invalid);
   box-shadow: 0 0 0 2px var(--ui-color-surface), 0 0 0 4px var(--ui-color-danger);
+}
+
+/* Non-color invalid indicator (WCAG 1.4.1) */
+.llm-textarea.is-invalid .textarea-field::before {
+  content: '✕';
+  position: absolute;
+  top: 0.625rem;
+  right: 0.75rem;
+  color: var(--ui-color-danger);
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
 }
 
 /* Disabled state */
