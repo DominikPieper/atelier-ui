@@ -2,6 +2,16 @@ import { HTMLAttributes, ReactNode } from 'react';
 import type { LlmBadgeSpec } from '../spec';
 import './llm-badge.css';
 
+type LlmBadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info';
+
+const VARIANT_ICONS: Record<LlmBadgeVariant, string | null> = {
+  default: null,
+  success: '✓',
+  warning: '⚠',
+  danger: '✕',
+  info: 'ℹ',
+};
+
 /**
  * Properties for the LlmBadge component.
  */
@@ -11,7 +21,7 @@ export interface LlmBadgeProps
   /**
    * The visual style variant of the badge.
    */
-  variant?: 'default' | 'success' | 'warning' | 'danger' | 'info';
+  variant?: LlmBadgeVariant;
   /**
    * The size of the badge.
    */
@@ -34,8 +44,10 @@ export function LlmBadge({
 }: LlmBadgeProps) {
   const classes = ['llm-badge', `variant-${variant}`, `size-${size}`, className]
     .filter(Boolean).join(' ');
+  const icon = VARIANT_ICONS[variant];
   return (
     <span className={classes} role="status" {...rest}>
+      {icon && <span className="variant-icon" aria-hidden="true">{icon}</span>}
       {children}
     </span>
   );

@@ -17,12 +17,22 @@ import {
  * </llm-alert>
  * ```
  */
+const VARIANT_ICONS: Record<'info' | 'success' | 'warning' | 'danger', string> = {
+  info: 'ℹ',
+  success: '✓',
+  warning: '⚠',
+  danger: '✕',
+};
+
 @Component({
   selector: 'llm-alert',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <span class="content"><ng-content /></span>
+    <span class="content">
+      <span class="variant-icon" aria-hidden="true">{{ variantIcon() }}</span>
+      <ng-content />
+    </span>
     @if (isDismissible) {
       <button class="dismiss" type="button" aria-label="Dismiss" (click)="dismiss()">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -50,6 +60,8 @@ export class LlmAlert {
   readonly dismissed = output<void>();
 
   protected readonly hostClasses = computed(() => `variant-${this.variant()}`);
+
+  protected readonly variantIcon = computed(() => VARIANT_ICONS[this.variant()]);
 
   /** @internal */
   get isDismissible(): boolean {

@@ -2,6 +2,15 @@ import { HTMLAttributes, ReactNode } from 'react';
 import type { LlmAlertSpec } from '../spec';
 import './llm-alert.css';
 
+type LlmAlertVariant = 'info' | 'success' | 'warning' | 'danger';
+
+const VARIANT_ICONS: Record<LlmAlertVariant, string> = {
+  info: 'ℹ',
+  success: '✓',
+  warning: '⚠',
+  danger: '✕',
+};
+
 /**
  * Properties for the LlmAlert component.
  */
@@ -11,7 +20,7 @@ export interface LlmAlertProps
   /**
    * The visual style variant of the alert.
    */
-  variant?: 'info' | 'success' | 'warning' | 'danger';
+  variant?: LlmAlertVariant;
   /**
    * Whether the alert can be dismissed by the user.
    */
@@ -42,7 +51,10 @@ export function LlmAlert({
 
   return (
     <div className={classes} role="alert" aria-live={ariaLive} {...rest}>
-      <span className="content">{children}</span>
+      <span className="content">
+        <span className="variant-icon" aria-hidden="true">{VARIANT_ICONS[variant]}</span>
+        {children}
+      </span>
       {dismissible && (
         <button
           className="dismiss"

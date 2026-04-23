@@ -4,10 +4,19 @@ import './llm-alert.css';
 
 defineOptions({ name: 'LlmAlert' });
 
+type LlmAlertVariant = 'info' | 'success' | 'warning' | 'danger';
+
 interface LlmAlertProps {
-  variant?: 'info' | 'success' | 'warning' | 'danger';
+  variant?: LlmAlertVariant;
   dismissible?: boolean;
 }
+
+const VARIANT_ICONS: Record<LlmAlertVariant, string> = {
+  info: 'ℹ',
+  success: '✓',
+  warning: '⚠',
+  danger: '✕',
+};
 
 const props = withDefaults(defineProps<LlmAlertProps>(), {
   variant: 'info',
@@ -23,11 +32,16 @@ const classes = computed(() => ['llm-alert', `variant-${props.variant}`]);
 const ariaLive = computed(() =>
   props.variant === 'danger' || props.variant === 'warning' ? 'assertive' : 'polite'
 );
+
+const variantIcon = computed(() => VARIANT_ICONS[props.variant]);
 </script>
 
 <template>
   <div :class="classes" role="alert" :aria-live="ariaLive">
-    <span class="content"><slot /></span>
+    <span class="content">
+      <span class="variant-icon" aria-hidden="true">{{ variantIcon }}</span>
+      <slot />
+    </span>
     <button
       v-if="dismissible"
       class="dismiss"

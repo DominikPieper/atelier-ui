@@ -15,11 +15,24 @@ import {
  * <llm-badge variant="warning">Pending</llm-badge>
  * ```
  */
+const VARIANT_ICONS: Record<'default' | 'success' | 'warning' | 'danger' | 'info', string | null> = {
+  default: null,
+  success: '✓',
+  warning: '⚠',
+  danger: '✕',
+  info: 'ℹ',
+};
+
 @Component({
   selector: 'llm-badge',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<ng-content />`,
+  template: `
+    @if (variantIcon(); as icon) {
+      <span class="variant-icon" aria-hidden="true">{{ icon }}</span>
+    }
+    <ng-content />
+  `,
   styleUrl: './llm-badge.css',
   host: {
     '[class]': 'hostClasses()',
@@ -36,4 +49,6 @@ export class LlmBadge {
   protected readonly hostClasses = computed(
     () => `variant-${this.variant()} size-${this.size()}`
   );
+
+  protected readonly variantIcon = computed(() => VARIANT_ICONS[this.variant()]);
 }
