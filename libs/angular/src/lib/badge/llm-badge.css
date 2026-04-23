@@ -51,3 +51,17 @@
   color: var(--ui-color-info-text);
   border: 1px solid color-mix(in srgb, var(--ui-color-info-text) 25%, transparent);
 }
+
+/* Semantic indicator glyphs — non-color differentiation (WCAG 1.4.1). */
+:host(.variant-success)::before,
+:host(.variant-warning)::before,
+:host(.variant-danger)::before,
+:host(.variant-info)::before {
+  font-weight: 700;
+  margin-right: 0.3em;
+  line-height: 1;
+}
+:host(.variant-success)::before { content: '✓'; }
+:host(.variant-warning)::before { content: '⚠'; }
+:host(.variant-danger)::before  { content: '✕'; }
+:host(.variant-info)::before    { content: 'ℹ'; }

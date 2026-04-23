@@ -68,3 +68,18 @@
   box-shadow: var(--ui-focus-ring);
   opacity: 1;
 }
+
+/* Semantic indicator glyphs — non-color differentiation (WCAG 1.4.1). */
+.llm-alert.variant-success .content::before,
+.llm-alert.variant-warning .content::before,
+.llm-alert.variant-danger .content::before,
+.llm-alert.variant-info .content::before {
+  display: inline-block;
+  font-weight: 700;
+  margin-right: 0.4em;
+  line-height: 1;
+}
+.llm-alert.variant-success .content::before { content: '✓'; }
+.llm-alert.variant-warning .content::before { content: '⚠'; }
+.llm-alert.variant-danger .content::before  { content: '✕'; }
+.llm-alert.variant-info .content::before    { content: 'ℹ'; }
