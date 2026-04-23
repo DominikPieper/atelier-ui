@@ -4,6 +4,8 @@ import {
   LlmInput, LlmCheckbox, LlmAlert, LlmToggle, LlmSelect, LlmOption,
   LlmTabGroup, LlmTab, LlmDialog, LlmDialogHeader, LlmDialogContent, LlmDialogFooter,
   LlmBadge, LlmAccordionGroup, LlmAccordionItem,
+  LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd,
+  LlmProgress,
 } from '@atelier-ui/react';
 
 function CodeTabs({ files }: { files: Array<{ label: string; code: string }> }) {
@@ -220,6 +222,44 @@ function ConfirmationDemo() {
   );
 }
 
+// ── 4. Data List with Actions ──
+const dataListRows = [
+  { id: 1, name: 'Marketing Website', description: 'Brand-refresh landing page', status: 'Active', statusVariant: 'success' as const },
+  { id: 2, name: 'Mobile App v2', description: 'Cross-platform rewrite in Flutter', status: 'In Review', statusVariant: 'warning' as const },
+  { id: 3, name: 'API Gateway', description: 'Microservices ingress layer', status: 'Draft', statusVariant: 'default' as const },
+  { id: 4, name: 'Legacy Migration', description: 'PHP monolith → Node services', status: 'Paused', statusVariant: 'danger' as const },
+];
+
+function DataListDemo() {
+  return (
+    <div style={{ maxWidth: '560px', width: '100%', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+        <h4 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>Projects</h4>
+        <LlmButton variant="primary" size="sm">New project</LlmButton>
+      </div>
+      {dataListRows.map((item) => (
+        <LlmCard key={item.id} variant="outlined" padding="md">
+          <LlmCardContent>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '0.9375rem', fontWeight: 600 }}>{item.name}</span>
+                  <LlmBadge variant={item.statusVariant} size="sm">{item.status}</LlmBadge>
+                </div>
+                <p style={{ margin: '4px 0 0', fontSize: '0.8125rem', opacity: 0.7 }}>{item.description}</p>
+              </div>
+              <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+                <LlmButton variant="outline" size="sm">View</LlmButton>
+                <LlmButton variant="outline" size="sm">...</LlmButton>
+              </div>
+            </div>
+          </LlmCardContent>
+        </LlmCard>
+      ))}
+    </div>
+  );
+}
+
 // ── 5. Notification Center ──
 function NotificationCenterDemo() {
   return (
@@ -247,6 +287,121 @@ function NotificationCenterDemo() {
           </div>
         </LlmAccordionItem>
       </LlmAccordionGroup>
+    </div>
+  );
+}
+
+// ── 6. Management Dashboard ──
+const dashboardMetrics = [
+  { label: 'Active users', value: '8,412', delta: '+12%', deltaVariant: 'success' as const, foot: 'vs. previous period' },
+  { label: 'Sessions', value: '24,390', delta: '+4%', deltaVariant: 'success' as const, foot: 'vs. previous period' },
+  { label: 'Revenue', value: '$42,108', delta: '-2%', deltaVariant: 'danger' as const, foot: 'vs. previous period' },
+  { label: 'Avg. response', value: '184 ms', delta: '+18 ms', deltaVariant: 'warning' as const, foot: 'P95 across edges' },
+];
+const dashboardActivity = [
+  { id: 1, user: 'alex@acme.dev', action: 'Rotated API key', status: 'Success', statusVariant: 'success' as const, time: '2m ago' },
+  { id: 2, user: 'maria@acme.dev', action: 'Invited new member', status: 'Pending', statusVariant: 'warning' as const, time: '14m ago' },
+  { id: 3, user: 'deploy-bot', action: 'Pushed build v3.2.1', status: 'Success', statusVariant: 'success' as const, time: '1h ago' },
+  { id: 4, user: 'lee@acme.dev', action: 'Removed webhook', status: 'Failed', statusVariant: 'danger' as const, time: '2h ago' },
+];
+
+function ManagementDashboardDemo() {
+  const [range, setRange] = useState(1);
+  const quota = 87;
+  return (
+    <div style={{ maxWidth: '820px', width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem' }}>
+        <div>
+          <h4 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>Operations Overview</h4>
+          <p style={{ margin: '4px 0 0', fontSize: '0.8125rem', opacity: 0.7 }}>Snapshot across the selected range</p>
+        </div>
+        <LlmTabGroup variant="pills" selectedIndex={range} onSelectedIndexChange={setRange}>
+          <LlmTab label="7D">{' '}</LlmTab>
+          <LlmTab label="30D">{' '}</LlmTab>
+          <LlmTab label="90D">{' '}</LlmTab>
+        </LlmTabGroup>
+      </div>
+      {quota >= 85 && (
+        <LlmAlert variant="warning" dismissible>
+          API request quota is at {quota}%. Upgrade to avoid throttling.
+        </LlmAlert>
+      )}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.75rem' }}>
+        {dashboardMetrics.map((m) => (
+          <LlmCard key={m.label} variant="elevated" padding="md">
+            <LlmCardContent>
+              <div style={{ fontSize: '0.75rem', opacity: 0.65, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{m.label}</div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginTop: '8px' }}>
+                <span style={{ fontSize: '1.5rem', fontWeight: 700 }}>{m.value}</span>
+                <LlmBadge variant={m.deltaVariant} size="sm">{m.delta}</LlmBadge>
+              </div>
+              <p style={{ margin: '8px 0 0', fontSize: '0.7rem', opacity: 0.65 }}>{m.foot}</p>
+            </LlmCardContent>
+          </LlmCard>
+        ))}
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '0.75rem' }}>
+        <LlmCard variant="elevated" padding="none">
+          <LlmCardHeader>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <h5 style={{ margin: 0, fontSize: '0.9375rem', fontWeight: 600 }}>Recent Activity</h5>
+              <LlmButton variant="outline" size="sm">Export</LlmButton>
+            </div>
+          </LlmCardHeader>
+          <LlmCardContent>
+            <LlmTable variant="striped" size="sm">
+              <LlmThead>
+                <LlmTr>
+                  <LlmTh>User</LlmTh>
+                  <LlmTh>Action</LlmTh>
+                  <LlmTh>Status</LlmTh>
+                  <LlmTh align="end">Time</LlmTh>
+                </LlmTr>
+              </LlmThead>
+              <LlmTbody>
+                {dashboardActivity.map((row) => (
+                  <LlmTr key={row.id}>
+                    <LlmTd>{row.user}</LlmTd>
+                    <LlmTd>{row.action}</LlmTd>
+                    <LlmTd><LlmBadge variant={row.statusVariant} size="sm">{row.status}</LlmBadge></LlmTd>
+                    <LlmTd align="end">{row.time}</LlmTd>
+                  </LlmTr>
+                ))}
+              </LlmTbody>
+            </LlmTable>
+          </LlmCardContent>
+        </LlmCard>
+        <LlmCard variant="elevated" padding="md">
+          <LlmCardHeader>
+            <h5 style={{ margin: 0, fontSize: '0.9375rem', fontWeight: 600 }}>Plan Usage</h5>
+          </LlmCardHeader>
+          <LlmCardContent>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8125rem', marginBottom: '4px' }}>
+                  <span style={{ fontWeight: 500 }}>API requests</span>
+                  <span style={{ opacity: 0.7 }}>{quota}%</span>
+                </div>
+                <LlmProgress value={quota} variant="warning" size="sm" />
+              </div>
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8125rem', marginBottom: '4px' }}>
+                  <span style={{ fontWeight: 500 }}>Storage</span>
+                  <span style={{ opacity: 0.7 }}>42%</span>
+                </div>
+                <LlmProgress value={42} variant="success" size="sm" />
+              </div>
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8125rem', marginBottom: '4px' }}>
+                  <span style={{ fontWeight: 500 }}>Seats</span>
+                  <span style={{ opacity: 0.7 }}>9 / 12</span>
+                </div>
+                <LlmProgress value={75} variant="default" size="sm" />
+              </div>
+            </div>
+          </LlmCardContent>
+        </LlmCard>
+      </div>
     </div>
   );
 }
@@ -416,6 +571,117 @@ const notificationsVue = `<LlmAccordionGroup :multi="true" variant="separated">
   </LlmAccordionItem>
 </LlmAccordionGroup>`;
 
+const dataListAngular = `<div class="list-header">
+  <h2>Projects</h2>
+  <llm-button variant="primary" size="sm">New project</llm-button>
+</div>
+@for (item of items(); track item.id) {
+  <llm-card variant="outlined" padding="md">
+    <llm-card-content>
+      <span>{{ item.name }}</span>
+      <llm-badge [variant]="item.statusVariant" size="sm">{{ item.status }}</llm-badge>
+      <p>{{ item.description }}</p>
+      <llm-button variant="outline" size="sm">View</llm-button>
+    </llm-card-content>
+  </llm-card>
+}`;
+
+const dataListReact = `<div className="list-header">
+  <h2>Projects</h2>
+  <LlmButton variant="primary" size="sm">New project</LlmButton>
+</div>
+{items.map(item => (
+  <LlmCard key={item.id} variant="outlined" padding="md">
+    <LlmCardContent>
+      <span>{item.name}</span>
+      <LlmBadge variant={item.statusVariant} size="sm">{item.status}</LlmBadge>
+      <p>{item.description}</p>
+      <LlmButton variant="outline" size="sm">View</LlmButton>
+    </LlmCardContent>
+  </LlmCard>
+))}`;
+
+const dataListVue = `<div class="list-header">
+  <h2>Projects</h2>
+  <LlmButton variant="primary" size="sm">New project</LlmButton>
+</div>
+<LlmCard v-for="item in items" :key="item.id" variant="outlined" padding="md">
+  <LlmCardContent>
+    <span>{{ item.name }}</span>
+    <LlmBadge :variant="item.statusVariant" size="sm">{{ item.status }}</LlmBadge>
+    <p>{{ item.description }}</p>
+    <LlmButton variant="outline" size="sm">View</LlmButton>
+  </LlmCardContent>
+</LlmCard>`;
+
+const dashboardAngular = `<!-- Metric cards + activity table + quota widget.
+     Uses Card, Table, TabGroup, Badge, Alert, Progress. -->
+<llm-tab-group variant="pills" [(selectedIndex)]="range">
+  <llm-tab label="7D" />
+  <llm-tab label="30D" />
+  <llm-tab label="90D" />
+</llm-tab-group>
+@if (quota() >= 85) {
+  <llm-alert variant="warning">API quota at {{ quota() }}%.</llm-alert>
+}
+<!-- ...metric cards grid (LlmCard + LlmBadge delta)... -->
+<llm-table variant="striped" size="sm">
+  <llm-thead>
+    <llm-tr><llm-th>User</llm-th><llm-th>Action</llm-th></llm-tr>
+  </llm-thead>
+  <llm-tbody>
+    @for (row of activity(); track row.id) {
+      <llm-tr>
+        <llm-td>{{ row.user }}</llm-td>
+        <llm-td>{{ row.action }}</llm-td>
+      </llm-tr>
+    }
+  </llm-tbody>
+</llm-table>
+<llm-progress [value]="quota()" variant="warning" size="sm" />`;
+
+const dashboardReact = `<LlmTabGroup variant="pills" selectedIndex={range} onSelectedIndexChange={setRange}>
+  <LlmTab label="7D">{' '}</LlmTab>
+  <LlmTab label="30D">{' '}</LlmTab>
+  <LlmTab label="90D">{' '}</LlmTab>
+</LlmTabGroup>
+{quota >= 85 && <LlmAlert variant="warning">API quota at {quota}%.</LlmAlert>}
+{/* ...metric cards grid (LlmCard + LlmBadge delta)... */}
+<LlmTable variant="striped" size="sm">
+  <LlmThead>
+    <LlmTr><LlmTh>User</LlmTh><LlmTh>Action</LlmTh></LlmTr>
+  </LlmThead>
+  <LlmTbody>
+    {activity.map(row => (
+      <LlmTr key={row.id}>
+        <LlmTd>{row.user}</LlmTd>
+        <LlmTd>{row.action}</LlmTd>
+      </LlmTr>
+    ))}
+  </LlmTbody>
+</LlmTable>
+<LlmProgress value={quota} variant="warning" size="sm" />`;
+
+const dashboardVue = `<LlmTabGroup variant="pills" v-model:selectedIndex="range">
+  <LlmTab label="7D">&nbsp;</LlmTab>
+  <LlmTab label="30D">&nbsp;</LlmTab>
+  <LlmTab label="90D">&nbsp;</LlmTab>
+</LlmTabGroup>
+<LlmAlert v-if="quota >= 85" variant="warning">API quota at {{ quota }}%.</LlmAlert>
+<!-- ...metric cards grid (LlmCard + LlmBadge delta)... -->
+<LlmTable variant="striped" size="sm">
+  <LlmThead>
+    <LlmTr><LlmTh>User</LlmTh><LlmTh>Action</LlmTh></LlmTr>
+  </LlmThead>
+  <LlmTbody>
+    <LlmTr v-for="row in activity" :key="row.id">
+      <LlmTd>{{ row.user }}</LlmTd>
+      <LlmTd>{{ row.action }}</LlmTd>
+    </LlmTr>
+  </LlmTbody>
+</LlmTable>
+<LlmProgress :value="quota" variant="warning" size="sm" />`;
+
 export default function PatternsPage() {
   return (
     <div className="docs-inline-page">
@@ -477,12 +743,30 @@ export default function PatternsPage() {
       </PatternSection>
 
       <PatternSection
-        title="4. Notification Center"
+        title="4. Data List with Actions"
+        description="Inline actions on a list of items. The core pattern for dashboards and admin panels — Card + Badge + Button composition."
+        tags={['LlmCard', 'LlmBadge', 'LlmButton']}
+        angularCode={dataListAngular} reactCode={dataListReact} vueCode={dataListVue}
+      >
+        <DataListDemo />
+      </PatternSection>
+
+      <PatternSection
+        title="5. Notification Center"
         description="Structural feedback grouping using Accordion and Alert. Useful for monitoring and admin tools."
         tags={['LlmAccordionGroup', 'LlmAlert', 'LlmBadge']}
         angularCode={notificationsAngular} reactCode={notificationsReact} vueCode={notificationsVue}
       >
         <NotificationCenterDemo />
+      </PatternSection>
+
+      <PatternSection
+        title="6. Management Dashboard"
+        description="The densest cookbook pattern — metric cards, activity table, and quota indicators combined. Shows how Card, Table, TabGroup, Badge, Alert, and Progress fit together."
+        tags={['LlmCard', 'LlmTable', 'LlmTabGroup', 'LlmBadge', 'LlmAlert', 'LlmProgress']}
+        angularCode={dashboardAngular} reactCode={dashboardReact} vueCode={dashboardVue}
+      >
+        <ManagementDashboardDemo />
       </PatternSection>
     </div>
   );

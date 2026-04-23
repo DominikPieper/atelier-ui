@@ -6,6 +6,8 @@
     "check:sync": "node tools/scripts/check-sync.js",
     "check:spec": "node tools/scripts/sync-spec.mjs --check",
     "check:docs": "node tools/scripts/check-docs-sync.js",
+    "check:llms": "node tools/scripts/gen-llms-txt.mjs --check",
+    "gen:llms": "node tools/scripts/gen-llms-txt.mjs",
     "preflight": "node tools/scripts/preflight.mjs"
   },
   "private": true,

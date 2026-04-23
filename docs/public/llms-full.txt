@@ -1,7 +1,7 @@
 # Atelier UI — Full API Reference
 
 > Complete component API for LLM consumption. 26 accessible components for Angular, React, and Vue with consistent prop naming across all frameworks.
-> Version 0.0.11 | https://atelier.pieper.io
+> Version 0.0.22 | https://atelier.pieper.io
 
 ---
 
@@ -27,390 +27,278 @@
 
 ---
 
+## Framework Syntax Cheatsheet
+
+Each component's Usage block below uses JSX-like syntax as a lingua franca.
+Apply the following transformations for Angular or Vue:
+
+  Construct           JSX / React            Angular                         Vue
+  ---------           -------------          ---------------                 --------------
+  Tag name            <LlmButton>            <llm-button>                    <LlmButton>
+  Static attr         variant="primary"      variant="primary"               variant="primary"
+  Bool attr           loading={true}         [loading]="true"                :loading="true"
+  Expression          count={items.length}   [count]="items.length"          :count="items.length"
+  Event               onClick={save}         (click)="save()"                @click="save"
+  Two-way (value)     value + onValueChange  [(value)]="v"                   v-model:value="v"
+  Signal Forms        (n/a)                  [formField]="form.email"        (n/a)
+  Loop / iteration    {items.map(x => ...)}  @for (x of items; track x.id)   v-for="x in items"
+  Conditional         {cond && <X/>}         @if (cond) { <X/> }             v-if="cond"
+
+Import lines are identical across frameworks: adjust the package path.
+
+  import { LlmButton } from '@atelier-ui/angular';
+  import { LlmButton } from '@atelier-ui/react';
+  import { LlmButton } from '@atelier-ui/vue';
+
+---
+
 ## Component API
 
 Each entry lists:
   Props: name | type | default | description
-  Then framework-specific usage examples.
+  Then a generic Usage example (apply the Framework Syntax Cheatsheet above).
 
 ---
 
 ### LlmButton
 
-  Import (Angular): import { LlmButton } from '@atelier-ui/angular'
-  Import (React):   import { LlmButton } from '@atelier-ui/react'
-  Import (Vue):     import { LlmButton } from '@atelier-ui/vue'
+  A versatile button component with multiple variants and sizes. Supports loading and disabled states.
 
   Props:
-    variant   'primary' | 'secondary' | 'outline'   'primary'   Visual style
-    size      'sm' | 'md' | 'lg'                     'md'        Size
-    disabled  boolean                                 false       Prevents interaction
-    loading   boolean                                 false       Shows spinner, prevents interaction
+    variant   'primary' | 'secondary' | 'outline'  'primary'  Visual style variant
+    size      'sm' | 'md' | 'lg'                   'md'       Size of the button
+    disabled  boolean                              false      Disables the button
+    loading   boolean                              false      Shows a loading spinner, disables interaction
 
-  Angular:
-    <llm-button variant="primary">Save</llm-button>
-    <llm-button [loading]="isSaving" (click)="save()">Save</llm-button>
-    <llm-button variant="outline" [disabled]="true">Disabled</llm-button>
-
-  React:
-    <LlmButton variant="primary" onClick={save}>Save</LlmButton>
-    <LlmButton variant="secondary" loading={isSaving}>Saving...</LlmButton>
-    <LlmButton variant="outline" disabled>Disabled</LlmButton>
-
-  Vue:
-    <LlmButton variant="primary" @click="save">Save</LlmButton>
-    <LlmButton variant="secondary" :loading="isSaving">Saving...</LlmButton>
+  Usage:
+    <LlmButton variant="primary">Primary</LlmButton>
+    <LlmButton variant="secondary">Secondary</LlmButton>
+    <LlmButton variant="outline">Outline</LlmButton>
+    <LlmButton loading={true}>Loading</LlmButton>
+    <LlmButton disabled={true}>Disabled</LlmButton>
 
 ---
 
 ### LlmInput
 
-  Import (Angular): import { LlmInput } from '@atelier-ui/angular'
-  Import (React):   import { LlmInput } from '@atelier-ui/react'
-  Import (Vue):     import { LlmInput } from '@atelier-ui/vue'
+  A text input field that integrates with Signal Forms. Supports all standard HTML input types, validation states, and error display.
 
   Props:
-    value        string                                         ''       Controlled value
-    type         'text' | 'email' | 'password' | 'number'      'text'   Input type
-                 | 'tel' | 'url'
-    placeholder  string                                         ''       Placeholder text
-    disabled     boolean                                        false    Disables the input
-    readonly     boolean                                        false    Read-only mode
-    invalid      boolean                                        false    Error styling
-    required     boolean                                        false    Required field
-    name         string                                         ''       HTML name attribute
+    value          string                                                    ''      Controlled value
+    onValueChange  (value: string) => void                                   —       Called when the input value changes
+    type           'text' | 'email' | 'password' | 'number' | 'tel' | 'url'  'text'  Input type
+    placeholder    string                                                    ''      Placeholder text
+    disabled       boolean                                                   false   Disables the input
+    readonly       boolean                                                   false   Makes the input read-only
+    invalid        boolean                                                   false   Applies invalid/error styling
+    required       boolean                                                   false   Marks field as required
+    name           string                                                    ''      HTML name attribute for form submission
 
-  Angular:
-    <llm-input [(value)]="email" type="email" placeholder="you@example.com" />
-    <llm-input [formField]="form.email" type="email" placeholder="Email" />
-    <llm-input [invalid]="true" placeholder="Invalid" />
-
-  React:
-    <LlmInput value={email} onValueChange={setEmail} type="email" placeholder="you@example.com" />
-    <LlmInput invalid placeholder="Error state" />
-
-  Vue:
-    <LlmInput v-model:value="email" type="email" placeholder="you@example.com" />
-    <LlmInput :invalid="true" placeholder="Error state" />
+  Usage:
+    <LlmInput type="email" placeholder="you@example.com" />
+    <LlmInput type="password" placeholder="Password" />
+    <LlmInput invalid={true} placeholder="Invalid state" />
+    <LlmInput disabled={true} placeholder="Disabled" />
 
 ---
 
 ### LlmTextarea
 
-  Import (Angular): import { LlmTextarea } from '@atelier-ui/angular'
-  Import (React):   import { LlmTextarea } from '@atelier-ui/react'
-  Import (Vue):     import { LlmTextarea } from '@atelier-ui/vue'
+  A multi-line text input. Supports auto-resize to fit content and integrates with Signal Forms.
 
   Props:
-    value       string    ''     Controlled value
-    rows        number    3      Initial visible row count
-    placeholder string    ''     Placeholder text
-    disabled    boolean   false  Disables the textarea
-    readonly    boolean   false  Read-only mode
-    invalid     boolean   false  Error styling
-    required    boolean   false  Required field
-    name        string    ''     HTML name attribute
-    autoResize  boolean   false  Grows height as content grows
+    value          string                   ''     Controlled value
+    onValueChange  (value: string) => void  —      Called when the textarea value changes
+    rows           number                   3      Initial number of visible rows
+    placeholder    string                   ''     Placeholder text
+    disabled       boolean                  false  Disables the textarea
+    readonly       boolean                  false  Makes the textarea read-only
+    invalid        boolean                  false  Applies invalid/error styling
+    required       boolean                  false  Marks field as required
+    name           string                   ''     HTML name attribute for form submission
+    autoResize     boolean                  false  Grows height automatically as content grows
 
-  Angular:
-    <llm-textarea [(value)]="bio" placeholder="About you..." [autoResize]="true" />
-
-  React:
-    <LlmTextarea value={bio} onValueChange={setBio} autoResize placeholder="About you..." />
-
-  Vue:
-    <LlmTextarea v-model:value="bio" :autoResize="true" placeholder="About you..." />
+  Usage:
+    <LlmTextarea placeholder="Tell us about yourself" rows={4} />
+    <LlmTextarea autoResize={true} placeholder="Auto-resizes as you type..." />
+    <LlmTextarea disabled={true} placeholder="Disabled" />
 
 ---
 
 ### LlmCheckbox
 
-  Import (Angular): import { LlmCheckbox } from '@atelier-ui/angular'
-  Import (React):   import { LlmCheckbox } from '@atelier-ui/react'
-  Import (Vue):     import { LlmCheckbox } from '@atelier-ui/vue'
+  A checkbox input that supports indeterminate state. Integrates with Signal Forms.
 
   Props:
-    checked        boolean              false   Controlled checked state
-    indeterminate  boolean              false   Shows dash (partial selection)
-    disabled       boolean              false   Disables the checkbox
-    readonly       boolean              false   Read-only mode
-    invalid        boolean              false   Error styling
-    required       boolean              false   Required field
-    name           string               ''      HTML name attribute
+    checked          boolean                     false  Controlled checked state
+    onCheckedChange  (checked: boolean) => void  —      Called when the checked state changes
+    value            boolean                     false  Alias for checked (Signal Forms integration)
+    onValueChange    (checked: boolean) => void  —      Alias for onCheckedChange (Signal Forms integration)
+    indeterminate    boolean                     false  Shows a dash (indeterminate state)
+    disabled         boolean                     false  Disables the checkbox
+    readonly         boolean                     false  Makes the checkbox read-only
+    invalid          boolean                     false  Applies invalid/error styling
+    required         boolean                     false  Marks field as required
+    name             string                      ''     HTML name attribute for form submission
 
-  Angular:
-    <llm-checkbox [(checked)]="agreed">I agree to the terms</llm-checkbox>
-    <llm-checkbox [indeterminate]="true">Select all</llm-checkbox>
-
-  React:
-    <LlmCheckbox checked={agreed} onCheckedChange={setAgreed}>I agree to the terms</LlmCheckbox>
-    <LlmCheckbox indeterminate>Select all</LlmCheckbox>
-
-  Vue:
-    <LlmCheckbox v-model:checked="agreed">I agree to the terms</LlmCheckbox>
+  Usage:
+    <LlmCheckbox>I agree to the terms</LlmCheckbox>
+    <LlmCheckbox checked={true}>Pre-checked</LlmCheckbox>
+    <LlmCheckbox indeterminate={true}>Indeterminate</LlmCheckbox>
+    <LlmCheckbox disabled={true}>Disabled</LlmCheckbox>
 
 ---
 
 ### LlmToggle
 
-  Import (Angular): import { LlmToggle } from '@atelier-ui/angular'
-  Import (React):   import { LlmToggle } from '@atelier-ui/react'
-  Import (Vue):     import { LlmToggle } from '@atelier-ui/vue'
+  A toggle switch for boolean settings. Integrates with Signal Forms.
 
   Props:
-    checked   boolean   false   Controlled checked state
-    disabled  boolean   false   Disables the toggle
-    readonly  boolean   false   Read-only mode
-    invalid   boolean   false   Error styling
-    required  boolean   false   Required field
-    name      string    ''      HTML name attribute
+    checked          boolean                     false  Controlled checked state
+    onCheckedChange  (checked: boolean) => void  —      Called when the checked state changes
+    value            boolean                     false  Alias for checked (Signal Forms integration)
+    onValueChange    (checked: boolean) => void  —      Alias for onCheckedChange (Signal Forms integration)
+    disabled         boolean                     false  Disables the toggle
+    readonly         boolean                     false  Makes the toggle read-only
+    invalid          boolean                     false  Applies invalid/error styling
+    required         boolean                     false  Marks field as required
+    name             string                      ''     HTML name attribute for form submission
 
-  Angular:
-    <llm-toggle [(checked)]="notifications">Enable notifications</llm-toggle>
-
-  React:
-    <LlmToggle checked={notifications} onCheckedChange={setNotifications}>
-      Enable notifications
-    </LlmToggle>
-
-  Vue:
-    <LlmToggle v-model:checked="notifications">Enable notifications</LlmToggle>
+  Usage:
+    <LlmToggle>Enable notifications</LlmToggle>
+    <LlmToggle checked={true}>Active toggle</LlmToggle>
+    <LlmToggle disabled={true}>Disabled</LlmToggle>
 
 ---
 
 ### LlmRadioGroup + LlmRadio
 
-  Import (Angular): import { LlmRadioGroup, LlmRadio } from '@atelier-ui/angular'
-  Import (React):   import { LlmRadioGroup, LlmRadio } from '@atelier-ui/react'
-  Import (Vue):     import { LlmRadioGroup, LlmRadio } from '@atelier-ui/vue'
+  A group of radio buttons with keyboard navigation. The group handles arrow key navigation and value management.
 
-  LlmRadioGroup props:
-    value     string    ''     Selected radio value
-    disabled  boolean   false  Disables all radios
-    readonly  boolean   false  Read-only mode
-    invalid   boolean   false  Error styling
-    required  boolean   false  Required field
-    name      string    ''     HTML name (propagated to radios)
+  Props:
+    value          string                   ''     Currently selected value
+    onValueChange  (value: string) => void  —      Called when selection changes
+    disabled       boolean                  false  Disables all radios in the group
+    readonly       boolean                  false  Makes all radios in the group read-only
+    invalid        boolean                  false  Applies invalid/error styling
+    required       boolean                  false  Marks field as required
+    name           string                   ''     HTML name attribute (propagated to radios)
 
-  LlmRadio props:
-    radioValue  string   (required)   The value this radio represents
-    disabled    boolean  false        Disables this specific radio
-
-  Angular:
-    <llm-radio-group [(value)]="plan">
-      <llm-radio radioValue="free">Free</llm-radio>
-      <llm-radio radioValue="pro">Pro</llm-radio>
-      <llm-radio radioValue="enterprise">Enterprise</llm-radio>
-    </llm-radio-group>
-
-  React:
-    <LlmRadioGroup value={plan} onValueChange={setPlan} name="plan">
+  Usage:
+    <LlmRadioGroup name="plan" value="free" onValueChange={(v) => console.log(v)}>
       <LlmRadio radioValue="free">Free</LlmRadio>
       <LlmRadio radioValue="pro">Pro</LlmRadio>
       <LlmRadio radioValue="enterprise">Enterprise</LlmRadio>
-    </LlmRadioGroup>
-
-  Vue:
-    <LlmRadioGroup v-model:value="plan" name="plan">
-      <LlmRadio radioValue="free">Free</LlmRadio>
-      <LlmRadio radioValue="pro">Pro</LlmRadio>
     </LlmRadioGroup>
 
 ---
 
 ### LlmSelect + LlmOption
 
-  Import (Angular): import { LlmSelect, LlmOption } from '@atelier-ui/angular'
-  Import (React):   import { LlmSelect, LlmOption } from '@atelier-ui/react'
-  Import (Vue):     import { LlmSelect, LlmOption } from '@atelier-ui/vue'
+  A custom select dropdown built on the native Popover API. Supports keyboard navigation, type-ahead, and disabled options.
 
-  LlmSelect props:
-    value        string    ''     Selected option value
-    placeholder  string    ''     Text shown when nothing is selected
-    disabled     boolean   false  Disables the select
-    readonly     boolean   false  Read-only mode
-    invalid      boolean   false  Error styling
-    required     boolean   false  Required field
-    name         string    ''     HTML name attribute
+  Props:
+    value          string                   ''     Currently selected value
+    onValueChange  (value: string) => void  —      Called when selection changes
+    placeholder    string                   ''     Placeholder text when no option is selected
+    disabled       boolean                  false  Disables the select
+    readonly       boolean                  false  Makes the select read-only
+    invalid        boolean                  false  Applies invalid/error styling
+    required       boolean                  false  Marks field as required
+    name           string                   ''     HTML name attribute for form submission
 
-  LlmOption props:
-    optionValue  string   (required)   The value this option represents
-    disabled     boolean  false        Makes this option unselectable
-
-  Angular:
-    <llm-select [(value)]="country" placeholder="Select a country">
-      <llm-option optionValue="us">United States</llm-option>
-      <llm-option optionValue="ca">Canada</llm-option>
-      <llm-option optionValue="gb" [disabled]="true">United Kingdom</llm-option>
-    </llm-select>
-
-  React:
-    <LlmSelect value={country} onValueChange={setCountry} placeholder="Select a country">
+  Usage:
+    <LlmSelect placeholder="Select a country" onValueChange={(v) => console.log(v)}>
       <LlmOption optionValue="us">United States</LlmOption>
       <LlmOption optionValue="ca">Canada</LlmOption>
+      <LlmOption optionValue="uk" disabled={true}>United Kingdom (unavailable)</LlmOption>
     </LlmSelect>
-
-  Vue:
-    <LlmSelect v-model:value="country" placeholder="Select a country">
-      <LlmOption optionValue="us">United States</LlmOption>
-      <LlmOption optionValue="ca">Canada</LlmOption>
-    </LlmSelect>
-
-  Notes:
-    - Keyboard: Arrow keys navigate, Enter selects, Escape closes, type-ahead filtering
-    - ARIA: role="combobox" on trigger, role="listbox" on panel, role="option" on items
 
 ---
 
 ### LlmCombobox
 
-  Import (Angular): import { LlmCombobox } from '@atelier-ui/angular'
-  Import (React):   import { LlmCombobox } from '@atelier-ui/react'
-  Import (Vue):     import { LlmCombobox } from '@atelier-ui/vue'
+  A filterable autocomplete input. The user can type to narrow down a large list of options.
 
   Props:
-    value        string               ''   Selected option value
-    options      LlmComboboxOption[]  []   Array of {value, label, disabled?}
-    placeholder  string               ''   Input placeholder
-    disabled     boolean              false  Disables the combobox
-    invalid      boolean              false  Error styling
+    value          string                   ''     Controlled value
+    onValueChange  (value: string) => void  —      Called when selection changes
+    options        LlmComboboxOption[]      []     Array of { label, value } objects
+    placeholder    string                   ''     Placeholder text
+    disabled       boolean                  false  Disables the combobox
+    invalid        boolean                  false  Applies invalid/error styling
 
-  LlmComboboxOption shape: { value: string; label: string; disabled?: boolean }
-
-  Angular:
-    <llm-combobox
-      [(value)]="country"
-      [options]="countries"
-      placeholder="Search countries..."
+  Usage:
+    <LlmCombobox 
+      placeholder="Search framework..." 
+      options={[
+        { label: 'Angular', value: 'ng' },
+        { label: 'React', value: 'react' },
+        { label: 'Vue', value: 'vue' }
+      ]} 
     />
-
-  React:
-    const countries = [
-      { value: 'us', label: 'United States' },
-      { value: 'ca', label: 'Canada' },
-      { value: 'gb', label: 'United Kingdom', disabled: true },
-    ];
-    <LlmCombobox value={country} onValueChange={setCountry} options={countries} placeholder="Search..." />
-
-  Vue:
-    <LlmCombobox v-model:value="country" :options="countries" placeholder="Search..." />
-
-  Notes:
-    - Typing filters options by case-insensitive substring match on label
-    - Keyboard: ArrowDown/Up navigates list, Enter selects, Escape reverts
-    - Difference from Select: data-driven options array vs. slotted children
 
 ---
 
 ### LlmBadge
 
-  Import (Angular): import { LlmBadge } from '@atelier-ui/angular'
-  Import (React):   import { LlmBadge } from '@atelier-ui/react'
-  Import (Vue):     import { LlmBadge } from '@atelier-ui/vue'
+  A small inline label for status, categories, or counts. Use alongside cards, list items, and table cells.
 
   Props:
-    variant  'default' | 'success' | 'warning' | 'danger' | 'info'   'default'   Color scheme
-    size     'sm' | 'md'                                               'md'        Size
+    variant  'default' | 'success' | 'warning' | 'danger' | 'info'  'default'  Color scheme of the badge
+    size     'sm' | 'md'                                            'md'       Size of the badge
 
-  Angular:
-    <llm-badge variant="success">Active</llm-badge>
-    <llm-badge variant="danger" size="sm">Error</llm-badge>
-
-  React:
+  Usage:
+    <LlmBadge>Default</LlmBadge>
     <LlmBadge variant="success">Active</LlmBadge>
-    <LlmBadge variant="warning" size="sm">Pending</LlmBadge>
-
-  Vue:
-    <LlmBadge variant="info">New</LlmBadge>
+    <LlmBadge variant="warning">Pending</LlmBadge>
+    <LlmBadge variant="danger">Error</LlmBadge>
+    <LlmBadge variant="info">Info</LlmBadge>
+    <LlmBadge size="sm" variant="success">Small</LlmBadge>
 
 ---
 
-### LlmCard + sub-components
+### LlmCard
 
-  Import (Angular): import { LlmCard, LlmCardHeader, LlmCardContent, LlmCardFooter } from '@atelier-ui/angular'
-  Import (React):   import { LlmCard, LlmCardHeader, LlmCardContent, LlmCardFooter } from '@atelier-ui/react'
-  Import (Vue):     import { LlmCard, LlmCardHeader, LlmCardContent, LlmCardFooter } from '@atelier-ui/vue'
+  A container component for grouped content. Compose with LlmCardHeader, LlmCardContent, and LlmCardFooter.
 
-  LlmCard props:
-    variant  'elevated' | 'outlined' | 'flat'   'elevated'   Visual style
-    padding  'none' | 'sm' | 'md' | 'lg'        'md'         Inner spacing
+  Props:
+    variant  'elevated' | 'outlined' | 'flat'  'elevated'  Visual style of the card
+    padding  'none' | 'sm' | 'md' | 'lg'       'md'        Padding size inside the card
 
-  Angular:
-    <llm-card variant="elevated" padding="md">
-      <llm-card-header>Account Settings</llm-card-header>
-      <llm-card-content>Update your profile information.</llm-card-content>
-      <llm-card-footer>
-        <llm-button variant="primary" size="sm">Save</llm-button>
-      </llm-card-footer>
-    </llm-card>
-
-  React:
-    <LlmCard variant="outlined" padding="lg">
-      <LlmCardHeader>Account Settings</LlmCardHeader>
-      <LlmCardContent>Update your profile information.</LlmCardContent>
+  Usage:
+    <LlmCard variant="elevated" padding="md">
+      <LlmCardHeader>Card Title</LlmCardHeader>
+      <LlmCardContent>
+        This is the card body content. It can contain anything.
+      </LlmCardContent>
       <LlmCardFooter>
-        <LlmButton variant="primary" size="sm">Save</LlmButton>
+        <LlmButton variant="primary" size="sm">Action</LlmButton>
       </LlmCardFooter>
     </LlmCard>
 
-  Vue:
-    <LlmCard variant="elevated">
-      <LlmCardHeader>Account Settings</LlmCardHeader>
-      <LlmCardContent>Update your profile information.</LlmCardContent>
-    </LlmCard>
-
 ---
 
-### LlmTable + sub-components
+### LlmTable
 
-  Import (Angular): import { LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd } from '@atelier-ui/angular'
-  Import (React):   import { LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd } from '@atelier-ui/react'
-  Import (Vue):     import { LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd } from '@atelier-ui/vue'
+  A comprehensive data table component for displaying structured information. Supports sorting, row selection, sticky headers, and custom empty states.
 
-  LlmTable props:
-    variant       'default' | 'striped' | 'bordered'   'default'   Row background styling
-    size          'sm' | 'md' | 'lg'                   'md'        Vertical padding of cells
-    stickyHeader  boolean                               false       Sticky header row on scroll
+  Props:
+    variant       'default' | 'striped' | 'bordered'  'default'  Row background styling
+    size          'sm' | 'md' | 'lg'                  'md'       Vertical padding of cells
+    stickyHeader  boolean                             false      Makes header row stick to the top on scroll
 
-  LlmTh props:
-    sortable  boolean   false   Enables sort indicator and click handler
-    sorted    'asc' | 'desc' | null   null   Current sort direction
-
-  LlmTr props:
-    selectable  boolean   false   Adds hover highlight and cursor pointer
-
-  LlmTbody props:
-    empty    boolean   false   Shows empty slot when true
-    colSpan  number    1       Column span for the empty state row
-
-  Angular:
-    <llm-table variant="striped">
-      <llm-thead>
-        <llm-tr>
-          <llm-th [sortable]="true" [sorted]="sortDir" (sortChange)="onSort($event)">Name</llm-th>
-          <llm-th>Status</llm-th>
-        </llm-tr>
-      </llm-thead>
-      <llm-tbody [empty]="rows.length === 0" [colSpan]="2">
-        <llm-tr *ngFor="let row of rows" [selectable]="true" (click)="select(row)">
-          <llm-td>{{ row.name }}</llm-td>
-          <llm-td>{{ row.status }}</llm-td>
-        </llm-tr>
-        <ng-template llmTableEmpty>No results found</ng-template>
-      </llm-tbody>
-    </llm-table>
-
-  React:
+  Usage:
     <LlmTable variant="striped">
       <LlmThead>
         <LlmTr>
-          <LlmTh sortable sorted={sortDir} onSortChange={setSort}>Name</LlmTh>
+          <LlmTh sortable>Name</LlmTh>
           <LlmTh>Status</LlmTh>
         </LlmTr>
       </LlmThead>
       <LlmTbody empty={rows.length === 0} colSpan={2}>
         {rows.map(row => (
-          <LlmTr key={row.id} selectable onClick={() => select(row)}>
+          <LlmTr key={row.id} selectable>
             <LlmTd>{row.name}</LlmTd>
             <LlmTd>{row.status}</LlmTd>
           </LlmTr>
@@ -419,46 +307,24 @@ Each entry lists:
       </LlmTbody>
     </LlmTable>
 
-  Vue:
-    <LlmTable variant="striped">
-      <LlmThead>
-        <LlmTr>
-          <LlmTh :sortable="true" :sorted="sortDir" @sort-change="onSort">Name</LlmTh>
-          <LlmTh>Status</LlmTh>
-        </LlmTr>
-      </LlmThead>
-      <LlmTbody :empty="rows.length === 0" :col-span="2">
-        <LlmTr v-for="row in rows" :key="row.id" selectable @click="select(row)">
-          <LlmTd>{{ row.name }}</LlmTd>
-          <LlmTd>{{ row.status }}</LlmTd>
-        </LlmTr>
-        <template #empty>No results found</template>
-      </LlmTbody>
-    </LlmTable>
-
 ---
 
 ### LlmAvatar + LlmAvatarGroup
 
-  Import (Angular): import { LlmAvatar, LlmAvatarGroup } from '@atelier-ui/angular'
-  Import (React):   import { LlmAvatar, LlmAvatarGroup } from '@atelier-ui/react'
-  Import (Vue):     import { LlmAvatar, LlmAvatarGroup } from '@atelier-ui/vue'
+  User avatar with image, initials fallback, and status indicator. Group avatars with LlmAvatarGroup.
 
-  LlmAvatar props:
-    src     string                                          ''        Image URL
-    alt     string                                          ''        Alt text
-    name    string                                          ''        Used for initials fallback
-    size    'xs' | 'sm' | 'md' | 'lg' | 'xl'              'md'      Size
-    shape   'circle' | 'square'                             'circle'  Shape
-    status  'online' | 'offline' | 'away' | 'busy' | ''   ''        Status indicator dot
+  Props:
+    src     string                                       ''        Image URL
+    alt     string                                       ''        Alt text for the avatar image
+    name    string                                       ''        Used for initials fallback and aria-label
+    size    'xs' | 'sm' | 'md' | 'lg' | 'xl'             'md'      Size of the avatar
+    shape   'circle' | 'square'                          'circle'  Shape of the avatar
+    status  'online' | 'offline' | 'away' | 'busy' | ''  ''        Status dot indicator
 
-  LlmAvatarGroup props:
-    max   number                    5    Max avatars before overflow count
-    size  'xs' | 'sm' | 'md'...   'md'  Size applied to all avatars
-
-  React:
-    <LlmAvatar name="Jane Doe" size="lg" status="online" />
-    <LlmAvatarGroup max={3}>
+  Usage:
+    <LlmAvatar name="Jane Doe" size="md" status="online" />
+    <LlmAvatar name="John Smith" size="lg" shape="square" />
+    <LlmAvatarGroup max={3} size="md">
       <LlmAvatar name="Alice" />
       <LlmAvatar name="Bob" />
       <LlmAvatar name="Carol" />
@@ -469,330 +335,262 @@ Each entry lists:
 
 ### LlmSkeleton
 
-  Import (Angular): import { LlmSkeleton } from '@atelier-ui/angular'
-  Import (React):   import { LlmSkeleton } from '@atelier-ui/react'
-  Import (Vue):     import { LlmSkeleton } from '@atelier-ui/vue'
+  Loading placeholder that mimics content shape. Compose multiple skeletons to match your layout.
 
   Props:
-    variant   'text' | 'circular' | 'rectangular'   'text'    Shape
-    width     string                                  '100%'   CSS width
-    height    string                                  ''       CSS height (auto per variant if unset)
-    animated  boolean                                 true     Shimmer animation
+    variant   'text' | 'circular' | 'rectangular'  'text'  Shape of the skeleton
+    width     string                               '100%'  CSS width (e.g. "200px", "60%")
+    height    string                               ''      CSS height. Auto per variant if not set.
+    animated  boolean                              true    Enables shimmer animation
 
-  React:
-    <LlmSkeleton variant="circular" width="40px" />
+  Usage:
+    <LlmSkeleton variant="text" />
     <LlmSkeleton variant="text" width="60%" />
+    <LlmSkeleton variant="circular" width="40px" />
     <LlmSkeleton variant="rectangular" height="200px" />
 
 ---
 
 ### LlmProgress
 
-  Import (Angular): import { LlmProgress } from '@atelier-ui/angular'
-  Import (React):   import { LlmProgress } from '@atelier-ui/react'
-  Import (Vue):     import { LlmProgress } from '@atelier-ui/vue'
+  A horizontal progress bar for showing completion percentage or indeterminate loading.
 
   Props:
-    value          number                                      0         Progress value (0–max)
-    max            number                                      100       Maximum value
-    indeterminate  boolean                                     false     Animated indeterminate state
-    variant        'default' | 'success' | 'warning' | 'danger'  'default'  Color
-    size           'sm' | 'md' | 'lg'                         'md'      Bar height
+    value          number                                        0          Progress value from 0 to 100
+    max            number                                        100        Maximum value
+    indeterminate  boolean                                       false      Shows animated indeterminate state
+    variant        'default' | 'success' | 'warning' | 'danger'  'default'  Color variant
+    size           'sm' | 'md' | 'lg'                            'md'       Size of the progress bar
 
-  React:
-    <LlmProgress value={75} variant="success" />
-    <LlmProgress indeterminate />
+  Usage:
+    <LlmProgress value={25} />
+    <LlmProgress value={60} variant="success" />
+    <LlmProgress value={85} variant="warning" />
+    <LlmProgress indeterminate={true} />
+
+---
+
+### LlmCodeBlock
+
+  Displays a block of code with an optional header, language label, filename, and copy-to-clipboard button. Designed for rendering LLM-generated code output, API examples, and inline snippets.
+
+  Props:
+    code             string   ''      The code string to display
+    language         string   'text'  Language label shown in the header. Ignored when filename is set.
+    filename         string   ''      Optional filename shown in the header instead of the language label
+    copyable         boolean  true    Whether to show a copy-to-clipboard button
+    showLineNumbers  boolean  false   Whether to display line numbers alongside the code
+
+  Usage:
+    <LlmCodeBlock code="const x = 1;" language="typescript" />
+    <LlmCodeBlock code={tsCode} filename="app.ts" showLineNumbers={true} />
+    <LlmCodeBlock code={shellCmd} language="shell" />
+    <LlmCodeBlock code={jsonStr} filename="package.json" />
 
 ---
 
 ### LlmBreadcrumbs + LlmBreadcrumbItem
 
-  Import (Angular): import { LlmBreadcrumbs, LlmBreadcrumbItem } from '@atelier-ui/angular'
-  Import (React):   import { LlmBreadcrumbs, LlmBreadcrumbItem } from '@atelier-ui/react'
-  Import (Vue):     import { LlmBreadcrumbs, LlmBreadcrumbItem } from '@atelier-ui/vue'
+  Navigation breadcrumb trail showing the current page location within a hierarchy.
 
-  LlmBreadcrumbs props:
-    separator  string   '/'   Separator character between items
+  Props:
+    separator  string  '/'  Separator character between items
 
-  LlmBreadcrumbItem props:
-    href     string    ''      Link URL (omit for current page)
-    current  boolean   false   Marks as current page (aria-current="page")
-
-  React:
+  Usage:
     <LlmBreadcrumbs>
       <LlmBreadcrumbItem href="/">Home</LlmBreadcrumbItem>
-      <LlmBreadcrumbItem href="/settings">Settings</LlmBreadcrumbItem>
-      <LlmBreadcrumbItem>Profile</LlmBreadcrumbItem>
+      <LlmBreadcrumbItem href="/components">Components</LlmBreadcrumbItem>
+      <LlmBreadcrumbItem>Breadcrumbs</LlmBreadcrumbItem>
     </LlmBreadcrumbs>
 
 ---
 
 ### LlmTabGroup + LlmTab
 
-  Import (Angular): import { LlmTabGroup, LlmTab } from '@atelier-ui/angular'
-  Import (React):   import { LlmTabGroup, LlmTab } from '@atelier-ui/react'
-  Import (Vue):     import { LlmTabGroup, LlmTab } from '@atelier-ui/vue'
+  An accessible tabbed interface. Supports roving tabindex, arrow key navigation, and a pills variant.
 
-  LlmTabGroup props:
-    selectedIndex  number                    0           Active tab (0-based)
-    variant        'default' | 'pills'       'default'   Tab strip style
+  Props:
+    selectedIndex          number                   0          Index of the selected tab
+    onSelectedIndexChange  (index: number) => void  —          Called when selection changes
+    variant                'default' | 'pills'      'default'  Visual style of the tab strip
 
-  LlmTab props:
-    label     string   (required)   Tab button text
-    disabled  boolean  false        Disables this tab
-
-  Angular:
-    <llm-tab-group [(selectedIndex)]="activeTab" variant="pills">
-      <llm-tab label="Account">Account settings content.</llm-tab>
-      <llm-tab label="Billing">Billing information.</llm-tab>
-      <llm-tab label="API" [disabled]="true">API access.</llm-tab>
-    </llm-tab-group>
-
-  React:
-    <LlmTabGroup selectedIndex={tab} onSelectedIndexChange={setTab}>
+  Usage:
+    <LlmTabGroup selectedIndex={0}>
       <LlmTab label="Account">Account settings content.</LlmTab>
-      <LlmTab label="Billing">Billing information.</LlmTab>
+      <LlmTab label="Notifications">Notification preferences.</LlmTab>
+      <LlmTab label="Billing" disabled={true}>Billing info.</LlmTab>
     </LlmTabGroup>
 
-  Vue:
-    <LlmTabGroup v-model:selectedIndex="tab">
-      <LlmTab label="Account">Account settings content.</LlmTab>
-      <LlmTab label="Billing">Billing information.</LlmTab>
-    </LlmTabGroup>
+---
 
-  Notes: Keyboard — Arrow keys move focus, Home/End jump to first/last, disabled tabs are skipped.
+### LlmStepper + LlmStep
+
+  A multi-step wizard for complex processes. Supports linear and non-linear navigation.
+
+  Props:
+    activeStep   number                     0             Currently active step index
+    linear       boolean                    false         Forces user to complete steps in order
+    orientation  'horizontal' | 'vertical'  'horizontal'  Stepper layout direction
+
+  Usage:
+    <LlmStepper activeStep={0}>
+      <LlmStep label="Basic Info">Step 1 content</LlmStep>
+      <LlmStep label="Verification">Step 2 content</LlmStep>
+      <LlmStep label="Complete">Step 3 content</LlmStep>
+    </LlmStepper>
 
 ---
 
 ### LlmPagination
 
-  Import (Angular): import { LlmPagination } from '@atelier-ui/angular'
-  Import (React):   import { LlmPagination } from '@atelier-ui/react'
-  Import (Vue):     import { LlmPagination } from '@atelier-ui/vue'
+  Page navigation control for paginated data. Shows page numbers with previous/next buttons.
 
   Props:
-    page           number               1     Current page (1-indexed)
-    pageCount      number               1     Total page count
-    siblingCount   number               1     Page buttons either side of current
-    showFirstLast  boolean              true  Show first/last jump buttons
+    page           number                  1     Current page (1-indexed)
+    pageCount      number                  1     Total number of pages
+    onPageChange   (page: number) => void  —     Called when the user navigates to a page
+    siblingCount   number                  1     Number of page buttons on each side of current page
+    showFirstLast  boolean                 true  Show first/last page jump buttons
 
-  Angular:
-    <llm-pagination [(page)]="currentPage" [pageCount]="totalPages" />
-
-  React:
-    <LlmPagination page={page} pageCount={totalPages} onPageChange={setPage} />
-
-  Vue:
-    <LlmPagination v-model:page="currentPage" :pageCount="totalPages" />
+  Usage:
+    <LlmPagination
+      page={3}
+      pageCount={10}
+      onPageChange={(p) => console.log(p)}
+    />
 
 ---
 
-### LlmDialog + sub-components
+### LlmMenu + LlmMenuItem + LlmMenuTrigger
 
-  Import (Angular): import { LlmDialog, LlmDialogHeader, LlmDialogContent, LlmDialogFooter } from '@atelier-ui/angular'
-  Import (React):   import { LlmDialog, LlmDialogHeader, LlmDialogContent, LlmDialogFooter } from '@atelier-ui/react'
-  Import (Vue):     import { LlmDialog, LlmDialogHeader, LlmDialogContent, LlmDialogFooter } from '@atelier-ui/vue'
+  A dropdown context menu built on @angular/cdk/menu. Handles keyboard navigation, focus management, ARIA, and nested submenus.
 
-  LlmDialog props:
-    open             boolean                          false    Controls visibility
-    size             'sm' | 'md' | 'lg' | 'xl' | 'full'  'md'  Max-width
-    closeOnBackdrop  boolean                          true     Close when clicking backdrop
+  Props:
+    variant  'default' | 'compact'  'default'  Density of the menu
 
-  Angular:
-    <llm-button (click)="open = true">Delete</llm-button>
-    <llm-dialog [(open)]="open" size="sm">
-      <llm-dialog-header>Confirm Delete</llm-dialog-header>
-      <llm-dialog-content>This action cannot be undone.</llm-dialog-content>
-      <llm-dialog-footer>
-        <llm-button variant="outline" (click)="open = false">Cancel</llm-button>
-        <llm-button variant="primary" (click)="confirm()">Delete</llm-button>
-      </llm-dialog-footer>
-    </llm-dialog>
+  Usage:
+    <LlmButton llmMenuTriggerFor={actionsMenu}>Actions ▾</LlmButton>
+    {/* In template: */}
+    <LlmMenu ref={actionsMenu}>
+      <LlmMenuItem onTriggered={() => console.log('copy')}>Copy</LlmMenuItem>
+      <LlmMenuItem onTriggered={() => console.log('paste')}>Paste</LlmMenuItem>
+      <LlmMenuSeparator />
+      <LlmMenuItem disabled={true}>Delete</LlmMenuItem>
+    </LlmMenu>
 
-  React:
+---
+
+### LlmDialog
+
+  A modal dialog using the native <dialog> element. Includes focus trap, Escape to close, backdrop click to close, and smooth animations.
+
+  Props:
+    open             boolean                             false  Controls dialog visibility
+    onOpenChange     (open: boolean) => void             —      Called when open state changes
+    closeOnBackdrop  boolean                             true   Close when clicking the backdrop
+    size             'sm' | 'md' | 'lg' | 'xl' | 'full'  'md'   Max-width of the dialog
+
+  Usage:
+    <LlmButton onClick={() => setOpen(true)}>Open Dialog</LlmButton>
     <LlmDialog open={open} onOpenChange={setOpen} size="sm">
       <LlmDialogHeader>Confirm Delete</LlmDialogHeader>
-      <LlmDialogContent>This action cannot be undone.</LlmDialogContent>
+      <LlmDialogContent>Are you sure? This cannot be undone.</LlmDialogContent>
       <LlmDialogFooter>
         <LlmButton variant="outline" onClick={() => setOpen(false)}>Cancel</LlmButton>
-        <LlmButton variant="primary" onClick={handleDelete}>Delete</LlmButton>
+        <LlmButton variant="primary" onClick={() => setOpen(false)}>Delete</LlmButton>
       </LlmDialogFooter>
     </LlmDialog>
 
-  Notes: Focus is trapped inside while open. Escape closes. Uses native <dialog> element.
-
 ---
 
-### LlmDrawer + sub-components
+### LlmDrawer
 
-  Import (Angular): import { LlmDrawer, LlmDrawerHeader, LlmDrawerContent, LlmDrawerFooter } from '@atelier-ui/angular'
-  Import (React):   import { LlmDrawer, LlmDrawerHeader, LlmDrawerContent, LlmDrawerFooter } from '@atelier-ui/react'
-  Import (Vue):     import { LlmDrawer, LlmDrawerHeader, LlmDrawerContent, LlmDrawerFooter } from '@atelier-ui/vue'
+  A slide-in panel from the edge of the viewport. Useful for sidebars, filter panels, and detail views.
 
-  LlmDrawer props:
-    open             boolean                            false    Controls visibility
-    position         'left' | 'right' | 'top' | 'bottom'  'right'  Slide-in edge
-    size             'sm' | 'md' | 'lg' | 'full'       'md'     Width (or height for top/bottom)
-    closeOnBackdrop  boolean                            true     Close on backdrop click
+  Props:
+    open             boolean                              false    Controls drawer visibility
+    onOpenChange     (open: boolean) => void              —        Called when open state changes
+    position         'left' | 'right' | 'top' | 'bottom'  'right'  Which edge the drawer slides from
+    size             'sm' | 'md' | 'lg' | 'full'          'md'     Width (or height for top/bottom)
+    closeOnBackdrop  boolean                              true     Close when clicking the backdrop
 
-  React:
-    <LlmDrawer open={open} onOpenChange={setOpen} position="right" size="md">
-      <LlmDrawerHeader>Filters</LlmDrawerHeader>
+  Usage:
+    <LlmButton onClick={() => setOpen(true)}>Open Drawer</LlmButton>
+    <LlmDrawer open={open} onOpenChange={setOpen} position="right">
+      <LlmDrawerHeader>Settings</LlmDrawerHeader>
       <LlmDrawerContent>
         <LlmInput placeholder="Search..." />
       </LlmDrawerContent>
       <LlmDrawerFooter>
-        <LlmButton onClick={() => setOpen(false)}>Apply</LlmButton>
+        <LlmButton onClick={() => setOpen(false)}>Close</LlmButton>
       </LlmDrawerFooter>
     </LlmDrawer>
 
 ---
 
-### LlmTooltip
+### [llmTooltip]
 
-  Import (Angular): import { LlmTooltip } from '@atelier-ui/angular'
-  Import (React):   import { LlmTooltip } from '@atelier-ui/react'
-  Import (Vue):     import { LlmTooltip } from '@atelier-ui/vue'
+  An attribute directive that adds a tooltip to any element. Built on @angular/cdk/overlay for viewport-aware positioning.
 
   Props:
-    tooltip          string                              (required)   Tooltip text
-    position         'above' | 'below' | 'left' | 'right'  'above'  Preferred position
-    disabled         boolean                             false        Suppress tooltip
-    showDelay        number                              300          ms before showing
-    hideDelay        number                              0            ms before hiding
+    llmTooltip           string                                —        Tooltip text content (required)
+    llmTooltipPosition   'above' | 'below' | 'left' | 'right'  'above'  Preferred position
+    llmTooltipDisabled   boolean                               false    Disables the tooltip
+    llmTooltipShowDelay  number                                300      Delay in ms before showing
+    llmTooltipHideDelay  number                                0        Delay in ms before hiding
 
-  Angular (directive):
-    <llm-button llmTooltip="Save your changes">Save</llm-button>
-    <llm-button [llmTooltip]="tip" llmTooltipPosition="right">Copy</llm-button>
-
-  React (wrapper):
+  Usage:
     <LlmTooltip tooltip="Save your changes">
       <LlmButton>Save</LlmButton>
     </LlmTooltip>
-
-  Vue (wrapper):
-    <LlmTooltip tooltip="Save your changes" position="right">
-      <LlmButton>Save</LlmButton>
+    <LlmTooltip tooltip="Copy to clipboard" position="right">
+      <LlmButton variant="outline">Copy</LlmButton>
     </LlmTooltip>
 
 ---
 
-### LlmToast
+### LlmToastProvider + useLlmToast
 
-  Import (Angular): import { LlmToastContainer, LlmToastService } from '@atelier-ui/angular'
-  Import (React):   import { LlmToastProvider, LlmToastContainer, useLlmToast } from '@atelier-ui/react'
-  Import (Vue):     import { LlmToastContainer, useLlmToast } from '@atelier-ui/vue'
+  Transient notifications that auto-dismiss. Service/hook-based API — place LlmToastContainer once in app root.
 
-  Show options: { variant?, duration?, dismissible? }
-    variant     'default' | 'success' | 'warning' | 'danger' | 'info'   'default'
-    duration    number   5000   Auto-dismiss ms. 0 = no auto-dismiss
-    dismissible boolean  true   Show dismiss button
+  Props:
+    variant      'default' | 'success' | 'warning' | 'danger' | 'info'          'default'       Color scheme of the toast
+    duration     number                                                         5000            Auto-dismiss delay in ms. 0 = no auto-dismiss
+    dismissible  boolean                                                        true            Show a dismiss button
+    position     'top-right' | 'top-center' | 'bottom-right' | 'bottom-center'  'bottom-right'  Container position (on LlmToastContainer)
 
-  LlmToastContainer prop:
-    position  'top-right' | 'top-center' | 'bottom-right' | 'bottom-center'   'bottom-right'
-
-  Angular (service-based):
-    // app.component.html — place once:
-    <llm-toast-container position="bottom-right" />
-
-    // any component:
-    constructor(private toast: LlmToastService) {}
-    this.toast.show('Saved!', { variant: 'success' });
-    this.toast.show('Error', { variant: 'danger', duration: 0 });
-
-  React (hook-based):
-    // app root:
+  Usage:
+    // App root:
     <LlmToastProvider>
       <App />
       <LlmToastContainer position="bottom-right" />
     </LlmToastProvider>
 
-    // any component:
+    // In any component:
     const { show } = useLlmToast();
     show('Saved!', { variant: 'success' });
     show('Error occurred', { variant: 'danger', duration: 8000 });
-
-  Vue (hook-based):
-    // app root:
-    <LlmToastContainer position="bottom-right" />
-
-    // any component:
-    const { show } = useLlmToast();
-    show('Saved!', { variant: 'success' });
-
----
-
-### LlmMenu + sub-components
-
-  Import (Angular): import { LlmMenu, LlmMenuItem, LlmMenuTrigger, LlmMenuSeparator } from '@atelier-ui/angular'
-  Import (React):   import { LlmMenu, LlmMenuItem, LlmMenuTrigger, LlmMenuSeparator } from '@atelier-ui/react'
-  Import (Vue):     import { LlmMenu, LlmMenuItem, LlmMenuTrigger, LlmMenuSeparator } from '@atelier-ui/vue'
-
-  LlmMenu props:
-    variant  'default' | 'compact'   'default'   Menu density
-
-  LlmMenuItem props:
-    disabled  boolean   false   Disables this menu item
-
-  Angular:
-    <llm-button [llmMenuTriggerFor]="myMenu">Actions</llm-button>
-    <llm-menu #myMenu>
-      <llm-menu-item (triggered)="copy()">Copy</llm-menu-item>
-      <llm-menu-item (triggered)="paste()">Paste</llm-menu-item>
-      <llm-menu-separator />
-      <llm-menu-item [disabled]="true">Delete</llm-menu-item>
-    </llm-menu>
-
-  React:
-    <LlmMenuTrigger menu={<LlmMenu>
-      <LlmMenuItem onTriggered={copy}>Copy</LlmMenuItem>
-      <LlmMenuItem onTriggered={paste}>Paste</LlmMenuItem>
-    </LlmMenu>}>
-      <LlmButton>Actions</LlmButton>
-    </LlmMenuTrigger>
-
-  Notes: Full keyboard nav. Supports nested submenus by nesting LlmMenu inside LlmMenuItem.
+    show('Persistent', { duration: 0 });
 
 ---
 
 ### LlmAccordionGroup + LlmAccordionItem
 
-  Import (Angular): import { LlmAccordionGroup, LlmAccordionItem } from '@atelier-ui/angular'
-  Import (React):   import { LlmAccordionGroup, LlmAccordionItem } from '@atelier-ui/react'
-  Import (Vue):     import { LlmAccordionGroup, LlmAccordionItem } from '@atelier-ui/vue'
+  Expandable/collapsible sections. Supports multi-expand mode and smooth CSS grid animations.
 
-  LlmAccordionGroup props:
-    multi     boolean                                false       Allow multiple open at once
-    variant   'default' | 'bordered' | 'separated'  'default'   Visual style
+  Props:
+    multi    boolean                               false      Allow multiple items expanded simultaneously
+    variant  'default' | 'bordered' | 'separated'  'default'  Visual style of the group
 
-  LlmAccordionItem props:
-    expanded  boolean   false   Initially expanded
-    disabled  boolean   false   Prevents toggling
-
-  Angular:
-    <llm-accordion-group variant="separated" [multi]="true">
-      <llm-accordion-item>
-        <span llmAccordionHeader>What is Atelier UI?</span>
-        A component library optimized for LLM-assisted development.
-      </llm-accordion-item>
-      <llm-accordion-item [expanded]="true">
-        <span llmAccordionHeader>How do I install it?</span>
-        Run npm install @atelier-ui/angular.
-      </llm-accordion-item>
-    </llm-accordion-group>
-
-  React:
-    <LlmAccordionGroup variant="bordered">
-      <LlmAccordionItem header="What is Atelier UI?">
-        A component library optimized for LLM-assisted development.
-      </LlmAccordionItem>
-    </LlmAccordionGroup>
-
-  Vue:
-    <LlmAccordionGroup :multi="true" variant="separated">
+  Usage:
+    <LlmAccordionGroup variant="separated">
       <LlmAccordionItem>
-        <template #header>What is Atelier UI?</template>
-        A component library optimized for LLM-assisted development.
+        <span llmAccordionHeader>Question 1</span>
+        Answer content goes here.
+      </LlmAccordionItem>
+      <LlmAccordionItem>
+        <span llmAccordionHeader>Question 2</span>
+        Another answer here.
       </LlmAccordionItem>
     </LlmAccordionGroup>
 
@@ -800,128 +598,18 @@ Each entry lists:
 
 ### LlmAlert
 
-  Import (Angular): import { LlmAlert } from '@atelier-ui/angular'
-  Import (React):   import { LlmAlert } from '@atelier-ui/react'
-  Import (Vue):     import { LlmAlert } from '@atelier-ui/vue'
+  Inline status messages for feedback, warnings, and errors. Optionally dismissible.
 
   Props:
-    variant      'info' | 'success' | 'warning' | 'danger'   'info'   Color and icon
-    dismissible  boolean                                       false    Show close button
+    variant      'info' | 'success' | 'warning' | 'danger'  'info'  Color scheme and icon
+    dismissible  boolean                                    false   Show a close button
+    onDismissed  () => void                                 —       Called when the dismiss button is clicked
 
-  Angular:
-    <llm-alert variant="success">Changes saved successfully.</llm-alert>
-    <llm-alert variant="warning" [dismissible]="true" (dismissed)="hide()">
-      Session expires in 5 minutes.
-    </llm-alert>
-
-  React:
-    <LlmAlert variant="danger">Something went wrong.</LlmAlert>
-    <LlmAlert variant="warning" dismissible onDismissed={() => setVisible(false)}>
-      Session expires soon.
-    </LlmAlert>
-
-  Vue:
-    <LlmAlert variant="info" :dismissible="true" @dismissed="visible = false">
-      Your account is pending verification.
-    </LlmAlert>
-
----
-
-### LlmStepper + LlmStep
-
-  Import (Angular): import { LlmStepper, LlmStep } from '@atelier-ui/angular'
-  Import (React):   import { LlmStepper, LlmStep, useLlmStepper } from '@atelier-ui/react'
-  Import (Vue):     import { LlmStepper, LlmStep } from '@atelier-ui/vue'
-
-  LlmStepper props:
-    activeStep    number                         0            Active step index (0-based)
-    orientation   'horizontal' | 'vertical'      'horizontal' Layout direction
-    linear        boolean                         false        Require prior steps complete to advance
-
-  LlmStep props:
-    label        string   (required)   Step button text
-    description  string   ''           Subtitle below label
-    completed    boolean  false        Shows checkmark icon
-    error        boolean  false        Shows error icon
-    optional     boolean  false        Shows "Optional" label
-    disabled     boolean  false        Prevents navigation to this step
-
-  Angular:
-    <llm-stepper [(activeStep)]="step" orientation="horizontal">
-      <llm-step label="Account" description="Basic info" [completed]="step > 0">
-        <p>Fill in your account details.</p>
-        <llm-button (click)="step = step + 1">Next</llm-button>
-      </llm-step>
-      <llm-step label="Profile">
-        <p>Set up your profile.</p>
-        <llm-button (click)="step = step - 1">Back</llm-button>
-        <llm-button (click)="step = step + 1">Next</llm-button>
-      </llm-step>
-      <llm-step label="Review">
-        <p>Review and submit.</p>
-        <llm-button variant="primary">Submit</llm-button>
-      </llm-step>
-    </llm-stepper>
-
-  React:
-    // useLlmStepper() hook available inside step content
-    function StepContent() {
-      const { next, prev } = useLlmStepper();
-      return <LlmButton onClick={next}>Next</LlmButton>;
-    }
-
-    <LlmStepper activeStep={step} onActiveStepChange={setStep}>
-      <LlmStep label="Account" completed={step > 0}>
-        <StepContent />
-      </LlmStep>
-      <LlmStep label="Profile">Content</LlmStep>
-      <LlmStep label="Review">Content</LlmStep>
-    </LlmStepper>
-
-  Vue:
-    <LlmStepper v-model:activeStep="step" orientation="horizontal">
-      <LlmStep label="Account" :completed="step > 0">
-        <LlmButton @click="step++">Next</LlmButton>
-      </LlmStep>
-      <LlmStep label="Profile">
-        <LlmButton @click="step--">Back</LlmButton>
-        <LlmButton @click="step++">Next</LlmButton>
-      </LlmStep>
-    </LlmStepper>
-
----
-
-### LlmCodeBlock
-
-  Import (Angular): import { LlmCodeBlock } from '@atelier-ui/angular'
-  Import (React):   import { LlmCodeBlock } from '@atelier-ui/react'
-  Import (Vue):     import { LlmCodeBlock } from '@atelier-ui/vue'
-
-  Props:
-    code            string    ''       The code string to display (required)
-    language        string    'text'   Language label shown in the header. Ignored if filename is set.
-    filename        string    ''       Optional filename shown in header instead of language label
-    copyable        boolean   true     Whether to show a copy-to-clipboard button
-    showLineNumbers boolean   false    Whether to display line numbers alongside the code
-
-  Angular:
-    <llm-code-block code="const x = 1;" language="typescript" />
-    <llm-code-block [code]="generatedCode" filename="app.component.ts" [showLineNumbers]="true" />
-    <llm-code-block [code]="shellCmd" language="shell" [copyable]="false" />
-
-  React:
-    <LlmCodeBlock code="const x = 1;" language="typescript" />
-    <LlmCodeBlock code={generatedCode} filename="app.tsx" showLineNumbers />
-    <LlmCodeBlock code={shellCmd} language="shell" copyable={false} />
-
-    // Common usage: rendering LLM-generated code output
-    const [generatedCode, setGeneratedCode] = useState('');
-    <LlmCodeBlock code={generatedCode} language="typescript" filename="result.ts" showLineNumbers />
-
-  Vue:
-    <LlmCodeBlock code="const x = 1;" language="typescript" />
-    <LlmCodeBlock :code="generatedCode" filename="app.vue" :showLineNumbers="true" />
-    <LlmCodeBlock :code="shellCmd" language="shell" :copyable="false" />
+  Usage:
+    <LlmAlert variant="info">This is an informational message.</LlmAlert>
+    <LlmAlert variant="success">Your changes were saved successfully.</LlmAlert>
+    <LlmAlert variant="warning" dismissible={true}>Your session expires in 5 minutes.</LlmAlert>
+    <LlmAlert variant="danger">Something went wrong. Please try again.</LlmAlert>
 
 ---
 

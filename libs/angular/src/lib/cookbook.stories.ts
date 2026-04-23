@@ -34,6 +34,15 @@ import {
   LlmMenuTrigger,
 } from './menu/llm-menu';
 import { LlmTooltip } from './tooltip/llm-tooltip';
+import {
+  LlmTable,
+  LlmThead,
+  LlmTbody,
+  LlmTr,
+  LlmTh,
+  LlmTd,
+} from './table/llm-table';
+import { LlmProgress } from './progress/llm-progress';
 
 // ---------------------------------------------------------------------------
 // 1. Login Form
@@ -870,6 +879,328 @@ class NotificationCenterComponent {
 }
 
 // ---------------------------------------------------------------------------
+// 6. Management Dashboard
+// ---------------------------------------------------------------------------
+
+/**
+ * Management dashboards combine metric cards, tabular activity feeds, and
+ * quota indicators. Demonstrates composition across Card, Table, TabGroup,
+ * Badge, Progress, and Alert -- the densest single pattern in the cookbook.
+ */
+@Component({
+  selector: 'cookbook-management-dashboard',
+  standalone: true,
+  imports: [
+    LlmCard,
+    LlmCardHeader,
+    LlmCardContent,
+    LlmBadge,
+    LlmButton,
+    LlmTable,
+    LlmThead,
+    LlmTbody,
+    LlmTr,
+    LlmTh,
+    LlmTd,
+    LlmTabGroup,
+    LlmTab,
+    LlmAlert,
+    LlmProgress,
+  ],
+  template: `
+    <div class="wrapper">
+      <div class="dashboard-header">
+        <div>
+          <h2 class="dashboard-title">Operations Overview</h2>
+          <p class="dashboard-subtitle">
+            Snapshot across the selected time range
+          </p>
+        </div>
+        <llm-tab-group
+          variant="pills"
+          [selectedIndex]="rangeIndex()"
+          (selectedIndexChange)="rangeIndex.set($event)"
+        >
+          <llm-tab label="7D">&nbsp;</llm-tab>
+          <llm-tab label="30D">&nbsp;</llm-tab>
+          <llm-tab label="90D">&nbsp;</llm-tab>
+        </llm-tab-group>
+      </div>
+
+      @if (quotaPercent() >= 85) {
+        <llm-alert variant="warning" [dismissible]="true">
+          API request quota is at {{ quotaPercent() }}%. Upgrade your plan
+          before the monthly reset to avoid throttling.
+        </llm-alert>
+      }
+
+      <div class="metrics-grid">
+        @for (metric of metrics(); track metric.label) {
+          <llm-card variant="elevated" padding="md">
+            <llm-card-content>
+              <div class="metric-label">{{ metric.label }}</div>
+              <div class="metric-value-row">
+                <span class="metric-value">{{ metric.value }}</span>
+                <llm-badge [variant]="metric.deltaVariant" size="sm">
+                  {{ metric.delta }}
+                </llm-badge>
+              </div>
+              <p class="metric-foot">{{ metric.foot }}</p>
+            </llm-card-content>
+          </llm-card>
+        }
+      </div>
+
+      <div class="lower-grid">
+        <llm-card variant="elevated" padding="none">
+          <llm-card-header>
+            <div class="panel-header">
+              <h3 class="panel-title">Recent Activity</h3>
+              <llm-button variant="outline" size="sm">Export</llm-button>
+            </div>
+          </llm-card-header>
+          <llm-card-content>
+            <llm-table variant="striped" size="sm">
+              <llm-thead>
+                <llm-tr>
+                  <llm-th>User</llm-th>
+                  <llm-th>Action</llm-th>
+                  <llm-th>Status</llm-th>
+                  <llm-th align="end">Time</llm-th>
+                </llm-tr>
+              </llm-thead>
+              <llm-tbody>
+                @for (row of activity(); track row.id) {
+                  <llm-tr>
+                    <llm-td>{{ row.user }}</llm-td>
+                    <llm-td>{{ row.action }}</llm-td>
+                    <llm-td>
+                      <llm-badge [variant]="row.statusVariant" size="sm">
+                        {{ row.status }}
+                      </llm-badge>
+                    </llm-td>
+                    <llm-td align="end">{{ row.time }}</llm-td>
+                  </llm-tr>
+                }
+              </llm-tbody>
+            </llm-table>
+          </llm-card-content>
+        </llm-card>
+
+        <llm-card variant="elevated" padding="md">
+          <llm-card-header>
+            <h3 class="panel-title">Plan Usage</h3>
+          </llm-card-header>
+          <llm-card-content>
+            <div class="quota-stack">
+              <div class="quota-item">
+                <div class="quota-label-row">
+                  <span class="quota-label">API requests</span>
+                  <span class="quota-number">{{ quotaPercent() }}%</span>
+                </div>
+                <llm-progress
+                  [value]="quotaPercent()"
+                  variant="warning"
+                  size="sm"
+                />
+              </div>
+              <div class="quota-item">
+                <div class="quota-label-row">
+                  <span class="quota-label">Storage</span>
+                  <span class="quota-number">42%</span>
+                </div>
+                <llm-progress [value]="42" variant="success" size="sm" />
+              </div>
+              <div class="quota-item">
+                <div class="quota-label-row">
+                  <span class="quota-label">Seats</span>
+                  <span class="quota-number">9 / 12</span>
+                </div>
+                <llm-progress [value]="75" variant="default" size="sm" />
+              </div>
+            </div>
+          </llm-card-content>
+        </llm-card>
+      </div>
+    </div>
+  `,
+  styles: [
+    `
+      .wrapper {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: var(--ui-spacing-6);
+        display: flex;
+        flex-direction: column;
+        gap: var(--ui-spacing-4);
+      }
+      .dashboard-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: var(--ui-spacing-4);
+      }
+      .dashboard-title {
+        margin: 0;
+        font-size: 1.375rem;
+        font-weight: 600;
+        color: var(--ui-color-text);
+      }
+      .dashboard-subtitle {
+        margin: var(--ui-spacing-1) 0 0;
+        font-size: 0.875rem;
+        color: var(--ui-color-text-muted);
+      }
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: var(--ui-spacing-3);
+      }
+      .metric-label {
+        font-size: 0.8125rem;
+        color: var(--ui-color-text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .metric-value-row {
+        display: flex;
+        align-items: baseline;
+        gap: var(--ui-spacing-2);
+        margin-top: var(--ui-spacing-2);
+      }
+      .metric-value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--ui-color-text);
+      }
+      .metric-foot {
+        margin: var(--ui-spacing-2) 0 0;
+        font-size: 0.75rem;
+        color: var(--ui-color-text-muted);
+      }
+      .lower-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: var(--ui-spacing-3);
+      }
+      @media (max-width: 720px) {
+        .lower-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .panel-title {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--ui-color-text);
+      }
+      .quota-stack {
+        display: flex;
+        flex-direction: column;
+        gap: var(--ui-spacing-4);
+      }
+      .quota-label-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: var(--ui-spacing-1);
+        font-size: 0.8125rem;
+      }
+      .quota-label {
+        color: var(--ui-color-text);
+        font-weight: 500;
+      }
+      .quota-number {
+        color: var(--ui-color-text-muted);
+        font-variant-numeric: tabular-nums;
+      }
+    `,
+  ],
+})
+class ManagementDashboardComponent {
+  readonly rangeIndex = signal(1);
+  readonly quotaPercent = signal(87);
+
+  readonly metrics = signal([
+    {
+      label: 'Active users',
+      value: '8,412',
+      delta: '+12%',
+      deltaVariant: 'success' as const,
+      foot: 'vs. previous period',
+    },
+    {
+      label: 'Sessions',
+      value: '24,390',
+      delta: '+4%',
+      deltaVariant: 'success' as const,
+      foot: 'vs. previous period',
+    },
+    {
+      label: 'Revenue',
+      value: '$42,108',
+      delta: '-2%',
+      deltaVariant: 'danger' as const,
+      foot: 'vs. previous period',
+    },
+    {
+      label: 'Avg. response',
+      value: '184 ms',
+      delta: '+18 ms',
+      deltaVariant: 'warning' as const,
+      foot: 'P95 across edge nodes',
+    },
+  ]);
+
+  readonly activity = signal([
+    {
+      id: 1,
+      user: 'alex@acme.dev',
+      action: 'Rotated API key',
+      status: 'Success',
+      statusVariant: 'success' as const,
+      time: '2m ago',
+    },
+    {
+      id: 2,
+      user: 'maria@acme.dev',
+      action: 'Invited new member',
+      status: 'Pending',
+      statusVariant: 'warning' as const,
+      time: '14m ago',
+    },
+    {
+      id: 3,
+      user: 'deploy-bot',
+      action: 'Pushed build v3.2.1',
+      status: 'Success',
+      statusVariant: 'success' as const,
+      time: '1h ago',
+    },
+    {
+      id: 4,
+      user: 'lee@acme.dev',
+      action: 'Removed webhook',
+      status: 'Failed',
+      statusVariant: 'danger' as const,
+      time: '2h ago',
+    },
+    {
+      id: 5,
+      user: 'system',
+      action: 'Nightly backup complete',
+      status: 'Success',
+      statusVariant: 'success' as const,
+      time: '6h ago',
+    },
+  ]);
+}
+
+// ---------------------------------------------------------------------------
 // Storybook Meta & Stories
 // ---------------------------------------------------------------------------
 
@@ -947,6 +1278,18 @@ export const NotificationCenter: StoryObj = {
     template: `<cookbook-notification-center />`,
     moduleMetadata: {
       imports: [NotificationCenterComponent],
+    },
+  }),
+};
+
+// --- Management Dashboard ---
+
+export const ManagementDashboard: StoryObj = {
+  render: () => ({
+    props: {},
+    template: `<cookbook-management-dashboard />`,
+    moduleMetadata: {
+      imports: [ManagementDashboardComponent],
     },
   }),
 };
