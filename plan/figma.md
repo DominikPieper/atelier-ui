@@ -154,7 +154,7 @@ Node IDs below point to the actual `COMPONENT_SET` nodes (the parent of all vari
 | `LlmRadioGroup` | `55:137` | 4 | selection states |
 | `LlmRadio` | `420:185` | 5 | state (unchecked/checked/disabled/invalid/focus) |
 | `LlmSkeleton` | `55:102` | 3 | variant (text/circular/rectangular) |
-| `LlmProgress` | `420:153` | 24 | variant × size × state (determinate/indeterminate) |
+| `LlmProgress` | `420:153` | 12 | variant × size + `indeterminate` boolean component property |
 | `LlmAvatar` | `55:151` | 10 | size × shape × status |
 | `LlmToast` | `55:47` | 5 | variant |
 | `LlmBreadcrumbs` | `55:141` | 3 | path-length variants |
@@ -220,7 +220,6 @@ font: var(--ui-font-weight-medium) var(--ui-font-size-sm) / 1 'Inter', sans-seri
 Captured from `figma_audit_design_system` + `figma_lint_design` runs; not yet addressed.
 
 - **WCAG 1.4.1 lint false-positive** on `LlmBadge` / `LlmAlert` / `LlmToast`: the page-level `wcag-color-only` rule compares raw variant background fills and does not walk child nodes, so it keeps flagging variants that already have visible glyph text layers. The per-component `figma_audit_component_accessibility` scores 93–100 on colorDifferentiation for all three — real accessibility is in place. Accept the lint noise or raise upstream.
-- **LlmProgress variant explosion**: 4 × 3 × 2 = 24 variants. Convert `state` to a boolean component property to halve the count.
 - **LlmTable state property**: values mix orthogonal features (sortable/selectable/sticky overlap). Split into boolean properties + `state` variant for `default | empty | focus`.
 - **Decorative icon glyphs left unstyled**: ~50 pictogram text nodes (`▲ ▼ ✓ ✕ ⎘ ⎗ ⊕ ✏ →`) are intentionally not bound to a text style. Lint flags them under `no-text-style`; they should either be converted to vector icons or given a dedicated `text/icon-sm` style.
 - **Sub-12px text in icon roles**: 18 remaining `wcag-text-size` findings are chevrons/arrows at 10–11 px and 9 px avatar initials. Visually intentional; consider nudging to 12 px or converting chevrons to vector glyphs.

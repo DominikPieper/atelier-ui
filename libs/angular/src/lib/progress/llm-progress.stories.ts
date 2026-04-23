@@ -110,7 +110,7 @@ export const Indeterminate: Story = {
       </div>
     `,
   }),
-  parameters: { design: figmaNode('420-90') },
+  parameters: { design: figmaNode('420-87') },
 };
 
 export const ZeroValue: Story = {

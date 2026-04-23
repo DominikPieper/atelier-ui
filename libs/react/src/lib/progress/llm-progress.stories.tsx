@@ -49,7 +49,7 @@ export const Large: Story = {
 };
 export const Indeterminate: Story = {
   args: { indeterminate: true },
-  parameters: { design: figmaNode('420-90') },
+  parameters: { design: figmaNode('420-87') },
 };
 export const AllVariants: Story = {
   render: () => (
