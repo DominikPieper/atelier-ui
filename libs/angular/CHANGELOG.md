@@ -1,3 +1,14 @@
+## 0.0.18 (2026-04-23)
+
+### 🚀 Features
+
+- **tokens:** add semantic-bg + semantic-text pairs for AA-safe Badge/Alert ([#22](https://github.com/DominikPieper/atelier-ui/issues/22), [#166534](https://github.com/DominikPieper/atelier-ui/issues/166534), [#854](https://github.com/DominikPieper/atelier-ui/issues/854), [#991](https://github.com/DominikPieper/atelier-ui/issues/991), [#0](https://github.com/DominikPieper/atelier-ui/issues/0))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.0.17 (2026-04-23)
 
 ### 🩹 Fixes
