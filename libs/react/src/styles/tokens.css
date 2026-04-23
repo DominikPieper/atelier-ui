@@ -138,7 +138,7 @@
   --ui-color-input-border-focus: var(--ui-color-primary);
   --ui-color-input-border-invalid: var(--ui-color-danger);
   --ui-color-placeholder: #4b5563;
-  --ui-color-error-text: var(--ui-color-danger);
+  --ui-color-error-text: var(--ui-color-danger-text);
 
   /* Z-index scale */
   --ui-z-base: 0;
