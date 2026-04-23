@@ -29,25 +29,25 @@
 }
 
 .llm-badge.variant-success {
-  background-color: color-mix(in srgb, var(--ui-color-success) 12%, transparent);
-  color: var(--ui-color-success);
-  border: 1px solid color-mix(in srgb, var(--ui-color-success) 25%, transparent);
+  background-color: var(--ui-color-success-bg);
+  color: var(--ui-color-success-text);
+  border: 1px solid color-mix(in srgb, var(--ui-color-success-text) 25%, transparent);
 }
 
 .llm-badge.variant-warning {
-  background-color: color-mix(in srgb, var(--ui-color-warning) 12%, transparent);
-  color: var(--ui-color-warning);
-  border: 1px solid color-mix(in srgb, var(--ui-color-warning) 25%, transparent);
+  background-color: var(--ui-color-warning-bg);
+  color: var(--ui-color-warning-text);
+  border: 1px solid color-mix(in srgb, var(--ui-color-warning-text) 25%, transparent);
 }
 
 .llm-badge.variant-danger {
-  background-color: color-mix(in srgb, var(--ui-color-danger) 12%, transparent);
-  color: var(--ui-color-danger);
-  border: 1px solid color-mix(in srgb, var(--ui-color-danger) 25%, transparent);
+  background-color: var(--ui-color-danger-bg);
+  color: var(--ui-color-danger-text);
+  border: 1px solid color-mix(in srgb, var(--ui-color-danger-text) 25%, transparent);
 }
 
 .llm-badge.variant-info {
-  background-color: color-mix(in srgb, var(--ui-color-info) 12%, transparent);
-  color: var(--ui-color-info);
-  border: 1px solid color-mix(in srgb, var(--ui-color-info) 25%, transparent);
+  background-color: var(--ui-color-info-bg);
+  color: var(--ui-color-info-text);
+  border: 1px solid color-mix(in srgb, var(--ui-color-info-text) 25%, transparent);
 }

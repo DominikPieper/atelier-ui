@@ -44,6 +44,16 @@
   --ui-color-warning: #f59e0b;
   --ui-color-info: #06b6d4;
 
+  /* Semantic — AA-safe dark-text-on-tinted-bg pairs (for Badge, Alert, Toast) */
+  --ui-color-success-bg: #dcfce7;
+  --ui-color-success-text: #166534;
+  --ui-color-warning-bg: #fef9c3;
+  --ui-color-warning-text: #854d0e;
+  --ui-color-danger-bg: #fee2e2;
+  --ui-color-danger-text: #991b1b;
+  --ui-color-info-bg: #e0f2fe;
+  --ui-color-info-text: #0c4a6e;
+
   /* Colors — Surfaces */
   --ui-color-surface: #ffffff;
   --ui-color-surface-raised: #fafafa;
@@ -157,6 +167,15 @@
     --ui-color-warning: #fbbf24;
     --ui-color-info: #22d3ee;
 
+    --ui-color-success-bg: #14532d;
+    --ui-color-success-text: #86efac;
+    --ui-color-warning-bg: #78350f;
+    --ui-color-warning-text: #fde68a;
+    --ui-color-danger-bg: #7f1d1d;
+    --ui-color-danger-text: #fecaca;
+    --ui-color-info-bg: #0c4a6e;
+    --ui-color-info-text: #bae6fd;
+
     --ui-color-surface: #28283c;
     --ui-color-surface-raised: #2f2f45;
     --ui-color-surface-sunken: #22222f;
@@ -205,6 +224,15 @@
   --ui-color-warning: #fbbf24;
   --ui-color-info: #22d3ee;
 
+  --ui-color-success-bg: #14532d;
+  --ui-color-success-text: #86efac;
+  --ui-color-warning-bg: #78350f;
+  --ui-color-warning-text: #fde68a;
+  --ui-color-danger-bg: #7f1d1d;
+  --ui-color-danger-text: #fecaca;
+  --ui-color-info-bg: #0c4a6e;
+  --ui-color-info-text: #bae6fd;
+
   --ui-color-surface: #28283c;
   --ui-color-surface-raised: #2f2f45;
   --ui-color-surface-sunken: #22222f;
@@ -249,6 +277,15 @@
   --ui-color-success: #22c55e;
   --ui-color-warning: #f59e0b;
   --ui-color-info: #06b6d4;
+  /* Semantic — AA-safe dark-text-on-tinted-bg pairs (for Badge, Alert, Toast) */
+  --ui-color-success-bg: #dcfce7;
+  --ui-color-success-text: #166534;
+  --ui-color-warning-bg: #fef9c3;
+  --ui-color-warning-text: #854d0e;
+  --ui-color-danger-bg: #fee2e2;
+  --ui-color-danger-text: #991b1b;
+  --ui-color-info-bg: #e0f2fe;
+  --ui-color-info-text: #0c4a6e;
   --ui-color-surface: #ffffff;
   --ui-color-surface-raised: #fafafa;
   --ui-color-surface-sunken: #f5f5f5;

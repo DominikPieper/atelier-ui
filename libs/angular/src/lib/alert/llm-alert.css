@@ -18,27 +18,27 @@
 
 /* Variants */
 :host(.variant-info) {
-  background-color: color-mix(in srgb, var(--ui-color-info) 10%, transparent);
-  color: var(--ui-color-info);
-  border-color: color-mix(in srgb, var(--ui-color-info) 25%, transparent);
+  background-color: var(--ui-color-info-bg);
+  color: var(--ui-color-info-text);
+  border-color: 1px solid color-mix(in srgb, var(--ui-color-info-text) 25%, transparent);
 }
 
 :host(.variant-success) {
-  background-color: color-mix(in srgb, var(--ui-color-success) 10%, transparent);
-  color: var(--ui-color-success);
-  border-color: color-mix(in srgb, var(--ui-color-success) 25%, transparent);
+  background-color: var(--ui-color-success-bg);
+  color: var(--ui-color-success-text);
+  border-color: 1px solid color-mix(in srgb, var(--ui-color-success-text) 25%, transparent);
 }
 
 :host(.variant-warning) {
-  background-color: color-mix(in srgb, var(--ui-color-warning) 10%, transparent);
-  color: var(--ui-color-warning);
-  border-color: color-mix(in srgb, var(--ui-color-warning) 25%, transparent);
+  background-color: var(--ui-color-warning-bg);
+  color: var(--ui-color-warning-text);
+  border-color: 1px solid color-mix(in srgb, var(--ui-color-warning-text) 25%, transparent);
 }
 
 :host(.variant-danger) {
-  background-color: color-mix(in srgb, var(--ui-color-danger) 10%, transparent);
-  color: var(--ui-color-danger);
-  border-color: color-mix(in srgb, var(--ui-color-danger) 25%, transparent);
+  background-color: var(--ui-color-danger-bg);
+  color: var(--ui-color-danger-text);
+  border-color: 1px solid color-mix(in srgb, var(--ui-color-danger-text) 25%, transparent);
 }
 
 /* Dismiss button */
