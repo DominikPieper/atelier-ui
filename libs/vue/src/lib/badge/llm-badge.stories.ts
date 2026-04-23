@@ -8,9 +8,14 @@ function figmaNode(nodeId: string) {
 }
 
 const meta: Meta<typeof LlmBadge> = {
-  title: 'Components/LlmBadge',
+  title: 'Components/Display/LlmBadge',
   component: LlmBadge,
   tags: ['autodocs'],
+  render: (args) => ({
+    components: { LlmBadge },
+    setup() { return { args }; },
+    template: '<LlmBadge v-bind="args">Badge</LlmBadge>',
+  }),
   argTypes: {
     variant: { control: 'select', options: ['default', 'success', 'warning', 'danger', 'info'] },
     size: { control: 'select', options: ['sm', 'md'] },
@@ -28,11 +33,56 @@ export default meta;
 type Story = StoryObj<typeof LlmBadge>;
 
 export const Default: Story = {
+  parameters: { design: figmaNode('55-12') },
+};
+
+export const Success: Story = {
   render: (args) => ({
     components: { LlmBadge },
     setup() { return { args }; },
-    template: '<LlmBadge v-bind="args">Badge</LlmBadge>',
+    template: '<LlmBadge v-bind="args">Active</LlmBadge>',
   }),
+  args: { variant: 'success' },
+  parameters: { design: figmaNode('55-13') },
+};
+
+export const Warning: Story = {
+  render: (args) => ({
+    components: { LlmBadge },
+    setup() { return { args }; },
+    template: '<LlmBadge v-bind="args">Pending</LlmBadge>',
+  }),
+  args: { variant: 'warning' },
+  parameters: { design: figmaNode('55-14') },
+};
+
+export const Danger: Story = {
+  render: (args) => ({
+    components: { LlmBadge },
+    setup() { return { args }; },
+    template: '<LlmBadge v-bind="args">Error</LlmBadge>',
+  }),
+  args: { variant: 'danger' },
+  parameters: { design: figmaNode('55-15') },
+};
+
+export const Info: Story = {
+  render: (args) => ({
+    components: { LlmBadge },
+    setup() { return { args }; },
+    template: '<LlmBadge v-bind="args">Info</LlmBadge>',
+  }),
+  args: { variant: 'info' },
+  parameters: { design: figmaNode('55-16') },
+};
+
+export const Small: Story = {
+  args: { size: 'sm' },
+  parameters: { design: figmaNode('55-17') },
+};
+
+export const Medium: Story = {
+  args: { size: 'md' },
 };
 
 export const AllVariants: Story = {
@@ -45,8 +95,27 @@ export const AllVariants: Story = {
         <LlmBadge variant="warning">Warning</LlmBadge>
         <LlmBadge variant="danger">Danger</LlmBadge>
         <LlmBadge variant="info">Info</LlmBadge>
-        <LlmBadge variant="default" size="sm">Small</LlmBadge>
       </div>
     `,
+  }),
+};
+
+export const AllSizes: Story = {
+  render: () => ({
+    components: { LlmBadge },
+    template: `
+      <div style="display:flex;gap:0.75rem;align-items:center">
+        <LlmBadge variant="success" size="sm">Small</LlmBadge>
+        <LlmBadge variant="success" size="md">Medium</LlmBadge>
+      </div>
+    `,
+  }),
+};
+
+export const Playground: Story = {
+  render: (args) => ({
+    components: { LlmBadge },
+    setup() { return { args }; },
+    template: '<LlmBadge v-bind="args">Playground</LlmBadge>',
   }),
 };

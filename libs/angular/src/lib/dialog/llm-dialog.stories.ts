@@ -22,7 +22,7 @@ function figmaNode(nodeId: string): { type: "figma"; url: string } {
 }
 
 const meta: Meta<LlmDialog> = {
-  title: 'Components/LlmDialog',
+  title: 'Components/Overlay/LlmDialog',
   component: LlmDialog,
   tags: ['autodocs'],
   argTypes: {

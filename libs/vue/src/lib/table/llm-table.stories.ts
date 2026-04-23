@@ -14,7 +14,7 @@ function figmaNode(nodeId: string): { type: 'figma'; url: string } {
 }
 
 const meta: Meta<typeof LlmTable> = {
-  title: 'Components/LlmTable',
+  title: 'Components/Display/LlmTable',
   component: LlmTable,
   tags: ['autodocs'],
   argTypes: {
@@ -220,6 +220,93 @@ export const StickyHeader: Story = {
           </LlmTbody>
         </LlmTable>
       </div>
+    `,
+  }),
+};
+
+export const KitchenSink: Story = {
+  parameters: { design: figmaNode('421-1183') },
+  render: () => ({
+    components: { LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd },
+    setup() {
+      const rows = ref([
+        { id: '1', name: 'Alice Müller', role: 'Engineer', status: 'active' },
+        { id: '2', name: 'Bob Schmidt', role: 'Designer', status: 'active' },
+        { id: '3', name: 'Carol Wagner', role: 'Manager', status: 'inactive' },
+        { id: '4', name: 'David Bauer', role: 'Engineer', status: 'active' },
+      ]);
+      const selected = ref<Set<string>>(new Set());
+      const sortCol = ref<string | null>(null);
+      const sortDir = ref<'asc' | 'desc' | null>(null);
+      function toggle(id: string, val: boolean) {
+        const s = new Set(selected.value);
+        if (val) s.add(id); else s.delete(id);
+        selected.value = s;
+      }
+      function toggleAll(val: boolean) {
+        selected.value = val ? new Set(rows.value.map((r) => r.id)) : new Set();
+      }
+      function onSort(col: string, dir: 'asc' | 'desc' | null) {
+        sortCol.value = dir ? col : null;
+        sortDir.value = dir;
+      }
+      const allSelected = () => rows.value.every((r) => selected.value.has(r.id));
+      return { rows, selected, sortCol, sortDir, toggle, toggleAll, onSort, allSelected };
+    },
+    template: `
+      <div style="max-height:300px;overflow-y:auto;border:1px solid #e5e7eb;border-radius:0.75rem">
+        <LlmTable variant="striped" :stickyHeader="true">
+          <LlmThead>
+            <LlmTr>
+              <LlmTh>
+                <input type="checkbox" :checked="allSelected()" @change="toggleAll($event.target.checked)" />
+              </LlmTh>
+              <LlmTh :sortable="true" :sortDirection="sortCol === 'name' ? sortDir : null" @sort="onSort('name', $event)">Name</LlmTh>
+              <LlmTh>Role</LlmTh>
+              <LlmTh align="center">Status</LlmTh>
+              <LlmTh align="end">Actions</LlmTh>
+            </LlmTr>
+          </LlmThead>
+          <LlmTbody>
+            <LlmTr
+              v-for="row in rows"
+              :key="row.id"
+              :selectable="true"
+              :selected="selected.has(row.id)"
+              @update:selected="toggle(row.id, $event)"
+            >
+              <LlmTd>{{ row.name }}</LlmTd>
+              <LlmTd>{{ row.role }}</LlmTd>
+              <LlmTd align="center">{{ row.status }}</LlmTd>
+              <LlmTd align="end"><button type="button">Edit</button></LlmTd>
+            </LlmTr>
+          </LlmTbody>
+        </LlmTable>
+      </div>
+    `,
+  }),
+};
+
+export const Playground: Story = {
+  parameters: { design: figmaNode('421-1183') },
+  render: (args) => ({
+    components: { LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd },
+    setup() { return { args }; },
+    template: `
+      <LlmTable v-bind="args">
+        <LlmThead>
+          <LlmTr>
+            <LlmTh>Column A</LlmTh>
+            <LlmTh>Column B</LlmTh>
+            <LlmTh>Column C</LlmTh>
+          </LlmTr>
+        </LlmThead>
+        <LlmTbody>
+          <LlmTr><LlmTd>Cell A1</LlmTd><LlmTd>Cell B1</LlmTd><LlmTd>Cell C1</LlmTd></LlmTr>
+          <LlmTr><LlmTd>Cell A2</LlmTd><LlmTd>Cell B2</LlmTd><LlmTd>Cell C2</LlmTd></LlmTr>
+          <LlmTr><LlmTd>Cell A3</LlmTd><LlmTd>Cell B3</LlmTd><LlmTd>Cell C3</LlmTd></LlmTr>
+        </LlmTbody>
+      </LlmTable>
     `,
   }),
 };

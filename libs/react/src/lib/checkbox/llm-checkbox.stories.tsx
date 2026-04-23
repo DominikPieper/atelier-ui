@@ -9,7 +9,7 @@ function figmaNode(nodeId: string) {
 }
 
 const meta: Meta<typeof LlmCheckbox> = {
-  title: 'Components/LlmCheckbox',
+  title: 'Components/Inputs/LlmCheckbox',
   component: LlmCheckbox,
   tags: ['autodocs'],
   argTypes: {

@@ -9,7 +9,7 @@ function figmaNode(nodeId: string) {
 }
 
 const meta: Meta<typeof LlmTooltip> = {
-  title: 'Components/LlmTooltip',
+  title: 'Components/Overlay/LlmTooltip',
   component: LlmTooltip,
   tags: ['autodocs'],
   parameters: {

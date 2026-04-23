@@ -28,7 +28,7 @@ function figmaNode(nodeId: string): { type: 'figma'; url: string } {
 }
 
 const meta: Meta<LlmCodeBlock> = {
-  title: 'Components/LlmCodeBlock',
+  title: 'Components/Display/LlmCodeBlock',
   component: LlmCodeBlock,
   tags: ['autodocs'],
   argTypes: {

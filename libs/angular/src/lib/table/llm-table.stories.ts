@@ -13,7 +13,7 @@ function figmaNode(nodeId: string): { type: 'figma'; url: string } {
 }
 
 const meta: Meta<LlmTable> = {
-  title: 'Components/LlmTable',
+  title: 'Components/Display/LlmTable',
   component: LlmTable,
   tags: ['autodocs'],
   argTypes: {

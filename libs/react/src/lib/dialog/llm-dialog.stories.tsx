@@ -9,7 +9,7 @@ function figmaNode(nodeId: string) {
 }
 
 const meta: Meta<typeof LlmDialog> = {
-  title: 'Components/LlmDialog',
+  title: 'Components/Overlay/LlmDialog',
   component: LlmDialog,
   tags: ['autodocs'],
   argTypes: {

@@ -9,7 +9,7 @@ function figmaNode(nodeId: string): { type: 'figma'; url: string } {
 }
 
 const meta: Meta<LlmProgress> = {
-  title: 'Components/LlmProgress',
+  title: 'Components/Display/LlmProgress',
   component: LlmProgress,
   tags: ['autodocs'],
   argTypes: {

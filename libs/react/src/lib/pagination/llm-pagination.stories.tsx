@@ -9,7 +9,7 @@ function figmaNode(nodeId: string) {
 }
 
 const meta: Meta<typeof LlmPagination> = {
-  title: 'Components/LlmPagination',
+  title: 'Components/Navigation/LlmPagination',
   component: LlmPagination,
   tags: ['autodocs'],
   parameters: {

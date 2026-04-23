@@ -9,7 +9,7 @@ function figmaNode(nodeId: string) {
 import LlmAvatar from './llm-avatar.vue';
 
 const meta: Meta<typeof LlmAvatarGroup> = {
-  title: 'Components/LlmAvatarGroup',
+  title: 'Components/Display/LlmAvatarGroup',
   component: LlmAvatarGroup,
   tags: ['autodocs'],
   argTypes: {

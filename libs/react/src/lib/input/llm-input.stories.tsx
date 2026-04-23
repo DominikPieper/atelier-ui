@@ -8,7 +8,7 @@ function figmaNode(nodeId: string) {
 }
 
 const meta: Meta<typeof LlmInput> = {
-  title: 'Components/LlmInput',
+  title: 'Components/Inputs/LlmInput',
   component: LlmInput,
   tags: ['autodocs'],
   argTypes: {

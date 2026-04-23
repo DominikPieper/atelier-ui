@@ -8,7 +8,7 @@ function figmaNode(nodeId: string) {
 }
 
 const meta: Meta = {
-  title: 'Components/LlmToast',
+  title: 'Components/Overlay/LlmToast',
   tags: ['autodocs'],
   parameters: {
     design: figmaNode('55-47'),

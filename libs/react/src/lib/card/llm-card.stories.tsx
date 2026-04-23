@@ -8,7 +8,7 @@ function figmaNode(nodeId: string) {
 }
 
 const meta: Meta<typeof LlmCard> = {
-  title: 'Components/LlmCard',
+  title: 'Components/Display/LlmCard',
   component: LlmCard,
   tags: ['autodocs'],
   argTypes: {

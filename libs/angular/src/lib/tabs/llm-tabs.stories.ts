@@ -12,7 +12,7 @@ function figmaNode(nodeId: string): { type: "figma"; url: string } {
 }
 
 const meta: Meta<LlmTabGroup> = {
-  title: 'Components/LlmTabGroup',
+  title: 'Components/Navigation/LlmTabGroup',
   component: LlmTabGroup,
   tags: ['autodocs'],
   argTypes: {

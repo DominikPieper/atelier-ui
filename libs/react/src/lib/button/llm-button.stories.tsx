@@ -8,7 +8,7 @@ function figmaNode(nodeId: string) {
 }
 
 const meta: Meta<typeof LlmButton> = {
-  title: 'Components/LlmButton',
+  title: 'Components/Inputs/LlmButton',
   component: LlmButton,
   tags: ['autodocs'],
   argTypes: {

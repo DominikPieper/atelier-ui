@@ -9,7 +9,7 @@ function figmaNode(nodeId: string): { type: "figma"; url: string } {
 }
 
 const meta: Meta<LlmTextarea> = {
-  title: 'Components/LlmTextarea',
+  title: 'Components/Inputs/LlmTextarea',
   component: LlmTextarea,
   tags: ['autodocs'],
   render: (args) => ({

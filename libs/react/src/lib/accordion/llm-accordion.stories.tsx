@@ -8,7 +8,7 @@ function figmaNode(nodeId: string) {
 }
 
 const meta: Meta<typeof LlmAccordionGroup> = {
-  title: 'Components/LlmAccordionGroup',
+  title: 'Components/Feedback/LlmAccordionGroup',
   component: LlmAccordionGroup,
   tags: ['autodocs'],
   argTypes: {

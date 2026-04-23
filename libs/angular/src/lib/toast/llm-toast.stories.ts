@@ -123,7 +123,7 @@ function figmaNode(nodeId: string): { type: "figma"; url: string } {
 
 /* ── Individual toast meta (for autodocs) ── */
 const meta: Meta<LlmToast> = {
-  title: 'Components/LlmToast',
+  title: 'Components/Overlay/LlmToast',
   component: LlmToast,
   tags: ['autodocs'],
   argTypes: {

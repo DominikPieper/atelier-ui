@@ -9,7 +9,7 @@ function figmaNode(nodeId: string): { type: "figma"; url: string } {
 }
 
 const meta: Meta<LlmBadge> = {
-  title: 'Components/LlmBadge',
+  title: 'Components/Display/LlmBadge',
   component: LlmBadge,
   tags: ['autodocs'],
   render: (args) => ({
