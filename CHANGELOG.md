@@ -1,3 +1,14 @@
+## 0.0.16 (2026-04-23)
+
+### 🩹 Fixes
+
+- **tokens:** repair on-primary + secondary contrast after primary darken ([#00](https://github.com/DominikPieper/atelier-ui/issues/00), [#007070](https://github.com/DominikPieper/atelier-ui/issues/007070), [#0](https://github.com/DominikPieper/atelier-ui/issues/0), [#64748](https://github.com/DominikPieper/atelier-ui/issues/64748), [#475569](https://github.com/DominikPieper/atelier-ui/issues/475569), [#334155](https://github.com/DominikPieper/atelier-ui/issues/334155), [#1](https://github.com/DominikPieper/atelier-ui/issues/1))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.0.15 (2026-04-22)
 
 ### 🩹 Fixes
