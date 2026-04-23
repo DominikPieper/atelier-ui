@@ -156,7 +156,7 @@ function SortableStory() {
 
 export const Sortable: Story = {
   render: () => <SortableStory />,
-  parameters: { design: figmaNode('421-1002') },
+  parameters: { design: figmaNode('421-884') },
 };
 
 // ---------------------------------------------------------------------------
@@ -216,14 +216,14 @@ function SelectableStory() {
 
 export const Selectable: Story = {
   render: () => <SelectableStory />,
-  parameters: { design: figmaNode('421-1051') },
+  parameters: { design: figmaNode('421-884') },
 };
 
 // ---------------------------------------------------------------------------
 // Sticky Header
 // ---------------------------------------------------------------------------
 export const StickyHeader: Story = {
-  parameters: { design: figmaNode('421-1090') },
+  parameters: { design: figmaNode('421-884') },
   render: () => (
     <div style={{ maxHeight: '220px', overflowY: 'auto', border: '1px solid #e5e7eb', borderRadius: '0.5rem' }}>
       <LlmTable stickyHeader>

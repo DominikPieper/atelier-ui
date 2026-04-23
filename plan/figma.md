@@ -160,7 +160,7 @@ Node IDs below point to the actual `COMPONENT_SET` nodes (the parent of all vari
 | `LlmBreadcrumbs` | `55:141` | 3 | path-length variants |
 | `LlmPagination` | `55:145` | 3 | page position (first/middle/last) |
 | `LlmDrawer` | `421:398` | 4 | position (right/left/bottom) |
-| `LlmTable` | `421:1183` | 10 | variant (default/striped/bordered) × size × state |
+| `LlmTable` | `421:1183` | 7 | variant × size × state (default/empty/focus) + `sortable` · `selectable` · `stickyHeader` boolean props |
 | `LlmCodeBlock` | `420:286` | 4 | variants + copy/line-number flags |
 | `LlmCombobox` | `421:339` | 6 | state (default/open/filled/invalid/disabled) |
 | `LlmStepper` | `421:505` | 5 | orientation + step states (active/completed/error/optional/disabled) |
@@ -220,7 +220,6 @@ font: var(--ui-font-weight-medium) var(--ui-font-size-sm) / 1 'Inter', sans-seri
 Captured from `figma_audit_design_system` + `figma_lint_design` runs; not yet addressed.
 
 - **WCAG 1.4.1 lint false-positive** on `LlmBadge` / `LlmAlert` / `LlmToast`: the page-level `wcag-color-only` rule compares raw variant background fills and does not walk child nodes, so it keeps flagging variants that already have visible glyph text layers. The per-component `figma_audit_component_accessibility` scores 93–100 on colorDifferentiation for all three — real accessibility is in place. Accept the lint noise or raise upstream.
-- **LlmTable state property**: values mix orthogonal features (sortable/selectable/sticky overlap). Split into boolean properties + `state` variant for `default | empty | focus`.
 - **Decorative icon glyphs left unstyled**: ~50 pictogram text nodes (`▲ ▼ ✓ ✕ ⎘ ⎗ ⊕ ✏ →`) are intentionally not bound to a text style. Lint flags them under `no-text-style`; they should either be converted to vector icons or given a dedicated `text/icon-sm` style.
 - **Sub-12px text in icon roles**: 18 remaining `wcag-text-size` findings are chevrons/arrows at 10–11 px and 9 px avatar initials. Visually intentional; consider nudging to 12 px or converting chevrons to vector glyphs.
 - **Section-level caption text** (e.g. "variant: primary | …", "size: md") is documentation scaffolding not part of any component — convert to small captions or move into the component description.

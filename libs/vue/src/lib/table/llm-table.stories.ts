@@ -107,7 +107,7 @@ export const Bordered: Story = {
 };
 
 export const Sortable: Story = {
-  parameters: { design: figmaNode('421-1002') },
+  parameters: { design: figmaNode('421-884') },
   render: () => ({
     components: { LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd },
     setup() {
@@ -141,7 +141,7 @@ export const Sortable: Story = {
 };
 
 export const Selectable: Story = {
-  parameters: { design: figmaNode('421-1051') },
+  parameters: { design: figmaNode('421-884') },
   render: () => ({
     components: { LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd },
     setup() {
@@ -194,7 +194,7 @@ export const EmptyState: Story = {
 };
 
 export const StickyHeader: Story = {
-  parameters: { design: figmaNode('421-1090') },
+  parameters: { design: figmaNode('421-884') },
   render: () => ({
     components: { LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd },
     setup() {
