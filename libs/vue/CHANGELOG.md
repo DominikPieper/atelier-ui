@@ -1,3 +1,14 @@
+## 0.0.20 (2026-04-23)
+
+### 🚀 Features
+
+- **a11y:** add Unicode indicator glyphs to Badge + Alert semantic variants ([05104c8](https://github.com/DominikPieper/atelier-ui/commit/05104c8))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.0.19 (2026-04-23)
 
 ### 🩹 Fixes
