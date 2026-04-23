@@ -24,19 +24,21 @@ let nextId = 0;
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <input
-      [type]="type()"
-      [value]="value()"
-      (input)="onInput($event)"
-      (blur)="touched.set(true)"
-      [disabled]="disabled()"
-      [readOnly]="readonly()"
-      [placeholder]="placeholder()"
-      [attr.name]="name() || null"
-      [attr.aria-invalid]="invalid() || null"
-      [attr.aria-required]="required() || null"
-      [attr.aria-describedby]="showErrors() ? errorId : null"
-    />
+    <div class="input-field">
+      <input
+        [type]="type()"
+        [value]="value()"
+        (input)="onInput($event)"
+        (blur)="touched.set(true)"
+        [disabled]="disabled()"
+        [readOnly]="readonly()"
+        [placeholder]="placeholder()"
+        [attr.name]="name() || null"
+        [attr.aria-invalid]="invalid() || null"
+        [attr.aria-required]="required() || null"
+        [attr.aria-describedby]="showErrors() ? errorId : null"
+      />
+    </div>
     @if (showErrors()) {
       <div class="errors" [id]="errorId" aria-live="polite">
         @for (error of errors(); track error.kind) {

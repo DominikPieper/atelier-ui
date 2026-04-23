@@ -80,19 +80,21 @@ export function LlmInput({
   return (
     <div className={classes}>
       {label && <label htmlFor={inputId}>{label}</label>}
-      <input
-        id={inputId}
-        type={type}
-        value={value}
-        onChange={handleChange}
-        disabled={disabled}
-        readOnly={readOnly}
-        required={required}
-        aria-invalid={invalid || undefined}
-        aria-required={required || undefined}
-        aria-describedby={errors.length > 0 ? errorId : undefined}
-        {...rest}
-      />
+      <div className="input-field">
+        <input
+          id={inputId}
+          type={type}
+          value={value}
+          onChange={handleChange}
+          disabled={disabled}
+          readOnly={readOnly}
+          required={required}
+          aria-invalid={invalid || undefined}
+          aria-required={required || undefined}
+          aria-describedby={errors.length > 0 ? errorId : undefined}
+          {...rest}
+        />
+      </div>
       {errors.length > 0 && (
         <div className="errors" id={errorId} aria-live="polite">
           {errors.map((err, i) => (
