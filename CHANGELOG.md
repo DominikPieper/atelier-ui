@@ -1,3 +1,19 @@
+## 0.0.21 (2026-04-23)
+
+### 🚀 Features
+
+- **a11y:** add invalid-state glyph to LlmTextarea (WCAG 1.4.1) ([60b6657](https://github.com/DominikPieper/atelier-ui/commit/60b6657))
+- **a11y:** add invalid-state glyph to LlmInput (WCAG 1.4.1) ([a79064d](https://github.com/DominikPieper/atelier-ui/commit/a79064d))
+
+### 🩹 Fixes
+
+- **tokens:** align dark-mode --ui-color-on-primary with @media value (AA) ([#0](https://github.com/DominikPieper/atelier-ui/issues/0), [#00](https://github.com/DominikPieper/atelier-ui/issues/00))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.0.20 (2026-04-23)
 
 ### 🚀 Features

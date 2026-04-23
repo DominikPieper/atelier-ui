@@ -1,3 +1,14 @@
+## 0.0.21 (2026-04-23)
+
+### 🩹 Fixes
+
+- **tokens:** align dark-mode --ui-color-on-primary with @media value (AA) ([#0](https://github.com/DominikPieper/atelier-ui/issues/0), [#00](https://github.com/DominikPieper/atelier-ui/issues/00))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.0.20 (2026-04-23)
 
 This was a version bump only for create-workspace to align it with other projects, there were no code changes.
