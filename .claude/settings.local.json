@@ -162,7 +162,20 @@
       "Bash(nx serve *)",
       "Bash(echo \"Server starting in background, PID: $!\")",
       "Bash(echo \"PID: $!\")",
-      "Bash(npx astro *)"
+      "Bash(npx astro *)",
+      "Bash(git fetch *)",
+      "Bash(git rebase *)",
+      "Bash(gh run *)",
+      "Bash(E2E_FRAMEWORKS=angular E2E_KEEP_SCRATCH=true node libs/create-atelier-ui-workspace/e2e/cli.e2e.mjs)",
+      "Bash(tee /tmp/atelier-e2e-angular.log)",
+      "Bash(awk -F: '{print $1}')",
+      "Bash(awk -F/ '{print $2}')",
+      "Bash(echo \"exit=$?\")",
+      "Bash(E2E_FRAMEWORKS=angular node libs/create-atelier-ui-workspace/e2e/cli.e2e.mjs)",
+      "Bash(tee /tmp/e2e-run2.log)",
+      "Bash(tee /tmp/e2e-run3.log)",
+      "Bash(tee /tmp/e2e-run4.log)",
+      "mcp__figma-console__figma_update_variable"
     ]
   },
   "enableAllProjectMcpServers": true,
