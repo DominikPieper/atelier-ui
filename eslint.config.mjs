@@ -11,7 +11,7 @@ export default [{
     parser: await import('jsonc-eslint-parser'),
   },
 }, ...nx.configs['flat/base'], ...nx.configs['flat/typescript'], ...nx.configs['flat/javascript'], {
-  ignores: ['**/dist', '**/out-tsc', '**/vitest.config.*.timestamp*'],
+  ignores: ['**/dist', '**/out-tsc', '**/vitest.config.*.timestamp*', 'docs/.astro/**'],
 }, {
   files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
   rules: {
