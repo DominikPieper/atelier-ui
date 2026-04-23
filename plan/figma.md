@@ -17,9 +17,21 @@
 | 3 | `Spacing & Radius` | Visual documentation of spacing and radius tokens. |
 | 4 | `Cookbook` | Worked examples composing multiple components (forms, dashboards, dialogs). |
 | 5 | `Icons` | Catalogue of pictogram glyphs used in components (status, navigation, action). |
-| 6 | `Components` | All 27 component sets organized one per Section. |
+| 6 | `Components` | 27 component sets grouped into 5 category Sections that mirror the Storybook sidebar (`Inputs`, `Display`, `Navigation`, `Overlay`, `Feedback`). |
 
-> **Note:** When the library grows past ~30 components or a 2nd domain emerges, split the `Components` page into category-scoped pages (e.g. `Forms`, `Feedback`, `Navigation`, `Overlays`, `Data Display`).
+> **Note:** When a single category grows past ~15 components, promote it to its own page (e.g. split `Inputs` off first). The current single-page-with-category-Sections layout preserves "all components at a glance" while matching Storybook structure 1:1.
+
+### Components — Category Layout
+
+Category Sections are stacked top-to-bottom in the same order as `storySort.order` in `libs/{angular,react,vue}/.storybook/preview.{ts,tsx}`. Each has a subtle tinted background and a `Inter Semi Bold 64` heading. Per-component Sections are nested unchanged inside, preserving every `COMPONENT_SET` nodeId (so existing Storybook `addon-designs` links keep resolving).
+
+| Category Section | Members (in sidebar order) |
+|---|---|
+| `Inputs` | LlmButton · LlmInput · LlmTextarea · LlmSelect · LlmCombobox · LlmCheckbox · LlmRadio · LlmRadioGroup · LlmToggle |
+| `Display` | LlmBadge · LlmAvatar + LlmAvatarGroup · LlmCard · LlmSkeleton · LlmProgress · LlmTable · LlmCodeBlock |
+| `Navigation` | LlmBreadcrumbs · LlmMenu · LlmTabGroup · LlmPagination · LlmStepper |
+| `Overlay` | LlmTooltip · LlmDialog · LlmDrawer · LlmToast |
+| `Feedback` | LlmAlert · LlmAccordionGroup |
 
 ---
 
@@ -176,7 +188,7 @@ Node IDs below point to the actual `COMPONENT_SET` nodes (the parent of all vari
 4. Screenshot key Storybook stories to confirm no visual regression.
 
 ### New Component
-1. Create a new Section on the `Components` page.
+1. Create a new Section nested inside the matching category Section (`Inputs` / `Display` / `Navigation` / `Overlay` / `Feedback`) on the `Components` page. The category must match the Storybook `title:` prefix (`Components/<Category>/<Name>`).
 2. Build a `COMPONENT_SET` with variant properties that match the code spec (`libs/spec/src/index.ts`).
 3. Apply text styles (`text/*`) and variables — never raw hex/px.
 4. Write a component description (variants · sizes · states · a11y). It becomes the Assets-panel tooltip and the Dev Mode spec.
