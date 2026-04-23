@@ -1,3 +1,14 @@
+## 0.0.17 (2026-04-23)
+
+### 🩹 Fixes
+
+- **tokens:** darken placeholder once more to clear AA on input sunken bg ([#6](https://github.com/DominikPieper/atelier-ui/issues/6), [#4](https://github.com/DominikPieper/atelier-ui/issues/4))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.0.16 (2026-04-23)
 
 ### 🩹 Fixes
