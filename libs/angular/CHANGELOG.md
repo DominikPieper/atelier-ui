@@ -1,3 +1,14 @@
+## 0.0.22 (2026-04-23)
+
+### 🚀 Features
+
+- **storybook:** categorize sidebar and bring Vue stories to parity ([13a666e](https://github.com/DominikPieper/atelier-ui/commit/13a666e))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.21 (2026-04-23)
 
 ### 🚀 Features

@@ -1,3 +1,19 @@
+## 0.0.22 (2026-04-23)
+
+### 🚀 Features
+
+- **figma:** add LlmButton hover/active/loading state variants ([d3ee9ac](https://github.com/DominikPieper/atelier-ui/commit/d3ee9ac))
+- **storybook:** categorize sidebar and bring Vue stories to parity ([13a666e](https://github.com/DominikPieper/atelier-ui/commit/13a666e))
+
+### 🩹 Fixes
+
+- **e2e:** stop verdaccio cleanly so CLI e2e job doesn't time out ([899d356](https://github.com/DominikPieper/atelier-ui/commit/899d356))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.21 (2026-04-23)
 
 ### 🚀 Features

@@ -1,3 +1,14 @@
+## 0.0.22 (2026-04-23)
+
+### 🩹 Fixes
+
+- **e2e:** stop verdaccio cleanly so CLI e2e job doesn't time out ([899d356](https://github.com/DominikPieper/atelier-ui/commit/899d356))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.21 (2026-04-23)
 
 This was a version bump only for create-atelier-ui-workspace to align it with other projects, there were no code changes.
