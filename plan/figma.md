@@ -127,7 +127,7 @@ Node IDs below point to the actual `COMPONENT_SET` nodes (the parent of all vari
 
 | Component | nodeId | Variants | Properties |
 |---|---|---|---|
-| `LlmButton` | `129:20` | 10 | variant (primary/secondary/outline) · size (sm/md/lg) · state (default/focus) |
+| `LlmButton` | `129:20` | 13 | variant (primary/secondary/outline) · size (sm/md/lg) · state (default/hover/active/focus/loading) |
 | `LlmInput` | `129:33` | 5 | type (text/email/password) · state (default/filled/focus/invalid/disabled) |
 | `LlmCard` | `55:65` | 12 | variant (elevated/outlined/flat) · padding (none/sm/md/lg) |
 | `LlmBadge` | `55:22` | 10 | variant (default/success/warning/danger/info) · size (sm/md) |
