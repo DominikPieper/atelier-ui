@@ -1,3 +1,14 @@
+## 0.0.19 (2026-04-23)
+
+### 🩹 Fixes
+
+- **tokens:** point --ui-color-error-text at the AA-safe darker danger ([#991](https://github.com/DominikPieper/atelier-ui/issues/991))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.0.18 (2026-04-23)
 
 ### 🚀 Features
