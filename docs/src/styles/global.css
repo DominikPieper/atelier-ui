@@ -1015,6 +1015,50 @@ body {
   cursor: help;
 }
 
+/* ── Per-component composition parts ──────────────────── */
+.docs-composition-intro {
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+  color: var(--ui-color-text-muted);
+  line-height: 1.65;
+}
+
+.docs-composition-part {
+  padding: 1rem 1.2rem;
+  margin-bottom: 1rem;
+  background: var(--ui-color-surface-raised);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-md);
+}
+
+.docs-composition-part:last-child {
+  margin-bottom: 0;
+}
+
+.docs-composition-part-name {
+  margin: 0 0 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.docs-composition-part-name code {
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: var(--ui-color-primary);
+  background: transparent;
+  padding: 0;
+}
+
+.docs-composition-part-desc {
+  margin: 0 0 0.75rem;
+  font-size: 0.82rem;
+  color: var(--ui-color-text-muted);
+  line-height: 1.6;
+}
+
+.docs-composition-part .docs-props-table {
+  margin-bottom: 0;
+}
+
 /* ── Per-component accessibility section ───────────────── */
 .docs-a11y-role {
   display: flex;
@@ -1351,20 +1395,41 @@ body {
   text-align: center;
 }
 
+/* ── Terminal tokens ─────────────────────────────────────
+ * Terminals stay dark in both themes (convention), but the
+ * shades are tied to tokens so they stay in sync across the
+ * two terminal mockups (.docs-terminal + .preflight-mock).
+ */
+:root {
+  --docs-term-bg: #0b0f16;
+  --docs-term-bar-bg: #1a2031;
+  --docs-term-text: #d1d5db;
+  --docs-term-muted: #6b7280;
+  --docs-term-heading: #9ca3af;
+  --docs-term-strong: #f1f5f9;
+  --docs-term-accent: #44dada;
+  --docs-term-accent-strong: #00d0d0;
+  --docs-term-success: #34d399;
+  --docs-term-warning: #febc2e;
+  --docs-term-info: #89ceff;
+  --docs-term-border: rgba(68, 218, 218, 0.15);
+  --docs-term-border-soft: rgba(68, 218, 218, 0.08);
+}
+
+[data-theme='light'] {
+  --docs-term-bg: #1a2332;
+  --docs-term-border: rgba(0, 122, 122, 0.2);
+}
+
 /* ── Terminal block ──────────────────────────────────── */
 .docs-terminal {
-  background: #0a1520;
-  border: 1px solid rgba(68, 218, 218, 0.15);
+  background: var(--docs-term-bg);
+  border: 1px solid var(--docs-term-border);
   border-radius: var(--ui-radius-lg);
   overflow: hidden;
   margin: 2rem auto;
   max-width: 760px;
   box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.5);
-}
-
-[data-theme='light'] .docs-terminal {
-  background: #1a2332;
-  border-color: rgba(0, 122, 122, 0.2);
 }
 
 .docs-terminal-bar {

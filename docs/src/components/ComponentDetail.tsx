@@ -479,6 +479,41 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
         </div>
       )}
 
+      {/* Composition parts */}
+      {doc.composition && doc.composition.length > 0 && (
+        <div className="docs-section">
+          <h2 className="docs-section-title">Composition parts</h2>
+          <p className="docs-composition-intro">
+            {doc.name} is composed from the parts below. Each part is its own component — drop the ones you don't need.
+          </p>
+          {doc.composition.map(part => (
+            <div key={part.name} className="docs-composition-part">
+              <h3 className="docs-composition-part-name"><code>{part.name}</code></h3>
+              {part.description && (
+                <p className="docs-composition-part-desc">{part.description}</p>
+              )}
+              {part.props.length > 0 && (
+                <table className="docs-props-table">
+                  <thead>
+                    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                  </thead>
+                  <tbody>
+                    {part.props.map(prop => (
+                      <tr key={prop.name}>
+                        <td><code className="docs-prop-name">{prop.name}</code></td>
+                        <td><code className="docs-prop-type">{prop.type}</code></td>
+                        <td><code className="docs-prop-default">{prop.default}</code></td>
+                        <td>{prop.description}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* Import snippet */}
       {importSymbols.length > 0 && (
         <div className="docs-section">

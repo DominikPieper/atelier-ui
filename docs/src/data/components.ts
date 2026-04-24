@@ -25,6 +25,12 @@ export interface A11yInfo {
   notes?: string[];
 }
 
+export interface CompositionPart {
+  name: string;
+  description?: string;
+  props: PropRow[];
+}
+
 export interface ComponentDoc {
   name: string;
   selector: string;
@@ -39,6 +45,7 @@ export interface ComponentDoc {
     commonHallucinations: string[];
   };
   a11y?: A11yInfo;
+  composition?: CompositionPart[];
 }
 
 export const CATEGORY_ICONS: Record<string, string> = {
@@ -219,6 +226,16 @@ export const componentDocs: Record<string, ComponentDoc> = {
   <LlmRadio radioValue="pro">Pro</LlmRadio>
   <LlmRadio radioValue="enterprise">Enterprise</LlmRadio>
 </LlmRadioGroup>`,
+    composition: [
+      {
+        name: 'LlmRadio',
+        description: 'An individual radio button. Place inside LlmRadioGroup — the group manages the checked state.',
+        props: [
+          { name: 'radioValue', type: 'string', default: '—', description: 'Value this radio contributes when selected (required).' },
+          { name: 'disabled', type: 'boolean', default: 'false', description: 'Disable this radio only.' },
+        ],
+      },
+    ],
     a11y: {
       role: 'radiogroup',
       keyboard: [
@@ -254,6 +271,16 @@ export const componentDocs: Record<string, ComponentDoc> = {
   <LlmOption optionValue="ca">Canada</LlmOption>
   <LlmOption optionValue="uk" disabled={true}>United Kingdom (unavailable)</LlmOption>
 </LlmSelect>`,
+    composition: [
+      {
+        name: 'LlmOption',
+        description: 'A selectable option inside LlmSelect. The visible label is the element\'s children.',
+        props: [
+          { name: 'optionValue', type: 'string', default: '—', description: 'Value committed to the parent LlmSelect when selected (required).' },
+          { name: 'disabled', type: 'boolean', default: 'false', description: 'Prevent the option from being focused or selected.' },
+        ],
+      },
+    ],
     aiUsage: {
       bestPractices: [
         'Always use "LlmOption" for items within the "LlmSelect".',
@@ -356,6 +383,11 @@ export const componentDocs: Record<string, ComponentDoc> = {
     <LlmButton variant="primary" size="sm">Action</LlmButton>
   </LlmCardFooter>
 </LlmCard>`,
+    composition: [
+      { name: 'LlmCardHeader',  description: 'Title row at the top of the card. Slot-only — takes no props.',      props: [] },
+      { name: 'LlmCardContent', description: 'Main body of the card. Slot-only — takes no props.',                  props: [] },
+      { name: 'LlmCardFooter',  description: 'Action row at the bottom of the card. Slot-only — takes no props.',   props: [] },
+    ],
   },
 
   table: {
@@ -386,6 +418,47 @@ export const componentDocs: Record<string, ComponentDoc> = {
     <div llmTableEmpty>No results found</div>
   </LlmTbody>
 </LlmTable>`,
+    composition: [
+      {
+        name: 'LlmThead',
+        description: 'Header row container. Slot-only — takes no props.',
+        props: [],
+      },
+      {
+        name: 'LlmTbody',
+        description: 'Body container. Renders its own empty state when empty is true.',
+        props: [
+          { name: 'empty', type: 'boolean', default: 'false', description: 'Show an empty-state row instead of children.' },
+          { name: 'colSpan', type: 'number', default: '—', description: 'Number of columns the empty-state row should span.' },
+        ],
+      },
+      {
+        name: 'LlmTr',
+        description: 'A single row. Can be made selectable for row-level interaction.',
+        props: [
+          { name: 'selected', type: 'boolean', default: 'false', description: 'Visual + ARIA selected state.' },
+          { name: 'selectable', type: 'boolean', default: 'false', description: 'Makes the row keyboard-focusable and emits selection events.' },
+          { name: 'rowId', type: 'string', default: '—', description: 'Stable identifier for the row — used in selection change events.' },
+        ],
+      },
+      {
+        name: 'LlmTh',
+        description: 'A header cell. Make it sortable to expose a sort-toggle button.',
+        props: [
+          { name: 'sortable', type: 'boolean', default: 'false', description: 'Shows a sort indicator and announces the column as sortable.' },
+          { name: 'sortDirection', type: "'asc' | 'desc' | null", default: 'null', description: 'Current sort state when sortable.' },
+          { name: 'align', type: "'start' | 'center' | 'end'", default: "'start'", description: 'Text alignment in the cell.' },
+          { name: 'width', type: 'string', default: '—', description: 'Explicit column width (any CSS length).' },
+        ],
+      },
+      {
+        name: 'LlmTd',
+        description: 'A body cell.',
+        props: [
+          { name: 'align', type: "'start' | 'center' | 'end'", default: "'start'", description: 'Text alignment in the cell.' },
+        ],
+      },
+    ],
   },
 
   avatar: {
@@ -409,6 +482,16 @@ export const componentDocs: Record<string, ComponentDoc> = {
   <LlmAvatar name="Carol" />
   <LlmAvatar name="Dave" />
 </LlmAvatarGroup>`,
+    composition: [
+      {
+        name: 'LlmAvatarGroup',
+        description: 'Stacks multiple LlmAvatar children with a "+N" overflow indicator. Pass size once on the group and it applies to every child.',
+        props: [
+          { name: 'max', type: 'number', default: '—', description: 'Maximum number of avatars to show. Remaining children are summarized as "+N".' },
+          { name: 'size', type: "'xs' | 'sm' | 'md' | 'lg' | 'xl'", default: "'md'", description: 'Applied to every child avatar — overrides their individual size.' },
+        ],
+      },
+    ],
   },
 
   skeleton: {
@@ -459,6 +542,16 @@ export const componentDocs: Record<string, ComponentDoc> = {
   <LlmBreadcrumbItem href="/components">Components</LlmBreadcrumbItem>
   <LlmBreadcrumbItem>Breadcrumbs</LlmBreadcrumbItem>
 </LlmBreadcrumbs>`,
+    composition: [
+      {
+        name: 'LlmBreadcrumbItem',
+        description: 'One crumb. Omit href (or set current) on the final item; it renders as text and carries aria-current="page".',
+        props: [
+          { name: 'href', type: 'string', default: '—', description: 'Link destination. Omit for the current page.' },
+          { name: 'current', type: 'boolean', default: 'false', description: 'Marks the item as the current page. Auto-detected when href is missing.' },
+        ],
+      },
+    ],
   },
 
   tabs: {
@@ -476,6 +569,16 @@ export const componentDocs: Record<string, ComponentDoc> = {
   <LlmTab label="Notifications">Notification preferences.</LlmTab>
   <LlmTab label="Billing" disabled={true}>Billing info.</LlmTab>
 </LlmTabGroup>`,
+    composition: [
+      {
+        name: 'LlmTab',
+        description: 'A single tab + panel pair. Children render inside the panel; the label renders in the tablist.',
+        props: [
+          { name: 'label', type: 'string', default: '—', description: 'Text shown on the tab button (required).' },
+          { name: 'disabled', type: 'boolean', default: 'false', description: 'Skip this tab in keyboard navigation and prevent activation.' },
+        ],
+      },
+    ],
     a11y: {
       role: 'tablist / tab / tabpanel',
       keyboard: [
@@ -506,6 +609,20 @@ export const componentDocs: Record<string, ComponentDoc> = {
   <LlmStep label="Verification">Step 2 content</LlmStep>
   <LlmStep label="Complete">Step 3 content</LlmStep>
 </LlmStepper>`,
+    composition: [
+      {
+        name: 'LlmStep',
+        description: 'A single step in the wizard. Children render when the step is active.',
+        props: [
+          { name: 'label', type: 'string', default: '—', description: 'Short title shown in the stepper header (required).' },
+          { name: 'description', type: 'string', default: '—', description: 'Optional secondary line under the label.' },
+          { name: 'completed', type: 'boolean', default: 'false', description: 'Marks the step as completed (shows a checkmark).' },
+          { name: 'error', type: 'boolean', default: 'false', description: 'Marks the step as errored (shows an error glyph).' },
+          { name: 'optional', type: 'boolean', default: 'false', description: 'Tags the step as optional in the UI.' },
+          { name: 'disabled', type: 'boolean', default: 'false', description: 'Prevents the step from being activated.' },
+        ],
+      },
+    ],
   },
 
   pagination: {
@@ -543,6 +660,20 @@ export const componentDocs: Record<string, ComponentDoc> = {
   <LlmMenuSeparator />
   <LlmMenuItem disabled={true}>Delete</LlmMenuItem>
 </LlmMenu>`,
+    composition: [
+      {
+        name: 'LlmMenuItem',
+        description: 'A selectable menu entry. Children render as the label.',
+        props: [
+          { name: 'disabled', type: 'boolean', default: 'false', description: 'Prevents activation and skips the item in keyboard navigation.' },
+        ],
+      },
+      {
+        name: 'LlmMenuSeparator',
+        description: 'A visual divider between groups of menu items. Rendered with role="separator" — screen readers announce it as a group boundary. Takes no props.',
+        props: [],
+      },
+    ],
     a11y: {
       role: 'menu / menuitem',
       keyboard: [
@@ -581,6 +712,11 @@ export const componentDocs: Record<string, ComponentDoc> = {
     <LlmButton variant="primary" onClick={() => setOpen(false)}>Delete</LlmButton>
   </LlmDialogFooter>
 </LlmDialog>`,
+    composition: [
+      { name: 'LlmDialogHeader',  description: 'Title area. The text becomes the dialog\'s accessible name. Slot-only.', props: [] },
+      { name: 'LlmDialogContent', description: 'Main body. Receives initial focus when the dialog opens. Slot-only.', props: [] },
+      { name: 'LlmDialogFooter',  description: 'Action row — typically Cancel / Confirm buttons. Slot-only.',          props: [] },
+    ],
     a11y: {
       role: 'dialog (aria-modal="true")',
       keyboard: [
@@ -617,6 +753,11 @@ export const componentDocs: Record<string, ComponentDoc> = {
     <LlmButton onClick={() => setOpen(false)}>Close</LlmButton>
   </LlmDrawerFooter>
 </LlmDrawer>`,
+    composition: [
+      { name: 'LlmDrawerHeader',  description: 'Title area — doubles as the drag handle on touch. Slot-only.', props: [] },
+      { name: 'LlmDrawerContent', description: 'Scrollable body. Slot-only.',                                   props: [] },
+      { name: 'LlmDrawerFooter',  description: 'Pinned action row at the bottom edge. Slot-only.',              props: [] },
+    ],
     a11y: {
       role: 'dialog (aria-modal="true")',
       keyboard: [
@@ -717,6 +858,17 @@ show('Persistent', { duration: 0 });`,
     Another answer here.
   </LlmAccordionItem>
 </LlmAccordionGroup>`,
+    composition: [
+      {
+        name: 'LlmAccordionItem',
+        description: 'One expandable section. Mark the header content with the llmAccordionHeader directive; everything else renders as the panel body.',
+        props: [
+          { name: 'expanded', type: 'boolean', default: 'false', description: 'Controls the expanded state when used as a controlled component.' },
+          { name: 'onExpandedChange', type: '(expanded: boolean) => void', default: '—', description: 'Called when the user toggles the item.' },
+          { name: 'disabled', type: 'boolean', default: 'false', description: 'Prevents toggling.' },
+        ],
+      },
+    ],
     a11y: {
       role: 'heading + region (disclosure pattern)',
       keyboard: [

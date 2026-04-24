@@ -322,11 +322,14 @@ const MCP_CONFIG = `{
     margin-bottom: 0;
   }
 
-  /* Preflight mockup — styled like a terminal card */
+  /* Preflight mockup — styled like a terminal card.
+   * Colors come from the --docs-term-* tokens in global.css so
+   * this card stays in sync with .docs-terminal across themes.
+   */
   .preflight-mock {
     margin: 0.85rem 0 0;
-    background: #0b0f16;
-    border: 1px solid var(--ui-color-border);
+    background: var(--docs-term-bg);
+    border: 1px solid var(--docs-term-border);
     border-radius: var(--ui-radius-md);
     overflow: hidden;
     font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -336,8 +339,8 @@ const MCP_CONFIG = `{
     align-items: center;
     gap: 0.4rem;
     padding: 0.55rem 0.85rem;
-    background: #1a2031;
-    color: #9ca3af;
+    background: var(--docs-term-bar-bg);
+    color: var(--docs-term-heading);
     font-size: 0.68rem;
     font-weight: 600;
     letter-spacing: 0.04em;
@@ -359,15 +362,15 @@ const MCP_CONFIG = `{
     padding: 0.85rem 1rem 1rem;
     font-size: 0.78rem;
     line-height: 1.6;
-    color: #d1d5db;
+    color: var(--docs-term-text);
     white-space: pre-wrap;
   }
-  .preflight-mock-body .pre-prompt { color: #00d0d0; font-weight: 700; }
-  .preflight-mock-body .pre-cmd { color: #f1f5f9; }
-  .preflight-mock-body .pre-muted { color: #6b7280; }
-  .preflight-mock-body .pre-ok { color: #34d399; font-weight: 700; }
-  .preflight-mock-body .pre-ok-strong { color: #34d399; font-weight: 700; }
-  .preflight-mock-body .pre-val { color: #89ceff; }
+  .preflight-mock-body .pre-prompt { color: var(--docs-term-accent-strong); font-weight: 700; }
+  .preflight-mock-body .pre-cmd { color: var(--docs-term-strong); }
+  .preflight-mock-body .pre-muted { color: var(--docs-term-muted); }
+  .preflight-mock-body .pre-ok { color: var(--docs-term-success); font-weight: 700; }
+  .preflight-mock-body .pre-ok-strong { color: var(--docs-term-success); font-weight: 700; }
+  .preflight-mock-body .pre-val { color: var(--docs-term-info); }
 </style>
 
 <script>
