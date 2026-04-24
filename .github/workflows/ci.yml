@@ -18,6 +18,35 @@ concurrency:
 
 jobs:
   # ---------------------------------------------------------------------------
+  # Lockfile guard — rejects PRs that change package-lock.json without also
+  # changing package.json. Prevents the `devOptional` ↔ `dev` drift cycle
+  # caused by running `npm install` locally (macOS) after pulling a CI-written
+  # lockfile (Linux). Day-to-day installs should use `npm ci`, which never
+  # mutates the lockfile.
+  # ---------------------------------------------------------------------------
+  lockfile-guard:
+    name: Lockfile guard
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Reject lockfile-only changes
+        run: |
+          base="${{ github.event.pull_request.base.sha }}"
+          head="${{ github.event.pull_request.head.sha }}"
+          changed=$(git diff --name-only "$base" "$head")
+          lock_changed=$(echo "$changed" | grep -Fx 'package-lock.json' || true)
+          pkg_changed=$(echo "$changed" | grep -Fx 'package.json' || true)
+          if [ -n "$lock_changed" ] && [ -z "$pkg_changed" ]; then
+            echo "::error::package-lock.json changed without package.json changing."
+            echo "This usually means 'npm install' was run locally and re-normalized the lockfile."
+            echo "Use 'npm ci' for day-to-day installs. Only regen the lockfile when actually changing deps — run tools/scripts/relock.sh."
+            exit 1
+          fi
+
+  # ---------------------------------------------------------------------------
   # Lightweight sync / docs checks. No Nx, no affected — these always run.
   # ---------------------------------------------------------------------------
   checks:
@@ -29,8 +58,9 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v5
         with:
-          node-version: 24
+          node-version-file: '.node-version'
           cache: 'npm'
+      - run: corepack enable
       - run: npm ci
       - run: node tools/scripts/check-sync.js
       - run: node tools/scripts/sync-spec.mjs --check
@@ -50,8 +80,9 @@ jobs:
       - uses: nrwl/nx-set-shas@v4
       - uses: actions/setup-node@v5
         with:
-          node-version: 24
+          node-version-file: '.node-version'
           cache: 'npm'
+      - run: corepack enable
       - run: npm ci
       - name: Lint affected (PR)
         if: github.event_name == 'pull_request'
@@ -73,8 +104,9 @@ jobs:
       - uses: nrwl/nx-set-shas@v4
       - uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version-file: '.node-version'
           cache: 'npm'
+      - run: corepack enable
       - run: npm ci
       - name: Test affected (PR)
         if: github.event_name == 'pull_request'
@@ -97,8 +129,9 @@ jobs:
       - uses: nrwl/nx-set-shas@v4
       - uses: actions/setup-node@v5
         with:
-          node-version: 24
+          node-version-file: '.node-version'
           cache: 'npm'
+      - run: corepack enable
       - run: npm ci
       - name: Build affected (PR)
         if: github.event_name == 'pull_request'
@@ -123,8 +156,9 @@ jobs:
       - uses: nrwl/nx-set-shas@v4
       - uses: actions/setup-node@v5
         with:
-          node-version: 24
+          node-version-file: '.node-version'
           cache: 'npm'
+      - run: corepack enable
       - run: npm ci
       # Always use `affected` — e2e is slow (~5 min per framework) so skipping
       # unrelated commits matters even on main. `--output-style=stream` disables

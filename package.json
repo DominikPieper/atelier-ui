@@ -2,6 +2,10 @@
   "name": "@atelier-ui/source",
   "version": "0.0.0",
   "license": "MIT",
+  "packageManager": "npm@11.12.1",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "check:sync": "node tools/scripts/check-sync.js",
     "check:spec": "node tools/scripts/sync-spec.mjs --check",

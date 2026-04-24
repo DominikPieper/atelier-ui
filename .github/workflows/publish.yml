@@ -29,9 +29,11 @@ jobs:
 
       - uses: actions/setup-node@v5
         with:
-          node-version: 24
+          node-version-file: '.node-version'
           cache: 'npm'
           registry-url: 'https://registry.npmjs.org'
+
+      - run: corepack enable
 
       - run: npm ci
 
