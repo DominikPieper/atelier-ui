@@ -371,17 +371,9 @@ const MCP_CONFIG = `{
 </style>
 
 <script>
-  function initWorkshopTabs() {
-    const fwButtons = document.querySelectorAll<HTMLButtonElement>('[data-fw-btn]');
-    const fwPanels = document.querySelectorAll<HTMLElement>('[data-fw-panel]');
-    fwButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const fw = btn.dataset.fwBtn;
-        fwButtons.forEach(b => b.classList.toggle('active', b === btn));
-        fwPanels.forEach(p => { p.hidden = p.dataset.fwPanel !== fw; });
-      });
-    });
-
+  // Framework tabs handled by shared framework-pref-init script in BaseLayout.
+  // This script handles only the platform (macOS/Linux/Windows) tabs.
+  function initWorkshopPlatformTabs() {
     const platButtons = document.querySelectorAll<HTMLButtonElement>('[data-plat-btn]');
     const platPanels = document.querySelectorAll<HTMLElement>('[data-plat-panel]');
     platButtons.forEach(btn => {
@@ -392,6 +384,6 @@ const MCP_CONFIG = `{
       });
     });
   }
-  document.addEventListener('astro:page-load', initWorkshopTabs);
-  initWorkshopTabs();
+  document.addEventListener('astro:page-load', initWorkshopPlatformTabs);
+  initWorkshopPlatformTabs();
 </script>

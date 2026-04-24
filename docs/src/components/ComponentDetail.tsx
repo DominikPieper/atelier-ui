@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   LlmButton, LlmBadge, LlmCard, LlmCardHeader, LlmCardContent, LlmCardFooter,
   LlmInput, LlmTextarea, LlmCheckbox, LlmToggle, LlmRadioGroup, LlmRadio,
@@ -9,6 +9,7 @@ import {
   LlmDrawer, LlmDrawerHeader, LlmDrawerContent, LlmDrawerFooter, LlmCodeBlock,
 } from '@atelier-ui/react';
 import { componentDocs, COMPONENT_CATEGORIES } from '../data/components';
+import { getFramework, setFramework, subscribeFramework, type Framework } from '../lib/framework-pref';
 
 const CATEGORY_COLORS: Record<string, string> = {
   Inputs: '#7c3aed', Display: '#0284c7', Navigation: '#059669',
@@ -371,7 +372,9 @@ interface ComponentDetailProps {
 
 export default function ComponentDetail({ name }: ComponentDetailProps) {
   const doc = componentDocs[name];
-  const [framework, setFramework] = useState<'angular' | 'react' | 'vue'>('angular');
+  const [framework, setFrameworkState] = useState<Framework>(() => getFramework());
+
+  useEffect(() => subscribeFramework(setFrameworkState), []);
 
   if (!doc) {
     return (
@@ -442,6 +445,7 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
         <div className="docs-demo">
           <div className="docs-demo-header">
             <span className="docs-demo-label">Live Preview</span>
+            <span className="docs-demo-fw-tag" title="The live preview renders the React build. Angular and Vue use the same props and produce equivalent output.">React</span>
           </div>
           <div className="docs-demo-canvas docs-demo-canvas--column">
             <ComponentDemo name={name} />

@@ -288,35 +288,32 @@ const COMPONENT_IMPORT: Record<string, string> = {
 </style>
 
 <script>
-  function initInstallTabs() {
-    let activeFw = 'Angular';
+  // Framework tabs ([data-fw-btn] / [data-fw-panel]) are driven by the shared
+  // framework-pref-init script in BaseLayout. This script handles the package-
+  // manager tabs and the combined [data-install] panels that key on fw+pm.
+  import { getFramework, subscribeFramework, type Framework } from '../lib/framework-pref';
+
+  function initInstallPmTabs() {
     let activePm = 'npm';
 
-    function update() {
+    function updateInstallPanels(fw: Framework) {
+      const key = `${fw}-${activePm}`;
       document.querySelectorAll<HTMLElement>('[data-install]').forEach(el => {
-        el.hidden = el.dataset.install !== `${activeFw}-${activePm}`;
-      });
-      document.querySelectorAll<HTMLElement>('[data-fw-panel]').forEach(el => {
-        el.hidden = el.dataset.fwPanel !== activeFw;
+        el.hidden = (el.dataset.install ?? '').toLowerCase() !== key;
       });
     }
-
-    document.querySelectorAll<HTMLButtonElement>('[data-fw-btn]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        activeFw = btn.dataset.fwBtn ?? activeFw;
-        document.querySelectorAll('[data-fw-btn]').forEach(b => b.classList.toggle('active', b === btn));
-        update();
-      });
-    });
 
     document.querySelectorAll<HTMLButtonElement>('[data-pm-btn]').forEach(btn => {
       btn.addEventListener('click', () => {
         activePm = btn.dataset.pmBtn ?? activePm;
         document.querySelectorAll('[data-pm-btn]').forEach(b => b.classList.toggle('active', b === btn));
-        update();
+        updateInstallPanels(getFramework());
       });
     });
+
+    subscribeFramework(fw => updateInstallPanels(fw));
+    updateInstallPanels(getFramework());
   }
-  document.addEventListener('astro:page-load', initInstallTabs);
-  initInstallTabs();
+  document.addEventListener('astro:page-load', initInstallPmTabs);
+  initInstallPmTabs();
 </script>

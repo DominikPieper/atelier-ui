@@ -269,18 +269,4 @@ Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
   }
 </style>
 
-<script>
-  function initTabs() {
-    const buttons = document.querySelectorAll<HTMLButtonElement>('[data-fw-btn]');
-    const panels  = document.querySelectorAll<HTMLElement>('[data-fw-panel]');
-    buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const fw = btn.dataset.fwBtn;
-        buttons.forEach(b => b.classList.toggle('active', b === btn));
-        panels.forEach(p => { p.hidden = p.dataset.fwPanel !== fw; });
-      });
-    });
-  }
-  document.addEventListener('astro:page-load', initTabs);
-  initTabs();
-</script>
+<!-- Framework tabs handled by shared framework-pref-init script in BaseLayout. -->

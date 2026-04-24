@@ -212,22 +212,23 @@ const FRAMEWORKS: Fw[] = ['react', 'angular', 'vue'];
 </style>
 
 <script>
-  function initPrompts() {
-    let activeFw = 'react';
+  // Framework tab activation is driven by the shared framework-pref-init script
+  // in BaseLayout. This script keeps [data-prompt-fw] panels in sync with the
+  // shared preference and wires the copy-prompt buttons.
+  import { getFramework, subscribeFramework, type Framework } from '../lib/framework-pref';
 
-    function updateFw(fw: string) {
+  function initPrompts() {
+    let activeFw: Framework = getFramework();
+
+    function applyFw(fw: Framework) {
       activeFw = fw;
       document.querySelectorAll<HTMLElement>('[data-prompt-fw]').forEach(el => {
-        el.hidden = el.dataset.promptFw !== fw;
+        el.hidden = (el.dataset.promptFw ?? '').toLowerCase() !== fw;
       });
     }
 
-    document.querySelectorAll<HTMLButtonElement>('[data-fw-btn]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('[data-fw-btn]').forEach(b => b.classList.toggle('active', b === btn));
-        updateFw(btn.dataset.fwBtn ?? activeFw);
-      });
-    });
+    subscribeFramework(applyFw);
+    applyFw(activeFw);
 
     document.querySelectorAll<HTMLButtonElement>('.copy-prompt-btn').forEach(btn => {
       btn.addEventListener('click', () => {

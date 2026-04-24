@@ -3,6 +3,7 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import expressiveCode from 'astro-expressive-code';
 import mdx from '@astrojs/mdx';
+import pagefind from 'astro-pagefind';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
 export default defineConfig({
@@ -29,6 +30,7 @@ export default defineConfig({
     expressiveCode(),
     mdx(),
     react(),
+    pagefind(),
     sitemap({
       changefreq: 'weekly',
       priority: 0.7,

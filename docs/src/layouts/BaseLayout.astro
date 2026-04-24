@@ -57,9 +57,9 @@ function isTopActive(path: string): boolean {
 // Breadcrumb labels mirror the sidebar nav so JSON-LD crumbs match UI.
 const BREADCRUMB_LABELS: Record<string, string> = {
   workshop: 'Workshop Setup',
-  'figma-token': 'Figma Setup',
+  'figma-token': 'Figma Access',
   troubleshooting: 'Troubleshooting',
-  figma: 'Figma',
+  figma: 'Figma as Source',
   tutorial: 'Figma to Code',
   storybook: 'Storybook',
   mcp: 'AI Tools',
@@ -72,6 +72,7 @@ const BREADCRUMB_LABELS: Record<string, string> = {
   'claude-md': 'CLAUDE.md',
   prompts: 'Prompt Templates',
   'design-principles': 'Design Principles',
+  accessibility: 'Accessibility',
 };
 
 function titleCase(slug: string): string {
@@ -229,7 +230,7 @@ const breadcrumbSchema = {
             </a>
             <a href="/figma-token" class={`docs-nav-link${isActive('/figma-token') ? ' active' : ''}`}>
               <Icon name="cable" class="docs-nav-link-icon" />
-              Figma Setup
+              Figma Access
             </a>
             <a href="/troubleshooting" class={`docs-nav-link${isActive('/troubleshooting') ? ' active' : ''}`}>
               <Icon name="help" class="docs-nav-link-icon" />
@@ -244,7 +245,7 @@ const breadcrumbSchema = {
             </div>
             <a href="/figma" class={`docs-nav-link${isActive('/figma') ? ' active' : ''}`}>
               <Icon name="palette" class="docs-nav-link-icon" />
-              Figma
+              Figma as Source
             </a>
             <a href="/tutorial" class={`docs-nav-link${isActive('/tutorial') ? ' active' : ''}`}>
               <Icon name="school" class="docs-nav-link-icon" />
@@ -281,6 +282,14 @@ const breadcrumbSchema = {
               <Icon name="menu_book" class="docs-nav-link-icon" />
               Cookbook Patterns
             </a>
+            <a href="/design-principles" class={`docs-nav-link${isActive('/design-principles') ? ' active' : ''}`}>
+              <Icon name="schema" class="docs-nav-link-icon" />
+              Design Principles
+            </a>
+            <a href="/accessibility" class={`docs-nav-link${isActive('/accessibility') ? ' active' : ''}`}>
+              <Icon name="accessibility_new" class="docs-nav-link-icon" />
+              Accessibility
+            </a>
             <a href="/llms" class={`docs-nav-link${isActive('/llms') ? ' active' : ''}`}>
               <Icon name="description" class="docs-nav-link-icon" />
               llms.txt
@@ -304,11 +313,23 @@ const breadcrumbSchema = {
           <div class="docs-nav-section">
             <div class="docs-nav-heading">
               <span class="docs-nav-heading-icon">{SECTION_ICONS['Overview']}</span>
-              Overview
+              Docs
             </div>
             <a href="/" class="docs-nav-link docs-nav-link--back">
               <Icon name="arrow_back" class="docs-nav-link-icon" />
               Back to Docs
+            </a>
+            <a href="/workshop" class="docs-nav-link">
+              <Icon name="build_circle" class="docs-nav-link-icon" />
+              Workshop Setup
+            </a>
+            <a href="/install" class="docs-nav-link">
+              <Icon name="download" class="docs-nav-link-icon" />
+              Installation
+            </a>
+            <a href="/troubleshooting" class="docs-nav-link">
+              <Icon name="help" class="docs-nav-link-icon" />
+              Troubleshooting
             </a>
             <a href="/components" class={`docs-nav-link${currentPath === '/components' ? ' active' : ''}`}>
               <Icon name="grid_view" class="docs-nav-link-icon" />
@@ -338,7 +359,7 @@ const breadcrumbSchema = {
 
     <!-- Main -->
     <main class={`docs-main${hasToc ? ' docs-main--with-toc' : ''}`}>
-      <div class="docs-main-content">
+      <div class="docs-main-content" data-pagefind-body>
         <slot />
       </div>
       {hasToc && (
@@ -486,6 +507,10 @@ const breadcrumbSchema = {
     // Run on initial load and after every Astro page transition
     document.addEventListener('astro:page-load', initPage);
     initPage();
+  </script>
+
+  <script>
+    import '../scripts/framework-pref-init';
   </script>
 </body>
 </html>

@@ -334,6 +334,23 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
       </p>
     </section>
 
+    <!-- Next steps -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 2.5rem">
+      {[
+        { to: '/tutorial',        label: 'Next',    title: 'Figma to Code',    icon: '🎯' },
+        { to: '/figma',           label: 'Design',  title: 'Figma as Source',  icon: '🎨' },
+        { to: '/troubleshooting', label: 'Stuck?',  title: 'Troubleshooting',  icon: '🛟' },
+      ].map(({ to, label, title, icon }) => (
+        <a href={to} style="display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 1rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); text-decoration: none; color: inherit; border: 1px solid var(--ui-color-border)">
+          <span style="font-size: 1.25rem; flex-shrink: 0">{icon}</span>
+          <div>
+            <div style="font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ui-color-text-muted); margin-bottom: 0.15rem">{label}</div>
+            <div style="font-size: 0.88rem; font-weight: 700; color: var(--ui-color-text)">{title}</div>
+          </div>
+        </a>
+      ))}
+    </div>
+
   </div>
 </BaseLayout>
 

@@ -1,0 +1,255 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+type KbdRow = {
+  component: string;
+  keys: string;
+  action: string;
+};
+
+const KEYBOARD_MAP: KbdRow[] = [
+  { component: 'Button',          keys: 'Space / Enter',              action: 'Activate. Focus ring always visible in keyboard navigation.' },
+  { component: 'Input, Textarea', keys: '—',                          action: 'Native text editing. Invalid state also shown via a glyph (WCAG 1.4.1).' },
+  { component: 'Checkbox',        keys: 'Space',                      action: 'Toggle. Indeterminate state supported.' },
+  { component: 'Toggle',          keys: 'Space / Enter',              action: 'Toggle on/off.' },
+  { component: 'Radio Group',     keys: 'Arrow keys',                 action: 'Move selection within the group. Tab moves to the next field.' },
+  { component: 'Select, Combobox',keys: 'Enter / Space',              action: 'Open. Arrow keys move between options. Enter confirms, Escape closes without change.' },
+  { component: 'Dialog',          keys: 'Escape',                     action: 'Close. Focus is trapped inside while open and restored to the trigger on close.' },
+  { component: 'Drawer',          keys: 'Escape',                     action: 'Same as Dialog. Closes on backdrop click when closeOnBackdrop is enabled.' },
+  { component: 'Menu',            keys: 'Enter / Space / Arrow Down', action: 'Open from trigger. Arrow keys move between items, Enter activates, Escape closes.' },
+  { component: 'Tabs',            keys: 'Arrow Left / Right',         action: 'Move between tabs. Home / End jump to first / last.' },
+  { component: 'Accordion',       keys: 'Enter / Space',              action: 'Expand or collapse a section. Tab moves between headers.' },
+  { component: 'Stepper',         keys: 'Tab',                        action: 'Move between step controls. Steps report status to assistive tech.' },
+  { component: 'Pagination',      keys: 'Tab, Enter',                 action: 'Focus each page control, activate to navigate.' },
+  { component: 'Tooltip',         keys: 'Tab (focus)',                action: 'Appears on focus for keyboard users, not only on hover.' },
+  { component: 'Toast',           keys: 'Tab',                        action: 'Dismiss button reachable by keyboard. Announced via aria-live=polite.' },
+];
+
+type RecentA11y = {
+  release: string;
+  title: string;
+  detail: string;
+};
+
+const RECENT_A11Y: RecentA11y[] = [
+  {
+    release: 'v0.0.21',
+    title: 'Invalid-state glyph on Input and Textarea (WCAG 1.4.1)',
+    detail:
+      'Invalid form fields now show a non-color glyph in addition to the red border, so users who cannot distinguish red from the surrounding palette still get the signal.',
+  },
+  {
+    release: 'v0.0.20',
+    title: 'Unicode indicator glyphs on Badge and Alert variants',
+    detail:
+      'Semantic variants (info / success / warning / danger) carry a matching glyph alongside the color. The meaning survives greyscale and high-contrast modes.',
+  },
+  {
+    release: 'v0.0.18',
+    title: 'AA-safe semantic background + text token pairs',
+    detail:
+      'Badge and Alert now pull their foreground from paired semantic-text tokens calibrated against their backgrounds — AA in both light and dark mode.',
+  },
+  {
+    release: 'v0.0.15 – v0.0.19',
+    title: 'Contrast calibration pass',
+    detail:
+      'Primary, on-primary, secondary, placeholder, and error-text tokens were darkened and re-paired to clear WCAG AA on every surface they appear on.',
+  },
+];
+---
+
+<BaseLayout
+  title="Accessibility"
+  description="Accessibility stance for Atelier UI — WCAG 2.1 AA targets, non-color indicators, keyboard maps, and screen-reader support."
+  currentPath="/accessibility"
+>
+  <nav slot="toc">
+    <a href="#stance"          class="docs-toc-link">Our stance</a>
+    <a href="#non-color"       class="docs-toc-link">Non-color indicators</a>
+    <a href="#contrast"        class="docs-toc-link">Contrast &amp; tokens</a>
+    <a href="#keyboard"        class="docs-toc-link">Keyboard navigation</a>
+    <a href="#screen-readers"  class="docs-toc-link">Screen readers</a>
+    <a href="#focus"           class="docs-toc-link">Focus management</a>
+    <a href="#your-job"        class="docs-toc-link">What's still your job</a>
+    <a href="#recent"          class="docs-toc-link">Recent improvements</a>
+    <a href="#reporting"       class="docs-toc-link">Reporting issues</a>
+  </nav>
+
+  <div class="docs-inline-page">
+
+    <div style="margin-bottom: 2.5rem">
+      <h1 class="docs-page-title docs-gradient-title">Accessibility</h1>
+      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 560px; line-height: 1.65">
+        Atelier UI targets <strong style="color: var(--ui-color-text)">WCAG 2.1 Level AA</strong> out of the box —
+        contrast, non-color indicators, keyboard operability, and screen-reader semantics are baked into the primitives.
+        This page is a map of what the library does for you, and what you are still responsible for.
+      </p>
+    </div>
+
+    <!-- Stance -->
+    <section class="docs-section">
+      <h2 id="stance" class="docs-section-title">Our stance</h2>
+      <ul style="color: var(--ui-color-text-muted); line-height: 1.75; padding-left: 1.25rem">
+        <li>Every interactive component ships with a keyboard path that matches WAI-ARIA Authoring Practices.</li>
+        <li>Semantic state (success / warning / danger / info / invalid) is expressed in at least two channels — color + glyph or color + text — so it survives greyscale, high-contrast modes, and color-vision deficiencies.</li>
+        <li>Design tokens are calibrated for WCAG AA against the surfaces they appear on. If you stay within the token set, you stay in spec.</li>
+        <li>Focus is visible at all times in keyboard navigation, and no component suppresses the platform focus ring without replacing it.</li>
+      </ul>
+    </section>
+
+    <!-- Non-color -->
+    <section class="docs-section">
+      <h2 id="non-color" class="docs-section-title">Non-color indicators</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 0.75rem">
+        WCAG 1.4.1 requires that color never be the sole carrier of meaning. Atelier UI satisfies this at the primitive level:
+      </p>
+      <ul style="color: var(--ui-color-text-muted); line-height: 1.75; padding-left: 1.25rem">
+        <li><code>LlmBadge</code> and <code>LlmAlert</code> render a semantic glyph next to the label for every non-default variant.</li>
+        <li><code>LlmInput</code> and <code>LlmTextarea</code> render a glyph in the invalid state in addition to the red border.</li>
+        <li><code>LlmStepper</code> steps expose their status (<em>active</em>, <em>completed</em>, <em>error</em>) as text to assistive tech, not only via color.</li>
+        <li><code>LlmProgress</code> has an accessible name and exposes its value to assistive tech via <code>aria-valuenow</code>.</li>
+      </ul>
+    </section>
+
+    <!-- Contrast -->
+    <section class="docs-section">
+      <h2 id="contrast" class="docs-section-title">Contrast &amp; tokens</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 0.75rem">
+        The token layer at <a href="/tokens" style="color: var(--ui-color-primary)">/tokens</a> is the source of truth.
+        Every <code>--ui-color-*</code> pair (foreground on background) has been measured against WCAG AA in both light
+        and dark themes. If you override tokens, re-run your contrast checker — if you stick to the defaults, you are in spec.
+      </p>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0">
+        The two most common foot-guns:
+      </p>
+      <ul style="color: var(--ui-color-text-muted); line-height: 1.75; padding-left: 1.25rem">
+        <li>Using a custom <code>background</code> under a component. The component still uses its token foreground, which was calibrated against <em>our</em> background, not yours.</li>
+        <li>Using <code>opacity</code> on text to make it look muted. Blended opacity is not guaranteed to preserve AA — prefer <code>var(--ui-color-text-muted)</code> instead.</li>
+      </ul>
+    </section>
+
+    <!-- Keyboard map -->
+    <section class="docs-section">
+      <h2 id="keyboard" class="docs-section-title">Keyboard navigation</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 1rem">
+        Every interactive primitive is reachable and operable from the keyboard without a mouse.
+      </p>
+      <table class="docs-props-table">
+        <thead>
+          <tr>
+            <th style="width: 22%">Component</th>
+            <th style="width: 22%">Key</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {KEYBOARD_MAP.map(row => (
+            <tr>
+              <td><code>{row.component}</code></td>
+              <td><kbd>{row.keys}</kbd></td>
+              <td>{row.action}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Screen readers -->
+    <section class="docs-section">
+      <h2 id="screen-readers" class="docs-section-title">Screen readers</h2>
+      <ul style="color: var(--ui-color-text-muted); line-height: 1.75; padding-left: 1.25rem">
+        <li>Form fields expose their <code>label</code>, <code>hint</code>, and <code>error</code> slots through <code>aria-labelledby</code> / <code>aria-describedby</code> automatically — you don't wire them by hand.</li>
+        <li><code>LlmDialog</code> and <code>LlmDrawer</code> set <code>role="dialog"</code> and <code>aria-modal="true"</code>. The header is announced as the accessible name.</li>
+        <li><code>LlmToast</code> announces messages in a polite live region. Error toasts use <code>role="alert"</code>.</li>
+        <li><code>LlmMenu</code>, <code>LlmTabGroup</code>, <code>LlmAccordionGroup</code> set the ARIA roles and relationships required by the WAI-ARIA pattern for each widget.</li>
+        <li><code>LlmTooltip</code> uses <code>aria-describedby</code>, not <code>aria-label</code> — the tooltip supplements the trigger's name, it does not replace it.</li>
+      </ul>
+    </section>
+
+    <!-- Focus -->
+    <section class="docs-section">
+      <h2 id="focus" class="docs-section-title">Focus management</h2>
+      <ul style="color: var(--ui-color-text-muted); line-height: 1.75; padding-left: 1.25rem">
+        <li><strong style="color: var(--ui-color-text)">Visible focus.</strong> Every focusable element has a visible focus indicator in both themes. The ring uses <code>--ui-color-focus-ring</code> and does not disappear on custom backgrounds.</li>
+        <li><strong style="color: var(--ui-color-text)">Focus trapping.</strong> Dialog and Drawer trap Tab focus while open and restore focus to the original trigger on close.</li>
+        <li><strong style="color: var(--ui-color-text)">Initial focus.</strong> Menus and Comboboxes move focus to the first option on open. Dialogs move focus to the first tabbable element inside the content.</li>
+        <li><strong style="color: var(--ui-color-text)">Skip links.</strong> Long lists (Tables, Pagination, Menu) stay Tab-navigable without a skip link — but you can add one above a complex composition if the page has multiple such regions.</li>
+      </ul>
+    </section>
+
+    <!-- Your job -->
+    <section class="docs-section">
+      <h2 id="your-job" class="docs-section-title">What's still your job</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 0.75rem">
+        The library cannot guess your content. You still own:
+      </p>
+      <ul style="color: var(--ui-color-text-muted); line-height: 1.75; padding-left: 1.25rem">
+        <li><strong style="color: var(--ui-color-text)">Labels.</strong> Every form field needs a <code>label</code> prop — <code>placeholder</code> is not an accessible name.</li>
+        <li><strong style="color: var(--ui-color-text)">Alt text.</strong> Every <code>&lt;img&gt;</code> inside <code>LlmAvatar</code> or user content needs a meaningful <code>alt</code>, or <code>alt=""</code> if decorative.</li>
+        <li><strong style="color: var(--ui-color-text)">Heading hierarchy.</strong> Use <code>&lt;h1&gt;</code>–<code>&lt;h6&gt;</code> in source order. Don't skip levels for styling reasons.</li>
+        <li><strong style="color: var(--ui-color-text)">Localized messages.</strong> Error text, empty states, and confirmation dialogs should be translated for your users' locale.</li>
+        <li><strong style="color: var(--ui-color-text)">Motion preferences.</strong> Respect <code>prefers-reduced-motion</code> when adding your own transitions. Atelier's built-in animations already do.</li>
+      </ul>
+    </section>
+
+    <!-- Recent -->
+    <section class="docs-section">
+      <h2 id="recent" class="docs-section-title">Recent accessibility improvements</h2>
+      <div style="display: flex; flex-direction: column; gap: 0.85rem">
+        {RECENT_A11Y.map(item => (
+          <div style="padding: 0.9rem 1.1rem; background: var(--ui-color-surface-raised); border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md)">
+            <div style="display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.3rem">
+              <span style="font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; color: var(--ui-color-primary); background: color-mix(in srgb, var(--ui-color-primary) 10%, transparent); padding: 0.1rem 0.45rem; border-radius: 3px">{item.release}</span>
+              <span style="font-size: 0.92rem; font-weight: 700; color: var(--ui-color-text)">{item.title}</span>
+            </div>
+            <p style="margin: 0; font-size: 0.84rem; color: var(--ui-color-text-muted); line-height: 1.6">{item.detail}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Reporting -->
+    <section class="docs-section">
+      <h2 id="reporting" class="docs-section-title">Reporting accessibility issues</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65">
+        If you find a component that fails AA contrast, a keyboard path that dead-ends, or an ARIA role that misrepresents state, that's a bug.
+        Open an issue on
+        <a href="https://github.com/DominikPieper/atelier-ui/issues" target="_blank" rel="noopener noreferrer" style="color: var(--ui-color-primary)">GitHub</a>
+        with the component name, the assistive tech you're using, and the expected vs. actual behavior.
+        A11y fixes are treated as regressions, not feature requests.
+      </p>
+    </section>
+
+    <!-- Next steps -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 2.5rem">
+      {[
+        { to: '/tokens',             label: 'Reference',  title: 'Design Tokens',      icon: '🎨' },
+        { to: '/design-principles',  label: 'Why',        title: 'Design Principles',  icon: '🧠' },
+        { to: '/components',         label: 'Browse',     title: 'Components',         icon: '🧩' },
+      ].map(({ to, label, title, icon }) => (
+        <a href={to} style="display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 1rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); text-decoration: none; color: inherit; border: 1px solid var(--ui-color-border)">
+          <span style="font-size: 1.25rem; flex-shrink: 0">{icon}</span>
+          <div>
+            <div style="font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ui-color-text-muted); margin-bottom: 0.15rem">{label}</div>
+            <div style="font-size: 0.88rem; font-weight: 700; color: var(--ui-color-text)">{title}</div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+  </div>
+</BaseLayout>
+
+<style>
+  kbd {
+    font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.78rem;
+    padding: 0.15rem 0.45rem;
+    background: var(--ui-color-surface-sunken);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-sm);
+    color: var(--ui-color-text);
+    white-space: nowrap;
+  }
+</style>
