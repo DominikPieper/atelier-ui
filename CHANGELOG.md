@@ -1,3 +1,14 @@
+## 0.0.24 (2026-04-24)
+
+### 🚀 Features
+
+- **docs:** framework-pref persistence, full-text search, a11y page, nav fixes ([fd0f8a8](https://github.com/DominikPieper/atelier-ui/commit/fd0f8a8))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.23 (2026-04-23)
 
 ### 🚀 Features

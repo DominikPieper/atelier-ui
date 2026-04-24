@@ -1,3 +1,7 @@
+## 0.0.24 (2026-04-24)
+
+This was a version bump only for angular to align it with other projects, there were no code changes.
+
 ## 0.0.23 (2026-04-23)
 
 ### 🚀 Features
