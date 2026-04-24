@@ -1,3 +1,20 @@
+## 0.0.25 (2026-04-24)
+
+### 🚀 Features
+
+- **docs:** per-component a11y blocks, version badge, hero polish ([66319e4](https://github.com/DominikPieper/atelier-ui/commit/66319e4))
+- **docs:** composition-part prop tables + tokenized terminal mockups ([f5ed1b5](https://github.com/DominikPieper/atelier-ui/commit/f5ed1b5))
+
+### 🩹 Fixes
+
+- **ci:** stop package-lock.json drift across pushes ([4240e37](https://github.com/DominikPieper/atelier-ui/commit/4240e37))
+- **docs:** resolve lint + llms.txt drift from CI ([075e949](https://github.com/DominikPieper/atelier-ui/commit/075e949))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.24 (2026-04-24)
 
 ### 🚀 Features
