@@ -40,7 +40,7 @@ export function setFramework(fw: Framework): void {
 }
 
 export function subscribeFramework(cb: (fw: Framework) => void): () => void {
-  if (typeof window === 'undefined') return () => {};
+  if (typeof window === 'undefined') return () => undefined;
   const handler = (e: Event) => {
     const fw = parse((e as CustomEvent<Framework>).detail);
     if (fw) cb(fw);
