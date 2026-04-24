@@ -148,6 +148,26 @@ body {
   text-transform: uppercase;
 }
 
+.docs-sidebar-version {
+  display: inline-block;
+  margin-top: 0.25rem;
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.66rem;
+  font-weight: 600;
+  padding: 0.1rem 0.45rem;
+  border-radius: var(--ui-radius-sm);
+  background: color-mix(in srgb, var(--ui-color-primary) 10%, transparent);
+  color: var(--ui-color-text-muted);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: background 0.12s, color 0.12s;
+}
+
+.docs-sidebar-version:hover {
+  background: color-mix(in srgb, var(--ui-color-primary) 22%, transparent);
+  color: var(--ui-color-text);
+}
+
 .docs-sidebar-close {
   display: none;
   background: transparent;
@@ -993,6 +1013,61 @@ body {
   border: 1px solid color-mix(in srgb, #61dafb 30%, transparent);
   letter-spacing: 0.04em;
   cursor: help;
+}
+
+/* ── Per-component accessibility section ───────────────── */
+.docs-a11y-role {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 1rem;
+  font-size: 0.82rem;
+}
+
+.docs-a11y-role-label {
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ui-color-text-muted);
+}
+
+.docs-a11y-kbd {
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.78rem;
+  padding: 0.15rem 0.45rem;
+  background: var(--ui-color-surface-sunken);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-sm);
+  color: var(--ui-color-text);
+  white-space: nowrap;
+}
+
+.docs-a11y-notes {
+  margin: 0 0 1rem;
+  padding-left: 1.2rem;
+  font-size: 0.82rem;
+  color: var(--ui-color-text-muted);
+  line-height: 1.65;
+}
+
+.docs-a11y-notes li {
+  margin-bottom: 0.35rem;
+}
+
+.docs-a11y-link {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--ui-color-text-muted);
+}
+
+.docs-a11y-link a {
+  color: var(--ui-color-primary);
+  text-decoration: none;
+}
+
+.docs-a11y-link a:hover {
+  text-decoration: underline;
 }
 
 .docs-demo-canvas {

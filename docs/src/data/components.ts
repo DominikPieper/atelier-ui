@@ -14,6 +14,17 @@ export interface PropRow {
   vue?: FrameworkPropOverrides;
 }
 
+export interface KeyBinding {
+  key: string;
+  action: string;
+}
+
+export interface A11yInfo {
+  role?: string;
+  keyboard: KeyBinding[];
+  notes?: string[];
+}
+
 export interface ComponentDoc {
   name: string;
   selector: string;
@@ -27,6 +38,7 @@ export interface ComponentDoc {
     promptSnippet: string;
     commonHallucinations: string[];
   };
+  a11y?: A11yInfo;
 }
 
 export const CATEGORY_ICONS: Record<string, string> = {
@@ -207,6 +219,19 @@ export const componentDocs: Record<string, ComponentDoc> = {
   <LlmRadio radioValue="pro">Pro</LlmRadio>
   <LlmRadio radioValue="enterprise">Enterprise</LlmRadio>
 </LlmRadioGroup>`,
+    a11y: {
+      role: 'radiogroup',
+      keyboard: [
+        { key: 'Tab', action: 'Move focus into the group (to the checked radio, or the first radio if none is checked).' },
+        { key: 'Arrow Up / Left', action: 'Select the previous radio, wrapping to the last.' },
+        { key: 'Arrow Down / Right', action: 'Select the next radio, wrapping to the first.' },
+        { key: 'Space', action: 'Select the focused radio.' },
+      ],
+      notes: [
+        'Only the currently selected radio is in the tab sequence (roving tabindex) — the whole group is one tab stop.',
+        'If you supply a label via <label> or aria-labelledby on the group, screen readers announce it when focus enters.',
+      ],
+    },
   },
 
   select: {
@@ -240,6 +265,21 @@ export const componentDocs: Record<string, ComponentDoc> = {
         'AI may use standard HTML "select" and "option" tags.',
         'AI may try to use "items" or "options" prop instead of the composable child pattern.'
       ]
+    },
+    a11y: {
+      role: 'combobox / listbox',
+      keyboard: [
+        { key: 'Enter / Space / Arrow Down', action: 'Open the listbox.' },
+        { key: 'Arrow Up / Down', action: 'Move between options.' },
+        { key: 'Home / End', action: 'Jump to the first / last option.' },
+        { key: 'Enter', action: 'Confirm the highlighted option and close.' },
+        { key: 'Escape', action: 'Close without changing selection.' },
+        { key: 'Type a character', action: 'Jump to the next option starting with that letter.' },
+      ],
+      notes: [
+        'The trigger carries aria-expanded and aria-controls that point at the listbox.',
+        'Disabled options are skipped by keyboard navigation.',
+      ],
     }
   },
 
@@ -257,14 +297,28 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the combobox' },
       { name: 'invalid', type: 'boolean', default: 'false', description: 'Applies invalid/error styling' },
     ],
-    codeExample: `<LlmCombobox 
-  placeholder="Search framework..." 
+    codeExample: `<LlmCombobox
+  placeholder="Search framework..."
   options={[
     { label: 'Angular', value: 'ng' },
     { label: 'React', value: 'react' },
     { label: 'Vue', value: 'vue' }
-  ]} 
+  ]}
 />`,
+    a11y: {
+      role: 'combobox',
+      keyboard: [
+        { key: 'Type', action: 'Filter the options. The list updates in place.' },
+        { key: 'Arrow Down', action: 'Open the list (if closed) and focus the first matching option.' },
+        { key: 'Arrow Up / Down', action: 'Move between filtered options.' },
+        { key: 'Enter', action: 'Select the highlighted option.' },
+        { key: 'Escape', action: 'Close the list and clear focus.' },
+      ],
+      notes: [
+        'The input has aria-autocomplete="list" and aria-expanded reflects the open state.',
+        'The list is exposed as aria-activedescendant so screen readers announce the highlighted option without losing text-caret focus.',
+      ],
+    },
   },
 
   badge: {
@@ -422,6 +476,18 @@ export const componentDocs: Record<string, ComponentDoc> = {
   <LlmTab label="Notifications">Notification preferences.</LlmTab>
   <LlmTab label="Billing" disabled={true}>Billing info.</LlmTab>
 </LlmTabGroup>`,
+    a11y: {
+      role: 'tablist / tab / tabpanel',
+      keyboard: [
+        { key: 'Arrow Left / Right', action: 'Move between tabs. Focus wraps at the ends.' },
+        { key: 'Home / End', action: 'Jump to the first / last tab.' },
+        { key: 'Enter / Space', action: 'Activate the focused tab (manual activation mode).' },
+      ],
+      notes: [
+        'Tabs use roving tabindex — only the active tab is in the document tab sequence.',
+        'Each LlmTab has aria-controls pointing at its panel, and the panel has aria-labelledby pointing back at the tab. Disabled tabs are skipped by arrow navigation.',
+      ],
+    },
   },
 
   stepper: {
@@ -477,6 +543,22 @@ export const componentDocs: Record<string, ComponentDoc> = {
   <LlmMenuSeparator />
   <LlmMenuItem disabled={true}>Delete</LlmMenuItem>
 </LlmMenu>`,
+    a11y: {
+      role: 'menu / menuitem',
+      keyboard: [
+        { key: 'Enter / Space / Arrow Down', action: 'Open the menu from the trigger and focus the first item.' },
+        { key: 'Arrow Up / Down', action: 'Move between items, wrapping at the ends.' },
+        { key: 'Home / End', action: 'Jump to the first / last item.' },
+        { key: 'Enter / Space', action: 'Activate the focused item and close the menu.' },
+        { key: 'Escape', action: 'Close and return focus to the trigger.' },
+        { key: 'Arrow Right', action: 'Open a submenu (if present).' },
+        { key: 'Arrow Left', action: 'Close the current submenu and return to parent.' },
+      ],
+      notes: [
+        'The trigger carries aria-haspopup="menu" and aria-expanded.',
+        'Separators render as role="separator" and are skipped by keyboard navigation.',
+      ],
+    },
   },
 
   dialog: {
@@ -499,6 +581,18 @@ export const componentDocs: Record<string, ComponentDoc> = {
     <LlmButton variant="primary" onClick={() => setOpen(false)}>Delete</LlmButton>
   </LlmDialogFooter>
 </LlmDialog>`,
+    a11y: {
+      role: 'dialog (aria-modal="true")',
+      keyboard: [
+        { key: 'Escape', action: 'Close the dialog. Focus is returned to the element that opened it.' },
+        { key: 'Tab / Shift+Tab', action: 'Cycle through focusable elements inside the dialog (focus is trapped).' },
+      ],
+      notes: [
+        'Initial focus goes to the first tabbable element inside LlmDialogContent on open.',
+        'LlmDialogHeader is automatically linked as the accessible name via aria-labelledby.',
+        'Background content is inert while the dialog is open — screen readers only hear the dialog content.',
+      ],
+    },
   },
 
   drawer: {
@@ -523,6 +617,17 @@ export const componentDocs: Record<string, ComponentDoc> = {
     <LlmButton onClick={() => setOpen(false)}>Close</LlmButton>
   </LlmDrawerFooter>
 </LlmDrawer>`,
+    a11y: {
+      role: 'dialog (aria-modal="true")',
+      keyboard: [
+        { key: 'Escape', action: 'Close the drawer. Focus returns to the trigger.' },
+        { key: 'Tab / Shift+Tab', action: 'Cycle through focusable elements inside the drawer (focus is trapped).' },
+      ],
+      notes: [
+        'Same accessibility model as LlmDialog — the visual slide-in is purely presentational.',
+        'Backdrop click closes the drawer only when closeOnBackdrop is true; Escape always closes.',
+      ],
+    },
   },
 
   tooltip: {
@@ -543,6 +648,18 @@ export const componentDocs: Record<string, ComponentDoc> = {
 <LlmTooltip tooltip="Copy to clipboard" position="right">
   <LlmButton variant="outline">Copy</LlmButton>
 </LlmTooltip>`,
+    a11y: {
+      role: 'tooltip',
+      keyboard: [
+        { key: 'Tab (focus trigger)', action: 'Show the tooltip. It hides when focus leaves.' },
+        { key: 'Escape', action: 'Dismiss the tooltip while focus stays on the trigger.' },
+      ],
+      notes: [
+        'Uses aria-describedby — the tooltip supplements, never replaces, the trigger\'s accessible name.',
+        'Tooltips are shown on focus, not only on hover, so keyboard users get the same affordance.',
+        'Never put interactive content (links, buttons) inside a tooltip — it cannot be reached by keyboard.',
+      ],
+    },
   },
 
   toast: {
@@ -567,6 +684,18 @@ const { show } = useLlmToast();
 show('Saved!', { variant: 'success' });
 show('Error occurred', { variant: 'danger', duration: 8000 });
 show('Persistent', { duration: 0 });`,
+    a11y: {
+      role: 'status / alert',
+      keyboard: [
+        { key: 'Tab', action: 'Reach the dismiss button inside the toast.' },
+        { key: 'Enter / Space (on dismiss)', action: 'Close the toast early.' },
+      ],
+      notes: [
+        'Default toasts live in an aria-live="polite" region — announced without interrupting.',
+        'Danger-variant toasts use role="alert" so screen readers announce them immediately.',
+        'Auto-dismiss respects prefers-reduced-motion and pauses while the toast is hovered or focused.',
+      ],
+    },
   },
 
   accordion: {
@@ -588,6 +717,19 @@ show('Persistent', { duration: 0 });`,
     Another answer here.
   </LlmAccordionItem>
 </LlmAccordionGroup>`,
+    a11y: {
+      role: 'heading + region (disclosure pattern)',
+      keyboard: [
+        { key: 'Tab', action: 'Move focus between accordion headers.' },
+        { key: 'Enter / Space', action: 'Expand or collapse the focused section.' },
+        { key: 'Arrow Up / Down', action: 'Move between headers within the same group.' },
+        { key: 'Home / End', action: 'Jump to the first / last header in the group.' },
+      ],
+      notes: [
+        'Each header is a real button with aria-expanded reflecting state and aria-controls pointing at its panel.',
+        'Panels have role="region" with aria-labelledby pointing at their header, so the section has a screen-reader landmark.',
+      ],
+    },
   },
 
   alert: {

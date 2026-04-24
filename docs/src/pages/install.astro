@@ -69,6 +69,15 @@ const COMPONENT_IMPORT: Record<string, string> = {
   React:   `import {\n  LlmButton, LlmCard, LlmInput, LlmTextarea,\n  LlmCheckbox, LlmToggle, LlmBadge, LlmAlert,\n  LlmSelect, LlmOption, LlmDialog, LlmTabGroup,\n  LlmTab, LlmAccordionGroup, LlmMenu, LlmMenuItem,\n  LlmTooltip, LlmToastProvider, useLlmToast,\n  LlmSkeleton, LlmAvatar, LlmAvatarGroup\n} from '@atelier-ui/react';`,
   Vue:     `import {\n  LlmButton, LlmCard, LlmInput, LlmTextarea,\n  LlmCheckbox, LlmToggle, LlmBadge, LlmAlert,\n  LlmSelect, LlmOption, LlmDialog, LlmTabGroup,\n  LlmTab, LlmAccordionGroup, LlmMenu, LlmMenuItem,\n  LlmTooltip, LlmSkeleton, LlmAvatar, LlmAvatarGroup\n} from '@atelier-ui/vue';`,
 };
+
+// Why the import sets differ across frameworks: each framework wires toasts
+// in the idiomatic way for its own DI / composition model. The underlying
+// component set is otherwise identical.
+const IMPORT_NOTE: Record<string, string> = {
+  Angular: 'Toasts are shown via LlmToast on a host element; an injectable LlmToastService triggers them. No Provider tree needed — Angular DI handles it.',
+  React:   'Toasts need a root <LlmToastProvider>. Call useLlmToast() inside any descendant component to push messages. LlmAvatarGroup is a React-only composition helper.',
+  Vue:     'Toasts use the composition API: call useLlmToast() inside <script setup>. No Provider component — a module-scoped store is shared across the app.',
+};
 ---
 
 <BaseLayout
@@ -206,6 +215,9 @@ const COMPONENT_IMPORT: Record<string, string> = {
             <span class="docs-file-path-notes">{COMPONENT_FILE[fw].notes}</span>
           </div>
           <Code code={COMPONENT_IMPORT[fw]} lang="ts" />
+          <p style="margin: 0.6rem 0 0; padding: 0.55rem 0.85rem; font-size: 0.76rem; color: var(--ui-color-text-muted); line-height: 1.55; background: var(--ui-color-primary-light); border-radius: var(--ui-radius-sm); border-left: 2px solid var(--ui-color-primary)">
+            <strong style="color: var(--ui-color-text); font-weight: 700">Why this list:</strong> {IMPORT_NOTE[fw]}
+          </p>
         </div>
       ))}
     </div>

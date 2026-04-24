@@ -487,6 +487,43 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
         </div>
       )}
 
+      {/* Accessibility */}
+      {doc.a11y && (
+        <div className="docs-section">
+          <h2 className="docs-section-title">Accessibility</h2>
+          {doc.a11y.role && (
+            <p className="docs-a11y-role">
+              <span className="docs-a11y-role-label">ARIA role</span>
+              <code>{doc.a11y.role}</code>
+            </p>
+          )}
+          <table className="docs-props-table" style={{ marginBottom: doc.a11y.notes ? '1rem' : 0 }}>
+            <thead>
+              <tr>
+                <th style={{ width: '32%' }}>Key</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {doc.a11y.keyboard.map((row, i) => (
+                <tr key={i}>
+                  <td><kbd className="docs-a11y-kbd">{row.key}</kbd></td>
+                  <td>{row.action}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {doc.a11y.notes && doc.a11y.notes.length > 0 && (
+            <ul className="docs-a11y-notes">
+              {doc.a11y.notes.map((note, i) => <li key={i}>{note}</li>)}
+            </ul>
+          )}
+          <p className="docs-a11y-link">
+            See the <a href="/accessibility">accessibility overview</a> for the site-wide WCAG stance.
+          </p>
+        </div>
+      )}
+
       {/* Storybook link */}
       <div className="docs-section">
         <a
