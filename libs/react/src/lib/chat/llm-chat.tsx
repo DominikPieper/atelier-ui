@@ -79,6 +79,18 @@ export function LlmChat({
     }
   }, [open, variant]);
 
+  // Auto-focus the input on open for drawer / popup. Inline keeps user focus.
+  const hostRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    if (variant === 'inline') return;
+    const host = hostRef.current;
+    if (!host) return;
+    requestAnimationFrame(() => {
+      host.querySelector<HTMLTextAreaElement>('textarea')?.focus();
+    });
+  }, [open, variant]);
+
   useEffect(() => {
     if (variant !== 'drawer') return;
     const dialog = dialogRef.current;
@@ -118,7 +130,7 @@ export function LlmChat({
 
   return (
     <ChatContext.Provider value={ctx}>
-      <div className={hostClass}>
+      <div ref={hostRef} className={hostClass}>
         {variant === 'drawer' && (
           <dialog
             ref={dialogRef}
@@ -214,15 +226,28 @@ export function LlmChatHeader({
 
 /**
  * Scrollable message list. Project `LlmChatMessage`, `LlmChatTyping`, or
- * `LlmChatSuggestion` children inside.
+ * `LlmChatSuggestion` children inside. Auto-scrolls to the bottom whenever
+ * children are added or content changes — important for streaming responses
+ * where new tokens are appended live.
  */
 export function LlmChatMessages({
   children,
   className,
   ...rest
 }: HTMLAttributes<HTMLDivElement>) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const stickToBottom = () => { el.scrollTop = el.scrollHeight; };
+    stickToBottom();
+    const observer = new MutationObserver(stickToBottom);
+    observer.observe(el, { childList: true, subtree: true, characterData: true });
+    return () => observer.disconnect();
+  }, []);
   return (
     <div
+      ref={ref}
       className={['llm-chat-messages', className].filter(Boolean).join(' ')}
       {...rest}
     >

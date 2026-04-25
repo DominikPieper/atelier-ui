@@ -19,7 +19,7 @@ export interface LlmChatProps {
 </script>
 
 <script setup lang="ts">
-import { computed, provide, ref, toRef, useId, watch } from 'vue';
+import { computed, nextTick, provide, ref, toRef, useId, useTemplateRef, watch } from 'vue';
 import './llm-chat.css';
 
 defineOptions({ name: 'LlmChat' });
@@ -35,6 +35,7 @@ const emit = defineEmits<{
 }>();
 
 const dialogRef = ref<HTMLDialogElement | null>(null);
+const hostRef = useTemplateRef<HTMLDivElement>('hostRef');
 const headerId = useId();
 const statusRef = toRef(props, 'status');
 
@@ -63,6 +64,20 @@ watch(
   { flush: 'post' },
 );
 
+// Auto-focus the input on open for drawer / popup. Inline keeps user focus.
+watch(
+  () => props.open,
+  async (isOpen) => {
+    if (!isOpen) return;
+    if (props.variant === 'inline') return;
+    await nextTick();
+    requestAnimationFrame(() => {
+      hostRef.value?.querySelector<HTMLTextAreaElement>('textarea')?.focus();
+    });
+  },
+  { flush: 'post', immediate: true },
+);
+
 function onDialogClose() { emit('update:open', false); }
 function onDialogCancel(event: Event) {
   event.preventDefault();
@@ -81,7 +96,7 @@ const hostClasses = computed(() => [
 </script>
 
 <template>
-  <div :class="hostClasses">
+  <div ref="hostRef" :class="hostClasses">
     <template v-if="variant === 'drawer'">
       <dialog
         ref="dialogRef"

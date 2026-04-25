@@ -1,7 +1,9 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   ElementRef,
+  afterNextRender,
   computed,
   effect,
   inject,
@@ -125,6 +127,7 @@ export class LlmChat {
   readonly headerId = `llm-chat-header-${nextId++}`;
 
   protected readonly dialogRef = viewChild<ElementRef<HTMLDialogElement>>('dialogEl');
+  private readonly host: ElementRef<HTMLElement> = inject(ElementRef);
   private readonly triggerEl = signal<HTMLElement | null>(null);
 
   protected readonly hostClasses = computed(
@@ -146,6 +149,17 @@ export class LlmChat {
         this.triggerEl()?.focus();
         this.triggerEl.set(null);
       }
+    });
+
+    // Auto-focus the input on open for drawer / popup. Inline variant keeps
+    // user focus where it was.
+    effect(() => {
+      if (!this.open()) return;
+      if (this.variant() === 'inline') return;
+      // Wait for the surface to be in the DOM (showModal / @if (open) render).
+      requestAnimationFrame(() => {
+        this.host.nativeElement.querySelector<HTMLTextAreaElement>('textarea')?.focus();
+      });
     });
   }
 
@@ -210,7 +224,9 @@ export class LlmChatHeader {
 
 /**
  * Scrollable message list for `llm-chat`. Project `llm-chat-message`,
- * `llm-chat-typing`, or `llm-chat-suggestion` children inside.
+ * `llm-chat-typing`, or `llm-chat-suggestion` children inside. Auto-scrolls
+ * to the bottom whenever children are added or content changes — important
+ * for streaming responses where new tokens are appended live.
  */
 @Component({
   selector: 'llm-chat-messages',
@@ -219,7 +235,21 @@ export class LlmChatHeader {
   template: `<ng-content />`,
   styleUrl: './llm-chat.css',
 })
-export class LlmChatMessages {}
+export class LlmChatMessages {
+  private readonly host: ElementRef<HTMLElement> = inject(ElementRef);
+  private readonly destroyRef = inject(DestroyRef);
+
+  constructor() {
+    afterNextRender(() => {
+      const el = this.host.nativeElement;
+      const stickToBottom = (): void => { el.scrollTop = el.scrollHeight; };
+      stickToBottom();
+      const observer = new MutationObserver(stickToBottom);
+      observer.observe(el, { childList: true, subtree: true, characterData: true });
+      this.destroyRef.onDestroy(() => observer.disconnect());
+    });
+  }
+}
 
 /**
  * A single chat message. Role drives bubble alignment and color.
