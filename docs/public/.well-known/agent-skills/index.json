@@ -2,6 +2,13 @@
   "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
   "skills": [
     {
+      "name": "figma-workspace-architect",
+      "type": "skill-md",
+      "description": "Claude Code skill for designing, building, and auditing Figma workspaces via figma-console-mcp.",
+      "url": "https://atelier.pieper.io/.well-known/agent-skills/figma-workspace-architect/SKILL.md",
+      "digest": "sha256:8a39386f0ef17252369bdedb46d2926d70ed83992d4af5cba2d213ed90990469"
+    },
+    {
       "name": "storybook-angular",
       "type": "skill-md",
       "description": "Look up Atelier UI Angular component props, types, and usage examples via Storybook MCP",

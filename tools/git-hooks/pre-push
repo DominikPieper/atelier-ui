@@ -17,16 +17,18 @@ set -e
 ROOT=$(git rev-parse --show-toplevel)
 cd "$ROOT"
 
-# Regenerate quietly. Both scripts are idempotent.
+# Regenerate quietly. All scripts are idempotent.
 node tools/scripts/sync-spec.mjs > /dev/null 2>&1 || true
 node tools/scripts/gen-llms-txt.mjs > /dev/null 2>&1 || true
+node tools/scripts/sync-skill-discovery.mjs figma-workspace-architect > /dev/null 2>&1 || true
 
 drift=$(git diff --name-only -- \
   libs/angular/src/lib/spec.ts \
   libs/react/src/lib/spec.ts \
   libs/vue/src/lib/spec.ts \
   docs/public/llms.txt \
-  docs/public/llms-full.txt 2>/dev/null)
+  docs/public/llms-full.txt \
+  'docs/public/.well-known/agent-skills/**' 2>/dev/null)
 
 if [ -n "$drift" ]; then
   echo ""
@@ -38,7 +40,8 @@ if [ -n "$drift" ]; then
   echo "  This usually means a chore(release) commit was rebased in but the"
   echo "  generated artifacts were not regenerated. Fix:"
   echo ""
-  echo "    git add libs/*/src/lib/spec.ts docs/public/llms.txt docs/public/llms-full.txt"
+  echo "    git add libs/*/src/lib/spec.ts docs/public/llms.txt docs/public/llms-full.txt \\"
+  echo "          'docs/public/.well-known/agent-skills/**'"
   echo "    git commit --amend --no-edit"
   echo "    git push"
   echo ""

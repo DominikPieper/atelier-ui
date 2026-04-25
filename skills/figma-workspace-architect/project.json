@@ -12,6 +12,16 @@
         "command": "node tools/scripts/package-skill.mjs figma-workspace-architect"
       }
     },
+    "sync-discovery": {
+      "executor": "nx:run-commands",
+      "outputs": [
+        "{workspaceRoot}/docs/public/.well-known/agent-skills/figma-workspace-architect",
+        "{workspaceRoot}/docs/public/.well-known/agent-skills/index.json"
+      ],
+      "options": {
+        "command": "node tools/scripts/sync-skill-discovery.mjs figma-workspace-architect"
+      }
+    },
     "lint": {
       "executor": "nx:run-commands",
       "options": {

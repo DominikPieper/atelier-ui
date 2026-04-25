@@ -111,6 +111,14 @@
         "version": {
           "conventionalCommits": true
         }
+      },
+      "skills": {
+        "projects": ["figma-workspace-architect"],
+        "releaseTagPattern": "skill-{projectName}-{version}",
+        "version": {
+          "conventionalCommits": true,
+          "fallbackCurrentVersionResolver": "disk"
+        }
       }
     },
     "changelog": {
