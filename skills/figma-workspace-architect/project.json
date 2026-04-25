@@ -1,0 +1,22 @@
+{
+  "name": "figma-workspace-architect",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "skills/figma-workspace-architect",
+  "projectType": "library",
+  "tags": ["type:skill"],
+  "targets": {
+    "package": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/skills/figma-workspace-architect.zip"],
+      "options": {
+        "command": "node tools/scripts/package-skill.mjs figma-workspace-architect"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node tools/scripts/check-skill.mjs figma-workspace-architect"
+      }
+    }
+  }
+}
