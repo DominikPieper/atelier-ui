@@ -9,6 +9,7 @@ export {
   LlmCardFooter,
 } from './lib/card/llm-card';
 export { LlmBadge } from './lib/badge/llm-badge';
+export { LlmIcon } from './lib/icon/llm-icon';
 export { LlmInput } from './lib/input/llm-input';
 export { LlmTextarea } from './lib/textarea/llm-textarea';
 export { LlmCheckbox } from './lib/checkbox/llm-checkbox';

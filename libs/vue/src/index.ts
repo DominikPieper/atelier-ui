@@ -13,6 +13,9 @@ export { default as LlmAvatarGroup } from './lib/avatar/llm-avatar-group.vue';
 // Badge
 export { default as LlmBadge } from './lib/badge/llm-badge.vue';
 
+// Icon
+export { default as LlmIcon } from './lib/icon/llm-icon.vue';
+
 // Breadcrumbs
 export { default as LlmBreadcrumbs } from './lib/breadcrumbs/llm-breadcrumbs.vue';
 export { default as LlmBreadcrumbItem } from './lib/breadcrumbs/llm-breadcrumb-item.vue';

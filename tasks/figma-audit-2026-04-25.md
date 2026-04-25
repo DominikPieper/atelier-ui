@@ -21,7 +21,7 @@
 | Token Architecture   | 83/100| Clean tiers + Modes; pulled down by `ALL_SCOPES` on 72 vars |
 | Component Metadata   | 83/100| All 27 sets described; descriptions are substantive (200–1240 chars) |
 | Accessibility        | 79/100| 9 contrast fails on danger/outline states, 7 color-only fails on danger family |
-| Consistency          | 82/100| 33 text nodes don't use Text Styles; otherwise tight |
+| Consistency          | 90/100| Text Styles introduced and applied — see TS resolution below |
 | Coverage             | 75/100| No Icon Component Set on the Icons page |
 
 ## Priority list
@@ -88,11 +88,11 @@ Effort key: **S** = single tool call. **M** = a few coordinated calls. **L** = m
 - **State:** No data — would require deep inspection of each set.
 - **Severity:** (deferred)
 
-#### CD4 — Icons modeled as Variants
+#### CD4 — Icons modeled as Variants — **RESOLVED 2026-04-25**
 - **State:** `Icons` page exists in the file's page list, but contains zero Component Sets and zero standalone Components (`figma_execute` walk confirms empty results for `/icon/i` regex match).
 - **Severity:** **Warning**
-- **Fix:** Two paths. Either (a) populate the Icons page with a real icon set (decision needed: own draws, or import an existing pack like Lucide/Heroicons), or (b) accept that Atelier is code-only on icons and rename the page or remove it.
-- **Effort:** L (full icon set is multi-day).
+- **Fix applied:** Created `LlmIcon` ComponentSet on the Icons page (`471:2730`) with 21 named variants matching the existing documentation catalog: success, warning, danger, info, error, chevron-{up,down,left,right}, sort-{asc,desc}, arrow-{right,left}, copy, paste, add, edit, delete, close, more, default-toast. Each variant is a 32×32 frame with the glyph at 16px Inter Regular, bound to `color/text` for fill and using the `icon/glyph-md` Text Style. ComponentSet background bound to `color/surface-sunken`, border bound to `color/border`. Lint on Icons page: 0 warnings.
+- **Effort:** L → M (delivered as glyph-icon ComponentSet rather than full SVG icon pack)
 
 #### CD5 — Composition / atomic structure
 - **State:** Not deeply inspected.
@@ -191,12 +191,19 @@ Otherwise: variable paths consistent (slash-grouped, kebab-case-within-segment, 
 
 ### Consistency — from the lint pass
 
-#### TS — No-text-style on Button text nodes (33 occurrences)
+#### TS — No-text-style on Button text nodes (33 occurrences) — **RESOLVED 2026-04-25**
 - **State:** All 33 button text labels (`"Button"`, `"⟳"`) don't use a shared Text Style. They have direct font-name + bound fontSize + bound fill.
 - **Severity:** **Warning**
 - **Notes:** This is a deliberate Atelier choice or an oversight — depends. Text Styles add a layer of indirection over `font-size` Variables. Some teams prefer Variables-only typography; others use Text Styles for `body-md`, `heading-lg` etc. as composed bundles (size + weight + line-height + family). The fact that 33 nodes share the same shape suggests Atelier *would* benefit from a `text/button` Text Style (Inter Medium + bound font-size variant + bound color).
-- **Fix:** Introduce 4–8 Text Styles for the canonical typography bundles (button-sm/md/lg, body-md, heading-md, code-sm) and re-attach. OR document that Atelier intentionally is Variables-only-typography.
-- **Effort:** M
+- **Fix applied:** Introduced 14 canonical Text Styles, all bound to `font-size/*` Variables where a matching token exists:
+  - `body/{sm,md,lg}` (Inter Regular)
+  - `label/{sm,md,lg}` (Inter Medium) — applied to all 28 LlmButton labels
+  - `heading/{sm,md,lg}` (Inter Semi Bold)
+  - `display/section-title` (Inter Bold 64) — applied to all 6 section titles (Inputs, Display, Navigation, Overlay, Feedback, AI)
+  - `icon/glyph-{sm,md,xs}` — applied to all 13 spinner glyphs across Button, Input, Select, Combobox, Checkbox, Radio, RadioGroup, Toggle, Table loading states
+  - `label/avatar-xs` — applied to xs avatar initials
+- **Verification:** Lint dropped from 33 → 0 unstyled text nodes in the audited component scope. The 197 remaining unstyled nodes are inside the LlmChat AI-section mockup primitives — separate scope, will be cleaned up when LlmChat is built as a real component.
+- **Effort:** M (delivered)
 
 #### HC — Hardcoded #000000 on "Inputs" section fill
 - **State:** The `Inputs` section frame on the Components page has a hardcoded `#000000` fill.

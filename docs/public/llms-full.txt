@@ -1,6 +1,6 @@
 # Atelier UI — Full API Reference
 
-> Complete component API for LLM consumption. 27 accessible components for Angular, React, and Vue with consistent prop naming across all frameworks.
+> Complete component API for LLM consumption. 28 accessible components for Angular, React, and Vue with consistent prop naming across all frameworks.
 > Version 0.0.30 | https://atelier.pieper.io
 
 ---
@@ -255,6 +255,22 @@ Each entry lists:
     <LlmBadge variant="danger">Error</LlmBadge>
     <LlmBadge variant="info">Info</LlmBadge>
     <LlmBadge size="sm" variant="success">Small</LlmBadge>
+
+---
+
+### LlmIcon
+
+  Pictogram glyph icon. 21 named variants matching the Figma `LlmIcon` component set. Decorative by default; pass `label` to announce a meaning to assistive tech.
+
+  Props:
+    name   'success' | 'warning' | 'danger' | 'info' | 'error' | 'chevron-up' | 'chevron-down' | 'chevron-left' | 'chevron-right' | 'sort-asc' | 'sort-desc' | 'arrow-right' | 'arrow-left' | 'copy' | 'paste' | 'add' | 'edit' | 'delete' | 'close' | 'more' | 'default-toast'  —          The icon name. Required.
+    size   'sm' | 'md' | 'lg'                                                                                                                                                                                                                                                    'md'       Icon size. Maps to the framework font-size scale.
+    label  string                                                                                                                                                                                                                                                                undefined  Accessible label. When provided, the icon is announced as an image with this label. When omitted, the icon is hidden from assistive tech (treated as decorative).
+
+  Usage:
+    <LlmIcon name="success" />
+    <LlmIcon name="warning" size="lg" label="Warning" />
+    <LlmIcon name="chevron-down" size="sm" />
 
 ---
 

@@ -68,7 +68,7 @@ export const SECTION_ICONS: Record<string, string> = {
 
 export const COMPONENT_CATEGORIES: Record<string, string[]> = {
   Inputs: ['button', 'input', 'textarea', 'checkbox', 'toggle', 'radio-group', 'select', 'combobox'],
-  Display: ['badge', 'card', 'table', 'avatar', 'skeleton', 'progress', 'code-block'],
+  Display: ['badge', 'icon', 'card', 'table', 'avatar', 'skeleton', 'progress', 'code-block'],
   Navigation: ['breadcrumbs', 'tabs', 'stepper', 'pagination', 'menu'],
   Overlay: ['dialog', 'drawer', 'tooltip', 'toast'],
   Layout: ['accordion', 'alert'],
@@ -365,6 +365,21 @@ export const componentDocs: Record<string, ComponentDoc> = {
 <LlmBadge variant="danger">Error</LlmBadge>
 <LlmBadge variant="info">Info</LlmBadge>
 <LlmBadge size="sm" variant="success">Small</LlmBadge>`,
+  },
+
+  icon: {
+    name: 'Icon',
+    selector: 'LlmIcon',
+    description: 'Pictogram glyph icon. 21 named variants matching the Figma `LlmIcon` component set. Decorative by default; pass `label` to announce a meaning to assistive tech.',
+    category: 'Display',
+    props: [
+      { name: 'name', type: "'success' | 'warning' | 'danger' | 'info' | 'error' | 'chevron-up' | 'chevron-down' | 'chevron-left' | 'chevron-right' | 'sort-asc' | 'sort-desc' | 'arrow-right' | 'arrow-left' | 'copy' | 'paste' | 'add' | 'edit' | 'delete' | 'close' | 'more' | 'default-toast'", default: '—', description: 'The icon name. Required.' },
+      { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Icon size. Maps to the framework font-size scale.' },
+      { name: 'label', type: 'string', default: 'undefined', description: 'Accessible label. When provided, the icon is announced as an image with this label. When omitted, the icon is hidden from assistive tech (treated as decorative).' },
+    ],
+    codeExample: `<LlmIcon name="success" />
+<LlmIcon name="warning" size="lg" label="Warning" />
+<LlmIcon name="chevron-down" size="sm" />`,
   },
 
   card: {

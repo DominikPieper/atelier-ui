@@ -345,6 +345,43 @@ export interface LlmTdSpec {
 }
 
 // ---------------------------------------------------------------------------
+// Icon
+// ---------------------------------------------------------------------------
+export type LlmIconName =
+  | 'success'
+  | 'warning'
+  | 'danger'
+  | 'info'
+  | 'error'
+  | 'chevron-up'
+  | 'chevron-down'
+  | 'chevron-left'
+  | 'chevron-right'
+  | 'sort-asc'
+  | 'sort-desc'
+  | 'arrow-right'
+  | 'arrow-left'
+  | 'copy'
+  | 'paste'
+  | 'add'
+  | 'edit'
+  | 'delete'
+  | 'close'
+  | 'more'
+  | 'default-toast';
+export type LlmIconSize = 'sm' | 'md' | 'lg';
+export interface LlmIconSpec {
+  name: LlmIconName;
+  size?: LlmIconSize;
+  /**
+   * Accessible label. When provided, the icon is announced as an image with
+   * this label. When omitted, the icon is hidden from assistive tech (treated
+   * as decorative).
+   */
+  label?: string;
+}
+
+// ---------------------------------------------------------------------------
 // Chat (AI surface)
 // ---------------------------------------------------------------------------
 export type LlmChatVariant = 'drawer' | 'popup' | 'inline';

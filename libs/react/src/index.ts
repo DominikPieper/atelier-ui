@@ -2,6 +2,7 @@ export * from './lib/accordion/llm-accordion';
 export * from './lib/alert/llm-alert';
 export * from './lib/avatar/llm-avatar';
 export * from './lib/badge/llm-badge';
+export * from './lib/icon/llm-icon';
 export * from './lib/breadcrumbs/llm-breadcrumbs';
 export * from './lib/button/llm-button';
 export * from './lib/card/llm-card';

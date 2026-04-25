@@ -1,0 +1,29 @@
+.llm-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--ui-font-family);
+  font-weight: var(--ui-font-weight-medium);
+  line-height: 1;
+  color: currentColor;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.llm-icon.size-sm {
+  width: 1rem;
+  height: 1rem;
+  font-size: var(--ui-font-size-sm);
+}
+
+.llm-icon.size-md {
+  width: 1.25rem;
+  height: 1.25rem;
+  font-size: var(--ui-font-size-md);
+}
+
+.llm-icon.size-lg {
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: var(--ui-font-size-lg);
+}

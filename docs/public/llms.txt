@@ -1,6 +1,6 @@
 # Atelier UI
 
-> LLM-optimized component library for Angular, React, and Vue. 27 accessible components with flat prop APIs, data-driven patterns, and consistent naming across all three frameworks.
+> LLM-optimized component library for Angular, React, and Vue. 28 accessible components with flat prop APIs, data-driven patterns, and consistent naming across all three frameworks.
 
 Packages: @atelier-ui/angular | @atelier-ui/react | @atelier-ui/vue
 Version: 0.0.30
@@ -30,6 +30,7 @@ Docs: https://atelier.pieper.io
 - [Select](https://atelier.pieper.io/components/select): value, placeholder, disabled, readonly, invalid, required
 - [Combobox](https://atelier.pieper.io/components/combobox): value, options, placeholder, disabled, invalid
 - [Badge](https://atelier.pieper.io/components/badge): variant (default|success|warning|danger|info), size (sm|md)
+- [Icon](https://atelier.pieper.io/components/icon): name (success|warning|danger|info|error|chevron-up|chevron-down|chevron-left|chevron-right|sort-asc|sort-desc|arrow-right|arrow-left|copy|paste|add|edit|delete|close|more|default-toast), size (sm|md|lg), label
 - [Card](https://atelier.pieper.io/components/card): variant (elevated|outlined|flat), padding (none|sm|md|lg)
 - [Table](https://atelier.pieper.io/components/table): variant (default|striped|bordered), size (sm|md|lg), stickyHeader
 - [Avatar](https://atelier.pieper.io/components/avatar): src, alt, name, size (xs|sm|md|lg|xl), shape (circle|square), status (online|offline|away|busy)
