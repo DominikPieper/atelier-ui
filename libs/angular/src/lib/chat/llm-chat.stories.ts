@@ -141,8 +141,7 @@ export const DrawerStreaming: Story = {
         <llm-chat-messages>
           <llm-chat-message role="assistant">Hi! How can I help?</llm-chat-message>
           <llm-chat-message role="user">Write a small sorting function for my user list (by name, asc).</llm-chat-message>
-          <llm-chat-message role="assistant">Sure! Here's a one-liner using Array.prototype.sort with a</llm-chat-message>
-          <llm-chat-typing />
+          <llm-chat-message role="assistant">Sure! Here's a one-liner using Array.prototype.sort with a<llm-chat-typing inline /></llm-chat-message>
         </llm-chat-messages>
         <llm-chat-input />
       </llm-chat>
@@ -245,8 +244,7 @@ export const PopupStreaming: Story = {
         <llm-chat-messages>
           <llm-chat-message role="assistant">Hi! How can I help?</llm-chat-message>
           <llm-chat-message role="user">Draft a release note for v3.</llm-chat-message>
-          <llm-chat-message role="assistant">Sure! Here's a draft: ## v3.0 — What's new * New LlmChat component for AI…</llm-chat-message>
-          <llm-chat-typing />
+          <llm-chat-message role="assistant">Sure! Here's a draft: ## v3.0 — What's new * New LlmChat component for AI…<llm-chat-typing inline /></llm-chat-message>
         </llm-chat-messages>
         <llm-chat-input />
       </llm-chat>
@@ -370,8 +368,7 @@ export const InlineStreaming: Story = {
 1. Renders all three variants without runtime errors
 2. Tab moves focus into the input area first
 3. Escape closes drawer/popup variants
-4. Streaming state announces with</llm-chat-message>
-            <llm-chat-typing />
+4. Streaming state announces with<llm-chat-typing inline /></llm-chat-message>
           </llm-chat-messages>
           <llm-chat-input />
         </llm-chat>

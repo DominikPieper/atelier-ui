@@ -285,8 +285,16 @@ export class LlmChatMessage {
 }
 
 /**
- * Typing indicator (three animated dots). Render at the end of the message
- * list while the assistant is streaming a response.
+ * Typing indicator (three animated dots).
+ *
+ * Two display modes:
+ * - **Standalone bubble** (default) — render as the last child of
+ *   `LlmChatMessages` to show "the assistant is starting to respond"
+ *   before any tokens arrive.
+ * - **Inline cursor** (`inline`) — render as the LAST child INSIDE
+ *   `LlmChatMessage role="assistant"` to show the dots after the
+ *   currently-streaming text. The bubble background is dropped so the
+ *   dots read as a typing caret at the end of the partial response.
  */
 @Component({
   selector: 'llm-chat-typing',
@@ -300,11 +308,19 @@ export class LlmChatMessage {
   `,
   styleUrl: './llm-chat.css',
   host: {
+    '[class]': 'hostClasses()',
     '[attr.role]': '"status"',
     '[attr.aria-live]': '"polite"',
   },
 })
-export class LlmChatTyping {}
+export class LlmChatTyping {
+  /** When true, renders as an inline cursor without bubble chrome. */
+  readonly inline = input(false);
+
+  protected readonly hostClasses = computed(() =>
+    this.inline() ? 'is-inline' : ''
+  );
+}
 
 /**
  * Tappable suggestion chip used in the empty state to seed a conversation.

@@ -105,8 +105,7 @@ export const DrawerStreaming: Story = {
       <LlmChatMessages>
         <LlmChatMessage role="assistant">Hi! How can I help?</LlmChatMessage>
         <LlmChatMessage role="user">Write a small sorting function for my user list (by name, asc).</LlmChatMessage>
-        <LlmChatMessage role="assistant">Sure! Here&apos;s a one-liner using Array.prototype.sort with a</LlmChatMessage>
-        <LlmChatTyping />
+        <LlmChatMessage role="assistant">Sure! Here&apos;s a one-liner using Array.prototype.sort with a<LlmChatTyping inline /></LlmChatMessage>
       </LlmChatMessages>
       <LlmChatInput />
     </LlmChat>
@@ -197,8 +196,7 @@ export const PopupStreaming: Story = {
       <LlmChatMessages>
         <LlmChatMessage role="assistant">Hi! How can I help?</LlmChatMessage>
         <LlmChatMessage role="user">Draft a release note for v3.</LlmChatMessage>
-        <LlmChatMessage role="assistant">Sure! Here&apos;s a draft: ## v3.0 — What&apos;s new * New LlmChat component for AI…</LlmChatMessage>
-        <LlmChatTyping />
+        <LlmChatMessage role="assistant">Sure! Here&apos;s a draft: ## v3.0 — What&apos;s new * New LlmChat component for AI…<LlmChatTyping inline /></LlmChatMessage>
       </LlmChatMessages>
       <LlmChatInput />
     </LlmChat>
@@ -299,12 +297,14 @@ export const InlineStreaming: Story = {
         <LlmChatMessages>
           <LlmChatMessage role="assistant">Welcome back. What would you like to work on?</LlmChatMessage>
           <LlmChatMessage role="user">Generate test cases for LlmChat — cover keyboard, screen reader, and streaming behavior.</LlmChatMessage>
-          <LlmChatMessage role="assistant">{`Here are the test cases I'm drafting:
+          <LlmChatMessage role="assistant">
+            {`Here are the test cases I'm drafting:
 1. Renders all three variants without runtime errors
 2. Tab moves focus into the input area first
 3. Escape closes drawer/popup variants
-4. Streaming state announces with`}</LlmChatMessage>
-          <LlmChatTyping />
+4. Streaming state announces with`}
+            <LlmChatTyping inline />
+          </LlmChatMessage>
         </LlmChatMessages>
         <LlmChatInput />
       </LlmChat>

@@ -289,20 +289,32 @@ export function LlmChatMessage({
 }
 
 /**
- * Typing indicator (three animated dots). Render at the end of the
- * message list while the assistant is streaming.
+ * Typing indicator (three animated dots).
+ *
+ * Two display modes:
+ * - **Standalone bubble** (default) — render at the end of the message
+ *   list to show "the assistant is starting to respond".
+ * - **Inline cursor** (`inline`) — render as the LAST child INSIDE the
+ *   currently-streaming `LlmChatMessage` so the dots read as a typing
+ *   caret at the end of the partial text.
  */
+export interface LlmChatTypingProps extends HTMLAttributes<HTMLDivElement> {
+  /** When true, renders as an inline cursor without bubble chrome. */
+  inline?: boolean;
+}
+
 export function LlmChatTyping({
+  inline = false,
   className,
   ...rest
-}: HTMLAttributes<HTMLDivElement>) {
+}: LlmChatTypingProps) {
+  const classes = [
+    'llm-chat-typing',
+    inline && 'is-inline',
+    className,
+  ].filter(Boolean).join(' ');
   return (
-    <div
-      role="status"
-      aria-live="polite"
-      className={['llm-chat-typing', className].filter(Boolean).join(' ')}
-      {...rest}
-    >
+    <div role="status" aria-live="polite" className={classes} {...rest}>
       <span className="dot" />
       <span className="dot" />
       <span className="dot" />

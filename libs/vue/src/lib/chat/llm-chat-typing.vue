@@ -1,9 +1,25 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+
 defineOptions({ name: 'LlmChatTyping' });
+
+interface LlmChatTypingProps {
+  /** When true, renders as an inline cursor without bubble chrome. */
+  inline?: boolean;
+}
+
+const props = withDefaults(defineProps<LlmChatTypingProps>(), {
+  inline: false,
+});
+
+const classes = computed(() => [
+  'llm-chat-typing',
+  props.inline && 'is-inline',
+]);
 </script>
 
 <template>
-  <div class="llm-chat-typing" role="status" aria-live="polite">
+  <div :class="classes" role="status" aria-live="polite">
     <span class="dot" />
     <span class="dot" />
     <span class="dot" />
