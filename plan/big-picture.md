@@ -516,3 +516,53 @@ nx generate @atelier-ui/generators:llm-component-react --name=<name>
 
 Generated files: `llm-<name>.tsx`, `llm-<name>.css`, `llm-<name>.spec.tsx`, `llm-<name>.stories.tsx`
 Auto-exports from `libs/llm-components-react/src/index.ts`.
+
+---
+
+## LlmChat
+
+A new top-level library category, **AI**, sits alongside the existing five categories (`Inputs`, `Display`, `Navigation`, `Overlay`, `Layout`). It is reserved for AI-surface components — chat panels, prompt cards, agent traces, tool-call indicators, etc. — that don't fit cleanly into the existing taxonomy.
+
+Its first component is **`LlmChat`**, an AI assistant surface. Implementation is **provider-agnostic** — wrapper takes `variant` / `status` / `open`; everything else is composed via slots. Wiring to CopilotKit, Vercel AI SDK, or a custom backend is a thin downstream adapter on top of the `(send)` / `(stop)` events.
+
+### Variants and States
+
+| Variant | Description | States |
+|---|---|---|
+| `drawer` | Right-anchored slide-in panel, full viewport height. Built on native `<dialog>` + CDK A11y focus trap (Angular). | idle · streaming · error |
+| `popup` | Floating bubble (bottom-right) that opens a compact 380×560 chat window. | idle · streaming · error |
+| `inline` | Embedded as a regular page surface — uses `LlmCard` chrome, no overlay, no close button. | idle · streaming · error |
+
+All states use only existing design tokens — primary teal for the user bubble, `brand-ai` lime for the assistant accent, `surface-sunken` for assistant bubbles, `danger` for connection errors and the Stop button.
+
+### Sub-component composition
+
+```
+LlmChat                   – Wrapper, holds variant / status / open
+├── LlmChatHeader         – Title block + auto close button (hidden on inline)
+├── LlmChatMessages       – Scrollable message list
+│   ├── LlmChatMessage    – role: 'user' | 'assistant' | 'system', + failed flag
+│   ├── LlmChatTyping     – three animated dots, prefers-reduced-motion aware
+│   └── LlmChatSuggestion – tappable starter chip with label + hint
+└── LlmChatInput          – textarea + Send button, swaps to danger Stop while streaming
+```
+
+### Figma reference
+
+File: `Atelier UI` (key `QMnDD8uZQPldPrlCwZZ58T`), page `Components`, top-level section **AI**. Three variant sub-sections (`LlmChat / drawer`, `LlmChat / popup`, `LlmChat / inline`) each contain four state frames. All Atelier components inside the mockups are real instances (not detached primitives) so design changes propagate automatically.
+
+### Implementation status
+
+| Area | Status |
+|---|---|
+| Figma mockups (12 frames) | ✅ shipped |
+| `LlmButton` `danger` variant (used by Stop button) | ✅ shipped (`d46dc94`) |
+| Spec types in `libs/spec/src/index.ts` | ✅ shipped |
+| Angular implementation (`libs/angular/src/lib/chat/`) | ✅ shipped (`fc01c4b`) |
+| React implementation (`libs/react/src/lib/chat/`) | ✅ shipped (`02d7e94`) |
+| Vue implementation (`libs/vue/src/lib/chat/`) | ✅ shipped (`9cb1fdc`) |
+| Storybook stories (12 per framework, mirroring Figma) | ✅ shipped |
+| Tests (Angular 18, React 17, Vue 19) | ✅ shipped |
+| Docs entry in `docs/src/data/components.ts` + AI category | ✅ shipped (`104ff47`) |
+| CopilotKit adapter | ⏸ deferred — visual surface only for now |
+| Vercel AI SDK adapter | ⏸ not on the roadmap |
