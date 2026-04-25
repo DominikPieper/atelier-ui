@@ -57,7 +57,10 @@ export {
 export type { ToastOptions, ToastData } from './lib/toast/llm-toast';
 export { LlmAvatar, LlmAvatarGroup } from './lib/avatar/llm-avatar';
 export { LlmProgress } from './lib/progress/llm-progress';
-export { LlmBreadcrumbs, LlmBreadcrumbItem } from './lib/breadcrumbs/llm-breadcrumbs';
+export {
+  LlmBreadcrumbs,
+  LlmBreadcrumbItem,
+} from './lib/breadcrumbs/llm-breadcrumbs';
 export { LLM_BREADCRUMBS } from './lib/breadcrumbs/llm-breadcrumbs.token';
 export type { LlmBreadcrumbsContext } from './lib/breadcrumbs/llm-breadcrumbs.token';
 export { LlmPagination } from './lib/pagination/llm-pagination';
@@ -82,5 +85,19 @@ export {
 export type { LlmTableContext, LlmSortDirection } from './lib/table/llm-table';
 export { LlmStepper, LlmStep } from './lib/stepper/llm-stepper';
 export { LLM_STEPPER } from './lib/stepper/llm-stepper.token';
-export type { LlmStepperContext, StepInfo } from './lib/stepper/llm-stepper.token';
+export type {
+  LlmStepperContext,
+  StepInfo,
+} from './lib/stepper/llm-stepper.token';
 export { LlmCodeBlock } from './lib/code-block/llm-code-block';
+export {
+  LlmChat,
+  LlmChatHeader,
+  LlmChatMessages,
+  LlmChatMessage,
+  LlmChatTyping,
+  LlmChatSuggestion,
+  LlmChatInput,
+} from './lib/chat/llm-chat';
+export { LLM_CHAT } from './lib/chat/llm-chat.token';
+export type { LlmChatContext } from './lib/chat/llm-chat.token';

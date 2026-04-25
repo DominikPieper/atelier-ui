@@ -347,3 +347,33 @@ export interface LlmThSpec {
 export interface LlmTdSpec {
   align?: LlmTableAlign;
 }
+
+// ---------------------------------------------------------------------------
+// Chat (AI surface)
+// ---------------------------------------------------------------------------
+export type LlmChatVariant = 'drawer' | 'popup' | 'inline';
+export type LlmChatStatus = 'idle' | 'streaming' | 'error';
+export type LlmChatMessageRole = 'user' | 'assistant' | 'system';
+
+export interface LlmChatMessageSpec {
+  id: string;
+  role: LlmChatMessageRole;
+  content: string;
+  failed?: boolean;
+}
+
+export interface LlmChatSuggestionSpec {
+  id: string;
+  label: string;
+  hint?: string;
+}
+
+export interface LlmChatSpec {
+  variant?: LlmChatVariant;
+  status?: LlmChatStatus;
+  open?: boolean;
+  title?: string;
+  statusLabel?: string;
+  placeholder?: string;
+  errorMessage?: string;
+}
