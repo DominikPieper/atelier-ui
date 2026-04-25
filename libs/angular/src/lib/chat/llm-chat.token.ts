@@ -1,5 +1,5 @@
 import { InjectionToken, Signal } from '@angular/core';
-import type { LlmChatStatus } from '../spec';
+import type { LlmChatStatus, LlmChatVariant } from '../spec';
 
 /**
  * Context token used by `llm-chat` sub-components (header, input) to
@@ -8,6 +8,7 @@ import type { LlmChatStatus } from '../spec';
  */
 export interface LlmChatContext {
   readonly headerId: string;
+  readonly variant: Signal<LlmChatVariant>;
   readonly status: Signal<LlmChatStatus>;
   close(): void;
   toggle(): void;

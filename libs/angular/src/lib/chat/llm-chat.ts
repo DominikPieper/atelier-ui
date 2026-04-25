@@ -12,6 +12,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { A11yModule } from '@angular/cdk/a11y';
+import { NgTemplateOutlet } from '@angular/common';
 import type {
   LlmChatMessageRole,
   LlmChatStatus,
@@ -47,13 +48,14 @@ let nextId = 0;
 @Component({
   selector: 'llm-chat',
   standalone: true,
-  imports: [A11yModule],
+  imports: [A11yModule, NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: LLM_CHAT,
       useFactory: (chat: LlmChat) => ({
         headerId: chat.headerId,
+        variant: chat.variant,
         status: chat.status,
         close: () => chat.open.set(false),
         toggle: () => chat.open.set(!chat.open()),
@@ -62,6 +64,7 @@ let nextId = 0;
     },
   ],
   template: `
+    <ng-template #content><ng-content /></ng-template>
     @switch (variant()) {
       @case ('drawer') {
         <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
@@ -76,14 +79,14 @@ let nextId = 0;
         >
           <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
           <div class="surface drawer-surface" (click)="$event.stopPropagation()">
-            <ng-content />
+            <ng-container [ngTemplateOutlet]="content" />
           </div>
         </dialog>
       }
       @case ('popup') {
         @if (open()) {
           <div class="surface popup-surface" [attr.aria-labelledby]="headerId" role="dialog">
-            <ng-content />
+            <ng-container [ngTemplateOutlet]="content" />
           </div>
         }
         <button
@@ -98,7 +101,7 @@ let nextId = 0;
       }
       @default {
         <section class="surface inline-surface" [attr.aria-labelledby]="headerId">
-          <ng-content />
+          <ng-container [ngTemplateOutlet]="content" />
         </section>
       }
     }
@@ -170,29 +173,31 @@ export class LlmChat {
     <div class="title-block">
       <ng-content />
     </div>
-    <button
-      type="button"
-      class="close-btn"
-      aria-label="Close chat"
-      (click)="context.close()"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="14"
-        height="14"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-        focusable="false"
+    @if (context.variant() !== 'inline') {
+      <button
+        type="button"
+        class="close-btn"
+        aria-label="Close chat"
+        (click)="context.close()"
       >
-        <line x1="18" y1="6" x2="6" y2="18" />
-        <line x1="6" y1="6" x2="18" y2="18" />
-      </svg>
-    </button>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    }
   `,
   styleUrl: './llm-chat.css',
   host: {
