@@ -1,6 +1,6 @@
 # Atelier UI
 
-> LLM-optimized component library for Angular, React, and Vue. 26 accessible components with flat prop APIs, data-driven patterns, and consistent naming across all three frameworks.
+> LLM-optimized component library for Angular, React, and Vue. 27 accessible components with flat prop APIs, data-driven patterns, and consistent naming across all three frameworks.
 
 Packages: @atelier-ui/angular | @atelier-ui/react | @atelier-ui/vue
 Version: 0.0.24
@@ -47,3 +47,4 @@ Docs: https://atelier.pieper.io
 - [Toast](https://atelier.pieper.io/components/toast): variant (default|success|warning|danger|info), duration, dismissible, position (top-right|top-center|bottom-right|bottom-center)
 - [Accordion](https://atelier.pieper.io/components/accordion): multi, variant (default|bordered|separated)
 - [Alert](https://atelier.pieper.io/components/alert): variant (info|success|warning|danger), dismissible
+- [Chat](https://atelier.pieper.io/components/chat): variant (drawer|popup|inline), status (idle|streaming|error), open

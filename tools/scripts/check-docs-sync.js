@@ -53,6 +53,7 @@ const SPEC_TO_DOCS = {
   LlmProgressSpec: 'progress',
   LlmDrawerSpec: 'drawer',
   LlmBreadcrumbsSpec: 'breadcrumbs',
+  LlmChatSpec: 'chat',
 };
 
 /**

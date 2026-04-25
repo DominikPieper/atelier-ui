@@ -1,6 +1,6 @@
 # Atelier UI — Full API Reference
 
-> Complete component API for LLM consumption. 26 accessible components for Angular, React, and Vue with consistent prop naming across all frameworks.
+> Complete component API for LLM consumption. 27 accessible components for Angular, React, and Vue with consistent prop naming across all frameworks.
 > Version 0.0.24 | https://atelier.pieper.io
 
 ---
@@ -610,6 +610,35 @@ Each entry lists:
     <LlmAlert variant="success">Your changes were saved successfully.</LlmAlert>
     <LlmAlert variant="warning" dismissible={true}>Your session expires in 5 minutes.</LlmAlert>
     <LlmAlert variant="danger">Something went wrong. Please try again.</LlmAlert>
+
+---
+
+### LlmChat
+
+  Composable AI assistant surface. Three layout variants (drawer, popup, inline) share the same content slots and a status-driven Send/Stop button toggle. Provider-agnostic — wire it to CopilotKit, Vercel AI SDK, or your own backend by binding the Send/Stop events.
+
+  Props:
+    variant       'drawer' | 'popup' | 'inline'   'drawer'  Layout — slide-in drawer, floating bubble + popup window, or embedded inline card.
+    status        'idle' | 'streaming' | 'error'  'idle'    Connection / response status. Drives the input footer button (Send → Stop) and disables the textarea while streaming.
+    open          boolean                         false     Whether the chat is open. Only used by drawer and popup variants. Two-way bindable.
+    onOpenChange  (open: boolean) => void         —         React: emitted when the open state should change. Vue uses v-model:open; Angular uses [(open)].
+
+  Usage:
+    <LlmChat variant="drawer" open={open} onOpenChange={setOpen} status="idle">
+      <LlmChatHeader>
+        <LlmAvatar size="sm" name="AI" />
+        <span>AI Assistant</span>
+        <LlmBadge variant="success" size="sm">Online</LlmBadge>
+      </LlmChatHeader>
+      <LlmChatMessages>
+        <LlmChatMessage role="assistant">Hi! How can I help today?</LlmChatMessage>
+        <LlmChatMessage role="user">Show me a sorting function.</LlmChatMessage>
+        <LlmChatMessage role="assistant">
+          <LlmCodeBlock language="ts" code={snippet} />
+        </LlmChatMessage>
+      </LlmChatMessages>
+      <LlmChatInput onSend={onSend} onStop={onStop} />
+    </LlmChat>
 
 ---
 

@@ -54,6 +54,7 @@ export const CATEGORY_ICONS: Record<string, string> = {
   Navigation: '🧭',
   Overlay: '🪟',
   Layout: '📐',
+  AI: '🤖',
 };
 
 export const SECTION_ICONS: Record<string, string> = {
@@ -71,6 +72,7 @@ export const COMPONENT_CATEGORIES: Record<string, string[]> = {
   Navigation: ['breadcrumbs', 'tabs', 'stepper', 'pagination', 'menu'],
   Overlay: ['dialog', 'drawer', 'tooltip', 'toast'],
   Layout: ['accordion', 'alert'],
+  AI: ['chat'],
 };
 
 export const ALL_COMPONENTS = Object.values(COMPONENT_CATEGORIES).flat();
@@ -917,5 +919,80 @@ show('Persistent', { duration: 0 });`,
 <LlmCodeBlock code={tsCode} filename="app.ts" showLineNumbers={true} />
 <LlmCodeBlock code={shellCmd} language="shell" />
 <LlmCodeBlock code={jsonStr} filename="package.json" />`,
+  },
+
+  chat: {
+    name: 'Chat',
+    selector: 'LlmChat',
+    description: 'Composable AI assistant surface. Three layout variants (drawer, popup, inline) share the same content slots and a status-driven Send/Stop button toggle. Provider-agnostic — wire it to CopilotKit, Vercel AI SDK, or your own backend by binding the Send/Stop events.',
+    category: 'AI',
+    status: 'new',
+    props: [
+      { name: 'variant', type: "'drawer' | 'popup' | 'inline'", default: "'drawer'", description: 'Layout — slide-in drawer, floating bubble + popup window, or embedded inline card.' },
+      { name: 'status', type: "'idle' | 'streaming' | 'error'", default: "'idle'", description: 'Connection / response status. Drives the input footer button (Send → Stop) and disables the textarea while streaming.' },
+      { name: 'open', type: 'boolean', default: 'false', description: 'Whether the chat is open. Only used by drawer and popup variants. Two-way bindable.' },
+      { name: 'onOpenChange', type: '(open: boolean) => void', default: '—', description: 'React: emitted when the open state should change. Vue uses v-model:open; Angular uses [(open)].' },
+    ],
+    codeExample: `<LlmChat variant="drawer" open={open} onOpenChange={setOpen} status="idle">
+  <LlmChatHeader>
+    <LlmAvatar size="sm" name="AI" />
+    <span>AI Assistant</span>
+    <LlmBadge variant="success" size="sm">Online</LlmBadge>
+  </LlmChatHeader>
+  <LlmChatMessages>
+    <LlmChatMessage role="assistant">Hi! How can I help today?</LlmChatMessage>
+    <LlmChatMessage role="user">Show me a sorting function.</LlmChatMessage>
+    <LlmChatMessage role="assistant">
+      <LlmCodeBlock language="ts" code={snippet} />
+    </LlmChatMessage>
+  </LlmChatMessages>
+  <LlmChatInput onSend={onSend} onStop={onStop} />
+</LlmChat>`,
+    composition: [
+      { name: 'LlmChatHeader', description: 'Title block (avatar / name / status badge) plus the close button. Slot-only. The close button is auto-hidden on the inline variant.', props: [] },
+      { name: 'LlmChatMessages', description: 'Scrollable message list. Project LlmChatMessage, LlmChatTyping, and LlmChatSuggestion children inside.', props: [] },
+      {
+        name: 'LlmChatMessage',
+        description: 'A single message bubble. Role drives alignment (user → right, primary fill; assistant/system → left, surface-sunken). Use failed for the error-state dashed border.',
+        props: [
+          { name: 'role', type: "'user' | 'assistant' | 'system'", default: "'assistant'", description: 'Sender of the message — drives bubble color and alignment.' },
+          { name: 'failed', type: 'boolean', default: 'false', description: 'Marks the message as failed (red dashed border).' },
+        ],
+      },
+      { name: 'LlmChatTyping', description: 'Three animated dots. Render at the end of the message list while the assistant is streaming. Respects prefers-reduced-motion.', props: [] },
+      {
+        name: 'LlmChatSuggestion',
+        description: 'Tappable starter chip used in the empty state. Emits selected (Angular/Vue) or onSelected (React) with the label.',
+        props: [
+          { name: 'label', type: 'string', default: '— (required)', description: 'Primary text of the chip.' },
+          { name: 'hint', type: 'string', default: '—', description: 'Optional secondary text shown below the label.' },
+        ],
+      },
+      {
+        name: 'LlmChatInput',
+        description: 'Composable input footer. Wraps a textarea and renders a primary "Send" button — automatically swapped for a danger "Stop" button while the parent chat\'s status is "streaming".',
+        props: [
+          { name: 'placeholder', type: 'string', default: 'status-aware', description: 'Defaults to "Message your AI assistant…", "Waiting for response…" while streaming, or "Try again…" on error.' },
+          { name: 'value', type: 'string', default: '—', description: 'Optional controlled value. Omit for uncontrolled internal state.' },
+          { name: 'onSend', type: '(text: string) => void', default: '—', description: 'Fires on Enter (without Shift) or Send-button click.' },
+          { name: 'onStop', type: '() => void', default: '—', description: 'Fires when the Stop button is clicked while streaming.' },
+        ],
+      },
+    ],
+    a11y: {
+      role: 'dialog (drawer/popup), region (inline)',
+      keyboard: [
+        { key: 'Escape', action: 'Close drawer or popup variant. Inline variant ignores Escape.' },
+        { key: 'Tab / Shift+Tab', action: 'Cycle focus inside the drawer (focus is trapped via CDK A11y / focus-trap equivalents).' },
+        { key: 'Enter (in input)', action: 'Send the message.' },
+        { key: 'Shift+Enter (in input)', action: 'Insert a newline without sending.' },
+      ],
+      notes: [
+        'Drawer uses native <dialog> with aria-modal — same accessibility model as LlmDialog and LlmDrawer.',
+        'Streaming state announces via aria-live="polite" on the typing indicator so screen readers know the assistant is responding.',
+        'Stop button uses LlmButton variant="danger" so the destructive intent is communicated by both color and label.',
+        'Inline variant has no overlay chrome — the close button is hidden because there is nothing to close.',
+      ],
+    },
   },
 };

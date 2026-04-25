@@ -372,8 +372,4 @@ export interface LlmChatSpec {
   variant?: LlmChatVariant;
   status?: LlmChatStatus;
   open?: boolean;
-  title?: string;
-  statusLabel?: string;
-  placeholder?: string;
-  errorMessage?: string;
 }
