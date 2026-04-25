@@ -85,13 +85,14 @@ Go straight to `references/decision-heuristics.md`, find the matching decision, 
 
 Each file is self-contained and loaded only when relevant. Don't load everything up front.
 
-- **`references/tool-map.md`** — figma-console-mcp tools grouped by purpose (read, create-tokens, create-components, validate, document). Read first time the agent isn't sure which tool to use.
+- **`references/tool-map.md`** — figma-console-mcp tools grouped by purpose (read, create-tokens, create-components, validate, document). Read first time the agent isn't sure which tool to use. Includes ready-to-use `figma_execute` and `figma_setup_design_tokens` payloads.
 - **`references/token-architecture.md`** — three-tier token model (Primitive / Semantic / Component), Modes, Variable Scopes (this is where most setups go wrong), naming, anti-patterns.
 - **`references/component-design.md`** — Variants vs. Component Properties vs. Instance Swap, atomic composition, slot patterns, Variant Property naming that matches engineering props.
 - **`references/naming-and-file-structure.md`** — slash naming, page layout (Cover / Tokens / Icons / Components / Patterns), `_` and `.` prefixes for unpublished sub-components, library splitting heuristics.
 - **`references/build-workflow.md`** — Build mode in depth: discovery checklist, decide gates, validation steps, documentation requirements.
 - **`references/audit-checklist.md`** — five architectural categories, severity definitions, per-finding fix template.
 - **`references/decision-heuristics.md`** — decision trees for the recurring forks.
+- **`references/code-sync.md`** — keeping Figma Variables in lockstep with code-side tokens (CSS / JSON / framework libraries). Direction-of-truth, sync approaches, mode-mapping pitfalls, drift sources.
 
 ## Output expectations
 

@@ -139,6 +139,19 @@ jobs:
       - name: Build all (push to main)
         if: github.event_name != 'pull_request'
         run: npx nx run-many -t build --parallel=2
+      # ---------------------------------------------------------------------
+      # Skill packaging — validates that every Claude Code skill in skills/
+      # still produces a clean zip. The `lint` target above already validates
+      # SKILL.md frontmatter and reference-link integrity; this step catches
+      # zip-pipeline regressions (missing files, broken `tools/scripts/
+      # package-skill.mjs`, etc.).
+      # ---------------------------------------------------------------------
+      - name: Package skills (affected on PR)
+        if: github.event_name == 'pull_request'
+        run: npx nx affected -t package --parallel=2
+      - name: Package skills (all on push to main)
+        if: github.event_name != 'pull_request'
+        run: npx nx run-many -t package --parallel=2
 
   # ---------------------------------------------------------------------------
   # CLI e2e — spins up local verdaccio, publishes the preset + CLI tarballs,

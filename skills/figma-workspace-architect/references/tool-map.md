@@ -80,3 +80,137 @@ When the client supports the MCP Apps protocol extension and `ENABLE_MCP_APPS=tr
 - **Built variant frames, want them as a component set?** Always `figma_arrange_component_set`, never hand-drawn containers.
 - **Just created a component?** Don't return until `figma_set_description` has run.
 - **About to call a destructive tool (`figma_delete_*`)?** Confirm with the user in chat first, even if they previously implied permission.
+
+## Example payloads
+
+Working snippets for the most common build operations. Treat them as starting points — adapt the names, modes, and scopes to the file at hand.
+
+### Bootstrap a 3-tier token system in one call
+
+`figma_setup_design_tokens` is the fastest way to greenfield a real token architecture. The payload below sets up a `UI Tokens` collection with `Light` / `Dark` modes, a primitive primary palette, and semantic aliases that resolve through to those primitives. Variant Scopes are restricted to the slots each token actually belongs in.
+
+```json
+{
+  "collectionName": "UI Tokens",
+  "modes": ["Light", "Dark"],
+  "variables": [
+    {
+      "name": "primitive/teal/600",
+      "type": "COLOR",
+      "scopes": ["FRAME_FILL", "SHAPE_FILL", "TEXT_FILL", "STROKE_COLOR"],
+      "valuesByMode": { "Light": "#007070", "Dark": "#0a8080" }
+    },
+    {
+      "name": "primitive/teal/700",
+      "type": "COLOR",
+      "scopes": ["FRAME_FILL", "SHAPE_FILL", "TEXT_FILL", "STROKE_COLOR"],
+      "valuesByMode": { "Light": "#005858", "Dark": "#0a6868" }
+    },
+    {
+      "name": "color/primary",
+      "type": "COLOR",
+      "scopes": ["FRAME_FILL", "SHAPE_FILL", "STROKE_COLOR"],
+      "valuesByMode": { "Light": { "alias": "primitive/teal/600" }, "Dark": { "alias": "primitive/teal/600" } }
+    },
+    {
+      "name": "color/primary-hover",
+      "type": "COLOR",
+      "scopes": ["FRAME_FILL", "SHAPE_FILL", "STROKE_COLOR"],
+      "valuesByMode": { "Light": { "alias": "primitive/teal/700" }, "Dark": { "alias": "primitive/teal/700" } }
+    },
+    {
+      "name": "spacing/4",
+      "type": "FLOAT",
+      "scopes": ["GAP", "WIDTH_HEIGHT"],
+      "valuesByMode": { "Light": 16, "Dark": 16 }
+    }
+  ]
+}
+```
+
+Pattern notes:
+- **Primitives** (`primitive/*`) carry the actual hex / number; their scopes are the most permissive valid set.
+- **Semantic** tokens (`color/primary`, `color/primary-hover`) alias primitives via `{ "alias": "primitive/..." }`. Their scopes are tighter — semantic colors should not appear in spacing pickers.
+- **Modes** carry theming. Each Variable has a value (or alias) per mode.
+- **Spacing tokens** are `FLOAT`, not `COLOR`. Don't mix them in one collection unless the system genuinely treats them uniformly.
+
+### Set Variable Scopes after creation (`figma_execute`)
+
+`figma_setup_design_tokens` accepts `scopes` directly, but `figma_create_variable` and the batch flavors do not. Restrict scopes after creation via Plugin API:
+
+```js
+// figma_execute payload
+const variable = await figma.variables.getVariableByIdAsync('VariableID:1234:5');
+variable.scopes = ['FRAME_FILL', 'SHAPE_FILL', 'STROKE_COLOR'];
+return { id: variable.id, scopes: variable.scopes };
+```
+
+`ALL_FILLS` is mutually exclusive with the specific fill scopes — pick one set or the other, not both.
+
+### Create a single-variant Component with a primary fill bound to a Variable
+
+The `build → arrange → describe` pattern in code. Three calls; `figma_execute` for the geometry, `figma_arrange_component_set` for the container, `figma_set_description` for discoverability.
+
+```js
+// figma_execute — build the variant frame
+await figma.loadFontAsync({ family: 'Inter', style: 'Medium' });
+
+const frame = figma.createFrame();
+frame.name = 'variant=primary, size=md';
+frame.layoutMode = 'HORIZONTAL';
+frame.primaryAxisAlignItems = 'CENTER';
+frame.counterAxisAlignItems = 'CENTER';
+frame.paddingLeft = frame.paddingRight = 16;
+frame.paddingTop = frame.paddingBottom = 8;
+frame.itemSpacing = 8;
+frame.cornerRadius = 8;
+frame.layoutSizingHorizontal = 'HUG';
+frame.layoutSizingVertical = 'HUG';
+
+// Bind fill to the semantic Variable
+const primary = await figma.variables.getVariableByIdAsync('VariableID:1234:5');
+const fill = { type: 'SOLID', color: { r: 0, g: 0.44, b: 0.44 } };
+frame.fills = [figma.variables.setBoundVariableForPaint(fill, 'color', primary)];
+
+// Label
+const label = figma.createText();
+label.fontName = { family: 'Inter', style: 'Medium' };
+label.characters = 'Button';
+label.fontSize = 14;
+label.fills = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }];
+frame.appendChild(label);
+
+// Promote to a component
+const component = figma.createComponentFromNode(frame);
+return { id: component.id, name: component.name };
+```
+
+Then call `figma_arrange_component_set` with the array of component IDs (one per variant) to wrap them in the proper Component Set frame, and `figma_set_description` to attach markdown documentation.
+
+### Add a new Mode to an existing collection
+
+```js
+// figma_execute — add a "Compact" density mode and seed its values
+const collection = await figma.variables.getVariableCollectionByIdAsync('VariableCollectionId:1234:0');
+const newModeId = collection.addMode('Compact');
+
+// Seed the spacing/4 Variable in the new mode (smaller value for compact density)
+const spacing4 = await figma.variables.getVariableByIdAsync('VariableID:1234:7');
+spacing4.setValueForMode(newModeId, 12);
+
+return { newModeId, modes: collection.modes.map(m => m.name) };
+```
+
+Modes scale linearly per Variable — adding a mode is cheap, but you now have **N × M** values to maintain. Audit for "hidden" Variables that fall back to default and check the user actually wants that.
+
+### Validation pattern after any meaningful write
+
+```js
+// Right after a build, screenshot the Components page bounding box
+const node = await figma.getNodeByIdAsync('123:456');           // the parent section / page
+const settings = { format: 'PNG', constraint: { type: 'SCALE', value: 1 } };
+const bytes = await node.exportAsync(settings);
+return { bytes: bytes.length };  // confirm it rendered before pulling the image via figma_take_screenshot
+```
+
+Use `figma_take_screenshot` directly when the goal is to look at the result; use the snippet above when the goal is purely to confirm the node is renderable (catches "0×0 frame" bugs cheaply).
