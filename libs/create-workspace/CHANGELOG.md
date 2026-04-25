@@ -1,3 +1,14 @@
+## 0.0.33 (2026-04-25)
+
+### 🩹 Fixes
+
+- **tokens:** consolidate on-primary into mode-aware text-on-primary ([#0](https://github.com/DominikPieper/atelier-ui/issues/0), [#00](https://github.com/DominikPieper/atelier-ui/issues/00))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.32 (2026-04-25)
 
 This was a version bump only for create-workspace to align it with other projects, there were no code changes.
