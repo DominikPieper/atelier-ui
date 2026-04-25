@@ -1,3 +1,17 @@
+## 0.0.26 (2026-04-25)
+
+### 🚀 Features
+
+- **button:** add danger variant ([bcdb114](https://github.com/DominikPieper/atelier-ui/commit/bcdb114))
+- **chat:** add LlmChat component for Angular ([48392af](https://github.com/DominikPieper/atelier-ui/commit/48392af))
+- **chat:** add LlmChat component for React ([5b04778](https://github.com/DominikPieper/atelier-ui/commit/5b04778))
+- **chat:** add LlmChat component for Vue ([f34a34b](https://github.com/DominikPieper/atelier-ui/commit/f34a34b))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.25 (2026-04-24)
 
 ### 🚀 Features

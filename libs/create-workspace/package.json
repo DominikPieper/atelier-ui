@@ -1,6 +1,6 @@
 {
   "name": "@atelier-ui/create-workspace",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "description": "Nx preset for Atelier UI workshop workspaces",
   "keywords": [
     "nx",
