@@ -13,12 +13,19 @@ references/
                                       Look here when a structural decision needs to be made.
   build-workflow.md                 ← Discover → Decide → Map tools → Execute → Validate → Document.
   audit-checklist.md                ← What "well-architected" looks like; what to flag and how.
-  tool-map.md                       ← Which figma-console-mcp tool for which intent.
+  tool-map.md                       ← Which figma-console-mcp tool for which intent. Includes
+                                      ready-to-use figma_execute / figma_setup_design_tokens payloads.
   token-architecture.md             ← Primitive / Semantic / Component tier model + Modes.
   naming-and-file-structure.md      ← Slash naming, page-level taxonomy, library boundaries.
   component-design.md               ← Variants, Component Properties, slot patterns.
+  code-sync.md                      ← Keeping Figma Variables in lockstep with code-side
+                                      tokens (CSS / JSON / framework libs).
+  migration-playbook.md             ← Refactoring an existing file safely. Safety classes,
+                                      coordination protocol, recipes for the common operations.
 assets/
   audit-report-template.md          ← Output template for Audit mode.
+tests/                              ← Behavior-spec fixtures (dev-only — excluded from the
+                                      runtime zip). One scenario per directory.
 ```
 
 ## Develop
@@ -28,6 +35,9 @@ Edit the markdown directly. Targets via Nx:
 ```bash
 # Lint structure (frontmatter, required references, dead links)
 npx nx lint figma-workspace-architect
+
+# Validate test fixtures (well-formedness; manual / LLM-judged grading)
+npx nx test figma-workspace-architect
 
 # Bundle into dist/skills/figma-workspace-architect.zip for distribution
 npx nx package figma-workspace-architect
