@@ -75,13 +75,14 @@
 }
 
 :host(.variant-outline:hover:not(.is-disabled)) {
-  background-color: var(--ui-color-primary-light);
+  background-color: var(--ui-color-surface-sunken);
   border-color: var(--ui-color-primary);
   transform: translateY(-1px);
 }
 
 :host(.variant-outline:active:not(.is-disabled)) {
-  background-color: color-mix(in srgb, var(--ui-color-primary) 12%, transparent);
+  background-color: var(--ui-color-surface-sunken);
+  border-color: var(--ui-color-primary);
   transform: scale(0.97);
 }
 
