@@ -5,7 +5,7 @@ import './llm-button.css';
 defineOptions({ name: 'LlmButton' });
 
 interface LlmButtonProps {
-  variant?: 'primary' | 'secondary' | 'outline';
+  variant?: 'primary' | 'secondary' | 'outline' | 'danger';
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   loading?: boolean;

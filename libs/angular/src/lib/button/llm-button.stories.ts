@@ -19,7 +19,7 @@ const meta: Meta<LlmButton> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'outline'],
+      options: ['primary', 'secondary', 'outline', 'danger'],
     },
     size: {
       control: 'select',
@@ -59,6 +59,11 @@ export const Outline: Story = {
   parameters: { design: figmaNode('129-16') },
 };
 
+export const Danger: Story = {
+  args: { variant: 'danger' },
+  parameters: { design: figmaNode('468-2590') },
+};
+
 export const Small: Story = {
   args: { size: 'sm' },
   parameters: { design: figmaNode('129-2') },
@@ -89,6 +94,7 @@ export const AllVariants: Story = {
         <llm-button variant="primary">Primary</llm-button>
         <llm-button variant="secondary">Secondary</llm-button>
         <llm-button variant="outline">Outline</llm-button>
+        <llm-button variant="danger">Danger</llm-button>
       </div>
     `,
   }),

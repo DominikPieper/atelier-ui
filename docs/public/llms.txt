@@ -21,7 +21,7 @@ Docs: https://atelier.pieper.io
 
 ## Components
 
-- [Button](https://atelier.pieper.io/components/button): variant (primary|secondary|outline), size (sm|md|lg), disabled, loading
+- [Button](https://atelier.pieper.io/components/button): variant (primary|secondary|outline|danger), size (sm|md|lg), disabled, loading
 - [Input](https://atelier.pieper.io/components/input): value, type (text|email|password|number|tel|url), placeholder, disabled, readonly, invalid
 - [Textarea](https://atelier.pieper.io/components/textarea): value, rows, placeholder, disabled, readonly, invalid
 - [Checkbox](https://atelier.pieper.io/components/checkbox): checked, value, indeterminate, disabled, readonly, invalid

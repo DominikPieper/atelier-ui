@@ -10,7 +10,7 @@ describe('LlmButton', () => {
   });
 
   describe('variant classes', () => {
-    it.each(['primary', 'secondary', 'outline'] as const)(
+    it.each(['primary', 'secondary', 'outline', 'danger'] as const)(
       'applies variant-%s class to host',
       async (variant) => {
         const { container } = await render(

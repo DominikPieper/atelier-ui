@@ -83,7 +83,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
     category: 'Inputs',
     status: 'stable',
     props: [
-      { name: 'variant', type: "'primary' | 'secondary' | 'outline'", default: "'primary'", description: 'Visual style variant' },
+      { name: 'variant', type: "'primary' | 'secondary' | 'outline' | 'danger'", default: "'primary'", description: 'Visual style variant' },
       { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Size of the button' },
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the button' },
       { name: 'loading', type: 'boolean', default: 'false', description: 'Shows a loading spinner, disables interaction' },

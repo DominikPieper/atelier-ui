@@ -85,6 +85,27 @@
   transform: scale(0.97);
 }
 
+.llm-button.variant-danger {
+  background-color: var(--ui-color-danger);
+  color: var(--ui-color-text-on-danger);
+  border-color: var(--ui-color-danger);
+  box-shadow: var(--ui-shadow-xs);
+}
+
+.llm-button.variant-danger:hover:not(.is-disabled) {
+  background-color: var(--ui-color-danger-hover);
+  border-color: var(--ui-color-danger-hover);
+  box-shadow: var(--ui-shadow-md);
+  transform: translateY(-1px);
+}
+
+.llm-button.variant-danger:active:not(.is-disabled) {
+  background-color: var(--ui-color-danger-active);
+  border-color: var(--ui-color-danger-active);
+  box-shadow: var(--ui-shadow-xs);
+  transform: scale(0.97);
+}
+
 /* Sizes */
 .llm-button.size-sm {
   padding: var(--ui-spacing-1) var(--ui-spacing-3);

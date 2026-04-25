@@ -16,7 +16,7 @@
 // ---------------------------------------------------------------------------
 // Button
 // ---------------------------------------------------------------------------
-export type LlmButtonVariant = 'primary' | 'secondary' | 'outline';
+export type LlmButtonVariant = 'primary' | 'secondary' | 'outline' | 'danger';
 export type LlmButtonSize = 'sm' | 'md' | 'lg';
 export interface LlmButtonSpec {
   variant?: LlmButtonVariant;

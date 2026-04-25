@@ -17,7 +17,7 @@ const meta: Meta<typeof LlmButton> = {
     template: '<LlmButton v-bind="args">Button</LlmButton>',
   }),
   argTypes: {
-    variant: { control: 'select', options: ['primary', 'secondary', 'outline'] },
+    variant: { control: 'select', options: ['primary', 'secondary', 'outline', 'danger'] },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
     disabled: { control: 'boolean' },
     loading: { control: 'boolean' },
@@ -53,6 +53,11 @@ export const Outline: Story = {
   parameters: { design: figmaNode('129-16') },
 };
 
+export const Danger: Story = {
+  args: { variant: 'danger' },
+  parameters: { design: figmaNode('468-2590') },
+};
+
 export const Small: Story = {
   args: { size: 'sm' },
   parameters: { design: figmaNode('129-2') },
@@ -84,6 +89,7 @@ export const AllVariants: Story = {
         <LlmButton variant="primary">Primary</LlmButton>
         <LlmButton variant="secondary">Secondary</LlmButton>
         <LlmButton variant="outline">Outline</LlmButton>
+        <LlmButton variant="danger">Danger</LlmButton>
       </div>
     `,
   }),

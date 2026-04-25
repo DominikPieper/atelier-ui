@@ -12,7 +12,7 @@ const meta: Meta<typeof LlmButton> = {
   component: LlmButton,
   tags: ['autodocs'],
   argTypes: {
-    variant: { control: 'select', options: ['primary', 'secondary', 'outline'] },
+    variant: { control: 'select', options: ['primary', 'secondary', 'outline', 'danger'] },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
     disabled: { control: 'boolean' },
     loading: { control: 'boolean' },
@@ -30,6 +30,7 @@ export const Default: Story = {};
 export const Primary: Story = { args: { variant: 'primary' }, parameters: { design: figmaNode('129-4') } };
 export const Secondary: Story = { args: { variant: 'secondary' }, parameters: { design: figmaNode('129-10') } };
 export const Outline: Story = { args: { variant: 'outline' }, parameters: { design: figmaNode('129-16') } };
+export const Danger: Story = { args: { variant: 'danger' }, parameters: { design: figmaNode('468-2590') } };
 export const Small: Story = { args: { size: 'sm' }, parameters: { design: figmaNode('129-2') } };
 export const Large: Story = { args: { size: 'lg' }, parameters: { design: figmaNode('129-6') } };
 export const Disabled: Story = { args: { disabled: true } };
@@ -40,6 +41,7 @@ export const AllVariants: Story = {
       <LlmButton variant="primary">Primary</LlmButton>
       <LlmButton variant="secondary">Secondary</LlmButton>
       <LlmButton variant="outline">Outline</LlmButton>
+      <LlmButton variant="danger">Danger</LlmButton>
     </div>
   ),
 };

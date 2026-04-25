@@ -65,10 +65,10 @@ Each entry lists:
   A versatile button component with multiple variants and sizes. Supports loading and disabled states.
 
   Props:
-    variant   'primary' | 'secondary' | 'outline'  'primary'  Visual style variant
-    size      'sm' | 'md' | 'lg'                   'md'       Size of the button
-    disabled  boolean                              false      Disables the button
-    loading   boolean                              false      Shows a loading spinner, disables interaction
+    variant   'primary' | 'secondary' | 'outline' | 'danger'  'primary'  Visual style variant
+    size      'sm' | 'md' | 'lg'                              'md'       Size of the button
+    disabled  boolean                                         false      Disables the button
+    loading   boolean                                         false      Shows a loading spinner, disables interaction
 
   Usage:
     <LlmButton variant="primary">Primary</LlmButton>
