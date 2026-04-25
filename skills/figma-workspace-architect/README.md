@@ -49,15 +49,20 @@ npx nx package figma-workspace-architect
 
 The packaged zip preserves the canonical layout (`figma-workspace-architect/SKILL.md`, `figma-workspace-architect/references/*`, `figma-workspace-architect/assets/*`) that Claude Code expects.
 
-## Install (local Claude Code)
+## In this repo — auto-active
 
-After building:
+The skill is symlinked at `.claude/skills/figma-workspace-architect` → `skills/figma-workspace-architect`. Claude Code picks up project-local skills from `.claude/skills/` automatically when invoked in this repo. No install step. Edits to `SKILL.md` or `references/*.md` take effect on the next session.
+
+## Install elsewhere (other projects / global)
+
+For machines other than this repo:
 
 ```bash
+npx nx package figma-workspace-architect
 unzip -o dist/skills/figma-workspace-architect.zip -d ~/.claude/skills/
 ```
 
-Then re-launch Claude Code; the skill auto-discovers via the `name` in `SKILL.md`.
+Re-launch Claude Code; the skill auto-discovers via the `name` in `SKILL.md`.
 
 ## Scope reminder
 

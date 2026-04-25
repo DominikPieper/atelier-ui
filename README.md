@@ -164,6 +164,11 @@ npm install
 # guard for llms.txt / spec drift caused by interleaved release commits)
 bash tools/scripts/install-hooks.sh
 
+# Project-local Claude Code skills are auto-loaded from .claude/skills/.
+# figma-workspace-architect is symlinked there; no install step needed.
+# Edit skill content under skills/figma-workspace-architect/ — changes
+# take effect on the next Claude Code session.
+
 # Docs site (Astro, port 4300)
 npx nx serve docs
 
