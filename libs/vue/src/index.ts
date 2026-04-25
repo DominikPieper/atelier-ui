@@ -104,3 +104,11 @@ export { default as LlmTooltip } from './lib/tooltip/llm-tooltip.vue';
 
 // CodeBlock
 export { default as LlmCodeBlock } from './lib/code-block/llm-code-block.vue';
+export { default as LlmChat, LlmChatKey } from './lib/chat/llm-chat.vue';
+export type { LlmChatContext } from './lib/chat/llm-chat.vue';
+export { default as LlmChatHeader } from './lib/chat/llm-chat-header.vue';
+export { default as LlmChatMessages } from './lib/chat/llm-chat-messages.vue';
+export { default as LlmChatMessage } from './lib/chat/llm-chat-message.vue';
+export { default as LlmChatTyping } from './lib/chat/llm-chat-typing.vue';
+export { default as LlmChatSuggestion } from './lib/chat/llm-chat-suggestion.vue';
+export { default as LlmChatInput } from './lib/chat/llm-chat-input.vue';
