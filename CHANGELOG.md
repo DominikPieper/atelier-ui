@@ -1,3 +1,23 @@
+## 0.0.31 (2026-04-25)
+
+### 🚀 Features
+
+- **skills:** add figma-workspace-architect Claude Code skill ([db2035c](https://github.com/DominikPieper/atelier-ui/commit/db2035c))
+- **skills:** code-sync reference + payload examples + CI package gate ([#4](https://github.com/DominikPieper/atelier-ui/issues/4))
+- **skills:** add Migrate mode + migration-playbook reference ([cd68b28](https://github.com/DominikPieper/atelier-ui/commit/cd68b28))
+- **skills:** add behavior-spec test fixtures + nx test target ([cfa1e90](https://github.com/DominikPieper/atelier-ui/commit/cfa1e90))
+- **skills:** add iconography reference ([074a75a](https://github.com/DominikPieper/atelier-ui/commit/074a75a))
+- **skills:** scaffold-payload reference + Build Scaffold sub-mode ([d47011c](https://github.com/DominikPieper/atelier-ui/commit/d47011c))
+
+### 🩹 Fixes
+
+- **button:** outline hover/active uses surface-sunken (a11y) ([400bbf4](https://github.com/DominikPieper/atelier-ui/commit/400bbf4))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.30 (2026-04-25)
 
 ### 🚀 Features

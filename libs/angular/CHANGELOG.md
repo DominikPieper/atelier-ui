@@ -1,3 +1,14 @@
+## 0.0.31 (2026-04-25)
+
+### 🩹 Fixes
+
+- **button:** outline hover/active uses surface-sunken (a11y) ([400bbf4](https://github.com/DominikPieper/atelier-ui/commit/400bbf4))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.30 (2026-04-25)
 
 ### 🚀 Features
