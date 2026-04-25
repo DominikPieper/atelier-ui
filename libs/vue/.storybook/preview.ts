@@ -23,7 +23,7 @@ const preview: Preview = {
 
   decorators: [
     (story, context) => {
-      const isDark = context.globals['backgrounds']?.value === '#1a1a2e';
+      const isDark = context.globals['backgrounds']?.value === 'dark';
       document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
       return story();
     },
