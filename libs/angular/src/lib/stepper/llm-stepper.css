@@ -109,7 +109,7 @@
 .step-item.is-completed .step-circle {
   border-color: var(--ui-color-primary);
   background: var(--ui-color-primary);
-  color: var(--ui-color-on-primary);
+  color: var(--ui-color-text-on-primary);
 }
 
 .step-item.is-completed .step-label {

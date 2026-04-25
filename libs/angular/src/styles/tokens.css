@@ -70,7 +70,6 @@
   --ui-color-text-on-secondary: #ffffff;
   --ui-color-text-on-danger: #ffffff;
   --ui-color-text-on-success: #ffffff;
-  --ui-color-on-primary: #ffffff;
 
   /* Colors — Brand palette */
   --ui-color-brand-corporate: #00bebe;
@@ -185,7 +184,7 @@
 
     --ui-color-text: #f1f5f9;
     --ui-color-text-muted: #94a3b8;
-    --ui-color-on-primary: #0f172a;
+    --ui-color-text-on-primary: #0f172a;
     --ui-color-text-on-secondary: #0f172a;
 
     --ui-opacity-disabled: 0.65;
@@ -242,7 +241,7 @@
 
   --ui-color-text: #f1f5f9;
   --ui-color-text-muted: #94a3b8;
-  --ui-color-on-primary: #0f172a;
+  --ui-color-text-on-primary: #0f172a;
   --ui-color-text-on-secondary: #0f172a;
 
   --ui-opacity-disabled: 0.65;
@@ -293,7 +292,7 @@
   --ui-color-border-hover: #d1d5db;
   --ui-color-text: #0f172a;
   --ui-color-text-muted: #64748b;
-  --ui-color-on-primary: #ffffff;
+  --ui-color-text-on-primary: #ffffff;
   --ui-color-input-border: #d1d5db;
   --ui-color-input-border-hover: #9ca3af;
   --ui-color-placeholder: #4b5563;

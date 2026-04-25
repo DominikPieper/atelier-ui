@@ -54,7 +54,7 @@
   margin: auto;
   width: 0.35rem;
   height: 0.6rem;
-  border: 2px solid var(--ui-color-on-primary);
+  border: 2px solid var(--ui-color-text-on-primary);
   border-top: none;
   border-left: none;
   transform: rotate(45deg) translate(-1px, -1px);
@@ -74,7 +74,7 @@
   margin: auto;
   width: 0.5rem;
   height: 2px;
-  background-color: var(--ui-color-on-primary);
+  background-color: var(--ui-color-text-on-primary);
   animation: llm-check-pop var(--ui-duration-normal) var(--ui-ease-spring);
 }
 

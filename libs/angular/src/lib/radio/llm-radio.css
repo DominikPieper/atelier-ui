@@ -55,7 +55,7 @@ input[type='radio']:checked::after {
   width: 0.45rem;
   height: 0.45rem;
   border-radius: 50%;
-  background-color: var(--ui-color-on-primary);
+  background-color: var(--ui-color-text-on-primary);
   animation: llm-radio-pop var(--ui-duration-normal) var(--ui-ease-spring);
 }
 
