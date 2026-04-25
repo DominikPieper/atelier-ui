@@ -1,3 +1,7 @@
+## 0.0.32 (2026-04-25)
+
+This was a version bump only for create-workspace to align it with other projects, there were no code changes.
+
 ## 0.0.31 (2026-04-25)
 
 This was a version bump only for create-workspace to align it with other projects, there were no code changes.
