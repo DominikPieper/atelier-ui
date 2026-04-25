@@ -54,6 +54,17 @@ Never start writing to Figma directly. Run this loop:
 
 The detailed Build playbook is in `references/build-workflow.md`.
 
+#### Scaffold sub-mode — one-shot starter file
+
+Triggered by *scaffold, template, starter, quickstart, bootstrap a new file* (when the user wants a working skeleton in one turn, not an iterative dialogue).
+
+Skip the full Discovery → Decide loop and run a fixed three-call recipe that produces Cover + Tokens + Components pages with placeholder content. The output is a *skeleton* the user is expected to replace, not a finished system. See `references/scaffold-payload.md` for the recipe and the after-scaffold checklist that the agent must hand back to the user.
+
+Use the regular Build loop (not Scaffold) when:
+- The user already has a file and wants additions — Discovery first.
+- The user has specific values to seed — use those, not the placeholder palette.
+- The user wants something polished — Scaffold ships placeholders intentionally.
+
 ### Audit mode
 
 Triggered by *audit, review, check, assess, what's wrong with, how good is*.
@@ -89,6 +100,7 @@ If the migration is large enough to span sessions, finish each session in a self
 | User says…                                                      | Mode    | First action                                            |
 |-----------------------------------------------------------------|---------|---------------------------------------------------------|
 | "create / build / set up / bootstrap…"                          | Build   | `figma_get_file_data` for discovery                     |
+| "scaffold / starter / template / quickstart a new file…"        | Build (Scaffold sub-mode) | Open `references/scaffold-payload.md`, run the three-call recipe |
 | "audit / review / check / assess / how good is…"                | Audit   | Try Design System Dashboard MCP App; then deep-audit    |
 | "should I use a Variant or…?", "is it better to…?"              | Decide  | Open `references/decision-heuristics.md`                |
 | "rename / split / restructure / deprecate / migrate…"           | Migrate | Open `references/migration-playbook.md`; run pre-flight  |
@@ -108,6 +120,8 @@ Each file is self-contained and loaded only when relevant. Don't load everything
 - **`references/decision-heuristics.md`** — decision trees for the recurring forks.
 - **`references/code-sync.md`** — keeping Figma Variables in lockstep with code-side tokens (CSS / JSON / framework libraries). Direction-of-truth, sync approaches, mode-mapping pitfalls, drift sources.
 - **`references/migration-playbook.md`** — refactoring an existing file safely. Safety classes per operation, the additive coordination protocol, recipes for Variable renames, Mode adds, Variant-Set splits, semantic-tier promotions, and Library splits.
+- **`references/iconography.md`** — icon-system architecture. Size stops, internal boxed-model layout, Component-vs-vector heuristic, color-binding (never hardcode fills), naming categories, library-split signals, audit checklist.
+- **`references/scaffold-payload.md`** — Scaffold sub-mode recipe. Three-call sequence (`figma_setup_design_tokens` + `figma_execute` + `figma_arrange_component_set`) producing Cover + Tokens + Components pages with placeholder content; after-scaffold checklist for the user.
 
 ## Output expectations
 

@@ -22,6 +22,10 @@ references/
                                       tokens (CSS / JSON / framework libs).
   migration-playbook.md             ← Refactoring an existing file safely. Safety classes,
                                       coordination protocol, recipes for the common operations.
+  iconography.md                    ← Icon-system architecture: size stops, color binding,
+                                      Component-vs-vector heuristic, library-split signals.
+  scaffold-payload.md               ← Scaffold sub-mode of Build — one-shot recipe that
+                                      produces Cover + Tokens + Components pages.
 assets/
   audit-report-template.md          ← Output template for Audit mode.
 tests/                              ← Behavior-spec fixtures (dev-only — excluded from the
