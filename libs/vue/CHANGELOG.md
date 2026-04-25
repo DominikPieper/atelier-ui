@@ -1,3 +1,14 @@
+## 0.0.30 (2026-04-25)
+
+### 🚀 Features
+
+- **chat:** smooth streaming polish — inline typing cursor + smooth scroll ([a60db12](https://github.com/DominikPieper/atelier-ui/commit/a60db12))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.29 (2026-04-25)
 
 ### 🚀 Features
