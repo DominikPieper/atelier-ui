@@ -37,7 +37,7 @@ To keep scope sharp, this skill **does not** cover:
 
 When the user asks something out-of-scope, say so briefly and either point them at the right tool (the dashboard, code-gen workflows) or proceed with general knowledge — do not pretend this skill covers it.
 
-## Three modes — pick one based on the user's intent
+## Four modes — pick one based on the user's intent
 
 ### Build mode
 
@@ -71,6 +71,19 @@ Triggered by either/or questions or "should I…" framings. The user is at a for
 
 Go straight to `references/decision-heuristics.md`, find the matching decision, give the recommendation **with the reasoning in one or two sentences**, and offer the alternative path with the trade-off. Don't write a treatise — the user is trying to move on.
 
+### Migrate mode
+
+Triggered by *rename, split, restructure, refactor, deprecate, retire, replace* — when the user wants to **change** an existing structure without breaking downstream consumers (designers, code, libraries that depend on this file).
+
+Never run a Breaking operation alone. Open `references/migration-playbook.md` and:
+
+1. Pre-flight: re-discover, snapshot, classify each planned change as Safe / Mostly safe / Breaking.
+2. For Breaking changes: enforce the additive coordination protocol (add new shape alongside old → wait one cycle → migrate consumers → remove old). Skipping this is the source of "the design system broke prod" stories.
+3. Use the recipes in the playbook for the common patterns: Variable rename, Mode addition, Variant Set split, Primitive→Semantic promotion, Library split.
+4. Post-flight: re-audit, diff against the snapshot, update Component descriptions, run the codesync exporter, log the change on the Cover page.
+
+If the migration is large enough to span sessions, finish each session in a self-contained state — never leave the file mid-restructure overnight.
+
 ## Mode routing — quick reference
 
 | User says…                                                      | Mode    | First action                                            |
@@ -78,7 +91,8 @@ Go straight to `references/decision-heuristics.md`, find the matching decision, 
 | "create / build / set up / bootstrap…"                          | Build   | `figma_get_file_data` for discovery                     |
 | "audit / review / check / assess / how good is…"                | Audit   | Try Design System Dashboard MCP App; then deep-audit    |
 | "should I use a Variant or…?", "is it better to…?"              | Decide  | Open `references/decision-heuristics.md`                |
-| "fix this issue…" (specific, after an audit)                    | Build   | Skip discovery if the audit already produced a fix list |
+| "rename / split / restructure / deprecate / migrate…"           | Migrate | Open `references/migration-playbook.md`; run pre-flight  |
+| "fix this issue…" (specific, after an audit)                    | Migrate | Use the playbook's recipe for the matching operation     |
 | "translate this Figma component into code…"                     | (none)  | This is out of scope — point at code-gen workflow       |
 
 ## References — load on demand
@@ -93,6 +107,7 @@ Each file is self-contained and loaded only when relevant. Don't load everything
 - **`references/audit-checklist.md`** — five architectural categories, severity definitions, per-finding fix template.
 - **`references/decision-heuristics.md`** — decision trees for the recurring forks.
 - **`references/code-sync.md`** — keeping Figma Variables in lockstep with code-side tokens (CSS / JSON / framework libraries). Direction-of-truth, sync approaches, mode-mapping pitfalls, drift sources.
+- **`references/migration-playbook.md`** — refactoring an existing file safely. Safety classes per operation, the additive coordination protocol, recipes for Variable renames, Mode adds, Variant-Set splits, semantic-tier promotions, and Library splits.
 
 ## Output expectations
 
