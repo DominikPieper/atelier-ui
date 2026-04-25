@@ -1,3 +1,14 @@
+## 0.0.29 (2026-04-25)
+
+### 🚀 Features
+
+- **chat:** auto-scroll messages + focus input on open ([686af87](https://github.com/DominikPieper/atelier-ui/commit/686af87))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.28 (2026-04-25)
 
 This was a version bump only for angular to align it with other projects, there were no code changes.
