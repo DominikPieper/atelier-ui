@@ -13,6 +13,13 @@ references/
                                       Look here when a structural decision needs to be made.
   build-workflow.md                 ← Discover → Decide → Map tools → Execute → Validate → Document.
   audit-checklist.md                ← What "well-architected" looks like; what to flag and how.
+                                      Includes pre-flight: snapshot pin + cross-source grep.
+  audit-verify-queries.md           ← Re-verify sub-mode of Audit — one query per category
+                                      with auto-resolve signals. Use when checking whether
+                                      findings from an older audit are still open.
+  code-verify.md                    ← Code-side visual verification recipe. Storybook +
+                                      browser-automation flow for confirming Figma↔code
+                                      parity in Light + Dark after token/variant changes.
   tool-map.md                       ← Which figma-console-mcp tool for which intent. Includes
                                       ready-to-use figma_execute / figma_setup_design_tokens payloads.
   token-architecture.md             ← Primitive / Semantic / Component tier model + Modes.
