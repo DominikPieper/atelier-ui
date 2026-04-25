@@ -25,3 +25,4 @@ export * from './lib/stepper/llm-stepper';
 export * from './lib/toggle/llm-toggle';
 export * from './lib/tooltip/llm-tooltip';
 export * from './lib/code-block/llm-code-block';
+export * from './lib/chat/llm-chat';
