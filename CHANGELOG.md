@@ -1,3 +1,14 @@
+## 0.0.28 (2026-04-25)
+
+### 🩹 Fixes
+
+- **vue:** remove duplicate Cookbook stories file blocking Storybook ([6229c61](https://github.com/DominikPieper/atelier-ui/commit/6229c61))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.27 (2026-04-25)
 
 ### 🩹 Fixes
