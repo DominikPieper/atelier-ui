@@ -160,6 +160,10 @@ Full design guide: [`plan/big-picture.md`](plan/big-picture.md).
 # Install
 npm install
 
+# One-time after clone — installs the project's git hooks (pre-push regen
+# guard for llms.txt / spec drift caused by interleaved release commits)
+bash tools/scripts/install-hooks.sh
+
 # Docs site (Astro, port 4300)
 npx nx serve docs
 

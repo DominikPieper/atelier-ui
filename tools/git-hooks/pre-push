@@ -1,0 +1,48 @@
+#!/bin/sh
+#
+# pre-push hook — regenerate derived artifacts and abort the push if drift
+# would be introduced. Prevents the recurring CI failure where the release
+# bot bumps a version between local pushes (rebase pulls in chore(release):
+# publish 0.0.X), leaving the llms.txt files or spec copies stale until
+# someone notices the failed CI run on a follow-up push.
+#
+# Install once after clone:
+#   bash tools/scripts/install-hooks.sh
+#
+# To bypass for one push (NOT recommended): git push --no-verify
+#
+
+set -e
+
+ROOT=$(git rev-parse --show-toplevel)
+cd "$ROOT"
+
+# Regenerate quietly. Both scripts are idempotent.
+node tools/scripts/sync-spec.mjs > /dev/null 2>&1 || true
+node tools/scripts/gen-llms-txt.mjs > /dev/null 2>&1 || true
+
+drift=$(git diff --name-only -- \
+  libs/angular/src/lib/spec.ts \
+  libs/react/src/lib/spec.ts \
+  libs/vue/src/lib/spec.ts \
+  docs/public/llms.txt \
+  docs/public/llms-full.txt 2>/dev/null)
+
+if [ -n "$drift" ]; then
+  echo ""
+  echo "✗ pre-push aborted: generated files drifted after regeneration"
+  echo ""
+  echo "  Files out of sync:"
+  echo "$drift" | sed 's/^/    - /'
+  echo ""
+  echo "  This usually means a chore(release) commit was rebased in but the"
+  echo "  generated artifacts were not regenerated. Fix:"
+  echo ""
+  echo "    git add libs/*/src/lib/spec.ts docs/public/llms.txt docs/public/llms-full.txt"
+  echo "    git commit --amend --no-edit"
+  echo "    git push"
+  echo ""
+  echo "  (Or: git push --no-verify to bypass — only for true emergencies.)"
+  echo ""
+  exit 1
+fi
