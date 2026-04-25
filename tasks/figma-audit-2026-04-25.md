@@ -2,7 +2,11 @@
 
 **File:** `Atelier UI` (`QMnDD8uZQPldPrlCwZZ58T`)
 **Audited:** 2026-04-25
+**Generated against:** `8932074` · Figma file last-edited 2026-04-25
+**Re-verified:** 2026-04-25T17:23Z — see *Re-verify* section at the bottom
 **Mode availability:** Local + Bridge (REST API not used; `figma_get_styles` and `figma_check_design_parity` skipped — both require `FIGMA_ACCESS_TOKEN` which is not configured. Audit done via plugin-bridge tools only.)
+
+> **Audit freshness:** This is a snapshot. 7 of 10 priority items are now auto-resolved or state-shifted; only `A11y-DG`, `FS2`, and `ES3` remain still-open. Use the *Re-verify* table at the end of the report as the active pin point — the priority list above retains the original audit numbering for traceability.
 
 ## Overall
 
@@ -233,6 +237,33 @@ Ordered by ROI × cost. Tackle 1–4 in one sitting (~30 min total). 5–6 are l
 4. **TA4** — set scopes on the 72 `ALL_SCOPES` variables. ~30 min via `figma_execute`, batched per token family. Tightens the architecture meaningfully.
 5. **A11y-DG** — make the architectural decision on danger contrast. The "darken color/danger to #dc2626" path is single-token change with ripple-tested consequences (hover/active also shift); discuss with design before changing. Otherwise, accept and document as known limitation.
 6. **A11y-OH** — outline hover overlay. Decide between switching bg to surface-sunken (more accessible, slight visual drift) or accepting the lint-measured contrast as a representational artifact (since real-world rendering is on a white surface).
+
+## Re-verify (2026-04-25T17:23Z)
+
+Re-verify pass run via the figma-workspace-architect skill's Re-verify sub-mode. Each finding was checked against current Figma + code state using the queries in `references/audit-verify-queries.md`.
+
+| Finding ID | Status | Current state                                                                                          | Verified at         |
+|------------|--------|--------------------------------------------------------------------------------------------------------|---------------------|
+| N2         | auto-resolved | `color/on-primary` (`VariableID:3:142`) deleted from UI Tokens; collection has 75 vars (was 76); CSS consolidated into mode-aware `--ui-color-text-on-primary` | 2026-04-25T17:23Z |
+| A11y-OL    | auto-resolved | Spinner glyphs sample-checked: outline → `color/primary`, secondary → `color/text-on-secondary`, danger → `color/text-on-danger` (latter rebound during this session — was incorrectly bound to `color/text-on-primary`)  | 2026-04-25T17:23Z |
+| A11y-OH    | auto-resolved | `outline md hover/active` background fills now bound to `color/surface-sunken` (`#f5f5f5`); the original `color/primary-light` overlay is gone — fixed in commit `400bbf4` | 2026-04-25T17:23Z |
+| TA4        | auto-resolved | 0 non-BOOLEAN variables on `ALL_SCOPES`; only the 2 BOOLEAN feature flags (`feature/reduce-motion`, `feature/high-contrast`) remain — acceptable per the documented exemption | 2026-04-25T17:23Z |
+| TS         | auto-resolved | 0 unstyled text labels on `LlmButton` (32 labels, all using Text Styles bound to `font-size/*` variables) | 2026-04-25T17:23Z |
+| HC         | state-shifted | Original audit said "Inputs section fill is `#000000`" — that section is now `#f2f7ff`. Real issue was 8 *other* section titles (Display, Navigation, Overlay, Feedback, AI, 3× LlmChat) hardcoded to `#000000`; all 8 rebound to `color/text` during this session. Page now has 0 hardcoded opaque-black fills (modal backdrops with opacity 0.5 retained as legitimate) | 2026-04-25T17:23Z |
+| CD4        | auto-resolved | Icons page now has `LlmIcon` ComponentSet (`471:2730`) + 21 standalone glyph components; was empty in original audit | 2026-04-25T17:23Z |
+| A11y-DG    | **still-open** | White `#ffffff` on `#ef4444` — unchanged. No architectural decision was made on darkening `color/danger` vs. restricting variant. Effort estimate stands. | 2026-04-25T17:23Z |
+| FS2        | **still-open** | Pages: Colors, Typography, Spacing & Radius, Cookbook, Icons, Components. No Cover page. Effort estimate stands (S, ~5 min). | 2026-04-25T17:23Z |
+| ES3        | **still-open** | No `figma.config.*` or Code Connect files in the repo. No alternative documentation on a Cover page (because no Cover page exists — see FS2). Effort estimate stands. | 2026-04-25T17:23Z |
+
+**Active priority list** (after Re-verify):
+
+| # | Severity   | Finding ID | What                                                                  | Effort |
+|---|------------|------------|-----------------------------------------------------------------------|--------|
+| 1 | Critical   | A11y-DG    | `danger` filled buttons fail AA contrast (white on `#ef4444` = 3.8:1) | M      |
+| 2 | Warning    | FS2        | No Cover page in the file                                             | S      |
+| 3 | Warning    | ES3        | No Code Connect / explicit Figma↔code mapping                         | M      |
+
+The other 7 priority items have been resolved between original audit and re-verify time — drop them from active triage.
 
 ## Notes
 
