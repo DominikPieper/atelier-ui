@@ -1,3 +1,15 @@
+## 0.0.27 (2026-04-25)
+
+### 🩹 Fixes
+
+- **chat:** make Angular content projection work across variants ([b064964](https://github.com/DominikPieper/atelier-ui/commit/b064964))
+- **docs:** regenerate llms.txt against 0.0.25 release ([6d7e161](https://github.com/DominikPieper/atelier-ui/commit/6d7e161))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.26 (2026-04-25)
 
 ### 🚀 Features

@@ -1,3 +1,7 @@
+## 0.0.27 (2026-04-25)
+
+This was a version bump only for vue to align it with other projects, there were no code changes.
+
 ## 0.0.26 (2026-04-25)
 
 ### 🚀 Features
