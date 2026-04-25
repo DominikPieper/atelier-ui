@@ -2,7 +2,10 @@
 
 **File:** `{Figma file URL or key}`
 **Audited:** {ISO date}
+**Generated against:** `{git short SHA in the consuming repo, if applicable}` · Figma file last-edited `{ISO date from figma_get_file_data.lastModified, if available}`
 **Mode availability for audit:** {Local + Bridge / Remote SSE only}
+
+> **Audit freshness:** This is a snapshot. Before acting on a finding more than a few hours old, re-verify the underlying state — Figma edits or code commits between audit time and now can have already resolved or shifted findings. The "Generated against" line above is the pin point.
 
 ## Overall
 
@@ -49,6 +52,7 @@ Effort key: **S** = single tool call. **M** = a few coordinated calls. **L** = m
 - **Severity:** {Blocker / Critical / Warning / Suggestion / Pass}
 - **Fix:** {one-line actionable}
 - **Effort:** {S/M/L}
+- **Verified at:** {ISO timestamp — set when re-verify mode confirms the State is still current; omit on first audit}
 
 #### TA2 — Mode placement
 - **State:** ...
@@ -135,6 +139,18 @@ A short numbered list, in order. Aim for 3–7 items. Group related fixes when t
 1. {Step 1 — typically a Blocker fix or a Critical that unblocks multiple others.}
 2. {Step 2}
 3. {Step 3}
+
+## Re-verify (optional, generated only after a re-verify pass)
+
+If this audit has been re-verified against current state since the original pass, list the result per finding:
+
+| Finding ID | Status | Current state                                                  | Verified at         |
+|------------|--------|----------------------------------------------------------------|---------------------|
+| TA4        | auto-resolved | 0 non-BOOLEAN ALL_SCOPES variables remain (was 72)      | {ISO timestamp}     |
+| HC         | state-shifted | Inputs section is now `#f2f7ff`; 8 other section titles still hardcoded `#000000` | {ISO timestamp} |
+| A11y-OL    | still-open | outline + secondary md loading spinner unchanged           | {ISO timestamp}     |
+
+Drop `auto-resolved` rows from the active priority list. Rewrite the `state-shifted` rows before acting. Treat the timestamp as the new pin point for that finding.
 
 ## Notes
 

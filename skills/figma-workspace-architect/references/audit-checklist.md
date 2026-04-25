@@ -21,13 +21,31 @@ Before running through the categories, gather:
 
 ```
 figma_get_status              → confirm bridge connected
-figma_get_file_data           → file structure, pages, top-level frames
+figma_get_file_data           → file structure, pages, top-level frames; capture `lastModified`
 figma_get_variables           → all collections, modes, variables
 figma_get_styles              → legacy styles still in use
 figma_get_component on samples → spot-check a few representative components
 ```
 
 If a Design System Dashboard run is available (MCP App), include its overall score and category scores in the audit context.
+
+### Pin the snapshot
+
+Audits go stale fast. Before writing the report, capture two pins so a later reader (including future-you) can tell whether findings still apply:
+
+- **Git SHA** — if there's a paired code repo, run `git rev-parse --short HEAD` in it and put the value into the report's `Generated against` line.
+- **Figma `lastModified`** — from `figma_get_file_data`, in the same line.
+
+If either pin moves before someone acts on a finding, that finding needs re-verification, not blind execution.
+
+### Cross-source check (when there's a paired code repo)
+
+Token-architecture findings often look very different once you check the code side. Two cheap, high-signal greps before writing TA, N, or ES findings:
+
+- For each Variable named in a finding (e.g. `color/on-primary`), grep the repo's token CSS / SCSS / TS / JSON for the matching code-side identifier (`--ui-color-on-primary`, `colorOnPrimary`, etc.). A "duplicate Figma variable" with zero code references is a different fix than one with active code usage and *different mode behavior*.
+- For each Component-Set Variant Property value (e.g. `variant=outline`), grep for the literal in component source (`variant: 'outline'`, `<LlmButton variant="outline">`). Mismatch is an N1 / ES2 finding even if both sides individually look fine.
+
+Treat the grep result as part of the finding's State block — at minimum a count of matches and one representative path.
 
 ## Category 1 — Token Architecture
 
@@ -66,9 +84,11 @@ Check: do Semantic variables alias Primitives, or hold raw values?
 
 Check: are scopes set per variable, or is everything `ALL_SCOPES`?
 
+**Exclude from this check:** `BOOLEAN` variables (typically feature flags like `feature/reduce-motion`). They are never bound into design properties, so `ALL_SCOPES` on them is a no-op, not a finding. Filter `resolvedType === 'BOOLEAN'` out of the count before reporting.
+
 | State                                                                | Severity   | Fix                                                                                        |
 |----------------------------------------------------------------------|------------|--------------------------------------------------------------------------------------------|
-| All variables default-scoped (`ALL_SCOPES`)                          | Critical   | Set scopes per variable purpose. See `token-architecture.md` scope table.                  |
+| All non-BOOLEAN variables default-scoped (`ALL_SCOPES`)              | Critical   | Set scopes per variable purpose. See `token-architecture.md` scope table.                  |
 | Color tokens appear in spacing pickers (or vice versa)               | Critical   | Scope mismatch. Re-scope the offending variables.                                          |
 | Scopes set deliberately, no cross-contamination                      | (pass)     | —                                                                                          |
 

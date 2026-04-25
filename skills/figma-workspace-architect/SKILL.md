@@ -74,7 +74,17 @@ Two layers, run in this order:
 1. **Run the built-in Design System Dashboard MCP App** first if the client supports MCP Apps (Claude Desktop with `ENABLE_MCP_APPS=true`). Ask the user something like "audit the design system" — this gives an immediate Lighthouse-style score across Naming, Tokens, Components, A11y, Consistency, and Coverage. Use this as the **breadth** layer; do not duplicate it.
 2. **Run the architectural deep-audit** in `references/audit-checklist.md`. This is the **depth** layer: five categories (Token Architecture, Component Design, Naming, File Structure, Engineering-Sync Readiness), each finding tagged with a severity (Blocker / Critical / Warning / Suggestion) and a concrete fix.
 
+Before writing the report, do the two pre-flight passes called out in the checklist's *Inputs* section: **pin the snapshot** (git SHA + Figma `lastModified`) and **cross-source-grep** any Variable / Variant value you're about to flag. Both are cheap and prevent the most common audit failure mode — findings that were already true at audit time but stale by the time someone acts on them, or findings that look bad in Figma but are actually load-bearing in code with subtly different semantics.
+
 Output the result using `assets/audit-report-template.md`. Always lead with the priority list — Blockers and Criticals at the top, with effort estimates. Do not bury the punchline in a category-by-category walk-through.
+
+#### Re-verify sub-mode — re-check an existing audit
+
+Triggered when an audit report already exists and the user asks "is X still relevant?", "what's actually left?", "re-check this audit", "re-verify before I act", or hands you an audit `.md` more than a few hours old.
+
+Don't redo the full deep-audit. Open `references/audit-verify-queries.md` and run *only* the verify query for each open finding. Emit a `still-open / auto-resolved / state-shifted` line per finding. Update the report's "Re-verify" table with the result (template field at the bottom of `assets/audit-report-template.md`) — drop `auto-resolved` rows from the priority list, and rewrite `state-shifted` rows before acting.
+
+This catches the most common audit failure mode: a stale `.md` directing fixes for findings that have already been resolved or have shifted in shape since audit time.
 
 ### Decide mode
 
@@ -91,7 +101,7 @@ Never run a Breaking operation alone. Open `references/migration-playbook.md` an
 1. Pre-flight: re-discover, snapshot, classify each planned change as Safe / Mostly safe / Breaking.
 2. For Breaking changes: enforce the additive coordination protocol (add new shape alongside old → wait one cycle → migrate consumers → remove old). Skipping this is the source of "the design system broke prod" stories.
 3. Use the recipes in the playbook for the common patterns: Variable rename, Mode addition, Variant Set split, Primitive→Semantic promotion, Library split.
-4. Post-flight: re-audit, diff against the snapshot, update Component descriptions, run the codesync exporter, log the change on the Cover page.
+4. Post-flight: re-audit, diff against the snapshot, update Component descriptions, run the codesync exporter, log the change on the Cover page. **If the change has a downstream visual effect in the consuming code repo** (mode-aware token, contrast-relevant fix, variant rename), run the recipe in `references/code-verify.md` to confirm Figma and code render the same thing in both Light and Dark — Figma alone won't catch decorator wiring or stale CSS-variable bindings.
 
 If the migration is large enough to span sessions, finish each session in a self-contained state — never leave the file mid-restructure overnight.
 
@@ -102,8 +112,10 @@ If the migration is large enough to span sessions, finish each session in a self
 | "create / build / set up / bootstrap…"                          | Build   | `figma_get_file_data` for discovery                     |
 | "scaffold / starter / template / quickstart a new file…"        | Build (Scaffold sub-mode) | Open `references/scaffold-payload.md`, run the three-call recipe |
 | "audit / review / check / assess / how good is…"                | Audit   | Try Design System Dashboard MCP App; then deep-audit    |
+| "is finding X still relevant?", "re-verify this audit…"         | Audit (Re-verify sub-mode) | Open `references/audit-verify-queries.md`; run only the verify queries for open findings |
 | "should I use a Variant or…?", "is it better to…?"              | Decide  | Open `references/decision-heuristics.md`                |
 | "rename / split / restructure / deprecate / migrate…"           | Migrate | Open `references/migration-playbook.md`; run pre-flight  |
+| "verify in code", "check the rendered result", "does dark mode look right…" | Migrate (post-flight) | Open `references/code-verify.md`; run the Storybook recipe |
 | "fix this issue…" (specific, after an audit)                    | Migrate | Use the playbook's recipe for the matching operation     |
 | "translate this Figma component into code…"                     | (none)  | This is out of scope — point at code-gen workflow       |
 
@@ -116,7 +128,9 @@ Each file is self-contained and loaded only when relevant. Don't load everything
 - **`references/component-design.md`** — Variants vs. Component Properties vs. Instance Swap, atomic composition, slot patterns, Variant Property naming that matches engineering props.
 - **`references/naming-and-file-structure.md`** — slash naming, page layout (Cover / Tokens / Icons / Components / Patterns), `_` and `.` prefixes for unpublished sub-components, library splitting heuristics.
 - **`references/build-workflow.md`** — Build mode in depth: discovery checklist, decide gates, validation steps, documentation requirements.
-- **`references/audit-checklist.md`** — five architectural categories, severity definitions, per-finding fix template.
+- **`references/audit-checklist.md`** — five architectural categories, severity definitions, per-finding fix template. Includes pre-flight steps for snapshot pinning and cross-source grep.
+- **`references/audit-verify-queries.md`** — Re-verify sub-mode. One verify query per audit category with auto-resolve signals; output format for `still-open / auto-resolved / state-shifted` per finding.
+- **`references/code-verify.md`** — code-side visual verification recipe. Storybook + browser-automation flow to confirm Figma↔code parity in Light + Dark after token/variant changes. Common traps (stale theme decorators, web-component selectors, HMR caching).
 - **`references/decision-heuristics.md`** — decision trees for the recurring forks.
 - **`references/code-sync.md`** — keeping Figma Variables in lockstep with code-side tokens (CSS / JSON / framework libraries). Direction-of-truth, sync approaches, mode-mapping pitfalls, drift sources.
 - **`references/migration-playbook.md`** — refactoring an existing file safely. Safety classes per operation, the additive coordination protocol, recipes for Variable renames, Mode adds, Variant-Set splits, semantic-tier promotions, and Library splits.

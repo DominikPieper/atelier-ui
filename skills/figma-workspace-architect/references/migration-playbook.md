@@ -70,7 +70,7 @@ The same five steps regardless of the operation:
 2. **Add the new shape alongside the old.** Both shapes exist for one cycle. Old is marked with `_deprecated` prefix or the description is updated.
 3. **Migrate consumers.** Code (rename in `tokens.css` / Style Dictionary source / manually). Other Figma files (`Swap Instance`). One designer per consumer file is the unit of work.
 4. **Wait.** Don't remove the old shape until the next design review or the next code-side release, whichever is later. This is the gap where "wait, we still use that" surfaces.
-5. **Remove.** `figma_delete_variable` (or equivalent) on the old shape. Confirm via `figma_get_file_data` that no broken aliases remain. Update the Cover page note.
+5. **Remove.** `figma_delete_variable` (or equivalent) on the old shape. Confirm via `figma_get_file_data` that no broken aliases remain. Update the Cover page note. **Removal verification gotcha:** after `Variable.remove()` the variable can still appear in `figma.variables.getVariableByIdAsync(id)` for a tick (returned object lacks a `removed: true` flag). The reliable check is to read the parent collection's `variableIds` array — the removed ID will be absent there. Don't rely on the by-ID lookup alone.
 
 Skipping step 4 is the most common failure. If you find yourself wanting to skip it because "we checked, nobody uses it" — assume someone does.
 
