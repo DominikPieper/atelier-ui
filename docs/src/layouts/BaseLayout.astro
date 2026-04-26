@@ -551,9 +551,53 @@ const breadcrumbSchema = {
         themeBtn.addEventListener('click', function() {
           var current = document.documentElement.getAttribute('data-theme');
           var next = current === 'dark' ? 'light' : 'dark';
-          document.documentElement.setAttribute('data-theme', next);
-          localStorage.setItem('docs-theme', next);
-          updateThemeIcon();
+
+          function apply() {
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('docs-theme', next);
+            updateThemeIcon();
+          }
+
+          // Animate the swap as a circle expanding from the toggle button
+          // using the View Transitions API. Falls back to an instant swap
+          // when the browser doesn't support it (Firefox today) or when the
+          // user prefers reduced motion.
+          var prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (!document.startViewTransition || prefersReduce) {
+            apply();
+            return;
+          }
+
+          var rect = themeBtn.getBoundingClientRect();
+          var cx = rect.left + rect.width / 2;
+          var cy = rect.top + rect.height / 2;
+          // Furthest viewport corner from the click → reveal radius.
+          var radius = Math.hypot(
+            Math.max(cx, window.innerWidth - cx),
+            Math.max(cy, window.innerHeight - cy)
+          );
+          var root = document.documentElement;
+          root.style.setProperty('--theme-x', cx + 'px');
+          root.style.setProperty('--theme-y', cy + 'px');
+          root.style.setProperty('--theme-r', radius + 'px');
+          // The "incoming" theme reveals over the "outgoing" theme.
+          // 'dark' here is the value AFTER apply(), so the class on <html>
+          // tells the keyframe whether to expand the dark or light circle.
+          root.classList.add('docs-theme-transitioning');
+          root.classList.toggle('docs-theme-transitioning--to-dark', next === 'dark');
+          root.classList.toggle('docs-theme-transitioning--to-light', next === 'light');
+
+          var transition = document.startViewTransition(apply);
+          // Rapid double-clicks skip the in-flight transition with an
+          // AbortError on `.finished`. That's expected; swallow it so the
+          // browser console stays clean. `finally` still runs on rejection.
+          transition.finished
+            .catch(function () {})
+            .finally(function () {
+              root.classList.remove('docs-theme-transitioning');
+              root.classList.remove('docs-theme-transitioning--to-dark');
+              root.classList.remove('docs-theme-transitioning--to-light');
+            });
         });
       }
 

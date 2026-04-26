@@ -84,3 +84,50 @@
   --docs-hero-gradient-end: var(--ui-color-brand-development, #00b4ff);
   --docs-topbar-height: 68px;
 }
+
+/* ----------------------------------------------------------------------
+ * Theme-toggle reveal — circle expanding from the topbar theme button
+ * via the View Transitions API.
+ *
+ * Light → Dark: the new (dark) snapshot grows out from the click point
+ * over the old (light) snapshot.
+ * Dark → Light: same idea, reversed colours.
+ *
+ * The custom properties --theme-x / --theme-y / --theme-r are written
+ * by the click handler in BaseLayout.astro before startViewTransition().
+ *
+ * Browsers without ::view-transition support (Firefox today) and users
+ * with prefers-reduced-motion fall through to the unanimated swap that
+ * has always worked.
+ * -------------------------------------------------------------------- */
+
+@supports (view-transition-name: root) {
+  .docs-theme-transitioning::view-transition-old(root),
+  .docs-theme-transitioning::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+  .docs-theme-transitioning::view-transition-old(root) {
+    z-index: 1;
+  }
+  .docs-theme-transitioning::view-transition-new(root) {
+    z-index: 2;
+    animation: docs-theme-reveal 520ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+
+  @keyframes docs-theme-reveal {
+    from {
+      clip-path: circle(0 at var(--theme-x, 100%) var(--theme-y, 0));
+    }
+    to {
+      clip-path: circle(var(--theme-r, 150vmax) at var(--theme-x, 100%) var(--theme-y, 0));
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .docs-theme-transitioning::view-transition-old(root),
+  .docs-theme-transitioning::view-transition-new(root) {
+    animation: none !important;
+  }
+}
