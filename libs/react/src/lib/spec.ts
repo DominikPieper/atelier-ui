@@ -23,6 +23,15 @@ export interface LlmButtonSpec {
   size?: LlmButtonSize;
   disabled?: boolean;
   loading?: boolean;
+  /**
+   * Accessible name — rendered as `aria-label`. Required when the
+   * button has no visible text label (icon-only buttons), otherwise
+   * the button is unnamed for assistive tech. The React adapter
+   * encodes this requirement at the type level via a discriminated
+   * union; the Angular and Vue adapters log a dev-mode warning when
+   * a rendered button has no accessible name.
+   */
+  'aria-label'?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -59,9 +68,28 @@ export interface LlmAvatarGroupSpec {
 // ---------------------------------------------------------------------------
 export type LlmCardVariant = 'elevated' | 'outlined' | 'flat';
 export type LlmCardPadding = 'none' | 'sm' | 'md' | 'lg';
+/**
+ * Optional landmark role for the card. Default behaviour is a plain
+ * `<div>` — most cards group content visually and shouldn't add a
+ * landmark to the page outline.
+ *
+ * Pick a role only when the card is meaningful as a landmark:
+ *   - `'article'` for self-contained pieces of content (a blog post,
+ *     a comment, a forum entry) that make sense out of context.
+ *   - `'region'` for a perceivable area that needs a screen-reader
+ *     stop. Pair with `aria-label` or `aria-labelledby`.
+ *   - `'section'` is not a landmark by itself — equivalent to a
+ *     `<section>` element. Useful when nesting structure matters.
+ */
+export type LlmCardRole = 'article' | 'region' | 'section';
 export interface LlmCardSpec {
   variant?: LlmCardVariant;
   padding?: LlmCardPadding;
+  /**
+   * Opt-in landmark role. Default is no role (plain `<div>`).
+   * See {@link LlmCardRole} for when to use each value.
+   */
+  role?: LlmCardRole;
 }
 
 // ---------------------------------------------------------------------------
@@ -209,10 +237,20 @@ export interface LlmAccordionGroupSpec {
   variant?: LlmAccordionGroupVariant;
 }
 
+export type LlmAccordionHeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 export interface LlmAccordionItemSpec {
   expanded?: boolean;
   onExpandedChange?: (expanded: boolean) => void;
   disabled?: boolean;
+  /**
+   * HTML heading level wrapping the trigger button. Default `3`.
+   * Set this to match your page's heading outline so the
+   * accordion's section titles don't break heading order.
+   * Example: if the accordion is nested under an `<h2>`, pass
+   * `headingLevel={3}` (default); if nested under an `<h3>`, pass
+   * `headingLevel={4}`.
+   */
+  headingLevel?: LlmAccordionHeadingLevel;
 }
 
 // ---------------------------------------------------------------------------
@@ -298,6 +336,13 @@ export interface LlmProgressSpec {
   variant?: LlmProgressVariant;
   size?: LlmProgressSize;
   indeterminate?: boolean;
+  /**
+   * Accessible name for the progress bar — rendered as `aria-label`.
+   * Required by ARIA when there is no visible label nearby; without it
+   * screen readers announce only "progress bar 47%". Examples:
+   * `"Upload progress"`, `"Form completion"`, `"Quota usage"`.
+   */
+  label?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -324,6 +369,13 @@ export interface LlmTableSpec {
   variant?: LlmTableVariant;
   size?: LlmTableSize;
   stickyHeader?: boolean;
+  /**
+   * Accessible name for the scrollable table region. The wrapper
+   * around the `<table>` is keyboard-focusable (tabindex=0) so that
+   * users can scroll horizontally; this label is what screen readers
+   * announce when focus enters the region. Defaults to `"Table"`.
+   */
+  'aria-label'?: string;
 }
 
 export interface LlmTbodySpec {

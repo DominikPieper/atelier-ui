@@ -65,10 +65,11 @@ Each entry lists:
   A versatile button component with multiple variants and sizes. Supports loading and disabled states.
 
   Props:
-    variant   'primary' | 'secondary' | 'outline' | 'danger'  'primary'  Visual style variant
-    size      'sm' | 'md' | 'lg'                              'md'       Size of the button
-    disabled  boolean                                         false      Disables the button
-    loading   boolean                                         false      Shows a loading spinner, disables interaction
+    variant     'primary' | 'secondary' | 'outline' | 'danger'  'primary'  Visual style variant
+    size        'sm' | 'md' | 'lg'                              'md'       Size of the button
+    disabled    boolean                                         false      Disables the button
+    loading     boolean                                         false      Shows a loading spinner, disables interaction
+    aria-label  string                                          —          Accessible name. Required for icon-only buttons (no children). React enforces this at compile time via a discriminated union; Angular/Vue warn at runtime in dev mode.
 
   Usage:
     <LlmButton variant="primary">Primary</LlmButton>
@@ -281,6 +282,7 @@ Each entry lists:
   Props:
     variant  'elevated' | 'outlined' | 'flat'  'elevated'  Visual style of the card
     padding  'none' | 'sm' | 'md' | 'lg'       'md'        Padding size inside the card
+    role     'article' | 'region' | 'section'  —           Opt-in landmark role. Default is no role (plain div). Use article for self-contained content, region for a perceivable area (pair with aria-label), section for HTML <section> semantics.
 
   Usage:
     <LlmCard variant="elevated" padding="md">
@@ -303,6 +305,7 @@ Each entry lists:
     variant       'default' | 'striped' | 'bordered'  'default'  Row background styling
     size          'sm' | 'md' | 'lg'                  'md'       Vertical padding of cells
     stickyHeader  boolean                             false      Makes header row stick to the top on scroll
+    aria-label    string                              'Table'    Accessible name for the scrollable wrapper region. Announced by screen readers when keyboard users focus the wrapper to scroll horizontally.
 
   Usage:
     <LlmTable variant="striped">
@@ -377,12 +380,13 @@ Each entry lists:
     indeterminate  boolean                                       false      Shows animated indeterminate state
     variant        'default' | 'success' | 'warning' | 'danger'  'default'  Color variant
     size           'sm' | 'md' | 'lg'                            'md'       Size of the progress bar
+    label          string                                        —          Accessible name (aria-label). Required by ARIA when no visible label is nearby.
 
   Usage:
-    <LlmProgress value={25} />
-    <LlmProgress value={60} variant="success" />
-    <LlmProgress value={85} variant="warning" />
-    <LlmProgress indeterminate={true} />
+    <LlmProgress value={25} label="Upload progress" />
+    <LlmProgress value={60} variant="success" label="Form completion" />
+    <LlmProgress value={85} variant="warning" label="Quota usage" />
+    <LlmProgress indeterminate label="Loading…" />
 
 ---
 
