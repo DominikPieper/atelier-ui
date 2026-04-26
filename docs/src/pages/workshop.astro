@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import Jargon from '../components/Jargon.astro';
 import Icon from '../components/Icon.astro';
+import HelpFooter from '../components/HelpFooter.astro';
 
 const SITE_URL = 'https://atelier.pieper.io';
 
@@ -91,6 +92,17 @@ const MCP_CONFIG = `{
         </ul>
       </div>
     </div>
+
+    <!-- Shortcut for users arriving from a repo clone -->
+    <aside class="docs-shortcut" aria-label="Shortcut for users with a local clone of the repo">
+      <div class="docs-shortcut-eyebrow">Already cloned the repo?</div>
+      <p class="docs-shortcut-desc">
+        You can skip <strong>Install prerequisites</strong>, <strong>Step 01</strong>
+        (workspace generator), and <strong>Step 02</strong> (preflight) — they're for
+        a fresh-scaffolded workspace. Jump straight to picking a framework and serving.
+      </p>
+      <a href="#step-03" class="docs-shortcut-link">Skip to Step 03 — Serve your app →</a>
+    </aside>
 
     <!-- Prerequisites -->
     <div class="docs-section" style="margin-bottom: 2rem; padding: 1.25rem 1.4rem; background: var(--ui-color-surface-raised); border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md)">
@@ -215,7 +227,7 @@ const MCP_CONFIG = `{
       </div>
 
       <!-- Step 03 -->
-      <div class="step-row">
+      <div class="step-row" id="step-03">
         <span class="step-badge">03</span>
         <div>
           <h3 class="step-title">Serve your app</h3>
@@ -314,7 +326,8 @@ const MCP_CONFIG = `{
         Based on your framework selection the preset scaffolds one app per framework,
         installs the matching Atelier package, and pre-configures Claude Code's MCP servers.
       </p>
-      <table class="docs-props-table" style="margin-bottom: 1.5rem">
+      <!-- Desktop / tablet: dense 4-column table -->
+      <table class="docs-props-table docs-props-table--md-up" style="margin-bottom: 1.5rem">
         <thead>
           <tr><th>Framework</th><th>App</th><th>Package</th><th>MCP</th></tr>
         </thead>
@@ -324,6 +337,32 @@ const MCP_CONFIG = `{
           <tr><td>Vue</td><td><code>workshop-vue</code></td><td><code>@atelier-ui/vue</code></td><td><code>storybook-vue</code></td></tr>
         </tbody>
       </table>
+
+      <!-- Mobile (≤640px): one card per framework, key/value rows.
+           CSS hides whichever doesn't match the breakpoint, so screen
+           readers only ever see one copy of the data. -->
+      <div class="docs-fw-cards" style="margin-bottom: 1.5rem">
+        {([
+          { name: 'Angular', app: 'workshop-angular', pkg: '@atelier-ui/angular', mcp: 'storybook-angular' },
+          { name: 'React',   app: 'workshop-react',   pkg: '@atelier-ui/react',   mcp: 'storybook-react' },
+          { name: 'Vue',     app: 'workshop-vue',     pkg: '@atelier-ui/vue',     mcp: 'storybook-vue' },
+        ] as const).map(({ name, app, pkg, mcp }) => (
+          <div class="docs-fw-card">
+            <div class="docs-fw-card-name">{name}</div>
+            <dl class="docs-fw-card-list">
+              <div class="docs-fw-card-row">
+                <dt>App</dt><dd><code>{app}</code></dd>
+              </div>
+              <div class="docs-fw-card-row">
+                <dt>Package</dt><dd><code>{pkg}</code></dd>
+              </div>
+              <div class="docs-fw-card-row">
+                <dt>MCP</dt><dd><code>{mcp}</code></dd>
+              </div>
+            </dl>
+          </div>
+        ))}
+      </div>
     </div>
 
     <!-- MCP configuration -->
@@ -341,6 +380,8 @@ const MCP_CONFIG = `{
         If you only want the Storybook MCP workflow, you can remove the <code>figma-console</code> entry.
       </p>
     </div>
+
+    <HelpFooter page="workshop" />
 
     <!-- Bottom nav -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 2.5rem">
