@@ -341,12 +341,7 @@ export default function McpExplorer() {
       `}</style>
 
       <div style={{ marginBottom: '2.5rem' }}>
-        <h1 style={{
-          fontSize: '2rem', fontWeight: '800', letterSpacing: '-0.04em', lineHeight: 1.1,
-          margin: '0 0 0.6rem',
-          background: 'linear-gradient(135deg, var(--ui-color-primary) 0%, var(--docs-secondary, #89ceff) 100%)',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-        }}>MCP Playground</h1>
+        <h1 className="docs-page-h1">MCP Playground</h1>
         <p style={{ fontSize: '0.9rem', color: 'var(--ui-color-text-muted)', margin: 0, maxWidth: '560px', lineHeight: '1.65' }}>
           Explore the component library MCP server. Select a tool, provide parameters,
           and call it to see exactly what structured data an AI receives.
@@ -553,10 +548,8 @@ export default function McpExplorer() {
           <div>
             <button onClick={handleCall} disabled={calling} style={{
               padding: '0.55rem 1.75rem', borderRadius: 'var(--ui-radius-md)', border: 'none',
-              background: calling
-                ? 'var(--ui-color-surface-raised)'
-                : 'linear-gradient(135deg, var(--ui-color-primary) 0%, var(--docs-secondary, #89ceff) 100%)',
-              color: calling ? 'var(--ui-color-text-muted)' : '#09141d',
+              background: calling ? 'var(--ui-color-surface-raised)' : 'var(--ui-color-primary)',
+              color: calling ? 'var(--ui-color-text-muted)' : 'var(--ui-color-text-on-primary)',
               cursor: calling ? 'not-allowed' : 'pointer',
               fontWeight: 700, fontSize: '0.85rem', fontFamily: 'monospace', letterSpacing: '0.03em',
               animation: calling ? 'mcp-pulse 1.4s ease-in-out infinite' : 'none',
@@ -588,11 +581,10 @@ export default function McpExplorer() {
       </div>
 
       {/* Use with AI tools */}
-      <div style={{ marginTop: '3.5rem', paddingTop: '2.5rem', borderTop: '1px solid rgba(64,72,93,0.2)' }}>
+      <div style={{ marginTop: '3.5rem', paddingTop: '2.5rem', borderTop: '1px solid var(--ui-color-border)' }}>
         <h2 style={{
           fontSize: '1.1rem', fontWeight: 800, letterSpacing: '-0.03em', marginBottom: '0.4rem',
-          background: 'linear-gradient(135deg, var(--ui-color-primary) 0%, var(--docs-secondary, #89ceff) 100%)',
-          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+          color: 'var(--ui-color-primary)',
         }}>Use with AI tools</h2>
         <p style={{ fontSize: '0.85rem', color: 'var(--ui-color-text-muted)', marginBottom: '1.75rem', lineHeight: '1.65' }}>
           The MCP servers are live. Add them to your AI tool's config and every tool shown above works directly — Claude, Cursor, and any MCP-compatible host.

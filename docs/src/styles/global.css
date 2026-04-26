@@ -508,12 +508,6 @@ body {
   max-width: 600px;
 }
 
-.docs-gradient-title {
-  background: linear-gradient(135deg, var(--ui-color-primary) 0%, var(--docs-secondary, #818cf8) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
 
 .docs-section { margin-bottom: 2rem; }
 
