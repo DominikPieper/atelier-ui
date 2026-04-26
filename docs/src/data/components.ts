@@ -57,18 +57,20 @@ export const CATEGORY_ICONS: Record<string, string> = {
   AI: '🤖',
 };
 
+/* Material icon names. Rendered via <Icon name={...} /> in BaseLayout.
+ * Names must exist in docs/src/components/Icon.astro's import list. */
 export const SECTION_ICONS: Record<string, string> = {
   // Diátaxis-aligned sections used by the main sidebar
-  'Workshop': '🎓',
-  'How-To': '🧰',
-  'Reference': '📖',
-  'Explanation': '💡',
+  'Workshop': 'school',
+  'How-To': 'build_circle',
+  'Reference': 'menu_book',
+  'Explanation': 'lightbulb',
   // Older labels kept for backwards-compatibility (e.g. components subsidebar)
-  'Get Started': '🚀',
-  'Workflow': '🔄',
-  Tools: '🛠️',
-  'The Library': '📚',
-  Overview: '🏠',
+  'Get Started': 'dashboard',
+  'Workflow': 'schema',
+  Tools: 'build_circle',
+  'The Library': 'book',
+  Overview: 'dashboard',
 };
 
 export const COMPONENT_CATEGORIES: Record<string, string[]> = {

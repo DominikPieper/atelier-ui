@@ -171,7 +171,10 @@ const breadcrumbSchema = {
       <a href="/" class="docs-logo">
         {/* alt="" — decorative; the adjacent .docs-logo-text already names the link. */}
         <img src={logo.src} alt="" class="docs-logo-img" width={224} height={214} />
-        <span class="docs-logo-text">Atelier</span>
+        <span class="docs-logo-stack">
+          <span class="docs-logo-text">Atelier</span>
+          <span class="docs-logo-attribution">by Conciso · workshop</span>
+        </span>
       </a>
 
       <div class="docs-topbar-sep"></div>
@@ -230,7 +233,7 @@ const breadcrumbSchema = {
               expectation that this is a path, not a menu. */}
           <div class="docs-nav-section">
             <div class="docs-nav-heading">
-              <span class="docs-nav-heading-icon">{SECTION_ICONS['Workshop']}</span>
+              <Icon name={SECTION_ICONS['Workshop']} class="docs-nav-heading-icon" />
               Workshop
             </div>
             <a href="/" class={`docs-nav-link${isActive('/') ? ' active' : ''}`}>
@@ -269,7 +272,7 @@ const breadcrumbSchema = {
               you have a specific task in mind. */}
           <div class="docs-nav-section">
             <div class="docs-nav-heading">
-              <span class="docs-nav-heading-icon">{SECTION_ICONS['How-To']}</span>
+              <Icon name={SECTION_ICONS['How-To']} class="docs-nav-heading-icon" />
               How-To
             </div>
             <a href="/install" class={`docs-nav-link${isActive('/install') ? ' active' : ''}`}>
@@ -297,7 +300,7 @@ const breadcrumbSchema = {
           {/* Reference — random-access lookups. */}
           <div class="docs-nav-section">
             <div class="docs-nav-heading">
-              <span class="docs-nav-heading-icon">{SECTION_ICONS['Reference']}</span>
+              <Icon name={SECTION_ICONS['Reference']} class="docs-nav-heading-icon" />
               Reference
             </div>
             <a href="/components" class={`docs-nav-link${isActive('/components') ? ' active' : ''}`}>
@@ -334,7 +337,7 @@ const breadcrumbSchema = {
               not to do. */}
           <div class="docs-nav-section">
             <div class="docs-nav-heading">
-              <span class="docs-nav-heading-icon">{SECTION_ICONS['Explanation']}</span>
+              <Icon name={SECTION_ICONS['Explanation']} class="docs-nav-heading-icon" />
               Explanation
             </div>
             <a href="/design-principles" class={`docs-nav-link${isActive('/design-principles') ? ' active' : ''}`}>
@@ -351,7 +354,7 @@ const breadcrumbSchema = {
         <>
           <div class="docs-nav-section">
             <div class="docs-nav-heading">
-              <span class="docs-nav-heading-icon">{SECTION_ICONS['Overview']}</span>
+              <Icon name={SECTION_ICONS['Overview']} class="docs-nav-heading-icon" />
               Docs
             </div>
             <a href="/" class="docs-nav-link docs-nav-link--back">

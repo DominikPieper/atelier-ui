@@ -68,17 +68,10 @@
 :root {
   --docs-font: var(--font-sans), 'Inter', system-ui, sans-serif;
   --docs-font-code: var(--font-mono), 'Fira Code', 'Menlo', monospace;
-  --docs-glass-bg: rgba(10, 17, 22, 0.88);
-  --docs-glass-blur: blur(20px);
-  --docs-topbar-border: rgba(52, 216, 216, 0.12);
+  --docs-topbar-border: var(--ui-color-border);
   --docs-secondary: var(--ui-color-primary);
   --docs-tertiary: var(--ui-color-primary);
   --docs-hero-gradient-start: var(--ui-color-primary);
   --docs-hero-gradient-end: var(--ui-color-brand-development, #00b4ff);
   --docs-topbar-height: 68px;
-}
-
-[data-theme='light'] {
-  --docs-glass-bg: rgba(255, 255, 255, 0.94);
-  --docs-topbar-border: #e2e8f0;
 }

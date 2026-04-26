@@ -31,11 +31,8 @@ body {
   display: flex;
   align-items: center;
   padding: 0 1.5rem;
-  background: var(--docs-glass-bg);
-  backdrop-filter: var(--docs-glass-blur);
-  -webkit-backdrop-filter: var(--docs-glass-blur);
-  border-bottom: 1px solid var(--docs-topbar-border);
-  box-shadow: 0 4px 40px -10px rgba(0, 0, 0, 0.25);
+  background: var(--ui-color-surface-raised);
+  border-bottom: 1px solid var(--ui-color-border);
   gap: 1rem;
   position: sticky;
   top: 0;
@@ -46,7 +43,7 @@ body {
 .docs-logo {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.625rem;
   text-decoration: none;
   flex-shrink: 0;
 }
@@ -57,15 +54,27 @@ body {
   display: block;
 }
 
+.docs-logo-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  line-height: 1;
+}
+
 .docs-logo-text {
   font-size: 1.125rem;
-  font-weight: 700;
-  letter-spacing: -0.05em;
+  font-weight: 800;
+  letter-spacing: -0.04em;
   text-transform: uppercase;
-  background: linear-gradient(135deg, var(--ui-color-primary) 0%, var(--docs-secondary, #818cf8) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--ui-color-primary);
+}
+
+.docs-logo-attribution {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ui-color-text-muted);
 }
 
 /* Thin separator after logo */
@@ -1595,8 +1604,7 @@ body {
     display: flex;
     grid-column: 1 / -1;
     border-top: 1px solid var(--ui-color-border);
-    background: var(--docs-glass-bg);
-    backdrop-filter: var(--docs-glass-blur);
+    background: var(--ui-color-surface-raised);
     position: sticky;
     bottom: 0;
     z-index: 90;
@@ -2703,13 +2711,6 @@ a.docs-pagepair-card:hover {
  * together visually. A consistent top gap separates them without
  * needing inline margin overrides. */
 .docs-section + .docs-section { margin-top: 2.5rem; }
-
-/* Glass topbar fallback — browsers without backdrop-filter would render
- * the rgba(...) background semi-transparently over scrolling content,
- * leaking text. Fall back to a solid surface color in that case. */
-@supports not ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px))) {
-  .docs-topbar { background: var(--ui-color-surface); }
-}
 
 /* ── Expressive Code overrides ───────────────────────────────
  * The terminal-frame title bar (`.is-terminal .header .title`) ships
