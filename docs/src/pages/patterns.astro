@@ -1,6 +1,28 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PatternsPage from '../components/PatternsPage';
+import { Code } from 'astro-expressive-code/components';
+import { PATTERNS } from '../data/patterns';
+import {
+  LoginFormDemo,
+  SettingsPageDemo,
+  ConfirmationDemo,
+  DataListDemo,
+  NotificationCenterDemo,
+  ManagementDashboardDemo,
+} from '../components/PatternsPage';
+
+const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
+type Framework = typeof FRAMEWORKS[number];
+
+const LANG_MAP: Record<Framework, string> = {
+  Angular: 'html',
+  React: 'tsx',
+  Vue: 'vue',
+};
+
+function frameworkCode(p: typeof PATTERNS[number], fw: Framework): string {
+  return fw === 'Angular' ? p.angular : fw === 'React' ? p.react : p.vue;
+}
 ---
 
 <BaseLayout
@@ -9,16 +31,30 @@ import PatternsPage from '../components/PatternsPage';
   currentPath="/patterns"
 >
   <nav slot="toc">
-    <a href="#pattern-1" class="docs-toc-link">Login Form</a>
-    <a href="#pattern-2" class="docs-toc-link">Settings Page</a>
-    <a href="#pattern-3" class="docs-toc-link">Confirmation Dialog</a>
-    <a href="#pattern-4" class="docs-toc-link">Data List with Actions</a>
-    <a href="#pattern-5" class="docs-toc-link">Notification Center</a>
-    <a href="#pattern-6" class="docs-toc-link">Management Dashboard</a>
+    {PATTERNS.map((p) => (
+      <a href={`#pattern-${p.num}`} class="docs-toc-link">{p.title}</a>
+    ))}
   </nav>
 
-  <div style="max-width: 1000px; margin: 0 auto; padding: 0 1.5rem 0.5rem">
-    <div style="padding: 0.85rem 1.1rem; background: color-mix(in srgb, var(--ui-color-primary) 6%, transparent); border: 1px solid color-mix(in srgb, var(--ui-color-primary) 20%, transparent); border-radius: var(--ui-radius-md); display: flex; gap: 0.75rem; align-items: flex-start">
+  <div class="docs-inline-page">
+
+    <div style="margin-bottom: 1.25rem">
+      <div class="page-eyebrow">
+        <span class="page-eyebrow-time">📚 Reference</span>
+        <span class="page-eyebrow-tag">{PATTERNS.length} patterns · 3 frameworks</span>
+      </div>
+      <h1 style="font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin: 0 0 0.6rem; background: linear-gradient(135deg, var(--ui-color-primary) 0%, var(--docs-secondary, #89ceff) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text">
+        Cookbook Patterns
+      </h1>
+      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 640px; line-height: 1.65">
+        Composition recipes for common UI scenarios. Each pattern shows the
+        intended way to combine atomic components — Card with Form, Dialog
+        with Alert, Table with Badge — and ships in Angular, React, and Vue.
+      </p>
+    </div>
+
+    <!-- Why composed API -->
+    <div style="padding: 0.85rem 1.1rem; background: color-mix(in srgb, var(--ui-color-primary) 6%, transparent); border: 1px solid color-mix(in srgb, var(--ui-color-primary) 20%, transparent); border-radius: var(--ui-radius-md); display: flex; gap: 0.75rem; align-items: flex-start; margin-bottom: 2.5rem">
       <span style="font-size: 1rem; flex-shrink: 0; margin-top: 1px">🧩</span>
       <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
         <strong style="color: var(--ui-color-text)">Why the composed API.</strong>
@@ -27,7 +63,114 @@ import PatternsPage from '../components/PatternsPage';
         All Atelier container components follow the same pattern.
       </p>
     </div>
-  </div>
 
-  <PatternsPage client:load />
+    {PATTERNS.map((p) => (
+      <section id={`pattern-${p.num}`} class="pattern-section">
+        <div class="pattern-section-head">
+          <span class="pattern-num">{String(p.num).padStart(2, '0')}</span>
+          <div>
+            <h2 class="pattern-title">{p.title}</h2>
+            <p class="pattern-desc">{p.description}</p>
+            <div class="pattern-tags">
+              {p.tags.map((tag) => (
+                <span class="pattern-tag">{tag}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- Live demo (React island, hydrates on idle).
+             Astro requires each island to reference its imported component
+             statically, so we switch on p.id rather than a map lookup. -->
+        <div class="pattern-demo">
+          {p.id === 'login-form'           && <LoginFormDemo client:idle />}
+          {p.id === 'settings-page'        && <SettingsPageDemo client:idle />}
+          {p.id === 'confirmation-dialog'  && <ConfirmationDemo client:idle />}
+          {p.id === 'data-list'            && <DataListDemo client:idle />}
+          {p.id === 'notification-center'  && <NotificationCenterDemo client:idle />}
+          {p.id === 'management-dashboard' && <ManagementDashboardDemo client:idle />}
+        </div>
+
+        <!-- Framework-tabbed code blocks (SSG, indexable) -->
+        <div class="docs-multi-code-tabs" style="border-radius: 8px 8px 0 0; margin: 0">
+          {FRAMEWORKS.map((fw, i) => (
+            <button
+              class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`}
+              data-fw-btn={fw}
+              type="button"
+            >{fw}</button>
+          ))}
+        </div>
+        {FRAMEWORKS.map((fw, i) => (
+          <div data-fw-panel={fw} hidden={i !== 0}>
+            <Code code={frameworkCode(p, fw)} lang={LANG_MAP[fw]} />
+          </div>
+        ))}
+      </section>
+    ))}
+
+  </div>
 </BaseLayout>
+
+<style>
+  .pattern-section {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 88px;
+  }
+  .pattern-section-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    margin-bottom: 1rem;
+  }
+  .pattern-num {
+    font-family: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--ui-color-primary);
+    background: var(--ui-color-primary-light);
+    padding: 0.15rem 0.45rem;
+    border-radius: 3px;
+    letter-spacing: 0.06em;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+  .pattern-title {
+    margin: 0 0 0.3rem;
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ui-color-text);
+  }
+  .pattern-desc {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--ui-color-text-muted);
+    line-height: 1.6;
+  }
+  .pattern-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: 0.55rem;
+  }
+  .pattern-tag {
+    font-family: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--docs-secondary, #89ceff);
+    background: color-mix(in srgb, var(--docs-secondary, #89ceff) 10%, transparent);
+    padding: 0.12rem 0.42rem;
+    border-radius: 3px;
+  }
+  .pattern-demo {
+    background: var(--ui-color-surface-sunken);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+    padding: 2rem 1.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+</style>
