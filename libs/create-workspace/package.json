@@ -1,7 +1,7 @@
 {
   "name": "@atelier-ui/create-workspace",
   "version": "0.0.34",
-  "description": "Nx preset for Atelier UI workshop workspaces",
+  "description": "Nx preset for Atelier workshop workspaces",
   "keywords": [
     "nx",
     "preset",
@@ -9,7 +9,7 @@
     "angular",
     "workshop"
   ],
-  "author": "Atelier UI",
+  "author": "Atelier",
   "license": "MIT",
   "repository": {
     "type": "git",

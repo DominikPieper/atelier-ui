@@ -85,7 +85,7 @@ export async function main() {
     figmaMcp = (res as { figma: boolean }).figma;
   }
 
-  console.log(`\nScaffolding Atelier UI workshop: ${name} (${framework})\n`);
+  console.log(`\nScaffolding Atelier workshop: ${name} (${framework})\n`);
 
   const presetVersion = require('../package.json').version;
   // ATELIER_PRESET_SPEC overrides the published preset — used by the e2e test

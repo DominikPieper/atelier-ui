@@ -1,7 +1,7 @@
 {
   "name": "@atelier-ui/react",
   "version": "0.0.34",
-  "description": "Atelier UI component library for React — LLM-optimised, accessible, design-token-driven",
+  "description": "Atelier component library for React — LLM-optimised, accessible, design-token-driven",
   "keywords": [
     "react",
     "ui",
@@ -10,7 +10,7 @@
     "atelier-ui",
     "llm"
   ],
-  "author": "Atelier UI",
+  "author": "Atelier",
   "license": "MIT",
   "repository": {
     "type": "git",

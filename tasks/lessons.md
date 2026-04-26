@@ -1,4 +1,4 @@
-# Atelier UI — Lessons
+# Atelier — Lessons
 
 Patterns and gotchas captured during implementation. When a mistake repeats, add a rule here so it doesn't repeat again.
 

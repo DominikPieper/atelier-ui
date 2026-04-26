@@ -1,4 +1,4 @@
-# Atelier UI — Status
+# Atelier — Status
 
 ## Shipped ✅
 
@@ -88,12 +88,12 @@ Snapshot of what's still open after the multi-round review + cleanup work (commi
 ### Pointers back
 
 - All session commits: `git log --oneline 6cf4f74..` (on `main`, from before `v0.0.12` up through `v0.0.19`).
-- Figma file: `Atelier UI` (`QMnDD8uZQPldPrlCwZZ58T`) — `Components` page. Lint via `figma_lint_design`; component audit via `figma_audit_component_accessibility`.
+- Figma file: `Atelier` (`QMnDD8uZQPldPrlCwZZ58T`) — `Components` page. Lint via `figma_lint_design`; component audit via `figma_audit_component_accessibility`.
 - Session lint deltas (before / after): `wcag-contrast` 25 → 0; `wcag-focus-indicator` 6 → 0; `wcag-disabled-no-context` 8 → 0; `wcag-color-only` 13 → 16* (*page-level heuristic; component-level is clean).
 
 ## Review — Figma designs for the last 7 components + parity pass (2026-04-22)
 
-Closed the Figma design gap for the 7 components that existed in code but had no design: `code-block`, `combobox`, `drawer`, `progress`, `radio` (standalone), `stepper`, `table`. All new component sets live on the Atelier UI `Components` page, bind every fill/stroke/text to UI Tokens so Light + Dark modes render automatically, and are linked back into Storybook via `parameters.design` on the meta and per-named story across Angular, React, and Vue.
+Closed the Figma design gap for the 7 components that existed in code but had no design: `code-block`, `combobox`, `drawer`, `progress`, `radio` (standalone), `stepper`, `table`. All new component sets live on the Atelier `Components` page, bind every fill/stroke/text to UI Tokens so Light + Dark modes render automatically, and are linked back into Storybook via `parameters.design` on the meta and per-named story across Angular, React, and Vue.
 
 **Figma node-ids (captured this run):**
 

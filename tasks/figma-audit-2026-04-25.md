@@ -1,6 +1,6 @@
-# Figma Workspace Audit — Atelier UI
+# Figma Workspace Audit — Atelier
 
-**File:** `Atelier UI` (`QMnDD8uZQPldPrlCwZZ58T`)
+**File:** `Atelier` (`QMnDD8uZQPldPrlCwZZ58T`)
 **Audited:** 2026-04-25
 **Generated against:** `8932074` · Figma file last-edited 2026-04-25
 **Re-verified:** 2026-04-25T17:23Z — see *Re-verify* section at the bottom

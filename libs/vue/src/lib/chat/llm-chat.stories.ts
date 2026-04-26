@@ -275,7 +275,7 @@ export const InlineDefault: Story = {
             <LlmBadge variant="success" size="sm">Online · GPT-4o</LlmBadge>
           </LlmChatHeader>
           <LlmChatMessages>
-            <LlmChatMessage role="assistant">Welcome back, Dominik. I see you're working in the Atelier UI repo. How can I help today?</LlmChatMessage>
+            <LlmChatMessage role="assistant">Welcome back, Dominik. I see you're working in the Atelier repo. How can I help today?</LlmChatMessage>
             <LlmChatMessage role="user">Help me write a Storybook story for the new LlmChat component, with all 3 variants.</LlmChatMessage>
             <LlmChatMessage role="assistant">
               Sure — here's a starting point:

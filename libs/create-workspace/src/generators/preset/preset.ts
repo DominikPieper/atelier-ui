@@ -142,9 +142,9 @@ Before using any component:
 
   tree.write(
     'CLAUDE.md',
-    `# Atelier UI Workshop
+    `# Atelier Workshop
 
-This workspace uses Atelier UI for all UI components.
+This workspace uses Atelier for all UI components.
 Full API reference: ${SITE_URL}/llms-full.txt
 
 ## MCP Servers
@@ -170,7 +170,7 @@ Key tokens:
 ## Rules
 - Prefer component props over custom CSS
 - When custom styling is needed, use --ui-color-* and --ui-spacing-* tokens
-- Do not install other UI component libraries alongside Atelier UI
+- Do not install other UI component libraries alongside Atelier
 - Do not add inline hex colors or hardcoded spacing values
 
 ## Apps
@@ -265,7 +265,7 @@ file exports). The Desktop Bridge covers creation and inspection without a token
   // Write README
   tree.write(
     'README.md',
-    `# Atelier UI Workshop
+    `# Atelier Workshop
 
 ## Apps
 

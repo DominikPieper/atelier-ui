@@ -2,14 +2,14 @@
   "name": "@atelier-ui/spec",
   "version": "0.0.13",
   "private": true,
-  "description": "Framework-agnostic TypeScript interfaces for the Atelier UI component API contract (workspace-internal; inlined into each framework lib at build time)",
+  "description": "Framework-agnostic TypeScript interfaces for the Atelier component API contract (workspace-internal; inlined into each framework lib at build time)",
   "keywords": [
     "atelier-ui",
     "typescript",
     "spec",
     "interfaces"
   ],
-  "author": "Atelier UI",
+  "author": "Atelier",
   "license": "MIT",
   "repository": {
     "type": "git",

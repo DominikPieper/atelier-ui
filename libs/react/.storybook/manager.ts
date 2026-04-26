@@ -4,7 +4,7 @@ import { create } from 'storybook/theming';
 addons.setConfig({
   theme: create({
     base: 'light',
-    brandTitle: 'Atelier UI · React',
+    brandTitle: 'Atelier · React',
     brandImage: './artelier-logo.png',
     brandUrl: 'https://github.com/DominikPieper/atelier-ui',
   }),

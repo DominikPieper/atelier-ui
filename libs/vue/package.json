@@ -1,7 +1,7 @@
 {
   "name": "@atelier-ui/vue",
   "version": "0.0.34",
-  "description": "Atelier UI component library for Vue 3 — LLM-optimised, accessible, design-token-driven",
+  "description": "Atelier component library for Vue 3 — LLM-optimised, accessible, design-token-driven",
   "keywords": [
     "vue",
     "vue3",
@@ -11,7 +11,7 @@
     "atelier-ui",
     "llm"
   ],
-  "author": "Atelier UI",
+  "author": "Atelier",
   "license": "MIT",
   "repository": {
     "type": "git",

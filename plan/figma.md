@@ -1,6 +1,6 @@
 # Figma as Visual Source of Truth
 
-**File:** Atelier UI
+**File:** Atelier
 **File Key:** `QMnDD8uZQPldPrlCwZZ58T`
 **URL:** https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier%20UI
 

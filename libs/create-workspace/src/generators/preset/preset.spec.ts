@@ -330,7 +330,7 @@ describe('preset generator', () => {
     await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
     expect(tree.exists('tools/scripts/preflight.mjs')).toBe(true);
     const content = tree.read('tools/scripts/preflight.mjs', 'utf-8') ?? '';
-    expect(content).toContain('Atelier UI Preflight');
+    expect(content).toContain('Atelier Preflight');
   });
 
   it('adds preflight npm script to package.json', async () => {

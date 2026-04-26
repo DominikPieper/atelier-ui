@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/schema",
   "$id": "Preset",
-  "title": "Atelier UI Workshop Preset",
+  "title": "Atelier Workshop Preset",
   "type": "object",
   "properties": {
     "name": {

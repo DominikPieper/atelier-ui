@@ -549,7 +549,7 @@ LlmChat                   – Wrapper, holds variant / status / open
 
 ### Figma reference
 
-File: `Atelier UI` (key `QMnDD8uZQPldPrlCwZZ58T`), page `Components`, top-level section **AI**. Three variant sub-sections (`LlmChat / drawer`, `LlmChat / popup`, `LlmChat / inline`) each contain four state frames. All Atelier components inside the mockups are real instances (not detached primitives) so design changes propagate automatically.
+File: `Atelier` (key `QMnDD8uZQPldPrlCwZZ58T`), page `Components`, top-level section **AI**. Three variant sub-sections (`LlmChat / drawer`, `LlmChat / popup`, `LlmChat / inline`) each contain four state frames. All Atelier components inside the mockups are real instances (not detached primitives) so design changes propagate automatically.
 
 ### Implementation status
 

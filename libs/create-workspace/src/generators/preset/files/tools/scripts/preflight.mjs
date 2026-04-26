@@ -3,7 +3,7 @@
  * preflight.mjs
  *
  * Pre-workshop self-check. Verifies the local environment is ready for the
- * Atelier UI workshop (Figma + Claude Code + Storybook MCP).
+ * Atelier workshop (Figma + Claude Code + Storybook MCP).
  *
  * Run via:  node tools/scripts/preflight.mjs
  *           (or  npm run preflight)
@@ -271,7 +271,7 @@ function header(title) {
 
 async function main() {
   console.log('');
-  console.log(bold('Atelier UI Preflight'));
+  console.log(bold('Atelier Preflight'));
   console.log(dim('Checking your environment for the workshop…'));
 
   header('Runtime');
