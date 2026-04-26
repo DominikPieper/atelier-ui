@@ -8,7 +8,7 @@ import {
   LlmButton, LlmCard, LlmCardHeader, LlmCardContent, LlmCardFooter,
   LlmInput, LlmCheckbox, LlmAlert, LlmToggle, LlmSelect, LlmOption,
   LlmTabGroup, LlmTab, LlmDialog, LlmDialogHeader, LlmDialogContent, LlmDialogFooter,
-  LlmBadge, LlmAccordionGroup, LlmAccordionItem,
+  LlmBadge, LlmAccordionGroup, LlmAccordionItem, LlmAccordionHeader,
   LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd,
   LlmProgress,
 } from '@atelier-ui/react';
@@ -109,7 +109,9 @@ export function ConfirmationDemo() {
   return (
     <div style={{ maxWidth: '480px', width: '100%' }}>
       <div style={{ padding: '1.25rem', border: '1px solid var(--ui-color-border)', borderRadius: '8px', background: 'var(--ui-color-surface)' }}>
-        <h4 style={{ margin: '0 0 4px', fontSize: '1.125rem', fontWeight: 600, color: 'var(--ui-color-danger)' }}>Danger Zone</h4>
+        {/* AA-safe darker danger for the heading — the lib's
+         * --ui-color-danger (#ef4444) is 3.76:1 on white, below AA. */}
+        <h3 style={{ margin: '0 0 4px', fontSize: '1.125rem', fontWeight: 600, color: '#b91c1c' }}>Danger Zone</h3>
         <p style={{ margin: '0 0 1rem', fontSize: '0.875rem', opacity: 0.7 }}>Deleting your account is permanent.</p>
         <LlmButton variant="primary" onClick={() => setOpen(true)}>Delete account</LlmButton>
       </div>
@@ -141,7 +143,7 @@ export function DataListDemo() {
   return (
     <div style={{ maxWidth: '560px', width: '100%', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-        <h4 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>Projects</h4>
+        <h3 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>Projects</h3>
         <LlmButton variant="primary" size="sm">New project</LlmButton>
       </div>
       {dataListRows.map((item) => (
@@ -157,7 +159,7 @@ export function DataListDemo() {
               </div>
               <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
                 <LlmButton variant="outline" size="sm">View</LlmButton>
-                <LlmButton variant="outline" size="sm">...</LlmButton>
+                <LlmButton variant="outline" size="sm" aria-label="More actions">…</LlmButton>
               </div>
             </div>
           </LlmCardContent>
@@ -172,23 +174,27 @@ export function NotificationCenterDemo() {
   return (
     <div style={{ maxWidth: '500px', width: '100%' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-        <h4 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>Notifications</h4>
+        <h3 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>Notifications</h3>
         <LlmButton variant="outline" size="sm">Clear all</LlmButton>
       </div>
       <LlmAccordionGroup multi variant="separated">
-        <LlmAccordionItem expanded>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            Errors <LlmBadge variant="danger" size="sm">2</LlmBadge>
-          </span>
+        <LlmAccordionItem expanded headingLevel={4}>
+          <LlmAccordionHeader>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              Errors <LlmBadge variant="danger" size="sm">2</LlmBadge>
+            </span>
+          </LlmAccordionHeader>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '12px 0' }}>
             <LlmAlert variant="danger">Database connection failed on replica-3.</LlmAlert>
             <LlmAlert variant="danger">Payment service returned 503.</LlmAlert>
           </div>
         </LlmAccordionItem>
-        <LlmAccordionItem>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            Warnings <LlmBadge variant="warning" size="sm">1</LlmBadge>
-          </span>
+        <LlmAccordionItem headingLevel={4}>
+          <LlmAccordionHeader>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              Warnings <LlmBadge variant="warning" size="sm">1</LlmBadge>
+            </span>
+          </LlmAccordionHeader>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '12px 0' }}>
             <LlmAlert variant="warning">Disk usage at 89% on worker-7.</LlmAlert>
           </div>
@@ -219,7 +225,7 @@ export function ManagementDashboardDemo() {
     <div style={{ maxWidth: '820px', width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem' }}>
         <div>
-          <h4 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>Operations Overview</h4>
+          <h3 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>Operations Overview</h3>
           <p style={{ margin: '4px 0 0', fontSize: '0.8125rem', opacity: 0.7 }}>Snapshot across the selected range</p>
         </div>
         <LlmTabGroup variant="pills" selectedIndex={range} onSelectedIndexChange={setRange}>
@@ -251,7 +257,7 @@ export function ManagementDashboardDemo() {
         <LlmCard variant="elevated" padding="none">
           <LlmCardHeader>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <h5 style={{ margin: 0, fontSize: '0.9375rem', fontWeight: 600 }}>Recent Activity</h5>
+              <h4 style={{ margin: 0, fontSize: '0.9375rem', fontWeight: 600 }}>Recent Activity</h4>
               <LlmButton variant="outline" size="sm">Export</LlmButton>
             </div>
           </LlmCardHeader>
@@ -280,7 +286,7 @@ export function ManagementDashboardDemo() {
         </LlmCard>
         <LlmCard variant="elevated" padding="md">
           <LlmCardHeader>
-            <h5 style={{ margin: 0, fontSize: '0.9375rem', fontWeight: 600 }}>Plan Usage</h5>
+            <h4 style={{ margin: 0, fontSize: '0.9375rem', fontWeight: 600 }}>Plan Usage</h4>
           </LlmCardHeader>
           <LlmCardContent>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -289,21 +295,21 @@ export function ManagementDashboardDemo() {
                   <span style={{ fontWeight: 500 }}>API requests</span>
                   <span style={{ opacity: 0.7 }}>{quota}%</span>
                 </div>
-                <LlmProgress value={quota} variant="warning" size="sm" />
+                <LlmProgress value={quota} variant="warning" size="sm" label="API requests" />
               </div>
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8125rem', marginBottom: '4px' }}>
                   <span style={{ fontWeight: 500 }}>Storage</span>
                   <span style={{ opacity: 0.7 }}>42%</span>
                 </div>
-                <LlmProgress value={42} variant="success" size="sm" />
+                <LlmProgress value={42} variant="success" size="sm" label="Storage" />
               </div>
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8125rem', marginBottom: '4px' }}>
                   <span style={{ fontWeight: 500 }}>Seats</span>
                   <span style={{ opacity: 0.7 }}>9 / 12</span>
                 </div>
-                <LlmProgress value={75} variant="default" size="sm" />
+                <LlmProgress value={75} variant="default" size="sm" label="Seats used" />
               </div>
             </div>
           </LlmCardContent>

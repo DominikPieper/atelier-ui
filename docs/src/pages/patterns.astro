@@ -154,14 +154,27 @@ function frameworkCode(p: typeof PATTERNS[number], fw: Framework): string {
     gap: 0.3rem;
     margin-top: 0.55rem;
   }
+  /* WCAG AA dedicated colors — using --docs-secondary directly was
+   * 4.29:1 in light mode (indigo-500 on white surface). The tag is
+   * small bold text, needs ≥4.5:1. We hardcode a darker indigo for
+   * light and the existing brighter one for dark. */
   .pattern-tag {
     font-family: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
     font-size: 0.65rem;
     font-weight: 600;
-    color: var(--docs-secondary, #89ceff);
-    background: color-mix(in srgb, var(--docs-secondary, #89ceff) 10%, transparent);
+    color: #89ceff;
+    background: var(--ui-color-surface-raised);
+    border: 1px solid color-mix(in srgb, #89ceff 35%, var(--ui-color-border));
     padding: 0.12rem 0.42rem;
     border-radius: 3px;
+  }
+  /* :global() escapes Astro's scoped-style processing so the
+   * light-mode override matches against <html data-theme="light">,
+   * which lives outside this component's scope. */
+  :global([data-theme='light']) .pattern-tag {
+    /* indigo-700 — 7.1:1 on #f8fafc */
+    color: #4338ca;
+    border-color: color-mix(in srgb, #4338ca 35%, var(--ui-color-border));
   }
   .pattern-demo {
     background: var(--ui-color-surface-sunken);
