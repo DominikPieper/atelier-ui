@@ -1,3 +1,14 @@
+## 0.2.14 (2026-04-26)
+
+### 🚀 Features
+
+- **skills:** figma-workspace-architect — Sync mode + audit re-verify nudge + false-positives doc ([29a5944](https://github.com/DominikPieper/atelier-ui/commit/29a5944))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.2.13 (2026-04-26)
 
 ### 🩹 Fixes
