@@ -1,0 +1,120 @@
+{
+  "version": "1",
+  "site": "https://atelier.pieper.io",
+  "patterns": [
+    {
+      "id": "login-form",
+      "num": 1,
+      "title": "Login Form",
+      "description": "The most frequent AI-generated page. Shows Card composition, validation error display, and loading states.",
+      "url": "https://atelier.pieper.io/patterns#pattern-1",
+      "components": [
+        "LlmCard",
+        "LlmInput",
+        "LlmButton",
+        "LlmAlert",
+        "LlmCheckbox"
+      ],
+      "frameworks": {
+        "angular": "<llm-card variant=\"elevated\" padding=\"lg\">\n  <llm-card-header>\n    <h3>Sign in</h3>\n  </llm-card-header>\n  <llm-card-content>\n    @if (showError()) {\n      <llm-alert variant=\"danger\">Invalid email or password.</llm-alert>\n    }\n    <llm-input type=\"email\" placeholder=\"you@example.com\" [invalid]=\"showError()\" />\n    <llm-input type=\"password\" placeholder=\"••••••••\" [invalid]=\"showError()\" />\n    <llm-checkbox>Remember me</llm-checkbox>\n  </llm-card-content>\n  <llm-card-footer>\n    <llm-button variant=\"primary\" [loading]=\"loading()\" (click)=\"signIn()\">\n      Sign in\n    </llm-button>\n  </llm-card-footer>\n</llm-card>",
+        "react": "<LlmCard variant=\"elevated\" padding=\"lg\">\n  <LlmCardHeader><h3>Sign in</h3></LlmCardHeader>\n  <LlmCardContent>\n    {showError && <LlmAlert variant=\"danger\">Invalid email or password.</LlmAlert>}\n    <LlmInput type=\"email\" placeholder=\"you@example.com\" invalid={showError} />\n    <LlmInput type=\"password\" placeholder=\"••••••••\" invalid={showError} />\n    <LlmCheckbox>Remember me</LlmCheckbox>\n  </LlmCardContent>\n  <LlmCardFooter>\n    <LlmButton variant=\"primary\" loading={loading} onClick={signIn}>\n      Sign in\n    </LlmButton>\n  </LlmCardFooter>\n</LlmCard>",
+        "vue": "<LlmCard variant=\"elevated\" padding=\"lg\">\n  <LlmCardHeader>Sign in</LlmCardHeader>\n  <LlmCardContent>\n    <LlmAlert v-if=\"showError\" variant=\"danger\">Invalid email or password.</LlmAlert>\n    <LlmInput type=\"email\" placeholder=\"you@example.com\" v-model:value=\"email\" />\n    <LlmInput type=\"password\" placeholder=\"••••••••\" v-model:value=\"password\" />\n    <LlmCheckbox v-model:checked=\"remember\">Remember me</LlmCheckbox>\n  </LlmCardContent>\n  <LlmCardFooter>\n    <LlmButton variant=\"primary\" :loading=\"loading\" @click=\"signIn\">Sign in</LlmButton>\n  </LlmCardFooter>\n</LlmCard>"
+      }
+    },
+    {
+      "id": "settings-page",
+      "num": 2,
+      "title": "Settings Page",
+      "description": "Exercises tabs, form controls, and layout composition. The bread and butter of SaaS applications.",
+      "url": "https://atelier.pieper.io/patterns#pattern-2",
+      "components": [
+        "LlmTabGroup",
+        "LlmToggle",
+        "LlmSelect",
+        "LlmInput",
+        "LlmButton",
+        "LlmAlert"
+      ],
+      "frameworks": {
+        "angular": "<llm-tab-group [(selectedIndex)]=\"activeTab\">\n  <llm-tab label=\"Account\">\n    <llm-input label=\"Full Name\" placeholder=\"John Doe\" />\n    <llm-input label=\"Email\" placeholder=\"john@example.com\" />\n  </llm-tab>\n  <llm-tab label=\"Notifications\">\n    <llm-toggle [(checked)]=\"emailOn\">Email notifications</llm-toggle>\n    <llm-toggle [(checked)]=\"pushOn\">Push notifications</llm-toggle>\n  </llm-tab>\n</llm-tab-group>\n<llm-button variant=\"primary\" (click)=\"save()\">Save changes</llm-button>",
+        "react": "<LlmTabGroup selectedIndex={tab} onSelectedIndexChange={setTab}>\n  <LlmTab label=\"Account\">\n    <LlmInput label=\"Full Name\" placeholder=\"John Doe\" />\n    <LlmInput label=\"Email\" placeholder=\"john@example.com\" />\n  </LlmTab>\n  <LlmTab label=\"Notifications\">\n    <LlmToggle checked={emailOn} onCheckedChange={setEmailOn}>Email</LlmToggle>\n    <LlmToggle checked={pushOn} onCheckedChange={setPushOn}>Push</LlmToggle>\n  </LlmTab>\n</LlmTabGroup>\n<LlmButton variant=\"primary\" onClick={save}>Save changes</LlmButton>",
+        "vue": "<LlmTabGroup v-model:selectedIndex=\"activeTab\">\n  <LlmTab label=\"Account\">\n    <LlmInput v-model:value=\"name\" label=\"Full Name\" />\n    <LlmInput v-model:value=\"email\" label=\"Email\" />\n  </LlmTab>\n  <LlmTab label=\"Notifications\">\n    <LlmToggle v-model:checked=\"emailOn\">Email notifications</LlmToggle>\n  </LlmTab>\n</LlmTabGroup>\n<LlmButton variant=\"primary\" @click=\"save\">Save changes</LlmButton>"
+      }
+    },
+    {
+      "id": "confirmation-dialog",
+      "num": 3,
+      "title": "Confirmation Dialog",
+      "description": "Accessible modal flow for destructive actions. Shows trigger → dialog → action logic.",
+      "url": "https://atelier.pieper.io/patterns#pattern-3",
+      "components": [
+        "LlmDialog",
+        "LlmAlert",
+        "LlmButton"
+      ],
+      "frameworks": {
+        "angular": "<llm-button variant=\"primary\" (click)=\"isOpen.set(true)\">Delete account</llm-button>\n\n<llm-dialog [(open)]=\"isOpen\" size=\"sm\">\n  <llm-dialog-header>Delete Account</llm-dialog-header>\n  <llm-dialog-content>\n    <llm-alert variant=\"warning\">This action cannot be undone.</llm-alert>\n  </llm-dialog-content>\n  <llm-dialog-footer>\n    <llm-button variant=\"outline\" (click)=\"isOpen.set(false)\">Cancel</llm-button>\n    <llm-button variant=\"primary\" (click)=\"confirm()\">Yes, delete</llm-button>\n  </llm-dialog-footer>\n</llm-dialog>",
+        "react": "<LlmButton onClick={() => setOpen(true)}>Delete account</LlmButton>\n\n<LlmDialog open={open} onOpenChange={setOpen} size=\"sm\">\n  <LlmDialogHeader>Delete Account</LlmDialogHeader>\n  <LlmDialogContent>\n    <LlmAlert variant=\"warning\">This action cannot be undone.</LlmAlert>\n  </LlmDialogContent>\n  <LlmDialogFooter>\n    <LlmButton variant=\"outline\" onClick={() => setOpen(false)}>Cancel</LlmButton>\n    <LlmButton variant=\"primary\" onClick={confirm}>Yes, delete</LlmButton>\n  </LlmDialogFooter>\n</LlmDialog>",
+        "vue": "<LlmButton variant=\"primary\" @click=\"isOpen = true\">Delete account</LlmButton>\n\n<LlmDialog v-model:open=\"isOpen\" size=\"sm\">\n  <LlmDialogHeader>Delete Account</LlmDialogHeader>\n  <LlmDialogContent>\n    <LlmAlert variant=\"warning\">This action cannot be undone.</LlmAlert>\n  </LlmDialogContent>\n  <LlmDialogFooter>\n    <LlmButton variant=\"outline\" @click=\"isOpen = false\">Cancel</LlmButton>\n    <LlmButton variant=\"primary\" @click=\"confirm\">Yes, delete</LlmButton>\n  </LlmDialogFooter>\n</LlmDialog>"
+      }
+    },
+    {
+      "id": "data-list",
+      "num": 4,
+      "title": "Data List with Actions",
+      "description": "Inline actions on a list of items. The core pattern for dashboards and admin panels — Card + Badge + Button composition.",
+      "url": "https://atelier.pieper.io/patterns#pattern-4",
+      "components": [
+        "LlmCard",
+        "LlmBadge",
+        "LlmButton",
+        "LlmMenu",
+        "LlmTooltip"
+      ],
+      "frameworks": {
+        "angular": "<div class=\"list-header\">\n  <h2>Projects</h2>\n  <llm-button variant=\"primary\" size=\"sm\">New project</llm-button>\n</div>\n@for (item of items(); track item.id) {\n  <llm-card variant=\"outlined\" padding=\"md\">\n    <llm-card-content>\n      <span>{{ item.name }}</span>\n      <llm-badge [variant]=\"item.statusVariant\" size=\"sm\">{{ item.status }}</llm-badge>\n      <p>{{ item.description }}</p>\n      <llm-button variant=\"outline\" size=\"sm\" llmTooltip=\"View details\">View</llm-button>\n      <llm-button\n        variant=\"outline\"\n        size=\"sm\"\n        [llmMenuTriggerFor]=\"actionsMenu\"\n        llmTooltip=\"More actions\"\n      >...</llm-button>\n      <ng-template #actionsMenu>\n        <llm-menu>\n          <llm-menu-item>Edit</llm-menu-item>\n          <llm-menu-item>Duplicate</llm-menu-item>\n          <llm-menu-separator />\n          <llm-menu-item>Delete</llm-menu-item>\n        </llm-menu>\n      </ng-template>\n    </llm-card-content>\n  </llm-card>\n}",
+        "react": "<div className=\"list-header\">\n  <h2>Projects</h2>\n  <LlmButton variant=\"primary\" size=\"sm\">New project</LlmButton>\n</div>\n{items.map(item => (\n  <LlmCard key={item.id} variant=\"outlined\" padding=\"md\">\n    <LlmCardContent>\n      <span>{item.name}</span>\n      <LlmBadge variant={item.statusVariant} size=\"sm\">{item.status}</LlmBadge>\n      <p>{item.description}</p>\n      <LlmTooltip llmTooltip=\"View details\">\n        <LlmButton variant=\"outline\" size=\"sm\">View</LlmButton>\n      </LlmTooltip>\n      <LlmMenuTrigger\n        menu={\n          <LlmMenu variant=\"compact\">\n            <LlmMenuItem>Edit</LlmMenuItem>\n            <LlmMenuItem>Duplicate</LlmMenuItem>\n            <LlmMenuSeparator />\n            <LlmMenuItem>Delete</LlmMenuItem>\n          </LlmMenu>\n        }\n      >\n        {({ onClick, ref }) => (\n          <LlmTooltip llmTooltip=\"More actions\">\n            <LlmButton ref={ref} onClick={onClick} variant=\"outline\" size=\"sm\">...</LlmButton>\n          </LlmTooltip>\n        )}\n      </LlmMenuTrigger>\n    </LlmCardContent>\n  </LlmCard>\n))}",
+        "vue": "<div class=\"list-header\">\n  <h2>Projects</h2>\n  <LlmButton variant=\"primary\" size=\"sm\">New project</LlmButton>\n</div>\n<LlmCard v-for=\"item in items\" :key=\"item.id\" variant=\"outlined\" padding=\"md\">\n  <LlmCardContent>\n    <span>{{ item.name }}</span>\n    <LlmBadge :variant=\"item.statusVariant\" size=\"sm\">{{ item.status }}</LlmBadge>\n    <p>{{ item.description }}</p>\n    <LlmTooltip llmTooltip=\"View details\">\n      <LlmButton variant=\"outline\" size=\"sm\">View</LlmButton>\n    </LlmTooltip>\n    <LlmMenuTrigger>\n      <template #trigger>\n        <LlmTooltip llmTooltip=\"More actions\">\n          <LlmButton variant=\"outline\" size=\"sm\">...</LlmButton>\n        </LlmTooltip>\n      </template>\n      <template #menu>\n        <LlmMenu variant=\"compact\">\n          <LlmMenuItem>Edit</LlmMenuItem>\n          <LlmMenuItem>Duplicate</LlmMenuItem>\n          <LlmMenuSeparator />\n          <LlmMenuItem>Delete</LlmMenuItem>\n        </LlmMenu>\n      </template>\n    </LlmMenuTrigger>\n  </LlmCardContent>\n</LlmCard>"
+      }
+    },
+    {
+      "id": "notification-center",
+      "num": 5,
+      "title": "Notification Center",
+      "description": "Structural feedback grouping using Accordion and Alert. Useful for monitoring and admin tools.",
+      "url": "https://atelier.pieper.io/patterns#pattern-5",
+      "components": [
+        "LlmAccordionGroup",
+        "LlmAlert",
+        "LlmBadge",
+        "LlmButton"
+      ],
+      "frameworks": {
+        "angular": "<llm-accordion-group [multi]=\"true\" variant=\"separated\">\n  <llm-accordion-item [expanded]=\"true\">\n    <span llmAccordionHeader>\n      Errors <llm-badge variant=\"danger\" size=\"sm\">2</llm-badge>\n    </span>\n    <llm-alert variant=\"danger\">Database failed.</llm-alert>\n    <llm-alert variant=\"danger\">Service 503.</llm-alert>\n  </llm-accordion-item>\n  <llm-accordion-item>\n    <span llmAccordionHeader>\n      Warnings <llm-badge variant=\"warning\" size=\"sm\">1</llm-badge>\n    </span>\n    <llm-alert variant=\"warning\">Disk at 89%.</llm-alert>\n  </llm-accordion-item>\n</llm-accordion-group>",
+        "react": "<LlmAccordionGroup multi variant=\"separated\">\n  <LlmAccordionItem expanded>\n    <span>Errors <LlmBadge variant=\"danger\" size=\"sm\">2</LlmBadge></span>\n    <LlmAlert variant=\"danger\">Database failed.</LlmAlert>\n    <LlmAlert variant=\"danger\">Service 503.</LlmAlert>\n  </LlmAccordionItem>\n  <LlmAccordionItem>\n    <span>Warnings <LlmBadge variant=\"warning\" size=\"sm\">1</LlmBadge></span>\n    <LlmAlert variant=\"warning\">Disk at 89%.</LlmAlert>\n  </LlmAccordionItem>\n</LlmAccordionGroup>",
+        "vue": "<LlmAccordionGroup :multi=\"true\" variant=\"separated\">\n  <LlmAccordionItem :expanded=\"true\">\n    <template #header>\n      Errors <LlmBadge variant=\"danger\">2</LlmBadge>\n    </template>\n    <LlmAlert variant=\"danger\">Database failed.</LlmAlert>\n  </LlmAccordionItem>\n  <LlmAccordionItem>\n    <template #header>\n      Warnings <LlmBadge variant=\"warning\">1</LlmBadge>\n    </template>\n    <LlmAlert variant=\"warning\">Disk at 89%.</LlmAlert>\n  </LlmAccordionItem>\n</LlmAccordionGroup>"
+      }
+    },
+    {
+      "id": "management-dashboard",
+      "num": 6,
+      "title": "Management Dashboard",
+      "description": "The densest cookbook pattern — metric cards, activity table, and quota indicators combined. Shows how Card, Table, TabGroup, Badge, Alert, and Progress fit together.",
+      "url": "https://atelier.pieper.io/patterns#pattern-6",
+      "components": [
+        "LlmCard",
+        "LlmTable",
+        "LlmTabGroup",
+        "LlmBadge",
+        "LlmAlert",
+        "LlmProgress",
+        "LlmButton"
+      ],
+      "frameworks": {
+        "angular": "<!-- Metric cards + activity table + quota widget.\n     Uses Card, Table, TabGroup, Badge, Alert, Progress. -->\n<llm-tab-group variant=\"pills\" [(selectedIndex)]=\"range\">\n  <llm-tab label=\"7D\" />\n  <llm-tab label=\"30D\" />\n  <llm-tab label=\"90D\" />\n</llm-tab-group>\n@if (quota() >= 85) {\n  <llm-alert variant=\"warning\">API quota at {{ quota() }}%.</llm-alert>\n}\n<!-- ...metric cards grid (LlmCard + LlmBadge delta)... -->\n<llm-table variant=\"striped\" size=\"sm\">\n  <llm-thead>\n    <llm-tr><llm-th>User</llm-th><llm-th>Action</llm-th></llm-tr>\n  </llm-thead>\n  <llm-tbody>\n    @for (row of activity(); track row.id) {\n      <llm-tr>\n        <llm-td>{{ row.user }}</llm-td>\n        <llm-td>{{ row.action }}</llm-td>\n      </llm-tr>\n    }\n  </llm-tbody>\n</llm-table>\n<llm-progress [value]=\"quota()\" variant=\"warning\" size=\"sm\" />",
+        "react": "<LlmTabGroup variant=\"pills\" selectedIndex={range} onSelectedIndexChange={setRange}>\n  <LlmTab label=\"7D\">{' '}</LlmTab>\n  <LlmTab label=\"30D\">{' '}</LlmTab>\n  <LlmTab label=\"90D\">{' '}</LlmTab>\n</LlmTabGroup>\n{quota >= 85 && <LlmAlert variant=\"warning\">API quota at {quota}%.</LlmAlert>}\n{/* ...metric cards grid (LlmCard + LlmBadge delta)... */}\n<LlmTable variant=\"striped\" size=\"sm\">\n  <LlmThead>\n    <LlmTr><LlmTh>User</LlmTh><LlmTh>Action</LlmTh></LlmTr>\n  </LlmThead>\n  <LlmTbody>\n    {activity.map(row => (\n      <LlmTr key={row.id}>\n        <LlmTd>{row.user}</LlmTd>\n        <LlmTd>{row.action}</LlmTd>\n      </LlmTr>\n    ))}\n  </LlmTbody>\n</LlmTable>\n<LlmProgress value={quota} variant=\"warning\" size=\"sm\" />",
+        "vue": "<LlmTabGroup variant=\"pills\" v-model:selectedIndex=\"range\">\n  <LlmTab label=\"7D\">&nbsp;</LlmTab>\n  <LlmTab label=\"30D\">&nbsp;</LlmTab>\n  <LlmTab label=\"90D\">&nbsp;</LlmTab>\n</LlmTabGroup>\n<LlmAlert v-if=\"quota >= 85\" variant=\"warning\">API quota at {{ quota }}%.</LlmAlert>\n<!-- ...metric cards grid (LlmCard + LlmBadge delta)... -->\n<LlmTable variant=\"striped\" size=\"sm\">\n  <LlmThead>\n    <LlmTr><LlmTh>User</LlmTh><LlmTh>Action</LlmTh></LlmTr>\n  </LlmThead>\n  <LlmTbody>\n    <LlmTr v-for=\"row in activity\" :key=\"row.id\">\n      <LlmTd>{{ row.user }}</LlmTd>\n      <LlmTd>{{ row.action }}</LlmTd>\n    </LlmTr>\n  </LlmTbody>\n</LlmTable>\n<LlmProgress :value=\"quota\" variant=\"warning\" size=\"sm\" />"
+      }
+    }
+  ]
+}

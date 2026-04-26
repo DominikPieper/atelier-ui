@@ -193,30 +193,57 @@ interface PatternMeta {
 }
 ```
 
-### P4 — Expose patterns via MCP
+### P4 — Expose patterns via MCP — ✅ Shipped 2026-04-26
 
-Static JSON catalog at `docs/public/.well-known/cookbook-patterns.json`
-generated from `patterns.ts` at build time. Schema:
+Static JSON catalog generated from `patterns.ts` and served at
+`https://atelier.pieper.io/.well-known/cookbook-patterns.json`
+(neighbour of the existing `.well-known/mcp/server-card.json` and
+`.well-known/api-catalog`).
 
-```json
-{
-  "version": "1",
-  "patterns": [
-    { "id": "login-form", "title": "...", "description": "...",
-      "url": "https://atelier-ui.netlify.app/patterns/login-form",
-      "components": ["LlmCard", "LlmInput", ...],
-      "frameworks": { "angular": "...", "react": "...", "vue": "..." }
-    }
-  ]
-}
-```
+- `tools/scripts/gen-cookbook-manifest.mjs` — Node + TypeScript
+  Compiler API. Builds a top-level identifier symbol table for
+  patterns.ts so the eval helper resolves snippet references
+  (`loginAngular`, `settingsReact`, …) into the strings they point at.
+  Asserts the `PATTERNS` array has 6 entries. Supports `--check` mode
+  identical to `gen-llms-txt.mjs --check` so CI can fail on stale
+  output.
+- Output schema (committed at `docs/public/.well-known/
+  cookbook-patterns.json`, ~15 KB):
 
-Fits into existing `.well-known/mcp/server-card.json` neighbour. Once
-shipped, file an issue against the Storybook MCP plugin to expose a
-`get_cookbook_pattern` tool that reads this manifest. (The MCP tool
-itself depends on Storybook addon support and is not a hard
-prerequisite — the static JSON is already useful for any agent that can
-hit a URL.)
+  ```json
+  {
+    "version": "1",
+    "site": "https://atelier.pieper.io",
+    "patterns": [
+      {
+        "id": "login-form",
+        "num": 1,
+        "title": "Login Form",
+        "description": "...",
+        "url": "https://atelier.pieper.io/patterns#pattern-1",
+        "components": ["LlmCard", "LlmInput", "LlmButton", ...],
+        "frameworks": {
+          "angular": "<llm-card variant=...>...",
+          "react":   "<LlmCard variant=...>...",
+          "vue":     "<LlmCard variant=...>..."
+        }
+      }
+    ]
+  }
+  ```
+
+- URLs use the existing `#pattern-N` anchor on `/patterns`. When P3
+  ships the per-pattern detail pages, the URL field switches to
+  `${SITE_URL}/patterns/${id}` — a one-line change in
+  `gen-cookbook-manifest.mjs`.
+- Wired as `npm run gen:cookbook-manifest` (write) and
+  `npm run check:cookbook-manifest` (CI). The `--check` invocation is
+  added to the `Sync checks` job.
+- Verified: manifest written + read clean, `nx build docs` copies it to
+  `dist/docs/.well-known/cookbook-patterns.json` (Astro static-asset
+  passthrough, no plugin work required).
+- A future `get_cookbook_pattern` MCP tool can read this URL directly
+  without depending on Storybook addon support; tracked separately.
 
 ### P5 — Update preset CLAUDE.md
 

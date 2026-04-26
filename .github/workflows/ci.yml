@@ -67,6 +67,7 @@ jobs:
       - run: node tools/scripts/check-docs-sync.js
       - run: node tools/scripts/gen-llms-txt.mjs --check
       - run: node tools/scripts/check-cookbook-parity.mjs
+      - run: node tools/scripts/gen-cookbook-manifest.mjs --check
 
   # ---------------------------------------------------------------------------
   # Lint — fastest gate, fails early if style/type rules break.

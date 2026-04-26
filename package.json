@@ -12,7 +12,9 @@
     "check:docs": "node tools/scripts/check-docs-sync.js",
     "check:llms": "node tools/scripts/gen-llms-txt.mjs --check",
     "check:cookbook": "node tools/scripts/check-cookbook-parity.mjs",
+    "check:cookbook-manifest": "node tools/scripts/gen-cookbook-manifest.mjs --check",
     "gen:llms": "node tools/scripts/gen-llms-txt.mjs",
+    "gen:cookbook-manifest": "node tools/scripts/gen-cookbook-manifest.mjs",
     "preflight": "node tools/scripts/preflight.mjs"
   },
   "private": true,
