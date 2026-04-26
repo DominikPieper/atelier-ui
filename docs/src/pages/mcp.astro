@@ -10,6 +10,20 @@ import DiagramFigure from '../components/DiagramFigure.astro';
   currentPath="/mcp"
 >
   <div style="max-width: 1000px; margin: 0 auto; padding: 0 1.5rem">
+    <div style="margin-bottom: 2rem">
+      <div class="page-eyebrow">
+        <span class="page-eyebrow-kind page-eyebrow-kind--reference">Reference</span>
+      </div>
+      <h1 style="font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin: 0 0 0.6rem; background: linear-gradient(135deg, var(--ui-color-primary) 0%, var(--docs-secondary, #89ceff) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text">
+        MCP Playground
+      </h1>
+      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 600px; line-height: 1.65">
+        Explore the Model Context Protocol servers that power AI-assisted Atelier
+        development — one Storybook MCP per framework plus the figma-console MCP
+        that reads Figma directly.
+      </p>
+    </div>
+
     <DiagramFigure caption="One AI client talks to three parallel Storybook MCP servers — one per framework. The JSON-RPC contract is identical; only the returned props change.">
       <svg viewBox="0 0 960 340" role="img" aria-labelledby="mcp-title mcp-desc" preserveAspectRatio="xMidYMid meet">
         <title id="mcp-title">MCP data flow from client to Storybook servers</title>
