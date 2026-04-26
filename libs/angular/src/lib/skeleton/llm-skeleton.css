@@ -1,4 +1,4 @@
-:host {
+.llm-skeleton {
   display: block;
   background: var(--ui-color-border);
   overflow: hidden;
@@ -6,27 +6,29 @@
 }
 
 /* Variant shapes */
-:host(.variant-text) {
+.llm-skeleton.variant-text {
   border-radius: var(--ui-radius-sm);
 }
 
-:host(.variant-circular) {
+.llm-skeleton.variant-circular {
   border-radius: var(--ui-radius-full, 9999px);
 }
 
-:host(.variant-rectangular) {
+.llm-skeleton.variant-rectangular {
   border-radius: var(--ui-radius-md);
 }
 
-/* Shimmer animation */
-:host(.is-animated)::after {
+/* Shimmer animation — uses currentColor-aware overlay so it reads on
+ * both light and dark surfaces (was hardcoded white at 0.3 alpha,
+ * which only showed on dark backgrounds). */
+.llm-skeleton.is-animated::after {
   content: '';
   position: absolute;
   inset: 0;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.3) 50%,
+    color-mix(in srgb, var(--ui-color-surface-raised) 80%, transparent) 50%,
     transparent 100%
   );
   animation: shimmer 1.5s infinite;
@@ -43,7 +45,7 @@
 
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  :host(.is-animated)::after {
+  .llm-skeleton.is-animated::after {
     animation: none;
   }
 }

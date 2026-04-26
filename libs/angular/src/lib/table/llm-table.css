@@ -1,29 +1,14 @@
 /* ============================================================
-   llm-table.css — Shared styles for all table sub-components
+   llm-table.css — Styles for the React table component
    ============================================================ */
-
-/* ---------------------------------------------------------------------------
-   Custom element display reset — CRITICAL for native table layout
-   Without display:contents, custom elements break thead/tbody/tr/th/td layout
-   --------------------------------------------------------------------------- */
-llm-thead,
-llm-tbody,
-llm-tr,
-llm-th,
-llm-td {
-  display: contents;
-}
 
 /* ---------------------------------------------------------------------------
    Table host container
    --------------------------------------------------------------------------- */
-llm-table {
+.llm-table {
   display: block;
   font-family: var(--ui-font-family);
   color: var(--ui-color-text);
-  border: 1px solid var(--ui-color-border);
-  border-radius: var(--ui-radius-md);
-  overflow: hidden;
 }
 
 .llm-table-wrapper {
@@ -31,7 +16,7 @@ llm-table {
   overflow-x: auto;
 }
 
-llm-table table {
+.llm-table table {
   width: 100%;
   border-collapse: collapse;
 }
@@ -39,7 +24,7 @@ llm-table table {
 /* ---------------------------------------------------------------------------
    Header cells
    --------------------------------------------------------------------------- */
-llm-table thead th {
+.llm-table thead th {
   font-size: var(--ui-font-size-xs);
   font-weight: var(--ui-font-weight-semibold);
   color: var(--ui-color-text-muted);
@@ -55,7 +40,7 @@ llm-table thead th {
 /* ---------------------------------------------------------------------------
    Body cells
    --------------------------------------------------------------------------- */
-llm-table tbody td {
+.llm-table tbody td {
   border-bottom: 1px solid var(--ui-color-border);
   padding: var(--ui-spacing-3) var(--ui-spacing-4);
   vertical-align: middle;
@@ -66,20 +51,20 @@ llm-table tbody td {
 /* ---------------------------------------------------------------------------
    Size variants
    --------------------------------------------------------------------------- */
-llm-table.size-sm thead th,
-llm-table.size-sm tbody td {
+.llm-table.size-sm thead th,
+.llm-table.size-sm tbody td {
   padding: var(--ui-spacing-2) var(--ui-spacing-3);
   font-size: var(--ui-font-size-xs);
 }
 
-llm-table.size-md thead th,
-llm-table.size-md tbody td {
+.llm-table.size-md thead th,
+.llm-table.size-md tbody td {
   padding: var(--ui-spacing-3) var(--ui-spacing-4);
   font-size: var(--ui-font-size-sm);
 }
 
-llm-table.size-lg thead th,
-llm-table.size-lg tbody td {
+.llm-table.size-lg thead th,
+.llm-table.size-lg tbody td {
   padding: var(--ui-spacing-4) var(--ui-spacing-6);
   font-size: var(--ui-font-size-md);
 }
@@ -89,13 +74,13 @@ llm-table.size-lg tbody td {
    --------------------------------------------------------------------------- */
 
 /* Striped: alternate even row background */
-llm-table.variant-striped llm-tbody llm-tr:nth-child(even) td {
+.llm-table.variant-striped tbody tr:nth-child(even) td {
   background-color: var(--ui-color-surface-sunken);
 }
 
 /* Bordered: all cell borders */
-llm-table.variant-bordered thead th,
-llm-table.variant-bordered tbody td {
+.llm-table.variant-bordered thead th,
+.llm-table.variant-bordered tbody td {
   border: 1px solid var(--ui-color-border);
 }
 
@@ -119,18 +104,17 @@ td.align-end {
 
 /* ---------------------------------------------------------------------------
    Row hover and selection
-   (targets inner <tr> since display:contents on llm-tr blocks hover events)
    --------------------------------------------------------------------------- */
-llm-table tbody tr:hover td {
+.llm-table tbody tr:hover td {
   background-color: var(--ui-color-surface-sunken);
 }
 
-llm-table tbody tr.is-selected td {
+.llm-table tbody tr.is-selected td {
   background-color: var(--ui-color-primary-light);
 }
 
 /* Keep selected color on hover */
-llm-table tbody tr.is-selected:hover td {
+.llm-table tbody tr.is-selected:hover td {
   background-color: var(--ui-color-primary-light);
 }
 
@@ -141,7 +125,7 @@ llm-table tbody tr.is-selected:hover td {
 }
 
 /* Strip default checkbox layout to center it in the cell */
-.llm-tr-select-cell llm-checkbox label {
+.llm-tr-select-cell .llm-checkbox label {
   justify-content: center;
 }
 
@@ -149,7 +133,7 @@ llm-table tbody tr.is-selected:hover td {
    Sticky header
    z-index:1 is intentional — above sibling rows but below dropdowns (z-index:100)
    --------------------------------------------------------------------------- */
-llm-table.is-sticky-header thead th {
+.llm-table.is-sticky-header thead th {
   position: sticky;
   top: 0;
   z-index: 1;
@@ -173,7 +157,8 @@ llm-table.is-sticky-header thead th {
 }
 
 .llm-th-sort-btn:focus-visible {
-  outline: var(--ui-focus-ring);
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
   border-radius: var(--ui-radius-sm);
 }
 
@@ -197,11 +182,6 @@ th.sort-asc .llm-th-sort-asc-arrow {
 
 th.sort-desc .llm-th-sort-desc-arrow {
   opacity: 1;
-}
-
-/* Remove bottom border on the last body row to avoid double-border with wrapper */
-llm-table llm-tbody llm-tr:last-child td {
-  border-bottom: none;
 }
 
 /* ---------------------------------------------------------------------------

@@ -12,17 +12,17 @@
   overflow: hidden;
 }
 
-/* Size variants */
+/* Size variants — modernised for visibility (sm was 4px → 6px) */
 .llm-progress.size-sm .track {
-  height: 4px;
+  height: 6px;
 }
 
 .llm-progress.size-md .track {
-  height: 8px;
+  height: 10px;
 }
 
 .llm-progress.size-lg .track {
-  height: 12px;
+  height: 14px;
 }
 
 /* Fill */

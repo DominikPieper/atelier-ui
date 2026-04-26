@@ -56,10 +56,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--ui-spacing-3);
   width: 100%;
-  padding: var(--ui-spacing-4);
+  min-height: 3.25rem;
+  padding: var(--ui-spacing-4) var(--ui-spacing-5);
   font-size: var(--ui-font-size-md);
-  font-weight: var(--ui-font-weight-medium);
+  font-weight: var(--ui-font-weight-semibold);
   color: var(--ui-color-text);
   cursor: pointer;
   transition: background-color var(--ui-transition-fast);
@@ -110,9 +112,9 @@
 }
 
 .accordion-panel-wrapper.is-expanded .accordion-panel {
-  padding: 0 var(--ui-spacing-4) var(--ui-spacing-4);
+  padding: 0 var(--ui-spacing-5) var(--ui-spacing-5);
 }
 
 .accordion-panel-wrapper:not(.is-expanded) .accordion-panel {
-  padding: 0 var(--ui-spacing-4);
+  padding: 0 var(--ui-spacing-5);
 }

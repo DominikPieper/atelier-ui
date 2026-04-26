@@ -157,7 +157,8 @@ td.align-end {
 }
 
 .llm-th-sort-btn:focus-visible {
-  outline: var(--ui-focus-ring);
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
   border-radius: var(--ui-radius-sm);
 }
 

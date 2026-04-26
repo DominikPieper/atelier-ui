@@ -1,65 +1,67 @@
-/* ── AccordionGroup host ─────────────────────────────────────────────── */
-:host {
+/* ── AccordionGroup ──────────────────────────────────────────────────────── */
+.llm-accordion-group {
   display: block;
   font-family: var(--ui-font-family);
   color: var(--ui-color-text);
 }
 
-/* ── Default variant — shared borders between items ──────────────────── */
-:host(.variant-default) {
+/* ── Default variant — shared borders between items ──────────────────────── */
+.llm-accordion-group.variant-default {
   border-top: 1px solid var(--ui-color-border);
 }
 
-:host(.variant-default) llm-accordion-item {
+.llm-accordion-group.variant-default .llm-accordion-item {
   border-bottom: 1px solid var(--ui-color-border);
 }
 
-/* ── Bordered variant — outer border + radius ────────────────────────── */
-:host(.variant-bordered) {
+/* ── Bordered variant — outer border + radius ────────────────────────────── */
+.llm-accordion-group.variant-bordered {
   border: 1px solid var(--ui-color-border);
   border-radius: var(--ui-radius-lg);
   overflow: hidden;
 }
 
-:host(.variant-bordered) llm-accordion-item:not(:last-child) {
+.llm-accordion-group.variant-bordered .llm-accordion-item:not(:last-child) {
   border-bottom: 1px solid var(--ui-color-border);
 }
 
-/* ── Separated variant — card-like items with gap ────────────────────── */
-:host(.variant-separated) {
+/* ── Separated variant — card-like items with gap ────────────────────────── */
+.llm-accordion-group.variant-separated {
   display: flex;
   flex-direction: column;
   gap: var(--ui-spacing-2);
 }
 
-:host(.variant-separated) llm-accordion-item {
+.llm-accordion-group.variant-separated .llm-accordion-item {
   border: 1px solid var(--ui-color-border);
   border-radius: var(--ui-radius-lg);
   overflow: hidden;
 }
 
-/* ── AccordionItem host ──────────────────────────────────────────────── */
-llm-accordion-item {
+/* ── AccordionItem ──────────────────────────────────────────────────────────── */
+.llm-accordion-item {
   display: block;
 }
 
-/* ── Heading reset ───────────────────────────────────────────────────── */
+/* ── Heading reset ─────────────────────────────────────────────────────────── */
 .accordion-heading {
   all: unset;
   display: block;
 }
 
-/* ── Trigger button ──────────────────────────────────────────────────── */
+/* ── Trigger button ────────────────────────────────────────────────────────── */
 .accordion-trigger {
   all: unset;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--ui-spacing-3);
   width: 100%;
-  padding: var(--ui-spacing-4);
+  min-height: 3.25rem;
+  padding: var(--ui-spacing-4) var(--ui-spacing-5);
   font-size: var(--ui-font-size-md);
-  font-weight: var(--ui-font-weight-medium);
+  font-weight: var(--ui-font-weight-semibold);
   color: var(--ui-color-text);
   cursor: pointer;
   transition: background-color var(--ui-transition-fast);
@@ -82,7 +84,7 @@ llm-accordion-item {
   cursor: not-allowed;
 }
 
-/* ── Chevron icon ────────────────────────────────────────────────────── */
+/* ── Chevron icon ──────────────────────────────────────────────────────────── */
 .chevron {
   flex-shrink: 0;
   color: var(--ui-color-text-muted);
@@ -93,7 +95,7 @@ llm-accordion-item {
   transform: rotate(180deg);
 }
 
-/* ── Collapsible panel wrapper — CSS grid height animation ───────────── */
+/* ── Collapsible panel wrapper — CSS grid height animation ─────────────────── */
 .accordion-panel-wrapper {
   display: grid;
   grid-template-rows: 0fr;
@@ -104,15 +106,15 @@ llm-accordion-item {
   grid-template-rows: 1fr;
 }
 
-/* ── Inner panel ─────────────────────────────────────────────────────── */
+/* ── Inner panel ───────────────────────────────────────────────────────────── */
 .accordion-panel {
   overflow: hidden;
 }
 
 .accordion-panel-wrapper.is-expanded .accordion-panel {
-  padding: 0 var(--ui-spacing-4) var(--ui-spacing-4);
+  padding: 0 var(--ui-spacing-5) var(--ui-spacing-5);
 }
 
 .accordion-panel-wrapper:not(.is-expanded) .accordion-panel {
-  padding: 0 var(--ui-spacing-4);
+  padding: 0 var(--ui-spacing-5);
 }
