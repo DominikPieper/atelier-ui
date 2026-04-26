@@ -1,0 +1,37 @@
+---
+// Small "Stuck?" CTA block for the bottom of training/setup pages.
+// Two parallel exits: structured troubleshooting (read-side) and a
+// pre-filled GitHub issue (report-side).
+
+interface Props {
+  /** Short label that ends up in the GitHub issue title prefix.
+   *  Pages typically pass their own slug, e.g. "workshop" or "tutorial". */
+  page: string;
+}
+
+const { page } = Astro.props;
+
+const REPO_URL = 'https://github.com/DominikPieper/atelier-ui';
+const issueTitle = `[docs/${page}] `;
+const issueUrl = `${REPO_URL}/issues/new?title=${encodeURIComponent(issueTitle)}`;
+---
+
+<aside class="docs-help-footer" aria-label="Stuck or want to report something?">
+  <div class="docs-help-footer-head">Stuck?</div>
+  <p class="docs-help-footer-desc">
+    Two ways to keep moving — read the common failure modes, or open a
+    pre-filled issue with a one-line description of what blocked you.
+  </p>
+  <div class="docs-help-footer-cta">
+    <a href="/troubleshooting" class="docs-help-footer-link">
+      <span class="docs-help-footer-link-eyebrow">Read</span>
+      <span class="docs-help-footer-link-title">/troubleshooting</span>
+      <span class="docs-help-footer-link-desc">Eight common failure modes with one-line fixes.</span>
+    </a>
+    <a href={issueUrl} target="_blank" rel="noopener noreferrer" class="docs-help-footer-link">
+      <span class="docs-help-footer-link-eyebrow">Report</span>
+      <span class="docs-help-footer-link-title">Open a GitHub issue</span>
+      <span class="docs-help-footer-link-desc">Pre-filled title <code>{issueTitle}</code> — describe what blocked you.</span>
+    </a>
+  </div>
+</aside>

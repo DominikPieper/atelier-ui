@@ -2197,6 +2197,316 @@ body {
   }
 }
 
+/* ─── Page-pair callout (siblings that should be navigated together) ───── */
+.docs-pagepair {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: stretch;
+  gap: 0.5rem;
+  margin-bottom: 2.5rem;
+}
+.docs-pagepair-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.85rem 1rem;
+  background: var(--ui-color-surface-raised);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-md);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 120ms ease, transform 120ms ease;
+}
+a.docs-pagepair-card:hover {
+  border-color: var(--ui-color-primary);
+  transform: translateY(-1px);
+}
+.docs-pagepair-card--here {
+  border-style: dashed;
+  background: transparent;
+  cursor: default;
+}
+.docs-pagepair-eyebrow {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ui-color-text-muted);
+}
+.docs-pagepair-card--here .docs-pagepair-eyebrow,
+.docs-pagepair-card--next .docs-pagepair-eyebrow,
+.docs-pagepair-card--prev .docs-pagepair-eyebrow {
+  color: var(--ui-color-primary);
+}
+.docs-pagepair-title {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--ui-color-text);
+}
+.docs-pagepair-desc {
+  font-size: 0.78rem;
+  color: var(--ui-color-text-muted);
+  line-height: 1.5;
+}
+.docs-pagepair-desc code {
+  font-size: 0.74rem;
+}
+.docs-pagepair-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: var(--ui-color-text-muted);
+  padding: 0 0.25rem;
+}
+@media (max-width: 640px) {
+  .docs-pagepair { grid-template-columns: 1fr; }
+  .docs-pagepair-arrow { transform: rotate(90deg); padding: 0.25rem 0; }
+}
+
+/* ─── Shortcut banner (for visitors arriving from a repo clone) ─────────── */
+.docs-shortcut {
+  margin-bottom: 2rem;
+  padding: 0.85rem 1.1rem;
+  background: color-mix(in srgb, var(--ui-color-primary) 6%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--ui-color-primary) 35%, transparent);
+  border-radius: var(--ui-radius-md);
+}
+.docs-shortcut-eyebrow {
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ui-color-primary);
+  margin-bottom: 0.35rem;
+}
+.docs-shortcut-desc {
+  margin: 0 0 0.55rem;
+  font-size: 0.82rem;
+  color: var(--ui-color-text-muted);
+  line-height: 1.55;
+}
+.docs-shortcut-desc strong {
+  color: var(--ui-color-text);
+  font-weight: 700;
+}
+.docs-shortcut-link {
+  display: inline-block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ui-color-primary);
+  text-decoration: none;
+}
+.docs-shortcut-link:hover {
+  text-decoration: underline;
+}
+.step-row[id] { scroll-margin-top: 88px; }
+
+/* ─── MCP "Without / With" comparison (tutorial intro) ─────────────────── */
+.mcp-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+  margin-bottom: 2.5rem;
+}
+.mcp-compare-card {
+  padding: 1rem 1.15rem 0.9rem;
+  background: var(--ui-color-surface-raised);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-md);
+}
+.mcp-compare-card--pos {
+  border-color: color-mix(in srgb, var(--ui-color-primary) 35%, var(--ui-color-border));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ui-color-primary) 18%, transparent);
+}
+.mcp-compare-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.7rem;
+}
+.mcp-compare-label {
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ui-color-danger);
+}
+.mcp-compare-card--pos .mcp-compare-label {
+  color: var(--ui-color-primary);
+}
+.mcp-compare-time {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ui-color-danger);
+}
+.mcp-compare-card--pos .mcp-compare-time {
+  color: var(--ui-color-primary);
+}
+.mcp-compare-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--ui-color-text);
+}
+.mcp-compare-list code {
+  font-size: 0.78rem;
+}
+.mcp-compare-prompt {
+  margin: 0.7rem 0;
+  padding: 0.7rem 0.85rem;
+  background: var(--ui-color-surface-sunken);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-sm, 6px);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: var(--ui-color-text);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.mcp-compare-foot {
+  margin: 0.85rem 0 0;
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--ui-color-text-muted);
+}
+.mcp-compare-card--pos .mcp-compare-foot {
+  color: var(--ui-color-primary);
+}
+@media (max-width: 720px) {
+  .mcp-compare { grid-template-columns: 1fr; }
+}
+
+/* ─── Help footer (training pages) ──────────────────────────────────────── */
+.docs-help-footer {
+  margin: 3rem 0 0;
+  padding: 1.25rem 1.4rem;
+  background: var(--ui-color-surface-raised);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-md);
+}
+.docs-help-footer-head {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ui-color-primary);
+  margin-bottom: 0.55rem;
+}
+.docs-help-footer-desc {
+  margin: 0 0 1rem;
+  font-size: 0.82rem;
+  color: var(--ui-color-text-muted);
+  line-height: 1.55;
+}
+.docs-help-footer-cta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+.docs-help-footer-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  padding: 0.75rem 0.9rem;
+  background: var(--ui-color-surface);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-sm, 6px);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 120ms ease, transform 120ms ease;
+}
+.docs-help-footer-link:hover {
+  border-color: var(--ui-color-primary);
+  transform: translateY(-1px);
+}
+.docs-help-footer-link-eyebrow {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ui-color-primary);
+}
+.docs-help-footer-link-title {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--ui-color-text);
+}
+.docs-help-footer-link-desc {
+  font-size: 0.76rem;
+  color: var(--ui-color-text-muted);
+  line-height: 1.45;
+}
+.docs-help-footer-link-desc code {
+  font-size: 0.72rem;
+  padding: 0 0.25rem;
+  background: var(--ui-color-primary-light);
+  border-radius: 3px;
+}
+@media (max-width: 640px) {
+  .docs-help-footer-cta { grid-template-columns: 1fr; }
+}
+
+/* ─── Framework cards (mobile fallback for dense 4+ col tables) ─────────── */
+.docs-fw-cards {
+  display: none;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.docs-fw-card {
+  padding: 0.85rem 1rem;
+  background: var(--ui-color-surface-raised);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-md);
+}
+.docs-fw-card-name {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ui-color-primary);
+  margin-bottom: 0.55rem;
+}
+.docs-fw-card-list {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.docs-fw-card-row {
+  display: flex;
+  gap: 0.65rem;
+  font-size: 0.8rem;
+  align-items: baseline;
+}
+.docs-fw-card-row dt {
+  flex-shrink: 0;
+  width: 4.5rem;
+  color: var(--ui-color-text-muted);
+  font-weight: 600;
+}
+.docs-fw-card-row dd {
+  margin: 0;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  color: var(--ui-color-text);
+  word-break: break-all;
+}
+.docs-fw-card-row code {
+  font-size: 0.78rem;
+}
+@media (max-width: 640px) {
+  .docs-props-table--md-up { display: none; }
+  .docs-fw-cards { display: flex; }
+}
+
 /* ─── Homepage 3-step orientation strip ("Where to start") ──────────────── */
 .docs-orient-strip {
   margin: 0 auto 2.5rem;
