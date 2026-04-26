@@ -1,3 +1,14 @@
+## 0.2.13 (2026-04-26)
+
+### 🩹 Fixes
+
+- **release:** no-op nx-release-publish for figma-workspace-architect skill ([32b23af](https://github.com/DominikPieper/atelier-ui/commit/32b23af))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.2.12 (2026-04-26)
 
 This was a version bump only for figma-workspace-architect to align it with other projects, there were no code changes.
