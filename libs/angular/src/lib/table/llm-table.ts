@@ -94,7 +94,6 @@ export class LlmTable implements LlmTableContext {
    * scroll the wrapper know what they're scrolling. Defaults to
    * `"Table"` if unset.
    */
-  // eslint-disable-next-line @angular-eslint/no-input-rename
   readonly ariaLabel = input<string | undefined>(undefined, { alias: 'aria-label' });
 
   /** @internal */

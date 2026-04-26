@@ -67,11 +67,10 @@ export class LlmButton {
     if (typeof ngDevMode !== 'undefined' && ngDevMode) {
       afterNextRender(() => {
         const host = this.el.nativeElement;
-        const hasText = (host.textContent ?? '').trim().length > 0;
+        const hasText = host.textContent.trim().length > 0;
         const hasAriaLabel = host.hasAttribute('aria-label')
           || host.hasAttribute('aria-labelledby');
         if (!hasText && !hasAriaLabel) {
-          // eslint-disable-next-line no-console
           console.warn(
             '[LlmButton] icon-only button is missing an accessible name — '
               + 'add an aria-label attribute so screen readers announce its purpose.',
