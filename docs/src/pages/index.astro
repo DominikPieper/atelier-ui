@@ -122,7 +122,7 @@ import Icon from '../components/Icon.astro';
 </style>
 
 <BaseLayout
-  description="Atelier UI — build UIs with AI, Storybook, and Figma. A framework-agnostic component library with Angular, React, and Vue adapters, designed for LLM-assisted development."
+  description="Atelier — build UIs with AI, Storybook, and Figma. A framework-agnostic component library with Angular, React, and Vue adapters, designed for LLM-assisted development."
   currentPath="/"
 >
   <!-- Hero -->
@@ -138,9 +138,12 @@ import Icon from '../components/Icon.astro';
     <h1 class="docs-hero-wordmark">ATELIER</h1>
 
     <p class="docs-hero-subtitle">
-      A component library for <strong>Angular</strong>, <strong>React</strong>, and <strong>Vue</strong> —
-      designed for AI-assisted development.
-      Design in Figma. Explore in Storybook. Ship with AI.
+      <strong>Workshop in a box.</strong> Design in Figma, explore in Storybook,
+      ship with Claude — across <strong>Angular</strong>, <strong>React</strong>,
+      and <strong>Vue</strong>.
+    </p>
+    <p class="docs-hero-disclaimer">
+      Teaching artifact · not a production library
     </p>
 
     <div class="docs-hero-actions">
@@ -153,8 +156,33 @@ import Icon from '../components/Icon.astro';
     </div>
   </section>
 
+  <!-- Where to start — 3-step orientation strip -->
+  <section class="docs-orient-strip" aria-label="Where to start">
+    <div class="docs-orient-eyebrow">Where to start</div>
+    <div class="docs-orient-cards">
+      <a href="#workflow" class="docs-orient-card">
+        <div class="docs-orient-card-time">⏱ Read · 5 min</div>
+        <div class="docs-orient-card-title">What is Atelier?</div>
+        <div class="docs-orient-card-desc">The three pillars and how they connect.</div>
+        <div class="docs-orient-card-link">Read the overview →</div>
+      </a>
+      <a href="/workshop" class="docs-orient-card">
+        <div class="docs-orient-card-time">⏱ Run · 15 min</div>
+        <div class="docs-orient-card-title">Scaffold your workspace</div>
+        <div class="docs-orient-card-desc">One command + preflight verifies your setup.</div>
+        <div class="docs-orient-card-link">Open the Workshop →</div>
+      </a>
+      <a href="/tutorial" class="docs-orient-card docs-orient-card--accent">
+        <div class="docs-orient-card-time">⏱ Build · 30 min</div>
+        <div class="docs-orient-card-title">First component with Claude</div>
+        <div class="docs-orient-card-desc">Figma → MCP → token-exact code.</div>
+        <div class="docs-orient-card-link">Open the Tutorial →</div>
+      </a>
+    </div>
+  </section>
+
   <!-- Workflow section -->
-  <div class="docs-home-section-heading">Workflow</div>
+  <div class="docs-home-section-heading" id="workflow">Workflow</div>
 
   <div class="workflow-svg-wrapper">
     <DiagramFigure caption="Design in Figma, explore in Storybook, ship with AI. The loop closes when the result feeds back into the next iteration.">
