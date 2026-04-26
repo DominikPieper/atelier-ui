@@ -1,3 +1,14 @@
+## 0.0.38 (2026-04-26)
+
+### 🚀 Features
+
+- **cookbook:** equalize compositions across frameworks (Phase 5 / P2) ([fb7db85](https://github.com/DominikPieper/atelier-ui/commit/fb7db85))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.37 (2026-04-26)
 
 This was a version bump only for react to align it with other projects, there were no code changes.
