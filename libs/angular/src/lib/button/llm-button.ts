@@ -1,7 +1,10 @@
 import {
+  afterNextRender,
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
+  inject,
   input,
 } from '@angular/core';
 import type { LlmButtonVariant, LlmButtonSize } from '../spec';
@@ -53,4 +56,32 @@ export class LlmButton {
     () =>
       `variant-${this.variant()} size-${this.size()}${this.isDisabled() ? ' is-disabled' : ''}${this.loading() ? ' is-loading' : ''}`
   );
+
+  /** @internal — host element ref for the dev-mode a11y check. */
+  private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  constructor() {
+    // Dev-mode warning when a button has no accessible name. Angular's
+    // <ng-content> projection means we can't enforce this at the type
+    // level (unlike the React adapter), so we check after first render.
+    if (typeof ngDevMode !== 'undefined' && ngDevMode) {
+      afterNextRender(() => {
+        const host = this.el.nativeElement;
+        const hasText = (host.textContent ?? '').trim().length > 0;
+        const hasAriaLabel = host.hasAttribute('aria-label')
+          || host.hasAttribute('aria-labelledby');
+        if (!hasText && !hasAriaLabel) {
+          // eslint-disable-next-line no-console
+          console.warn(
+            '[LlmButton] icon-only button is missing an accessible name — '
+              + 'add an aria-label attribute so screen readers announce its purpose.',
+            host,
+          );
+        }
+      });
+    }
+  }
 }
+
+// Angular's compiler injects this global; declare so TS doesn't complain.
+declare const ngDevMode: unknown;

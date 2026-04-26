@@ -7,12 +7,20 @@ defineOptions({ name: 'LlmAccordionItem' });
 interface LlmAccordionItemProps {
   expanded?: boolean;
   disabled?: boolean;
+  /**
+   * HTML heading level wrapping the trigger button. Default `3`.
+   * Match your page's heading outline so heading order stays valid.
+   */
+  headingLevel?: 1 | 2 | 3 | 4 | 5 | 6;
 }
 
 const props = withDefaults(defineProps<LlmAccordionItemProps>(), {
   expanded: undefined,
   disabled: false,
+  headingLevel: 3,
 });
+
+const headingTag = computed(() => `h${props.headingLevel}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6');
 
 const emit = defineEmits<{
   'update:expanded': [expanded: boolean];
@@ -102,7 +110,7 @@ const chevronClasses = computed(() => ['chevron', isExpanded.value && 'is-expand
 
 <template>
   <div :class="itemClasses">
-    <h3 class="accordion-heading">
+    <component :is="headingTag" class="accordion-heading">
       <button
         :id="triggerId"
         ref="triggerRef"
@@ -132,7 +140,7 @@ const chevronClasses = computed(() => ['chevron', isExpanded.value && 'is-expand
           />
         </svg>
       </button>
-    </h3>
+    </component>
     <div class="accordion-panel-wrapper" :class="isExpanded && 'is-expanded'">
       <div
         :id="panelId"

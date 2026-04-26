@@ -3,14 +3,21 @@ import type { LlmButtonSpec } from '../spec';
 import './llm-button.css';
 
 /**
+ * Accessibility requirement: the button must carry an accessible name
+ * either as visible children OR as an `aria-label`. TypeScript catches
+ * the icon-only-without-aria-label mistake at consumer build time.
+ */
+type LlmButtonAccessibleName =
+  | { children: ReactNode; 'aria-label'?: string }
+  | { children?: undefined; 'aria-label': string };
+
+/**
  * Properties for the LlmButton component.
  */
-export interface LlmButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, LlmButtonSpec {
-  /**
-   * The content to be rendered inside the button.
-   */
-  children?: ReactNode;
-}
+export type LlmButtonProps =
+  Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'aria-label'>
+  & LlmButtonSpec
+  & LlmButtonAccessibleName;
 
 /**
  * A versatile button component that supports various styles, sizes, and states.

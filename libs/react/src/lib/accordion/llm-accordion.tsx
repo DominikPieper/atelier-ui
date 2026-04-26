@@ -147,6 +147,11 @@ export interface LlmAccordionItemProps
    */
   disabled?: boolean;
   /**
+   * HTML heading level wrapping the trigger button. Default `3`.
+   * Match your page's heading outline so heading order stays valid.
+   */
+  headingLevel?: 1 | 2 | 3 | 4 | 5 | 6;
+  /**
    * The content of the accordion item, typically including an LlmAccordionHeader.
    */
   children?: ReactNode;
@@ -159,6 +164,7 @@ export function LlmAccordionItem({
   expanded: externalExpanded,
   onExpandedChange,
   disabled = false,
+  headingLevel = 3,
   children,
   className,
   ...rest
@@ -207,9 +213,13 @@ export function LlmAccordionItem({
   );
   const bodyNodes = childArray.filter((c) => c !== headerNode);
 
+  // Render the heading wrapper at the level the consumer asked for.
+  // We can't use a JSX expression as a tag, so React.createElement is
+  // the cleanest path here.
+  const Heading = `h${headingLevel}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
   return (
     <div className={classes} {...rest}>
-      <h3 className="accordion-heading">
+      <Heading className="accordion-heading">
         <button
           ref={triggerRef}
           type="button"
@@ -244,7 +254,7 @@ export function LlmAccordionItem({
             />
           </svg>
         </button>
-      </h3>
+      </Heading>
       <div
         className={['accordion-panel-wrapper', isExpanded && 'is-expanded']
           .filter(Boolean)

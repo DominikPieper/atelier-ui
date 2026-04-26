@@ -55,7 +55,16 @@ export const LLM_TABLE = new InjectionToken<LlmTableContext>('LLM_TABLE');
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="llm-table-wrapper">
+    <!-- The wrapper is the scrollable region — tabindex=0 lets keyboard
+         users scroll horizontally through wide tables. role=region +
+         aria-label expose it as a labelled landmark for screen readers
+         (axe: scrollable-region-focusable). -->
+    <div
+      class="llm-table-wrapper"
+      tabindex="0"
+      role="region"
+      [attr.aria-label]="ariaLabel() || 'Table'"
+    >
       <table>
         <ng-content />
       </table>
@@ -78,6 +87,15 @@ export class LlmTable implements LlmTableContext {
 
   /** Whether the header row sticks to the top when the table scrolls. */
   readonly stickyHeader = input(false);
+
+  /**
+   * Accessible name for the scrollable table region. Surfaces to
+   * screen readers as the region's label so keyboard users who
+   * scroll the wrapper know what they're scrolling. Defaults to
+   * `"Table"` if unset.
+   */
+  // eslint-disable-next-line @angular-eslint/no-input-rename
+  readonly ariaLabel = input<string | undefined>(undefined, { alias: 'aria-label' });
 
   /** @internal */
   protected readonly hostClasses = computed(() => {

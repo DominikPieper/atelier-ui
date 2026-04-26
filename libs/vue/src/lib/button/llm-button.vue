@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import './llm-button.css';
 
 defineOptions({ name: 'LlmButton' });
@@ -29,10 +29,32 @@ const classes = computed(() => [
   isDisabled.value && 'is-disabled',
   props.loading && 'is-loading',
 ].filter(Boolean));
+
+// Dev-mode warning when a button has no accessible name. Vue's <slot>
+// projection means we can't enforce this at the type level (unlike the
+// React adapter), so we check after mount.
+const buttonRef = ref<HTMLButtonElement | null>(null);
+onMounted(() => {
+  if (import.meta.env?.DEV !== true) return;
+  const el = buttonRef.value;
+  if (!el) return;
+  const hasText = (el.textContent ?? '').trim().length > 0;
+  const hasAriaLabel = el.hasAttribute('aria-label')
+    || el.hasAttribute('aria-labelledby');
+  if (!hasText && !hasAriaLabel) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      '[LlmButton] icon-only button is missing an accessible name — '
+        + 'add an aria-label attribute so screen readers announce its purpose.',
+      el,
+    );
+  }
+});
 </script>
 
 <template>
   <button
+    ref="buttonRef"
     :class="classes"
     :type="type"
     :disabled="isDisabled"

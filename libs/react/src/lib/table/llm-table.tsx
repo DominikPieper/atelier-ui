@@ -18,6 +18,13 @@ export type { LlmSortDirection };
 
 export interface LlmTableProps extends HTMLAttributes<HTMLDivElement>, LlmTableSpec {
   children?: ReactNode;
+  /**
+   * Accessible name for the scrollable table region. Surfaces to
+   * screen readers as the region's label so keyboard users who
+   * scroll the wrapper know what they're scrolling. Defaults to
+   * `"Table"` if unset.
+   */
+  'aria-label'?: string;
 }
 
 export function LlmTable({
@@ -26,6 +33,7 @@ export function LlmTable({
   stickyHeader = false,
   children,
   className,
+  'aria-label': ariaLabel,
   ...rest
 }: LlmTableProps) {
   const classes = [
@@ -40,7 +48,16 @@ export function LlmTable({
 
   return (
     <div className={classes} {...rest}>
-      <div className="llm-table-wrapper">
+      {/* The wrapper is the scrollable region — give it tabindex=0 so
+       * keyboard users can scroll horizontally through wide tables.
+       * role=region + aria-label expose it as a labelled landmark for
+       * screen readers (axe rule: scrollable-region-focusable). */}
+      <div
+        className="llm-table-wrapper"
+        tabIndex={0}
+        role="region"
+        aria-label={ariaLabel ?? 'Table'}
+      >
         <table>{children}</table>
       </div>
     </div>

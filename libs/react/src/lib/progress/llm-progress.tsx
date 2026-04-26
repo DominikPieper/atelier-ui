@@ -28,6 +28,11 @@ export interface LlmProgressProps
    * Whether the progress bar is in an indeterminate state.
    */
   indeterminate?: boolean;
+  /**
+   * Accessible name for the progress bar — rendered as `aria-label`.
+   * Required by ARIA when there is no visible label nearby.
+   */
+  label?: string;
 }
 
 /**
@@ -39,6 +44,7 @@ export function LlmProgress({
   variant = 'default',
   size = 'md',
   indeterminate = false,
+  label,
   className,
   ...rest
 }: LlmProgressProps) {
@@ -57,6 +63,7 @@ export function LlmProgress({
     <div
       className={classes}
       role="progressbar"
+      aria-label={label}
       aria-valuemin={0}
       aria-valuenow={indeterminate ? undefined : clampedValue}
       aria-valuemax={indeterminate ? undefined : max}

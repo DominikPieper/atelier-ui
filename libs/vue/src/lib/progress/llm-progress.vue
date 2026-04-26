@@ -10,6 +10,11 @@ interface LlmProgressProps {
   variant?: 'default' | 'success' | 'warning' | 'danger';
   size?: 'sm' | 'md' | 'lg';
   indeterminate?: boolean;
+  /**
+   * Accessible name — rendered as `aria-label` on the host.
+   * Required by ARIA when there is no visible label nearby.
+   */
+  label?: string;
 }
 
 const props = withDefaults(defineProps<LlmProgressProps>(), {
@@ -18,6 +23,7 @@ const props = withDefaults(defineProps<LlmProgressProps>(), {
   variant: 'default',
   size: 'md',
   indeterminate: false,
+  label: undefined,
 });
 
 const clampedValue = computed(() => Math.min(Math.max(props.value, 0), props.max));
@@ -38,6 +44,7 @@ const classes = computed(() => [
   <div
     :class="classes"
     role="progressbar"
+    :aria-label="label"
     :aria-valuemin="0"
     :aria-valuenow="indeterminate ? undefined : clampedValue"
     :aria-valuemax="indeterminate ? undefined : max"

@@ -30,6 +30,7 @@ import {
     'aria-valuemin': '0',
     '[attr.aria-valuenow]': 'indeterminate() ? null : clampedValue()',
     '[attr.aria-valuemax]': 'indeterminate() ? null : max()',
+    '[attr.aria-label]': 'label() || null',
     '[class]': 'hostClasses()',
   },
 })
@@ -48,6 +49,12 @@ export class LlmProgress {
 
   /** Shows an animated indeterminate state (loading). */
   readonly indeterminate = input(false);
+
+  /**
+   * Accessible name — rendered as `aria-label` on the host.
+   * Required by ARIA when there is no visible label nearby.
+   */
+  readonly label = input<string | undefined>(undefined);
 
   protected readonly clampedValue = computed(() =>
     Math.min(Math.max(this.value(), 0), this.max())

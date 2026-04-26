@@ -94,6 +94,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Size of the button' },
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the button' },
       { name: 'loading', type: 'boolean', default: 'false', description: 'Shows a loading spinner, disables interaction' },
+      { name: 'aria-label', type: 'string', default: '—', description: 'Accessible name. Required for icon-only buttons (no children). React enforces this at compile time via a discriminated union; Angular/Vue warn at runtime in dev mode.' },
     ],
     codeExample: `<LlmButton variant="primary">Primary</LlmButton>
 <LlmButton variant="secondary">Secondary</LlmButton>
@@ -422,6 +423,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'variant', type: "'default' | 'striped' | 'bordered'", default: "'default'", description: 'Row background styling' },
       { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Vertical padding of cells' },
       { name: 'stickyHeader', type: 'boolean', default: 'false', description: 'Makes header row stick to the top on scroll' },
+      { name: 'aria-label', type: 'string', default: "'Table'", description: 'Accessible name for the scrollable wrapper region. Announced by screen readers when keyboard users focus the wrapper to scroll horizontally.' },
     ],
     codeExample: `<LlmTable variant="striped">
   <LlmThead>
@@ -544,11 +546,12 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'indeterminate', type: 'boolean', default: 'false', description: 'Shows animated indeterminate state' },
       { name: 'variant', type: "'default' | 'success' | 'warning' | 'danger'", default: "'default'", description: 'Color variant' },
       { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Size of the progress bar' },
+      { name: 'label', type: 'string', default: '—', description: 'Accessible name (aria-label). Required by ARIA when no visible label is nearby.' },
     ],
-    codeExample: `<LlmProgress value={25} />
-<LlmProgress value={60} variant="success" />
-<LlmProgress value={85} variant="warning" />
-<LlmProgress indeterminate={true} />`,
+    codeExample: `<LlmProgress value={25} label="Upload progress" />
+<LlmProgress value={60} variant="success" label="Form completion" />
+<LlmProgress value={85} variant="warning" label="Quota usage" />
+<LlmProgress indeterminate label="Loading…" />`,
   },
 
   breadcrumbs: {
@@ -888,6 +891,7 @@ show('Persistent', { duration: 0 });`,
           { name: 'expanded', type: 'boolean', default: 'false', description: 'Controls the expanded state when used as a controlled component.' },
           { name: 'onExpandedChange', type: '(expanded: boolean) => void', default: '—', description: 'Called when the user toggles the item.' },
           { name: 'disabled', type: 'boolean', default: 'false', description: 'Prevents toggling.' },
+          { name: 'headingLevel', type: '1 | 2 | 3 | 4 | 5 | 6', default: '3', description: 'HTML heading level wrapping the trigger. Match your page outline so heading order stays valid (e.g. pass 4 if the accordion is nested under an h3).' },
         ],
       },
     ],

@@ -127,7 +127,7 @@ export class LlmAccordionHeader {}
   changeDetection: ChangeDetectionStrategy.OnPush,
   hostDirectives: [CdkAccordionItem],
   template: `
-    <h3 class="accordion-heading">
+    <div role="heading" [attr.aria-level]="headingLevel()" class="accordion-heading">
       <button
         type="button"
         class="accordion-trigger"
@@ -158,7 +158,7 @@ export class LlmAccordionHeader {}
           />
         </svg>
       </button>
-    </h3>
+    </div>
     <div
       class="accordion-panel-wrapper"
       [class.is-expanded]="isExpandedValue"
@@ -185,6 +185,14 @@ export class LlmAccordionItem implements AccordionItem, OnInit, OnDestroy {
   /** Whether this item is disabled. */
   // eslint-disable-next-line @angular-eslint/no-input-rename
   readonly disabledInput = input(false, { alias: 'disabled' });
+
+  /**
+   * HTML heading level wrapping the trigger button. Default `3`.
+   * Match your page's heading outline so heading order stays valid.
+   * Rendered as `<div role="heading" aria-level="N">` so screen
+   * readers treat it as a real heading at that level.
+   */
+  readonly headingLevel = input<1 | 2 | 3 | 4 | 5 | 6>(3);
 
   /** @internal — satisfies AccordionItem / FocusableOption interface */
   get disabled(): boolean {
