@@ -1,0 +1,428 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Code } from 'astro-expressive-code/components';
+import HelpFooter from '../components/HelpFooter.astro';
+import Icon from '../components/Icon.astro';
+
+const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Components?node-id=695-313';
+const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
+type Framework = typeof FRAMEWORKS[number];
+
+const PROMPT = `Build the Settings / Card Figma frame as an Atelier component.
+
+1. Use figma-console MCP (figma_get_component_for_development) on
+   node-id 695-313 — read the component spec, boundVariables, and
+   the rendered preview.
+2. Use the storybook-{framework} MCP (list-all-documentation, then
+   get-documentation) to look up LlmCard and LlmInput props.
+3. Generate the component using:
+   - Atelier UI components matched from Storybook
+   - The exact CSS custom property names from the boundVariables
+     (no manual conversion — they're identical to the Figma variables)
+   - No hardcoded hex colors, no hardcoded padding values`;
+
+const PARITY_PROMPT = `Run figma_check_design_parity on node-id 695-313 against
+the SettingsCard component I just generated. Fix any discrepancies.`;
+
+const EXPECTED: Record<Framework, { file: string; cmd: string; port: number }> = {
+  Angular: {
+    file: 'apps/workshop-angular/src/app/components/settings-card.component.ts',
+    cmd:  'npx nx serve workshop-angular',
+    port: 4200,
+  },
+  React: {
+    file: 'apps/workshop-react/src/components/SettingsCard.tsx',
+    cmd:  'npx nx serve workshop-react',
+    port: 4201,
+  },
+  Vue: {
+    file: 'apps/workshop-vue/src/components/SettingsCard.vue',
+    cmd:  'npx nx serve workshop-vue',
+    port: 4202,
+  },
+};
+---
+
+<BaseLayout
+  title="First Component (kata)"
+  description="A 15-minute kata. Open the Figma frame, paste the prompt, save the output, compare. No theory — just the recipe."
+  currentPath="/first-component"
+>
+  <div class="docs-inline-page">
+
+    <div style="margin-bottom: 1.25rem">
+      <div class="page-eyebrow">
+        <span class="page-eyebrow-kind page-eyebrow-kind--tutorial">Tutorial</span>
+        <span class="page-eyebrow-time">⏱ ~15 min</span>
+        <span class="page-eyebrow-tag">Kata · copy-paste</span>
+      </div>
+      <h1 style="font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin: 0 0 0.6rem; background: linear-gradient(135deg, var(--ui-color-primary) 0%, var(--docs-secondary, #89ceff) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text">
+        First Component
+      </h1>
+      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 580px; line-height: 1.65">
+        Five copy-paste steps that build the Settings Card end-to-end.
+        For the why behind each step, read <a href="/tutorial" style="color: var(--ui-color-primary)">/tutorial</a> instead.
+      </p>
+    </div>
+
+    <!-- What you'll build -->
+    <div class="kata-target" aria-label="What you'll have built when you're done">
+      <div class="kata-target-eyebrow">What you'll build</div>
+      <div class="kata-target-body">
+        <div class="kata-target-mock" role="img" aria-label="Settings Card preview: a card with two text inputs (Name, Email) and a primary Save Changes button.">
+          <div class="kata-mock-card">
+            <div class="kata-mock-title">Account Settings</div>
+            <div class="kata-mock-input">
+              <span class="kata-mock-label">Name</span>
+              <span class="kata-mock-value">Jane Smith</span>
+            </div>
+            <div class="kata-mock-input">
+              <span class="kata-mock-label">Email</span>
+              <span class="kata-mock-value">jane@example.com</span>
+            </div>
+            <div class="kata-mock-btn">Save Changes</div>
+          </div>
+        </div>
+        <ul class="kata-target-checks">
+          <li><Icon name="check_circle" /> LlmCard <code>variant="elevated"</code></li>
+          <li><Icon name="check_circle" /> Two LlmInputs (Name, Email)</li>
+          <li><Icon name="check_circle" /> LlmButton <code>variant="primary"</code></li>
+          <li><Icon name="check_circle" /> Tokens: <code>--ui-spacing-6</code> · <code>--ui-spacing-4</code> · <code>--ui-color-surface-raised</code></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Step 1 -->
+    <section class="kata-step">
+      <div class="kata-step-head">
+        <span class="kata-step-num">1</span>
+        <h2 class="kata-step-title">Open the Figma frame</h2>
+      </div>
+      <p class="kata-step-desc">
+        Open <a href={FIGMA_URL} target="_blank" rel="noopener noreferrer" style="color: var(--ui-color-primary); font-weight: 600">the Settings / Card frame</a>.
+        The URL already carries <code>?node-id=695-313</code> — that's the node ID you'll
+        pass to Claude. No need to copy it manually.
+      </p>
+    </section>
+
+    <!-- Step 2 -->
+    <section class="kata-step">
+      <div class="kata-step-head">
+        <span class="kata-step-num">2</span>
+        <h2 class="kata-step-title">Pick your framework</h2>
+      </div>
+      <p class="kata-step-desc">Pick the framework you scaffolded in <a href="/workshop" style="color: var(--ui-color-primary)">Setup</a>. The tabs below stay in sync across this page.</p>
+      <div class="docs-multi-code-tabs" style="border-radius: 8px; margin: 0.5rem 0 0; width: fit-content">
+        {FRAMEWORKS.map((fw, i) => (
+          <button class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`} data-fw-btn={fw} type="button">{fw}</button>
+        ))}
+      </div>
+    </section>
+
+    <!-- Step 3 -->
+    <section class="kata-step">
+      <div class="kata-step-head">
+        <span class="kata-step-num">3</span>
+        <h2 class="kata-step-title">Paste this prompt into Claude Code</h2>
+      </div>
+      <p class="kata-step-desc">
+        Copy verbatim. Replace <code>{`{framework}`}</code> with your framework
+        (<code>angular</code>, <code>react</code>, or <code>vue</code>). Claude will fetch the
+        Figma spec and Storybook props, then write the component.
+      </p>
+      <Code code={PROMPT} lang="text" title="prompt — paste into Claude Code" />
+    </section>
+
+    <!-- Step 4 -->
+    <section class="kata-step">
+      <div class="kata-step-head">
+        <span class="kata-step-num">4</span>
+        <h2 class="kata-step-title">Save the output and serve</h2>
+      </div>
+      <p class="kata-step-desc">Save the generated component to the path below, then start the dev server:</p>
+      {FRAMEWORKS.map((fw, i) => (
+        <div data-fw-panel={fw} hidden={i !== 0}>
+          <ol class="run-steps" style="margin-top: 0.5rem">
+            <li>
+              <span class="run-step-label">Save as</span>
+              <code class="run-step-path">{EXPECTED[fw].file}</code>
+            </li>
+            <li>
+              <span class="run-step-label">Serve</span>
+              <Code code={EXPECTED[fw].cmd} lang="shell" />
+            </li>
+            <li>
+              <span class="run-step-label">Open</span>
+              <a href={`http://localhost:${EXPECTED[fw].port}`} target="_blank" rel="noopener noreferrer" class="run-step-link">
+                http://localhost:{EXPECTED[fw].port}
+              </a>
+            </li>
+          </ol>
+        </div>
+      ))}
+    </section>
+
+    <!-- Step 5 -->
+    <section class="kata-step">
+      <div class="kata-step-head">
+        <span class="kata-step-num">5</span>
+        <h2 class="kata-step-title">Compare to the target</h2>
+      </div>
+      <p class="kata-step-desc">
+        You should see the card from the <strong style="color: var(--ui-color-text)">"What you'll build"</strong> mockup
+        above — surface-raised background, two labelled inputs, primary button.
+        Spacing should match the Figma frame because the generated code uses
+        <code>--ui-spacing-6</code> and <code>--ui-spacing-4</code> (not pixel values).
+      </p>
+      <p class="kata-step-desc" style="margin-top: 0.4rem">
+        If the spacing or colors look off — that's a token drift. Run the parity check below.
+      </p>
+    </section>
+
+    <!-- Optional Step 6 -->
+    <section class="kata-step kata-step--optional">
+      <div class="kata-step-head">
+        <span class="kata-step-num kata-step-num--optional">+</span>
+        <h2 class="kata-step-title">Optional — run the parity check</h2>
+      </div>
+      <p class="kata-step-desc">
+        <code>figma_check_design_parity</code> compares the generated code against the Figma
+        spec and lists discrepancies — exact paddings, exact colors, missing variants.
+        Pass this prompt to close the loop:
+      </p>
+      <Code code={PARITY_PROMPT} lang="text" title="parity check prompt" />
+    </section>
+
+    <!-- Done -->
+    <div class="kata-done">
+      <div class="kata-done-head">
+        <span class="kata-done-eyebrow">Done</span>
+        <h2 class="kata-done-title">You shipped a token-exact component in ~15 min.</h2>
+      </div>
+      <p class="kata-done-desc">
+        Browse <a href="/patterns" style="color: var(--ui-color-primary); font-weight: 600">/patterns</a>
+        for variations on the recipe — Login Form, Confirmation Dialog, Management Dashboard —
+        all use the same Figma → MCP → Storybook → code loop you just ran.
+      </p>
+    </div>
+
+    <HelpFooter page="first-component" />
+
+    <!-- Bottom nav -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 2.5rem">
+      {([
+        { to: '/tutorial',  label: 'The why', title: 'Tutorial',   icon: 'school' },
+        { to: '/patterns',  label: 'More',    title: 'Patterns',   icon: 'menu_book' },
+        { to: '/storybook', label: 'API',     title: 'Storybook',  icon: 'book' },
+      ] as const).map(({ to, label, title, icon }) => (
+        <a href={to} class="bottom-nav-card">
+          <span class="bottom-nav-icon"><Icon name={icon} /></span>
+          <div>
+            <div class="bottom-nav-label">{label}</div>
+            <div class="bottom-nav-title">{title}</div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+  </div>
+</BaseLayout>
+
+<style>
+  /* Target preview block — pure CSS mock of the Settings Card so the page
+   * works without any built libs or screenshots. */
+  .kata-target {
+    margin-bottom: 2.5rem;
+    padding: 1.25rem 1.4rem;
+    background: var(--ui-color-surface-raised);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+  }
+  .kata-target-eyebrow {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ui-color-primary);
+    margin-bottom: 1rem;
+  }
+  .kata-target-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: center;
+  }
+  .kata-target-mock {
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem 1rem;
+    background: var(--ui-color-surface-sunken);
+    border-radius: var(--ui-radius-md);
+  }
+  .kata-mock-card {
+    width: 100%;
+    max-width: 280px;
+    padding: 1.25rem;
+    background: var(--ui-color-surface);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--ui-color-primary) 8%, transparent);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .kata-mock-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ui-color-text);
+    margin-bottom: 0.25rem;
+  }
+  .kata-mock-input {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.4rem 0.55rem;
+    background: var(--ui-color-surface-sunken);
+    border: 1px solid var(--ui-color-border);
+    border-radius: 4px;
+  }
+  .kata-mock-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ui-color-text-muted);
+  }
+  .kata-mock-value {
+    font-size: 0.78rem;
+    color: var(--ui-color-text);
+  }
+  .kata-mock-btn {
+    margin-top: 0.25rem;
+    padding: 0.45rem 0.85rem;
+    background: var(--ui-color-primary);
+    color: var(--ui-color-surface);
+    border-radius: 4px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-align: center;
+  }
+  .kata-target-checks {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--ui-color-text);
+    line-height: 1.4;
+  }
+  .kata-target-checks li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+  }
+  .kata-target-checks li :global(svg) {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    color: var(--ui-color-primary);
+    margin-top: 1px;
+  }
+  .kata-target-checks code {
+    font-size: 0.78rem;
+    padding: 0 0.25rem;
+    background: var(--ui-color-primary-light);
+    border-radius: 3px;
+  }
+  @media (max-width: 720px) {
+    .kata-target-body { grid-template-columns: 1fr; }
+  }
+
+  /* Step blocks — numbered, large enough to scan */
+  .kata-step {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--ui-color-border);
+  }
+  .kata-step:last-of-type { border-bottom: 0; }
+  .kata-step--optional {
+    opacity: 0.92;
+  }
+  .kata-step-head {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 0.65rem;
+  }
+  .kata-step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.7rem;
+    height: 1.7rem;
+    border-radius: 50%;
+    background: var(--ui-color-primary);
+    color: var(--ui-color-surface);
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+  .kata-step-num--optional {
+    background: var(--ui-color-surface-raised);
+    color: var(--ui-color-text-muted);
+    border: 1px solid var(--ui-color-border);
+    font-size: 1rem;
+  }
+  .kata-step-title {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ui-color-text);
+  }
+  .kata-step-desc {
+    margin: 0 0 0.85rem;
+    font-size: 0.88rem;
+    color: var(--ui-color-text-muted);
+    line-height: 1.6;
+  }
+  .kata-step-desc:last-child { margin-bottom: 0; }
+
+  /* "Done" closer */
+  .kata-done {
+    margin: 2rem 0 1.5rem;
+    padding: 1.25rem 1.4rem;
+    background: var(--ui-color-primary-light);
+    border: 1px solid color-mix(in srgb, var(--ui-color-primary) 30%, transparent);
+    border-radius: var(--ui-radius-md);
+  }
+  .kata-done-head {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-bottom: 0.6rem;
+  }
+  .kata-done-eyebrow {
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ui-color-primary);
+  }
+  .kata-done-title {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ui-color-text);
+  }
+  .kata-done-desc {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--ui-color-text-muted);
+    line-height: 1.6;
+  }
+</style>
