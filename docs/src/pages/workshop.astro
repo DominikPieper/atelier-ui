@@ -131,7 +131,7 @@ const MCP_CONFIG = `{
     <div style="display: flex; flex-direction: column; gap: 1.75rem; margin-bottom: 2.5rem">
 
       <!-- Step 01 -->
-      <div class="step-row">
+      <div class="step-row" data-step="1">
         <span class="step-badge">01</span>
         <div>
           <h3 class="step-title">Run the workspace generator</h3>
@@ -144,7 +144,7 @@ const MCP_CONFIG = `{
       </div>
 
       <!-- Step 02 -->
-      <div class="step-row">
+      <div class="step-row" data-step="2">
         <span class="step-badge">02</span>
         <div>
           <h3 class="step-title">Install dependencies &amp; run preflight</h3>
@@ -228,7 +228,7 @@ const MCP_CONFIG = `{
       </div>
 
       <!-- Step 03 -->
-      <div class="step-row" id="step-03">
+      <div class="step-row" data-step="3" id="step-03">
         <span class="step-badge">03</span>
         <div>
           <h3 class="step-title">Serve your app</h3>
@@ -247,7 +247,7 @@ const MCP_CONFIG = `{
       </div>
 
       <!-- Step 04 -->
-      <div class="step-row">
+      <div class="step-row" data-step="4">
         <span class="step-badge">04</span>
         <div>
           <h3 class="step-title">Open in Claude Code</h3>
@@ -278,7 +278,7 @@ const MCP_CONFIG = `{
       </p>
       <div style="display: flex; flex-direction: column; gap: 1.75rem">
 
-        <div class="step-row">
+        <div class="step-row" data-step="5">
           <span class="step-badge">A</span>
           <div>
             <h3 class="step-title">Open Figma — find your component frame</h3>
@@ -288,7 +288,7 @@ const MCP_CONFIG = `{
           </div>
         </div>
 
-        <div class="step-row">
+        <div class="step-row" data-step="6">
           <span class="step-badge">B</span>
           <div>
             <h3 class="step-title">Reference design tokens in your prompt</h3>
@@ -297,7 +297,7 @@ const MCP_CONFIG = `{
           </div>
         </div>
 
-        <div class="step-row">
+        <div class="step-row" data-step="7">
           <span class="step-badge">C</span>
           <div>
             <h3 class="step-title">AI checks Storybook, writes component code</h3>
@@ -307,7 +307,7 @@ const MCP_CONFIG = `{
           </div>
         </div>
 
-        <div class="step-row">
+        <div class="step-row" data-step="8">
           <span class="step-badge">D</span>
           <div>
             <h3 class="step-title">Ship — the component matches the design</h3>

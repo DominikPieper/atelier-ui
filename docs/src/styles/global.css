@@ -225,6 +225,31 @@ body {
 
 .docs-nav-heading-icon { font-size: 0.9rem; opacity: 0.8; flex-shrink: 0; }
 
+/* Workshop progress indicator — only present on the .docs-nav-section--workshop
+ * heading. Fills based on the --workshop-progress CSS variable (0..1) set by
+ * the inline IntersectionObserver script in BaseLayout. */
+.docs-workshop-progress {
+  margin-left: auto;
+  display: block;
+  width: 3.25rem;
+  height: 3px;
+  background: var(--ui-color-border);
+  border-radius: var(--ui-radius-full);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.docs-workshop-progress-fill {
+  display: block;
+  height: 100%;
+  width: calc(var(--workshop-progress, 0) * 100%);
+  background: var(--ui-color-primary);
+  border-radius: var(--ui-radius-full);
+  transition: width var(--ui-transition-normal) var(--ui-ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .docs-workshop-progress-fill { transition: none; }
+}
+
 .docs-nav-link {
   display: flex;
   align-items: center;
