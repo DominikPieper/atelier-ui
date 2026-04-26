@@ -29,6 +29,11 @@ import LlmTr from './table/llm-tr.vue';
 import LlmTh from './table/llm-th.vue';
 import LlmTd from './table/llm-td.vue';
 import LlmProgress from './progress/llm-progress.vue';
+import LlmMenu from './menu/llm-menu.vue';
+import LlmMenuItem from './menu/llm-menu-item.vue';
+import LlmMenuSeparator from './menu/llm-menu-separator.vue';
+import LlmMenuTrigger from './menu/llm-menu-trigger.vue';
+import LlmTooltip from './tooltip/llm-tooltip.vue';
 
 // ---------------------------------------------------------------------------
 // Shared inline style fragments. Keeping them in one place avoids duplicating
@@ -178,8 +183,10 @@ const confirmationTemplate = `
     <LlmDialog v-model:open="open" size="sm">
       <LlmDialogHeader>Delete this account?</LlmDialogHeader>
       <LlmDialogContent>
-        This action is permanent. All your data, workspaces, and API keys will
-        be removed immediately. This cannot be undone.
+        <LlmAlert variant="warning">This action cannot be undone.</LlmAlert>
+        <p style="margin:var(--ui-spacing-3) 0 0;color:var(--ui-color-text-muted);font-size:0.875rem">
+          All your data, workspaces, and API keys will be removed immediately.
+        </p>
       </LlmDialogContent>
       <LlmDialogFooter>
         <LlmButton variant="outline" @click="open = false">Cancel</LlmButton>
@@ -241,8 +248,24 @@ const dataListTemplate = `
             <p style="margin:var(--ui-spacing-1) 0 0;font-size:0.8125rem;color:var(--ui-color-text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ item.description }}</p>
           </div>
           <div style="display:flex;gap:var(--ui-spacing-2);flex-shrink:0">
-            <LlmButton variant="outline" size="sm">View</LlmButton>
-            <LlmButton variant="outline" size="sm">...</LlmButton>
+            <LlmTooltip llmTooltip="View details" llmTooltipPosition="above">
+              <LlmButton variant="outline" size="sm">View</LlmButton>
+            </LlmTooltip>
+            <LlmMenuTrigger>
+              <template #trigger>
+                <LlmTooltip llmTooltip="More actions" llmTooltipPosition="above">
+                  <LlmButton variant="outline" size="sm">...</LlmButton>
+                </LlmTooltip>
+              </template>
+              <template #menu>
+                <LlmMenu variant="compact">
+                  <LlmMenuItem>Edit</LlmMenuItem>
+                  <LlmMenuItem>Duplicate</LlmMenuItem>
+                  <LlmMenuSeparator />
+                  <LlmMenuItem>Delete</LlmMenuItem>
+                </LlmMenu>
+              </template>
+            </LlmMenuTrigger>
           </div>
         </div>
       </LlmCardContent>
@@ -483,6 +506,7 @@ export const ConfirmationDialog: Story = {
       LlmDialogHeader,
       LlmDialogContent,
       LlmDialogFooter,
+      LlmAlert,
     },
     setup() {
       const open = ref(false);
@@ -495,7 +519,17 @@ export const ConfirmationDialog: Story = {
 export const DataListWithActions: Story = {
   name: 'Data List with Actions',
   render: () => ({
-    components: { LlmCard, LlmCardContent, LlmButton, LlmBadge },
+    components: {
+      LlmCard,
+      LlmCardContent,
+      LlmButton,
+      LlmBadge,
+      LlmMenu,
+      LlmMenuItem,
+      LlmMenuSeparator,
+      LlmMenuTrigger,
+      LlmTooltip,
+    },
     setup() {
       return { items: dataListItems };
     },

@@ -84,11 +84,73 @@ fail/warn split. Hard fails fixed by adding tags to `patterns.ts`:
 Outcome: catalog ↔ story parity is now mechanical. Future cookbook
 edits will fail CI if `patterns.ts` and the live stories disagree.
 
-### P2 — Vue cookbook completion (small)
+### P2 — Framework equalization across patterns — ✅ Shipped 2026-04-26
 
-Audit `libs/vue/src/lib/cookbook.stories.ts` against the Angular file.
-Bring missing pattern depth up to par. Likely additions: state
-management on settings page, table action menu, dashboard quota cards.
+P1 surfaced 3 real cross-framework drifts (after fixing a section-end
+bug in the parity script — Vue's `Storybook Meta & Stories` block was
+bleeding into section 6 and producing 5 false positives on the
+dashboard pattern). The remaining drifts were:
+
+1. **Confirmation Dialog** — Angular dialog content had
+   `<llm-alert variant="warning">This action cannot be undone.</llm-alert>`
+   inside `LlmDialogContent`; React + Vue rendered a plain explanatory
+   paragraph with no Alert composition.
+2. **Data List with Actions** — Angular per-row "..." button used
+   `LlmTooltip` for hover affordance and `[llmMenuTriggerFor]` to open
+   an `LlmMenu` (Edit / Duplicate / Delete + separator); React + Vue
+   rendered an inert "..." button.
+
+Equalization direction was *enrich React + Vue* rather than *trim
+Angular*, because the Angular composition demonstrates more of the
+library and the cookbook is a teaching surface.
+
+Changes:
+
+- `libs/react/src/lib/cookbook.stories.tsx`
+  - Added `LlmMenu` / `LlmMenuItem` / `LlmMenuSeparator` /
+    `LlmMenuTrigger` / `LlmTooltip` imports.
+  - Confirmation dialog now wraps an `<LlmAlert variant="warning">`
+    above a smaller explanatory paragraph in `LlmDialogContent`.
+  - Data list "View" button wrapped in `LlmTooltip`. The "..." button
+    wrapped in an `LlmMenuTrigger` with a render-prop child that
+    forwards `ref` + `onClick`, plus an inner `LlmTooltip` for hover
+    affordance. Menu uses the same `compact` variant + items as the
+    Angular story.
+- `libs/vue/src/lib/cookbook.stories.ts`
+  - Added `LlmMenu` / `LlmMenuItem` / `LlmMenuSeparator` /
+    `LlmMenuTrigger` / `LlmTooltip` imports.
+  - Confirmation dialog template gains the same
+    `<LlmAlert variant="warning">` + paragraph composition; story's
+    `components: {…}` registration extended with `LlmAlert`.
+  - Data list template uses `<LlmMenuTrigger>` with the `#trigger` /
+    `#menu` slot pattern from the Vue Menu story; story registration
+    extended with the 5 added components.
+- `docs/src/data/patterns.ts`
+  - `data-list` `tags[]` adds `LlmMenu` and `LlmTooltip`.
+  - `dataListAngular` / `dataListReact` / `dataListVue` snippets
+    rewritten to mirror the richer composition (each shows a per-row
+    `LlmTooltip` + `LlmMenuTrigger` action menu with the same items).
+
+Parity script tweak:
+
+- `splitStoryByNum` now treats `// Storybook Meta & Stories` and
+  `// Shared inline styles` headers as section terminators, so the last
+  numbered pattern's section never absorbs the meta block. This was
+  responsible for the inverted "Vue dashboard is denser" reading from
+  P1.
+
+Verification (all green):
+
+- `node tools/scripts/check-cookbook-parity.mjs` — 6/6 patterns ✓, no
+  hard fails, no drift warnings.
+- `nx run-many -t lint -p react,vue` — 0 errors (29 pre-existing
+  jsx-a11y/aria-role warnings, none in cookbook stories).
+- `nx run-many -t test -p react,vue` — 247/247 across 29 test files.
+- `nx build docs` — 49 pages rendered.
+
+Outcome: cookbook compositions are now equivalent across the three
+frameworks. P3 (per-pattern detail pages) and P4 (JSON manifest) can
+proceed against a stable, parity-checked catalog.
 
 ### P3 — Per-pattern detail pages
 

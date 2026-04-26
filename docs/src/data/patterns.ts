@@ -153,7 +153,21 @@ const dataListAngular = `<div class="list-header">
       <span>{{ item.name }}</span>
       <llm-badge [variant]="item.statusVariant" size="sm">{{ item.status }}</llm-badge>
       <p>{{ item.description }}</p>
-      <llm-button variant="outline" size="sm">View</llm-button>
+      <llm-button variant="outline" size="sm" llmTooltip="View details">View</llm-button>
+      <llm-button
+        variant="outline"
+        size="sm"
+        [llmMenuTriggerFor]="actionsMenu"
+        llmTooltip="More actions"
+      >...</llm-button>
+      <ng-template #actionsMenu>
+        <llm-menu>
+          <llm-menu-item>Edit</llm-menu-item>
+          <llm-menu-item>Duplicate</llm-menu-item>
+          <llm-menu-separator />
+          <llm-menu-item>Delete</llm-menu-item>
+        </llm-menu>
+      </ng-template>
     </llm-card-content>
   </llm-card>
 }`;
@@ -168,7 +182,25 @@ const dataListReact = `<div className="list-header">
       <span>{item.name}</span>
       <LlmBadge variant={item.statusVariant} size="sm">{item.status}</LlmBadge>
       <p>{item.description}</p>
-      <LlmButton variant="outline" size="sm">View</LlmButton>
+      <LlmTooltip llmTooltip="View details">
+        <LlmButton variant="outline" size="sm">View</LlmButton>
+      </LlmTooltip>
+      <LlmMenuTrigger
+        menu={
+          <LlmMenu variant="compact">
+            <LlmMenuItem>Edit</LlmMenuItem>
+            <LlmMenuItem>Duplicate</LlmMenuItem>
+            <LlmMenuSeparator />
+            <LlmMenuItem>Delete</LlmMenuItem>
+          </LlmMenu>
+        }
+      >
+        {({ onClick, ref }) => (
+          <LlmTooltip llmTooltip="More actions">
+            <LlmButton ref={ref} onClick={onClick} variant="outline" size="sm">...</LlmButton>
+          </LlmTooltip>
+        )}
+      </LlmMenuTrigger>
     </LlmCardContent>
   </LlmCard>
 ))}`;
@@ -182,7 +214,24 @@ const dataListVue = `<div class="list-header">
     <span>{{ item.name }}</span>
     <LlmBadge :variant="item.statusVariant" size="sm">{{ item.status }}</LlmBadge>
     <p>{{ item.description }}</p>
-    <LlmButton variant="outline" size="sm">View</LlmButton>
+    <LlmTooltip llmTooltip="View details">
+      <LlmButton variant="outline" size="sm">View</LlmButton>
+    </LlmTooltip>
+    <LlmMenuTrigger>
+      <template #trigger>
+        <LlmTooltip llmTooltip="More actions">
+          <LlmButton variant="outline" size="sm">...</LlmButton>
+        </LlmTooltip>
+      </template>
+      <template #menu>
+        <LlmMenu variant="compact">
+          <LlmMenuItem>Edit</LlmMenuItem>
+          <LlmMenuItem>Duplicate</LlmMenuItem>
+          <LlmMenuSeparator />
+          <LlmMenuItem>Delete</LlmMenuItem>
+        </LlmMenu>
+      </template>
+    </LlmMenuTrigger>
   </LlmCardContent>
 </LlmCard>`;
 
@@ -333,7 +382,7 @@ export const PATTERNS: PatternMeta[] = [
     num: 4,
     title: 'Data List with Actions',
     description: 'Inline actions on a list of items. The core pattern for dashboards and admin panels — Card + Badge + Button composition.',
-    tags: ['LlmCard', 'LlmBadge', 'LlmButton'],
+    tags: ['LlmCard', 'LlmBadge', 'LlmButton', 'LlmMenu', 'LlmTooltip'],
     angular: dataListAngular,
     react: dataListReact,
     vue: dataListVue,

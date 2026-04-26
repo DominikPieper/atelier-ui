@@ -35,6 +35,13 @@ import {
   LlmTd,
 } from './table/llm-table';
 import { LlmProgress } from './progress/llm-progress';
+import {
+  LlmMenu,
+  LlmMenuItem,
+  LlmMenuSeparator,
+  LlmMenuTrigger,
+} from './menu/llm-menu';
+import { LlmTooltip } from './tooltip/llm-tooltip';
 
 // ---------------------------------------------------------------------------
 // 1. Login Form
@@ -181,8 +188,10 @@ function ConfirmationDialogPattern() {
       <LlmDialog open={open} onOpenChange={setOpen} size="sm">
         <LlmDialogHeader>Delete this account?</LlmDialogHeader>
         <LlmDialogContent>
-          This action is permanent. All your data, workspaces, and API keys
-          will be removed immediately. This cannot be undone.
+          <LlmAlert variant="warning">This action cannot be undone.</LlmAlert>
+          <p style={{ margin: 'var(--ui-spacing-3) 0 0', color: 'var(--ui-color-text-muted)', fontSize: '0.875rem' }}>
+            All your data, workspaces, and API keys will be removed immediately.
+          </p>
         </LlmDialogContent>
         <LlmDialogFooter>
           <LlmButton variant="outline" onClick={() => setOpen(false)}>
@@ -262,12 +271,34 @@ function DataListPattern() {
                 <p style={rowDescStyle}>{item.description}</p>
               </div>
               <div style={rowActionsStyle}>
-                <LlmButton variant="outline" size="sm">
-                  View
-                </LlmButton>
-                <LlmButton variant="outline" size="sm">
-                  ...
-                </LlmButton>
+                <LlmTooltip llmTooltip="View details" llmTooltipPosition="above">
+                  <LlmButton variant="outline" size="sm">
+                    View
+                  </LlmButton>
+                </LlmTooltip>
+                <LlmMenuTrigger
+                  menu={
+                    <LlmMenu variant="compact">
+                      <LlmMenuItem>Edit</LlmMenuItem>
+                      <LlmMenuItem>Duplicate</LlmMenuItem>
+                      <LlmMenuSeparator />
+                      <LlmMenuItem>Delete</LlmMenuItem>
+                    </LlmMenu>
+                  }
+                >
+                  {({ onClick, ref }) => (
+                    <LlmTooltip llmTooltip="More actions" llmTooltipPosition="above">
+                      <LlmButton
+                        ref={ref as React.RefObject<HTMLButtonElement>}
+                        onClick={onClick}
+                        variant="outline"
+                        size="sm"
+                      >
+                        ...
+                      </LlmButton>
+                    </LlmTooltip>
+                  )}
+                </LlmMenuTrigger>
               </div>
             </div>
           </LlmCardContent>

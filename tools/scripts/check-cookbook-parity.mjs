@@ -97,19 +97,38 @@ function readPatterns() {
 /**
  * Splits a cookbook.stories.* file into sections keyed by num (1..6).
  * Section markers look like:  `// 1. Login Form`
+ *
+ * The Vue stories file (and similarly-shaped React/Angular files) end with
+ * a `// Storybook Meta & Stories` block that registers components per
+ * exported story. That block must NOT bleed into the last pattern's
+ * section, otherwise Vue's `components: { LlmInput, LlmSelect, ... }`
+ * registrations get attributed to whichever pattern happened to be last.
+ * Same applies to a `// Shared inline styles` block in the React file.
  */
+const POST_PATTERN_HEADERS = [
+  /^\/\/\s+Storybook\b/,
+  /^\/\/\s+Shared\s+(inline\s+)?styles\b/i,
+];
+
 function splitStoryByNum(src) {
   const lines = src.split('\n');
   const markers = [];
+  let endLine = lines.length;
   for (let i = 0; i < lines.length; i++) {
     const m = /^\/\/\s+(\d+)\.\s+(.+)$/.exec(lines[i]);
-    if (m) markers.push({ num: Number(m[1]), title: m[2].trim(), line: i });
+    if (m) {
+      markers.push({ num: Number(m[1]), title: m[2].trim(), line: i });
+      continue;
+    }
+    if (POST_PATTERN_HEADERS.some((re) => re.test(lines[i])) && endLine === lines.length) {
+      endLine = i;
+    }
   }
   const sections = new Map();
   for (let i = 0; i < markers.length; i++) {
     const { num } = markers[i];
     const start = markers[i].line;
-    const end = i + 1 < markers.length ? markers[i + 1].line : lines.length;
+    const end = i + 1 < markers.length ? markers[i + 1].line : endLine;
     sections.set(num, lines.slice(start, end).join('\n'));
   }
   return sections;
