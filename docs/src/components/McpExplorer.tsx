@@ -364,9 +364,15 @@ export default function McpExplorer() {
             const color = FRAMEWORK_COLORS[fw];
             return (
               <button key={fw} onClick={() => switchFramework(fw)} style={{
-                padding: '0.3rem 0.85rem', borderRadius: 'var(--ui-radius-md)', border: 'none',
-                background: active ? `${color}22` : 'transparent',
-                color: active ? color : 'var(--ui-color-text-muted)',
+                // Brand-coloured border carries the active cue; the text uses
+                // --ui-color-text (AA-safe). Brand colours like #61dafb (React
+                // light blue) and #42b883 (Vue green) only hit 1.5–2.4:1 on
+                // a light surface as text — they're tuned for their own brand
+                // backgrounds, not neutral chrome.
+                padding: '0.3rem 0.85rem', borderRadius: 'var(--ui-radius-md)',
+                border: active ? `1.5px solid ${color}` : '1.5px solid transparent',
+                background: active ? 'var(--ui-color-surface-raised)' : 'transparent',
+                color: active ? 'var(--ui-color-text)' : 'var(--ui-color-text-muted)',
                 cursor: 'pointer', fontWeight: active ? 700 : 500,
                 fontSize: '0.82rem', fontFamily: 'monospace',
               }}>
@@ -374,7 +380,10 @@ export default function McpExplorer() {
               </button>
             );
           })}
-          <span style={{ marginLeft: '0.5rem', fontSize: '0.72rem', fontFamily: 'monospace', color: 'var(--ui-color-text-muted)', opacity: 0.7 }}>
+          {/* No opacity — --ui-color-text-muted is already AA-safe (#4f5f7c
+           * light, 5.07:1 on surface-sunken). Adding 0.7 opacity composited
+           * the colour down to 3.1:1 (axe color-contrast violation). */}
+          <span style={{ marginLeft: '0.5rem', fontSize: '0.72rem', fontFamily: 'monospace', color: 'var(--ui-color-text-muted)' }}>
             @atelier-ui/{framework}
           </span>
           <span style={{
@@ -433,15 +442,30 @@ export default function McpExplorer() {
             const mockDef = TOOL_DEFS.find(t => t.name === tool.name);
             const supported = !mockDef?.supportedFrameworks || mockDef.supportedFrameworks.includes(framework);
             return (
-              <button key={tool.name} onClick={() => selectTool(tool.name)} style={{
-                display: 'block', width: '100%', textAlign: 'left',
-                padding: '0.55rem 0.85rem 0.55rem 0.75rem', border: 'none',
-                borderLeft: `3px solid ${active ? 'var(--ui-color-primary)' : 'transparent'}`,
-                background: active ? 'rgba(68,218,218,0.07)' : 'transparent',
-                color: active ? 'var(--ui-color-primary)' : 'var(--ui-color-text-muted)',
-                cursor: 'pointer', fontFamily: 'monospace', fontSize: '0.78rem',
-                fontWeight: active ? 700 : 400, opacity: supported ? 1 : 0.45,
-              }}>
+              <button
+                key={tool.name}
+                onClick={() => supported && selectTool(tool.name)}
+                disabled={!supported}
+                aria-disabled={!supported || undefined}
+                title={supported ? undefined : `Not supported on ${framework}`}
+                style={{
+                  display: 'block', width: '100%', textAlign: 'left',
+                  padding: '0.55rem 0.85rem 0.55rem 0.75rem', border: 'none',
+                  borderLeft: `3px solid ${active ? 'var(--ui-color-primary)' : 'transparent'}`,
+                  background: active ? 'rgba(68,218,218,0.07)' : 'transparent',
+                  // disabled buttons are exempt from WCAG contrast requirements
+                  // (per the disabled-controls exception). The opacity is the
+                  // visual "this is unavailable" cue; aria-disabled signals it
+                  // to assistive tech. Keep cursor + textDecoration to make
+                  // the unavailable state obvious for sighted users too.
+                  color: active ? 'var(--ui-color-primary)' : 'var(--ui-color-text-muted)',
+                  cursor: supported ? 'pointer' : 'not-allowed',
+                  fontFamily: 'monospace', fontSize: '0.78rem',
+                  fontWeight: active ? 700 : 400,
+                  opacity: supported ? 1 : 0.55,
+                  textDecoration: supported ? 'none' : 'line-through',
+                }}
+              >
                 {tool.name}
               </button>
             );
