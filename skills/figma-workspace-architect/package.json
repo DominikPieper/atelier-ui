@@ -1,6 +1,6 @@
 {
   "name": "@atelier-ui/skill-figma-workspace-architect",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "private": true,
   "description": "Claude Code skill for designing, building, and auditing Figma workspaces via figma-console-mcp.",
   "type": "module",
