@@ -1,21 +1,22 @@
-:host {
+.llm-toggle {
   display: block;
   font-family: var(--ui-font-family);
   font-size: var(--ui-font-size-md);
 }
 
-label {
+.llm-toggle label {
   display: inline-flex;
   align-items: center;
-  gap: var(--ui-spacing-2);
+  gap: var(--ui-spacing-3);
   cursor: pointer;
   user-select: none;
   color: var(--ui-color-text);
   line-height: var(--ui-line-height-normal);
+  min-height: 1.5rem;
 }
 
 /* Hide native checkbox visually but keep it accessible */
-input[type='checkbox'] {
+.llm-toggle input[type='checkbox'] {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -28,7 +29,7 @@ input[type='checkbox'] {
 }
 
 /* Track — pill-shaped container */
-.track {
+.llm-toggle .track {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -36,7 +37,7 @@ input[type='checkbox'] {
   width: 2.75rem;
   height: 1.5rem;
   border-radius: var(--ui-radius-full);
-  border: 1.5px solid var(--ui-color-input-border);
+  border: 1px solid var(--ui-color-border-strong);
   background-color: var(--ui-color-input-bg);
   transition: background-color var(--ui-transition-fast),
               border-color var(--ui-transition-fast),
@@ -45,71 +46,71 @@ input[type='checkbox'] {
 }
 
 /* Thumb — circular slider */
-.thumb {
+.llm-toggle .thumb {
   position: absolute;
   left: 0.125rem;
   width: 1.125rem;
   height: 1.125rem;
   border-radius: var(--ui-radius-full);
-  background-color: var(--ui-color-input-border);
+  background-color: var(--ui-color-border-strong);
   box-shadow: var(--ui-shadow-xs);
-  transition: transform var(--ui-transition-fast),
+  transition: transform var(--ui-transition-normal) var(--ui-ease-out),
               background-color var(--ui-transition-fast);
 }
 
 /* Hover state */
-label:hover:not(:has(input:disabled)) .track {
-  border-color: var(--ui-color-input-border-hover);
+.llm-toggle label:hover:not(:has(input:disabled)) .track {
+  border-color: var(--ui-color-primary);
 }
 
 /* Focus ring on track when native input is focused */
-input[type='checkbox']:focus-visible + .track {
+.llm-toggle input[type='checkbox']:focus-visible + .track {
   box-shadow: var(--ui-focus-ring);
-  border-color: var(--ui-color-input-border-focus);
+  border-color: var(--ui-color-primary);
 }
 
 /* Checked state — track */
-:host(.is-checked) .track {
+.llm-toggle.is-checked .track {
   background-color: var(--ui-color-primary);
   border-color: var(--ui-color-primary);
 }
 
 /* Checked state — thumb slides right */
-:host(.is-checked) .thumb {
+.llm-toggle.is-checked .thumb {
   transform: translateX(1.25rem);
-  background-color: var(--ui-color-surface);
+  background-color: var(--ui-color-text-on-primary);
 }
 
 /* Invalid state — track border */
-:host(.is-invalid) .track {
+.llm-toggle.is-invalid .track {
   border-color: var(--ui-color-input-border-invalid);
 }
 
-:host(.is-invalid) input[type='checkbox']:focus-visible + .track {
+.llm-toggle.is-invalid input[type='checkbox']:focus-visible + .track {
   border-color: var(--ui-color-input-border-invalid);
   box-shadow: 0 0 0 2px var(--ui-color-surface), 0 0 0 4px var(--ui-color-danger);
 }
 
 /* Disabled state */
-:host(.is-disabled) {
+.llm-toggle.is-disabled {
   opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }
 
-:host(.is-disabled) label {
+.llm-toggle.is-disabled label {
   cursor: not-allowed;
 }
 
-:host(.is-disabled) .track {
+.llm-toggle.is-disabled .track {
   cursor: not-allowed;
 }
 
 /* Error messages */
-.errors {
-  margin-top: var(--ui-spacing-1);
+.llm-toggle .errors {
+  margin-top: var(--ui-spacing-2);
 }
 
-.error-message {
+.llm-toggle .error-message {
   margin: 0;
   font-size: var(--ui-font-size-sm);
   color: var(--ui-color-error-text);

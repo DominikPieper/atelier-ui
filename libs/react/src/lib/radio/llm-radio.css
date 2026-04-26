@@ -9,6 +9,7 @@
   font-family: var(--ui-font-family);
   font-size: var(--ui-font-size-md);
   padding: var(--ui-spacing-1) 0;
+  min-height: 1.5rem;
   transition: color var(--ui-transition-fast);
 }
 
@@ -22,12 +23,15 @@
   flex-shrink: 0;
   width: 1.25rem;
   height: 1.25rem;
-  border: 2px solid var(--ui-color-border);
+  border: 1.5px solid var(--ui-color-border-strong);
   border-radius: 50%;
-  background-color: var(--ui-color-surface);
+  background-color: var(--ui-color-input-bg);
   cursor: pointer;
   position: relative;
-  transition: all var(--ui-transition-fast) var(--ui-ease-out);
+  transition: border-color var(--ui-transition-fast),
+              border-width var(--ui-transition-fast) var(--ui-ease-out),
+              background-color var(--ui-transition-fast),
+              box-shadow var(--ui-transition-fast);
   outline: none;
   margin: 0;
 }
@@ -37,11 +41,11 @@
 }
 
 .llm-radio input[type='radio']:focus-visible {
-  box-shadow: 0 0 0 2px var(--ui-color-surface), 0 0 0 4px var(--ui-color-primary-light);
+  box-shadow: var(--ui-focus-ring);
   border-color: var(--ui-color-primary);
 }
 
-/* Checked state */
+/* Checked state — thick inner ring */
 .llm-radio input[type='radio']:checked {
   border-color: var(--ui-color-primary);
   border-width: 6px;
@@ -49,7 +53,7 @@
 
 /* Invalid state */
 .llm-radio.is-invalid input[type='radio'] {
-  border-color: var(--ui-color-danger);
+  border-color: var(--ui-color-input-border-invalid);
 }
 
 .llm-radio.is-invalid:hover input[type='radio'] {
@@ -57,7 +61,8 @@
 }
 
 .llm-radio.is-invalid input[type='radio']:focus-visible {
-  box-shadow: 0 0 0 2px var(--ui-color-surface), 0 0 0 4px var(--ui-color-danger-light);
+  border-color: var(--ui-color-input-border-invalid);
+  box-shadow: 0 0 0 2px var(--ui-color-surface), 0 0 0 4px var(--ui-color-danger);
 }
 
 /* Disabled state */

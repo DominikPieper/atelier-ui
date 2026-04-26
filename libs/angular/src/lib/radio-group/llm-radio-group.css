@@ -1,19 +1,29 @@
-:host {
-  display: block;
+.llm-radio-group {
+  display: flex;
   font-family: var(--ui-font-family);
+  gap: var(--ui-spacing-3);
 }
 
-:host(.is-disabled) {
+.llm-radio-group.orientation-vertical {
+  flex-direction: column;
+}
+
+.llm-radio-group.orientation-horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.llm-radio-group.is-disabled {
   opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }
 
 /* Error messages */
-.errors {
-  margin-top: var(--ui-spacing-1);
+.llm-radio-group .errors {
+  margin-top: var(--ui-spacing-2);
 }
 
-.error-message {
+.llm-radio-group .error-message {
   margin: 0;
   font-size: var(--ui-font-size-sm);
   color: var(--ui-color-error-text);

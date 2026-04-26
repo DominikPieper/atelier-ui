@@ -20,7 +20,7 @@
 
 /* Error messages */
 .llm-radio-group .errors {
-  margin-top: var(--ui-spacing-1);
+  margin-top: var(--ui-spacing-2);
 }
 
 .llm-radio-group .error-message {

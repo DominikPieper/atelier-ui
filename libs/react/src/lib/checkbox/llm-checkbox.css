@@ -7,11 +7,12 @@
 .llm-checkbox label {
   display: inline-flex;
   align-items: center;
-  gap: var(--ui-spacing-2);
+  gap: var(--ui-spacing-3);
   cursor: pointer;
   user-select: none;
   color: var(--ui-color-text);
   line-height: var(--ui-line-height-normal);
+  min-height: 1.5rem;
 }
 
 .llm-checkbox input[type='checkbox'] {
@@ -20,7 +21,7 @@
   flex-shrink: 0;
   width: 1.25rem;
   height: 1.25rem;
-  border: 1.5px solid var(--ui-color-input-border);
+  border: 1.5px solid var(--ui-color-border-strong);
   border-radius: var(--ui-radius-sm);
   background-color: var(--ui-color-input-bg);
   cursor: pointer;
@@ -32,13 +33,13 @@
 }
 
 .llm-checkbox input[type='checkbox']:hover:not(:disabled) {
-  border-color: var(--ui-color-input-border-hover);
+  border-color: var(--ui-color-primary);
   background-color: var(--ui-color-primary-light);
 }
 
 .llm-checkbox input[type='checkbox']:focus-visible {
   box-shadow: var(--ui-focus-ring);
-  border-color: var(--ui-color-input-border-focus);
+  border-color: var(--ui-color-primary);
 }
 
 /* Checked state */
@@ -104,7 +105,7 @@
 
 /* Error messages */
 .llm-checkbox .errors {
-  margin-top: var(--ui-spacing-1);
+  margin-top: var(--ui-spacing-2);
 }
 
 .llm-checkbox .error-message {
