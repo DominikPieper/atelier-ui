@@ -6,7 +6,29 @@ import { Meta, ColorPalette, ColorItem } from '@storybook/addon-docs/blocks';
 
 All color tokens use the `--ui-color-*` prefix and automatically switch between light and dark themes via the `data-theme="dark"` attribute.
 
-## Brand
+The current palette is **Direction C** ("workshop signature"): Conciso navy spine + Pieper-organic moss accent on a warm-bone canvas. Light-mode-first; dark mode is a switch. All foreground/background pairs are verified to meet WCAG 2.2 AA.
+
+## Primary — Conciso navy spine
+
+<ColorPalette>
+  <ColorItem
+    title="Primary"
+    subtitle="--ui-color-primary / hover / active / light"
+    colors={{ Default: '#0a2540', Hover: '#143659', Active: '#061a30', Light: 'rgba(10,37,64,0.08)' }}
+  />
+</ColorPalette>
+
+## Accent — workshop affordances (Pieper-organic moss)
+
+<ColorPalette>
+  <ColorItem
+    title="Accent"
+    subtitle="--ui-color-accent / hover / active / bg"
+    colors={{ Default: '#506c36', Hover: '#3f5728', Active: '#2e4319', Bg: '#e8efde' }}
+  />
+</ColorPalette>
+
+## Brand — Conciso reference (opt-in)
 
 <ColorPalette>
   <ColorItem title="Corporate" subtitle="--ui-color-brand-corporate" colors={{ Corporate: '#00bebe' }} />
@@ -21,32 +43,27 @@ All color tokens use the `--ui-color-*` prefix and automatically switch between 
 
 <ColorPalette>
   <ColorItem
-    title="Primary"
-    subtitle="--ui-color-primary / hover / active / light"
-    colors={{ Default: '#00bebe', Hover: '#009696', Active: '#007070', Light: 'rgba(0,190,190,0.08)' }}
-  />
-  <ColorItem
     title="Secondary"
     subtitle="--ui-color-secondary / hover / active"
-    colors={{ Default: '#64748b', Hover: '#475569', Active: '#334155' }}
+    colors={{ Default: '#475569', Hover: '#334155', Active: '#1e293b' }}
   />
   <ColorItem
     title="Danger"
     subtitle="--ui-color-danger / hover / active"
-    colors={{ Default: '#ef4444', Hover: '#dc2626', Active: '#b91c1c' }}
+    colors={{ Default: '#9b1c1c', Hover: '#7a1414', Active: '#5e0f0f' }}
   />
-  <ColorItem title="Success" subtitle="--ui-color-success" colors={{ Success: '#22c55e' }} />
-  <ColorItem title="Warning" subtitle="--ui-color-warning" colors={{ Warning: '#f59e0b' }} />
-  <ColorItem title="Info" subtitle="--ui-color-info" colors={{ Info: '#06b6d4' }} />
+  <ColorItem title="Success" subtitle="--ui-color-success" colors={{ Success: '#1f6b3e' }} />
+  <ColorItem title="Warning" subtitle="--ui-color-warning" colors={{ Warning: '#985808' }} />
+  <ColorItem title="Info" subtitle="--ui-color-info" colors={{ Info: '#0050a0' }} />
 </ColorPalette>
 
-## Surface
+## Surface — warm bone
 
 <ColorPalette>
   <ColorItem
     title="Surface"
     subtitle="--ui-color-surface / surface-raised / surface-sunken"
-    colors={{ Default: '#ffffff', Raised: '#fafafa', Sunken: '#f5f5f5' }}
+    colors={{ Default: '#f7f5f0', Raised: '#ffffff', Sunken: '#ece9e1' }}
   />
 </ColorPalette>
 
@@ -56,7 +73,7 @@ All color tokens use the `--ui-color-*` prefix and automatically switch between 
   <ColorItem
     title="Text"
     subtitle="--ui-color-text / text-muted / placeholder"
-    colors={{ Default: '#0f172a', Muted: '#64748b', Placeholder: '#9ca3af' }}
+    colors={{ Default: '#0f172a', Muted: '#48556e', Placeholder: '#6a6358' }}
   />
 </ColorPalette>
 
@@ -65,8 +82,8 @@ All color tokens use the `--ui-color-*` prefix and automatically switch between 
 <ColorPalette>
   <ColorItem
     title="Border"
-    subtitle="--ui-color-border / border-hover"
-    colors={{ Default: '#e5e7eb', Hover: '#d1d5db' }}
+    subtitle="--ui-color-border (decorative) / border-hover / border-strong (functional)"
+    colors={{ Default: '#d8d3c5', Hover: '#bcb6a4', Strong: '#76716a' }}
   />
 </ColorPalette>
 
@@ -76,9 +93,13 @@ When `data-theme="dark"` is applied these tokens resolve to their dark-mode equi
 
 | Token | Light | Dark |
 |---|---|---|
-| `--ui-color-primary` | `#00bebe` | `#00d0d0` |
-| `--ui-color-surface` | `#ffffff` | `#1e1e2e` |
-| `--ui-color-surface-sunken` | `#f5f5f5` | `#18181f` |
+| `--ui-color-primary` | `#0a2540` | `#5fa7ff` |
+| `--ui-color-accent` | `#506c36` | `#a3c87a` |
+| `--ui-color-surface` | `#f7f5f0` | `#0c1620` |
+| `--ui-color-surface-raised` | `#ffffff` | `#13202c` |
+| `--ui-color-surface-sunken` | `#ece9e1` | `#08111a` |
 | `--ui-color-text` | `#0f172a` | `#f1f5f9` |
-| `--ui-color-border` | `#e5e7eb` | `#2e2e3e` |
-| `--ui-color-danger` | `#ef4444` | `#f87171` |
+| `--ui-color-text-muted` | `#48556e` | `#a4b4ce` |
+| `--ui-color-border` | `#d8d3c5` | `#2a3a4d` |
+| `--ui-color-border-strong` | `#76716a` | `#5d6f8c` |
+| `--ui-color-danger` | `#9b1c1c` | `#f87a7a` |

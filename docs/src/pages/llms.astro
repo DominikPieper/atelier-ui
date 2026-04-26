@@ -127,14 +127,14 @@ const previewCode = `# Atelier — Full API Reference
             <div style="flex: 1; min-width: 0">
               <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.35rem">
                 <span style="font-family: monospace; font-weight: 700; font-size: 0.92rem; color: var(--ui-color-primary)">{filename}</span>
-                <span style="font-family: monospace; font-size: 0.65rem; font-weight: 600; color: var(--docs-secondary, #89ceff); background: rgba(137,206,255,0.08); padding: 0.1rem 0.35rem; border-radius: 3px">{size}</span>
+                <span style="font-family: monospace; font-size: 0.65rem; font-weight: 600; color: var(--ui-color-accent); background: var(--ui-color-accent-bg); padding: 0.1rem 0.35rem; border-radius: 3px">{size}</span>
               </div>
               <p style="margin: 0 0 0.4rem; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">{desc}</p>
               <a href={url} target="_blank" rel="noopener noreferrer" style="font-size: 0.75rem; color: var(--ui-color-text-muted); text-decoration: none; font-family: monospace; opacity: 0.7">{url}</a>
             </div>
             <button
               data-copy={url}
-              style="flex-shrink: 0; padding: 0.3rem 0.75rem; border: none; border-radius: var(--ui-radius-sm); background: linear-gradient(135deg, var(--ui-color-primary) 0%, var(--docs-secondary, #89ceff) 100%); color: #09141d; font-size: 0.72rem; font-weight: 700; font-family: monospace; cursor: pointer; white-space: nowrap"
+              style="flex-shrink: 0; padding: 0.3rem 0.75rem; border: none; border-radius: var(--ui-radius-sm); background: var(--ui-color-primary); color: var(--ui-color-text-on-primary); font-size: 0.72rem; font-weight: 700; font-family: monospace; cursor: pointer; white-space: nowrap"
             >
               copy url
             </button>

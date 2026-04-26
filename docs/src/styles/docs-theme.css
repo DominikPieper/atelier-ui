@@ -1,91 +1,94 @@
 /**
- * Docs-specific theme: "Digital Architect"
+ * Docs-specific theme — Direction C: "Workshop signature"
  * Overrides the shared component library tokens for the docs chrome only.
+ *
+ * Palette: Conciso navy spine + Pieper-organic moss accent on warm-bone canvas.
+ * All pairs verified WCAG 2.2 AA via tools/scripts/wcag-contrast.mjs.
+ * Plan: ~/.claude/plans/atelier-design-rebrief.md
  */
 
-/* ── Dark mode: deep-sea navy palette ──────────────────────── */
+/* ── Dark mode: deep navy canvas ───────────────────────────── */
 [data-theme='dark'] {
   --docs-code-text:    #d8e4f1;
   --docs-code-keyword: #89ceff;
-  --docs-code-name:    #44dada;
-  --docs-code-string:  #a6d644;
+  --docs-code-name:    #5fa7ff;
+  --docs-code-string:  #a3c87a;
   --docs-code-muted:   #6b7a99;
 
-  --ui-color-surface: #0d1a24;
-  --ui-color-surface-raised: #16212a;
-  --ui-color-surface-sunken: #09141d;
+  --ui-color-surface: #0c1620;
+  --ui-color-surface-raised: #13202c;
+  --ui-color-surface-sunken: #08111a;
 
-  --ui-color-border: rgba(64, 72, 93, 0.35);
-  --ui-color-border-hover: rgba(64, 72, 93, 0.6);
+  --ui-color-border: #2a3a4d;
+  --ui-color-border-hover: #3a4a60;
+  --ui-color-border-strong: #5d6f8c;
 
-  --ui-color-primary: #44dada;
-  --ui-color-primary-hover: #2abcbc;
-  --ui-color-primary-active: #1a9a9a;
-  --ui-color-primary-light: rgba(68, 218, 218, 0.1);
+  --ui-color-primary: #5fa7ff;
+  --ui-color-primary-hover: #82bbff;
+  --ui-color-primary-active: #a6cffe;
+  --ui-color-primary-light: rgba(95, 167, 255, 0.15);
 
-  --ui-color-text: #d8e4f1;
-  /* WCAG AA — bumped from #6b7a99 (3.79–4.31:1, below AA on every surface)
-   * to #8492b0 (5.23–5.95:1, comfortable AA across surface, raised, sunken). */
-  --ui-color-text-muted: #8492b0;
+  --ui-color-accent: #a3c87a;
+  --ui-color-accent-hover: #b3d088;
+  --ui-color-accent-active: #c3d896;
+  --ui-color-accent-bg: #1c2618;
 
-  --ui-color-input-bg: #09141d;
-  --ui-color-input-bg-focus: #0d1a24;
-  --ui-color-input-border: rgba(64, 72, 93, 0.5);
-  --ui-color-input-border-hover: rgba(68, 218, 218, 0.4);
-  --ui-color-input-border-focus: #44dada;
-  --ui-color-placeholder: #4a5568;
+  --ui-color-text: #f1f5f9;
+  --ui-color-text-muted: #a4b4ce;
+
+  --ui-color-input-bg: #08111a;
+  --ui-color-input-bg-focus: #13202c;
+  --ui-color-input-border: var(--ui-color-border-strong);
+  --ui-color-input-border-hover: #768aab;
+  --ui-color-input-border-focus: var(--ui-color-primary);
+  --ui-color-placeholder: #768aab;
 }
 
-/* ── Light mode: crisp slate palette ───────────────────────── */
+/* ── Light mode: warm-bone canvas (default; workshop projector friendly) ── */
 [data-theme='light'] {
-  --docs-code-text:    #1e293b;
-  --docs-code-keyword: #0369a1;
-  --docs-code-name:    #007a7a;
-  --docs-code-string:  #166534;
-  --docs-code-muted:   #64748b;
+  --docs-code-text:    #0f172a;
+  --docs-code-keyword: #063872;
+  --docs-code-name:    #0a2540;
+  --docs-code-string:  #155228;
+  --docs-code-muted:   #48556e;
 
-  --ui-color-surface: #ffffff;
-  --ui-color-surface-raised: #f8fafc;
-  --ui-color-surface-sunken: #f1f5fb;
-  --ui-color-border: #e2e8f0;
-  --ui-color-border-hover: #cbd5e1;
-  /* Primary darkened from #007a7a (4.92:1 on white, only 4.48:1 on the
-   * primary-tinted backgrounds we use for chips and step badges) to
-   * #006666 (6.89:1 on white, 5.89:1 on primary-light) so axe-core
-   * stops flagging primary-on-tinted-surface as a serious AA fail. */
-  --ui-color-primary: #006666;
-  --ui-color-primary-hover: #005252;
-  --ui-color-primary-active: #003e3e;
-  --ui-color-primary-light: rgba(0, 102, 102, 0.08);
+  --ui-color-surface: #f7f5f0;
+  --ui-color-surface-raised: #ffffff;
+  --ui-color-surface-sunken: #ece9e1;
+
+  --ui-color-border: #d8d3c5;
+  --ui-color-border-hover: #bcb6a4;
+  --ui-color-border-strong: #76716a;
+
+  --ui-color-primary: #0a2540;
+  --ui-color-primary-hover: #143659;
+  --ui-color-primary-active: #061a30;
+  --ui-color-primary-light: rgba(10, 37, 64, 0.08);
+
+  --ui-color-accent: #506c36;
+  --ui-color-accent-hover: #3f5728;
+  --ui-color-accent-active: #2e4319;
+  --ui-color-accent-bg: #e8efde;
+
   --ui-color-text: #0f172a;
-  /* WCAG AA — bumped from #64748b (failed sunken at 4.35:1) to #4f5f7c
-   * (5.29:1+ across all surfaces, including the primary-light tinted
-   * callouts where the previous #5d6c87 was at 4.36:1). */
-  --ui-color-text-muted: #4f5f7c;
+  --ui-color-text-muted: #48556e;
 }
 
 /* ── Docs-specific variables ───────────────────────────────── */
 :root {
   --docs-font: var(--font-sans), 'Inter', system-ui, sans-serif;
   --docs-font-code: var(--font-mono), 'Fira Code', 'Menlo', monospace;
-  --docs-glass-bg: rgba(9, 20, 29, 0.88);
+  --docs-glass-bg: rgba(12, 22, 32, 0.88);
   --docs-glass-blur: blur(20px);
-  --docs-topbar-border: rgba(68, 218, 218, 0.1);
-  --docs-secondary: #818cf8;
-  --docs-tertiary: #a6d644;
-  --docs-hero-gradient-start: #44dada;
-  --docs-hero-gradient-end: #818cf8;
+  --docs-topbar-border: rgba(95, 167, 255, 0.12);
+  --docs-secondary: var(--ui-color-accent);
+  --docs-tertiary: var(--ui-color-accent);
+  --docs-hero-gradient-start: var(--ui-color-primary);
+  --docs-hero-gradient-end: var(--ui-color-accent);
   --docs-topbar-height: 68px;
 }
 
 [data-theme='light'] {
-  --docs-glass-bg: rgba(255, 255, 255, 0.94);
-  --docs-topbar-border: #e2e8f0;
-  /* WCAG AA — bumped from indigo-500 (#6366f1, 4.26:1 on white,
-   * fails AA for small text) to indigo-700 (#4338ca, 7.1:1).
-   * Mirrors the pattern-tag fix from b5a3412 — same root cause:
-   * indigo-500 on light surface lands just below 4.5:1 in light mode. */
-  --docs-secondary: #4338ca;
-  --docs-hero-gradient-start: #007a7a;
-  --docs-hero-gradient-end: #4338ca;
+  --docs-glass-bg: rgba(247, 245, 240, 0.94);
+  --docs-topbar-border: #d8d3c5;
 }

@@ -689,11 +689,11 @@ body {
 }
 
 [data-theme='dark'] .docs-status-badge--new {
-  background: rgba(68, 218, 218, 0.1); color: #44dada; border-color: rgba(68, 218, 218, 0.25);
+  background: rgba(95, 167, 255, 0.1); color: #82bbff; border-color: rgba(95, 167, 255, 0.3);
 }
 
 [data-theme='dark'] .docs-status-badge--updated {
-  background: rgba(129, 140, 248, 0.12); color: #818cf8; border-color: rgba(129, 140, 248, 0.3);
+  background: rgba(163, 200, 122, 0.12); color: #b3d088; border-color: rgba(163, 200, 122, 0.3);
 }
 
 [data-theme='dark'] .docs-status-badge--stable {
@@ -1451,18 +1451,18 @@ body {
   --docs-term-muted: #8b93a8;
   --docs-term-heading: #9ca3af;
   --docs-term-strong: #f1f5f9;
-  --docs-term-accent: #44dada;
-  --docs-term-accent-strong: #00d0d0;
-  --docs-term-success: #34d399;
-  --docs-term-warning: #febc2e;
-  --docs-term-info: #89ceff;
-  --docs-term-border: rgba(68, 218, 218, 0.15);
-  --docs-term-border-soft: rgba(68, 218, 218, 0.08);
+  --docs-term-accent: #82bbff;
+  --docs-term-accent-strong: #5fa7ff;
+  --docs-term-success: #7ed99e;
+  --docs-term-warning: #f5c161;
+  --docs-term-info: #a3c87a;
+  --docs-term-border: rgba(95, 167, 255, 0.18);
+  --docs-term-border-soft: rgba(95, 167, 255, 0.08);
 }
 
 [data-theme='light'] {
-  --docs-term-bg: #1a2332;
-  --docs-term-border: rgba(0, 122, 122, 0.2);
+  --docs-term-bg: #0c1620;
+  --docs-term-border: rgba(95, 167, 255, 0.2);
 }
 
 /* ── Terminal block ──────────────────────────────────── */
@@ -1482,7 +1482,7 @@ body {
   justify-content: space-between;
   padding: 0.75rem 1rem;
   background: rgba(255, 255, 255, 0.03);
-  border-bottom: 1px solid rgba(68, 218, 218, 0.08);
+  border-bottom: 1px solid var(--docs-term-border-soft);
 }
 
 .docs-terminal-dots { display: flex; gap: 6px; }
@@ -1516,7 +1516,7 @@ body {
   gap: 0.1rem;
 }
 
-.docs-term-prompt { color: #44dada; margin-right: 0.5rem; }
+.docs-term-prompt { color: var(--docs-term-accent); margin-right: 0.5rem; }
 .docs-term-cmd { color: #f1f5f9; font-weight: 500; }
 /* Bumped from rgba(168,196,216,0.5) (3.26:1 — fails AA) to 0.8 (~5:1). */
 .docs-term-muted { color: rgba(168, 196, 216, 0.8); }
@@ -1527,28 +1527,28 @@ body {
 }
 
 .docs-term-tag {
-  color: #44dada;
+  color: var(--docs-term-accent);
   opacity: 0.7;
   flex-shrink: 0;
 }
 
-.docs-term-ok { color: #28c840; margin-left: auto; }
-.docs-term-running { color: #febc2e; margin-left: auto; }
+.docs-term-ok { color: var(--docs-term-success); margin-left: auto; }
+.docs-term-running { color: var(--docs-term-warning); margin-left: auto; }
 
 .docs-terminal-success {
   margin-top: 0.5rem;
   padding-top: 0.75rem;
-  border-top: 1px solid rgba(68, 218, 218, 0.1);
+  border-top: 1px solid var(--docs-term-border-soft);
 }
 
 .docs-term-success-msg {
-  color: #28c840;
+  color: var(--docs-term-success);
   font-weight: 600;
 }
 
 .docs-term-blink {
   animation: blink 1s step-end infinite;
-  color: #44dada;
+  color: var(--docs-term-accent);
 }
 
 @keyframes blink {
@@ -2186,13 +2186,13 @@ body {
   background: var(--ui-color-surface-raised);
   border: 1px solid color-mix(in srgb, currentColor 38%, var(--ui-color-border));
 }
-.page-eyebrow-kind--tutorial    { color: var(--ui-color-primary); }
-.page-eyebrow-kind--howto       { color: #f59e0b; }
-.page-eyebrow-kind--reference   { color: #818cf8; }
-.page-eyebrow-kind--explanation { color: #84cc16; }
-[data-theme='light'] .page-eyebrow-kind--howto       { color: #b45309; }
-[data-theme='light'] .page-eyebrow-kind--reference   { color: #4f46e5; }
-[data-theme='light'] .page-eyebrow-kind--explanation { color: #4d7c0f; }
+/* Diátaxis Eyebrow tints — accent (moss) for human-learning kinds (tutorial,
+ * explanation), neutral muted for lookup kinds (howto, reference). Aligned
+ * with the rebrief plan §3.3 — accent is rare and meaningful. */
+.page-eyebrow-kind--tutorial    { color: var(--ui-color-accent); }
+.page-eyebrow-kind--howto       { color: var(--ui-color-text-muted); }
+.page-eyebrow-kind--reference   { color: var(--ui-color-text-muted); }
+.page-eyebrow-kind--explanation { color: var(--ui-color-accent); }
 
 /* ─── Learning-objectives box ("What you'll learn" / "Before you start") ── */
 .objective-box {
@@ -2709,4 +2709,14 @@ a.docs-pagepair-card:hover {
  * leaking text. Fall back to a solid surface color in that case. */
 @supports not ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px))) {
   .docs-topbar { background: var(--ui-color-surface); }
+}
+
+/* ── Expressive Code overrides ───────────────────────────────
+ * The terminal-frame title bar (`.is-terminal .header .title`) ships
+ * with a dim slate that lands ~4.4:1 on our new bone/navy surfaces —
+ * just under WCAG AA. Bind to our text-muted token so it scales with
+ * the theme and stays AA. Same fix for the regular code-frame title. */
+.expressive-code .frame .header .title,
+.expressive-code .frame.is-terminal .header .title {
+  color: var(--ui-color-text-muted);
 }

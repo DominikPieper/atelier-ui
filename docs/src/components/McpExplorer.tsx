@@ -491,11 +491,11 @@ export default function McpExplorer() {
             {!serverOnline && (
               <div style={{
                 marginTop: '0.85rem', padding: '0.55rem 0.85rem',
-                background: 'rgba(166,214,68,0.06)', borderRadius: 'var(--ui-radius-sm)',
+                background: 'var(--ui-color-accent-bg)', borderRadius: 'var(--ui-radius-sm)',
                 fontSize: '0.75rem', color: 'var(--ui-color-text-muted)', lineHeight: '1.55',
                 display: 'flex', gap: '0.5rem',
               }}>
-                <span style={{ color: '#a6d644', flexShrink: 0 }}>💡</span>
+                <span style={{ color: 'var(--ui-color-accent)', flexShrink: 0 }}>💡</span>
                 <span>{activeMockTool.workshopTip}</span>
               </div>
             )}
@@ -535,8 +535,8 @@ export default function McpExplorer() {
                         const isActive = params[param.name] === s;
                         return (
                           <button key={s} onClick={() => { setParams(p => ({ ...p, [param.name]: s })); setResponse(null); }} style={{
-                            padding: '0.15rem 0.55rem', borderRadius: 'var(--ui-radius-sm)', border: 'none',
-                            background: isActive ? 'rgba(68,218,218,0.12)' : 'var(--ui-color-surface-sunken)',
+                            minHeight: '24px', padding: '0.4rem 0.65rem', borderRadius: 'var(--ui-radius-sm)', border: 'none',
+                            background: isActive ? 'var(--ui-color-primary-light)' : 'var(--ui-color-surface-sunken)',
                             color: isActive ? 'var(--ui-color-primary)' : 'var(--ui-color-text-muted)',
                             cursor: 'pointer', fontFamily: 'monospace', fontSize: '0.72rem', fontWeight: isActive ? 600 : 400,
                           }}>{s}</button>

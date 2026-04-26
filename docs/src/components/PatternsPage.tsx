@@ -109,9 +109,7 @@ export function ConfirmationDemo() {
   return (
     <div style={{ maxWidth: '480px', width: '100%' }}>
       <div style={{ padding: '1.25rem', border: '1px solid var(--ui-color-border)', borderRadius: '8px', background: 'var(--ui-color-surface)' }}>
-        {/* AA-safe darker danger for the heading — the lib's
-         * --ui-color-danger (#ef4444) is 3.76:1 on white, below AA. */}
-        <h3 style={{ margin: '0 0 4px', fontSize: '1.125rem', fontWeight: 600, color: '#b91c1c' }}>Danger Zone</h3>
+        <h3 style={{ margin: '0 0 4px', fontSize: '1.125rem', fontWeight: 600, color: 'var(--ui-color-danger)' }}>Danger Zone</h3>
         <p style={{ margin: '0 0 1rem', fontSize: '0.875rem', opacity: 0.7 }}>Deleting your account is permanent.</p>
         <LlmButton variant="primary" onClick={() => setOpen(true)}>Delete account</LlmButton>
       </div>

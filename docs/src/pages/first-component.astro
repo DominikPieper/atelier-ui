@@ -340,6 +340,43 @@ const EXPECTED: Record<Framework, { file: string; cmd: string; port: number }> =
     .kata-target-body { grid-template-columns: 1fr; }
   }
 
+  /* "Run it" three-step list — Save / Serve / Open */
+  .run-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0;
+    padding-left: 1.4rem;
+    color: var(--ui-color-text);
+  }
+  .run-step-label {
+    display: inline-block;
+    min-width: 4.5rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ui-color-text-muted);
+    margin-right: 0.4rem;
+  }
+  .run-step-path {
+    font-family: var(--docs-font-code);
+    font-size: 0.82rem;
+    padding: 0.1rem 0.4rem;
+    background: var(--ui-color-surface-sunken);
+    border: 1px solid var(--ui-color-border);
+    border-radius: 3px;
+    color: var(--ui-color-text);
+  }
+  .run-step-link {
+    color: var(--ui-color-primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    font-family: var(--docs-font-code);
+    font-size: 0.85rem;
+  }
+  .run-step-link:hover { color: var(--ui-color-primary-hover); }
+
   /* Step blocks — numbered, large enough to scan */
   .kata-step {
     margin-bottom: 2rem;

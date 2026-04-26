@@ -1,9 +1,15 @@
 /**
- * Design tokens for the LLM-optimized Angular component library.
- * Import this stylesheet once at the application root to activate the token layer.
+ * Design tokens for the Atelier component library.
+ * Direction C ("workshop signature") — Conciso navy spine + Pieper-organic
+ * moss accent on a warm-bone canvas. Light-mode-first; dark mode is a switch.
+ *
+ * All foreground/background pairs verified WCAG 2.2 AA via
+ * tools/scripts/wcag-contrast.mjs (62/62 pairs passing 2026-04-26).
+ *
+ * Plan: ~/.claude/plans/atelier-design-rebrief.md
  *
  * Usage:
- *   @import '@atelier-ui/angular/styles/tokens.css';
+ *   @import '@atelier-ui/{angular,react,vue}/styles/tokens.css';
  */
 
 :root {
@@ -25,53 +31,63 @@
   --ui-line-height-tight: 1.25;
   --ui-line-height-normal: 1.5;
 
-  /* Colors — Primary */
-  --ui-color-primary: #007070;
-  --ui-color-primary-hover: #005858;
-  --ui-color-primary-active: #003f3f;
-  --ui-color-primary-light: rgba(0, 190, 190, 0.08);
+  /* ── Colours · light mode (default) ────────────────────────── */
 
-  /* Colors — Secondary */
+  /* Primary — Conciso navy spine */
+  --ui-color-primary: #0a2540;
+  --ui-color-primary-hover: #143659;
+  --ui-color-primary-active: #061a30;
+  --ui-color-primary-light: rgba(10, 37, 64, 0.08);
+
+  /* Accent — workshop affordances (Pieper-organic moss) */
+  --ui-color-accent: #506c36;
+  --ui-color-accent-hover: #3f5728;
+  --ui-color-accent-active: #2e4319;
+  --ui-color-accent-bg: #e8efde;
+
+  /* Secondary (legacy — kept for components that opt in) */
   --ui-color-secondary: #475569;
   --ui-color-secondary-hover: #334155;
   --ui-color-secondary-active: #1e293b;
 
-  /* Colors — Semantic */
-  --ui-color-danger: #ef4444;
-  --ui-color-danger-hover: #dc2626;
-  --ui-color-danger-active: #b91c1c;
-  --ui-color-success: #22c55e;
-  --ui-color-warning: #f59e0b;
-  --ui-color-info: #06b6d4;
+  /* Semantic */
+  --ui-color-danger: #9b1c1c;
+  --ui-color-danger-hover: #7a1414;
+  --ui-color-danger-active: #5e0f0f;
+  --ui-color-success: #1f6b3e;
+  --ui-color-warning: #985808;
+  --ui-color-info: #0050a0;
 
-  /* Semantic — AA-safe dark-text-on-tinted-bg pairs (for Badge, Alert, Toast) */
-  --ui-color-success-bg: #dcfce7;
-  --ui-color-success-text: #166534;
-  --ui-color-warning-bg: #fef9c3;
-  --ui-color-warning-text: #854d0e;
-  --ui-color-danger-bg: #fee2e2;
-  --ui-color-danger-text: #991b1b;
-  --ui-color-info-bg: #e0f2fe;
-  --ui-color-info-text: #0c4a6e;
+  /* Semantic — AA-safe dark-text-on-tinted-bg pairs (Badge / Alert / Toast) */
+  --ui-color-success-bg: #e2f1e6;
+  --ui-color-success-text: #155228;
+  --ui-color-warning-bg: #fbeed4;
+  --ui-color-warning-text: #7a4607;
+  --ui-color-danger-bg: #fbe7e7;
+  --ui-color-danger-text: #7a1414;
+  --ui-color-info-bg: #dde8f6;
+  --ui-color-info-text: #063872;
 
-  /* Colors — Surfaces */
-  --ui-color-surface: #ffffff;
-  --ui-color-surface-raised: #fafafa;
-  --ui-color-surface-sunken: #f5f5f5;
+  /* Surfaces — warm bone (projector-friendly) */
+  --ui-color-surface: #f7f5f0;
+  --ui-color-surface-raised: #ffffff;
+  --ui-color-surface-sunken: #ece9e1;
 
-  /* Colors — Borders */
-  --ui-color-border: #e5e7eb;
-  --ui-color-border-hover: #d1d5db;
+  /* Borders — split decorative from functional per WCAG 1.4.11 */
+  --ui-color-border: #d8d3c5;          /* decorative — card on surface */
+  --ui-color-border-hover: #bcb6a4;
+  --ui-color-border-strong: #76716a;   /* functional ≥3:1 — inputs, outline buttons */
 
-  /* Colors — Text */
+  /* Text */
   --ui-color-text: #0f172a;
-  --ui-color-text-muted: #4f5f7c;
+  --ui-color-text-muted: #48556e;
   --ui-color-text-on-primary: #ffffff;
+  --ui-color-text-on-accent: #ffffff;
   --ui-color-text-on-secondary: #ffffff;
   --ui-color-text-on-danger: #ffffff;
   --ui-color-text-on-success: #ffffff;
 
-  /* Colors — Brand palette */
+  /* Brand palette — Conciso reference, opt-in for components that need it */
   --ui-color-brand-corporate: #00bebe;
   --ui-color-brand-agile: #00d296;
   --ui-color-brand-architecture: #009696;
@@ -101,18 +117,18 @@
   --ui-spacing-12: 3rem;
   --ui-spacing-16: 4rem;
 
-  /* Shadows — dual-layer (ambient + key light) */
-  --ui-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
-  --ui-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.06),
-    0 1px 2px -1px rgba(0, 0, 0, 0.06);
-  --ui-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07),
-    0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  --ui-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08),
-    0 4px 6px -4px rgba(0, 0, 0, 0.04);
-  --ui-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08),
-    0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  /* Shadows — dual-layer (ambient + key light); softened for warm bone surface */
+  --ui-shadow-xs: 0 1px 2px 0 rgba(10, 37, 64, 0.04);
+  --ui-shadow-sm: 0 1px 3px 0 rgba(10, 37, 64, 0.06),
+    0 1px 2px -1px rgba(10, 37, 64, 0.06);
+  --ui-shadow-md: 0 4px 6px -1px rgba(10, 37, 64, 0.07),
+    0 2px 4px -2px rgba(10, 37, 64, 0.05);
+  --ui-shadow-lg: 0 10px 15px -3px rgba(10, 37, 64, 0.08),
+    0 4px 6px -4px rgba(10, 37, 64, 0.04);
+  --ui-shadow-xl: 0 20px 25px -5px rgba(10, 37, 64, 0.08),
+    0 8px 10px -6px rgba(10, 37, 64, 0.04);
 
-  /* Motion — custom easings for polished feel */
+  /* Motion */
   --ui-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ui-ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
   --ui-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -131,12 +147,12 @@
 
   /* Form controls */
   --ui-color-input-bg: var(--ui-color-surface-sunken);
-  --ui-color-input-bg-focus: var(--ui-color-surface);
-  --ui-color-input-border: #d1d5db;
-  --ui-color-input-border-hover: #9ca3af;
+  --ui-color-input-bg-focus: var(--ui-color-surface-raised);
+  --ui-color-input-border: var(--ui-color-border-strong);
+  --ui-color-input-border-hover: #5d5950;
   --ui-color-input-border-focus: var(--ui-color-primary);
   --ui-color-input-border-invalid: var(--ui-color-danger);
-  --ui-color-placeholder: #4b5563;
+  --ui-color-placeholder: #6a6358;
   --ui-color-error-text: var(--ui-color-danger-text);
 
   /* Z-index scale */
@@ -147,51 +163,60 @@
   --ui-z-toast: 400;
 }
 
+/* ── Colours · dark mode ───────────────────────────────────── */
+
 @media (prefers-color-scheme: dark) {
   :root {
-    --ui-color-primary: #00d0d0;
-    --ui-color-primary-hover: #00bebe;
-    --ui-color-primary-active: #009696;
-    --ui-color-primary-light: rgba(0, 190, 190, 0.15);
+    --ui-color-primary: #5fa7ff;
+    --ui-color-primary-hover: #82bbff;
+    --ui-color-primary-active: #a6cffe;
+    --ui-color-primary-light: rgba(95, 167, 255, 0.15);
+
+    --ui-color-accent: #a3c87a;
+    --ui-color-accent-hover: #b3d088;
+    --ui-color-accent-active: #c3d896;
+    --ui-color-accent-bg: #1c2618;
 
     --ui-color-secondary: #94a3b8;
     --ui-color-secondary-hover: #cbd5e1;
     --ui-color-secondary-active: #e2e8f0;
 
-    --ui-color-danger: #f87171;
+    --ui-color-danger: #f87a7a;
     --ui-color-danger-hover: #fca5a5;
     --ui-color-danger-active: #fecaca;
+    --ui-color-success: #7ed99e;
+    --ui-color-warning: #f5c161;
+    --ui-color-info: #7ab7ff;
 
-    --ui-color-success: #4ade80;
-    --ui-color-warning: #fbbf24;
-    --ui-color-info: #22d3ee;
+    --ui-color-success-bg: #0f3320;
+    --ui-color-success-text: #9ee9b8;
+    --ui-color-warning-bg: #3a2510;
+    --ui-color-warning-text: #f7d28b;
+    --ui-color-danger-bg: #3a1414;
+    --ui-color-danger-text: #fca5a5;
+    --ui-color-info-bg: #102338;
+    --ui-color-info-text: #a3cdff;
 
-    --ui-color-success-bg: #14532d;
-    --ui-color-success-text: #86efac;
-    --ui-color-warning-bg: #78350f;
-    --ui-color-warning-text: #fde68a;
-    --ui-color-danger-bg: #7f1d1d;
-    --ui-color-danger-text: #fecaca;
-    --ui-color-info-bg: #0c4a6e;
-    --ui-color-info-text: #bae6fd;
+    --ui-color-surface: #0c1620;
+    --ui-color-surface-raised: #13202c;
+    --ui-color-surface-sunken: #08111a;
 
-    --ui-color-surface: #28283c;
-    --ui-color-surface-raised: #2f2f45;
-    --ui-color-surface-sunken: #22222f;
-
-    --ui-color-border: #3a3a4f;
-    --ui-color-border-hover: #4a4a63;
+    --ui-color-border: #2a3a4d;
+    --ui-color-border-hover: #3a4a60;
+    --ui-color-border-strong: #5d6f8c;
 
     --ui-color-text: #f1f5f9;
-    --ui-color-text-muted: #94a3b8;
-    --ui-color-text-on-primary: #0f172a;
+    --ui-color-text-muted: #a4b4ce;
+    --ui-color-text-on-primary: #0a2540;
+    --ui-color-text-on-accent: #0c1620;
     --ui-color-text-on-secondary: #0f172a;
+    --ui-color-text-on-danger: #0c1620;
 
     --ui-opacity-disabled: 0.65;
 
-    --ui-color-input-border: #4a4a63;
-    --ui-color-input-border-hover: #686880;
-    --ui-color-placeholder: #686880;
+    --ui-color-input-border: var(--ui-color-border-strong);
+    --ui-color-input-border-hover: #768aab;
+    --ui-color-placeholder: #768aab;
 
     --ui-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
     --ui-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3),
@@ -206,49 +231,56 @@
 }
 
 [data-theme="dark"] {
-  --ui-color-primary: #00d0d0;
-  --ui-color-primary-hover: #00bebe;
-  --ui-color-primary-active: #009696;
-  --ui-color-primary-light: rgba(0, 190, 190, 0.15);
+  --ui-color-primary: #5fa7ff;
+  --ui-color-primary-hover: #82bbff;
+  --ui-color-primary-active: #a6cffe;
+  --ui-color-primary-light: rgba(95, 167, 255, 0.15);
+
+  --ui-color-accent: #a3c87a;
+  --ui-color-accent-hover: #b3d088;
+  --ui-color-accent-active: #c3d896;
+  --ui-color-accent-bg: #1c2618;
 
   --ui-color-secondary: #94a3b8;
   --ui-color-secondary-hover: #cbd5e1;
   --ui-color-secondary-active: #e2e8f0;
 
-  --ui-color-danger: #f87171;
+  --ui-color-danger: #f87a7a;
   --ui-color-danger-hover: #fca5a5;
   --ui-color-danger-active: #fecaca;
+  --ui-color-success: #7ed99e;
+  --ui-color-warning: #f5c161;
+  --ui-color-info: #7ab7ff;
 
-  --ui-color-success: #4ade80;
-  --ui-color-warning: #fbbf24;
-  --ui-color-info: #22d3ee;
+  --ui-color-success-bg: #0f3320;
+  --ui-color-success-text: #9ee9b8;
+  --ui-color-warning-bg: #3a2510;
+  --ui-color-warning-text: #f7d28b;
+  --ui-color-danger-bg: #3a1414;
+  --ui-color-danger-text: #fca5a5;
+  --ui-color-info-bg: #102338;
+  --ui-color-info-text: #a3cdff;
 
-  --ui-color-success-bg: #14532d;
-  --ui-color-success-text: #86efac;
-  --ui-color-warning-bg: #78350f;
-  --ui-color-warning-text: #fde68a;
-  --ui-color-danger-bg: #7f1d1d;
-  --ui-color-danger-text: #fecaca;
-  --ui-color-info-bg: #0c4a6e;
-  --ui-color-info-text: #bae6fd;
+  --ui-color-surface: #0c1620;
+  --ui-color-surface-raised: #13202c;
+  --ui-color-surface-sunken: #08111a;
 
-  --ui-color-surface: #28283c;
-  --ui-color-surface-raised: #2f2f45;
-  --ui-color-surface-sunken: #22222f;
-
-  --ui-color-border: #3a3a4f;
-  --ui-color-border-hover: #4a4a63;
+  --ui-color-border: #2a3a4d;
+  --ui-color-border-hover: #3a4a60;
+  --ui-color-border-strong: #5d6f8c;
 
   --ui-color-text: #f1f5f9;
-  --ui-color-text-muted: #94a3b8;
-  --ui-color-text-on-primary: #0f172a;
+  --ui-color-text-muted: #a4b4ce;
+  --ui-color-text-on-primary: #0a2540;
+  --ui-color-text-on-accent: #0c1620;
   --ui-color-text-on-secondary: #0f172a;
+  --ui-color-text-on-danger: #0c1620;
 
   --ui-opacity-disabled: 0.65;
 
-  --ui-color-input-border: #4a4a63;
-  --ui-color-input-border-hover: #686880;
-  --ui-color-placeholder: #686880;
+  --ui-color-input-border: var(--ui-color-border-strong);
+  --ui-color-input-border-hover: #768aab;
+  --ui-color-placeholder: #768aab;
 
   --ui-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
   --ui-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3),
@@ -263,44 +295,58 @@
 
 /* Explicit light theme — declared last so it wins over prefers-color-scheme: dark */
 [data-theme="light"] {
-  --ui-color-primary: #007070;
-  --ui-color-primary-hover: #005858;
-  --ui-color-primary-active: #003f3f;
-  --ui-color-primary-light: rgba(0, 190, 190, 0.08);
+  --ui-color-primary: #0a2540;
+  --ui-color-primary-hover: #143659;
+  --ui-color-primary-active: #061a30;
+  --ui-color-primary-light: rgba(10, 37, 64, 0.08);
+
+  --ui-color-accent: #506c36;
+  --ui-color-accent-hover: #3f5728;
+  --ui-color-accent-active: #2e4319;
+  --ui-color-accent-bg: #e8efde;
+
   --ui-color-secondary: #475569;
   --ui-color-secondary-hover: #334155;
   --ui-color-secondary-active: #1e293b;
-  --ui-color-danger: #ef4444;
-  --ui-color-danger-hover: #dc2626;
-  --ui-color-danger-active: #b91c1c;
-  --ui-color-success: #22c55e;
-  --ui-color-warning: #f59e0b;
-  --ui-color-info: #06b6d4;
-  /* Semantic — AA-safe dark-text-on-tinted-bg pairs (for Badge, Alert, Toast) */
-  --ui-color-success-bg: #dcfce7;
-  --ui-color-success-text: #166534;
-  --ui-color-warning-bg: #fef9c3;
-  --ui-color-warning-text: #854d0e;
-  --ui-color-danger-bg: #fee2e2;
-  --ui-color-danger-text: #991b1b;
-  --ui-color-info-bg: #e0f2fe;
-  --ui-color-info-text: #0c4a6e;
-  --ui-color-surface: #ffffff;
-  --ui-color-surface-raised: #fafafa;
-  --ui-color-surface-sunken: #f5f5f5;
-  --ui-color-border: #e5e7eb;
-  --ui-color-border-hover: #d1d5db;
+
+  --ui-color-danger: #9b1c1c;
+  --ui-color-danger-hover: #7a1414;
+  --ui-color-danger-active: #5e0f0f;
+  --ui-color-success: #1f6b3e;
+  --ui-color-warning: #985808;
+  --ui-color-info: #0050a0;
+
+  --ui-color-success-bg: #e2f1e6;
+  --ui-color-success-text: #155228;
+  --ui-color-warning-bg: #fbeed4;
+  --ui-color-warning-text: #7a4607;
+  --ui-color-danger-bg: #fbe7e7;
+  --ui-color-danger-text: #7a1414;
+  --ui-color-info-bg: #dde8f6;
+  --ui-color-info-text: #063872;
+
+  --ui-color-surface: #f7f5f0;
+  --ui-color-surface-raised: #ffffff;
+  --ui-color-surface-sunken: #ece9e1;
+
+  --ui-color-border: #d8d3c5;
+  --ui-color-border-hover: #bcb6a4;
+  --ui-color-border-strong: #76716a;
+
   --ui-color-text: #0f172a;
-  --ui-color-text-muted: #4f5f7c;
+  --ui-color-text-muted: #48556e;
   --ui-color-text-on-primary: #ffffff;
-  --ui-color-input-border: #d1d5db;
-  --ui-color-input-border-hover: #9ca3af;
-  --ui-color-placeholder: #4b5563;
-  --ui-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
-  --ui-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
-  --ui-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  --ui-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
-  --ui-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  --ui-color-text-on-accent: #ffffff;
+
+  --ui-color-input-border: var(--ui-color-border-strong);
+  --ui-color-input-border-hover: #5d5950;
+  --ui-color-placeholder: #6a6358;
+
+  --ui-shadow-xs: 0 1px 2px 0 rgba(10, 37, 64, 0.04);
+  --ui-shadow-sm: 0 1px 3px 0 rgba(10, 37, 64, 0.06), 0 1px 2px -1px rgba(10, 37, 64, 0.06);
+  --ui-shadow-md: 0 4px 6px -1px rgba(10, 37, 64, 0.07), 0 2px 4px -2px rgba(10, 37, 64, 0.05);
+  --ui-shadow-lg: 0 10px 15px -3px rgba(10, 37, 64, 0.08), 0 4px 6px -4px rgba(10, 37, 64, 0.04);
+  --ui-shadow-xl: 0 20px 25px -5px rgba(10, 37, 64, 0.08), 0 8px 10px -6px rgba(10, 37, 64, 0.04);
 }
 
 @media (prefers-reduced-motion: reduce) {
