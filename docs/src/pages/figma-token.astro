@@ -14,7 +14,7 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
 >
   <div class="docs-inline-page">
 
-    <div style="margin-bottom: 2rem">
+    <div style="margin-bottom: 1.25rem">
       <h1 style="font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin: 0 0 0.6rem; background: linear-gradient(135deg, var(--ui-color-primary) 0%, var(--docs-secondary, #89ceff) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text">
         Figma Setup
       </h1>
@@ -25,6 +25,21 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
         required for screenshots, selection tracking, or any interactive tool.
       </p>
     </div>
+
+    <!-- Page-pair: setup is a precondition for the Figma reference page. -->
+    <aside class="docs-pagepair" aria-label="Two related Figma pages">
+      <a href="/figma" class="docs-pagepair-card docs-pagepair-card--prev">
+        <span class="docs-pagepair-eyebrow">← Without setup</span>
+        <span class="docs-pagepair-title">/figma</span>
+        <span class="docs-pagepair-desc">Manual workflow — read the inspect panel, copy token names, no plugin needed.</span>
+      </a>
+      <div class="docs-pagepair-arrow" aria-hidden="true">›</div>
+      <div class="docs-pagepair-card docs-pagepair-card--here">
+        <span class="docs-pagepair-eyebrow">You're here</span>
+        <span class="docs-pagepair-title">/figma-token</span>
+        <span class="docs-pagepair-desc">Plugin install, token, and <code>.mcp.json</code> entry — one-time, ~5 min.</span>
+      </div>
+    </aside>
 
     <!-- How this connects -->
     <section style="margin-bottom: 2.25rem">

@@ -13,7 +13,7 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Com
   currentPath="/figma"
 >
   <div class="docs-inline-page">
-    <div style="margin-bottom: 2.5rem">
+    <div style="margin-bottom: 1.25rem">
       <h1 style="background: linear-gradient(135deg, var(--ui-color-primary) 0%, var(--docs-secondary, #89ceff) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; margin: 0 0 0.6rem">
         Figma
       </h1>
@@ -21,6 +21,22 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Com
         The design source of truth for every Atelier component — variables, frames, and token mappings, all in one file.
       </p>
     </div>
+
+    <!-- Page-pair: this page covers the manual workflow; figma-token covers
+         the MCP-driven workflow that skips inspection entirely. -->
+    <aside class="docs-pagepair" aria-label="Two related Figma pages">
+      <div class="docs-pagepair-card docs-pagepair-card--here">
+        <span class="docs-pagepair-eyebrow">You're here</span>
+        <span class="docs-pagepair-title">/figma</span>
+        <span class="docs-pagepair-desc">Manual workflow — open the inspect panel, copy token names, prompt Claude with them. No setup needed.</span>
+      </div>
+      <div class="docs-pagepair-arrow" aria-hidden="true">›</div>
+      <a href="/figma-token" class="docs-pagepair-card docs-pagepair-card--next">
+        <span class="docs-pagepair-eyebrow">Skip the manual step</span>
+        <span class="docs-pagepair-title">/figma-token →</span>
+        <span class="docs-pagepair-desc">Configure the figma-console MCP (Desktop Bridge plugin + token) so Claude reads boundVariables directly.</span>
+      </a>
+    </aside>
 
     <!-- The Figma file -->
     <div class="docs-section" style="margin-bottom: 2.5rem">
