@@ -4,6 +4,7 @@ import { Code } from 'astro-expressive-code/components';
 import DiagramFigure from '../components/DiagramFigure.astro';
 import Jargon from '../components/Jargon.astro';
 import Icon from '../components/Icon.astro';
+import HelpFooter from '../components/HelpFooter.astro';
 
 const FRAMEWORKS = ['React', 'Angular', 'Vue'] as const;
 
@@ -135,7 +136,8 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         Tutorial
       </h1>
       <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 520px; line-height: 1.65">
-        Use <strong style="color: var(--ui-color-text)">figma-console <Jargon term="MCP">MCP</Jargon></strong> to read a Figma component spec directly — <Jargon term="design tokens">design tokens</Jargon> included — then <strong style="color: var(--ui-color-text)">Storybook MCP</strong> to match Atelier components, and let Claude Code write token-exact code.
+        Use <strong style="color: var(--ui-color-text)">figma-console MCP</strong> to read a Figma component spec directly — design tokens included — then <strong style="color: var(--ui-color-text)">Storybook MCP</strong> to match Atelier components, and let Claude Code write token-exact code.
+        We explain what an MCP is in the next section.
       </p>
     </div>
 
@@ -161,17 +163,47 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
       </div>
     </div>
 
-    <!-- Why this is different -->
-    <div style="padding: 1rem 1.25rem; background: var(--ui-color-primary-light); border: 1px solid color-mix(in srgb, var(--ui-color-primary) 20%, transparent); border-radius: var(--ui-radius-md); margin-bottom: 2.5rem">
-      <p style="margin: 0 0 0.35rem; font-size: 0.82rem; font-weight: 700; color: var(--ui-color-text)">No manual token copying</p>
-      <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
-        The basic workshop workflow requires you to note token names from Figma's inspect panel. With the figma-console MCP, AI reads the component's <Jargon term="boundVariables"><code>boundVariables</code></Jargon> directly — every spacing, color, and radius value is already mapped to its CSS custom property name.
-      </p>
+    <!-- Why this is different — concrete cost of doing it the old way -->
+    <div class="mcp-compare" aria-label="Cost of building a component with vs. without MCP">
+      <div class="mcp-compare-card mcp-compare-card--neg">
+        <div class="mcp-compare-head">
+          <span class="mcp-compare-label">Without MCP</span>
+          <span class="mcp-compare-time">~12 min</span>
+        </div>
+        <ol class="mcp-compare-list">
+          <li>Open Figma · click the frame</li>
+          <li>Read the inspect panel by hand</li>
+          <li>Note color tokens · copy by hand</li>
+          <li>Note spacing &amp; radius tokens</li>
+          <li>Switch to the Storybook tab</li>
+          <li>Find the right component</li>
+          <li>Read prop docs &amp; variants</li>
+          <li>Type the code · risk drift</li>
+          <li>Manually verify against the design</li>
+        </ol>
+        <p class="mcp-compare-foot">Drift risk at every step.</p>
+      </div>
+      <div class="mcp-compare-card mcp-compare-card--pos">
+        <div class="mcp-compare-head">
+          <span class="mcp-compare-label">With MCP</span>
+          <span class="mcp-compare-time">~90 sec</span>
+        </div>
+        <ol class="mcp-compare-list">
+          <li>Copy the node-id from the Figma URL</li>
+          <li>Send one prompt to Claude Code</li>
+        </ol>
+        <pre class="mcp-compare-prompt">"build component for node-id 695-313 using figma-console + storybook-react MCP."</pre>
+        <ol class="mcp-compare-list" start="3">
+          <li>Token-exact code lands</li>
+          <li>Optional: <code>figma_check_design_parity</code></li>
+        </ol>
+        <p class="mcp-compare-foot">Single source of truth · no drift.</p>
+      </div>
     </div>
 
     <!-- What's an MCP? — mental model before specifics -->
     <div class="docs-section">
-      <h2 class="docs-section-title">What's an <Jargon term="MCP">MCP</Jargon>, in 30 seconds?</h2>
+      <h2 class="docs-section-title">What's an MCP, in 30 seconds?</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
         Claude Code can call functions exposed by an external <strong style="color: var(--ui-color-text)">MCP server</strong>.
         The server fetches structured data from a source (Figma, Storybook, Nx) and hands it back —
@@ -515,6 +547,8 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         </tbody>
       </table>
     </div>
+
+    <HelpFooter page="tutorial" />
 
     <!-- Bottom nav -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 2.5rem">
