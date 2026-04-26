@@ -1,3 +1,16 @@
+## 0.0.35 (2026-04-26)
+
+### 🚀 Features
+
+- **libs:** Phase 3 — non-color differentiation + protanopia bumps ([#64748](https://github.com/DominikPieper/atelier-ui/issues/64748), [#4](https://github.com/DominikPieper/atelier-ui/issues/4))
+- **libs:** Phase 2.2 — LlmCard opt-in role prop ([eae5e5d](https://github.com/DominikPieper/atelier-ui/commit/eae5e5d))
+- **libs:** Phase 1 a11y fixes — Progress label, Accordion headingLevel, Button aria-label, Table tabindex ([76b9b7f](https://github.com/DominikPieper/atelier-ui/commit/76b9b7f))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.34 (2026-04-25)
 
 This was a version bump only for vue to align it with other projects, there were no code changes.

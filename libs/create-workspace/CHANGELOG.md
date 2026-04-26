@@ -1,3 +1,14 @@
+## 0.0.35 (2026-04-26)
+
+### 🚀 Features
+
+- **libs:** Phase 3 — non-color differentiation + protanopia bumps ([#64748](https://github.com/DominikPieper/atelier-ui/issues/64748), [#4](https://github.com/DominikPieper/atelier-ui/issues/4))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.34 (2026-04-25)
 
 This was a version bump only for create-workspace to align it with other projects, there were no code changes.
