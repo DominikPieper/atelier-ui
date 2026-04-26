@@ -69,8 +69,17 @@
   --docs-font: var(--font-sans), 'Inter', system-ui, sans-serif;
   --docs-font-code: var(--font-mono), 'Fira Code', 'Menlo', monospace;
   --docs-topbar-border: var(--ui-color-border);
-  --docs-secondary: var(--ui-color-primary);
-  --docs-tertiary: var(--ui-color-primary);
+  /* Diagram-secondary tier — used by /a11y-workflow Venn circles, the
+   * /patterns "updated" tag, and a few other dual-category visuals.
+   * Bound to --ui-color-info so it stays AA-safe (3:1 minimum) on every
+   * surface tier in both modes, while still being visually distinct
+   * from the primary teal. */
+  --docs-secondary: var(--ui-color-info);
+  /* Diagram-tertiary — the *third* category in tri-color visuals
+   * (e.g. the Spec-audit circle on /a11y-workflow opposite the
+   * Figma-audit one). Forest green carries "code/correct" semantics
+   * and is AA-safe across surfaces. */
+  --docs-tertiary: var(--ui-color-success);
   --docs-hero-gradient-start: var(--ui-color-primary);
   --docs-hero-gradient-end: var(--ui-color-brand-development, #00b4ff);
   --docs-topbar-height: 68px;
