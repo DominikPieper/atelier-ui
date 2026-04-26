@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import DiagramFigure from '../components/DiagramFigure.astro';
 import Jargon from '../components/Jargon.astro';
+import Icon from '../components/Icon.astro';
 
 const FRAMEWORKS = ['React', 'Angular', 'Vue'] as const;
 
@@ -12,7 +13,7 @@ const EXAMPLE_PROMPT = `I've selected the "Settings / Card" frame in Figma.
    the component spec — I need the boundVariables and the visual reference.
 2. Use storybook-react MCP to look up LlmCard and LlmInput props.
 3. Generate the React component using:
-   - The Atelier UI components matched from Storybook
+   - The Atelier components matched from Storybook
    - The exact token names from boundVariables (they map 1-to-1 to CSS
      custom properties — no conversion needed)`;
 
@@ -83,6 +84,27 @@ import { LlmCard, LlmInput, LlmButton } from '@atelier-ui/vue';
 const PARITY_PROMPT = `Run figma_check_design_parity on the settings card node
 against the component I just generated. Fix any discrepancies.`;
 
+const RUN_IT: Record<string, { path: string; cmd: string; port: number; expected: string }> = {
+  React: {
+    path: 'apps/workshop-react/src/components/SettingsCard.tsx',
+    cmd: 'npx nx serve workshop-react',
+    port: 4201,
+    expected: 'A card with two text inputs (Name, Email) and a primary "Save Changes" button — surface-raised background, padding from the Figma spacing token.',
+  },
+  Angular: {
+    path: 'apps/workshop-angular/src/app/components/settings-card.component.ts',
+    cmd: 'npx nx serve workshop-angular',
+    port: 4200,
+    expected: 'A card with two text inputs (Name, Email) and a primary "Save Changes" button — same surface, padding, and radius as the Figma frame.',
+  },
+  Vue: {
+    path: 'apps/workshop-vue/src/components/SettingsCard.vue',
+    cmd: 'npx nx serve workshop-vue',
+    port: 4202,
+    expected: 'A card with two text inputs (Name, Email) and a primary "Save Changes" button — surface-raised background, identical token-driven spacing.',
+  },
+};
+
 const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns for a card frame:
 {
   "name": "Settings / Card",
@@ -99,18 +121,44 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
 
 <BaseLayout
   title="Figma to Code Tutorial"
-  description="Step-by-step tutorial for turning a Figma component into framework-agnostic Atelier UI code with Claude, Storybook, and the MCP toolchain."
+  description="Step-by-step tutorial for turning a Figma component into framework-agnostic Atelier code with Claude, Storybook, and the MCP toolchain."
   currentPath="/tutorial"
 >
   <div class="docs-inline-page">
 
-    <div style="margin-bottom: 2.5rem">
+    <div style="margin-bottom: 1.25rem">
+      <div class="page-eyebrow">
+        <span class="page-eyebrow-time">⏱ ~30 min</span>
+        <span class="page-eyebrow-tag">Hands-on · Figma → Code</span>
+      </div>
       <h1 style="font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin: 0 0 0.6rem; background: linear-gradient(135deg, var(--ui-color-primary) 0%, var(--docs-secondary, #89ceff) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text">
         Tutorial
       </h1>
       <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 520px; line-height: 1.65">
-        Use <strong style="color: var(--ui-color-text)">figma-console <Jargon term="MCP">MCP</Jargon></strong> to read a Figma component spec directly — <Jargon term="design tokens">design tokens</Jargon> included — then <strong style="color: var(--ui-color-text)">Storybook MCP</strong> to match Atelier UI components, and let Claude Code write token-exact code.
+        Use <strong style="color: var(--ui-color-text)">figma-console <Jargon term="MCP">MCP</Jargon></strong> to read a Figma component spec directly — <Jargon term="design tokens">design tokens</Jargon> included — then <strong style="color: var(--ui-color-text)">Storybook MCP</strong> to match Atelier components, and let Claude Code write token-exact code.
       </p>
+    </div>
+
+    <!-- Learning objectives & assumed knowledge -->
+    <div class="objective-box">
+      <div class="objective-col">
+        <h2 class="objective-heading objective-heading--accent">What you'll learn</h2>
+        <ul class="objective-list">
+          <li>Read a Figma component's <code>boundVariables</code> via MCP</li>
+          <li>Match the right Atelier component through the Storybook MCP</li>
+          <li>Generate token-exact code in Angular, React or Vue</li>
+          <li>Verify design parity automatically</li>
+        </ul>
+      </div>
+      <div class="objective-col">
+        <h2 class="objective-heading">Before you start</h2>
+        <ul class="objective-list objective-list--muted">
+          <li>Completed the <a href="/workshop" style="color: var(--ui-color-primary)">Workshop setup</a></li>
+          <li><code>figma-console</code> MCP configured — see <a href="/figma-token" style="color: var(--ui-color-primary)">Figma Setup</a></li>
+          <li>Read access to the Atelier Figma file (linked below)</li>
+          <li>One framework picked — Angular, React or Vue</li>
+        </ul>
+      </div>
     </div>
 
     <!-- Why this is different -->
@@ -129,7 +177,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
       </p>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; margin-bottom: 1.25rem">
         {[
-          { title: 'boundVariables', body: 'Each CSS property mapped to its Figma variable name — identical to the CSS custom property name in Atelier UI. No conversion needed.' },
+          { title: 'boundVariables', body: 'Each CSS property mapped to its Figma variable name — identical to the CSS custom property name in Atelier. No conversion needed.' },
           { title: '2× rendered image', body: 'A screenshot of the component, included automatically. AI gets visual and structural context in a single call.' },
           { title: 'Component tree', body: 'Full layout structure: padding, gap, constraints, text behaviour, and interaction states (reactions).' },
         ].map(({ title, body }) => (
@@ -281,7 +329,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         <div class="step-row">
           <span class="step-badge">C</span>
           <div style="flex: 1">
-            <h3 class="step-title">AI matches to Atelier UI components</h3>
+            <h3 class="step-title">AI matches to Atelier components</h3>
             <p class="step-desc">Claude Code queries the Storybook MCP (<code>list-all-documentation</code> → <code>get-documentation</code>) for the matching component. It gets exact prop names and variants — no guessing.</p>
           </div>
         </div>
@@ -290,7 +338,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           <span class="step-badge">D</span>
           <div style="flex: 1">
             <h3 class="step-title">AI generates token-exact code</h3>
-            <p class="step-desc">With the Figma token names from <code>boundVariables</code> and the correct Atelier UI props from Storybook, the generated code uses the right component APIs and the exact CSS custom properties — no hardcoded values, no style overrides.</p>
+            <p class="step-desc">With the Figma token names from <code>boundVariables</code> and the correct Atelier props from Storybook, the generated code uses the right component APIs and the exact CSS custom properties — no hardcoded values, no style overrides.</p>
           </div>
         </div>
 
@@ -319,7 +367,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
     <div class="docs-section">
       <h2 class="docs-section-title">Generated Output</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
-        What Claude Code produces — using <code>LlmCard</code> and <code>LlmInput</code> from Atelier UI with tokens drawn directly from Figma <code>boundVariables</code>:
+        What Claude Code produces — using <code>LlmCard</code> and <code>LlmInput</code> from Atelier with tokens drawn directly from Figma <code>boundVariables</code>:
       </p>
       <div class="docs-multi-code-tabs" style="border-radius: 8px 8px 0 0; margin-bottom: 0; width: fit-content">
         {FRAMEWORKS.map((fw, i) => (
@@ -329,6 +377,40 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
       {FRAMEWORKS.map((fw, i) => (
         <div data-fw-panel={fw} hidden={i !== 0}>
           <Code code={OUTPUT[fw]} lang={fw === 'Angular' ? 'ts' : 'tsx'} />
+        </div>
+      ))}
+    </div>
+
+    <!-- Run it -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">Run it</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
+        Save the generated component, start your dev server, and verify against the Figma frame.
+        The framework tabs above stay in sync with this section.
+      </p>
+      {FRAMEWORKS.map((fw, i) => (
+        <div data-fw-panel={fw} hidden={i !== 0}>
+          <ol class="run-steps">
+            <li>
+              <span class="run-step-label">Save as</span>
+              <code class="run-step-path">{RUN_IT[fw].path}</code>
+            </li>
+            <li>
+              <span class="run-step-label">Start the dev server</span>
+              <Code code={RUN_IT[fw].cmd} lang="shell" />
+            </li>
+            <li>
+              <span class="run-step-label">Open</span>
+              <a href={`http://localhost:${RUN_IT[fw].port}`} target="_blank" rel="noopener noreferrer" class="run-step-link">
+                http://localhost:{RUN_IT[fw].port}
+              </a>
+              <span class="run-step-detail">{RUN_IT[fw].expected}</span>
+            </li>
+            <li>
+              <span class="run-step-label">Verify parity</span>
+              <span class="run-step-detail">Run the parity prompt above — Claude will list any discrepancies and propose fixes.</span>
+            </li>
+          </ol>
         </div>
       ))}
     </div>
@@ -367,16 +449,16 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
 
     <!-- Bottom nav -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 2.5rem">
-      {[
-        { to: '/figma',    label: 'Design', title: 'Figma File',    icon: '🎨' },
-        { to: '/workshop', label: 'Setup',  title: 'Workshop',      icon: '⚙' },
-        { to: '/storybook',label: 'Explore',title: 'Storybook',     icon: '📖' },
-      ].map(({ to, label, title, icon }) => (
-        <a href={to} style="display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 1rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); text-decoration: none; color: inherit; border: 1px solid var(--ui-color-border)">
-          <span style="font-size: 1.25rem; flex-shrink: 0">{icon}</span>
+      {([
+        { to: '/figma',     label: 'Design',  title: 'Figma File', icon: 'palette' },
+        { to: '/workshop',  label: 'Setup',   title: 'Workshop',   icon: 'build_circle' },
+        { to: '/storybook', label: 'Explore', title: 'Storybook',  icon: 'book' },
+      ] as const).map(({ to, label, title, icon }) => (
+        <a href={to} class="bottom-nav-card">
+          <span class="bottom-nav-icon"><Icon name={icon} /></span>
           <div>
-            <div style="font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ui-color-text-muted); margin-bottom: 0.15rem">{label}</div>
-            <div style="font-size: 0.88rem; font-weight: 700; color: var(--ui-color-text)">{title}</div>
+            <div class="bottom-nav-label">{label}</div>
+            <div class="bottom-nav-title">{title}</div>
           </div>
         </a>
       ))}
@@ -418,6 +500,71 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
     color: var(--ui-color-text-muted);
     line-height: 1.6;
   }
+
+  /* "Run it" steps — file path, command, expected outcome */
+  .run-steps {
+    list-style: none;
+    counter-reset: run-step;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .run-steps > li {
+    counter-increment: run-step;
+    position: relative;
+    padding: 0.65rem 0.9rem 0.65rem 2.4rem;
+    background: var(--ui-color-surface-raised);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+    font-size: 0.84rem;
+    line-height: 1.55;
+  }
+  .run-steps > li::before {
+    content: counter(run-step);
+    position: absolute;
+    left: 0.7rem;
+    top: 0.65rem;
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 50%;
+    background: var(--ui-color-primary-light);
+    color: var(--ui-color-primary);
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono), ui-monospace, monospace;
+  }
+  .run-step-label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ui-color-text-muted);
+    margin-bottom: 0.3rem;
+  }
+  .run-step-path {
+    font-size: 0.82rem;
+    color: var(--ui-color-text);
+    word-break: break-all;
+  }
+  .run-step-link {
+    color: var(--ui-color-primary);
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.82rem;
+  }
+  .run-step-detail {
+    display: block;
+    margin-top: 0.35rem;
+    color: var(--ui-color-text-muted);
+    font-size: 0.8rem;
+  }
+  /* Drop the default expressive-code top margin inside the run-step card */
+  .run-steps .expressive-code { margin-top: 0.35rem; }
 </style>
 
 <!-- Framework tabs handled by shared framework-pref-init script in BaseLayout. -->
