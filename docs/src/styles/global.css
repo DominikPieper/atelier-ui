@@ -2732,3 +2732,16 @@ a.docs-pagepair-card:hover {
 .expressive-code .frame.is-terminal .header .title {
   color: var(--ui-color-text-muted);
 }
+
+/* Inner-page h1 — solid primary, tightened letter-spacing.
+ * Replaces the prior recurring inline-style block that carried a
+ * cyan→indigo gradient. Per Direction A, the gradient is reserved
+ * for the homepage hero only; inner-page h1s use solid primary teal. */
+.docs-page-h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin: 0 0 0.6rem;
+  color: var(--ui-color-primary);
+}
