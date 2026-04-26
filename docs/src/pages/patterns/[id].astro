@@ -1,0 +1,359 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { Code } from 'astro-expressive-code/components';
+import { PATTERNS, TAG_TO_SLUG } from '../../data/patterns';
+import {
+  LoginFormDemo,
+  SettingsPageDemo,
+  ConfirmationDemo,
+  DataListDemo,
+  NotificationCenterDemo,
+  ManagementDashboardDemo,
+} from '../../components/PatternsPage';
+
+export function getStaticPaths() {
+  return PATTERNS.map((p) => ({ params: { id: p.id } }));
+}
+
+const { id } = Astro.params;
+const pattern = PATTERNS.find((p) => p.id === id);
+if (!pattern) {
+  throw new Error(`No pattern found with id "${id}"`);
+}
+
+const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
+type Framework = typeof FRAMEWORKS[number];
+
+const LANG_MAP: Record<Framework, string> = {
+  Angular: 'html',
+  React: 'tsx',
+  Vue: 'vue',
+};
+
+function frameworkCode(fw: Framework): string {
+  return fw === 'Angular'
+    ? pattern!.angular
+    : fw === 'React'
+      ? pattern!.react
+      : pattern!.vue;
+}
+
+function frameworkStorybook(fw: Framework): string {
+  return fw === 'Angular'
+    ? pattern!.storybook.angular
+    : fw === 'React'
+      ? pattern!.storybook.react
+      : pattern!.storybook.vue;
+}
+
+const sections = [
+  { id: 'when-to-use', label: 'When to use' },
+  { id: 'when-not-to-use', label: 'When not to use' },
+  { id: 'a11y', label: 'Accessibility' },
+  { id: 'pitfalls', label: 'Common pitfalls' },
+  { id: 'variations', label: 'Variations' },
+  { id: 'code', label: 'Code' },
+  { id: 'storybook', label: 'Storybook' },
+];
+
+const prevPattern = PATTERNS.find((p) => p.num === pattern.num - 1) ?? null;
+const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
+---
+
+<BaseLayout
+  title={`${pattern.title} — Cookbook Pattern`}
+  description={pattern.description}
+  currentPath={`/patterns/${pattern.id}`}
+>
+  <nav slot="toc">
+    <a href="/patterns" class="docs-toc-link" style="font-weight: 600">← All patterns</a>
+    {sections.map((s) => (
+      <a href={`#${s.id}`} class="docs-toc-link">{s.label}</a>
+    ))}
+  </nav>
+
+  <div class="docs-inline-page">
+
+    <div style="margin-bottom: 1.25rem">
+      <div class="page-eyebrow">
+        <span class="page-eyebrow-kind page-eyebrow-kind--howto">How-To</span>
+        <span class="page-eyebrow-tag">
+          Pattern {String(pattern.num).padStart(2, '0')} of {PATTERNS.length}
+        </span>
+      </div>
+      <h1 class="docs-page-h1">{pattern.title}</h1>
+      <p style="font-size: 0.95rem; color: var(--ui-color-text-muted); margin: 0.5rem 0 0; max-width: 720px; line-height: 1.65">
+        {pattern.description}
+      </p>
+      <div class="pattern-tags" style="margin-top: 1rem">
+        {pattern.tags.map((tag) => {
+          const slug = TAG_TO_SLUG[tag];
+          return slug ? (
+            <a href={`/components/${slug}`} class="pattern-tag-link">{tag}</a>
+          ) : (
+            <span class="pattern-tag-static">{tag}</span>
+          );
+        })}
+      </div>
+    </div>
+
+    {/* Live demo */}
+    <div class="pattern-demo">
+      {pattern.id === 'login-form'           && <LoginFormDemo client:idle />}
+      {pattern.id === 'settings-page'        && <SettingsPageDemo client:idle />}
+      {pattern.id === 'confirmation-dialog'  && <ConfirmationDemo client:idle />}
+      {pattern.id === 'data-list'            && <DataListDemo client:idle />}
+      {pattern.id === 'notification-center'  && <NotificationCenterDemo client:idle />}
+      {pattern.id === 'management-dashboard' && <ManagementDashboardDemo client:idle />}
+    </div>
+
+    {/* When to use / not to use — two-column */}
+    <div class="pattern-two-col">
+      <section id="when-to-use" class="pattern-block">
+        <h2 class="docs-section-title">When to use</h2>
+        <ul class="pattern-list">
+          {pattern.whenToUse.map((b) => <li>{b}</li>)}
+        </ul>
+      </section>
+      <section id="when-not-to-use" class="pattern-block pattern-block--neg">
+        <h2 class="docs-section-title">When not to use</h2>
+        <ul class="pattern-list">
+          {pattern.whenNotToUse.map((b) => <li>{b}</li>)}
+        </ul>
+      </section>
+    </div>
+
+    {/* Accessibility */}
+    <section id="a11y" class="pattern-block" style="margin-top: 2rem">
+      <h2 class="docs-section-title">Accessibility</h2>
+      <ul class="pattern-list">
+        {pattern.a11yNotes.map((b) => <li>{b}</li>)}
+      </ul>
+      <p class="pattern-foot-note">
+        See the <a href="/accessibility" class="docs-link-primary">accessibility overview</a> for the
+        site-wide WCAG stance and per-component focus / ARIA notes.
+      </p>
+    </section>
+
+    {/* Pitfalls */}
+    <section id="pitfalls" class="pattern-block" style="margin-top: 2rem">
+      <h2 class="docs-section-title">Common pitfalls</h2>
+      <p style="font-size: 0.85rem; color: var(--ui-color-text-muted); margin: 0 0 0.85rem; line-height: 1.6">
+        What an LLM most commonly produces wrong here.
+      </p>
+      <ul class="pattern-list">
+        {pattern.pitfalls.map((b) => <li>{b}</li>)}
+      </ul>
+    </section>
+
+    {/* Variations */}
+    <section id="variations" class="pattern-block" style="margin-top: 2rem">
+      <h2 class="docs-section-title">Variations</h2>
+      <div class="pattern-variations">
+        {pattern.variations.map((v) => (
+          <div class="pattern-variation">
+            <h3 class="pattern-variation-title">{v.title}</h3>
+            <p class="pattern-variation-note">{v.note}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    {/* Code */}
+    <section id="code" style="margin-top: 2.5rem">
+      <h2 class="docs-section-title">Code</h2>
+      <p style="font-size: 0.85rem; color: var(--ui-color-text-muted); margin: 0 0 0.85rem; line-height: 1.6">
+        Snippets are intentionally trimmed for readability. The full implementation
+        — with state, styles, and demo data — lives in the framework Storybook
+        files linked below.
+      </p>
+      <div class="docs-multi-code-tabs" style="border-radius: 8px 8px 0 0; margin: 0">
+        {FRAMEWORKS.map((fw, i) => (
+          <button
+            class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`}
+            data-fw-btn={fw}
+            type="button"
+          >{fw}</button>
+        ))}
+      </div>
+      {FRAMEWORKS.map((fw, i) => (
+        <div data-fw-panel={fw} hidden={i !== 0}>
+          <Code code={frameworkCode(fw)} lang={LANG_MAP[fw]} />
+        </div>
+      ))}
+    </section>
+
+    {/* Storybook deep-links */}
+    <section id="storybook" style="margin-top: 2.5rem">
+      <h2 class="docs-section-title">Open in Storybook</h2>
+      <p style="font-size: 0.85rem; color: var(--ui-color-text-muted); margin: 0 0 0.85rem; line-height: 1.6">
+        The same composition with state, styles, and demo data — running live in
+        each framework Storybook.
+      </p>
+      <div class="pattern-storybook-links">
+        {FRAMEWORKS.map((fw) => (
+          <a href={frameworkStorybook(fw)} target="_blank" rel="noopener noreferrer" class="docs-btn docs-btn-outline">
+            {fw} Storybook →
+          </a>
+        ))}
+      </div>
+    </section>
+
+    {/* Pager */}
+    <nav class="pattern-pager">
+      {prevPattern ? (
+        <a href={`/patterns/${prevPattern.id}`} class="pattern-pager-link">
+          <span class="pattern-pager-dir">← Previous</span>
+          <span class="pattern-pager-title">{prevPattern.title}</span>
+        </a>
+      ) : <span />}
+      {nextPattern ? (
+        <a href={`/patterns/${nextPattern.id}`} class="pattern-pager-link pattern-pager-link--next">
+          <span class="pattern-pager-dir">Next →</span>
+          <span class="pattern-pager-title">{nextPattern.title}</span>
+        </a>
+      ) : <span />}
+    </nav>
+
+  </div>
+</BaseLayout>
+
+<style>
+  .pattern-tag-link,
+  .pattern-tag-static {
+    font-family: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--docs-secondary);
+    background: var(--ui-color-surface-raised);
+    border: 1px solid color-mix(in srgb, var(--docs-secondary) 35%, var(--ui-color-border));
+    padding: 0.18rem 0.5rem;
+    border-radius: 3px;
+    text-decoration: none;
+    transition: background 0.12s ease, border-color 0.12s ease;
+  }
+  .pattern-tag-link:hover {
+    background: color-mix(in srgb, var(--docs-secondary) 10%, var(--ui-color-surface-raised));
+    border-color: var(--docs-secondary);
+  }
+  .pattern-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  .pattern-demo {
+    background: var(--ui-color-surface-sunken);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+    padding: 2rem 1.5rem;
+    margin: 1.5rem 0 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .pattern-two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+  @media (max-width: 720px) {
+    .pattern-two-col { grid-template-columns: 1fr; }
+  }
+  .pattern-block {
+    background: var(--ui-color-surface-raised);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+    padding: 1.1rem 1.25rem;
+  }
+  .pattern-block--neg {
+    background: color-mix(in srgb, var(--ui-color-danger) 5%, var(--ui-color-surface-raised));
+    border-color: color-mix(in srgb, var(--ui-color-danger) 25%, var(--ui-color-border));
+  }
+  .pattern-list {
+    margin: 0;
+    padding-left: 1.1rem;
+    color: var(--ui-color-text);
+    font-size: 0.875rem;
+    line-height: 1.65;
+  }
+  .pattern-list li + li {
+    margin-top: 0.4rem;
+  }
+  .pattern-foot-note {
+    margin: 1rem 0 0;
+    font-size: 0.8rem;
+    color: var(--ui-color-text-muted);
+    line-height: 1.55;
+  }
+  .pattern-variations {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  @media (max-width: 720px) {
+    .pattern-variations { grid-template-columns: 1fr; }
+  }
+  .pattern-variation {
+    background: var(--ui-color-surface-raised);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+    padding: 0.95rem 1.1rem;
+  }
+  .pattern-variation-title {
+    margin: 0 0 0.4rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ui-color-text);
+  }
+  .pattern-variation-note {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--ui-color-text-muted);
+    line-height: 1.6;
+  }
+  .pattern-storybook-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .pattern-pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin: 3rem 0 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--ui-color-border);
+  }
+  .pattern-pager-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.85rem 1.1rem;
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+    text-decoration: none;
+    color: var(--ui-color-text);
+    background: var(--ui-color-surface-raised);
+    transition: background 0.12s ease, border-color 0.12s ease;
+  }
+  .pattern-pager-link:hover {
+    border-color: var(--ui-color-primary);
+    background: color-mix(in srgb, var(--ui-color-primary) 6%, var(--ui-color-surface-raised));
+  }
+  .pattern-pager-link--next {
+    text-align: right;
+  }
+  .pattern-pager-dir {
+    font-size: 0.72rem;
+    color: var(--ui-color-text-muted);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .pattern-pager-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+</style>
+
+<!-- Framework tabs handled by shared framework-pref-init script in BaseLayout. -->

@@ -152,46 +152,80 @@ Outcome: cookbook compositions are now equivalent across the three
 frameworks. P3 (per-pattern detail pages) and P4 (JSON manifest) can
 proceed against a stable, parity-checked catalog.
 
-### P3 — Per-pattern detail pages
+### P3 — Per-pattern detail pages — ✅ Shipped 2026-04-26
 
-Two viable shapes:
+Picked option A (dynamic route). Cookbook now has 6 deep-content
+pages at `/patterns/<id>`, plus the existing `/patterns` index, plus
+the `.well-known/cookbook-patterns.json` manifest pointing at the new
+URLs.
 
-- **A. Dynamic route** `docs/src/pages/patterns/[id].astro` — one page
-  per pattern, deep content (when-to-use, a11y notes, pitfalls,
-  variations, the full code).
-- **B. Inline expansion** on `/patterns` — per-card `<details>` blocks
-  with the deep content.
+Authored content (`docs/src/data/patterns.ts`):
 
-Recommend **A** because:
-- Better URLs for agents to cite (e.g. atelier-ui.netlify.app/patterns/login-form).
-- Keeps `/patterns` scannable.
-- Each page can ship its own Open Graph / docs sidebar entry.
+- `PatternMeta` extended with `whenToUse[]`, `whenNotToUse[]`,
+  `a11yNotes[]`, `pitfalls[]`, `variations[]`, `storybook { angular,
+  react, vue }`.
+- Added `TAG_TO_SLUG: Record<string, string>` so each component tag
+  in the catalog maps cleanly onto the existing `/components/<slug>`
+  reference page.
+- All 6 patterns now ship 3 when-to-use bullets, 3 when-not-to-use
+  bullets, 3 a11y notes, 3 pitfalls (focused on what an LLM most
+  commonly produces wrong), and 2 variations. Roughly 1100 words of
+  pedagogical content total, written deliberately tight.
+- `storybookLinks(storyId)` helper builds the per-framework
+  `?path=/docs/cookbook--<id>` URLs. Storybook IDs were verified
+  against the `cookbook.stories.*` exports (note: data-list resolves
+  to `cookbook--data-list-with-actions`, the rest follow the obvious
+  kebab of the pattern title).
 
-Each detail page contains:
-- Tag list (component links).
-- "When to use" / "When not to use" (2–3 bullets each).
-- A11y considerations (focus order, ARIA, screen reader behavior).
-- Common mistakes (what an LLM tends to get wrong).
-- Variations (1–2 alt compositions).
-- Full code (3 framework tabs) — sourced from `patterns.ts` via the
-  parity script so the simplified vs full distinction is explicit.
-- Storybook deep-link.
+Detail page (`docs/src/pages/patterns/[id].astro`):
 
-Extend `PatternMeta`:
+- `getStaticPaths()` produces one page per `PATTERNS` entry; the page
+  throws if the param doesn't resolve (build-time error rather than
+  silent 404).
+- Layout, in order: eyebrow + H1 + description + linked tag list,
+  live React-island demo (reuses `LoginFormDemo`, `SettingsPageDemo`,
+  ... from `docs/src/components/PatternsPage.tsx`), When-to-use ↔
+  When-not-to-use side-by-side block, Accessibility, Common pitfalls,
+  Variations grid, code in 3 framework tabs, "Open in Storybook"
+  link row per framework, Prev/Next pager.
+- Sidebar TOC: anchor links per section + "← All patterns" back-link.
+- Tab switching uses the global `framework-pref-init.ts` handler that
+  BaseLayout already imports — no per-page script. Picking React on
+  one detail page persists to siblings.
 
-```ts
-interface PatternMeta {
-  // existing
-  id: PatternId; num: number; title: string; description: string;
-  tags: string[]; angular: string; react: string; vue: string;
-  // new
-  whenToUse: string[];
-  whenNotToUse: string[];
-  a11yNotes: string[];
-  pitfalls: string[];
-  variations: { title: string; note: string }[];
-}
-```
+Index page (`docs/src/pages/patterns.astro`):
+
+- Title is now an `<a>` to the detail page; tags become links via
+  `TAG_TO_SLUG`; each pattern card gains a "Read full guide →" CTA
+  beneath the tags.
+
+Manifest (`tools/scripts/gen-cookbook-manifest.mjs`):
+
+- `url` field switched from `/patterns#pattern-<num>` to
+  `/patterns/<id>` (one-line change as anticipated). Manifest
+  regenerated; CI `--check` mode passes.
+
+Verification:
+
+- `nx build docs` — 49 → **55 pages**, no errors. The 6 new pages
+  appear at `dist/docs/patterns/{login-form,settings-page,
+  confirmation-dialog,data-list,notification-center,
+  management-dashboard}/index.html`.
+- `nx lint docs` clean.
+- All 6 sync checks pass: `check:cookbook`, `check:cookbook-manifest`,
+  `check:llms`, `check:sync`, `check:docs`, `check:spec`.
+- Spot-checked rendered HTML for `/patterns/login-form`: tags link to
+  `/components/card` and `/components/input`, pager links to
+  `/patterns/settings-page`, all required sections present.
+
+What's still open (deferred):
+
+- Replacing the live React-island demos with framework-native demos
+  per detail page would let the page show the active framework's
+  exact composition end-to-end. The current React island is fine for
+  a static visual check but is not framework-faithful.
+- A "copy code" button on each tab. The `astro-expressive-code` Code
+  component supports this but it's off in this codebase.
 
 ### P4 — Expose patterns via MCP — ✅ Shipped 2026-04-26
 

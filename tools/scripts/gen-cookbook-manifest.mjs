@@ -156,7 +156,7 @@ function buildManifest(patterns) {
         num: p.num,
         title: p.title,
         description: p.description,
-        url: `${SITE_URL}/patterns#pattern-${p.num}`,
+        url: `${SITE_URL}/patterns/${p.id}`,
         components: p.tags,
         frameworks: {
           angular: p.angular,
