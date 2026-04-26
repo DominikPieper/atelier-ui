@@ -225,22 +225,58 @@ const breadcrumbSchema = {
 
       {!isComponents ? (
         <>
+          {/* Workshop track — sequential, follow in order. Numbered to set the
+              expectation that this is a path, not a menu. */}
           <div class="docs-nav-section">
             <div class="docs-nav-heading">
-              <span class="docs-nav-heading-icon">{SECTION_ICONS['Get Started']}</span>
-              Get Started
+              <span class="docs-nav-heading-icon">{SECTION_ICONS['Workshop']}</span>
+              Workshop
             </div>
             <a href="/" class={`docs-nav-link${isActive('/') ? ' active' : ''}`}>
               <Icon name="dashboard" class="docs-nav-link-icon" />
+              <span class="docs-nav-link-num">1</span>
               Overview
             </a>
             <a href="/workshop" class={`docs-nav-link${isActive('/workshop') ? ' active' : ''}`}>
               <Icon name="build_circle" class="docs-nav-link-icon" />
-              Workshop Setup
+              <span class="docs-nav-link-num">2</span>
+              Setup
             </a>
             <a href="/figma-token" class={`docs-nav-link${isActive('/figma-token') ? ' active' : ''}`}>
               <Icon name="cable" class="docs-nav-link-icon" />
+              <span class="docs-nav-link-num">3</span>
               Figma Access
+            </a>
+            <a href="/tutorial" class={`docs-nav-link${isActive('/tutorial') ? ' active' : ''}`}>
+              <Icon name="school" class="docs-nav-link-icon" />
+              <span class="docs-nav-link-num">4</span>
+              First Component
+            </a>
+            <a href="/patterns" class={`docs-nav-link${isActive('/patterns') ? ' active' : ''}`}>
+              <Icon name="menu_book" class="docs-nav-link-icon" />
+              <span class="docs-nav-link-num">5</span>
+              Patterns
+            </a>
+          </div>
+
+          {/* How-To — problem-oriented recipes. Look here when stuck or when
+              you have a specific task in mind. */}
+          <div class="docs-nav-section">
+            <div class="docs-nav-heading">
+              <span class="docs-nav-heading-icon">{SECTION_ICONS['How-To']}</span>
+              How-To
+            </div>
+            <a href="/install" class={`docs-nav-link${isActive('/install') ? ' active' : ''}`}>
+              <Icon name="download" class="docs-nav-link-icon" />
+              Installation
+            </a>
+            <a href="/figma" class={`docs-nav-link${isActive('/figma') ? ' active' : ''}`}>
+              <Icon name="palette" class="docs-nav-link-icon" />
+              Figma — manual workflow
+            </a>
+            <a href="/prompts" class={`docs-nav-link${isActive('/prompts') ? ' active' : ''}`}>
+              <Icon name="chat" class="docs-nav-link-icon" />
+              Prompt Templates
             </a>
             <a href="/troubleshooting" class={`docs-nav-link${isActive('/troubleshooting') ? ' active' : ''}`}>
               <Icon name="help" class="docs-nav-link-icon" />
@@ -248,29 +284,7 @@ const breadcrumbSchema = {
             </a>
           </div>
 
-          <div class="docs-nav-section">
-            <div class="docs-nav-heading">
-              <span class="docs-nav-heading-icon">{SECTION_ICONS['Workflow']}</span>
-              Workflow
-            </div>
-            <a href="/figma" class={`docs-nav-link${isActive('/figma') ? ' active' : ''}`}>
-              <Icon name="palette" class="docs-nav-link-icon" />
-              Figma as Source
-            </a>
-            <a href="/tutorial" class={`docs-nav-link${isActive('/tutorial') ? ' active' : ''}`}>
-              <Icon name="school" class="docs-nav-link-icon" />
-              Figma to Code
-            </a>
-            <a href="/storybook" class={`docs-nav-link${isActive('/storybook') ? ' active' : ''}`}>
-              <Icon name="book" class="docs-nav-link-icon" />
-              Storybook
-            </a>
-            <a href="/mcp" class={`docs-nav-link${isActive('/mcp') ? ' active' : ''}`}>
-              <Icon name="smart_toy" class="docs-nav-link-icon" />
-              AI Tools
-            </a>
-          </div>
-
+          {/* Reference — random-access lookups. */}
           <div class="docs-nav-section">
             <div class="docs-nav-heading">
               <span class="docs-nav-heading-icon">{SECTION_ICONS['Reference']}</span>
@@ -280,18 +294,39 @@ const breadcrumbSchema = {
               <Icon name="widgets" class="docs-nav-link-icon" />
               Components
             </a>
-            <a href="/install" class={`docs-nav-link${isActive('/install') ? ' active' : ''}`}>
-              <Icon name="download" class="docs-nav-link-icon" />
-              Installation
+            <a href="/storybook" class={`docs-nav-link${isActive('/storybook') ? ' active' : ''}`}>
+              <Icon name="book" class="docs-nav-link-icon" />
+              Storybook
             </a>
             <a href="/tokens" class={`docs-nav-link${isActive('/tokens') ? ' active' : ''}`}>
               <Icon name="palette" class="docs-nav-link-icon" />
               Design Tokens
             </a>
-            <a href="/patterns" class={`docs-nav-link${isActive('/patterns') ? ' active' : ''}`}>
-              <Icon name="menu_book" class="docs-nav-link-icon" />
-              Cookbook Patterns
+            <a href="/mcp" class={`docs-nav-link${isActive('/mcp') ? ' active' : ''}`}>
+              <Icon name="smart_toy" class="docs-nav-link-icon" />
+              MCP Playground
             </a>
+            <a href="/llms" class={`docs-nav-link${isActive('/llms') ? ' active' : ''}`}>
+              <Icon name="description" class="docs-nav-link-icon" />
+              llms.txt
+            </a>
+            <a href="/claude-md" class={`docs-nav-link${isActive('/claude-md') ? ' active' : ''}`}>
+              <Icon name="article" class="docs-nav-link-icon" />
+              CLAUDE.md
+            </a>
+            <a href="/agent-skills" class={`docs-nav-link${isActive('/agent-skills') ? ' active' : ''}`}>
+              <Icon name="robot_2" class="docs-nav-link-icon" />
+              Agent Skills
+            </a>
+          </div>
+
+          {/* Explanation — the why behind the design. Consult to understand,
+              not to do. */}
+          <div class="docs-nav-section">
+            <div class="docs-nav-heading">
+              <span class="docs-nav-heading-icon">{SECTION_ICONS['Explanation']}</span>
+              Explanation
+            </div>
             <a href="/design-principles" class={`docs-nav-link${isActive('/design-principles') ? ' active' : ''}`}>
               <Icon name="schema" class="docs-nav-link-icon" />
               Design Principles
@@ -299,22 +334,6 @@ const breadcrumbSchema = {
             <a href="/accessibility" class={`docs-nav-link${isActive('/accessibility') ? ' active' : ''}`}>
               <Icon name="accessibility_new" class="docs-nav-link-icon" />
               Accessibility
-            </a>
-            <a href="/llms" class={`docs-nav-link${isActive('/llms') ? ' active' : ''}`}>
-              <Icon name="description" class="docs-nav-link-icon" />
-              llms.txt
-            </a>
-            <a href="/agent-skills" class={`docs-nav-link${isActive('/agent-skills') ? ' active' : ''}`}>
-              <Icon name="robot_2" class="docs-nav-link-icon" />
-              Agent Skills
-            </a>
-            <a href="/claude-md" class={`docs-nav-link${isActive('/claude-md') ? ' active' : ''}`}>
-              <Icon name="article" class="docs-nav-link-icon" />
-              CLAUDE.md
-            </a>
-            <a href="/prompts" class={`docs-nav-link${isActive('/prompts') ? ' active' : ''}`}>
-              <Icon name="chat" class="docs-nav-link-icon" />
-              Prompt Templates
             </a>
           </div>
         </>

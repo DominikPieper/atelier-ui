@@ -58,9 +58,14 @@ export const CATEGORY_ICONS: Record<string, string> = {
 };
 
 export const SECTION_ICONS: Record<string, string> = {
+  // Diátaxis-aligned sections used by the main sidebar
+  'Workshop': '🎓',
+  'How-To': '🧰',
+  'Reference': '📖',
+  'Explanation': '💡',
+  // Older labels kept for backwards-compatibility (e.g. components subsidebar)
   'Get Started': '🚀',
   'Workflow': '🔄',
-  'Reference': '📖',
   Tools: '🛠️',
   'The Library': '📚',
   Overview: '🏠',
