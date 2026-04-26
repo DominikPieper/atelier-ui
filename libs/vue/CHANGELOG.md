@@ -1,3 +1,14 @@
+## 0.0.37 (2026-04-26)
+
+### 🩹 Fixes
+
+- **vue:** inline LlmStepper props type to satisfy nx release dts emit ([4f09447](https://github.com/DominikPieper/atelier-ui/commit/4f09447))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.36 (2026-04-26)
 
 This was a version bump only for vue to align it with other projects, there were no code changes.
