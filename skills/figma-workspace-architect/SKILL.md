@@ -86,6 +86,14 @@ Don't redo the full deep-audit. Open `references/audit-verify-queries.md` and ru
 
 This catches the most common audit failure mode: a stale `.md` directing fixes for findings that have already been resolved or have shifted in shape since audit time.
 
+**Auto-prompt re-verify when the audit looks old.** When the user references
+an audit `.md` more than ~1 hour stale (check the file `mtime` or the
+`Generated against` git SHA against current `HEAD`), don't wait for them to
+ask — say something like *"this audit is from N hours ago; let me re-verify
+open findings before we act on them"* and run the Re-verify sub-mode. One
+read of `references/audit-verify-queries.md` plus one verify-pass per open
+finding is far cheaper than fixing items that already auto-resolved.
+
 ### Decide mode
 
 Triggered by either/or questions or "should I…" framings. The user is at a fork.
@@ -105,6 +113,47 @@ Never run a Breaking operation alone. Open `references/migration-playbook.md` an
 
 If the migration is large enough to span sessions, finish each session in a self-contained state — never leave the file mid-restructure overnight.
 
+### Sync mode
+
+Triggered when a change has already happened on one side (code OR design)
+and the user wants the other side to follow. Common phrasings:
+*"propagate to Figma"*, *"sync the lib tokens to Figma"*, *"the code just
+changed X, update Figma"*, *"keep Figma and code in lockstep"*, *"make
+Figma match the new spec"*.
+
+Different from Migrate: Migrate plans a structural change with coordinated
+rollout across both sides. Sync handles the more common case where one side
+has already moved and the other needs to catch up — value drift, not
+shape change.
+
+1. **Establish direction.** Which side is the source of truth for *this*
+   change? Token values from a CSS/JSON/spec file → Figma is the most
+   common (code-as-truth). Figma frame dimensions → code is rarer but
+   real (design-as-truth). Get this wrong and you'll overwrite real work
+   on the other side.
+2. **Diff.** Read the target side via `figma_get_variables` /
+   `figma_get_file_data`, compare against the source, list the deltas.
+   Classify each as a Variable value update (cheap, batch-able), a frame
+   dimension change (per-variant, scripted), or a structural change (rename,
+   add, remove — bail out and use Migrate).
+3. **Plan.** Group Variable updates into a single
+   `figma_batch_update_variables` call (50–100 variables at once is fine).
+   Group dimension changes into one `figma_execute` script that walks the
+   variants. See `references/code-sync.md` for the direction-of-truth
+   patterns and the mass-resize recipe.
+4. **Execute, then validate.** Run the batch + scripts, then re-audit the
+   touched components (`figma_audit_component_accessibility`) and the file
+   overall (`figma_audit_design_system`). The audit is the closing-the-
+   loop check; if scores drop, you have new work, not a finished sync.
+5. **Document.** Output a Sync summary (see "Output expectations" below):
+   how many Variables updated, how many frames resized, what audit scores
+   moved, anything left undone.
+
+If you find yourself adding/removing/renaming things rather than only
+updating existing values, stop and switch to Migrate mode — Sync's
+batch-and-script approach won't apply the additive coordination protocol
+that downstream consumers need.
+
 ## Mode routing — quick reference
 
 | User says…                                                      | Mode    | First action                                            |
@@ -116,6 +165,7 @@ If the migration is large enough to span sessions, finish each session in a self
 | "should I use a Variant or…?", "is it better to…?"              | Decide  | Open `references/decision-heuristics.md`                |
 | "rename / split / restructure / deprecate / migrate…"           | Migrate | Open `references/migration-playbook.md`; run pre-flight  |
 | "verify in code", "check the rendered result", "does dark mode look right…" | Migrate (post-flight) | Open `references/code-verify.md`; run the Storybook recipe |
+| "propagate to Figma / sync the tokens / make Figma match…"      | Sync    | `figma_get_variables` → diff → batch update; see `references/code-sync.md` |
 | "fix this issue…" (specific, after an audit)                    | Migrate | Use the playbook's recipe for the matching operation     |
 | "translate this Figma component into code…"                     | (none)  | This is out of scope — point at code-gen workflow       |
 
@@ -142,3 +192,4 @@ Each file is self-contained and loaded only when relevant. Don't load everything
 - **Audit report** — always use `assets/audit-report-template.md`. Priority list first, then findings by category. Severity tags on every finding. Each finding has a one-line fix.
 - **Build summary** — after a build, return what was created (counts: collections, modes, variables, components), what was validated (screenshots taken, descriptions set), and what is left undone (e.g. "Code Connect mappings — out of scope here, see [TODO]").
 - **Decision answer** — recommendation in the first sentence, reasoning in the second, the alternative and its trade-off in the third. Stop there.
+- **Sync summary** — after a code↔Figma sync run, return: direction (code→Figma or Figma→code), counts (Variables updated, frames resized, components touched), audit deltas (which scores moved up/down/held), known false-positives encountered (so the user doesn't re-fix them), and anything left undone. One small table beats prose here.

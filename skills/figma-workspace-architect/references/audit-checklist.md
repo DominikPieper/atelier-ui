@@ -269,3 +269,52 @@ Check: does the library produce useful documentation for engineering?
 5. Output via `assets/audit-report-template.md`.
 
 A good audit produces ~15–40 findings on a real-world library. Fewer than 10 means you skipped categories; more than 60 means you're listing things that should be condensed.
+
+## Known audit-tool false-positives
+
+The figma-console-mcp `figma_audit_component_accessibility` tool has a small
+set of recurring false-positives. Recognise these patterns instead of
+re-flagging items as real issues — they waste designer time and make audit
+diffs look noisier than they are.
+
+### Focus indicator delivered via drop-shadow reads as ~1.2:1 stroke contrast
+
+The audit tool measures focus-ring contrast on the *stroke* of the focus
+variant. When the design uses a `--ui-focus-ring`-style **drop-shadow**
+(double-ring surface gap + primary outer ring), the stroke itself is often
+just the component's normal border, which can be ~1.2:1 against the surface.
+The actual rendered ring is delivered by the drop-shadow effect at ~6:1+,
+which the audit tool doesn't read.
+
+**Action:** if the component has a `state=focus` variant whose focus ring
+is implemented as a drop-shadow (not a stroke), tag the finding as
+*"audit-tool false positive — drop-shadow delivers ~6:1 actual"* in the
+report. Don't fix in Figma; verify in code with `references/code-verify.md`
+instead. Common offenders historically: TabGroup, Select, Combobox.
+
+### Variant `state=default` / `state=error` flagged missing when names differ
+
+The audit tool maps interactive-state coverage to a fixed vocabulary
+(`default`, `hover`, `focus`, `disabled`, `error`, `active`, `loading`).
+Components whose Variants use names like `state=off|on`, `state=disabled-off`,
+or `state=invalid` will be reported as missing `default` and/or `error`,
+even when the conceptually-equivalent variants exist.
+
+**Action:** check the Variant Property values. If equivalents exist under
+different names, tag as *"variant-naming mismatch with audit-tool vocabulary
+— equivalent variants exist as `state=<name>`"* and propose a one-time
+rename to align with the standard names (this is a Migrate operation,
+not a Build one). Common offenders historically: Toggle, Checkbox,
+RadioGroup.
+
+### Hardcoded inset shadow on a fill is *not* a stroke fail
+
+Some components use a 1px `inset` shadow inside a fill to deliver
+non-color differentiation (WCAG 1.4.1) — for example, a danger button's
+silhouette in greyscale/protanopia. The audit tool only reads explicit
+strokes and may report "no border" or low contrast on the silhouette.
+
+**Action:** confirm the inset-shadow approach via `figma_get_component`
+on a representative variant. If present, tag *"non-color cue delivered
+via inset shadow on fill (audit tool reads strokes only)"* and skip.
+Common offenders: Button (danger variant), Toast (variant border-left).
