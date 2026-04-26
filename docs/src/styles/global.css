@@ -537,8 +537,8 @@ body {
 
 .docs-btn-primary {
   background: var(--ui-color-primary);
-  color: #000;
-  box-shadow: 0 0 0 rgba(68, 218, 218, 0);
+  color: var(--ui-color-text-on-primary);
+  box-shadow: none;
   transition: background 0.15s, box-shadow 0.15s, transform 0.15s;
 }
 
@@ -547,8 +547,6 @@ body {
   box-shadow: 0 0 20px color-mix(in srgb, var(--ui-color-primary) 30%, transparent);
   transform: translateY(-1px);
 }
-
-[data-theme='light'] .docs-btn-primary { color: #fff; }
 
 .docs-btn-outline {
   background: transparent;
@@ -1675,18 +1673,18 @@ body {
   overflow: hidden;
 }
 
-/* Crosshair grid background */
+/* Crosshair grid background — tinted by primary teal */
 .docs-hero-grid-bg {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(68, 218, 218, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(68, 218, 218, 0.05) 1px, transparent 1px);
+    linear-gradient(color-mix(in srgb, var(--ui-color-primary) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ui-color-primary) 8%, transparent) 1px, transparent 1px);
   background-size: 40px 40px;
   pointer-events: none;
 }
 
-/* Primary center glow */
+/* Primary center glow — primary teal */
 .docs-hero-glow {
   position: absolute;
   top: 40%;
@@ -1694,41 +1692,27 @@ body {
   transform: translate(-50%, -50%);
   width: 700px;
   height: 450px;
-  background: radial-gradient(ellipse, rgba(68, 218, 218, 0.13) 0%, transparent 70%);
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--ui-color-primary) 14%, transparent) 0%, transparent 70%);
   pointer-events: none;
 }
 
-/* Secondary top-right glow */
+/* Secondary top-right glow — Conciso brand sky-blue */
 .docs-hero-glow-2 {
   position: absolute;
   top: 0;
   right: 0;
   width: 400px;
   height: 300px;
-  background: radial-gradient(ellipse at top right, rgba(129, 140, 248, 0.1) 0%, transparent 70%);
+  background: radial-gradient(ellipse at top right, color-mix(in srgb, var(--ui-color-brand-development, #00b4ff) 12%, transparent) 0%, transparent 70%);
   pointer-events: none;
-}
-
-[data-theme='light'] .docs-hero-grid-bg {
-  background-image:
-    linear-gradient(rgba(0, 122, 122, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 122, 122, 0.07) 1px, transparent 1px);
-}
-
-[data-theme='light'] .docs-hero-glow {
-  background: radial-gradient(ellipse, rgba(0, 122, 122, 0.1) 0%, transparent 70%);
-}
-
-[data-theme='light'] .docs-hero-glow-2 {
-  background: radial-gradient(ellipse at top right, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
 }
 
 .docs-hero-eyebrow {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 5px 14px;
-  background: color-mix(in srgb, var(--ui-color-primary) 10%, transparent);
+  padding: 6px 14px;
+  background: var(--ui-color-primary-light);
   border: 1px solid color-mix(in srgb, var(--ui-color-primary) 25%, transparent);
   border-radius: 9999px;
   font-size: 0.72rem;
@@ -1738,8 +1722,6 @@ body {
   color: var(--ui-color-primary);
   margin-bottom: 1.25rem;
   position: relative;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
 }
 
 .docs-hero-wordmark {
