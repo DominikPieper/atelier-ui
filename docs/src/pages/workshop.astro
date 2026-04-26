@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import Jargon from '../components/Jargon.astro';
+import Icon from '../components/Icon.astro';
 
 const SITE_URL = 'https://atelier.pieper.io';
 
@@ -35,6 +36,14 @@ const MCP_CONFIG = `{
     "storybook-vue": {
       "type": "http",
       "url": "${SITE_URL}/storybook-vue/mcp"
+    },
+    "figma-console": {
+      "command": "npx",
+      "args": ["-y", "figma-console-mcp@latest"],
+      "env": {
+        "FIGMA_ACCESS_TOKEN": "\${FIGMA_ACCESS_TOKEN}",
+        "ENABLE_MCP_APPS": "true"
+      }
     }
   }
 }`;
@@ -42,25 +51,51 @@ const MCP_CONFIG = `{
 
 <BaseLayout
   title="Workshop Setup"
-  description="Set up the Atelier UI workshop end-to-end — clone the monorepo, install dependencies, run Storybook, and connect the AI tooling."
+  description="Set up the Atelier workshop end-to-end — clone the monorepo, install dependencies, run Storybook, and connect the AI tooling."
   currentPath="/workshop"
 >
   <div class="docs-inline-page">
 
-    <div style="margin-bottom: 2.5rem">
+    <div style="margin-bottom: 1.25rem">
+      <div class="page-eyebrow">
+        <span class="page-eyebrow-time">⏱ ~25 min</span>
+        <span class="page-eyebrow-tag">Hands-on · Setup</span>
+      </div>
       <h1 style="font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin: 0 0 0.6rem; background: linear-gradient(135deg, var(--ui-color-primary) 0%, var(--docs-secondary, #89ceff) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text">
         Workshop Setup
       </h1>
       <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 520px; line-height: 1.65">
-        Spin up a fully-configured Atelier UI workspace in one command — framework selection,
+        Spin up a fully-configured Atelier workspace in one command — framework selection,
         library install, and <Jargon term="MCP">MCP</Jargon> server wired up automatically.
       </p>
+    </div>
+
+    <!-- Learning objectives & assumed knowledge -->
+    <div class="objective-box">
+      <div class="objective-col">
+        <h2 class="objective-heading objective-heading--accent">What you'll learn</h2>
+        <ul class="objective-list">
+          <li>Scaffold an Atelier workspace with one command</li>
+          <li>Verify your environment with <code>preflight</code></li>
+          <li>Connect Claude Code to the Storybook MCP servers</li>
+          <li>Run the Figma → token → component loop end-to-end</li>
+        </ul>
+      </div>
+      <div class="objective-col">
+        <h2 class="objective-heading">Before you start</h2>
+        <ul class="objective-list objective-list--muted">
+          <li>Frontend experience in Angular, React or Vue</li>
+          <li>Comfortable with the terminal — Node 22+ available</li>
+          <li>Claude Code CLI (we walk you through installing it)</li>
+          <li>Figma account — optional, demo flow works without one</li>
+        </ul>
+      </div>
     </div>
 
     <!-- Prerequisites -->
     <div class="docs-section" style="margin-bottom: 2rem; padding: 1.25rem 1.4rem; background: var(--ui-color-surface-raised); border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md)">
       <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.85rem">
-        <h2 class="docs-section-title" style="margin: 0; font-size: 1rem">Prerequisites</h2>
+        <h2 class="docs-section-title" style="margin: 0; font-size: 1rem">Install prerequisites</h2>
         <a href="/troubleshooting" style="font-size: 0.78rem; color: var(--ui-color-primary); text-decoration: none">Troubleshooting →</a>
       </div>
       <p style="margin: 0 0 0.85rem; color: var(--ui-color-text-muted); font-size: 0.85rem; line-height: 1.55">
@@ -107,7 +142,12 @@ const MCP_CONFIG = `{
             and port availability. If anything fails, each line prints a one-step fix.
           </p>
 
-          <figure class="preflight-mock">
+          <div class="docs-multi-code-tabs" style="border-radius: 8px 8px 0 0; margin: 0.85rem 0 0">
+            <button class="docs-multi-code-tab active" data-pre-btn="success" type="button">Successful run</button>
+            <button class="docs-multi-code-tab" data-pre-btn="failed" type="button">Failed run</button>
+          </div>
+
+          <figure class="preflight-mock" data-pre-panel="success">
             <figcaption class="preflight-mock-title">
               <span class="preflight-mock-dot preflight-mock-dot--r"></span>
               <span class="preflight-mock-dot preflight-mock-dot--y"></span>
@@ -135,8 +175,41 @@ const MCP_CONFIG = `{
 
 <span class="pre-ok-strong">All checks passed. You are good to go.</span></pre>
           </figure>
+
+          <figure class="preflight-mock" data-pre-panel="failed" hidden>
+            <figcaption class="preflight-mock-title">
+              <span class="preflight-mock-dot preflight-mock-dot--r"></span>
+              <span class="preflight-mock-dot preflight-mock-dot--y"></span>
+              <span class="preflight-mock-dot preflight-mock-dot--g"></span>
+              <span class="preflight-mock-label">preflight — failed run with fix hints</span>
+            </figcaption>
+            <pre class="preflight-mock-body">
+<span class="pre-prompt">➜</span> <span class="pre-cmd">npm run preflight</span>
+
+<span class="pre-muted">[preflight] Checking your environment…</span>
+
+  <span class="pre-ok">✓</span> Node <span class="pre-val">v22.12.0</span>
+  <span class="pre-ok">✓</span> npm <span class="pre-val">v10.2.4</span>
+  <span class="pre-ok">✓</span> git <span class="pre-val">v2.43.0</span>
+  <span class="pre-fail">✗</span> Claude Code CLI <span class="pre-fail">not found</span>
+    <span class="pre-fix">→ fix:</span> <span class="pre-cmd">npm install -g @anthropic-ai/claude-code</span>
+  <span class="pre-ok">✓</span> FIGMA_ACCESS_TOKEN <span class="pre-muted">(figd_AbCd…)</span>
+  <span class="pre-ok">✓</span> MCP · storybook-angular reachable
+  <span class="pre-fail">✗</span> MCP · storybook-react <span class="pre-fail">unreachable (504)</span>
+    <span class="pre-fix">→ fix:</span> check internet · or set <span class="pre-cmd">STORYBOOK_REACT_MCP=http://localhost:6006/mcp</span>
+  <span class="pre-ok">✓</span> MCP · storybook-vue reachable
+  <span class="pre-ok">✓</span> MCP · nx-mcp reachable
+  <span class="pre-fail">✗</span> Port 4200 <span class="pre-fail">in use (pid 4711 — vite dev)</span>
+    <span class="pre-fix">→ fix:</span> <span class="pre-cmd">kill 4711</span> · or set <span class="pre-cmd">PORT=4250</span> in <span class="pre-cmd">.env</span>
+  <span class="pre-ok">✓</span> Port 4201 available
+  <span class="pre-ok">✓</span> Port 4202 available
+  <span class="pre-ok">✓</span> Port 6006 available
+
+<span class="pre-issue">3 issues found</span> <span class="pre-muted">· re-run after fixing each line</span>
+<span class="pre-muted">  See</span> <a href="/troubleshooting" class="pre-link">/troubleshooting</a> <span class="pre-muted">for context.</span></pre>
+          </figure>
           <p class="step-desc" style="margin-top: 0.6rem; font-size: 0.76rem">
-            On a failed run, each red <span style="color: var(--ui-color-danger); font-weight: 700">✗</span> line ends with a suggested fix and a link into <a href="/troubleshooting" style="color: var(--ui-color-primary)">/troubleshooting</a>.
+            Toggle the tabs above to compare. Each <span style="color: var(--ui-color-danger); font-weight: 700">✗</span> line ends with a one-step fix — copy, run, re-run <code>preflight</code>.
           </p>
         </div>
       </div>
@@ -239,7 +312,7 @@ const MCP_CONFIG = `{
       <h2 class="docs-section-title">What gets created</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem">
         Based on your framework selection the preset scaffolds one app per framework,
-        installs the matching Atelier UI package, and pre-configures Claude Code's MCP servers.
+        installs the matching Atelier package, and pre-configures Claude Code's MCP servers.
       </p>
       <table class="docs-props-table" style="margin-bottom: 1.5rem">
         <thead>
@@ -257,24 +330,30 @@ const MCP_CONFIG = `{
     <div class="docs-section">
       <h2 class="docs-section-title">MCP configuration</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem">
-        The generated <code>.claude/settings.json</code> wires up the Nx MCP and hosted
-        Storybook MCP servers for each selected framework:
+        The generated <code>.claude/settings.json</code> wires up the Nx MCP, the hosted
+        Storybook MCP servers for each selected framework, and <code>figma-console</code>
+        — needed for the <a href="/tutorial" style="color: var(--ui-color-primary)">Figma-to-Code Tutorial</a>:
       </p>
       <Code code={MCP_CONFIG} lang="json" />
+      <p style="margin: 0.75rem 0 0; font-size: 0.78rem; color: var(--ui-color-text-muted); line-height: 1.55">
+        <code>figma-console</code> requires the Desktop Bridge plugin and a personal access
+        token — see <a href="/figma-token" style="color: var(--ui-color-primary)">Figma Setup</a>.
+        If you only want the Storybook MCP workflow, you can remove the <code>figma-console</code> entry.
+      </p>
     </div>
 
     <!-- Bottom nav -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 2.5rem">
-      {[
-        { to: '/storybook', label: 'Next', title: 'Storybook', icon: '📖' },
-        { to: '/figma', label: 'Design', title: 'Figma File', icon: '🎨' },
-        { to: '/mcp', label: 'Tools', title: 'MCP Explorer', icon: '⬡' },
-      ].map(({ to, label, title, icon }) => (
-        <a href={to} style="display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 1rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); text-decoration: none; color: inherit; border: 1px solid var(--ui-color-border)">
-          <span style="font-size: 1.25rem; flex-shrink: 0">{icon}</span>
+      {([
+        { to: '/storybook', label: 'Next',   title: 'Storybook',    icon: 'book' },
+        { to: '/figma',     label: 'Design', title: 'Figma File',   icon: 'palette' },
+        { to: '/mcp',       label: 'Tools',  title: 'MCP Explorer', icon: 'cable' },
+      ] as const).map(({ to, label, title, icon }) => (
+        <a href={to} class="bottom-nav-card">
+          <span class="bottom-nav-icon"><Icon name={icon} /></span>
           <div>
-            <div style="font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ui-color-text-muted); margin-bottom: 0.15rem">{label}</div>
-            <div style="font-size: 0.88rem; font-weight: 700; color: var(--ui-color-text)">{title}</div>
+            <div class="bottom-nav-label">{label}</div>
+            <div class="bottom-nav-title">{title}</div>
           </div>
         </a>
       ))}
@@ -371,11 +450,21 @@ const MCP_CONFIG = `{
   .preflight-mock-body .pre-ok { color: var(--docs-term-success); font-weight: 700; }
   .preflight-mock-body .pre-ok-strong { color: var(--docs-term-success); font-weight: 700; }
   .preflight-mock-body .pre-val { color: var(--docs-term-info); }
+  .preflight-mock-body .pre-fail { color: var(--ui-color-danger); font-weight: 700; }
+  .preflight-mock-body .pre-fix { color: var(--docs-term-accent-strong); font-weight: 700; }
+  .preflight-mock-body .pre-issue { color: var(--ui-color-danger); font-weight: 700; }
+  .preflight-mock-body .pre-link { color: var(--ui-color-primary); text-decoration: underline; }
+
+  /* Stack the failed mockup directly under the tabs (no extra top margin
+   * — the tabs already provide the visual seam). */
+  .docs-multi-code-tabs + .preflight-mock { margin-top: 0; border-top-left-radius: 0; border-top-right-radius: 0; }
+  .preflight-mock + .preflight-mock { margin-top: 0; }
 </style>
 
 <script>
   // Framework tabs handled by shared framework-pref-init script in BaseLayout.
-  // This script handles only the platform (macOS/Linux/Windows) tabs.
+  // This script handles platform (macOS/Linux/Windows) tabs and the
+  // preflight success/failed mockup tabs.
   function initWorkshopPlatformTabs() {
     const platButtons = document.querySelectorAll<HTMLButtonElement>('[data-plat-btn]');
     const platPanels = document.querySelectorAll<HTMLElement>('[data-plat-panel]');
@@ -387,6 +476,21 @@ const MCP_CONFIG = `{
       });
     });
   }
-  document.addEventListener('astro:page-load', initWorkshopPlatformTabs);
+  function initWorkshopPreflightTabs() {
+    const preButtons = document.querySelectorAll<HTMLButtonElement>('[data-pre-btn]');
+    const prePanels = document.querySelectorAll<HTMLElement>('[data-pre-panel]');
+    preButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const pre = btn.dataset.preBtn;
+        preButtons.forEach(b => b.classList.toggle('active', b === btn));
+        prePanels.forEach(p => { p.hidden = p.dataset.prePanel !== pre; });
+      });
+    });
+  }
+  document.addEventListener('astro:page-load', () => {
+    initWorkshopPlatformTabs();
+    initWorkshopPreflightTabs();
+  });
   initWorkshopPlatformTabs();
+  initWorkshopPreflightTabs();
 </script>
