@@ -1,18 +1,33 @@
-:host {
+.llm-select {
   display: inline-block;
   position: relative;
   font-family: var(--ui-font-family);
   font-size: var(--ui-font-size-md);
 }
 
-/* Trigger button */
-.trigger {
+.llm-select label {
+  display: block;
+  margin-bottom: var(--ui-spacing-2);
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-color-text);
+  font-weight: var(--ui-font-weight-medium);
+}
+
+/* Select wrapper — holds native select + arrow icon */
+.llm-select .select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.llm-select select {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--ui-spacing-2);
   width: 100%;
-  padding: var(--ui-spacing-2) var(--ui-spacing-3);
+  min-height: 2.5rem;
+  padding: 0.625rem var(--ui-spacing-4);
+  padding-inline-end: calc(var(--ui-spacing-4) + 1.25rem);
   background: var(--ui-color-input-bg);
   border: 1px solid var(--ui-color-input-border);
   border-radius: var(--ui-radius-md);
@@ -20,113 +35,49 @@
   font-family: inherit;
   font-size: inherit;
   cursor: pointer;
-  transition: border-color var(--ui-transition-fast), box-shadow var(--ui-transition-fast);
+  appearance: none;
+  -webkit-appearance: none;
+  transition:
+    border-color var(--ui-transition-fast),
+    box-shadow var(--ui-transition-fast),
+    background-color var(--ui-transition-fast);
 }
 
-.trigger:hover:not(:disabled) {
+.llm-select select:hover:not(:disabled) {
   border-color: var(--ui-color-input-border-hover);
 }
 
-.trigger:focus-visible {
+.llm-select select:focus-visible {
   outline: none;
   box-shadow: var(--ui-focus-ring);
   border-color: var(--ui-color-input-border-focus);
 }
 
-.trigger:disabled {
+.llm-select select:disabled {
   opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }
 
-:host(.is-invalid) .trigger {
+.llm-select.is-invalid select {
   border-color: var(--ui-color-input-border-invalid);
 }
 
-:host(.is-open) .trigger {
-  border-color: var(--ui-color-input-border-focus);
-  box-shadow: var(--ui-focus-ring);
-}
-
-.trigger-text {
-  flex: 1;
-  text-align: start;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--ui-color-text);
-}
-
-.trigger-text:empty,
-.trigger[data-placeholder] .trigger-text {
-  color: var(--ui-color-placeholder);
-}
-
-.trigger-icon {
-  flex-shrink: 0;
+/* Arrow icon */
+.llm-select .select-arrow {
+  position: absolute;
+  inset-inline-end: var(--ui-spacing-4);
+  pointer-events: none;
   font-size: var(--ui-font-size-xs);
   color: var(--ui-color-text-muted);
-  transition: transform var(--ui-transition-fast);
-}
-
-:host(.is-open) .trigger-icon {
-  transform: rotate(180deg);
-}
-
-/* Dropdown panel — hidden while resting in the component's DOM */
-.panel {
-  visibility: hidden;
-  pointer-events: none;
-  padding: var(--ui-spacing-1) 0;
-  background: var(--ui-color-surface-raised);
-  border: 1px solid var(--ui-color-border);
-  border-radius: var(--ui-radius-md);
-  box-shadow: var(--ui-shadow-lg);
-  max-height: 16rem;
-  overflow-y: auto;
-  opacity: 0;
-  transform: translateY(-4px);
-  transition: opacity var(--ui-transition-normal), transform var(--ui-transition-normal);
-}
-
-/* Visible when in the CDK overlay pane (class added by open(), removed by close()) */
-.panel.is-open {
-  visibility: visible;
-  pointer-events: auto;
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Options (rendered inside llm-option) */
-llm-option [role="option"] {
-  padding: var(--ui-spacing-2) var(--ui-spacing-3);
-  cursor: pointer;
-  color: var(--ui-color-text);
-  transition: background var(--ui-transition-fast);
-}
-
-llm-option [role="option"]:hover,
-llm-option [role="option"].is-active {
-  background: var(--ui-color-surface-sunken);
-}
-
-llm-option [role="option"].is-selected {
-  background: var(--ui-color-primary-light);
-  color: var(--ui-color-primary);
-  font-weight: var(--ui-font-weight-medium);
-}
-
-llm-option [role="option"].is-disabled {
-  opacity: var(--ui-opacity-disabled);
-  cursor: not-allowed;
 }
 
 /* Error display */
-.errors {
-  margin-top: var(--ui-spacing-1);
+.llm-select .errors {
+  margin-top: var(--ui-spacing-2);
 }
 
-.error-message {
+.llm-select .error-message {
   margin: 0;
-  font-size: var(--ui-font-size-xs);
+  font-size: var(--ui-font-size-sm);
   color: var(--ui-color-error-text);
 }

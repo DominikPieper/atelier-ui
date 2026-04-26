@@ -7,7 +7,7 @@
 
 .llm-select label {
   display: block;
-  margin-bottom: var(--ui-spacing-1);
+  margin-bottom: var(--ui-spacing-2);
   font-size: var(--ui-font-size-sm);
   color: var(--ui-color-text);
   font-weight: var(--ui-font-weight-medium);
@@ -25,8 +25,9 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: var(--ui-spacing-2) var(--ui-spacing-3);
-  padding-inline-end: calc(var(--ui-spacing-3) + 1.25rem);
+  min-height: 2.5rem;
+  padding: 0.625rem var(--ui-spacing-4);
+  padding-inline-end: calc(var(--ui-spacing-4) + 1.25rem);
   background: var(--ui-color-input-bg);
   border: 1px solid var(--ui-color-input-border);
   border-radius: var(--ui-radius-md);
@@ -38,7 +39,8 @@
   -webkit-appearance: none;
   transition:
     border-color var(--ui-transition-fast),
-    box-shadow var(--ui-transition-fast);
+    box-shadow var(--ui-transition-fast),
+    background-color var(--ui-transition-fast);
 }
 
 .llm-select select:hover:not(:disabled) {
@@ -63,7 +65,7 @@
 /* Arrow icon */
 .llm-select .select-arrow {
   position: absolute;
-  inset-inline-end: var(--ui-spacing-3);
+  inset-inline-end: var(--ui-spacing-4);
   pointer-events: none;
   font-size: var(--ui-font-size-xs);
   color: var(--ui-color-text-muted);
@@ -71,11 +73,11 @@
 
 /* Error display */
 .llm-select .errors {
-  margin-top: var(--ui-spacing-1);
+  margin-top: var(--ui-spacing-2);
 }
 
 .llm-select .error-message {
   margin: 0;
-  font-size: var(--ui-font-size-xs);
+  font-size: var(--ui-font-size-sm);
   color: var(--ui-color-error-text);
 }

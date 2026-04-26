@@ -7,7 +7,7 @@
 /* ─── Tab list ─── */
 .llm-tab-group .tablist {
   display: flex;
-  gap: var(--ui-spacing-1);
+  gap: var(--ui-spacing-2);
   border-bottom: 1px solid var(--ui-color-border);
   overflow-x: auto;
   scrollbar-width: none;
@@ -24,7 +24,8 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  padding: var(--ui-spacing-2) var(--ui-spacing-4);
+  min-height: 2.5rem;
+  padding: var(--ui-spacing-3) var(--ui-spacing-4);
   font-size: var(--ui-font-size-sm);
   font-weight: var(--ui-font-weight-medium);
   color: var(--ui-color-text-muted);
@@ -36,16 +37,16 @@
   user-select: none;
 }
 
-/* Active indicator (underline) */
+/* Active indicator (underline) — 3px for modern weight */
 .llm-tab-group .tablist button::after {
   content: '';
   position: absolute;
   bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 2px;
+  left: var(--ui-spacing-2);
+  right: var(--ui-spacing-2);
+  height: 3px;
   background: transparent;
-  border-radius: var(--ui-radius-full);
+  border-radius: var(--ui-radius-full) var(--ui-radius-full) 0 0;
   transition: background var(--ui-transition-fast);
 }
 
@@ -78,7 +79,7 @@
 
 /* ─── Tab panel ─── */
 .llm-tab-group [role="tabpanel"] {
-  padding: var(--ui-spacing-4) 0;
+  padding: var(--ui-spacing-5) 0;
 }
 
 .llm-tab-group [role="tabpanel"]:focus-visible {
@@ -98,7 +99,8 @@
 
 .llm-tab-group.variant-pills .tablist button {
   border-radius: var(--ui-radius-md);
-  padding: var(--ui-spacing-1) var(--ui-spacing-4);
+  min-height: 2rem;
+  padding: var(--ui-spacing-2) var(--ui-spacing-4);
   font-size: var(--ui-font-size-sm);
 }
 

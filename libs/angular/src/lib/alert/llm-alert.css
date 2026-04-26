@@ -1,9 +1,9 @@
-:host {
+.llm-alert {
   display: flex;
   align-items: flex-start;
   gap: var(--ui-spacing-3);
-  padding: var(--ui-spacing-3) var(--ui-spacing-4);
-  border-radius: var(--ui-radius-md);
+  padding: var(--ui-spacing-4) var(--ui-spacing-5);
+  border-radius: var(--ui-radius-lg);
   border: 1px solid transparent;
   font-family: var(--ui-font-family);
   font-size: var(--ui-font-size-sm);
@@ -12,42 +12,44 @@
   width: 100%;
 }
 
-.content {
+.llm-alert .content {
   flex: 1;
 }
 
-/* Variants */
-:host(.variant-info) {
+/* Variants — semantic-tinted bg + matching text + faint border. */
+.llm-alert.variant-info {
   background-color: var(--ui-color-info-bg);
   color: var(--ui-color-info-text);
-  border-color: 1px solid color-mix(in srgb, var(--ui-color-info-text) 25%, transparent);
+  border-color: color-mix(in srgb, var(--ui-color-info-text) 20%, transparent);
 }
 
-:host(.variant-success) {
+.llm-alert.variant-success {
   background-color: var(--ui-color-success-bg);
   color: var(--ui-color-success-text);
-  border-color: 1px solid color-mix(in srgb, var(--ui-color-success-text) 25%, transparent);
+  border-color: color-mix(in srgb, var(--ui-color-success-text) 20%, transparent);
 }
 
-:host(.variant-warning) {
+.llm-alert.variant-warning {
   background-color: var(--ui-color-warning-bg);
   color: var(--ui-color-warning-text);
-  border-color: 1px solid color-mix(in srgb, var(--ui-color-warning-text) 25%, transparent);
+  border-color: color-mix(in srgb, var(--ui-color-warning-text) 20%, transparent);
 }
 
-:host(.variant-danger) {
+.llm-alert.variant-danger {
   background-color: var(--ui-color-danger-bg);
   color: var(--ui-color-danger-text);
-  border-color: 1px solid color-mix(in srgb, var(--ui-color-danger-text) 25%, transparent);
+  border-color: color-mix(in srgb, var(--ui-color-danger-text) 20%, transparent);
 }
 
 /* Dismiss button */
-.dismiss {
+.llm-alert .dismiss {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  padding: 0.125rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
   background: transparent;
   border: none;
   border-radius: var(--ui-radius-sm);
@@ -58,19 +60,19 @@
   line-height: 1;
 }
 
-.dismiss:hover {
+.llm-alert .dismiss:hover {
   opacity: 1;
   background-color: color-mix(in srgb, currentColor 10%, transparent);
 }
 
-.dismiss:focus-visible {
+.llm-alert .dismiss:focus-visible {
   outline: none;
   box-shadow: var(--ui-focus-ring);
   opacity: 1;
 }
 
 /* Semantic indicator glyph — non-color differentiation (WCAG 1.4.1). */
-.content .variant-icon {
+.llm-alert .content .variant-icon {
   display: inline-block;
   font-weight: 700;
   margin-right: 0.4em;

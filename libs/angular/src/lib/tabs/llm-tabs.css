@@ -1,30 +1,31 @@
-:host {
+.llm-tab-group {
   display: block;
   font-family: var(--ui-font-family);
   color: var(--ui-color-text);
 }
 
 /* ─── Tab list ─── */
-.tablist {
+.llm-tab-group .tablist {
   display: flex;
-  gap: var(--ui-spacing-1);
+  gap: var(--ui-spacing-2);
   border-bottom: 1px solid var(--ui-color-border);
   overflow-x: auto;
   scrollbar-width: none;
 }
 
-.tablist::-webkit-scrollbar {
+.llm-tab-group .tablist::-webkit-scrollbar {
   display: none;
 }
 
 /* ─── Tab button ─── */
-.tablist button {
+.llm-tab-group .tablist button {
   all: unset;
   box-sizing: border-box;
   position: relative;
   display: inline-flex;
   align-items: center;
-  padding: var(--ui-spacing-2) var(--ui-spacing-4);
+  min-height: 2.5rem;
+  padding: var(--ui-spacing-3) var(--ui-spacing-4);
   font-size: var(--ui-font-size-sm);
   font-weight: var(--ui-font-weight-medium);
   color: var(--ui-color-text-muted);
@@ -36,59 +37,59 @@
   user-select: none;
 }
 
-/* Active indicator (underline) */
-.tablist button::after {
+/* Active indicator (underline) — 3px for modern weight */
+.llm-tab-group .tablist button::after {
   content: '';
   position: absolute;
   bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 2px;
+  left: var(--ui-spacing-2);
+  right: var(--ui-spacing-2);
+  height: 3px;
   background: transparent;
-  border-radius: var(--ui-radius-full);
+  border-radius: var(--ui-radius-full) var(--ui-radius-full) 0 0;
   transition: background var(--ui-transition-fast);
 }
 
-.tablist button.is-active {
+.llm-tab-group .tablist button.is-active {
   color: var(--ui-color-primary);
 }
 
-.tablist button.is-active::after {
+.llm-tab-group .tablist button.is-active::after {
   background: var(--ui-color-primary);
 }
 
 /* Hover */
-.tablist button:hover:not(.is-disabled):not(.is-active) {
+.llm-tab-group .tablist button:hover:not(.is-disabled):not(.is-active) {
   color: var(--ui-color-text);
   background: var(--ui-color-surface-sunken);
 }
 
 /* Focus */
-.tablist button:focus-visible {
+.llm-tab-group .tablist button:focus-visible {
   outline: none;
   box-shadow: var(--ui-focus-ring);
   border-radius: var(--ui-radius-md);
 }
 
 /* Disabled */
-.tablist button.is-disabled {
+.llm-tab-group .tablist button.is-disabled {
   opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }
 
 /* ─── Tab panel ─── */
-llm-tab [role="tabpanel"] {
-  padding: var(--ui-spacing-4) 0;
+.llm-tab-group [role="tabpanel"] {
+  padding: var(--ui-spacing-5) 0;
 }
 
-llm-tab [role="tabpanel"]:focus-visible {
+.llm-tab-group [role="tabpanel"]:focus-visible {
   outline: none;
   box-shadow: var(--ui-focus-ring);
   border-radius: var(--ui-radius-md);
 }
 
 /* ─── Pills variant ─── */
-:host(.variant-pills) .tablist {
+.llm-tab-group.variant-pills .tablist {
   border-bottom: none;
   gap: var(--ui-spacing-2);
   padding: var(--ui-spacing-1);
@@ -96,23 +97,24 @@ llm-tab [role="tabpanel"]:focus-visible {
   border-radius: var(--ui-radius-lg);
 }
 
-:host(.variant-pills) .tablist button {
+.llm-tab-group.variant-pills .tablist button {
   border-radius: var(--ui-radius-md);
-  padding: var(--ui-spacing-1) var(--ui-spacing-4);
+  min-height: 2rem;
+  padding: var(--ui-spacing-2) var(--ui-spacing-4);
   font-size: var(--ui-font-size-sm);
 }
 
-:host(.variant-pills) .tablist button::after {
+.llm-tab-group.variant-pills .tablist button::after {
   display: none;
 }
 
-:host(.variant-pills) .tablist button.is-active {
+.llm-tab-group.variant-pills .tablist button.is-active {
   background: var(--ui-color-surface);
   color: var(--ui-color-text);
   box-shadow: var(--ui-shadow-sm);
 }
 
-:host(.variant-pills) .tablist button:hover:not(.is-disabled):not(.is-active) {
+.llm-tab-group.variant-pills .tablist button:hover:not(.is-disabled):not(.is-active) {
   background: transparent;
   color: var(--ui-color-text);
 }
