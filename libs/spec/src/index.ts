@@ -64,9 +64,28 @@ export interface LlmAvatarGroupSpec {
 // ---------------------------------------------------------------------------
 export type LlmCardVariant = 'elevated' | 'outlined' | 'flat';
 export type LlmCardPadding = 'none' | 'sm' | 'md' | 'lg';
+/**
+ * Optional landmark role for the card. Default behaviour is a plain
+ * `<div>` — most cards group content visually and shouldn't add a
+ * landmark to the page outline.
+ *
+ * Pick a role only when the card is meaningful as a landmark:
+ *   - `'article'` for self-contained pieces of content (a blog post,
+ *     a comment, a forum entry) that make sense out of context.
+ *   - `'region'` for a perceivable area that needs a screen-reader
+ *     stop. Pair with `aria-label` or `aria-labelledby`.
+ *   - `'section'` is not a landmark by itself — equivalent to a
+ *     `<section>` element. Useful when nesting structure matters.
+ */
+export type LlmCardRole = 'article' | 'region' | 'section';
 export interface LlmCardSpec {
   variant?: LlmCardVariant;
   padding?: LlmCardPadding;
+  /**
+   * Opt-in landmark role. Default is no role (plain `<div>`).
+   * See {@link LlmCardRole} for when to use each value.
+   */
+  role?: LlmCardRole;
 }
 
 // ---------------------------------------------------------------------------

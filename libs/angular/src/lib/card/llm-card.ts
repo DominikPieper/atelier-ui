@@ -28,6 +28,7 @@ import {
   styleUrl: './llm-card.css',
   host: {
     '[class]': 'hostClasses()',
+    '[attr.role]': 'role() || null',
   },
 })
 export class LlmCard {
@@ -36,6 +37,19 @@ export class LlmCard {
 
   /** Internal padding of the card. */
   readonly padding = input<'none' | 'sm' | 'md' | 'lg'>('md');
+
+  /**
+   * Opt-in landmark role. Default is no role.
+   *
+   * - `'article'` — self-contained content (blog post, comment).
+   * - `'region'`  — perceivable area that needs a screen-reader stop;
+   *                 pair with `aria-label`.
+   * - `'section'` — mirrors an HTML `<section>`.
+   *
+   * Most cards group content visually and shouldn't add a landmark.
+   * Leave unset by default.
+   */
+  readonly role = input<'article' | 'region' | 'section' | undefined>(undefined);
 
   protected readonly hostClasses = computed(
     () => `variant-${this.variant()} padding-${this.padding()}`

@@ -1,12 +1,12 @@
 import { HTMLAttributes, ReactNode } from 'react';
-import type { LlmCardSpec } from '../spec';
+import type { LlmCardSpec, LlmCardRole } from '../spec';
 import './llm-card.css';
 
 /**
  * Properties for the LlmCard component.
  */
 export interface LlmCardProps
-  extends HTMLAttributes<HTMLDivElement>,
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'role'>,
     LlmCardSpec {
   /**
    * The visual style variant of the card.
@@ -16,6 +16,13 @@ export interface LlmCardProps
    * The padding size within the card.
    */
   padding?: 'none' | 'sm' | 'md' | 'lg';
+  /**
+   * Opt-in landmark role. Default is no role (plain `<div>`).
+   * Pick `'article'` for self-contained content, `'region'` for a
+   * perceivable area that needs a screen-reader stop (pair with
+   * aria-label), or `'section'` to mirror an HTML `<section>`.
+   */
+  role?: LlmCardRole;
   /**
    * The content to be rendered inside the card.
    */

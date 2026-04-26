@@ -396,6 +396,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
     props: [
       { name: 'variant', type: "'elevated' | 'outlined' | 'flat'", default: "'elevated'", description: 'Visual style of the card' },
       { name: 'padding', type: "'none' | 'sm' | 'md' | 'lg'", default: "'md'", description: 'Padding size inside the card' },
+      { name: 'role', type: "'article' | 'region' | 'section'", default: '—', description: 'Opt-in landmark role. Default is no role (plain div). Use article for self-contained content, region for a perceivable area (pair with aria-label), section for HTML <section> semantics.' },
     ],
     codeExample: `<LlmCard variant="elevated" padding="md">
   <LlmCardHeader>Card Title</LlmCardHeader>
