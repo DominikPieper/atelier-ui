@@ -44,7 +44,6 @@
 
 - [ ] Storybook visual check — light + dark mode, manual pass on key components
 - [x] ~~CI pipeline for tests on PRs~~ — shipped (`.github/workflows/ci.yml`: parallel lint/test/build/checks on `nx affected`)
-- [ ] Facilitator guide — timing, learning arc, common pitfalls
 - [x] ~~True CLI e2e test~~ — shipped as `nx run create-atelier-ui-workspace:e2e`, wired into CI as an affected-gated job
 
 ## Open — Figma/a11y review follow-ups (2026-04-23)
@@ -179,4 +178,4 @@ Shipped for the 90-minute workshop onboarding:
 
 Verified: preflight exits 0 locally (12 ok, 1 warn for missing FIGMA token — expected), docs build succeeds (43 pages), create-workspace test suite passes (29/29).
 
-Out of scope this round (per plan): StackBlitz, facilitator guide, challenges, wow-demos, CI pipeline, visual regression, CLI e2e.
+Out of scope this round (per plan): StackBlitz, challenges, wow-demos, CI pipeline, visual regression, CLI e2e.
