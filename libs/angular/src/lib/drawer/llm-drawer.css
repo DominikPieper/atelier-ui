@@ -1,10 +1,10 @@
-/* ── Host ──────────────────────────────────────────────────────────────────── */
-:host(llm-drawer) {
+/* ── Host wrapper ──────────────────────────────────────────────────────────── */
+.llm-drawer-host {
   display: contents;
 }
 
 /* ── Native <dialog> base ──────────────────────────────────────────────────── */
-dialog {
+.llm-drawer-host dialog {
   all: unset;
   position: fixed;
   display: none;
@@ -19,13 +19,13 @@ dialog {
     overlay var(--ui-duration-slow) allow-discrete;
 }
 
-dialog[open] {
+.llm-drawer-host dialog[open] {
   display: flex;
   transform: translate(0, 0) !important;
 }
 
 /* ── Backdrop ──────────────────────────────────────────────────────────────── */
-dialog::backdrop {
+.llm-drawer-host dialog::backdrop {
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(2px);
   transition:
@@ -35,23 +35,23 @@ dialog::backdrop {
 }
 
 @starting-style {
-  dialog[open]::backdrop {
+  .llm-drawer-host dialog[open]::backdrop {
     opacity: 0;
   }
 }
 
 @media (prefers-color-scheme: dark) {
-  dialog::backdrop {
+  .llm-drawer-host dialog::backdrop {
     background: rgba(0, 0, 0, 0.7);
   }
 }
 
-[data-theme='dark'] dialog::backdrop {
+[data-theme='dark'] .llm-drawer-host dialog::backdrop {
   background: rgba(0, 0, 0, 0.7);
 }
 
 /* ── Panel (inner wrapper) ─────────────────────────────────────────────────── */
-.panel {
+.llm-drawer-host .panel {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -64,53 +64,53 @@ dialog::backdrop {
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
 /* ── Right ─────────────────────────────────────────────────────────────────── */
-:host(.position-right) dialog {
+.llm-drawer-host.position-right dialog {
   inset: 0 0 0 auto;
   height: 100dvh;
   transform: translateX(100%);
 }
 
 @starting-style {
-  :host(.position-right) dialog[open] {
+  .llm-drawer-host.position-right dialog[open] {
     transform: translateX(100%);
   }
 }
 
 /* ── Left ──────────────────────────────────────────────────────────────────── */
-:host(.position-left) dialog {
+.llm-drawer-host.position-left dialog {
   inset: 0 auto 0 0;
   height: 100dvh;
   transform: translateX(-100%);
 }
 
 @starting-style {
-  :host(.position-left) dialog[open] {
+  .llm-drawer-host.position-left dialog[open] {
     transform: translateX(-100%);
   }
 }
 
 /* ── Top ───────────────────────────────────────────────────────────────────── */
-:host(.position-top) dialog {
+.llm-drawer-host.position-top dialog {
   inset: 0 0 auto 0;
   width: 100vw;
   transform: translateY(-100%);
 }
 
 @starting-style {
-  :host(.position-top) dialog[open] {
+  .llm-drawer-host.position-top dialog[open] {
     transform: translateY(-100%);
   }
 }
 
 /* ── Bottom ────────────────────────────────────────────────────────────────── */
-:host(.position-bottom) dialog {
+.llm-drawer-host.position-bottom dialog {
   inset: auto 0 0 0;
   width: 100vw;
   transform: translateY(100%);
 }
 
 @starting-style {
-  :host(.position-bottom) dialog[open] {
+  .llm-drawer-host.position-bottom dialog[open] {
     transform: translateY(100%);
   }
 }
@@ -120,44 +120,44 @@ dialog::backdrop {
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
 /* Left / Right widths */
-:host(.position-right.size-sm) dialog,
-:host(.position-left.size-sm) dialog {
+.llm-drawer-host.position-right.size-sm dialog,
+.llm-drawer-host.position-left.size-sm dialog {
   width: 20rem;
 }
 
-:host(.position-right.size-md) dialog,
-:host(.position-left.size-md) dialog {
+.llm-drawer-host.position-right.size-md dialog,
+.llm-drawer-host.position-left.size-md dialog {
   width: 28rem;
 }
 
-:host(.position-right.size-lg) dialog,
-:host(.position-left.size-lg) dialog {
+.llm-drawer-host.position-right.size-lg dialog,
+.llm-drawer-host.position-left.size-lg dialog {
   width: 40rem;
 }
 
-:host(.position-right.size-full) dialog,
-:host(.position-left.size-full) dialog {
+.llm-drawer-host.position-right.size-full dialog,
+.llm-drawer-host.position-left.size-full dialog {
   width: 100vw;
 }
 
 /* Top / Bottom heights */
-:host(.position-top.size-sm) dialog,
-:host(.position-bottom.size-sm) dialog {
+.llm-drawer-host.position-top.size-sm dialog,
+.llm-drawer-host.position-bottom.size-sm dialog {
   height: 12rem;
 }
 
-:host(.position-top.size-md) dialog,
-:host(.position-bottom.size-md) dialog {
+.llm-drawer-host.position-top.size-md dialog,
+.llm-drawer-host.position-bottom.size-md dialog {
   height: 20rem;
 }
 
-:host(.position-top.size-lg) dialog,
-:host(.position-bottom.size-lg) dialog {
+.llm-drawer-host.position-top.size-lg dialog,
+.llm-drawer-host.position-bottom.size-lg dialog {
   height: 32rem;
 }
 
-:host(.position-top.size-full) dialog,
-:host(.position-bottom.size-full) dialog {
+.llm-drawer-host.position-top.size-full dialog,
+.llm-drawer-host.position-bottom.size-full dialog {
   height: 100dvh;
 }
 
@@ -165,11 +165,11 @@ dialog::backdrop {
 /* SUB-COMPONENTS                                                              */
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
-:host(llm-drawer-header) {
+.llm-drawer-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--ui-spacing-4) var(--ui-spacing-5);
+  padding: var(--ui-spacing-5) var(--ui-spacing-6);
   border-bottom: 1px solid var(--ui-color-border);
   font-size: var(--ui-font-size-xl);
   font-weight: 600;
@@ -178,20 +178,20 @@ dialog::backdrop {
   flex-shrink: 0;
 }
 
-:host(llm-drawer-content) {
+.llm-drawer-content {
   display: block;
-  padding: var(--ui-spacing-5);
+  padding: var(--ui-spacing-6);
   overflow-y: auto;
   flex: 1;
   color: var(--ui-color-text);
 }
 
-:host(llm-drawer-footer) {
+.llm-drawer-footer {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--ui-spacing-2);
-  padding: var(--ui-spacing-4) var(--ui-spacing-5);
+  gap: var(--ui-spacing-3);
+  padding: var(--ui-spacing-5) var(--ui-spacing-6);
   border-top: 1px solid var(--ui-color-border);
   flex-shrink: 0;
 }
@@ -202,8 +202,8 @@ dialog::backdrop {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 2rem;
+  height: 2rem;
   padding: 0;
   margin-left: var(--ui-spacing-3);
   background: transparent;

@@ -5,7 +5,7 @@
 .llm-code-block {
   display: block;
   border: 1px solid var(--ui-color-border);
-  border-radius: var(--ui-radius-md);
+  border-radius: var(--ui-radius-lg);
   overflow: hidden;
   font-family: var(--ui-font-family);
 }
@@ -18,10 +18,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--ui-spacing-2) var(--ui-spacing-3);
+  padding: var(--ui-spacing-3) var(--ui-spacing-4);
   background: var(--ui-color-surface-raised);
   border-bottom: 1px solid var(--ui-color-border);
-  min-height: 2.25rem;
+  min-height: 2.5rem;
 }
 
 .code-block-label {
@@ -62,8 +62,8 @@
 }
 
 .code-block-copy:focus-visible {
-  outline: var(--ui-focus-ring);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
 }
 
 /* ---------------------------------------------------------------------------
