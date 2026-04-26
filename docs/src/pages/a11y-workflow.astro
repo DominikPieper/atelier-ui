@@ -421,38 +421,54 @@ export type LlmButtonProps =
     <div class="docs-section">
       <h2 class="docs-section-title">From a real audit cycle (2026-04-26)</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
-        The numbers from the run that produced this page. Snapshotted in
-        <code>tasks/a11y-audit-2026-04-26.md</code>.
+        The numbers from the run that produced this page — start to ship,
+        five phases, end-to-end. Baseline in
+        <code>tasks/a11y-audit-2026-04-26.md</code>; after-snapshot in
+        <code>tasks/a11y-audit-2026-04-26-after.md</code>.
       </p>
 
       <div class="docs-stats-ribbon" style="grid-template-columns: repeat(4, 1fr)">
         <div class="docs-stat-item">
-          <span class="docs-stat-num" style="font-size: 1.8rem">28</span>
+          <span class="docs-stat-num" style="font-size: 1.6rem">28</span>
           <span class="docs-stat-lbl">component-sets audited</span>
         </div>
         <div class="docs-stat-item">
-          <span class="docs-stat-num" style="font-size: 1.8rem">94</span>
+          <span class="docs-stat-num" style="font-size: 1.6rem">94 → 100</span>
           <span class="docs-stat-lbl">median Figma score</span>
         </div>
         <div class="docs-stat-item">
-          <span class="docs-stat-num" style="font-size: 1.8rem">8</span>
-          <span class="docs-stat-lbl">P-critical findings</span>
+          <span class="docs-stat-num" style="font-size: 1.6rem">22 / 28</span>
+          <span class="docs-stat-lbl">components now perfect (was 13)</span>
         </div>
         <div class="docs-stat-item">
-          <span class="docs-stat-num" style="font-size: 1.8rem">4</span>
-          <span class="docs-stat-lbl">code-side fixes (1 day)</span>
+          <span class="docs-stat-num" style="font-size: 1.6rem">7 → 0</span>
+          <span class="docs-stat-lbl">axe violations on /patterns</span>
         </div>
       </div>
 
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-top: 1.25rem; font-size: 0.85rem">
         The eight P-critical findings split cleanly across the three
-        lanes: four were Figma-only (focus indicator contrast,
-        target-size, missing variants), three were axe-only
+        lanes: four were Figma-only (focus indicator contrast, target
+        size on Checkbox / Radio / RadioGroup, missing variants on
+        Select and Combobox, color-only differentiation on the danger
+        Button), three were axe-only
         (<code>aria-progressbar-name</code>, <code>button-name</code>,
         <code>scrollable-region-focusable</code>), and one was
-        spec-driven (icon-only buttons could ship unlabeled). No two
+        spec-driven (icon-only Buttons could ship unlabelled). No two
         lanes flagged the same node — but together they painted a
         complete picture.
+      </p>
+
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-top: 0.85rem; font-size: 0.85rem">
+        End state: every directly-touched docs page reports zero axe
+        violations (<code>/workshop</code>,
+        <code>/tutorial</code>, <code>/first-component</code>,
+        <code>/patterns</code>, <code>/a11y-workflow</code>,
+        <code>/accessibility</code>, <code>/install</code>,
+        <code>/mcp</code>) and the Figma file's worst component-set
+        score is 92. Three findings are deferred to a designer
+        (state-axis convention, protanopia rebinding, the
+        <code>LlmTabGroup</code> focus reading) — none block release.
       </p>
     </div>
 
