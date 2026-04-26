@@ -1,14 +1,10 @@
-/* ── LlmBreadcrumbs host ──────────────────────────────────────────────────── */
-:host(llm-breadcrumbs) {
+/* LlmBreadcrumbs */
+.llm-breadcrumbs {
   display: block;
   font-family: var(--ui-font-family);
 }
 
-nav {
-  display: block;
-}
-
-.list {
+.breadcrumbs-list {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -20,51 +16,47 @@ nav {
   color: var(--ui-color-text-muted);
 }
 
-/* ── LlmBreadcrumbItem host ───────────────────────────────────────────────── */
-:host(llm-breadcrumb-item) {
-  display: contents;
-}
-
-.item {
+/* LlmBreadcrumbItem */
+.llm-breadcrumb-item {
   display: flex;
   align-items: center;
 }
 
-/* Separator — CSS generated, not read by screen readers */
-.item::after {
-  content: var(--llm-separator, '/');
+/* Separator — chevron, CSS-generated, not read by screen readers */
+.llm-breadcrumb-item::after {
+  content: var(--llm-separator, '›');
   margin: 0 var(--ui-spacing-2);
   color: var(--ui-color-border-hover);
   font-size: var(--ui-font-size-md);
   line-height: 1;
 }
 
-:host(.is-current) .item::after {
+.llm-breadcrumb-item.is-current::after {
   display: none;
 }
 
-/* ── Links (navigable breadcrumbs) ───────────────────────────────────────── */
-.item a[href] {
+/* Links (navigable breadcrumbs) */
+.llm-breadcrumb-item .breadcrumb-link {
   color: var(--ui-color-text-muted);
   text-decoration: none;
   border-radius: var(--ui-radius-sm);
-  padding: 0.125rem 0.25rem;
-  margin: -0.125rem -0.25rem;
-  transition: color var(--ui-transition-fast);
+  padding: var(--ui-spacing-1) var(--ui-spacing-2);
+  margin: calc(var(--ui-spacing-1) * -1) calc(var(--ui-spacing-2) * -1);
+  transition: color var(--ui-transition-fast), background-color var(--ui-transition-fast);
 }
 
-.item a[href]:hover {
+.llm-breadcrumb-item .breadcrumb-link:hover {
   color: var(--ui-color-text);
-  text-decoration: underline;
+  background-color: var(--ui-color-surface-sunken);
 }
 
-.item a[href]:focus-visible {
+.llm-breadcrumb-item .breadcrumb-link:focus-visible {
   outline: none;
   box-shadow: var(--ui-focus-ring);
 }
 
-/* ── Current item (anchor without href = plain inline text) ───────────────── */
-.item a:not([href]) {
+/* Current item (plain text) */
+.llm-breadcrumb-item .breadcrumb-current {
   color: var(--ui-color-text);
   font-weight: var(--ui-font-weight-semibold);
 }

@@ -1,11 +1,11 @@
 /* Menu panel */
 .llm-menu {
   display: block;
-  min-width: 10rem;
-  padding: var(--ui-spacing-1) 0;
+  min-width: 12rem;
+  padding: var(--ui-spacing-2) 0;
   background: var(--ui-color-surface-raised);
   border: 1px solid var(--ui-color-border);
-  border-radius: var(--ui-radius-md);
+  border-radius: var(--ui-radius-lg);
   box-shadow: var(--ui-shadow-lg);
   font-family: var(--ui-font-family);
   font-size: var(--ui-font-size-md);
@@ -19,9 +19,11 @@
 
 .llm-menu.variant-compact {
   font-size: var(--ui-font-size-sm);
+  padding: var(--ui-spacing-1) 0;
 }
 
 .llm-menu.variant-compact .llm-menu-item {
+  min-height: 2rem;
   padding: var(--ui-spacing-1) var(--ui-spacing-3);
 }
 
@@ -40,8 +42,9 @@
 .llm-menu-item {
   display: flex;
   align-items: center;
-  gap: var(--ui-spacing-2);
-  padding: var(--ui-spacing-2) var(--ui-spacing-3);
+  gap: var(--ui-spacing-3);
+  min-height: 2.25rem;
+  padding: var(--ui-spacing-2) var(--ui-spacing-4);
   cursor: pointer;
   color: var(--ui-color-text);
   transition: background var(--ui-transition-fast);
@@ -67,7 +70,7 @@
 .llm-menu-separator {
   display: block;
   height: 1px;
-  margin: var(--ui-spacing-1) 0;
+  margin: var(--ui-spacing-2) 0;
   background: var(--ui-color-border);
   border: none;
 }
@@ -76,7 +79,7 @@
 .llm-menu-panel {
   position: absolute;
   z-index: var(--ui-z-dropdown, 100);
-  top: calc(100% + var(--ui-spacing-1));
+  top: calc(100% + var(--ui-spacing-2));
   left: 0;
   min-width: 100%;
 }

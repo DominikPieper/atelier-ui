@@ -1,4 +1,4 @@
-:host {
+.llm-stepper {
   display: block;
   font-family: var(--ui-font-family);
 }
@@ -22,7 +22,8 @@
   flex: 1;
   height: 2px;
   background: var(--ui-color-border);
-  transition: background var(--ui-transition-fast);
+  border-radius: var(--ui-radius-full);
+  transition: background var(--ui-transition-normal) var(--ui-ease-out);
   min-width: var(--ui-spacing-4);
 }
 
@@ -37,8 +38,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   border: 2px solid var(--ui-color-border);
   background: var(--ui-color-surface);
@@ -46,7 +47,7 @@
   font-size: var(--ui-font-size-sm);
   font-weight: var(--ui-font-weight-semibold);
   cursor: pointer;
-  transition: var(--ui-transition-fast);
+  transition: var(--ui-transition-normal) var(--ui-ease-out);
   transition-property: border-color, background-color, color, box-shadow;
   user-select: none;
   flex-shrink: 0;
@@ -57,7 +58,7 @@
   box-shadow: var(--ui-focus-ring);
 }
 
-.step-circle[disabled] {
+.step-circle:disabled {
   cursor: not-allowed;
 }
 
@@ -95,6 +96,10 @@
   margin-top: var(--ui-spacing-6);
 }
 
+.stepper-content [role="tabpanel"][hidden] {
+  display: none;
+}
+
 /* ─── Active state ─── */
 .step-item.is-active .step-circle {
   border-color: var(--ui-color-primary);
@@ -103,6 +108,7 @@
 
 .step-item.is-active .step-label {
   color: var(--ui-color-text);
+  font-weight: var(--ui-font-weight-semibold);
 }
 
 /* ─── Completed state ─── */
@@ -138,29 +144,28 @@
 }
 
 /* ─── Vertical orientation ─── */
-:host(.orientation-vertical) .stepper-header {
+.llm-stepper.orientation-vertical .stepper-header {
   flex-direction: column;
   align-items: stretch;
 }
 
-:host(.orientation-vertical) .step-item {
+.llm-stepper.orientation-vertical .step-item {
   flex-direction: row;
   align-items: flex-start;
   gap: var(--ui-spacing-3);
 }
 
-:host(.orientation-vertical) .step-text {
+.llm-stepper.orientation-vertical .step-text {
   align-items: flex-start;
   text-align: left;
   margin-top: 0;
   padding-top: var(--ui-spacing-1);
 }
 
-:host(.orientation-vertical) .step-connector {
+.llm-stepper.orientation-vertical .step-connector {
   flex: none;
   width: 2px;
   height: var(--ui-spacing-6);
-  margin-left: 15px; /* center of 32px circle */
+  margin-left: 17px;
   min-width: 0;
-  align-self: auto;
 }
