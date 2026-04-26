@@ -32,13 +32,11 @@ import './llm-stepper.css';
 
 defineOptions({ name: 'LlmStepper' });
 
-interface LlmStepperProps {
+const props = withDefaults(defineProps<{
   activeStep?: number;
   orientation?: 'horizontal' | 'vertical';
   linear?: boolean;
-}
-
-const props = withDefaults(defineProps<LlmStepperProps>(), {
+}>(), {
   activeStep: 0,
   orientation: 'horizontal',
   linear: false,
