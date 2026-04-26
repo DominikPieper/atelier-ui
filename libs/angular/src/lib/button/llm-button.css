@@ -86,24 +86,27 @@
   transform: scale(0.97);
 }
 
+/* Non-color differentiation (WCAG 1.4.1): the danger variant carries
+ * a darker inset border so its silhouette is recognizable in greyscale
+ * and color-blind simulations, not only by red fill. */
 :host(.variant-danger) {
   background-color: var(--ui-color-danger);
   color: var(--ui-color-text-on-danger);
   border-color: var(--ui-color-danger);
-  box-shadow: var(--ui-shadow-xs);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18), var(--ui-shadow-xs);
 }
 
 :host(.variant-danger:hover:not(.is-disabled)) {
   background-color: var(--ui-color-danger-hover);
   border-color: var(--ui-color-danger-hover);
-  box-shadow: var(--ui-shadow-md);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18), var(--ui-shadow-md);
   transform: translateY(-1px);
 }
 
 :host(.variant-danger:active:not(.is-disabled)) {
   background-color: var(--ui-color-danger-active);
   border-color: var(--ui-color-danger-active);
-  box-shadow: var(--ui-shadow-xs);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18), var(--ui-shadow-xs);
   transform: scale(0.97);
 }
 

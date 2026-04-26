@@ -65,7 +65,7 @@
 
   /* Colors — Text */
   --ui-color-text: #0f172a;
-  --ui-color-text-muted: #64748b;
+  --ui-color-text-muted: #4f5f7c;
   --ui-color-text-on-primary: #ffffff;
   --ui-color-text-on-secondary: #ffffff;
   --ui-color-text-on-danger: #ffffff;
@@ -291,7 +291,7 @@
   --ui-color-border: #e5e7eb;
   --ui-color-border-hover: #d1d5db;
   --ui-color-text: #0f172a;
-  --ui-color-text-muted: #64748b;
+  --ui-color-text-muted: #4f5f7c;
   --ui-color-text-on-primary: #ffffff;
   --ui-color-input-border: #d1d5db;
   --ui-color-input-border-hover: #9ca3af;
