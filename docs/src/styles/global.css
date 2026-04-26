@@ -2138,6 +2138,29 @@ body {
   color: var(--ui-color-text-muted);
 }
 
+/* Diátaxis kind chip — categorizes the page so readers calibrate their
+ * expectations before reading. Color is dimension-coded:
+ *   Tutorial    — primary cyan/teal  (sequential, learning-oriented)
+ *   How-To      — amber               (problem-oriented, recipe)
+ *   Reference   — indigo              (information-oriented, look-up)
+ *   Explanation — lime                (understanding-oriented, theory) */
+.page-eyebrow-kind {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, currentColor 14%, transparent);
+  border: 1px solid color-mix(in srgb, currentColor 32%, transparent);
+}
+.page-eyebrow-kind--tutorial    { color: var(--ui-color-primary); }
+.page-eyebrow-kind--howto       { color: #f59e0b; }
+.page-eyebrow-kind--reference   { color: #818cf8; }
+.page-eyebrow-kind--explanation { color: #84cc16; }
+[data-theme='light'] .page-eyebrow-kind--howto       { color: #b45309; }
+[data-theme='light'] .page-eyebrow-kind--reference   { color: #4f46e5; }
+[data-theme='light'] .page-eyebrow-kind--explanation { color: #4d7c0f; }
+
 /* ─── Learning-objectives box ("What you'll learn" / "Before you start") ── */
 .objective-box {
   display: grid;
