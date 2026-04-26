@@ -1444,7 +1444,11 @@ body {
   --docs-term-bg: #0b0f16;
   --docs-term-bar-bg: #1a2031;
   --docs-term-text: #d1d5db;
-  --docs-term-muted: #6b7280;
+  /* Bumped from #6b7280 (3.27:1 on the bar background — fails AA) to
+   * #8b93a8 (5.14:1) so the preflight terminal mock doesn't stand out
+   * as a serious axe violation while still feeling like dim
+   * terminal output. */
+  --docs-term-muted: #8b93a8;
   --docs-term-heading: #9ca3af;
   --docs-term-strong: #f1f5f9;
   --docs-term-accent: #44dada;
@@ -1495,7 +1499,9 @@ body {
 
 .docs-terminal-title {
   font-size: 0.72rem;
-  color: rgba(255, 255, 255, 0.3);
+  /* Bumped from rgba(255,255,255,0.3) (2.65:1 on the bar bg — fails AA) to
+   * rgba(255,255,255,0.7) (~5.4:1) so the terminal mock title meets AA. */
+  color: rgba(255, 255, 255, 0.7);
   font-family: var(--docs-font-code);
 }
 
@@ -1512,7 +1518,8 @@ body {
 
 .docs-term-prompt { color: #44dada; margin-right: 0.5rem; }
 .docs-term-cmd { color: #f1f5f9; font-weight: 500; }
-.docs-term-muted { color: rgba(168, 196, 216, 0.5); }
+/* Bumped from rgba(168,196,216,0.5) (3.26:1 — fails AA) to 0.8 (~5:1). */
+.docs-term-muted { color: rgba(168, 196, 216, 0.8); }
 
 .docs-term-row {
   display: flex;
@@ -2152,7 +2159,8 @@ body {
   align-items: center;
   gap: 0.3rem;
   padding: 0.18rem 0.55rem;
-  background: var(--ui-color-primary-light);
+  background: var(--ui-color-surface-raised);
+  border: 1px solid color-mix(in srgb, var(--ui-color-primary) 38%, var(--ui-color-border));
   border-radius: 999px;
   color: var(--ui-color-primary);
 }
@@ -2172,8 +2180,11 @@ body {
   gap: 0.3rem;
   padding: 0.18rem 0.55rem;
   border-radius: 999px;
-  background: color-mix(in srgb, currentColor 14%, transparent);
-  border: 1px solid color-mix(in srgb, currentColor 32%, transparent);
+  /* Non-tinted background so the same-color text keeps full
+   * contrast against its own background (color-mix tint with
+   * currentColor used to drop AA below 4.5:1 for small bold text). */
+  background: var(--ui-color-surface-raised);
+  border: 1px solid color-mix(in srgb, currentColor 38%, var(--ui-color-border));
 }
 .page-eyebrow-kind--tutorial    { color: var(--ui-color-primary); }
 .page-eyebrow-kind--howto       { color: #f59e0b; }
@@ -2314,8 +2325,11 @@ a.docs-pagepair-card:hover {
 .docs-shortcut {
   margin-bottom: 2rem;
   padding: 0.85rem 1.1rem;
-  background: color-mix(in srgb, var(--ui-color-primary) 6%, transparent);
-  border: 1px dashed color-mix(in srgb, var(--ui-color-primary) 35%, transparent);
+  /* Surface (non-tinted) — primary text on primary-tinted backgrounds
+   * was failing WCAG AA at small/bold sizes (~4.4:1). Dashed border
+   * carries the accent instead. */
+  background: var(--ui-color-surface-raised);
+  border: 1px dashed color-mix(in srgb, var(--ui-color-primary) 50%, var(--ui-color-border));
   border-radius: var(--ui-radius-md);
 }
 .docs-shortcut-eyebrow {
@@ -2376,17 +2390,24 @@ a.docs-pagepair-card:hover {
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ui-color-danger);
-}
-.mcp-compare-card--pos .mcp-compare-label {
-  color: var(--ui-color-primary);
+  /* Local AA-safe red — the shared --ui-color-danger (#ef4444) is only
+   * 3.60:1 on surface-raised in light mode. Scoped overrides keep the
+   * library token untouched. */
+  color: #b91c1c;
 }
 .mcp-compare-time {
   font-size: 0.78rem;
   font-weight: 700;
-  color: var(--ui-color-danger);
+  color: #b91c1c;
 }
-.mcp-compare-card--pos .mcp-compare-time {
+[data-theme='dark'] .mcp-compare-label,
+[data-theme='dark'] .mcp-compare-time {
+  color: #fb7185;
+}
+.mcp-compare-card--pos .mcp-compare-label,
+.mcp-compare-card--pos .mcp-compare-time,
+[data-theme='dark'] .mcp-compare-card--pos .mcp-compare-label,
+[data-theme='dark'] .mcp-compare-card--pos .mcp-compare-time {
   color: var(--ui-color-primary);
 }
 .mcp-compare-list {
@@ -2666,4 +2687,26 @@ a.docs-pagepair-card:hover {
   font-size: 0.88rem;
   font-weight: 700;
   color: var(--ui-color-text);
+}
+
+/* ─── P3 polish ─────────────────────────────────────────────────────────── */
+
+/* Inline link utility — drop-in replacement for the repeated
+ *   style="color: var(--ui-color-primary)"
+ * pattern across docs pages. Add the --bold modifier for the variant
+ * that also wanted font-weight: 600. */
+.docs-link-primary { color: var(--ui-color-primary); }
+.docs-link-primary:hover { text-decoration: underline; }
+.docs-link-primary--bold { font-weight: 600; }
+
+/* Section breathing room — adjacent .docs-section blocks were running
+ * together visually. A consistent top gap separates them without
+ * needing inline margin overrides. */
+.docs-section + .docs-section { margin-top: 2.5rem; }
+
+/* Glass topbar fallback — browsers without backdrop-filter would render
+ * the rgba(...) background semi-transparently over scrolling content,
+ * leaking text. Fall back to a solid surface color in that case. */
+@supports not ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px))) {
+  .docs-topbar { background: var(--ui-color-surface); }
 }

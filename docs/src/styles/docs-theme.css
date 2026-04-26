@@ -49,14 +49,19 @@
   --ui-color-surface-sunken: #f1f5fb;
   --ui-color-border: #e2e8f0;
   --ui-color-border-hover: #cbd5e1;
-  --ui-color-primary: #007a7a;
-  --ui-color-primary-hover: #006464;
-  --ui-color-primary-active: #004e4e;
-  --ui-color-primary-light: rgba(0, 122, 122, 0.08);
+  /* Primary darkened from #007a7a (4.92:1 on white, only 4.48:1 on the
+   * primary-tinted backgrounds we use for chips and step badges) to
+   * #006666 (6.89:1 on white, 5.89:1 on primary-light) so axe-core
+   * stops flagging primary-on-tinted-surface as a serious AA fail. */
+  --ui-color-primary: #006666;
+  --ui-color-primary-hover: #005252;
+  --ui-color-primary-active: #003e3e;
+  --ui-color-primary-light: rgba(0, 102, 102, 0.08);
   --ui-color-text: #0f172a;
-  /* WCAG AA — bumped from #64748b (failed sunken at 4.35:1) to #5d6c87
-   * (4.85–5.30:1 across all three surfaces). */
-  --ui-color-text-muted: #5d6c87;
+  /* WCAG AA — bumped from #64748b (failed sunken at 4.35:1) to #4f5f7c
+   * (5.29:1+ across all surfaces, including the primary-light tinted
+   * callouts where the previous #5d6c87 was at 4.36:1). */
+  --ui-color-text-muted: #4f5f7c;
 }
 
 /* ── Docs-specific variables ───────────────────────────────── */

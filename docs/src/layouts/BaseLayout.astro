@@ -169,13 +169,14 @@ const breadcrumbSchema = {
       </button>
 
       <a href="/" class="docs-logo">
-        <img src={logo.src} alt="Atelier" class="docs-logo-img" width={224} height={214} />
+        {/* alt="" — decorative; the adjacent .docs-logo-text already names the link. */}
+        <img src={logo.src} alt="" class="docs-logo-img" width={224} height={214} />
         <span class="docs-logo-text">Atelier</span>
       </a>
 
       <div class="docs-topbar-sep"></div>
 
-      <nav class="docs-topbar-links">
+      <nav class="docs-topbar-links" aria-label="Primary">
         <a href="/workshop"  class={`docs-topbar-link${isTopActive('/workshop') ? ' active' : ''}`}>Workshop</a>
         <a href="/storybook" class={`docs-topbar-link${isTopActive('/storybook') ? ' active' : ''}`}>Storybook</a>
         <a href="/figma"     class={`docs-topbar-link${isTopActive('/figma') ? ' active' : ''}`}>Figma</a>
@@ -202,7 +203,7 @@ const breadcrumbSchema = {
     <div class="docs-sidebar-backdrop" id="sidebar-backdrop"></div>
 
     <!-- Sidebar -->
-    <nav class="docs-sidebar" id="sidebar">
+    <nav class="docs-sidebar" id="sidebar" aria-label="Section navigation">
       <div class="docs-sidebar-header">
         <div class="docs-sidebar-header-top">
           <div>
@@ -405,7 +406,7 @@ const breadcrumbSchema = {
     </main>
 
     <!-- Bottom Nav (mobile) -->
-    <nav class="docs-bottom-nav">
+    <nav class="docs-bottom-nav" aria-label="Bottom">
       <a href="/workshop"  class={`docs-bottom-nav-item${isWorkshop ? ' active' : ''}`}>
         <Icon name="build_circle" class="docs-bottom-nav-icon" />
         <span class="docs-bottom-nav-label">Workshop</span>
@@ -513,6 +514,14 @@ const breadcrumbSchema = {
           else window.scrollTo({ top: 0, behavior: 'smooth' });
         });
       }
+
+      // axe-core flags scrollable <pre> blocks (from astro-expressive-code)
+      // as not keyboard-focusable. Add tabindex=0 so keyboard users can
+      // scroll horizontally through long code lines. WCAG 2.1.1.
+      Array.prototype.forEach.call(
+        document.querySelectorAll('.expressive-code pre, pre.preflight-mock-body'),
+        function(pre) { if (!pre.hasAttribute('tabindex')) pre.setAttribute('tabindex', '0'); }
+      );
 
       // TOC active state via IntersectionObserver
       var toc = document.querySelector('.docs-toc');
