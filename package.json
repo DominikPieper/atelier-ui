@@ -11,6 +11,7 @@
     "check:spec": "node tools/scripts/sync-spec.mjs --check",
     "check:docs": "node tools/scripts/check-docs-sync.js",
     "check:llms": "node tools/scripts/gen-llms-txt.mjs --check",
+    "check:cookbook": "node tools/scripts/check-cookbook-parity.mjs",
     "gen:llms": "node tools/scripts/gen-llms-txt.mjs",
     "preflight": "node tools/scripts/preflight.mjs"
   },
