@@ -149,15 +149,74 @@ Check: are common pieces (Icon, Avatar, Badge) directly drawn inside other compo
 | Vector icons drawn directly inside Button frames                     | Warning    | Replace with instances of the Icon library. Update the Button to use Instance Swap if the icon should vary. |
 | Same Avatar shape redrawn in three different places                  | Warning    | Extract to an Avatar component, instance it where used.                                    |
 
-### CD6 — Component descriptions
+### CD6 — Component description content (intent + use)
 
-Check: do Components have descriptions in the asset panel?
+Check: do Components have descriptions in the asset panel, *and* do the descriptions tell an agent **when to use** the component, **when not to use** it, and **what it signals** to the user?
+
+A description that only repeats the component's name doesn't fix the underlying drift problem: an agent that picks by shape rather than by intent will misuse a destructive button as a generic secondary, or grab a Toast for a modal flow. The description is what tells the agent *why the component exists*.
 
 | State                                                                | Severity   | Fix                                                                                        |
 |----------------------------------------------------------------------|------------|--------------------------------------------------------------------------------------------|
 | 0% of components have descriptions                                   | Critical   | Set descriptions for every Component. Bulk operation via `figma_set_description`.          |
 | <50% have descriptions                                                | Warning    | Fill gaps; require descriptions for new components going forward.                          |
-| Descriptions exist but aren't markdown / aren't useful (e.g. just the name repeated) | Warning | Rewrite using the template in `build-workflow.md`. Include props, use-when, don't-use-when. |
+| Descriptions exist but only restate the component name               | Critical   | Rewrite using the template in `build-workflow.md`. The description must surface intent — without it, an agent picks components by shape, not by purpose, and library-as-source-of-truth slowly erodes. |
+| Descriptions list props but no usage guidance                        | Warning    | Add `Use when…`, `Don't use when…`, `Signals…` sentences. Two lines is enough for most components. |
+| Descriptions are markdown but inconsistent in shape                  | Suggestion | Adopt one structure across all components: 1-line summary → bullet list of props → `Use when` → `Don't use when` → `Signals`. |
+
+### CD7 — Complete interactive-state variant coverage
+
+Check: does every interactive component cover all the states an agent will need to compose a real screen — **default, hover, focus, disabled, error, loading**?
+
+Gaps in the state matrix force an agent to improvise the missing variant. Improvisation is where drift starts: the agent fills the gap with something that looks plausible, and the library quietly stops being the source of truth.
+
+This check applies to **interactive** components only (Button, Input, Select, Combobox, Checkbox, Radio, Toggle, Tabs, Table-row, Stepper-step, etc.). Pure display components (Badge, Avatar, Skeleton, Card, Alert, Toast) need fewer states — apply judgement.
+
+| State                                                                | Severity   | Fix                                                                                        |
+|----------------------------------------------------------------------|------------|--------------------------------------------------------------------------------------------|
+| An interactive component has only `state=default`                    | Critical   | Add the missing `state=hover`, `state=focus`, `state=disabled`, `state=error`, `state=loading` variants. Match the visual treatment to the code-side rendering. |
+| Interactive component covers some states (e.g. default + disabled) but not all of {hover, focus, error, loading} | Critical   | Fill the gaps. List the missing ones explicitly in the report so the fix is mechanical.   |
+| Variant Property uses non-standard names (`state=on/off`, `state=invalid`) for conceptually-equivalent states | Warning    | Rename to the standard vocabulary (`default / hover / focus / disabled / error / loading`). Cuts down on audit-tool false-positives — see false-positives section below. |
+| All six states present, named per the standard vocabulary            | (pass)     | —                                                                                          |
+
+Edge cases:
+- **Hover** is a no-op on touch devices but still required in Figma — the `state=hover` variant is what agents and code-gen tools read to render the desktop hover.
+- **Focus** must be a visible difference, not only a stroke that the audit tool reads as ~1.2:1 (see false-positives below). If focus is delivered via drop-shadow, document that in the description.
+- **Loading** is sometimes redundant with a separate `Loading: boolean` Component Property — that's fine if the Boolean is what code uses. Pick one and cross-link in the description.
+
+### CD8 — Token-linked styles (no hardcoded values)
+
+Check: every fill, stroke, text style, spacing, and effect on a Component bound to a Variable — *not* a hardcoded hex / px / number?
+
+Hardcoded values break propagation: a primary-color tweak should ripple through every component that uses `color/primary`. If a component declares `#006470` directly, the propagation stops there and the library drifts every time tokens move. Same for spacing (`16px` vs `space/md`) and typography (a literal font-size vs a `text/body-md` style).
+
+Sample 5–8 representative Components per category. Every node with a fill/stroke/text/spacing/effect must show `boundVariables` on `figma_get_component_for_development_deep` (or the equivalent property in `figma_get_component`).
+
+| State                                                                | Severity   | Fix                                                                                        |
+|----------------------------------------------------------------------|------------|--------------------------------------------------------------------------------------------|
+| Hardcoded fill / stroke colors on a Component (e.g. raw hex on a node, no `boundVariables.fills`) | Critical   | Bind via `figma_set_fills` / `figma_set_strokes` referencing the matching Semantic Variable. Rebuild any node that's still using a legacy Style if the system has migrated to Variables. |
+| Hardcoded text properties (font-size / line-height / font-family) where a Text Style or Variable exists | Critical   | Apply the corresponding Text Style. If the team still uses Variables for typography, bind via `boundVariables.textProperties`. |
+| Hardcoded spacing on Auto Layout (literal `padding: 16` instead of `padding: {spaceMd}`) | Critical   | Bind padding / itemSpacing to spacing Variables. This is what lets density modes work later. |
+| Hardcoded values on *demo* / decoration nodes (placeholder swatches, mock charts, in-component examples) | Warning    | Bind these too if the goal is reusable demo content. Mark the section as decorative if the values are intentionally one-off. |
+| Mode-aware Variables used everywhere, no raw values                  | (pass)     | —                                                                                          |
+
+Cross-check signal: if the file declares Light + Dark modes but switching modes produces visible artefacts on a Component (a hardcoded `#fff` showing on a dark surface), that Component is failing CD8 — even if every *other* fill is bound.
+
+### CD9 — Auto Layout adoption
+
+Check: are Component frames built with Auto Layout (`layoutMode: HORIZONTAL` or `VERTICAL`), or are they fixed positions?
+
+Fixed frames produce fixed output. If the agent cannot resize a component to fit its context — a button label that grows to a translated string twice as long, a card stretched to fill a column — it either breaks the component (overflowing children) or skips it and inlines an ad-hoc replacement. Auto Layout is the mechanism that lets components reflow, and reflow is what keeps a library composable.
+
+This check applies to **container** components (Card, Section, ListRow, TableCell, Alert, Dialog/Drawer surfaces) and to interactive components whose internal padding/gap should track typography (Button, Input, Select, Combobox).
+
+| State                                                                | Severity   | Fix                                                                                        |
+|----------------------------------------------------------------------|------------|--------------------------------------------------------------------------------------------|
+| Component root frames have `layoutMode: NONE` (no Auto Layout at all) | Critical   | Convert to Auto Layout. `figma_execute` payload that walks COMPONENT_SET children and sets `layoutMode = 'HORIZONTAL'` (or `'VERTICAL'`) plus appropriate `primaryAxisSizingMode` / `counterAxisSizingMode`. |
+| Auto Layout enabled at the root but inner content nodes are absolutely positioned | Critical   | Re-parent inner nodes into Auto Layout sub-frames so they participate in resize.            |
+| Auto Layout used but with `*_AXIS_SIZING_MODE: FIXED` in places that should hug content | Warning    | Switch the offending axis to `AUTO`. A common cause of "this card stretches funny when the title is long". |
+| Auto Layout throughout, with sensible Hug / Fill choices              | (pass)     | —                                                                                          |
+
+Effort: Auto-Layout retrofits are typically L (multi-day) on existing libraries because every Variant frame needs the conversion. Don't propose this as a same-sprint fix unless the component count is small.
 
 ## Category 3 — Naming
 

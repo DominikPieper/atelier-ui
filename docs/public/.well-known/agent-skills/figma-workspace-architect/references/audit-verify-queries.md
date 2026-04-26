@@ -125,16 +125,108 @@ figma_execute:
 **Pass:** Icons page exists AND has ≥ 1 ComponentSet (or ≥ N standalone Components, per-team).
 **Auto-resolve signal:** componentSetCount > 0 OR componentCount above team threshold.
 
-### CD6 — Component descriptions
+### CD6 — Component description content (intent + use)
 
 ```
 figma_execute:
   const sets = (await figma.root.findAllAsync(n => n.type === 'COMPONENT_SET'));
-  return sets.map(s => ({ name: s.name, descLen: (s.description || '').length }));
+  return sets.map(s => {
+    const d = s.description || '';
+    return {
+      name: s.name,
+      descLen: d.length,
+      hasUseWhen:    /\b(use\s+when|when\s+to\s+use)\b/i.test(d),
+      hasDontUse:    /\b(don['’]?t\s+use|when\s+not\s+to\s+use|avoid)\b/i.test(d),
+      hasSignals:    /\b(signal|indicates?|conveys?)\b/i.test(d),
+      onlyRestatesName: d.replace(/\s+/g, ' ').trim().toLowerCase().includes(s.name.toLowerCase())
+                       && d.length < (s.name.length + 20)
+    };
+  });
 ```
 
-**Pass:** every component-set has description length ≥ 80 chars.
-**Auto-resolve signal:** zero zero-length or under-threshold descriptions.
+**Pass:** every component-set has `descLen ≥ 80` AND at least two of `{hasUseWhen, hasDontUse, hasSignals}` true AND `onlyRestatesName === false`.
+**Auto-resolve signal:** all four flags satisfied across every component-set.
+
+### CD7 — Complete interactive-state variant coverage
+
+Run only against **interactive** component-sets. Maintain an explicit list per file (e.g. `Button`, `Input`, `Select`, `Combobox`, `Checkbox`, `Radio`, `RadioGroup`, `Toggle`, `TabGroup`, `Stepper`, `Pagination`, `Table`).
+
+```
+figma_execute:
+  const INTERACTIVE = new Set([/* per-file list */]);
+  const REQUIRED = ['default','hover','focus','disabled','error','loading'];
+  const sets = await figma.root.findAllAsync(n => n.type === 'COMPONENT_SET');
+  return sets.filter(s => INTERACTIVE.has(s.name)).map(s => {
+    const stateProp = (s.componentPropertyDefinitions || {}).state
+      ?? Object.entries(s.componentPropertyDefinitions || {})
+            .find(([k]) => /state/i.test(k))?.[1];
+    const values = stateProp ? stateProp.variantOptions || [] : [];
+    const present = REQUIRED.filter(r => values.some(v => v.toLowerCase() === r));
+    const missing = REQUIRED.filter(r => !present.includes(r));
+    return { name: s.name, present, missing, nonStandardValues: values.filter(v => !REQUIRED.includes(v.toLowerCase())) };
+  });
+```
+
+**Pass:** every interactive component-set returns `missing: []` AND `nonStandardValues: []` (or the non-standard values are documented exceptions tagged in the report).
+**Auto-resolve signal:** zero `missing` entries, zero un-tagged `nonStandardValues`.
+
+### CD8 — Token-linked styles
+
+Sample 5–8 representative components across categories (one input-family, one display, one navigation, one overlay, one feedback). For each, check that fills, strokes, text, and Auto-Layout spacing all carry `boundVariables`.
+
+```
+figma_execute:
+  const SAMPLES = [/* component-set node IDs to spot-check */];
+  const out = [];
+  for (const id of SAMPLES) {
+    const node = await figma.getNodeByIdAsync(id);
+    if (!node) continue;
+    const findings = [];
+    node.findAll(n => true).forEach(child => {
+      const bv = child.boundVariables || {};
+      if (Array.isArray(child.fills) && child.fills.some(f => f.type === 'SOLID') && !bv.fills) {
+        findings.push({ kind: 'unbound-fill', path: child.name });
+      }
+      if (Array.isArray(child.strokes) && child.strokes.length > 0 && !bv.strokes) {
+        findings.push({ kind: 'unbound-stroke', path: child.name });
+      }
+      if (child.type === 'TEXT' && !bv.fills && !child.textStyleId) {
+        findings.push({ kind: 'unbound-text-fill', path: child.name });
+      }
+      if (child.layoutMode && child.layoutMode !== 'NONE') {
+        const SPACING_KEYS = ['paddingLeft','paddingRight','paddingTop','paddingBottom','itemSpacing'];
+        SPACING_KEYS.forEach(k => {
+          if (typeof child[k] === 'number' && child[k] > 0 && !(bv[k])) {
+            findings.push({ kind: 'unbound-spacing', path: child.name, prop: k, value: child[k] });
+          }
+        });
+      }
+    });
+    out.push({ id, name: node.name, findings: findings.slice(0, 25) });
+  }
+  return out;
+```
+
+**Pass:** zero findings across the sampled components.
+**Auto-resolve signal:** every sample returns an empty `findings` array. (When findings are non-empty but expected — e.g. an intentionally decorative demo node — the report should call them out as documented exceptions.)
+
+### CD9 — Auto Layout adoption
+
+```
+figma_execute:
+  const sets = await figma.root.findAllAsync(n => n.type === 'COMPONENT_SET');
+  return sets.map(s => {
+    const variants = s.children.filter(c => c.type === 'COMPONENT');
+    const noAutoLayout = variants.filter(v => v.layoutMode === 'NONE').length;
+    const totalChildren = variants.reduce((acc, v) => acc + v.findAll(n => n.type === 'FRAME' || n.type === 'COMPONENT' || n.type === 'INSTANCE').length, 0);
+    const innerNoAutoLayout = variants.reduce((acc, v) =>
+      acc + v.findAll(n => (n.type === 'FRAME') && n.layoutMode === 'NONE' && (n.children || []).length > 0).length, 0);
+    return { name: s.name, variantCount: variants.length, rootMissing: noAutoLayout, innerMissing: innerNoAutoLayout, innerTotal: totalChildren };
+  });
+```
+
+**Pass:** every entry has `rootMissing === 0`. `innerMissing` should be < ~10% of `innerTotal` (a few small absolute-positioned helpers are tolerable; large numbers indicate the component still needs reflow work).
+**Auto-resolve signal:** all `rootMissing === 0` AND each component's `innerMissing / innerTotal < 0.1`.
 
 ## Naming
 

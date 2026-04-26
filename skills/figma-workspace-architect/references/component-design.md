@@ -1,5 +1,18 @@
 # Component design
 
+## Required principles
+
+A component library that an agent can use without improvising has to satisfy four properties. Every Build, Migrate, and Audit pass should treat these as hard requirements, not nice-to-haves. The audit checklist (`references/audit-checklist.md`) maps each one to a check ID so findings are mechanical to record.
+
+1. **Complete variant states** *(audit ID: CD7)* — every interactive component covers all states an agent will need: `default`, `hover`, `focus`, `disabled`, `error`, `loading`. Gaps force the agent to improvise the missing variant, and improvisation is where drift starts. The agent fills the gap with something plausible-looking and the library quietly stops being the source of truth.
+2. **Annotated component descriptions** *(audit ID: CD6)* — every component carries a usage note: when to use it, when not to, and what it signals to the user. Without intent, an agent picks by shape — a button that looks secondary gets used as a secondary button even when it was designed for a destructive action. The description is what tells the agent *why the component exists*.
+3. **Token-linked styles** *(audit ID: CD8)* — colour, typography, spacing, and effects all bound to Variables (or Text/Effect Styles where Variables don't yet apply). No raw hex, no literal `16px`, no inline font sizes. The agent applies decisions through the token system; hardcoded values break propagation, and propagation is how the library stays consistent at scale.
+4. **Auto Layout throughout** *(audit ID: CD9)* — components are built with Auto Layout so an agent can resize and reflow without breaking structure. Fixed frames produce fixed output: if the agent cannot stretch a Card to a column or grow a Button to a translated label, it either breaks the component or skips it.
+
+These four are also the difference between a library a designer-only team can live with and one a code-gen agent can actually consume — the first three principles especially. Treat any Critical finding under CD6 / CD7 / CD8 / CD9 as a drift-source that will compound until it's fixed.
+
+## Variation mechanisms — pick the right one
+
 Figma offers four mechanisms to express variation in a component. Choosing the right one for each axis of variation is what separates a maintainable library from a 256-permutation Variant set that nobody can navigate.
 
 The four mechanisms:

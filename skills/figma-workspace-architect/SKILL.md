@@ -74,6 +74,15 @@ Two layers, run in this order:
 1. **Run the built-in Design System Dashboard MCP App** first if the client supports MCP Apps (Claude Desktop with `ENABLE_MCP_APPS=true`). Ask the user something like "audit the design system" — this gives an immediate Lighthouse-style score across Naming, Tokens, Components, A11y, Consistency, and Coverage. Use this as the **breadth** layer; do not duplicate it.
 2. **Run the architectural deep-audit** in `references/audit-checklist.md`. This is the **depth** layer: five categories (Token Architecture, Component Design, Naming, File Structure, Engineering-Sync Readiness), each finding tagged with a severity (Blocker / Critical / Warning / Suggestion) and a concrete fix.
 
+The Component Design category enforces four hard requirements every library has to meet — see *Required principles* in `references/component-design.md`:
+
+- **CD6** Component descriptions surface intent (use-when, don't-use-when, signals).
+- **CD7** Every interactive component covers all six states (default, hover, focus, disabled, error, loading).
+- **CD8** Fills, strokes, text, and spacing bind to Variables, never hardcoded values.
+- **CD9** Components built with Auto Layout, not fixed frames.
+
+These are the drift-sources an agent-driven workflow notices first. Treat any Critical finding under them as a real fix, not a cosmetic one.
+
 Before writing the report, do the two pre-flight passes called out in the checklist's *Inputs* section: **pin the snapshot** (git SHA + Figma `lastModified`) and **cross-source-grep** any Variable / Variant value you're about to flag. Both are cheap and prevent the most common audit failure mode — findings that were already true at audit time but stale by the time someone acts on them, or findings that look bad in Figma but are actually load-bearing in code with subtly different semantics.
 
 Output the result using `assets/audit-report-template.md`. Always lead with the priority list — Blockers and Criticals at the top, with effort estimates. Do not bury the punchline in a category-by-category walk-through.
