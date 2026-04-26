@@ -223,7 +223,13 @@ body {
   margin-top: 0.5rem;
 }
 
-.docs-nav-heading-icon { font-size: 0.9rem; opacity: 0.8; flex-shrink: 0; }
+.docs-nav-heading-icon {
+  font-size: 0.9rem;
+  width: 1em;
+  height: 1em;
+  opacity: 0.8;
+  flex-shrink: 0;
+}
 
 /* Workshop progress indicator — only present on the .docs-nav-section--workshop
  * heading. Fills based on the --workshop-progress CSS variable (0..1) set by
@@ -1413,7 +1419,13 @@ body {
 
 .docs-search-result:hover { background: var(--ui-color-surface-sunken); }
 
-.docs-search-result-icon { font-size: 1.1rem; opacity: 0.8; }
+.docs-search-result-icon {
+  font-size: 1.1rem;
+  width: 1em;
+  height: 1em;
+  opacity: 0.8;
+  flex-shrink: 0;
+}
 
 .docs-search-result-content { flex: 1; }
 
@@ -2034,9 +2046,11 @@ body {
 
 .docs-quicknav-card {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 0.85rem;
-  padding: 1rem 1.1rem;
+  padding: 1.4rem 1.25rem 1.3rem;
+  min-height: 9.5rem;
   background: var(--ui-color-surface);
   border: 1px solid var(--ui-color-border);
   border-radius: var(--ui-radius-md);
@@ -2051,22 +2065,22 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, var(--ui-color-primary-light), transparent 60%);
-  transform: translateX(-100%);
+  background: linear-gradient(135deg, var(--ui-color-primary-light), transparent 65%);
+  transform: translateY(-100%);
   transition: transform 0.25s ease;
 }
 
-.docs-quicknav-card:hover::before { transform: translateX(0); }
+.docs-quicknav-card:hover::before { transform: translateY(0); }
 .docs-quicknav-card:hover {
   border-color: var(--ui-color-primary);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
 .docs-quicknav-icon {
-  width: 36px;
-  height: 36px;
+  width: 48px;
+  height: 48px;
   background: var(--ui-color-primary-light);
-  border-radius: 8px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2076,23 +2090,23 @@ body {
 }
 
 .docs-quicknav-icon svg {
-  width: 1.1rem;
-  height: 1.1rem;
+  width: 1.5rem;
+  height: 1.5rem;
   color: var(--ui-color-primary);
 }
 
 .docs-quicknav-label {
-  font-size: 0.68rem;
+  font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--ui-color-primary);
-  margin-bottom: 0.1rem;
+  margin-bottom: 0.2rem;
   position: relative;
 }
 
 .docs-quicknav-title {
-  font-size: 0.88rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--ui-color-text);
   position: relative;
