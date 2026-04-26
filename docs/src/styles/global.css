@@ -689,11 +689,11 @@ body {
 }
 
 [data-theme='dark'] .docs-status-badge--new {
-  background: rgba(95, 167, 255, 0.1); color: #82bbff; border-color: rgba(95, 167, 255, 0.3);
+  background: rgba(52, 216, 216, 0.1); color: #34d8d8; border-color: rgba(52, 216, 216, 0.3);
 }
 
 [data-theme='dark'] .docs-status-badge--updated {
-  background: rgba(163, 200, 122, 0.12); color: #b3d088; border-color: rgba(163, 200, 122, 0.3);
+  background: rgba(56, 189, 248, 0.12); color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);
 }
 
 [data-theme='dark'] .docs-status-badge--stable {
@@ -1451,18 +1451,18 @@ body {
   --docs-term-muted: #8b93a8;
   --docs-term-heading: #9ca3af;
   --docs-term-strong: #f1f5f9;
-  --docs-term-accent: #82bbff;
-  --docs-term-accent-strong: #5fa7ff;
-  --docs-term-success: #7ed99e;
-  --docs-term-warning: #f5c161;
-  --docs-term-info: #a3c87a;
-  --docs-term-border: rgba(95, 167, 255, 0.18);
-  --docs-term-border-soft: rgba(95, 167, 255, 0.08);
+  --docs-term-accent: #5ee5e5;
+  --docs-term-accent-strong: #34d8d8;
+  --docs-term-success: #4ade80;
+  --docs-term-warning: #fbbf24;
+  --docs-term-info: #38bdf8;
+  --docs-term-border: rgba(52, 216, 216, 0.18);
+  --docs-term-border-soft: rgba(52, 216, 216, 0.08);
 }
 
 [data-theme='light'] {
-  --docs-term-bg: #0c1620;
-  --docs-term-border: rgba(95, 167, 255, 0.2);
+  --docs-term-bg: #0a1116;
+  --docs-term-border: rgba(52, 216, 216, 0.2);
 }
 
 /* ── Terminal block ──────────────────────────────────── */
@@ -2186,13 +2186,13 @@ body {
   background: var(--ui-color-surface-raised);
   border: 1px solid color-mix(in srgb, currentColor 38%, var(--ui-color-border));
 }
-/* Diátaxis Eyebrow tints — accent (moss) for human-learning kinds (tutorial,
- * explanation), neutral muted for lookup kinds (howto, reference). Aligned
- * with the rebrief plan §3.3 — accent is rare and meaningful. */
-.page-eyebrow-kind--tutorial    { color: var(--ui-color-accent); }
-.page-eyebrow-kind--howto       { color: var(--ui-color-text-muted); }
+/* Diátaxis Eyebrow tints — Direction A (Conciso only):
+ * Tutorial → primary teal · How-To → warning amber ·
+ * Reference → text-muted · Explanation → success green. */
+.page-eyebrow-kind--tutorial    { color: var(--ui-color-primary); }
+.page-eyebrow-kind--howto       { color: var(--ui-color-warning); }
 .page-eyebrow-kind--reference   { color: var(--ui-color-text-muted); }
-.page-eyebrow-kind--explanation { color: var(--ui-color-accent); }
+.page-eyebrow-kind--explanation { color: var(--ui-color-success); }
 
 /* ─── Learning-objectives box ("What you'll learn" / "Before you start") ── */
 .objective-box {

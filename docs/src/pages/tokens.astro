@@ -3,54 +3,46 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 const colorGroups = [
   {
-    label: 'Primary — Conciso navy spine',
+    label: 'Primary — Conciso deep teal',
     tokens: [
-      { name: '--ui-color-primary',        light: '#0a2540', dark: '#5fa7ff', desc: 'Brand primary action' },
-      { name: '--ui-color-primary-hover',  light: '#143659', dark: '#82bbff', desc: 'Hover state' },
-      { name: '--ui-color-primary-active', light: '#061a30', dark: '#a6cffe', desc: 'Active / pressed state' },
-      { name: '--ui-color-primary-light',  light: 'rgba(10,37,64,0.08)', dark: 'rgba(95,167,255,0.15)', desc: 'Tinted background' },
-    ],
-  },
-  {
-    label: 'Accent — workshop affordances (Pieper-organic moss)',
-    tokens: [
-      { name: '--ui-color-accent',     light: '#506c36', dark: '#a3c87a', desc: 'Tutorial / Explanation chips, completion markers' },
-      { name: '--ui-color-accent-bg',  light: '#e8efde', dark: '#1c2618', desc: 'Accent-tinted callout' },
+      { name: '--ui-color-primary',        light: '#006470', dark: '#34d8d8', desc: 'Brand primary action' },
+      { name: '--ui-color-primary-hover',  light: '#004e58', dark: '#5ee5e5', desc: 'Hover state' },
+      { name: '--ui-color-primary-active', light: '#003a42', dark: '#87efef', desc: 'Active / pressed state' },
+      { name: '--ui-color-primary-light',  light: 'rgba(0,100,112,0.08)', dark: 'rgba(52,216,216,0.15)', desc: 'Tinted background' },
     ],
   },
   {
     label: 'Semantic',
     tokens: [
-      { name: '--ui-color-danger',   light: '#9b1c1c', dark: '#f87a7a', desc: 'Destructive actions, errors' },
-      { name: '--ui-color-success',  light: '#1f6b3e', dark: '#7ed99e', desc: 'Confirmations, success' },
-      { name: '--ui-color-warning',  light: '#985808', dark: '#f5c161', desc: 'Cautions, warnings' },
-      { name: '--ui-color-info',     light: '#0050a0', dark: '#7ab7ff', desc: 'Informational' },
+      { name: '--ui-color-danger',   light: '#b91c1c', dark: '#f87171', desc: 'Destructive actions, errors' },
+      { name: '--ui-color-success',  light: '#15803d', dark: '#4ade80', desc: 'Confirmations, success' },
+      { name: '--ui-color-warning',  light: '#b45309', dark: '#fbbf24', desc: 'Cautions, warnings' },
+      { name: '--ui-color-info',     light: '#0369a1', dark: '#38bdf8', desc: 'Informational' },
       { name: '--ui-color-secondary',light: '#475569', dark: '#94a3b8', desc: 'Secondary actions' },
     ],
   },
   {
-    label: 'Surface — warm bone (workshop projector friendly)',
+    label: 'Surface — clean white + cool slate',
     tokens: [
-      { name: '--ui-color-surface',        light: '#f7f5f0', dark: '#0c1620', desc: 'Page / base background' },
-      { name: '--ui-color-surface-raised', light: '#ffffff', dark: '#13202c', desc: 'Cards, elevated surfaces' },
-      { name: '--ui-color-surface-sunken', light: '#ece9e1', dark: '#08111a', desc: 'Inset, recessed areas (code blocks)' },
+      { name: '--ui-color-surface',        light: '#ffffff', dark: '#0a1116', desc: 'Page / base background' },
+      { name: '--ui-color-surface-raised', light: '#f8fafc', dark: '#131c24', desc: 'Cards, elevated surfaces' },
+      { name: '--ui-color-surface-sunken', light: '#f1f5f9', dark: '#060c10', desc: 'Inset, recessed areas (code blocks)' },
     ],
   },
   {
     label: 'Border',
     tokens: [
-      { name: '--ui-color-border',        light: '#d8d3c5', dark: '#2a3a4d', desc: 'Decorative border (card on raised)' },
-      { name: '--ui-color-border-hover',  light: '#bcb6a4', dark: '#3a4a60', desc: 'Hovered decorative border' },
-      { name: '--ui-color-border-strong', light: '#76716a', dark: '#5d6f8c', desc: 'Functional border ≥3:1 (inputs, outline buttons)' },
+      { name: '--ui-color-border',        light: '#e2e8f0', dark: '#1e293b', desc: 'Decorative border (card on raised)' },
+      { name: '--ui-color-border-hover',  light: '#cbd5e1', dark: '#334155', desc: 'Hovered decorative border' },
+      { name: '--ui-color-border-strong', light: '#64748b', dark: '#64748b', desc: 'Functional border ≥3:1 (inputs, outline buttons)' },
     ],
   },
   {
     label: 'Text',
     tokens: [
       { name: '--ui-color-text',            light: '#0f172a', dark: '#f1f5f9', desc: 'Primary text' },
-      { name: '--ui-color-text-muted',      light: '#48556e', dark: '#a4b4ce', desc: 'Secondary / muted text' },
-      { name: '--ui-color-text-on-primary', light: '#ffffff', dark: '#0a2540', desc: 'Text on primary background' },
-      { name: '--ui-color-text-on-accent',  light: '#ffffff', dark: '#0c1620', desc: 'Text on accent background' },
+      { name: '--ui-color-text-muted',      light: '#475569', dark: '#94a3b8', desc: 'Secondary / muted text' },
+      { name: '--ui-color-text-on-primary', light: '#ffffff', dark: '#0a1116', desc: 'Text on primary background' },
     ],
   },
 ];

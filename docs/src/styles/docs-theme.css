@@ -1,94 +1,84 @@
 /**
- * Docs-specific theme — Direction C: "Workshop signature"
+ * Docs-specific theme — Direction A: Conciso anchor only.
  * Overrides the shared component library tokens for the docs chrome only.
  *
- * Palette: Conciso navy spine + Pieper-organic moss accent on warm-bone canvas.
- * All pairs verified WCAG 2.2 AA via tools/scripts/wcag-contrast.mjs.
- * Plan: ~/.claude/plans/atelier-design-rebrief.md
+ * Palette: deep Conciso teal on a clean white canvas (light) /
+ * bright teal on rich slate (dark). All pairs verified WCAG 2.2 AA.
+ * Plan: ~/.claude/plans/atelier-design-rebrief.md (Direction A pivot)
  */
 
-/* ── Dark mode: deep navy canvas ───────────────────────────── */
+/* ── Dark mode: rich slate canvas ──────────────────────────── */
 [data-theme='dark'] {
-  --docs-code-text:    #d8e4f1;
-  --docs-code-keyword: #89ceff;
-  --docs-code-name:    #5fa7ff;
-  --docs-code-string:  #a3c87a;
-  --docs-code-muted:   #6b7a99;
+  --docs-code-text:    #e2e8f0;
+  --docs-code-keyword: #38bdf8;
+  --docs-code-name:    #34d8d8;
+  --docs-code-string:  #4ade80;
+  --docs-code-muted:   #64748b;
 
-  --ui-color-surface: #0c1620;
-  --ui-color-surface-raised: #13202c;
-  --ui-color-surface-sunken: #08111a;
+  --ui-color-surface: #0a1116;
+  --ui-color-surface-raised: #131c24;
+  --ui-color-surface-sunken: #060c10;
 
-  --ui-color-border: #2a3a4d;
-  --ui-color-border-hover: #3a4a60;
-  --ui-color-border-strong: #5d6f8c;
+  --ui-color-border: #1e293b;
+  --ui-color-border-hover: #334155;
+  --ui-color-border-strong: #64748b;
 
-  --ui-color-primary: #5fa7ff;
-  --ui-color-primary-hover: #82bbff;
-  --ui-color-primary-active: #a6cffe;
-  --ui-color-primary-light: rgba(95, 167, 255, 0.15);
-
-  --ui-color-accent: #a3c87a;
-  --ui-color-accent-hover: #b3d088;
-  --ui-color-accent-active: #c3d896;
-  --ui-color-accent-bg: #1c2618;
+  --ui-color-primary: #34d8d8;
+  --ui-color-primary-hover: #5ee5e5;
+  --ui-color-primary-active: #87efef;
+  --ui-color-primary-light: rgba(52, 216, 216, 0.15);
 
   --ui-color-text: #f1f5f9;
-  --ui-color-text-muted: #a4b4ce;
+  --ui-color-text-muted: #94a3b8;
 
-  --ui-color-input-bg: #08111a;
-  --ui-color-input-bg-focus: #13202c;
+  --ui-color-input-bg: #060c10;
+  --ui-color-input-bg-focus: #131c24;
   --ui-color-input-border: var(--ui-color-border-strong);
-  --ui-color-input-border-hover: #768aab;
+  --ui-color-input-border-hover: #94a3b8;
   --ui-color-input-border-focus: var(--ui-color-primary);
-  --ui-color-placeholder: #768aab;
+  --ui-color-placeholder: #94a3b8;
 }
 
-/* ── Light mode: warm-bone canvas (default; workshop projector friendly) ── */
+/* ── Light mode: clean white + cool slate (default) ─────────── */
 [data-theme='light'] {
   --docs-code-text:    #0f172a;
-  --docs-code-keyword: #063872;
-  --docs-code-name:    #0a2540;
-  --docs-code-string:  #155228;
-  --docs-code-muted:   #48556e;
+  --docs-code-keyword: #0c4a6e;
+  --docs-code-name:    #006470;
+  --docs-code-string:  #166534;
+  --docs-code-muted:   #475569;
 
-  --ui-color-surface: #f7f5f0;
-  --ui-color-surface-raised: #ffffff;
-  --ui-color-surface-sunken: #ece9e1;
+  --ui-color-surface: #ffffff;
+  --ui-color-surface-raised: #f8fafc;
+  --ui-color-surface-sunken: #f1f5f9;
 
-  --ui-color-border: #d8d3c5;
-  --ui-color-border-hover: #bcb6a4;
-  --ui-color-border-strong: #76716a;
+  --ui-color-border: #e2e8f0;
+  --ui-color-border-hover: #cbd5e1;
+  --ui-color-border-strong: #64748b;
 
-  --ui-color-primary: #0a2540;
-  --ui-color-primary-hover: #143659;
-  --ui-color-primary-active: #061a30;
-  --ui-color-primary-light: rgba(10, 37, 64, 0.08);
-
-  --ui-color-accent: #506c36;
-  --ui-color-accent-hover: #3f5728;
-  --ui-color-accent-active: #2e4319;
-  --ui-color-accent-bg: #e8efde;
+  --ui-color-primary: #006470;
+  --ui-color-primary-hover: #004e58;
+  --ui-color-primary-active: #003a42;
+  --ui-color-primary-light: rgba(0, 100, 112, 0.08);
 
   --ui-color-text: #0f172a;
-  --ui-color-text-muted: #48556e;
+  --ui-color-text-muted: #475569;
 }
 
 /* ── Docs-specific variables ───────────────────────────────── */
 :root {
   --docs-font: var(--font-sans), 'Inter', system-ui, sans-serif;
   --docs-font-code: var(--font-mono), 'Fira Code', 'Menlo', monospace;
-  --docs-glass-bg: rgba(12, 22, 32, 0.88);
+  --docs-glass-bg: rgba(10, 17, 22, 0.88);
   --docs-glass-blur: blur(20px);
-  --docs-topbar-border: rgba(95, 167, 255, 0.12);
-  --docs-secondary: var(--ui-color-accent);
-  --docs-tertiary: var(--ui-color-accent);
+  --docs-topbar-border: rgba(52, 216, 216, 0.12);
+  --docs-secondary: var(--ui-color-primary);
+  --docs-tertiary: var(--ui-color-primary);
   --docs-hero-gradient-start: var(--ui-color-primary);
-  --docs-hero-gradient-end: var(--ui-color-accent);
+  --docs-hero-gradient-end: var(--ui-color-brand-development, #00b4ff);
   --docs-topbar-height: 68px;
 }
 
 [data-theme='light'] {
-  --docs-glass-bg: rgba(247, 245, 240, 0.94);
-  --docs-topbar-border: #d8d3c5;
+  --docs-glass-bg: rgba(255, 255, 255, 0.94);
+  --docs-topbar-border: #e2e8f0;
 }

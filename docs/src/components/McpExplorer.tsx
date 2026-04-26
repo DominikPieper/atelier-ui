@@ -491,11 +491,11 @@ export default function McpExplorer() {
             {!serverOnline && (
               <div style={{
                 marginTop: '0.85rem', padding: '0.55rem 0.85rem',
-                background: 'var(--ui-color-accent-bg)', borderRadius: 'var(--ui-radius-sm)',
-                fontSize: '0.75rem', color: 'var(--ui-color-text-muted)', lineHeight: '1.55',
+                background: 'var(--ui-color-info-bg)', borderRadius: 'var(--ui-radius-sm)',
+                fontSize: '0.75rem', color: 'var(--ui-color-info-text)', lineHeight: '1.55',
                 display: 'flex', gap: '0.5rem',
               }}>
-                <span style={{ color: 'var(--ui-color-accent)', flexShrink: 0 }}>💡</span>
+                <span style={{ color: 'var(--ui-color-info)', flexShrink: 0 }}>💡</span>
                 <span>{activeMockTool.workshopTip}</span>
               </div>
             )}

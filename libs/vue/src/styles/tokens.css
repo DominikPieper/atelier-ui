@@ -1,12 +1,13 @@
 /**
  * Design tokens for the Atelier component library.
- * Direction C ("workshop signature") — Conciso navy spine + Pieper-organic
- * moss accent on a warm-bone canvas. Light-mode-first; dark mode is a switch.
+ * Direction A — Conciso anchor only. Deep Conciso teal on a clean white
+ * canvas (light) / bright teal on rich slate (dark). Modernised radius
+ * scale. No moss, no warm bone — just Conciso.
  *
  * All foreground/background pairs verified WCAG 2.2 AA via
- * tools/scripts/wcag-contrast.mjs (62/62 pairs passing 2026-04-26).
+ * tools/scripts/wcag-contrast.mjs (52/52 pairs passing 2026-04-26).
  *
- * Plan: ~/.claude/plans/atelier-design-rebrief.md
+ * Plan: ~/.claude/plans/atelier-design-rebrief.md (Direction A pivot)
  *
  * Usage:
  *   @import '@atelier-ui/{angular,react,vue}/styles/tokens.css';
@@ -33,17 +34,11 @@
 
   /* ── Colours · light mode (default) ────────────────────────── */
 
-  /* Primary — Conciso navy spine */
-  --ui-color-primary: #0a2540;
-  --ui-color-primary-hover: #143659;
-  --ui-color-primary-active: #061a30;
-  --ui-color-primary-light: rgba(10, 37, 64, 0.08);
-
-  /* Accent — workshop affordances (Pieper-organic moss) */
-  --ui-color-accent: #506c36;
-  --ui-color-accent-hover: #3f5728;
-  --ui-color-accent-active: #2e4319;
-  --ui-color-accent-bg: #e8efde;
+  /* Primary — Conciso deep teal */
+  --ui-color-primary: #006470;
+  --ui-color-primary-hover: #004e58;
+  --ui-color-primary-active: #003a42;
+  --ui-color-primary-light: rgba(0, 100, 112, 0.08);
 
   /* Secondary (legacy — kept for components that opt in) */
   --ui-color-secondary: #475569;
@@ -51,38 +46,37 @@
   --ui-color-secondary-active: #1e293b;
 
   /* Semantic */
-  --ui-color-danger: #9b1c1c;
-  --ui-color-danger-hover: #7a1414;
-  --ui-color-danger-active: #5e0f0f;
-  --ui-color-success: #1f6b3e;
-  --ui-color-warning: #985808;
-  --ui-color-info: #0050a0;
+  --ui-color-danger: #b91c1c;
+  --ui-color-danger-hover: #991b1b;
+  --ui-color-danger-active: #7f1d1d;
+  --ui-color-success: #15803d;
+  --ui-color-warning: #b45309;
+  --ui-color-info: #0369a1;
 
   /* Semantic — AA-safe dark-text-on-tinted-bg pairs (Badge / Alert / Toast) */
-  --ui-color-success-bg: #e2f1e6;
-  --ui-color-success-text: #155228;
-  --ui-color-warning-bg: #fbeed4;
-  --ui-color-warning-text: #7a4607;
-  --ui-color-danger-bg: #fbe7e7;
-  --ui-color-danger-text: #7a1414;
-  --ui-color-info-bg: #dde8f6;
-  --ui-color-info-text: #063872;
+  --ui-color-success-bg: #dcfce7;
+  --ui-color-success-text: #166534;
+  --ui-color-warning-bg: #fef3c7;
+  --ui-color-warning-text: #854d0e;
+  --ui-color-danger-bg: #fee2e2;
+  --ui-color-danger-text: #991b1b;
+  --ui-color-info-bg: #e0f2fe;
+  --ui-color-info-text: #0c4a6e;
 
-  /* Surfaces — warm bone (projector-friendly) */
-  --ui-color-surface: #f7f5f0;
-  --ui-color-surface-raised: #ffffff;
-  --ui-color-surface-sunken: #ece9e1;
+  /* Surfaces — clean white + cool slate */
+  --ui-color-surface: #ffffff;
+  --ui-color-surface-raised: #f8fafc;
+  --ui-color-surface-sunken: #f1f5f9;
 
   /* Borders — split decorative from functional per WCAG 1.4.11 */
-  --ui-color-border: #d8d3c5;          /* decorative — card on surface */
-  --ui-color-border-hover: #bcb6a4;
-  --ui-color-border-strong: #76716a;   /* functional ≥3:1 — inputs, outline buttons */
+  --ui-color-border: #e2e8f0;          /* decorative */
+  --ui-color-border-hover: #cbd5e1;
+  --ui-color-border-strong: #64748b;   /* functional ≥3:1 */
 
   /* Text */
   --ui-color-text: #0f172a;
-  --ui-color-text-muted: #48556e;
+  --ui-color-text-muted: #475569;
   --ui-color-text-on-primary: #ffffff;
-  --ui-color-text-on-accent: #ffffff;
   --ui-color-text-on-secondary: #ffffff;
   --ui-color-text-on-danger: #ffffff;
   --ui-color-text-on-success: #ffffff;
@@ -98,11 +92,11 @@
   --ui-color-brand-light-green: #a0fa50;
   --ui-opacity-disabled: 0.5;
 
-  /* Border radius */
-  --ui-radius-sm: 0.375rem;
-  --ui-radius-md: 0.5rem;
-  --ui-radius-lg: 0.75rem;
-  --ui-radius-xl: 1rem;
+  /* Border radius — bumped for modern feel */
+  --ui-radius-sm: 0.5rem;   /* was 0.375rem */
+  --ui-radius-md: 0.625rem; /* was 0.5rem   */
+  --ui-radius-lg: 0.875rem; /* was 0.75rem  */
+  --ui-radius-xl: 1.25rem;  /* was 1rem     */
   --ui-radius-full: 9999px;
 
   /* Spacing */
@@ -117,16 +111,16 @@
   --ui-spacing-12: 3rem;
   --ui-spacing-16: 4rem;
 
-  /* Shadows — dual-layer (ambient + key light); softened for warm bone surface */
-  --ui-shadow-xs: 0 1px 2px 0 rgba(10, 37, 64, 0.04);
-  --ui-shadow-sm: 0 1px 3px 0 rgba(10, 37, 64, 0.06),
-    0 1px 2px -1px rgba(10, 37, 64, 0.06);
-  --ui-shadow-md: 0 4px 6px -1px rgba(10, 37, 64, 0.07),
-    0 2px 4px -2px rgba(10, 37, 64, 0.05);
-  --ui-shadow-lg: 0 10px 15px -3px rgba(10, 37, 64, 0.08),
-    0 4px 6px -4px rgba(10, 37, 64, 0.04);
-  --ui-shadow-xl: 0 20px 25px -5px rgba(10, 37, 64, 0.08),
-    0 8px 10px -6px rgba(10, 37, 64, 0.04);
+  /* Shadows — slate-tinted dual-layer (ambient + key light) */
+  --ui-shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --ui-shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.08),
+    0 1px 2px -1px rgba(15, 23, 42, 0.06);
+  --ui-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08),
+    0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --ui-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08),
+    0 4px 6px -4px rgba(15, 23, 42, 0.04);
+  --ui-shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.10),
+    0 8px 10px -6px rgba(15, 23, 42, 0.04);
 
   /* Motion */
   --ui-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -147,12 +141,12 @@
 
   /* Form controls */
   --ui-color-input-bg: var(--ui-color-surface-sunken);
-  --ui-color-input-bg-focus: var(--ui-color-surface-raised);
+  --ui-color-input-bg-focus: var(--ui-color-surface);
   --ui-color-input-border: var(--ui-color-border-strong);
-  --ui-color-input-border-hover: #5d5950;
+  --ui-color-input-border-hover: #475569;
   --ui-color-input-border-focus: var(--ui-color-primary);
   --ui-color-input-border-invalid: var(--ui-color-danger);
-  --ui-color-placeholder: #6a6358;
+  --ui-color-placeholder: #64748b;
   --ui-color-error-text: var(--ui-color-danger-text);
 
   /* Z-index scale */
@@ -167,186 +161,168 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --ui-color-primary: #5fa7ff;
-    --ui-color-primary-hover: #82bbff;
-    --ui-color-primary-active: #a6cffe;
-    --ui-color-primary-light: rgba(95, 167, 255, 0.15);
-
-    --ui-color-accent: #a3c87a;
-    --ui-color-accent-hover: #b3d088;
-    --ui-color-accent-active: #c3d896;
-    --ui-color-accent-bg: #1c2618;
+    --ui-color-primary: #34d8d8;
+    --ui-color-primary-hover: #5ee5e5;
+    --ui-color-primary-active: #87efef;
+    --ui-color-primary-light: rgba(52, 216, 216, 0.15);
 
     --ui-color-secondary: #94a3b8;
     --ui-color-secondary-hover: #cbd5e1;
     --ui-color-secondary-active: #e2e8f0;
 
-    --ui-color-danger: #f87a7a;
+    --ui-color-danger: #f87171;
     --ui-color-danger-hover: #fca5a5;
     --ui-color-danger-active: #fecaca;
-    --ui-color-success: #7ed99e;
-    --ui-color-warning: #f5c161;
-    --ui-color-info: #7ab7ff;
+    --ui-color-success: #4ade80;
+    --ui-color-warning: #fbbf24;
+    --ui-color-info: #38bdf8;
 
     --ui-color-success-bg: #0f3320;
-    --ui-color-success-text: #9ee9b8;
+    --ui-color-success-text: #86efac;
     --ui-color-warning-bg: #3a2510;
-    --ui-color-warning-text: #f7d28b;
+    --ui-color-warning-text: #fde68a;
     --ui-color-danger-bg: #3a1414;
     --ui-color-danger-text: #fca5a5;
     --ui-color-info-bg: #102338;
-    --ui-color-info-text: #a3cdff;
+    --ui-color-info-text: #bae6fd;
 
-    --ui-color-surface: #0c1620;
-    --ui-color-surface-raised: #13202c;
-    --ui-color-surface-sunken: #08111a;
+    --ui-color-surface: #0a1116;
+    --ui-color-surface-raised: #131c24;
+    --ui-color-surface-sunken: #060c10;
 
-    --ui-color-border: #2a3a4d;
-    --ui-color-border-hover: #3a4a60;
-    --ui-color-border-strong: #5d6f8c;
+    --ui-color-border: #1e293b;
+    --ui-color-border-hover: #334155;
+    --ui-color-border-strong: #64748b;
 
     --ui-color-text: #f1f5f9;
-    --ui-color-text-muted: #a4b4ce;
-    --ui-color-text-on-primary: #0a2540;
-    --ui-color-text-on-accent: #0c1620;
+    --ui-color-text-muted: #94a3b8;
+    --ui-color-text-on-primary: #0a1116;
     --ui-color-text-on-secondary: #0f172a;
-    --ui-color-text-on-danger: #0c1620;
+    --ui-color-text-on-danger: #0a1116;
 
     --ui-opacity-disabled: 0.65;
 
     --ui-color-input-border: var(--ui-color-border-strong);
-    --ui-color-input-border-hover: #768aab;
-    --ui-color-placeholder: #768aab;
+    --ui-color-input-border-hover: #94a3b8;
+    --ui-color-placeholder: #94a3b8;
 
-    --ui-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-    --ui-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3),
+    --ui-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --ui-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4),
       0 1px 2px -1px rgba(0, 0, 0, 0.3);
-    --ui-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.35),
-      0 2px 4px -2px rgba(0, 0, 0, 0.25);
-    --ui-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4),
-      0 4px 6px -4px rgba(0, 0, 0, 0.2);
-    --ui-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4),
-      0 8px 10px -6px rgba(0, 0, 0, 0.2);
+    --ui-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.45),
+      0 2px 4px -2px rgba(0, 0, 0, 0.3);
+    --ui-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5),
+      0 4px 6px -4px rgba(0, 0, 0, 0.25);
+    --ui-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
+      0 8px 10px -6px rgba(0, 0, 0, 0.25);
   }
 }
 
 [data-theme="dark"] {
-  --ui-color-primary: #5fa7ff;
-  --ui-color-primary-hover: #82bbff;
-  --ui-color-primary-active: #a6cffe;
-  --ui-color-primary-light: rgba(95, 167, 255, 0.15);
-
-  --ui-color-accent: #a3c87a;
-  --ui-color-accent-hover: #b3d088;
-  --ui-color-accent-active: #c3d896;
-  --ui-color-accent-bg: #1c2618;
+  --ui-color-primary: #34d8d8;
+  --ui-color-primary-hover: #5ee5e5;
+  --ui-color-primary-active: #87efef;
+  --ui-color-primary-light: rgba(52, 216, 216, 0.15);
 
   --ui-color-secondary: #94a3b8;
   --ui-color-secondary-hover: #cbd5e1;
   --ui-color-secondary-active: #e2e8f0;
 
-  --ui-color-danger: #f87a7a;
+  --ui-color-danger: #f87171;
   --ui-color-danger-hover: #fca5a5;
   --ui-color-danger-active: #fecaca;
-  --ui-color-success: #7ed99e;
-  --ui-color-warning: #f5c161;
-  --ui-color-info: #7ab7ff;
+  --ui-color-success: #4ade80;
+  --ui-color-warning: #fbbf24;
+  --ui-color-info: #38bdf8;
 
   --ui-color-success-bg: #0f3320;
-  --ui-color-success-text: #9ee9b8;
+  --ui-color-success-text: #86efac;
   --ui-color-warning-bg: #3a2510;
-  --ui-color-warning-text: #f7d28b;
+  --ui-color-warning-text: #fde68a;
   --ui-color-danger-bg: #3a1414;
   --ui-color-danger-text: #fca5a5;
   --ui-color-info-bg: #102338;
-  --ui-color-info-text: #a3cdff;
+  --ui-color-info-text: #bae6fd;
 
-  --ui-color-surface: #0c1620;
-  --ui-color-surface-raised: #13202c;
-  --ui-color-surface-sunken: #08111a;
+  --ui-color-surface: #0a1116;
+  --ui-color-surface-raised: #131c24;
+  --ui-color-surface-sunken: #060c10;
 
-  --ui-color-border: #2a3a4d;
-  --ui-color-border-hover: #3a4a60;
-  --ui-color-border-strong: #5d6f8c;
+  --ui-color-border: #1e293b;
+  --ui-color-border-hover: #334155;
+  --ui-color-border-strong: #64748b;
 
   --ui-color-text: #f1f5f9;
-  --ui-color-text-muted: #a4b4ce;
-  --ui-color-text-on-primary: #0a2540;
-  --ui-color-text-on-accent: #0c1620;
+  --ui-color-text-muted: #94a3b8;
+  --ui-color-text-on-primary: #0a1116;
   --ui-color-text-on-secondary: #0f172a;
-  --ui-color-text-on-danger: #0c1620;
+  --ui-color-text-on-danger: #0a1116;
 
   --ui-opacity-disabled: 0.65;
 
   --ui-color-input-border: var(--ui-color-border-strong);
-  --ui-color-input-border-hover: #768aab;
-  --ui-color-placeholder: #768aab;
+  --ui-color-input-border-hover: #94a3b8;
+  --ui-color-placeholder: #94a3b8;
 
-  --ui-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-  --ui-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3),
+  --ui-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --ui-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4),
     0 1px 2px -1px rgba(0, 0, 0, 0.3);
-  --ui-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.35),
-    0 2px 4px -2px rgba(0, 0, 0, 0.25);
-  --ui-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4),
-    0 4px 6px -4px rgba(0, 0, 0, 0.2);
-  --ui-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4),
-    0 8px 10px -6px rgba(0, 0, 0, 0.2);
+  --ui-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.45),
+    0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --ui-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5),
+    0 4px 6px -4px rgba(0, 0, 0, 0.25);
+  --ui-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
+    0 8px 10px -6px rgba(0, 0, 0, 0.25);
 }
 
 /* Explicit light theme — declared last so it wins over prefers-color-scheme: dark */
 [data-theme="light"] {
-  --ui-color-primary: #0a2540;
-  --ui-color-primary-hover: #143659;
-  --ui-color-primary-active: #061a30;
-  --ui-color-primary-light: rgba(10, 37, 64, 0.08);
-
-  --ui-color-accent: #506c36;
-  --ui-color-accent-hover: #3f5728;
-  --ui-color-accent-active: #2e4319;
-  --ui-color-accent-bg: #e8efde;
+  --ui-color-primary: #006470;
+  --ui-color-primary-hover: #004e58;
+  --ui-color-primary-active: #003a42;
+  --ui-color-primary-light: rgba(0, 100, 112, 0.08);
 
   --ui-color-secondary: #475569;
   --ui-color-secondary-hover: #334155;
   --ui-color-secondary-active: #1e293b;
 
-  --ui-color-danger: #9b1c1c;
-  --ui-color-danger-hover: #7a1414;
-  --ui-color-danger-active: #5e0f0f;
-  --ui-color-success: #1f6b3e;
-  --ui-color-warning: #985808;
-  --ui-color-info: #0050a0;
+  --ui-color-danger: #b91c1c;
+  --ui-color-danger-hover: #991b1b;
+  --ui-color-danger-active: #7f1d1d;
+  --ui-color-success: #15803d;
+  --ui-color-warning: #b45309;
+  --ui-color-info: #0369a1;
 
-  --ui-color-success-bg: #e2f1e6;
-  --ui-color-success-text: #155228;
-  --ui-color-warning-bg: #fbeed4;
-  --ui-color-warning-text: #7a4607;
-  --ui-color-danger-bg: #fbe7e7;
-  --ui-color-danger-text: #7a1414;
-  --ui-color-info-bg: #dde8f6;
-  --ui-color-info-text: #063872;
+  --ui-color-success-bg: #dcfce7;
+  --ui-color-success-text: #166534;
+  --ui-color-warning-bg: #fef3c7;
+  --ui-color-warning-text: #854d0e;
+  --ui-color-danger-bg: #fee2e2;
+  --ui-color-danger-text: #991b1b;
+  --ui-color-info-bg: #e0f2fe;
+  --ui-color-info-text: #0c4a6e;
 
-  --ui-color-surface: #f7f5f0;
-  --ui-color-surface-raised: #ffffff;
-  --ui-color-surface-sunken: #ece9e1;
+  --ui-color-surface: #ffffff;
+  --ui-color-surface-raised: #f8fafc;
+  --ui-color-surface-sunken: #f1f5f9;
 
-  --ui-color-border: #d8d3c5;
-  --ui-color-border-hover: #bcb6a4;
-  --ui-color-border-strong: #76716a;
+  --ui-color-border: #e2e8f0;
+  --ui-color-border-hover: #cbd5e1;
+  --ui-color-border-strong: #64748b;
 
   --ui-color-text: #0f172a;
-  --ui-color-text-muted: #48556e;
+  --ui-color-text-muted: #475569;
   --ui-color-text-on-primary: #ffffff;
-  --ui-color-text-on-accent: #ffffff;
 
   --ui-color-input-border: var(--ui-color-border-strong);
-  --ui-color-input-border-hover: #5d5950;
-  --ui-color-placeholder: #6a6358;
+  --ui-color-input-border-hover: #475569;
+  --ui-color-placeholder: #64748b;
 
-  --ui-shadow-xs: 0 1px 2px 0 rgba(10, 37, 64, 0.04);
-  --ui-shadow-sm: 0 1px 3px 0 rgba(10, 37, 64, 0.06), 0 1px 2px -1px rgba(10, 37, 64, 0.06);
-  --ui-shadow-md: 0 4px 6px -1px rgba(10, 37, 64, 0.07), 0 2px 4px -2px rgba(10, 37, 64, 0.05);
-  --ui-shadow-lg: 0 10px 15px -3px rgba(10, 37, 64, 0.08), 0 4px 6px -4px rgba(10, 37, 64, 0.04);
-  --ui-shadow-xl: 0 20px 25px -5px rgba(10, 37, 64, 0.08), 0 8px 10px -6px rgba(10, 37, 64, 0.04);
+  --ui-shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --ui-shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.08), 0 1px 2px -1px rgba(15, 23, 42, 0.06);
+  --ui-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --ui-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+  --ui-shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.10), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
 }
 
 @media (prefers-reduced-motion: reduce) {
