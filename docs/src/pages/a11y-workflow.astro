@@ -1,0 +1,520 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Code } from 'astro-expressive-code/components';
+import DiagramFigure from '../components/DiagramFigure.astro';
+import HelpFooter from '../components/HelpFooter.astro';
+import Icon from '../components/Icon.astro';
+
+const AXE_INJECT = `// Inject axe-core into the Storybook story iframe and run it,
+// scoped to the story root so the Storybook chrome doesn't pollute results.
+const iframe = document.querySelector('#storybook-preview-iframe');
+const doc = iframe.contentDocument;
+
+await new Promise((res, rej) => {
+  if (iframe.contentWindow.axe) return res();
+  const s = doc.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/axe-core@4.10.0/axe.min.js';
+  s.onload = res;
+  doc.head.appendChild(s);
+});
+
+const result = await iframe.contentWindow.axe.run(
+  doc.querySelector('#storybook-root'),
+  { resultTypes: ['violations'] }
+);
+console.log(result.violations.map(v => v.id));
+// → ["aria-progressbar-name", "button-name", ...]`;
+
+const FIGMA_AUDIT = `// figma-console MCP — one audit per component-set.
+// Returns scorecard: variant coverage, focus indicator,
+// non-color differentiation (WCAG 1.4.1), target size,
+// annotations, color-blind simulation.
+figma_audit_component_accessibility({ nodeId: "129:20" })
+
+// → {
+//     overallScore: 82,
+//     scores: { variantCoverage: 86, colorDifferentiation: 0, ... },
+//     recommendations: [
+//       { priority: "high", area: "color",
+//         message: "Add non-color indicators to 2 state variants (WCAG 1.4.1)" },
+//       { priority: "medium", area: "states",
+//         message: "Consider adding a 'disabled' variant" }
+//     ]
+//   }`;
+
+const CLAUDE_CHROME_LAUNCH = `# Launch Claude Code with the Chrome MCP attached.
+# This connects the running chat to a controlled Chrome instance so
+# the agent can navigate, run JS in the page, and read the DOM.
+
+claude --chrome
+
+# Once attached, the agent can call:
+#   mcp__claude-in-chrome__navigate
+#   mcp__claude-in-chrome__javascript_tool
+#   mcp__claude-in-chrome__read_console_messages
+# … which is what powers the axe injection in Lane 1 above.`;
+
+const SPEC_AUDIT = `// Static spec-side audit — read libs/spec/src/index.ts plus one
+// implementation per component. Look for components where the
+// public API doesn't enforce a11y by default.
+//
+// Bad: optional aria-label on an icon-only-capable button.
+// Good: discriminated union — children OR aria-label required.
+
+export type LlmButtonProps =
+  Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'aria-label'>
+  & LlmButtonSpec
+  & (
+    | { children: ReactNode;       'aria-label'?: string }
+    | { children?: undefined;      'aria-label': string  }
+  );`;
+---
+
+<BaseLayout
+  title="Accessibility Audit Workflow"
+  description="A three-source a11y audit loop using axe-core, the Figma component a11y audit, and a static spec read — coordinated by Claude through MCPs."
+  currentPath="/a11y-workflow"
+>
+  <div class="docs-inline-page">
+
+    <div style="margin-bottom: 1.25rem">
+      <div class="page-eyebrow">
+        <span class="page-eyebrow-kind page-eyebrow-kind--howto">How-To</span>
+        <span class="page-eyebrow-time">⏱ ~10 min</span>
+        <span class="page-eyebrow-tag">Workflow · 3 sources</span>
+      </div>
+      <h1 style="font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin: 0 0 0.6rem; background: linear-gradient(135deg, var(--ui-color-primary) 0%, var(--docs-secondary, #89ceff) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text">
+        Accessibility Audit Workflow
+      </h1>
+      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 620px; line-height: 1.65">
+        Each tool catches a different layer of the same problem. Use them
+        together, not in isolation — Figma flags missing variants before
+        any code is written, axe flags real DOM violations after build,
+        the spec audit catches APIs that don't enforce a11y by default.
+      </p>
+    </div>
+
+    <!-- ── Triangulation overview ──────────────────────────────────────── -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">Three sources, three layers</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
+        Any single tool will miss things. Triangulating across all three
+        keeps the gaps small enough to ship.
+      </p>
+
+      <DiagramFigure caption="The three audit lanes overlap on contrast and naming, diverge on what's design-time vs runtime. Use all three.">
+        <svg viewBox="0 0 880 380" role="img" aria-labelledby="tri-title tri-desc" preserveAspectRatio="xMidYMid meet">
+          <title id="tri-title">Three a11y audit lanes — what each catches uniquely</title>
+          <desc id="tri-desc">Three overlapping circles representing axe-core, Figma component a11y audit, and the static spec audit. Their overlaps show which kinds of issues each tool catches uniquely (DOM-time, design-time, API-time) and where they reinforce each other.</desc>
+
+          <!-- Three overlapping circles -->
+          <g style="mix-blend-mode: normal">
+            <circle cx="320" cy="180" r="150" fill="color-mix(in srgb, var(--ui-color-primary) 22%, transparent)" stroke="var(--ui-color-primary)" stroke-width="2"/>
+            <circle cx="560" cy="180" r="150" fill="color-mix(in srgb, var(--docs-secondary, #89ceff) 22%, transparent)" stroke="var(--docs-secondary, #89ceff)" stroke-width="2"/>
+            <circle cx="440" cy="80"  r="150" fill="color-mix(in srgb, var(--docs-tertiary, #a6d644) 22%, transparent)" stroke="var(--docs-tertiary, #a6d644)" stroke-width="2"/>
+          </g>
+
+          <!-- Lane labels -->
+          <g font-family="system-ui" font-weight="800" letter-spacing="0.06em" text-anchor="middle">
+            <text x="200" y="305" font-size="14" style="fill: var(--ui-color-primary)">axe-core</text>
+            <text x="200" y="324" font-size="10" class="diagram-muted">DOM · runtime</text>
+
+            <text x="680" y="305" font-size="14" style="fill: var(--docs-secondary, #89ceff)">Figma a11y audit</text>
+            <text x="680" y="324" font-size="10" class="diagram-muted">design · pre-handoff</text>
+
+            <text x="440" y="20"  font-size="14" style="fill: var(--docs-tertiary, #a6d644)">Spec audit</text>
+            <text x="440" y="38"  font-size="10" class="diagram-muted">API · code-review</text>
+          </g>
+
+          <!-- What each catches uniquely -->
+          <g font-family="system-ui" font-size="10.5" fill="var(--ui-color-text)">
+            <!-- axe-only (left bottom) -->
+            <text x="240" y="220" text-anchor="middle">label missing on render</text>
+            <text x="240" y="236" text-anchor="middle">heading-order in real DOM</text>
+            <text x="240" y="252" text-anchor="middle">scrollable-region focus</text>
+
+            <!-- Figma-only (right bottom) -->
+            <text x="640" y="220" text-anchor="middle">missing variants</text>
+            <text x="640" y="236" text-anchor="middle">target-size &lt; 24×24</text>
+            <text x="640" y="252" text-anchor="middle">color-blind simulation</text>
+
+            <!-- Spec-only (top) -->
+            <text x="440" y="86"  text-anchor="middle">API doesn't enforce</text>
+            <text x="440" y="102" text-anchor="middle">a11y prop missing</text>
+            <text x="440" y="118" text-anchor="middle">discriminated union gaps</text>
+
+            <!-- axe ∩ Figma (lower middle) -->
+            <text x="440" y="220" text-anchor="middle" font-style="italic" class="diagram-muted">contrast on real surfaces</text>
+
+            <!-- spec ∩ axe (left upper) -->
+            <text x="320" y="158" text-anchor="middle" font-size="10" font-style="italic" class="diagram-muted">aria-* presence</text>
+
+            <!-- spec ∩ Figma (right upper) -->
+            <text x="560" y="158" text-anchor="middle" font-size="10" font-style="italic" class="diagram-muted">state coverage</text>
+
+            <!-- All three (center) -->
+            <text x="440" y="195" text-anchor="middle" font-weight="700" style="fill: var(--ui-color-primary)">accessible name</text>
+          </g>
+
+          <!-- Below banner -->
+          <text x="440" y="364" text-anchor="middle" font-size="11" font-style="italic" class="diagram-muted">
+            One tool tells you something is wrong. Three tools tell you what to fix and why.
+          </text>
+        </svg>
+      </DiagramFigure>
+
+      <table class="docs-props-table" style="margin-top: 1.5rem">
+        <thead>
+          <tr>
+            <th>Source</th>
+            <th>Catches</th>
+            <th>Misses</th>
+            <th>When to run</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>axe-core</strong> (browser)</td>
+            <td>Real DOM violations as the component renders — labels, contrast, heading order, ARIA mistakes, keyboard traps</td>
+            <td>Issues that need a specific prop combination you didn't story; design-only problems (missing variants); API-shape gaps</td>
+            <td>After every build · on every Storybook story · on the deployed site</td>
+          </tr>
+          <tr>
+            <td><strong>Figma a11y audit</strong></td>
+            <td>Variant coverage, focus indicator quality, non-color differentiation (WCAG 1.4.1), target size (WCAG 2.5.8), color-blind simulation</td>
+            <td>Anything runtime — keyboard behavior, ARIA wiring, real-content edge cases</td>
+            <td>Before handoff · per component-set · before the design ↔ code parity check</td>
+          </tr>
+          <tr>
+            <td><strong>Spec / impl audit</strong></td>
+            <td>APIs that let consumers ship unlabeled components by accident; specs without required a11y props</td>
+            <td>Anything that depends on rendered output</td>
+            <td>Code review · before stabilising a component API</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── Audit loop ──────────────────────────────────────────────────── -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">The audit loop</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
+        Five steps. Each step feeds the next; the loop closes after a
+        verification re-run. Skip <em>Triangulate</em> at your peril —
+        it's the step where you decide whether what one tool flagged is
+        a real issue or noise.
+      </p>
+
+      <DiagramFigure caption="Triangulate before fixing — three sources rarely all flag the same wording, but the underlying issue usually is the same.">
+        <svg viewBox="0 0 880 220" role="img" aria-labelledby="loop-title loop-desc" preserveAspectRatio="xMidYMid meet">
+          <title id="loop-title">A11y audit loop — five steps</title>
+          <desc id="loop-desc">Five steps arranged left-to-right with arrows: Collect, Triangulate, Prioritize, Fix smallest first, Verify. A dashed return arrow loops from Verify back to Collect to indicate the cycle.</desc>
+
+          <defs>
+            <marker id="loop-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow"/>
+            </marker>
+            <marker id="loop-arrow-back" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--muted-accent"/>
+            </marker>
+          </defs>
+
+          <g font-family="system-ui">
+            <!-- Step circles -->
+            <g>
+              <circle cx="80"  cy="100" r="46" class="diagram-node"/>
+              <text x="80"  y="98"  text-anchor="middle" font-size="11" font-weight="700">Collect</text>
+              <text x="80"  y="115" text-anchor="middle" font-size="9" class="diagram-muted">all 3 sources</text>
+            </g>
+            <g>
+              <circle cx="240" cy="100" r="46" class="diagram-node"/>
+              <text x="240" y="98"  text-anchor="middle" font-size="11" font-weight="700">Triangulate</text>
+              <text x="240" y="115" text-anchor="middle" font-size="9" class="diagram-muted">map to issues</text>
+            </g>
+            <g>
+              <circle cx="400" cy="100" r="46" class="diagram-node"/>
+              <text x="400" y="98"  text-anchor="middle" font-size="11" font-weight="700">Prioritize</text>
+              <text x="400" y="115" text-anchor="middle" font-size="9" class="diagram-muted">WCAG impact</text>
+            </g>
+            <g>
+              <circle cx="560" cy="100" r="48" class="diagram-node diagram-node--accent"/>
+              <text x="560" y="98"  text-anchor="middle" font-size="11" font-weight="700" style="fill: var(--ui-color-primary)">Fix smallest</text>
+              <text x="560" y="115" text-anchor="middle" font-size="9" class="diagram-muted">one PR each</text>
+            </g>
+            <g>
+              <circle cx="720" cy="100" r="46" class="diagram-node"/>
+              <text x="720" y="98"  text-anchor="middle" font-size="11" font-weight="700">Verify</text>
+              <text x="720" y="115" text-anchor="middle" font-size="9" class="diagram-muted">re-run sources</text>
+            </g>
+
+            <!-- Forward arrows -->
+            <line x1="128" y1="100" x2="190" y2="100" class="diagram-connector" marker-end="url(#loop-arrow)"/>
+            <line x1="288" y1="100" x2="350" y2="100" class="diagram-connector" marker-end="url(#loop-arrow)"/>
+            <line x1="448" y1="100" x2="510" y2="100" class="diagram-connector" marker-end="url(#loop-arrow)"/>
+            <line x1="610" y1="100" x2="670" y2="100" class="diagram-connector" marker-end="url(#loop-arrow)"/>
+
+            <!-- Loop-back -->
+            <path d="M 720 148 C 720 195 720 200 600 200 L 200 200 C 80 200 80 195 80 148"
+                  class="diagram-connector diagram-connector--dashed"
+                  marker-end="url(#loop-arrow-back)"/>
+            <text x="400" y="195" text-anchor="middle" font-size="10" class="diagram-muted">re-run on next change</text>
+          </g>
+        </svg>
+      </DiagramFigure>
+    </div>
+
+    <!-- ── Worked example ─────────────────────────────────────────────── -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">Worked example — LlmProgress</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
+        A component all three lanes touched. Figma said it was perfect;
+        axe said it was broken; the spec told us why and where to fix.
+      </p>
+
+      <DiagramFigure caption="Each lane tells a different part of the same story. The fix lands in the spec; all three turn green.">
+        <svg viewBox="0 0 880 280" role="img" aria-labelledby="case-title case-desc" preserveAspectRatio="xMidYMid meet">
+          <title id="case-title">LlmProgress drilldown across the three audit lanes</title>
+          <desc id="case-desc">Four stacked panels showing the LlmProgress audit story. Figma reports 100/100. axe reports aria-progressbar-name violations. The spec audit shows label prop is missing. After the fix, all three lanes are green.</desc>
+
+          <g font-family="system-ui">
+            <!-- Panel 1: Figma -->
+            <rect x="40"  y="40"  width="200" height="180" rx="14" ry="14" class="diagram-node"/>
+            <text x="60"  y="68"  font-size="10" font-weight="800" letter-spacing="0.1em" style="fill: var(--docs-secondary, #89ceff)">FIGMA AUDIT</text>
+            <text x="60"  y="100" font-size="36" font-weight="800" style="fill: var(--ui-color-success, #34d399)">100</text>
+            <text x="60"  y="120" font-size="11" class="diagram-muted">overall score</text>
+            <text x="60"  y="148" font-size="10" class="diagram-muted">✓ variant coverage</text>
+            <text x="60"  y="166" font-size="10" class="diagram-muted">✓ color blind</text>
+            <text x="60"  y="184" font-size="10" class="diagram-muted">✓ annotations</text>
+            <text x="60"  y="208" font-size="10" font-style="italic" class="diagram-muted">"perfect"</text>
+
+            <!-- Panel 2: axe -->
+            <rect x="260" y="40"  width="200" height="180" rx="14" ry="14" class="diagram-node"/>
+            <text x="280" y="68"  font-size="10" font-weight="800" letter-spacing="0.1em" style="fill: var(--ui-color-primary)">AXE-CORE</text>
+            <text x="280" y="100" font-size="36" font-weight="800" style="fill: var(--ui-color-danger, #ef4444)">3</text>
+            <text x="280" y="120" font-size="11" class="diagram-muted">violations · serious</text>
+            <text x="280" y="148" font-size="10" class="diagram-mono diagram-muted">aria-progressbar-name</text>
+            <text x="280" y="174" font-size="10" class="diagram-muted">3 progress bars on</text>
+            <text x="280" y="190" font-size="10" class="diagram-muted">/patterns dashboard</text>
+            <text x="280" y="208" font-size="10" font-style="italic" class="diagram-muted">"missing label"</text>
+
+            <!-- Panel 3: Spec -->
+            <rect x="480" y="40"  width="200" height="180" rx="14" ry="14" class="diagram-node"/>
+            <text x="500" y="68"  font-size="10" font-weight="800" letter-spacing="0.1em" style="fill: var(--docs-tertiary, #a6d644)">SPEC AUDIT</text>
+            <text x="500" y="100" font-size="36" font-weight="800" style="fill: var(--ui-color-warning, #f59e0b)">!</text>
+            <text x="500" y="120" font-size="11" class="diagram-muted">API gap</text>
+            <text x="500" y="148" font-size="10" class="diagram-mono diagram-muted">LlmProgressSpec</text>
+            <text x="500" y="166" font-size="10" class="diagram-muted">has no label prop</text>
+            <text x="500" y="184" font-size="10" class="diagram-muted">consumers can't pass</text>
+            <text x="500" y="208" font-size="10" font-style="italic" class="diagram-muted">"the why"</text>
+
+            <!-- Panel 4: Fix -->
+            <rect x="700" y="40"  width="160" height="180" rx="14" ry="14" class="diagram-node diagram-node--accent"/>
+            <text x="720" y="68"  font-size="10" font-weight="800" letter-spacing="0.1em" style="fill: var(--ui-color-primary)">FIX</text>
+            <text x="720" y="100" font-size="36" font-weight="800" style="fill: var(--ui-color-success, #34d399)">✓</text>
+            <text x="720" y="120" font-size="11" class="diagram-muted">all green</text>
+            <text x="720" y="148" font-size="10" class="diagram-mono diagram-muted">label?: string</text>
+            <text x="720" y="166" font-size="10" class="diagram-muted">spec + 3 impls</text>
+            <text x="720" y="184" font-size="10" class="diagram-muted">36 tests pass</text>
+            <text x="720" y="208" font-size="10" font-style="italic" style="fill: var(--ui-color-primary)">1 prop, 1 day</text>
+
+            <!-- Connecting arrows between panels -->
+            <line x1="240" y1="130" x2="260" y2="130" class="diagram-connector" stroke-dasharray="3,3"/>
+            <line x1="460" y1="130" x2="480" y2="130" class="diagram-connector" stroke-dasharray="3,3"/>
+            <line x1="680" y1="130" x2="700" y2="130" class="diagram-connector"/>
+
+            <!-- Footer -->
+            <text x="450" y="260" text-anchor="middle" font-size="11" font-style="italic" class="diagram-muted">
+              The Figma score wasn't wrong — it can't see the runtime DOM. axe wasn't whining — the API really did let us miss the label.
+            </text>
+          </g>
+        </svg>
+      </DiagramFigure>
+    </div>
+
+    <!-- ── MCP integration ─────────────────────────────────────────────── -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">How the LLM coordinates the loop</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
+        Three MCPs cover the three audit lanes. Claude Code orchestrates
+        — runs the audits, parses the results, makes the fix, re-runs
+        for verification, all in one chat. No manual tool-switching.
+      </p>
+
+      <DiagramFigure caption="One chat, three MCP servers, three audit lanes. The LLM decides which tool to call based on the question.">
+        <svg viewBox="0 0 880 320" role="img" aria-labelledby="mcp-title mcp-desc" preserveAspectRatio="xMidYMid meet">
+          <title id="mcp-title">MCP-orchestrated a11y audit</title>
+          <desc id="mcp-desc">Claude Code at the center calls three MCP servers — Chrome (for axe-core), figma-console (for the Figma a11y audit), and the local repo via Read tool (for the spec audit). Each connects to a separate audit lane.</desc>
+
+          <defs>
+            <marker id="mcp-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--accent"/>
+            </marker>
+          </defs>
+
+          <g font-family="system-ui">
+            <!-- Center: Claude Code -->
+            <rect x="340" y="120" width="200" height="80" rx="12" ry="12" class="diagram-node diagram-node--accent"/>
+            <text x="440" y="150" text-anchor="middle" font-size="14" font-weight="700" style="fill: var(--ui-color-primary)">Claude Code</text>
+            <text x="440" y="170" text-anchor="middle" font-size="10" class="diagram-muted">orchestrates the loop</text>
+            <text x="440" y="186" text-anchor="middle" font-size="10" class="diagram-muted">parses, prioritizes, fixes</text>
+
+            <!-- Left: Chrome MCP -->
+            <rect x="40"  y="40"  width="220" height="80" rx="12" ry="12" class="diagram-node"/>
+            <text x="150" y="68"  text-anchor="middle" font-size="13" font-weight="700">Chrome MCP</text>
+            <text x="150" y="86"  text-anchor="middle" font-size="10" class="diagram-mono diagram-muted">javascript_tool · navigate</text>
+            <text x="150" y="102" text-anchor="middle" font-size="10" class="diagram-muted">injects axe-core, runs in-page</text>
+
+            <!-- Top right: Figma MCP -->
+            <rect x="620" y="40"  width="220" height="80" rx="12" ry="12" class="diagram-node"/>
+            <text x="730" y="68"  text-anchor="middle" font-size="13" font-weight="700">figma-console MCP</text>
+            <text x="730" y="86"  text-anchor="middle" font-size="10" class="diagram-mono diagram-muted">audit_component_accessibility</text>
+            <text x="730" y="102" text-anchor="middle" font-size="10" class="diagram-muted">scorecard per component-set</text>
+
+            <!-- Bottom: Repo (Read tool) -->
+            <rect x="330" y="240" width="220" height="60" rx="12" ry="12" class="diagram-node"/>
+            <text x="440" y="266" text-anchor="middle" font-size="13" font-weight="700">Repo · Read tool</text>
+            <text x="440" y="282" text-anchor="middle" font-size="10" class="diagram-muted">libs/spec/ · libs/&lt;fw&gt;/lib/&lt;component&gt;/</text>
+
+            <!-- Connectors (Claude → MCP) -->
+            <line x1="340" y1="160" x2="260" y2="100" class="diagram-connector diagram-connector--accent" marker-end="url(#mcp-arr)"/>
+            <line x1="540" y1="160" x2="620" y2="100" class="diagram-connector diagram-connector--accent" marker-end="url(#mcp-arr)"/>
+            <line x1="440" y1="200" x2="440" y2="240" class="diagram-connector diagram-connector--accent" marker-end="url(#mcp-arr)"/>
+
+            <!-- Lane labels -->
+            <text x="140" y="20"  text-anchor="middle" font-size="10" font-weight="800" letter-spacing="0.06em" style="fill: var(--ui-color-primary)">DOM-time</text>
+            <text x="730" y="20"  text-anchor="middle" font-size="10" font-weight="800" letter-spacing="0.06em" style="fill: var(--docs-secondary, #89ceff)">design-time</text>
+            <text x="440" y="316" text-anchor="middle" font-size="10" font-weight="800" letter-spacing="0.06em" style="fill: var(--docs-tertiary, #a6d644)">API-time</text>
+          </g>
+        </svg>
+      </DiagramFigure>
+    </div>
+
+    <!-- ── Code samples ─────────────────────────────────────────────── -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">The three calls</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
+        What each lane looks like in practice — copy these into a Claude
+        Code session to start your own audit loop.
+      </p>
+
+      <h3 class="docs-h3 docs-h3--spaced">Setup — launch Claude Code with Chrome attached</h3>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 0.75rem; font-size: 0.85rem">
+        Lane 1 needs Claude to <em>drive</em> a real browser. The
+        <code>--chrome</code> flag attaches a controlled Chrome
+        instance to the chat so the agent can navigate, inject
+        scripts, and read the DOM. One launch covers all subsequent
+        axe runs in the session.
+      </p>
+      <Code code={CLAUDE_CHROME_LAUNCH} lang="shell" title="claude --chrome (one-time per session)" />
+
+      <h3 class="docs-h3 docs-h3--spaced">Lane 1 — axe-core in a Storybook iframe</h3>
+      <Code code={AXE_INJECT} lang="js" title="run axe scoped to one story" />
+
+      <h3 class="docs-h3 docs-h3--spaced">Lane 2 — figma-console MCP</h3>
+      <Code code={FIGMA_AUDIT} lang="js" title="figma_audit_component_accessibility" />
+
+      <h3 class="docs-h3 docs-h3--spaced">Lane 3 — spec / impl audit</h3>
+      <Code code={SPEC_AUDIT} lang="ts" title="discriminated union for icon-only" />
+    </div>
+
+    <!-- ── Real numbers ────────────────────────────────────────────── -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">From a real audit cycle (2026-04-26)</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
+        The numbers from the run that produced this page. Snapshotted in
+        <code>tasks/a11y-audit-2026-04-26.md</code>.
+      </p>
+
+      <div class="docs-stats-ribbon" style="grid-template-columns: repeat(4, 1fr)">
+        <div class="docs-stat-item">
+          <span class="docs-stat-num" style="font-size: 1.8rem">28</span>
+          <span class="docs-stat-lbl">component-sets audited</span>
+        </div>
+        <div class="docs-stat-item">
+          <span class="docs-stat-num" style="font-size: 1.8rem">94</span>
+          <span class="docs-stat-lbl">median Figma score</span>
+        </div>
+        <div class="docs-stat-item">
+          <span class="docs-stat-num" style="font-size: 1.8rem">8</span>
+          <span class="docs-stat-lbl">P-critical findings</span>
+        </div>
+        <div class="docs-stat-item">
+          <span class="docs-stat-num" style="font-size: 1.8rem">4</span>
+          <span class="docs-stat-lbl">code-side fixes (1 day)</span>
+        </div>
+      </div>
+
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-top: 1.25rem; font-size: 0.85rem">
+        The eight P-critical findings split cleanly across the three
+        lanes: four were Figma-only (focus indicator contrast,
+        target-size, missing variants), three were axe-only
+        (<code>aria-progressbar-name</code>, <code>button-name</code>,
+        <code>scrollable-region-focusable</code>), and one was
+        spec-driven (icon-only buttons could ship unlabeled). No two
+        lanes flagged the same node — but together they painted a
+        complete picture.
+      </p>
+    </div>
+
+    <!-- ── When to run which ──────────────────────────────────────── -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">When to run which</h2>
+      <table class="docs-props-table">
+        <thead>
+          <tr>
+            <th>Phase</th>
+            <th>Source</th>
+            <th>Why now</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Component design</strong> (Figma)</td>
+            <td>Figma a11y audit</td>
+            <td>Catch missing variants and tap-target issues <em>before</em> any code is written. Cheapest fix point.</td>
+          </tr>
+          <tr>
+            <td><strong>Spec change</strong> (add/edit a11y prop)</td>
+            <td>Spec audit + types compile</td>
+            <td>Make sure the API enforces a11y by default, not by consumer discipline. Catch missing discriminated unions.</td>
+          </tr>
+          <tr>
+            <td><strong>Story added</strong> (Storybook)</td>
+            <td>axe on the story root</td>
+            <td>Verify the rendered DOM is correct in this exact prop combination. Stories are your test surface.</td>
+          </tr>
+          <tr>
+            <td><strong>PR check</strong></td>
+            <td>axe on changed components only</td>
+            <td>Fast regression gate. The Figma + spec lanes are slower; reserve them for component-level changes.</td>
+          </tr>
+          <tr>
+            <td><strong>Release</strong></td>
+            <td>All three, full sweep</td>
+            <td>One snapshot per release captures the baseline so the next cycle can diff against it.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <HelpFooter page="a11y-workflow" />
+
+    <!-- Bottom nav -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 2.5rem">
+      {([
+        { to: '/accessibility',  label: 'Stance',  title: 'Accessibility', icon: 'accessibility_new' },
+        { to: '/troubleshooting', label: 'Stuck?', title: 'Troubleshooting', icon: 'help' },
+        { to: '/mcp',            label: 'Tools',   title: 'MCP Playground', icon: 'cable' },
+      ] as const).map(({ to, label, title, icon }) => (
+        <a href={to} class="bottom-nav-card">
+          <span class="bottom-nav-icon"><Icon name={icon} /></span>
+          <div>
+            <div class="bottom-nav-label">{label}</div>
+            <div class="bottom-nav-title">{title}</div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+  </div>
+</BaseLayout>
