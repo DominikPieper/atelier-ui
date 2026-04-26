@@ -1,3 +1,14 @@
+## 0.0.36 (2026-04-26)
+
+### 🩹 Fixes
+
+- **angular:** drop dead `?? ''` and stale eslint-disable directives ([d00545b](https://github.com/DominikPieper/atelier-ui/commit/d00545b))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.35 (2026-04-26)
 
 ### 🚀 Features
