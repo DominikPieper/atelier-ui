@@ -33,6 +33,12 @@ type RecentA11y = {
 
 const RECENT_A11Y: RecentA11y[] = [
   {
+    release: '2026-04-26 audit',
+    title: 'Three-source audit cycle (axe + Figma + spec)',
+    detail:
+      'Triangulated audit across axe-core (DOM-time), figma_audit_component_accessibility (design-time), and a static spec read (API-time). 28 component-sets reviewed; 8 P-critical findings landed across 4 phases. Headlines: LlmProgress gained a label prop, LlmAccordionItem gained headingLevel, LlmButton gained a discriminated-union aria-label requirement, LlmTable wrapper got tabindex=0 + role=region, --ui-color-text-muted bumped to #4f5f7c (5.07-5.30:1, clearing protanopia AA), LlmButton danger picked up a 1px darker border for non-color differentiation, and Figma component-a11y median lifted from 94 to 100 (22 of 28 sets now perfect).',
+  },
+  {
     release: 'v0.0.21',
     title: 'Invalid-state glyph on Input and Textarea (WCAG 1.4.1)',
     detail:

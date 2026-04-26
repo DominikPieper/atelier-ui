@@ -81,7 +81,11 @@
 [data-theme='light'] {
   --docs-glass-bg: rgba(255, 255, 255, 0.94);
   --docs-topbar-border: #e2e8f0;
-  --docs-secondary: #6366f1;
+  /* WCAG AA — bumped from indigo-500 (#6366f1, 4.26:1 on white,
+   * fails AA for small text) to indigo-700 (#4338ca, 7.1:1).
+   * Mirrors the pattern-tag fix from b5a3412 — same root cause:
+   * indigo-500 on light surface lands just below 4.5:1 in light mode. */
+  --docs-secondary: #4338ca;
   --docs-hero-gradient-start: #007a7a;
-  --docs-hero-gradient-end: #6366f1;
+  --docs-hero-gradient-end: #4338ca;
 }

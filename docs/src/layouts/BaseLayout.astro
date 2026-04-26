@@ -519,13 +519,20 @@ const breadcrumbSchema = {
         });
       }
 
-      // axe-core flags scrollable <pre> blocks (from astro-expressive-code)
-      // as not keyboard-focusable. Add tabindex=0 so keyboard users can
-      // scroll horizontally through long code lines. WCAG 2.1.1.
-      Array.prototype.forEach.call(
-        document.querySelectorAll('.expressive-code pre, pre.preflight-mock-body'),
-        function(pre) { if (!pre.hasAttribute('tabindex')) pre.setAttribute('tabindex', '0'); }
-      );
+      // axe-core flags scrollable <pre> blocks as not keyboard-focusable.
+      // Add tabindex=0 so keyboard users can scroll horizontally through long
+      // code lines. WCAG 2.1.1. Catches astro-expressive-code, the preflight
+      // mockup, and any inline-styled <pre overflow:auto> in React islands
+      // (e.g. McpExplorer renders pre blocks for tool responses).
+      Array.prototype.forEach.call(document.querySelectorAll('pre'), function(pre) {
+        if (pre.hasAttribute('tabindex')) return;
+        var overflow = (pre.style.overflow || pre.style.overflowX || '') + ' '
+          + (getComputedStyle(pre).overflow || '') + ' '
+          + (getComputedStyle(pre).overflowX || '');
+        if (overflow.indexOf('auto') !== -1 || overflow.indexOf('scroll') !== -1) {
+          pre.setAttribute('tabindex', '0');
+        }
+      });
 
       // TOC active state via IntersectionObserver
       var toc = document.querySelector('.docs-toc');
