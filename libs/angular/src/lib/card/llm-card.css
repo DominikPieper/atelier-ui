@@ -1,53 +1,70 @@
-/* ── LlmCard host ──────────────────────────────────────────────────────────── */
-:host(llm-card) {
+.llm-card {
   display: block;
   border-radius: var(--ui-radius-xl);
-  background-color: var(--ui-color-surface);
+  background-color: var(--ui-color-surface-raised);
   overflow: hidden;
 }
 
-:host(llm-card.variant-elevated) {
-  box-shadow: var(--ui-shadow-md);
+/* Modernised variants — single soft shadow on elevated, no shadow on
+ * outlined or flat. Cards rest on the page; they don't float off it. */
+.llm-card.variant-elevated {
+  box-shadow: var(--ui-shadow-sm);
   border: 1px solid var(--ui-color-border);
 }
 
-:host(llm-card.variant-outlined) {
+.llm-card.variant-outlined {
   border: 1px solid var(--ui-color-border);
-  background-color: var(--ui-color-surface);
+  background-color: var(--ui-color-surface-raised);
 }
 
-:host(llm-card.variant-flat) {
+.llm-card.variant-flat {
   background-color: var(--ui-color-surface-sunken);
 }
 
-/* Padding custom property — consumed by sub-component hosts */
-:host(llm-card.padding-none) { --llm-card-padding: 0; }
-:host(llm-card.padding-sm)   { --llm-card-padding: var(--ui-spacing-3); }
-:host(llm-card.padding-md)   { --llm-card-padding: var(--ui-spacing-4); }
-:host(llm-card.padding-lg)   { --llm-card-padding: var(--ui-spacing-6); }
+/* Padding on .llm-card directly affects all slots */
+.llm-card.padding-none .llm-card-header,
+.llm-card.padding-none .llm-card-content,
+.llm-card.padding-none .llm-card-footer {
+  padding: 0;
+}
 
-/* ── Sub-component hosts ───────────────────────────────────────────────────── */
-:host(llm-card-header) {
+.llm-card.padding-sm .llm-card-header,
+.llm-card.padding-sm .llm-card-content,
+.llm-card.padding-sm .llm-card-footer {
+  padding: var(--ui-spacing-4);
+}
+
+.llm-card.padding-md .llm-card-header,
+.llm-card.padding-md .llm-card-content,
+.llm-card.padding-md .llm-card-footer {
+  padding: var(--ui-spacing-6);
+}
+
+.llm-card.padding-lg .llm-card-header,
+.llm-card.padding-lg .llm-card-content,
+.llm-card.padding-lg .llm-card-footer {
+  padding: var(--ui-spacing-8);
+}
+
+/* Sub-component layouts */
+.llm-card-header {
   display: block;
   font-size: var(--ui-font-size-lg);
   font-weight: var(--ui-font-weight-semibold);
   color: var(--ui-color-text);
   border-bottom: 1px solid var(--ui-color-border);
   letter-spacing: var(--ui-letter-spacing-tight);
-  padding: var(--llm-card-padding, var(--ui-spacing-4));
 }
 
-:host(llm-card-content) {
+.llm-card-content {
   display: block;
   color: var(--ui-color-text);
   line-height: var(--ui-line-height-normal);
-  padding: var(--llm-card-padding, var(--ui-spacing-4));
 }
 
-:host(llm-card-footer) {
+.llm-card-footer {
   display: flex;
   align-items: center;
-  gap: var(--ui-spacing-2);
+  gap: var(--ui-spacing-3);
   border-top: 1px solid var(--ui-color-border);
-  padding: var(--llm-card-padding, var(--ui-spacing-4));
 }

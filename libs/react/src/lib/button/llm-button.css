@@ -7,14 +7,14 @@
   border-radius: var(--ui-radius-md);
   font-family: var(--ui-font-family);
   font-size: var(--ui-font-size-md);
-  font-weight: var(--ui-font-weight-medium);
+  font-weight: var(--ui-font-weight-semibold);
   line-height: var(--ui-line-height-tight);
+  letter-spacing: -0.01em;
   cursor: pointer;
   transition: background-color var(--ui-transition-fast),
     border-color var(--ui-transition-fast),
     color var(--ui-transition-fast),
-    box-shadow var(--ui-transition-fast),
-    transform var(--ui-transition-fast);
+    box-shadow var(--ui-transition-fast);
   white-space: nowrap;
   text-decoration: none;
   user-select: none;
@@ -25,105 +25,94 @@
   box-shadow: var(--ui-focus-ring);
 }
 
-/* Variants */
+/* Variants — flat by default; subtle state shifts only */
 .llm-button.variant-primary {
   background-color: var(--ui-color-primary);
   color: var(--ui-color-text-on-primary);
   border-color: var(--ui-color-primary);
-  box-shadow: var(--ui-shadow-xs);
 }
 
 .llm-button.variant-primary:hover:not(.is-disabled) {
   background-color: var(--ui-color-primary-hover);
   border-color: var(--ui-color-primary-hover);
-  box-shadow: var(--ui-shadow-md);
-  transform: translateY(-1px);
 }
 
 .llm-button.variant-primary:active:not(.is-disabled) {
   background-color: var(--ui-color-primary-active);
   border-color: var(--ui-color-primary-active);
-  box-shadow: var(--ui-shadow-xs);
-  transform: scale(0.97);
 }
 
 .llm-button.variant-secondary {
   background-color: var(--ui-color-secondary);
   color: var(--ui-color-text-on-secondary);
   border-color: var(--ui-color-secondary);
-  box-shadow: var(--ui-shadow-xs);
 }
 
 .llm-button.variant-secondary:hover:not(.is-disabled) {
   background-color: var(--ui-color-secondary-hover);
   border-color: var(--ui-color-secondary-hover);
-  box-shadow: var(--ui-shadow-md);
-  transform: translateY(-1px);
 }
 
 .llm-button.variant-secondary:active:not(.is-disabled) {
   background-color: var(--ui-color-secondary-active);
   border-color: var(--ui-color-secondary-active);
-  box-shadow: var(--ui-shadow-xs);
-  transform: scale(0.97);
 }
 
 .llm-button.variant-outline {
-  background-color: transparent;
+  background-color: var(--ui-color-surface-raised);
   color: var(--ui-color-primary);
-  border-color: var(--ui-color-border);
+  border-color: var(--ui-color-border-strong);
 }
 
 .llm-button.variant-outline:hover:not(.is-disabled) {
   background-color: var(--ui-color-surface-sunken);
   border-color: var(--ui-color-primary);
-  transform: translateY(-1px);
 }
 
 .llm-button.variant-outline:active:not(.is-disabled) {
   background-color: var(--ui-color-surface-sunken);
-  border-color: var(--ui-color-primary);
-  transform: scale(0.97);
+  border-color: var(--ui-color-primary-active);
 }
 
-/* Non-color differentiation (WCAG 1.4.1): the danger variant carries
+/* Non-color differentiation (WCAG 1.4.1): danger variant carries
  * a darker inset border so its silhouette is recognizable in greyscale
  * and color-blind simulations, not only by red fill. */
 .llm-button.variant-danger {
   background-color: var(--ui-color-danger);
   color: var(--ui-color-text-on-danger);
   border-color: var(--ui-color-danger);
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18), var(--ui-shadow-xs);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
 }
 
 .llm-button.variant-danger:hover:not(.is-disabled) {
   background-color: var(--ui-color-danger-hover);
   border-color: var(--ui-color-danger-hover);
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18), var(--ui-shadow-md);
-  transform: translateY(-1px);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
 }
 
 .llm-button.variant-danger:active:not(.is-disabled) {
   background-color: var(--ui-color-danger-active);
   border-color: var(--ui-color-danger-active);
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18), var(--ui-shadow-xs);
-  transform: scale(0.97);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
 }
 
-/* Sizes */
+/* Sizes — modern target heights (sm 32px / md 40px / lg 48px) */
 .llm-button.size-sm {
-  padding: var(--ui-spacing-1) var(--ui-spacing-3);
+  padding: 0.375rem 0.875rem;
   font-size: var(--ui-font-size-sm);
+  min-height: 2rem;
 }
 
 .llm-button.size-md {
-  padding: var(--ui-spacing-2) var(--ui-spacing-4);
+  padding: 0.5625rem 1.125rem;
   font-size: var(--ui-font-size-md);
+  min-height: 2.5rem;
 }
 
 .llm-button.size-lg {
-  padding: var(--ui-spacing-3) var(--ui-spacing-6);
+  padding: 0.75rem 1.5rem;
   font-size: var(--ui-font-size-lg);
+  min-height: 3rem;
 }
 
 /* Disabled */

@@ -10,10 +10,10 @@ export default defineConfig({
   site: 'https://atelier.pieper.io',
   fonts: [
     {
-      name: 'Space Grotesk',
+      name: 'Inter',
       cssVariable: '--font-sans',
       provider: fontProviders.google(),
-      weights: [400, 500, 600, 700, 800, 900],
+      weights: [400, 500, 600, 700, 800],
       styles: ['normal'],
       display: 'swap',
     },

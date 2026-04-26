@@ -1,16 +1,14 @@
-/* ── Host ──────────────────────────────────────────────────────────────── */
-:host(llm-dialog) {
-  display: contents;
-}
-
-/* ── Native <dialog> reset + base ──────────────────────────────────────── */
-dialog {
+/* ── Native <dialog> reset + base ──────────────────────────────────────────── */
+.llm-dialog {
   all: unset;
   position: fixed;
   inset: 0;
   margin: auto;
+  width: fit-content;
+  height: fit-content;
   display: none; /* hidden by default; showModal() moves to top layer */
   flex-direction: column;
+  max-width: 100vw;
   max-height: calc(100dvh - var(--ui-spacing-8));
   border-radius: var(--ui-radius-lg);
   background: var(--ui-color-surface);
@@ -28,21 +26,21 @@ dialog {
     overlay var(--ui-duration-slow) allow-discrete;
 }
 
-dialog[open] {
+.llm-dialog[open] {
   display: flex;
   opacity: 1;
   transform: scale(1);
 }
 
 @starting-style {
-  dialog[open] {
+  .llm-dialog[open] {
     opacity: 0;
     transform: scale(0.95);
   }
 }
 
 /* ── Backdrop ────────────────────────────────────────────────────────────── */
-dialog::backdrop {
+.llm-dialog::backdrop {
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(2px);
   transition:
@@ -52,18 +50,18 @@ dialog::backdrop {
 }
 
 @starting-style {
-  dialog[open]::backdrop {
+  .llm-dialog[open]::backdrop {
     opacity: 0;
   }
 }
 
 @media (prefers-color-scheme: dark) {
-  dialog::backdrop {
+  .llm-dialog::backdrop {
     background: rgba(0, 0, 0, 0.7);
   }
 }
 
-[data-theme='dark'] dialog::backdrop {
+[data-theme='dark'] .llm-dialog::backdrop {
   background: rgba(0, 0, 0, 0.7);
 }
 
@@ -96,17 +94,18 @@ dialog::backdrop {
 .size-full {
   width: 100vw;
   height: 100dvh;
+  max-width: 100vw;
   max-height: 100dvh;
   border-radius: 0;
   margin: 0;
 }
 
 /* ── Sub-components ──────────────────────────────────────────────────────── */
-:host(llm-dialog-header) {
+.llm-dialog-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--ui-spacing-4) var(--ui-spacing-5);
+  padding: var(--ui-spacing-5) var(--ui-spacing-6);
   border-bottom: 1px solid var(--ui-color-border);
   font-size: var(--ui-font-size-xl);
   font-weight: 600;
@@ -115,32 +114,32 @@ dialog::backdrop {
   flex-shrink: 0;
 }
 
-:host(llm-dialog-content) {
+.llm-dialog-content {
   display: block;
-  padding: var(--ui-spacing-5);
+  padding: var(--ui-spacing-6);
   overflow-y: auto;
   flex: 1;
   color: var(--ui-color-text);
 }
 
-:host(llm-dialog-footer) {
+.llm-dialog-footer {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--ui-spacing-2);
-  padding: var(--ui-spacing-4) var(--ui-spacing-5);
+  gap: var(--ui-spacing-3);
+  padding: var(--ui-spacing-5) var(--ui-spacing-6);
   border-top: 1px solid var(--ui-color-border);
   flex-shrink: 0;
 }
 
-/* ── Close button (inside llm-dialog-header) ──────────────────────────────── */
+/* ── Close button ──────────────────────────────────────────────────────────── */
 .close-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 2rem;
+  height: 2rem;
   padding: 0;
   margin-left: var(--ui-spacing-3);
   background: transparent;

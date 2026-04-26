@@ -10,7 +10,7 @@ html, body {
 }
 
 body {
-  font-family: var(--docs-font, 'Space Grotesk', system-ui, sans-serif);
+  font-family: var(--docs-font, 'Inter', system-ui, sans-serif);
   background: var(--ui-color-surface-sunken, #09141d);
   color: var(--ui-color-text, #d8e4f1);
   line-height: 1.6;
