@@ -24,7 +24,9 @@
   --ui-color-primary-light: rgba(68, 218, 218, 0.1);
 
   --ui-color-text: #d8e4f1;
-  --ui-color-text-muted: #6b7a99;
+  /* WCAG AA — bumped from #6b7a99 (3.79–4.31:1, below AA on every surface)
+   * to #8492b0 (5.23–5.95:1, comfortable AA across surface, raised, sunken). */
+  --ui-color-text-muted: #8492b0;
 
   --ui-color-input-bg: #09141d;
   --ui-color-input-bg-focus: #0d1a24;
@@ -52,7 +54,9 @@
   --ui-color-primary-active: #004e4e;
   --ui-color-primary-light: rgba(0, 122, 122, 0.08);
   --ui-color-text: #0f172a;
-  --ui-color-text-muted: #64748b;
+  /* WCAG AA — bumped from #64748b (failed sunken at 4.35:1) to #5d6c87
+   * (4.85–5.30:1 across all three surfaces). */
+  --ui-color-text-muted: #5d6c87;
 }
 
 /* ── Docs-specific variables ───────────────────────────────── */
