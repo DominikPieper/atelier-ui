@@ -1,3 +1,14 @@
+## 0.2.16 (2026-04-26)
+
+### 🚀 Features
+
+- **skills:** figma-workspace-architect — agent-readiness principles in audit (CD6/CD7/CD8/CD9) ([952c06c](https://github.com/DominikPieper/atelier-ui/commit/952c06c))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.2.15 (2026-04-26)
 
 This was a version bump only for figma-workspace-architect to align it with other projects, there were no code changes.
