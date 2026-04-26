@@ -141,7 +141,7 @@ const skills = [
           <div style="flex: 1">
             <h3 class="step-title">Content Signals</h3>
             <p class="step-desc">
-              <code>robots.txt</code> declares AI content usage preferences per the <a href="https://contentsignals.org/" target="_blank" rel="noopener noreferrer" style="color: var(--ui-color-primary)">Content Signals</a> draft standard: agents may use this content as inference input but not for model training.
+              <code>robots.txt</code> declares AI content usage preferences per the <a href="https://contentsignals.org/" target="_blank" rel="noopener noreferrer" class="docs-link-primary">Content Signals</a> draft standard: agents may use this content as inference input but not for model training.
             </p>
             <Code code={CONTENT_SIGNAL} lang="text" />
           </div>
@@ -174,7 +174,7 @@ const skills = [
     <div class="docs-section">
       <h2 class="docs-section-title">MCP Skills</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.75rem; font-size: 0.85rem">
-        Three Storybook MCP servers — one per framework — expose component documentation via the Model Context Protocol. Each skill is described in a SKILL.md file listed in the <a href="/.well-known/agent-skills/index.json" style="color: var(--ui-color-primary)">agent-skills index</a>.
+        Three Storybook MCP servers — one per framework — expose component documentation via the Model Context Protocol. Each skill is described in a SKILL.md file listed in the <a href="/.well-known/agent-skills/index.json" class="docs-link-primary">agent-skills index</a>.
       </p>
       <div style="display: flex; flex-direction: column; gap: 1.5rem">
         {skills.map(({ n, name, label, endpoint, skill }) => (

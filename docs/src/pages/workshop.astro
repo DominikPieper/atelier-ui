@@ -113,7 +113,7 @@ const MCP_CONFIG = `{
       </div>
       <p style="margin: 0 0 0.85rem; color: var(--ui-color-text-muted); font-size: 0.85rem; line-height: 1.55">
         Pick your platform, run the commands below, then verify with <code>npm run preflight</code>
-        inside the scaffolded workspace. Connecting Figma? See <a href="/figma-token" style="color: var(--ui-color-primary)">Figma Setup</a>
+        inside the scaffolded workspace. Connecting Figma? See <a href="/figma-token" class="docs-link-primary">Figma Setup</a>
         — it walks through the Desktop Bridge plugin and the optional REST token.
       </p>
       <div class="docs-multi-code-tabs" style="border-radius: 8px 8px 0 0; margin-bottom: 0">
@@ -283,7 +283,7 @@ const MCP_CONFIG = `{
           <div>
             <h3 class="step-title">Open Figma — find your component frame</h3>
             <p class="step-desc">
-              The <a href="https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Components" target="_blank" rel="noopener noreferrer" style="color: var(--ui-color-primary)">Atelier Figma file</a> contains all component frames and design token variables. Find the section for the component you want to build and note the token names in the inspect panel.
+              The <a href="https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Components" target="_blank" rel="noopener noreferrer" class="docs-link-primary">Atelier Figma file</a> contains all component frames and design token variables. Find the section for the component you want to build and note the token names in the inspect panel.
             </p>
           </div>
         </div>
@@ -372,12 +372,12 @@ const MCP_CONFIG = `{
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem">
         The generated <code>.claude/settings.json</code> wires up the Nx MCP, the hosted
         Storybook MCP servers for each selected framework, and <code>figma-console</code>
-        — needed for the <a href="/tutorial" style="color: var(--ui-color-primary)">Figma-to-Code Tutorial</a>:
+        — needed for the <a href="/tutorial" class="docs-link-primary">Figma-to-Code Tutorial</a>:
       </p>
       <Code code={MCP_CONFIG} lang="json" />
       <p style="margin: 0.75rem 0 0; font-size: 0.78rem; color: var(--ui-color-text-muted); line-height: 1.55">
         <code>figma-console</code> requires the Desktop Bridge plugin and a personal access
-        token — see <a href="/figma-token" style="color: var(--ui-color-primary)">Figma Setup</a>.
+        token — see <a href="/figma-token" class="docs-link-primary">Figma Setup</a>.
         If you only want the Storybook MCP workflow, you can remove the <code>figma-console</code> entry.
       </p>
     </div>

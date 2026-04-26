@@ -206,7 +206,7 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
           <div>
             <h3 class="step-title">Open Figma settings</h3>
             <p class="step-desc">
-              Go to <a href="https://www.figma.com/developers/api#access-tokens" target="_blank" rel="noopener noreferrer" style="color: var(--ui-color-primary)">Figma → Settings → Security</a>,
+              Go to <a href="https://www.figma.com/developers/api#access-tokens" target="_blank" rel="noopener noreferrer" class="docs-link-primary">Figma → Settings → Security</a>,
               scroll to <strong>Personal access tokens</strong>.
             </p>
           </div>
@@ -279,7 +279,7 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
       <p style="margin: 1rem 0 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
         <strong>Workshop shortcut:</strong> if you are in a live session, the facilitator may hand
         out a short-lived read-only demo token scoped to the public
-        <a href={FIGMA_FILE_URL} target="_blank" rel="noopener noreferrer" style="color: var(--ui-color-primary)">Atelier file</a>.
+        <a href={FIGMA_FILE_URL} target="_blank" rel="noopener noreferrer" class="docs-link-primary">Atelier file</a>.
         Use it exactly as you would your own.
       </p>
     </section>
@@ -298,7 +298,7 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
       <p style="color: var(--ui-color-text-muted); font-size: 0.82rem; margin: 0 0 0.5rem; line-height: 1.6">
         Keeps the token out of version control. Claude Code expands
         <code>${'${FIGMA_ACCESS_TOKEN}'}</code> from your shell at MCP startup
-        (see the <a href="https://code.claude.com/docs/en/mcp-servers#environment-variable-expansion-in-mcpjson" target="_blank" rel="noopener noreferrer" style="color: var(--ui-color-primary)">expansion docs</a>).
+        (see the <a href="https://code.claude.com/docs/en/mcp-servers#environment-variable-expansion-in-mcpjson" target="_blank" rel="noopener noreferrer" class="docs-link-primary">expansion docs</a>).
       </p>
       <Code code={`// .mcp.json\n"figma-console": {\n  "command": "npx",\n  "args": ["-y", "figma-console-mcp@latest"],\n  "env": {\n    "FIGMA_ACCESS_TOKEN": "\${FIGMA_ACCESS_TOKEN}",\n    "ENABLE_MCP_APPS": "true"\n  }\n}`} lang="json" title=".mcp.json" />
       <Code code={`# macOS / Linux (zsh / bash) — persist the token\necho 'export FIGMA_ACCESS_TOKEN=figd_your_token_here' >> ~/.zshrc\nsource ~/.zshrc\n\n# Windows (PowerShell)\n[Environment]::SetEnvironmentVariable("FIGMA_ACCESS_TOKEN","figd_your_token_here","User")`} lang="shell" />
@@ -323,7 +323,7 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
       <p style="color: var(--ui-color-text-muted); font-size: 0.85rem; margin: 0 0 1rem; line-height: 1.6">
         If you are on a locked-down machine, in a browser-only Codespace, or using
         Claude.ai on the web, point the MCP at the hosted relay at
-        <a href={CLOUD_RELAY_URL} target="_blank" rel="noopener noreferrer" style="color: var(--ui-color-primary)"><code>{CLOUD_RELAY_URL}</code></a>.
+        <a href={CLOUD_RELAY_URL} target="_blank" rel="noopener noreferrer" class="docs-link-primary"><code>{CLOUD_RELAY_URL}</code></a>.
         You will be issued a 6-character pairing code (5-minute TTL) and get a reduced set of
         ~44 write tools. Selection tracking and console streaming are not available in cloud mode.
       </p>
@@ -338,7 +338,7 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
         Preflight checks the plugin manifest, the port range, and the token — in that order. The
         plugin manifest check is the important one: if it's missing, re-run Step 1.
         Token-related lines are warnings, not failures. See
-        <a href="/troubleshooting#figma-bridge-plugin-not-connected" style="color: var(--ui-color-primary)">troubleshooting</a>
+        <a href="/troubleshooting#figma-bridge-plugin-not-connected" class="docs-link-primary">troubleshooting</a>
         for the most common connection issues.
       </p>
 
