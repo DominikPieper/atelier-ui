@@ -2022,7 +2022,15 @@ body {
   margin-bottom: 3rem;
 }
 
+/* Four-column variant — homepage "Explore" grid. The inline-style 4-col
+ * override used to bypass the mobile breakpoint and squeezed each card
+ * to ~85px, making the icons read as oversized next to the cramped
+ * text. Now stays 4-up only at ≥768px and stacks to 2 below. */
+.docs-quicknav--four { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: 768px) { .docs-quicknav--four { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 640px) { .docs-quicknav { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 420px) { .docs-quicknav, .docs-quicknav--four { grid-template-columns: 1fr; } }
 
 .docs-quicknav-card {
   display: flex;

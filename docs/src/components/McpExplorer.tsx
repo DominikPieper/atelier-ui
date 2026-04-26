@@ -364,11 +364,14 @@ export default function McpExplorer() {
                 // light blue) and #42b883 (Vue green) only hit 1.5–2.4:1 on
                 // a light surface as text — they're tuned for their own brand
                 // backgrounds, not neutral chrome.
+                // Constant fontWeight so flipping active state doesn't reflow
+                // the row (Inter 700 is visibly wider than 500 — on mobile
+                // that read as a font-size shift to users).
                 padding: '0.3rem 0.85rem', borderRadius: 'var(--ui-radius-md)',
                 border: active ? `1.5px solid ${color}` : '1.5px solid transparent',
                 background: active ? 'var(--ui-color-surface-raised)' : 'transparent',
                 color: active ? 'var(--ui-color-text)' : 'var(--ui-color-text-muted)',
-                cursor: 'pointer', fontWeight: active ? 700 : 500,
+                cursor: 'pointer', fontWeight: 600,
                 fontSize: '0.82rem', fontFamily: 'monospace',
               }}>
                 {fw.charAt(0).toUpperCase() + fw.slice(1)}
@@ -456,7 +459,11 @@ export default function McpExplorer() {
                   color: active ? 'var(--ui-color-primary)' : 'var(--ui-color-text-muted)',
                   cursor: supported ? 'pointer' : 'not-allowed',
                   fontFamily: 'monospace', fontSize: '0.78rem',
-                  fontWeight: active ? 700 : 400,
+                  // Constant 500 weight — the border + background + color
+                  // shifts already mark active state. Flipping 400→700 on
+                  // click made the text reflow, reading as a font-size
+                  // change on mobile.
+                  fontWeight: 500,
                   opacity: supported ? 1 : 0.55,
                   textDecoration: supported ? 'none' : 'line-through',
                 }}
@@ -533,7 +540,7 @@ export default function McpExplorer() {
                             minHeight: '24px', padding: '0.4rem 0.65rem', borderRadius: 'var(--ui-radius-sm)', border: 'none',
                             background: isActive ? 'var(--ui-color-primary-light)' : 'var(--ui-color-surface-sunken)',
                             color: isActive ? 'var(--ui-color-primary)' : 'var(--ui-color-text-muted)',
-                            cursor: 'pointer', fontFamily: 'monospace', fontSize: '0.72rem', fontWeight: isActive ? 600 : 400,
+                            cursor: 'pointer', fontFamily: 'monospace', fontSize: '0.72rem', fontWeight: 500,
                           }}>{s}</button>
                         );
                       })}
