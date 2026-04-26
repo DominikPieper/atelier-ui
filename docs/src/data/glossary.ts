@@ -25,7 +25,7 @@ export const GLOSSARY: Record<string, GlossaryEntry> = {
   boundVariables: {
     definition:
       'A field in the figma-console MCP response that lists every design property of a frame (fills, padding, radius, …) mapped to its Figma variable name.',
-    hint: 'Each Figma variable name is identical to the CSS custom property in Atelier UI — no translation needed.',
+    hint: 'Each Figma variable name is identical to the CSS custom property in Atelier — no translation needed.',
   },
 
   'CLAUDE.md': {
@@ -61,7 +61,7 @@ export const GLOSSARY: Record<string, GlossaryEntry> = {
   'composition API': {
     definition:
       'Vue 3’s function-based component API using `<script setup>`, `ref()`, `computed()`, and `defineProps()` — replaces the Options API.',
-    hint: 'Atelier UI Vue components assume composition API throughout.',
+    hint: 'Atelier Vue components assume composition API throughout.',
   },
 
   'flat API': {
@@ -79,6 +79,6 @@ export const GLOSSARY: Record<string, GlossaryEntry> = {
   'design tokens': {
     definition:
       'Named design values (colors, spacings, radii, type scales) stored as variables — so "primary color" has one canonical name instead of a hex code copy-pasted everywhere.',
-    hint: 'In Atelier UI, tokens live as CSS custom properties like `--ui-color-primary`, and they mirror the variable names in the Figma file 1:1.',
+    hint: 'In Atelier, tokens live as CSS custom properties like `--ui-color-primary`, and they mirror the variable names in the Figma file 1:1.',
   },
 };

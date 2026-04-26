@@ -86,7 +86,7 @@ const ISSUES: Issue[] = [
     id: 'node-too-old',
     title: 'Node.js version too old',
     symptom: '`npx create-atelier-ui-workspace` exits with `engines` or `Unsupported engine` errors.',
-    cause: 'Atelier UI requires Node 22.12+ for Angular 21 and Astro 6 support.',
+    cause: 'Atelier requires Node 22.12+ for Angular 21 and Astro 6 support.',
     fix: [
       'Install `nvm` (https://github.com/nvm-sh/nvm) — then `nvm install 22 && nvm use 22`.',
       'Verify with `node --version`. Must report v22.12.0 or newer.',
@@ -144,7 +144,7 @@ const ISSUES: Issue[] = [
 
 <BaseLayout
   title="Troubleshooting"
-  description="Fixes for common Atelier UI setup issues — MCP servers, Figma tokens, Storybook wiring, and AI-assisted workflow gotchas."
+  description="Fixes for common Atelier setup issues — MCP servers, Figma tokens, Storybook wiring, and AI-assisted workflow gotchas."
   currentPath="/troubleshooting"
 >
   <div class="docs-inline-page">
@@ -154,7 +154,7 @@ const ISSUES: Issue[] = [
         Troubleshooting
       </h1>
       <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 640px; line-height: 1.65">
-        The most common issues when setting up the Atelier UI workshop — symptom, cause, and a fix in three steps or less.
+        The most common issues when setting up the Atelier workshop — symptom, cause, and a fix in three steps or less.
         Start with <code>npm run preflight</code>; it flags most of these automatically.
       </p>
     </div>

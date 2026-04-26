@@ -5,7 +5,7 @@ import Jargon from '../components/Jargon.astro';
 
 <BaseLayout
   title="LLM-Optimized APIs"
-  description="Design principles behind Atelier UI — API shapes that help language models generate correct, idiomatic component code on the first try."
+  description="Design principles behind Atelier — API shapes that help language models generate correct, idiomatic component code on the first try."
   currentPath="/design-principles"
 >
   <nav slot="toc">
@@ -20,7 +20,7 @@ import Jargon from '../components/Jargon.astro';
     <div style="margin-bottom: 2.5rem">
       <h1 class="docs-page-title docs-gradient-title">LLM-Optimized API Design</h1>
       <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 520px; line-height: 1.65">
-        Why Atelier UI is structured the way it is — and what makes a component
+        Why Atelier is structured the way it is — and what makes a component
         library easy for AI to use correctly on the first attempt.
       </p>
     </div>
@@ -135,7 +135,7 @@ import Jargon from '../components/Jargon.astro';
       <h2 id="principle-4" class="docs-section-title">4. A single reactivity model per framework</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin-bottom: 0.75rem">
         Mixing patterns forces the model to decide which approach to use — and it will sometimes
-        guess wrong. Atelier UI picks one and uses it everywhere.
+        guess wrong. Atelier picks one and uses it everywhere.
       </p>
       <ul style="color: var(--ui-color-text-muted); padding-left: 1.5rem; display: flex; flex-direction: column; gap: 0.35rem; margin: 0.5rem 0 1rem">
         <li><strong>Angular:</strong> Signals only — <Jargon term="signal input"><code>input()</code></Jargon>, <code>output()</code>, <code>model()</code>. No legacy <code>@Input</code>/<code>@Output</code> decorators.</li>
