@@ -175,14 +175,13 @@ on the deployed surface — not what's on `HEAD`.
   `aria-label="More actions"` on the trigger. Deploy-stale finding;
   no action needed.
 - **`scrollable-region-focusable` × 2 on `/patterns/`** target
-  `.docs-code-block > pre`. Real, still present on main:
-  `docs/src/styles/global.css:716-724` defines
-  `.docs-code-block pre { overflow-x: auto }` without `tabindex="0"`,
-  so keyboard-only users can't scroll long code samples. Affects
-  every page that uses the `.docs-code-block` shell (currently
-  `ComponentDetail.tsx` and `design-principles.astro`). **Filed as
-  follow-up.** One-line fix: add `tabindex="0"` and `role="region"`
-  with an `aria-label` on the rendered `<pre>`.
+  `.docs-code-block > pre`. Already fixed on main in commit
+  `6fd78653` (2026-04-26 08:56) — `BaseLayout.astro:663-671` runs an
+  init script that adds `tabindex="0"` to every `<pre>` whose
+  computed overflow is `auto` or `scroll`, idempotent and post-Astro
+  page-load. Catches `.docs-code-block`, `astro-expressive-code`,
+  preflight mockups, and inline-styled React-island `<pre>` blocks.
+  Deploy-stale finding; no further action needed.
 
 ### Sign-off
 
@@ -196,13 +195,9 @@ on the deployed surface — not what's on `HEAD`.
 
 ### Follow-ups created by this run
 
-- [ ] **`docs-code-block` keyboard scroll** — add `tabindex="0"`
-  + `role="region"` + `aria-label` to the rendered `<pre>` so it can
-  be scrolled by keyboard. Touches `docs/src/styles/global.css` and
-  whatever Astro/MDX shell renders the block (likely
-  `astro-expressive-code`'s output wrapper, or a small
-  `docs/src/components/CodeBlockShell.astro`).
 - [ ] **Re-run axe after next docs deploy** — confirm contrast
   counts drop to near-zero. One-shot run repeats the same nine URLs
   (this time `/accessibility/` and one `/patterns/<id>/` will be
-  reachable too).
+  reachable too); the `BaseLayout.astro:663` runtime tabindex fix
+  shipped in `6fd78653` will also be live, so
+  `scrollable-region-focusable` is expected to clear.
