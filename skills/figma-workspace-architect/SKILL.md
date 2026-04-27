@@ -32,7 +32,9 @@ To keep scope sharp, this skill **does not** cover:
 
 - **Plugin API mechanics for `figma_execute`** — colors as 0–1, `await figma.loadFontAsync`, `appendChild` ordering, etc. Use general Plugin API knowledge for the payload itself.
 - **Figma → code translation** — generating React/Vue/Swift from a design. That is downstream of this skill.
-- **Console / plugin debugging** (`figma_get_console_logs`, `figma_watch_console`). Those are unrelated workflows.
+- **Code Connect or Figma's official Dev-Mode MCP server.** Explicit user constraint: the toolchain is figma-console-mcp only. The bridge to code in this skill is **naming alignment** alone — Component names, Variant Property names/values, and Variable names matching the codebase exactly. If the user asks about Code Connect / Dev-Mode MCP, say it's out of scope here and don't pretend either is being recommended.
+- **FigJam boards and Figma Slides decks.** The MCP exposes `figjam_*` and `figma_*_slide` tools; this skill targets Figma Design files only.
+- **Console / plugin debugging** (`figma_get_console_logs`, `figma_watch_console`, `figma_reload_plugin`, `figma_reconnect`). Unrelated workflows.
 - **Accessibility and visual-coverage auditing** — the figma-console-mcp built-in *Design System Dashboard* MCP App already scores Naming, Tokens, Components, Accessibility, Consistency, and Coverage. This skill defers A11y and Coverage to that dashboard and focuses on **architectural** depth the dashboard does not reach.
 
 When the user asks something out-of-scope, say so briefly and either point them at the right tool (the dashboard, code-gen workflows) or proceed with general knowledge — do not pretend this skill covers it.
@@ -45,14 +47,16 @@ Triggered by verbs like *create, set up, bootstrap, scaffold, build, generate, a
 
 Never start writing to Figma directly. Run this loop:
 
-1. **Discovery.** Call `figma_get_file_data` (or `figma_get_variables` + `figma_get_styles` if the file is large) to see what already exists. Read the existing structure before adding to it. Skipping this is the #1 cause of duplicate or conflicting tokens.
-2. **Decide.** Resolve every architectural question before any write tool. Use `references/decision-heuristics.md` for the common ones (Variant vs. Property, Token tier, Mode vs. Collection, etc.). If a decision genuinely cannot be made without the user, ask — don't guess.
-3. **Map tools.** Pick the right tool for each step using `references/tool-map.md`. Prefer `figma_setup_design_tokens` and `figma_batch_*` over loops of single calls; they are 10–50× faster and atomic.
+1. **Discovery.** Call `figma_get_file_data` (or `figma_get_design_system_kit` for a one-call full snapshot, or `figma_get_variables` + `figma_get_styles` if the file is large) to see what already exists. Read the existing structure before adding to it. Skipping this is the #1 cause of duplicate or conflicting tokens.
+2. **Decide.** Resolve every architectural question before any write tool. Use `references/decision-heuristics.md` for the common ones (Variant vs. Property, Token tier, Mode vs. Collection, Section vs. Frame, etc.). If a decision genuinely cannot be made without the user, ask — don't guess.
+3. **Map tools.** Pick the right tool for each step using `references/tool-map.md`. Prefer `figma_setup_design_tokens` and `figma_batch_*` over loops of single calls; they are 10–50× faster and atomic. For single-property mutations, prefer targeted node-write tools over `figma_execute`.
 4. **Execute.** Run the writes. Return all created/mutated node IDs from any `figma_execute` payload — subsequent calls reference them.
-5. **Validate.** Call `figma_take_screenshot` on the result. Look for cropped text, wrong scopes (e.g. a color variable showing up in spacing pickers), missing descriptions. Fix issues with targeted follow-ups, not a rebuild.
+5. **Validate.** Call `figma_capture_screenshot` (live, post-write) — `figma_take_screenshot` (REST) can be cache-stale right after a mutation. Look for cropped text, wrong scopes (e.g. a color variable showing up in spacing pickers), missing descriptions. Fix issues with targeted follow-ups, not a rebuild.
 6. **Document.** Use `figma_set_description` on every Component, Component Set, and shared Style. The description is what designers see in the asset panel and what Dev Mode surfaces — undocumented components are invisible.
+7. **Annotate.** `figma_set_annotations` for the surgical implementation details that don't belong in the description — focus-ring delivery, animation easing, A11y exceptions, tap-target extensions. Annotations surface in the Dev-Mode Inspect panel.
+8. **Mark Ready for Dev.** Set `devStatus = { type: 'READY_FOR_DEV' }` on the containing Section / Frame / Component via `figma_execute`. Without this, downstream Dev-Mode UI and consuming agents treat the artifact as work-in-progress and skip it.
 
-The detailed Build playbook is in `references/build-workflow.md`.
+The detailed Build playbook is in `references/build-workflow.md`, including the pre-publish checklist.
 
 #### Scaffold sub-mode — one-shot starter file
 
@@ -64,6 +68,16 @@ Use the regular Build loop (not Scaffold) when:
 - The user already has a file and wants additions — Discovery first.
 - The user has specific values to seed — use those, not the placeholder palette.
 - The user wants something polished — Scaffold ships placeholders intentionally.
+
+#### Inventory sub-mode — visual library catalog
+
+Triggered by *generate inventory, build gallery, library catalog, stickersheet, library overview* — when the user wants a one-page visual reference of every published Component / Component Set in the file.
+
+The output is a dedicated `📋 Inventory` page: one Section per top-level slash category, one card per component, each card carrying a header + status badge + default-variant preview + meta row + property table + optional description footer. Cards adopt a light or dark surface based on contextual background detection so the preview reads correctly.
+
+Run it after the regular Build loop's **Validate** step (so half-shipped components don't pollute the gallery) — or stand-alone against an existing library when the user wants a fresh visual reference. See `references/inventory-generation.md` for the seven-phase pipeline and `references/inventory-payload.md` for the ready-to-paste `figma_execute` snippets.
+
+Build the gallery **section by section** — one `figma_execute` per top-level Section, components chunked in groups of 25 with `setTimeout(0)` yields between chunks. A 500-component library otherwise blows the plugin host or saturates the figma_execute size cap. Sections beyond ~150 components get split across multiple calls.
 
 ### Audit mode
 
@@ -124,44 +138,11 @@ If the migration is large enough to span sessions, finish each session in a self
 
 ### Sync mode
 
-Triggered when a change has already happened on one side (code OR design)
-and the user wants the other side to follow. Common phrasings:
-*"propagate to Figma"*, *"sync the lib tokens to Figma"*, *"the code just
-changed X, update Figma"*, *"keep Figma and code in lockstep"*, *"make
-Figma match the new spec"*.
+Triggered when one side moved and the other must catch up. Trigger phrases: *"propagate to Figma"*, *"sync the lib tokens"*, *"keep Figma and code in lockstep"*, *"make Figma match the new spec"*. Different from Migrate: Migrate plans a coordinated structural change; Sync handles value drift after one side has already moved.
 
-Different from Migrate: Migrate plans a structural change with coordinated
-rollout across both sides. Sync handles the more common case where one side
-has already moved and the other needs to catch up — value drift, not
-shape change.
+Open `references/sync-workflow.md` and run the four steps: direction → diff → batch-or-script → validate. Output a Sync summary (see "Output expectations" below).
 
-1. **Establish direction.** Which side is the source of truth for *this*
-   change? Token values from a CSS/JSON/spec file → Figma is the most
-   common (code-as-truth). Figma frame dimensions → code is rarer but
-   real (design-as-truth). Get this wrong and you'll overwrite real work
-   on the other side.
-2. **Diff.** Read the target side via `figma_get_variables` /
-   `figma_get_file_data`, compare against the source, list the deltas.
-   Classify each as a Variable value update (cheap, batch-able), a frame
-   dimension change (per-variant, scripted), or a structural change (rename,
-   add, remove — bail out and use Migrate).
-3. **Plan.** Group Variable updates into a single
-   `figma_batch_update_variables` call (50–100 variables at once is fine).
-   Group dimension changes into one `figma_execute` script that walks the
-   variants. See `references/code-sync.md` for the direction-of-truth
-   patterns and the mass-resize recipe.
-4. **Execute, then validate.** Run the batch + scripts, then re-audit the
-   touched components (`figma_audit_component_accessibility`) and the file
-   overall (`figma_audit_design_system`). The audit is the closing-the-
-   loop check; if scores drop, you have new work, not a finished sync.
-5. **Document.** Output a Sync summary (see "Output expectations" below):
-   how many Variables updated, how many frames resized, what audit scores
-   moved, anything left undone.
-
-If you find yourself adding/removing/renaming things rather than only
-updating existing values, stop and switch to Migrate mode — Sync's
-batch-and-script approach won't apply the additive coordination protocol
-that downstream consumers need.
+If the diff turns out to include adds / removes / renames rather than only value updates, stop and switch to Migrate — Sync's batch-and-script approach won't apply the additive coordination protocol downstream consumers need.
 
 ## Mode routing — quick reference
 
@@ -169,6 +150,7 @@ that downstream consumers need.
 |-----------------------------------------------------------------|---------|---------------------------------------------------------|
 | "create / build / set up / bootstrap…"                          | Build   | `figma_get_file_data` for discovery                     |
 | "scaffold / starter / template / quickstart a new file…"        | Build (Scaffold sub-mode) | Open `references/scaffold-payload.md`, run the three-call recipe |
+| "generate inventory / build gallery / library catalog / stickersheet…" | Build (Inventory sub-mode) | Open `references/inventory-generation.md`; run the seven-phase pipeline section-by-section |
 | "audit / review / check / assess / how good is…"                | Audit   | Try Design System Dashboard MCP App; then deep-audit    |
 | "is finding X still relevant?", "re-verify this audit…"         | Audit (Re-verify sub-mode) | Open `references/audit-verify-queries.md`; run only the verify queries for open findings |
 | "should I use a Variant or…?", "is it better to…?"              | Decide  | Open `references/decision-heuristics.md`                |
@@ -195,6 +177,9 @@ Each file is self-contained and loaded only when relevant. Don't load everything
 - **`references/migration-playbook.md`** — refactoring an existing file safely. Safety classes per operation, the additive coordination protocol, recipes for Variable renames, Mode adds, Variant-Set splits, semantic-tier promotions, and Library splits.
 - **`references/iconography.md`** — icon-system architecture. Size stops, internal boxed-model layout, Component-vs-vector heuristic, color-binding (never hardcode fills), naming categories, library-split signals, audit checklist.
 - **`references/scaffold-payload.md`** — Scaffold sub-mode recipe. Three-call sequence (`figma_setup_design_tokens` + `figma_execute` + `figma_arrange_component_set`) producing Cover + Tokens + Components pages with placeholder content; after-scaffold checklist for the user.
+- **`references/inventory-generation.md`** — Inventory sub-mode. Seven-phase pipeline (Discover → Group → Scaffold → Populate → Card builder → Mark Ready → Validate) for generating a visual library catalog. Layout token contract, internal grouping schema, batching contract (one Section per `figma_execute`, chunks of 25 with yields, 150-component split rule).
+- **`references/inventory-payload.md`** — Ready-to-paste `figma_execute` snippets for the Inventory sub-mode: discover, scaffold, populate-one-section (with all card-builder helpers), mark-ready + TOC, and the optional contextual-background cache clear.
+- **`references/sync-workflow.md`** — Sync mode in depth: direction-of-truth, diff classification (value-update / dimension-change / structural-bailout-to-Migrate), batch-or-script execution, audit + parity-check validation, and the escalate-to-Migrate signals.
 
 ## Output expectations
 

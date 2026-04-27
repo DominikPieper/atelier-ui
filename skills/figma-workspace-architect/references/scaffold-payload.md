@@ -223,6 +223,32 @@ When replacing:
 )
 ```
 
+### Call 4 (optional) — Annotations + Ready-for-Dev marker
+
+Make the skeleton **demo-ready** instead of just rendered. One short `figma_set_annotations` call on the `ExampleButton` plus a Ready-for-dev marker on the Components Section turns the scaffold into something the user can immediately hand to engineering for orientation.
+
+```
+figma_set_annotations
+  nodeId: <ExampleButton component-set ID>
+  body: """
+Replace this placeholder before publishing. Architectural shape (variant × size) is
+intentional; visuals are not. Bind real fills to color/primary; add a `state` Variant
+Property covering default / hover / focus / disabled / error / loading.
+"""
+```
+
+Then mark the Components Section Ready-for-dev so the skeleton announces itself in Dev Mode:
+
+```js
+// figma_execute payload — small, atomic
+const componentsPage = figma.root.children.find(p => p.name === 'Components');
+const section = componentsPage?.children?.find(n => n.type === 'SECTION');
+if (section) section.devStatus = { type: 'READY_FOR_DEV' };
+return { sectionId: section?.id, devStatus: section?.devStatus };
+```
+
+Skip Call 4 when the user only wants the bare-bones rendering. Include it when the next person opening the file should see "this is a scaffold, here's the shape, here's where to start".
+
 ## After the scaffold — what the user has to do
 
 Hand back this checklist verbatim:

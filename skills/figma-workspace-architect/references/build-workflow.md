@@ -22,9 +22,11 @@ Then, depending on what you're building:
 |----------------------------|----------------------------------------------------------------------|
 | A token system from scratch| `figma_get_variables` to confirm there's nothing there yet           |
 | Adding tokens to existing  | `figma_get_variables` — read every existing collection and mode      |
-| A new component            | `figma_get_file_data`, then `figma_get_component` on related ones    |
+| A new component            | `figma_search_components` (does it already exist?), then `figma_get_file_data` and `figma_get_component` on related ones |
 | An icon set                | `figma_get_file_data` — find the existing Icons page if one exists   |
-| Restructuring a library    | `figma_get_file_data` and `figma_get_variables` — full inventory     |
+| Restructuring a library    | `figma_get_design_system_kit` (one-call snapshot) or `figma_get_file_data` + `figma_get_variables` |
+
+**Search-then-instantiate over rebuild.** When the user describes a component that probably exists somewhere, run `figma_search_components` first. If a match comes back, `figma_instantiate_component` it into the target page rather than rebuilding from scratch. Re-creation is the most common cause of duplicate-component drift.
 
 Output a brief inventory back to the user before proceeding: "I see your file has X collections (Y modes total) and Z components organized as ABC. I'm planning to add/change DEF — confirm?"
 
@@ -166,6 +168,65 @@ Set descriptions on **shared Styles** too if you've created any — Effect Style
 
 For Variables, descriptions aren't typically per-variable (it would be too noisy). Instead, ensure the **collection** has a clear name and the variable **path** itself is self-documenting (`color/text/primary` needs no description; `color/c1/v3` needs a lot of explanation, and the right fix is renaming, not describing).
 
+## Phase 7 — Annotate
+
+Component descriptions explain the big picture; **annotations** carry the surgical handoff details that an engineer needs while implementing — and they surface in Dev Mode's Inspect panel, not in the asset panel. Set them after the description is in place.
+
+Run for every non-trivial interactive component:
+
+```
+figma_set_annotations
+```
+
+Anchor each annotation to the specific node it describes — the focus ring on the focus variant, the loading spinner on the loading variant, the tap-target padding on the surface frame. Examples of annotation content:
+
+- *"Focus ring delivered via drop-shadow (4px primary outer + 2px surface gap), not stroke. Stroke contrast measures ~1.2:1 by design — see `code-verify.md`."*
+- *"Tap target extends 8 px past visible border on every side. The visible component is 32 × 32; hit-area is 48 × 48."*
+- *"Loading spinner uses `cubic-bezier(0.4, 0, 0.2, 1)` over 1.2 s. Reduce-motion users get a static dot — bound to `feature/reduce-motion`."*
+
+Use `figma_get_annotation_categories` first to learn the categories defined for the file (different teams set different category sets).
+
+When a Component description already says it, don't duplicate in an annotation. Annotations are for things that **only matter at the implementation spot**.
+
+## Phase 8 — Mark Ready for Dev
+
+The final step. Without it, downstream agents and the Dev-Mode UI treat the new content as work-in-progress and skip it.
+
+```js
+// figma_execute payload
+const node = await figma.getNodeByIdAsync('123:456');   // the Section/Frame/Component just built
+node.devStatus = { type: 'READY_FOR_DEV' };
+return { id: node.id, devStatus: node.devStatus };
+```
+
+What to mark:
+
+- The containing **Section** when an entire grouping is shipped together.
+- The **Component** or **Component Set** when shipping individually.
+- The **Frame** when shipping a screen or pattern that consumers should treat as canonical.
+
+Don't mark the whole page Ready-for-dev — too coarse. Mark the artifact at the smallest stable scope.
+
+## Optional — Inventory generation (sub-mode)
+
+When the build's deliverable includes a visual catalog of the library — or the user explicitly asks to *generate inventory, build a gallery, library catalog, stickersheet, library overview* — run the Inventory sub-mode after Validate (so the gallery only shows shipped components) and before Document.
+
+The sub-mode is self-contained and lives in `references/inventory-generation.md`. Seven phases: Discover (one read-only call) → Group (pure JS) → Scaffold (one call) → Populate (one call **per top-level Section**, chunked in groups of 25 with `setTimeout(0)` yields) → Card builder (inside Populate) → Mark Ready + TOC (one call) → Validate (one screenshot per Section).
+
+Hard rules — do not bundle multiple Sections into one `figma_execute`. Do not load every component's metadata in Phase 1 (only `id`, `name`, `type`). For Sections with more than 150 components, split across multiple calls passing the same `innerId`. The full batching contract is in `references/inventory-generation.md` § *Batching contract*.
+
+## Pre-publish checklist
+
+Before the user (or the agent) runs Library Publish, confirm:
+
+- [ ] `figma_get_design_changes` shows no broken Variable / Component references introduced during the session.
+- [ ] Every new Component has a description (`figma_set_description`) AND annotations on non-obvious spots.
+- [ ] Slash naming consistent — Library Swap re-binds **by name match**; one typo desyncs every consumer file.
+- [ ] Containing Section/Frame on Ready-for-dev.
+- [ ] `figma_audit_design_system` ran at least once and the score was logged for trend tracking.
+- [ ] Cover-page changelog entry drafted: what changed, why, who.
+- [ ] If on **Branching** (Org/Enterprise), the work happened on a branch — publishing is from main only. Merge before publishing.
+
 ## Build summary — what to return to the user
 
 After the loop completes, return a concise summary. Don't bury what was actually done.
@@ -188,7 +249,7 @@ Format:
 
 ## Not done
 
-- Code Connect mappings — out of scope for figma-console-mcp; use Figma's official MCP if needed.
+- Code-side mapping beyond naming alignment — figma-console-mcp doesn't implement Code Connect, and this skill explicitly does not recommend the official Figma MCP. Naming alignment is the bridge; if it's tight, code-gen tools infer the rest.
 - Patterns / composition examples — recommend a follow-up to add a `Patterns` page.
 
 ## Notes

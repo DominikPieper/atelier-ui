@@ -187,7 +187,15 @@ function makeGroupFrame(groupName) {
   return wrap;
 }
 
-function makeCardsRow() {
+function makeCardsRow(cardCount) {
+  // Size the wrap row to the actual card count, capped at MAX_COLS.
+  // FIXED width is required for `layoutWrap = 'WRAP'` to know when to break
+  // a new row, but a hardcoded 1480 leaves single-card sections (1 card in
+  // a 1480-wide row) sitting in 1160px of phantom whitespace that propagates
+  // up through the parent group, inner Frame, and Section bounds.
+  const MAX_COLS = 4;
+  const cols = Math.min(cardCount, MAX_COLS);
+  const width = cols * CARD_WIDTH + Math.max(0, cols - 1) * GAP_CARD;
   const row = figma.createFrame();
   row.name = 'cards';
   row.layoutMode = 'HORIZONTAL';
@@ -195,7 +203,7 @@ function makeCardsRow() {
   row.itemSpacing = GAP_CARD;
   row.counterAxisSpacing = GAP_CARD;
   row.layoutSizingHorizontal = 'FIXED';
-  row.resize(1480, 1);                               // wide enough for ~4 cards across; HUG resizes vertically
+  row.resize(width, 1);
   row.layoutSizingVertical = 'HUG';
   row.fills = [];
   return row;
@@ -361,7 +369,7 @@ for (const group of groups) {
   const groupFrame = makeGroupFrame(group.groupName);
   inner.appendChild(groupFrame);
 
-  const cardsRow = makeCardsRow();
+  const cardsRow = makeCardsRow(group.componentIds.length);
   groupFrame.appendChild(cardsRow);
 
   for (let i = 0; i < group.componentIds.length; i += 25) {

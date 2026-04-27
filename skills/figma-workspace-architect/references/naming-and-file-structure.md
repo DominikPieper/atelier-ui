@@ -85,6 +85,27 @@ Notes:
 - **Patterns** are not components. They're reference designs (e.g. "how to compose an empty state"). Don't publish them.
 - The page emoji is there for human navigability, not Figma's structure. It's optional but appreciated.
 
+## Sections vs. Frames — when to use which container
+
+Both group children, but they serve different roles. Mixing them up is a recurring audit finding (FS4).
+
+| Aspect                | Section                                   | Frame                                          |
+|-----------------------|-------------------------------------------|------------------------------------------------|
+| Auto Layout           | ❌                                         | ✅                                              |
+| Constraints           | ❌                                         | ✅                                              |
+| Clip content          | ❌                                         | ✅                                              |
+| Fills / strokes       | ❌                                         | ✅                                              |
+| Can nest in a Frame   | ❌                                         | ✅                                              |
+| `Ready for dev` marker| ✅                                         | ✅                                              |
+| Asset-panel grouping  | Page-level region                         | n/a                                             |
+
+**Rule:**
+
+- **Page-level grouping** (e.g. "Tokens reference area", "All Buttons here", "Patterns gallery") → Section. Mark the Section Ready for dev when the group ships together.
+- **Anything inside a component** — every variant frame, every nested layout container — → Frame. No exceptions.
+
+A Section nested inside a Frame is invalid hierarchy and must be lifted out. A component built around a Section instead of a Frame loses every reflow guarantee.
+
 ## File / page structure for a working file
 
 A product / feature file is for current design work, not the library. Recommended pages:

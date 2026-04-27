@@ -339,6 +339,7 @@ Mismatches render as a `_Skipped` frame on the Inventory page listing each missi
 | `GAP_GROUP` | 48 | between subgroups inside a Section |
 | `GAP_CARD` | 32 | between cards in the wrap row |
 | `CARD_WIDTH` | 320 | fixed; cards wrap to grid |
+| `MAX_COLS` | 4 | maximum cards per row before wrapping |
 | `CARD_PADDING` | 24 | inside each card (per spec) |
 | `CARD_ITEM_SPACING` | 12 | header → preview → table → footer |
 | `PREVIEW_PAD` | 16 | preview frame internal |
@@ -363,6 +364,16 @@ if (scale < 0.99) instance.rescale(scale);
 A width-only clamp is the common bug — a 1080×720 chat composition scaled by width alone becomes 240×26 because the preview frame's `minHeight: 96` clips the rescaled height after the fact, leaving the instance as a thin strip in a mostly-empty card. Both-axes clamp keeps the aspect ratio and sizes the preview proportionally so even the largest compositions stay readable in their card.
 
 For the inverse case — components whose master is *smaller* than the preview inner box (e.g. a 24×24 Avatar) — the `Math.min(..., 1)` floor keeps them at native size; the `PREVIEW_MIN_H` floor pads the preview so the card doesn't collapse around the tiny instance.
+
+**Cards-row sizing.** The wrapping row needs a FIXED width for `layoutWrap = 'WRAP'` to know where to break, but a hardcoded "max" width (e.g. 1480 for 4 cards across) leaves single-card sections sitting in 1160px of phantom whitespace that bubbles up through the parent group, the inner Frame, and the Section bounds. Size the row to the actual card count instead:
+
+```js
+const cols = Math.min(cardCount, MAX_COLS);
+const width = cols * CARD_WIDTH + Math.max(0, cols - 1) * GAP_CARD;
+row.resize(width, 1);
+```
+
+A 1-card section becomes 320 wide; a 2-card section 672; a 4+-card section 1376 (the wrap-cap). Section bounds shrink in lockstep — a 7-section inventory drops from ~11800px to ~8200px page width, easier to scan in Figma's overview.
 
 ## Internal grouping schema (example)
 
