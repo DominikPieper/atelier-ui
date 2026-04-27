@@ -157,6 +157,15 @@ ${mcpSection}
 
 ${frameworkSections}
 
+## Composition Patterns
+
+When composing multi-component flows (login form, settings page, confirmation dialog, data list, notification center, management dashboard), check the cookbook first:
+
+- Browse: ${SITE_URL}/patterns
+- JSON catalog (machine-readable): ${SITE_URL}/.well-known/cookbook-patterns.json
+
+Patterns shown there are the canonical way to combine atoms in this library — prefer them over inventing a composition from scratch.
+
 ## Design Tokens
 
 All colors, spacing, and radii use CSS custom properties. Never use

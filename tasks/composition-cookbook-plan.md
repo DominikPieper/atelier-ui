@@ -279,21 +279,31 @@ Static JSON catalog generated from `patterns.ts` and served at
 - A future `get_cookbook_pattern` MCP tool can read this URL directly
   without depending on Storybook addon support; tracked separately.
 
-### P5 — Update preset CLAUDE.md
+### P5 — Update preset CLAUDE.md — ✅ Shipped 2026-04-27
 
-`libs/create-workspace/src/generators/preset/files/CLAUDE.md.template`
-gets a new section:
+The CLAUDE.md isn't a separate template file — it's an inline string
+literal in `libs/create-workspace/src/generators/preset/preset.ts`
+(starting at line 144). Added a `## Composition Patterns` section
+between *Component Libraries* and *Design Tokens*:
 
-> ## Composition patterns
-> When composing multi-component flows (login, settings, dialogs,
-> dashboards), check the cookbook first:
-> https://atelier-ui.netlify.app/patterns
+> When composing multi-component flows (login form, settings page,
+> confirmation dialog, data list, notification center, management
+> dashboard), check the cookbook first:
 >
-> Patterns shown there are the canonical way to combine atoms in this
-> library — prefer them over inventing a composition from scratch.
+> - Browse: ${SITE_URL}/patterns
+> - JSON catalog (machine-readable): ${SITE_URL}/.well-known/cookbook-patterns.json
+>
+> Patterns shown there are the canonical way to combine atoms in
+> this library — prefer them over inventing a composition from
+> scratch.
 
-Re-run `nx test create-workspace` (29 expected) to confirm the template
-still renders.
+The site URL uses the `SITE_URL` constant (`https://atelier.pieper.io`),
+not the older `atelier-ui.netlify.app` referenced in the original
+plan. The JSON catalog link points at the manifest shipped in P4 so
+agents have a machine-readable entry point.
+
+Added one assertion in `preset.spec.ts` so silent removal fails CI.
+`nx test create-workspace` 36 → **37 passed**, lint clean.
 
 ### P6 — Smoke tests
 

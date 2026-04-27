@@ -178,6 +178,15 @@ describe('preset generator', () => {
     expect(md).not.toContain('atelier.pieper.io/figma-token');
   });
 
+  it('CLAUDE.md points at the composition cookbook', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
+
+    const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+    expect(md).toContain('Composition Patterns');
+    expect(md).toContain('atelier.pieper.io/patterns');
+    expect(md).toContain('cookbook-patterns.json');
+  });
+
   // ─── README ────────────────────────────────────────────────────────────────
 
   it('writes README.md', async () => {
