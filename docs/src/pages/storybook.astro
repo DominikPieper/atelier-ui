@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
+import PageEyebrow from '../components/PageEyebrow.astro';
 const SITE_URL = 'https://atelier.pieper.io';
 
 const MCP_CONFIG = `{
@@ -34,9 +35,7 @@ const STORYBOOK_LINKS = [
 >
   <div class="docs-inline-page">
     <div style="margin-bottom: 2.5rem">
-      <div class="page-eyebrow">
-        <span class="page-eyebrow-kind page-eyebrow-kind--reference">Reference</span>
-      </div>
+      <PageEyebrow kind="reference" />
       <h1 class="docs-page-h1">Storybook</h1>
       <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 520px; line-height: 1.65">
         Interactive component explorers for Angular, React, and Vue. Browse stories, inspect props, and test accessibility in isolation.

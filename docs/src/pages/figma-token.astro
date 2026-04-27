@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import DiagramFigure from '../components/DiagramFigure.astro';
+import PageEyebrow from '../components/PageEyebrow.astro';
+import BottomNav from '../components/BottomNav.astro';
 
 const FIGMA_FILE_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Components';
 const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
@@ -15,9 +17,7 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
   <div class="docs-inline-page">
 
     <div style="margin-bottom: 1.25rem">
-      <div class="page-eyebrow">
-        <span class="page-eyebrow-kind page-eyebrow-kind--howto">How-To</span>
-      </div>
+      <PageEyebrow kind="howto" />
       <h1 class="docs-page-h1">
         Figma Setup
       </h1>
@@ -346,22 +346,11 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
       </p>
     </section>
 
-    <!-- Next steps -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 2.5rem">
-      {[
-        { to: '/tutorial',        label: 'Next',    title: 'Figma to Code',    icon: '🎯' },
-        { to: '/figma',           label: 'Design',  title: 'Figma as Source',  icon: '🎨' },
-        { to: '/troubleshooting', label: 'Stuck?',  title: 'Troubleshooting',  icon: '🛟' },
-      ].map(({ to, label, title, icon }) => (
-        <a href={to} style="display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 1rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); text-decoration: none; color: inherit; border: 1px solid var(--ui-color-border)">
-          <span style="font-size: 1.25rem; flex-shrink: 0">{icon}</span>
-          <div>
-            <div style="font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ui-color-text-muted); margin-bottom: 0.15rem">{label}</div>
-            <div style="font-size: 0.88rem; font-weight: 700; color: var(--ui-color-text)">{title}</div>
-          </div>
-        </a>
-      ))}
-    </div>
+    <BottomNav items={[
+      { to: '/tutorial',        label: 'Next',   title: 'Figma to Code',    emoji: '🎯' },
+      { to: '/figma',           label: 'Design', title: 'Figma as Source',  emoji: '🎨' },
+      { to: '/troubleshooting', label: 'Stuck?', title: 'Troubleshooting',  emoji: '🛟' },
+    ]} />
 
   </div>
 </BaseLayout>

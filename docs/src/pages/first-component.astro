@@ -3,6 +3,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import HelpFooter from '../components/HelpFooter.astro';
 import Icon from '../components/Icon.astro';
+import PageEyebrow from '../components/PageEyebrow.astro';
+import BottomNav from '../components/BottomNav.astro';
 
 const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Components?node-id=695-313';
 const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
@@ -51,11 +53,7 @@ const EXPECTED: Record<Framework, { file: string; cmd: string; port: number }> =
   <div class="docs-inline-page">
 
     <div style="margin-bottom: 1.25rem">
-      <div class="page-eyebrow">
-        <span class="page-eyebrow-kind page-eyebrow-kind--tutorial">Tutorial</span>
-        <span class="page-eyebrow-time">⏱ ~15 min</span>
-        <span class="page-eyebrow-tag">Kata · copy-paste</span>
-      </div>
+      <PageEyebrow kind="tutorial" time="~15 min" tag="Kata · copy-paste" />
       <h1 class="docs-page-h1">
         First Component
       </h1>
@@ -208,22 +206,11 @@ const EXPECTED: Record<Framework, { file: string; cmd: string; port: number }> =
 
     <HelpFooter page="first-component" />
 
-    <!-- Bottom nav -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 2.5rem">
-      {([
-        { to: '/tutorial',  label: 'The why', title: 'Tutorial',   icon: 'school' },
-        { to: '/patterns',  label: 'More',    title: 'Patterns',   icon: 'menu_book' },
-        { to: '/storybook', label: 'API',     title: 'Storybook',  icon: 'book' },
-      ] as const).map(({ to, label, title, icon }) => (
-        <a href={to} class="bottom-nav-card">
-          <span class="bottom-nav-icon"><Icon name={icon} /></span>
-          <div>
-            <div class="bottom-nav-label">{label}</div>
-            <div class="bottom-nav-title">{title}</div>
-          </div>
-        </a>
-      ))}
-    </div>
+    <BottomNav items={[
+      { to: '/tutorial',  label: 'The why', title: 'Tutorial',  icon: 'school' },
+      { to: '/patterns',  label: 'More',    title: 'Patterns',  icon: 'menu_book' },
+      { to: '/storybook', label: 'API',     title: 'Storybook', icon: 'book' },
+    ]} />
 
   </div>
 </BaseLayout>

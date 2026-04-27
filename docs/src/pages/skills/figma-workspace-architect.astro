@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
+import BottomNav from '../../components/BottomNav.astro';
 
 const SITE_URL = 'https://atelier.pieper.io';
 const SKILL_URL = `${SITE_URL}/.well-known/agent-skills/figma-workspace-architect/SKILL.md`;
@@ -264,21 +265,11 @@ const tests = [
     </div>
 
     <!-- Bottom nav -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 2.5rem">
-      {[
-        { to: '/agent-skills',    label: 'Index',   title: 'All Skills',    icon: '◇' },
-        { to: '/figma-token',     label: 'Connect', title: 'Figma Setup',   icon: '⚒' },
-        { to: '/mcp',             label: 'Explore', title: 'MCP Explorer',  icon: '⬡' },
-      ].map(({ to, label, title, icon }) => (
-        <a href={to} style="display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 1rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); text-decoration: none; color: inherit; border: 1px solid var(--ui-color-border)">
-          <span style="font-size: 1.25rem; flex-shrink: 0">{icon}</span>
-          <div>
-            <div style="font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ui-color-text-muted); margin-bottom: 0.15rem">{label}</div>
-            <div style="font-size: 0.88rem; font-weight: 700; color: var(--ui-color-text)">{title}</div>
-          </div>
-        </a>
-      ))}
-    </div>
+    <BottomNav items={[
+      { to: '/agent-skills', label: 'Index',   title: 'All Skills',   emoji: '◇' },
+      { to: '/figma-token',  label: 'Connect', title: 'Figma Setup',  emoji: '⚒' },
+      { to: '/mcp',          label: 'Explore', title: 'MCP Explorer', emoji: '⬡' },
+    ]} />
 
   </div>
 </BaseLayout>

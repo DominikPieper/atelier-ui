@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
+import PageEyebrow from '../components/PageEyebrow.astro';
 
 const DOCS_URL = 'https://atelier.pieper.io/llms-full.txt';
 type Fw = 'react' | 'angular' | 'vue';
@@ -108,9 +109,7 @@ const FRAMEWORKS: Fw[] = ['react', 'angular', 'vue'];
   <div class="docs-inline-page">
 
     <div style="margin-bottom: 2rem">
-      <div class="page-eyebrow">
-        <span class="page-eyebrow-kind page-eyebrow-kind--howto">How-To</span>
-      </div>
+      <PageEyebrow kind="howto" />
       <h1 class="docs-page-h1">
         Prompt Templates
       </h1>

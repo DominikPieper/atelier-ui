@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import { PATTERNS, TAG_TO_SLUG } from '../data/patterns';
+import PageEyebrow from '../components/PageEyebrow.astro';
 import {
   LoginFormDemo,
   SettingsPageDemo,
@@ -39,10 +40,7 @@ function frameworkCode(p: typeof PATTERNS[number], fw: Framework): string {
   <div class="docs-inline-page">
 
     <div style="margin-bottom: 1.25rem">
-      <div class="page-eyebrow">
-        <span class="page-eyebrow-kind page-eyebrow-kind--howto">How-To</span>
-        <span class="page-eyebrow-tag">{PATTERNS.length} patterns · 3 frameworks</span>
-      </div>
+      <PageEyebrow kind="howto" tag={`${PATTERNS.length} patterns · 3 frameworks`} />
       <h1 class="docs-page-h1">
         Cookbook Patterns
       </h1>

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ComponentGallery from '../../components/ComponentGallery';
+import PageEyebrow from '../../components/PageEyebrow.astro';
 ---
 
 <BaseLayout
@@ -9,8 +10,8 @@ import ComponentGallery from '../../components/ComponentGallery';
   currentPath="/components"
 >
   <div style="max-width: 1280px; margin: 0 auto; padding: 0 1.5rem">
-    <div class="page-eyebrow" style="margin-top: 1rem">
-      <span class="page-eyebrow-kind page-eyebrow-kind--reference">Reference</span>
+    <div style="margin-top: 1rem">
+      <PageEyebrow kind="reference" />
     </div>
   </div>
   <ComponentGallery client:load />

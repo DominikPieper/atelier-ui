@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import McpExplorer from '../components/McpExplorer';
 import DiagramFigure from '../components/DiagramFigure.astro';
+import PageEyebrow from '../components/PageEyebrow.astro';
 ---
 
 <BaseLayout
@@ -11,9 +12,7 @@ import DiagramFigure from '../components/DiagramFigure.astro';
 >
   <div style="max-width: 1000px; margin: 0 auto; padding: 0 1.5rem">
     <div style="margin-bottom: 2rem">
-      <div class="page-eyebrow">
-        <span class="page-eyebrow-kind page-eyebrow-kind--reference">Reference</span>
-      </div>
+      <PageEyebrow kind="reference" />
       <h1 class="docs-page-h1">
         MCP Playground
       </h1>

@@ -4,6 +4,8 @@ import { Code } from 'astro-expressive-code/components';
 import DiagramFigure from '../components/DiagramFigure.astro';
 import Jargon from '../components/Jargon.astro';
 import Icon from '../components/Icon.astro';
+import PageEyebrow from '../components/PageEyebrow.astro';
+import BottomNav from '../components/BottomNav.astro';
 
 const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
 const PKG_MANAGERS = ['npm', 'pnpm', 'yarn'] as const;
@@ -88,9 +90,7 @@ const IMPORT_NOTE: Record<string, string> = {
   <div class="docs-inline-page">
 
     <div style="margin-bottom: 2rem">
-      <div class="page-eyebrow">
-        <span class="page-eyebrow-kind page-eyebrow-kind--howto">How-To</span>
-      </div>
+      <PageEyebrow kind="howto" />
       <h1 class="docs-page-h1">
         Installation
       </h1>
@@ -249,21 +249,11 @@ const IMPORT_NOTE: Record<string, string> = {
     </div>
 
     <!-- Next steps -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 2.5rem">
-      {[
-        { to: '/workshop', label: 'Next', title: 'Workshop Setup', icon: '⚙' },
-        { to: '/components', label: 'Browse', title: 'Components', icon: '🧩' },
-        { to: '/design-principles', label: 'Read', title: 'LLM-Optimized APIs', icon: '🧠' },
-      ].map(({ to, label, title, icon }) => (
-        <a href={to} style="display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 1rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); text-decoration: none; color: inherit; border: 1px solid var(--ui-color-border)">
-          <span style="font-size: 1.25rem; flex-shrink: 0">{icon}</span>
-          <div>
-            <div style="font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ui-color-text-muted); margin-bottom: 0.15rem">{label}</div>
-            <div style="font-size: 0.88rem; font-weight: 700; color: var(--ui-color-text)">{title}</div>
-          </div>
-        </a>
-      ))}
-    </div>
+    <BottomNav items={[
+      { to: '/workshop',          label: 'Next',   title: 'Workshop Setup',     emoji: '⚙' },
+      { to: '/components',        label: 'Browse', title: 'Components',         emoji: '🧩' },
+      { to: '/design-principles', label: 'Read',   title: 'LLM-Optimized APIs', emoji: '🧠' },
+    ]} />
 
   </div>
 </BaseLayout>

@@ -1,0 +1,37 @@
+---
+import Icon from './Icon.astro';
+
+interface NavItem {
+  to: string;
+  label: string;
+  title: string;
+  /** Material icon name — rendered via the Icon component. */
+  icon?: string;
+  /** Emoji character — rendered as plain text fallback. */
+  emoji?: string;
+}
+
+interface Props {
+  items: NavItem[];
+  ariaLabel?: string;
+}
+
+const { items, ariaLabel = 'Continue exploring' } = Astro.props;
+---
+
+<nav class="bottom-nav-grid" aria-label={ariaLabel}>
+  {items.map(({ to, label, title, icon, emoji }) => (
+    <a href={to} class="bottom-nav-card">
+      {icon && (
+        <span class="bottom-nav-icon"><Icon name={icon} /></span>
+      )}
+      {!icon && emoji && (
+        <span class="bottom-nav-icon bottom-nav-icon--emoji" aria-hidden="true">{emoji}</span>
+      )}
+      <div>
+        <div class="bottom-nav-label">{label}</div>
+        <div class="bottom-nav-title">{title}</div>
+      </div>
+    </a>
+  ))}
+</nav>

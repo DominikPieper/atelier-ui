@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
+import PageEyebrow from '../components/PageEyebrow.astro';
 
 type Issue = {
   id: string;
@@ -150,9 +151,7 @@ const ISSUES: Issue[] = [
   <div class="docs-inline-page">
 
     <div style="margin-bottom: 2rem">
-      <div class="page-eyebrow">
-        <span class="page-eyebrow-kind page-eyebrow-kind--howto">How-To</span>
-      </div>
+      <PageEyebrow kind="howto" />
       <h1 class="docs-page-h1">
         Troubleshooting
       </h1>

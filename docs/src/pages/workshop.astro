@@ -2,8 +2,9 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import Jargon from '../components/Jargon.astro';
-import Icon from '../components/Icon.astro';
 import HelpFooter from '../components/HelpFooter.astro';
+import PageEyebrow from '../components/PageEyebrow.astro';
+import BottomNav from '../components/BottomNav.astro';
 
 const SITE_URL = 'https://atelier.pieper.io';
 
@@ -58,11 +59,7 @@ const MCP_CONFIG = `{
   <div class="docs-inline-page">
 
     <div style="margin-bottom: 1.25rem">
-      <div class="page-eyebrow">
-        <span class="page-eyebrow-kind page-eyebrow-kind--tutorial">Tutorial</span>
-        <span class="page-eyebrow-time">⏱ ~25 min</span>
-        <span class="page-eyebrow-tag">Hands-on · Setup</span>
-      </div>
+      <PageEyebrow kind="tutorial" time="~25 min" tag="Hands-on · Setup" />
       <h1 class="docs-page-h1">
         Workshop Setup
       </h1>
@@ -347,22 +344,11 @@ const MCP_CONFIG = `{
 
     <HelpFooter page="workshop" />
 
-    <!-- Bottom nav -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 2.5rem">
-      {([
-        { to: '/storybook', label: 'Next',   title: 'Storybook',    icon: 'book' },
-        { to: '/figma',     label: 'Design', title: 'Figma File',   icon: 'palette' },
-        { to: '/mcp',       label: 'Tools',  title: 'MCP Explorer', icon: 'cable' },
-      ] as const).map(({ to, label, title, icon }) => (
-        <a href={to} class="bottom-nav-card">
-          <span class="bottom-nav-icon"><Icon name={icon} /></span>
-          <div>
-            <div class="bottom-nav-label">{label}</div>
-            <div class="bottom-nav-title">{title}</div>
-          </div>
-        </a>
-      ))}
-    </div>
+    <BottomNav items={[
+      { to: '/storybook', label: 'Next',   title: 'Storybook',    icon: 'book' },
+      { to: '/figma',     label: 'Design', title: 'Figma File',   icon: 'palette' },
+      { to: '/mcp',       label: 'Tools',  title: 'MCP Explorer', icon: 'cable' },
+    ]} />
 
   </div>
 </BaseLayout>

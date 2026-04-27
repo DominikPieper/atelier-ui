@@ -3,8 +3,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import DiagramFigure from '../components/DiagramFigure.astro';
 import Jargon from '../components/Jargon.astro';
-import Icon from '../components/Icon.astro';
 import HelpFooter from '../components/HelpFooter.astro';
+import PageEyebrow from '../components/PageEyebrow.astro';
+import BottomNav from '../components/BottomNav.astro';
 
 const FRAMEWORKS = ['React', 'Angular', 'Vue'] as const;
 
@@ -128,11 +129,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
   <div class="docs-inline-page">
 
     <div style="margin-bottom: 1.25rem">
-      <div class="page-eyebrow">
-        <span class="page-eyebrow-kind page-eyebrow-kind--tutorial">Tutorial</span>
-        <span class="page-eyebrow-time">⏱ ~30 min</span>
-        <span class="page-eyebrow-tag">Hands-on · Figma → Code</span>
-      </div>
+      <PageEyebrow kind="tutorial" time="~30 min" tag="Hands-on · Figma → Code" />
       <h1 class="docs-page-h1">
         Tutorial
       </h1>
@@ -569,22 +566,11 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
 
     <HelpFooter page="tutorial" />
 
-    <!-- Bottom nav -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 2.5rem">
-      {([
-        { to: '/figma',     label: 'Design',  title: 'Figma File', icon: 'palette' },
-        { to: '/workshop',  label: 'Setup',   title: 'Workshop',   icon: 'build_circle' },
-        { to: '/storybook', label: 'Explore', title: 'Storybook',  icon: 'book' },
-      ] as const).map(({ to, label, title, icon }) => (
-        <a href={to} class="bottom-nav-card">
-          <span class="bottom-nav-icon"><Icon name={icon} /></span>
-          <div>
-            <div class="bottom-nav-label">{label}</div>
-            <div class="bottom-nav-title">{title}</div>
-          </div>
-        </a>
-      ))}
-    </div>
+    <BottomNav items={[
+      { to: '/figma',     label: 'Design',  title: 'Figma File', icon: 'palette' },
+      { to: '/workshop',  label: 'Setup',   title: 'Workshop',   icon: 'build_circle' },
+      { to: '/storybook', label: 'Explore', title: 'Storybook',  icon: 'book' },
+    ]} />
 
   </div>
 </BaseLayout>

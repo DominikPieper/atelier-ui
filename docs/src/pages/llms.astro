@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import Jargon from '../components/Jargon.astro';
+import PageEyebrow from '../components/PageEyebrow.astro';
 
 const SITE_URL = 'https://atelier.pieper.io';
 
@@ -85,9 +86,7 @@ const previewCode = `# Atelier — Full API Reference
   <div class="docs-inline-page">
 
     <div style="margin-bottom: 2.5rem">
-      <div class="page-eyebrow">
-        <span class="page-eyebrow-kind page-eyebrow-kind--reference">Reference</span>
-      </div>
+      <PageEyebrow kind="reference" />
       <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.6rem">
         <h1 class="docs-page-h1" style="margin: 0">llms.txt</h1>
         <span style="font-family: monospace; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; background: rgba(68,218,218,0.1); color: var(--ui-color-primary); padding: 0.15rem 0.5rem; border-radius: 3px">Standard</span>

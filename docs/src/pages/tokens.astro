@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageEyebrow from '../components/PageEyebrow.astro';
+import BottomNav from '../components/BottomNav.astro';
 
 const colorGroups = [
   {
@@ -100,9 +102,7 @@ const motion = [
   <div class="docs-inline-page">
 
     <div style="margin-bottom: 2.5rem">
-      <div class="page-eyebrow">
-        <span class="page-eyebrow-kind page-eyebrow-kind--reference">Reference</span>
-      </div>
+      <PageEyebrow kind="reference" />
       <h1 class="docs-page-h1">
         Design Tokens
       </h1>
@@ -256,22 +256,11 @@ const motion = [
       </p>
     </div>
 
-    <!-- Bottom nav -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 2.5rem">
-      {[
-        { to: '/figma',      label: 'Figma',    title: 'Figma Variables', icon: '🎨' },
-        { to: '/install',    label: 'Install',  title: 'Installation',    icon: '📦' },
-        { to: '/components', label: 'Browse',   title: 'Components',      icon: '🧩' },
-      ].map(({ to, label, title, icon }) => (
-        <a href={to} style="display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 1rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); text-decoration: none; color: inherit; border: 1px solid var(--ui-color-border)">
-          <span style="font-size: 1.25rem; flex-shrink: 0">{icon}</span>
-          <div>
-            <div style="font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ui-color-text-muted); margin-bottom: 0.15rem">{label}</div>
-            <div style="font-size: 0.88rem; font-weight: 700; color: var(--ui-color-text)">{title}</div>
-          </div>
-        </a>
-      ))}
-    </div>
+    <BottomNav items={[
+      { to: '/figma',      label: 'Figma',   title: 'Figma Variables', emoji: '🎨' },
+      { to: '/install',    label: 'Install', title: 'Installation',    emoji: '📦' },
+      { to: '/components', label: 'Browse',  title: 'Components',      emoji: '🧩' },
+    ]} />
 
   </div>
 </BaseLayout>

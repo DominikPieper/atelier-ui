@@ -1,0 +1,29 @@
+---
+type EyebrowKind = 'tutorial' | 'howto' | 'reference' | 'explanation';
+
+interface Props {
+  kind: EyebrowKind;
+  /** Display label for the kind. Defaults to a capitalised form. */
+  kindLabel?: string;
+  /** Optional time estimate, e.g. "~30 min". Rendered with a clock glyph. */
+  time?: string;
+  /** Optional tag — short modifier, e.g. "Hands-on · Figma → Code". */
+  tag?: string;
+}
+
+const KIND_LABEL: Record<EyebrowKind, string> = {
+  tutorial: 'Tutorial',
+  howto: 'How-To',
+  reference: 'Reference',
+  explanation: 'Explanation',
+};
+
+const { kind, kindLabel, time, tag } = Astro.props;
+const label = kindLabel ?? KIND_LABEL[kind];
+---
+
+<div class="page-eyebrow">
+  <span class={`page-eyebrow-kind page-eyebrow-kind--${kind}`}>{label}</span>
+  {time && <span class="page-eyebrow-time">⏱ {time}</span>}
+  {tag && <span class="page-eyebrow-tag">{tag}</span>}
+</div>
