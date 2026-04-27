@@ -1,3 +1,14 @@
+## 0.2.18 (2026-04-27)
+
+### 🚀 Features
+
+- **skills:** inventory preview scales on both axes (W and H clamp) ([2302473](https://github.com/DominikPieper/atelier-ui/commit/2302473))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.2.17 (2026-04-27)
 
 ### 🚀 Features
