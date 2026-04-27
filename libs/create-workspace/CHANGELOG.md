@@ -1,3 +1,14 @@
+## 0.0.39 (2026-04-27)
+
+### 🚀 Features
+
+- **workspace:** preset CLAUDE.md points at composition cookbook (P5) ([58ef524](https://github.com/DominikPieper/atelier-ui/commit/58ef524))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.38 (2026-04-26)
 
 This was a version bump only for create-workspace to align it with other projects, there were no code changes.

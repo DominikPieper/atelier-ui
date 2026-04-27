@@ -1,3 +1,14 @@
+## 0.0.39 (2026-04-27)
+
+### 🚀 Features
+
+- **cookbook:** smoke play() functions across all 6 patterns × 3 frameworks (P6) ([e8f7993](https://github.com/DominikPieper/atelier-ui/commit/e8f7993))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.38 (2026-04-26)
 
 This was a version bump only for angular to align it with other projects, there were no code changes.
