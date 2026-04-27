@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
+import { userEvent, expect, screen } from 'storybook/test';
 import { ref } from 'vue';
 
 import LlmButton from './button/llm-button.vue';
@@ -471,7 +472,14 @@ const meta: Meta = { title: 'Cookbook' };
 export default meta;
 type Story = StoryObj;
 
-export const LoginForm: Story = LoginFormStory(false);
+export const LoginForm: Story = {
+  ...LoginFormStory(false),
+  play: async ({ canvas }) => {
+    await expect(await canvas.findByRole('heading', { name: 'Sign in' })).toBeVisible();
+    await expect(await canvas.findByRole('button', { name: 'Sign in' })).toBeVisible();
+    await expect(await canvas.findByLabelText('Remember me')).toBeInTheDocument();
+  },
+};
 
 export const LoginFormWithValidationErrors: Story = {
   name: 'Login Form / With Validation Errors',
@@ -496,6 +504,10 @@ export const SettingsPage: Story = {
     },
     template: settingsTemplate,
   }),
+  play: async ({ canvas }) => {
+    await expect(await canvas.findByRole('heading', { name: 'Settings' })).toBeVisible();
+    await expect(await canvas.findByRole('tab', { name: 'Account' })).toBeVisible();
+  },
 };
 
 export const ConfirmationDialog: Story = {
@@ -514,6 +526,17 @@ export const ConfirmationDialog: Story = {
     },
     template: confirmationTemplate,
   }),
+  play: async ({ canvas }) => {
+    const trigger = await canvas.findByRole('button', { name: 'Delete account' });
+    await userEvent.click(trigger);
+    // Native <dialog> renders to the top-layer outside the Storybook canvas root,
+    // so query the whole document via `screen` instead of the scoped `canvas`.
+    const dialog = await screen.findByRole('dialog');
+    await expect(dialog).toHaveAttribute('open');
+    await expect(
+      await screen.findByRole('button', { name: 'Delete permanently' }),
+    ).toBeInTheDocument();
+  },
 };
 
 export const DataListWithActions: Story = {
@@ -535,6 +558,11 @@ export const DataListWithActions: Story = {
     },
     template: dataListTemplate,
   }),
+  play: async ({ canvas }) => {
+    await expect(await canvas.findByRole('heading', { name: 'Projects' })).toBeVisible();
+    await expect(await canvas.findByText('Marketing Website')).toBeVisible();
+    await expect(await canvas.findByRole('button', { name: 'New project' })).toBeVisible();
+  },
 };
 
 export const NotificationCenter: Story = {
@@ -579,6 +607,11 @@ export const NotificationCenter: Story = {
     },
     template: notificationTemplate,
   }),
+  play: async ({ canvas }) => {
+    await expect(await canvas.findByRole('heading', { name: 'Notifications' })).toBeVisible();
+    await expect(await canvas.findByRole('button', { name: 'Clear all' })).toBeVisible();
+    await expect(await canvas.findByText('Errors')).toBeVisible();
+  },
 };
 
 export const ManagementDashboard: Story = {
@@ -607,4 +640,9 @@ export const ManagementDashboard: Story = {
     },
     template: dashboardTemplate,
   }),
+  play: async ({ canvas }) => {
+    await expect(await canvas.findByRole('heading', { name: 'Operations Overview' })).toBeVisible();
+    await expect(await canvas.findByRole('heading', { name: 'Recent Activity' })).toBeVisible();
+    await expect(await canvas.findByRole('heading', { name: 'Plan Usage' })).toBeVisible();
+  },
 };

@@ -1,5 +1,6 @@
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection, @angular-eslint/component-selector */
 import type { Meta, StoryObj } from '@storybook/angular';
+import { userEvent, expect, screen } from 'storybook/test';
 import { Component, signal } from '@angular/core';
 import { LlmButton } from './button/llm-button';
 import {
@@ -1220,6 +1221,11 @@ export const LoginForm: StoryObj = {
       imports: [LoginFormComponent],
     },
   }),
+  play: async ({ canvas }) => {
+    await expect(await canvas.findByRole('heading', { name: 'Sign in' })).toBeVisible();
+    await expect(await canvas.findByRole('button', { name: 'Sign in' })).toBeVisible();
+    await expect(await canvas.findByLabelText('Remember me')).toBeInTheDocument();
+  },
 };
 
 export const LoginFormWithValidationErrors: StoryObj = {
@@ -1243,6 +1249,10 @@ export const SettingsPage: StoryObj = {
       imports: [SettingsPageComponent],
     },
   }),
+  play: async ({ canvas }) => {
+    await expect(await canvas.findByRole('heading', { name: 'Settings' })).toBeVisible();
+    await expect(await canvas.findByRole('tab', { name: 'Account' })).toBeVisible();
+  },
 };
 
 // --- Confirmation Dialog ---
@@ -1255,6 +1265,17 @@ export const ConfirmationDialog: StoryObj = {
       imports: [ConfirmationDialogComponent],
     },
   }),
+  play: async ({ canvas }) => {
+    const trigger = await canvas.findByRole('button', { name: 'Delete account' });
+    await userEvent.click(trigger);
+    // Native <dialog> renders to the top-layer outside the Storybook canvas root,
+    // so query the whole document via `screen` instead of the scoped `canvas`.
+    const dialog = await screen.findByRole('dialog');
+    await expect(dialog).toHaveAttribute('open');
+    await expect(
+      await screen.findByRole('button', { name: 'Yes, delete my account' }),
+    ).toBeInTheDocument();
+  },
 };
 
 // --- Data List with Actions ---
@@ -1268,6 +1289,11 @@ export const DataListWithActions: StoryObj = {
       imports: [DataListComponent],
     },
   }),
+  play: async ({ canvas }) => {
+    await expect(await canvas.findByRole('heading', { name: 'Projects' })).toBeVisible();
+    await expect(await canvas.findByText('Marketing Website')).toBeVisible();
+    await expect(await canvas.findByRole('button', { name: 'New project' })).toBeVisible();
+  },
 };
 
 // --- Notification Center ---
@@ -1280,6 +1306,11 @@ export const NotificationCenter: StoryObj = {
       imports: [NotificationCenterComponent],
     },
   }),
+  play: async ({ canvas }) => {
+    await expect(await canvas.findByRole('heading', { name: 'Notifications' })).toBeVisible();
+    await expect(await canvas.findByRole('button', { name: 'Clear all' })).toBeVisible();
+    await expect(await canvas.findByText('Errors')).toBeVisible();
+  },
 };
 
 // --- Management Dashboard ---
@@ -1292,4 +1323,9 @@ export const ManagementDashboard: StoryObj = {
       imports: [ManagementDashboardComponent],
     },
   }),
+  play: async ({ canvas }) => {
+    await expect(await canvas.findByRole('heading', { name: 'Operations Overview' })).toBeVisible();
+    await expect(await canvas.findByRole('heading', { name: 'Recent Activity' })).toBeVisible();
+    await expect(await canvas.findByRole('heading', { name: 'Plan Usage' })).toBeVisible();
+  },
 };
