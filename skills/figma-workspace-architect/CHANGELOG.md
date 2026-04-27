@@ -1,3 +1,15 @@
+## 0.2.17 (2026-04-27)
+
+### 🚀 Features
+
+- **skills:** inventory discover skips Icon namespace + Icons page by default ([b4ad17f](https://github.com/DominikPieper/atelier-ui/commit/b4ad17f))
+- **skills:** inventory sub-mode refs with ancestor-walk contextualBg ([b3428ce](https://github.com/DominikPieper/atelier-ui/commit/b3428ce))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.2.16 (2026-04-26)
 
 ### 🚀 Features
