@@ -341,10 +341,10 @@ export default function McpExplorer() {
       `}</style>
 
       <div style={{ marginBottom: '2.5rem' }}>
-        <h1 className="docs-page-h1">MCP Playground</h1>
+        <h2 className="docs-section-title" style={{ marginTop: 0 }}>Try a tool</h2>
         <p style={{ fontSize: '0.9rem', color: 'var(--ui-color-text-muted)', margin: 0, maxWidth: '560px', lineHeight: '1.65' }}>
-          Explore the component library MCP server. Select a tool, provide parameters,
-          and call it to see exactly what structured data an AI receives.
+          Pick a framework, select a tool, set parameters, and call it
+          to see exactly what structured data an AI receives.
         </p>
       </div>
 
