@@ -3,13 +3,20 @@ interface Props {
   caption?: string;
   align?: 'start' | 'center';
   compact?: boolean;
+  /**
+   * `mockup` flags the figure as a placeholder UI rendering awaiting a real
+   * screenshot. Visually adds a small "MOCKUP" eyebrow in the top-right
+   * corner so contributors can spot replacement targets at a glance.
+   */
+  kind?: 'diagram' | 'mockup';
 }
 
-const { caption, align = 'center', compact = false } = Astro.props;
+const { caption, align = 'center', compact = false, kind = 'diagram' } = Astro.props;
 ---
 
-<figure class:list={["diagram-figure", `diagram-figure--${align}`, compact && "diagram-figure--compact"]}>
+<figure class:list={["diagram-figure", `diagram-figure--${align}`, compact && "diagram-figure--compact", kind === 'mockup' && "diagram-figure--mockup"]}>
   <div class="diagram-figure-surface">
+    {kind === 'mockup' && <span class="diagram-figure-mockup-tag" aria-hidden="true">Mockup</span>}
     <slot />
   </div>
   {caption && <figcaption class="diagram-figure-caption">{caption}</figcaption>}
@@ -51,6 +58,41 @@ const { caption, align = 'center', compact = false } = Astro.props;
     height: auto;
     display: block;
     max-width: 100%;
+  }
+
+  /* Mockup eyebrow — small italic flag in the top-right corner. */
+  .diagram-figure-mockup-tag {
+    position: absolute;
+    top: 0.55rem;
+    right: 0.7rem;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ui-color-text-muted);
+    background: var(--ui-color-surface-sunken);
+    border: 1px solid var(--ui-color-border);
+    padding: 0.1rem 0.4rem;
+    border-radius: 999px;
+    font-style: italic;
+    pointer-events: none;
+  }
+
+  /* Mobile rescue: SVG labels declared at small font-size attributes shrink
+   * proportionally with the diagram width and become unreadable on phones.
+   * Below 640px we let the surface scroll horizontally and force a minimum
+   * SVG width that keeps the labels at human-readable sizes. The mask fades
+   * the right edge to hint at scrollable content. */
+  @media (max-width: 640px) {
+    .diagram-figure-surface {
+      overflow-x: auto;
+      -webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
+      mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
+    }
+    .diagram-figure-surface :global(svg) {
+      min-width: 600px;
+      max-width: none;
+    }
   }
 
   .diagram-figure-caption {

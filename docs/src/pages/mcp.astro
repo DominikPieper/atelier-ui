@@ -17,14 +17,20 @@ import DiagramFigure from '../components/DiagramFigure.astro';
       <h1 class="docs-page-h1">
         MCP Playground
       </h1>
-      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 600px; line-height: 1.65">
+      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 620px; line-height: 1.65">
         Explore the Model Context Protocol servers that power AI-assisted Atelier
         development — one Storybook MCP per framework plus the figma-console MCP
         that reads Figma directly.
       </p>
+      <p style="font-size: 0.82rem; color: var(--ui-color-text-muted); margin: 0.7rem 0 0; max-width: 620px; line-height: 1.6">
+        <strong style="color: var(--ui-color-text)">New to MCP?</strong>
+        An MCP server exposes a small set of functions an AI client can call over a
+        standard request/response format (JSON-RPC — think "remote function call");
+        each Atelier MCP returns structured data, no screenshots or copy-paste.
+      </p>
     </div>
 
-    <DiagramFigure caption="One AI client talks to three parallel Storybook MCP servers — one per framework. The JSON-RPC contract is identical; only the returned props change.">
+    <DiagramFigure caption="One AI client talks to three parallel Storybook MCP servers — one per framework. The request format (JSON-RPC) is identical; only the returned props change.">
       <svg viewBox="0 0 960 340" role="img" aria-labelledby="mcp-title mcp-desc" preserveAspectRatio="xMidYMid meet">
         <title id="mcp-title">MCP data flow from client to Storybook servers</title>
         <desc id="mcp-desc">A client application sends user intent to Claude. Claude then issues JSON-RPC tools/list and tools/call requests to three parallel Storybook MCP servers — one each for Angular, React, and Vue. Each server returns exact component documentation.</desc>

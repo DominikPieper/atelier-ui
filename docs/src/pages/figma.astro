@@ -143,50 +143,90 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Com
         </svg>
       </DiagramFigure>
 
-      <table class="docs-props-table" style="margin-bottom: 1rem">
-        <thead>
-          <tr>
-            <th>Figma variable</th>
-            <th>CSS custom property</th>
-            <th>Light value</th>
-            <th>Dark value</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><code>color/primary</code></td>
-            <td><code>--ui-color-primary</code></td>
-            <td><code>#2563eb</code></td>
-            <td><code>#3b82f6</code></td>
-          </tr>
-          <tr>
-            <td><code>color/surface-raised</code></td>
-            <td><code>--ui-color-surface-raised</code></td>
-            <td><code>#fafafa</code></td>
-            <td><code>#252535</code></td>
-          </tr>
-          <tr>
-            <td><code>spacing/4</code></td>
-            <td><code>--ui-spacing-4</code></td>
-            <td colspan="2"><code>1rem (16px)</code></td>
-          </tr>
-          <tr>
-            <td><code>spacing/6</code></td>
-            <td><code>--ui-spacing-6</code></td>
-            <td colspan="2"><code>1.5rem (24px)</code></td>
-          </tr>
-          <tr>
-            <td><code>radius/md</code></td>
-            <td><code>--ui-radius-md</code></td>
-            <td colspan="2"><code>0.5rem (8px)</code></td>
-          </tr>
-          <tr>
-            <td><code>radius/lg</code></td>
-            <td><code>--ui-radius-lg</code></td>
-            <td colspan="2"><code>0.75rem (12px)</code></td>
-          </tr>
-        </tbody>
-      </table>
+      <ul class="token-chip-grid" aria-label="Six representative tokens — Figma variable, matching CSS custom property, and resolved values">
+        <li class="token-chip">
+          <span class="token-chip-swatch token-chip-swatch--split" aria-hidden="true">
+            <span style="background: #2563eb"></span>
+            <span style="background: #3b82f6"></span>
+          </span>
+          <div class="token-chip-names">
+            <code class="token-chip-figma">color/primary</code>
+            <span class="token-chip-arrow" aria-hidden="true">→</span>
+            <code class="token-chip-css">--ui-color-primary</code>
+          </div>
+          <div class="token-chip-meta">
+            <span><span class="token-meta-key">light</span><code>#2563eb</code></span>
+            <span><span class="token-meta-key">dark</span><code>#3b82f6</code></span>
+          </div>
+        </li>
+        <li class="token-chip">
+          <span class="token-chip-swatch token-chip-swatch--split" aria-hidden="true">
+            <span style="background: #fafafa"></span>
+            <span style="background: #252535"></span>
+          </span>
+          <div class="token-chip-names">
+            <code class="token-chip-figma">color/surface-raised</code>
+            <span class="token-chip-arrow" aria-hidden="true">→</span>
+            <code class="token-chip-css">--ui-color-surface-raised</code>
+          </div>
+          <div class="token-chip-meta">
+            <span><span class="token-meta-key">light</span><code>#fafafa</code></span>
+            <span><span class="token-meta-key">dark</span><code>#252535</code></span>
+          </div>
+        </li>
+        <li class="token-chip">
+          <span class="token-chip-swatch token-chip-swatch--measure" aria-hidden="true">
+            <span class="token-measure-bar" style="width: 16px"></span>
+          </span>
+          <div class="token-chip-names">
+            <code class="token-chip-figma">spacing/4</code>
+            <span class="token-chip-arrow" aria-hidden="true">→</span>
+            <code class="token-chip-css">--ui-spacing-4</code>
+          </div>
+          <div class="token-chip-meta">
+            <span><code>1rem · 16 px</code></span>
+          </div>
+        </li>
+        <li class="token-chip">
+          <span class="token-chip-swatch token-chip-swatch--measure" aria-hidden="true">
+            <span class="token-measure-bar" style="width: 24px"></span>
+          </span>
+          <div class="token-chip-names">
+            <code class="token-chip-figma">spacing/6</code>
+            <span class="token-chip-arrow" aria-hidden="true">→</span>
+            <code class="token-chip-css">--ui-spacing-6</code>
+          </div>
+          <div class="token-chip-meta">
+            <span><code>1.5rem · 24 px</code></span>
+          </div>
+        </li>
+        <li class="token-chip">
+          <span class="token-chip-swatch token-chip-swatch--radius" aria-hidden="true">
+            <span class="token-radius-corner" style="border-top-left-radius: 8px"></span>
+          </span>
+          <div class="token-chip-names">
+            <code class="token-chip-figma">radius/md</code>
+            <span class="token-chip-arrow" aria-hidden="true">→</span>
+            <code class="token-chip-css">--ui-radius-md</code>
+          </div>
+          <div class="token-chip-meta">
+            <span><code>0.5rem · 8 px</code></span>
+          </div>
+        </li>
+        <li class="token-chip">
+          <span class="token-chip-swatch token-chip-swatch--radius" aria-hidden="true">
+            <span class="token-radius-corner" style="border-top-left-radius: 12px"></span>
+          </span>
+          <div class="token-chip-names">
+            <code class="token-chip-figma">radius/lg</code>
+            <span class="token-chip-arrow" aria-hidden="true">→</span>
+            <code class="token-chip-css">--ui-radius-lg</code>
+          </div>
+          <div class="token-chip-meta">
+            <span><code>0.75rem · 12 px</code></span>
+          </div>
+        </li>
+      </ul>
       <p style="font-size: 0.8rem; color: var(--ui-color-text-muted); margin: 0">
         56 variables total: 29 color, 10 spacing, 5 radius, 12 typography. Full list in <code>libs/llm-components-angular/src/styles/tokens.css</code>.
       </p>
@@ -269,7 +309,7 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Com
               CSS token names you’ll use in code.
             </p>
 
-            <DiagramFigure caption="The right sidebar in Figma. Every property bound to a variable shows the variable name instead of a raw value — that name is your CSS custom property name.">
+            <DiagramFigure kind="mockup" caption="The right sidebar in Figma. Every property bound to a variable shows the variable name instead of a raw value — that name is your CSS custom property name.">
               <svg viewBox="0 0 640 400" role="img" aria-labelledby="insp-title insp-desc" preserveAspectRatio="xMidYMid meet">
                 <title id="insp-title">Figma Design panel with variable bindings highlighted</title>
                 <desc id="insp-desc">A mockup of the Figma right-hand Design panel. Three properties are shown — Fill, Padding, Corner radius — each with its value on the left and its bound variable name on the right. The variable names color/primary, spacing/6, and radius/lg are highlighted.</desc>
@@ -359,4 +399,123 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Com
     </div>
   </div>
 </BaseLayout>
+
+<style>
+  /* Token chip grid — visual replacement for the Figma → CSS mapping table.
+   * Each chip pairs a small visual cue (swatch / measure / radius) with the
+   * Figma name → CSS custom property, plus resolved values.
+   */
+  .token-chip-grid {
+    list-style: none;
+    margin: 0 0 1rem;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 0.65rem;
+  }
+  .token-chip {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 0.85rem;
+    row-gap: 0.35rem;
+    padding: 0.7rem 0.85rem;
+    background: var(--ui-color-surface-raised);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+    align-items: center;
+  }
+  .token-chip-swatch {
+    grid-row: 1 / span 2;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--ui-radius-md);
+    border: 1px solid var(--ui-color-border);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ui-color-surface-sunken);
+  }
+  .token-chip-swatch--split {
+    display: flex;
+    flex-direction: column;
+  }
+  .token-chip-swatch--split > span {
+    flex: 1;
+    width: 100%;
+    display: block;
+  }
+  .token-chip-swatch--measure {
+    background: repeating-linear-gradient(
+      45deg,
+      transparent 0 4px,
+      color-mix(in srgb, var(--ui-color-border) 50%, transparent) 4px 5px
+    );
+  }
+  .token-measure-bar {
+    height: 4px;
+    background: var(--ui-color-primary);
+    border-radius: 2px;
+  }
+  .token-chip-swatch--radius {
+    background: var(--ui-color-surface-sunken);
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .token-radius-corner {
+    width: 28px;
+    height: 28px;
+    margin: 8px 0 0 8px;
+    border-top: 3px solid var(--ui-color-primary);
+    border-left: 3px solid var(--ui-color-primary);
+  }
+  .token-chip-names {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+  }
+  .token-chip-figma,
+  .token-chip-css {
+    font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.78rem;
+  }
+  .token-chip-figma {
+    color: var(--ui-color-text);
+    font-weight: 600;
+  }
+  .token-chip-arrow {
+    color: var(--ui-color-primary);
+    font-weight: 700;
+  }
+  .token-chip-css {
+    color: var(--ui-color-primary);
+    font-weight: 600;
+    background: color-mix(in srgb, var(--ui-color-primary) 8%, transparent);
+    padding: 0.05rem 0.4rem;
+    border-radius: 4px;
+  }
+  .token-chip-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem 1rem;
+    font-size: 0.72rem;
+    color: var(--ui-color-text-muted);
+  }
+  .token-chip-meta code {
+    font-size: 0.72rem;
+    color: var(--ui-color-text-muted);
+  }
+  .token-meta-key {
+    display: inline-block;
+    margin-right: 0.3rem;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ui-color-text-muted);
+  }
+</style>
 

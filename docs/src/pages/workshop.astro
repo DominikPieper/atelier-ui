@@ -268,57 +268,20 @@ const MCP_CONFIG = `{
 
     </div>
 
-    <!-- The Workflow — what you do once everything is running -->
-    <div class="docs-section" style="margin-top: 2.5rem">
-      <h2 class="docs-section-title">The Workflow — once you are set up</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.75rem">
-        With the workspace running and MCP servers live, this is the loop you will use for every
-        component: read the design in Figma, reference tokens in your prompt, let Claude match
-        components against Storybook, ship.
-      </p>
-      <div style="display: flex; flex-direction: column; gap: 1.75rem">
-
-        <div class="docs-step-row" data-step="5">
-          <span class="docs-step-badge">A</span>
-          <div>
-            <h3 class="docs-h3">Open Figma — find your component frame</h3>
-            <p class="docs-step-desc">
-              The <a href="https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Components" target="_blank" rel="noopener noreferrer" class="docs-link-primary">Atelier Figma file</a> contains all component frames and design token variables. Find the section for the component you want to build and note the token names in the inspect panel.
-            </p>
-          </div>
-        </div>
-
-        <div class="docs-step-row" data-step="6">
-          <span class="docs-step-badge">B</span>
-          <div>
-            <h3 class="docs-h3">Reference design tokens in your prompt</h3>
-            <p class="docs-step-desc">Include token names from Figma directly. AI will use the identical names in code:</p>
-            <Code code={`Build a settings card using LlmCard with variant="elevated".\nMatch the Figma spec: --ui-color-surface-raised background,\n--ui-spacing-6 padding, --ui-radius-lg border-radius.\nUse storybook-react MCP to check LlmCard props.`} lang="text" title="example prompt" />
-          </div>
-        </div>
-
-        <div class="docs-step-row" data-step="7">
-          <span class="docs-step-badge">C</span>
-          <div>
-            <h3 class="docs-h3">AI checks Storybook, writes component code</h3>
-            <p class="docs-step-desc">
-              Claude Code reads the Storybook MCP for accurate prop names and usage examples, then generates code using the exact token values from Figma. The output is immediately usable — no prop guessing, no style overrides.
-            </p>
-          </div>
-        </div>
-
-        <div class="docs-step-row" data-step="8">
-          <span class="docs-step-badge">D</span>
-          <div>
-            <h3 class="docs-h3">Ship — the component matches the design</h3>
-            <p class="docs-step-desc">
-              Because Figma variables and CSS custom properties share the same token names, there is no gap between what the designer specified and what ships. Light and dark mode work automatically.
-            </p>
-          </div>
-        </div>
-
-      </div>
-    </div>
+    <!-- Once set up: hand off to the workflow pages instead of repeating them. -->
+    <aside class="docs-pagepair" aria-label="What to do once setup is done" style="margin-top: 2.5rem">
+      <a href="/tutorial" class="docs-pagepair-card docs-pagepair-card--next">
+        <span class="docs-pagepair-eyebrow">MCP-driven workflow</span>
+        <span class="docs-pagepair-title">/tutorial →</span>
+        <span class="docs-pagepair-desc">Walk Figma → MCP → token-exact code in five steps. ~30 min.</span>
+      </a>
+      <div class="docs-pagepair-arrow" aria-hidden="true">·</div>
+      <a href="/figma" class="docs-pagepair-card docs-pagepair-card--next">
+        <span class="docs-pagepair-eyebrow">Manual workflow</span>
+        <span class="docs-pagepair-title">/figma →</span>
+        <span class="docs-pagepair-desc">No-MCP variant — read the inspect panel by hand, copy token names into your prompt.</span>
+      </a>
+    </aside>
 
     <!-- What gets created -->
     <div class="docs-section" style="margin-top: 2.5rem">

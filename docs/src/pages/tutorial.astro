@@ -145,6 +145,21 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
       </p>
     </div>
 
+    <!-- Page-pair: this is the MCP-driven path; /figma is the manual variant. -->
+    <aside class="docs-pagepair" aria-label="Two ways to go from Figma to code">
+      <div class="docs-pagepair-card docs-pagepair-card--here">
+        <span class="docs-pagepair-eyebrow">You're here</span>
+        <span class="docs-pagepair-title">/tutorial</span>
+        <span class="docs-pagepair-desc">MCP-driven — Claude reads <code>boundVariables</code> and Storybook props directly. Setup needed.</span>
+      </div>
+      <div class="docs-pagepair-arrow" aria-hidden="true">·</div>
+      <a href="/figma" class="docs-pagepair-card docs-pagepair-card--prev">
+        <span class="docs-pagepair-eyebrow">No-MCP variant</span>
+        <span class="docs-pagepair-title">/figma →</span>
+        <span class="docs-pagepair-desc">Manual workflow — read the inspect panel, copy token names into your prompt. No plugin needed.</span>
+      </a>
+    </aside>
+
     <!-- Learning objectives & assumed knowledge -->
     <div class="objective-box">
       <div class="objective-col">
@@ -278,7 +293,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
     <div class="docs-section">
       <h2 class="docs-section-title">What figma-console MCP provides</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
-        The key tool is <code>figma_get_component_for_development</code>. Given a node ID it returns:
+        The key tool is <code>figma_get_component_for_development</code>. Given a node-id it returns:
       </p>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; margin-bottom: 1.25rem">
         {[
@@ -302,7 +317,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
       <DiagramFigure caption="Each step passes concrete data to the next. The dashed arrow closes the loop when parity checks surface discrepancies.">
         <svg viewBox="0 0 960 260" role="img" aria-labelledby="tut-title tut-desc" preserveAspectRatio="xMidYMid meet">
           <title id="tut-title">Figma-to-code sequence diagram</title>
-          <desc id="tut-desc">Five steps from selecting a frame in Figma to verifying design parity. Data flows from left to right: node ID, boundVariables, prop spec, generated code, parity score. A dashed loop returns discrepancies to the first step.</desc>
+          <desc id="tut-desc">Five steps from selecting a frame in Figma to verifying design parity. Data flows from left to right: node-id, boundVariables, prop spec, generated code, parity score. A dashed loop returns discrepancies to the first step.</desc>
 
           <defs>
             <marker id="tut-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -321,7 +336,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           <line x1="768" y1="100" x2="864" y2="100" class="diagram-connector" marker-end="url(#tut-arrow)"/>
 
           <!-- Data labels on connectors -->
-          <text x="152" y="88" class="diagram-eyebrow" text-anchor="middle">node ID</text>
+          <text x="152" y="88" class="diagram-eyebrow" text-anchor="middle">node-id</text>
           <text x="316" y="88" class="diagram-eyebrow" text-anchor="middle">boundVariables</text>
           <text x="484" y="88" class="diagram-eyebrow" text-anchor="middle">prop spec</text>
           <text x="652" y="88" class="diagram-eyebrow" text-anchor="middle">code</text>
@@ -384,12 +399,12 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           <span class="docs-step-badge">A</span>
           <div style="flex: 1">
             <h3 class="docs-h3">Select the component in Figma</h3>
-            <p class="docs-step-desc">Open the <a href="https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Components" target="_blank" rel="noopener noreferrer" class="docs-link-primary">Atelier Figma file</a> and click the frame you want to implement. The <Jargon term="node ID">node ID</Jargon> appears in the URL after <code>?node-id=</code> — copy that value, you’ll pass it to the MCP tool.</p>
+            <p class="docs-step-desc">Open the <a href="https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Components" target="_blank" rel="noopener noreferrer" class="docs-link-primary">Atelier Figma file</a> and click the frame you want to implement. The <Jargon term="node-id">node-id</Jargon> appears in the URL after <code>?node-id=</code> — copy that value, you’ll pass it to the MCP tool.</p>
 
-            <DiagramFigure caption="The node ID is the value after ?node-id= in the Figma URL. Colons (:) appear URL-encoded as %3A or as a single dash.">
+            <DiagramFigure kind="mockup" caption="The node-id is the value after ?node-id= in the Figma URL. Colons (:) appear URL-encoded as %3A or as a single dash.">
               <svg viewBox="0 0 880 160" role="img" aria-labelledby="url-title url-desc" preserveAspectRatio="xMidYMid meet">
                 <title id="url-title">Figma URL with the node-id parameter highlighted</title>
-                <desc id="url-desc">Screenshot mockup of a browser URL bar showing a Figma design URL. The node-id=695-313 parameter at the end is highlighted in cyan with a caption arrow pointing to it.</desc>
+                <desc id="url-desc">Mockup of a browser URL bar showing a Figma design URL. The node-id=695-313 parameter at the end is highlighted in cyan with a caption arrow pointing to it.</desc>
 
                 <defs>
                   <marker id="url-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -416,7 +431,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
 
                 <!-- Arrow and caption pointing to the node-id -->
                 <path d="M 696 110 L 696 76" class="diagram-connector diagram-connector--accent" marker-end="url(#url-arrow)"/>
-                <text x="696" y="132" text-anchor="middle" font-size="11" font-weight="600" style="fill: var(--ui-color-primary)">this is the node ID</text>
+                <text x="696" y="132" text-anchor="middle" font-size="11" font-weight="600" style="fill: var(--ui-color-primary)">this is the node-id</text>
                 <text x="696" y="146" text-anchor="middle" font-size="10" class="diagram-muted">pass it to figma_get_component_for_development</text>
               </svg>
             </DiagramFigure>

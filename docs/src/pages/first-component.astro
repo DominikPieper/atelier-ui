@@ -16,7 +16,7 @@ const PROMPT = `Build the Settings / Card Figma frame as an Atelier component.
 2. Use the storybook-{framework} MCP (list-all-documentation, then
    get-documentation) to look up LlmCard and LlmInput props.
 3. Generate the component using:
-   - Atelier UI components matched from Storybook
+   - Atelier components matched from Storybook
    - The exact CSS custom property names from the boundVariables
      (no manual conversion — they're identical to the Figma variables)
    - No hardcoded hex colors, no hardcoded padding values`;
@@ -100,7 +100,7 @@ const EXPECTED: Record<Framework, { file: string; cmd: string; port: number }> =
       </div>
       <p class="kata-step-desc">
         Open <a href={FIGMA_URL} target="_blank" rel="noopener noreferrer" class="docs-link-primary docs-link-primary--bold">the Settings / Card frame</a>.
-        The URL already carries <code>?node-id=695-313</code> — that's the node ID you'll
+        The URL already carries <code>?node-id=695-313</code> — that's the node-id you'll
         pass to Claude. No need to copy it manually.
       </p>
     </section>
