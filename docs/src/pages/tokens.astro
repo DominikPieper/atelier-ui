@@ -48,47 +48,47 @@ const colorGroups = [
 ];
 
 const spacing = [
-  { name: '--ui-spacing-1',  rem: '0.25rem', px: '4px'  },
-  { name: '--ui-spacing-2',  rem: '0.5rem',  px: '8px'  },
-  { name: '--ui-spacing-3',  rem: '0.75rem', px: '12px' },
-  { name: '--ui-spacing-4',  rem: '1rem',    px: '16px' },
-  { name: '--ui-spacing-5',  rem: '1.25rem', px: '20px' },
-  { name: '--ui-spacing-6',  rem: '1.5rem',  px: '24px' },
-  { name: '--ui-spacing-8',  rem: '2rem',    px: '32px' },
-  { name: '--ui-spacing-10', rem: '2.5rem',  px: '40px' },
-  { name: '--ui-spacing-12', rem: '3rem',    px: '48px' },
-  { name: '--ui-spacing-16', rem: '4rem',    px: '64px' },
+  { name: '--ui-spacing-1',  rem: '0.25rem', px: '4px',  use: 'Icon insets, hairline gaps' },
+  { name: '--ui-spacing-2',  rem: '0.5rem',  px: '8px',  use: 'Tight inline gaps, badge inset' },
+  { name: '--ui-spacing-3',  rem: '0.75rem', px: '12px', use: 'Chip padding, button content gap' },
+  { name: '--ui-spacing-4',  rem: '1rem',    px: '16px', use: 'Default body gap, form-field spacing' },
+  { name: '--ui-spacing-5',  rem: '1.25rem', px: '20px', use: 'Compact section spacing' },
+  { name: '--ui-spacing-6',  rem: '1.5rem',  px: '24px', use: 'Card padding, dialog inset' },
+  { name: '--ui-spacing-8',  rem: '2rem',    px: '32px', use: 'Block-level section gap' },
+  { name: '--ui-spacing-10', rem: '2.5rem',  px: '40px', use: 'Page-level vertical rhythm' },
+  { name: '--ui-spacing-12', rem: '3rem',    px: '48px', use: 'Hero / major section break' },
+  { name: '--ui-spacing-16', rem: '4rem',    px: '64px', use: 'Full-bleed section separation' },
 ];
 
 const radii = [
-  { name: '--ui-radius-sm',   value: '0.375rem', px: '6px'  },
-  { name: '--ui-radius-md',   value: '0.5rem',   px: '8px'  },
-  { name: '--ui-radius-lg',   value: '0.75rem',  px: '12px' },
-  { name: '--ui-radius-xl',   value: '1rem',     px: '16px' },
-  { name: '--ui-radius-full', value: '9999px',   px: '∞'    },
+  { name: '--ui-radius-sm',   value: '0.375rem', px: '6px',  use: 'Inputs, kbd glyphs, small chips' },
+  { name: '--ui-radius-md',   value: '0.5rem',   px: '8px',  use: 'Default — buttons, badges, cards' },
+  { name: '--ui-radius-lg',   value: '0.75rem',  px: '12px', use: 'Elevated cards, dialogs, panels' },
+  { name: '--ui-radius-xl',   value: '1rem',     px: '16px', use: 'Hero / showcase surfaces' },
+  { name: '--ui-radius-full', value: '9999px',   px: '∞',    use: 'Pills, avatars, circular icons' },
 ];
 
 const typography = [
-  { name: '--ui-font-size-xs',  value: '0.75rem',  px: '12px', label: 'xs' },
-  { name: '--ui-font-size-sm',  value: '0.875rem', px: '14px', label: 'sm' },
-  { name: '--ui-font-size-md',  value: '1rem',     px: '16px', label: 'md' },
-  { name: '--ui-font-size-lg',  value: '1.125rem', px: '18px', label: 'lg' },
-  { name: '--ui-font-size-xl',  value: '1.25rem',  px: '20px', label: 'xl' },
-  { name: '--ui-font-size-2xl', value: '1.5rem',   px: '24px', label: '2xl' },
+  { name: '--ui-font-size-xs',  value: '0.75rem',  px: '12px', label: 'xs',  use: 'Labels, captions, eyebrows' },
+  { name: '--ui-font-size-sm',  value: '0.875rem', px: '14px', label: 'sm',  use: 'Secondary text, table cells' },
+  { name: '--ui-font-size-md',  value: '1rem',     px: '16px', label: 'md',  use: 'Default body copy' },
+  { name: '--ui-font-size-lg',  value: '1.125rem', px: '18px', label: 'lg',  use: 'Emphasized body, sub-heading' },
+  { name: '--ui-font-size-xl',  value: '1.25rem',  px: '20px', label: 'xl',  use: 'Card titles, section heads' },
+  { name: '--ui-font-size-2xl', value: '1.5rem',   px: '24px', label: '2xl', use: 'Page heads, hero titles' },
 ];
 
 const shadows = [
-  { name: '--ui-shadow-xs', label: 'xs' },
-  { name: '--ui-shadow-sm', label: 'sm' },
-  { name: '--ui-shadow-md', label: 'md' },
-  { name: '--ui-shadow-lg', label: 'lg' },
-  { name: '--ui-shadow-xl', label: 'xl' },
+  { name: '--ui-shadow-xs', label: 'xs', use: 'Inputs at rest, subtle inset hint' },
+  { name: '--ui-shadow-sm', label: 'sm', use: 'Cards at rest' },
+  { name: '--ui-shadow-md', label: 'md', use: 'Hovered cards, dropdowns' },
+  { name: '--ui-shadow-lg', label: 'lg', use: 'Dialogs, drawers' },
+  { name: '--ui-shadow-xl', label: 'xl', use: 'Tooltips, floating menus' },
 ];
 
 const motion = [
-  { name: '--ui-duration-fast',   value: '150ms' },
-  { name: '--ui-duration-normal', value: '200ms' },
-  { name: '--ui-duration-slow',   value: '300ms' },
+  { name: '--ui-duration-fast',   value: '150ms', use: 'Micro-interactions — hover, focus, press' },
+  { name: '--ui-duration-normal', value: '200ms', use: 'Standard UI transitions — toggle, expand' },
+  { name: '--ui-duration-slow',   value: '300ms', use: 'Dialog / drawer enter and exit' },
 ];
 ---
 
@@ -152,13 +152,17 @@ const motion = [
     <!-- Spacing -->
     <div class="docs-section">
       <h2 class="docs-section-title">Spacing</h2>
+      <p style="color: var(--ui-color-text-muted); font-size: 0.82rem; line-height: 1.6; margin-bottom: 1rem">
+        The same scale drives padding, gap, and margin. Pick the smallest token that gives the surface room to breathe — bigger numbers belong at higher levels of layout (sections, hero blocks).
+      </p>
       <div style="display: flex; flex-direction: column; gap: 0.35rem">
         {spacing.map(s => (
-          <div style="display: flex; align-items: center; gap: 0.85rem; padding: 0.5rem 0.85rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); border: 1px solid var(--ui-color-border)">
+          <div style="display: flex; align-items: center; gap: 0.85rem; padding: 0.5rem 0.85rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); border: 1px solid var(--ui-color-border); flex-wrap: wrap">
             <div style={`height: 6px; background: var(--ui-color-primary); border-radius: 3px; width: ${s.rem}; flex-shrink: 0; opacity: 0.7`}></div>
-            <div style="font-family: monospace; font-size: 0.8rem; font-weight: 600; color: var(--ui-color-text); min-width: 180px">{s.name}</div>
-            <div style="font-family: monospace; font-size: 0.75rem; color: var(--ui-color-text-muted)">{s.rem}</div>
-            <div style="font-family: monospace; font-size: 0.75rem; color: var(--ui-color-text-muted)">{s.px}</div>
+            <div style="font-family: monospace; font-size: 0.8rem; font-weight: 600; color: var(--ui-color-text); min-width: 160px">{s.name}</div>
+            <div style="font-family: monospace; font-size: 0.75rem; color: var(--ui-color-text-muted); min-width: 4rem">{s.rem}</div>
+            <div style="font-family: monospace; font-size: 0.75rem; color: var(--ui-color-text-muted); min-width: 3rem">{s.px}</div>
+            <div style="font-size: 0.75rem; color: var(--ui-color-text-muted); flex: 1; min-width: 200px">{s.use}</div>
           </div>
         ))}
       </div>
@@ -167,12 +171,16 @@ const motion = [
     <!-- Radius -->
     <div class="docs-section">
       <h2 class="docs-section-title">Border Radius</h2>
+      <p style="color: var(--ui-color-text-muted); font-size: 0.82rem; line-height: 1.6; margin-bottom: 1rem">
+        Radius scales with surface importance. <code>md</code> is the project default; reach for <code>lg</code> when the surface lifts above the page (cards, dialogs).
+      </p>
       <div style="display: flex; gap: 1rem; flex-wrap: wrap">
         {radii.map(r => (
-          <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); border: 1px solid var(--ui-color-border); min-width: 100px">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); border: 1px solid var(--ui-color-border); min-width: 140px; max-width: 180px">
             <div style={`width: 48px; height: 48px; background: var(--ui-color-primary-light); border: 2px solid var(--ui-color-primary); border-radius: var(${r.name})`}></div>
             <div style="font-family: monospace; font-size: 0.68rem; font-weight: 600; color: var(--ui-color-text); text-align: center">{r.name.replace('--ui-radius-', '')}</div>
             <div style="font-family: monospace; font-size: 0.65rem; color: var(--ui-color-text-muted)">{r.value}</div>
+            <div style="font-size: 0.7rem; color: var(--ui-color-text-muted); text-align: center; line-height: 1.4">{r.use}</div>
           </div>
         ))}
       </div>
@@ -181,13 +189,17 @@ const motion = [
     <!-- Typography -->
     <div class="docs-section">
       <h2 class="docs-section-title">Typography Scale</h2>
+      <p style="color: var(--ui-color-text-muted); font-size: 0.82rem; line-height: 1.6; margin-bottom: 1rem">
+        Body copy starts at <code>md</code>. Step down to <code>sm</code> / <code>xs</code> for secondary text and labels; up to <code>lg</code>+ for headings. Pair every step change with a heading-level shift in markup.
+      </p>
       <div style="display: flex; flex-direction: column; gap: 0.35rem">
         {typography.map(t => (
-          <div style="display: flex; align-items: baseline; gap: 1rem; padding: 0.6rem 0.85rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); border: 1px solid var(--ui-color-border)">
+          <div style="display: flex; align-items: baseline; gap: 1rem; padding: 0.6rem 0.85rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); border: 1px solid var(--ui-color-border); flex-wrap: wrap">
             <span style={`font-size: var(${t.name}); font-weight: 600; color: var(--ui-color-text); line-height: 1; flex-shrink: 0; min-width: 3.5rem`}>Aa</span>
-            <span style="font-family: monospace; font-size: 0.8rem; color: var(--ui-color-text); min-width: 180px">{t.name}</span>
-            <span style="font-family: monospace; font-size: 0.75rem; color: var(--ui-color-text-muted)">{t.value}</span>
-            <span style="font-family: monospace; font-size: 0.75rem; color: var(--ui-color-text-muted)">{t.px}</span>
+            <span style="font-family: monospace; font-size: 0.8rem; color: var(--ui-color-text); min-width: 160px">{t.name}</span>
+            <span style="font-family: monospace; font-size: 0.75rem; color: var(--ui-color-text-muted); min-width: 4rem">{t.value}</span>
+            <span style="font-family: monospace; font-size: 0.75rem; color: var(--ui-color-text-muted); min-width: 3rem">{t.px}</span>
+            <span style="font-size: 0.75rem; color: var(--ui-color-text-muted); flex: 1; min-width: 200px">{t.use}</span>
           </div>
         ))}
       </div>
@@ -196,12 +208,16 @@ const motion = [
     <!-- Shadows -->
     <div class="docs-section">
       <h2 class="docs-section-title">Shadows</h2>
+      <p style="color: var(--ui-color-text-muted); font-size: 0.82rem; line-height: 1.6; margin-bottom: 1rem">
+        Shadows encode elevation. Larger token = higher layer in the stacking order. Keep the difference between hovered and resting states one step apart so movement reads as deliberate.
+      </p>
       <div style="display: flex; gap: 1rem; flex-wrap: wrap">
         {shadows.map(s => (
-          <div style={`display: flex; flex-direction: column; align-items: center; gap: 0.6rem; padding: 1.25rem 1rem; background: var(--ui-color-surface); border-radius: var(--ui-radius-md); border: 1px solid var(--ui-color-border); min-width: 90px`}>
+          <div style={`display: flex; flex-direction: column; align-items: center; gap: 0.6rem; padding: 1.25rem 1rem; background: var(--ui-color-surface); border-radius: var(--ui-radius-md); border: 1px solid var(--ui-color-border); min-width: 130px; max-width: 160px`}>
             <div style={`width: 48px; height: 48px; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); box-shadow: var(${s.name})`}></div>
             <div style="font-family: monospace; font-size: 0.72rem; font-weight: 600; color: var(--ui-color-text)">{s.label}</div>
             <div style="font-family: monospace; font-size: 0.65rem; color: var(--ui-color-text-muted)">{s.name.replace('--ui-', '')}</div>
+            <div style="font-size: 0.7rem; color: var(--ui-color-text-muted); text-align: center; line-height: 1.4">{s.use}</div>
           </div>
         ))}
       </div>
@@ -210,20 +226,24 @@ const motion = [
     <!-- Motion -->
     <div class="docs-section">
       <h2 class="docs-section-title">Motion</h2>
+      <p style="color: var(--ui-color-text-muted); font-size: 0.82rem; line-height: 1.6; margin-bottom: 1rem">
+        Durations match perceived weight: tiny things move fast, surfaces move slowly. Easing curves carry intent — <code>ease-out</code> for entrances, <code>ease-spring</code> for affirmative actions, <code>ease-in-out</code> for everything else.
+      </p>
       <table class="docs-props-table">
         <thead>
-          <tr><th>Token</th><th>Value</th></tr>
+          <tr><th>Token</th><th>Value</th><th>Use</th></tr>
         </thead>
         <tbody>
           {motion.map(m => (
             <tr>
               <td><code>{m.name}</code></td>
               <td><code>{m.value}</code></td>
+              <td>{m.use}</td>
             </tr>
           ))}
-          <tr><td><code>--ui-ease-out</code></td><td><code>cubic-bezier(0.16, 1, 0.3, 1)</code></td></tr>
-          <tr><td><code>--ui-ease-in-out</code></td><td><code>cubic-bezier(0.45, 0, 0.55, 1)</code></td></tr>
-          <tr><td><code>--ui-ease-spring</code></td><td><code>cubic-bezier(0.34, 1.56, 0.64, 1)</code></td></tr>
+          <tr><td><code>--ui-ease-out</code></td><td><code>cubic-bezier(0.16, 1, 0.3, 1)</code></td><td>Element entering view (toast, dropdown)</td></tr>
+          <tr><td><code>--ui-ease-in-out</code></td><td><code>cubic-bezier(0.45, 0, 0.55, 1)</code></td><td>Symmetric transitions (toggle, accordion)</td></tr>
+          <tr><td><code>--ui-ease-spring</code></td><td><code>cubic-bezier(0.34, 1.56, 0.64, 1)</code></td><td>Confirmations, success cues</td></tr>
         </tbody>
       </table>
     </div>
