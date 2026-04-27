@@ -13,7 +13,9 @@ const CARD_WIDTH  = 320;
 const CARD_PADDING = 24;
 const CARD_ITEM_SPACING = 12;
 const PREVIEW_PAD = 16;
-const PREVIEW_MIN_H = 160;
+const PREVIEW_MIN_H = 96;        // floor for tiny components (Badge, Avatar, Skeleton)
+const PREVIEW_MAX_H = 240;       // ceiling for large compositions (Chat, Drawer, Table)
+const PREVIEW_INNER_W = CARD_WIDTH - CARD_PADDING * 2 - PREVIEW_PAD * 2;  // 240 by default
 const BADGE_PAD = { x: 6, y: 4 };
 
 // Palettes
@@ -309,6 +311,15 @@ async function buildCard(node) {
   try {
     const instance = meta.previewNode.createInstance();
     preview.appendChild(instance);
+    // Scale-fit on BOTH axes — width-only clamp pancakes tall compositions
+    // (a 1080×720 chat preview scaled by width alone becomes 240×26 because
+    // the parent preview frame's minHeight clips the height after rescale).
+    const scale = Math.min(
+      PREVIEW_INNER_W / instance.width,
+      PREVIEW_MAX_H / instance.height,
+      1,
+    );
+    if (scale < 0.99) instance.rescale(scale);
   } catch (e) {
     preview.appendChild(makeText('(preview unavailable)', { size: 11, color: bg.muted }));
   }

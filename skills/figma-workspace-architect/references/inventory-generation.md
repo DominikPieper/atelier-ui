@@ -205,8 +205,8 @@ Card                  Frame · VERTICAL · width 320 · HUG height · padding 24
 │  ├─ Name            Text  · weight 600 · size 14 · color = bg.fg
 │  └─ StatusBadge     Frame · HORIZONTAL · padding [6,4] · radius 12 · fill = status.color
 │     └─ Label        Text  · size 10 · uppercase · color = status.fg
-├─ Preview            Frame · VERTICAL · primaryAxis CENTER · counterAxis CENTER · padding 16 · minHeight 160 · FILL horizontal · fill = bg.preview
-│  └─ Instance        defaultVariant.createInstance() (or node.createInstance() for COMPONENT)
+├─ Preview            Frame · VERTICAL · primaryAxis CENTER · counterAxis CENTER · padding 16 · minHeight 96 · FILL horizontal · fill = bg.preview
+│  └─ Instance        defaultVariant.createInstance() (or node.createInstance() for COMPONENT) · scale-fit on both axes
 ├─ MetaRow            Frame · HORIZONTAL · itemSpacing 8 · "{type} · {w}×{h}px"
 ├─ PropertyTable      Frame · VERTICAL · itemSpacing 4 · FILL horizontal
 │  └─ Row × N         Frame · HORIZONTAL · itemSpacing 8 · "{key}" "{type}" "default: {default}"
@@ -342,10 +342,27 @@ Mismatches render as a `_Skipped` frame on the Inventory page listing each missi
 | `CARD_PADDING` | 24 | inside each card (per spec) |
 | `CARD_ITEM_SPACING` | 12 | header → preview → table → footer |
 | `PREVIEW_PAD` | 16 | preview frame internal |
-| `PREVIEW_MIN_H` | 160 | keeps small components from collapsing the card |
+| `PREVIEW_MIN_H` | 96 | floor — keeps tiny components (Badge, Avatar 24×24) from collapsing the card |
+| `PREVIEW_MAX_H` | 240 | ceiling — caps tall compositions (Chat 1080×720, Drawer 440×320) from dominating the card |
+| `PREVIEW_INNER_W` | 240 | derived: `CARD_WIDTH − 2·CARD_PADDING − 2·PREVIEW_PAD` (320 − 48 − 32) |
 | `BADGE_PAD` | [6, 4] | status badge padding [x, y] |
 
 All multiples of 4, matching the existing skill scale (`token-architecture.md:35`).
+
+**Scale rule.** Inside the preview frame, the instance is rescaled to fit the inner box on **both** axes:
+
+```js
+const scale = Math.min(
+  PREVIEW_INNER_W / instance.width,
+  PREVIEW_MAX_H   / instance.height,
+  1,                                  // never upscale
+);
+if (scale < 0.99) instance.rescale(scale);
+```
+
+A width-only clamp is the common bug — a 1080×720 chat composition scaled by width alone becomes 240×26 because the preview frame's `minHeight: 96` clips the rescaled height after the fact, leaving the instance as a thin strip in a mostly-empty card. Both-axes clamp keeps the aspect ratio and sizes the preview proportionally so even the largest compositions stay readable in their card.
+
+For the inverse case — components whose master is *smaller* than the preview inner box (e.g. a 24×24 Avatar) — the `Math.min(..., 1)` floor keeps them at native size; the `PREVIEW_MIN_H` floor pads the preview so the card doesn't collapse around the tiny instance.
 
 ## Internal grouping schema (example)
 
