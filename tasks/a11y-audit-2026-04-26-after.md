@@ -126,10 +126,83 @@ file was changed in this phase — Phase 4 is purely Figma-side.
 
 ## What's next
 
-- Phase 5 — wrap up: re-run axe on the deployed docs to confirm no
-  regression, snapshot the audit numbers into the
-  `/accessibility` page's "Recent improvements" list, and commit
-  this after-report.
 - Designer follow-up — three deferred items above (state-axis
   convention; rebind muted-text vars; LlmTabGroup focus reading).
   None block release.
+
+## Phase 5 — verification (2026-04-27)
+
+Ran axe-core 4.11.3 (chrome-headless, ChromeDriver 147) with WCAG 2.0
++ 2.1, levels A + AA, against the deployed docs at
+`https://atelier.pieper.io`. Local run was preferred but blocked by
+the sandbox (no http server allowed); pivoted to the deployed site.
+
+**Caveat: deploy lags main by 4 days.** The deployed sitemap's
+`lastmod` is 2026-04-23; the audit work and Phase 3 token bumps land
+in commits from 2026-04-26 (audit phases) and later. Consequently,
+two of the nine planned URLs aren't deployed yet
+(`/accessibility/`, `/patterns/<id>/` detail pages) and most
+contrast violations on the audited URLs are pre-Phase-3 known issues
+already fixed on main. The verification below confirms what's still
+on the deployed surface — not what's on `HEAD`.
+
+### Per-URL results
+
+| URL | Total | color-contrast | Other |
+|---|---:|---:|---|
+| `/` | 4 | 4 | — |
+| `/components/` | 12 | 12 | — |
+| `/components/button/` | 19 | 19 | — |
+| `/patterns/` | 53 | 49 | `button-name` × 2, `scrollable-region-focusable` × 2 |
+| `/tokens/` | 64 | 64 | — |
+| `/workshop/` | 30 | 30 | — |
+| `/figma-token/` | 57 | 57 | — |
+
+### Classification
+
+- **All `color-contrast` violations** (235 of 239 total) are the same
+  pre-Phase-3 issue. Confirmed by inspecting the deployed
+  `BaseLayout.<hash>.css`: `--ui-color-text-muted: #64748b` (the
+  pre-bump value). On main this is now `#475569` (further darkened
+  past the original `#4f5f7c` slated in `9b7e137`). Same for
+  `#9faab8` (sidebar muted variant in dark sections). Spot-check on
+  `/tokens` confirms the bucket: 48 of 64 violations carry foreground
+  `#64748b`, 16 carry `#9faab8`. **Expected to drop to near-zero on
+  next deploy.**
+- **`button-name` × 2 on `/patterns/`** target two
+  `LlmMenuTrigger` "..." buttons in the data-list demo. Already
+  fixed on main: `docs/src/components/PatternsPage.tsx:160` carries
+  `aria-label="More actions"` on the trigger. Deploy-stale finding;
+  no action needed.
+- **`scrollable-region-focusable` × 2 on `/patterns/`** target
+  `.docs-code-block > pre`. Real, still present on main:
+  `docs/src/styles/global.css:716-724` defines
+  `.docs-code-block pre { overflow-x: auto }` without `tabindex="0"`,
+  so keyboard-only users can't scroll long code samples. Affects
+  every page that uses the `.docs-code-block` shell (currently
+  `ComponentDetail.tsx` and `design-principles.astro`). **Filed as
+  follow-up.** One-line fix: add `tabindex="0"` and `role="region"`
+  with an `aria-label` on the rendered `<pre>`.
+
+### Sign-off
+
+- No regression detected from Phase 4. Phase 4 was Figma-only —
+  zero DOM diff in this repo — so a regression was structurally
+  unlikely; this run confirms nothing slipped in via adjacent docs
+  commits since 2026-04-23.
+- Phase 5 partially complete. The "no regression on deployed docs"
+  half is gated on the next Netlify deploy; will re-run after deploy
+  to confirm contrast counts collapse to ~0.
+
+### Follow-ups created by this run
+
+- [ ] **`docs-code-block` keyboard scroll** — add `tabindex="0"`
+  + `role="region"` + `aria-label` to the rendered `<pre>` so it can
+  be scrolled by keyboard. Touches `docs/src/styles/global.css` and
+  whatever Astro/MDX shell renders the block (likely
+  `astro-expressive-code`'s output wrapper, or a small
+  `docs/src/components/CodeBlockShell.astro`).
+- [ ] **Re-run axe after next docs deploy** — confirm contrast
+  counts drop to near-zero. One-shot run repeats the same nine URLs
+  (this time `/accessibility/` and one `/patterns/<id>/` will be
+  reachable too).
