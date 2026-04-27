@@ -51,6 +51,13 @@ const all = await figma.root.findAllAsync(
   n => n.type === 'COMPONENT' || n.type === 'COMPONENT_SET'
 );
 
+// Defaults — agents can override via skipNamespaces / skipPages.
+// Icons live on a dedicated `Icons` page in a properly-structured library
+// (see naming-and-file-structure.md). They typically number in the dozens
+// and would dominate the gallery — exclude by default.
+const SKIP_NS    = new Set(['Icon']);
+const SKIP_PAGES = new Set(['Icons', '🔣 Icons']);
+
 const skipped = [];
 const sources = all.filter(n => {
   // Skip variant children — the parent COMPONENT_SET is the unit of inventory
@@ -59,6 +66,19 @@ const sources = all.filter(n => {
   const leaf = n.name.split('/').pop();
   if (/^[_.]/.test(leaf)) {
     skipped.push({ id: n.id, name: n.name, reason: 'private prefix' });
+    return false;
+  }
+  // Skip configured top-level slash namespaces
+  const top = n.name.split('/')[0];
+  if (SKIP_NS.has(top)) {
+    skipped.push({ id: n.id, name: n.name, reason: `namespace skip: ${top}` });
+    return false;
+  }
+  // Skip components that live on a dedicated icon/asset page
+  let cursor = n.parent;
+  while (cursor && cursor.type !== 'PAGE') cursor = cursor.parent;
+  if (cursor && SKIP_PAGES.has(cursor.name)) {
+    skipped.push({ id: n.id, name: n.name, reason: `page skip: ${cursor.name}` });
     return false;
   }
   return true;
@@ -71,6 +91,8 @@ return {
 ```
 
 `loadAllPagesAsync()` is required — without it `findAllAsync` does not see components on unloaded pages. The host plugin's manifest must declare `documentAccess: "dynamic-page"`; figma-console-mcp does this by default but new self-hosted plugins need it.
+
+**Why icons are excluded by default.** Icons live on a dedicated `Icons` page in a properly-structured library (per `naming-and-file-structure.md`). That page is *itself* the icon gallery — re-rendering every icon as an inventory card produces a wall of mostly-empty cells (one tiny glyph each, no Variant Properties to display, identical descriptions) that drowns the actual component cards. The agent should treat the dedicated Icons page as the canonical icon reference and keep the inventory focused on Components. Override the defaults when an icon library legitimately lives outside its own page (rare).
 
 ## Phase 2 — Group (no `figma_execute`)
 

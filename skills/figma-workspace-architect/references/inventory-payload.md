@@ -47,6 +47,10 @@ Read-only. Returns the light index. Heavy metadata is deferred to Phase 4.
 
 ```js
 // figma_execute payload — Phase 1
+// Inputs (inlined by the skill agent):
+//   skipNamespaces: string[]    // top-level slash segments to drop, e.g. ['Icon']
+//   skipPages: string[]         // page names to drop, e.g. ['Icons', '🔣 Icons']
+
 await figma.loadAllPagesAsync();
 figma.skipInvisibleInstanceChildren = true;
 
@@ -54,12 +58,30 @@ const all = await figma.root.findAllAsync(
   n => n.type === 'COMPONENT' || n.type === 'COMPONENT_SET'
 );
 
+// Default skip lists — `Icon` namespace and common icon page names.
+// Icons live on a dedicated `Icons` page (see naming-and-file-structure.md);
+// dumping them into the component inventory drowns it in single-cell cards.
+const defaultSkipNamespaces = new Set(skipNamespaces || ['Icon']);
+const defaultSkipPages      = new Set(skipPages || ['Icons', '🔣 Icons']);
+
 const skipped = [];
 const sources = all.filter(n => {
   if (n.type === 'COMPONENT' && n.parent?.type === 'COMPONENT_SET') return false;
   const leaf = n.name.split('/').pop();
   if (/^[_.]/.test(leaf)) {
     skipped.push({ id: n.id, name: n.name, reason: 'private prefix' });
+    return false;
+  }
+  const top = n.name.split('/')[0];
+  if (defaultSkipNamespaces.has(top)) {
+    skipped.push({ id: n.id, name: n.name, reason: `namespace skip: ${top}` });
+    return false;
+  }
+  // Walk up to find the parent page
+  let cursor = n.parent;
+  while (cursor && cursor.type !== 'PAGE') cursor = cursor.parent;
+  if (cursor && defaultSkipPages.has(cursor.name)) {
+    skipped.push({ id: n.id, name: n.name, reason: `page skip: ${cursor.name}` });
     return false;
   }
   return true;
