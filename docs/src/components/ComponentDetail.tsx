@@ -319,7 +319,7 @@ function ComponentDemo({ name }: { name: string }) {
         <div style={{ width: '100%' }}>
           <LlmAccordionGroup variant="bordered">
             <LlmAccordionItem expanded={accordionExpanded} onExpandedChange={setAccordionExpanded}>
-              <LlmAccordionHeader>What is LLM Components?</LlmAccordionHeader>
+              <LlmAccordionHeader>What is Atelier UI?</LlmAccordionHeader>
               A component library designed for AI-generated applications with consistent APIs.
             </LlmAccordionItem>
             <LlmAccordionItem>

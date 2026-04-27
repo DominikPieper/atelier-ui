@@ -6,7 +6,7 @@ import PageEyebrow from '../components/PageEyebrow.astro';
 
 <BaseLayout
   title="LLM-Optimized APIs"
-  description="Design principles behind Atelier — API shapes that help language models generate correct, idiomatic component code on the first try."
+  description="Design principles behind Atelier UI — API shapes that help language models generate correct, idiomatic component code on the first try."
   currentPath="/design-principles"
 >
   <nav slot="toc">
@@ -26,7 +26,7 @@ import PageEyebrow from '../components/PageEyebrow.astro';
         copy examples, and tweak. An LLM-optimized library flips the priority:
         the model has to infer correct usage from minimal context and produce
         working code on the first try. The five principles below are what make
-        that possible — and what shaped every API decision in Atelier.
+        that possible — and what shaped every API decision in Atelier UI.
       </p>
     </div>
 
@@ -133,7 +133,7 @@ import PageEyebrow from '../components/PageEyebrow.astro';
       <h2 id="principle-4" class="docs-section-title">4. A single reactivity model per framework</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin-bottom: 0.75rem">
         Mixing patterns forces the model to decide which approach to use — and it will sometimes
-        guess wrong. Atelier picks one and uses it everywhere.
+        guess wrong. Atelier UI picks one and uses it everywhere.
       </p>
       <ul style="color: var(--ui-color-text-muted); padding-left: 1.5rem; display: flex; flex-direction: column; gap: 0.35rem; margin: 0.5rem 0 1rem">
         <li><strong>Angular:</strong> Signals only — <Jargon term="signal input"><code>input()</code></Jargon>, <code>output()</code>, <code>model()</code>. No legacy <code>@Input</code>/<code>@Output</code> decorators.</li>

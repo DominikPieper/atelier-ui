@@ -6,11 +6,11 @@ import Icon from '../components/Icon.astro';
 import PageEyebrow from '../components/PageEyebrow.astro';
 import BottomNav from '../components/BottomNav.astro';
 
-const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Components?node-id=695-313';
+const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI?node-id=695-313';
 const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
 type Framework = typeof FRAMEWORKS[number];
 
-const PROMPT = `Build the Settings / Card Figma frame as an Atelier component.
+const PROMPT = `Build the Settings / Card Figma frame as an Atelier UI component.
 
 1. Use figma-console MCP (figma_get_component_for_development) on
    node-id 695-313 — read the component spec, boundVariables, and
@@ -18,7 +18,7 @@ const PROMPT = `Build the Settings / Card Figma frame as an Atelier component.
 2. Use the storybook-{framework} MCP (list-all-documentation, then
    get-documentation) to look up LlmCard and LlmInput props.
 3. Generate the component using:
-   - Atelier components matched from Storybook
+   - Atelier UI components matched from Storybook
    - The exact CSS custom property names from the boundVariables
      (no manual conversion — they're identical to the Figma variables)
    - No hardcoded hex colors, no hardcoded padding values`;

@@ -15,7 +15,7 @@ const EXAMPLE_PROMPT = `I've selected the "Settings / Card" frame in Figma.
    the component spec — I need the boundVariables and the visual reference.
 2. Use storybook-react MCP to look up LlmCard and LlmInput props.
 3. Generate the React component using:
-   - The Atelier components matched from Storybook
+   - The Atelier UI components matched from Storybook
    - The exact token names from boundVariables (they map 1-to-1 to CSS
      custom properties — no conversion needed)`;
 
@@ -123,7 +123,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
 
 <BaseLayout
   title="Figma to Code Tutorial"
-  description="Step-by-step tutorial for turning a Figma component into framework-agnostic Atelier code with Claude, Storybook, and the MCP toolchain."
+  description="Step-by-step tutorial for turning a Figma component into framework-agnostic Atelier UI code with Claude, Storybook, and the MCP toolchain."
   currentPath="/tutorial"
 >
   <div class="docs-inline-page">
@@ -134,7 +134,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         Tutorial
       </h1>
       <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 520px; line-height: 1.65">
-        Use <strong style="color: var(--ui-color-text)">figma-console MCP</strong> to read a Figma component spec directly — design tokens included — then <strong style="color: var(--ui-color-text)">Storybook MCP</strong> to match Atelier components, and let Claude Code write token-exact code.
+        Use <strong style="color: var(--ui-color-text)">figma-console MCP</strong> to read a Figma component spec directly — design tokens included — then <strong style="color: var(--ui-color-text)">Storybook MCP</strong> to match Atelier UI components, and let Claude Code write token-exact code.
         We explain what an MCP is in the next section.
       </p>
       <p style="font-size: 0.78rem; color: var(--ui-color-text-muted); margin: 0.65rem 0 0; max-width: 520px; line-height: 1.55">
@@ -163,7 +163,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         <h2 class="objective-heading objective-heading--accent">What you'll learn</h2>
         <ul class="objective-list">
           <li>Read a Figma component's <code>boundVariables</code> via MCP</li>
-          <li>Match the right Atelier component through the Storybook MCP</li>
+          <li>Match the right Atelier UI component through the Storybook MCP</li>
           <li>Generate token-exact code in Angular, React or Vue</li>
           <li>Verify design parity automatically</li>
         </ul>
@@ -173,7 +173,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         <ul class="objective-list objective-list--muted">
           <li>Completed the <a href="/workshop" class="docs-link-primary">Workshop setup</a></li>
           <li><code>figma-console</code> MCP configured — see <a href="/figma-token" class="docs-link-primary">Figma Setup</a></li>
-          <li>Read access to the Atelier Figma file (linked below)</li>
+          <li>Read access to the Atelier UI Figma file (linked below)</li>
           <li>One framework picked — Angular, React or Vue</li>
         </ul>
       </div>
@@ -282,7 +282,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
       </DiagramFigure>
 
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-top: 1rem; font-size: 0.82rem">
-        This tutorial uses two MCP servers: <code>figma-console</code> (reads Figma component frames) and one of the <code>storybook-*</code> servers (returns Atelier component prop documentation). The next section walks the figma-console tools you'll use.
+        This tutorial uses two MCP servers: <code>figma-console</code> (reads Figma component frames) and one of the <code>storybook-*</code> servers (returns Atelier UI component prop documentation). The next section walks the figma-console tools you'll use.
       </p>
     </div>
 
@@ -294,7 +294,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
       </p>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; margin-bottom: 1.25rem">
         {[
-          { title: 'boundVariables', body: 'Each CSS property mapped to its Figma variable name — identical to the CSS custom property name in Atelier. No conversion needed.' },
+          { title: 'boundVariables', body: 'Each CSS property mapped to its Figma variable name — identical to the CSS custom property name in Atelier UI. No conversion needed.' },
           { title: '2× rendered image', body: 'A screenshot of the component, included automatically. AI gets visual and structural context in a single call.' },
           { title: 'Component tree', body: 'Full layout structure: padding, gap, constraints, text behaviour, and interaction states (reactions).' },
         ].map(({ title, body }) => (
@@ -396,7 +396,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           <span class="docs-step-badge">A</span>
           <div style="flex: 1">
             <h3 class="docs-h3">Select the component in Figma</h3>
-            <p class="docs-step-desc">Open the <a href="https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Components" target="_blank" rel="noopener noreferrer" class="docs-link-primary">Atelier Figma file</a> and click the frame you want to implement. The <Jargon term="node-id">node-id</Jargon> appears in the URL after <code>?node-id=</code> — copy that value, you’ll pass it to the MCP tool.</p>
+            <p class="docs-step-desc">Open the <a href="https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI" target="_blank" rel="noopener noreferrer" class="docs-link-primary">Atelier UI Figma file</a> and click the frame you want to implement. The <Jargon term="node-id">node-id</Jargon> appears in the URL after <code>?node-id=</code> — copy that value, you’ll pass it to the MCP tool.</p>
 
             <DiagramFigure kind="mockup" caption="The node-id is the value after ?node-id= in the Figma URL. Colons (:) appear URL-encoded as %3A or as a single dash.">
               <svg viewBox="0 0 880 160" role="img" aria-labelledby="url-title url-desc" preserveAspectRatio="xMidYMid meet">
@@ -419,7 +419,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
                 </g>
 
                 <!-- URL text (broken into parts so we can highlight one segment) -->
-                <text x="96" y="64" font-size="13" class="diagram-mono diagram-muted">figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components</text>
+                <text x="96" y="64" font-size="13" class="diagram-mono diagram-muted">figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI</text>
 
                 <!-- Highlight box around the node-id parameter -->
                 <rect x="592" y="44" width="208" height="28" rx="6" ry="6"
@@ -446,7 +446,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         <div class="docs-step-row" data-step="3">
           <span class="docs-step-badge">C</span>
           <div style="flex: 1">
-            <h3 class="docs-h3">AI matches to Atelier components</h3>
+            <h3 class="docs-h3">AI matches to Atelier UI components</h3>
             <p class="docs-step-desc">Claude Code queries the Storybook MCP (<code>list-all-documentation</code> → <code>get-documentation</code>) for the matching component. It gets exact prop names and variants — no guessing.</p>
           </div>
         </div>
@@ -455,7 +455,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           <span class="docs-step-badge">D</span>
           <div style="flex: 1">
             <h3 class="docs-h3">AI generates token-exact code</h3>
-            <p class="docs-step-desc">With the Figma token names from <code>boundVariables</code> and the correct Atelier props from Storybook, the generated code uses the right component APIs and the exact CSS custom properties — no hardcoded values, no style overrides.</p>
+            <p class="docs-step-desc">With the Figma token names from <code>boundVariables</code> and the correct Atelier UI props from Storybook, the generated code uses the right component APIs and the exact CSS custom properties — no hardcoded values, no style overrides.</p>
           </div>
         </div>
 
@@ -484,7 +484,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
     <div class="docs-section">
       <h2 class="docs-section-title">Generated Output</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
-        What Claude Code produces — using <code>LlmCard</code> and <code>LlmInput</code> from Atelier with tokens drawn directly from Figma <code>boundVariables</code>:
+        What Claude Code produces — using <code>LlmCard</code> and <code>LlmInput</code> from Atelier UI with tokens drawn directly from Figma <code>boundVariables</code>:
       </p>
       <div class="docs-multi-code-tabs" style="border-radius: 8px 8px 0 0; margin-bottom: 0; width: fit-content">
         {FRAMEWORKS.map((fw, i) => (

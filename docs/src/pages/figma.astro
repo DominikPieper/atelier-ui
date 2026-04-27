@@ -6,12 +6,12 @@ import Jargon from '../components/Jargon.astro';
 import WorkflowDiagram from '../components/WorkflowDiagram.astro';
 import PageEyebrow from '../components/PageEyebrow.astro';
 import BottomNav from '../components/BottomNav.astro';
-const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Components';
+const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 ---
 
 <BaseLayout
   title="Figma"
-  description="How Atelier uses Figma as the design source of truth — component frames, design tokens, and the Figma → Storybook → code workflow."
+  description="How Atelier UI uses Figma as the design source of truth — component frames, design tokens, and the Figma → Storybook → code workflow."
   currentPath="/figma"
 >
   <div class="docs-inline-page">
@@ -19,7 +19,7 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Com
       <PageEyebrow kind="howto" />
       <h1 class="docs-page-h1">Figma</h1>
       <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 520px; line-height: 1.65">
-        The design source of truth for every Atelier component — variables, frames, and token mappings, all in one file.
+        The design source of truth for every Atelier UI component — variables, frames, and token mappings, all in one file.
       </p>
     </div>
 
@@ -43,8 +43,8 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Com
     <div class="docs-section" style="margin-bottom: 2.5rem">
       <h2 class="docs-section-title">The Figma file</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem">
-        <a href={FIGMA_URL} target="_blank" rel="noopener noreferrer" class="docs-link-primary docs-link-primary--bold">LLM Components</a> is the single Figma file for the Atelier design system.
-        It contains two pages and a variable collection that maps 1:1 to the CSS token system.
+        <a href={FIGMA_URL} target="_blank" rel="noopener noreferrer" class="docs-link-primary docs-link-primary--bold">Atelier UI</a> is the single Figma file for the Atelier UI design system —
+        the component library Atelier ships. It contains two pages and a variable collection that maps 1:1 to the CSS token system.
       </p>
       <table class="docs-props-table" style="margin-bottom: 1.25rem">
         <thead>
@@ -228,7 +228,7 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Com
         </li>
       </ul>
       <p style="font-size: 0.8rem; color: var(--ui-color-text-muted); margin: 0">
-        56 variables total: 29 color, 10 spacing, 5 radius, 12 typography. Full list in <code>libs/llm-components-angular/src/styles/tokens.css</code>.
+        56 variables total: 29 color, 10 spacing, 5 radius, 12 typography. Full list in <code>libs/angular/src/styles/tokens.css</code>.
       </p>
     </div>
 

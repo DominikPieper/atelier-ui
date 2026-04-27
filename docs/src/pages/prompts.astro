@@ -27,12 +27,12 @@ const SECTIONS: Section[] = [
       {
         title: 'Chat interface',
         description: 'A chat UI with message history, a text input, and a send button. Shows a skeleton while the response streams.',
-        prompt: (fw) => `Fetch the Atelier API reference first:\n${DOCS_URL}\n\nBuild a chat interface using Atelier components. ${fwNote(fw)}\n\nRequirements:\n- Message list with user and assistant message bubbles (different alignment/background)\n- LlmInput with autoResize for the chat input field\n- LlmButton (primary, "Send") to submit the message\n- LlmSkeleton (3 rows) shown while the assistant response is loading\n- LlmCard wrapping the whole chat panel\n- Keyboard shortcut: pressing Enter submits the message\n\nState to manage:\n- messages: Array<{ role: 'user' | 'assistant'; content: string }>\n- inputValue: string\n- isLoading: boolean\n\nDo not call a real API — use a 1.5s setTimeout to simulate a response.`,
+        prompt: (fw) => `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a chat interface using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- Message list with user and assistant message bubbles (different alignment/background)\n- LlmInput with autoResize for the chat input field\n- LlmButton (primary, "Send") to submit the message\n- LlmSkeleton (3 rows) shown while the assistant response is loading\n- LlmCard wrapping the whole chat panel\n- Keyboard shortcut: pressing Enter submits the message\n\nState to manage:\n- messages: Array<{ role: 'user' | 'assistant'; content: string }>\n- inputValue: string\n- isLoading: boolean\n\nDo not call a real API — use a 1.5s setTimeout to simulate a response.`,
       },
       {
         title: 'Generated code output',
         description: 'Displays AI-generated code with a LlmCodeBlock inside a LlmCard, with a regenerate button.',
-        prompt: (fw) => `Fetch the Atelier API reference first:\n${DOCS_URL}\n\nBuild a "generated code" panel using Atelier components. ${fwNote(fw)}\n\nRequirements:\n- LlmCard with a header ("Generated Component") and content area\n- LlmCodeBlock showing a hardcoded TypeScript snippet (language="typescript", filename="component.ts", showLineNumbers=true)\n- A "Regenerate" LlmButton (variant="outline") below the code block\n- A LlmBadge (variant="success") in the card header showing "Ready"\n- While "regenerating" (simulate with 1.2s timeout), show LlmSkeleton with 4 rows instead of the code block and change the badge to variant="warning" with text "Generating…"`,
+        prompt: (fw) => `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a "generated code" panel using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- LlmCard with a header ("Generated Component") and content area\n- LlmCodeBlock showing a hardcoded TypeScript snippet (language="typescript", filename="component.ts", showLineNumbers=true)\n- A "Regenerate" LlmButton (variant="outline") below the code block\n- A LlmBadge (variant="success") in the card header showing "Ready"\n- While "regenerating" (simulate with 1.2s timeout), show LlmSkeleton with 4 rows instead of the code block and change the badge to variant="warning" with text "Generating…"`,
       },
     ],
   },
@@ -42,12 +42,12 @@ const SECTIONS: Section[] = [
       {
         title: 'Login form',
         description: 'Email + password fields in a card, with a submit button and basic validation feedback.',
-        prompt: (fw) => `Fetch the Atelier API reference first:\n${DOCS_URL}\n\nBuild a login form using Atelier components. ${fwNote(fw)}\n\nRequirements:\n- LlmCard (max-width 400px, centered) containing:\n  - Card header: "Sign in to your account"\n  - LlmInput (type="email", label "Email", required)\n  - LlmInput (type="password", label "Password", required)\n  - LlmButton (variant="primary", full width, "Sign in")\n  - LlmButton (variant="outline", full width, "Continue with Google")\n- Show LlmAlert (variant="danger") above the form if both fields are empty on submit\n- Show loading state on the Sign in button while submitting (simulate 1.5s)`,
+        prompt: (fw) => `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a login form using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- LlmCard (max-width 400px, centered) containing:\n  - Card header: "Sign in to your account"\n  - LlmInput (type="email", label "Email", required)\n  - LlmInput (type="password", label "Password", required)\n  - LlmButton (variant="primary", full width, "Sign in")\n  - LlmButton (variant="outline", full width, "Continue with Google")\n- Show LlmAlert (variant="danger") above the form if both fields are empty on submit\n- Show loading state on the Sign in button while submitting (simulate 1.5s)`,
       },
       {
         title: 'Settings page',
         description: 'Profile and notification settings inside cards with save feedback via a toast or alert.',
-        prompt: (fw) => `Fetch the Atelier API reference first:\n${DOCS_URL}\n\nBuild a settings page using Atelier components. ${fwNote(fw)}\n\nRequirements:\n- Page title "Settings"\n- Two LlmCard sections:\n\n  Profile card:\n  - LlmInput for "Display name" (type="text")\n  - LlmInput for "Email" (type="email")\n  - LlmSelect with options: "UTC", "US/Eastern", "US/Pacific", "Europe/London"\n  - LlmButton (primary, "Save profile") — show loading for 1s, then show LlmAlert (variant="success", "Profile saved!")\n\n  Notifications card:\n  - LlmToggle labeled "Email notifications"\n  - LlmToggle labeled "Weekly digest"\n  - LlmToggle labeled "Product updates"\n  - LlmButton (outline, "Save preferences")`,
+        prompt: (fw) => `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a settings page using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- Page title "Settings"\n- Two LlmCard sections:\n\n  Profile card:\n  - LlmInput for "Display name" (type="text")\n  - LlmInput for "Email" (type="email")\n  - LlmSelect with options: "UTC", "US/Eastern", "US/Pacific", "Europe/London"\n  - LlmButton (primary, "Save profile") — show loading for 1s, then show LlmAlert (variant="success", "Profile saved!")\n\n  Notifications card:\n  - LlmToggle labeled "Email notifications"\n  - LlmToggle labeled "Weekly digest"\n  - LlmToggle labeled "Product updates"\n  - LlmButton (outline, "Save preferences")`,
       },
     ],
   },
@@ -57,12 +57,12 @@ const SECTIONS: Section[] = [
       {
         title: 'Stats dashboard',
         description: 'Three metric cards with numbers, labels, and status badges in a responsive grid.',
-        prompt: (fw) => `Fetch the Atelier API reference first:\n${DOCS_URL}\n\nBuild a stats dashboard using Atelier components. ${fwNote(fw)}\n\nRequirements:\n- Page title "Dashboard"\n- Responsive grid (3 columns on desktop, 1 on mobile) of LlmCard components:\n  1. "Total Requests" — value: 12,847 — LlmBadge (variant="success") "+12% this week"\n  2. "Avg Latency" — value: 342ms — LlmBadge (variant="warning") "p95: 890ms"\n  3. "Error Rate" — value: 0.3% — LlmBadge (variant="success") "Below threshold"\n- Each card: large bold metric number, muted label below it, badge in card header\n- LlmProgress bar below each metric (values: 78, 34, 8 out of 100)`,
+        prompt: (fw) => `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a stats dashboard using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- Page title "Dashboard"\n- Responsive grid (3 columns on desktop, 1 on mobile) of LlmCard components:\n  1. "Total Requests" — value: 12,847 — LlmBadge (variant="success") "+12% this week"\n  2. "Avg Latency" — value: 342ms — LlmBadge (variant="warning") "p95: 890ms"\n  3. "Error Rate" — value: 0.3% — LlmBadge (variant="success") "Below threshold"\n- Each card: large bold metric number, muted label below it, badge in card header\n- LlmProgress bar below each metric (values: 78, 34, 8 out of 100)`,
       },
       {
         title: 'Data table with pagination',
         description: 'A sortable table of users with status badges, and pagination controls below.',
-        prompt: (fw) => `Fetch the Atelier API reference first:\n${DOCS_URL}\n\nBuild a data table using Atelier components. ${fwNote(fw)}\n\nRequirements:\n- Hardcode 20 users: { id, name, email, role: 'admin'|'editor'|'viewer', status: 'active'|'inactive' }\n- LlmTable with columns: Name, Email, Role, Status, Actions\n- Status column: LlmBadge — variant="success" for active, variant="default" for inactive\n- Role column: LlmBadge — variant="info" for admin, no variant for others\n- Actions column: LlmButton (size="sm", variant="outline", "Edit") per row\n- LlmPagination below the table — show 5 users per page\n- LlmInput above the table for filtering by name (client-side)`,
+        prompt: (fw) => `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a data table using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- Hardcode 20 users: { id, name, email, role: 'admin'|'editor'|'viewer', status: 'active'|'inactive' }\n- LlmTable with columns: Name, Email, Role, Status, Actions\n- Status column: LlmBadge — variant="success" for active, variant="default" for inactive\n- Role column: LlmBadge — variant="info" for admin, no variant for others\n- Actions column: LlmButton (size="sm", variant="outline", "Edit") per row\n- LlmPagination below the table — show 5 users per page\n- LlmInput above the table for filtering by name (client-side)`,
       },
     ],
   },
@@ -72,12 +72,12 @@ const SECTIONS: Section[] = [
       {
         title: 'Multi-step form wizard',
         description: 'A 3-step wizard using LlmStepper with back/next buttons and validation gating.',
-        prompt: (fw) => `Fetch the Atelier API reference first:\n${DOCS_URL}\n\nBuild a multi-step form wizard using Atelier components. ${fwNote(fw)}\n\nRequirements:\n- LlmStepper with 3 steps: "Account", "Profile", "Review"\n- Step 1 — Account: LlmInput (email, required), LlmInput (password, required)\n- Step 2 — Profile: LlmInput (display name), LlmSelect (timezone), LlmToggle (marketing emails)\n- Step 3 — Review: Read-only summary of entered values in a LlmCard\n- Navigation: LlmButton (outline, "Back") + LlmButton (primary, "Next" / "Submit" on last step)\n- Validate required fields before allowing Next — show LlmAlert (variant="warning") if invalid\n- On Submit: show LlmAlert (variant="success", "Account created!") and reset to step 0`,
+        prompt: (fw) => `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a multi-step form wizard using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- LlmStepper with 3 steps: "Account", "Profile", "Review"\n- Step 1 — Account: LlmInput (email, required), LlmInput (password, required)\n- Step 2 — Profile: LlmInput (display name), LlmSelect (timezone), LlmToggle (marketing emails)\n- Step 3 — Review: Read-only summary of entered values in a LlmCard\n- Navigation: LlmButton (outline, "Back") + LlmButton (primary, "Next" / "Submit" on last step)\n- Validate required fields before allowing Next — show LlmAlert (variant="warning") if invalid\n- On Submit: show LlmAlert (variant="success", "Account created!") and reset to step 0`,
       },
       {
         title: 'Tabbed content panel',
         description: 'Three tabs (Overview, Analytics, Settings) each with different content.',
-        prompt: (fw) => `Fetch the Atelier API reference first:\n${DOCS_URL}\n\nBuild a tabbed panel using Atelier components. ${fwNote(fw)}\n\nRequirements:\n- LlmTabGroup with 3 tabs:\n  1. Overview — LlmCard with a paragraph of placeholder text and an LlmBadge (variant="success", "Active")\n  2. Analytics — Three LlmProgress bars labeled "Impressions", "Clicks", "Conversions" (values 82, 47, 23)\n  3. Settings — LlmToggle ("Public visibility"), LlmInput ("Custom domain"), LlmButton (primary, "Save")\n- LlmCard wrapping the entire panel`,
+        prompt: (fw) => `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a tabbed panel using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- LlmTabGroup with 3 tabs:\n  1. Overview — LlmCard with a paragraph of placeholder text and an LlmBadge (variant="success", "Active")\n  2. Analytics — Three LlmProgress bars labeled "Impressions", "Clicks", "Conversions" (values 82, 47, 23)\n  3. Settings — LlmToggle ("Public visibility"), LlmInput ("Custom domain"), LlmButton (primary, "Save")\n- LlmCard wrapping the entire panel`,
       },
     ],
   },
@@ -103,7 +103,7 @@ const FRAMEWORKS: Fw[] = ['react', 'angular', 'vue'];
 
 <BaseLayout
   title="Prompt Templates"
-  description="Battle-tested prompt templates for building Atelier components with Claude — scaffolding, refactors, Figma-to-code, and story writing."
+  description="Battle-tested prompt templates for building Atelier UI components with Claude — scaffolding, refactors, Figma-to-code, and story writing."
   currentPath="/prompts"
 >
   <div class="docs-inline-page">
@@ -114,7 +114,7 @@ const FRAMEWORKS: Fw[] = ['react', 'angular', 'vue'];
         Prompt Templates
       </h1>
       <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 560px; line-height: 1.65">
-        Pre-written prompts that produce correct Atelier code on the first try.
+        Pre-written prompts that produce correct Atelier UI code on the first try.
         Each prompt instructs the model to fetch the full API reference before generating.
       </p>
     </div>

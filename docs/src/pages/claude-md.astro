@@ -27,9 +27,9 @@ const IMPORT_EXAMPLE: Record<string, string> = {
 };
 
 const TEMPLATE: Record<string, string> = {
-  React: `# UI Components — Atelier (React)
+  React: `# UI Components — Atelier UI (React)
 
-This project uses Atelier for all UI components.
+This project uses Atelier UI for all UI components.
 Full API reference: ${SITE_URL}/llms-full.txt
 
 ## Package
@@ -60,12 +60,12 @@ Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
 ## Rules
 - Prefer component props over custom CSS
 - When custom styling is needed, use --ui-color-* and --ui-spacing-* tokens
-- Do not install other UI component libraries alongside Atelier
+- Do not install other UI component libraries alongside Atelier UI
 - Do not add inline hex colors or hardcoded spacing values`,
 
-  Angular: `# UI Components — Atelier (Angular)
+  Angular: `# UI Components — Atelier UI (Angular)
 
-This project uses Atelier for all UI components.
+This project uses Atelier UI for all UI components.
 Full API reference: ${SITE_URL}/llms-full.txt
 
 ## Package
@@ -101,12 +101,12 @@ Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
 ## Rules
 - Prefer component props over custom CSS
 - When custom styling is needed, use --ui-color-* and --ui-spacing-* tokens
-- Do not install other UI component libraries alongside Atelier
+- Do not install other UI component libraries alongside Atelier UI
 - Do not add inline hex colors or hardcoded spacing values`,
 
-  Vue: `# UI Components — Atelier (Vue)
+  Vue: `# UI Components — Atelier UI (Vue)
 
-This project uses Atelier for all UI components.
+This project uses Atelier UI for all UI components.
 Full API reference: ${SITE_URL}/llms-full.txt
 
 ## Package
@@ -137,14 +137,14 @@ Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
 ## Rules
 - Prefer component props over custom CSS
 - When custom styling is needed, use --ui-color-* and --ui-spacing-* tokens
-- Do not install other UI component libraries alongside Atelier
+- Do not install other UI component libraries alongside Atelier UI
 - Do not add inline hex colors or hardcoded spacing values`,
 };
 ---
 
 <BaseLayout
   title="CLAUDE.md Template"
-  description="A drop-in CLAUDE.md template for Atelier projects — instructions that prime Claude Code to use the component library correctly."
+  description="A drop-in CLAUDE.md template for Atelier UI projects — instructions that prime Claude Code to use the component library correctly."
   currentPath="/claude-md"
 >
   <div class="docs-inline-page">
@@ -155,7 +155,7 @@ Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
         CLAUDE.md Template
       </h1>
       <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 520px; line-height: 1.65">
-        Drop this into your project root as <code>CLAUDE.md</code> to give Claude Code persistent context about Atelier — MCP servers, design tokens, and component conventions — so every session starts component-aware.
+        Drop this into your project root as <code>CLAUDE.md</code> to give Claude Code persistent context about Atelier UI — MCP servers, design tokens, and component conventions — so every session starts component-aware.
       </p>
     </div>
 
@@ -163,7 +163,7 @@ Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
     <div style="padding: 1rem 1.25rem; background: var(--ui-color-primary-light); border: 1px solid color-mix(in srgb, var(--ui-color-primary) 20%, transparent); border-radius: var(--ui-radius-md); margin-bottom: 2rem">
       <p style="margin: 0 0 0.3rem; font-size: 0.82rem; font-weight: 700; color: var(--ui-color-text)">What is CLAUDE.md?</p>
       <p style="margin: 0 0 0.55rem; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
-        <code>CLAUDE.md</code> is a project-level instructions file that Claude Code reads at the start of every session. It sets rules, conventions, and context so you never have to repeat "this project uses Atelier" in every prompt.
+        <code>CLAUDE.md</code> is a project-level instructions file that Claude Code reads at the start of every session. It sets rules, conventions, and context so you never have to repeat "this project uses Atelier UI" in every prompt.
       </p>
       <p style="margin: 0; font-size: 0.78rem; color: var(--ui-color-text-muted); line-height: 1.55">
         <strong style="color: var(--ui-color-text)">When you need this:</strong> the workshop workspace generator already ships a CLAUDE.md for you. Come back to this page when you start a new project of your own and want the same component-aware behaviour.

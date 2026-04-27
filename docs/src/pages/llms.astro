@@ -11,13 +11,13 @@ const usageSteps = [
     n: '01',
     title: 'Paste into your LLM context',
     desc: "Copy the URL of llms-full.txt and ask your LLM to fetch it, or paste the file contents directly. The file is plain text optimised for token efficiency — no HTML, no markup noise.",
-    code: `Here is the full API reference for the Atelier component library:\n\n<paste contents of llms-full.txt here>\n\nUsing this library, build a settings page with a card containing\nname (Input), email (Input), and notification preference (Toggle).`,
+    code: `Here is the full API reference for the Atelier UI component library:\n\n<paste contents of llms-full.txt here>\n\nUsing this library, build a settings page with a card containing\nname (Input), email (Input), and notification preference (Toggle).`,
     lang: 'markdown',
   },
   {
     n: '02',
     title: 'Reference via MCP',
-    desc: 'The Atelier MCP server provides structured access to component docs so your LLM can look up components on demand without consuming your entire context window upfront.',
+    desc: 'The Atelier UI MCP server provides structured access to component docs so your LLM can look up components on demand without consuming your entire context window upfront.',
     code: `{\n  "mcpServers": {\n    "atelier-ui": {\n      "url": "${SITE_URL}/storybook-angular/mcp"\n    }\n  }\n}`,
     lang: 'json',
   },
@@ -37,7 +37,7 @@ const whyCards = [
   { title: 'Cacheable', body: 'LLM tools can cache the file across sessions. Fetch once, reference many times.' },
 ];
 
-const previewCode = `# Atelier — Full API Reference
+const previewCode = `# Atelier UI — Full API Reference
 
 > Complete component API for LLM consumption. 24 accessible components
 > for Angular, React, and Vue with consistent prop naming.
@@ -80,7 +80,7 @@ const previewCode = `# Atelier — Full API Reference
 
 <BaseLayout
   title="llms.txt"
-  description="Machine-readable llms.txt and llms-full.txt files for Atelier — structured context AI assistants can load without scraping HTML."
+  description="Machine-readable llms.txt and llms-full.txt files for Atelier UI — structured context AI assistants can load without scraping HTML."
   currentPath="/llms"
 >
   <div class="docs-inline-page">
@@ -101,7 +101,7 @@ const previewCode = `# Atelier — Full API Reference
       <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
         <strong style="color: var(--ui-color-text)">Good to know.</strong>
         This is reference material for AI tools — not something you need to memorize for the workshop.
-        During the hands-on session your MCP servers already expose this data; you only come back here later if you want to use Atelier from an LLM that does not speak MCP.
+        During the hands-on session your MCP servers already expose this data; you only come back here later if you want to use Atelier UI from an LLM that does not speak MCP.
       </p>
     </div>
 
@@ -111,7 +111,7 @@ const previewCode = `# Atelier — Full API Reference
         <Jargon term="llms.txt"><code>llms.txt</code></Jargon> is a proposed open standard — analogous to <code>robots.txt</code> — for helping LLMs understand a project. It lives at the root of a site, uses plain Markdown, and provides a short structured index with links to deeper content.
       </p>
       <p style="margin: 0; font-size: 0.85rem; color: var(--ui-color-text-muted); line-height: 1.65">
-        Atelier provides two files: a short index (<code>llms.txt</code>) and a comprehensive reference (<code>llms-full.txt</code>) containing every component's props, types, defaults, and framework-specific usage examples across Angular, React, and Vue.
+        Atelier UI provides two files: a short index (<code>llms.txt</code>) and a comprehensive reference (<code>llms-full.txt</code>) containing every component's props, types, defaults, and framework-specific usage examples across Angular, React, and Vue.
       </p>
     </div>
 
