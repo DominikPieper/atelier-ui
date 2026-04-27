@@ -64,18 +64,18 @@ const STORYBOOK_LINKS = [
 
     <!-- MCP section -->
     <div>
-      <h2 style="font-size: 0.95rem; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 0.5rem; color: var(--ui-color-text)">MCP Server</h2>
+      <h2 class="docs-section-title">MCP Server</h2>
       <p style="margin: 0 0 1.75rem; font-size: 0.85rem; color: var(--ui-color-text-muted); line-height: 1.65">
         All three Storybook instances expose a hosted MCP endpoint so AI coding assistants can read component documentation directly — no local setup required.
       </p>
 
-      <div style="display: flex; flex-direction: column; gap: 1.75rem">
+      <div class="docs-step-list">
         <!-- Step 01 -->
-        <div style="display: flex; gap: 0.85rem; align-items: flex-start">
-          <span class="step-badge">01</span>
-          <div style="flex: 1">
-            <h3 style="margin: 0 0 0.4rem; font-size: 0.9rem; font-weight: 700; color: var(--ui-color-text)">Add the MCP server to your project</h3>
-            <p style="margin: 0 0 0.75rem; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
+        <div class="docs-step-row">
+          <span class="docs-step-badge">01</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">Add the MCP server to your project</h3>
+            <p class="docs-step-desc">
               In your AI assistant's MCP configuration (e.g. <code>.claude/settings.json</code> for Claude Code) add one or more servers:
             </p>
             <Code code={MCP_CONFIG} lang="json" />
@@ -83,11 +83,11 @@ const STORYBOOK_LINKS = [
         </div>
 
         <!-- Step 02 -->
-        <div style="display: flex; gap: 0.85rem; align-items: flex-start">
-          <span class="step-badge">02</span>
-          <div style="flex: 1">
-            <h3 style="margin: 0 0 0.4rem; font-size: 0.9rem; font-weight: 700; color: var(--ui-color-text)">Use it in your prompts</h3>
-            <p style="margin: 0 0 0.75rem; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
+        <div class="docs-step-row">
+          <span class="docs-step-badge">02</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">Use it in your prompts</h3>
+            <p class="docs-step-desc">
               Once connected, your AI assistant can look up component props, variants, and usage examples directly from Storybook:
             </p>
             <Code code={`Build a settings page using @atelier-ui/react components.\nUse the storybook-react MCP to check available props.`} lang="text" />
@@ -95,11 +95,11 @@ const STORYBOOK_LINKS = [
         </div>
 
         <!-- Step 03 -->
-        <div style="display: flex; gap: 0.85rem; align-items: flex-start">
-          <span class="step-badge">03</span>
-          <div style="flex: 1">
-            <h3 style="margin: 0 0 0.4rem; font-size: 0.9rem; font-weight: 700; color: var(--ui-color-text)">Framework Parity</h3>
-            <p style="margin: 0 0 0.75rem; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
+        <div class="docs-step-row">
+          <span class="docs-step-badge">03</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">Framework Parity</h3>
+            <p class="docs-step-desc">
               All frameworks support prop documentation and component search. Story previews and Vitest integration are currently React and Vue only.
             </p>
             <table class="docs-props-table">
@@ -117,10 +117,10 @@ const STORYBOOK_LINKS = [
         </div>
 
         <!-- Step 04 -->
-        <div style="display: flex; gap: 0.85rem; align-items: flex-start">
-          <span class="step-badge">04</span>
-          <div style="flex: 1">
-            <h3 style="margin: 0 0 0.4rem; font-size: 0.9rem; font-weight: 700; color: var(--ui-color-text)">Endpoints</h3>
+        <div class="docs-step-row">
+          <span class="docs-step-badge">04</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">Endpoints</h3>
             <table class="docs-props-table" style="margin-top: 0.25rem">
               <thead>
                 <tr><th>Library</th><th>URL</th></tr>
@@ -139,19 +139,6 @@ const STORYBOOK_LINKS = [
 </BaseLayout>
 
 <style>
-  .step-badge {
-    font-family: monospace;
-    font-size: 0.62rem;
-    font-weight: 700;
-    color: var(--ui-color-primary);
-    background: rgba(68, 218, 218, 0.1);
-    padding: 0.1rem 0.4rem;
-    border-radius: 3px;
-    letter-spacing: 0.04em;
-    flex-shrink: 0;
-    margin-top: 3px;
-  }
-
   .storybook-card:hover {
     background: var(--ui-color-surface-raised) !important;
     filter: brightness(1.05);

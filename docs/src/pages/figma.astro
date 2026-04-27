@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import DiagramFigure from '../components/DiagramFigure.astro';
 import Jargon from '../components/Jargon.astro';
-import Icon from '../components/Icon.astro';
+import WorkflowDiagram from '../components/WorkflowDiagram.astro';
 const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Components';
 ---
 
@@ -244,58 +244,25 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Com
         This is how Figma, Storybook, and AI work together to produce component code that matches the design exactly.
       </p>
 
-      <div class="workflow-diagram" style="margin-bottom: 2rem">
-        <div class="workflow-node">
-          <Icon name="palette" class="workflow-node-icon" />
-          <div class="workflow-node-title">Figma</div>
-          <div class="workflow-node-desc">Design tokens<br/>Component frames</div>
-        </div>
-        <div class="workflow-connector">
-          <span class="workflow-connector-label">inspect</span>
-          <span class="workflow-connector-arrow">→</span>
-        </div>
-        <div class="workflow-node">
-          <Icon name="book" class="workflow-node-icon" />
-          <div class="workflow-node-title">Storybook</div>
-          <div class="workflow-node-desc">Props &amp; stories<br/>via MCP</div>
-        </div>
-        <div class="workflow-connector">
-          <span class="workflow-connector-label">prompt</span>
-          <span class="workflow-connector-arrow">→</span>
-        </div>
-        <div class="workflow-node workflow-node--highlight">
-          <Icon name="smart_toy" class="workflow-node-icon" />
-          <div class="workflow-node-title">AI · Claude</div>
-          <div class="workflow-node-desc">Reads both sources<br/>Writes code</div>
-        </div>
-        <div class="workflow-connector">
-          <span class="workflow-connector-label">ships</span>
-          <span class="workflow-connector-arrow">→</span>
-        </div>
-        <div class="workflow-node">
-          <Icon name="check_circle" class="workflow-node-icon" />
-          <div class="workflow-node-title">Component</div>
-          <div class="workflow-node-desc">Design-accurate<br/>Dark mode ready</div>
-        </div>
-      </div>
+      <WorkflowDiagram figureId="figma-workflow" caption="This is how Figma, Storybook, and AI work together to produce component code that matches the design exactly." />
 
-      <div style="display: flex; flex-direction: column; gap: 1.75rem">
-        <div style="display: flex; gap: 0.85rem; align-items: flex-start">
-          <span class="step-badge">01</span>
-          <div style="flex: 1">
-            <h3 style="margin: 0 0 0.4rem; font-size: 0.9rem; font-weight: 700; color: var(--ui-color-text)">Open the Figma file — find the component frame</h3>
-            <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
+      <div class="docs-step-list">
+        <div class="docs-step-row">
+          <span class="docs-step-badge">01</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">Open the Figma file — find the component frame</h3>
+            <p class="docs-step-desc">
               Navigate to the <code>Components</code> page and locate the section for the component you want to build.
               Note the variant names and states — these map directly to the component's props.
             </p>
           </div>
         </div>
 
-        <div style="display: flex; gap: 0.85rem; align-items: flex-start">
-          <span class="step-badge">02</span>
-          <div style="flex: 1">
-            <h3 style="margin: 0 0 0.4rem; font-size: 0.9rem; font-weight: 700; color: var(--ui-color-text)">Note the token values from the variable panel</h3>
-            <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
+        <div class="docs-step-row">
+          <span class="docs-step-badge">02</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">Note the token values from the variable panel</h3>
+            <p class="docs-step-desc">
               In the Figma inspect panel (right sidebar, <strong>Design</strong> tab), hover over fills,
               padding, or radius values to see the bound variable name
               (e.g. <code>color/primary</code>, <code>spacing/6</code>, <code>radius/lg</code>). These are the exact
@@ -348,11 +315,11 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Com
           </div>
         </div>
 
-        <div style="display: flex; gap: 0.85rem; align-items: flex-start">
-          <span class="step-badge">03</span>
-          <div style="flex: 1">
-            <h3 style="margin: 0 0 0.4rem; font-size: 0.9rem; font-weight: 700; color: var(--ui-color-text)">Ask AI — reference token names and Storybook MCP</h3>
-            <p style="margin: 0 0 0.75rem; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
+        <div class="docs-step-row">
+          <span class="docs-step-badge">03</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">Ask AI — reference token names and Storybook MCP</h3>
+            <p class="docs-step-desc">
               Include the Figma token names in your prompt. AI will use the same names in code,
               and will look up accurate prop names and examples from the Storybook MCP:
             </p>
@@ -360,11 +327,11 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Com
           </div>
         </div>
 
-        <div style="display: flex; gap: 0.85rem; align-items: flex-start">
-          <span class="step-badge">04</span>
-          <div style="flex: 1">
-            <h3 style="margin: 0 0 0.4rem; font-size: 0.9rem; font-weight: 700; color: var(--ui-color-text)">Ship — the component matches the design</h3>
-            <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
+        <div class="docs-step-row">
+          <span class="docs-step-badge">04</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">Ship — the component matches the design</h3>
+            <p class="docs-step-desc">
               Because Figma variables and CSS custom properties share the same names, there is no gap between
               what the designer specified and what ships. Light and dark mode work automatically — the tokens
               resolve to their mode-specific values at runtime.
@@ -393,119 +360,3 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Com
   </div>
 </BaseLayout>
 
-<style>
-  .step-badge {
-    font-family: monospace;
-    font-size: 0.62rem;
-    font-weight: 700;
-    color: var(--ui-color-primary);
-    background: rgba(37, 99, 235, 0.1);
-    padding: 0.1rem 0.4rem;
-    border-radius: 3px;
-    letter-spacing: 0.04em;
-    flex-shrink: 0;
-    margin-top: 3px;
-  }
-
-  .workflow-diagram {
-    display: flex;
-    align-items: stretch;
-    overflow-x: auto;
-    padding-bottom: 0.5rem;
-    gap: 0;
-  }
-
-  .workflow-node {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 1.25rem 1rem;
-    background: var(--ui-color-surface-raised);
-    border: 1px solid var(--ui-color-border);
-    border-radius: var(--ui-radius-lg);
-    gap: 0.5rem;
-    min-width: 120px;
-    flex: 1;
-  }
-
-  .workflow-node--highlight {
-    border-color: var(--ui-color-primary);
-    box-shadow: 0 0 0 1px color-mix(in srgb, var(--ui-color-primary) 25%, transparent),
-                0 4px 20px color-mix(in srgb, var(--ui-color-primary) 12%, transparent);
-  }
-
-  .workflow-node-icon {
-    font-size: 1.5rem;
-    width: 1em;
-    height: 1em;
-    color: var(--ui-color-primary);
-    line-height: 1;
-  }
-
-  .workflow-node-title {
-    font-size: 0.88rem;
-    font-weight: 700;
-    color: var(--ui-color-text);
-    white-space: nowrap;
-  }
-
-  .workflow-node-desc {
-    font-size: 0.72rem;
-    color: var(--ui-color-text-muted);
-    line-height: 1.4;
-  }
-
-  .workflow-connector {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.2rem;
-    padding: 0 0.75rem;
-    flex-shrink: 0;
-  }
-
-  .workflow-connector-label {
-    font-size: 0.6rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--ui-color-text-muted);
-  }
-
-  .workflow-connector-arrow {
-    color: var(--ui-color-border-hover);
-    font-size: 1.25rem;
-    line-height: 1;
-  }
-
-  @media (max-width: 640px) {
-    .workflow-diagram {
-      flex-direction: column;
-      align-items: stretch;
-      overflow-x: visible;
-    }
-
-    .workflow-node {
-      flex-direction: row;
-      text-align: left;
-      gap: 0.75rem;
-      min-width: unset;
-    }
-
-    .workflow-node-icon {
-      flex-shrink: 0;
-    }
-
-    .workflow-connector {
-      flex-direction: row;
-      padding: 0.25rem 0;
-      justify-content: center;
-    }
-
-    .workflow-connector-arrow {
-      transform: rotate(90deg);
-    }
-  }
-</style>

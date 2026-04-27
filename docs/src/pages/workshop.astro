@@ -131,26 +131,26 @@ const MCP_CONFIG = `{
     <div style="display: flex; flex-direction: column; gap: 1.75rem; margin-bottom: 2.5rem">
 
       <!-- Step 01 -->
-      <div class="step-row" data-step="1">
-        <span class="step-badge">01</span>
+      <div class="docs-step-row" data-step="1">
+        <span class="docs-step-badge">01</span>
         <div>
-          <h3 class="step-title">Run the workspace generator</h3>
-          <p class="step-desc">Run the following command, then follow the prompts to choose your workspace name and frameworks:</p>
+          <h3 class="docs-h3">Run the workspace generator</h3>
+          <p class="docs-step-desc">Run the following command, then follow the prompts to choose your workspace name and frameworks:</p>
           <Code code="npx create-atelier-ui-workspace" lang="shell" />
           <Code code={`? Workspace name: › my-workshop\n? Which framework(s) do you want to use?\n  ◉ Angular\n  ◉ React\n  ◉ Vue`} lang="text" />
-          <p class="step-desc" style="margin-top: 0.75rem">Or pass the name directly to skip the first prompt:</p>
+          <p class="docs-step-desc" style="margin-top: 0.75rem">Or pass the name directly to skip the first prompt:</p>
           <Code code="npx create-atelier-ui-workspace my-workshop" lang="shell" />
         </div>
       </div>
 
       <!-- Step 02 -->
-      <div class="step-row" data-step="2">
-        <span class="step-badge">02</span>
+      <div class="docs-step-row" data-step="2">
+        <span class="docs-step-badge">02</span>
         <div>
-          <h3 class="step-title">Install dependencies &amp; run preflight</h3>
-          <p class="step-desc">Navigate into your workspace, install deps, and verify your environment:</p>
+          <h3 class="docs-h3">Install dependencies &amp; run preflight</h3>
+          <p class="docs-step-desc">Navigate into your workspace, install deps, and verify your environment:</p>
           <Code code={`cd my-workshop\nnpm install\nnpm run preflight`} lang="shell" />
-          <p class="step-desc" style="margin-top: 0.75rem">
+          <p class="docs-step-desc" style="margin-top: 0.75rem">
             <code>preflight</code> checks Node, Claude Code CLI, the Figma token, MCP reachability,
             and port availability. If anything fails, each line prints a one-step fix.
           </p>
@@ -221,18 +221,18 @@ const MCP_CONFIG = `{
 <span class="pre-issue">3 issues found</span> <span class="pre-muted">· re-run after fixing each line</span>
 <span class="pre-muted">  See</span> <a href="/troubleshooting" class="pre-link">/troubleshooting</a> <span class="pre-muted">for context.</span></pre>
           </figure>
-          <p class="step-desc" style="margin-top: 0.6rem; font-size: 0.76rem">
+          <p class="docs-step-desc" style="margin-top: 0.6rem; font-size: 0.76rem">
             Toggle the tabs above to compare. Each <span style="color: var(--ui-color-danger); font-weight: 700">✗</span> line ends with a one-step fix — copy, run, re-run <code>preflight</code>.
           </p>
         </div>
       </div>
 
       <!-- Step 03 -->
-      <div class="step-row" data-step="3" id="step-03">
-        <span class="step-badge">03</span>
+      <div class="docs-step-row" data-step="3" id="step-03">
+        <span class="docs-step-badge">03</span>
         <div>
-          <h3 class="step-title">Serve your app</h3>
-          <p class="step-desc">Start the dev server for your chosen framework:</p>
+          <h3 class="docs-h3">Serve your app</h3>
+          <p class="docs-step-desc">Start the dev server for your chosen framework:</p>
           <div class="docs-multi-code-tabs" style="border-radius: 8px 8px 0 0; margin-bottom: 0">
             {Object.keys(SERVE_CMD).map((fw, i) => (
               <button class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`} data-fw-btn={fw}>{fw}</button>
@@ -247,11 +247,11 @@ const MCP_CONFIG = `{
       </div>
 
       <!-- Step 04 -->
-      <div class="step-row" data-step="4">
-        <span class="step-badge">04</span>
+      <div class="docs-step-row" data-step="4">
+        <span class="docs-step-badge">04</span>
         <div>
-          <h3 class="step-title">Open in Claude Code</h3>
-          <p class="step-desc">
+          <h3 class="docs-h3">Open in Claude Code</h3>
+          <p class="docs-step-desc">
             Open the workspace in VS Code or any editor with Claude Code. The MCP servers
             connect automatically — your AI assistant can look up component props, variants,
             and usage examples directly from Storybook without any extra setup.
@@ -278,40 +278,40 @@ const MCP_CONFIG = `{
       </p>
       <div style="display: flex; flex-direction: column; gap: 1.75rem">
 
-        <div class="step-row" data-step="5">
-          <span class="step-badge">A</span>
+        <div class="docs-step-row" data-step="5">
+          <span class="docs-step-badge">A</span>
           <div>
-            <h3 class="step-title">Open Figma — find your component frame</h3>
-            <p class="step-desc">
+            <h3 class="docs-h3">Open Figma — find your component frame</h3>
+            <p class="docs-step-desc">
               The <a href="https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM%20Components" target="_blank" rel="noopener noreferrer" class="docs-link-primary">Atelier Figma file</a> contains all component frames and design token variables. Find the section for the component you want to build and note the token names in the inspect panel.
             </p>
           </div>
         </div>
 
-        <div class="step-row" data-step="6">
-          <span class="step-badge">B</span>
+        <div class="docs-step-row" data-step="6">
+          <span class="docs-step-badge">B</span>
           <div>
-            <h3 class="step-title">Reference design tokens in your prompt</h3>
-            <p class="step-desc">Include token names from Figma directly. AI will use the identical names in code:</p>
+            <h3 class="docs-h3">Reference design tokens in your prompt</h3>
+            <p class="docs-step-desc">Include token names from Figma directly. AI will use the identical names in code:</p>
             <Code code={`Build a settings card using LlmCard with variant="elevated".\nMatch the Figma spec: --ui-color-surface-raised background,\n--ui-spacing-6 padding, --ui-radius-lg border-radius.\nUse storybook-react MCP to check LlmCard props.`} lang="text" title="example prompt" />
           </div>
         </div>
 
-        <div class="step-row" data-step="7">
-          <span class="step-badge">C</span>
+        <div class="docs-step-row" data-step="7">
+          <span class="docs-step-badge">C</span>
           <div>
-            <h3 class="step-title">AI checks Storybook, writes component code</h3>
-            <p class="step-desc">
+            <h3 class="docs-h3">AI checks Storybook, writes component code</h3>
+            <p class="docs-step-desc">
               Claude Code reads the Storybook MCP for accurate prop names and usage examples, then generates code using the exact token values from Figma. The output is immediately usable — no prop guessing, no style overrides.
             </p>
           </div>
         </div>
 
-        <div class="step-row" data-step="8">
-          <span class="step-badge">D</span>
+        <div class="docs-step-row" data-step="8">
+          <span class="docs-step-badge">D</span>
           <div>
-            <h3 class="step-title">Ship — the component matches the design</h3>
-            <p class="step-desc">
+            <h3 class="docs-h3">Ship — the component matches the design</h3>
+            <p class="docs-step-desc">
               Because Figma variables and CSS custom properties share the same token names, there is no gap between what the designer specified and what ships. Light and dark mode work automatically.
             </p>
           </div>
@@ -405,48 +405,6 @@ const MCP_CONFIG = `{
 </BaseLayout>
 
 <style>
-  .step-badge {
-    font-family: monospace;
-    font-size: 0.62rem;
-    font-weight: 700;
-    color: var(--ui-color-primary);
-    background: rgba(68, 218, 218, 0.1);
-    padding: 0.1rem 0.4rem;
-    border-radius: 3px;
-    letter-spacing: 0.04em;
-    flex-shrink: 0;
-    margin-top: 3px;
-  }
-
-  .step-row {
-    display: flex;
-    gap: 0.85rem;
-    align-items: flex-start;
-  }
-
-  /* Matches the .docs-h3 baseline (1rem · 700 · -0.01em) so step titles
-   * sit visibly between body text and the section title. */
-  .step-title {
-    margin: 0 0 0.4rem;
-    font-size: 1rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    line-height: 1.3;
-    color: var(--ui-color-text);
-  }
-
-  .step-desc {
-    margin: 0 0 0.75rem;
-    font-size: 0.82rem;
-    color: var(--ui-color-text-muted);
-    line-height: 1.6;
-  }
-
-  /* Remove bottom margin on last step-desc before a Code block */
-  .step-desc:last-child {
-    margin-bottom: 0;
-  }
-
   /* Preflight mockup — styled like a terminal card.
    * Colors come from the --docs-term-* tokens in global.css so
    * this card stays in sync with .docs-terminal across themes.

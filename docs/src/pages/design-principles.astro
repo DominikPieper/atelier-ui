@@ -201,12 +201,12 @@ import Jargon from '../components/Jargon.astro';
   }
 
   .docs-comparison-bad .docs-comparison-label {
-    background: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
+    background: color-mix(in srgb, var(--ui-color-danger) 12%, transparent);
+    color: var(--ui-color-danger);
   }
 
   .docs-comparison-good .docs-comparison-label {
-    background: rgba(68, 218, 218, 0.1);
+    background: color-mix(in srgb, var(--ui-color-primary) 12%, transparent);
     color: var(--ui-color-primary);
   }
 

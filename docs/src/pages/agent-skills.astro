@@ -114,33 +114,33 @@ const skills = [
       <h2 class="docs-section-title">HTTP Agent Features</h2>
       <div style="display: flex; flex-direction: column; gap: 1.75rem">
 
-        <div class="step-row">
-          <span class="step-badge">A</span>
+        <div class="docs-step-row">
+          <span class="docs-step-badge">A</span>
           <div style="flex: 1">
-            <h3 class="step-title">Link Headers (RFC 8288)</h3>
-            <p class="step-desc">
+            <h3 class="docs-h3">Link Headers (RFC 8288)</h3>
+            <p class="docs-step-desc">
               The homepage response includes a <code>Link</code> header advertising the component API reference, full docs, and the API catalog — so agents discover resources from the first HTTP response without crawling.
             </p>
             <Code code={LINK_HEADER} lang="http" />
           </div>
         </div>
 
-        <div class="step-row">
-          <span class="step-badge">B</span>
+        <div class="docs-step-row">
+          <span class="docs-step-badge">B</span>
           <div style="flex: 1">
-            <h3 class="step-title">Markdown for Agents</h3>
-            <p class="step-desc">
+            <h3 class="docs-h3">Markdown for Agents</h3>
+            <p class="docs-step-desc">
               Any page can be requested as plain Markdown by sending <code>Accept: text/markdown</code>. The response will have <code>Content-Type: text/markdown</code> and an <code>x-markdown-tokens</code> count — no HTML parsing needed.
             </p>
             <Code code={MARKDOWN_CURL} lang="shell" />
           </div>
         </div>
 
-        <div class="step-row">
-          <span class="step-badge">C</span>
+        <div class="docs-step-row">
+          <span class="docs-step-badge">C</span>
           <div style="flex: 1">
-            <h3 class="step-title">Content Signals</h3>
-            <p class="step-desc">
+            <h3 class="docs-h3">Content Signals</h3>
+            <p class="docs-step-desc">
               <code>robots.txt</code> declares AI content usage preferences per the <a href="https://contentsignals.org/" target="_blank" rel="noopener noreferrer" class="docs-link-primary">Content Signals</a> draft standard: agents may use this content as inference input but not for model training.
             </p>
             <Code code={CONTENT_SIGNAL} lang="text" />
@@ -157,11 +157,11 @@ const skills = [
         Multi-file Claude Code skills that ship architectural playbooks — references and assets loaded on demand by the active mode. Distinct from the MCP Skills below: these run in Claude Code itself, not as a remote MCP server.
       </p>
       <div style="display: flex; flex-direction: column; gap: 1.5rem">
-        <div class="step-row">
-          <span class="step-badge">α</span>
+        <div class="docs-step-row">
+          <span class="docs-step-badge">α</span>
           <div style="flex: 1">
-            <h3 class="step-title"><a href="/skills/figma-workspace-architect" style="color: inherit; text-decoration: none">figma-workspace-architect <span style="color: var(--ui-color-text-muted); font-size: 0.78em; font-weight: 500">→</span></a></h3>
-            <p class="step-desc" style="margin-bottom: 0.5rem">
+            <h3 class="docs-h3"><a href="/skills/figma-workspace-architect" style="color: inherit; text-decoration: none">figma-workspace-architect <span style="color: var(--ui-color-text-muted); font-size: 0.78em; font-weight: 500">→</span></a></h3>
+            <p class="docs-step-desc" style="margin-bottom: 0.5rem">
               Designs, builds, audits, and migrates Figma workspaces via figma-console-mcp. Four modes (Build, Audit, Decide, Migrate) with three sub-modes (Scaffold, Re-verify, Code-verify). 13 references loaded on demand.
             </p>
             <a href={`${SITE_URL}/.well-known/agent-skills/figma-workspace-architect/SKILL.md`} target="_blank" rel="noopener noreferrer" style="font-size: 0.75rem; font-family: monospace; color: var(--ui-color-text-muted); text-decoration: none; opacity: 0.7">{`${SITE_URL}/.well-known/agent-skills/figma-workspace-architect/SKILL.md`}</a>
@@ -178,14 +178,14 @@ const skills = [
       </p>
       <div style="display: flex; flex-direction: column; gap: 1.5rem">
         {skills.map(({ n, name, label, endpoint, skill }) => (
-          <div class="step-row">
-            <span class="step-badge">{n}</span>
+          <div class="docs-step-row">
+            <span class="docs-step-badge">{n}</span>
             <div style="flex: 1">
-              <h3 class="step-title">{label} — <code style="font-size: 0.85em">{name}</code></h3>
-              <p class="step-desc" style="margin-bottom: 0.5rem">
+              <h3 class="docs-h3">{label} — <code style="font-size: 0.85em">{name}</code></h3>
+              <p class="docs-step-desc" style="margin-bottom: 0.5rem">
                 MCP endpoint: <a href={endpoint} style="color: var(--ui-color-primary); font-family: monospace; font-size: 0.82rem">{endpoint}</a>
               </p>
-              <p class="step-desc" style="margin-bottom: 0.75rem">
+              <p class="docs-step-desc" style="margin-bottom: 0.75rem">
                 Available tools: <code>list-all-documentation</code>, <code>get-documentation</code>, <code>get-documentation-for-story</code>
               </p>
               <a href={skill} target="_blank" rel="noopener noreferrer" style="font-size: 0.75rem; font-family: monospace; color: var(--ui-color-text-muted); text-decoration: none; opacity: 0.7">{skill}</a>
@@ -215,37 +215,3 @@ const skills = [
   </div>
 </BaseLayout>
 
-<style>
-  .step-badge {
-    font-family: monospace;
-    font-size: 0.62rem;
-    font-weight: 700;
-    color: var(--ui-color-primary);
-    background: rgba(68, 218, 218, 0.1);
-    padding: 0.1rem 0.4rem;
-    border-radius: 3px;
-    letter-spacing: 0.04em;
-    flex-shrink: 0;
-    margin-top: 3px;
-  }
-
-  .step-row {
-    display: flex;
-    gap: 0.85rem;
-    align-items: flex-start;
-  }
-
-  .step-title {
-    margin: 0 0 0.4rem;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--ui-color-text);
-  }
-
-  .step-desc {
-    margin: 0 0 0.75rem;
-    font-size: 0.82rem;
-    color: var(--ui-color-text-muted);
-    line-height: 1.6;
-  }
-</style>

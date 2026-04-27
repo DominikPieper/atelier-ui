@@ -46,7 +46,7 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
 
     <!-- How this connects -->
     <section style="margin-bottom: 2.25rem">
-      <h2 class="docs-section-title" style="margin-bottom: 0.5rem">How the pieces connect</h2>
+      <h2 class="docs-section-title">How the pieces connect</h2>
       <p style="color: var(--ui-color-text-muted); font-size: 0.85rem; margin: 0 0 0.5rem; line-height: 1.6">
         Claude Code spawns the MCP server, which opens a local WebSocket. The Figma Desktop plugin
         connects to that socket. The REST token is an optional side channel the MCP uses for
@@ -105,18 +105,18 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
 
     <!-- Step 1 — Plugin (required) -->
     <section style="margin-bottom: 2.25rem">
-      <h2 class="docs-section-title" style="margin-bottom: 0.5rem">Step 1 — Install the Desktop Bridge plugin (required)</h2>
+      <h2 class="docs-section-title">Step 1 — Install the Desktop Bridge plugin (required)</h2>
       <p style="color: var(--ui-color-text-muted); font-size: 0.85rem; margin: 0 0 1rem; line-height: 1.6">
         Takes ~90 seconds. One-time setup. The plugin is bundled with the MCP package — no separate
         download.
       </p>
 
       <div style="display: flex; flex-direction: column; gap: 1rem">
-        <div class="step-row">
-          <span class="step-badge">01</span>
+        <div class="docs-step-row">
+          <span class="docs-step-badge">01</span>
           <div>
-            <h3 class="step-title">Seed the plugin directory</h3>
-            <p class="step-desc">
+            <h3 class="docs-h3">Seed the plugin directory</h3>
+            <p class="docs-step-desc">
               Run the MCP package once. On first launch it auto-populates
               <code>~/.figma-console-mcp/plugin/</code> with <code>manifest.json</code> and UI assets.
             </p>
@@ -124,11 +124,11 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
           </div>
         </div>
 
-        <div class="step-row">
-          <span class="step-badge">02</span>
+        <div class="docs-step-row">
+          <span class="docs-step-badge">02</span>
           <div>
-            <h3 class="step-title">Import the plugin into Figma Desktop</h3>
-            <p class="step-desc">
+            <h3 class="docs-h3">Import the plugin into Figma Desktop</h3>
+            <p class="docs-step-desc">
               Open Figma Desktop (normal launch, no special flags). In the top menu, go to
               <strong>Plugins → Development → Import plugin from manifest…</strong> and pick
               <code>~/.figma-console-mcp/plugin/manifest.json</code>.
@@ -175,11 +175,11 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
           </div>
         </div>
 
-        <div class="step-row">
-          <span class="step-badge">03</span>
+        <div class="docs-step-row">
+          <span class="docs-step-badge">03</span>
           <div>
-            <h3 class="step-title">Run the plugin and keep it open</h3>
-            <p class="step-desc">
+            <h3 class="docs-h3">Run the plugin and keep it open</h3>
+            <p class="docs-step-desc">
               From the menu: <strong>Plugins → Development → Figma Desktop Bridge</strong>. A small
               plugin panel opens — keep it visible while you work. The panel scans ports
               <code>9223–9232</code> and connects to any MCP server it finds. You will see the
@@ -193,7 +193,7 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
 
     <!-- Step 2 — Optional REST token -->
     <section style="margin-bottom: 2.25rem">
-      <h2 class="docs-section-title" style="margin-bottom: 0.5rem">Step 2 — Add a REST access token (optional)</h2>
+      <h2 class="docs-section-title">Step 2 — Add a REST access token (optional)</h2>
       <p style="color: var(--ui-color-text-muted); font-size: 0.85rem; margin: 0 0 1rem; line-height: 1.6">
         Only needed if you want Claude to read file/variable/comment metadata via Figma's REST API.
         All interactive work — screenshots, selection, edits — already flows through the plugin and
@@ -201,21 +201,21 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
       </p>
 
       <div style="display: flex; flex-direction: column; gap: 1rem">
-        <div class="step-row">
-          <span class="step-badge">01</span>
+        <div class="docs-step-row">
+          <span class="docs-step-badge">01</span>
           <div>
-            <h3 class="step-title">Open Figma settings</h3>
-            <p class="step-desc">
+            <h3 class="docs-h3">Open Figma settings</h3>
+            <p class="docs-step-desc">
               Go to <a href="https://www.figma.com/developers/api#access-tokens" target="_blank" rel="noopener noreferrer" class="docs-link-primary">Figma → Settings → Security</a>,
               scroll to <strong>Personal access tokens</strong>.
             </p>
           </div>
         </div>
-        <div class="step-row">
-          <span class="step-badge">02</span>
+        <div class="docs-step-row">
+          <span class="docs-step-badge">02</span>
           <div>
-            <h3 class="step-title">Generate the token</h3>
-            <p class="step-desc">
+            <h3 class="docs-h3">Generate the token</h3>
+            <p class="docs-step-desc">
               Name it <code>atelier-ui-workshop</code>. Expiration: 30 days.
               Scope: <strong>File content → Read only</strong>. Copy the value
               (<code>figd_…</code>) — it is shown only once.
@@ -280,7 +280,7 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
 
     <!-- Step 3 — Wire the token into .mcp.json -->
     <section style="margin-bottom: 2.25rem">
-      <h2 class="docs-section-title" style="margin-bottom: 0.5rem">Step 3 — Wire the token into <code>.mcp.json</code> (only if Step 2)</h2>
+      <h2 class="docs-section-title">Step 3 — Wire the token into <code>.mcp.json</code> (only if Step 2)</h2>
       <p style="color: var(--ui-color-text-muted); font-size: 0.85rem; margin: 0 0 1rem; line-height: 1.6">
         The MCP process receives its environment from the <code>env</code> block of
         <code>.mcp.json</code>, <em>not</em> from your login shell. A bare <code>export</code> will
@@ -288,8 +288,8 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
         options:
       </p>
 
-      <h3 style="font-size: 0.9rem; font-weight: 700; margin: 0.5rem 0 0.4rem">Option A — Shell export + <code>${'${VAR}'}</code> substitution (recommended)</h3>
-      <p style="color: var(--ui-color-text-muted); font-size: 0.82rem; margin: 0 0 0.5rem; line-height: 1.6">
+      <h3 class="docs-h3" style="margin-top: 0.5rem">Option A — Shell export + <code>${'${VAR}'}</code> substitution (recommended)</h3>
+      <p class="docs-step-desc" style="margin-bottom: 0.5rem">
         Keeps the token out of version control. Claude Code expands
         <code>${'${FIGMA_ACCESS_TOKEN}'}</code> from your shell at MCP startup
         (see the <a href="https://code.claude.com/docs/en/mcp-servers#environment-variable-expansion-in-mcpjson" target="_blank" rel="noopener noreferrer" class="docs-link-primary">expansion docs</a>).
@@ -297,8 +297,8 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
       <Code code={`// .mcp.json\n"figma-console": {\n  "command": "npx",\n  "args": ["-y", "figma-console-mcp@latest"],\n  "env": {\n    "FIGMA_ACCESS_TOKEN": "\${FIGMA_ACCESS_TOKEN}",\n    "ENABLE_MCP_APPS": "true"\n  }\n}`} lang="json" title=".mcp.json" />
       <Code code={`# macOS / Linux (zsh / bash) — persist the token\necho 'export FIGMA_ACCESS_TOKEN=figd_your_token_here' >> ~/.zshrc\nsource ~/.zshrc\n\n# Windows (PowerShell)\n[Environment]::SetEnvironmentVariable("FIGMA_ACCESS_TOKEN","figd_your_token_here","User")`} lang="shell" />
 
-      <h3 style="font-size: 0.9rem; font-weight: 700; margin: 1.25rem 0 0.4rem">Option B — Inline value</h3>
-      <p style="color: var(--ui-color-text-muted); font-size: 0.82rem; margin: 0 0 0.5rem; line-height: 1.6">
+      <h3 class="docs-h3 docs-h3--spaced">Option B — Inline value</h3>
+      <p class="docs-step-desc" style="margin-bottom: 0.5rem">
         Simpler, but the token lives in the file. Fine for a machine-local, git-ignored
         <code>.mcp.json</code> — never commit it.
       </p>
@@ -313,7 +313,7 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
 
     <!-- Cloud fallback -->
     <section style="margin-bottom: 2.25rem">
-      <h2 class="docs-section-title" style="margin-bottom: 0.5rem">Can't run Figma Desktop? Cloud mode</h2>
+      <h2 class="docs-section-title">Can't run Figma Desktop? Cloud mode</h2>
       <p style="color: var(--ui-color-text-muted); font-size: 0.85rem; margin: 0 0 1rem; line-height: 1.6">
         If you are on a locked-down machine, in a browser-only Codespace, or using
         Claude.ai on the web, point the MCP at the hosted relay at
@@ -326,7 +326,7 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
 
     <!-- Verification -->
     <section>
-      <h2 class="docs-section-title" style="margin-bottom: 0.5rem">Verify the setup</h2>
+      <h2 class="docs-section-title">Verify the setup</h2>
       <Code code={`npm run preflight`} lang="shell" />
       <p style="color: var(--ui-color-text-muted); font-size: 0.85rem; margin-top: 0.75rem; line-height: 1.6">
         Preflight checks the plugin manifest, the port range, and the token — in that order. The
@@ -366,37 +366,3 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
   </div>
 </BaseLayout>
 
-<style>
-  .step-badge {
-    font-family: monospace;
-    font-size: 0.62rem;
-    font-weight: 700;
-    color: var(--ui-color-primary);
-    background: rgba(68, 218, 218, 0.1);
-    padding: 0.1rem 0.4rem;
-    border-radius: 3px;
-    letter-spacing: 0.04em;
-    flex-shrink: 0;
-    margin-top: 3px;
-  }
-  .step-row {
-    display: flex;
-    gap: 0.85rem;
-    align-items: flex-start;
-  }
-  .step-title {
-    margin: 0 0 0.4rem;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--ui-color-text);
-  }
-  .step-desc {
-    margin: 0 0 0.75rem;
-    font-size: 0.82rem;
-    color: var(--ui-color-text-muted);
-    line-height: 1.6;
-  }
-  .step-desc:last-child {
-    margin-bottom: 0;
-  }
-</style>

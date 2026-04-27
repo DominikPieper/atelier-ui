@@ -107,7 +107,7 @@ const previewCode = `# Atelier — Full API Reference
     </div>
 
     <div style="margin-bottom: 2.5rem">
-      <h2 style="font-size: 0.95rem; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 1rem; color: var(--ui-color-text)">What is llms.txt?</h2>
+      <h2 class="docs-section-title">What is llms.txt?</h2>
       <p style="margin: 0 0 0.75rem; font-size: 0.85rem; color: var(--ui-color-text-muted); line-height: 1.65">
         <Jargon term="llms.txt"><code>llms.txt</code></Jargon> is a proposed open standard — analogous to <code>robots.txt</code> — for helping LLMs understand a project. It lives at the root of a site, uses plain Markdown, and provides a short structured index with links to deeper content.
       </p>
@@ -117,7 +117,7 @@ const previewCode = `# Atelier — Full API Reference
     </div>
 
     <div style="margin-bottom: 2.5rem">
-      <h2 style="font-size: 0.95rem; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 1rem; color: var(--ui-color-text)">The Files</h2>
+      <h2 class="docs-section-title">The Files</h2>
       <div style="display: flex; flex-direction: column; gap: 0.85rem">
         {[
           { filename: 'llms.txt', url: `${SITE_URL}/llms.txt`, size: '~2 KB', desc: 'Short index: component list with one-line prop summaries and links to docs. Use this when your context window is limited or you just need component names and key props.' },
@@ -144,16 +144,14 @@ const previewCode = `# Atelier — Full API Reference
     </div>
 
     <div style="margin-bottom: 2.5rem">
-      <h2 style="font-size: 0.95rem; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 1rem; color: var(--ui-color-text)">How to Use It</h2>
-      <div style="display: flex; flex-direction: column; gap: 1.5rem">
+      <h2 class="docs-section-title">How to Use It</h2>
+      <div class="docs-step-list">
         {usageSteps.map(({ n, title, desc, code, lang }) => (
-          <div style="display: flex; gap: 0.85rem; align-items: flex-start">
-            <div style="margin-top: 2px">
-              <span class="step-badge">{n}</span>
-            </div>
-            <div style="flex: 1">
-              <h3 style="margin: 0 0 0.4rem; font-size: 0.9rem; font-weight: 700; color: var(--ui-color-text)">{title}</h3>
-              <p style="margin: 0 0 0.75rem; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">{desc}</p>
+          <div class="docs-step-row">
+            <span class="docs-step-badge">{n}</span>
+            <div class="docs-step-body">
+              <h3 class="docs-h3">{title}</h3>
+              <p class="docs-step-desc">{desc}</p>
               <Code code={code} lang={lang} />
             </div>
           </div>
@@ -162,7 +160,7 @@ const previewCode = `# Atelier — Full API Reference
     </div>
 
     <div style="margin-bottom: 2.5rem">
-      <h2 style="font-size: 0.95rem; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 1rem; color: var(--ui-color-text)">Why Plain Text?</h2>
+      <h2 class="docs-section-title">Why Plain Text?</h2>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.85rem">
         {whyCards.map(({ title, body }) => (
           <div style="padding: 0.9rem 1rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md)">
@@ -174,7 +172,7 @@ const previewCode = `# Atelier — Full API Reference
     </div>
 
     <div>
-      <h2 style="font-size: 0.95rem; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 0.85rem; color: var(--ui-color-text)">Preview</h2>
+      <h2 class="docs-section-title">Preview</h2>
       <p style="margin: 0 0 0.85rem; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
         A snapshot of what an LLM sees when you share the reference file:
       </p>
@@ -184,18 +182,6 @@ const previewCode = `# Atelier — Full API Reference
   </div>
 </BaseLayout>
 
-<style>
-  .step-badge {
-    font-family: monospace;
-    font-size: 0.62rem;
-    font-weight: 700;
-    color: var(--ui-color-primary);
-    background: rgba(68, 218, 218, 0.1);
-    padding: 0.1rem 0.4rem;
-    border-radius: 3px;
-    letter-spacing: 0.04em;
-  }
-</style>
 
 <script>
   function initCopyButtons() {

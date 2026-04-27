@@ -187,29 +187,29 @@ Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
     <!-- How to use -->
     <div class="docs-section" style="margin-top: 2.5rem">
       <h2 class="docs-section-title">How to use it</h2>
-      <div style="display: flex; flex-direction: column; gap: 1.25rem">
-        <div class="step-row">
-          <span class="step-badge">01</span>
-          <div>
-            <h3 class="step-title">Copy the template above</h3>
-            <p class="step-desc">Choose your framework, then copy the CLAUDE.md content into a file at your project root.</p>
+      <div class="docs-step-list">
+        <div class="docs-step-row">
+          <span class="docs-step-badge">01</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">Copy the template above</h3>
+            <p class="docs-step-desc">Choose your framework, then copy the CLAUDE.md content into a file at your project root.</p>
           </div>
         </div>
-        <div class="step-row">
-          <span class="step-badge">02</span>
-          <div>
-            <h3 class="step-title">Confirm MCP is configured</h3>
-            <p class="step-desc">
+        <div class="docs-step-row">
+          <span class="docs-step-badge">02</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">Confirm MCP is configured</h3>
+            <p class="docs-step-desc">
               The template references the MCP server by name. Make sure the matching server is wired up in your
               <code>.claude/settings.json</code> — the <a href="/workshop" class="docs-link-primary">Workshop Setup</a> does this automatically.
             </p>
           </div>
         </div>
-        <div class="step-row">
-          <span class="step-badge">03</span>
-          <div>
-            <h3 class="step-title">Open the project in Claude Code</h3>
-            <p class="step-desc">
+        <div class="docs-step-row">
+          <span class="docs-step-badge">03</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">Open the project in Claude Code</h3>
+            <p class="docs-step-desc">
               Claude Code picks up CLAUDE.md on session start. From here, every prompt has component awareness — no preamble needed.
             </p>
           </div>
@@ -236,40 +236,5 @@ Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
 
   </div>
 </BaseLayout>
-
-<style>
-  .step-badge {
-    font-family: monospace;
-    font-size: 0.62rem;
-    font-weight: 700;
-    color: var(--ui-color-primary);
-    background: rgba(68, 218, 218, 0.1);
-    padding: 0.1rem 0.4rem;
-    border-radius: 3px;
-    letter-spacing: 0.04em;
-    flex-shrink: 0;
-    margin-top: 3px;
-  }
-
-  .step-row {
-    display: flex;
-    gap: 0.85rem;
-    align-items: flex-start;
-  }
-
-  .step-title {
-    margin: 0 0 0.4rem;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--ui-color-text);
-  }
-
-  .step-desc {
-    margin: 0;
-    font-size: 0.82rem;
-    color: var(--ui-color-text-muted);
-    line-height: 1.6;
-  }
-</style>
 
 <!-- Framework tabs handled by shared framework-pref-init script in BaseLayout. -->
