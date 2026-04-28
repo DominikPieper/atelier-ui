@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+import { existsSync, readdirSync, statSync } from 'node:fs';
+import { resolve } from 'node:path';
+
 import { createWorkspace } from 'create-nx-workspace';
 
 const enquirer = require('enquirer');
@@ -61,6 +64,17 @@ export async function main() {
     throw new Error('Please provide a name for the workspace');
   }
 
+  const targetDir = resolve(process.cwd(), name);
+  if (existsSync(targetDir)) {
+    const stat = statSync(targetDir);
+    const nonEmpty = stat.isDirectory() && readdirSync(targetDir).length > 0;
+    if (!stat.isDirectory() || nonEmpty) {
+      console.error(`\n✖ Cannot create workspace: "${name}" already exists at ${targetDir}.`);
+      console.error(`  Pick a different name or remove the existing directory.\n`);
+      process.exit(1);
+    }
+  }
+
   if (!framework) {
     const res = await enquirer.prompt({
       type: 'select',
@@ -116,5 +130,9 @@ export async function main() {
 }
 
 if (require.main === module) {
-  main();
+  main().catch((err: unknown) => {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error(`\n✖ ${msg}\n`);
+    process.exit(1);
+  });
 }
