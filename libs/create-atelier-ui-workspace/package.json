@@ -1,6 +1,6 @@
 {
   "name": "create-atelier-ui-workspace",
-  "version": "0.0.40",
+  "version": "0.0.41",
   "description": "Create an Atelier Angular workshop workspace in one command",
   "keywords": [
     "nx",

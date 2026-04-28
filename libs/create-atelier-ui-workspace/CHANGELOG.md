@@ -1,3 +1,14 @@
+## 0.0.41 (2026-04-28)
+
+### 🚀 Features
+
+- **create-cli:** colorize output + cleaner success summary ([b844253](https://github.com/DominikPieper/atelier-ui/commit/b844253))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.40 (2026-04-28)
 
 ### 🩹 Fixes
