@@ -55,6 +55,13 @@
       "options": {
         "command": "npx storybook build --config-dir libs/vue/.storybook --output-dir dist/storybook/vue"
       }
+    },
+    "storybook-test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx vitest run --config vitest.storybook.config.ts",
+        "cwd": "libs/vue"
+      }
     }
   }
 }

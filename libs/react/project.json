@@ -57,6 +57,13 @@
       "options": {
         "command": "npx storybook build --config-dir libs/react/.storybook --output-dir dist/storybook/react"
       }
+    },
+    "storybook-test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx vitest run --config vitest.storybook.config.ts",
+        "cwd": "libs/react"
+      }
     }
   }
 }
