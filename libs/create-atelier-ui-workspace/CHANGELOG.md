@@ -1,3 +1,14 @@
+## 0.0.42 (2026-04-28)
+
+### 🩹 Fixes
+
+- **create-cli:** bump process maxListeners to silence warning ([1deb1fa](https://github.com/DominikPieper/atelier-ui/commit/1deb1fa))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.41 (2026-04-28)
 
 ### 🚀 Features
