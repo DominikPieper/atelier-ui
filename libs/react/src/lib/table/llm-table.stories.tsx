@@ -252,7 +252,6 @@ export const StickyHeader: Story = {
 // Empty State
 // ---------------------------------------------------------------------------
 export const EmptyState: Story = {
-  parameters: { design: figmaNode('421-1103') },
   render: () => (
     <LlmTable>
       <LlmThead>

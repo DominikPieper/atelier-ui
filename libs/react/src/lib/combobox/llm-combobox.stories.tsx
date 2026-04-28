@@ -80,7 +80,6 @@ export const Disabled: Story = {
     disabled: true,
     placeholder: 'Search fruit…',
   },
-  parameters: { design: figmaNode('421-328') },
 };
 
 export const Invalid: Story = {
@@ -91,7 +90,6 @@ export const Invalid: Story = {
     errors: ['Please select a fruit'],
     placeholder: 'Search fruit…',
   },
-  parameters: { design: figmaNode('421-332') },
 };
 
 export const WithDisabledOption: Story = {

@@ -33,7 +33,7 @@ const meta: Meta<typeof LlmChat> = {
     open: { control: 'boolean' },
   },
   args: { variant: 'drawer', status: 'idle', open: true },
-  parameters: { design: figmaNode('453-1758') },
+  parameters: { design: figmaNode('507-2953') },
 };
 
 export default meta;
@@ -44,7 +44,7 @@ type Story = StoryObj<typeof LlmChat>;
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const DrawerDefault: Story = {
-  parameters: { design: figmaNode('453-1760') },
+  parameters: { design: figmaNode('507-2950') },
   args: { variant: 'drawer', status: 'idle', open: true },
   render: (args) => ({
     components: COMPONENTS,
@@ -72,7 +72,7 @@ export const DrawerDefault: Story = {
 };
 
 export const DrawerEmpty: Story = {
-  parameters: { design: figmaNode('453-1766') },
+  parameters: { design: figmaNode('507-2950') },
   args: { variant: 'drawer', status: 'idle', open: true },
   render: (args) => ({
     components: COMPONENTS,
@@ -101,7 +101,7 @@ export const DrawerEmpty: Story = {
 };
 
 export const DrawerStreaming: Story = {
-  parameters: { design: figmaNode('453-1772') },
+  parameters: { design: figmaNode('507-2950') },
   args: { variant: 'drawer', status: 'streaming', open: true },
   render: (args) => ({
     components: COMPONENTS,
@@ -125,7 +125,7 @@ export const DrawerStreaming: Story = {
 };
 
 export const DrawerError: Story = {
-  parameters: { design: figmaNode('453-1778') },
+  parameters: { design: figmaNode('507-2950') },
   args: { variant: 'drawer', status: 'error', open: true },
   render: (args) => ({
     components: COMPONENTS,
@@ -154,7 +154,7 @@ export const DrawerError: Story = {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const PopupDefault: Story = {
-  parameters: { design: figmaNode('453-1762') },
+  parameters: { design: figmaNode('507-2951') },
   args: { variant: 'popup', status: 'idle', open: true },
   render: (args) => ({
     components: COMPONENTS,
@@ -179,7 +179,7 @@ export const PopupDefault: Story = {
 };
 
 export const PopupEmpty: Story = {
-  parameters: { design: figmaNode('453-1768') },
+  parameters: { design: figmaNode('507-2951') },
   args: { variant: 'popup', status: 'idle', open: true },
   render: (args) => ({
     components: COMPONENTS,
@@ -208,7 +208,7 @@ export const PopupEmpty: Story = {
 };
 
 export const PopupStreaming: Story = {
-  parameters: { design: figmaNode('453-1774') },
+  parameters: { design: figmaNode('507-2951') },
   args: { variant: 'popup', status: 'streaming', open: true },
   render: (args) => ({
     components: COMPONENTS,
@@ -232,7 +232,7 @@ export const PopupStreaming: Story = {
 };
 
 export const PopupError: Story = {
-  parameters: { design: figmaNode('453-1780') },
+  parameters: { design: figmaNode('507-2951') },
   args: { variant: 'popup', status: 'error', open: true },
   render: (args) => ({
     components: COMPONENTS,
@@ -261,7 +261,7 @@ export const PopupError: Story = {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const InlineDefault: Story = {
-  parameters: { design: figmaNode('453-1764') },
+  parameters: { design: figmaNode('507-2952') },
   args: { variant: 'inline', status: 'idle', open: true },
   render: (args) => ({
     components: COMPONENTS,
@@ -290,7 +290,7 @@ export const InlineDefault: Story = {
 };
 
 export const InlineEmpty: Story = {
-  parameters: { design: figmaNode('453-1770') },
+  parameters: { design: figmaNode('507-2952') },
   args: { variant: 'inline', status: 'idle', open: true },
   render: (args) => ({
     components: COMPONENTS,
@@ -324,7 +324,7 @@ export const InlineEmpty: Story = {
 };
 
 export const InlineStreaming: Story = {
-  parameters: { design: figmaNode('453-1776') },
+  parameters: { design: figmaNode('507-2952') },
   args: { variant: 'inline', status: 'streaming', open: true },
   render: (args) => ({
     components: COMPONENTS,
@@ -350,7 +350,7 @@ export const InlineStreaming: Story = {
 };
 
 export const InlineError: Story = {
-  parameters: { design: figmaNode('453-1782') },
+  parameters: { design: figmaNode('507-2952') },
   args: { variant: 'inline', status: 'error', open: true },
   render: (args) => ({
     components: COMPONENTS,

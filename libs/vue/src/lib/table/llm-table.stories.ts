@@ -177,7 +177,6 @@ export const Selectable: Story = {
 };
 
 export const EmptyState: Story = {
-  parameters: { design: figmaNode('421-1103') },
   render: () => ({
     components: { LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd },
     template: `

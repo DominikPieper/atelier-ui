@@ -95,7 +95,6 @@ export const Disabled: Story = {
     props: args,
     template: `<llm-combobox ${argsToTemplate(args)} />`,
   }),
-  parameters: { design: figmaNode('421-328') },
 };
 
 export const Invalid: Story = {
@@ -108,7 +107,6 @@ export const Invalid: Story = {
     props: args,
     template: `<llm-combobox ${argsToTemplate(args)} />`,
   }),
-  parameters: { design: figmaNode('421-332') },
 };
 
 export const WithDisabledOption: Story = {

@@ -91,7 +91,6 @@ export const Disabled: Story = {
     setup() { return { options: FRUITS }; },
     template: `<LlmCombobox value="banana" :options="options" :disabled="true" placeholder="Search fruit…" />`,
   }),
-  parameters: { design: figmaNode('421-328') },
 };
 
 export const Invalid: Story = {
@@ -111,7 +110,6 @@ export const Invalid: Story = {
       />
     `,
   }),
-  parameters: { design: figmaNode('421-332') },
 };
 
 export const WithDisabledOption: Story = {

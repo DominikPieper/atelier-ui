@@ -288,7 +288,6 @@ export const EmptyState: Story = {
       </llm-table>
     `,
   }),
-  parameters: { design: figmaNode('421-1103') },
 };
 
 // ---------------------------------------------------------------------------
