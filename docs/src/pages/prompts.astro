@@ -7,7 +7,13 @@ const DOCS_URL = 'https://atelier.pieper.io/llms-full.txt';
 type Fw = 'react' | 'angular' | 'vue';
 
 const FW_LABELS: Record<Fw, string> = { react: 'React', angular: 'Angular', vue: 'Vue' };
-const FW_COLORS: Record<Fw, string> = { angular: '#e23237', react: '#61dafb', vue: '#42b883' };
+// `bg`  — brand hue, used for the active-tab background tint.
+// `text` — AA-safe darker variant of the same hue, used for the active-tab label.
+const FW_COLORS: Record<Fw, { bg: string; text: string }> = {
+  angular: { bg: '#e23237', text: '#991b1b' },
+  react:   { bg: '#61dafb', text: '#155e75' },
+  vue:     { bg: '#42b883', text: '#166534' },
+};
 
 function fwNote(fw: Fw): string {
   return {
@@ -142,7 +148,7 @@ const FRAMEWORKS: Fw[] = ['react', 'angular', 'vue'];
           <button
             data-fw-btn={fw}
             class={fw === 'react' ? 'prompt-fw-btn active' : 'prompt-fw-btn'}
-            style={`--fw-color: ${FW_COLORS[fw]}`}
+            style={`--fw-bg: ${FW_COLORS[fw].bg}; --fw-text: ${FW_COLORS[fw].text}`}
           >
             {FW_LABELS[fw]}
           </button>
@@ -208,9 +214,15 @@ const FRAMEWORKS: Fw[] = ['react', 'angular', 'vue'];
 
   .prompt-fw-btn.active {
     font-weight: 700;
-    background: color-mix(in srgb, var(--fw-color) 13%, transparent);
-    color: var(--fw-color);
+    background: color-mix(in srgb, var(--fw-bg) 13%, transparent);
+    color: var(--fw-text);
   }
+
+  /* In dark mode the surface is too dark for the -800 shades; use lighter
+     tints of the same hue. */
+  [data-theme='dark'] .prompt-fw-btn.active[data-fw-btn='angular'] { color: #fca5a5; }
+  [data-theme='dark'] .prompt-fw-btn.active[data-fw-btn='react']   { color: #67e8f9; }
+  [data-theme='dark'] .prompt-fw-btn.active[data-fw-btn='vue']     { color: #86efac; }
 </style>
 
 <script>

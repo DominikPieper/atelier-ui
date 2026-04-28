@@ -22,9 +22,11 @@ const MCP_CONFIG = `{
 }`;
 
 const STORYBOOK_LINKS = [
-  { name: 'React', pkg: '@atelier-ui/react', href: `${SITE_URL}/storybook-react/`, color: '#61dafb' },
-  { name: 'Angular', pkg: '@atelier-ui/angular', href: `${SITE_URL}/storybook-angular/`, color: '#e23237' },
-  { name: 'Vue', pkg: '@atelier-ui/vue', href: `${SITE_URL}/storybook-vue/`, color: '#42b883' },
+  // border = brand hue (decorative); text color comes from a per-framework
+  // CSS class that picks an AA-safe shade per theme.
+  { name: 'React',   pkg: '@atelier-ui/react',   href: `${SITE_URL}/storybook-react/`,   border: '#61dafb', textClass: 'storybook-card--react' },
+  { name: 'Angular', pkg: '@atelier-ui/angular', href: `${SITE_URL}/storybook-angular/`, border: '#e23237', textClass: 'storybook-card--angular' },
+  { name: 'Vue',     pkg: '@atelier-ui/vue',     href: `${SITE_URL}/storybook-vue/`,     border: '#42b883', textClass: 'storybook-card--vue' },
 ];
 ---
 
@@ -44,19 +46,19 @@ const STORYBOOK_LINKS = [
 
     <!-- Framework cards -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.85rem; margin-bottom: 3rem">
-      {STORYBOOK_LINKS.map(({ name, pkg, href, color }) => (
+      {STORYBOOK_LINKS.map(({ name, pkg, href, border, textClass }) => (
         <a
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          style={`display: flex; flex-direction: column; gap: 0.5rem; padding: 1.1rem 1.1rem 0.9rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); text-decoration: none; border-left: 3px solid ${color}; transition: background 0.12s`}
-          class="storybook-card"
+          style={`display: flex; flex-direction: column; gap: 0.5rem; padding: 1.1rem 1.1rem 0.9rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); text-decoration: none; border-left: 3px solid ${border}; transition: background 0.12s`}
+          class={`storybook-card ${textClass}`}
         >
           <div style="display: flex; align-items: center; gap: 0.5rem">
-            <span style={`font-weight: 700; font-size: 0.95rem; color: ${color}`}>{name}</span>
+            <span class="storybook-card__name">{name}</span>
           </div>
           <span style="font-family: monospace; font-size: 0.72rem; color: var(--ui-color-text-muted)">{pkg}</span>
-          <span style={`font-size: 0.75rem; color: ${color}; font-weight: 600; letter-spacing: 0.01em; margin-top: 0.1rem`}>Open →</span>
+          <span class="storybook-card__cta">Open →</span>
         </a>
       ))}
     </div>
@@ -142,4 +144,22 @@ const STORYBOOK_LINKS = [
     background: var(--ui-color-surface-raised) !important;
     filter: brightness(1.05);
   }
+  .storybook-card__name { font-weight: 700; font-size: 0.95rem; }
+  .storybook-card__cta  { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.01em; margin-top: 0.1rem; }
+
+  /* Per-framework AA-safe text colors. Light: -800 shades on raised surface.
+     Dark: -300/-400 shades on dark raised surface. */
+  .storybook-card--react   .storybook-card__name,
+  .storybook-card--react   .storybook-card__cta   { color: #155e75; }
+  .storybook-card--angular .storybook-card__name,
+  .storybook-card--angular .storybook-card__cta   { color: #991b1b; }
+  .storybook-card--vue     .storybook-card__name,
+  .storybook-card--vue     .storybook-card__cta   { color: #166534; }
+
+  [data-theme='dark'] .storybook-card--react   .storybook-card__name,
+  [data-theme='dark'] .storybook-card--react   .storybook-card__cta   { color: #67e8f9; }
+  [data-theme='dark'] .storybook-card--angular .storybook-card__name,
+  [data-theme='dark'] .storybook-card--angular .storybook-card__cta   { color: #fca5a5; }
+  [data-theme='dark'] .storybook-card--vue     .storybook-card__name,
+  [data-theme='dark'] .storybook-card--vue     .storybook-card__cta   { color: #86efac; }
 </style>
