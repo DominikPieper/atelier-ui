@@ -4,7 +4,6 @@ import {
   formatFiles,
   NX_VERSION,
   removeDependenciesFromPackageJson,
-  runTasksInSerial,
   Tree,
   updateJson,
   writeJson,
@@ -33,6 +32,7 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
     const appName = `workshop-${framework}`;
 
     if (framework === 'angular') {
+      console.log(`\n◇ Generating Angular workshop app…`);
       await ensurePackage('@nx/angular', NX_VERSION);
       const { applicationGenerator: angularAppGenerator } = require('@nx/angular/generators');
       await angularAppGenerator(tree, {
@@ -50,6 +50,7 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
     }
 
     if (framework === 'react') {
+      console.log(`\n◇ Generating React workshop app…`);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { applicationGenerator: reactAppGenerator } = await ensurePackage<any>(
         '@nx/react',
@@ -70,6 +71,7 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
     }
 
     if (framework === 'vue') {
+      console.log(`\n◇ Generating Vue workshop app…`);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { applicationGenerator: vueAppGenerator } = await ensurePackage<any>(
         '@nx/vue',
@@ -99,6 +101,8 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
     const existing = tree.exists(stylesPath) ? (tree.read(stylesPath, 'utf-8') ?? '') : '';
     tree.write(stylesPath, `@import './styles/tokens.css';\n\n${existing}`);
   }
+
+  console.log(`\n◇ Writing project files (CLAUDE.md, README, .mcp.json)…`);
 
   // Write CLAUDE.md with framework-specific guidance
   const frameworkSections = frameworks
@@ -294,9 +298,18 @@ Browse components at ${SITE_URL}
 `,
   );
 
+  console.log(`\n◇ Formatting files…`);
   await formatFiles(tree);
 
-  return runTasksInSerial(installTask, removePresetTask);
+  // Wrap installTask + removePresetTask so the (multi-second, otherwise silent)
+  // npm-install phase that runs after the generator returns has user-visible
+  // progress. runTasksInSerial would also work but wouldn't surface phase names.
+  return async () => {
+    console.log(`\n◇ Installing Atelier component packages…`);
+    await installTask();
+    console.log(`\n◇ Cleaning up preset package…`);
+    await removePresetTask();
+  };
 }
 
 export default presetGenerator;
