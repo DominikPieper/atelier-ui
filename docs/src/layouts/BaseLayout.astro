@@ -160,86 +160,6 @@ const breadcrumbSchema = {
     });
   </script>
 
-  {/* Workshop progress observer — fills the sidebar progress bar as the
-      visitor scrolls through the numbered steps on /workshop, /tutorial,
-      and /first-component. Cumulative across all three pages, persisted
-      to localStorage so returning visitors keep their place. Re-runs on
-      Astro view-transition page loads. */}
-  <script is:inline>
-    (function() {
-      var TOTALS = { '/workshop': 8, '/tutorial': 5, '/first-component': 6 };
-      var TOTAL_ALL = 19;
-      var KEY = 'workshop-progress';
-
-      function load() {
-        try { return JSON.parse(localStorage.getItem(KEY) || '{}'); }
-        catch (e) { return {}; }
-      }
-      function save(state) {
-        try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
-      }
-      function setRatio(ratio) {
-        document.documentElement.style.setProperty('--workshop-progress', String(ratio));
-      }
-      function totalSeen(state) {
-        var sum = 0;
-        for (var p in TOTALS) {
-          var v = state[p] || 0;
-          sum += Math.min(v, TOTALS[p]);
-        }
-        return sum;
-      }
-
-      var activeObs = null;
-      function initWorkshopProgress() {
-        // Always render prior cumulative progress, even on non-track pages.
-        var state = load();
-        setRatio(totalSeen(state) / TOTAL_ALL);
-
-        // Tear down a stale observer from a previous track-page visit.
-        if (activeObs) { activeObs.disconnect(); activeObs = null; }
-
-        var path = location.pathname.replace(/\/$/, '') || '/';
-        var pageTotal = TOTALS[path];
-        if (!pageTotal) return;
-
-        var steps = document.querySelectorAll('[data-step]');
-        if (!steps.length) return;
-
-        if (typeof IntersectionObserver === 'undefined') return;
-
-        // A step counts as "seen" when its top crosses 60% of the viewport.
-        // Negative bottom rootMargin trims the lower 40% so we credit the
-        // step only when the visitor has actually scrolled it into focus.
-        activeObs = new IntersectionObserver(function(entries) {
-          var changed = false;
-          var fresh = load();
-          var prior = fresh[path] || 0;
-          var maxSeen = prior;
-          for (var i = 0; i < entries.length; i++) {
-            var e = entries[i];
-            if (!e.isIntersecting) continue;
-            var n = parseInt(e.target.getAttribute('data-step'), 10);
-            if (!isNaN(n) && n > maxSeen) { maxSeen = n; changed = true; }
-          }
-          if (changed) {
-            fresh[path] = maxSeen;
-            save(fresh);
-            setRatio(totalSeen(fresh) / TOTAL_ALL);
-          }
-        }, { rootMargin: '0px 0px -40% 0px', threshold: 0 });
-
-        steps.forEach(function(s) { activeObs.observe(s); });
-      }
-
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initWorkshopProgress);
-      } else {
-        initWorkshopProgress();
-      }
-      document.addEventListener('astro:page-load', initWorkshopProgress);
-    })();
-  </script>
 </head>
 <body>
   <div class="docs-shell" id="docs-shell">
@@ -316,14 +236,6 @@ const breadcrumbSchema = {
             <div class="docs-nav-heading">
               <Icon name={SECTION_ICONS['Workshop']} class="docs-nav-heading-icon" />
               <span>Workshop</span>
-              {/* Cumulative progress across /workshop, /tutorial, /first-component
-                  steps. Filled by an IntersectionObserver in this layout's
-                  inline script; persisted via localStorage so returning
-                  visitors keep their place. Hidden from screen readers — the
-                  numbered link list already conveys the same structure. */}
-              <span class="docs-workshop-progress" aria-hidden="true" data-workshop-progress>
-                <span class="docs-workshop-progress-fill"></span>
-              </span>
             </div>
             <a href="/" class={`docs-nav-link${isActive('/') ? ' active' : ''}`}>
               <Icon name="dashboard" class="docs-nav-link-icon" />
