@@ -7,6 +7,11 @@ import { createWorkspace } from 'create-nx-workspace';
 
 const enquirer = require('enquirer');
 
+// create-nx-workspace spawns several child processes (npm install + per-plugin
+// generators); each registers its own exit handler on `process`, exceeding the
+// default cap of 10 and triggering MaxListenersExceededWarning.
+process.setMaxListeners(20);
+
 type Framework = 'angular' | 'react' | 'vue';
 const VALID_FRAMEWORKS: readonly Framework[] = ['angular', 'react', 'vue'];
 
