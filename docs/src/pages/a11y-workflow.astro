@@ -158,6 +158,34 @@ export type LlmButtonProps =
             One tool tells you something is wrong. Three tools tell you what to fix and why.
           </text>
         </svg>
+
+        <div slot="mobile-fallback" class="lane-stack" role="img" aria-label="Three a11y audit lanes — what each catches uniquely">
+          <div class="lane-stack__row lane-stack__row--axe">
+            <span class="lane-stack__label">axe-core <span class="lane-stack__when">DOM · runtime</span></span>
+            <ul class="lane-stack__list">
+              <li>label missing on render</li>
+              <li>heading-order in real DOM</li>
+              <li>scrollable-region focus</li>
+            </ul>
+          </div>
+          <div class="lane-stack__row lane-stack__row--figma">
+            <span class="lane-stack__label">Figma a11y audit <span class="lane-stack__when">design · pre-handoff</span></span>
+            <ul class="lane-stack__list">
+              <li>missing variants</li>
+              <li>target-size &lt; 24×24</li>
+              <li>color-blind simulation</li>
+            </ul>
+          </div>
+          <div class="lane-stack__row lane-stack__row--spec">
+            <span class="lane-stack__label">Spec audit <span class="lane-stack__when">API · code-review</span></span>
+            <ul class="lane-stack__list">
+              <li>API doesn't enforce</li>
+              <li>a11y prop missing</li>
+              <li>discriminated-union gaps</li>
+            </ul>
+          </div>
+          <p class="lane-stack__overlap"><strong>All three:</strong> accessible name. <strong>axe ∩ Figma:</strong> contrast on real surfaces.</p>
+        </div>
       </DiagramFigure>
 
       <table class="docs-props-table" style="margin-top: 1.5rem">
@@ -325,6 +353,33 @@ export type LlmButtonProps =
             </text>
           </g>
         </svg>
+
+        <div slot="mobile-fallback" class="case-stack" role="img" aria-label="LlmProgress drilldown across three audit lanes, then the fix">
+          <div class="case-stack__panel">
+            <span class="case-stack__eyebrow case-stack__eyebrow--figma">Figma audit</span>
+            <span class="case-stack__score case-stack__score--ok">100</span>
+            <p class="case-stack__body">overall score · ✓ variant coverage · ✓ color blind · ✓ annotations</p>
+            <p class="case-stack__quote">"perfect"</p>
+          </div>
+          <div class="case-stack__panel">
+            <span class="case-stack__eyebrow case-stack__eyebrow--axe">axe-core</span>
+            <span class="case-stack__score case-stack__score--bad">3</span>
+            <p class="case-stack__body">violations · serious · <code>aria-progressbar-name</code> on three progress bars in <code>/patterns</code></p>
+            <p class="case-stack__quote">"missing label"</p>
+          </div>
+          <div class="case-stack__panel">
+            <span class="case-stack__eyebrow case-stack__eyebrow--spec">Spec audit</span>
+            <span class="case-stack__score case-stack__score--warn">!</span>
+            <p class="case-stack__body">API gap · <code>LlmProgressSpec</code> has no <code>label</code> prop · consumers can't pass one</p>
+            <p class="case-stack__quote">"the why"</p>
+          </div>
+          <div class="case-stack__panel case-stack__panel--accent">
+            <span class="case-stack__eyebrow case-stack__eyebrow--fix">Fix</span>
+            <span class="case-stack__score case-stack__score--ok">✓</span>
+            <p class="case-stack__body">all green · <code>label?: string</code> · spec + 3 impls · 36 tests pass</p>
+            <p class="case-stack__quote case-stack__quote--accent">1 prop, 1 day</p>
+          </div>
+        </div>
       </DiagramFigure>
     </div>
 
@@ -520,3 +575,113 @@ export type LlmButtonProps =
 
   </div>
 </BaseLayout>
+
+<style>
+  /* Mobile fallback for the three-lane Venn — readable on phones where the
+     overlapping circles can't shrink and stay legible. */
+  .lane-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .lane-stack__row {
+    border-left: 3px solid var(--ui-color-border);
+    padding: 0.55rem 0.85rem;
+    background: var(--ui-color-surface);
+    border-radius: 0 var(--ui-radius-md) var(--ui-radius-md) 0;
+  }
+  .lane-stack__row--axe { border-left-color: var(--ui-color-primary); }
+  .lane-stack__row--figma { border-left-color: var(--docs-secondary, #89ceff); }
+  .lane-stack__row--spec { border-left-color: var(--docs-tertiary, #a6d644); }
+  .lane-stack__label {
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--ui-color-text);
+  }
+  .lane-stack__when {
+    font-weight: 500;
+    font-size: 0.72rem;
+    color: var(--ui-color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .lane-stack__list {
+    margin: 0.35rem 0 0;
+    padding-left: 1.1rem;
+    color: var(--ui-color-text-muted);
+    font-size: 0.82rem;
+    line-height: 1.55;
+  }
+  .lane-stack__overlap {
+    margin: 0.25rem 0 0;
+    font-size: 0.78rem;
+    color: var(--ui-color-text-muted);
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  /* Mobile fallback for the four-panel case study. */
+  .case-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+  .case-stack__panel {
+    background: var(--ui-color-surface);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+    padding: 0.85rem 1rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.4rem 0.85rem;
+    align-items: baseline;
+  }
+  .case-stack__panel--accent {
+    border-color: var(--ui-color-primary);
+    background: color-mix(in srgb, var(--ui-color-primary) 6%, var(--ui-color-surface));
+  }
+  .case-stack__eyebrow {
+    grid-column: 1 / -1;
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .case-stack__eyebrow--figma { color: var(--docs-secondary, #89ceff); }
+  .case-stack__eyebrow--axe   { color: var(--ui-color-primary); }
+  .case-stack__eyebrow--spec  { color: var(--docs-tertiary, #a6d644); }
+  .case-stack__eyebrow--fix   { color: var(--ui-color-primary); }
+  .case-stack__score {
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1;
+    grid-row: 2;
+  }
+  .case-stack__score--ok   { color: var(--ui-color-success, #34d399); }
+  .case-stack__score--bad  { color: var(--ui-color-danger, #ef4444); }
+  .case-stack__score--warn { color: var(--ui-color-warning, #f59e0b); }
+  .case-stack__body {
+    margin: 0;
+    grid-row: 2;
+    font-size: 0.82rem;
+    color: var(--ui-color-text-muted);
+    line-height: 1.55;
+  }
+  .case-stack__body code {
+    font-size: 0.78rem;
+  }
+  .case-stack__quote {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-size: 0.78rem;
+    color: var(--ui-color-text-muted);
+    font-style: italic;
+  }
+  .case-stack__quote--accent {
+    color: var(--ui-color-primary);
+    font-weight: 600;
+  }
+</style>

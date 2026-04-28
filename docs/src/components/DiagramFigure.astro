@@ -14,11 +14,16 @@ interface Props {
 const { caption, align = 'center', compact = false, kind = 'diagram' } = Astro.props;
 ---
 
-<figure class:list={["diagram-figure", `diagram-figure--${align}`, compact && "diagram-figure--compact", kind === 'mockup' && "diagram-figure--mockup"]}>
-  <div class="diagram-figure-surface">
+<figure class:list={["diagram-figure", `diagram-figure--${align}`, compact && "diagram-figure--compact", kind === 'mockup' && "diagram-figure--mockup", Astro.slots.has('mobile-fallback') && "diagram-figure--has-fallback"]}>
+  <div class="diagram-figure-surface diagram-figure-surface--svg">
     {kind === 'mockup' && <span class="diagram-figure-mockup-tag" aria-hidden="true">Mockup</span>}
     <slot />
   </div>
+  {Astro.slots.has('mobile-fallback') && (
+    <div class="diagram-figure-surface diagram-figure-surface--fallback">
+      <slot name="mobile-fallback" />
+    </div>
+  )}
   {caption && <figcaption class="diagram-figure-caption">{caption}</figcaption>}
 </figure>
 
@@ -84,15 +89,28 @@ const { caption, align = 'center', compact = false, kind = 'diagram' } = Astro.p
    * SVG width that keeps the labels at human-readable sizes. The mask fades
    * the right edge to hint at scrollable content. */
   @media (max-width: 640px) {
-    .diagram-figure-surface {
+    .diagram-figure-surface--svg {
       overflow-x: auto;
       -webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
       mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
     }
-    .diagram-figure-surface :global(svg) {
+    .diagram-figure-surface--svg :global(svg) {
       min-width: 600px;
       max-width: none;
     }
+  }
+
+  /* When a `mobile-fallback` slot is provided, the SVG surface gives way
+   * to the stacked HTML alternative below 640px — densely-overlapping
+   * diagrams (Venns, multi-panel sequences) can't be salvaged by scroll
+   * alone. The fallback is hidden on desktop so AT only sees one. */
+  .diagram-figure-surface--fallback { display: none; }
+  @media (max-width: 640px) {
+    .diagram-figure--has-fallback .diagram-figure-surface--svg { display: none; }
+    .diagram-figure--has-fallback .diagram-figure-surface--fallback { display: block; }
+  }
+  .diagram-figure-surface--fallback {
+    padding: 1.25rem 1.1rem;
   }
 
   .diagram-figure-caption {
