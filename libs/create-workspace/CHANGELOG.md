@@ -1,3 +1,14 @@
+## 0.1.0 (2026-04-28)
+
+### 🚀 Features
+
+- **create-workspace:** log preset phases for visible progress ([7425c09](https://github.com/DominikPieper/atelier-ui/commit/7425c09))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.42 (2026-04-28)
 
 This was a version bump only for create-workspace to align it with other projects, there were no code changes.
