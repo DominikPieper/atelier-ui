@@ -98,7 +98,8 @@ describe('create-atelier-ui-workspace CLI', () => {
     await main();
 
     const logged = consoleLogSpy.mock.calls.flat().join('\n');
-    expect(logged).toContain('✓ Workspace created at: /tmp/my-workspace');
+    expect(logged).toContain('Workshop ready');
+    expect(logged).toContain('/tmp/my-workspace');
     expect(logged).toContain('cd /tmp/my-workspace');
     expect(logged).toContain('npx nx serve workshop-angular');
   });
@@ -219,7 +220,7 @@ describe('create-atelier-ui-workspace CLI', () => {
 
     const logged = consoleLogSpy.mock.calls.flat().join('\n');
     expect(logged).toContain('atelier.pieper.io/figma-token');
-    expect(logged).toMatch(/Figma MCP enabled/);
+    expect(logged).toMatch(/figma-console-mcp/);
   });
 
   it('does not log the Figma setup URL when figma is disabled', async () => {

@@ -12,6 +12,21 @@ const VALID_FRAMEWORKS: readonly Framework[] = ['angular', 'react', 'vue'];
 
 const FIGMA_SETUP_URL = 'https://atelier.pieper.io/figma-token';
 
+const useColor = process.stdout.isTTY && !process.env.NO_COLOR;
+const wrap = (open: string, close: string) => (s: string) =>
+  useColor ? `\x1b[${open}m${s}\x1b[${close}m` : s;
+const c = {
+  bold: wrap('1', '22'),
+  dim: wrap('2', '22'),
+  cyan: wrap('36', '39'),
+  green: wrap('32', '39'),
+  red: wrap('31', '39'),
+};
+
+function banner(): void {
+  console.log(`\n${c.bold(c.cyan('▲ Atelier UI'))}  ${c.dim('workshop scaffolder')}\n`);
+}
+
 function parseFlag(args: string[], name: string): string | undefined {
   const eqPrefix = `--${name}=`;
   const withEq = args.find((a) => a.startsWith(eqPrefix));
@@ -38,6 +53,7 @@ function parseBooleanFlag(args: string[], name: string): boolean | undefined {
 }
 
 export async function main() {
+  banner();
   const argv = process.argv.slice(2);
 
   let name = argv.find((arg) => !arg.startsWith('-'));
@@ -69,8 +85,9 @@ export async function main() {
     const stat = statSync(targetDir);
     const nonEmpty = stat.isDirectory() && readdirSync(targetDir).length > 0;
     if (!stat.isDirectory() || nonEmpty) {
-      console.error(`\n✖ Cannot create workspace: "${name}" already exists at ${targetDir}.`);
-      console.error(`  Pick a different name or remove the existing directory.\n`);
+      console.error(`\n${c.red('✖')} Cannot create workspace: "${c.bold(name)}" already exists.`);
+      console.error(`  ${c.dim(targetDir)}`);
+      console.error(`  ${c.dim('Pick a different name or remove the existing directory.')}\n`);
       process.exit(1);
     }
   }
@@ -99,7 +116,7 @@ export async function main() {
     figmaMcp = (res as { figma: boolean }).figma;
   }
 
-  console.log(`\nScaffolding Atelier workshop: ${name} (${framework})\n`);
+  console.log(`\n${c.cyan('◇')} Setting up "${c.bold(name)}" with ${c.bold(framework)}…\n`);
 
   const presetVersion = require('../package.json').version;
   // ATELIER_PRESET_SPEC overrides the published preset — used by the e2e test
@@ -116,14 +133,13 @@ export async function main() {
   });
 
   const appName = `workshop-${framework}`;
-  console.log(`\n✓ Workspace created at: ${directory}`);
-  console.log(`\nGet started:\n`);
-  console.log(`  cd ${directory}`);
-  console.log(`  npx nx serve ${appName}`);
-  console.log(`\nApp scaffolded: ${appName}`);
+  console.log(`\n${c.green('✓')} ${c.bold('Workshop ready')} ${c.dim(`— ${directory}`)}`);
+  console.log(`\n  ${c.dim('Next steps:')}`);
+  console.log(`    ${c.cyan(`cd ${directory}`)}`);
+  console.log(`    ${c.cyan(`npx nx serve ${appName}`)}`);
   if (figmaMcp) {
-    console.log(`\nFigma MCP enabled — install the Desktop Bridge plugin:`);
-    console.log(`  ${FIGMA_SETUP_URL}\n`);
+    console.log(`\n  ${c.dim('figma-console-mcp — install the Desktop Bridge plugin:')}`);
+    console.log(`    ${c.cyan(FIGMA_SETUP_URL)}\n`);
   } else {
     console.log('');
   }
@@ -132,7 +148,7 @@ export async function main() {
 if (require.main === module) {
   main().catch((err: unknown) => {
     const msg = err instanceof Error ? err.message : String(err);
-    console.error(`\n✖ ${msg}\n`);
+    console.error(`\n${c.red('✖')} ${msg}\n`);
     process.exit(1);
   });
 }
