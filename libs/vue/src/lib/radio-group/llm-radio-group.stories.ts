@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import LlmRadioGroup from './llm-radio-group.vue';
 import LlmRadio from '../radio/llm-radio.vue';
 
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };

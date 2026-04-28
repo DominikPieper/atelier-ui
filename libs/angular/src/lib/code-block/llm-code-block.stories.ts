@@ -21,7 +21,7 @@ const SAMPLE_JSON = `{
 const SAMPLE_SHELL = `npm install @atelier-ui/angular
 npx nx generate @atelier-ui/generators:llm-component-angular --name=my-widget`;
 
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };

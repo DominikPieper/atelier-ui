@@ -3,7 +3,7 @@ import { argsToTemplate } from '@storybook/angular';
 import { LlmRadio } from '../radio/llm-radio';
 import { LlmRadioGroup } from './llm-radio-group';
 
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/LLM-Components';
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
