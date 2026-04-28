@@ -1,3 +1,14 @@
+## 0.0.40 (2026-04-28)
+
+### 🩹 Fixes
+
+- **create-cli:** abort cleanly when target directory exists ([98b70db](https://github.com/DominikPieper/atelier-ui/commit/98b70db))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper
+
 ## 0.0.39 (2026-04-27)
 
 This was a version bump only for create-atelier-ui-workspace to align it with other projects, there were no code changes.
