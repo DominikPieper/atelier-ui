@@ -774,10 +774,10 @@ summary:focus-visible,
 .docs-prop-default {
   font-family: var(--docs-font-code);
   font-size: 0.75rem;
-  color: #059669;
+  color: #065f46;
 }
 
-[data-theme='dark'] .docs-prop-default { color: #34d399; }
+[data-theme='dark'] .docs-prop-default { color: #6ee7b7; }
 
 /* ── Status Badges ───────────────────────────────────── */
 .docs-status-badge {
@@ -791,15 +791,15 @@ summary:focus-visible,
 }
 
 .docs-status-badge--new {
-  background: #ecfdf5; color: #059669; border: 1px solid #10b98140;
+  background: #ecfdf5; color: #065f46; border: 1px solid #10b98140;
 }
 
 .docs-status-badge--updated {
-  background: #eff6ff; color: #2563eb; border: 1px solid #3b82f640;
+  background: #eff6ff; color: #1d4ed8; border: 1px solid #3b82f640;
 }
 
 .docs-status-badge--stable {
-  background: #f8fafc; color: #64748b; border: 1px solid #cbd5e1;
+  background: #f8fafc; color: #475569; border: 1px solid #cbd5e1;
 }
 
 [data-theme='dark'] .docs-status-badge--new {
@@ -1162,11 +1162,17 @@ summary:focus-visible,
   font-weight: 700;
   padding: 0.12rem 0.45rem;
   border-radius: var(--ui-radius-sm);
-  background: color-mix(in srgb, #61dafb 18%, transparent);
-  color: #61dafb;
-  border: 1px solid color-mix(in srgb, #61dafb 30%, transparent);
+  background: color-mix(in srgb, #0891b2 14%, transparent);
+  color: #164e63;
+  border: 1px solid color-mix(in srgb, #0891b2 35%, transparent);
   letter-spacing: 0.04em;
   cursor: help;
+}
+
+[data-theme='dark'] .docs-demo-fw-tag {
+  background: color-mix(in srgb, #67e8f9 14%, transparent);
+  color: #67e8f9;
+  border-color: color-mix(in srgb, #67e8f9 30%, transparent);
 }
 
 /* ── Per-component composition parts ──────────────────── */

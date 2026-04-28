@@ -12,8 +12,8 @@ import { componentDocs, COMPONENT_CATEGORIES } from '../data/components';
 import { getFramework, setFramework, subscribeFramework, type Framework } from '../lib/framework-pref';
 
 const CATEGORY_COLORS: Record<string, string> = {
-  Inputs: '#7c3aed', Display: '#0284c7', Navigation: '#059669',
-  Overlay: '#d97706', Layout: '#dc2626',
+  Inputs: '#5b21b6', Display: '#075985', Navigation: '#065f46',
+  Overlay: '#92400e', Layout: '#991b1b',
 };
 
 const IMPORT_MAP: Record<string, string[]> = {
