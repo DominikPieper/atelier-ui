@@ -63,6 +63,7 @@ export const WithValue: Story = {
       </LlmSelect>
     );
   },
+  parameters: { design: figmaNode('55-89') },
 };
 
 export const Disabled: Story = {
@@ -72,7 +73,6 @@ export const Disabled: Story = {
       <LlmOption optionValue="ca">Canada</LlmOption>
     </LlmSelect>
   ),
-  parameters: { design: figmaNode('55-91') },
 };
 
 export const Invalid: Story = {

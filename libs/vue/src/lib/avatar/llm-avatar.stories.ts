@@ -49,6 +49,7 @@ export const WithInitials: Story = {
     src: '',
     name: 'Jane Doe',
   },
+  parameters: { design: figmaNode('55-148') },
 };
 
 export const WithIcon: Story = {
@@ -57,6 +58,7 @@ export const WithIcon: Story = {
     name: '',
     alt: 'Unknown user',
   },
+  parameters: { design: figmaNode('55-148') },
 };
 
 export const Sizes: Story = {
@@ -168,6 +170,7 @@ export const FallbackChain: Story = {
 };
 
 export const AvatarGroup: Story = {
+  parameters: { design: figmaNode('508-7221') },
   render: () => ({
     components: { LlmAvatar, LlmAvatarGroup },
     template: `

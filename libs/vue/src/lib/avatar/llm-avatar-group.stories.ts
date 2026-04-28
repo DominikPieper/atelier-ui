@@ -21,7 +21,7 @@ const meta: Meta<typeof LlmAvatarGroup> = {
     size: 'md',
   },
   parameters: {
-    design: figmaNode('55-151'),
+    design: figmaNode('508-7221'),
   },
 };
 
@@ -42,6 +42,7 @@ export const Default: Story = {
       </LlmAvatarGroup>
     `,
   }),
+  parameters: { design: figmaNode('507-6305') },
 };
 
 export const AllVariants: Story = {

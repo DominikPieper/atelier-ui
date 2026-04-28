@@ -66,10 +66,12 @@ export const Flat: Story = {
 
 export const PaddingSmall: Story = {
   args: { padding: 'sm' },
+  parameters: { design: figmaNode('55-56') },
 };
 
 export const PaddingNone: Story = {
   args: { padding: 'none' },
+  parameters: { design: figmaNode('55-53') },
 };
 
 export const AllVariants: Story = {

@@ -41,6 +41,7 @@ export const LastPage: Story = {
     const [page, setPage] = useState(10);
     return <LlmPagination page={page} pageCount={10} onPageChange={setPage} />;
   },
+  parameters: { design: figmaNode('55-144') },
 };
 
 export const FewPages: Story = {

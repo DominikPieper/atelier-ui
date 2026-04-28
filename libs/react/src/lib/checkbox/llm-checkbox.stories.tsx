@@ -39,6 +39,7 @@ export const Checked: Story = {
 
 export const Unchecked: Story = {
   args: { checked: false, children: 'Unchecked checkbox' },
+  parameters: { design: figmaNode('55-32') },
 };
 
 export const Indeterminate: Story = {
@@ -48,7 +49,6 @@ export const Indeterminate: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true, children: 'Disabled checkbox' },
-  parameters: { design: figmaNode('55-35') },
 };
 
 export const DisabledChecked: Story = {

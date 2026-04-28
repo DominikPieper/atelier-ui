@@ -38,16 +38,15 @@ export const Checked: Story = {
 
 export const Unchecked: Story = {
   args: { checked: false, children: 'Disabled' },
+  parameters: { design: figmaNode('55-37') },
 };
 
 export const Disabled: Story = {
   args: { disabled: true, children: 'Disabled toggle' },
-  parameters: { design: figmaNode('55-39') },
 };
 
 export const DisabledChecked: Story = {
   args: { disabled: true, checked: true, children: 'Disabled (on)' },
-  parameters: { design: figmaNode('55-40') },
 };
 
 export const Invalid: Story = {

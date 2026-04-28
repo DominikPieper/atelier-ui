@@ -61,11 +61,11 @@ export const WithSelection: Story = {
       </llm-select>
     `,
   }),
+  parameters: { design: figmaNode('55-89') },
 };
 
 export const Disabled: Story = {
   args: { disabled: true },
-  parameters: { design: figmaNode('55-91') },
 };
 
 export const Invalid: Story = {

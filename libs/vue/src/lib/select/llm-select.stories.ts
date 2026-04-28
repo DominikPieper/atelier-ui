@@ -54,6 +54,7 @@ export const Default: Story = {
 
 export const WithSelection: Story = {
   args: { value: 'ca' },
+  parameters: { design: figmaNode('55-89') },
 };
 
 export const WithLabel: Story = {
@@ -75,7 +76,6 @@ export const WithLabel: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  parameters: { design: figmaNode('55-91') },
 };
 
 export const Invalid: Story = {

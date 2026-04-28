@@ -75,7 +75,6 @@ export const Disabled: Story = {
       </LlmRadioGroup>
     `,
   }),
-  parameters: { design: figmaNode('420-174') },
 };
 
 export const Playground: Story = {

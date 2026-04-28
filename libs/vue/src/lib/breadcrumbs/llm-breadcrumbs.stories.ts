@@ -59,6 +59,7 @@ export const DeepNavigation: Story = {
       </LlmBreadcrumbs>
     `,
   }),
+  parameters: { design: figmaNode('55-140') },
 };
 
 export const LongTrail: Story = {
@@ -75,6 +76,7 @@ export const LongTrail: Story = {
       </LlmBreadcrumbs>
     `,
   }),
+  parameters: { design: figmaNode('55-140') },
 };
 
 export const NoLinks: Story = {

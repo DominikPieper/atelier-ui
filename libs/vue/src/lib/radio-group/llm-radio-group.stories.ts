@@ -76,7 +76,6 @@ export const WithPreselection: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  parameters: { design: figmaNode('55-136') },
 };
 
 export const Invalid: Story = {

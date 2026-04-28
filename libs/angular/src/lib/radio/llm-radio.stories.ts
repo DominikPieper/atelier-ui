@@ -51,7 +51,6 @@ export const Disabled: Story = {
       </llm-radio-group>
     `,
   }),
-  parameters: { design: figmaNode('420-174') },
 };
 
 export const Checked: Story = {

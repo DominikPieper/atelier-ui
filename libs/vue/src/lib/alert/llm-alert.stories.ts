@@ -73,7 +73,6 @@ export const Dismissible: Story = {
     template: '<LlmAlert v-bind="args">This alert can be dismissed.</LlmAlert>',
   }),
   args: { variant: 'warning', dismissible: true },
-  parameters: { design: figmaNode('55-28') },
 };
 
 export const AllVariants: Story = {

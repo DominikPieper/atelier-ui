@@ -50,6 +50,7 @@ export const Default: Story = {
       </LlmMenuTrigger>
     `,
   }),
+  parameters: { design: figmaNode('55-128') },
 };
 
 export const Compact: Story = {
@@ -70,6 +71,7 @@ export const Compact: Story = {
       </LlmMenuTrigger>
     `,
   }),
+  parameters: { design: figmaNode('55-129') },
 };
 
 export const WithSeparators: Story = {

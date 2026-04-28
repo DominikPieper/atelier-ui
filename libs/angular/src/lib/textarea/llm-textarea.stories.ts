@@ -56,7 +56,6 @@ export const TallRows: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true, placeholder: 'Cannot edit' },
-  parameters: { design: figmaNode('55-86') },
 };
 
 export const Readonly: Story = {

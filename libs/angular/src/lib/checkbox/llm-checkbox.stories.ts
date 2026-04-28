@@ -49,7 +49,6 @@ export const Checked: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  parameters: { design: figmaNode('55-35') },
 };
 
 export const DisabledChecked: Story = {

@@ -61,6 +61,7 @@ export const BottomRight: Story = {
       <ToastDemo position="bottom-right" />
     </LlmToastProvider>
   ),
+  parameters: { design: figmaNode('508-7046') },
 };
 
 export const BottomCenter: Story = {
@@ -69,6 +70,7 @@ export const BottomCenter: Story = {
       <ToastDemo position="bottom-center" />
     </LlmToastProvider>
   ),
+  parameters: { design: figmaNode('508-7051') },
 };
 
 export const TopRight: Story = {
@@ -77,6 +79,7 @@ export const TopRight: Story = {
       <ToastDemo position="top-right" />
     </LlmToastProvider>
   ),
+  parameters: { design: figmaNode('55-42') },
 };
 
 export const TopCenter: Story = {
@@ -85,6 +88,7 @@ export const TopCenter: Story = {
       <ToastDemo position="top-center" />
     </LlmToastProvider>
   ),
+  parameters: { design: figmaNode('508-7041') },
 };
 
 export const AutoDismiss: Story = {

@@ -42,7 +42,6 @@ export const Disabled: Story = {
       <LlmRadio radioValue="pro">Pro</LlmRadio>
     </LlmRadioGroup>
   ),
-  parameters: { design: figmaNode('55-136') },
 };
 
 export const IndividualDisabled: Story = {

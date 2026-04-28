@@ -57,7 +57,6 @@ export const Password: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true, placeholder: 'Cannot edit' },
-  parameters: { design: figmaNode('129-31') },
 };
 
 export const Readonly: Story = {

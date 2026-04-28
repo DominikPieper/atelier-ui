@@ -61,6 +61,7 @@ export const LongTrail: Story = {
       </llm-breadcrumbs>
     `,
   }),
+  parameters: { design: figmaNode('55-140') },
 };
 
 export const NoLinks: Story = {

@@ -119,6 +119,7 @@ export const TopCenter: Story = {
       </LlmToastProvider>
     `,
   }),
+  parameters: { design: figmaNode('508-7041') },
 };
 
 export const AllVariants: Story = {

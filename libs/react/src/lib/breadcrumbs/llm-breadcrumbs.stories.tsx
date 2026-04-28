@@ -49,6 +49,7 @@ export const DeepNesting: Story = {
       <LlmBreadcrumbItem>Select</LlmBreadcrumbItem>
     </LlmBreadcrumbs>
   ),
+  parameters: { design: figmaNode('55-140') },
 };
 
 export const SingleItem: Story = {

@@ -39,7 +39,6 @@ export const WithLabel: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true, value: 'Disabled value', placeholder: '' },
-  parameters: { design: figmaNode('129-31') },
 };
 
 export const ReadOnly: Story = {

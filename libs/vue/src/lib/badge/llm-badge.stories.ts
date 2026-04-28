@@ -83,6 +83,7 @@ export const Small: Story = {
 
 export const Medium: Story = {
   args: { size: 'md' },
+  parameters: { design: figmaNode('55-12') },
 };
 
 export const AllVariants: Story = {

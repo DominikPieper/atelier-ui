@@ -26,10 +26,19 @@ export default meta;
 type Story = StoryObj<typeof LlmAvatar>;
 
 export const Default: Story = { args: { name: 'Jane Doe' }, parameters: { design: figmaNode('55-148') } };
-export const WithImage: Story = { args: { src: 'https://i.pravatar.cc/150?img=1', alt: 'User', size: 'lg' } };
-export const Initials: Story = { args: { name: 'John Smith', size: 'lg' } };
+export const WithImage: Story = {
+  args: { src: 'https://i.pravatar.cc/150?img=1', alt: 'User', size: 'lg' },
+  parameters: { design: figmaNode('55-149') },
+};
+export const Initials: Story = {
+  args: { name: 'John Smith', size: 'lg' },
+  parameters: { design: figmaNode('55-149') },
+};
 export const WithStatus: Story = { args: { name: 'Alice', status: 'online' } };
-export const Square: Story = { args: { name: 'AB', shape: 'square', size: 'lg' } };
+export const Square: Story = {
+  args: { name: 'AB', shape: 'square', size: 'lg' },
+  parameters: { design: figmaNode('73-392') },
+};
 export const AllSizes: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
@@ -58,4 +67,5 @@ export const Group: Story = {
       <LlmAvatar name="Eve" />
     </LlmAvatarGroup>
   ),
+  parameters: { design: figmaNode('507-6305') },
 };

@@ -72,6 +72,7 @@ export const NoPadding: Story = {
       <LlmCardContent>Content without padding.</LlmCardContent>
     </LlmCard>
   ),
+  parameters: { design: figmaNode('55-53') },
 };
 
 export const AllVariants: Story = {

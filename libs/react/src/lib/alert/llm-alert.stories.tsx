@@ -54,7 +54,6 @@ export const Danger: Story = {
 
 export const Dismissible: Story = {
   args: { dismissible: true, variant: 'warning', children: 'Dismiss me.' },
-  parameters: { design: figmaNode('55-28') },
 };
 
 export const AllVariants: Story = {
