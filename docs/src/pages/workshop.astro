@@ -167,23 +167,35 @@ const MCP_CONFIG = `{
             <pre class="preflight-mock-body">
 <span class="pre-prompt">➜</span> <span class="pre-cmd">npm run preflight</span>
 
-<span class="pre-muted">[preflight] Checking your environment…</span>
+<span class="pre-section">Atelier UI Preflight</span>
+<span class="pre-muted">Checking your environment for the workshop…</span>
 
-  <span class="pre-ok">✓</span> Node <span class="pre-val">v22.12.0</span>
-  <span class="pre-ok">✓</span> npm <span class="pre-val">v10.2.4</span>
-  <span class="pre-ok">✓</span> git <span class="pre-val">v2.43.0</span>
-  <span class="pre-ok">✓</span> Claude Code CLI <span class="pre-val">v0.15.3</span>
-  <span class="pre-ok">✓</span> FIGMA_ACCESS_TOKEN <span class="pre-muted">(figd_AbCd…)</span>
-  <span class="pre-ok">✓</span> MCP · storybook-angular reachable
-  <span class="pre-ok">✓</span> MCP · storybook-react reachable
-  <span class="pre-ok">✓</span> MCP · storybook-vue reachable
-  <span class="pre-ok">✓</span> MCP · nx-mcp reachable
-  <span class="pre-ok">✓</span> Port 4200 available
-  <span class="pre-ok">✓</span> Port 4201 available
-  <span class="pre-ok">✓</span> Port 4202 available
-  <span class="pre-ok">✓</span> Port 6006 available
+<span class="pre-section">Runtime</span>
+  <span class="pre-ok">✓</span> Node.js<span class="pre-muted"> — v22.12.0</span>
+  <span class="pre-ok">✓</span> npm<span class="pre-muted"> — v10.9.4</span>
+  <span class="pre-ok">✓</span> git<span class="pre-muted"> — git version 2.43.0</span>
 
-<span class="pre-ok-strong">All checks passed. You are good to go.</span></pre>
+<span class="pre-section">Claude Code</span>
+  <span class="pre-ok">✓</span> Claude Code CLI<span class="pre-muted"> — 2.1.121 (Claude Code)</span>
+
+<span class="pre-section">Figma</span>
+  <span class="pre-ok">✓</span> Figma Desktop Bridge plugin<span class="pre-muted"> — manifest at ~/.figma-console-mcp/plugin/manifest.json</span>
+  <span class="pre-ok">✓</span> Bridge port range 9223–9232<span class="pre-muted"> — all free (MCP will bind on first launch)</span>
+  <span class="pre-ok">✓</span> FIGMA_ACCESS_TOKEN<span class="pre-muted"> — set (45 chars, REST reads enabled)</span>
+
+<span class="pre-section">MCP reachability</span>
+  <span class="pre-ok">✓</span> MCP: storybook-angular<span class="pre-muted"> — https://atelier.pieper.io/storybook-angular/mcp (HTTP 200)</span>
+  <span class="pre-ok">✓</span> MCP: storybook-react<span class="pre-muted"> — https://atelier.pieper.io/storybook-react/mcp (HTTP 200)</span>
+  <span class="pre-ok">✓</span> MCP: storybook-vue<span class="pre-muted"> — https://atelier.pieper.io/storybook-vue/mcp (HTTP 200)</span>
+  <span class="pre-ok">✓</span> MCP: nx-mcp<span class="pre-muted"> — https://atelier.pieper.io/nx-mcp (HTTP 200)</span>
+
+<span class="pre-section">Local ports</span>
+  <span class="pre-ok">✓</span> Port 4200<span class="pre-muted"> — free</span>
+  <span class="pre-ok">✓</span> Port 4201<span class="pre-muted"> — free</span>
+  <span class="pre-ok">✓</span> Port 4202<span class="pre-muted"> — free</span>
+  <span class="pre-ok">✓</span> Port 6006<span class="pre-muted"> — free</span>
+
+<span class="pre-ok-strong">All hard checks passed</span><span class="pre-muted"> · 15 ok, 0 warning(s)</span></pre>
           </figure>
 
           <figure class="preflight-mock" data-pre-panel="failed" hidden>
@@ -196,27 +208,41 @@ const MCP_CONFIG = `{
             <pre class="preflight-mock-body">
 <span class="pre-prompt">➜</span> <span class="pre-cmd">npm run preflight</span>
 
-<span class="pre-muted">[preflight] Checking your environment…</span>
+<span class="pre-section">Atelier UI Preflight</span>
+<span class="pre-muted">Checking your environment for the workshop…</span>
 
-  <span class="pre-ok">✓</span> Node <span class="pre-val">v22.12.0</span>
-  <span class="pre-ok">✓</span> npm <span class="pre-val">v10.2.4</span>
-  <span class="pre-ok">✓</span> git <span class="pre-val">v2.43.0</span>
-  <span class="pre-fail">✗</span> Claude Code CLI <span class="pre-fail">not found</span>
-    <span class="pre-fix">→ fix:</span> <span class="pre-cmd">npm install -g @anthropic-ai/claude-code</span>
-  <span class="pre-ok">✓</span> FIGMA_ACCESS_TOKEN <span class="pre-muted">(figd_AbCd…)</span>
-  <span class="pre-ok">✓</span> MCP · storybook-angular reachable
-  <span class="pre-fail">✗</span> MCP · storybook-react <span class="pre-fail">unreachable (504)</span>
-    <span class="pre-fix">→ fix:</span> check internet · or set <span class="pre-cmd">STORYBOOK_REACT_MCP=http://localhost:6006/mcp</span>
-  <span class="pre-ok">✓</span> MCP · storybook-vue reachable
-  <span class="pre-ok">✓</span> MCP · nx-mcp reachable
-  <span class="pre-fail">✗</span> Port 4200 <span class="pre-fail">in use (pid 4711 — vite dev)</span>
-    <span class="pre-fix">→ fix:</span> <span class="pre-cmd">kill 4711</span> · or set <span class="pre-cmd">PORT=4250</span> in <span class="pre-cmd">.env</span>
-  <span class="pre-ok">✓</span> Port 4201 available
-  <span class="pre-ok">✓</span> Port 4202 available
-  <span class="pre-ok">✓</span> Port 6006 available
+<span class="pre-section">Runtime</span>
+  <span class="pre-ok">✓</span> Node.js<span class="pre-muted"> — v22.12.0</span>
+  <span class="pre-ok">✓</span> npm<span class="pre-muted"> — v10.9.4</span>
+  <span class="pre-ok">✓</span> git<span class="pre-muted"> — git version 2.43.0</span>
 
-<span class="pre-issue">3 issues found</span> <span class="pre-muted">· re-run after fixing each line</span>
-<span class="pre-muted">  See</span> <a href="/troubleshooting" class="pre-link">/troubleshooting</a> <span class="pre-muted">for context.</span></pre>
+<span class="pre-section">Claude Code</span>
+  <span class="pre-fail">✗</span> <span class="pre-fail">Claude Code CLI</span><span class="pre-muted"> — not found on PATH</span>
+      <span class="pre-muted">→</span> Install: <span class="pre-cmd">https://docs.claude.com/en/docs/claude-code/setup</span>
+
+<span class="pre-section">Figma</span>
+  <span class="pre-ok">✓</span> Figma Desktop Bridge plugin<span class="pre-muted"> — manifest at ~/.figma-console-mcp/plugin/manifest.json</span>
+  <span class="pre-ok">✓</span> Bridge port range 9223–9232<span class="pre-muted"> — all free (MCP will bind on first launch)</span>
+  <span class="pre-warn">⚠</span> FIGMA_ACCESS_TOKEN (optional)<span class="pre-muted"> — not set — REST reads disabled, plugin tools still work</span>
+      <span class="pre-muted">→</span> See <span class="pre-cmd">https://atelier.pieper.io/figma-token</span> if you need metadata reads
+
+<span class="pre-section">MCP reachability</span>
+  <span class="pre-ok">✓</span> MCP: storybook-angular<span class="pre-muted"> — https://atelier.pieper.io/storybook-angular/mcp (HTTP 200)</span>
+  <span class="pre-fail">✗</span> <span class="pre-fail">MCP: storybook-react</span><span class="pre-muted"> — https://atelier.pieper.io/storybook-react/mcp unreachable (timeout)</span>
+      <span class="pre-muted">→</span> Check your network or proxy settings
+  <span class="pre-ok">✓</span> MCP: storybook-vue<span class="pre-muted"> — https://atelier.pieper.io/storybook-vue/mcp (HTTP 200)</span>
+  <span class="pre-ok">✓</span> MCP: nx-mcp<span class="pre-muted"> — https://atelier.pieper.io/nx-mcp (HTTP 200)</span>
+
+<span class="pre-section">Local ports</span>
+  <span class="pre-warn">⚠</span> Port 4200<span class="pre-muted"> — in use</span>
+      <span class="pre-muted">→</span> Run <span class="pre-cmd">`lsof -ti :4200 | xargs kill`</span> (macOS/Linux)
+  <span class="pre-ok">✓</span> Port 4201<span class="pre-muted"> — free</span>
+  <span class="pre-ok">✓</span> Port 4202<span class="pre-muted"> — free</span>
+  <span class="pre-ok">✓</span> Port 6006<span class="pre-muted"> — free</span>
+
+<span class="pre-issue">2 check(s) failed</span><span class="pre-muted"> · 11 ok, 2 warning(s)</span>
+<span class="pre-muted">Fix the items above, then re-run </span><span class="pre-cmd">`npm run preflight`</span><span class="pre-muted">.</span>
+<span class="pre-muted">Full troubleshooting guide: </span><a href="/troubleshooting" class="pre-link">https://atelier.pieper.io/troubleshooting</a></pre>
           </figure>
           <p class="docs-step-desc" style="margin-top: 0.6rem; font-size: 0.76rem">
             Toggle the tabs above to compare. Each <span style="color: var(--ui-color-danger); font-weight: 700">✗</span> line ends with a one-step fix — copy, run, re-run <code>preflight</code>.
@@ -407,6 +433,8 @@ const MCP_CONFIG = `{
   .preflight-mock-body .pre-fix { color: var(--docs-term-accent-strong); font-weight: 700; }
   .preflight-mock-body .pre-issue { color: var(--ui-color-danger); font-weight: 700; }
   .preflight-mock-body .pre-link { color: var(--ui-color-primary); text-decoration: underline; }
+  .preflight-mock-body .pre-section { color: var(--docs-term-strong); font-weight: 700; }
+  .preflight-mock-body .pre-warn { color: var(--docs-term-warning); font-weight: 700; }
 
   /* Stack the failed mockup directly under the tabs (no extra top margin
    * — the tabs already provide the visual seam). */
