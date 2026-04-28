@@ -4,6 +4,7 @@ import { Code } from 'astro-expressive-code/components';
 import DiagramFigure from '../components/DiagramFigure.astro';
 import PageEyebrow from '../components/PageEyebrow.astro';
 import BottomNav from '../components/BottomNav.astro';
+import personalAccessTokenScreenshot from '../assets/screenshots/personal-access-token.png';
 
 const FIGMA_FILE_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
@@ -134,7 +135,7 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
               <code>~/.figma-console-mcp/plugin/manifest.json</code>.
             </p>
 
-            <DiagramFigure kind="mockup" caption="Figma Desktop → Plugins → Development → Import plugin from manifest… Select the manifest from the path below.">
+            <DiagramFigure caption="Figma Desktop → Plugins → Development → Import plugin from manifest… Select the manifest from the path below.">
               <svg viewBox="0 0 640 360" role="img" aria-labelledby="plg-title plg-desc" preserveAspectRatio="xMidYMid meet">
                 <title id="plg-title">Importing the Desktop Bridge plugin into Figma</title>
                 <desc id="plg-desc">A mockup of the Figma Desktop menu showing the Plugins menu open, with the Development submenu expanded and the 'Import plugin from manifest…' item highlighted. Below it, a file picker shows the manifest.json path at ~/.figma-console-mcp/plugin/manifest.json.</desc>
@@ -216,47 +217,26 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
           <div>
             <h3 class="docs-h3">Generate the token</h3>
             <p class="docs-step-desc">
-              Name it <code>atelier-ui-workshop</code>. Expiration: 30 days.
-              Scope: <strong>File content → Read only</strong>. Copy the value
-              (<code>figd_…</code>) — it is shown only once.
+              Name it <code>atelier-ui-workshop</code>. Pick an expiration (default is
+              <em>1 day</em>; bump it to 30 or 90 days if you plan to keep using the workshop).
+              Under <strong>Scopes</strong>, enable
+              <strong>Files → File content (Read)</strong> as the minimum. For the Token
+              Browser and Design System Dashboard, also tick
+              <strong>Design systems → Library content (Read)</strong> and
+              <strong>Library assets (Read)</strong>. Click <strong>Generate token</strong>
+              and copy the value (<code>figd_…</code>) — it is shown only once.
             </p>
 
-            <DiagramFigure kind="mockup" caption="Figma Settings → Security → Personal access tokens. The value is shown once — copy it straight into your password manager or .mcp.json.">
-              <svg viewBox="0 0 640 400" role="img" aria-labelledby="tok-set-title tok-set-desc" preserveAspectRatio="xMidYMid meet">
-                <title id="tok-set-title">Figma token settings mockup</title>
-                <desc id="tok-set-desc">A mockup of the Figma Settings dialog showing the Security tab active, the Personal access tokens section, and a dialog below where you name the token, set expiration to 30 days, and choose the 'File content – Read only' scope.</desc>
-
-                <rect x="20" y="16" width="600" height="176" rx="12" ry="12" class="diagram-node"/>
-                <text x="44" y="42" font-size="11" class="diagram-eyebrow">Figma · Settings</text>
-                <text x="44" y="64" font-size="14" font-weight="700">Security</text>
-
-                <text x="44" y="94" font-size="12" font-weight="700">Personal access tokens</text>
-                <text x="44" y="112" font-size="11" class="diagram-muted">Used by scripts and integrations to read Figma files on your behalf.</text>
-
-                <rect x="44" y="130" width="176" height="36" rx="8" ry="8" class="diagram-node diagram-node--accent"/>
-                <text x="132" y="153" text-anchor="middle" font-size="12" font-weight="700" style="fill: var(--ui-color-primary)">+ Generate new token</text>
-
-                <rect x="240" y="132" width="356" height="32" rx="6" ry="6" style="fill: var(--ui-color-surface-sunken); stroke: var(--ui-color-border); stroke-width: 1;"/>
-                <text x="256" y="152" font-size="10" class="diagram-mono diagram-muted">no tokens yet</text>
-
-                <rect x="60" y="216" width="520" height="168" rx="12" ry="12" class="diagram-node"/>
-                <text x="84" y="244" font-size="12" font-weight="700">New personal access token</text>
-
-                <text x="84" y="270" font-size="10" class="diagram-eyebrow">Name</text>
-                <rect x="84" y="278" width="472" height="26" rx="5" ry="5" style="fill: var(--ui-color-surface-sunken); stroke: var(--ui-color-border); stroke-width: 1;"/>
-                <text x="96" y="295" font-size="11" class="diagram-mono">atelier-ui-workshop</text>
-
-                <text x="84" y="324" font-size="10" class="diagram-eyebrow">Expiration</text>
-                <rect x="84" y="332" width="152" height="26" rx="5" ry="5" style="fill: var(--ui-color-surface-sunken); stroke: var(--ui-color-border); stroke-width: 1;"/>
-                <text x="96" y="349" font-size="11" class="diagram-mono">30 days</text>
-
-                <text x="260" y="324" font-size="10" class="diagram-eyebrow">File content</text>
-                <rect x="260" y="332" width="200" height="26" rx="5" ry="5" style="fill: color-mix(in srgb, var(--ui-color-primary) 14%, transparent); stroke: var(--ui-color-primary); stroke-width: 1.5;"/>
-                <text x="272" y="349" font-size="11" font-weight="700" class="diagram-mono" style="fill: var(--ui-color-primary)">Read only</text>
-
-                <rect x="484" y="332" width="72" height="26" rx="5" ry="5" style="fill: var(--ui-color-primary); stroke: none;"/>
-                <text x="520" y="349" text-anchor="middle" font-size="11" font-weight="700" style="fill: var(--ui-color-on-primary)">Generate</text>
-              </svg>
+            <DiagramFigure caption="Figma Settings → Security → Personal access tokens. The value is shown once — copy it straight into your password manager or .mcp.json.">
+              <img
+                src={personalAccessTokenScreenshot.src}
+                width={personalAccessTokenScreenshot.width}
+                height={personalAccessTokenScreenshot.height}
+                alt="Figma's Generate new token dialog: a Token name field, an Expiration dropdown defaulting to 1 day, and a scrollable list of read scopes grouped by Users, Files, Design systems and Development. The Generate token button at the bottom right stays disabled until a name is entered."
+                loading="lazy"
+                decoding="async"
+                style="display: block; max-width: 320px; width: 100%; height: auto; margin: 0 auto; border-radius: var(--ui-radius-md);"
+              />
             </DiagramFigure>
 
             <div style="margin-top: 1rem; padding: 0.75rem 1rem; background: var(--ui-color-surface-sunken); border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md); display: flex; flex-direction: column; gap: 0.45rem;">
