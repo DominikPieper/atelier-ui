@@ -3,7 +3,7 @@
 > LLM-optimized component library for Angular, React, and Vue. 28 accessible components with flat prop APIs, data-driven patterns, and consistent naming across all three frameworks.
 
 Packages: @atelier-ui/angular | @atelier-ui/react | @atelier-ui/vue
-Version: 0.0.39
+Version: 0.0.40
 Docs: https://atelier.pieper.io
 
 ## Full API Reference
