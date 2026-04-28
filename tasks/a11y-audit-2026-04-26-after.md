@@ -195,9 +195,67 @@ on the deployed surface — not what's on `HEAD`.
 
 ### Follow-ups created by this run
 
-- [ ] **Re-run axe after next docs deploy** — confirm contrast
-  counts drop to near-zero. One-shot run repeats the same nine URLs
-  (this time `/accessibility/` and one `/patterns/<id>/` will be
-  reachable too); the `BaseLayout.astro:663` runtime tabindex fix
-  shipped in `6fd78653` will also be live, so
-  `scrollable-region-focusable` is expected to clear.
+- [x] ~~**Re-run axe after next docs deploy**~~ — done 2026-04-28, see
+  next section. Contrast collapsed 239 → 11 (-95.4%);
+  `scrollable-region-focusable` and `button-name` cleared as predicted.
+
+## Phase 5 — post-deploy re-run (2026-04-28)
+
+Re-ran `npx @axe-core/cli@latest` (axe-core 4.11.1, ChromeDriver 147,
+Chrome 147.0.7727.102) against the same 9-URL set on
+`https://atelier.pieper.io`. Sitemap `lastmod` = `2026-04-28T05:27:35Z`
+— all URLs are post-Phase-3 token bumps and post-`6fd78653` runtime
+tabindex fix. Two URLs that were 404 last run (`/accessibility/`,
+`/patterns/login-form/`) are reachable.
+
+### Per-URL results
+
+| URL | Total | color-contrast | Other | Δ vs. 2026-04-27 |
+|---|---:|---:|---|---:|
+| `/` | 0 | 0 | — | −4 |
+| `/components/` | 5 | 5 | — | −7 |
+| `/components/button/` | 6 | 6 | — | −13 |
+| `/patterns/` | 0 | 0 | — | −53 |
+| `/patterns/login-form/` | 0 | 0 | — | n/a (404 last run) |
+| `/accessibility/` | 0 | 0 | — | n/a (404 last run) |
+| `/tokens/` | 0 | 0 | — | −64 |
+| `/workshop/` | 0 | 0 | — | −30 |
+| `/figma-token/` | 0 | 0 | — | −57 |
+| **Total** | **11** | **11** | **0** | **−228** |
+
+### Classification
+
+- **The 235 muted-text `color-contrast` violations from the previous
+  run are gone.** Phase-3 token bumps (`--ui-color-text-muted` 64748b
+  → 475569) are live and the bulk-bucket cleared as predicted.
+- **`button-name` × 2 and `scrollable-region-focusable` × 2 on
+  `/patterns/`** also cleared — the `aria-label="More actions"` on
+  `LlmMenuTrigger` and the `BaseLayout.astro:663` runtime tabindex
+  init are now both deployed.
+- **The 11 remaining violations are net-new findings**, surfaced now
+  that the muted-text bucket no longer drowns them out:
+  - `5 × .docs-status-badge--new` on `/components/` index cards
+    (combobox, table, code-block, stepper, chat). The "New" pill
+    variant uses an accent-on-light combo that's borderline below AA.
+  - `1 × .docs-category-tag` + `1 × .docs-demo-fw-tag` +
+    `4 × .docs-prop-default` on `/components/button/`. Low-contrast
+    accent text on tinted chip backgrounds.
+
+### Sign-off
+
+- Phase 5 verification complete. The pre-Phase-3 contrast bucket is
+  closed.
+- The 11 net-new findings are out of scope for this commit (they
+  weren't introduced by the audit work — they were pre-existing
+  issues hidden behind the muted-text bucket); filed as a new
+  follow-up below.
+
+### Follow-ups created by this run
+
+- [ ] **Tighten `.docs-status-badge--new` and the small chip
+  classes** to clear AA. Five chips affected — `.docs-status-badge--new`,
+  `.docs-category-tag`, `.docs-demo-fw-tag`, `.docs-prop-default`, and
+  any siblings discovered during the fix. Either darken the foreground
+  by one token step or swap to a higher-contrast badge palette pair.
+  Not a release blocker (none of these are interactive controls), but
+  worth a one-PR sweep.
