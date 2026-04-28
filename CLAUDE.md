@@ -101,3 +101,14 @@ The primary documentation for the component library lives in the `docs/` applica
   - Vue components → `storybook-vue` MCP (`list-all-documentation`, `get-documentation`)
 
 ---
+
+## Figma File (Atelier UI)
+
+File key: `QMnDD8uZQPldPrlCwZZ58T`. Page conventions:
+
+- **Components page** = master `COMPONENT_SET`s with full variant matrix. Source of truth.
+- **Inventory page** = condensed catalog. Every tile is an `INSTANCE` of a master on Components — never duplicate by hand.
+- When adding a new master: also add one `INSTANCE` on Inventory and bump the TOC count + date.
+- When removing a master: instance auto-deletes; bump TOC.
+
+---
