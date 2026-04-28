@@ -48,6 +48,7 @@ function frameworkStorybook(fw: Framework): string {
 }
 
 const sections = [
+  { id: 'reference', label: 'Visual reference' },
   { id: 'when-to-use', label: 'When to use' },
   { id: 'when-not-to-use', label: 'When not to use' },
   { id: 'a11y', label: 'Accessibility' },
@@ -56,6 +57,12 @@ const sections = [
   { id: 'code', label: 'Code' },
   { id: 'storybook', label: 'Storybook' },
 ];
+
+const FRAMEWORK_SLUG: Record<Framework, string> = {
+  Angular: 'angular',
+  React: 'react',
+  Vue: 'vue',
+};
 
 const prevPattern = PATTERNS.find((p) => p.num === pattern.num - 1) ?? null;
 const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
@@ -102,6 +109,40 @@ const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
       {pattern.id === 'notification-center'  && <NotificationCenterDemo client:idle />}
       {pattern.id === 'management-dashboard' && <ManagementDashboardDemo client:idle />}
     </div>
+
+    {/* Visual reference — per-framework Storybook screenshots, light + dark */}
+    <section id="reference" style="margin-top: 2.5rem">
+      <h2 class="docs-section-title">Visual reference</h2>
+      <p style="font-size: 0.85rem; color: var(--ui-color-text-muted); margin: 0 0 0.85rem; line-height: 1.6">
+        Storybook captures of this pattern in each framework, light and dark modes.
+        The live demo above runs in React; these confirm the Angular and Vue
+        compositions render the same way.
+      </p>
+      <div class="docs-multi-code-tabs" style="border-radius: 8px 8px 0 0; margin: 0">
+        {FRAMEWORKS.map((fw, i) => (
+          <button
+            class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`}
+            data-fw-btn={fw}
+            type="button"
+          >{fw}</button>
+        ))}
+      </div>
+      {FRAMEWORKS.map((fw, i) => {
+        const slug = FRAMEWORK_SLUG[fw];
+        return (
+          <div data-fw-panel={fw} hidden={i !== 0} class="pattern-shots">
+            <figure class="pattern-shot">
+              <img src={`/patterns/screenshots/${pattern.id}-${slug}-light.png`} alt={`${pattern.title} in ${fw}, light mode`} loading="lazy" />
+              <figcaption>Light</figcaption>
+            </figure>
+            <figure class="pattern-shot">
+              <img src={`/patterns/screenshots/${pattern.id}-${slug}-dark.png`} alt={`${pattern.title} in ${fw}, dark mode`} loading="lazy" />
+              <figcaption>Dark</figcaption>
+            </figure>
+          </div>
+        );
+      })}
+    </section>
 
     {/* When to use / not to use — two-column */}
     <div class="pattern-two-col">
@@ -311,6 +352,40 @@ const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
     display: flex;
     flex-wrap: wrap;
     gap: 0.6rem;
+  }
+  .pattern-shots {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--ui-color-surface-raised);
+    border: 1px solid var(--ui-color-border);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+  }
+  @media (max-width: 720px) {
+    .pattern-shots { grid-template-columns: 1fr; }
+  }
+  .pattern-shot {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+  .pattern-shot img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+    background: var(--ui-color-surface);
+  }
+  .pattern-shot figcaption {
+    font-size: 0.72rem;
+    color: var(--ui-color-text-muted);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
   .pattern-pager {
     display: grid;
