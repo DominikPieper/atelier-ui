@@ -2,6 +2,9 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "atelier-ui",
   "main": "worker/index.ts",
+  "build": {
+    "command": "npx nx run docs:build && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/react/.storybook --output-dir dist/docs/storybook-react && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/angular/.storybook --output-dir dist/docs/storybook-angular && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/vue/.storybook --output-dir dist/docs/storybook-vue"
+  },
   "compatibility_date": "2026-04-30",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
