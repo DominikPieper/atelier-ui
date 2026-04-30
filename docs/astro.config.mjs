@@ -4,6 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import expressiveCode from 'astro-expressive-code';
 import mdx from '@astrojs/mdx';
 import pagefind from 'astro-pagefind';
+import llms from 'astro-llms-md';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
 export default defineConfig({
@@ -31,6 +32,11 @@ export default defineConfig({
     mdx(),
     react(),
     pagefind(),
+    llms({
+      generateIndividualMd: true,
+      generateLlmsTxt: false,
+      generateLlmsFullTxt: false,
+    }),
     sitemap({
       changefreq: 'weekly',
       priority: 0.7,

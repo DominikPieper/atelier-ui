@@ -17,6 +17,6 @@ export default {
       return handler(request);
     }
 
-    return negotiateMarkdown(request, () => env.ASSETS.fetch(request));
+    return negotiateMarkdown(request, env.ASSETS);
   },
 };

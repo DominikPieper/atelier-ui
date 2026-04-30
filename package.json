@@ -113,6 +113,7 @@
     "@vitest/ui": "^4.0.8",
     "angular-eslint": "21.3.1",
     "astro": "^6.1.8",
+    "astro-llms-md": "^2.0.0",
     "astro-pagefind": "^1.8.6",
     "autoprefixer": "^10.4.0",
     "eslint": "^9.8.0",
