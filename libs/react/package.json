@@ -1,6 +1,6 @@
 {
   "name": "@atelier-ui/react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Atelier component library for React — LLM-optimised, accessible, design-token-driven",
   "keywords": [
     "react",
