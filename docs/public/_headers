@@ -1,0 +1,6 @@
+/
+  Link: </llms.txt>; rel="describedby", </llms-full.txt>; rel="service-doc", </.well-known/api-catalog>; rel="api-catalog"
+
+/.well-known/api-catalog
+  Content-Type: application/linkset+json
+  Access-Control-Allow-Origin: *
