@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "atelier-ui",
+  "main": "worker/index.ts",
+  "build": {
+    "command": "npx nx run docs:build && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/react/.storybook --output-dir dist/docs/storybook-react && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/angular/.storybook --output-dir dist/docs/storybook-angular && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/vue/.storybook --output-dir dist/docs/storybook-vue"
+  },
+  "compatibility_date": "2026-04-30",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./dist/docs",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": [
+      "/storybook-react/mcp",
+      "/storybook-angular/mcp",
+      "/storybook-vue/mcp"
+    ]
+  },
+  "observability": {
+    "enabled": true
+  }
+}
