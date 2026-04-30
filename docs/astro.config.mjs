@@ -5,6 +5,8 @@ import expressiveCode from 'astro-expressive-code';
 import mdx from '@astrojs/mdx';
 import pagefind from 'astro-pagefind';
 import llms from 'astro-llms-md';
+import icon from 'astro-icon';
+import astroBrokenLinksChecker from 'astro-broken-links-checker';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
 export default defineConfig({
@@ -31,12 +33,23 @@ export default defineConfig({
     expressiveCode(),
     mdx(),
     react(),
+    icon(),
     pagefind(),
     llms({
       generateIndividualMd: true,
       generateLlmsTxt: false,
       generateLlmsFullTxt: false,
     }),
+    astroBrokenLinksChecker({
+      checkExternalLinks: false,
+      // Storybook subtrees are built after docs in the CF/Netlify build chain,
+      // so /storybook-*/ links are flagged here as false positives. The
+      // checker has no exclude option (upstream issue); throwError stays false.
+    }),
+    // TODO: wire astro-og-canvas. Deps (astro-og-canvas + canvaskit-wasm) are
+    // installed; needs an OGImageRoute endpoint at src/pages/og/[...slug].png.ts
+    // plus a per-page title/description source. BaseLayout currently uses
+    // /logo.png as static fallback for og:image.
     sitemap({
       changefreq: 'weekly',
       priority: 0.7,
