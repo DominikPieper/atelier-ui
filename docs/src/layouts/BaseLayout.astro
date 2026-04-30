@@ -8,6 +8,7 @@ import '../styles/global.css';
 import Search from '../components/Search';
 import Icon from '../components/Icon.astro';
 import { COMPONENT_CATEGORIES, CATEGORY_ICONS, SECTION_ICONS } from '../data/components';
+import { isOgSlug, slugFromPath } from '../data/og-pages';
 import libPkg from '../../../libs/angular/package.json';
 
 const LIB_VERSION = libPkg.version;
@@ -25,11 +26,16 @@ const SITE_NAME = 'Atelier';
 const DEFAULT_DESCRIPTION =
   'Build UIs with AI, Storybook, and Figma — the Atelier workshop. Framework-agnostic component library with Angular, React, and Vue adapters.';
 
+const ogSlug = slugFromPath(Astro.props.currentPath);
+const defaultOgImage = isOgSlug(ogSlug)
+  ? `${SITE_URL}/og/${ogSlug}.png`
+  : `${SITE_URL}/logo.png`;
+
 const {
   title = SITE_NAME,
   description = DEFAULT_DESCRIPTION,
   ogTitle,
-  ogImage = `${SITE_URL}/logo.png`,
+  ogImage = defaultOgImage,
   currentPath,
 } = Astro.props;
 
