@@ -6,6 +6,7 @@ import Jargon from '../components/Jargon.astro';
 import HelpFooter from '../components/HelpFooter.astro';
 import PageHero from '../components/PageHero.astro';
 import BottomNav from '../components/BottomNav.astro';
+import FwSwitcher from '../components/FwSwitcher.astro';
 
 const FRAMEWORKS = ['React', 'Angular', 'Vue'] as const;
 
@@ -485,11 +486,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
         What Claude Code produces — using <code>LlmCard</code> and <code>LlmInput</code> from Atelier UI with tokens drawn directly from Figma <code>boundVariables</code>:
       </p>
-      <div class="docs-multi-code-tabs" style="border-radius: 8px 8px 0 0; margin-bottom: 0; width: fit-content">
-        {FRAMEWORKS.map((fw, i) => (
-          <button class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`} data-fw-btn={fw}>{fw}</button>
-        ))}
-      </div>
+      <FwSwitcher variant="tabs" frameworks={['react', 'angular', 'vue']} label="Choose a framework for the generated output" />
       {FRAMEWORKS.map((fw, i) => (
         <div data-fw-panel={fw} hidden={i !== 0}>
           <Code code={OUTPUT[fw]} lang={fw === 'Angular' ? 'ts' : 'tsx'} />

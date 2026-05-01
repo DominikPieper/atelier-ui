@@ -254,7 +254,7 @@ Three connected pages, share patterns. Apply primitives.
 - [x] **B7.1** `workshop.astro` — wrap each `docs-step-row` in a single semantic `<ol>`, replace inline `style=` on the prerequisites box (lines 106-126) with a utility class. Replace `docs-shortcut` block with `Callout` tone="tip".
 - [x] **B7.2** `tutorial.astro` — sentence-case all `<h2 class="docs-section-title">`, drop inline `<h2 style={{…}}>` at lines 31, 52, 74 (use `SectionHead`). Replace `Example Prompt` / `Generated Output` / `Run it` headings with `Example prompt`, `Generated output`, `Run it`.
 - [x] **B7.3** `first-component.astro` — replace the kata-step row layout with the workshop step-row pattern; sentence-case the `Optional —` heading.
-- [~] **B7.4** All three pages — replace the framework-switcher tab strip with `<FwSwitcher />`.
+- [x] **B7.4** All three pages — replace the framework-switcher tab strip with `<FwSwitcher />`.
 
 **Success criterion for B7:** these three pages share one step-row primitive, one section-head primitive, one fw-switcher; no inline `<h2 style=…>`.
 
@@ -263,9 +263,9 @@ Three connected pages, share patterns. Apply primitives.
 Apply primitives to `tokens`, `install`, `mcp`, `storybook`, `llms`, `agent-skills`, `claude-md`, `prompts`, `troubleshooting`, `figma`, `figma-token`, `accessibility`, `design-principles`, `patterns`, `a11y-workflow`, `skills/figma-workspace-architect`.
 
 - [x] **B8.1** Replace each page's `<div style="margin-bottom: 2rem"><PageEyebrow /><h1 class="docs-page-h1">…</h1><p style="…">…</p></div>` with `<PageHero variant="page" eyebrow=… title=… sub=… />`. Roughly 15 pages, one component invocation each.
-- [~] **B8.2** Replace each `<h2 class="docs-section-title">` + lede `<p style="…">` with `<SectionHead />`. ~60 sites.
+- [x] **B8.2** Replace each `<h2 class="docs-section-title">` + lede `<p style="…">` with `<SectionHead />`. ~60 sites.
 - [x] **B8.3** Replace 💡 / 🧩 callouts on `llms.astro` 99-106, `agent-skills.astro` 56-63, `patterns.astro` 55-63 with `<Callout tone="tip">`.
-- [~] **B8.4** Replace `docs-multi-code-tabs` framework selectors on `install.astro` 104-108, `prompts.astro`, `workshop.astro` with `<FwSwitcher />`.
+- [x] **B8.4** Replace `docs-multi-code-tabs` framework selectors on `install.astro` 104-108, `prompts.astro`, `workshop.astro` with `<FwSwitcher />`.
 - [x] **B8.5** `storybook.astro` 111-114 — replace `✅` / `⏳` glyphs with text or new `Icon name="check_circle"` / `Icon name="schedule"` (already in icon set).
 
 **Success criterion for B8:** every page imports `BaseLayout`, `PageHero` (or eyebrow alone where intentional), and the right primitives — no bespoke header HTML; emoji-grep returns zero in `docs/src/pages` and `docs/src/components`.

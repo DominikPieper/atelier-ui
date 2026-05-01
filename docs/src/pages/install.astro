@@ -6,6 +6,7 @@ import Jargon from '../components/Jargon.astro';
 import Icon from '../components/Icon.astro';
 import PageHero from '../components/PageHero.astro';
 import BottomNav from '../components/BottomNav.astro';
+import FwSwitcher from '../components/FwSwitcher.astro';
 
 const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
 const PKG_MANAGERS = ['npm', 'pnpm', 'yarn'] as const;
@@ -96,10 +97,8 @@ const IMPORT_NOTE: Record<string, string> = {
     />
 
     <!-- Framework selector -->
-    <div class="docs-multi-code-tabs" style="border-radius: 8px; margin-bottom: 2rem; width: fit-content">
-      {FRAMEWORKS.map((fw, i) => (
-        <button class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`} data-fw-btn={fw}>{fw}</button>
-      ))}
+    <div style="margin-bottom: 2rem">
+      <FwSwitcher variant="segmented" label="Choose a framework" />
     </div>
 
     <DiagramFigure caption="Each step produces the artifact the next step consumes. No config files, no bundler plugins.">

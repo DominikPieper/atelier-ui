@@ -6,6 +6,7 @@ import HelpFooter from '../components/HelpFooter.astro';
 import PageHero from '../components/PageHero.astro';
 import BottomNav from '../components/BottomNav.astro';
 import Callout from '../components/Callout.astro';
+import FwSwitcher from '../components/FwSwitcher.astro';
 
 const SITE_URL = 'https://atelier.pieper.io';
 
@@ -256,11 +257,7 @@ const MCP_CONFIG = `{
         <div>
           <h3 class="docs-h3">Serve your app</h3>
           <p class="docs-step-desc">Start the dev server for your chosen framework:</p>
-          <div class="docs-multi-code-tabs" style="border-radius: 8px 8px 0 0; margin-bottom: 0">
-            {Object.keys(SERVE_CMD).map((fw, i) => (
-              <button class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`} data-fw-btn={fw}>{fw}</button>
-            ))}
-          </div>
+          <FwSwitcher variant="tabs" label="Choose a framework to serve" />
           {Object.entries(SERVE_CMD).map(([fw, cmd], i) => (
             <div data-fw-panel={fw} hidden={i !== 0}>
               <Code code={cmd} lang="shell" />
