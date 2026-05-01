@@ -7,6 +7,7 @@ import '../styles/docs-theme.css';
 import '../styles/global.css';
 import Search from '../components/Search';
 import Icon from '../components/Icon.astro';
+import Footer from '../components/Footer.astro';
 import { COMPONENT_CATEGORIES, CATEGORY_ICONS, SECTION_ICONS } from '../data/components';
 import { isOgSlug, slugFromPath } from '../data/og-pages';
 import libPkg from '../../../libs/angular/package.json';
@@ -157,6 +158,12 @@ const breadcrumbSchema = {
       var stored = localStorage.getItem('docs-theme');
       var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
       document.documentElement.setAttribute('data-theme', theme);
+      // Sync aria-pressed on the theme toggle as soon as the button mounts so
+      // assistive tech reads the correct state on first paint, not after JS init.
+      document.addEventListener('DOMContentLoaded', function() {
+        var btn = document.getElementById('theme-btn');
+        if (btn) btn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+      });
     })();
 
     // Before Astro swaps in the new document, copy data-theme to it so there's no flash
@@ -168,6 +175,7 @@ const breadcrumbSchema = {
 
 </head>
 <body>
+  <a href="#main" class="docs-skip-link">Skip to content</a>
   <div class="docs-shell" id="docs-shell">
     <!-- Top Bar -->
     <header class="docs-topbar">
@@ -187,15 +195,15 @@ const breadcrumbSchema = {
       <div class="docs-topbar-sep"></div>
 
       <nav class="docs-topbar-links" aria-label="Primary">
-        <a href="/workshop"  class={`docs-topbar-link${isTopActive('/workshop') ? ' active' : ''}`}>Workshop</a>
-        <a href="/storybook" class={`docs-topbar-link${isTopActive('/storybook') ? ' active' : ''}`}>Storybook</a>
-        <a href="/figma"     class={`docs-topbar-link${isTopActive('/figma') ? ' active' : ''}`}>Figma</a>
-        <a href="/mcp"       class={`docs-topbar-link${isTopActive('/mcp') ? ' active' : ''}`}>MCP Explorer</a>
+        <a href="/workshop"  class={`docs-topbar-link${isTopActive('/workshop') ? ' active' : ''}`} aria-current={isTopActive('/workshop') ? 'page' : undefined}>Workshop</a>
+        <a href="/storybook" class={`docs-topbar-link${isTopActive('/storybook') ? ' active' : ''}`} aria-current={isTopActive('/storybook') ? 'page' : undefined}>Storybook</a>
+        <a href="/figma"     class={`docs-topbar-link${isTopActive('/figma') ? ' active' : ''}`} aria-current={isTopActive('/figma') ? 'page' : undefined}>Figma</a>
+        <a href="/mcp"       class={`docs-topbar-link${isTopActive('/mcp') ? ' active' : ''}`} aria-current={isTopActive('/mcp') ? 'page' : undefined}>MCP Explorer</a>
       </nav>
 
       <Search client:idle />
 
-      <button class="docs-theme-btn" id="theme-btn" aria-label="Toggle theme">
+      <button class="docs-theme-btn" id="theme-btn" aria-label="Toggle dark theme" aria-pressed="false">
         <svg id="theme-icon-moon" class="docs-theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
         </svg>
@@ -407,7 +415,7 @@ const breadcrumbSchema = {
     </nav>
 
     <!-- Main -->
-    <main class={`docs-main${hasToc ? ' docs-main--with-toc' : ''}`}>
+    <main id="main" class={`docs-main${hasToc ? ' docs-main--with-toc' : ''}`}>
       <div class="docs-main-content" data-pagefind-body>
         <slot />
       </div>
@@ -418,6 +426,8 @@ const breadcrumbSchema = {
         </aside>
       )}
     </main>
+
+    <Footer />
 
     <!-- Bottom Nav (mobile) -->
     <nav class="docs-bottom-nav" aria-label="Bottom">
@@ -460,6 +470,9 @@ const breadcrumbSchema = {
         if (moonIcon && sunIcon) {
           moonIcon.style.display = theme === 'dark' ? 'block' : 'none';
           sunIcon.style.display  = theme === 'dark' ? 'none'  : 'block';
+        }
+        if (themeBtn) {
+          themeBtn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
         }
       }
 
@@ -572,6 +585,21 @@ const breadcrumbSchema = {
           else window.scrollTo({ top: 0, behavior: 'smooth' });
         });
       }
+
+      // Mark every nav link with `.active` as the current page so screen
+      // readers announce "current page" instead of just "link". The .active
+      // class is set per-link via SSR; we mirror it to aria-current here so
+      // every nav surface (topbar, sidebar, bottom-nav) stays consistent.
+      Array.prototype.forEach.call(
+        document.querySelectorAll('.docs-topbar-link.active, .docs-nav-link.active, .docs-bottom-nav-item.active'),
+        function(el) { el.setAttribute('aria-current', 'page'); }
+      );
+      Array.prototype.forEach.call(
+        document.querySelectorAll('.docs-topbar-link, .docs-nav-link, .docs-bottom-nav-item'),
+        function(el) {
+          if (!el.classList.contains('active')) el.removeAttribute('aria-current');
+        }
+      );
 
       // axe-core flags scrollable <pre> blocks as not keyboard-focusable.
       // Add tabindex=0 so keyboard users can scroll horizontally through long

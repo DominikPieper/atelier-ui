@@ -1,0 +1,73 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  sub?: string;
+  align?: 'left' | 'center';
+  /**
+   * Heading level for the title. Use h2 for top-level page sections (default),
+   * h3 inside an h2-led section, etc.
+   */
+  level?: 1 | 2 | 3 | 4;
+  id?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  sub,
+  align = 'left',
+  level = 2,
+  id,
+} = Astro.props;
+
+const Tag = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4';
+---
+
+<header class:list={['docs-section-head', `docs-section-head--${align}`]}>
+  {eyebrow && <span class="docs-section-eyebrow">{eyebrow}</span>}
+  <Tag class="docs-section-title" id={id}>{title}</Tag>
+  {sub && <p class="docs-section-sub">{sub}</p>}
+</header>
+
+<style>
+  .docs-section-head {
+    margin-bottom: 2.5rem;
+  }
+
+  .docs-section-head--center {
+    text-align: center;
+  }
+
+  .docs-section-head--center .docs-section-sub {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .docs-section-eyebrow {
+    display: inline-block;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ui-color-primary);
+    margin-bottom: 0.75rem;
+  }
+
+  .docs-section-title {
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    margin: 0 0 0.75rem;
+    color: var(--ui-color-text);
+  }
+
+  .docs-section-sub {
+    font-size: 1.0625rem;
+    color: var(--ui-color-text-muted);
+    line-height: 1.6;
+    max-width: 38rem;
+    margin: 0;
+  }
+</style>

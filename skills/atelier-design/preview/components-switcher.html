@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Framework switcher</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 26px; background: var(--ui-color-surface); font-family: var(--ui-font-family); color: var(--ui-color-text); display:flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .switcher { display: inline-flex; background: #f1f5f9; padding: 4px; border-radius: 10px; border: 1px solid #e2e8f0; }
+  .btn { padding: 7px 14px; font-size: 13px; font-weight: 600; border: none; background: transparent; color: #475569; border-radius: 7px; cursor: pointer; font-family: inherit; }
+  .btn.active { background: #fff; color: #006470; box-shadow: 0 1px 3px rgba(15,23,42,.08); }
+  .dots { display: flex; gap: 5px; align-items: center; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; }
+  .label { font-family: var(--ui-font-mono); font-size: 11px; color: var(--ui-color-text-muted); }
+</style>
+</head>
+<body>
+  <div class="switcher">
+    <button class="btn">Angular</button>
+    <button class="btn active">React</button>
+    <button class="btn">Vue</button>
+  </div>
+  <div class="dots">
+    <span class="dot" style="background:#dd0031"></span><span class="label">Angular</span>
+    <span class="dot" style="background:#61dafb"></span><span class="label">React</span>
+    <span class="dot" style="background:#42b883"></span><span class="label">Vue</span>
+  </div>
+</body>
+</html>

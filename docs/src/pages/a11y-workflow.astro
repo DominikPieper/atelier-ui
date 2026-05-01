@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import DiagramFigure from '../components/DiagramFigure.astro';
 import HelpFooter from '../components/HelpFooter.astro';
-import PageEyebrow from '../components/PageEyebrow.astro';
+import PageHero from '../components/PageHero.astro';
 import BottomNav from '../components/BottomNav.astro';
 
 const AXE_INJECT = `// Inject axe-core into the Storybook story iframe and run it,
@@ -78,18 +78,14 @@ export type LlmButtonProps =
 >
   <div class="docs-inline-page">
 
-    <div style="margin-bottom: 1.25rem">
-      <PageEyebrow kind="howto" time="~10 min" tag="Workflow · 3 sources" />
-      <h1 class="docs-page-h1">
-        Accessibility Audit Workflow
-      </h1>
-      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 620px; line-height: 1.65">
-        Each tool catches a different layer of the same problem. Use them
-        together, not in isolation — Figma flags missing variants before
-        any code is written, axe flags real DOM violations after build,
-        the spec audit catches APIs that don't enforce a11y by default.
-      </p>
-    </div>
+    <PageHero
+      kind="howto"
+      time="~10 min"
+      tag="Workflow · 3 sources"
+      title="Accessibility audit workflow"
+      lede="Each tool catches a different layer of the same problem. Use them together, not in isolation — Figma flags missing variants before any code is written, axe flags real DOM violations after build, the spec audit catches APIs that don't enforce a11y by default."
+      ledeMax="620px"
+    />
 
     <!-- ── Triangulation overview ──────────────────────────────────────── -->
     <div class="docs-section">

@@ -1,0 +1,65 @@
+---
+import PageEyebrow from './PageEyebrow.astro';
+
+type EyebrowKind = 'tutorial' | 'howto' | 'reference' | 'explanation';
+
+interface Props {
+  kind?: EyebrowKind;
+  kindLabel?: string;
+  time?: string;
+  tag?: string;
+  title: string;
+  /** Plain-text lede. For rich markup, use the default slot instead. */
+  lede?: string;
+  /** Max-width on the lede paragraph. Defaults to a comfortable 36rem. */
+  ledeMax?: string;
+}
+
+const {
+  kind,
+  kindLabel,
+  time,
+  tag,
+  title,
+  lede,
+  ledeMax = '36rem',
+} = Astro.props;
+
+const hasLedeSlot = Astro.slots.has('default');
+---
+
+<header class="docs-page-hero">
+  {kind && <PageEyebrow kind={kind} kindLabel={kindLabel} time={time} tag={tag} />}
+  <h1 class="docs-page-h1">{title}</h1>
+  {(lede || hasLedeSlot) && (
+    <p class="docs-page-hero-lede" style={`max-width: ${ledeMax}`}>
+      {lede ?? <slot />}
+    </p>
+  )}
+</header>
+
+<style>
+  .docs-page-hero {
+    margin-bottom: 2.5rem;
+  }
+
+  .docs-page-hero-lede {
+    font-size: 0.9rem;
+    color: var(--ui-color-text-muted);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  .docs-page-hero-lede :global(strong) {
+    color: var(--ui-color-text);
+  }
+
+  .docs-page-hero-lede :global(code) {
+    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+    font-size: 0.85em;
+    color: var(--ui-color-primary);
+    background: var(--ui-color-primary-light);
+    padding: 0.05em 0.4em;
+    border-radius: var(--ui-radius-sm);
+  }
+</style>

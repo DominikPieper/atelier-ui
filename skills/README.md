@@ -20,6 +20,7 @@ Each skill follows the canonical Claude Code structure:
 
 | Skill | Status | Purpose |
 |---|---|---|
+| `atelier-design` | 0.1.0 | Generates well-branded Atelier interfaces, slides, and assets — voice rules, design tokens, Astro docs UI kit. |
 | `figma-workspace-architect` | 0.1.0 | Designs, builds, audits, and improves Figma workspaces via `figma-console-mcp`. |
 
 ## Develop

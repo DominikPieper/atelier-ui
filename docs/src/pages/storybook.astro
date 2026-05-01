@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
-import PageEyebrow from '../components/PageEyebrow.astro';
+import PageHero from '../components/PageHero.astro';
 const SITE_URL = 'https://atelier.pieper.io';
 
 const MCP_CONFIG = `{
@@ -36,13 +36,12 @@ const STORYBOOK_LINKS = [
   currentPath="/storybook"
 >
   <div class="docs-inline-page">
-    <div style="margin-bottom: 2.5rem">
-      <PageEyebrow kind="reference" />
-      <h1 class="docs-page-h1">Storybook</h1>
-      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 520px; line-height: 1.65">
-        Interactive component explorers for Angular, React, and Vue. Browse stories, inspect props, and test accessibility in isolation.
-      </p>
-    </div>
+    <PageHero
+      kind="reference"
+      title="Storybook"
+      lede="Interactive component explorers for Angular, React, and Vue. Browse stories, inspect props, and test accessibility in isolation."
+      ledeMax="520px"
+    />
 
     <!-- Framework cards -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.85rem; margin-bottom: 3rem">
@@ -58,14 +57,14 @@ const STORYBOOK_LINKS = [
             <span class="storybook-card__name">{name}</span>
           </div>
           <span style="font-family: monospace; font-size: 0.72rem; color: var(--ui-color-text-muted)">{pkg}</span>
-          <span class="storybook-card__cta">Open →</span>
+          <span class="storybook-card__cta">Open</span>
         </a>
       ))}
     </div>
 
     <!-- MCP section -->
     <div>
-      <h2 class="docs-section-title">MCP Server</h2>
+      <h2 class="docs-section-title">MCP server</h2>
       <p style="margin: 0 0 1.75rem; font-size: 0.85rem; color: var(--ui-color-text-muted); line-height: 1.65">
         All three Storybook instances expose a hosted MCP endpoint so AI coding assistants can read component documentation directly — no local setup required.
       </p>
@@ -99,7 +98,7 @@ const STORYBOOK_LINKS = [
         <div class="docs-step-row">
           <span class="docs-step-badge">03</span>
           <div class="docs-step-body">
-            <h3 class="docs-h3">Framework Parity</h3>
+            <h3 class="docs-h3">Framework parity</h3>
             <p class="docs-step-desc">
               All frameworks support prop documentation and component search. Story previews and Vitest integration are currently React and Vue only.
             </p>
@@ -108,10 +107,10 @@ const STORYBOOK_LINKS = [
                 <tr><th>Feature</th><th>React</th><th>Vue</th><th>Angular</th></tr>
               </thead>
               <tbody>
-                <tr><td>Prop Documentation</td><td>✅ Full</td><td>✅ Full</td><td>✅ Full</td></tr>
-                <tr><td>Component Search</td><td>✅ Full</td><td>✅ Full</td><td>✅ Full</td></tr>
-                <tr><td>Story Previews</td><td>✅ Full</td><td>✅ Full</td><td>⏳ Limited</td></tr>
-                <tr><td>Vitest Integration</td><td>✅ Full</td><td>✅ Full</td><td>⏳ Planned</td></tr>
+                <tr><td>Prop documentation</td><td>Full</td><td>Full</td><td>Full</td></tr>
+                <tr><td>Component search</td><td>Full</td><td>Full</td><td>Full</td></tr>
+                <tr><td>Story previews</td><td>Full</td><td>Full</td><td>Limited</td></tr>
+                <tr><td>Vitest integration</td><td>Full</td><td>Full</td><td>Planned</td></tr>
               </tbody>
             </table>
           </div>

@@ -292,7 +292,7 @@ body {
 }
 
 .docs-nav-link--back {
-  opacity: 0.65;
+  opacity: 0.85;
   font-size: 0.78rem;
 }
 
@@ -530,6 +530,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.75rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .docs-step-row {
@@ -573,7 +576,8 @@ body {
 /* ── Visually hidden utility (a11y) ───────────────────
  * Hides content from sighted users while keeping it readable to
  * assistive tech. Standard "sr-only" recipe. */
-.sr-only {
+.sr-only,
+.docs-visually-hidden {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -596,9 +600,53 @@ select:focus-visible,
 textarea:focus-visible,
 summary:focus-visible,
 [tabindex]:not([tabindex="-1"]):focus-visible {
-  outline: 2px solid var(--ui-color-primary);
-  outline-offset: 2px;
-  border-radius: var(--ui-radius-sm, 4px);
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
+  border-radius: var(--ui-radius-sm);
+}
+
+/* Skip-link — visually hidden until focused, then surfaces with double-ring */
+.docs-skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 1000;
+  padding: 0.625rem 1rem;
+  background: var(--ui-color-surface);
+  color: var(--ui-color-primary);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-md);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-150%);
+  transition: transform var(--ui-duration-fast) var(--ui-ease-out);
+}
+
+.docs-skip-link:focus,
+.docs-skip-link:focus-visible {
+  transform: translateY(0);
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
+}
+
+/* Global motion guard — respects user preference site-wide. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ui-duration-fast: 0ms;
+    --ui-duration-normal: 0ms;
+    --ui-duration-slow: 0ms;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ── Buttons ─────────────────────────────────────────── */
@@ -661,6 +709,34 @@ summary:focus-visible,
   padding: 0.4rem 0.75rem;
   border-bottom: 1px solid var(--ui-color-border);
   background: var(--ui-color-surface-sunken);
+}
+
+/* ── Reusable tag chips ───────────────────────────────────
+ * Use when you need a small mono-styled label inline with prose
+ * or in a card meta-row. Pillar tags consume .docs-pill-tag.
+ * Version pills (e.g. on llms.txt) consume .docs-mono-tag. */
+.docs-pill-tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 0.6875rem;
+  padding: 3px 8px;
+  background: var(--ui-color-surface-sunken);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-sm);
+  color: var(--ui-color-primary);
+}
+
+.docs-mono-tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 0.6875rem;
+  padding: 0.05rem 0.375rem;
+  background: var(--ui-color-surface-sunken);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-sm);
+  color: var(--ui-color-text-muted);
 }
 
 .docs-code-block-lang {
@@ -792,7 +868,7 @@ summary:focus-visible,
 /* ── Component Grid ──────────────────────────────────── */
 .docs-component-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1rem;
 }
 
@@ -813,21 +889,22 @@ summary:focus-visible,
 
 .docs-component-card:hover {
   border-top-color: var(--ui-color-primary);
-  box-shadow: 0 6px 24px color-mix(in srgb, var(--ui-color-primary) 12%, transparent);
+  box-shadow: var(--ui-shadow-card-hover);
   transform: translateY(-2px);
 }
 
 .docs-component-card-icon {
   width: 40px;
   height: 40px;
-  background: linear-gradient(135deg,
-    color-mix(in srgb, var(--ui-color-primary) 15%, transparent),
-    color-mix(in srgb, var(--docs-secondary, #818cf8) 8%, transparent));
+  background: var(--ui-color-primary-light);
+  color: var(--ui-color-primary);
   border-radius: var(--ui-radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 0.9rem;
+  font-weight: 700;
   margin-bottom: 0.25rem;
   flex-shrink: 0;
 }
@@ -927,26 +1004,38 @@ summary:focus-visible,
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-color-primary) 15%, transparent);
 }
 
-.docs-category-pills { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.docs-category-pills { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
 .docs-category-pill {
-  padding: 0.3rem 0.8rem;
-  border-radius: 9999px;
+  padding: 0.375rem 0.875rem;
+  border-radius: var(--ui-radius-full);
   border: 1px solid var(--ui-color-border);
   background: transparent;
   color: var(--ui-color-text-muted);
-  font-family: var(--docs-font, inherit);
-  font-size: 0.8rem;
+  font-family: inherit;
+  font-size: 0.8125rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: color var(--ui-duration-fast) var(--ui-ease-out),
+    border-color var(--ui-duration-fast) var(--ui-ease-out),
+    background var(--ui-duration-fast) var(--ui-ease-out);
 }
 
-.docs-category-pill:hover { border-color: var(--ui-color-primary); color: var(--ui-color-primary); }
-.docs-category-pill.active {
+.docs-category-pill:hover {
   border-color: var(--ui-color-primary);
-  background: color-mix(in srgb, var(--ui-color-primary) 12%, transparent);
   color: var(--ui-color-primary);
+}
+
+.docs-category-pill.active,
+.docs-category-pill[aria-pressed="true"] {
+  border-color: var(--ui-color-primary);
+  background: var(--ui-color-primary-light);
+  color: var(--ui-color-primary);
+}
+
+.docs-category-pill:focus-visible {
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
 }
 
 .docs-count-badge {
@@ -1767,7 +1856,9 @@ summary:focus-visible,
   overflow: hidden;
 }
 
-/* Crosshair grid background — tinted by primary teal */
+/* Crosshair grid background — tinted by primary teal, masked to fade
+ * outward so the grid is densest behind the wordmark. Mirrors the kit
+ * pattern at skills/atelier-design/ui_kits/docs-site/landing.css L54-60. */
 .docs-hero-grid-bg {
   position: absolute;
   inset: 0;
@@ -1775,29 +1866,20 @@ summary:focus-visible,
     linear-gradient(color-mix(in srgb, var(--ui-color-primary) 8%, transparent) 1px, transparent 1px),
     linear-gradient(90deg, color-mix(in srgb, var(--ui-color-primary) 8%, transparent) 1px, transparent 1px);
   background-size: 40px 40px;
+  -webkit-mask-image: radial-gradient(ellipse 800px 500px at center, #000 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse 800px 500px at center, #000 30%, transparent 75%);
   pointer-events: none;
 }
 
-/* Primary center glow — primary teal */
+/* Primary center glow — primary teal, positioned above the wordmark per kit. */
 .docs-hero-glow {
   position: absolute;
-  top: 40%;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 700px;
-  height: 450px;
+  height: 400px;
   background: radial-gradient(ellipse, color-mix(in srgb, var(--ui-color-primary) 14%, transparent) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-/* Secondary top-right glow — Conciso brand sky-blue */
-.docs-hero-glow-2 {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 400px;
-  height: 300px;
-  background: radial-gradient(ellipse at top right, color-mix(in srgb, var(--ui-color-brand-development, #00b4ff) 12%, transparent) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -2049,12 +2131,13 @@ summary:focus-visible,
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  transition: transform 0.18s, box-shadow 0.18s;
+  transition: transform var(--ui-duration-normal) var(--ui-ease-out),
+    box-shadow var(--ui-duration-normal) var(--ui-ease-out);
 }
 
 .docs-feature-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px -6px rgba(0,0,0,0.2);
+  box-shadow: var(--ui-shadow-card-hover);
 }
 
 .docs-feature-card-num {
@@ -2063,9 +2146,9 @@ summary:focus-visible,
   font-weight: 600;
   color: var(--ui-color-primary);
   background: var(--ui-color-primary-light);
-  border: 1px solid color-mix(in srgb, var(--ui-color-primary) 25%, transparent);
+  border: 1px solid var(--ui-color-primary-border);
   padding: 2px 7px;
-  border-radius: 4px;
+  border-radius: var(--ui-radius-sm);
   letter-spacing: 0.04em;
   width: fit-content;
 }
@@ -2197,6 +2280,268 @@ summary:focus-visible,
   flex: 1;
   height: 1px;
   background: var(--ui-color-border);
+}
+
+.docs-home-section-sub {
+  margin: -0.5rem 0 1.5rem;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--ui-color-text-muted);
+  max-width: 38rem;
+}
+
+.docs-home-section-sub strong {
+  color: var(--ui-color-text);
+  font-weight: 600;
+}
+
+/* ── Three pillars ────────────────────────────────────── */
+.docs-pillars-section {
+  margin: 4rem 0 5rem;
+}
+
+.docs-pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.docs-pillar {
+  background: var(--ui-color-surface);
+  border: 1px solid var(--ui-color-border);
+  border-top: 2px solid transparent;
+  border-radius: var(--ui-radius-lg);
+  padding: 1.75rem;
+  transition: transform var(--ui-duration-normal) var(--ui-ease-out),
+    box-shadow var(--ui-duration-normal) var(--ui-ease-out),
+    border-top-color var(--ui-duration-normal) var(--ui-ease-out);
+}
+
+.docs-pillar:hover {
+  border-top-color: var(--ui-color-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--ui-shadow-card-hover);
+}
+
+.docs-pillar-step {
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--ui-color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1.125rem;
+}
+
+.docs-pillar-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--ui-radius-md);
+  background: var(--ui-color-primary-light);
+  color: var(--ui-color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.125rem;
+  font-size: 1.5rem;
+}
+
+.docs-pillar-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5rem;
+  color: var(--ui-color-text);
+}
+
+.docs-pillar-desc {
+  font-size: 0.875rem;
+  color: var(--ui-color-text-muted);
+  line-height: 1.6;
+  margin: 0 0 1rem;
+}
+
+.docs-pillar-desc code {
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 0.8125rem;
+  color: var(--ui-color-primary);
+}
+
+.docs-pillar-meta {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 860px) {
+  .docs-pillars {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── MCP setup grid ───────────────────────────────────── */
+.docs-mcp-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 3rem;
+  align-items: start;
+}
+
+.docs-mcp-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.docs-mcp-checklist li {
+  display: flex;
+  gap: 0.625rem;
+  align-items: flex-start;
+  font-size: 0.9375rem;
+  color: var(--ui-color-text);
+}
+
+.docs-mcp-checklist li::before {
+  content: '✓';
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  background: var(--ui-color-primary-light);
+  color: var(--ui-color-primary);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  margin-top: 1px;
+}
+
+@media (max-width: 860px) {
+  .docs-mcp-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+/* ── Scaffolder CTA ───────────────────────────────────── */
+.docs-cta {
+  background: linear-gradient(135deg, var(--ui-color-primary) 0%, var(--ui-color-primary-active) 100%);
+  border-radius: var(--ui-radius-xl);
+  padding: 4rem 2.5rem;
+  text-align: center;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  margin: 5rem 0 3rem;
+}
+
+.docs-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse 600px 300px at center, #000 20%, transparent 80%);
+  mask-image: radial-gradient(ellipse 600px 300px at center, #000 20%, transparent 80%);
+}
+
+.docs-cta-eyebrow {
+  position: relative;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 1rem;
+}
+
+.docs-cta-title {
+  position: relative;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0 0 1rem;
+  color: #fff;
+}
+
+.docs-cta-sub {
+  position: relative;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 32rem;
+  margin: 0 auto 1.75rem;
+  line-height: 1.6;
+}
+
+.docs-cta-cmd {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.375rem;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--ui-radius-md);
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 0.9375rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.docs-cta-cmd-icon {
+  color: rgba(255, 255, 255, 0.7);
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.docs-cta-cmd-prompt {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.docs-cta-cmd-text {
+  color: #fff;
+  background: transparent;
+  font: inherit;
+  padding: 0;
+}
+
+.docs-cta-cmd-copy {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--ui-radius-sm);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--docs-font);
+  transition: background var(--ui-duration-fast) var(--ui-ease-out);
+}
+
+.docs-cta-cmd-copy:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.docs-cta-cmd-copy.is-copied {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.docs-cta-cmd-copy:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ui-color-primary), 0 0 0 4px #fff;
+}
+
+@media (max-width: 860px) {
+  .docs-cta {
+    padding: 3rem 1.75rem;
+  }
 }
 
 /* ── MCP protocol steps ───────────────────────────────── */

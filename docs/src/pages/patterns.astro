@@ -2,7 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import { PATTERNS, TAG_TO_SLUG } from '../data/patterns';
-import PageEyebrow from '../components/PageEyebrow.astro';
+import PageHero from '../components/PageHero.astro';
+import Callout from '../components/Callout.astro';
 import {
   LoginFormDemo,
   SettingsPageDemo,
@@ -39,28 +40,20 @@ function frameworkCode(p: typeof PATTERNS[number], fw: Framework): string {
 
   <div class="docs-inline-page">
 
-    <div style="margin-bottom: 1.25rem">
-      <PageEyebrow kind="howto" tag={`${PATTERNS.length} patterns · 3 frameworks`} />
-      <h1 class="docs-page-h1">
-        Cookbook Patterns
-      </h1>
-      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 640px; line-height: 1.65">
-        Composition recipes for common UI scenarios. Each pattern shows the
-        intended way to combine atomic components — Card with Form, Dialog
-        with Alert, Table with Badge — and ships in Angular, React, and Vue.
-      </p>
-    </div>
+    <PageHero
+      kind="howto"
+      tag={`${PATTERNS.length} patterns · 3 frameworks`}
+      title="Cookbook patterns"
+      lede="Composition recipes for common UI scenarios. Each pattern shows the intended way to combine atomic components — Card with Form, Dialog with Alert, Table with Badge — and ships in Angular, React, and Vue."
+      ledeMax="640px"
+    />
 
-    <!-- Why composed API -->
-    <div style="padding: 0.85rem 1.1rem; background: color-mix(in srgb, var(--ui-color-primary) 6%, transparent); border: 1px solid color-mix(in srgb, var(--ui-color-primary) 20%, transparent); border-radius: var(--ui-radius-md); display: flex; gap: 0.75rem; align-items: flex-start; margin-bottom: 2.5rem">
-      <span style="font-size: 1rem; flex-shrink: 0; margin-top: 1px">🧩</span>
-      <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
-        <strong style="color: var(--ui-color-text)">Why the composed API.</strong>
-        <code>LlmCard</code> breaks into <code>LlmCardHeader</code>, <code>LlmCardContent</code>, and <code>LlmCardFooter</code> instead of flat props like <code>header={'…'}</code> / <code>footer={'…'}</code>.
-        Composition wins three things an LLM cannot: you can drop sections you don’t need (no empty <code>footer</code> slot to null-guard), you can put any JSX/markup inside each part (buttons, badges, form controls), and screen readers get a real DOM landmark for each section instead of a flat container.
-        All Atelier UI container components follow the same pattern.
-      </p>
-    </div>
+    <!-- Composition over configuration. -->
+    <Callout tone="tip" title="Composition over configuration.">
+      <code>LlmCard</code> breaks into <code>LlmCardHeader</code>, <code>LlmCardContent</code>, and <code>LlmCardFooter</code> instead of flat props like <code>header={'…'}</code> / <code>footer={'…'}</code>.
+      Composition wins three things an LLM cannot: you can drop sections you don’t need (no empty <code>footer</code> slot to null-guard), you can put any JSX/markup inside each part (buttons, badges, form controls), and screen readers get a real DOM landmark for each section instead of a flat container.
+      All Atelier UI container components follow the same pattern.
+    </Callout>
 
     {PATTERNS.map((p) => (
       <section id={`pattern-${p.num}`} class="pattern-section">
@@ -81,7 +74,7 @@ function frameworkCode(p: typeof PATTERNS[number], fw: Framework): string {
                 );
               })}
             </div>
-            <a href={`/patterns/${p.id}`} class="pattern-deeplink">Read full guide →</a>
+            <a href={`/patterns/${p.id}`} class="pattern-deeplink">Read full guide</a>
           </div>
         </div>
 

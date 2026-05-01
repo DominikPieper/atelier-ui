@@ -105,7 +105,22 @@ export default function Search() {
   return (
     <div className="docs-search">
       <div className="docs-search-input-wrapper">
-        <span className="docs-search-icon">🔍</span>
+        <svg
+          className="docs-search-icon"
+          viewBox="0 0 24 24"
+          width="16"
+          height="16"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.75"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
         <input
           ref={inputRef}
           type="text"
@@ -114,6 +129,7 @@ export default function Search() {
           value={query}
           onChange={e => { setQuery(e.target.value); setOpen(true); }}
           onFocus={() => setOpen(true)}
+          aria-label="Search docs and components"
         />
         <kbd className="docs-search-kbd">⌘K</kbd>
       </div>
@@ -133,8 +149,8 @@ export default function Search() {
                     setQuery('');
                   }}
                 >
-                  <span className="docs-search-result-icon">
-                    {CATEGORY_ICONS[componentDocs[name]?.category ?? ''] ?? '🧩'}
+                  <span className="docs-search-result-icon" aria-hidden="true">
+                    {(componentDocs[name]?.name ?? name).replace(/^Llm/, '').charAt(0)}
                   </span>
                   <div className="docs-search-result-content">
                     <div className="docs-search-result-name">{componentDocs[name]?.name ?? name}</div>
@@ -158,7 +174,22 @@ export default function Search() {
                     setQuery('');
                   }}
                 >
-                  <span className="docs-search-result-icon">📄</span>
+                  <svg
+                    className="docs-search-result-icon"
+                    viewBox="0 0 24 24"
+                    width="16"
+                    height="16"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.75"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                  </svg>
                   <div className="docs-search-result-content">
                     <div className="docs-search-result-name">{p.title}</div>
                     <div

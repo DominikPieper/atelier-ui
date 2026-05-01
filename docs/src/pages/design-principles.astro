@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Jargon from '../components/Jargon.astro';
-import PageEyebrow from '../components/PageEyebrow.astro';
+import PageHero from '../components/PageHero.astro';
 ---
 
 <BaseLayout
@@ -18,17 +18,14 @@ import PageEyebrow from '../components/PageEyebrow.astro';
   </nav>
 
   <div class="docs-inline-page">
-    <div style="margin-bottom: 2.5rem">
-      <PageEyebrow kind="explanation" />
-      <h1 class="docs-page-h1">LLM-Optimized API Design</h1>
-      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 580px; line-height: 1.65">
-        Traditional component libraries are designed for humans who browse docs,
-        copy examples, and tweak. An LLM-optimized library flips the priority:
-        the model has to infer correct usage from minimal context and produce
-        working code on the first try. The five principles below are what make
-        that possible — and what shaped every API decision in Atelier UI.
-      </p>
-    </div>
+    <PageHero kind="explanation" title="LLM-optimized API design" ledeMax="580px">
+      <strong>Predictable APIs across frameworks.</strong>
+      Traditional component libraries are designed for humans who browse docs,
+      copy examples, and tweak. An LLM-optimized library flips the priority:
+      the model has to infer correct usage from minimal context and produce
+      working code on the first try. The five principles below are what make
+      that possible — and what shaped every API decision in Atelier UI.
+    </PageHero>
 
     <!-- Principle 1 -->
     <div class="docs-section">

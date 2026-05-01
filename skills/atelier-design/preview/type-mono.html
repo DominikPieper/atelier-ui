@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Type — Mono & Tokens</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 24px 28px; background: var(--ui-color-surface); font-family: var(--ui-font-family); color: var(--ui-color-text); }
+  .row { display:flex; align-items:center; gap:12px; margin-bottom:10px; flex-wrap:wrap; }
+  .label { font-family: var(--ui-font-mono); font-size: 10px; color: var(--ui-color-text-muted); text-transform: uppercase; letter-spacing: .08em; min-width:88px; }
+  code.inline { font-family: var(--ui-font-mono); font-size: 13px; color: var(--ui-color-primary); font-weight: 500; }
+  .token { font-family: var(--ui-font-mono); font-size: 12px; background: var(--ui-color-surface-sunken); border: 1px solid var(--ui-color-border); border-radius: 8px; padding: 3px 8px; color: var(--ui-color-primary); }
+  .kbd { font-family: var(--ui-font-mono); font-size: 12px; padding: 2px 6px; background: var(--ui-color-surface-sunken); border:1px solid var(--ui-color-border); border-radius:6px; color: var(--ui-color-text); }
+  .block { font-family: var(--ui-font-mono); font-size: 12px; background: var(--ui-color-surface-sunken); border:1px solid var(--ui-color-border); border-radius: 10px; padding: 10px 12px; color: var(--ui-color-text); }
+  .b-key { color: #0c4a6e; }
+  .b-name { color: #006470; }
+  .b-str { color: #166534; }
+  .b-mut { color: #475569; }
+</style>
+</head>
+<body>
+  <div class="row"><span class="label">Inline</span><code class="inline">@atelier-ui/spec</code><code class="inline">LlmButtonSpec</code></div>
+  <div class="row"><span class="label">Token chip</span><span class="token">--ui-color-primary</span><span class="token">--ui-radius-md</span></div>
+  <div class="row"><span class="label">Kbd</span><span class="kbd">⌘</span><span class="kbd">K</span></div>
+  <div class="block"><span class="b-mut">// Fira Code · 12px · 1.65</span><br><span class="b-key">export type</span> <span class="b-name">LlmButtonVariant</span> = <span class="b-str">'primary'</span> | <span class="b-str">'secondary'</span> | <span class="b-str">'outline'</span> | <span class="b-str">'danger'</span>;</div>
+</body>
+</html>

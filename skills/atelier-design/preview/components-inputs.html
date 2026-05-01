@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Inputs</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 22px 26px; background: var(--ui-color-surface); font-family: var(--ui-font-family); color: var(--ui-color-text); }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 12px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  label { font-size: 11px; font-weight: 600; color: var(--ui-color-text-muted); text-transform: uppercase; letter-spacing: .08em; }
+  input { font-family: inherit; font-size: 14px; padding: 9px 12px; border-radius: 10px; border: 1px solid #64748b; background: #f1f5f9; color: #0f172a; outline: none; transition: all .15s; }
+  input:focus { border-color: #006470; background: #fff; box-shadow: 0 0 0 3px rgba(0,100,112,.15); }
+  input.invalid { border-color: #b91c1c; }
+  .err { font-size: 11px; color: #991b1b; margin-top: 2px; }
+  .help { font-size: 11px; color: var(--ui-color-text-muted); }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="field"><label>Email</label><input type="email" placeholder="you@example.com"><div class="help">Required for MCP token sync.</div></div>
+    <div class="field"><label>Token</label><input class="invalid" type="password" value="••••"><div class="err">Token expired — regenerate in Figma settings.</div></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Workspace</label><input value="atelier-workshop" readonly></div>
+    <div class="field"><label>Disabled</label><input value="—" disabled style="opacity:.5"></div>
+  </div>
+</body>
+</html>

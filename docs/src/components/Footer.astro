@@ -1,0 +1,67 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="docs-footer" aria-label="Site footer">
+  <div class="docs-footer-row">
+    <p class="docs-footer-meta">
+      &copy; {year} Dominik Pieper &middot; MIT &middot; Teaching artifact
+    </p>
+    <nav class="docs-footer-links" aria-label="Footer">
+      <a
+        href="https://github.com/DominikPieper/atelier-ui"
+        target="_blank"
+        rel="noopener noreferrer">GitHub</a>
+      <a href="/llms">llms.txt</a>
+      <a href="/components">Components</a>
+      <a href="/workshop">Workshop</a>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .docs-footer {
+    grid-column: 1 / -1;
+    padding: 3rem 2rem 2.25rem;
+    border-top: 1px solid var(--ui-color-border);
+    background: var(--ui-color-surface);
+  }
+
+  .docs-footer-row {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .docs-footer-meta {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: var(--ui-color-text-muted);
+  }
+
+  .docs-footer-links {
+    display: flex;
+    gap: 1.125rem;
+    font-size: 0.8125rem;
+  }
+
+  .docs-footer-links a {
+    color: var(--ui-color-text-muted);
+    text-decoration: none;
+    transition: color var(--ui-duration-fast) var(--ui-ease-out);
+  }
+
+  .docs-footer-links a:hover {
+    color: var(--ui-color-primary);
+  }
+
+  .docs-footer-links a:focus-visible {
+    outline: none;
+    box-shadow: var(--ui-focus-ring);
+    border-radius: var(--ui-radius-sm);
+  }
+</style>

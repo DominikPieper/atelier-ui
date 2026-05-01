@@ -3,8 +3,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import Jargon from '../components/Jargon.astro';
 import HelpFooter from '../components/HelpFooter.astro';
-import PageEyebrow from '../components/PageEyebrow.astro';
+import PageHero from '../components/PageHero.astro';
 import BottomNav from '../components/BottomNav.astro';
+import Callout from '../components/Callout.astro';
 
 const SITE_URL = 'https://atelier.pieper.io';
 
@@ -58,16 +59,16 @@ const MCP_CONFIG = `{
 >
   <div class="docs-inline-page">
 
-    <div style="margin-bottom: 1.25rem">
-      <PageEyebrow kind="tutorial" time="~25 min" tag="Hands-on · Setup" />
-      <h1 class="docs-page-h1">
-        Workshop Setup
-      </h1>
-      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 520px; line-height: 1.65">
-        Spin up a fully-configured Atelier workspace in one command — framework selection,
-        library install, and <Jargon term="MCP">MCP</Jargon> server wired up automatically.
-      </p>
-    </div>
+    <PageHero
+      kind="tutorial"
+      time="~25 min"
+      tag="Hands-on · Setup"
+      title="Workshop setup"
+      ledeMax="520px"
+    >
+      Spin up a fully-configured Atelier workspace in one command — framework selection,
+      library install, and <Jargon term="MCP">MCP</Jargon> server wired up automatically.
+    </PageHero>
 
     <!-- Learning objectives & assumed knowledge -->
     <div class="objective-box">
@@ -92,21 +93,20 @@ const MCP_CONFIG = `{
     </div>
 
     <!-- Shortcut for users arriving from a repo clone -->
-    <aside class="docs-shortcut" aria-label="Shortcut for users with a local clone of the repo">
-      <div class="docs-shortcut-eyebrow">Already cloned the repo?</div>
-      <p class="docs-shortcut-desc">
-        You can skip <strong>Install prerequisites</strong>, <strong>Step 01</strong>
-        (workspace generator), and <strong>Step 02</strong> (preflight) — they're for
-        a fresh-scaffolded workspace. Jump straight to picking a framework and serving.
+    <Callout tone="tip" title="Already cloned the repo">
+      <p>
+        Skip <strong>Install prerequisites</strong>, <strong>Step 01</strong> (workspace generator), and <strong>Step 02</strong> (preflight) — they are for a fresh-scaffolded workspace. Jump straight to picking a framework and serving.
       </p>
-      <a href="#step-03" class="docs-shortcut-link">Skip to Step 03 — Serve your app →</a>
-    </aside>
+      <p>
+        <a href="#step-03" class="docs-link-primary">Skip to step 03 — Serve your app</a>
+      </p>
+    </Callout>
 
     <!-- Prerequisites -->
     <div class="docs-section" style="margin-bottom: 2rem; padding: 1.25rem 1.4rem; background: var(--ui-color-surface-raised); border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md)">
       <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.85rem">
         <h2 class="docs-section-title" style="margin: 0; font-size: 1rem">Install prerequisites</h2>
-        <a href="/troubleshooting" style="font-size: 0.78rem; color: var(--ui-color-primary); text-decoration: none">Troubleshooting →</a>
+        <a href="/troubleshooting" style="font-size: 0.78rem; color: var(--ui-color-primary); text-decoration: none">Troubleshooting</a>
       </div>
       <p style="margin: 0 0 0.85rem; color: var(--ui-color-text-muted); font-size: 0.85rem; line-height: 1.55">
         Pick your platform, run the commands below, then verify with <code>npm run preflight</code>
@@ -125,10 +125,10 @@ const MCP_CONFIG = `{
       ))}
     </div>
 
-    <div style="display: flex; flex-direction: column; gap: 1.75rem; margin-bottom: 2.5rem">
+    <ol class="docs-step-list" style="margin-bottom: 2.5rem">
 
       <!-- Step 01 -->
-      <div class="docs-step-row" data-step="1">
+      <li class="docs-step-row" data-step="1">
         <span class="docs-step-badge">01</span>
         <div>
           <h3 class="docs-h3">Run the workspace generator</h3>
@@ -138,10 +138,10 @@ const MCP_CONFIG = `{
           <p class="docs-step-desc" style="margin-top: 0.75rem">Or pass the name directly to skip the first prompt:</p>
           <Code code="npx create-atelier-ui-workspace my-workshop" lang="shell" />
         </div>
-      </div>
+      </li>
 
       <!-- Step 02 -->
-      <div class="docs-step-row" data-step="2">
+      <li class="docs-step-row" data-step="2">
         <span class="docs-step-badge">02</span>
         <div>
           <h3 class="docs-h3">Install dependencies &amp; run preflight</h3>
@@ -248,10 +248,10 @@ const MCP_CONFIG = `{
             Toggle the tabs above to compare. Each <span style="color: var(--ui-color-danger); font-weight: 700">✗</span> line ends with a one-step fix — copy, run, re-run <code>preflight</code>.
           </p>
         </div>
-      </div>
+      </li>
 
       <!-- Step 03 -->
-      <div class="docs-step-row" data-step="3" id="step-03">
+      <li class="docs-step-row" data-step="3" id="step-03">
         <span class="docs-step-badge">03</span>
         <div>
           <h3 class="docs-h3">Serve your app</h3>
@@ -267,10 +267,10 @@ const MCP_CONFIG = `{
             </div>
           ))}
         </div>
-      </div>
+      </li>
 
       <!-- Step 04 -->
-      <div class="docs-step-row" data-step="4">
+      <li class="docs-step-row" data-step="4">
         <span class="docs-step-badge">04</span>
         <div>
           <h3 class="docs-h3">Open in Claude Code</h3>
@@ -287,9 +287,9 @@ const MCP_CONFIG = `{
             </p>
           </div>
         </div>
-      </div>
+      </li>
 
-    </div>
+    </ol>
 
     <!-- Once set up: hand off to the workflow pages instead of repeating them. -->
     <aside class="docs-pagepair" aria-label="What to do once setup is done" style="margin-top: 2.5rem">

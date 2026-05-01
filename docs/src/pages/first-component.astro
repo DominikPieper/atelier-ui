@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import HelpFooter from '../components/HelpFooter.astro';
 import Icon from '../components/Icon.astro';
-import PageEyebrow from '../components/PageEyebrow.astro';
+import PageHero from '../components/PageHero.astro';
 import BottomNav from '../components/BottomNav.astro';
 
 const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI?node-id=695-313';
@@ -52,16 +52,16 @@ const EXPECTED: Record<Framework, { file: string; cmd: string; port: number }> =
 >
   <div class="docs-inline-page">
 
-    <div style="margin-bottom: 1.25rem">
-      <PageEyebrow kind="tutorial" time="~15 min" tag="Kata · copy-paste" />
-      <h1 class="docs-page-h1">
-        First Component
-      </h1>
-      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 580px; line-height: 1.65">
-        Five copy-paste steps that build the Settings Card end-to-end.
-        For the why behind each step, read <a href="/tutorial" class="docs-link-primary">/tutorial</a> instead.
-      </p>
-    </div>
+    <PageHero
+      kind="tutorial"
+      time="~15 min"
+      tag="Kata · copy-paste"
+      title="First component"
+      ledeMax="580px"
+    >
+      Five copy-paste steps that build the Settings Card end-to-end.
+      For the why behind each step, read <a href="/tutorial" class="docs-link-primary">/tutorial</a> instead.
+    </PageHero>
 
     <!-- What you'll build -->
     <div class="kata-target" aria-label="What you'll have built when you're done">
@@ -181,7 +181,7 @@ const EXPECTED: Record<Framework, { file: string; cmd: string; port: number }> =
     <section data-step="6" class="kata-step kata-step--optional">
       <div class="kata-step-head">
         <span class="kata-step-num kata-step-num--optional">+</span>
-        <h2 class="kata-step-title">Optional — run the parity check</h2>
+        <h2 class="kata-step-title">Optional &middot; run the parity check</h2>
       </div>
       <p class="kata-step-desc">
         <code>figma_check_design_parity</code> compares the generated code against the Figma

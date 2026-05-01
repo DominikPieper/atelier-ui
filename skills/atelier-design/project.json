@@ -1,0 +1,44 @@
+{
+  "name": "atelier-design",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "skills/atelier-design",
+  "projectType": "library",
+  "tags": ["type:skill"],
+  "targets": {
+    "package": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/skills/atelier-design.zip"],
+      "options": {
+        "command": "node tools/scripts/package-skill.mjs atelier-design"
+      }
+    },
+    "sync-discovery": {
+      "executor": "nx:run-commands",
+      "outputs": [
+        "{workspaceRoot}/docs/public/.well-known/agent-skills/atelier-design",
+        "{workspaceRoot}/docs/public/.well-known/agent-skills/index.json"
+      ],
+      "options": {
+        "command": "node tools/scripts/sync-skill-discovery.mjs atelier-design"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node tools/scripts/check-skill.mjs atelier-design"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node tools/scripts/test-skill.mjs atelier-design"
+      }
+    },
+    "nx-release-publish": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "echo 'atelier-design is a private skill — distributed as a zip via the `package` target, not via npm. Skipping nx-release-publish.'"
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Toast / Alert</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 22px 24px; background: var(--ui-color-surface-sunken); font-family: var(--ui-font-family); color: var(--ui-color-text); }
+  .toast { display: flex; gap: 10px; align-items: flex-start; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 11px 13px; box-shadow: 0 4px 6px -1px rgba(15,23,42,.08), 0 2px 4px -2px rgba(15,23,42,.05); margin-bottom: 10px; }
+  .accent { width: 4px; align-self: stretch; border-radius: 2px; }
+  .body { flex: 1; }
+  .title { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+  .desc { font-size: 12.5px; color: #475569; line-height: 1.5; }
+  .close { background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 16px; line-height: 1; }
+</style>
+</head>
+<body>
+  <div class="toast"><div class="accent" style="background:#15803d"></div><div class="body"><div class="title" style="color:#166534">Story tests passed</div><div class="desc">All 27 components green on React 19. Preview links updated.</div></div><button class="close">×</button></div>
+  <div class="toast"><div class="accent" style="background:#b45309"></div><div class="body"><div class="title" style="color:#854d0e">Spec drift detected</div><div class="desc">`LlmCombobox.placeholder` documented in Vue but missing from Angular.</div></div><button class="close">×</button></div>
+  <div class="toast"><div class="accent" style="background:#0369a1"></div><div class="body"><div class="title" style="color:#0c4a6e">MCP endpoint reachable</div><div class="desc">storybook-react/mcp · 12 tools registered.</div></div><button class="close">×</button></div>
+</body>
+</html>

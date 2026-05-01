@@ -1,0 +1,111 @@
+---
+type Framework = 'angular' | 'react' | 'vue';
+
+interface Props {
+  /** Frameworks to render in the switcher, in display order. */
+  frameworks?: Framework[];
+  /**
+   * Visual style. `segmented` matches the brand kit's segmented control;
+   * `tabs` matches the existing `docs-multi-code-tabs` strip used on
+   * pre-Atelier pages. Both wire identically — only chrome differs.
+   */
+  variant?: 'segmented' | 'tabs';
+  /** Accessible label for the toggle group. */
+  label?: string;
+}
+
+const {
+  frameworks = ['angular', 'react', 'vue'],
+  variant = 'segmented',
+  label = 'Choose a framework',
+} = Astro.props;
+
+const FRAMEWORK_LABELS: Record<Framework, string> = {
+  angular: 'Angular',
+  react: 'React',
+  vue: 'Vue',
+};
+---
+
+<div
+  class:list={['docs-fw-switcher', `docs-fw-switcher--${variant}`]}
+  role="tablist"
+  aria-label={label}>
+  {frameworks.map((fw) => (
+    <button
+      type="button"
+      class="docs-fw-switcher-btn"
+      data-fw-btn={fw}
+      role="tab">
+      {FRAMEWORK_LABELS[fw]}
+    </button>
+  ))}
+</div>
+
+<style>
+  .docs-fw-switcher--segmented {
+    display: inline-flex;
+    background: var(--ui-color-surface-sunken);
+    padding: 0.25rem;
+    border-radius: var(--ui-radius-md);
+    border: 1px solid var(--ui-color-border);
+    gap: 0.125rem;
+  }
+
+  .docs-fw-switcher--segmented .docs-fw-switcher-btn {
+    padding: 0.4375rem 0.875rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    border: none;
+    background: transparent;
+    color: var(--ui-color-text-muted);
+    border-radius: var(--ui-radius-sm);
+    cursor: pointer;
+    font-family: inherit;
+    transition: color var(--ui-duration-fast) var(--ui-ease-out),
+      background var(--ui-duration-fast) var(--ui-ease-out),
+      box-shadow var(--ui-duration-fast) var(--ui-ease-out);
+  }
+
+  .docs-fw-switcher--segmented .docs-fw-switcher-btn.active {
+    background: var(--ui-color-surface);
+    color: var(--ui-color-primary);
+    box-shadow: var(--ui-shadow-sm);
+  }
+
+  .docs-fw-switcher--tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--ui-color-border);
+    margin-bottom: 0;
+  }
+
+  .docs-fw-switcher--tabs .docs-fw-switcher-btn {
+    padding: 0.45rem 0.95rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: none;
+    background: transparent;
+    color: var(--ui-color-text-muted);
+    cursor: pointer;
+    font-family: inherit;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color var(--ui-duration-fast) var(--ui-ease-out),
+      border-bottom-color var(--ui-duration-fast) var(--ui-ease-out);
+  }
+
+  .docs-fw-switcher--tabs .docs-fw-switcher-btn.active {
+    color: var(--ui-color-primary);
+    border-bottom-color: var(--ui-color-primary);
+  }
+
+  .docs-fw-switcher-btn:hover:not(.active) {
+    color: var(--ui-color-primary);
+  }
+
+  .docs-fw-switcher-btn:focus-visible {
+    outline: none;
+    box-shadow: var(--ui-focus-ring);
+  }
+</style>

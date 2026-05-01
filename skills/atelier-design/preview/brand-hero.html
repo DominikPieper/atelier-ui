@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Hero treatment</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; background: #fff; font-family: var(--ui-font-family); color: var(--ui-color-text); }
+  .hero { position: relative; padding: 28px 24px 24px; text-align: center; overflow: hidden; }
+  .grid-bg { position: absolute; inset: 0; background-image:
+    linear-gradient(rgba(0,100,112,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,100,112,.08) 1px, transparent 1px);
+    background-size: 30px 30px; pointer-events: none; }
+  .glow { position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); width: 380px; height: 200px; background: radial-gradient(ellipse, rgba(0,100,112,.14) 0%, transparent 70%); pointer-events: none; }
+  .eyebrow { display: inline-block; padding: 4px 10px; background: rgba(0,100,112,.08); border: 1px solid rgba(0,100,112,.25); border-radius: 9999px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #006470; margin-bottom: 8px; position: relative; }
+  .word { font-size: 56px; font-weight: 900; letter-spacing: -.04em; line-height: 1; margin: 0 0 8px; position: relative;
+    background: linear-gradient(135deg, #006470 0%, #00b4ff 100%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .sub { font-size: 13px; color: #475569; margin: 0 0 6px; position: relative; }
+  .disc { font-size: 9.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #475569; opacity: .7; position: relative; }
+</style>
+</head>
+<body>
+  <div class="hero">
+    <div class="grid-bg"></div>
+    <div class="glow"></div>
+    <div class="eyebrow">Workshop · Component-driven UIs</div>
+    <h1 class="word">Atelier</h1>
+    <p class="sub">Design in Figma. Explore in Storybook. Ship with AI.</p>
+    <div class="disc">Teaching artifact · not a production library</div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,135 @@
+---
+/**
+ * Theme-aware screenshot block.
+ *
+ * Renders a <figure> with a <picture> that swaps the source between light
+ * and dark variants via `prefers-color-scheme` AND the explicit `data-theme`
+ * attribute on <html>, so the image tracks both OS preference and the user's
+ * topbar theme toggle.
+ *
+ * Place screenshots under `docs/src/assets/screenshots/<slug>-{light,dark}.png`
+ * and pass the imported objects (or string URLs) as props. The captionId prop
+ * lets you cross-reference the figure from elsewhere on the page.
+ */
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  /** Light-theme variant. ImageMetadata import or absolute URL. */
+  srcLight: ImageMetadata | string;
+  /** Dark-theme variant. ImageMetadata import or absolute URL. */
+  srcDark: ImageMetadata | string;
+  /** Required. Screen-readable summary of what the screenshot shows. */
+  alt: string;
+  /** Optional caption rendered visually under the image. */
+  caption?: string;
+  /** Anchor id for cross-linking. Also wires aria-labelledby on the figure. */
+  captionId?: string;
+  /** Optional intrinsic dimensions hint (helps avoid layout shift). */
+  width?: number;
+  height?: number;
+}
+
+const {
+  srcLight,
+  srcDark,
+  alt,
+  caption,
+  captionId,
+  width,
+  height,
+} = Astro.props;
+
+function urlOf(src: ImageMetadata | string): string {
+  return typeof src === 'string' ? src : src.src;
+}
+
+function widthOf(src: ImageMetadata | string): number | undefined {
+  return typeof src === 'string' ? undefined : src.width;
+}
+
+function heightOf(src: ImageMetadata | string): number | undefined {
+  return typeof src === 'string' ? undefined : src.height;
+}
+
+const lightUrl = urlOf(srcLight);
+const darkUrl = urlOf(srcDark);
+
+const finalWidth = width ?? widthOf(srcLight) ?? widthOf(srcDark);
+const finalHeight = height ?? heightOf(srcLight) ?? heightOf(srcDark);
+---
+
+<figure class="docs-screenshot" aria-labelledby={captionId}>
+  <picture>
+    <source srcset={darkUrl} media="(prefers-color-scheme: dark)" />
+    <img
+      src={lightUrl}
+      alt={alt}
+      width={finalWidth}
+      height={finalHeight}
+      loading="lazy"
+      decoding="async"
+    />
+  </picture>
+  {caption && (
+    <figcaption class="docs-screenshot-caption" id={captionId}>{caption}</figcaption>
+  )}
+</figure>
+
+<script>
+  /**
+   * `prefers-color-scheme` only handles OS-level theme. The docs site lets users
+   * override theme via the topbar toggle, which sets `data-theme` on <html>.
+   * Sync screenshot sources to that override so a user on light OS who toggles
+   * dark in the topbar still sees the dark screenshot.
+   */
+  function syncScreenshotTheme() {
+    const theme = document.documentElement.getAttribute('data-theme');
+    document
+      .querySelectorAll<HTMLElement>('.docs-screenshot picture')
+      .forEach((picture) => {
+        const source = picture.querySelector<HTMLSourceElement>('source');
+        const img = picture.querySelector<HTMLImageElement>('img');
+        if (!source || !img) return;
+        const dark = source.getAttribute('srcset');
+        const light = img.dataset.lightSrc ?? img.getAttribute('src');
+        if (!dark || !light) return;
+        if (!img.dataset.lightSrc) img.dataset.lightSrc = light;
+        img.src = theme === 'dark' ? dark : light;
+      });
+  }
+
+  document.addEventListener('astro:page-load', syncScreenshotTheme);
+  // Re-run when the topbar theme toggle dispatches a change. The toggle
+  // sets data-theme directly; observe attribute changes on <html>.
+  const observer = new MutationObserver(syncScreenshotTheme);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  });
+  syncScreenshotTheme();
+</script>
+
+<style>
+  .docs-screenshot {
+    margin: 1.5rem 0;
+    padding: 0;
+  }
+
+  .docs-screenshot picture,
+  .docs-screenshot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-lg);
+    overflow: hidden;
+    background: var(--ui-color-surface-raised);
+  }
+
+  .docs-screenshot-caption {
+    margin-top: 0.625rem;
+    font-size: 0.8125rem;
+    color: var(--ui-color-text-muted);
+    line-height: 1.55;
+  }
+</style>

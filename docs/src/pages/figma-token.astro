@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import DiagramFigure from '../components/DiagramFigure.astro';
-import PageEyebrow from '../components/PageEyebrow.astro';
+import PageHero from '../components/PageHero.astro';
 import BottomNav from '../components/BottomNav.astro';
 import personalAccessTokenScreenshot from '../assets/screenshots/personal-access-token.png';
 
@@ -17,18 +17,12 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
 >
   <div class="docs-inline-page">
 
-    <div style="margin-bottom: 1.25rem">
-      <PageEyebrow kind="howto" />
-      <h1 class="docs-page-h1">
-        Figma Setup
-      </h1>
-      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 660px; line-height: 1.65">
-        The <code>figma-console</code> MCP server talks to Figma through a
-        <strong>Desktop Bridge plugin</strong> running inside Figma Desktop. A REST access token is
-        a <em>secondary</em> channel — it only authorizes read-only metadata calls and is not
-        required for screenshots, selection tracking, or any interactive tool.
-      </p>
-    </div>
+    <PageHero kind="howto" title="Figma access" ledeMax="660px">
+      Figma is the single source of truth, and the <code>figma-console</code> MCP server reads it through a
+      <strong>Desktop Bridge plugin</strong> running inside Figma Desktop. A REST access token is
+      a <em>secondary</em> channel — it only authorizes read-only metadata calls and is not
+      required for screenshots, selection tracking, or any interactive tool.
+    </PageHero>
 
     <!-- Page-pair: setup is a precondition for the Figma reference page. -->
     <aside class="docs-pagepair" aria-label="Two related Figma pages">
@@ -327,9 +321,9 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
     </section>
 
     <BottomNav items={[
-      { to: '/tutorial',        label: 'Next',   title: 'Figma to Code',    emoji: '🎯' },
-      { to: '/figma',           label: 'Design', title: 'Figma as Source',  emoji: '🎨' },
-      { to: '/troubleshooting', label: 'Stuck?', title: 'Troubleshooting',  emoji: '🛟' },
+      { to: '/tutorial',        label: 'Next',   title: 'Figma to code',    icon: 'school' },
+      { to: '/figma',           label: 'Design', title: 'Figma as source',  icon: 'palette' },
+      { to: '/troubleshooting', label: 'Stuck?', title: 'Troubleshooting',  icon: 'help' },
     ]} />
 
   </div>

@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
-import PageEyebrow from '../components/PageEyebrow.astro';
+import PageHero from '../components/PageHero.astro';
 
 const DOCS_URL = 'https://atelier.pieper.io/llms-full.txt';
 type Fw = 'react' | 'angular' | 'vue';
@@ -114,16 +114,12 @@ const FRAMEWORKS: Fw[] = ['react', 'angular', 'vue'];
 >
   <div class="docs-inline-page">
 
-    <div style="margin-bottom: 2rem">
-      <PageEyebrow kind="howto" />
-      <h1 class="docs-page-h1">
-        Prompt Templates
-      </h1>
-      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 560px; line-height: 1.65">
-        Pre-written prompts that produce correct Atelier UI code on the first try.
-        Each prompt instructs the model to fetch the full API reference before generating.
-      </p>
-    </div>
+    <PageHero
+      kind="howto"
+      title="Prompt templates"
+      lede="Pre-written prompts that produce correct Atelier UI code on the first try. Each prompt instructs the model to fetch the full API reference before generating."
+      ledeMax="560px"
+    />
 
     <div style="padding: 1rem 1.25rem; background: rgba(68,218,218,0.05); border: 1px solid rgba(68,218,218,0.1); border-radius: var(--ui-radius-md); margin-bottom: 2rem">
       <p style="margin: 0 0 0.5rem; font-size: 0.82rem; font-weight: 700; color: var(--ui-color-text)">How to use</p>
@@ -135,7 +131,7 @@ const FRAMEWORKS: Fw[] = ['react', 'angular', 'vue'];
       </p>
       <ol style="margin: 0; padding-left: 1.1rem; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.9">
         <li>Select your framework below.</li>
-        <li>Click <strong style="color: var(--ui-color-text); font-family: monospace">copy prompt</strong> on any card.</li>
+        <li>Click <strong style="color: var(--ui-color-text); font-family: monospace">Copy prompt</strong> on any card.</li>
         <li>Paste into your LLM of choice (Claude, ChatGPT, Gemini, …) and send.</li>
       </ol>
     </div>
@@ -175,7 +171,7 @@ const FRAMEWORKS: Fw[] = ['react', 'angular', 'vue'];
                   <div style="font-size: 0.78rem; color: var(--ui-color-text-muted); line-height: 1.55">{card.description}</div>
                 </div>
                 <button class="copy-prompt-btn" style="flex-shrink: 0; display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.3rem 0.75rem; border: none; border-radius: var(--ui-radius-sm); background: var(--ui-color-primary); color: var(--ui-color-text-on-primary); font-size: 0.72rem; font-weight: 700; font-family: monospace; cursor: pointer; white-space: nowrap">
-                  copy prompt
+                  Copy prompt
                 </button>
               </div>
               {FRAMEWORKS.map(fw => (
@@ -250,8 +246,8 @@ const FRAMEWORKS: Fw[] = ['react', 'angular', 'vue'];
         const pre = card?.querySelector<HTMLElement>(`[data-prompt-fw="${activeFw}"]:not([hidden]) pre`);
         const text = pre?.textContent ?? '';
         navigator.clipboard.writeText(text).then(() => {
-          btn.textContent = '✓ copied';
-          setTimeout(() => { btn.textContent = 'copy prompt'; }, 1800);
+          btn.textContent = 'Copied';
+          setTimeout(() => { btn.textContent = 'Copy prompt'; }, 1800);
         });
       });
     });

@@ -2,8 +2,9 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import Jargon from '../components/Jargon.astro';
-import PageEyebrow from '../components/PageEyebrow.astro';
+import PageHero from '../components/PageHero.astro';
 import BottomNav from '../components/BottomNav.astro';
+import Callout from '../components/Callout.astro';
 
 const SITE_URL = 'https://atelier.pieper.io';
 
@@ -45,28 +46,21 @@ const skills = [
 >
   <div class="docs-inline-page">
 
-    <div style="margin-bottom: 2.5rem">
-      <PageEyebrow kind="reference" />
-      <h1 class="docs-page-h1">
-        Agent Skills
-      </h1>
-      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 520px; line-height: 1.65">
-        Everything this site exposes so AI agents can discover, read, and interact with Atelier UI automatically.
-      </p>
-    </div>
+    <PageHero
+      kind="reference"
+      title="Agent skills"
+      lede="Everything this site exposes so AI agents can discover, read, and interact with Atelier UI automatically."
+      ledeMax="520px"
+    />
 
-    <div style="margin-bottom: 2rem; padding: 0.85rem 1.1rem; background: color-mix(in srgb, var(--ui-color-primary) 6%, transparent); border: 1px solid color-mix(in srgb, var(--ui-color-primary) 20%, transparent); border-radius: var(--ui-radius-md); display: flex; gap: 0.75rem; align-items: flex-start">
-      <span style="font-size: 1rem; flex-shrink: 0; margin-top: 1px">💡</span>
-      <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
-        <strong style="color: var(--ui-color-text)">Good to know.</strong>
-        You do not need any of this for the workshop — your MCP servers already handle discovery.
-        This page documents the infrastructure (well-known files, RFC 9727, Link headers) so AI platforms and tool-builders can wire up Atelier UI without reading a single docs page.
-      </p>
-    </div>
+    <Callout tone="tip" title="Good to know.">
+      You do not need any of this for the workshop — your MCP servers already handle discovery.
+      This page documents the infrastructure (well-known files, RFC 9727, Link headers) so AI platforms and tool-builders can wire up Atelier UI without reading a single docs page.
+    </Callout>
 
     <!-- Discovery endpoints quick-ref -->
     <div class="docs-section">
-      <h2 class="docs-section-title">Discovery Endpoints</h2>
+      <h2 class="docs-section-title">Discovery endpoints</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
         All <Jargon term="well-known file">well-known</Jargon> and machine-readable files published at this domain:
       </p>
@@ -111,7 +105,7 @@ const skills = [
 
     <!-- HTTP features -->
     <div class="docs-section">
-      <h2 class="docs-section-title">HTTP Agent Features</h2>
+      <h2 class="docs-section-title">HTTP agent features</h2>
       <div style="display: flex; flex-direction: column; gap: 1.75rem">
 
         <div class="docs-step-row">
@@ -139,7 +133,7 @@ const skills = [
         <div class="docs-step-row">
           <span class="docs-step-badge">C</span>
           <div style="flex: 1">
-            <h3 class="docs-h3">Content Signals</h3>
+            <h3 class="docs-h3">Content signals</h3>
             <p class="docs-step-desc">
               <code>robots.txt</code> declares AI content usage preferences per the <a href="https://contentsignals.org/" target="_blank" rel="noopener noreferrer" class="docs-link-primary">Content Signals</a> draft standard: agents may use this content as inference input but not for model training.
             </p>
@@ -152,7 +146,7 @@ const skills = [
 
     <!-- Workspace Skills -->
     <div class="docs-section">
-      <h2 class="docs-section-title">Workspace Skills</h2>
+      <h2 class="docs-section-title">Workspace skills</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.75rem; font-size: 0.85rem">
         Multi-file Claude Code skills that ship architectural playbooks — references and assets loaded on demand by the active mode. Distinct from the MCP Skills below: these run in Claude Code itself, not as a remote MCP server.
       </p>
@@ -172,7 +166,7 @@ const skills = [
 
     <!-- MCP Skills -->
     <div class="docs-section">
-      <h2 class="docs-section-title">MCP Skills</h2>
+      <h2 class="docs-section-title">MCP skills</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.75rem; font-size: 0.85rem">
         Three Storybook MCP servers — one per framework — expose component documentation via the Model Context Protocol. Each skill is described in a SKILL.md file listed in the <a href="/.well-known/agent-skills/index.json" class="docs-link-primary">agent-skills index</a>.
       </p>
@@ -197,9 +191,9 @@ const skills = [
 
     <!-- Bottom nav -->
     <BottomNav items={[
-      { to: '/mcp',      label: 'Explore', title: 'MCP Explorer', emoji: '⬡' },
-      { to: '/llms',     label: 'Read',    title: 'llms.txt',     emoji: '📄' },
-      { to: '/workshop', label: 'Start',   title: 'Workshop',     emoji: '⚙' },
+      { to: '/mcp',      label: 'Explore', title: 'MCP Explorer', icon: 'smart_toy' },
+      { to: '/llms',     label: 'Read',    title: 'llms.txt',     icon: 'description' },
+      { to: '/workshop', label: 'Start',   title: 'Workshop',     icon: 'build_circle' },
     ]} />
 
   </div>

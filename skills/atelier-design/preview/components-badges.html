@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Badges & Chips</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 24px 26px; background: var(--ui-color-surface); font-family: var(--ui-font-family); color: var(--ui-color-text); }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; align-items: center; }
+  .badge { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 3px 8px; border-radius: 8px; line-height: 1; }
+  .b-success { background: #dcfce7; color: #166534; border: 1px solid #15803d40; }
+  .b-warning { background: #fef3c7; color: #854d0e; border: 1px solid #b4530940; }
+  .b-danger  { background: #fee2e2; color: #991b1b; border: 1px solid #b91c1c40; }
+  .b-info    { background: #e0f2fe; color: #0c4a6e; border: 1px solid #0369a140; }
+  .b-default { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+  .pill { padding: 6px 14px; border-radius: 9999px; border: 1px solid #e2e8f0; background: transparent; color: #475569; font-size: 13px; font-weight: 500; }
+  .pill.active { border-color: #006470; background: rgba(0,100,112,.12); color: #006470; }
+  .count { font-size: 12px; font-weight: 600; color: #006470; background: rgba(0,100,112,.08); border: 1px solid rgba(0,100,112,.25); border-radius: 8px; padding: 3px 8px; }
+  .label { font-family: var(--ui-font-mono); font-size: 10px; color: var(--ui-color-text-muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+  <div class="label">Badges · semantic</div>
+  <div class="row">
+    <span class="badge b-success">success</span>
+    <span class="badge b-warning">updated</span>
+    <span class="badge b-danger">deprecated</span>
+    <span class="badge b-info">new</span>
+    <span class="badge b-default">stable</span>
+  </div>
+  <div class="label">Filter pills · count</div>
+  <div class="row">
+    <span class="pill active">All</span>
+    <span class="pill">Inputs</span>
+    <span class="pill">Display</span>
+    <span class="pill">Overlay</span>
+    <span class="count">27</span>
+  </div>
+</body>
+</html>

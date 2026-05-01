@@ -1,0 +1,29 @@
+---
+interface Props {
+  /** Accessible label for the group (required for `role="tablist"` semantics). */
+  label: string;
+  /**
+   * Optional shared name for `aria-controls` wiring on consumers — emitted as
+   * `data-pill-group` so client scripts can target a specific group.
+   */
+  name?: string;
+}
+
+const { label, name } = Astro.props;
+---
+
+<div
+  class="docs-pill-group"
+  role="tablist"
+  aria-label={label}
+  data-pill-group={name}>
+  <slot />
+</div>
+
+<style>
+  .docs-pill-group {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+</style>

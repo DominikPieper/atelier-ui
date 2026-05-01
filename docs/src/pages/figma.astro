@@ -4,7 +4,7 @@ import { Code } from 'astro-expressive-code/components';
 import DiagramFigure from '../components/DiagramFigure.astro';
 import Jargon from '../components/Jargon.astro';
 import WorkflowDiagram from '../components/WorkflowDiagram.astro';
-import PageEyebrow from '../components/PageEyebrow.astro';
+import PageHero from '../components/PageHero.astro';
 import BottomNav from '../components/BottomNav.astro';
 const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 ---
@@ -15,13 +15,12 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
   currentPath="/figma"
 >
   <div class="docs-inline-page">
-    <div style="margin-bottom: 1.25rem">
-      <PageEyebrow kind="howto" />
-      <h1 class="docs-page-h1">Figma</h1>
-      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 520px; line-height: 1.65">
-        The design source of truth for every Atelier UI component — variables, frames, and token mappings, all in one file.
-      </p>
-    </div>
+    <PageHero
+      kind="howto"
+      title="Figma"
+      lede="The single source of truth for every Atelier UI component — variables, frames, and token mappings, all in one file."
+      ledeMax="520px"
+    />
 
     <!-- Page-pair: this page covers the manual workflow; figma-token covers
          the MCP-driven workflow that skips inspection entirely. -->
@@ -70,7 +69,7 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
         rel="noopener noreferrer"
         style="display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 600; color: var(--ui-color-primary); text-decoration: none"
       >
-        Open in Figma →
+        Open in Figma
       </a>
     </div>
 
@@ -146,8 +145,8 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
       <ul class="token-chip-grid" aria-label="Six representative tokens — Figma variable, matching CSS custom property, and resolved values">
         <li class="token-chip">
           <span class="token-chip-swatch token-chip-swatch--split" aria-hidden="true">
-            <span style="background: #2563eb"></span>
-            <span style="background: #3b82f6"></span>
+            <span style="background: #006470"></span>
+            <span style="background: #34d8d8"></span>
           </span>
           <div class="token-chip-names">
             <code class="token-chip-figma">color/primary</code>
@@ -155,14 +154,14 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
             <code class="token-chip-css">--ui-color-primary</code>
           </div>
           <div class="token-chip-meta">
-            <span><span class="token-meta-key">light</span><code>#2563eb</code></span>
-            <span><span class="token-meta-key">dark</span><code>#3b82f6</code></span>
+            <span><span class="token-meta-key">light</span><code>#006470</code></span>
+            <span><span class="token-meta-key">dark</span><code>#34d8d8</code></span>
           </div>
         </li>
         <li class="token-chip">
           <span class="token-chip-swatch token-chip-swatch--split" aria-hidden="true">
-            <span style="background: #fafafa"></span>
-            <span style="background: #252535"></span>
+            <span style="background: #f8fafc"></span>
+            <span style="background: #131c24"></span>
           </span>
           <div class="token-chip-names">
             <code class="token-chip-figma">color/surface-raised</code>
@@ -170,8 +169,8 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
             <code class="token-chip-css">--ui-color-surface-raised</code>
           </div>
           <div class="token-chip-meta">
-            <span><span class="token-meta-key">light</span><code>#fafafa</code></span>
-            <span><span class="token-meta-key">dark</span><code>#252535</code></span>
+            <span><span class="token-meta-key">light</span><code>#f8fafc</code></span>
+            <span><span class="token-meta-key">dark</span><code>#131c24</code></span>
           </div>
         </li>
         <li class="token-chip">
@@ -202,7 +201,7 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
         </li>
         <li class="token-chip">
           <span class="token-chip-swatch token-chip-swatch--radius" aria-hidden="true">
-            <span class="token-radius-corner" style="border-top-left-radius: 8px"></span>
+            <span class="token-radius-corner" style="border-top-left-radius: 10px"></span>
           </span>
           <div class="token-chip-names">
             <code class="token-chip-figma">radius/md</code>
@@ -210,12 +209,12 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
             <code class="token-chip-css">--ui-radius-md</code>
           </div>
           <div class="token-chip-meta">
-            <span><code>0.5rem · 8 px</code></span>
+            <span><code>0.625rem · 10 px</code></span>
           </div>
         </li>
         <li class="token-chip">
           <span class="token-chip-swatch token-chip-swatch--radius" aria-hidden="true">
-            <span class="token-radius-corner" style="border-top-left-radius: 12px"></span>
+            <span class="token-radius-corner" style="border-top-left-radius: 14px"></span>
           </span>
           <div class="token-chip-names">
             <code class="token-chip-figma">radius/lg</code>
@@ -223,7 +222,7 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
             <code class="token-chip-css">--ui-radius-lg</code>
           </div>
           <div class="token-chip-meta">
-            <span><code>0.75rem · 12 px</code></span>
+            <span><code>0.875rem · 14 px</code></span>
           </div>
         </li>
       </ul>
@@ -382,9 +381,9 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
     </div>
 
     <BottomNav items={[
-      { to: '/workshop',  label: 'Setup',   title: 'Workshop',     emoji: '🔧' },
-      { to: '/storybook', label: 'Explore', title: 'Storybook',    emoji: '📖' },
-      { to: '/mcp',       label: 'Tools',   title: 'MCP Explorer', emoji: '⬡' },
+      { to: '/workshop',  label: 'Setup',   title: 'Workshop',     icon: 'build_circle' },
+      { to: '/storybook', label: 'Explore', title: 'Storybook',    icon: 'book' },
+      { to: '/mcp',       label: 'Tools',   title: 'MCP Explorer', icon: 'smart_toy' },
     ]} />
   </div>
 </BaseLayout>

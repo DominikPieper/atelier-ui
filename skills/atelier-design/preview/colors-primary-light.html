@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Colors — Primary (Light)</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 22px 24px; background: var(--ui-color-surface); font-family: var(--ui-font-family); color: var(--ui-color-text); }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .sw { border-radius: 10px; overflow: hidden; border: 1px solid var(--ui-color-border); }
+  .sw .chip { height: 56px; }
+  .sw .meta { padding: 8px 10px; }
+  .sw .name { font-size: 12px; font-weight: 600; }
+  .sw .hex  { font-family: var(--ui-font-mono); font-size: 11px; color: var(--ui-color-text-muted); }
+  .label { font-family: var(--ui-font-mono); font-size: 10px; color: var(--ui-color-text-muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+  <div class="label">Primary · Conciso deep teal · light mode</div>
+  <div class="grid">
+    <div class="sw"><div class="chip" style="background:#006470"></div><div class="meta"><div class="name" style="color:var(--ui-color-text)">primary</div><div class="hex">#006470</div></div></div>
+    <div class="sw"><div class="chip" style="background:#004e58"></div><div class="meta"><div class="name">primary-hover</div><div class="hex">#004e58</div></div></div>
+    <div class="sw"><div class="chip" style="background:#003a42"></div><div class="meta"><div class="name">primary-active</div><div class="hex">#003a42</div></div></div>
+    <div class="sw"><div class="chip" style="background:rgba(0,100,112,0.08)"></div><div class="meta"><div class="name">primary-light</div><div class="hex">rgba(0,100,112,.08)</div></div></div>
+  </div>
+</body>
+</html>

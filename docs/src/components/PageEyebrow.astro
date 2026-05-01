@@ -1,11 +1,13 @@
 ---
+import Icon from './Icon.astro';
+
 type EyebrowKind = 'tutorial' | 'howto' | 'reference' | 'explanation';
 
 interface Props {
   kind: EyebrowKind;
   /** Display label for the kind. Defaults to a capitalised form. */
   kindLabel?: string;
-  /** Optional time estimate, e.g. "~30 min". Rendered with a clock glyph. */
+  /** Optional time estimate, e.g. "~30 min". Rendered with a clock icon. */
   time?: string;
   /** Optional tag — short modifier, e.g. "Hands-on · Figma → Code". */
   tag?: string;
@@ -24,6 +26,23 @@ const label = kindLabel ?? KIND_LABEL[kind];
 
 <div class="page-eyebrow">
   <span class={`page-eyebrow-kind page-eyebrow-kind--${kind}`}>{label}</span>
-  {time && <span class="page-eyebrow-time">⏱ {time}</span>}
+  {time && (
+    <span class="page-eyebrow-time">
+      <Icon name="schedule" class="page-eyebrow-time-icon" />
+      <span>{time}</span>
+    </span>
+  )}
   {tag && <span class="page-eyebrow-tag">{tag}</span>}
 </div>
+
+<style>
+  .page-eyebrow-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+  }
+  .page-eyebrow-time-icon {
+    width: 1em;
+    height: 1em;
+  }
+</style>

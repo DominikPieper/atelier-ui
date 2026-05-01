@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import McpExplorer from '../components/McpExplorer';
 import DiagramFigure from '../components/DiagramFigure.astro';
-import PageEyebrow from '../components/PageEyebrow.astro';
+import PageHero from '../components/PageHero.astro';
 ---
 
 <BaseLayout
@@ -11,23 +11,17 @@ import PageEyebrow from '../components/PageEyebrow.astro';
   currentPath="/mcp"
 >
   <div style="max-width: 1000px; margin: 0 auto; padding: 0 1.5rem">
-    <div style="margin-bottom: 2rem">
-      <PageEyebrow kind="reference" />
-      <h1 class="docs-page-h1">
-        MCP Playground
-      </h1>
-      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 620px; line-height: 1.65">
-        Explore the Model Context Protocol servers that power AI-assisted Atelier UI
-        development — one Storybook MCP per framework plus the figma-console MCP
-        that reads Figma directly.
-      </p>
-      <p style="font-size: 0.82rem; color: var(--ui-color-text-muted); margin: 0.7rem 0 0; max-width: 620px; line-height: 1.6">
-        <strong style="color: var(--ui-color-text)">New to MCP?</strong>
-        An MCP server exposes a small set of functions an AI client can call over a
-        standard request/response format (JSON-RPC — think "remote function call");
-        each Atelier UI MCP returns structured data, no screenshots or copy-paste.
-      </p>
-    </div>
+    <PageHero kind="reference" title="MCP playground" ledeMax="620px">
+      Explore the Model Context Protocol servers that power AI-assisted Atelier UI
+      development — one Storybook MCP per framework plus the figma-console MCP
+      that reads Figma directly. The full loop: <strong>inspect → prompt → ship → iterate</strong>.
+    </PageHero>
+
+    <p style="font-size: 0.82rem; color: var(--ui-color-text-muted); margin: -1.5rem 0 2rem; max-width: 620px; line-height: 1.6">
+      An MCP server exposes a small set of functions an AI client can call over a
+      standard request/response format (JSON-RPC — think "remote function call");
+      each Atelier UI MCP returns structured data, no screenshots or copy-paste.
+    </p>
 
     <DiagramFigure caption="One AI client talks to three parallel Storybook MCP servers — one per framework. The request format (JSON-RPC) is identical; only the returned props change.">
       <svg viewBox="0 0 960 340" role="img" aria-labelledby="mcp-title mcp-desc" preserveAspectRatio="xMidYMid meet">

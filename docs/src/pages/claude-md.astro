@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
-import PageEyebrow from '../components/PageEyebrow.astro';
+import PageHero from '../components/PageHero.astro';
 import BottomNav from '../components/BottomNav.astro';
 
 const SITE_URL = 'https://atelier.pieper.io';
@@ -149,18 +149,12 @@ Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
 >
   <div class="docs-inline-page">
 
-    <div style="margin-bottom: 2.5rem">
-      <PageEyebrow kind="reference" />
-      <h1 class="docs-page-h1">
-        CLAUDE.md Template
-      </h1>
-      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 520px; line-height: 1.65">
-        Drop this into your project root as <code>CLAUDE.md</code> to give Claude Code persistent context about Atelier UI — MCP servers, design tokens, and component conventions — so every session starts component-aware.
-      </p>
-    </div>
+    <PageHero kind="reference" title="CLAUDE.md template" ledeMax="520px">
+      Drop this into your project root as <code>CLAUDE.md</code> to give Claude Code persistent context about Atelier UI — MCP servers, design tokens, and component conventions — so every session starts component-aware.
+    </PageHero>
 
     <!-- What is CLAUDE.md -->
-    <div style="padding: 1rem 1.25rem; background: var(--ui-color-primary-light); border: 1px solid color-mix(in srgb, var(--ui-color-primary) 20%, transparent); border-radius: var(--ui-radius-md); margin-bottom: 2rem">
+    <div style="padding: 1rem 1.25rem; background: var(--ui-color-primary-light); border: 1px solid var(--ui-color-primary-border); border-radius: var(--ui-radius-md); margin-bottom: 2rem">
       <p style="margin: 0 0 0.3rem; font-size: 0.82rem; font-weight: 700; color: var(--ui-color-text)">What is CLAUDE.md?</p>
       <p style="margin: 0 0 0.55rem; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
         <code>CLAUDE.md</code> is a project-level instructions file that Claude Code reads at the start of every session. It sets rules, conventions, and context so you never have to repeat "this project uses Atelier UI" in every prompt.
@@ -219,9 +213,9 @@ Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
 
     <!-- Bottom nav -->
     <BottomNav items={[
-      { to: '/workshop', label: 'Setup',  title: 'Workshop',         emoji: '⚙' },
-      { to: '/tokens',   label: 'Browse', title: 'Design Tokens',    emoji: '🎨' },
-      { to: '/prompts',  label: 'Use',    title: 'Prompt Templates', emoji: '💬' },
+      { to: '/workshop', label: 'Setup',  title: 'Workshop',         icon: 'build_circle' },
+      { to: '/tokens',   label: 'Browse', title: 'Design tokens',    icon: 'palette' },
+      { to: '/prompts',  label: 'Use',    title: 'Prompt templates', icon: 'chat' },
     ]} />
 
   </div>

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Shadows</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 26px 24px; background: var(--ui-color-surface-sunken); font-family: var(--ui-font-family); color: var(--ui-color-text); }
+  .row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+  .sw { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .box { width: 80px; height: 60px; background: var(--ui-color-surface); border-radius: 10px; border: 1px solid var(--ui-color-border); }
+  .name { font-family: var(--ui-font-mono); font-size: 11px; color: var(--ui-color-text); }
+  .label { font-family: var(--ui-font-mono); font-size: 10px; color: var(--ui-color-text-muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+  <div class="label">Shadow scale — slate-tinted, dual-layer</div>
+  <div class="row">
+    <div class="sw"><div class="box" style="box-shadow:0 1px 2px 0 rgba(15,23,42,0.05)"></div><div class="name">xs</div></div>
+    <div class="sw"><div class="box" style="box-shadow:0 1px 3px 0 rgba(15,23,42,0.08), 0 1px 2px -1px rgba(15,23,42,0.06)"></div><div class="name">sm</div></div>
+    <div class="sw"><div class="box" style="box-shadow:0 4px 6px -1px rgba(15,23,42,0.08), 0 2px 4px -2px rgba(15,23,42,0.05)"></div><div class="name">md</div></div>
+    <div class="sw"><div class="box" style="box-shadow:0 10px 15px -3px rgba(15,23,42,0.08), 0 4px 6px -4px rgba(15,23,42,0.04)"></div><div class="name">lg</div></div>
+    <div class="sw"><div class="box" style="box-shadow:0 20px 25px -5px rgba(15,23,42,0.10), 0 8px 10px -6px rgba(15,23,42,0.04)"></div><div class="name">xl</div></div>
+  </div>
+</body>
+</html>

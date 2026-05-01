@@ -1,0 +1,103 @@
+---
+import Icon, { type IconName } from './Icon.astro';
+
+type Tone = 'note' | 'tip' | 'warning';
+
+interface Props {
+  tone?: Tone;
+  /** Accessible heading inside the callout. Optional — slot can carry it. */
+  title?: string;
+}
+
+const { tone = 'note', title } = Astro.props;
+
+const TONE_ICON: Record<Tone, IconName> = {
+  note: 'info',
+  tip: 'lightbulb',
+  warning: 'warning',
+};
+---
+
+<aside class:list={['docs-callout', `docs-callout--${tone}`]} role="note">
+  <span class="docs-callout-icon" aria-hidden="true">
+    <Icon name={TONE_ICON[tone]} />
+  </span>
+  <div class="docs-callout-body">
+    {title && <p class="docs-callout-title">{title}</p>}
+    <slot />
+  </div>
+</aside>
+
+<style>
+  .docs-callout {
+    display: flex;
+    gap: 0.875rem;
+    align-items: flex-start;
+    padding: 1rem 1.125rem;
+    border: 1px solid var(--ui-color-border);
+    border-left-width: 3px;
+    border-radius: var(--ui-radius-md);
+    background: var(--ui-color-surface-raised);
+    color: var(--ui-color-text);
+    margin: 1.5rem 0;
+  }
+
+  .docs-callout-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+    color: var(--ui-color-text-muted);
+    font-size: 1.125rem;
+  }
+
+  .docs-callout-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .docs-callout-body :global(:first-child) {
+    margin-top: 0;
+  }
+
+  .docs-callout-body :global(:last-child) {
+    margin-bottom: 0;
+  }
+
+  .docs-callout-title {
+    font-weight: 600;
+    margin: 0 0 0.375rem;
+    color: var(--ui-color-text);
+  }
+
+  .docs-callout--note {
+    border-left-color: var(--ui-color-info);
+  }
+
+  .docs-callout--note .docs-callout-icon {
+    color: var(--ui-color-info);
+  }
+
+  .docs-callout--tip {
+    background: var(--ui-color-primary-tint-6);
+    border-color: var(--ui-color-primary-border);
+    border-left-color: var(--ui-color-primary);
+  }
+
+  .docs-callout--tip .docs-callout-icon {
+    color: var(--ui-color-primary);
+  }
+
+  .docs-callout--warning {
+    background: var(--ui-color-warning-bg);
+    border-color: color-mix(in srgb, var(--ui-color-warning) 30%, transparent);
+    border-left-color: var(--ui-color-warning);
+    color: var(--ui-color-warning-text);
+  }
+
+  .docs-callout--warning .docs-callout-icon {
+    color: var(--ui-color-warning);
+  }
+</style>

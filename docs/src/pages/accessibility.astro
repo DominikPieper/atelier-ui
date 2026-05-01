@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PageEyebrow from '../components/PageEyebrow.astro';
+import PageHero from '../components/PageHero.astro';
 import BottomNav from '../components/BottomNav.astro';
 
 type KbdRow = {
@@ -73,7 +73,7 @@ const RECENT_A11Y: RecentA11y[] = [
   currentPath="/accessibility"
 >
   <nav slot="toc">
-    <a href="#stance"          class="docs-toc-link">Our stance</a>
+    <a href="#stance"          class="docs-toc-link">Stance</a>
     <a href="#non-color"       class="docs-toc-link">Non-color indicators</a>
     <a href="#contrast"        class="docs-toc-link">Contrast &amp; tokens</a>
     <a href="#keyboard"        class="docs-toc-link">Keyboard navigation</a>
@@ -86,19 +86,19 @@ const RECENT_A11Y: RecentA11y[] = [
 
   <div class="docs-inline-page">
 
-    <div style="margin-bottom: 2.5rem">
-      <PageEyebrow kind="explanation" />
-      <h1 class="docs-page-h1">Accessibility</h1>
-      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 560px; line-height: 1.65">
-        Atelier UI targets <strong style="color: var(--ui-color-text)">WCAG 2.1 Level AA</strong> out of the box —
-        contrast, non-color indicators, keyboard operability, and screen-reader semantics are baked into the primitives.
-        This page is a map of what the library does for you, and what you are still responsible for.
-      </p>
-    </div>
+    <PageHero kind="explanation" title="Accessibility" ledeMax="560px">
+      Atelier UI targets <strong>WCAG 2.1 Level AA</strong> out of the box —
+      contrast, non-color indicators, keyboard operability, and screen-reader semantics are baked into the primitives.
+      This page is a map of what the library does for you, and what you are still responsible for.
+    </PageHero>
 
     <!-- Stance -->
     <section class="docs-section">
-      <h2 id="stance" class="docs-section-title">Our stance</h2>
+      <h2 id="stance" class="docs-section-title">Stance</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 1rem">
+        <strong style="color: var(--ui-color-text)">ARIA-first.</strong>
+        Every interactive surface follows the matching WAI-ARIA pattern, and keyboard interactions are standards-aligned — not bolted on after the fact.
+      </p>
       <ul style="color: var(--ui-color-text-muted); line-height: 1.75; padding-left: 1.25rem">
         <li>Every interactive component ships with a keyboard path that matches WAI-ARIA Authoring Practices.</li>
         <li>Semantic state (success / warning / danger / info / invalid) is expressed in at least two channels — color + glyph or color + text — so it survives greyscale, high-contrast modes, and color-vision deficiencies.</li>
@@ -222,6 +222,7 @@ const RECENT_A11Y: RecentA11y[] = [
     <section class="docs-section">
       <h2 id="reporting" class="docs-section-title">Reporting accessibility issues</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.65">
+        Atelier is a teaching artifact, not a production library, but accessibility regressions matter all the same.
         If you find a component that fails AA contrast, a keyboard path that dead-ends, or an ARIA role that misrepresents state, that's a bug.
         Open an issue on
         <a href="https://github.com/DominikPieper/atelier-ui/issues" target="_blank" rel="noopener noreferrer" class="docs-link-primary">GitHub</a>
@@ -231,9 +232,9 @@ const RECENT_A11Y: RecentA11y[] = [
     </section>
 
     <BottomNav items={[
-      { to: '/tokens',            label: 'Reference', title: 'Design Tokens',     emoji: '🎨' },
-      { to: '/design-principles', label: 'Why',       title: 'Design Principles', emoji: '🧠' },
-      { to: '/components',        label: 'Browse',    title: 'Components',        emoji: '🧩' },
+      { to: '/tokens',            label: 'Reference', title: 'Design tokens',     icon: 'palette' },
+      { to: '/design-principles', label: 'Why',       title: 'Design principles', icon: 'schema' },
+      { to: '/components',        label: 'Browse',    title: 'Components',        icon: 'widgets' },
     ]} />
 
   </div>

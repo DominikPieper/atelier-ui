@@ -41,18 +41,36 @@ export default function ComponentGallery() {
 
       <div className="docs-filter-bar">
         <div className="docs-filter-search-wrap">
-          <span className="docs-filter-search-icon">🔍</span>
+          <svg
+            className="docs-filter-search-icon"
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
           <input
             type="text"
             placeholder="Search components..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="docs-filter-search"
+            aria-label="Search components"
           />
         </div>
-        <div className="docs-category-pills">
+        <div className="docs-category-pills" role="group" aria-label="Filter components by category">
           <button
+            type="button"
             className={`docs-category-pill${!activeCategory ? ' active' : ''}`}
+            aria-pressed={!activeCategory}
             onClick={() => setActiveCategory(null)}
           >
             All
@@ -60,10 +78,12 @@ export default function ComponentGallery() {
           {categories.map(cat => (
             <button
               key={cat}
+              type="button"
               className={`docs-category-pill${activeCategory === cat ? ' active' : ''}`}
+              aria-pressed={activeCategory === cat}
               onClick={() => setActiveCategory(cat === activeCategory ? null : cat)}
             >
-              {CATEGORY_ICONS[cat]} {cat}
+              {cat}
             </button>
           ))}
         </div>
@@ -72,7 +92,7 @@ export default function ComponentGallery() {
       {Object.entries(filteredCategories).map(([category, components]) => (
         <div key={category} className="docs-section">
           <h2 className="docs-section-title">
-            {CATEGORY_ICONS[category]} {category}
+            {category}
           </h2>
           <div className="docs-component-grid">
             {components.map((name) => {
@@ -83,8 +103,8 @@ export default function ComponentGallery() {
                   href={`/components/${name}`}
                   className="docs-component-card"
                 >
-                  <div className="docs-component-card-icon">
-                    {CATEGORY_ICONS[doc?.category ?? ''] ?? '🧩'}
+                  <div className="docs-component-card-icon" aria-hidden="true">
+                    {(doc?.name ?? formatComponentName(name)).replace(/^Llm/, '').charAt(0)}
                   </div>
                   <div className="docs-component-card-header">
                     <div className="docs-component-card-name">
@@ -101,12 +121,13 @@ export default function ComponentGallery() {
                     {(doc?.description.length ?? 0) > 85 ? '…' : ''}
                   </div>
                   <div className="docs-component-card-footer">
-                    <span className="docs-component-card-cta">View docs →</span>
-                    <div className="docs-fw-dots" title="Available for Angular, React & Vue">
-                      <span className="docs-fw-dot docs-fw-dot--angular" title="Angular"></span>
-                      <span className="docs-fw-dot docs-fw-dot--react" title="React"></span>
-                      <span className="docs-fw-dot docs-fw-dot--vue" title="Vue"></span>
-                    </div>
+                    <span className="docs-component-card-cta" aria-hidden="true">View docs</span>
+                    <span className="docs-fw-dots" aria-hidden="true">
+                      <span className="docs-fw-dot docs-fw-dot--angular"></span>
+                      <span className="docs-fw-dot docs-fw-dot--react"></span>
+                      <span className="docs-fw-dot docs-fw-dot--vue"></span>
+                    </span>
+                    <span className="docs-visually-hidden">View docs. Available for Angular, React, and Vue.</span>
                   </div>
                 </a>
               );
@@ -117,7 +138,6 @@ export default function ComponentGallery() {
 
       {Object.keys(filteredCategories).length === 0 && (
         <div className="docs-not-found">
-          <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🔍</div>
           <p>No components found matching "{query}"</p>
         </div>
       )}

@@ -64,7 +64,7 @@ function CodeBlock({ code, lang }: { code: string; lang: string }) {
     <div className="docs-code-block">
       <div className="docs-code-block-header">
         <span className="docs-code-block-lang">{lang}</span>
-        <button className={`docs-code-block-copy${copied ? ' copied' : ''}`} onClick={copy}>{copied ? '✓ Copied' : 'Copy'}</button>
+        <button className={`docs-code-block-copy${copied ? ' copied' : ''}`} onClick={copy}>{copied ? 'Copied' : 'Copy'}</button>
       </div>
       <pre><code>{code}</code></pre>
     </div>
@@ -379,10 +379,9 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
   if (!doc) {
     return (
       <div className="docs-not-found">
-        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🧩</div>
         <h2>Component not found</h2>
         <p>The component <code>{name}</code> does not exist in this library.</p>
-        <a href="/components" className="docs-btn docs-btn-primary">← Back to Components</a>
+        <a href="/components" className="docs-btn docs-btn-primary">Back to components</a>
       </div>
     );
   }
@@ -567,7 +566,7 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
           rel="noopener noreferrer"
           className="docs-btn docs-btn-outline"
         >
-          📖 Explore in Storybook →
+          Explore in Storybook
         </a>
       </div>
 
@@ -577,26 +576,26 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
           <h2 className="docs-section-title">Prototyping with AI</h2>
           <div className="docs-ai-grid">
             <div className="docs-ai-card docs-ai-best-practices">
-              <h3 className="docs-ai-card-title">✨ Best Practices</h3>
+              <h3 className="docs-ai-card-title">Best practices</h3>
               <ul className="docs-ai-list">
                 {doc.aiUsage.bestPractices.map((bp, i) => <li key={i}>{bp}</li>)}
               </ul>
             </div>
             <div className="docs-ai-card docs-ai-hallucinations">
-              <h3 className="docs-ai-card-title">⚠️ Common Hallucinations</h3>
+              <h3 className="docs-ai-card-title">Common hallucinations</h3>
               <ul className="docs-ai-list">
                 {doc.aiUsage.commonHallucinations.map((ch, i) => <li key={i}>{ch}</li>)}
               </ul>
             </div>
             <div className="docs-ai-card docs-ai-prompt" style={{ gridColumn: '1 / -1' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                <h3 className="docs-ai-card-title" style={{ marginBottom: 0 }}>💬 Example Prompt</h3>
+                <h3 className="docs-ai-card-title" style={{ marginBottom: 0 }}>Example prompt</h3>
                 <button
                   className="docs-btn docs-btn-outline docs-btn-sm"
                   onClick={() => doc.aiUsage && navigator.clipboard.writeText(doc.aiUsage.promptSnippet)}
                   style={{ padding: '4px 10px', fontSize: '0.75rem' }}
                 >
-                  Copy Prompt
+                  Copy prompt
                 </button>
               </div>
               <p className="docs-ai-prompt-text">{doc.aiUsage.promptSnippet}</p>

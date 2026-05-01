@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Spacing scale</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 22px 24px; background: var(--ui-color-surface); font-family: var(--ui-font-family); color: var(--ui-color-text); }
+  .row { display: flex; align-items: center; gap: 14px; margin-bottom: 7px; }
+  .name { font-family: var(--ui-font-mono); font-size: 11px; min-width: 56px; color: var(--ui-color-text-muted); }
+  .px   { font-family: var(--ui-font-mono); font-size: 11px; min-width: 56px; color: var(--ui-color-text); }
+  .bar  { background: var(--ui-color-primary); height: 10px; border-radius: 3px; }
+  .label { font-family: var(--ui-font-mono); font-size: 10px; color: var(--ui-color-text-muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+  <div class="label">Spacing — 0.25rem base · 1 / 2 / 3 / 4 / 5 / 6 / 8 / 10 / 12 / 16</div>
+  <div class="row"><div class="name">--ui-1</div><div class="px">4px</div><div class="bar" style="width:4px"></div></div>
+  <div class="row"><div class="name">--ui-2</div><div class="px">8px</div><div class="bar" style="width:8px"></div></div>
+  <div class="row"><div class="name">--ui-3</div><div class="px">12px</div><div class="bar" style="width:12px"></div></div>
+  <div class="row"><div class="name">--ui-4</div><div class="px">16px</div><div class="bar" style="width:16px"></div></div>
+  <div class="row"><div class="name">--ui-6</div><div class="px">24px</div><div class="bar" style="width:24px"></div></div>
+  <div class="row"><div class="name">--ui-8</div><div class="px">32px</div><div class="bar" style="width:32px"></div></div>
+  <div class="row"><div class="name">--ui-12</div><div class="px">48px</div><div class="bar" style="width:48px"></div></div>
+  <div class="row"><div class="name">--ui-16</div><div class="px">64px</div><div class="bar" style="width:64px"></div></div>
+</body>
+</html>

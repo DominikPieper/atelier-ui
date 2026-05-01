@@ -1,0 +1,153 @@
+---
+type Framework = 'angular' | 'react' | 'vue';
+
+interface Props {
+  /** PascalCase component name with the `Llm` prefix (e.g. `LlmButton`). */
+  name: string;
+  desc: string;
+  /** One-character mono glyph rendered in the icon tile. */
+  glyph?: string;
+  href: string;
+  /** Frameworks this component is available in. Defaults to all three. */
+  frameworks?: Framework[];
+}
+
+const {
+  name,
+  desc,
+  glyph,
+  href,
+  frameworks = ['angular', 'react', 'vue'],
+} = Astro.props;
+
+const FRAMEWORK_LABELS: Record<Framework, string> = {
+  angular: 'Angular',
+  react: 'React',
+  vue: 'Vue',
+};
+
+const fwSummary = frameworks.map((f) => FRAMEWORK_LABELS[f]).join(', ');
+---
+
+<a class="docs-comp-card" href={href}>
+  <span class="docs-comp-card-icon" aria-hidden="true">
+    {glyph ?? name.charAt(3) ?? name.charAt(0)}
+  </span>
+  <span class="docs-comp-card-name">{name}</span>
+  <span class="docs-comp-card-desc">{desc}</span>
+  <span class="docs-comp-card-foot">
+    <span class="docs-comp-card-cta" aria-hidden="true">View story</span>
+    <span class="docs-comp-card-fws" aria-hidden="true">
+      {frameworks.map((fw) => (
+        <span class={`docs-comp-card-fw docs-comp-card-fw--${fw}`}></span>
+      ))}
+    </span>
+    <span class="docs-visually-hidden">Available for {fwSummary}.</span>
+  </span>
+</a>
+
+<style>
+  .docs-comp-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.25rem;
+    background: var(--ui-color-surface);
+    border: 1px solid var(--ui-color-border);
+    border-top: 2px solid transparent;
+    border-radius: var(--ui-radius-lg);
+    color: inherit;
+    text-decoration: none;
+    transition: transform var(--ui-duration-normal) var(--ui-ease-out),
+      box-shadow var(--ui-duration-normal) var(--ui-ease-out),
+      border-top-color var(--ui-duration-normal) var(--ui-ease-out);
+  }
+
+  .docs-comp-card:hover {
+    border-top-color: var(--ui-color-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px color-mix(in srgb, var(--ui-color-primary) 10%, transparent);
+  }
+
+  .docs-comp-card:focus-visible {
+    outline: none;
+    box-shadow: var(--ui-focus-ring);
+  }
+
+  .docs-comp-card-icon {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--ui-radius-sm);
+    background: var(--ui-color-primary-light);
+    color: var(--ui-color-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+    font-size: 0.875rem;
+    font-weight: 700;
+    margin-bottom: 0.375rem;
+  }
+
+  .docs-comp-card-name {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--ui-color-text);
+  }
+
+  .docs-comp-card-desc {
+    font-size: 0.8125rem;
+    color: var(--ui-color-text-muted);
+    line-height: 1.45;
+    flex: 1;
+  }
+
+  .docs-comp-card-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+  }
+
+  .docs-comp-card-cta {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--ui-color-primary);
+  }
+
+  .docs-comp-card-fws {
+    display: inline-flex;
+    gap: 3px;
+  }
+
+  .docs-comp-card-fw {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    opacity: 0.85;
+  }
+
+  .docs-comp-card-fw--angular {
+    background: #dd0031;
+  }
+
+  .docs-comp-card-fw--react {
+    background: #61dafb;
+  }
+
+  .docs-comp-card-fw--vue {
+    background: #42b883;
+  }
+
+  .docs-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>

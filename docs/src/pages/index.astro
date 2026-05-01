@@ -1,8 +1,27 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Jargon from '../components/Jargon.astro';
 import Icon from '../components/Icon.astro';
-import WorkflowDiagram from '../components/WorkflowDiagram.astro';
+import SectionHead from '../components/SectionHead.astro';
+import CodeCard from '../components/CodeCard.astro';
+
+const MCP_CONFIG = `{
+  "mcpServers": {
+    "storybook-angular": {
+      "type": "http",
+      "url": "https://atelier.pieper.io/storybook-angular/mcp"
+    },
+    "storybook-react": {
+      "type": "http",
+      "url": "https://atelier.pieper.io/storybook-react/mcp"
+    },
+    "storybook-vue": {
+      "type": "http",
+      "url": "https://atelier.pieper.io/storybook-vue/mcp"
+    }
+  }
+}`;
+
+const SCAFFOLD_CMD = 'npx create-atelier-ui-workspace';
 ---
 
 <BaseLayout
@@ -10,193 +29,191 @@ import WorkflowDiagram from '../components/WorkflowDiagram.astro';
   currentPath="/"
 >
   <!-- Hero -->
-  <section class="docs-hero-v2">
-    <div class="docs-hero-grid-bg"></div>
-    <div class="docs-hero-glow"></div>
-    <div class="docs-hero-glow-2"></div>
+  <section class="docs-hero-v2" aria-labelledby="hero-title">
+    <div class="docs-hero-grid-bg" aria-hidden="true"></div>
+    <div class="docs-hero-glow" aria-hidden="true"></div>
 
     <div class="docs-hero-eyebrow">
-      <span>✦</span> AI Workshop for Component-Driven UIs
+      <span class="docs-hero-eyebrow-dot" aria-hidden="true"></span>
+      Workshop · Component-driven UIs with AI
     </div>
 
-    <h1 class="docs-hero-wordmark">ATELIER</h1>
+    <h1 class="docs-hero-wordmark" id="hero-title">ATELIER</h1>
 
     <p class="docs-hero-subtitle">
-      <strong>Workshop in a box.</strong> Design in Figma, explore in Storybook,
-      ship with Claude — across <strong>Angular</strong>, <strong>React</strong>,
-      and <strong>Vue</strong>.
+      Design in Figma. Explore in Storybook. Ship with AI.
     </p>
     <p class="docs-hero-disclaimer">
-      Teaching artifact · not a production library
+      Teaching artifact &middot; not a production library
     </p>
 
     <div class="docs-hero-actions">
       <a href="/workshop" class="docs-btn docs-btn-primary">
-        Start the Workshop →
+        Start the workshop
       </a>
-      <a href="/figma" class="docs-btn docs-btn-outline">
-        View Figma File
-      </a>
-    </div>
-  </section>
-
-  <!-- Where to start — 3-step orientation strip -->
-  <section class="docs-orient-strip" aria-label="Where to start">
-    <div class="docs-orient-eyebrow">Where to start</div>
-    <div class="docs-orient-cards">
-      <a href="#workflow" class="docs-orient-card">
-        <div class="docs-orient-card-time">⏱ Read · 5 min</div>
-        <div class="docs-orient-card-title">What is Atelier?</div>
-        <div class="docs-orient-card-desc">The three pillars and how they connect.</div>
-        <div class="docs-orient-card-link">Read the overview →</div>
-      </a>
-      <a href="/workshop" class="docs-orient-card">
-        <div class="docs-orient-card-time">⏱ Run · 25 min</div>
-        <div class="docs-orient-card-title">Scaffold your workspace</div>
-        <div class="docs-orient-card-desc">One command + preflight verifies your setup.</div>
-        <div class="docs-orient-card-link">Open the Workshop →</div>
-      </a>
-      <a href="/tutorial" class="docs-orient-card docs-orient-card--accent">
-        <div class="docs-orient-card-time">⏱ Build · 30 min</div>
-        <div class="docs-orient-card-title">First component with Claude</div>
-        <div class="docs-orient-card-desc">Figma → MCP → token-exact code.</div>
-        <div class="docs-orient-card-link">Open the Tutorial →</div>
+      <a href="/components" class="docs-btn docs-btn-outline">
+        Browse components
       </a>
     </div>
   </section>
 
-  <!-- Workflow section -->
-  <h2 class="docs-home-section-heading" id="workflow">Workflow</h2>
+  <!-- Three pillars -->
+  <section class="docs-pillars-section" aria-labelledby="pillars-title">
+    <SectionHead
+      eyebrow="The three pillars"
+      title="A loop, not a stack."
+      sub="Each tool reads the others through Model Context Protocol. Inspect → prompt → ship → iterate."
+      align="center"
+      id="pillars-title"
+    />
+    <div class="docs-pillars">
+      <article class="docs-pillar">
+        <div class="docs-pillar-step">01 &middot; Inspect</div>
+        <div class="docs-pillar-icon" aria-hidden="true"><Icon name="figma" /></div>
+        <h3 class="docs-pillar-name">Figma</h3>
+        <p class="docs-pillar-desc">
+          Single source of truth for tokens and component frames. Variables sync to <code>tokens.css</code>.
+        </p>
+        <div class="docs-pillar-meta">
+          <span class="docs-pill-tag">Variables</span>
+          <span class="docs-pill-tag">Frames</span>
+        </div>
+      </article>
+      <article class="docs-pillar">
+        <div class="docs-pillar-step">02 &middot; Prompt</div>
+        <div class="docs-pillar-icon" aria-hidden="true"><Icon name="book" /></div>
+        <h3 class="docs-pillar-name">Storybook</h3>
+        <p class="docs-pillar-desc">
+          Per-framework live explorer. Each instance hosts an MCP endpoint Claude can call.
+        </p>
+        <div class="docs-pillar-meta">
+          <span class="docs-pill-tag">/mcp</span>
+          <span class="docs-pill-tag">Stories</span>
+        </div>
+      </article>
+      <article class="docs-pillar">
+        <div class="docs-pillar-step">03 &middot; Ship</div>
+        <div class="docs-pillar-icon" aria-hidden="true"><Icon name="sparkles" /></div>
+        <h3 class="docs-pillar-name">Claude + MCP</h3>
+        <p class="docs-pillar-desc">
+          Reads Figma + Storybook through MCP, writes spec-aligned code in Angular, React, or Vue.
+        </p>
+        <div class="docs-pillar-meta">
+          <span class="docs-pill-tag">Spec-aware</span>
+          <span class="docs-pill-tag">Parity</span>
+        </div>
+      </article>
+    </div>
+  </section>
 
-  <WorkflowDiagram figureId="home-workflow" />
+  <!-- MCP setup -->
+  <section class="docs-mcp-section" aria-labelledby="mcp-setup-title">
+    <div class="docs-mcp-grid">
+      <div>
+        <SectionHead
+          eyebrow="MCP setup"
+          title="Three endpoints. One config."
+          sub="Drop these into your Claude Code MCP config. Each Storybook instance exposes the same four tools — list-all-documentation, get-documentation, preview-stories, run-story-tests."
+          id="mcp-setup-title"
+        />
+        <ul class="docs-mcp-checklist">
+          <li>HTTP transport — no local processes to babysit.</li>
+          <li>Hosted alongside the Storybook itself, no extra deploy.</li>
+          <li>Spec-aware — Claude knows which props exist before suggesting code.</li>
+        </ul>
+      </div>
+      <CodeCard lang=".mcp.json" code={MCP_CONFIG} id="home-mcp-config" />
+    </div>
+  </section>
 
-  <div class="docs-feature-grid">
-    <div class="docs-feature-card">
-      <span class="docs-feature-card-num">01</span>
-      <h3 class="docs-feature-card-title">Design in Figma</h3>
-      <p class="docs-feature-card-desc">
-        Figma is the single source of truth. <Jargon term="design tokens">Design tokens</Jargon>, component frames, and spacing — all defined here before code is written.
+  <!-- Scaffolder CTA -->
+  <section class="docs-cta-section" aria-labelledby="cta-title">
+    <div class="docs-cta">
+      <div class="docs-cta-eyebrow">Get started in 60 seconds</div>
+      <h2 class="docs-cta-title" id="cta-title">Scaffold a workspace.</h2>
+      <p class="docs-cta-sub">
+        An Nx workspace with your framework choice, the component library wired up, and the MCP config pre-seeded.
       </p>
-      <a href="/figma" class="docs-btn docs-btn-outline" style="margin-top: auto; width: fit-content; font-size: 0.8rem; padding: 0.35rem 0.75rem">Explore Figma →</a>
-    </div>
-
-    <div class="docs-feature-card">
-      <span class="docs-feature-card-num">02</span>
-      <h3 class="docs-feature-card-title">Explore in Storybook</h3>
-      <p class="docs-feature-card-desc">
-        Storybook is the live component library. Browse props, test states, and reference stories — AI reads it directly via <Jargon term="MCP">MCP</Jargon>.
-      </p>
-      <a href="/storybook" class="docs-btn docs-btn-outline" style="margin-top: auto; width: fit-content; font-size: 0.8rem; padding: 0.35rem 0.75rem">Open Storybook →</a>
-    </div>
-
-    <div class="docs-feature-card">
-      <span class="docs-feature-card-num">03</span>
-      <h3 class="docs-feature-card-title">Build with AI</h3>
-      <p class="docs-feature-card-desc">
-        Claude Code connects Figma specs to Storybook components. Reference a Figma frame, ask AI, get production-ready component code.
-      </p>
-      <a href="/mcp" class="docs-btn docs-btn-outline" style="margin-top: auto; width: fit-content; font-size: 0.8rem; padding: 0.35rem 0.75rem">AI Tools →</a>
-    </div>
-  </div>
-
-  <!-- 3-pillar ribbon -->
-  <div class="docs-stats-ribbon" style="grid-template-columns: repeat(3, 1fr)">
-    <div class="docs-stat-item">
-      <span class="docs-stat-num" style="font-size: 1.25rem">Figma</span>
-      <span class="docs-stat-lbl">Design Source of Truth</span>
-    </div>
-    <div class="docs-stat-item">
-      <span class="docs-stat-num" style="font-size: 1.25rem">Storybook</span>
-      <span class="docs-stat-lbl">Live Component Explorer</span>
-    </div>
-    <div class="docs-stat-item">
-      <span class="docs-stat-num" style="font-size: 1.25rem">AI · MCP</span>
-      <span class="docs-stat-lbl">Connects Design to Code</span>
-    </div>
-  </div>
-
-  <!-- Terminal showcase -->
-  <h2 class="docs-home-section-heading">Get Started</h2>
-  <div class="docs-terminal">
-    <div class="docs-terminal-bar">
-      <div class="docs-terminal-dots">
-        <span class="docs-terminal-dot docs-terminal-dot--red"></span>
-        <span class="docs-terminal-dot docs-terminal-dot--yellow"></span>
-        <span class="docs-terminal-dot docs-terminal-dot--green"></span>
-      </div>
-      <span class="docs-terminal-title">terminal — atelier-init — 80x24</span>
-      <div style="width: 2.5rem"></div>
-    </div>
-    <div class="docs-terminal-body">
-      <div>
-        <span class="docs-term-prompt">➜</span>
-        <span class="docs-term-cmd">npx create-atelier-ui-workspace</span>
-      </div>
-      <div class="docs-term-muted">Initializing Atelier workspace...</div>
-      <div class="docs-term-row">
-        <span class="docs-term-tag">[STAGE]</span>
-        <span>Fetch Component Registry.</span>
-        <span class="docs-term-ok">DONE</span>
-      </div>
-      <div class="docs-term-row">
-        <span class="docs-term-tag">[STAGE]</span>
-        <span>Inject Design Tokens.......</span>
-        <span class="docs-term-ok">DONE</span>
-      </div>
-      <div class="docs-term-row">
-        <span class="docs-term-tag">[STAGE]</span>
-        <span>Wire MCP Server...........</span>
-        <span class="docs-term-running">RUNNING (87%)</span>
-      </div>
-      <div class="docs-terminal-success">
-        <div class="docs-term-success-msg">✓ Workspace created at ./my-workshop</div>
-        <div class="docs-term-muted">Start dev server: <span class="docs-term-cmd">nx serve my-workshop</span></div>
-      </div>
-      <div>
-        <span class="docs-term-prompt">➜</span>
-        <span class="docs-term-blink">█</span>
+      <div class="docs-cta-cmd">
+        <Icon name="terminal" class="docs-cta-cmd-icon" />
+        <span class="docs-cta-cmd-prompt" aria-hidden="true">$</span>
+        <code class="docs-cta-cmd-text">{SCAFFOLD_CMD}</code>
+        <button
+          type="button"
+          class="docs-cta-cmd-copy"
+          data-cta-copy={SCAFFOLD_CMD}
+          aria-label="Copy scaffold command to clipboard">
+          Copy
+        </button>
+        <span class="docs-visually-hidden" data-cta-copy-status aria-live="polite" role="status"></span>
       </div>
     </div>
-  </div>
-
-  <!-- Quick nav grid -->
-  <h2 class="docs-home-section-heading">Explore</h2>
-  <div class="docs-quicknav docs-quicknav--four">
-    <a href="/workshop" class="docs-quicknav-card">
-      <div class="docs-quicknav-icon">
-        <Icon name="build_circle" />
-      </div>
-      <div>
-        <div class="docs-quicknav-label">Setup</div>
-        <div class="docs-quicknav-title">Workshop</div>
-      </div>
-    </a>
-    <a href="/storybook" class="docs-quicknav-card">
-      <div class="docs-quicknav-icon">
-        <Icon name="book" />
-      </div>
-      <div>
-        <div class="docs-quicknav-label">Live Components</div>
-        <div class="docs-quicknav-title">Storybook</div>
-      </div>
-    </a>
-    <a href="/figma" class="docs-quicknav-card">
-      <div class="docs-quicknav-icon">
-        <Icon name="palette" />
-      </div>
-      <div>
-        <div class="docs-quicknav-label">Design Tokens</div>
-        <div class="docs-quicknav-title">Figma</div>
-      </div>
-    </a>
-    <a href="/mcp" class="docs-quicknav-card">
-      <div class="docs-quicknav-icon">
-        <Icon name="smart_toy" />
-      </div>
-      <div>
-        <div class="docs-quicknav-label">AI Protocol</div>
-        <div class="docs-quicknav-title">MCP Explorer</div>
-      </div>
-    </a>
-  </div>
+  </section>
 </BaseLayout>
+
+<script>
+  function bindCtaCopy() {
+    const btns = document.querySelectorAll<HTMLButtonElement>('[data-cta-copy]');
+    btns.forEach((btn) => {
+      if (btn.dataset.ctaCopyBound === '1') return;
+      btn.dataset.ctaCopyBound = '1';
+      btn.addEventListener('click', async () => {
+        const payload = btn.getAttribute('data-cta-copy') ?? '';
+        const status = btn.parentElement?.querySelector<HTMLElement>('[data-cta-copy-status]');
+        try {
+          await navigator.clipboard.writeText(payload);
+          const original = btn.textContent;
+          btn.textContent = 'Copied';
+          btn.classList.add('is-copied');
+          if (status) status.textContent = 'Command copied to clipboard.';
+          window.setTimeout(() => {
+            btn.textContent = original;
+            btn.classList.remove('is-copied');
+            if (status) status.textContent = '';
+          }, 1400);
+        } catch (err) {
+          console.error('Clipboard write failed', err);
+          if (status) status.textContent = 'Copy failed. Select and copy manually.';
+        }
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', bindCtaCopy);
+  bindCtaCopy();
+</script>
+
+<style>
+  .docs-hero-eyebrow-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ui-color-primary);
+    margin-right: 0.5rem;
+    vertical-align: middle;
+    animation: docs-hero-eyebrow-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes docs-hero-eyebrow-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.4); }
+  }
+
+  .docs-mcp-section,
+  .docs-cta-section {
+    margin-bottom: 0;
+  }
+
+  .docs-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>

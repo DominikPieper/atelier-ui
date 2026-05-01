@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Component card</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 22px 26px; background: var(--ui-color-surface-sunken); font-family: var(--ui-font-family); color: var(--ui-color-text); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .card { background: #fff; border: 1px solid #e2e8f0; border-top: 2px solid transparent; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 8px; transition: all .18s; }
+  .card.hover { border-top-color: #006470; box-shadow: 0 6px 24px rgba(0,100,112,.12); transform: translateY(-2px); }
+  .icon { width: 36px; height: 36px; border-radius: 8px; background: linear-gradient(135deg, rgba(0,100,112,.15), rgba(0,180,255,.08)); display:flex;align-items:center;justify-content:center;font-family:var(--ui-font-mono);font-size:15px;color:#006470;font-weight:700; }
+  .name { font-weight: 600; font-size: 14px; }
+  .desc { font-size: 13px; color: #475569; line-height: 1.45; flex: 1; }
+  .footer { display: flex; justify-content: space-between; align-items: center; }
+  .cta { font-size: 12px; font-weight: 600; color: #006470; }
+  .dots { display: flex; gap: 3px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; opacity: .8; }
+</style>
+</head>
+<body>
+  <div class="grid">
+    <div class="card">
+      <div class="icon">B</div>
+      <div class="name">LlmButton</div>
+      <div class="desc">Primary action element. Variants: primary, secondary, outline, danger.</div>
+      <div class="footer"><span class="cta">View →</span><span class="dots"><span class="dot" style="background:#dd0031"></span><span class="dot" style="background:#61dafb"></span><span class="dot" style="background:#42b883"></span></span></div>
+    </div>
+    <div class="card hover">
+      <div class="icon">C</div>
+      <div class="name">LlmCard</div>
+      <div class="desc">Composable container — Header, Content, Footer subcomponents.</div>
+      <div class="footer"><span class="cta">View →</span><span class="dots"><span class="dot" style="background:#dd0031"></span><span class="dot" style="background:#61dafb"></span><span class="dot" style="background:#42b883"></span></span></div>
+    </div>
+  </div>
+</body>
+</html>

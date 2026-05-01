@@ -27,6 +27,8 @@
   --ui-color-primary-hover: #5ee5e5;
   --ui-color-primary-active: #87efef;
   --ui-color-primary-light: rgba(52, 216, 216, 0.15);
+  --ui-color-primary-tint-6: color-mix(in srgb, var(--ui-color-primary) 6%, transparent);
+  --ui-color-primary-border: color-mix(in srgb, var(--ui-color-primary) 30%, transparent);
 
   --ui-color-text: #f1f5f9;
   --ui-color-text-muted: #94a3b8;
@@ -37,6 +39,8 @@
   --ui-color-input-border-hover: #94a3b8;
   --ui-color-input-border-focus: var(--ui-color-primary);
   --ui-color-placeholder: #94a3b8;
+
+  --ui-shadow-card-hover: 0 12px 24px rgba(0, 0, 0, 0.45);
 }
 
 /* ── Light mode: clean white + cool slate (default) ─────────── */
@@ -59,9 +63,13 @@
   --ui-color-primary-hover: #004e58;
   --ui-color-primary-active: #003a42;
   --ui-color-primary-light: rgba(0, 100, 112, 0.08);
+  --ui-color-primary-tint-6: color-mix(in srgb, var(--ui-color-primary) 6%, transparent);
+  --ui-color-primary-border: color-mix(in srgb, var(--ui-color-primary) 20%, transparent);
 
   --ui-color-text: #0f172a;
   --ui-color-text-muted: #475569;
+
+  --ui-shadow-card-hover: 0 12px 24px rgba(0, 100, 112, 0.10);
 }
 
 /* ── Docs-specific variables ───────────────────────────────── */
@@ -80,8 +88,12 @@
    * Figma-audit one). Forest green carries "code/correct" semantics
    * and is AA-safe across surfaces. */
   --docs-tertiary: var(--ui-color-success);
+  /* Wordmark resolves to a solid primary teal — gradient end retained as the
+   * same value so any consumer still using --docs-hero-gradient-end stays
+   * brand-aligned. The kit specifies a primary-only wordmark; the cyan
+   * gradient end was a legacy SaaS-marketing affordance. */
   --docs-hero-gradient-start: var(--ui-color-primary);
-  --docs-hero-gradient-end: var(--ui-color-brand-development, #00b4ff);
+  --docs-hero-gradient-end:   var(--ui-color-primary);
   --docs-topbar-height: 68px;
 }
 

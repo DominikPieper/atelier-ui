@@ -4,7 +4,7 @@ import { Code } from 'astro-expressive-code/components';
 import DiagramFigure from '../components/DiagramFigure.astro';
 import Jargon from '../components/Jargon.astro';
 import Icon from '../components/Icon.astro';
-import PageEyebrow from '../components/PageEyebrow.astro';
+import PageHero from '../components/PageHero.astro';
 import BottomNav from '../components/BottomNav.astro';
 
 const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
@@ -89,16 +89,11 @@ const IMPORT_NOTE: Record<string, string> = {
 >
   <div class="docs-inline-page">
 
-    <div style="margin-bottom: 2rem">
-      <PageEyebrow kind="howto" />
-      <h1 class="docs-page-h1">
-        Installation
-      </h1>
-      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 580px; line-height: 1.65">
-        Add Atelier UI to an existing app — package commands for npm, pnpm, and yarn,
-        plus the one-line token import that wires up dark mode and theming.
-      </p>
-    </div>
+    <PageHero
+      kind="howto"
+      title="Installation"
+      lede="Add Atelier UI to an existing app — package commands for npm, pnpm, and yarn, plus the one-line token import that wires up dark mode and theming."
+    />
 
     <!-- Framework selector -->
     <div class="docs-multi-code-tabs" style="border-radius: 8px; margin-bottom: 2rem; width: fit-content">
@@ -167,7 +162,7 @@ const IMPORT_NOTE: Record<string, string> = {
         <!-- Ready badge -->
         <g transform="translate(368, 184)">
           <rect x="0" y="0" width="144" height="28" rx="14" ry="14" style="fill: color-mix(in srgb, var(--ui-color-success) 15%, transparent); stroke: var(--ui-color-success); stroke-width: 1;"/>
-          <text x="72" y="18" text-anchor="middle" font-size="11" font-weight="700" style="fill: var(--ui-color-success)">✓ ready to build</text>
+          <text x="72" y="18" text-anchor="middle" font-size="11" font-weight="700" style="fill: var(--ui-color-success)">Ready to build</text>
         </g>
       </svg>
     </DiagramFigure>
@@ -205,7 +200,7 @@ const IMPORT_NOTE: Record<string, string> = {
           <Code code={TOKEN_IMPORT[fw]} lang="css" />
         </div>
       ))}
-      <div style="padding: 1rem 1.25rem; background: var(--ui-color-primary-light); border: 1px solid color-mix(in srgb, var(--ui-color-primary) 20%, transparent); border-radius: var(--ui-radius-md); margin-top: 1rem">
+      <div style="padding: 1rem 1.25rem; background: var(--ui-color-primary-light); border: 1px solid var(--ui-color-primary-border); border-radius: var(--ui-radius-md); margin-top: 1rem">
         <p style="margin: 0 0 0.3rem; font-size: 0.82rem; font-weight: 700; color: var(--ui-color-text)">CSS Variables</p>
         <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
           Atelier UI uses CSS custom properties for all design tokens, enabling dynamic
@@ -250,9 +245,9 @@ const IMPORT_NOTE: Record<string, string> = {
 
     <!-- Next steps -->
     <BottomNav items={[
-      { to: '/workshop',          label: 'Next',   title: 'Workshop Setup',     emoji: '⚙' },
-      { to: '/components',        label: 'Browse', title: 'Components',         emoji: '🧩' },
-      { to: '/design-principles', label: 'Read',   title: 'LLM-Optimized APIs', emoji: '🧠' },
+      { to: '/workshop',          label: 'Next',   title: 'Workshop setup',     icon: 'build_circle' },
+      { to: '/components',        label: 'Browse', title: 'Components',         icon: 'widgets' },
+      { to: '/design-principles', label: 'Read',   title: 'Design principles',  icon: 'schema' },
     ]} />
 
   </div>

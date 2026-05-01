@@ -1,7 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PageEyebrow from '../components/PageEyebrow.astro';
+import PageHero from '../components/PageHero.astro';
 import BottomNav from '../components/BottomNav.astro';
+import Callout from '../components/Callout.astro';
 
 const colorGroups = [
   {
@@ -101,24 +102,13 @@ const motion = [
 >
   <div class="docs-inline-page">
 
-    <div style="margin-bottom: 2.5rem">
-      <PageEyebrow kind="reference" />
-      <h1 class="docs-page-h1">
-        Design Tokens
-      </h1>
-      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 520px; line-height: 1.65">
-        All CSS custom properties used by Atelier UI — colors, spacing, radius, typography, shadows, and motion. Import once via <code>tokens.css</code>; dark and light mode update automatically.
-      </p>
-    </div>
+    <PageHero kind="reference" title="Design tokens" ledeMax="520px">
+      <strong>Tokens, not utilities.</strong> All CSS custom properties used by Atelier UI — colors, spacing, radius, typography, shadows, and motion. Import once via <code>tokens.css</code>; dark and light mode update automatically.
+    </PageHero>
 
-    <div style="margin-bottom: 2rem; padding: 0.85rem 1.1rem; background: color-mix(in srgb, var(--ui-color-primary) 6%, transparent); border: 1px solid color-mix(in srgb, var(--ui-color-primary) 20%, transparent); border-radius: var(--ui-radius-md); display: flex; gap: 0.75rem; align-items: flex-start">
-      <span style="font-size: 1rem; flex-shrink: 0; margin-top: 1px">🌓</span>
-      <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
-        <strong style="color: var(--ui-color-text)">Watch tokens swap live.</strong>
-        Use the <span style="font-family: monospace; padding: 0.05rem 0.3rem; border-radius: 3px; background: var(--ui-color-surface-sunken); border: 1px solid var(--ui-color-border)">☀︎/☾</span> toggle in the header to flip between light and dark — every swatch and value below updates instantly. In your own app, set
-        <code>data-theme="dark"</code> on <code>&lt;html&gt;</code> to force dark mode, <code>data-theme="light"</code> to force light. With neither attribute set, the user’s OS preference wins.
-      </p>
-    </div>
+    <Callout tone="tip" title="Watch tokens swap live.">
+      Use the theme toggle in the topbar to flip between light and dark — every swatch and value below updates instantly. In your own app, set <code>data-theme="dark"</code> on <code>&lt;html&gt;</code> to force dark mode, <code>data-theme="light"</code> to force light. With neither attribute set, the user’s OS preference wins.
+    </Callout>
 
     <!-- Colors -->
     <div class="docs-section">
@@ -170,7 +160,7 @@ const motion = [
 
     <!-- Radius -->
     <div class="docs-section">
-      <h2 class="docs-section-title">Border Radius</h2>
+      <h2 class="docs-section-title">Border radius</h2>
       <p style="color: var(--ui-color-text-muted); font-size: 0.82rem; line-height: 1.6; margin-bottom: 1rem">
         Radius scales with surface importance. <code>md</code> is the project default; reach for <code>lg</code> when the surface lifts above the page (cards, dialogs).
       </p>
@@ -188,7 +178,7 @@ const motion = [
 
     <!-- Typography -->
     <div class="docs-section">
-      <h2 class="docs-section-title">Typography Scale</h2>
+      <h2 class="docs-section-title">Typography scale</h2>
       <p style="color: var(--ui-color-text-muted); font-size: 0.82rem; line-height: 1.6; margin-bottom: 1rem">
         Body copy starts at <code>md</code>. Step down to <code>sm</code> / <code>xs</code> for secondary text and labels; up to <code>lg</code>+ for headings. Pair every step change with a heading-level shift in markup.
       </p>
@@ -249,7 +239,7 @@ const motion = [
     </div>
 
     <!-- Import snippet -->
-    <div style="margin-top: 2rem; padding: 1rem 1.25rem; background: var(--ui-color-primary-light); border: 1px solid color-mix(in srgb, var(--ui-color-primary) 20%, transparent); border-radius: var(--ui-radius-md)">
+    <div style="margin-top: 2rem; padding: 1rem 1.25rem; background: var(--ui-color-primary-light); border: 1px solid var(--ui-color-primary-border); border-radius: var(--ui-radius-md)">
       <p style="margin: 0 0 0.3rem; font-size: 0.82rem; font-weight: 700; color: var(--ui-color-text)">Import once in your global styles</p>
       <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); font-family: monospace">
         @import '@atelier-ui/react/styles/tokens.css';
@@ -257,9 +247,9 @@ const motion = [
     </div>
 
     <BottomNav items={[
-      { to: '/figma',      label: 'Figma',   title: 'Figma Variables', emoji: '🎨' },
-      { to: '/install',    label: 'Install', title: 'Installation',    emoji: '📦' },
-      { to: '/components', label: 'Browse',  title: 'Components',      emoji: '🧩' },
+      { to: '/figma',      label: 'Figma',   title: 'Figma variables', icon: 'palette' },
+      { to: '/install',    label: 'Install', title: 'Installation',    icon: 'download' },
+      { to: '/components', label: 'Browse',  title: 'Components',      icon: 'widgets' },
     ]} />
 
   </div>

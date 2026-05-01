@@ -1,0 +1,338 @@
+/**
+ * Atelier Design System — token snapshot
+ *
+ * Mirror of `libs/react/src/styles/tokens.css` in the upstream repo
+ * (github.com/DominikPieper/atelier-ui). Regenerated whenever the
+ * canonical token sheet changes — do not hand-edit.
+ *
+ * Direction A — Conciso anchor only. Deep Conciso teal on a clean white
+ * canvas (light) / bright teal on rich slate (dark). Modernised radius
+ * scale. No moss, no warm bone — just Conciso.
+ *
+ * All foreground/background pairs verified WCAG 2.2 AA via
+ * tools/scripts/wcag-contrast.mjs (52/52 pairs passing 2026-04-26).
+ *
+ * Usage:
+ *   @import '@atelier-ui/{angular,react,vue}/styles/tokens.css';
+ */
+
+:root {
+  /* Typography */
+  --ui-font-family: 'Inter', ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --ui-font-size-xs: 0.75rem;
+  --ui-font-size-sm: 0.875rem;
+  --ui-font-size-md: 1rem;
+  --ui-font-size-lg: 1.125rem;
+  --ui-font-size-xl: 1.25rem;
+  --ui-font-size-2xl: 1.5rem;
+  --ui-letter-spacing-tight: -0.01em;
+  --ui-letter-spacing-normal: 0;
+  --ui-letter-spacing-wide: 0.01em;
+  --ui-font-weight-normal: 400;
+  --ui-font-weight-medium: 500;
+  --ui-font-weight-semibold: 600;
+  --ui-line-height-tight: 1.25;
+  --ui-line-height-normal: 1.5;
+
+  /* ── Colours · light mode (default) ────────────────────────── */
+
+  /* Primary — Conciso deep teal */
+  --ui-color-primary: #006470;
+  --ui-color-primary-hover: #004e58;
+  --ui-color-primary-active: #003a42;
+  --ui-color-primary-light: rgba(0, 100, 112, 0.08);
+
+  /* Secondary (legacy — kept for components that opt in) */
+  --ui-color-secondary: #475569;
+  --ui-color-secondary-hover: #334155;
+  --ui-color-secondary-active: #1e293b;
+
+  /* Semantic */
+  --ui-color-danger: #b91c1c;
+  --ui-color-danger-hover: #991b1b;
+  --ui-color-danger-active: #7f1d1d;
+  --ui-color-success: #15803d;
+  --ui-color-warning: #b45309;
+  --ui-color-info: #0369a1;
+
+  /* Semantic — AA-safe dark-text-on-tinted-bg pairs (Badge / Alert / Toast) */
+  --ui-color-success-bg: #dcfce7;
+  --ui-color-success-text: #166534;
+  --ui-color-warning-bg: #fef3c7;
+  --ui-color-warning-text: #854d0e;
+  --ui-color-danger-bg: #fee2e2;
+  --ui-color-danger-text: #991b1b;
+  --ui-color-info-bg: #e0f2fe;
+  --ui-color-info-text: #0c4a6e;
+
+  /* Surfaces — clean white + cool slate */
+  --ui-color-surface: #ffffff;
+  --ui-color-surface-raised: #f8fafc;
+  --ui-color-surface-sunken: #f1f5f9;
+
+  /* Borders — split decorative from functional per WCAG 1.4.11 */
+  --ui-color-border: #e2e8f0;          /* decorative */
+  --ui-color-border-hover: #cbd5e1;
+  --ui-color-border-strong: #64748b;   /* functional ≥3:1 */
+
+  /* Text */
+  --ui-color-text: #0f172a;
+  --ui-color-text-muted: #475569;
+  --ui-color-text-on-primary: #ffffff;
+  --ui-color-text-on-secondary: #ffffff;
+  --ui-color-text-on-danger: #ffffff;
+  --ui-color-text-on-success: #ffffff;
+
+  /* Brand palette — Conciso reference, opt-in for components that need it */
+  --ui-color-brand-corporate: #00bebe;
+  --ui-color-brand-agile: #00d296;
+  --ui-color-brand-architecture: #009696;
+  --ui-color-brand-development: #00b4ff;
+  --ui-color-brand-petrol: #005064;
+  --ui-color-brand-ai: #b5e61c;
+  --ui-color-brand-light-blue: #00ebff;
+  --ui-color-brand-light-green: #a0fa50;
+  --ui-opacity-disabled: 0.5;
+
+  /* Border radius — bumped for modern feel */
+  --ui-radius-sm: 0.5rem;   /* was 0.375rem */
+  --ui-radius-md: 0.625rem; /* was 0.5rem   */
+  --ui-radius-lg: 0.875rem; /* was 0.75rem  */
+  --ui-radius-xl: 1.25rem;  /* was 1rem     */
+  --ui-radius-full: 9999px;
+
+  /* Spacing */
+  --ui-spacing-1: 0.25rem;
+  --ui-spacing-2: 0.5rem;
+  --ui-spacing-3: 0.75rem;
+  --ui-spacing-4: 1rem;
+  --ui-spacing-5: 1.25rem;
+  --ui-spacing-6: 1.5rem;
+  --ui-spacing-8: 2rem;
+  --ui-spacing-10: 2.5rem;
+  --ui-spacing-12: 3rem;
+  --ui-spacing-16: 4rem;
+
+  /* Shadows — slate-tinted dual-layer (ambient + key light) */
+  --ui-shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --ui-shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.08),
+    0 1px 2px -1px rgba(15, 23, 42, 0.06);
+  --ui-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08),
+    0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --ui-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08),
+    0 4px 6px -4px rgba(15, 23, 42, 0.04);
+  --ui-shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.10),
+    0 8px 10px -6px rgba(15, 23, 42, 0.04);
+
+  /* Motion */
+  --ui-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ui-ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+  --ui-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --ui-duration-fast: 150ms;
+  --ui-duration-normal: 200ms;
+  --ui-duration-slow: 300ms;
+
+  --ui-transition-fast: var(--ui-duration-fast) var(--ui-ease-out);
+  --ui-transition-normal: var(--ui-duration-normal) var(--ui-ease-out);
+  --ui-transition-slow: var(--ui-duration-slow) var(--ui-ease-out);
+
+  /* Focus ring — double-ring for light & dark background compatibility */
+  --ui-focus-ring: 0 0 0 2px var(--ui-color-surface),
+    0 0 0 4px var(--ui-color-primary);
+
+  /* Form controls */
+  --ui-color-input-bg: var(--ui-color-surface-sunken);
+  --ui-color-input-bg-focus: var(--ui-color-surface);
+  --ui-color-input-border: var(--ui-color-border-strong);
+  --ui-color-input-border-hover: #475569;
+  --ui-color-input-border-focus: var(--ui-color-primary);
+  --ui-color-input-border-invalid: var(--ui-color-danger);
+  --ui-color-placeholder: #64748b;
+  --ui-color-error-text: var(--ui-color-danger-text);
+
+  /* Z-index scale */
+  --ui-z-base: 0;
+  --ui-z-dropdown: 100;
+  --ui-z-overlay: 200;
+  --ui-z-modal: 300;
+  --ui-z-toast: 400;
+}
+
+/* ── Colours · dark mode ───────────────────────────────────── */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ui-color-primary: #34d8d8;
+    --ui-color-primary-hover: #5ee5e5;
+    --ui-color-primary-active: #87efef;
+    --ui-color-primary-light: rgba(52, 216, 216, 0.15);
+
+    --ui-color-secondary: #94a3b8;
+    --ui-color-secondary-hover: #cbd5e1;
+    --ui-color-secondary-active: #e2e8f0;
+
+    --ui-color-danger: #f87171;
+    --ui-color-danger-hover: #fca5a5;
+    --ui-color-danger-active: #fecaca;
+    --ui-color-success: #4ade80;
+    --ui-color-warning: #fbbf24;
+    --ui-color-info: #38bdf8;
+
+    --ui-color-success-bg: #0f3320;
+    --ui-color-success-text: #86efac;
+    --ui-color-warning-bg: #3a2510;
+    --ui-color-warning-text: #fde68a;
+    --ui-color-danger-bg: #3a1414;
+    --ui-color-danger-text: #fca5a5;
+    --ui-color-info-bg: #102338;
+    --ui-color-info-text: #bae6fd;
+
+    --ui-color-surface: #0a1116;
+    --ui-color-surface-raised: #131c24;
+    --ui-color-surface-sunken: #060c10;
+
+    --ui-color-border: #1e293b;
+    --ui-color-border-hover: #334155;
+    --ui-color-border-strong: #64748b;
+
+    --ui-color-text: #f1f5f9;
+    --ui-color-text-muted: #94a3b8;
+    --ui-color-text-on-primary: #0a1116;
+    --ui-color-text-on-secondary: #0f172a;
+    --ui-color-text-on-danger: #0a1116;
+
+    --ui-opacity-disabled: 0.65;
+
+    --ui-color-input-border: var(--ui-color-border-strong);
+    --ui-color-input-border-hover: #94a3b8;
+    --ui-color-placeholder: #94a3b8;
+
+    --ui-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --ui-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4),
+      0 1px 2px -1px rgba(0, 0, 0, 0.3);
+    --ui-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.45),
+      0 2px 4px -2px rgba(0, 0, 0, 0.3);
+    --ui-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5),
+      0 4px 6px -4px rgba(0, 0, 0, 0.25);
+    --ui-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
+      0 8px 10px -6px rgba(0, 0, 0, 0.25);
+  }
+}
+
+[data-theme="dark"] {
+  --ui-color-primary: #34d8d8;
+  --ui-color-primary-hover: #5ee5e5;
+  --ui-color-primary-active: #87efef;
+  --ui-color-primary-light: rgba(52, 216, 216, 0.15);
+
+  --ui-color-secondary: #94a3b8;
+  --ui-color-secondary-hover: #cbd5e1;
+  --ui-color-secondary-active: #e2e8f0;
+
+  --ui-color-danger: #f87171;
+  --ui-color-danger-hover: #fca5a5;
+  --ui-color-danger-active: #fecaca;
+  --ui-color-success: #4ade80;
+  --ui-color-warning: #fbbf24;
+  --ui-color-info: #38bdf8;
+
+  --ui-color-success-bg: #0f3320;
+  --ui-color-success-text: #86efac;
+  --ui-color-warning-bg: #3a2510;
+  --ui-color-warning-text: #fde68a;
+  --ui-color-danger-bg: #3a1414;
+  --ui-color-danger-text: #fca5a5;
+  --ui-color-info-bg: #102338;
+  --ui-color-info-text: #bae6fd;
+
+  --ui-color-surface: #0a1116;
+  --ui-color-surface-raised: #131c24;
+  --ui-color-surface-sunken: #060c10;
+
+  --ui-color-border: #1e293b;
+  --ui-color-border-hover: #334155;
+  --ui-color-border-strong: #64748b;
+
+  --ui-color-text: #f1f5f9;
+  --ui-color-text-muted: #94a3b8;
+  --ui-color-text-on-primary: #0a1116;
+  --ui-color-text-on-secondary: #0f172a;
+  --ui-color-text-on-danger: #0a1116;
+
+  --ui-opacity-disabled: 0.65;
+
+  --ui-color-input-border: var(--ui-color-border-strong);
+  --ui-color-input-border-hover: #94a3b8;
+  --ui-color-placeholder: #94a3b8;
+
+  --ui-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --ui-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4),
+    0 1px 2px -1px rgba(0, 0, 0, 0.3);
+  --ui-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.45),
+    0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --ui-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5),
+    0 4px 6px -4px rgba(0, 0, 0, 0.25);
+  --ui-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
+    0 8px 10px -6px rgba(0, 0, 0, 0.25);
+}
+
+/* Explicit light theme — declared last so it wins over prefers-color-scheme: dark */
+[data-theme="light"] {
+  --ui-color-primary: #006470;
+  --ui-color-primary-hover: #004e58;
+  --ui-color-primary-active: #003a42;
+  --ui-color-primary-light: rgba(0, 100, 112, 0.08);
+
+  --ui-color-secondary: #475569;
+  --ui-color-secondary-hover: #334155;
+  --ui-color-secondary-active: #1e293b;
+
+  --ui-color-danger: #b91c1c;
+  --ui-color-danger-hover: #991b1b;
+  --ui-color-danger-active: #7f1d1d;
+  --ui-color-success: #15803d;
+  --ui-color-warning: #b45309;
+  --ui-color-info: #0369a1;
+
+  --ui-color-success-bg: #dcfce7;
+  --ui-color-success-text: #166534;
+  --ui-color-warning-bg: #fef3c7;
+  --ui-color-warning-text: #854d0e;
+  --ui-color-danger-bg: #fee2e2;
+  --ui-color-danger-text: #991b1b;
+  --ui-color-info-bg: #e0f2fe;
+  --ui-color-info-text: #0c4a6e;
+
+  --ui-color-surface: #ffffff;
+  --ui-color-surface-raised: #f8fafc;
+  --ui-color-surface-sunken: #f1f5f9;
+
+  --ui-color-border: #e2e8f0;
+  --ui-color-border-hover: #cbd5e1;
+  --ui-color-border-strong: #64748b;
+
+  --ui-color-text: #0f172a;
+  --ui-color-text-muted: #475569;
+  --ui-color-text-on-primary: #ffffff;
+
+  --ui-color-input-border: var(--ui-color-border-strong);
+  --ui-color-input-border-hover: #475569;
+  --ui-color-placeholder: #64748b;
+
+  --ui-shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --ui-shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.08), 0 1px 2px -1px rgba(15, 23, 42, 0.06);
+  --ui-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --ui-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+  --ui-shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.10), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ui-duration-fast: 0ms;
+    --ui-duration-normal: 0ms;
+    --ui-duration-slow: 0ms;
+    --ui-ease-spring: ease;
+  }
+}

@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import Jargon from '../components/Jargon.astro';
 import PageEyebrow from '../components/PageEyebrow.astro';
+import Callout from '../components/Callout.astro';
 
 const SITE_URL = 'https://atelier.pieper.io';
 
@@ -96,17 +97,13 @@ const previewCode = `# Atelier UI — Full API Reference
       </p>
     </div>
 
-    <div style="margin-bottom: 2rem; padding: 0.85rem 1.1rem; background: color-mix(in srgb, var(--ui-color-primary) 6%, transparent); border: 1px solid color-mix(in srgb, var(--ui-color-primary) 20%, transparent); border-radius: var(--ui-radius-md); display: flex; gap: 0.75rem; align-items: flex-start">
-      <span style="font-size: 1rem; flex-shrink: 0; margin-top: 1px">💡</span>
-      <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
-        <strong style="color: var(--ui-color-text)">Good to know.</strong>
-        This is reference material for AI tools — not something you need to memorize for the workshop.
-        During the hands-on session your MCP servers already expose this data; you only come back here later if you want to use Atelier UI from an LLM that does not speak MCP.
-      </p>
-    </div>
+    <Callout tone="tip" title="Good to know.">
+      This is reference material for AI tools — not something you need to memorize for the workshop.
+      During the hands-on session your MCP servers already expose this data; you only come back here later if you want to use Atelier UI from an LLM that does not speak MCP.
+    </Callout>
 
     <div style="margin-bottom: 2.5rem">
-      <h2 class="docs-section-title">What is llms.txt?</h2>
+      <h2 class="docs-section-title">What is llms.txt</h2>
       <p style="margin: 0 0 0.75rem; font-size: 0.85rem; color: var(--ui-color-text-muted); line-height: 1.65">
         <Jargon term="llms.txt"><code>llms.txt</code></Jargon> is a proposed open standard — analogous to <code>robots.txt</code> — for helping LLMs understand a project. It lives at the root of a site, uses plain Markdown, and provides a short structured index with links to deeper content.
       </p>
@@ -116,7 +113,7 @@ const previewCode = `# Atelier UI — Full API Reference
     </div>
 
     <div style="margin-bottom: 2.5rem">
-      <h2 class="docs-section-title">The Files</h2>
+      <h2 class="docs-section-title">The files</h2>
       <div style="display: flex; flex-direction: column; gap: 0.85rem">
         {[
           { filename: 'llms.txt', url: `${SITE_URL}/llms.txt`, size: '~2 KB', desc: 'Short index: component list with one-line prop summaries and links to docs. Use this when your context window is limited or you just need component names and key props.' },
@@ -143,7 +140,7 @@ const previewCode = `# Atelier UI — Full API Reference
     </div>
 
     <div style="margin-bottom: 2.5rem">
-      <h2 class="docs-section-title">How to Use It</h2>
+      <h2 class="docs-section-title">How to use it</h2>
       <div class="docs-step-list">
         {usageSteps.map(({ n, title, desc, code, lang }) => (
           <div class="docs-step-row">
@@ -159,7 +156,7 @@ const previewCode = `# Atelier UI — Full API Reference
     </div>
 
     <div style="margin-bottom: 2.5rem">
-      <h2 class="docs-section-title">Why Plain Text?</h2>
+      <h2 class="docs-section-title">Why plain text</h2>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.85rem">
         {whyCards.map(({ title, body }) => (
           <div style="padding: 0.9rem 1rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md)">
@@ -189,7 +186,7 @@ const previewCode = `# Atelier UI — Full API Reference
         const text = btn.dataset.copy ?? '';
         navigator.clipboard.writeText(text).then(() => {
           const orig = btn.textContent ?? '';
-          btn.textContent = '✓ copied';
+          btn.textContent = 'Copied';
           setTimeout(() => { btn.textContent = orig; }, 1800);
         });
       });

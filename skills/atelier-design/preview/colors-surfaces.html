@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Colors — Surfaces</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 22px 24px; background: var(--ui-color-surface); font-family: var(--ui-font-family); color: var(--ui-color-text); }
+  .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px; }
+  .sw { border-radius: 10px; overflow: hidden; border: 1px solid var(--ui-color-border); }
+  .sw .chip { height: 48px; display:flex;align-items:center;justify-content:center;font-family:var(--ui-font-mono);font-size:11px; }
+  .sw .meta { padding: 7px 10px; background: var(--ui-color-surface); }
+  .sw .name { font-size: 12px; font-weight: 600; }
+  .sw .hex  { font-family: var(--ui-font-mono); font-size: 11px; color: var(--ui-color-text-muted); }
+  .label { font-family: var(--ui-font-mono); font-size: 10px; color: var(--ui-color-text-muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+  <div class="label">Surfaces · light · sunken / surface / raised</div>
+  <div class="row">
+    <div class="sw"><div class="chip" style="background:#f1f5f9;color:#475569">sunken</div><div class="meta"><div class="name">surface-sunken</div><div class="hex">#f1f5f9</div></div></div>
+    <div class="sw"><div class="chip" style="background:#ffffff;border-bottom:1px solid #e2e8f0;color:#475569">surface</div><div class="meta"><div class="name">surface</div><div class="hex">#ffffff</div></div></div>
+    <div class="sw"><div class="chip" style="background:#f8fafc;color:#475569">raised</div><div class="meta"><div class="name">surface-raised</div><div class="hex">#f8fafc</div></div></div>
+  </div>
+  <div class="label" style="background:#141d26;color:#94a3b8;padding:6px 8px;border-radius:6px;display:inline-block">Surfaces · dark</div>
+  <div class="row">
+    <div class="sw" style="border-color:#243140"><div class="chip" style="background:#0f1721;color:#94a3b8">sunken</div><div class="meta" style="background:#1c2733"><div class="name" style="color:#f1f5f9">surface-sunken</div><div class="hex" style="color:#94a3b8">#0f1721</div></div></div>
+    <div class="sw" style="border-color:#243140"><div class="chip" style="background:#141d26;color:#94a3b8">surface</div><div class="meta" style="background:#1c2733"><div class="name" style="color:#f1f5f9">surface</div><div class="hex" style="color:#94a3b8">#141d26</div></div></div>
+    <div class="sw" style="border-color:#243140"><div class="chip" style="background:#1c2733;color:#94a3b8">raised</div><div class="meta" style="background:#1c2733"><div class="name" style="color:#f1f5f9">surface-raised</div><div class="hex" style="color:#94a3b8">#1c2733</div></div></div>
+  </div>
+</body>
+</html>

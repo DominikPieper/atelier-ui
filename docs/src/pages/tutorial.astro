@@ -4,7 +4,7 @@ import { Code } from 'astro-expressive-code/components';
 import DiagramFigure from '../components/DiagramFigure.astro';
 import Jargon from '../components/Jargon.astro';
 import HelpFooter from '../components/HelpFooter.astro';
-import PageEyebrow from '../components/PageEyebrow.astro';
+import PageHero from '../components/PageHero.astro';
 import BottomNav from '../components/BottomNav.astro';
 
 const FRAMEWORKS = ['React', 'Angular', 'Vue'] as const;
@@ -128,19 +128,18 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
 >
   <div class="docs-inline-page">
 
-    <div style="margin-bottom: 1.25rem">
-      <PageEyebrow kind="tutorial" time="~30 min" tag="Hands-on · Figma → Code" />
-      <h1 class="docs-page-h1">
-        Tutorial
-      </h1>
-      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0; max-width: 520px; line-height: 1.65">
-        Use <strong style="color: var(--ui-color-text)">figma-console MCP</strong> to read a Figma component spec directly — design tokens included — then <strong style="color: var(--ui-color-text)">Storybook MCP</strong> to match Atelier UI components, and let Claude Code write token-exact code.
-        We explain what an MCP is in the next section.
-      </p>
-      <p style="font-size: 0.78rem; color: var(--ui-color-text-muted); margin: 0.65rem 0 0; max-width: 520px; line-height: 1.55">
-        Just want the recipe? Try the <a href="/first-component" class="docs-link-primary docs-link-primary--bold">15-min kata</a> instead.
-      </p>
-    </div>
+    <PageHero
+      kind="tutorial"
+      time="~30 min"
+      tag="Hands-on · Figma → Code"
+      title="Tutorial"
+      ledeMax="520px"
+    >
+      Use <strong>figma-console MCP</strong> to read a Figma component spec directly — design tokens included — then <strong>Storybook MCP</strong> to match Atelier UI components, and let Claude Code write token-exact code. The next section explains what an MCP is.
+    </PageHero>
+    <p style="font-size: 0.78rem; color: var(--ui-color-text-muted); margin: -1.5rem 0 1.5rem; max-width: 520px; line-height: 1.55">
+      Just want the recipe? Try the <a href="/first-component" class="docs-link-primary docs-link-primary--bold">15-min kata</a> instead.
+    </p>
 
     <!-- Page-pair: this is the MCP-driven path; /figma is the manual variant. -->
     <aside class="docs-pagepair" aria-label="Two ways to go from Figma to code">
@@ -309,7 +308,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
 
     <!-- The workflow -->
     <div class="docs-section">
-      <h2 class="docs-section-title">The Workflow</h2>
+      <h2 class="docs-section-title">The workflow</h2>
 
       <DiagramFigure caption="Each step passes concrete data to the next. The dashed arrow closes the loop when parity checks surface discrepancies.">
         <svg viewBox="0 0 960 260" role="img" aria-labelledby="tut-title tut-desc" preserveAspectRatio="xMidYMid meet">
@@ -473,7 +472,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
 
     <!-- Example prompt -->
     <div class="docs-section">
-      <h2 class="docs-section-title">Example Prompt</h2>
+      <h2 class="docs-section-title">Example prompt</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1rem; font-size: 0.85rem">
         A prompt that drives the full A–D workflow in one shot:
       </p>
@@ -482,7 +481,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
 
     <!-- Generated output -->
     <div class="docs-section">
-      <h2 class="docs-section-title">Generated Output</h2>
+      <h2 class="docs-section-title">Generated output</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
         What Claude Code produces — using <code>LlmCard</code> and <code>LlmInput</code> from Atelier UI with tokens drawn directly from Figma <code>boundVariables</code>:
       </p>
@@ -534,7 +533,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
 
     <!-- Tool reference -->
     <div class="docs-section">
-      <h2 class="docs-section-title">figma-console MCP — Tools Used</h2>
+      <h2 class="docs-section-title">figma-console MCP — tools used</h2>
       <table class="docs-props-table">
         <thead>
           <tr><th>Tool</th><th>When to use</th></tr>

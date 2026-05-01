@@ -224,7 +224,7 @@ function CodePane({ code, label, labelColor = 'var(--ui-color-primary)' }: { cod
           background: 'none', border: 'none', cursor: 'pointer',
           fontSize: '0.68rem', color: copied ? 'var(--ui-color-primary)' : 'var(--ui-color-text-muted)', fontFamily: 'monospace',
         }}>
-          {copied ? '✓' : 'copy'}
+          {copied ? 'Copied' : 'Copy'}
         </button>
       </div>
       <pre style={{ margin: 0, padding: '0.75rem', overflow: 'auto', maxHeight: '400px', fontSize: '0.78rem', lineHeight: 1.5 }}>
@@ -401,7 +401,6 @@ export default function McpExplorer() {
           borderRadius: 'var(--ui-radius-md)', border: '1px solid rgba(68,218,218,0.1)',
           marginBottom: '1.75rem', display: 'flex', gap: '0.75rem', alignItems: 'flex-start',
         }}>
-          <span style={{ fontSize: '1rem', flexShrink: 0, marginTop: '1px' }}>💡</span>
           <p style={{ fontSize: '0.82rem', color: 'var(--ui-color-text-muted)', margin: 0, lineHeight: '1.6' }}>
             <strong style={{ color: 'var(--ui-color-text)' }}>Note:</strong> The Angular MCP server currently supports documentation tools only. Full story previews and test tools are available for React and Vue.
           </p>
@@ -497,7 +496,6 @@ export default function McpExplorer() {
                 fontSize: '0.75rem', color: 'var(--ui-color-info-text)', lineHeight: '1.55',
                 display: 'flex', gap: '0.5rem',
               }}>
-                <span style={{ color: 'var(--ui-color-info)', flexShrink: 0 }}>💡</span>
                 <span>{activeMockTool.workshopTip}</span>
               </div>
             )}

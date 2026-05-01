@@ -1,0 +1,189 @@
+---
+interface Props {
+  /** Mono uppercase tag in the header (e.g. `.mcp.json`, `terminal`). */
+  lang: string;
+  /**
+   * Raw code body. If omitted, render the default slot — useful when the body
+   * needs syntax-tinted spans rather than plain text.
+   */
+  code?: string;
+  /**
+   * Show the Copy button. When true, the button copies the code body to the
+   * clipboard and announces success via an `aria-live` region.
+   */
+  copyable?: boolean;
+  /** Plain-text payload to copy. Defaults to `code` when supplied. */
+  copyText?: string;
+  id?: string;
+}
+
+const {
+  lang,
+  code,
+  copyable = true,
+  copyText,
+  id,
+} = Astro.props;
+
+// Stable IDs so multiple CodeCards on a page don't collide.
+const slug = id ?? `codecard-${Math.random().toString(36).slice(2, 9)}`;
+const bodyId = `${slug}-body`;
+const statusId = `${slug}-status`;
+const payload = copyText ?? code ?? '';
+---
+
+<figure class="docs-code-card" data-code-card>
+  <div class="docs-code-card-head">
+    <span class="docs-code-card-lang">{lang}</span>
+    {copyable && (
+      <button
+        type="button"
+        class="docs-code-card-copy"
+        data-copy-target={bodyId}
+        data-copy-status={statusId}
+        data-copy-payload={payload}
+        aria-label={`Copy ${lang} contents to clipboard`}>
+        Copy
+      </button>
+    )}
+  </div>
+  {code !== undefined ? (
+    <pre class="docs-code-card-body" id={bodyId}><code>{code}</code></pre>
+  ) : (
+    <pre class="docs-code-card-body" id={bodyId}><code><slot /></code></pre>
+  )}
+  {copyable && (
+    <span class="docs-code-card-status" id={statusId} aria-live="polite" role="status"></span>
+  )}
+</figure>
+
+<script>
+  function bindCopy(card: HTMLElement) {
+    const btn = card.querySelector<HTMLButtonElement>('[data-copy-target]');
+    if (!btn || btn.dataset.copyBound === '1') return;
+    btn.dataset.copyBound = '1';
+    btn.addEventListener('click', async () => {
+      const targetId = btn.getAttribute('data-copy-target');
+      const statusId = btn.getAttribute('data-copy-status');
+      const payload = btn.getAttribute('data-copy-payload') ?? '';
+      const target = targetId ? document.getElementById(targetId) : null;
+      const status = statusId ? document.getElementById(statusId) : null;
+      const text = payload || (target ? target.innerText : '');
+      try {
+        await navigator.clipboard.writeText(text);
+        const originalLabel = btn.textContent;
+        btn.textContent = 'Copied';
+        btn.classList.add('is-copied');
+        if (status) status.textContent = 'Copied to clipboard.';
+        window.setTimeout(() => {
+          btn.textContent = originalLabel;
+          btn.classList.remove('is-copied');
+          if (status) status.textContent = '';
+        }, 1400);
+      } catch (err) {
+        console.error('Clipboard write failed', err);
+        if (status) status.textContent = 'Copy failed. Select and copy manually.';
+      }
+    });
+  }
+
+  function init() {
+    document
+      .querySelectorAll<HTMLElement>('[data-code-card]')
+      .forEach(bindCopy);
+  }
+
+  document.addEventListener('astro:page-load', init);
+  init();
+</script>
+
+<style>
+  .docs-code-card {
+    margin: 0;
+    background: var(--ui-color-surface);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--ui-shadow-md);
+  }
+
+  .docs-code-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: var(--ui-color-surface-sunken);
+    border-bottom: 1px solid var(--ui-color-border);
+  }
+
+  .docs-code-card-lang {
+    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ui-color-primary);
+  }
+
+  .docs-code-card-copy {
+    padding: 0.25rem 0.625rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    background: transparent;
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-sm);
+    color: var(--ui-color-text-muted);
+    cursor: pointer;
+    font-family: inherit;
+    transition: color var(--ui-duration-fast) var(--ui-ease-out),
+      border-color var(--ui-duration-fast) var(--ui-ease-out),
+      background var(--ui-duration-fast) var(--ui-ease-out);
+  }
+
+  .docs-code-card-copy:hover {
+    color: var(--ui-color-primary);
+    border-color: var(--ui-color-primary);
+  }
+
+  .docs-code-card-copy.is-copied {
+    color: var(--ui-color-primary);
+    border-color: var(--ui-color-primary);
+    background: var(--ui-color-primary-light);
+  }
+
+  .docs-code-card-copy:focus-visible {
+    outline: none;
+    box-shadow: var(--ui-focus-ring);
+  }
+
+  .docs-code-card-body {
+    margin: 0;
+    padding: 1.125rem 1.25rem;
+    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+    font-size: 0.8125rem;
+    line-height: 1.75;
+    overflow-x: auto;
+    color: var(--ui-color-text);
+    background: var(--ui-color-surface);
+    white-space: pre;
+  }
+
+  .docs-code-card-body code {
+    font: inherit;
+    color: inherit;
+    background: transparent;
+    padding: 0;
+  }
+
+  .docs-code-card-status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
