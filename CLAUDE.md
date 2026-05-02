@@ -55,6 +55,7 @@ This project provides several MCP servers to assist in development. Always use t
   - `storybook-angular` MCP: High-fidelity documentation for Angular components.
   - `storybook-react` MCP: Full support including previews and story tests for React.
   - `storybook-vue` MCP: Full support including previews and story tests for Vue.
+- **Component Anatomy & Cross-Framework Mapping**: Use the **`uianatomy` MCP server** (HTTP at `https://uianatomy.dev/mcp`, 22 tools) for canonical component anatomy, axes, slots, transitions, motion, tokens, events, and library divergences. Pair with the bundled `uianatomy-mcp` skill at `.claude/skills/uianatomy-mcp/SKILL.md` for trigger guidance.
 
 ### Storybook MCP Workflows
 
