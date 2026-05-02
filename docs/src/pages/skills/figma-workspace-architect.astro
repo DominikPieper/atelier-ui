@@ -7,7 +7,7 @@ const SITE_URL = 'https://atelier.pieper.io';
 const SKILL_URL = `${SITE_URL}/.well-known/agent-skills/figma-workspace-architect/SKILL.md`;
 const SKILL_NAME = 'figma-workspace-architect';
 const SKILL_VERSION = '0.2.0';
-const REPO_URL = `https://github.com/DominikPieper/atelier-ui/tree/main/skills/${SKILL_NAME}`;
+const REPO_URL = 'https://github.com/DominikPieper/atelier-ui/tree/main/skills/figma-workspace-architect';
 
 const INSTALL_CURL = `# Download the runtime payload (SKILL.md + references/ + assets/)
 curl -sL "${SITE_URL}/.well-known/agent-skills/${SKILL_NAME}.zip" \\
@@ -242,26 +242,16 @@ const tests = [
     <!-- Source -->
     <div class="docs-section">
       <h2 class="docs-section-title">Source</h2>
-      <table class="docs-props-table">
-        <tbody>
-          <tr>
-            <td style="white-space: nowrap; font-weight: 600; font-size: 0.82rem">SKILL.md</td>
-            <td><a href={SKILL_URL} target="_blank" rel="noopener noreferrer" style="color: var(--ui-color-primary); font-family: monospace; font-size: 0.78rem">{SKILL_URL}</a></td>
-          </tr>
-          <tr>
-            <td style="white-space: nowrap; font-weight: 600; font-size: 0.82rem">Repository</td>
-            <td><a href={REPO_URL} target="_blank" rel="noopener noreferrer" style="color: var(--ui-color-primary); font-family: monospace; font-size: 0.78rem">{REPO_URL}</a></td>
-          </tr>
-          <tr>
-            <td style="white-space: nowrap; font-weight: 600; font-size: 0.82rem">Discovery index</td>
-            <td><a href="/.well-known/agent-skills/index.json" style="color: var(--ui-color-primary); font-family: monospace; font-size: 0.78rem">/.well-known/agent-skills/index.json</a></td>
-          </tr>
-          <tr>
-            <td style="white-space: nowrap; font-weight: 600; font-size: 0.82rem">License</td>
-            <td style="font-size: 0.82rem; color: var(--ui-color-text-muted)">Same as the repository (MIT). The skill is <code>private: true</code> on npm — distribution is via the discovery URL only.</td>
-          </tr>
-        </tbody>
-      </table>
+      <dl class="docs-source-dl">
+        <dt>SKILL.md</dt>
+        <dd><a href={SKILL_URL} target="_blank" rel="noopener noreferrer" class="docs-mono-link">{SKILL_URL}</a></dd>
+        <dt>Repository</dt>
+        <dd><a href={REPO_URL} target="_blank" rel="noopener noreferrer" class="docs-mono-link">{REPO_URL}</a></dd>
+        <dt>Discovery index</dt>
+        <dd><a href="/.well-known/agent-skills/index.json" class="docs-mono-link">/.well-known/agent-skills/index.json</a></dd>
+        <dt>License</dt>
+        <dd>Same as the repository (MIT). The skill is <code>private: true</code> on npm — distribution is via the discovery URL only.</dd>
+      </dl>
     </div>
 
     <!-- Bottom nav -->

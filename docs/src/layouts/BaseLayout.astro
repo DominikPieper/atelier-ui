@@ -66,22 +66,22 @@ function isTopActive(path: string): boolean {
 
 // Breadcrumb labels mirror the sidebar nav so JSON-LD crumbs match UI.
 const BREADCRUMB_LABELS: Record<string, string> = {
-  workshop: 'Workshop Setup',
-  'figma-token': 'Figma Access',
+  workshop: 'Workshop setup',
+  'figma-token': 'Figma access',
   troubleshooting: 'Troubleshooting',
-  figma: 'Figma as Source',
-  tutorial: 'Figma to Code',
+  figma: 'Figma as source',
+  tutorial: 'Figma to code',
   storybook: 'Storybook',
-  mcp: 'AI Tools',
+  mcp: 'AI tools',
   components: 'Components',
   install: 'Installation',
-  tokens: 'Design Tokens',
-  patterns: 'Cookbook Patterns',
+  tokens: 'Design tokens',
+  patterns: 'Cookbook patterns',
   llms: 'llms.txt',
-  'agent-skills': 'Agent Skills',
+  'agent-skills': 'Agent skills',
   'claude-md': 'CLAUDE.md',
-  prompts: 'Prompt Templates',
-  'design-principles': 'Design Principles',
+  prompts: 'Prompt templates',
+  'design-principles': 'Design principles',
   accessibility: 'Accessibility',
 };
 
@@ -264,7 +264,7 @@ const breadcrumbSchema = {
             <a href="/figma-token" class={`docs-nav-link${isActive('/figma-token') ? ' active' : ''}`}>
               <Icon name="cable" class="docs-nav-link-icon" />
               <span class="docs-nav-link-num">3</span>
-              Figma Access
+              Figma access
             </a>
             <a href="/tutorial" class={`docs-nav-link${isActive('/tutorial') ? ' active' : ''}`}>
               <Icon name="school" class="docs-nav-link-icon" />
@@ -274,7 +274,7 @@ const breadcrumbSchema = {
             <a href="/first-component" class={`docs-nav-link${isActive('/first-component') ? ' active' : ''}`}>
               <Icon name="check_circle" class="docs-nav-link-icon" />
               <span class="docs-nav-link-num">5</span>
-              First Component
+              First component
             </a>
             <a href="/patterns" class={`docs-nav-link${isActive('/patterns') ? ' active' : ''}`}>
               <Icon name="menu_book" class="docs-nav-link-icon" />
@@ -300,11 +300,11 @@ const breadcrumbSchema = {
             </a>
             <a href="/prompts" class={`docs-nav-link${isActive('/prompts') ? ' active' : ''}`}>
               <Icon name="chat" class="docs-nav-link-icon" />
-              Prompt Templates
+              Prompt templates
             </a>
             <a href="/a11y-workflow" class={`docs-nav-link${isActive('/a11y-workflow') ? ' active' : ''}`}>
               <Icon name="accessibility_new" class="docs-nav-link-icon" />
-              A11y Workflow
+              A11y workflow
             </a>
             <a href="/troubleshooting" class={`docs-nav-link${isActive('/troubleshooting') ? ' active' : ''}`}>
               <Icon name="help" class="docs-nav-link-icon" />
@@ -328,11 +328,11 @@ const breadcrumbSchema = {
             </a>
             <a href="/tokens" class={`docs-nav-link${isActive('/tokens') ? ' active' : ''}`}>
               <Icon name="palette" class="docs-nav-link-icon" />
-              Design Tokens
+              Design tokens
             </a>
             <a href="/mcp" class={`docs-nav-link${isActive('/mcp') ? ' active' : ''}`}>
               <Icon name="smart_toy" class="docs-nav-link-icon" />
-              MCP Playground
+              MCP playground
             </a>
             <a href="/llms" class={`docs-nav-link${isActive('/llms') ? ' active' : ''}`}>
               <Icon name="description" class="docs-nav-link-icon" />
@@ -344,7 +344,7 @@ const breadcrumbSchema = {
             </a>
             <a href="/agent-skills" class={`docs-nav-link${isActive('/agent-skills') ? ' active' : ''}`}>
               <Icon name="robot_2" class="docs-nav-link-icon" />
-              Agent Skills
+              Agent skills
             </a>
           </div>
 
@@ -357,7 +357,7 @@ const breadcrumbSchema = {
             </div>
             <a href="/design-principles" class={`docs-nav-link${isActive('/design-principles') ? ' active' : ''}`}>
               <Icon name="schema" class="docs-nav-link-icon" />
-              Design Principles
+              Design principles
             </a>
             <a href="/accessibility" class={`docs-nav-link${isActive('/accessibility') ? ' active' : ''}`}>
               <Icon name="accessibility_new" class="docs-nav-link-icon" />
@@ -374,11 +374,11 @@ const breadcrumbSchema = {
             </div>
             <a href="/" class="docs-nav-link docs-nav-link--back">
               <Icon name="arrow_back" class="docs-nav-link-icon" />
-              Back to Docs
+              Back to docs
             </a>
             <a href="/workshop" class="docs-nav-link">
               <Icon name="build_circle" class="docs-nav-link-icon" />
-              Workshop Setup
+              Workshop setup
             </a>
             <a href="/install" class="docs-nav-link">
               <Icon name="download" class="docs-nav-link-icon" />
@@ -390,7 +390,7 @@ const breadcrumbSchema = {
             </a>
             <a href="/components" class={`docs-nav-link${currentPath === '/components' ? ' active' : ''}`}>
               <Icon name="grid_view" class="docs-nav-link-icon" />
-              All Components
+              All components
             </a>
           </div>
 

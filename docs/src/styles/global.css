@@ -739,6 +739,46 @@ summary:focus-visible,
   color: var(--ui-color-text-muted);
 }
 
+/* Mono-styled inline link, used in reference tables. */
+.docs-mono-link {
+  color: var(--ui-color-primary);
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 0.78rem;
+  word-break: break-all;
+}
+
+/* Inline body-text links — underline so the link is distinguishable from
+ * surrounding muted text in dark mode without relying on color alone
+ * (WCAG 1.4.1). Scoped to prose containers to avoid underlining cards,
+ * nav links, and CTA buttons that already have their own affordance. */
+.docs-main-content :is(p, li, dd, blockquote) a:not([class]),
+.docs-main-content :is(p, li, dd, blockquote) a.docs-link-primary {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+/* Definition list used for skill-source metadata. */
+.docs-source-dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 1.25rem;
+  row-gap: 0.625rem;
+  font-size: 0.82rem;
+}
+
+.docs-source-dl dt {
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.docs-source-dl dd {
+  margin: 0;
+  color: var(--ui-color-text-muted);
+  line-height: 1.55;
+}
+
 .docs-code-block-lang {
   font-family: var(--docs-font-code);
   font-size: 0.68rem;
@@ -1174,6 +1214,31 @@ summary:focus-visible,
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+.docs-category-tag--primary {
+  background: var(--ui-color-primary-light);
+  color: var(--ui-color-primary);
+}
+
+.docs-category-tag--info {
+  background: var(--ui-color-info-bg);
+  color: var(--ui-color-info-text);
+}
+
+.docs-category-tag--success {
+  background: var(--ui-color-success-bg);
+  color: var(--ui-color-success-text);
+}
+
+.docs-category-tag--warning {
+  background: var(--ui-color-warning-bg);
+  color: var(--ui-color-warning-text);
+}
+
+.docs-category-tag--danger {
+  background: var(--ui-color-danger-bg);
+  color: var(--ui-color-danger-text);
 }
 
 /* ── Meta chips ──────────────────────────────────────── */

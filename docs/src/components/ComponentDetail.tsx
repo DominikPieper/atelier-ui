@@ -11,9 +11,12 @@ import {
 import { componentDocs, COMPONENT_CATEGORIES } from '../data/components';
 import { getFramework, setFramework, subscribeFramework, type Framework } from '../lib/framework-pref';
 
-const CATEGORY_COLORS: Record<string, string> = {
-  Inputs: '#5b21b6', Display: '#075985', Navigation: '#065f46',
-  Overlay: '#92400e', Layout: '#991b1b',
+const CATEGORY_TONE: Record<string, string> = {
+  Inputs: 'primary',
+  Display: 'info',
+  Navigation: 'success',
+  Overlay: 'warning',
+  Layout: 'danger',
 };
 
 const IMPORT_MAP: Record<string, string[]> = {
@@ -387,7 +390,7 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
   }
 
   const category = getCategory(name);
-  const categoryColor = CATEGORY_COLORS[category] ?? 'var(--ui-color-primary)';
+  const categoryTone = CATEGORY_TONE[category] ?? 'primary';
   const importSymbols = IMPORT_MAP[name] ?? [];
 
   return (
@@ -404,10 +407,7 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
       {/* Page header */}
       <div className="docs-page-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-          <span
-            className="docs-category-tag"
-            style={{ background: `color-mix(in srgb, ${categoryColor} 12%, transparent)`, color: categoryColor }}
-          >
+          <span className={`docs-category-tag docs-category-tag--${categoryTone}`}>
             {category}
           </span>
           {doc.status && (
