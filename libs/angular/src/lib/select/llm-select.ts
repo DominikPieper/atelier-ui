@@ -240,7 +240,7 @@ export class LlmSelect implements FormValueControl<string>, LlmSelectContext, On
         if (!this.isOpen()) {
           this.open();
         } else {
-          const activeItem = this.keyManager?.activeItem as SelectOptionItem | null | undefined;
+          const activeItem = this.keyManager?.activeItem;
           if (activeItem) {
             this.select(activeItem.value);
           }

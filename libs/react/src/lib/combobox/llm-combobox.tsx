@@ -1,10 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { LlmComboboxOption, LlmComboboxSpec } from '../spec';
 import './llm-combobox.css';
 
 export type { LlmComboboxOption };
-
-let nextId = 0;
 
 export interface LlmComboboxProps extends LlmComboboxSpec {
   value?: string;
@@ -46,7 +44,8 @@ export function LlmCombobox({
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const ids = useRef({ input: `llm-combobox-input-${nextId}`, panel: `llm-combobox-panel-${nextId++}` });
+  const inputId = useId();
+  const panelId = useId();
 
   const selectedLabel = useMemo(
     () => options.find((o) => o.value === value)?.label ?? '',
@@ -59,12 +58,7 @@ export function LlmCombobox({
     return options.filter((o) => o.label.toLowerCase().includes(q));
   }, [options, query]);
 
-  // Sync display when value changes externally
-  useEffect(() => {
-    if (!isOpen) {
-      setQuery(selectedLabel);
-    }
-  }, [selectedLabel, isOpen]);
+  const displayValue = isOpen ? query : selectedLabel;
 
   // Outside-click closes panel
   useEffect(() => {
@@ -81,6 +75,7 @@ export function LlmCombobox({
 
   function open() {
     if (disabled || readonly) return;
+    setQuery(selectedLabel);
     setIsOpen(true);
     setActiveIndex(-1);
   }
@@ -158,7 +153,7 @@ export function LlmCombobox({
     .join(' ');
 
   const activeOptionId =
-    activeIndex >= 0 ? `${ids.current.panel}-option-${activeIndex}` : undefined;
+    activeIndex >= 0 ? `${panelId}-option-${activeIndex}` : undefined;
 
   return (
     <div className={classes} ref={containerRef}>
@@ -169,9 +164,9 @@ export function LlmCombobox({
           type="text"
           autoComplete="off"
           role="combobox"
-          id={ids.current.input}
+          id={inputId}
           aria-expanded={isOpen}
-          aria-controls={ids.current.panel}
+          aria-controls={panelId}
           aria-autocomplete="list"
           aria-activedescendant={activeOptionId}
           aria-invalid={invalid || undefined}
@@ -180,7 +175,7 @@ export function LlmCombobox({
           required={required}
           name={name}
           placeholder={placeholder}
-          value={query}
+          value={displayValue}
           onChange={handleInput}
           onFocus={handleFocus}
           onBlur={handleBlur}
@@ -195,16 +190,16 @@ export function LlmCombobox({
 
       {isOpen && (
         <ul
-          id={ids.current.panel}
+          id={panelId}
           className="llm-combobox-panel"
           role="listbox"
-          aria-labelledby={ids.current.input}
+          aria-labelledby={inputId}
         >
           {filteredOptions.length > 0 ? (
             filteredOptions.map((option, i) => (
               <li
                 key={option.value}
-                id={`${ids.current.panel}-option-${i}`}
+                id={`${panelId}-option-${i}`}
                 role="option"
                 className={[
                   'llm-combobox-option',
