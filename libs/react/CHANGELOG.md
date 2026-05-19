@@ -1,3 +1,14 @@
+## 0.1.3 (2026-05-19)
+
+### 🩹 Fixes
+
+- **lint:** satisfy new typescript-eslint + react-hooks v7.1 rules ([e9713f6](https://github.com/DominikPieper/atelier-ui/commit/e9713f6))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.1.2 (2026-04-30)
 
 This was a version bump only for react to align it with other projects, there were no code changes.
