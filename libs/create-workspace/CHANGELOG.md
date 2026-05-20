@@ -1,3 +1,14 @@
+## 0.1.5 (2026-05-20)
+
+### 🩹 Fixes
+
+- **lint:** bump create-nx-workspace + @nx/devkit pins to 22.7.2 ([b33716d](https://github.com/DominikPieper/atelier-ui/commit/b33716d))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.1.4 (2026-05-20)
 
 This was a version bump only for create-workspace to align it with other projects, there were no code changes.
