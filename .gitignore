@@ -54,3 +54,6 @@ storybook-static
 
 # Astro build cache
 docs/.astro
+
+.nx/polygraph
+.nx/self-healing
