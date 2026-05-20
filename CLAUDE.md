@@ -51,32 +51,31 @@ This project provides several MCP servers to assist in development. Always use t
 
 - **Nx & Workspace Management**: Use the **Nx MCP server** for understanding project dependencies and running workspace tasks.
 - **Angular-Specific CLI**: Use the **Angular CLI MCP server** for Angular-specific best practices, API searches, and examples.
-- **Component Discovery & Docs**: Use the framework-specific **Storybook MCP servers** for exact component specs:
-  - `storybook-angular` MCP: High-fidelity documentation for Angular components.
-  - `storybook-react` MCP: Full support including previews and story tests for React.
-  - `storybook-vue` MCP: Full support including previews and story tests for Vue.
+- **Component Discovery & Docs**: Use the framework-specific **Storybook MCP servers** for exact component specs. Storybook 10.4 ships MCP in two layers — be explicit about which surface you're calling.
 - **Component Anatomy & Cross-Framework Mapping**: Use the **`uianatomy` MCP server** (HTTP at `https://uianatomy.dev/mcp`, 22 tools) for canonical component anatomy, axes, slots, transitions, motion, tokens, events, and library divergences. Pair with the bundled `uianatomy-mcp` skill at `.claude/skills/uianatomy-mcp/SKILL.md` for trigger guidance.
 
 ### Storybook MCP Workflows
 
-**When creating or editing components/stories:**
-1. Call `get-storybook-story-instructions` before writing any code
-2. After any change, call `preview-stories` and include the returned URLs in your response
-3. Run `run-story-tests` after each change — fix failures before reporting completion
+**Two MCP surfaces (do not conflate):**
 
-**When reading component docs:**
+| Surface | URL | Tools exposed | Frameworks |
+|---|---|---|---|
+| **Hosted** (`@storybook/mcp` via Cloudflare Worker, reads static manifests) | `atelier.pieper.io/storybook-{angular,react,vue}/mcp` | `list-all-documentation`, `get-documentation`, `get-documentation-for-story` | React: components + docs. Angular/Vue: **docs (MDX foundation pages) only** — Storybook 10.4 only emits `components.json` for React. |
+| **Local dev** (`@storybook/addon-mcp` inside a running Storybook) | `http://localhost:6006/mcp` (after `nx storybook <fw>`) | Hosted tools **plus** `preview-stories`, `run-story-tests`, `get-storybook-story-instructions` | React: preview-supported. Vue/Angular: experimental per Storybook 10.4 — may not work. |
+
+The `.mcp.json` at the repo root wires the hosted surface for all three frameworks. Add a local entry when you need preview / test tools or per-component data on Angular/Vue. For Angular/Vue prop tables, fall back to the React MCP as cross-framework API reference (the spec contract is identical) or read `libs/spec/src/index.ts` directly.
+
+**When reading component docs (any framework, any surface):**
 1. Call `list-all-documentation` once at session start to get valid IDs
 2. Use `get-documentation` with those IDs — never guess IDs or invent props
 3. If a prop isn't documented, say so rather than inventing it
 
-**Which MCP to use:**
-- Angular components → `storybook-angular` MCP
-  - *Supported Tools*: `list-all-documentation`, `get-documentation`
-  - *Status*: Documentation only; previews and tests coming soon.
-- React components → `storybook-react` MCP
-  - *Supported Tools*: Full support (`preview-stories`, `run-story-tests`, `get-storybook-story-instructions`, etc.)
-- Vue components → `storybook-vue` MCP
-  - *Supported Tools*: Full support (`preview-stories`, `run-story-tests`, etc.)
+**When creating or editing components/stories (React, local dev only):**
+1. Call `get-storybook-story-instructions` before writing any code
+2. After any change, call `preview-stories` and include the returned URLs in your response
+3. Run `run-story-tests` after each change — fix failures before reporting completion
+
+For Angular/Vue, the test loop is `nx test <lib>` (Vitest) plus a manual browser preview in the running Storybook.
 
 ## Core Principles
 
@@ -96,10 +95,7 @@ The primary documentation for the component library lives in the `docs/` applica
 **Do not add component API documentation to this file.** Use the following sources instead:
 - **Interactive Docs**: Run the `docs` app (`nx serve docs`) for framework-specific API tables and live demos.
 - **Spec Library**: Refer to `libs/spec/src/index.ts` for the ground-truth API definitions.
-- **Storybook MCP**: Use the framework-specific Storybook MCP servers for live discovery during development:
-  - Angular components → `storybook-angular` MCP (`list-all-documentation`, `get-documentation`)
-  - React components → `storybook-react` MCP (`list-all-documentation`, `get-documentation`)
-  - Vue components → `storybook-vue` MCP (`list-all-documentation`, `get-documentation`)
+- **Storybook MCP**: See the "Storybook MCP Workflows" table above for the hosted vs. local surfaces and their tools.
 
 ---
 

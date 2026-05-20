@@ -3,13 +3,13 @@ import { dirname } from "node:path";
 import { StorybookConfig } from '@analogjs/storybook-angular';
 import type { InlineConfig } from 'vite';
 
-const isProduction = process.env['CI'] || process.env['BUILD_STORYBOOK'];
-
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [
-    // MCP addon requires a running Node.js server — dev only
-    ...(!isProduction ? ['@storybook/addon-mcp'] : []),
+    // Emits manifests/components.json at build time for the hosted @storybook/mcp worker;
+    // also registers dev-only tools (preview-stories, run-story-tests, get-storybook-story-instructions)
+    // when Storybook runs as a local dev server.
+    '@storybook/addon-mcp',
     getAbsolutePath("@storybook/addon-vitest"),
     getAbsolutePath("@storybook/addon-a11y"),
     getAbsolutePath("@storybook/addon-designs"),

@@ -98,21 +98,29 @@ const STORYBOOK_LINKS = [
         <div class="docs-step-row">
           <span class="docs-step-badge">03</span>
           <div class="docs-step-body">
-            <h3 class="docs-h3">Framework parity</h3>
+            <h3 class="docs-h3">Two MCP surfaces</h3>
             <p class="docs-step-desc">
-              All frameworks support prop documentation and component search. Story previews and Vitest integration are currently React and Vue only.
+              Storybook 10.4 ships MCP in two layers. The <strong>hosted</strong> endpoint serves docs from a static manifest — works for any framework, no install. The <strong>local dev</strong> surface adds preview &amp; test tools while a local Storybook is running, and is officially React-preview only as of 10.4.
             </p>
             <table class="docs-props-table">
               <thead>
-                <tr><th>Feature</th><th>React</th><th>Vue</th><th>Angular</th></tr>
+                <tr><th>Tool</th><th>Hosted (atelier.pieper.io)</th><th>Local dev (<code>nx storybook &lt;fw&gt;</code>)</th></tr>
               </thead>
               <tbody>
-                <tr><td>Prop documentation</td><td>Full</td><td>Full</td><td>Full</td></tr>
-                <tr><td>Component search</td><td>Full</td><td>Full</td><td>Full</td></tr>
-                <tr><td>Story previews</td><td>Full</td><td>Full</td><td>Limited</td></tr>
-                <tr><td>Vitest integration</td><td>Full</td><td>Full</td><td>Planned</td></tr>
+                <tr><td><code>list-all-documentation</code></td><td>React: components + docs · Angular/Vue: docs only</td><td>All frameworks</td></tr>
+                <tr><td><code>get-documentation</code></td><td>React: full · Angular/Vue: docs only</td><td>All frameworks</td></tr>
+                <tr><td><code>get-documentation-for-story</code></td><td>React: full · Angular/Vue: docs only</td><td>All frameworks</td></tr>
+                <tr><td><code>preview-stories</code></td><td>—</td><td>React (preview); Vue/Angular experimental</td></tr>
+                <tr><td><code>run-story-tests</code></td><td>—</td><td>React (preview); Vue/Angular experimental</td></tr>
+                <tr><td><code>get-storybook-story-instructions</code></td><td>—</td><td>React (preview); Vue/Angular experimental</td></tr>
               </tbody>
             </table>
+            <p class="docs-step-desc" style="margin-top: 0.75rem">
+              The hosted endpoint reads <code>manifests/components.json</code> emitted by <code>@storybook/addon-mcp</code> at build time. As of Storybook 10.4 that file is only generated for <strong>React</strong> (via TypeScript Language Server docgen). Angular &amp; Vue static builds only emit <code>docs.json</code> — hosted MCPs for those frameworks return MDX docs (foundations, tokens) but no per-component props. Run the local Storybook dev server for per-component data in Angular/Vue, or use the React MCP as the cross-framework API reference (the spec is identical, only the binding differs).
+            </p>
+            <p class="docs-step-desc" style="margin-top: 0.5rem">
+              The preview / test tools require a running Node.js Storybook dev server and are gated by Storybook 10.4 to React for now.
+            </p>
           </div>
         </div>
 
@@ -123,14 +131,17 @@ const STORYBOOK_LINKS = [
             <h3 class="docs-h3">Endpoints</h3>
             <table class="docs-props-table" style="margin-top: 0.25rem">
               <thead>
-                <tr><th>Library</th><th>URL</th></tr>
+                <tr><th>Library</th><th>Hosted URL</th><th>Local dev URL</th></tr>
               </thead>
               <tbody>
-                <tr><td><code>@atelier-ui/react</code></td><td><code>{SITE_URL}/storybook-react/mcp</code></td></tr>
-                <tr><td><code>@atelier-ui/angular</code></td><td><code>{SITE_URL}/storybook-angular/mcp</code></td></tr>
-                <tr><td><code>@atelier-ui/vue</code></td><td><code>{SITE_URL}/storybook-vue/mcp</code></td></tr>
+                <tr><td><code>@atelier-ui/react</code></td><td><code>{SITE_URL}/storybook-react/mcp</code></td><td><code>http://localhost:6006/mcp</code></td></tr>
+                <tr><td><code>@atelier-ui/angular</code></td><td><code>{SITE_URL}/storybook-angular/mcp</code></td><td><code>http://localhost:6006/mcp</code></td></tr>
+                <tr><td><code>@atelier-ui/vue</code></td><td><code>{SITE_URL}/storybook-vue/mcp</code></td><td><code>http://localhost:6006/mcp</code></td></tr>
               </tbody>
             </table>
+            <p class="docs-step-desc" style="margin-top: 0.5rem">
+              Only one local Storybook can bind <code>localhost:6006</code> at a time — pick the framework you're actively working in.
+            </p>
           </div>
         </div>
       </div>
