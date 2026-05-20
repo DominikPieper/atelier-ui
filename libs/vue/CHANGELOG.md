@@ -1,3 +1,14 @@
+## 0.1.4 (2026-05-20)
+
+### 🩹 Fixes
+
+- **storybook-mcp:** align hosted MCPs with Storybook 10.4 reality ([a043e56](https://github.com/DominikPieper/atelier-ui/commit/a043e56))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.1.3 (2026-05-19)
 
 This was a version bump only for vue to align it with other projects, there were no code changes.
