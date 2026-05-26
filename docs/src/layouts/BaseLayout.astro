@@ -465,6 +465,19 @@ const breadcrumbSchema = {
 
   <script is:inline>
     // ── Re-runs on every page load (initial + Astro View Transitions) ──
+    function bindOnce(el, event, handler) {
+      // ClientRouter swaps <body>, re-executing this inline script. Without a
+      // guard, every navigation stacks another listener on the same element,
+      // and on first paint initPage() runs twice (direct call + astro:page-load),
+      // so each click toggles open/close → mobile nav appears dead. WHY: shared
+      // doc-level listeners accumulate; per-element data-attr is the simplest dedupe.
+      if (!el) return;
+      var key = 'bound_' + event;
+      if (el.dataset[key]) return;
+      el.dataset[key] = '1';
+      el.addEventListener(event, handler);
+    }
+
     function initPage() {
       // Theme toggle
       var themeBtn = document.getElementById('theme-btn');
@@ -484,8 +497,7 @@ const breadcrumbSchema = {
 
       updateThemeIcon();
 
-      if (themeBtn) {
-        themeBtn.addEventListener('click', function() {
+      bindOnce(themeBtn, 'click', function() {
           var current = document.documentElement.getAttribute('data-theme');
           var next = current === 'dark' ? 'light' : 'dark';
 
@@ -536,7 +548,6 @@ const breadcrumbSchema = {
               root.classList.remove('docs-theme-transitioning--to-light');
             });
         });
-      }
 
       // Mobile sidebar
       var menuBtn  = document.getElementById('menu-btn');
@@ -560,16 +571,14 @@ const breadcrumbSchema = {
         }
       }
 
-      if (menuBtn) {
-        menuBtn.addEventListener('click', function() {
-          sidebar && sidebar.classList.contains('docs-sidebar--open')
-            ? closeSidebar()
-            : openSidebar();
-        });
-      }
+      bindOnce(menuBtn, 'click', function() {
+        sidebar && sidebar.classList.contains('docs-sidebar--open')
+          ? closeSidebar()
+          : openSidebar();
+      });
 
-      if (backdrop) backdrop.addEventListener('click', closeSidebar);
-      if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+      bindOnce(backdrop, 'click', closeSidebar);
+      bindOnce(closeBtn, 'click', closeSidebar);
 
       // Scroll to top button
       var scrollTopBtn = document.getElementById('scroll-top');
@@ -582,15 +591,17 @@ const breadcrumbSchema = {
         }
       }
 
-      if (mainEl) mainEl.addEventListener('scroll', handleScroll);
-      else window.addEventListener('scroll', handleScroll);
-
-      if (scrollTopBtn) {
-        scrollTopBtn.addEventListener('click', function() {
-          if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
-          else window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+      if (mainEl) {
+        bindOnce(mainEl, 'scroll', handleScroll);
+      } else if (!window.__atelierScrollBound) {
+        window.__atelierScrollBound = true;
+        window.addEventListener('scroll', handleScroll);
       }
+
+      bindOnce(scrollTopBtn, 'click', function() {
+        if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
+        else window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
 
       // Mark every nav link with `.active` as the current page so screen
       // readers announce "current page" instead of just "link". The .active
@@ -646,8 +657,13 @@ const breadcrumbSchema = {
       }
     }
 
-    // Run on initial load and after every Astro page transition
-    document.addEventListener('astro:page-load', initPage);
+    // Run on initial load and after every Astro page transition.
+    // Register doc-level listener once per window — ClientRouter re-executes
+    // this inline script on swap, which would otherwise stack listeners.
+    if (!window.__atelierPageLoadBound) {
+      window.__atelierPageLoadBound = true;
+      document.addEventListener('astro:page-load', initPage);
+    }
     initPage();
   </script>
 
