@@ -16,6 +16,11 @@ export const OG_PAGES = {
     description:
       'Set up the Atelier workshop end-to-end — monorepo, dependencies, Storybook, and AI tooling.',
   },
+  schulung: {
+    title: '2-Tages-Schulung',
+    description:
+      'Curriculum für die Atelier 2-Tages-Schulung — KI-gestützter Design-to-Code-Workflow mit Figma, Storybook, MCP und Claude Code.',
+  },
   install: {
     title: 'Installation',
     description:

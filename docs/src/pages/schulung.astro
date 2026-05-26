@@ -1,0 +1,479 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import HelpFooter from '../components/HelpFooter.astro';
+import BottomNav from '../components/BottomNav.astro';
+import Callout from '../components/Callout.astro';
+
+type Block = {
+  num: string;
+  time: string;
+  title: string;
+  format: string;
+  risk?: boolean;
+  bullets: string[];
+};
+
+type Day = {
+  day: string;
+  title: string;
+  goal: string;
+  result: string[];
+  blocks: Block[];
+};
+
+const DAYS: Day[] = [
+  {
+    day: 'Tag 1',
+    title: 'Werkzeuge verstehen & Workflow end-to-end',
+    goal: 'Jeder Teilnehmer hat ein laufendes Setup, kennt alle vier Pillars (Figma · Storybook · MCP · Claude Code) und hat einmal end-to-end eine existierende Atelier-Komponente per Prompt verändert.',
+    result: [
+      'Laufendes Atelier-Workspace mit grünem preflight',
+      'Mindestens ein erfolgreicher Prompt-zu-Code-Roundtrip',
+      'Verständnis: Figma = Quelle, Storybook = Spec, MCP = Verbindung, Claude = Ausführung',
+    ],
+    blocks: [
+      {
+        num: '00',
+        time: '09:00–09:30 · 30 min',
+        title: 'Kickoff',
+        format: 'Vortrag + Live-Demo',
+        bullets: [
+          'Warum component-driven? Warum AI?',
+          'Live-Demo: in 5 min eine Atelier-Komponente per Prompt cross-framework abändern',
+          'Was lernen Teilnehmer in 2 Tagen, was nicht',
+        ],
+      },
+      {
+        num: '01',
+        time: '09:30–10:45 · 75 min',
+        title: 'Setup-Verifikation & Preflight',
+        format: 'Hands-on · High-Risk Block',
+        risk: true,
+        bullets: [
+          'Pre-Workshop-Setup ist Pflicht-Hausaufgabe — Block prüft nur, installiert nicht von Null',
+          'Node 20 oder 22 LTS aktiv, pnpm/npm-Version aus package.json#packageManager',
+          'Repo geklont, Claude Code CLI eingeloggt mit eigenem API-Key, Figma-Account-Token gesetzt',
+          'npm run preflight lokal grün',
+          'MCP-Konfig in .claude/settings.json gemeinsam lesen und verstehen',
+        ],
+      },
+      {
+        num: '02',
+        time: '11:00–12:15 · 75 min',
+        title: 'Figma für Entwickler',
+        format: 'Geführte Tour',
+        bullets: [
+          'Wie Designer denken — Atelier-File öffnen',
+          'Variables / Tokens: Primitives → Semantic → Component',
+          'Component-Sets, Variants, Component Properties, Auto Layout',
+          'Modes (light/dark), Inventory- vs Components-Page',
+        ],
+      },
+      {
+        num: '03',
+        time: '13:15–14:30 · 75 min',
+        title: 'Storybook als API-Wahrheit',
+        format: 'Hands-on Vergleich',
+        bullets: [
+          'Was ist Storybook, was sind Stories, Prop-Tables',
+          'Hosted Storybooks öffnen — selbe Komponente (Button) in Angular/React/Vue vergleichen',
+          'libs/spec als Quelle der Wahrheit — Parität spürbar machen',
+          'Storybook 10.4: Agentic Setup, experimentalReactComponentMeta, Change Review Sidebar, Subcomponent-Docs',
+        ],
+      },
+      {
+        num: '04',
+        time: '14:45–16:00 · 75 min',
+        title: 'MCP & Claude Code Grundlagen',
+        format: 'Hands-on Demo',
+        bullets: [
+          'Was ist MCP? Welche Server sind aktiv (storybook-{angular,react,vue}, nx-mcp, figma-console, uianatomy)?',
+          'Storybook 10.4 Toolset-Modell: docs / dev / test — hosted vs. lokale Surface',
+          'Toolset-Gating zeigen — wann test für Read-Only-Agents deaktivieren',
+          'Live-Übung: Claude per Prompt nach Button-Props fragen, Token-Werte ausgeben, Preview im Chat',
+          'Negativ-Demo: dieselbe Frage im Browser-Chat ohne MCP → Halluzination. Mit MCP → korrekte Antwort',
+          'Skills-Konzept (figma-workspace-architect, atelier-design) vorstellen',
+        ],
+      },
+      {
+        num: '05',
+        time: '16:10–17:15 · 65 min',
+        title: 'Geführter End-to-End-Walkthrough',
+        format: 'Hands-on, alle synchron',
+        bullets: [
+          'Das offizielle /tutorial: Figma → MCP → Token-genauer Code in 5 Schritten',
+          'Teilnehmer prompten Claude im gewählten Framework, ändern existierende Komponente (z.B. neuer Button-Tone)',
+          'Wichtig: nicht selbst tippen, sondern prompten',
+        ],
+      },
+      {
+        num: '06',
+        time: '17:15–17:30 · 15 min',
+        title: 'Wrap-up Tag 1',
+        format: 'Diskussion',
+        bullets: [
+          'Was war überraschend? Wo hat AI sauber funktioniert, wo nicht?',
+          'Vorschau Tag 2 + optionale Hausaufgabe: kleine Komponente skizzieren (Toast / Tag-Chip / Stat-Card / Badge)',
+        ],
+      },
+    ],
+  },
+  {
+    day: 'Tag 2',
+    title: 'Eigene Komponente bauen (Figma → Storybook → Code)',
+    goal: 'Jeder Teilnehmer hat eine selbst gestaltete Komponente durchgängig produziert: Figma-Spec mit Variants & Tokens, generierte Story, generierter Code im gewählten Framework, A11y-Check bestanden, Dark Mode funktioniert.',
+    result: [
+      'Eigene Komponente im Atelier-Figma-File (Component-Set mit Variants + Properties + Dark-Mode)',
+      'Generierte Spec + Story im eigenen Workspace',
+      'Funktionierende Implementierung im gewählten Framework',
+      'A11y-Audit bestanden',
+    ],
+    blocks: [
+      {
+        num: '00',
+        time: '09:00–09:30 · 30 min',
+        title: 'Recap & Brief',
+        format: 'Vortrag',
+        bullets: [
+          'Tag-1-Recap',
+          'Komponenten-Brief vorstellen — Anatomie, Axes, States, A11y-Anforderungen',
+          'uianatomy MCP als Hilfsmittel zeigen',
+        ],
+      },
+      {
+        num: '01',
+        time: '09:30–11:00 · 90 min',
+        title: 'Design in Figma',
+        format: 'Hands-on',
+        bullets: [
+          'Pflicht-Vorabschritt: Atelier-File in eigene Drafts duplizieren — niemals im Original-File mutieren',
+          '~45 min manuelles Design im Figma-UI (Layout, Variants, Token-Zuweisung)',
+          '~45 min MCP-Strukturierung (Component Properties, A11y-Audits)',
+          'Eigenes Component-Set: Variants, Properties, korrekte Tokens (--ui-*), Dark-Mode-Variante',
+          'Skills als Co-Pilot: figma-workspace-architect (Architektur), atelier-design (Brand-Konsistenz)',
+        ],
+      },
+      {
+        num: '02',
+        time: '11:15–12:30 · 75 min',
+        title: 'Spec & Story per Prompt',
+        format: 'Prompt-Übung',
+        bullets: [
+          'API in Worten beschreiben → von Claude eine Spec (im Stil von libs/spec/src/index.ts) und Story generieren lassen',
+          'LLM-optimierte API-Regeln: predictable naming, literal unions, composition über config, keine versteckten Defaults',
+          'Iterieren bis Prop-Table passt',
+          'React-Teilnehmer: nx storybook react parallel + get-storybook-story-instructions (Pflicht vor jedem *.stories.* Edit)',
+          'Angular/Vue: plan/big-picture.md direkt zur Hand, ggf. React-Story als Vorlage holen',
+        ],
+      },
+      {
+        num: '03',
+        time: '13:30–15:00 · 90 min',
+        title: 'Codegen im Wunsch-Framework',
+        format: 'Prompt-Übung',
+        bullets: [
+          'Fokus: Prompts schreiben, Output bewerten, korrigieren — nicht selbst tippen',
+          'Token-Treue erzwingen: Golden-Prompts verlangen --ui-* Custom Properties',
+          'plan/big-picture.md (API-Regeln) + plan/design-principles.md (Surface/Motion/Dark Mode) im Prompt-Kontext',
+          'Test-Loop React: dev + test Toolset über localhost:6006/mcp (preview-stories, run-story-tests mit a11y)',
+          'Test-Loop Angular/Vue: nx test <lib> --watch + parallel laufende Storybook im Browser',
+          'AI-gestütztes Debugging: Fehlermeldungen per Copy-Paste an Claude zurückgeben statt selbst debuggen',
+        ],
+      },
+      {
+        num: '04',
+        time: '15:15–16:30 · 75 min',
+        title: 'A11y + Dark Mode + States',
+        format: 'Hands-on',
+        bullets: [
+          'Dreischritt-A11y-Check: (1) figma_audit_component_accessibility, (2) Storybook A11y-Panel (axe-core), (3) Keyboard-Walkthrough',
+          'Befunde von Claude beheben lassen',
+          'ARIA-Anforderungen, Fokus-Ring via Tokens, Hover/Active/Disabled-States',
+          'Dark-Mode-Toggle via Storybook backgrounds-/theme-Addon — Token-Override-Drift sichtbar machen',
+        ],
+      },
+      {
+        num: '05',
+        time: '16:40–17:30 · 50 min',
+        title: 'Show & Tell + Best Practices',
+        format: 'Präsentation + Diskussion',
+        bullets: [
+          'Jeder Teilnehmer zeigt 3–5 min seine Komponente',
+          'Trainer-Synthese: Prompt-Patterns die geklappt haben, Anti-Patterns, wann Claude scheitert, wie mit Drift umgehen',
+          'Ausblick: produktiver Einsatz im eigenen Repo, eigene CLAUDE.md, eigene Skills',
+        ],
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="2-Tages-Schulung"
+  description="Curriculum für die Atelier 2-Tages-Schulung — KI-gestützter Design-to-Code-Workflow mit Figma, Storybook, MCP und Claude Code. Jeder Teilnehmer im Wunsch-Framework (Angular / React / Vue)."
+  currentPath="/schulung"
+>
+  <div class="docs-inline-page">
+
+    <PageHero
+      kind="tutorial"
+      time="2 Tage · je ~7–8 h"
+      tag="Schulung · Curriculum"
+      title="2-Tages-Schulung"
+      ledeMax="640px"
+    >
+      KI-gestützter Design-to-Code-Workflow für Entwickler mit solider Frontend-Basis. Jeder Teilnehmer wählt sein eigenes Framework (Angular / React / Vue) — am Ende steht eine <strong>selbst designte und implementierte Komponente</strong> in Figma, Storybook und Code.
+    </PageHero>
+
+    <div class="objective-box">
+      <div class="objective-col">
+        <h2 class="objective-heading objective-heading--accent">Zielgruppe</h2>
+        <ul class="objective-list">
+          <li>Entwickler mit Frontend-Basis (Angular, React oder Vue)</li>
+          <li>Wenig Erfahrung mit Figma, Storybook, MCP oder AI-Codegen</li>
+          <li>Sprache: Deutsch</li>
+          <li>Eigenes Framework wählbar — Code ist zweitrangig</li>
+        </ul>
+      </div>
+      <div class="objective-col">
+        <h2 class="objective-heading">Hauptlernziel</h2>
+        <ul class="objective-list objective-list--muted">
+          <li>Die vier Pillars verstehen: Figma · Storybook · MCP · Claude Code</li>
+          <li>End-to-End Design-to-Code-Workflow beherrschen</li>
+          <li>Komponente von Figma-Spec bis Production-Code prompten</li>
+          <li>A11y- und Dark-Mode-Loop sicher anwenden</li>
+        </ul>
+      </div>
+    </div>
+
+    <Callout tone="tip" title="Format pro Tag">
+      <p>
+        ~7–8 h netto · 60 min Mittagspause · 2× 15 min Kaffeepausen · kleine Mikro-Pausen. Pre-Workshop-Setup
+        (Node 22 LTS, Claude Code CLI, Figma-Token, <code>npm run preflight</code> grün) ist Pflicht-Hausaufgabe —
+        siehe <a href="/workshop" class="docs-link-primary">Workshop Setup</a>.
+      </p>
+    </Callout>
+
+    {DAYS.map((day) => (
+      <section class="schulung-day" aria-labelledby={`day-${day.day.replace(' ', '-').toLowerCase()}`}>
+        <header class="schulung-day-header">
+          <span class="schulung-day-eyebrow">{day.day}</span>
+          <h2 class="schulung-day-title" id={`day-${day.day.replace(' ', '-').toLowerCase()}`}>
+            {day.title}
+          </h2>
+          <p class="schulung-day-goal"><strong>Tagesziel:</strong> {day.goal}</p>
+        </header>
+
+        <ol class="docs-step-list schulung-blocks">
+          {day.blocks.map((block) => (
+            <li class={`docs-step-row schulung-block${block.risk ? ' schulung-block--risk' : ''}`}>
+              <span class="docs-step-badge">{block.num}</span>
+              <div>
+                <div class="schulung-block-meta">
+                  <span class="schulung-block-time">{block.time}</span>
+                  <span class="schulung-block-format">{block.format}</span>
+                  {block.risk && <span class="schulung-block-risk">High-Risk</span>}
+                </div>
+                <h3 class="docs-h3">{block.title}</h3>
+                <ul class="schulung-bullets">
+                  {block.bullets.map((b) => <li>{b}</li>)}
+                </ul>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <div class="schulung-result">
+          <h3 class="schulung-result-heading">Lieferergebnis pro Teilnehmer</h3>
+          <ul class="objective-list">
+            {day.result.map((r) => <li>{r}</li>)}
+          </ul>
+        </div>
+      </section>
+    ))}
+
+    <section class="docs-section" aria-labelledby="verify-title">
+      <h2 class="docs-section-title" id="verify-title">Erfolgs-Verifizierung</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1rem; font-size: 0.85rem">
+        End-to-End-Check am Ende von Tag 2 pro Teilnehmer:
+      </p>
+      <ol class="schulung-verify">
+        <li>Komponente liegt als Component-Set im Atelier-Figma-File (auf einer Schulungs-Page)</li>
+        <li><code>npm run preflight</code> weiter grün</li>
+        <li><code>nx serve &lt;workshop-fw&gt;</code> zeigt Komponente in einer kleinen Demo-Page</li>
+        <li>Test-Loop grün: React → <code>run-story-tests</code> MCP-Call passes; Angular/Vue → <code>nx test &lt;lib&gt;</code> + Story sichtbar im laufenden Storybook</li>
+        <li><code>figma_audit_component_accessibility</code> ohne kritische Findings <strong>und</strong> Storybook A11y-Tab ohne axe-core-Findings</li>
+        <li>Dark Mode wird durch Token-Override korrekt umgeschaltet</li>
+      </ol>
+    </section>
+
+    <HelpFooter page="schulung" />
+
+    <BottomNav items={[
+      { to: '/workshop', label: 'Setup',    title: 'Workshop setup', icon: 'build_circle' },
+      { to: '/tutorial', label: 'Tutorial', title: 'Figma to code',  icon: 'school' },
+      { to: '/prompts',  label: 'Prompts',  title: 'Prompt templates', icon: 'chat' },
+    ]} />
+
+  </div>
+</BaseLayout>
+
+<style>
+  .schulung-day {
+    margin-bottom: 3rem;
+    padding-top: 1rem;
+  }
+  .schulung-day + .schulung-day {
+    border-top: 1px solid var(--ui-color-border);
+    padding-top: 2.5rem;
+  }
+  .schulung-day-header {
+    margin-bottom: 1.75rem;
+  }
+  .schulung-day-eyebrow {
+    display: inline-block;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ui-color-primary);
+    background: color-mix(in srgb, var(--ui-color-primary) 12%, transparent);
+    padding: 0.2rem 0.55rem;
+    border-radius: 3px;
+    margin-bottom: 0.65rem;
+  }
+  .schulung-day-title {
+    font-size: 1.45rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.65rem;
+    color: var(--ui-color-text);
+    line-height: 1.2;
+  }
+  .schulung-day-goal {
+    margin: 0;
+    color: var(--ui-color-text-muted);
+    font-size: 0.88rem;
+    line-height: 1.6;
+    max-width: 60rem;
+  }
+  .schulung-day-goal strong {
+    color: var(--ui-color-text);
+  }
+
+  .schulung-blocks {
+    margin-bottom: 2rem;
+  }
+
+  .schulung-block-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    margin-bottom: 0.45rem;
+    font-size: 0.72rem;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    color: var(--ui-color-text-muted);
+  }
+  .schulung-block-time {
+    color: var(--ui-color-text);
+    font-weight: 600;
+  }
+  .schulung-block-format {
+    color: var(--ui-color-text-muted);
+  }
+  .schulung-block-format::before {
+    content: '·';
+    margin-right: 0.5rem;
+    opacity: 0.5;
+  }
+  .schulung-block-risk {
+    color: var(--ui-color-danger);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .schulung-block-risk::before {
+    content: '·';
+    margin-right: 0.5rem;
+    opacity: 0.5;
+    color: var(--ui-color-text-muted);
+    font-weight: 400;
+  }
+
+  .schulung-block--risk .docs-step-badge {
+    color: var(--ui-color-danger);
+    background: color-mix(in srgb, var(--ui-color-danger) 12%, transparent);
+  }
+
+  .schulung-bullets {
+    margin: 0.4rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    line-height: 1.55;
+    color: var(--ui-color-text);
+  }
+  .schulung-bullets li {
+    position: relative;
+    padding-left: 1rem;
+  }
+  .schulung-bullets li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--ui-color-primary);
+    opacity: 0.7;
+  }
+  .schulung-bullets code {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.78rem;
+    color: var(--ui-color-primary);
+    background: var(--ui-color-primary-light);
+    padding: 0.05em 0.35em;
+    border-radius: var(--ui-radius-sm);
+  }
+
+  .schulung-result {
+    margin-top: 1.5rem;
+    padding: 1.1rem 1.3rem;
+    background: var(--ui-color-surface-raised);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+  }
+  .schulung-result-heading {
+    margin: 0 0 0.65rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ui-color-success);
+  }
+
+  .schulung-verify {
+    margin: 0;
+    padding-left: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    line-height: 1.55;
+    color: var(--ui-color-text);
+  }
+  .schulung-verify code {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.78rem;
+    color: var(--ui-color-primary);
+    background: var(--ui-color-primary-light);
+    padding: 0.05em 0.35em;
+    border-radius: var(--ui-radius-sm);
+  }
+</style>

@@ -67,6 +67,7 @@ function isTopActive(path: string): boolean {
 // Breadcrumb labels mirror the sidebar nav so JSON-LD crumbs match UI.
 const BREADCRUMB_LABELS: Record<string, string> = {
   workshop: 'Workshop setup',
+  schulung: '2-Tages-Schulung',
   'figma-token': 'Figma access',
   troubleshooting: 'Troubleshooting',
   figma: 'Figma as source',
@@ -256,29 +257,34 @@ const breadcrumbSchema = {
               <span class="docs-nav-link-num">1</span>
               Overview
             </a>
+            <a href="/schulung" class={`docs-nav-link${isActive('/schulung') ? ' active' : ''}`}>
+              <Icon name="schedule" class="docs-nav-link-icon" />
+              <span class="docs-nav-link-num">2</span>
+              Schulung (2 Tage)
+            </a>
             <a href="/workshop" class={`docs-nav-link${isActive('/workshop') ? ' active' : ''}`}>
               <Icon name="build_circle" class="docs-nav-link-icon" />
-              <span class="docs-nav-link-num">2</span>
+              <span class="docs-nav-link-num">3</span>
               Setup
             </a>
             <a href="/figma-token" class={`docs-nav-link${isActive('/figma-token') ? ' active' : ''}`}>
               <Icon name="cable" class="docs-nav-link-icon" />
-              <span class="docs-nav-link-num">3</span>
+              <span class="docs-nav-link-num">4</span>
               Figma access
             </a>
             <a href="/tutorial" class={`docs-nav-link${isActive('/tutorial') ? ' active' : ''}`}>
               <Icon name="school" class="docs-nav-link-icon" />
-              <span class="docs-nav-link-num">4</span>
+              <span class="docs-nav-link-num">5</span>
               Tutorial
             </a>
             <a href="/first-component" class={`docs-nav-link${isActive('/first-component') ? ' active' : ''}`}>
               <Icon name="check_circle" class="docs-nav-link-icon" />
-              <span class="docs-nav-link-num">5</span>
+              <span class="docs-nav-link-num">6</span>
               First component
             </a>
             <a href="/patterns" class={`docs-nav-link${isActive('/patterns') ? ' active' : ''}`}>
               <Icon name="menu_book" class="docs-nav-link-icon" />
-              <span class="docs-nav-link-num">6</span>
+              <span class="docs-nav-link-num">7</span>
               Patterns
             </a>
           </div>
