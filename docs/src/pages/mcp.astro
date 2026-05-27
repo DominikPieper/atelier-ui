@@ -23,6 +23,10 @@ import PageHero from '../components/PageHero.astro';
       each Atelier UI MCP returns structured data, no screenshots or copy-paste.
     </p>
 
+    <aside style="margin: -0.5rem 0 2.25rem; padding: 0.95rem 1.15rem; border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md); background: var(--ui-color-surface-raised); font-size: 0.82rem; line-height: 1.65; max-width: 720px">
+      <strong>Storybook 10.4 MCP at a glance.</strong> Three toolsets — <code>docs</code> (<code>list-all-documentation</code>, <code>get-documentation</code>, <code>get-documentation-for-story</code>), <code>dev</code> (<code>get-storybook-story-instructions</code>, <code>preview-stories</code>, <code>get-changed-stories</code>), <code>test</code> (<code>run-story-tests</code>). Hosted MCPs ship the <code>docs</code> toolset only; <code>dev</code> + <code>test</code> live in <code>@storybook/addon-mcp</code> behind a running Storybook. See <a href="/storybook/#toolset-configuration">Storybook → Toolset configuration</a> for the full matrix, 10.4 highlights (<code>experimentalReactComponentMeta</code>, Change Review, MCP Apps preview, multi-source composition, self-host API), and gating rules.
+    </aside>
+
     <DiagramFigure caption="One AI client talks to three parallel Storybook MCP servers — one per framework. The request format (JSON-RPC) is identical; only the returned props change.">
       <svg viewBox="0 0 960 340" role="img" aria-labelledby="mcp-title mcp-desc" preserveAspectRatio="xMidYMid meet">
         <title id="mcp-title">MCP data flow from client to Storybook servers</title>

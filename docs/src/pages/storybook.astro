@@ -98,35 +98,121 @@ const STORYBOOK_LINKS = [
         <div class="docs-step-row">
           <span class="docs-step-badge">03</span>
           <div class="docs-step-body">
-            <h3 class="docs-h3">Two MCP surfaces</h3>
+            <h3 class="docs-h3">Two MCP surfaces, three toolsets</h3>
             <p class="docs-step-desc">
-              Storybook 10.4 ships MCP in two layers. The <strong>hosted</strong> endpoint serves docs from a static manifest — works for any framework, no install. The <strong>local dev</strong> surface adds preview &amp; test tools while a local Storybook is running, and is officially React-preview only as of 10.4.
+              Storybook 10.4 ships MCP in two layers. The <strong>hosted</strong> endpoint serves docs from a static manifest — works for any framework, no install. The <strong>local dev</strong> surface adds dev &amp; test tools while a local Storybook is running, and is officially React-preview only as of 10.4. Tools are grouped into three <strong>toolsets</strong> (<code>dev</code>, <code>docs</code>, <code>test</code>), each toggleable in the addon options.
             </p>
             <table class="docs-props-table">
               <thead>
-                <tr><th>Tool</th><th>Hosted (atelier.pieper.io)</th><th>Local dev (<code>nx storybook &lt;fw&gt;</code>)</th></tr>
+                <tr><th>Toolset</th><th>Tool</th><th>Hosted (atelier.pieper.io)</th><th>Local dev (<code>nx storybook &lt;fw&gt;</code>)</th></tr>
               </thead>
               <tbody>
-                <tr><td><code>list-all-documentation</code></td><td>React: components + docs · Angular/Vue: docs only</td><td>All frameworks</td></tr>
+                <tr><td rowspan="3"><code>docs</code></td><td><code>list-all-documentation</code></td><td>React: components + docs · Angular/Vue: docs only</td><td>All frameworks</td></tr>
                 <tr><td><code>get-documentation</code></td><td>React: full · Angular/Vue: docs only</td><td>All frameworks</td></tr>
                 <tr><td><code>get-documentation-for-story</code></td><td>React: full · Angular/Vue: docs only</td><td>All frameworks</td></tr>
+                <tr><td rowspan="3"><code>dev</code></td><td><code>get-storybook-story-instructions</code></td><td>—</td><td>React (preview); Vue/Angular experimental</td></tr>
                 <tr><td><code>preview-stories</code></td><td>—</td><td>React (preview); Vue/Angular experimental</td></tr>
-                <tr><td><code>run-story-tests</code></td><td>—</td><td>React (preview); Vue/Angular experimental</td></tr>
-                <tr><td><code>get-storybook-story-instructions</code></td><td>—</td><td>React (preview); Vue/Angular experimental</td></tr>
+                <tr><td><code>get-changed-stories</code> <em>(10.4)</em></td><td>—</td><td>Requires <code>features.changeDetection</code></td></tr>
+                <tr><td><code>test</code></td><td><code>run-story-tests</code></td><td>—</td><td>Requires <code>@storybook/addon-vitest</code>; a11y via <code>@storybook/addon-a11y</code></td></tr>
               </tbody>
             </table>
             <p class="docs-step-desc" style="margin-top: 0.75rem">
-              The hosted endpoint reads <code>manifests/components.json</code> emitted by <code>@storybook/addon-mcp</code> at build time. As of Storybook 10.4 that file is only generated for <strong>React</strong> (via TypeScript Language Server docgen). Angular &amp; Vue static builds only emit <code>docs.json</code> — hosted MCPs for those frameworks return MDX docs (foundations, tokens) but no per-component props. Run the local Storybook dev server for per-component data in Angular/Vue, or use the React MCP as the cross-framework API reference (the spec is identical, only the binding differs).
+              The hosted endpoint reads <code>manifests/components.json</code> emitted by <code>@storybook/addon-mcp</code> at build time. As of Storybook 10.4 that file is only generated for <strong>React</strong> (via TypeScript Language Server docgen — the new <code>experimentalReactComponentMeta</code> docgen path). Angular &amp; Vue static builds only emit <code>docs.json</code> — hosted MCPs for those frameworks return MDX docs (foundations, tokens) but no per-component props. Run the local Storybook dev server for per-component data in Angular/Vue, or use the React MCP as the cross-framework API reference (the spec is identical, only the binding differs).
             </p>
             <p class="docs-step-desc" style="margin-top: 0.5rem">
-              The preview / test tools require a running Node.js Storybook dev server and are gated by Storybook 10.4 to React for now.
+              The dev / test toolsets require a running Node.js Storybook dev server and are gated by Storybook 10.4 to React for now. <code>docs</code> tools support a <code>storybookId</code> parameter to scope a request to one source in multi-source (composition) setups; <code>list-all-documentation</code> accepts <code>withStoryIds: true</code> when downstream tools need story IDs.
             </p>
           </div>
         </div>
 
-        <!-- Step 04 -->
+        <!-- Step 04: 10.4 highlights -->
         <div class="docs-step-row">
           <span class="docs-step-badge">04</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">What&apos;s new in Storybook 10.4 MCP</h3>
+            <p class="docs-step-desc">
+              The 10.4 release tightens the agentic loop on four fronts:
+            </p>
+            <table class="docs-props-table">
+              <thead>
+                <tr><th>Capability</th><th>What it does</th><th>How to enable</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>experimentalReactComponentMeta</code> (RCM)</td>
+                  <td>Volar + TypeScript Language Server docgen replaces <code>react-docgen</code> / <code>react-docgen-typescript</code> — faster, better detection, faster dev-mode HMR for prop edits. Powers React <code>components.json</code>.</td>
+                  <td><code>experimentalReactComponentMeta: true</code> in <code>.storybook/main.ts</code> (React). <code>@storybook/mcp@0.6.2+</code> reads the new <code>reactComponentMeta</code> payload automatically.</td>
+                </tr>
+                <tr>
+                  <td>Change Review sidebar &amp; <code>get-changed-stories</code></td>
+                  <td>Storybook tracks <em>new</em>, <em>modified</em>, and <em>affected</em> stories. The MCP tool returns just that subset so agents can scope review to recent edits.</td>
+                  <td>Set <code>features.changeDetection: true</code> in <code>.storybook/main.ts</code>. Tool registers automatically.</td>
+                </tr>
+                <tr>
+                  <td>Multi-source composition + OAuth</td>
+                  <td>Compose several Storybooks behind one MCP endpoint via Storybook refs. The addon serves <code>/.well-known/oauth-protected-resource</code> and accepts bearer tokens so agents can reach private composed Storybooks.</td>
+                  <td>Add <code>refs</code> to <code>.storybook/main.ts</code>; pass <code>storybookId</code> to docs tools to disambiguate.</td>
+                </tr>
+                <tr>
+                  <td>MCP Apps preview resource</td>
+                  <td><code>preview-stories</code> exposes a <code>ui://preview-stories/preview.html</code> resource so MCP-Apps-capable hosts render the story preview inline in chat (Cursor, Claude Desktop with MCP Apps). Non-capable hosts get the <code>previewUrl</code> per story instead.</td>
+                  <td>Automatic when the host advertises MCP Apps support.</td>
+                </tr>
+                <tr>
+                  <td>Subcomponent docs</td>
+                  <td><code>get-documentation</code> surfaces subcomponent props for compound components.</td>
+                  <td><code>@storybook/mcp@0.7.0+</code> &amp; <code>@storybook/addon-mcp@0.6.0+</code>. No config.</td>
+                </tr>
+                <tr>
+                  <td>Self-host API (<code>createStorybookMcpHandler</code>)</td>
+                  <td>Reusable docs handler for serving manifests from any runtime (Cloudflare Workers, Netlify Functions, Node). Hooks: <code>manifestProvider</code>, <code>onListAllDocumentation</code>, <code>onGetDocumentation</code>, <code>onSessionInitialize</code>. Tool-registration exports (<code>addListAllDocumentationTool</code>, etc.) for custom <code>tmcp</code> servers.</td>
+                  <td><code>import &#123; createStorybookMcpHandler &#125; from '@storybook/mcp'</code>. See <code>worker/mcp.ts</code> in this repo.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Step 05: Toolset config -->
+        <div class="docs-step-row">
+          <span class="docs-step-badge">05</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">Toolset configuration</h3>
+            <p class="docs-step-desc">
+              All three toolsets default to <code>true</code>. Disable a toolset when an agent should not see those tools — e.g. read-only agents:
+            </p>
+            <Code code={`// .storybook/main.ts
+import type { StorybookConfig } from '@storybook/react-vite';
+
+const config: StorybookConfig = {
+  addons: [
+    {
+      name: '@storybook/addon-mcp',
+      options: {
+        toolsets: {
+          dev: true,    // preview-stories, get-storybook-story-instructions, get-changed-stories
+          docs: true,   // list-all-documentation, get-documentation, get-documentation-for-story
+          test: false,  // disable run-story-tests for read-only agents
+        },
+      },
+    },
+  ],
+  features: {
+    experimentalComponentsManifest: true, // gates the docs toolset
+    changeDetection: true,                // gates get-changed-stories
+  },
+};
+
+export default config;`} lang="ts" />
+            <p class="docs-step-desc" style="margin-top: 0.5rem">
+              Telemetry is on by default — disable with Storybook&apos;s <code>core.disableTelemetry</code>.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 06 -->
+        <div class="docs-step-row">
+          <span class="docs-step-badge">06</span>
           <div class="docs-step-body">
             <h3 class="docs-h3">Endpoints</h3>
             <table class="docs-props-table" style="margin-top: 0.25rem">

@@ -58,22 +58,26 @@ This project provides several MCP servers to assist in development. Always use t
 
 **Two MCP surfaces (do not conflate):**
 
-| Surface | URL | Tools exposed | Frameworks |
+| Surface | URL | Toolsets exposed | Frameworks |
 |---|---|---|---|
-| **Hosted** (`@storybook/mcp` via Cloudflare Worker, reads static manifests) | `atelier.pieper.io/storybook-{angular,react,vue}/mcp` | `list-all-documentation`, `get-documentation`, `get-documentation-for-story` | React: components + docs. Angular/Vue: **docs (MDX foundation pages) only** — Storybook 10.4 only emits `components.json` for React. |
-| **Local dev** (`@storybook/addon-mcp` inside a running Storybook) | `http://localhost:6006/mcp` (after `nx storybook <fw>`) | Hosted tools **plus** `preview-stories`, `run-story-tests`, `get-storybook-story-instructions` | React: preview-supported. Vue/Angular: experimental per Storybook 10.4 — may not work. |
+| **Hosted** (`@storybook/mcp` via Cloudflare Worker, reads static manifests) | `atelier.pieper.io/storybook-{angular,react,vue}/mcp` | `docs` only: `list-all-documentation`, `get-documentation`, `get-documentation-for-story` | React: components + docs. Angular/Vue: **docs (MDX foundation pages) only** — Storybook 10.4 only emits `components.json` for React. |
+| **Local dev** (`@storybook/addon-mcp` inside a running Storybook) | `http://localhost:6006/mcp` (after `nx storybook <fw>`) | `docs` + `dev` (`preview-stories`, `get-storybook-story-instructions`, `get-changed-stories`) + `test` (`run-story-tests`) | React: preview-supported. Vue/Angular: experimental per Storybook 10.4 — may not work. |
+
+**Toolset gating** (addon-mcp options, all default `true`): `dev` requires nothing extra. `docs` requires the `experimentalComponentsManifest` feature flag + emitted `components.json` (React only as of 10.4). `test` requires `@storybook/addon-vitest`; a11y in `run-story-tests` activates when `@storybook/addon-a11y` is installed. `get-changed-stories` activates when `features.changeDetection` is on (Storybook 10.4 Change Review sidebar).
 
 The `.mcp.json` at the repo root wires the hosted surface for all three frameworks. Add a local entry when you need preview / test tools or per-component data on Angular/Vue. For Angular/Vue prop tables, fall back to the React MCP as cross-framework API reference (the spec contract is identical) or read `libs/spec/src/index.ts` directly.
 
 **When reading component docs (any framework, any surface):**
-1. Call `list-all-documentation` once at session start to get valid IDs
-2. Use `get-documentation` with those IDs — never guess IDs or invent props
-3. If a prop isn't documented, say so rather than inventing it
+1. Call `list-all-documentation` once at session start to get valid IDs (set `withStoryIds: true` if you need story IDs for downstream tools; pass `storybookId` to scope multi-source setups)
+2. Use `get-documentation` with those IDs — never guess IDs or invent props; subcomponent docs are included since `@storybook/mcp@0.7.0`
+3. Call `get-documentation-for-story` only when `get-documentation` lacks the story-level detail you need
+4. If a prop isn't documented, say so rather than inventing it
 
 **When creating or editing components/stories (React, local dev only):**
-1. Call `get-storybook-story-instructions` before writing any code
-2. After any change, call `preview-stories` and include the returned URLs in your response
-3. Run `run-story-tests` after each change — fix failures before reporting completion
+1. Call `get-storybook-story-instructions` before writing any code (REQUIRED before touching `*.stories.*` files)
+2. After any change, call `preview-stories` and include the returned `previewUrl`s in your final response; in MCP-Apps-capable hosts the addon also exposes a `ui://preview-stories/preview.html` resource that embeds the previews directly
+3. Use `get-changed-stories` to enumerate new/modified/affected stories from the Change Review sidebar before bulk edits
+4. Run `run-story-tests` after each change (pass `{ stories: [...] }` for focused runs, omit for full suite; `a11y: false` to skip accessibility checks) — fix failures before reporting completion
 
 For Angular/Vue, the test loop is `nx test <lib>` (Vitest) plus a manual browser preview in the running Storybook.
 
