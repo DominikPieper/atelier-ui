@@ -120,6 +120,7 @@ describe('LlmTabGroup', () => {
   });
 
   describe('keyboard navigation', () => {
+    // @behavior keyboard-nav
     it('ArrowRight moves to next tab', async () => {
       const user = userEvent.setup();
       await render(BASIC_TEMPLATE, { imports: IMPORTS });

@@ -24,6 +24,18 @@ describe('LlmTabGroup', () => {
     expect(screen.getByRole('tab', { name: 'Tab Three' })).toBeInTheDocument();
   });
 
+  // @behavior keyboard-nav
+  // Vue tabs use automatic activation: ArrowRight selects the next tab
+  // (React/Angular use manual activation — arrow moves focus, Enter selects).
+  it('ArrowRight activates the next tab', async () => {
+    const user = userEvent.setup();
+    render(TabsFixture);
+    await flushPromises();
+    screen.getByRole('tab', { name: 'Tab One' }).focus();
+    await user.keyboard('{ArrowRight}');
+    expect(screen.getByRole('tab', { name: 'Tab Two' })).toHaveAttribute('aria-selected', 'true');
+  });
+
   // @behavior first-tab-default
   it('first tab is selected by default', async () => {
     render(TabsFixture);

@@ -27,6 +27,17 @@ describe('LlmAccordionGroup', () => {
     expect(screen.getByText('Question 2')).toBeInTheDocument();
   });
 
+  // @behavior keyboard-nav
+  it('ArrowDown moves focus to the next header', async () => {
+    const user = userEvent.setup();
+    render(AccordionFixture);
+    const first = screen.getByRole('button', { name: /Question 1/i });
+    const second = screen.getByRole('button', { name: /Question 2/i });
+    first.focus();
+    await user.keyboard('{ArrowDown}');
+    expect(second).toHaveFocus();
+  });
+
   // @behavior expand-on-click
   it('expands an item on click', async () => {
     const user = userEvent.setup();

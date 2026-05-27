@@ -169,6 +169,7 @@ describe('LlmAccordionGroup', () => {
   });
 
   describe('keyboard navigation', () => {
+    // @behavior keyboard-nav
     it('ArrowDown moves focus to next item', async () => {
       const user = userEvent.setup();
       await render(BASIC_TEMPLATE, { imports: IMPORTS });

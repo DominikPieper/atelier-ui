@@ -42,7 +42,8 @@
     { "id": "collapse-on-click", "describe": "collapses an expanded item on a second click" },
     { "id": "disabled-no-toggle", "describe": "a disabled item does not toggle on click" },
     { "id": "multi-expand", "describe": "allows multiple items open at once in multi mode" },
-    { "id": "single-collapse-other", "describe": "opening one item collapses the other in single mode" }
+    { "id": "single-collapse-other", "describe": "opening one item collapses the other in single mode" },
+    { "id": "keyboard-nav", "describe": "arrow keys move focus between accordion headers" }
   ],
   "alert": [
     { "id": "dismiss-hidden", "describe": "no dismiss button unless dismissible" },
@@ -171,7 +172,8 @@
     { "id": "first-tab-default", "describe": "selects/shows the first tab by default" },
     { "id": "switch-on-click", "describe": "switches the active tab on click" },
     { "id": "disabled-tab-noop", "describe": "a disabled tab cannot be selected" },
-    { "id": "variant-class", "describe": "applies the variant class" }
+    { "id": "variant-class", "describe": "applies the variant class" },
+    { "id": "keyboard-nav", "describe": "arrow keys navigate between tabs (focus or activation, per adapter's activation model)" }
   ],
   "textarea": [
     { "id": "renders-textarea", "describe": "renders a native textarea element" },

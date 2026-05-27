@@ -14,6 +14,20 @@ describe('LlmTabGroup', () => {
     expect(screen.getByRole('tab', { name: 'Tab Two' })).toBeInTheDocument();
   });
 
+  // @behavior keyboard-nav
+  it('ArrowRight moves focus to the next tab', async () => {
+    const user = userEvent.setup();
+    render(
+      <LlmTabGroup>
+        <LlmTab label="Tab One">Content One</LlmTab>
+        <LlmTab label="Tab Two">Content Two</LlmTab>
+      </LlmTabGroup>
+    );
+    screen.getByRole('tab', { name: 'Tab One' }).focus();
+    await user.keyboard('{ArrowRight}');
+    expect(screen.getByRole('tab', { name: 'Tab Two' })).toHaveFocus();
+  });
+
   // @behavior first-tab-default
   it('selects the first tab by default', () => {
     render(

@@ -32,6 +32,27 @@ describe('LlmAccordionGroup', () => {
     expect(screen.getByRole('button')).toHaveAttribute('aria-expanded', 'false');
   });
 
+  // @behavior keyboard-nav
+  it('ArrowDown moves focus to the next header', async () => {
+    const user = userEvent.setup();
+    render(
+      <LlmAccordionGroup>
+        <LlmAccordionItem>
+          <LlmAccordionHeader>Section One</LlmAccordionHeader>
+          Content one
+        </LlmAccordionItem>
+        <LlmAccordionItem>
+          <LlmAccordionHeader>Section Two</LlmAccordionHeader>
+          Content two
+        </LlmAccordionItem>
+      </LlmAccordionGroup>
+    );
+    const [first, second] = screen.getAllByRole('button');
+    first.focus();
+    await user.keyboard('{ArrowDown}');
+    expect(second).toHaveFocus();
+  });
+
   // @behavior expand-on-click
   it('expands an item on click', async () => {
     const user = userEvent.setup();
