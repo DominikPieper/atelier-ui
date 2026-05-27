@@ -31,6 +31,7 @@ const MenuFixture = {
 };
 
 describe('LlmMenuTrigger', () => {
+  // @behavior closed-initially
   it('does not show menu initially', () => {
     render(MenuFixture);
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
@@ -44,6 +45,7 @@ describe('LlmMenuTrigger', () => {
     expect(screen.getByRole('menu')).toBeInTheDocument();
   });
 
+  // @behavior close-on-item-click
   it('hides menu after clicking a menu item', async () => {
     const user = userEvent.setup();
     render(MenuFixture);

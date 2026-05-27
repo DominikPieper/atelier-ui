@@ -78,6 +78,7 @@ describe('LlmMenuSeparator', () => {
 });
 
 describe('LlmMenuTrigger', () => {
+  // @behavior closed-initially
   it('does not show menu initially', () => {
     render(
       <LlmMenuTrigger
@@ -142,6 +143,7 @@ describe('LlmMenuTrigger', () => {
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
   });
 
+  // @behavior close-on-item-click
   it('closes menu when a menu item is clicked', async () => {
     const user = userEvent.setup();
     render(

@@ -14,7 +14,9 @@
     { "id": "close-button", "describe": "the close button closes the dialog / emits open=false" }
   ],
   "menu": [
+    { "id": "closed-initially", "describe": "menu is not rendered until the trigger is activated" },
     { "id": "open-on-trigger", "describe": "opens the menu and renders items on trigger click" },
+    { "id": "close-on-item-click", "describe": "selecting a menu item closes the menu" },
     { "id": "disabled-item", "describe": "a disabled item is marked disabled and cannot be triggered" }
   ],
   "select": [
