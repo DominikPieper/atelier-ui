@@ -20,44 +20,11 @@
 const path = require('path');
 const fs = require('fs');
 const ts = require('typescript');
+const { UNION_TO_COMPONENT, AXIS_PREFIX } = require('./lib/component-axes');
 
 const ROOT = path.resolve(__dirname, '../..');
 const SPEC_FILE = path.join(ROOT, 'libs/spec/src/index.ts');
 const FRAMEWORKS = ['angular', 'react', 'vue'];
-
-/**
- * Maps each CSS-backed spec union to its component directory. The directory
- * cannot always be derived from the type name (LlmTabGroupVariant lives in
- * `tabs`, LlmToastContainerPosition in `toast`), so the mapping is explicit —
- * the check warns when a `*Variant`/`*Size`/`*Shape`/`*Position` union exists
- * in the spec but is absent here, so new axes get noticed.
- */
-const UNION_TO_COMPONENT = {
-  LlmButtonVariant: 'button',
-  LlmButtonSize: 'button',
-  LlmBadgeVariant: 'badge',
-  LlmBadgeSize: 'badge',
-  LlmAvatarSize: 'avatar',
-  LlmAvatarShape: 'avatar',
-  LlmCardVariant: 'card',
-  LlmAlertVariant: 'alert',
-  LlmDialogSize: 'dialog',
-  LlmTabGroupVariant: 'tabs',
-  LlmAccordionGroupVariant: 'accordion',
-  LlmMenuVariant: 'menu',
-  LlmTooltipPosition: 'tooltip',
-  LlmToastVariant: 'toast',
-  LlmToastContainerPosition: 'toast',
-  LlmSkeletonVariant: 'skeleton',
-  LlmProgressVariant: 'progress',
-  LlmProgressSize: 'progress',
-  LlmDrawerPosition: 'drawer',
-  LlmDrawerSize: 'drawer',
-  LlmTableVariant: 'table',
-  LlmTableSize: 'table',
-  LlmIconSize: 'icon',
-  LlmChatVariant: 'chat',
-};
 
 /**
  * `framework:union:member` triples that intentionally have no CSS class — the
@@ -87,15 +54,6 @@ const DEFAULT_IS_BASE = new Set([
   'LlmProgressVariant',
   'LlmTableVariant',
 ]);
-
-/** Suffix -> CSS class prefix. */
-const AXIS_PREFIX = {
-  Variant: 'variant',
-  Size: 'size',
-  Shape: 'shape',
-  Position: 'position',
-  Orientation: 'orientation',
-};
 
 /** Extract string-literal members of a type alias, or null if not a pure literal union. */
 function literalsOfAlias(node, checker) {
