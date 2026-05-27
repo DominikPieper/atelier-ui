@@ -191,6 +191,7 @@ describe('LlmRadioGroup', () => {
   });
 
   describe('keyboard navigation', () => {
+    // @behavior keyboard-nav
     it('moves focus to next radio on ArrowDown', async () => {
       const user = userEvent.setup();
       const { container } = await render(GROUP_TEMPLATE, {

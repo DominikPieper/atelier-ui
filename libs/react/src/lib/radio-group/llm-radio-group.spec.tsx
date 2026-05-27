@@ -52,6 +52,37 @@ describe('LlmRadioGroup', () => {
     expect(onChange).toHaveBeenCalledWith('pro');
   });
 
+  // @behavior keyboard-nav
+  it('ArrowDown selects the next radio', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(
+      <LlmRadioGroup value="free" onValueChange={onChange} name="plan">
+        <LlmRadio radioValue="free">Free</LlmRadio>
+        <LlmRadio radioValue="pro">Pro</LlmRadio>
+        <LlmRadio radioValue="enterprise">Enterprise</LlmRadio>
+      </LlmRadioGroup>
+    );
+    screen.getByLabelText('Free').focus();
+    await user.keyboard('{ArrowDown}');
+    expect(onChange).toHaveBeenLastCalledWith('pro');
+  });
+
+  it('ArrowUp wraps from the first radio to the last', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(
+      <LlmRadioGroup value="free" onValueChange={onChange} name="plan">
+        <LlmRadio radioValue="free">Free</LlmRadio>
+        <LlmRadio radioValue="pro">Pro</LlmRadio>
+        <LlmRadio radioValue="enterprise">Enterprise</LlmRadio>
+      </LlmRadioGroup>
+    );
+    screen.getByLabelText('Free').focus();
+    await user.keyboard('{ArrowUp}');
+    expect(onChange).toHaveBeenLastCalledWith('enterprise');
+  });
+
   it('applies is-disabled class when disabled', () => {
     const { container } = render(
       <LlmRadioGroup disabled name="plan">

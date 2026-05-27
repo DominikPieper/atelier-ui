@@ -139,7 +139,8 @@
     { "id": "checks-matching-value", "describe": "checks the radio matching the value" },
     { "id": "value-change", "describe": "emits/calls back when a radio is selected" },
     { "id": "invalid", "describe": "sets aria-invalid / invalid state when invalid" },
-    { "id": "errors", "describe": "shows error messages when invalid" }
+    { "id": "errors", "describe": "shows error messages when invalid" },
+    { "id": "keyboard-nav", "describe": "arrow keys move selection between radios (roving, wrapping)" }
   ],
   "skeleton": [
     { "id": "not-animated", "describe": "drops the is-animated class when animated=false" },

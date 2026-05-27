@@ -52,6 +52,23 @@ describe('LlmRadioGroup', () => {
     expect(emitted()['update:modelValue']).toEqual([['pro']]);
   });
 
+  // @behavior keyboard-nav
+  it('ArrowDown selects the next radio', async () => {
+    const user = userEvent.setup();
+    const { emitted } = render(RadioGroupWithOptions, { props: { modelValue: 'free' } });
+    (screen.getByRole('radio', { name: 'Free' }) as HTMLElement).focus();
+    await user.keyboard('{ArrowDown}');
+    expect(emitted()['update:modelValue']).toEqual([['pro']]);
+  });
+
+  it('ArrowUp wraps from the first radio to the last', async () => {
+    const user = userEvent.setup();
+    const { emitted } = render(RadioGroupWithOptions, { props: { modelValue: 'free' } });
+    (screen.getByRole('radio', { name: 'Free' }) as HTMLElement).focus();
+    await user.keyboard('{ArrowUp}');
+    expect(emitted()['update:modelValue']).toEqual([['enterprise']]);
+  });
+
   it('disables all radios when disabled', () => {
     render(RadioGroupWithOptions, { props: { modelValue: '', disabled: true } });
     for (const radio of screen.getAllByRole('radio')) {

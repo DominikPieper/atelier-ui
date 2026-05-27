@@ -1,4 +1,11 @@
-import { createContext, useContext, InputHTMLAttributes, ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useRef,
+  type KeyboardEvent,
+  InputHTMLAttributes,
+  ReactNode,
+} from 'react';
 import type { LlmRadioGroupSpec } from '../spec';
 import './llm-radio-group.css';
 
@@ -113,6 +120,29 @@ export function LlmRadioGroup({
   ...rest
 }: LlmRadioGroupProps) {
   const readOnly = reactReadOnly ?? specReadOnly ?? false;
+  const groupRef = useRef<HTMLDivElement>(null);
+
+  // Roving arrow-key navigation per the WAI-ARIA radiogroup pattern: Arrow
+  // Down/Right move to the next enabled radio, Up/Left to the previous, both
+  // wrapping, and the navigated radio is selected and focused.
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (disabled || readOnly) return;
+    const forward = event.key === 'ArrowDown' || event.key === 'ArrowRight';
+    const backward = event.key === 'ArrowUp' || event.key === 'ArrowLeft';
+    if (!forward && !backward) return;
+    const radios = Array.from(
+      groupRef.current?.querySelectorAll<HTMLInputElement>('input[type="radio"]') ?? []
+    ).filter((radio) => !radio.disabled);
+    if (radios.length === 0) return;
+    event.preventDefault();
+    const currentIdx = radios.findIndex((radio) => radio.value === value);
+    const start = currentIdx === -1 ? (forward ? -1 : 0) : currentIdx;
+    const nextIdx = (start + (forward ? 1 : -1) + radios.length) % radios.length;
+    const target = radios[nextIdx];
+    target.focus();
+    onValueChange?.(target.value);
+  };
+
   const classes = [
     'llm-radio-group',
     `orientation-${orientation}`,
@@ -137,10 +167,12 @@ export function LlmRadioGroup({
       }}
     >
       <div
+        ref={groupRef}
         className={classes}
         role="radiogroup"
         aria-invalid={invalid || undefined}
         aria-required={required || undefined}
+        onKeyDown={handleKeyDown}
         {...rest}
       >
         {children}
