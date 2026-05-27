@@ -84,6 +84,19 @@ figma_lint_design  (rules=['no-text-style', 'no-color-style'])
 **Pass:** style count is low relative to Variable count, OR the lint shows < 5 nodes per page bypassing styles.
 **Auto-resolve signal:** lint findings under 5 per page.
 
+### TA6 — Variable mode count vs. plan tier
+
+```
+figma_execute:
+  const collections = await figma.variables.getLocalVariableCollectionsAsync();
+  return collections.map(c => ({ name: c.name, modeCount: c.modes.length, modes: c.modes.map(m => m.name) }));
+```
+
+Compare against the team's plan-tier ceiling (Free=1, Pro=4, Org=10, Enterprise=40). If unknown, ask the user.
+
+**Pass:** all collections at or below `ceiling − 2`.
+**Auto-resolve signal:** every collection's mode count is well below the ceiling.
+
 ## Component Design
 
 ### CD1 — Variant axis explosion
@@ -286,6 +299,37 @@ figma_search_components  (limit=100)
 
 **Pass:** zero name-leading-underscore or dot components published.
 
+### FS4 — Sections vs. Frames misuse
+
+```
+figma_execute:
+  await figma.loadAllPagesAsync();
+  const offenders = [];
+  const sets = await figma.root.findAllAsync(n => n.type === 'COMPONENT_SET' || n.type === 'COMPONENT');
+  for (const s of sets) {
+    const sectionsInside = s.findAll(n => n.type === 'SECTION');
+    if (sectionsInside.length > 0) offenders.push({ name: s.name, count: sectionsInside.length });
+  }
+  return offenders;
+```
+
+**Pass:** zero offenders — components contain only Frames internally, never Sections.
+**Auto-resolve signal:** the offenders array is empty.
+
+### FS5 — "Ready for dev" coverage
+
+```
+figma_execute:
+  await figma.loadAllPagesAsync();
+  const sets = await figma.root.findAllAsync(n => n.type === 'COMPONENT_SET');
+  const counts = { ready: 0, notReady: 0 };
+  sets.forEach(s => { (s.devStatus?.type === 'READY_FOR_DEV') ? counts.ready++ : counts.notReady++; });
+  return { ...counts, total: sets.length };
+```
+
+**Pass:** `ready / total ≥ 0.9` for shipped libraries.
+**Auto-resolve signal:** ratio at or above the threshold; remaining unmarked items are explicitly draft.
+
 ## Engineering-Sync Readiness
 
 ### ES1 — Token names match codebase
@@ -304,14 +348,16 @@ figma_search_components  (limit=100)
 
 See **CD2** — same query, same auto-resolve signal.
 
-### ES3 — Code Connect / mapping setup
+### ES3 — Naming-alignment as the code bridge
+
+This skill does not recommend Figma's official Dev-Mode MCP or Code Connect — naming alignment alone is the bridge. Re-verify the alignment, not the absence of a Code Connect file.
 
 ```
-1. Check repo for `figma.config.json` or `figma-code-connect.json`.
-2. Or: confirm that "name parity is the chosen mapping mechanism" is documented on the Cover page.
+1. Run CD2 + N1 verify queries.
+2. Pass = both pass.
 ```
 
-**Pass:** either the config exists, or the Cover page explicitly documents name-parity as the mapping.
+**Pass:** CD2 and N1 both pass. No further action.
 
 ### ES4 — Documentation handoff
 
@@ -320,6 +366,32 @@ grep -rE "parameters\.design|figmaNode\(" libs/*/src/lib/ | wc -l
 ```
 
 **Pass:** count > 80% of stories have `design` parameters linking back to Figma frames.
+
+### ES5 — Branching workflow (Org / Enterprise only)
+
+If the team has Branching, verify that recent migrations went through a branch.
+
+```
+1. Ask the user: "did the last structural migration land directly on main, or via a merged branch?"
+2. If main: still-open. If branch: auto-resolved.
+```
+
+**Pass:** confirmation that branching was used.
+**N/A:** Free / Pro plans (no Branching feature).
+
+### ES6 — Library analytics review (Enterprise only)
+
+```
+1. Ask the user whether they pull Library Analytics insertion counts on a recurring schedule.
+2. If yes: confirm last review was within ~30 days.
+```
+
+**Pass:** monthly review is in place; deprecation candidates have been flagged.
+**N/A:** Free / Pro / Org plans (no Library Analytics REST access).
+
+## Live-session re-verify — `figma_get_design_changes`
+
+When re-verifying *during* an active Build/Migrate session (i.e. you just made a change and want to confirm a finding moved), `figma_get_design_changes` returns the WebSocket-buffered events since the last call. **Caveat:** this is not a historical git-style diff — only events from the current connection are buffered. For audits older than the current session, fall back to `figma_get_file_data` snapshot comparison against the prior `lastModified` pin.
 
 ## Cross-source greps — quick reference
 

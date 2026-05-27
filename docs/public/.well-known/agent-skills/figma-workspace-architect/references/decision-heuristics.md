@@ -143,22 +143,58 @@ A Mode is appropriate when **the same Semantic token resolves to a different val
 
 **Default:** new work goes on Variables. Don't migrate existing Styles aggressively unless modes are actually needed — Styles continue to work fine.
 
-## Code Connect vs. naming alignment
+## Code-side mapping — naming alignment is the bridge
 
-figma-console-mcp does not implement Code Connect. The two ways to bridge Figma → code are:
+This skill explicitly does not recommend Figma's official Dev-Mode MCP or Code Connect. The toolchain is figma-console-mcp only, and the bridge to code is **naming alignment**:
 
-**Code Connect (via Figma's official Dev Mode MCP):**
-- Explicit mapping between Figma component and code component path.
-- Best fidelity for code-gen tools.
-- Requires Figma's official MCP server, not figma-console-mcp.
-
-**Naming alignment (this skill's lane):**
 - Component names match code component names exactly.
 - Variant Property names and values match code prop API exactly.
 - Variable names match codebase token names.
-- Code-gen tools can infer the mapping with high accuracy.
 
-**Default:** prioritize naming alignment regardless of whether Code Connect is set up. If the team also has Code Connect via Figma's official MCP, both layers reinforce each other. If they only have figma-console-mcp, naming alignment is the bridge.
+When alignment is tight, code-gen tools infer the mapping with high accuracy without an explicit Code Connect file. When alignment drifts, no mapping config recovers it.
+
+**Default:** invest the maintenance effort in keeping names in lockstep, not in setting up a parallel mapping system. If the user asks about Code Connect or the official Figma Dev-Mode MCP, say it is out of scope for this skill — figma-console-mcp doesn't implement it and we don't run a second MCP for it.
+
+## `figma_execute` vs. high-level Component Property tools
+
+When defining or modifying a Component Property (Boolean / Text / Instance Swap), prefer the typed CRUD tools over hand-rolling Plugin API in `figma_execute`.
+
+**Use `figma_add_component_property` / `figma_edit_component_property` / `figma_delete_component_property` when:**
+- The change is a single property definition.
+- The atomicity boundary is "one property, valid or rolled back".
+- The agent or a future reader benefits from typed inputs (no malformed `componentPropertyDefinitions` shapes possible).
+
+**Use `figma_execute` when:**
+- The property change must happen alongside other mutations atomically (e.g. add `HasIcon` AND set every variant's icon-slot Instance Swap default in one go).
+- The script involves walking the component tree to derive the property's allowed values from existing variants.
+
+**Default:** start with the high-level tool. Escalate to `figma_execute` when the atomic boundary genuinely needs the wider scope.
+
+## Section vs. Frame as container
+
+Sections and Frames look similar but carry different layout primitives. Pick the right one — using a Section where a Frame belongs breaks downstream layout assumptions.
+
+**Use a Section when:**
+- The container is **page-level grouping** of unrelated artifacts (e.g. "Tokens", "Components", "Patterns" as sections on a page).
+- You want to mark the entire grouping **Ready for dev** in one go.
+- Designers should be able to navigate it as a labeled region but it doesn't constrain its contents.
+
+**Use a Frame when:**
+- Anything **inside** a component — every variant frame, every nested layout box.
+- Auto Layout is needed (Sections don't have it).
+- Constraints, clip-content, corner radius, fills, or strokes are needed (Sections don't have these).
+- The container will live inside another Frame (Sections cannot nest inside Frames).
+
+**Decision tree:**
+
+```
+Is this the inside of a component / variant?     → Frame
+Does this container need Auto Layout / fills?    → Frame
+Does this container need to live inside a Frame? → Frame
+Is it a page-level "this is the Components area" grouping? → Section
+```
+
+**Default:** Frame. Sections are a small, specialized tool for organizational labeling — most "container" needs in a design system are Frames.
 
 ## Component Tokens — yes or no?
 

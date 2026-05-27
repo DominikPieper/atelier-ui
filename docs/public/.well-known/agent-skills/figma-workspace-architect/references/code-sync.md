@@ -97,6 +97,79 @@ Most drift is silent because Modes are handled wrong. The mapping must be explic
 
 Test: change a Variable's value in only one Mode in Figma; re-export; verify only one selector / key changed in code. If both changed, the exporter is collapsing modes.
 
+## Annotations as a code-handoff layer
+
+Variables carry the *static value* contract; **annotations** carry the *implementation-detail* contract — animation easings, focus-ring delivery mechanism, tap-target extensions, A11y notes. Treat them as a first-class part of code-sync, not as designer marginalia.
+
+| Direction         | What to do with annotations                                                                                       |
+|-------------------|-------------------------------------------------------------------------------------------------------------------|
+| **Figma → code**  | Pull annotations via `figma_get_annotations` after each export. Surface them in the same place as token diffs (PR description, Style Dictionary metadata, story `parameters.design`). |
+| **Code → Figma**  | When code-side specs change (e.g. animation tokens migrate to a new easing curve), write the new spec back into the relevant component's annotations via `figma_set_annotations`. The Figma file should never lag the code on implementation details a designer cares about. |
+
+Annotation content that should round-trip:
+
+- Focus-ring delivery (drop-shadow vs. stroke) — see `code-verify.md` for why this matters.
+- Animation/easing tokens that are not Variables (because Figma can't bind effect-curves yet).
+- Tap-target / safe-area extensions beyond the visible frame.
+- A11y exceptions (e.g. "non-color cue delivered via inset shadow on fill" — common in danger buttons).
+
+## Cross-file Variable resolution — linked libraries
+
+A common architecture is **one Tokens file** (Primitive + Semantic Variables) consumed by **N Component files** as a linked library. The patterns below cover what to expect.
+
+### What links cleanly
+
+- **Variables**. Component files reference Tokens-library Variables by ID — values resolve at consume-time. Mode switches in the consuming file follow the local mode mapping.
+- **Components**. Library components instantiate by `componentKey`; `figma_search_components` and `figma_get_library_components` find them across files.
+
+### What does NOT auto-link
+
+- **Mode names**. Library Swap matches Modes by **exact name**. If the Tokens file has `Light`/`Dark` and a consuming file has `light`/`dark`, the swap leaves bindings unresolved. Standardize casing across all files.
+- **Variant Property values**. Same exact-name match rule. `Size: Small` in one file and `Size: small` in another won't merge cleanly.
+
+### Cross-file discovery tools
+
+| Tool                              | Use when…                                                                       |
+|-----------------------------------|---------------------------------------------------------------------------------|
+| `figma_get_library_components`    | List a linked library's published components — what's available to instantiate. |
+| `figma_get_design_system_kit`     | Fetch tokens + components + styles from any file in one call. Useful when the agent needs to compare a Component file against the Tokens file. |
+| `figma_search_components`         | Find a component by name across the file or a linked library.                   |
+
+### Audit signal — local Variables that should consume
+
+A Component file that defines its own `color/*` Variables (instead of consuming the Tokens-library Variables) is a Critical drift source. In a properly linked setup, the Component file's Variable list should contain only **component-tier** Variables (if any) plus inherited library references. Local Primitive or Semantic Variables in a Component file mean someone built the file before linking the library, or the link broke.
+
+## Closing the sync — `figma_check_design_parity`
+
+End every Sync run with a parity check. Schema:
+
+```jsonc
+// Input — codeSpec (one block per axis you want compared)
+{
+  "visual":          { /* fills, strokes, opacity, radius */ },
+  "spacing":         { /* padding, gap, margins */ },
+  "typography":      { /* font family, size, weight, line-height, letter-spacing */ },
+  "tokens":          { /* expected Variable bindings */ },
+  "componentAPI":    { /* prop names + values */ },
+  "accessibility":   { /* roles, labels, contrast minimums */ },
+  "metadata":        { /* description text, slash-name shape */ }
+}
+```
+
+Output:
+
+```jsonc
+{
+  "score": 0–100,
+  "discrepancies": [ /* per-axis diffs, severity-tagged */ ],
+  "actionItems":   [ /* concrete fix steps */ ]
+}
+```
+
+Use `figma_scan_code_accessibility` (axe-core against rendered HTML, no Figma needed) to seed the `accessibility` axis before calling `figma_check_design_parity` — the `mapToCodeSpec` option produces input compatible with the parity tool.
+
+Optional: when parity fails on a component the team needs to see in-Figma, drop a comment via `figma_post_comment` on the affected frame so the next designer who opens the file sees the drift even if they skim the chat output.
+
 ## Common drift sources
 
 Add these to the Audit checklist's "Engineering-Sync Readiness" category — they are the failure modes to expect.

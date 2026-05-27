@@ -46,6 +46,30 @@ When to use: only when a component has multiple state-driven values that are eas
 
 Modes: rarely. State (hover, active) is usually a Variant property, not a mode.
 
+## Variable types beyond color
+
+The architecture above generalizes across all four Variable types. Use the right type for each value — not everything is a color.
+
+| Type      | Use for                                                                                  | Scope examples                                       |
+|-----------|------------------------------------------------------------------------------------------|------------------------------------------------------|
+| **COLOR** | Fills, strokes, text colors, background surfaces.                                        | `FRAME_FILL`, `TEXT_FILL`, `STROKE_COLOR`            |
+| **FLOAT** (Number) | Spacing, radius, stroke width, font-size, line-height, opacity, fixed widths/heights. | `GAP`, `CORNER_RADIUS`, `STROKE_FLOAT`, `FONT_SIZE`, `LINE_HEIGHT`, `OPACITY`, `WIDTH_HEIGHT` |
+| **STRING** | Font family, font style, locale-specific labels, marketing copy that needs to vary per mode/brand. | `FONT_FAMILY`, `FONT_STYLE`                          |
+| **BOOLEAN** | System flags consumed by component visibility-toggles or by code (`feature/reduce-motion`, `density/compact`). Not bound into design properties via scopes. | (no scope — boolean variables are exempt from the picker model) |
+
+A workspace that only uses COLOR variables is incomplete. Spacing, radius, and typography belong on FLOAT and STRING variables; a hardcoded `16px` or `'Inter'` in a component is the same drift problem as a hardcoded `#007070`.
+
+**Boolean-variable note.** `BOOLEAN` variables are never bound through Variable Scopes — they're consumed via component property logic or read by code. They're exempt from the TA4 scope audit (the audit-checklist explicitly filters `resolvedType === 'BOOLEAN'` before counting `ALL_SCOPES` offenders).
+
+### Variable Expressions — prototype-time only
+
+Figma supports expressions inside Variable values for **prototyping interactions** — they evaluate at runtime when a prototype plays. Architecturally they are **not** a substitute for aliases:
+
+- An expression in a static design context will not resolve — the rendered value is whatever the expression evaluates to in the editor, not a live computation.
+- Code-gen tools and exporters read static values, not expressions; an expression-driven Variable looks like a constant when read by `figma_get_variables`.
+
+Use expressions if you're authoring prototypes. Use `{ alias: '...' }` when one Variable should resolve through another in the static design surface.
+
 ## Modes — when to use one
 
 A Mode is appropriate when **the same semantic token resolves to a different value in a different context**. The classic uses:
@@ -62,6 +86,25 @@ A Mode is **not** appropriate for:
 - Sub-brands that are actually different design languages — that's a separate Library, not a mode
 
 Adding a Mode duplicates every value in the collection for that mode, so adding modes carelessly creates maintenance debt fast. Add modes only at the Semantic tier — Primitive modes mean someone misunderstood the model.
+
+### Mode limits per plan tier
+
+Figma caps the number of Modes per Collection by plan. Check the team's tier **before** proposing a multi-axis Mode topology — if Theme × Density × Brand crosses the ceiling, the design has to collapse modes (combine Density into the Brand axis) or split into separate library files.
+
+| Plan        | Modes / Collection |
+|-------------|--------------------|
+| Free        | 1 (no theming)     |
+| Pro         | 4                  |
+| Org         | 10                 |
+| Enterprise  | 40 (post-Schema 2025) |
+
+Audit signal:
+
+- Mode count **at or above** the tier ceiling → Blocker. Cannot add another mode without paid upgrade or a structural collapse.
+- Mode count = ceiling − 1 → Warning. One more axis exhausts the budget.
+- Plan unknown but designs assume ≥4 modes → ask the user; default planning assumption is Pro (4).
+
+The cheapest fix when a design exceeds the budget is usually to lift one axis (e.g. Brand) into a *separate library file* — Brand A and Brand B each consume the shared Foundations library and override only the brand-specific Semantic values. Each library still has its own mode budget for Theme + Density.
 
 ## Variable Scopes — the silent killer
 

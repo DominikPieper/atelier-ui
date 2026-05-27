@@ -11,6 +11,17 @@ A component library that an agent can use without improvising has to satisfy fou
 
 These four are also the difference between a library a designer-only team can live with and one a code-gen agent can actually consume — the first three principles especially. Treat any Critical finding under CD6 / CD7 / CD8 / CD9 as a drift-source that will compound until it's fixed.
 
+## Component Properties default to visible (2026-03-23)
+
+As of Figma's **2026-03-23 simplified-instances rollout**, every Component Property defined on a component is **default-visible** in the instance properties panel. The historic "hidden property" pattern — defining a property on the master and counting on Figma not to surface it — is no longer reliable.
+
+Architectural consequence: **if a property shouldn't be exposed to designers, it shouldn't be a property at all.** Two correct shapes:
+
+- Move the variation into a **separate Component** (`Button` and `IconButton`, not one Button with a hidden `variant=icon-only`).
+- Move the structural piece into an **internal sub-component** prefixed with `_` or `.` (e.g. `_ButtonContent`), kept unpublished.
+
+When auditing an existing file, every Component Property the team explicitly didn't want users to see is now a finding — pick one of the two shapes above.
+
 ## Variation mechanisms — pick the right one
 
 Figma offers four mechanisms to express variation in a component. Choosing the right one for each axis of variation is what separates a maintainable library from a 256-permutation Variant set that nobody can navigate.
@@ -92,6 +103,20 @@ Rules of thumb:
 - Property names are **PascalCase or Title Case** in Figma (Figma's own UI uses Title Case).
 - Property values match the code value casing exactly (`sm`, not `Sm` or `Small`) — this is what gets read out by code-generation tools.
 - Boolean properties end in a positive (`HasIcon`, `Disabled`, `Loading`) — never negative (`NoIcon`).
+
+## Component Properties via high-level CRUD
+
+The figma-console-mcp exposes typed CRUD tools for Component Properties — prefer them over hand-rolling `componentPropertyDefinitions` inside a `figma_execute` payload.
+
+| Tool                              | Use when…                                                        |
+|-----------------------------------|------------------------------------------------------------------|
+| `figma_add_component_property`    | Defining a new Boolean / Text / Instance Swap property.          |
+| `figma_edit_component_property`   | Renaming, changing default value, or retyping a property.        |
+| `figma_delete_component_property` | Removing a property. Breaking — coordination protocol applies.   |
+
+Why prefer them: typed inputs (you can't smuggle a malformed property shape past the API), atomic per-property updates, and far less Plugin-API boilerplate to read in chat. Reach for `figma_execute` only when defining a property must happen alongside other mutations in one atomic step (e.g. "add `HasIcon` AND set every variant's icon-slot Instance Swap default in one go").
+
+When changing instance values (not the master definition), use `figma_set_instance_properties` — it understands the `#nodeId`-suffix that Component Property keys carry on instances. Bare `figma_set_text` against an instance child fails silently.
 
 ## Atomic composition
 

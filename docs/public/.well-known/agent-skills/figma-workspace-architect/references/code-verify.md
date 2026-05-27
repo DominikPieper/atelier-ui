@@ -117,7 +117,26 @@ Run the same query in light mode (`data-theme="light"`). Compare:
 
 If the change is being shipped as a PR or audit-follow-up, capture a screenshot in each mode using `figma_capture_screenshot` (Figma side) and the browser-automation tool's `screenshot` action (code side). Place them side-by-side in the PR description.
 
-### 7. Tear down
+### 7. Optional: round-trip check via `figma_scan_code_accessibility` + `figma_check_design_parity`
+
+Before manual computed-value reading, run axe-core on the rendered HTML — it catches a class of issues (missing roles, contrast at unrendered focus states, label/aria mismatches) that is hard to spot by eye.
+
+```
+figma_scan_code_accessibility
+  url: http://localhost:<port>/?path=/story/<story-id>
+  mapToCodeSpec: true
+```
+
+The `mapToCodeSpec: true` option emits the result in the shape `figma_check_design_parity` consumes for its `accessibility` axis. Pipe the two:
+
+```
+1. figma_scan_code_accessibility (mapToCodeSpec: true) → codeSpec
+2. figma_check_design_parity (codeSpec, figmaComponentId) → score + discrepancies
+```
+
+If parity score < 100, the discrepancies list is the work; tag each as a Figma-side fix or a code-side fix and proceed.
+
+### 8. Tear down
 
 Stop the dev-server background task. The recipe is complete.
 

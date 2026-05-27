@@ -102,6 +102,17 @@ Check: is the system on Variables, or still on legacy Styles?
 | Mixed: some on Styles, some on Variables, no clear policy            | Warning    | Pick one (Variables for color/number/string/boolean; Styles only for text/effect for now). |
 | Effect Styles for shadows                                            | (pass)     | Variables don't fully replace effect styles yet — Styles is still the right place.        |
 
+### TA6 — Variable mode count vs. plan tier
+
+Check: how many Modes does each Collection have, relative to the team's plan tier limit (Free=1, Pro=4, Org=10, Enterprise=40)?
+
+| State                                                                | Severity   | Fix                                                                                        |
+|----------------------------------------------------------------------|------------|--------------------------------------------------------------------------------------------|
+| Mode count = tier ceiling                                            | Blocker    | Cannot add another mode without paid upgrade or restructure. Lift one axis (e.g. Brand) into a separate library file consuming a shared Foundations library. |
+| Mode count = tier ceiling − 1                                        | Warning    | Next axis exhausts the budget. Discuss before agreeing to a new mode.                      |
+| Plan tier unknown but designs assume ≥4 modes                        | Suggestion | Confirm tier with the user; default planning assumption is Pro (4).                        |
+| Mode count comfortably below ceiling                                 | (pass)     | —                                                                                          |
+
 ## Category 2 — Component Design
 
 ### CD1 — Variant axis explosion
@@ -162,8 +173,11 @@ A description that only repeats the component's name doesn't fix the underlying 
 | Descriptions exist but only restate the component name               | Critical   | Rewrite using the template in `build-workflow.md`. The description must surface intent — without it, an agent picks components by shape, not by purpose, and library-as-source-of-truth slowly erodes. |
 | Descriptions list props but no usage guidance                        | Warning    | Add `Use when…`, `Don't use when…`, `Signals…` sentences. Two lines is enough for most components. |
 | Descriptions are markdown but inconsistent in shape                  | Suggestion | Adopt one structure across all components: 1-line summary → bullet list of props → `Use when` → `Don't use when` → `Signals`. |
+| Non-trivial interactive component has zero **Dev-Mode annotations** on implementation-detail spots (focus-ring delivery, tap-target extension, animation easing, A11y exceptions) | Warning | Add annotations via `figma_set_annotations`. Description = big picture; annotations = surgical implementation details surfaced in Inspect panel. |
 
 ### CD7 — Complete interactive-state variant coverage
+
+**Tool:** `figma_analyze_component_set` extracts the variant state-machine + cross-variant diffs + CSS pseudo-class mapping. It's the right tool for this check — it surfaces which states exist, which are missing, and which differ only cosmetically vs. semantically.
 
 Check: does every interactive component cover all the states an agent will need to compose a real screen — **default, hover, focus, disabled, error, loading**?
 
@@ -277,6 +291,30 @@ Check: are atomic sub-components (slot placeholders, internal pieces) publishing
 | `_Slot/Default` shows up in the asset panel for designers            | Warning    | Confirm the `_` prefix is set; Figma should auto-exclude.                                  |
 | Internal helpers (`ButtonContent`, `CardShell`) are publishable      | Warning    | Prefix with `_` or `.` to exclude from publishing.                                         |
 
+### FS4 — Sections vs. Frames misuse
+
+Check: are component-internal layouts built inside Sections instead of Frames?
+
+Sections are organizational only — no Auto Layout, no constraints, no clip, can't nest inside Frames. Frames carry the actual layout primitives. Using a Section as an internal layout container breaks every reflow assumption downstream.
+
+| State                                                                | Severity   | Fix                                                                                        |
+|----------------------------------------------------------------------|------------|--------------------------------------------------------------------------------------------|
+| Component / variant inner content lives inside a Section             | Critical   | Convert to a Frame with `layoutMode: HORIZONTAL` or `VERTICAL`. Sections are for page-level grouping only. |
+| Sections used at the page level for grouping (correct)               | (pass)     | —                                                                                          |
+| Sections nested inside Frames                                        | Warning    | Inverted hierarchy. Sections cannot live inside Frames; lift them out or replace with a Frame. |
+
+### FS5 — "Ready for dev" coverage
+
+Check: do published components / patterns / sections carry a `devStatus = READY_FOR_DEV` marker?
+
+Without it, downstream Dev-Mode UI and code-gen agents treat the artifact as work-in-progress and skip it. The agent that consumes the library can't tell "draft" from "shipped".
+
+| State                                                                | Severity   | Fix                                                                                        |
+|----------------------------------------------------------------------|------------|--------------------------------------------------------------------------------------------|
+| 0% of published components / sections marked Ready for dev           | Warning    | Set `devStatus` on each shipped Section / Component via `figma_execute`. See `build-workflow.md` Phase 8. |
+| Mixed coverage with no policy                                        | Suggestion | Adopt the rule: any shipped artifact gets the marker before publish.                       |
+| Whole pages marked Ready for dev (too coarse)                        | Suggestion | Mark at the Section / Component scope, not the page. Pages are organizational.             |
+
 ## Category 5 — Engineering-Sync Readiness
 
 ### ES1 — Token names match codebase
@@ -296,14 +334,18 @@ Check: do Variant Property names/values match code prop names/values?
 |----------------------------------------------------------------------|------------|--------------------------------------------------------------------------------------------|
 | Mismatched (Figma `Size: Small`, code `size: 'sm'`)                  | Critical   | Rename Figma to match code.                                                               |
 
-### ES3 — Code Connect / mapping setup
+### ES3 — Naming-alignment as the code bridge
 
-Check: is there any mechanism mapping Figma components to code components?
+This skill explicitly does **not** recommend Figma's official Dev-Mode MCP or Code Connect. The bridge to code in this toolchain is **naming alignment** alone — Component names, Variant Property names/values, and Variable names matching the codebase exactly. When alignment is tight, code-gen tools infer the rest.
+
+Check: is naming alignment hard enough that an agent could map Figma↔code without an explicit Code Connect file?
 
 | State                                                                | Severity   | Fix                                                                                        |
 |----------------------------------------------------------------------|------------|--------------------------------------------------------------------------------------------|
-| No mapping at all                                                    | Warning    | figma-console-mcp doesn't have a Code Connect feature. Recommend the user set up Code Connect via Figma's official MCP / Dev Mode for code-gen workflows. |
-| Naming alignment is so good that code-gen tools can infer the mapping | (pass)    | —                                                                                          |
+| Components and Variant Properties match code exactly (CD2 + N1 pass) | (pass)     | Naming alignment is the mapping. No further action.                                        |
+| Some misalignment in Variant Property values (e.g. `Small` vs `sm`)  | Critical   | Rename in Figma to match code. See CD2.                                                    |
+| Component names abbreviated or stylized differently than code         | Critical   | Rename. See N1.                                                                            |
+| User asks about Code Connect / Dev-Mode MCP                           | (info)     | Out of scope for this skill. Use figma-console-mcp; rely on naming alignment. Don't pretend the official MCP is being recommended here. |
 
 ### ES4 — Documentation handoff
 
@@ -313,6 +355,32 @@ Check: does the library produce useful documentation for engineering?
 |----------------------------------------------------------------------|------------|--------------------------------------------------------------------------------------------|
 | No component docs anywhere                                           | Warning    | Use `figma_generate_component_doc` per component to produce Markdown handoff.             |
 | Component descriptions exist in Figma but aren't surfaced elsewhere  | Suggestion | If the team uses zeroheight, Storybook MDX, or similar, mirror descriptions there.        |
+
+### ES5 — Branching workflow (Org / Enterprise)
+
+Check: when migrations are planned on a file with Branching available, do they happen on a branch or directly on main?
+
+Library Publishing only happens from main; landing risky structural changes directly on main means there's no review buffer. Branching is the buffer.
+
+| State                                                                | Severity   | Fix                                                                                        |
+|----------------------------------------------------------------------|------------|--------------------------------------------------------------------------------------------|
+| Recent migrations landed directly on main (Org+ team)                | Warning    | Adopt the migration-playbook branching step. Run additive coordination on a branch, merge, then publish from main. |
+| Branching not available (Free / Pro)                                 | (n/a)      | —                                                                                          |
+| Branches in use, merged before publish                               | (pass)     | —                                                                                          |
+
+### ES6 — Library analytics review (Enterprise)
+
+Check: is the team correlating component-insertion analytics against the library to spot dead components?
+
+Figma Library Analytics (Enterprise REST API) reports per-component insertion / detachment counts. Components with zero insertions over 90 days are deprecation candidates; high detachment rates are a design-debt signal that the component doesn't fit real use cases.
+
+| State                                                                | Severity    | Fix                                                                                        |
+|----------------------------------------------------------------------|-------------|--------------------------------------------------------------------------------------------|
+| No regular review (Enterprise team)                                  | Suggestion  | Run `figma_audit_design_system` monthly + pull insertion counts via the REST API. Flag zero-insertion components for deprecation. |
+| Regular review in place                                              | (pass)      | —                                                                                          |
+| Free / Pro / Org team (no Library Analytics access)                  | (n/a)       | —                                                                                          |
+
+The skill doesn't itself integrate Library Analytics — it only flags this as a process recommendation when the team has the access.
 
 ## Audit run order
 

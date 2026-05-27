@@ -19,12 +19,13 @@ If the user has already run the Audit and is now in fix-mode, you'll often arriv
 
 ## Pre-flight — always
 
-Run all four before touching anything:
+Run all five before touching anything:
 
 1. **Re-run discovery.** `figma_get_file_data` (or `figma_get_variables` + `figma_get_styles` for large files). The state you remember from the last session may not be the current state.
 2. **Snapshot.** Pin a screenshot or `figma_get_file_data` dump as "before". You will refer back to it.
 3. **Identify the safety class** for each planned change (table below). A Breaking change in your set forces the coordination protocol; a list of all-Safe changes can run end-to-end without ceremony.
-4. **Tell the consumers.** Code (Style Dictionary export, Token Studio config, manually-maintained `tokens.css`), other Figma files using this as a library, and the design team. The cost of silence is debugging "the production app's primary color is wrong" three days later.
+4. **Branch first (Org / Enterprise only).** If the file lives in a workspace with **Branching** enabled, do the migration work on a branch, not on main. Library publishing happens **only from main**, so the workflow is: branch → migrate → review → merge → publish. Never run a Breaking change directly on main when a branch is available — it removes the only review buffer you have.
+5. **Tell the consumers.** Code (Style Dictionary export, Token Studio config, manually-maintained `tokens.css`), other Figma files using this as a library, and the design team. The cost of silence is debugging "the production app's primary color is wrong" three days later.
 
 ## Safety classes
 
