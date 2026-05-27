@@ -52,4 +52,17 @@ describe('LlmButton', () => {
     await user.click(screen.getByRole('button'));
     expect(onClick).toHaveBeenCalledOnce();
   });
+
+  // @behavior disabled-no-click
+  it('does not fire click when disabled', async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+    render(
+      <LlmButton disabled onClick={onClick}>
+        Click me
+      </LlmButton>
+    );
+    await user.click(screen.getByRole('button'));
+    expect(onClick).not.toHaveBeenCalled();
+  });
 });

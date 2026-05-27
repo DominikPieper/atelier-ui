@@ -98,4 +98,16 @@ describe('LlmButton', () => {
     await user.click(container.querySelector('llm-button')!);
     expect(onClick).toHaveBeenCalledOnce();
   });
+
+  // @behavior disabled-no-click
+  it('does not emit click when disabled', async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+    const { container } = await render(
+      '<llm-button [disabled]="true" (click)="onClick()">Click me</llm-button>',
+      { imports: [LlmButton], componentProperties: { onClick } }
+    );
+    await user.click(container.querySelector('llm-button')!);
+    expect(onClick).not.toHaveBeenCalled();
+  });
 });

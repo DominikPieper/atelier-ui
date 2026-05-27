@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   ElementRef,
   inject,
   input,
@@ -60,7 +61,27 @@ export class LlmButton {
   /** @internal — host element ref for the dev-mode a11y check. */
   private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);
 
+  private readonly destroyRef = inject(DestroyRef);
+
   constructor() {
+    // Suppress clicks while disabled/loading. The host is a custom element, so
+    // — unlike a native `<button disabled>` — neither the `disabled` attribute
+    // nor `pointer-events: none` reliably blocks click dispatch (the latter only
+    // affects pointer-driven clicks, not programmatic/keyboard ones). A real
+    // click lands on projected content (a descendant), so a capture-phase
+    // listener on the host intercepts it before any consumer `(click)` handler
+    // bound on the host (which fires in the bubble phase), matching the
+    // React/Vue native-disabled behavior.
+    const host = this.el.nativeElement;
+    const guard = (event: Event) => {
+      if (this.isDisabled()) {
+        event.stopImmediatePropagation();
+        event.preventDefault();
+      }
+    };
+    host.addEventListener('click', guard, true);
+    this.destroyRef.onDestroy(() => host.removeEventListener('click', guard, true));
+
     // Dev-mode warning when a button has no accessible name. Angular's
     // <ng-content> projection means we can't enforce this at the type
     // level (unlike the React adapter), so we check after first render.

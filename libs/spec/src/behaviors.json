@@ -4,7 +4,8 @@
     { "id": "default-render", "describe": "renders with default props/inputs without error" },
     { "id": "disabled-state", "describe": "is disabled / aria-disabled when disabled is true" },
     { "id": "loading-spinner", "describe": "renders a spinner while loading is true" },
-    { "id": "click-emits", "describe": "emits a click event when not disabled" }
+    { "id": "click-emits", "describe": "emits a click event when not disabled" },
+    { "id": "disabled-no-click", "describe": "does not emit a click event when disabled" }
   ],
   "dialog": [
     { "id": "render-dialog-element", "describe": "renders a native <dialog> element" },

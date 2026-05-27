@@ -43,6 +43,7 @@ describe('LlmButton', () => {
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
+  // @behavior disabled-no-click
   it('does not emit click when disabled', async () => {
     const user = userEvent.setup();
     const onClick = vi.fn();
