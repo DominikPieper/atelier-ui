@@ -1,3 +1,32 @@
+## 0.2.43 (2026-05-27)
+
+### 🚀 Features
+
+- **skills:** inventory cards-row width fits actual card count ([7f8f069](https://github.com/DominikPieper/atelier-ui/commit/7f8f069))
+- **skills:** inventory preview scales on both axes (W and H clamp) ([2302473](https://github.com/DominikPieper/atelier-ui/commit/2302473))
+- **skills:** inventory discover skips Icon namespace + Icons page by default ([b4ad17f](https://github.com/DominikPieper/atelier-ui/commit/b4ad17f))
+- **skills:** inventory sub-mode refs with ancestor-walk contextualBg ([b3428ce](https://github.com/DominikPieper/atelier-ui/commit/b3428ce))
+- **skills:** figma-workspace-architect — agent-readiness principles in audit (CD6/CD7/CD8/CD9) ([952c06c](https://github.com/DominikPieper/atelier-ui/commit/952c06c))
+- **skills:** figma-workspace-architect — Sync mode + audit re-verify nudge + false-positives doc ([29a5944](https://github.com/DominikPieper/atelier-ui/commit/29a5944))
+- **skills:** figma-workspace-architect — auto-release + discovery mirror ([b1725d6](https://github.com/DominikPieper/atelier-ui/commit/b1725d6))
+- **skills:** figma-workspace-architect — trigger on bare "Figma" keyword ([d95a4ed](https://github.com/DominikPieper/atelier-ui/commit/d95a4ed))
+- **skills:** figma-workspace-architect — audit freshness + code verify ([e2fb1db](https://github.com/DominikPieper/atelier-ui/commit/e2fb1db))
+- **skills:** scaffold-payload reference + Build Scaffold sub-mode ([d47011c](https://github.com/DominikPieper/atelier-ui/commit/d47011c))
+- **skills:** add iconography reference ([074a75a](https://github.com/DominikPieper/atelier-ui/commit/074a75a))
+- **skills:** add behavior-spec test fixtures + nx test target ([cfa1e90](https://github.com/DominikPieper/atelier-ui/commit/cfa1e90))
+- **skills:** add Migrate mode + migration-playbook reference ([cd68b28](https://github.com/DominikPieper/atelier-ui/commit/cd68b28))
+- **skills:** code-sync reference + payload examples + CI package gate ([#4](https://github.com/DominikPieper/atelier-ui/issues/4))
+- **skills:** add figma-workspace-architect Claude Code skill ([db2035c](https://github.com/DominikPieper/atelier-ui/commit/db2035c))
+
+### 🩹 Fixes
+
+- **release:** no-op nx-release-publish for figma-workspace-architect skill ([32b23af](https://github.com/DominikPieper/atelier-ui/commit/32b23af))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.42 (2026-05-27)
 
 This was a version bump only for figma-workspace-architect to align it with other projects, there were no code changes.
