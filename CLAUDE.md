@@ -52,7 +52,7 @@ This project provides several MCP servers to assist in development. Always use t
 - **Nx & Workspace Management**: Use the **Nx MCP server** for understanding project dependencies and running workspace tasks.
 - **Angular-Specific CLI**: Use the **Angular CLI MCP server** for Angular-specific best practices, API searches, and examples.
 - **Component Discovery & Docs**: Use the framework-specific **Storybook MCP servers** for exact component specs. Storybook 10.4 ships MCP in two layers — be explicit about which surface you're calling.
-- **Component Anatomy & Cross-Framework Mapping**: Use the **`uianatomy` MCP server** (HTTP at `https://uianatomy.dev/mcp`, 22 tools) for canonical component anatomy, axes, slots, transitions, motion, tokens, events, and library divergences. Pair with the bundled `uianatomy-mcp` skill at `.claude/skills/uianatomy-mcp/SKILL.md` for trigger guidance.
+- **Component Anatomy & Cross-Framework Mapping**: Use the **`uianatomy` MCP server** (HTTP at `https://uianatomy.dev/mcp`, 29 tools) for canonical component anatomy, axes, slots, transitions, motion, tokens, events, and library divergences (41 components; per-library `implementations/` audits across radix, headlessui, cdk, react-aria, vaul). Pair with the bundled `uianatomy-mcp` skill at `.claude/skills/uianatomy-mcp/SKILL.md` for trigger guidance.
 
 ### Storybook MCP Workflows
 
