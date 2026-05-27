@@ -56,6 +56,7 @@ describe('LlmToggle', () => {
       expect(input).not.toBeChecked();
     });
 
+    // @behavior aria-checked
     it('sets aria-checked attribute', async () => {
       const { container } = await render(
         '<llm-toggle [checked]="true">Label</llm-toggle>',

@@ -36,6 +36,7 @@ beforeAll(() => {
 
 describe('LlmChat', () => {
   describe('variant classes', () => {
+    // @behavior variant-class
     it.each(['drawer', 'popup', 'inline'] as const)(
       'applies variant-%s class to host',
       async (variant) => {

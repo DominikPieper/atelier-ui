@@ -66,6 +66,7 @@ describe('LlmCheckbox', () => {
     expect(onCheckedChange).toHaveBeenCalledWith(true);
   });
 
+  // @behavior indeterminate
   it('sets indeterminate state on checkbox element', () => {
     render(<LlmCheckbox indeterminate />);
     const checkbox = screen.getByRole('checkbox') as HTMLInputElement;

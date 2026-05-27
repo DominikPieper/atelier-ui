@@ -34,6 +34,7 @@ describe('LlmToast', () => {
     expect(screen.getByText('Hello!')).toBeInTheDocument();
   });
 
+  // @behavior variant-class
   it('applies variant class to toast', async () => {
     const user = userEvent.setup();
     const { container } = render({

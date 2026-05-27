@@ -2,9 +2,16 @@ import { render, screen } from '@testing-library/react';
 import { LlmAvatar, LlmAvatarGroup } from './llm-avatar';
 
 describe('LlmAvatar', () => {
+  // @behavior img-when-src
   it('renders image when src is provided', () => {
     render(<LlmAvatar src="https://example.com/photo.jpg" alt="Jane Doe" />);
     expect(screen.getByAltText('Jane Doe')).toBeInTheDocument();
+  });
+
+  // @behavior icon-when-empty
+  it('shows icon placeholder when no src or name', () => {
+    const { container } = render(<LlmAvatar />);
+    expect(container.querySelector('svg.icon')).toBeInTheDocument();
   });
 
   // @behavior initials-when-no-src

@@ -107,6 +107,7 @@ describe('LlmToast', () => {
     expect(screen.getByText('Hello world')).toBeInTheDocument();
   });
 
+  // @behavior variant-class
   it.each(['default', 'success', 'warning', 'danger', 'info'] as const)(
     'applies variant-%s class to host',
     async (variant) => {

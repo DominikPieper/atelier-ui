@@ -51,6 +51,8 @@
     { "id": "aria-live", "describe": "sets aria-live according to variant severity" }
   ],
   "avatar": [
+    { "id": "img-when-src", "describe": "renders an img when src is provided" },
+    { "id": "icon-when-empty", "describe": "renders the icon placeholder when no src or name" },
     { "id": "initials-when-no-src", "describe": "shows name initials when no image src is given" },
     { "id": "aria-label-from-name", "describe": "uses the name as the accessible label when no alt" }
   ],
@@ -75,14 +77,16 @@
     { "id": "send-button-idle", "describe": "renders a Send button while status is idle" },
     { "id": "stop-button-streaming", "describe": "renders a Stop button while status is streaming" },
     { "id": "emits-send", "describe": "emits send with the typed text on Enter" },
-    { "id": "emits-stop", "describe": "emits stop when Stop is clicked while streaming" }
+    { "id": "emits-stop", "describe": "emits stop when Stop is clicked while streaming" },
+    { "id": "variant-class", "describe": "applies the variant class to the host" }
   ],
   "checkbox": [
     { "id": "reflects-checked", "describe": "reflects the checked prop/input" },
     { "id": "toggle-emits", "describe": "toggles and emits/calls back on click" },
     { "id": "disabled", "describe": "is disabled when the disabled prop is true" },
     { "id": "invalid", "describe": "sets aria-invalid / invalid state when invalid" },
-    { "id": "errors", "describe": "shows error messages when invalid" }
+    { "id": "errors", "describe": "shows error messages when invalid" },
+    { "id": "indeterminate", "describe": "sets the indeterminate property when indeterminate is true" }
   ],
   "code-block": [
     { "id": "renders-code", "describe": "renders the code content" },
@@ -178,14 +182,16 @@
   "toast": [
     { "id": "show-adds", "describe": "show() adds a toast" },
     { "id": "dismiss-button-click", "describe": "the dismiss button removes the toast" },
-    { "id": "position-class", "describe": "applies the position class to the container" }
+    { "id": "position-class", "describe": "applies the position class to the container" },
+    { "id": "variant-class", "describe": "applies the variant class to the toast" }
   ],
   "toggle": [
     { "id": "role-switch", "describe": "exposes role=switch" },
     { "id": "reflects-checked", "describe": "reflects the checked state" },
     { "id": "toggle-emits", "describe": "toggles and emits/calls back on click" },
     { "id": "disabled", "describe": "is disabled when the disabled prop is true" },
-    { "id": "errors", "describe": "shows error messages when invalid" }
+    { "id": "errors", "describe": "shows error messages when invalid" },
+    { "id": "aria-checked", "describe": "sets aria-checked reflecting the on/off state" }
   ],
   "tooltip": [
     { "id": "hidden-initially", "describe": "tooltip is not shown initially" },

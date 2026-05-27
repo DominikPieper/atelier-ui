@@ -34,6 +34,7 @@ const ChatFixture = {
 
 describe('LlmChat', () => {
   describe.each(['drawer', 'popup', 'inline'] as const)('variant=%s', (variant) => {
+    // @behavior variant-class
     it('applies the variant class on the host', () => {
       const { container } = render(ChatFixture, { props: { variant, status: 'idle', open: true } });
       expect(container.firstChild).toHaveClass(`variant-${variant}`);

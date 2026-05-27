@@ -39,4 +39,13 @@ describe('LlmCheckbox', () => {
     render(LlmCheckbox, { props: { invalid: true }, slots: { default: 'Invalid' } });
     expect(screen.getByRole('checkbox', { name: 'Invalid' })).toHaveAttribute('aria-invalid', 'true');
   });
+
+  // @behavior indeterminate
+  it('sets the indeterminate property on the input when indeterminate is true', () => {
+    const { container } = render(LlmCheckbox, {
+      props: { indeterminate: true },
+      slots: { default: 'Partial' },
+    });
+    expect((container.querySelector('input') as HTMLInputElement).indeterminate).toBe(true);
+  });
 });

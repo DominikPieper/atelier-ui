@@ -239,6 +239,7 @@ describe('LlmCheckbox', () => {
   });
 
   describe('indeterminate state', () => {
+    // @behavior indeterminate
     it('sets the indeterminate DOM property when true', async () => {
       const { container } = await render(
         '<llm-checkbox [indeterminate]="true">Label</llm-checkbox>',

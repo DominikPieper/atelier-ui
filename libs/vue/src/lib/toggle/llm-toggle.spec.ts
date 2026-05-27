@@ -34,4 +34,10 @@ describe('LlmToggle', () => {
     render(LlmToggle, { props: { errors: ['This is required'] }, slots: { default: 'Toggle' } });
     expect(screen.getByText('This is required')).toBeInTheDocument();
   });
+
+  // @behavior aria-checked
+  it('sets aria-checked attribute', () => {
+    render(LlmToggle, { props: { checked: true }, slots: { default: 'Notify' } });
+    expect(screen.getByRole('switch', { name: 'Notify' })).toHaveAttribute('aria-checked', 'true');
+  });
 });

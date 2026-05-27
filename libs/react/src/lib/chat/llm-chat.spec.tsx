@@ -17,6 +17,7 @@ beforeEach(() => {
 
 describe('LlmChat', () => {
   describe.each(['drawer', 'popup', 'inline'] as const)('variant=%s', (variant) => {
+    // @behavior variant-class
     it('applies the variant class on the host', () => {
       const { container } = render(
         <LlmChat variant={variant} open>

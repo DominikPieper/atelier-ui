@@ -36,6 +36,7 @@ describe('LlmAvatar', () => {
   });
 
   describe('content fallback', () => {
+    // @behavior img-when-src
     it('renders an img when src is provided', async () => {
       const { container } = await render(
         '<llm-avatar src="https://example.com/photo.jpg" alt="User" />',
@@ -61,6 +62,7 @@ describe('LlmAvatar', () => {
       expect(screen.getByText('AB')).toBeInTheDocument();
     });
 
+    // @behavior icon-when-empty
     it('shows icon SVG when neither src nor name is given', async () => {
       const { container } = await render('<llm-avatar />', { imports: [LlmAvatar] });
       expect(container.querySelector('svg.icon')).toBeInTheDocument();

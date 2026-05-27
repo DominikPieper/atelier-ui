@@ -9,6 +9,15 @@ describe('LlmAvatar', () => {
     expect(screen.getByText('JD')).toBeInTheDocument();
   });
 
+  // @behavior img-when-src
+  it('renders an img when src is provided', () => {
+    const { container } = render(LlmAvatar, {
+      props: { src: 'https://example.com/photo.jpg', alt: 'Jane' },
+    });
+    expect(container.querySelector('img')).toBeInTheDocument();
+  });
+
+  // @behavior icon-when-empty
   it('renders icon placeholder when no src or name', () => {
     const { container } = render(LlmAvatar);
     expect(container.querySelector('.icon')).toBeInTheDocument();

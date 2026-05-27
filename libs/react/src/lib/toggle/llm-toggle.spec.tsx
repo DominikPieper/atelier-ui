@@ -72,6 +72,7 @@ describe('LlmToggle', () => {
     expect(screen.getByText('Required')).toBeInTheDocument();
   });
 
+  // @behavior aria-checked
   it('sets aria-checked attribute', () => {
     render(<LlmToggle checked />);
     expect(screen.getByRole('switch')).toHaveAttribute('aria-checked', 'true');
