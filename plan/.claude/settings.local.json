@@ -20,7 +20,7 @@
       "Bash(npx tsc:*)",
       "Bash(node:*)",
       "Bash(do echo:*)",
-      "Read(//Users/dominikpieper/Projects/angular-llm-components/plan/**)",
+      "Read(//Users/dominikpieper/Projects/atelier/plan/**)",
       "Bash(done)",
       "Bash(npm install:*)",
       "WebFetch(domain:blog.ninja-squad.com)",
