@@ -1,3 +1,19 @@
+## 0.1.6 (2026-05-27)
+
+### 🚀 Features
+
+- **a11y:** add roving arrow-key navigation to React/Vue radio-group ([0c2ae81](https://github.com/DominikPieper/atelier-ui/commit/0c2ae81))
+- **tooling:** enforce behavioral-parity coverage across framework adapters ([06c1829](https://github.com/DominikPieper/atelier-ui/commit/06c1829))
+
+### 🩹 Fixes
+
+- **angular:** suppress click events on disabled button ([1639ced](https://github.com/DominikPieper/atelier-ui/commit/1639ced))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.1.5 (2026-05-20)
 
 This was a version bump only for angular to align it with other projects, there were no code changes.
