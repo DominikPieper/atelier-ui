@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { LlmButton } from './llm-button';
 
 describe('LlmButton', () => {
+  // @behavior default-render
   it('renders without error with default props', () => {
     render(<LlmButton>Click me</LlmButton>);
     expect(screen.getByRole('button', { name: 'Click me' })).toBeInTheDocument();
@@ -21,6 +22,7 @@ describe('LlmButton', () => {
     expect(screen.getByRole('button')).toHaveClass(`size-${size}`);
   });
 
+  // @behavior disabled-state
   it('is disabled when disabled prop is true', () => {
     render(<LlmButton disabled>Btn</LlmButton>);
     expect(screen.getByRole('button')).toBeDisabled();
@@ -31,6 +33,7 @@ describe('LlmButton', () => {
     expect(screen.getByRole('button')).toHaveClass('is-disabled');
   });
 
+  // @behavior loading-spinner
   it('renders spinner when loading', () => {
     const { container } = render(<LlmButton loading>Btn</LlmButton>);
     expect(container.querySelector('.spinner')).toBeInTheDocument();
@@ -41,6 +44,7 @@ describe('LlmButton', () => {
     expect(screen.getByRole('button')).toBeDisabled();
   });
 
+  // @behavior click-emits
   it('fires click event when not disabled', async () => {
     const user = userEvent.setup();
     const onClick = vi.fn();

@@ -4,6 +4,7 @@ import { userEvent } from '@testing-library/user-event';
 import { LlmButton } from './llm-button';
 
 describe('LlmButton', () => {
+  // @behavior default-render
   it('renders without error with default inputs', async () => {
     await render('<llm-button>Click me</llm-button>', { imports: [LlmButton] });
     expect(screen.getByText('Click me')).toBeInTheDocument();
@@ -36,6 +37,7 @@ describe('LlmButton', () => {
   });
 
   describe('disabled state', () => {
+    // @behavior disabled-state
     it('sets aria-disabled when disabled input is true', async () => {
       const { container } = await render(
         '<llm-button [disabled]="true">Btn</llm-button>',
@@ -54,6 +56,7 @@ describe('LlmButton', () => {
   });
 
   describe('loading state', () => {
+    // @behavior loading-spinner
     it('renders spinner when loading', async () => {
       const { container } = await render(
         '<llm-button [loading]="true">Btn</llm-button>',
@@ -84,6 +87,7 @@ describe('LlmButton', () => {
     expect(screen.getByText('Save Changes')).toBeInTheDocument();
   });
 
+  // @behavior click-emits
   it('emits native click events when not disabled', async () => {
     const user = userEvent.setup();
     const onClick = vi.fn();

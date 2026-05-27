@@ -36,6 +36,7 @@ describe('LlmMenuTrigger', () => {
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
   });
 
+  // @behavior open-on-trigger
   it('shows menu on trigger click', async () => {
     const user = userEvent.setup();
     render(MenuFixture);
@@ -67,6 +68,7 @@ describe('LlmMenuTrigger', () => {
     expect(container.querySelector('.llm-menu-separator')).toBeInTheDocument();
   });
 
+  // @behavior disabled-item
   it('disabled menu item cannot be triggered', async () => {
     const user = userEvent.setup();
     render(MenuFixture);

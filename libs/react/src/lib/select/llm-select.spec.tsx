@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { LlmSelect, LlmOption } from './llm-select';
 
 describe('LlmSelect', () => {
+  // @behavior render-element
   it('renders a select element', () => {
     render(
       <LlmSelect>
@@ -23,6 +24,7 @@ describe('LlmSelect', () => {
     expect(screen.getByRole('option', { name: 'Canada' })).toBeInTheDocument();
   });
 
+  // @behavior placeholder
   it('shows placeholder when value is empty', () => {
     const { container } = render(
       <LlmSelect value="" placeholder="Select a country">
@@ -33,6 +35,7 @@ describe('LlmSelect', () => {
     expect(container.querySelector('option[value=""]')?.textContent).toBe('Select a country');
   });
 
+  // @behavior value-change
   it('calls onValueChange when selection changes', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
@@ -57,6 +60,7 @@ describe('LlmSelect', () => {
     expect(select.value).toBe('ca');
   });
 
+  // @behavior disabled
   it('is disabled when disabled prop is true', () => {
     render(
       <LlmSelect disabled>
@@ -75,6 +79,7 @@ describe('LlmSelect', () => {
     expect(container.firstChild).toHaveClass('is-disabled');
   });
 
+  // @behavior invalid
   it('applies is-invalid class when invalid', () => {
     const { container } = render(
       <LlmSelect invalid>
@@ -84,6 +89,7 @@ describe('LlmSelect', () => {
     expect(container.firstChild).toHaveClass('is-invalid');
   });
 
+  // @behavior error-messages
   it('shows error messages when invalid and errors provided', () => {
     render(
       <LlmSelect invalid errors={['Please select an option']}>

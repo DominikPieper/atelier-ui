@@ -45,6 +45,7 @@ describe('LlmMenuItem', () => {
     expect(onTriggered).toHaveBeenCalled();
   });
 
+  // @behavior disabled-item
   it('does not call onTriggered when disabled', async () => {
     const user = userEvent.setup();
     const onTriggered = vi.fn();
@@ -96,6 +97,7 @@ describe('LlmMenuTrigger', () => {
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
   });
 
+  // @behavior open-on-trigger
   it('shows menu when trigger is clicked', async () => {
     const user = userEvent.setup();
     render(

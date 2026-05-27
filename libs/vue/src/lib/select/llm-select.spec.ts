@@ -5,6 +5,7 @@ import LlmOption from './llm-option.vue';
 
 
 describe('LlmSelect', () => {
+  // @behavior render-element
   it('renders a select element', () => {
     render(LlmSelect);
     expect(screen.getByRole('combobox')).toBeInTheDocument();
@@ -15,27 +16,32 @@ describe('LlmSelect', () => {
     expect(screen.getByText('Country')).toBeInTheDocument();
   });
 
+  // @behavior placeholder
   it('renders placeholder option', () => {
     render(LlmSelect, { props: { placeholder: 'Select a country' } });
     expect(screen.getByText('Select a country')).toBeInTheDocument();
   });
 
+  // @behavior error-messages
   it('renders error messages', () => {
     render(LlmSelect, { props: { errors: ['This field is required'], invalid: true } });
     expect(screen.getByText('This field is required')).toBeInTheDocument();
     expect(screen.getByRole('alert')).toBeInTheDocument();
   });
 
+  // @behavior invalid
   it('sets aria-invalid when invalid', () => {
     render(LlmSelect, { props: { invalid: true } });
     expect(screen.getByRole('combobox')).toHaveAttribute('aria-invalid', 'true');
   });
 
+  // @behavior disabled
   it('disables the select when disabled', () => {
     render(LlmSelect, { props: { disabled: true } });
     expect(screen.getByRole('combobox')).toBeDisabled();
   });
 
+  // @behavior value-change
   it('emits update:value on change', async () => {
     const user = userEvent.setup();
     const { emitted } = render(LlmSelect, {

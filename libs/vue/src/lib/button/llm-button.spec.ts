@@ -3,6 +3,7 @@ import { userEvent } from '@testing-library/user-event';
 import LlmButton from './llm-button.vue';
 
 describe('LlmButton', () => {
+  // @behavior default-render
   it('renders with default props', () => {
     render(LlmButton, { slots: { default: 'Click me' } });
     const button = screen.getByRole('button', { name: 'Click me' });
@@ -16,6 +17,7 @@ describe('LlmButton', () => {
     expect(button).toHaveClass('variant-outline', 'size-lg');
   });
 
+  // @behavior disabled-state
   it('is disabled when disabled prop is true', () => {
     render(LlmButton, { props: { disabled: true }, slots: { default: 'Disabled' } });
     const button = screen.getByRole('button', { name: 'Disabled' });
@@ -23,6 +25,7 @@ describe('LlmButton', () => {
     expect(button).toHaveClass('is-disabled');
   });
 
+  // @behavior loading-spinner
   it('is disabled and shows spinner when loading', () => {
     render(LlmButton, { props: { loading: true }, slots: { default: 'Loading' } });
     const button = screen.getByRole('button', { name: 'Loading' });
@@ -31,6 +34,7 @@ describe('LlmButton', () => {
     expect(button.querySelector('.spinner')).toBeInTheDocument();
   });
 
+  // @behavior click-emits
   it('emits click events when not disabled', async () => {
     const user = userEvent.setup();
     const onClick = vi.fn();

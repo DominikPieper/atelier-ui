@@ -34,6 +34,7 @@ beforeAll(() => {
 });
 
 describe('LlmSelect', () => {
+  // @behavior render-element
   it('renders with role="combobox"', async () => {
     const { container } = await render(SELECT_TEMPLATE, {
       imports: [LlmSelect, LlmOption],
@@ -50,6 +51,7 @@ describe('LlmSelect', () => {
     expect(container.querySelector('button.trigger')).toBeInTheDocument();
   });
 
+  // @behavior placeholder
   it('shows placeholder when no value is selected', async () => {
     await render(SELECT_TEMPLATE, {
       imports: [LlmSelect, LlmOption],
@@ -104,6 +106,7 @@ describe('LlmSelect', () => {
   });
 
   describe('disabled state', () => {
+    // @behavior disabled
     it('disables the trigger button when disabled', async () => {
       const { container } = await render(
         `<llm-select [disabled]="true" placeholder="Choose">
@@ -151,6 +154,7 @@ describe('LlmSelect', () => {
   });
 
   describe('invalid state', () => {
+    // @behavior invalid
     it('sets aria-invalid on the trigger when invalid', async () => {
       const { container } = await render(
         `<llm-select [invalid]="true" placeholder="Choose">
@@ -198,6 +202,7 @@ describe('LlmSelect', () => {
       expect(container.querySelector('.errors')).not.toBeInTheDocument();
     });
 
+    // @behavior error-messages
     it('shows errors when touched and invalid', async () => {
       await render(
         `<llm-select [invalid]="true" [errors]="errors" [touched]="true" placeholder="Choose">
@@ -260,6 +265,7 @@ describe('LlmSelect', () => {
       expect(container.querySelector('llm-select')).not.toHaveClass('is-open');
     });
 
+    // @behavior value-change
     it('selects an option when clicked and closes the panel', async () => {
       const user = userEvent.setup();
       const { container } = await render(SELECT_TEMPLATE, {

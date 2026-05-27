@@ -23,6 +23,7 @@ function Controlled(props: { initialValue?: string }) {
 }
 
 describe('LlmCombobox', () => {
+  // @behavior render-input
   it('renders an input with role="combobox"', () => {
     const { container } = render(<Controlled />);
     expect(container.querySelector('input[role="combobox"]')).toBeInTheDocument();
@@ -40,6 +41,7 @@ describe('LlmCombobox', () => {
     expect(screen.getByRole('listbox')).toBeInTheDocument();
   });
 
+  // @behavior filter-on-type
   it('filters options as user types', async () => {
     const user = userEvent.setup();
     render(<Controlled />);
@@ -58,6 +60,7 @@ describe('LlmCombobox', () => {
     expect(screen.getByText('No results found.')).toBeInTheDocument();
   });
 
+  // @behavior select-on-click
   it('selects an option on click', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
@@ -83,6 +86,7 @@ describe('LlmCombobox', () => {
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 
+  // @behavior keyboard-nav
   it('navigates with ArrowDown and selects with Enter', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
@@ -102,6 +106,7 @@ describe('LlmCombobox', () => {
     expect(onChange).toHaveBeenCalledWith('apple');
   });
 
+  // @behavior close-on-escape
   it('closes on Escape', async () => {
     const user = userEvent.setup();
     render(<Controlled />);
@@ -111,6 +116,7 @@ describe('LlmCombobox', () => {
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 
+  // @behavior aria-expanded
   it('sets aria-expanded=true when open', async () => {
     const user = userEvent.setup();
     render(<Controlled />);

@@ -18,6 +18,8 @@ beforeAll(() => {
 });
 
 describe('LlmDialog', () => {
+  // @behavior render-dialog-element
+  // @behavior aria-modal
   it('renders a <dialog> element with aria-modal="true"', async () => {
     const { container } = await render('<llm-dialog>Content</llm-dialog>', {
       imports: [LlmDialog],
@@ -34,6 +36,7 @@ describe('LlmDialog', () => {
     expect(container.querySelector('dialog')).not.toHaveAttribute('open');
   });
 
+  // @behavior open-shows-modal
   it('opens the dialog when open=true', async () => {
     const { container, fixture } = await render('<llm-dialog [open]="true">Content</llm-dialog>', {
       imports: [LlmDialog],
@@ -58,6 +61,7 @@ describe('LlmDialog', () => {
 
   describe('size variants', () => {
     for (const size of ['sm', 'md', 'lg', 'xl', 'full'] as const) {
+      // @behavior size-class
       it(`applies size-${size} class to .panel`, async () => {
         const { container } = await render(
           `<llm-dialog size="${size}">Content</llm-dialog>`,
@@ -149,6 +153,7 @@ describe('LlmDialog', () => {
       expect(closeBtn).toHaveAttribute('aria-label', 'Close dialog');
     });
 
+    // @behavior close-button
     it('closes the dialog when close button is clicked', async () => {
       const user = userEvent.setup();
       const { container } = await render(

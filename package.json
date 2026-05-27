@@ -11,6 +11,7 @@
     "check:spec": "node tools/scripts/sync-spec.mjs --check",
     "check:docs": "node tools/scripts/check-docs-sync.js",
     "check:tokens": "node tools/scripts/sync-tokens.mjs --check",
+    "check:behavior": "node tools/scripts/check-behavior-coverage.mjs",
     "check:llms": "node tools/scripts/gen-llms-txt.mjs --check",
     "check:cookbook": "node tools/scripts/check-cookbook-parity.mjs",
     "check:cookbook-manifest": "node tools/scripts/gen-cookbook-manifest.mjs --check",

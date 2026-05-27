@@ -38,6 +38,7 @@ function getInput(container: Element): HTMLInputElement {
 }
 
 describe('LlmCombobox', () => {
+  // @behavior render-input
   it('renders an input with role="combobox"', async () => {
     const { container } = await render(TEMPLATE, {
       imports: [LlmCombobox],
@@ -75,6 +76,7 @@ describe('LlmCombobox', () => {
     expect(screen.getAllByRole('option').length).toBeGreaterThan(0);
   });
 
+  // @behavior filter-on-type
   it('filters options as user types', async () => {
     const user = userEvent.setup();
     const { container } = await render(TEMPLATE, {
@@ -99,6 +101,7 @@ describe('LlmCombobox', () => {
     expect(screen.getByText('No results found.')).toBeInTheDocument();
   });
 
+  // @behavior select-on-click
   it('selects an option on click and shows its label in the input', async () => {
     const user = userEvent.setup();
     const { container } = await render(TEMPLATE, {
@@ -122,6 +125,7 @@ describe('LlmCombobox', () => {
     expect(container.querySelector('llm-combobox')).not.toHaveClass('is-open');
   });
 
+  // @behavior keyboard-nav
   it('navigates options with ArrowDown and selects with Enter', async () => {
     const user = userEvent.setup();
     const { container } = await render(TEMPLATE, {
@@ -134,6 +138,7 @@ describe('LlmCombobox', () => {
     expect(input.value).toBe('Apple');
   });
 
+  // @behavior close-on-escape
   it('closes on Escape (removes is-open class)', async () => {
     const user = userEvent.setup();
     const { container } = await render(TEMPLATE, {
@@ -146,6 +151,7 @@ describe('LlmCombobox', () => {
     expect(container.querySelector('llm-combobox')).not.toHaveClass('is-open');
   });
 
+  // @behavior aria-expanded
   it('sets aria-expanded=true when open', async () => {
     const user = userEvent.setup();
     const { container } = await render(TEMPLATE, {

@@ -47,6 +47,7 @@ describe('LlmMenu', () => {
     expect(menu).toHaveClass('variant-compact');
   });
 
+  // @behavior open-on-trigger
   it('opens menu on trigger click and renders items', async () => {
     await render(MENU_TEMPLATE, { imports: MENU_IMPORTS });
     screen.getByText('Open Menu').click();
@@ -62,6 +63,7 @@ describe('LlmMenu', () => {
     expect(separator).toHaveAttribute('role', 'separator');
   });
 
+  // @behavior disabled-item
   it('applies is-disabled class on disabled item', async () => {
     await render(MENU_TEMPLATE, { imports: MENU_IMPORTS });
     screen.getByText('Open Menu').click();

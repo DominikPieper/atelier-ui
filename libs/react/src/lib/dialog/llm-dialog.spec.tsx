@@ -9,11 +9,13 @@ beforeEach(() => {
 });
 
 describe('LlmDialog', () => {
+  // @behavior render-dialog-element
   it('renders dialog element', () => {
     render(<LlmDialog open={false} />);
     expect(document.querySelector('dialog')).toBeInTheDocument();
   });
 
+  // @behavior open-shows-modal
   it('calls showModal when open becomes true', () => {
     render(<LlmDialog open={true} />);
     expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalled();
@@ -46,6 +48,7 @@ describe('LlmDialog', () => {
     expect(screen.getByText('Footer content')).toBeInTheDocument();
   });
 
+  // @behavior close-button
   it('close button calls onOpenChange with false', async () => {
     const user = userEvent.setup();
     const onOpenChange = vi.fn();
@@ -64,6 +67,7 @@ describe('LlmDialog', () => {
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
+  // @behavior size-class
   it('applies size class to dialog element', () => {
     render(<LlmDialog open={true} size="lg" />);
     expect(document.querySelector('dialog')).toHaveClass('size-lg');
@@ -78,6 +82,7 @@ describe('LlmDialog', () => {
     }
   });
 
+  // @behavior aria-modal
   it('renders with aria-modal on dialog element', () => {
     render(<LlmDialog open={true} />);
     expect(document.querySelector('dialog')).toHaveAttribute('aria-modal', 'true');

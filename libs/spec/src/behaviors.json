@@ -1,0 +1,36 @@
+{
+  "$comment": "Behavior contract: runtime behaviors every framework adapter must test, keyed by component. The check-behavior-coverage.mjs script asserts each id is tagged (// @behavior <id>) in every framework's spec file, so behavioral parity is enforced the way shape parity is by the type contract. This is a ratchet: it locks behaviors currently covered in all three adapters. Add ids here as you backfill divergent coverage (see the gap report in the Gap-3 commit).",
+  "button": [
+    { "id": "default-render", "describe": "renders with default props/inputs without error" },
+    { "id": "disabled-state", "describe": "is disabled / aria-disabled when disabled is true" },
+    { "id": "loading-spinner", "describe": "renders a spinner while loading is true" },
+    { "id": "click-emits", "describe": "emits a click event when not disabled" }
+  ],
+  "dialog": [
+    { "id": "render-dialog-element", "describe": "renders a native <dialog> element" },
+    { "id": "open-shows-modal", "describe": "shows the modal (showModal) when open becomes true" },
+    { "id": "size-class", "describe": "applies the size class to the dialog/panel" },
+    { "id": "aria-modal", "describe": "sets aria-modal on the dialog element" },
+    { "id": "close-button", "describe": "the close button closes the dialog / emits open=false" }
+  ],
+  "menu": [
+    { "id": "open-on-trigger", "describe": "opens the menu and renders items on trigger click" },
+    { "id": "disabled-item", "describe": "a disabled item is marked disabled and cannot be triggered" }
+  ],
+  "select": [
+    { "id": "render-element", "describe": "renders the select control" },
+    { "id": "placeholder", "describe": "shows the placeholder when no value is selected" },
+    { "id": "disabled", "describe": "is disabled when the disabled prop is true" },
+    { "id": "invalid", "describe": "reflects the invalid state (aria-invalid / is-invalid)" },
+    { "id": "value-change", "describe": "emits / calls back on selection change" },
+    { "id": "error-messages", "describe": "shows error messages when invalid" }
+  ],
+  "combobox": [
+    { "id": "render-input", "describe": "renders an input with role=combobox" },
+    { "id": "filter-on-type", "describe": "filters options as the user types" },
+    { "id": "select-on-click", "describe": "selects an option on click" },
+    { "id": "keyboard-nav", "describe": "navigates options with ArrowDown and selects with Enter" },
+    { "id": "close-on-escape", "describe": "closes the listbox on Escape" },
+    { "id": "aria-expanded", "describe": "sets aria-expanded=true when the listbox is open" }
+  ]
+}
