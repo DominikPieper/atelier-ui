@@ -26,7 +26,7 @@
 
 /* ── Backdrop ──────────────────────────────────────────────────────────────── */
 .llm-drawer-host dialog::backdrop {
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--ui-color-overlay);
   backdrop-filter: blur(2px);
   transition:
     opacity var(--ui-duration-slow) var(--ui-ease-out, ease-out),
@@ -42,12 +42,12 @@
 
 @media (prefers-color-scheme: dark) {
   .llm-drawer-host dialog::backdrop {
-    background: rgba(0, 0, 0, 0.7);
+    background: var(--ui-color-overlay);
   }
 }
 
 [data-theme='dark'] .llm-drawer-host dialog::backdrop {
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--ui-color-overlay);
 }
 
 /* ── Panel (inner wrapper) ─────────────────────────────────────────────────── */

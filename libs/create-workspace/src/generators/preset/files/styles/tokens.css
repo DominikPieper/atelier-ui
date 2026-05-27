@@ -67,6 +67,7 @@
   --ui-color-surface: #ffffff;
   --ui-color-surface-raised: #f8fafc;
   --ui-color-surface-sunken: #f1f5f9;
+  --ui-color-overlay: rgba(0, 0, 0, 0.5);
 
   /* Borders — split decorative from functional per WCAG 1.4.11 */
   --ui-color-border: #e2e8f0;          /* decorative */
@@ -189,6 +190,7 @@
     --ui-color-surface: #0a1116;
     --ui-color-surface-raised: #131c24;
     --ui-color-surface-sunken: #060c10;
+  --ui-color-overlay: rgba(0, 0, 0, 0.7);
 
     --ui-color-border: #1e293b;
     --ui-color-border-hover: #334155;
@@ -247,6 +249,7 @@
   --ui-color-surface: #0a1116;
   --ui-color-surface-raised: #131c24;
   --ui-color-surface-sunken: #060c10;
+  --ui-color-overlay: rgba(0, 0, 0, 0.7);
 
   --ui-color-border: #1e293b;
   --ui-color-border-hover: #334155;
@@ -305,6 +308,7 @@
   --ui-color-surface: #ffffff;
   --ui-color-surface-raised: #f8fafc;
   --ui-color-surface-sunken: #f1f5f9;
+  --ui-color-overlay: rgba(0, 0, 0, 0.5);
 
   --ui-color-border: #e2e8f0;
   --ui-color-border-hover: #cbd5e1;
