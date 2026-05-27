@@ -73,7 +73,7 @@ export class LlmButton {
     // bound on the host (which fires in the bubble phase), matching the
     // React/Vue native-disabled behavior.
     const host = this.el.nativeElement;
-    const guard = (event: Event) => {
+    const guard = (event: Event): void => {
       if (this.isDisabled()) {
         event.stopImmediatePropagation();
         event.preventDefault();
