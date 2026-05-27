@@ -12,6 +12,7 @@ const GROUP_TEMPLATE = `
 `;
 
 describe('LlmRadioGroup', () => {
+  // @behavior role
   it('renders with role="radiogroup"', async () => {
     const { container } = await render(GROUP_TEMPLATE, {
       imports: [LlmRadioGroup, LlmRadio],
@@ -28,6 +29,7 @@ describe('LlmRadioGroup', () => {
     expect(container.querySelectorAll('input[type="radio"]')).toHaveLength(3);
   });
 
+  // @behavior checks-matching-value
   it('sets the checked radio based on value', async () => {
     const { container } = await render(GROUP_TEMPLATE, {
       imports: [LlmRadioGroup, LlmRadio],
@@ -51,6 +53,7 @@ describe('LlmRadioGroup', () => {
   });
 
   describe('selection', () => {
+    // @behavior value-change
     it('updates value when a radio is clicked', async () => {
       const user = userEvent.setup();
       const { container } = await render(GROUP_TEMPLATE, {
@@ -100,6 +103,7 @@ describe('LlmRadioGroup', () => {
   });
 
   describe('invalid state', () => {
+    // @behavior invalid
     it('sets aria-invalid on the group when invalid', async () => {
       const { container } = await render(
         `<llm-radio-group [invalid]="true" name="size">
@@ -150,6 +154,7 @@ describe('LlmRadioGroup', () => {
       expect(container.querySelector('.errors')).not.toBeInTheDocument();
     });
 
+    // @behavior errors
     it('shows errors when touched and invalid', async () => {
       const user = userEvent.setup();
       const { container } = await render(

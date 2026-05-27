@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/vue';
 import LlmIcon from './llm-icon.vue';
 
 describe('LlmIcon', () => {
+  // @behavior renders-glyph
   it('renders the glyph for the named icon', () => {
     render(LlmIcon, { props: { name: 'success' } });
     expect(screen.getByText('✓')).toBeInTheDocument();
@@ -18,6 +19,7 @@ describe('LlmIcon', () => {
     expect(screen.getByText(glyph)).toBeInTheDocument();
   });
 
+  // @behavior decorative-hidden
   it('is hidden from assistive tech by default', () => {
     render(LlmIcon, { props: { name: 'info' } });
     const el = screen.getByText('ℹ');
@@ -25,6 +27,7 @@ describe('LlmIcon', () => {
     expect(el).not.toHaveAttribute('role');
   });
 
+  // @behavior labelled-img
   it('exposes role=img and aria-label when label is provided', () => {
     render(LlmIcon, { props: { name: 'info', label: 'Information' } });
     const el = screen.getByRole('img', { name: 'Information' });

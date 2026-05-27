@@ -15,6 +15,7 @@ describe('LlmPagination', () => {
     expect(screen.getByRole('button', { name: 'Page 3' })).toBeInTheDocument();
   });
 
+  // @behavior aria-current
   it('marks the current page button with aria-current="page"', () => {
     render(<LlmPagination page={2} pageCount={3} />);
     expect(screen.getByRole('button', { name: 'Page 2' })).toHaveAttribute(
@@ -40,18 +41,21 @@ describe('LlmPagination', () => {
     expect(screen.getByRole('button', { name: 'Last page' })).toBeInTheDocument();
   });
 
+  // @behavior hide-first-last
   it('does not render First and Last buttons when showFirstLast is false', () => {
     render(<LlmPagination page={2} pageCount={5} showFirstLast={false} />);
     expect(screen.queryByRole('button', { name: 'First page' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Last page' })).not.toBeInTheDocument();
   });
 
+  // @behavior disables-prev-first
   it('disables Previous and First buttons on page 1', () => {
     render(<LlmPagination page={1} pageCount={5} />);
     expect(screen.getByRole('button', { name: 'Previous page' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'First page' })).toBeDisabled();
   });
 
+  // @behavior disables-next-last
   it('disables Next and Last buttons on last page', () => {
     render(<LlmPagination page={5} pageCount={5} />);
     expect(screen.getByRole('button', { name: 'Next page' })).toBeDisabled();
@@ -74,6 +78,7 @@ describe('LlmPagination', () => {
     expect(onPageChange).toHaveBeenCalledWith(2);
   });
 
+  // @behavior page-change-on-click
   it('calls onPageChange with specific page when page button is clicked', async () => {
     const user = userEvent.setup();
     const onPageChange = vi.fn();

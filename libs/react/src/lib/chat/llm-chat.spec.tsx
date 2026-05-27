@@ -38,6 +38,7 @@ describe('LlmChat', () => {
     });
   });
 
+  // @behavior inline-variant
   it('inline variant renders a section, no dialog or fab', () => {
     const { container } = render(
       <LlmChat variant="inline" open>
@@ -50,6 +51,7 @@ describe('LlmChat', () => {
     expect(screen.getByText('Hello')).toBeInTheDocument();
   });
 
+  // @behavior popup-variant
   it('popup variant renders the floating bubble + popup window', () => {
     const { container } = render(
       <LlmChat variant="popup" open>
@@ -78,6 +80,7 @@ describe('LlmChat', () => {
       },
     );
 
+    // @behavior is-failed
     it('applies is-failed when failed=true', () => {
       render(<LlmChatMessage failed>err</LlmChatMessage>);
       expect(screen.getByText('err')).toHaveClass('is-failed');
@@ -103,6 +106,7 @@ describe('LlmChat', () => {
   });
 
   describe('LlmChatInput', () => {
+    // @behavior send-button-idle
     it('renders a Send button when status is idle', () => {
       const { container } = render(
         <LlmChat variant="inline" status="idle" open>
@@ -113,6 +117,7 @@ describe('LlmChat', () => {
       expect(btn).toHaveTextContent('Send');
     });
 
+    // @behavior stop-button-streaming
     it('renders a Stop button when status is streaming', () => {
       const { container } = render(
         <LlmChat variant="inline" status="streaming" open>
@@ -124,6 +129,7 @@ describe('LlmChat', () => {
       expect(container.querySelector('textarea')).toBeDisabled();
     });
 
+    // @behavior emits-send
     it('emits onSend with the typed text on Enter', async () => {
       const user = userEvent.setup();
       const onSend = vi.fn();
@@ -137,6 +143,7 @@ describe('LlmChat', () => {
       expect(onSend).toHaveBeenCalledWith('hello');
     });
 
+    // @behavior emits-stop
     it('emits onStop when Stop is clicked while streaming', async () => {
       const user = userEvent.setup();
       const onStop = vi.fn();

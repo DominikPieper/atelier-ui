@@ -23,6 +23,7 @@ const TriggerChild = defineComponent({
 });
 
 describe('LlmToast', () => {
+  // @behavior show-adds
   it('shows a toast when show() is called', async () => {
     const user = userEvent.setup();
     render({
@@ -43,6 +44,7 @@ describe('LlmToast', () => {
     expect(container.querySelector('.llm-toast')).toHaveClass('variant-danger');
   });
 
+  // @behavior dismiss-button-click
   it('dismisses a toast when dismiss button is clicked', async () => {
     const user = userEvent.setup();
     render({
@@ -70,6 +72,7 @@ describe('LlmToast', () => {
     expect(screen.queryByText('Error occurred')).not.toBeInTheDocument();
   });
 
+  // @behavior position-class
   it('applies position class to container', () => {
     const { container } = render({
       components: { LlmToastProvider, LlmToastContainer },

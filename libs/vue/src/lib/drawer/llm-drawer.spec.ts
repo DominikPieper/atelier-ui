@@ -29,11 +29,13 @@ const DrawerFixture = {
 };
 
 describe('LlmDrawer', () => {
+  // @behavior render-dialog-element
   it('renders a dialog element', () => {
     const { container } = render(DrawerFixture, { props: { open: false } });
     expect(container.querySelector('dialog')).toBeInTheDocument();
   });
 
+  // @behavior open-shows-modal
   it('calls showModal when open becomes true', async () => {
     const { rerender } = render(DrawerFixture, { props: { open: false } });
     await rerender({ open: true });
@@ -47,6 +49,7 @@ describe('LlmDrawer', () => {
     expect(screen.getByText('Drawer footer.')).toBeInTheDocument();
   });
 
+  // @behavior close-button
   it('close button emits update:open with false', async () => {
     const user = userEvent.setup();
     const { emitted } = render(DrawerFixture, { props: { open: true } });
@@ -67,11 +70,13 @@ describe('LlmDrawer', () => {
     expect(container.querySelector('dialog')).toHaveClass('size-lg');
   });
 
+  // @behavior is-open-class
   it('applies is-open class when open', () => {
     const { container } = render(LlmDrawer, { props: { open: true } });
     expect(container.querySelector('dialog')).toHaveClass('is-open');
   });
 
+  // @behavior aria-modal
   it('sets aria-modal', () => {
     const { container } = render(LlmDrawer, { props: { open: false } });
     expect(container.querySelector('dialog')).toHaveAttribute('aria-modal', 'true');

@@ -9,6 +9,7 @@ describe('LlmProgress', () => {
     expect(bar).toHaveClass('llm-progress', 'variant-default', 'size-md');
   });
 
+  // @behavior aria-value
   it('sets aria attributes from value and max', () => {
     render(LlmProgress, { props: { value: 40, max: 100 } });
     const bar = screen.getByRole('progressbar');
@@ -16,11 +17,13 @@ describe('LlmProgress', () => {
     expect(bar).toHaveAttribute('aria-valuemax', '100');
   });
 
+  // @behavior clamp
   it('clamps value between 0 and max', () => {
     render(LlmProgress, { props: { value: 150, max: 100 } });
     expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '100');
   });
 
+  // @behavior indeterminate-omits-valuenow
   it('omits aria-valuenow and aria-valuemax when indeterminate', () => {
     render(LlmProgress, { props: { indeterminate: true } });
     const bar = screen.getByRole('progressbar');

@@ -3,6 +3,7 @@ import LlmBreadcrumbs from './llm-breadcrumbs.vue';
 import LlmBreadcrumbItem from './llm-breadcrumb-item.vue';
 
 describe('LlmBreadcrumbs', () => {
+  // @behavior nav-aria-label
   it('renders a nav with aria-label', () => {
     render(LlmBreadcrumbs);
     const nav = screen.getByRole('navigation', { name: 'Breadcrumb' });
@@ -19,6 +20,7 @@ describe('LlmBreadcrumbs', () => {
 });
 
 describe('LlmBreadcrumbItem', () => {
+  // @behavior link-when-href
   it('renders a link when href is provided and current is false', () => {
     render(LlmBreadcrumbItem, {
       props: { href: '/home' },
@@ -46,6 +48,7 @@ describe('LlmBreadcrumbItem', () => {
     expect(span).not.toHaveAttribute('aria-current');
   });
 
+  // @behavior current-class
   it('applies is-current class when current', () => {
     const { container } = render(LlmBreadcrumbItem, { props: { current: true } });
     expect(container.firstChild).toHaveClass('is-current');

@@ -16,6 +16,7 @@ function Basic({ initialStep = 0 }: { initialStep?: number }) {
 
 describe('LlmStepper', () => {
   describe('rendering', () => {
+    // @behavior renders-tablist
     it('renders a tablist', () => {
       render(<Basic />);
       expect(screen.getByRole('tablist')).toBeInTheDocument();
@@ -33,6 +34,7 @@ describe('LlmStepper', () => {
       expect(screen.getByRole('tab', { name: /Review/i })).toBeInTheDocument();
     });
 
+    // @behavior first-panel-default
     it('shows first step panel by default', () => {
       render(<Basic />);
       expect(screen.getByRole('tabpanel')).toHaveTextContent('Account content');
@@ -54,6 +56,7 @@ describe('LlmStepper', () => {
   });
 
   describe('ARIA attributes', () => {
+    // @behavior aria-selected-active
     it('sets aria-selected on active step', () => {
       render(<Basic />);
       const tabs = screen.getAllByRole('tab');
@@ -73,6 +76,7 @@ describe('LlmStepper', () => {
   });
 
   describe('click navigation', () => {
+    // @behavior click-navigates
     it('clicking a step navigates to it', async () => {
       const user = userEvent.setup();
       render(<Basic />);
@@ -85,6 +89,7 @@ describe('LlmStepper', () => {
       expect(visiblePanel).toHaveTextContent('Profile content');
     });
 
+    // @behavior disabled-step-noop
     it('clicking a disabled step does nothing', async () => {
       const user = userEvent.setup();
       const [step, setStep] = [0, vi.fn()];
@@ -102,6 +107,7 @@ describe('LlmStepper', () => {
   });
 
   describe('states', () => {
+    // @behavior completed-class
     it('applies is-completed class to completed non-active steps', () => {
       const { container } = render(
         <LlmStepper activeStep={1}>
@@ -113,6 +119,7 @@ describe('LlmStepper', () => {
       expect(items[0]).toHaveClass('is-completed');
     });
 
+    // @behavior error-class
     it('applies is-error class to error steps', () => {
       const { container } = render(
         <LlmStepper activeStep={1}>
@@ -142,6 +149,7 @@ describe('LlmStepper', () => {
       expect(container.querySelector('.llm-stepper')).toHaveClass('orientation-horizontal');
     });
 
+    // @behavior orientation-vertical
     it('applies orientation-vertical class', () => {
       const { container } = render(
         <LlmStepper orientation="vertical">

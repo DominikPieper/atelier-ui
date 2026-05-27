@@ -14,6 +14,7 @@ describe('LlmTabGroup', () => {
     expect(screen.getByRole('tab', { name: 'Tab Two' })).toBeInTheDocument();
   });
 
+  // @behavior first-tab-default
   it('selects the first tab by default', () => {
     render(
       <LlmTabGroup>
@@ -37,6 +38,7 @@ describe('LlmTabGroup', () => {
     expect(panels[1]).toHaveAttribute('hidden');
   });
 
+  // @behavior switch-on-click
   it('switches tab on click', async () => {
     const user = userEvent.setup();
     render(
@@ -73,6 +75,7 @@ describe('LlmTabGroup', () => {
     expect(screen.getByRole('tab', { name: 'Tab Two' })).toHaveAttribute('aria-selected', 'true');
   });
 
+  // @behavior disabled-tab-noop
   it('does not select a disabled tab on click', async () => {
     const user = userEvent.setup();
     render(
@@ -115,6 +118,7 @@ describe('LlmTabGroup', () => {
     expect(screen.getByRole('tab', { name: 'Tab One' })).toHaveAttribute('aria-selected', 'true');
   });
 
+  // @behavior variant-class
   it('applies variant-pills class', () => {
     const { container } = render(
       <LlmTabGroup variant="pills">

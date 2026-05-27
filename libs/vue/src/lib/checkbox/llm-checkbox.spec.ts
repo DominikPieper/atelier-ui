@@ -8,11 +8,13 @@ describe('LlmCheckbox', () => {
     expect(screen.getByLabelText('Accept terms')).toBeInTheDocument();
   });
 
+  // @behavior reflects-checked
   it('reflects checked prop', () => {
     render(LlmCheckbox, { props: { checked: true }, slots: { default: 'Checked' } });
     expect(screen.getByRole('checkbox', { name: 'Checked' })).toBeChecked();
   });
 
+  // @behavior toggle-emits
   it('emits update:checked on change', async () => {
     const user = userEvent.setup();
     const { emitted } = render(LlmCheckbox, { props: { checked: false }, slots: { default: 'Toggle' } });
@@ -20,16 +22,19 @@ describe('LlmCheckbox', () => {
     expect(emitted()['update:checked']).toEqual([[true]]);
   });
 
+  // @behavior disabled
   it('is disabled when disabled prop is true', () => {
     render(LlmCheckbox, { props: { disabled: true }, slots: { default: 'Disabled' } });
     expect(screen.getByRole('checkbox', { name: 'Disabled' })).toBeDisabled();
   });
 
+  // @behavior errors
   it('displays error messages', () => {
     render(LlmCheckbox, { props: { errors: ['Field is required'] }, slots: { default: 'Required' } });
     expect(screen.getByText('Field is required')).toBeInTheDocument();
   });
 
+  // @behavior invalid
   it('marks input as invalid when invalid prop is true', () => {
     render(LlmCheckbox, { props: { invalid: true }, slots: { default: 'Invalid' } });
     expect(screen.getByRole('checkbox', { name: 'Invalid' })).toHaveAttribute('aria-invalid', 'true');

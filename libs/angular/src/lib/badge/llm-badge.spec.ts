@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/angular';
 import { LlmBadge } from './llm-badge';
 
 describe('LlmBadge', () => {
+  // @behavior render-default
   it('renders without error with default inputs', async () => {
     await render('<llm-badge>Active</llm-badge>', { imports: [LlmBadge] });
     expect(screen.getByText('Active')).toBeInTheDocument();

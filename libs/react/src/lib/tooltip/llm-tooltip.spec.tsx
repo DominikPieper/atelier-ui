@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { LlmTooltip } from './llm-tooltip';
 
 describe('LlmTooltip', () => {
+  // @behavior hidden-initially
   it('does not show tooltip initially', () => {
     render(
       <LlmTooltip llmTooltip="Save your changes" llmTooltipShowDelay={0}>
@@ -12,6 +13,7 @@ describe('LlmTooltip', () => {
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   });
 
+  // @behavior show-on-hover
   it('shows tooltip on hover after delay', async () => {
     const user = userEvent.setup();
     render(
@@ -27,6 +29,7 @@ describe('LlmTooltip', () => {
     expect(screen.getByRole('tooltip')).toHaveTextContent('Save your changes');
   });
 
+  // @behavior hide-on-leave
   it('hides tooltip on mouse leave', async () => {
     const user = userEvent.setup();
     render(
@@ -42,6 +45,7 @@ describe('LlmTooltip', () => {
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   });
 
+  // @behavior disabled-no-show
   it('does not show tooltip when disabled', async () => {
     const user = userEvent.setup();
     render(

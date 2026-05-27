@@ -15,6 +15,7 @@ describe('LlmRadioGroup', () => {
     expect(screen.getByText('Pro')).toBeInTheDocument();
   });
 
+  // @behavior role
   it('has role="radiogroup"', () => {
     render(
       <LlmRadioGroup name="plan">
@@ -24,6 +25,7 @@ describe('LlmRadioGroup', () => {
     expect(screen.getByRole('radiogroup')).toBeInTheDocument();
   });
 
+  // @behavior checks-matching-value
   it('checks the radio matching value', () => {
     render(
       <LlmRadioGroup value="pro" name="plan">
@@ -36,6 +38,7 @@ describe('LlmRadioGroup', () => {
     expect(radios[1]).toBeChecked();
   });
 
+  // @behavior value-change
   it('calls onValueChange when a radio is selected', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
@@ -71,6 +74,7 @@ describe('LlmRadioGroup', () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
+  // @behavior invalid
   it('applies is-invalid class when invalid', () => {
     const { container } = render(
       <LlmRadioGroup invalid name="plan">
@@ -80,6 +84,7 @@ describe('LlmRadioGroup', () => {
     expect(container.firstChild).toHaveClass('is-invalid');
   });
 
+  // @behavior errors
   it('shows error messages when invalid and errors provided', () => {
     render(
       <LlmRadioGroup invalid errors={['Please select a plan']} name="plan">

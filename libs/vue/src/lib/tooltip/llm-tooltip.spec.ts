@@ -3,6 +3,7 @@ import { userEvent } from '@testing-library/user-event';
 import LlmTooltip from './llm-tooltip.vue';
 
 describe('LlmTooltip', () => {
+  // @behavior hidden-initially
   it('does not show tooltip by default', () => {
     render(LlmTooltip, {
       props: { llmTooltip: 'Tooltip text', llmTooltipShowDelay: 0 },
@@ -11,6 +12,7 @@ describe('LlmTooltip', () => {
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   });
 
+  // @behavior show-on-hover
   it('shows tooltip on mouseenter after delay', async () => {
     const user = userEvent.setup();
     render(LlmTooltip, {
@@ -24,6 +26,7 @@ describe('LlmTooltip', () => {
     });
   });
 
+  // @behavior hide-on-leave
   it('hides tooltip on mouseleave', async () => {
     const user = userEvent.setup();
     render(LlmTooltip, {
@@ -36,6 +39,7 @@ describe('LlmTooltip', () => {
     await waitFor(() => expect(screen.queryByRole('tooltip')).not.toBeInTheDocument());
   });
 
+  // @behavior disabled-no-show
   it('does not show tooltip when disabled', async () => {
     const user = userEvent.setup();
     render(LlmTooltip, {

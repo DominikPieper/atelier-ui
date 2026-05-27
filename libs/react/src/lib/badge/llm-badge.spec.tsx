@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { LlmBadge } from './llm-badge';
 
 describe('LlmBadge', () => {
+  // @behavior render-default
   it('renders without error', () => {
     render(<LlmBadge>Active</LlmBadge>);
     expect(screen.getByText('Active')).toBeInTheDocument();

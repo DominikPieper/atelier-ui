@@ -5,6 +5,7 @@ import { LlmBreadcrumbs, LlmBreadcrumbItem } from './llm-breadcrumbs';
 const ALL_IMPORTS = [LlmBreadcrumbs, LlmBreadcrumbItem];
 
 describe('LlmBreadcrumbs', () => {
+  // @behavior nav-aria-label
   it('renders a <nav> with aria-label="Breadcrumb"', async () => {
     const { container } = await render(
       `<llm-breadcrumbs><llm-breadcrumb-item>Home</llm-breadcrumb-item></llm-breadcrumbs>`,
@@ -26,6 +27,7 @@ describe('LlmBreadcrumbs', () => {
   });
 
   describe('LlmBreadcrumbItem', () => {
+    // @behavior link-when-href
     it('renders an <a href> for non-current items with href', async () => {
       const { container } = await render(
         `<llm-breadcrumbs>
@@ -81,6 +83,7 @@ describe('LlmBreadcrumbs', () => {
       expect(firstItem!.querySelector('[aria-current]')).not.toBeInTheDocument();
     });
 
+    // @behavior current-class
     it('adds is-current class to host of last item', async () => {
       const { container } = await render(
         `<llm-breadcrumbs>

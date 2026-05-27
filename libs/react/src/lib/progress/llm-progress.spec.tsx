@@ -12,11 +12,13 @@ describe('LlmProgress', () => {
     expect(container.firstChild).toHaveAttribute('role', 'progressbar');
   });
 
+  // @behavior aria-value
   it('sets aria-valuenow to the clamped value', () => {
     const { container } = render(<LlmProgress value={75} />);
     expect(container.firstChild).toHaveAttribute('aria-valuenow', '75');
   });
 
+  // @behavior clamp
   it('clamps value to max', () => {
     const { container } = render(<LlmProgress value={200} max={100} />);
     expect(container.firstChild).toHaveAttribute('aria-valuenow', '100');
@@ -45,6 +47,7 @@ describe('LlmProgress', () => {
     expect(container.firstChild).toHaveClass('is-indeterminate');
   });
 
+  // @behavior indeterminate-omits-valuenow
   it('omits aria-valuenow when indeterminate', () => {
     const { container } = render(<LlmProgress indeterminate value={50} />);
     expect(container.firstChild).not.toHaveAttribute('aria-valuenow');

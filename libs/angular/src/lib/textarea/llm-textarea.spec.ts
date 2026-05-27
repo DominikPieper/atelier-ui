@@ -3,6 +3,7 @@ import { userEvent } from '@testing-library/user-event';
 import { LlmTextarea } from './llm-textarea';
 
 describe('LlmTextarea', () => {
+  // @behavior renders-textarea
   it('renders a native textarea element', async () => {
     const { container } = await render('<llm-textarea />', {
       imports: [LlmTextarea],
@@ -25,6 +26,7 @@ describe('LlmTextarea', () => {
   });
 
   describe('rows input', () => {
+    // @behavior rows
     it('sets rows attribute on the native textarea', async () => {
       const { container } = await render('<llm-textarea [rows]="6" />', {
         imports: [LlmTextarea],
@@ -47,6 +49,7 @@ describe('LlmTextarea', () => {
   });
 
   describe('value binding', () => {
+    // @behavior updates-value
     it('updates value when user types', async () => {
       const user = userEvent.setup();
       await render('<llm-textarea />', {
@@ -67,6 +70,7 @@ describe('LlmTextarea', () => {
       expect(container.querySelector('llm-textarea')).toHaveClass('is-disabled');
     });
 
+    // @behavior disabled
     it('sets disabled attribute on native textarea', async () => {
       const { container } = await render(
         '<llm-textarea [disabled]="true" />',
@@ -127,6 +131,7 @@ describe('LlmTextarea', () => {
       expect(container.querySelector('.errors')).not.toBeInTheDocument();
     });
 
+    // @behavior errors
     it('shows error messages when touched and invalid', async () => {
       const user = userEvent.setup();
       const { container } = await render(

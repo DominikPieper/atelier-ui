@@ -11,18 +11,21 @@ describe('LlmPagination', () => {
     expect(screen.getByRole('button', { name: 'Last page' })).toBeInTheDocument();
   });
 
+  // @behavior disables-prev-first
   it('disables prev/first when on first page', () => {
     render(LlmPagination, { props: { page: 1, pageCount: 5 } });
     expect(screen.getByRole('button', { name: 'First page' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Previous page' })).toBeDisabled();
   });
 
+  // @behavior disables-next-last
   it('disables next/last when on last page', () => {
     render(LlmPagination, { props: { page: 5, pageCount: 5 } });
     expect(screen.getByRole('button', { name: 'Next page' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Last page' })).toBeDisabled();
   });
 
+  // @behavior page-change-on-click
   it('emits pageChange with correct value when a page button is clicked', async () => {
     const user = userEvent.setup();
     const { emitted } = render(LlmPagination, { props: { page: 1, pageCount: 5 } });
@@ -30,11 +33,13 @@ describe('LlmPagination', () => {
     expect(emitted()['pageChange']).toEqual([[2]]);
   });
 
+  // @behavior aria-current
   it('marks the current page button with aria-current', () => {
     render(LlmPagination, { props: { page: 3, pageCount: 5 } });
     expect(screen.getByRole('button', { name: 'Page 3' })).toHaveAttribute('aria-current', 'page');
   });
 
+  // @behavior hide-first-last
   it('hides first/last buttons when showFirstLast is false', () => {
     render(LlmPagination, { props: { page: 2, pageCount: 5, showFirstLast: false } });
     expect(screen.queryByRole('button', { name: 'First page' })).not.toBeInTheDocument();

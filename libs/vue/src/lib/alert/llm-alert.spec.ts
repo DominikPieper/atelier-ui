@@ -15,16 +15,19 @@ describe('LlmAlert', () => {
     expect(screen.getByRole('alert')).toHaveClass('variant-danger');
   });
 
+  // @behavior dismiss-hidden
   it('does not show dismiss button by default', () => {
     render(LlmAlert, { slots: { default: 'Message' } });
     expect(screen.queryByRole('button', { name: 'Dismiss' })).not.toBeInTheDocument();
   });
 
+  // @behavior dismiss-shown
   it('shows dismiss button when dismissible is true', () => {
     render(LlmAlert, { props: { dismissible: true }, slots: { default: 'Dismissible' } });
     expect(screen.getByRole('button', { name: 'Dismiss' })).toBeInTheDocument();
   });
 
+  // @behavior emits-dismiss
   it('emits dismissed event when dismiss button is clicked', async () => {
     const user = userEvent.setup();
     const { emitted } = render(LlmAlert, { props: { dismissible: true }, slots: { default: 'Msg' } });
@@ -32,6 +35,7 @@ describe('LlmAlert', () => {
     expect(emitted()['dismissed']).toHaveLength(1);
   });
 
+  // @behavior aria-live
   it('sets aria-live to assertive for danger and warning variants', () => {
     render(LlmAlert, { props: { variant: 'danger' }, slots: { default: 'Error' } });
     expect(screen.getByRole('alert')).toHaveAttribute('aria-live', 'assertive');

@@ -24,6 +24,7 @@ const RadioGroupWithOptions = {
 };
 
 describe('LlmRadioGroup', () => {
+  // @behavior role
   it('renders with role radiogroup', () => {
     render(LlmRadioGroup);
     expect(screen.getByRole('radiogroup')).toBeInTheDocument();
@@ -36,12 +37,14 @@ describe('LlmRadioGroup', () => {
     expect(screen.getByRole('radio', { name: 'Enterprise' })).toBeInTheDocument();
   });
 
+  // @behavior checks-matching-value
   it('checks the radio matching the value', () => {
     render(RadioGroupWithOptions, { props: { modelValue: 'pro' } });
     expect(screen.getByRole('radio', { name: 'Pro' })).toBeChecked();
     expect(screen.getByRole('radio', { name: 'Free' })).not.toBeChecked();
   });
 
+  // @behavior value-change
   it('emits update:value when a radio is selected', async () => {
     const user = userEvent.setup();
     const { emitted } = render(RadioGroupWithOptions, { props: { modelValue: '' } });
@@ -56,11 +59,13 @@ describe('LlmRadioGroup', () => {
     }
   });
 
+  // @behavior invalid
   it('sets aria-invalid when invalid', () => {
     render(RadioGroupWithOptions, { props: { modelValue: '', invalid: true } });
     expect(screen.getByRole('radiogroup')).toHaveAttribute('aria-invalid', 'true');
   });
 
+  // @behavior errors
   it('renders error messages', () => {
     render(RadioGroupWithOptions, {
       props: { modelValue: '', errors: ['Please select a plan'], invalid: true },

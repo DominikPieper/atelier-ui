@@ -21,6 +21,7 @@ const RadioWithGroup = {
 };
 
 describe('LlmRadio', () => {
+  // @behavior renders-input
   it('renders a native radio input', () => {
     const { container } = render(RadioWithGroup, { props: { modelValue: '' } });
     expect(container.querySelector('input[type="radio"]')).toBeInTheDocument();
@@ -36,12 +37,14 @@ describe('LlmRadio', () => {
     expect(screen.getByRole('radio', { name: 'Option A' })).not.toBeChecked();
   });
 
+  // @behavior checked-from-group
   it('is checked when group value matches radioValue', () => {
     render(RadioWithGroup, { props: { modelValue: 'a' } });
     expect(screen.getByRole('radio', { name: 'Option A' })).toBeChecked();
     expect(screen.getByRole('radio', { name: 'Option B' })).not.toBeChecked();
   });
 
+  // @behavior select-on-click
   it('becomes checked when clicked', async () => {
     const user = userEvent.setup();
     const { emitted } = render(RadioWithGroup, { props: { modelValue: '' } });
@@ -49,6 +52,7 @@ describe('LlmRadio', () => {
     expect(emitted()['update:modelValue']).toEqual([['a']]);
   });
 
+  // @behavior disabled
   it('is disabled when individually disabled', () => {
     render(RadioWithGroup, { props: { modelValue: '', radioDisabled: true } });
     expect(screen.getByRole('radio', { name: 'Option A' })).toBeDisabled();

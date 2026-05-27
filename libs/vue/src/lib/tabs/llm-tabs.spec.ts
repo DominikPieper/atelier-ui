@@ -24,6 +24,7 @@ describe('LlmTabGroup', () => {
     expect(screen.getByRole('tab', { name: 'Tab Three' })).toBeInTheDocument();
   });
 
+  // @behavior first-tab-default
   it('first tab is selected by default', async () => {
     render(TabsFixture);
     await flushPromises();
@@ -39,6 +40,7 @@ describe('LlmTabGroup', () => {
     expect(panels[1]).toHaveAttribute('hidden');
   });
 
+  // @behavior switch-on-click
   it('switches active tab on click', async () => {
     const user = userEvent.setup();
     render(TabsFixture);
@@ -58,6 +60,7 @@ describe('LlmTabGroup', () => {
     expect(panels[0]).toHaveAttribute('hidden');
   });
 
+  // @behavior variant-class
   it('applies variant class', () => {
     const { container } = render({
       components: { LlmTabGroup, LlmTab },
@@ -66,6 +69,7 @@ describe('LlmTabGroup', () => {
     expect(container.querySelector('.llm-tab-group')).toHaveClass('variant-pills');
   });
 
+  // @behavior disabled-tab-noop
   it('disabled tab cannot be selected', async () => {
     render({
       components: { LlmTabGroup, LlmTab },

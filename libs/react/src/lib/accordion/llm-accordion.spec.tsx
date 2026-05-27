@@ -32,6 +32,7 @@ describe('LlmAccordionGroup', () => {
     expect(screen.getByRole('button')).toHaveAttribute('aria-expanded', 'false');
   });
 
+  // @behavior expand-on-click
   it('expands an item on click', async () => {
     const user = userEvent.setup();
     render(
@@ -46,6 +47,7 @@ describe('LlmAccordionGroup', () => {
     expect(screen.getByRole('button')).toHaveAttribute('aria-expanded', 'true');
   });
 
+  // @behavior collapse-on-click
   it('collapses an expanded item on second click', async () => {
     const user = userEvent.setup();
     render(
@@ -62,6 +64,7 @@ describe('LlmAccordionGroup', () => {
     expect(btn).toHaveAttribute('aria-expanded', 'false');
   });
 
+  // @behavior single-collapse-other
   it('in single-expand mode, opening one collapses another', async () => {
     const user = userEvent.setup();
     render(
@@ -84,6 +87,7 @@ describe('LlmAccordionGroup', () => {
     expect(btn2).toHaveAttribute('aria-expanded', 'true');
   });
 
+  // @behavior multi-expand
   it('in multi mode, multiple items can be open simultaneously', async () => {
     const user = userEvent.setup();
     render(
@@ -105,6 +109,7 @@ describe('LlmAccordionGroup', () => {
     expect(btn2).toHaveAttribute('aria-expanded', 'true');
   });
 
+  // @behavior disabled-no-toggle
   it('does not toggle a disabled item', async () => {
     const user = userEvent.setup();
     render(

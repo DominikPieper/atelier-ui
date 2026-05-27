@@ -3,6 +3,7 @@ import { userEvent } from '@testing-library/user-event';
 import { LlmInput } from './llm-input';
 
 describe('LlmInput', () => {
+  // @behavior renders-input
   it('renders a native input element', async () => {
     const { container } = await render('<llm-input />', {
       imports: [LlmInput],
@@ -51,6 +52,7 @@ describe('LlmInput', () => {
   });
 
   describe('value binding', () => {
+    // @behavior updates-value
     it('updates value when user types', async () => {
       const user = userEvent.setup();
       await render('<llm-input />', {
@@ -71,6 +73,7 @@ describe('LlmInput', () => {
       expect(container.querySelector('llm-input')).toHaveClass('is-disabled');
     });
 
+    // @behavior disabled
     it('sets disabled attribute on native input', async () => {
       const { container } = await render(
         '<llm-input [disabled]="true" />',
@@ -99,6 +102,7 @@ describe('LlmInput', () => {
   });
 
   describe('invalid and error display', () => {
+    // @behavior invalid
     it('applies is-invalid class when invalid', async () => {
       const { container } = await render(
         '<llm-input [invalid]="true" />',
@@ -131,6 +135,7 @@ describe('LlmInput', () => {
       expect(container.querySelector('.errors')).not.toBeInTheDocument();
     });
 
+    // @behavior errors
     it('shows error messages when touched and invalid', async () => {
       const user = userEvent.setup();
       const { container } = await render(

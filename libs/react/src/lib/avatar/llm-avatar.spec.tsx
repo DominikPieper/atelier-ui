@@ -7,6 +7,7 @@ describe('LlmAvatar', () => {
     expect(screen.getByAltText('Jane Doe')).toBeInTheDocument();
   });
 
+  // @behavior initials-when-no-src
   it('shows initials when no src', () => {
     render(<LlmAvatar name="John Smith" />);
     expect(screen.getByText('JS')).toBeInTheDocument();
@@ -32,6 +33,7 @@ describe('LlmAvatar', () => {
     expect(screen.getByRole('img')).toBeInTheDocument();
   });
 
+  // @behavior aria-label-from-name
   it('uses name as aria-label when no alt provided', () => {
     render(<LlmAvatar name="Jane Doe" />);
     expect(screen.getByRole('img')).toHaveAttribute('aria-label', 'Jane Doe');

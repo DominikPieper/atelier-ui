@@ -23,6 +23,7 @@ describe('LlmCheckbox', () => {
     expect(screen.getByRole('checkbox')).not.toBeChecked();
   });
 
+  // @behavior reflects-checked
   it('renders as checked when checked=true', () => {
     render(<LlmCheckbox checked>Accept</LlmCheckbox>);
     expect(screen.getByRole('checkbox')).toBeChecked();
@@ -33,6 +34,7 @@ describe('LlmCheckbox', () => {
     expect(container.firstChild).toHaveClass('is-checked');
   });
 
+  // @behavior disabled
   it('is disabled when disabled prop is true', () => {
     render(<LlmCheckbox disabled />);
     expect(screen.getByRole('checkbox')).toBeDisabled();
@@ -48,11 +50,13 @@ describe('LlmCheckbox', () => {
     expect(container.firstChild).toHaveClass('is-invalid');
   });
 
+  // @behavior invalid
   it('sets aria-invalid when invalid', () => {
     render(<LlmCheckbox invalid />);
     expect(screen.getByRole('checkbox')).toHaveAttribute('aria-invalid', 'true');
   });
 
+  // @behavior toggle-emits
   it('calls onCheckedChange on click', async () => {
     const user = userEvent.setup();
     const onCheckedChange = vi.fn();
@@ -68,6 +72,7 @@ describe('LlmCheckbox', () => {
     expect(checkbox.indeterminate).toBe(true);
   });
 
+  // @behavior errors
   it('shows error messages', () => {
     render(<LlmCheckbox invalid errors={['Required']}>Accept</LlmCheckbox>);
     expect(screen.getByText('Required')).toBeInTheDocument();

@@ -8,11 +8,13 @@ beforeEach(() => {
 });
 
 describe('LlmDrawer', () => {
+  // @behavior render-dialog-element
   it('renders dialog element', () => {
     render(<LlmDrawer open={false} />);
     expect(document.querySelector('dialog')).toBeInTheDocument();
   });
 
+  // @behavior open-shows-modal
   it('calls showModal when open becomes true', () => {
     render(<LlmDrawer open={true} />);
     expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalled();
@@ -45,6 +47,7 @@ describe('LlmDrawer', () => {
     expect(screen.getByText('Footer')).toBeInTheDocument();
   });
 
+  // @behavior close-button
   it('close button calls onOpenChange with false', async () => {
     const user = userEvent.setup();
     const onOpenChange = vi.fn();
@@ -79,6 +82,7 @@ describe('LlmDrawer', () => {
     }
   );
 
+  // @behavior is-open-class
   it('applies is-open class when open', () => {
     const { container } = render(<LlmDrawer open={true} />);
     expect(container.firstChild).toHaveClass('is-open');
@@ -89,6 +93,7 @@ describe('LlmDrawer', () => {
     expect(container.firstChild).not.toHaveClass('is-open');
   });
 
+  // @behavior aria-modal
   it('renders with aria-modal on dialog element', () => {
     render(<LlmDrawer open={true} />);
     expect(document.querySelector('dialog')).toHaveAttribute('aria-modal', 'true');

@@ -27,11 +27,13 @@ function BasicTable() {
 
 describe('LlmTable', () => {
   describe('rendering', () => {
+    // @behavior renders-table
     it('renders a table element', () => {
       const { container } = render(<BasicTable />);
       expect(container.querySelector('table')).toBeInTheDocument();
     });
 
+    // @behavior thead-tbody
     it('renders thead and tbody', () => {
       const { container } = render(<BasicTable />);
       expect(container.querySelector('thead')).toBeInTheDocument();
@@ -44,6 +46,7 @@ describe('LlmTable', () => {
       expect(screen.getByText('Bob')).toBeInTheDocument();
     });
 
+    // @behavior variant-default
     it('applies variant-default class by default', () => {
       const { container } = render(<BasicTable />);
       expect(container.querySelector('.llm-table')).toHaveClass('variant-default');
@@ -54,6 +57,7 @@ describe('LlmTable', () => {
       expect(container.querySelector('.llm-table')).toHaveClass('size-md');
     });
 
+    // @behavior sticky-header
     it('applies is-sticky-header class when stickyHeader=true', () => {
       const { container } = render(
         <LlmTable stickyHeader>
@@ -66,6 +70,7 @@ describe('LlmTable', () => {
   });
 
   describe('LlmTh — sorting', () => {
+    // @behavior sort-button
     it('renders a sort button when sortable=true', () => {
       const { container } = render(
         <LlmTable>
@@ -76,6 +81,7 @@ describe('LlmTable', () => {
       expect(container.querySelector('.llm-th-sort-btn')).toBeInTheDocument();
     });
 
+    // @behavior no-sort-button
     it('does not render a sort button when sortable=false', () => {
       const { container } = render(
         <LlmTable>
@@ -176,6 +182,7 @@ describe('LlmTable', () => {
       expect(container.querySelector('input[type="checkbox"]')).not.toBeInTheDocument();
     });
 
+    // @behavior checkbox-selectable
     it('renders a checkbox when selectable=true', () => {
       const { container } = render(
         <LlmTable>
@@ -245,6 +252,7 @@ describe('LlmTable', () => {
       expect(screen.getByText('Alice')).toBeInTheDocument();
     });
 
+    // @behavior empty-state
     it('hides rows and shows empty state when empty=true', () => {
       render(
         <LlmTable>

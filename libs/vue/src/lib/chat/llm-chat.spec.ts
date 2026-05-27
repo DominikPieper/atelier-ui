@@ -47,6 +47,7 @@ describe('LlmChat', () => {
     });
   });
 
+  // @behavior inline-variant
   it('inline variant renders a section, no dialog or fab', () => {
     const { container } = render(ChatFixture, { props: { variant: 'inline', status: 'idle', open: true } });
     expect(container.querySelector('section.inline-surface')).toBeInTheDocument();
@@ -54,6 +55,7 @@ describe('LlmChat', () => {
     expect(container.querySelector('.fab-bubble')).not.toBeInTheDocument();
   });
 
+  // @behavior popup-variant
   it('popup variant renders the floating bubble + popup window', () => {
     const { container } = render(ChatFixture, { props: { variant: 'popup', status: 'idle', open: true } });
     expect(container.querySelector('button.fab-bubble')).toBeInTheDocument();
@@ -76,6 +78,7 @@ describe('LlmChat', () => {
       },
     );
 
+    // @behavior is-failed
     it('applies is-failed when failed=true', () => {
       const { container } = render(LlmChatMessage, { props: { failed: true }, slots: { default: 'err' } });
       expect(container.querySelector('.llm-chat-message')).toHaveClass('is-failed');
@@ -111,17 +114,20 @@ describe('LlmChat', () => {
       `,
     };
 
+    // @behavior send-button-idle
     it('renders a Send button when status is idle', () => {
       const { container } = render(InputFixture, { props: { status: 'idle' } });
       expect(container.querySelector('button.variant-primary')).toHaveTextContent('Send');
     });
 
+    // @behavior stop-button-streaming
     it('renders a Stop button when status is streaming', () => {
       const { container } = render(InputFixture, { props: { status: 'streaming' } });
       expect(container.querySelector('button.variant-danger')).toHaveTextContent('Stop');
       expect(container.querySelector('textarea')).toBeDisabled();
     });
 
+    // @behavior emits-send
     it('emits send with the typed text on Enter', async () => {
       const user = userEvent.setup();
       const { emitted } = render(InputFixture, { props: { status: 'idle' } });
@@ -129,6 +135,7 @@ describe('LlmChat', () => {
       expect(emitted('send')).toEqual([['hello']]);
     });
 
+    // @behavior emits-stop
     it('emits stop when Stop is clicked while streaming', async () => {
       const user = userEvent.setup();
       const { emitted } = render(InputFixture, { props: { status: 'streaming' } });

@@ -14,11 +14,13 @@ describe('LlmSkeleton', () => {
     expect(container.firstChild).toHaveClass('variant-circular');
   });
 
+  // @behavior not-animated
   it('does not add is-animated class when animated is false', () => {
     const { container } = render(LlmSkeleton, { props: { animated: false } });
     expect(container.firstChild).not.toHaveClass('is-animated');
   });
 
+  // @behavior custom-size
   it('applies custom width and height styles', () => {
     const { container } = render(LlmSkeleton, { props: { variant: 'rectangular', width: '200px', height: '50px' } });
     const el = container.firstChild as HTMLElement;
@@ -26,6 +28,7 @@ describe('LlmSkeleton', () => {
     expect(el.style.height).toBe('50px');
   });
 
+  // @behavior circular-height
   it('computes height for circular variant to match width', () => {
     const { container } = render(LlmSkeleton, { props: { variant: 'circular', width: '48px' } });
     const el = container.firstChild as HTMLElement;

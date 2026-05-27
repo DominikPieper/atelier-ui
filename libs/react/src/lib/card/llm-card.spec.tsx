@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { LlmCard, LlmCardHeader, LlmCardContent, LlmCardFooter } from './llm-card';
 
 describe('LlmCard', () => {
+  // @behavior renders-content
   it('renders without error', () => {
     render(<LlmCard>Content</LlmCard>);
     expect(screen.getByText('Content')).toBeInTheDocument();
@@ -45,16 +46,19 @@ describe('LlmCard', () => {
     expect(screen.getByText('Footer')).toBeInTheDocument();
   });
 
+  // @behavior header-subcomponent
   it('LlmCardHeader applies llm-card-header class', () => {
     const { container } = render(<LlmCardHeader>H</LlmCardHeader>);
     expect(container.firstChild).toHaveClass('llm-card-header');
   });
 
+  // @behavior content-subcomponent
   it('LlmCardContent applies llm-card-content class', () => {
     const { container } = render(<LlmCardContent>C</LlmCardContent>);
     expect(container.firstChild).toHaveClass('llm-card-content');
   });
 
+  // @behavior footer-subcomponent
   it('LlmCardFooter applies llm-card-footer class', () => {
     const { container } = render(<LlmCardFooter>F</LlmCardFooter>);
     expect(container.firstChild).toHaveClass('llm-card-footer');

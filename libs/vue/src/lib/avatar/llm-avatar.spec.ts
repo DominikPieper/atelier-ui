@@ -3,6 +3,7 @@ import LlmAvatar from './llm-avatar.vue';
 import LlmAvatarGroup from './llm-avatar-group.vue';
 
 describe('LlmAvatar', () => {
+  // @behavior initials-when-no-src
   it('renders with initials when name is provided and no src', () => {
     render(LlmAvatar, { props: { name: 'Jane Doe' } });
     expect(screen.getByText('JD')).toBeInTheDocument();
@@ -13,6 +14,7 @@ describe('LlmAvatar', () => {
     expect(container.querySelector('.icon')).toBeInTheDocument();
   });
 
+  // @behavior aria-label-from-name
   it('uses name as aria-label', () => {
     render(LlmAvatar, { props: { name: 'Alice' } });
     expect(screen.getByRole('img', { name: 'Alice' })).toBeInTheDocument();

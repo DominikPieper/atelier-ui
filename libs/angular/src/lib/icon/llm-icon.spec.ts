@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/angular';
 import { LlmIcon } from './llm-icon';
 
 describe('LlmIcon', () => {
+  // @behavior renders-glyph
   it('renders the glyph for the named icon', async () => {
     await render('<llm-icon name="success" />', { imports: [LlmIcon] });
     expect(screen.getByText('✓')).toBeInTheDocument();
@@ -18,6 +19,7 @@ describe('LlmIcon', () => {
     expect(screen.getByText(glyph)).toBeInTheDocument();
   });
 
+  // @behavior decorative-hidden
   it('is hidden from assistive tech by default (decorative)', async () => {
     const { container } = await render('<llm-icon name="info" />', { imports: [LlmIcon] });
     const host = container.querySelector('llm-icon');
@@ -25,6 +27,7 @@ describe('LlmIcon', () => {
     expect(host).not.toHaveAttribute('role');
   });
 
+  // @behavior labelled-img
   it('exposes role=img and aria-label when label is provided', async () => {
     const { container } = await render(
       '<llm-icon name="info" label="Information" />',

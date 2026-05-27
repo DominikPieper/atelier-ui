@@ -4,6 +4,7 @@ import { LlmCard, LlmCardContent, LlmCardFooter, LlmCardHeader } from './llm-car
 const imports = [LlmCard, LlmCardHeader, LlmCardContent, LlmCardFooter];
 
 describe('LlmCard', () => {
+  // @behavior renders-content
   it('renders without error with default inputs', async () => {
     await render('<llm-card>Content</llm-card>', { imports });
     expect(screen.getByText('Content')).toBeInTheDocument();
@@ -36,6 +37,7 @@ describe('LlmCard', () => {
   });
 
   describe('content projection', () => {
+    // @behavior header-subcomponent
     it('projects content via llm-card-header', async () => {
       await render(
         '<llm-card><llm-card-header>My Title</llm-card-header></llm-card>',
@@ -44,6 +46,7 @@ describe('LlmCard', () => {
       expect(screen.getByText('My Title')).toBeInTheDocument();
     });
 
+    // @behavior content-subcomponent
     it('projects content via llm-card-content', async () => {
       await render(
         '<llm-card><llm-card-content>Body text</llm-card-content></llm-card>',
@@ -52,6 +55,7 @@ describe('LlmCard', () => {
       expect(screen.getByText('Body text')).toBeInTheDocument();
     });
 
+    // @behavior footer-subcomponent
     it('projects content via llm-card-footer', async () => {
       await render(
         '<llm-card><llm-card-footer>Footer actions</llm-card-footer></llm-card>',

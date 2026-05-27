@@ -112,6 +112,7 @@ describe('LlmAccordionGroup', () => {
   });
 
   describe('click toggle — single mode', () => {
+    // @behavior expand-on-click
     it('expands an item on click', async () => {
       const user = userEvent.setup();
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
@@ -120,6 +121,7 @@ describe('LlmAccordionGroup', () => {
       expect(screen.getByRole('button', { name: 'Section 1' })).toHaveAttribute('aria-expanded', 'true');
     });
 
+    // @behavior collapse-on-click
     it('collapses an expanded item on click', async () => {
       const user = userEvent.setup();
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
@@ -129,6 +131,7 @@ describe('LlmAccordionGroup', () => {
       expect(screen.getByRole('button', { name: 'Section 1' })).toHaveAttribute('aria-expanded', 'false');
     });
 
+    // @behavior single-collapse-other
     it('closes previously open item when opening another in single mode', async () => {
       const user = userEvent.setup();
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
@@ -141,6 +144,7 @@ describe('LlmAccordionGroup', () => {
       expect(screen.getByRole('button', { name: 'Section 2' })).toHaveAttribute('aria-expanded', 'true');
     });
 
+    // @behavior disabled-no-toggle
     it('does not toggle disabled items on click', async () => {
       const user = userEvent.setup();
       await render(WITH_DISABLED, { imports: IMPORTS });
@@ -151,6 +155,7 @@ describe('LlmAccordionGroup', () => {
   });
 
   describe('click toggle — multi mode', () => {
+    // @behavior multi-expand
     it('allows multiple items to be expanded', async () => {
       const user = userEvent.setup();
       await render(MULTI_TEMPLATE, { imports: IMPORTS });

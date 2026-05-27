@@ -5,6 +5,7 @@ import LlmCardContent from './llm-card-content.vue';
 import LlmCardFooter from './llm-card-footer.vue';
 
 describe('LlmCard', () => {
+  // @behavior renders-content
   it('renders slot content', () => {
     render(LlmCard, { slots: { default: 'Card body' } });
     expect(screen.getByText('Card body')).toBeInTheDocument();
@@ -32,6 +33,7 @@ describe('LlmCardHeader', () => {
     expect(screen.getByText('Header text')).toBeInTheDocument();
   });
 
+  // @behavior header-subcomponent
   it('has llm-card-header class', () => {
     const { container } = render(LlmCardHeader);
     expect(container.firstChild).toHaveClass('llm-card-header');
@@ -44,6 +46,7 @@ describe('LlmCardContent', () => {
     expect(screen.getByText('Content text')).toBeInTheDocument();
   });
 
+  // @behavior content-subcomponent
   it('has llm-card-content class', () => {
     const { container } = render(LlmCardContent);
     expect(container.firstChild).toHaveClass('llm-card-content');
@@ -56,6 +59,7 @@ describe('LlmCardFooter', () => {
     expect(screen.getByText('Footer text')).toBeInTheDocument();
   });
 
+  // @behavior footer-subcomponent
   it('has llm-card-footer class', () => {
     const { container } = render(LlmCardFooter);
     expect(container.firstChild).toHaveClass('llm-card-footer');

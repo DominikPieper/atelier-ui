@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/vue';
 import LlmBadge from './llm-badge.vue';
 
 describe('LlmBadge', () => {
+  // @behavior render-default
   it('renders with default props', () => {
     render(LlmBadge, { slots: { default: 'Active' } });
     const badge = screen.getByRole('status');

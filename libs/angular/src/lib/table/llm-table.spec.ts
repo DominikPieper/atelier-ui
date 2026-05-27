@@ -27,11 +27,13 @@ const BASIC_TABLE = `
 
 describe('LlmTable', () => {
   describe('rendering', () => {
+    // @behavior renders-table
     it('renders a table element', async () => {
       const { container } = await render(BASIC_TABLE, { imports: IMPORTS });
       expect(container.querySelector('table')).toBeInTheDocument();
     });
 
+    // @behavior thead-tbody
     it('renders thead and tbody', async () => {
       const { container } = await render(BASIC_TABLE, { imports: IMPORTS });
       expect(container.querySelector('thead')).toBeInTheDocument();
@@ -44,6 +46,7 @@ describe('LlmTable', () => {
       expect(screen.getByText('Bob')).toBeInTheDocument();
     });
 
+    // @behavior variant-default
     it('applies variant-default class by default', async () => {
       const { container } = await render(BASIC_TABLE, { imports: IMPORTS });
       expect(container.querySelector('llm-table')).toHaveClass('variant-default');
@@ -54,6 +57,7 @@ describe('LlmTable', () => {
       expect(container.querySelector('llm-table')).toHaveClass('size-md');
     });
 
+    // @behavior sticky-header
     it('applies is-sticky-header class when stickyHeader=true', async () => {
       const { container } = await render(
         `<llm-table [stickyHeader]="true">
@@ -67,6 +71,7 @@ describe('LlmTable', () => {
   });
 
   describe('LlmTh — sorting', () => {
+    // @behavior sort-button
     it('renders a sort button when sortable=true', async () => {
       const { container } = await render(
         `<llm-table>
@@ -78,6 +83,7 @@ describe('LlmTable', () => {
       expect(container.querySelector('.llm-th-sort-btn')).toBeInTheDocument();
     });
 
+    // @behavior no-sort-button
     it('does not render a sort button when sortable=false', async () => {
       const { container } = await render(
         `<llm-table>
@@ -201,6 +207,7 @@ describe('LlmTable', () => {
       expect(container.querySelector('input[type="checkbox"]')).not.toBeInTheDocument();
     });
 
+    // @behavior checkbox-selectable
     it('renders a checkbox when selectable=true', async () => {
       const { container } = await render(
         `<llm-table>
@@ -280,6 +287,7 @@ describe('LlmTable', () => {
       expect(screen.getByText('Alice')).toBeInTheDocument();
     });
 
+    // @behavior empty-state
     it('hides rows and shows empty state when empty=true', async () => {
       await render(
         `<llm-table>

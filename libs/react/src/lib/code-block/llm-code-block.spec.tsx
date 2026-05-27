@@ -5,32 +5,38 @@ import { LlmCodeBlock } from './llm-code-block';
 const CODE = `const greeting = 'Hello, World!';\nconsole.log(greeting);`;
 
 describe('LlmCodeBlock', () => {
+  // @behavior renders-code
   it('renders the code content', () => {
     render(<LlmCodeBlock code={CODE} />);
     expect(screen.getByText(/Hello, World!/)).toBeInTheDocument();
   });
 
+  // @behavior language-label
   it('shows the language label when no filename is provided', () => {
     render(<LlmCodeBlock code={CODE} language="typescript" />);
     expect(screen.getByText('typescript')).toBeInTheDocument();
   });
 
+  // @behavior filename-label
   it('shows the filename label instead of language when filename is set', () => {
     render(<LlmCodeBlock code={CODE} language="typescript" filename="app.ts" />);
     expect(screen.getByText('app.ts')).toBeInTheDocument();
     expect(screen.queryByText('typescript')).not.toBeInTheDocument();
   });
 
+  // @behavior copy-button
   it('renders a copy button when copyable is true (default)', () => {
     render(<LlmCodeBlock code={CODE} />);
     expect(screen.getByRole('button', { name: /copy/i })).toBeInTheDocument();
   });
 
+  // @behavior no-copy-button
   it('does not render a copy button when copyable is false', () => {
     render(<LlmCodeBlock code={CODE} copyable={false} />);
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 
+  // @behavior line-numbers
   it('shows line numbers when showLineNumbers is true', () => {
     const { container } = render(<LlmCodeBlock code={CODE} showLineNumbers />);
     const lineNumbers = container.querySelectorAll('.code-line-number');
@@ -44,6 +50,7 @@ describe('LlmCodeBlock', () => {
     expect(container.querySelectorAll('.code-line-number').length).toBe(0);
   });
 
+  // @behavior copied-state
   it('shows copied state after clicking copy button', async () => {
     const user = userEvent.setup();
     Object.defineProperty(navigator, 'clipboard', {

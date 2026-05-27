@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { LlmToggle } from './llm-toggle';
 
 describe('LlmToggle', () => {
+  // @behavior role-switch
   it('renders a checkbox input with role switch', () => {
     render(<LlmToggle>Enable</LlmToggle>);
     expect(screen.getByRole('switch')).toBeInTheDocument();
@@ -23,6 +24,7 @@ describe('LlmToggle', () => {
     expect(screen.getByRole('switch')).not.toBeChecked();
   });
 
+  // @behavior reflects-checked
   it('renders as checked when checked=true', () => {
     render(<LlmToggle checked>Enable</LlmToggle>);
     expect(screen.getByRole('switch')).toBeChecked();
@@ -33,6 +35,7 @@ describe('LlmToggle', () => {
     expect(container.firstChild).toHaveClass('is-checked');
   });
 
+  // @behavior disabled
   it('is disabled when disabled prop is true', () => {
     render(<LlmToggle disabled />);
     expect(screen.getByRole('switch')).toBeDisabled();
@@ -53,6 +56,7 @@ describe('LlmToggle', () => {
     expect(screen.getByRole('switch')).toHaveAttribute('aria-invalid', 'true');
   });
 
+  // @behavior toggle-emits
   it('calls onCheckedChange on click', async () => {
     const user = userEvent.setup();
     const onCheckedChange = vi.fn();
@@ -62,6 +66,7 @@ describe('LlmToggle', () => {
     expect(onCheckedChange).toHaveBeenCalledWith(true);
   });
 
+  // @behavior errors
   it('shows error messages', () => {
     render(<LlmToggle invalid errors={['Required']}>Enable</LlmToggle>);
     expect(screen.getByText('Required')).toBeInTheDocument();

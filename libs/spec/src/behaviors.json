@@ -36,5 +36,161 @@
     { "id": "keyboard-nav", "describe": "navigates options with ArrowDown and selects with Enter" },
     { "id": "close-on-escape", "describe": "closes the listbox on Escape" },
     { "id": "aria-expanded", "describe": "sets aria-expanded=true when the listbox is open" }
+  ],
+  "accordion": [
+    { "id": "expand-on-click", "describe": "expands a collapsed item on click" },
+    { "id": "collapse-on-click", "describe": "collapses an expanded item on a second click" },
+    { "id": "disabled-no-toggle", "describe": "a disabled item does not toggle on click" },
+    { "id": "multi-expand", "describe": "allows multiple items open at once in multi mode" },
+    { "id": "single-collapse-other", "describe": "opening one item collapses the other in single mode" }
+  ],
+  "alert": [
+    { "id": "dismiss-hidden", "describe": "no dismiss button unless dismissible" },
+    { "id": "dismiss-shown", "describe": "renders the dismiss button when dismissible" },
+    { "id": "emits-dismiss", "describe": "emits/calls back when the dismiss button is clicked" },
+    { "id": "aria-live", "describe": "sets aria-live according to variant severity" }
+  ],
+  "avatar": [
+    { "id": "initials-when-no-src", "describe": "shows name initials when no image src is given" },
+    { "id": "aria-label-from-name", "describe": "uses the name as the accessible label when no alt" }
+  ],
+  "badge": [
+    { "id": "render-default", "describe": "renders with default props without error" }
+  ],
+  "breadcrumbs": [
+    { "id": "nav-aria-label", "describe": "renders a nav landmark with an aria-label" },
+    { "id": "link-when-href", "describe": "non-current items with href render as links" },
+    { "id": "current-class", "describe": "applies the is-current class to the current item" }
+  ],
+  "card": [
+    { "id": "renders-content", "describe": "renders projected/slotted content" },
+    { "id": "header-subcomponent", "describe": "the header sub-component applies llm-card-header" },
+    { "id": "content-subcomponent", "describe": "the content sub-component applies llm-card-content" },
+    { "id": "footer-subcomponent", "describe": "the footer sub-component applies llm-card-footer" }
+  ],
+  "chat": [
+    { "id": "inline-variant", "describe": "inline variant renders without overlay chrome" },
+    { "id": "popup-variant", "describe": "popup variant renders the floating bubble" },
+    { "id": "is-failed", "describe": "applies is-failed class when failed=true" },
+    { "id": "send-button-idle", "describe": "renders a Send button while status is idle" },
+    { "id": "stop-button-streaming", "describe": "renders a Stop button while status is streaming" },
+    { "id": "emits-send", "describe": "emits send with the typed text on Enter" },
+    { "id": "emits-stop", "describe": "emits stop when Stop is clicked while streaming" }
+  ],
+  "checkbox": [
+    { "id": "reflects-checked", "describe": "reflects the checked prop/input" },
+    { "id": "toggle-emits", "describe": "toggles and emits/calls back on click" },
+    { "id": "disabled", "describe": "is disabled when the disabled prop is true" },
+    { "id": "invalid", "describe": "sets aria-invalid / invalid state when invalid" },
+    { "id": "errors", "describe": "shows error messages when invalid" }
+  ],
+  "code-block": [
+    { "id": "renders-code", "describe": "renders the code content" },
+    { "id": "language-label", "describe": "shows the language label when no filename" },
+    { "id": "filename-label", "describe": "shows the filename label instead of language when set" },
+    { "id": "copy-button", "describe": "renders a copy button when copyable" },
+    { "id": "no-copy-button", "describe": "no copy button when copyable=false" },
+    { "id": "line-numbers", "describe": "shows line numbers when showLineNumbers is true" },
+    { "id": "copied-state", "describe": "shows copied state after clicking copy" }
+  ],
+  "drawer": [
+    { "id": "render-dialog-element", "describe": "renders a native <dialog> element" },
+    { "id": "open-shows-modal", "describe": "shows the modal (showModal) when open becomes true" },
+    { "id": "is-open-class", "describe": "applies is-open class when open" },
+    { "id": "close-button", "describe": "the close button closes the drawer / emits open=false" },
+    { "id": "aria-modal", "describe": "sets aria-modal on the dialog element" }
+  ],
+  "icon": [
+    { "id": "renders-glyph", "describe": "renders the glyph for the named icon" },
+    { "id": "decorative-hidden", "describe": "decorative by default (hidden from assistive tech)" },
+    { "id": "labelled-img", "describe": "role=img + aria-label when a label is provided" }
+  ],
+  "input": [
+    { "id": "renders-input", "describe": "renders a native input element" },
+    { "id": "disabled", "describe": "is disabled when the disabled prop is true" },
+    { "id": "invalid", "describe": "applies is-invalid / aria-invalid when invalid" },
+    { "id": "errors", "describe": "shows error messages when invalid" },
+    { "id": "updates-value", "describe": "emits/calls back as the user types" }
+  ],
+  "pagination": [
+    { "id": "disables-prev-first", "describe": "disables prev/first controls on the first page" },
+    { "id": "disables-next-last", "describe": "disables next/last controls on the last page" },
+    { "id": "aria-current", "describe": "marks the current page with aria-current" },
+    { "id": "page-change-on-click", "describe": "emits/calls back the page on a page-button click" },
+    { "id": "hide-first-last", "describe": "hides first/last controls when showFirstLast=false" }
+  ],
+  "progress": [
+    { "id": "aria-value", "describe": "sets aria-valuenow from value/max" },
+    { "id": "clamp", "describe": "clamps the value within [0, max]" },
+    { "id": "indeterminate-omits-valuenow", "describe": "omits aria-valuenow when indeterminate" }
+  ],
+  "radio": [
+    { "id": "renders-input", "describe": "renders a native radio input" },
+    { "id": "disabled", "describe": "is disabled when individually disabled" },
+    { "id": "checked-from-group", "describe": "is checked when the group value matches" },
+    { "id": "select-on-click", "describe": "becomes selected / emits on click" }
+  ],
+  "radio-group": [
+    { "id": "role", "describe": "exposes role=radiogroup" },
+    { "id": "checks-matching-value", "describe": "checks the radio matching the value" },
+    { "id": "value-change", "describe": "emits/calls back when a radio is selected" },
+    { "id": "invalid", "describe": "sets aria-invalid / invalid state when invalid" },
+    { "id": "errors", "describe": "shows error messages when invalid" }
+  ],
+  "skeleton": [
+    { "id": "not-animated", "describe": "drops the is-animated class when animated=false" },
+    { "id": "circular-height", "describe": "circular variant derives height from width" },
+    { "id": "custom-size", "describe": "applies custom width/height styles" }
+  ],
+  "stepper": [
+    { "id": "renders-tablist", "describe": "renders a tablist" },
+    { "id": "first-panel-default", "describe": "shows the first step panel by default" },
+    { "id": "aria-selected-active", "describe": "sets aria-selected on the active step" },
+    { "id": "click-navigates", "describe": "clicking a step navigates to it" },
+    { "id": "disabled-step-noop", "describe": "clicking a disabled step does nothing" },
+    { "id": "completed-class", "describe": "applies is-completed to completed steps" },
+    { "id": "error-class", "describe": "applies is-error to error steps" },
+    { "id": "orientation-vertical", "describe": "applies the orientation-vertical class" }
+  ],
+  "table": [
+    { "id": "renders-table", "describe": "renders a table element" },
+    { "id": "thead-tbody", "describe": "renders thead and tbody" },
+    { "id": "variant-default", "describe": "applies variant-default by default" },
+    { "id": "sticky-header", "describe": "applies is-sticky-header when stickyHeader=true" },
+    { "id": "sort-button", "describe": "renders a sort button when sortable" },
+    { "id": "no-sort-button", "describe": "no sort button when sortable=false" },
+    { "id": "checkbox-selectable", "describe": "renders a row checkbox when selectable" },
+    { "id": "empty-state", "describe": "shows the empty state when empty=true" }
+  ],
+  "tabs": [
+    { "id": "first-tab-default", "describe": "selects/shows the first tab by default" },
+    { "id": "switch-on-click", "describe": "switches the active tab on click" },
+    { "id": "disabled-tab-noop", "describe": "a disabled tab cannot be selected" },
+    { "id": "variant-class", "describe": "applies the variant class" }
+  ],
+  "textarea": [
+    { "id": "renders-textarea", "describe": "renders a native textarea element" },
+    { "id": "disabled", "describe": "is disabled when the disabled prop is true" },
+    { "id": "errors", "describe": "shows error messages when invalid" },
+    { "id": "updates-value", "describe": "emits/calls back as the user types" },
+    { "id": "rows", "describe": "applies the rows attribute" }
+  ],
+  "toast": [
+    { "id": "show-adds", "describe": "show() adds a toast" },
+    { "id": "dismiss-button-click", "describe": "the dismiss button removes the toast" },
+    { "id": "position-class", "describe": "applies the position class to the container" }
+  ],
+  "toggle": [
+    { "id": "role-switch", "describe": "exposes role=switch" },
+    { "id": "reflects-checked", "describe": "reflects the checked state" },
+    { "id": "toggle-emits", "describe": "toggles and emits/calls back on click" },
+    { "id": "disabled", "describe": "is disabled when the disabled prop is true" },
+    { "id": "errors", "describe": "shows error messages when invalid" }
+  ],
+  "tooltip": [
+    { "id": "hidden-initially", "describe": "tooltip is not shown initially" },
+    { "id": "show-on-hover", "describe": "shows on hover/mouseenter after the delay" },
+    { "id": "hide-on-leave", "describe": "hides on mouseleave" },
+    { "id": "disabled-no-show", "describe": "does not show when disabled" }
   ]
 }

@@ -21,6 +21,7 @@ describe('LlmAvatar', () => {
     expect(container.querySelector('llm-avatar')).toHaveAttribute('aria-label', 'Profile photo');
   });
 
+  // @behavior aria-label-from-name
   it('falls back to name for aria-label when no alt', async () => {
     const { container } = await render(
       '<llm-avatar name="Jane Doe" />',
@@ -44,6 +45,7 @@ describe('LlmAvatar', () => {
       expect(container.querySelector('img')).toHaveAttribute('src', 'https://example.com/photo.jpg');
     });
 
+    // @behavior initials-when-no-src
     it('shows initials derived from name when no src', async () => {
       await render('<llm-avatar name="John Doe" />', { imports: [LlmAvatar] });
       expect(screen.getByText('JD')).toBeInTheDocument();

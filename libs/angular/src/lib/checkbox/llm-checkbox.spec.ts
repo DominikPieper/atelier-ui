@@ -25,6 +25,7 @@ describe('LlmCheckbox', () => {
   });
 
   describe('checked state', () => {
+    // @behavior reflects-checked
     it('reflects checked=true via attribute', async () => {
       const { container } = await render(
         '<llm-checkbox [checked]="true">Label</llm-checkbox>',
@@ -41,6 +42,7 @@ describe('LlmCheckbox', () => {
       expect(container.querySelector('llm-checkbox')).toHaveClass('is-checked');
     });
 
+    // @behavior toggle-emits
     it('toggles checked when clicked', async () => {
       const user = userEvent.setup();
       const { container } = await render('<llm-checkbox>Label</llm-checkbox>', {
@@ -55,6 +57,7 @@ describe('LlmCheckbox', () => {
   });
 
   describe('disabled state', () => {
+    // @behavior disabled
     it('disables the native input', async () => {
       const { container } = await render(
         '<llm-checkbox [disabled]="true">Label</llm-checkbox>',
@@ -73,6 +76,7 @@ describe('LlmCheckbox', () => {
   });
 
   describe('invalid state', () => {
+    // @behavior invalid
     it('sets aria-invalid on native input', async () => {
       const { container } = await render(
         '<llm-checkbox [invalid]="true">Label</llm-checkbox>',
@@ -158,6 +162,7 @@ describe('LlmCheckbox', () => {
       expect(container.querySelector('.errors')).not.toBeInTheDocument();
     });
 
+    // @behavior errors
     it('shows errors when touched and invalid', async () => {
       const user = userEvent.setup();
       const { container } = await render(

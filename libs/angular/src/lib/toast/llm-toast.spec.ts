@@ -22,6 +22,7 @@ describe('LlmToastService', () => {
     expect(service.toasts()).toEqual([]);
   });
 
+  // @behavior show-adds
   it('show() adds a toast and returns an id', () => {
     const id = service.show('Hello');
     expect(id).toBeTruthy();
@@ -138,6 +139,7 @@ describe('LlmToast', () => {
     expect(screen.queryByRole('button', { name: 'Dismiss' })).not.toBeInTheDocument();
   });
 
+  // @behavior dismiss-button-click
   it('emits dismissed with toastId when dismiss button is clicked', async () => {
     const user = userEvent.setup();
     const dismissed = vi.fn();
@@ -185,6 +187,7 @@ describe('LlmToastContainer', () => {
     expect(screen.getByText('Second toast')).toBeInTheDocument();
   });
 
+  // @behavior position-class
   it('applies position class to host', async () => {
     const { container } = await render(
       '<llm-toast-container position="top-center" />',

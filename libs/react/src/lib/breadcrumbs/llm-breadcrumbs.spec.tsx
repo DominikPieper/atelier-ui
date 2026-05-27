@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { LlmBreadcrumbs, LlmBreadcrumbItem } from './llm-breadcrumbs';
 
 describe('LlmBreadcrumbs', () => {
+  // @behavior nav-aria-label
   it('renders a nav with aria-label="Breadcrumb"', () => {
     render(
       <LlmBreadcrumbs>
@@ -36,6 +37,7 @@ describe('LlmBreadcrumbs', () => {
     expect(currentItem).toHaveClass('is-current');
   });
 
+  // @behavior link-when-href
   it('renders non-current items as links when href is provided', () => {
     render(
       <LlmBreadcrumbs>
@@ -85,6 +87,7 @@ describe('LlmBreadcrumbItem', () => {
     expect(screen.getByText('Current')).toBeInTheDocument();
   });
 
+  // @behavior current-class
   it('applies is-current class when current is true', () => {
     const { container } = render(<LlmBreadcrumbItem current>Current</LlmBreadcrumbItem>);
     expect(container.firstChild).toHaveClass('is-current');

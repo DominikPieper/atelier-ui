@@ -20,6 +20,7 @@ describe('LlmTooltip', () => {
     expect(screen.getByText('Save')).toBeInTheDocument();
   });
 
+  // @behavior hidden-initially
   it('does not show tooltip initially', async () => {
     await render(
       '<llm-button llmTooltip="Save changes">Save</llm-button>',
@@ -36,6 +37,7 @@ describe('LlmTooltip', () => {
     expect(container.querySelector('[aria-describedby]')).toBeNull();
   });
 
+  // @behavior show-on-hover
   it('shows tooltip on mouseenter after delay', async () => {
     vi.useFakeTimers();
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
@@ -95,6 +97,7 @@ describe('LlmTooltip', () => {
     vi.useRealTimers();
   });
 
+  // @behavior disabled-no-show
   it('does not show tooltip when disabled', async () => {
     vi.useFakeTimers();
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
@@ -112,6 +115,7 @@ describe('LlmTooltip', () => {
     vi.useRealTimers();
   });
 
+  // @behavior hide-on-leave
   it('hides tooltip on mouseleave', async () => {
     vi.useFakeTimers();
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });

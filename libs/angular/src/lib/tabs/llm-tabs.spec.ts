@@ -39,6 +39,7 @@ describe('LlmTabGroup', () => {
       expect(screen.getByRole('tab', { name: 'Third' })).toBeInTheDocument();
     });
 
+    // @behavior first-tab-default
     it('shows first tab panel by default', async () => {
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
       expect(screen.getByRole('tabpanel')).toHaveTextContent('First content');
@@ -96,6 +97,7 @@ describe('LlmTabGroup', () => {
   });
 
   describe('click interaction', () => {
+    // @behavior switch-on-click
     it('clicking a tab selects it and shows its panel', async () => {
       const user = userEvent.setup();
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
@@ -106,6 +108,7 @@ describe('LlmTabGroup', () => {
       expect(screen.getByRole('tab', { name: 'Second' })).toHaveAttribute('aria-selected', 'true');
     });
 
+    // @behavior disabled-tab-noop
     it('clicking a disabled tab does nothing', async () => {
       const user = userEvent.setup();
       await render(WITH_DISABLED, { imports: IMPORTS });
@@ -223,6 +226,7 @@ describe('LlmTabGroup', () => {
       expect(container.querySelector('llm-tab-group')).toHaveClass('variant-default');
     });
 
+    // @behavior variant-class
     it('applies variant-pills class', async () => {
       const { container } = await render(
         `<llm-tab-group variant="pills">

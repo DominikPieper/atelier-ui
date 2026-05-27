@@ -23,6 +23,8 @@ beforeAll(() => {
 });
 
 describe('LlmDrawer', () => {
+  // @behavior render-dialog-element
+  // @behavior aria-modal
   it('renders a <dialog> element with aria-modal="true"', async () => {
     const { container } = await render('<llm-drawer>Content</llm-drawer>', {
       imports: [LlmDrawer],
@@ -39,6 +41,7 @@ describe('LlmDrawer', () => {
     expect(container.querySelector('dialog')).not.toHaveAttribute('open');
   });
 
+  // @behavior open-shows-modal
   it('opens the drawer when open=true', async () => {
     const { container, fixture } = await render(
       '<llm-drawer [open]="true">Content</llm-drawer>',
@@ -48,6 +51,7 @@ describe('LlmDrawer', () => {
     expect(container.querySelector('dialog')).toHaveAttribute('open');
   });
 
+  // @behavior is-open-class
   it('applies is-open class to host when open=true', async () => {
     const { container } = await render('<llm-drawer [open]="true">Content</llm-drawer>', {
       imports: [LlmDrawer],
@@ -151,6 +155,7 @@ describe('LlmDrawer', () => {
       expect(closeBtn).toHaveAttribute('aria-label', 'Close drawer');
     });
 
+    // @behavior close-button
     it('closes the drawer when close button is clicked', async () => {
       const user = userEvent.setup();
       const { container } = await render(

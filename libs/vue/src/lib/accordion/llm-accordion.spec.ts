@@ -27,6 +27,7 @@ describe('LlmAccordionGroup', () => {
     expect(screen.getByText('Question 2')).toBeInTheDocument();
   });
 
+  // @behavior expand-on-click
   it('expands an item on click', async () => {
     const user = userEvent.setup();
     render(AccordionFixture);
@@ -36,6 +37,7 @@ describe('LlmAccordionGroup', () => {
     expect(btn).toHaveAttribute('aria-expanded', 'true');
   });
 
+  // @behavior collapse-on-click
   it('collapses an open item on second click', async () => {
     const user = userEvent.setup();
     render(AccordionFixture);
@@ -45,6 +47,7 @@ describe('LlmAccordionGroup', () => {
     expect(btn).toHaveAttribute('aria-expanded', 'false');
   });
 
+  // @behavior single-collapse-other
   it('collapses previously open item when multi is false', async () => {
     const user = userEvent.setup();
     render(AccordionFixture);
@@ -57,6 +60,7 @@ describe('LlmAccordionGroup', () => {
     expect(btn1).toHaveAttribute('aria-expanded', 'false');
   });
 
+  // @behavior multi-expand
   it('allows multiple open items when multi is true', async () => {
     const user = userEvent.setup();
     render({
@@ -76,6 +80,7 @@ describe('LlmAccordionGroup', () => {
     expect(btn2).toHaveAttribute('aria-expanded', 'true');
   });
 
+  // @behavior disabled-no-toggle
   it('does not expand a disabled item', async () => {
     render({
       components: { LlmAccordionGroup, LlmAccordionItem },

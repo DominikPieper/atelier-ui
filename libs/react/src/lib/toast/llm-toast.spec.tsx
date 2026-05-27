@@ -20,6 +20,7 @@ function renderWithProvider(ui = <TestHarness />) {
 }
 
 describe('LlmToast', () => {
+  // @behavior show-adds
   it('shows a toast when show() is called', async () => {
     const user = userEvent.setup();
     renderWithProvider();
@@ -55,6 +56,7 @@ describe('LlmToast', () => {
     expect(screen.queryByRole('button', { name: 'Dismiss' })).not.toBeInTheDocument();
   });
 
+  // @behavior dismiss-button-click
   it('dismisses toast when dismiss button is clicked', async () => {
     const user = userEvent.setup();
     renderWithProvider();
@@ -73,6 +75,7 @@ describe('LlmToast', () => {
     expect(screen.getByText('Success!')).toBeInTheDocument();
   });
 
+  // @behavior position-class
   it('container applies position class', () => {
     renderWithProvider(<TestHarness position="top-center" />);
     expect(document.querySelector('.llm-toast-container')).toHaveClass('position-top-center');

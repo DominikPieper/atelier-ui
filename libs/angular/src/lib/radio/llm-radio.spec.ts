@@ -6,6 +6,7 @@ import { LlmRadio } from './llm-radio';
 const GROUP_IMPORTS = [LlmRadioGroup, LlmRadio];
 
 describe('LlmRadio', () => {
+  // @behavior renders-input
   it('renders a native radio input', async () => {
     const { container } = await render(
       `<llm-radio-group name="test">
@@ -37,6 +38,7 @@ describe('LlmRadio', () => {
   });
 
   describe('checked state', () => {
+    // @behavior checked-from-group
     it('is checked when group value matches radioValue', async () => {
       const { container } = await render(
         `<llm-radio-group [(value)]="value" name="test">
@@ -60,6 +62,7 @@ describe('LlmRadio', () => {
       expect(container.querySelector('llm-radio')).toHaveClass('is-checked');
     });
 
+    // @behavior select-on-click
     it('becomes checked when clicked', async () => {
       const user = userEvent.setup();
       const { container } = await render(
@@ -75,6 +78,7 @@ describe('LlmRadio', () => {
   });
 
   describe('disabled state', () => {
+    // @behavior disabled
     it('is disabled when individually disabled', async () => {
       const { container } = await render(
         `<llm-radio-group name="test">
