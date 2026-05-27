@@ -64,6 +64,7 @@ jobs:
       - run: npm ci
       - run: node tools/scripts/check-sync.js
       - run: node tools/scripts/sync-spec.mjs --check
+      - run: node tools/scripts/sync-tokens.mjs --check
       - run: node tools/scripts/check-docs-sync.js
       - run: node tools/scripts/gen-llms-txt.mjs --check
       - run: node tools/scripts/check-cookbook-parity.mjs

@@ -10,9 +10,11 @@
     "check:sync": "node tools/scripts/check-sync.js",
     "check:spec": "node tools/scripts/sync-spec.mjs --check",
     "check:docs": "node tools/scripts/check-docs-sync.js",
+    "check:tokens": "node tools/scripts/sync-tokens.mjs --check",
     "check:llms": "node tools/scripts/gen-llms-txt.mjs --check",
     "check:cookbook": "node tools/scripts/check-cookbook-parity.mjs",
     "check:cookbook-manifest": "node tools/scripts/gen-cookbook-manifest.mjs --check",
+    "sync:tokens": "node tools/scripts/sync-tokens.mjs",
     "gen:llms": "node tools/scripts/gen-llms-txt.mjs",
     "gen:cookbook-manifest": "node tools/scripts/gen-cookbook-manifest.mjs",
     "preflight": "node tools/scripts/preflight.mjs"
@@ -52,7 +54,7 @@
     }
   },
   "devDependencies": {
-    "@analogjs/storybook-angular": "^2.5.2-beta.2",
+    "@analogjs/storybook-angular": "^2.5.2",
     "@analogjs/vite-plugin-angular": "~2.3.1",
     "@analogjs/vitest-angular": "~2.3.1",
     "@angular-devkit/build-angular": "~21.2.2",
