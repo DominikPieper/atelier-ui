@@ -31,6 +31,7 @@ describe('LlmMenu', () => {
     expect(menu).toHaveClass('variant-default');
   });
 
+  // @behavior variant-class
   it('applies compact variant class', async () => {
     await render(
       `

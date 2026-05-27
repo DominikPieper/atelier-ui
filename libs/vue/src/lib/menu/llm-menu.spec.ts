@@ -30,6 +30,14 @@ const MenuFixture = {
   },
 };
 
+describe('LlmMenu', () => {
+  // @behavior variant-class
+  it('applies the variant class to the menu', () => {
+    const { container } = render(LlmMenu, { props: { variant: 'compact' } });
+    expect(container.querySelector('[role="menu"]')).toHaveClass('variant-compact');
+  });
+});
+
 describe('LlmMenuTrigger', () => {
   // @behavior closed-initially
   it('does not show menu initially', () => {

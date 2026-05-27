@@ -12,6 +12,7 @@ describe('LlmMenu', () => {
     expect(screen.getByRole('menu')).toBeInTheDocument();
   });
 
+  // @behavior variant-class
   it('applies variant class', () => {
     const { container } = render(<LlmMenu variant="compact" />);
     expect(container.firstChild).toHaveClass('variant-compact');
