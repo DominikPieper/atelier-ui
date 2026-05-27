@@ -116,6 +116,7 @@
       },
       "skills": {
         "projects": ["figma-workspace-architect"],
+        "projectsRelationship": "independent",
         "releaseTagPattern": "skill-{projectName}-{version}",
         "version": {
           "conventionalCommits": true,
