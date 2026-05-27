@@ -49,3 +49,17 @@ if [ -n "$drift" ]; then
   echo ""
   exit 1
 fi
+
+# Run the full drift suite (structural + story, spec, tokens, variants,
+# behavior coverage, docs, llms, cookbook). Catches drift locally instead of
+# on a failed CI run after the push has already landed.
+if ! checkout=$(npm run --silent check:all 2>&1); then
+  echo ""
+  echo "✗ pre-push aborted: drift check failed"
+  echo ""
+  printf '%s\n' "$checkout" | sed 's/^/    /'
+  echo ""
+  echo "  Fix the reported drift, or: git push --no-verify to bypass."
+  echo ""
+  exit 1
+fi
