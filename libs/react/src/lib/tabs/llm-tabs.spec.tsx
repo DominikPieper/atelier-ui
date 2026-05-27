@@ -28,6 +28,53 @@ describe('LlmTabGroup', () => {
     expect(screen.getByRole('tab', { name: 'Tab Two' })).toHaveFocus();
   });
 
+  // @behavior home-end
+  it('Home focuses the first tab and End the last', async () => {
+    const user = userEvent.setup();
+    render(
+      <LlmTabGroup>
+        <LlmTab label="Tab One">Content One</LlmTab>
+        <LlmTab label="Tab Two">Content Two</LlmTab>
+        <LlmTab label="Tab Three">Content Three</LlmTab>
+      </LlmTabGroup>
+    );
+    screen.getByRole('tab', { name: 'Tab One' }).focus();
+    await user.keyboard('{End}');
+    expect(screen.getByRole('tab', { name: 'Tab Three' })).toHaveFocus();
+    await user.keyboard('{Home}');
+    expect(screen.getByRole('tab', { name: 'Tab One' })).toHaveFocus();
+  });
+
+  // @behavior wrap
+  it('ArrowRight wraps from the last tab to the first', async () => {
+    const user = userEvent.setup();
+    render(
+      <LlmTabGroup>
+        <LlmTab label="Tab One">Content One</LlmTab>
+        <LlmTab label="Tab Two">Content Two</LlmTab>
+      </LlmTabGroup>
+    );
+    await user.click(screen.getByRole('tab', { name: 'Tab Two' }));
+    screen.getByRole('tab', { name: 'Tab Two' }).focus();
+    await user.keyboard('{ArrowRight}');
+    expect(screen.getByRole('tab', { name: 'Tab One' })).toHaveFocus();
+  });
+
+  // @behavior skip-disabled
+  it('arrow navigation skips disabled tabs', async () => {
+    const user = userEvent.setup();
+    render(
+      <LlmTabGroup>
+        <LlmTab label="Tab One">Content One</LlmTab>
+        <LlmTab label="Tab Two" disabled>Content Two</LlmTab>
+        <LlmTab label="Tab Three">Content Three</LlmTab>
+      </LlmTabGroup>
+    );
+    screen.getByRole('tab', { name: 'Tab One' }).focus();
+    await user.keyboard('{ArrowRight}');
+    expect(screen.getByRole('tab', { name: 'Tab Three' })).toHaveFocus();
+  });
+
   // @behavior first-tab-default
   it('selects the first tab by default', () => {
     render(

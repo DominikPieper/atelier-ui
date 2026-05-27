@@ -36,6 +36,47 @@ describe('LlmTabGroup', () => {
     expect(screen.getByRole('tab', { name: 'Tab Two' })).toHaveAttribute('aria-selected', 'true');
   });
 
+  // @behavior home-end
+  it('Home activates the first tab and End the last', async () => {
+    const user = userEvent.setup();
+    render(TabsFixture);
+    await flushPromises();
+    screen.getByRole('tab', { name: 'Tab One' }).focus();
+    await user.keyboard('{End}');
+    expect(screen.getByRole('tab', { name: 'Tab Three' })).toHaveAttribute('aria-selected', 'true');
+    await user.keyboard('{Home}');
+    expect(screen.getByRole('tab', { name: 'Tab One' })).toHaveAttribute('aria-selected', 'true');
+  });
+
+  // @behavior wrap
+  it('ArrowRight wraps from the last tab to the first', async () => {
+    const user = userEvent.setup();
+    render(TabsFixture);
+    await flushPromises();
+    await user.click(screen.getByRole('tab', { name: 'Tab Three' }));
+    await user.keyboard('{ArrowRight}');
+    expect(screen.getByRole('tab', { name: 'Tab One' })).toHaveAttribute('aria-selected', 'true');
+  });
+
+  // @behavior skip-disabled
+  it('arrow navigation skips disabled tabs', async () => {
+    const user = userEvent.setup();
+    render({
+      components: { LlmTabGroup, LlmTab },
+      template: `
+        <LlmTabGroup>
+          <LlmTab label="Active">Active</LlmTab>
+          <LlmTab label="Disabled" :disabled="true">Disabled</LlmTab>
+          <LlmTab label="Last">Last</LlmTab>
+        </LlmTabGroup>
+      `,
+    });
+    await flushPromises();
+    screen.getByRole('tab', { name: 'Active' }).focus();
+    await user.keyboard('{ArrowRight}');
+    expect(screen.getByRole('tab', { name: 'Last' })).toHaveAttribute('aria-selected', 'true');
+  });
+
   // @behavior first-tab-default
   it('first tab is selected by default', async () => {
     render(TabsFixture);

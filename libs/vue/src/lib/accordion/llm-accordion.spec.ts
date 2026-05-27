@@ -38,6 +38,58 @@ describe('LlmAccordionGroup', () => {
     expect(second).toHaveFocus();
   });
 
+  // @behavior home-end
+  it('Home focuses the first header and End the last', async () => {
+    const user = userEvent.setup();
+    render({
+      components: { LlmAccordionGroup, LlmAccordionItem },
+      template: `
+        <LlmAccordionGroup>
+          <LlmAccordionItem><template #header>Q1</template>A1</LlmAccordionItem>
+          <LlmAccordionItem><template #header>Q2</template>A2</LlmAccordionItem>
+          <LlmAccordionItem><template #header>Q3</template>A3</LlmAccordionItem>
+        </LlmAccordionGroup>
+      `,
+    });
+    const btns = screen.getAllByRole('button');
+    btns[0].focus();
+    await user.keyboard('{End}');
+    expect(btns[2]).toHaveFocus();
+    await user.keyboard('{Home}');
+    expect(btns[0]).toHaveFocus();
+  });
+
+  // @behavior wrap
+  it('ArrowDown wraps from the last header to the first', async () => {
+    const user = userEvent.setup();
+    render(AccordionFixture);
+    const first = screen.getByRole('button', { name: /Question 1/i });
+    const second = screen.getByRole('button', { name: /Question 2/i });
+    second.focus();
+    await user.keyboard('{ArrowDown}');
+    expect(first).toHaveFocus();
+  });
+
+  // @behavior skip-disabled
+  it('arrow navigation skips disabled items', async () => {
+    const user = userEvent.setup();
+    render({
+      components: { LlmAccordionGroup, LlmAccordionItem },
+      template: `
+        <LlmAccordionGroup>
+          <LlmAccordionItem><template #header>Q1</template>A1</LlmAccordionItem>
+          <LlmAccordionItem :disabled="true"><template #header>Q2</template>A2</LlmAccordionItem>
+          <LlmAccordionItem><template #header>Q3</template>A3</LlmAccordionItem>
+        </LlmAccordionGroup>
+      `,
+    });
+    const q1 = screen.getByRole('button', { name: /Q1/i });
+    const q3 = screen.getByRole('button', { name: /Q3/i });
+    q1.focus();
+    await user.keyboard('{ArrowDown}');
+    expect(q3).toHaveFocus();
+  });
+
   // @behavior expand-on-click
   it('expands an item on click', async () => {
     const user = userEvent.setup();

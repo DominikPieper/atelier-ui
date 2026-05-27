@@ -53,6 +53,54 @@ describe('LlmAccordionGroup', () => {
     expect(second).toHaveFocus();
   });
 
+  // @behavior home-end
+  it('Home focuses the first header and End the last', async () => {
+    const user = userEvent.setup();
+    render(
+      <LlmAccordionGroup>
+        <LlmAccordionItem><LlmAccordionHeader>Section One</LlmAccordionHeader>One</LlmAccordionItem>
+        <LlmAccordionItem><LlmAccordionHeader>Section Two</LlmAccordionHeader>Two</LlmAccordionItem>
+        <LlmAccordionItem><LlmAccordionHeader>Section Three</LlmAccordionHeader>Three</LlmAccordionItem>
+      </LlmAccordionGroup>
+    );
+    const btns = screen.getAllByRole('button');
+    btns[0].focus();
+    await user.keyboard('{End}');
+    expect(btns[2]).toHaveFocus();
+    await user.keyboard('{Home}');
+    expect(btns[0]).toHaveFocus();
+  });
+
+  // @behavior wrap
+  it('ArrowDown wraps from the last header to the first', async () => {
+    const user = userEvent.setup();
+    render(
+      <LlmAccordionGroup>
+        <LlmAccordionItem><LlmAccordionHeader>Section One</LlmAccordionHeader>One</LlmAccordionItem>
+        <LlmAccordionItem><LlmAccordionHeader>Section Two</LlmAccordionHeader>Two</LlmAccordionItem>
+      </LlmAccordionGroup>
+    );
+    const btns = screen.getAllByRole('button');
+    btns[1].focus();
+    await user.keyboard('{ArrowDown}');
+    expect(btns[0]).toHaveFocus();
+  });
+
+  // @behavior skip-disabled
+  it('arrow navigation skips disabled items', async () => {
+    const user = userEvent.setup();
+    render(
+      <LlmAccordionGroup>
+        <LlmAccordionItem><LlmAccordionHeader>Section One</LlmAccordionHeader>One</LlmAccordionItem>
+        <LlmAccordionItem disabled><LlmAccordionHeader>Section Two</LlmAccordionHeader>Two</LlmAccordionItem>
+        <LlmAccordionItem><LlmAccordionHeader>Section Three</LlmAccordionHeader>Three</LlmAccordionItem>
+      </LlmAccordionGroup>
+    );
+    screen.getByRole('button', { name: 'Section One' }).focus();
+    await user.keyboard('{ArrowDown}');
+    expect(screen.getByRole('button', { name: 'Section Three' })).toHaveFocus();
+  });
+
   // @behavior expand-on-click
   it('expands an item on click', async () => {
     const user = userEvent.setup();

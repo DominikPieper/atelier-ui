@@ -145,6 +145,7 @@ describe('LlmTabGroup', () => {
       expect(screen.getByRole('tabpanel')).toHaveTextContent('First content');
     });
 
+    // @behavior wrap
     it('ArrowRight wraps from last to first', async () => {
       const user = userEvent.setup();
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
@@ -166,6 +167,7 @@ describe('LlmTabGroup', () => {
       expect(screen.getByRole('tab', { name: 'Third' })).toHaveFocus();
     });
 
+    // @behavior home-end
     it('Home selects first enabled tab', async () => {
       const user = userEvent.setup();
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
@@ -189,6 +191,7 @@ describe('LlmTabGroup', () => {
       expect(screen.getByRole('tabpanel')).toHaveTextContent('Third content');
     });
 
+    // @behavior skip-disabled
     it('arrow keys skip disabled tabs', async () => {
       const user = userEvent.setup();
       await render(WITH_DISABLED, { imports: IMPORTS });

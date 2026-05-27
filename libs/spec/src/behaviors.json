@@ -43,7 +43,10 @@
     { "id": "disabled-no-toggle", "describe": "a disabled item does not toggle on click" },
     { "id": "multi-expand", "describe": "allows multiple items open at once in multi mode" },
     { "id": "single-collapse-other", "describe": "opening one item collapses the other in single mode" },
-    { "id": "keyboard-nav", "describe": "arrow keys move focus between accordion headers" }
+    { "id": "keyboard-nav", "describe": "arrow keys move focus between accordion headers" },
+    { "id": "home-end", "describe": "Home/End focus the first/last header" },
+    { "id": "wrap", "describe": "arrow focus wraps past the first/last header" },
+    { "id": "skip-disabled", "describe": "arrow navigation skips disabled items" }
   ],
   "alert": [
     { "id": "dismiss-hidden", "describe": "no dismiss button unless dismissible" },
@@ -173,7 +176,10 @@
     { "id": "switch-on-click", "describe": "switches the active tab on click" },
     { "id": "disabled-tab-noop", "describe": "a disabled tab cannot be selected" },
     { "id": "variant-class", "describe": "applies the variant class" },
-    { "id": "keyboard-nav", "describe": "arrow keys navigate between tabs (focus or activation, per adapter's activation model)" }
+    { "id": "keyboard-nav", "describe": "arrow keys navigate between tabs (focus or activation, per adapter's activation model)" },
+    { "id": "home-end", "describe": "Home/End navigate to the first/last tab" },
+    { "id": "wrap", "describe": "arrow navigation wraps past the first/last tab" },
+    { "id": "skip-disabled", "describe": "arrow navigation skips disabled tabs" }
   ],
   "textarea": [
     { "id": "renders-textarea", "describe": "renders a native textarea element" },

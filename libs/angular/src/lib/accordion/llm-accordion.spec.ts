@@ -190,6 +190,7 @@ describe('LlmAccordionGroup', () => {
       expect(screen.getByRole('button', { name: 'Section 1' })).toHaveFocus();
     });
 
+    // @behavior wrap
     it('ArrowDown wraps from last to first', async () => {
       const user = userEvent.setup();
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
@@ -210,6 +211,7 @@ describe('LlmAccordionGroup', () => {
       expect(screen.getByRole('button', { name: 'Section 3' })).toHaveFocus();
     });
 
+    // @behavior home-end
     it('Home moves focus to first enabled item', async () => {
       const user = userEvent.setup();
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
@@ -230,6 +232,7 @@ describe('LlmAccordionGroup', () => {
       expect(screen.getByRole('button', { name: 'Section 3' })).toHaveFocus();
     });
 
+    // @behavior skip-disabled
     it('arrow keys skip disabled items', async () => {
       const user = userEvent.setup();
       await render(WITH_DISABLED, { imports: IMPORTS });
