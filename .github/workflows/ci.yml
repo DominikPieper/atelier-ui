@@ -69,7 +69,7 @@ jobs:
       - run: node tools/scripts/check-css-tokens.js
       - run: node tools/scripts/check-exports.js
       - run: node tools/scripts/check-defaults.js
-      - run: node tools/scripts/check-behavior-coverage.mjs
+      - run: node tools/parity/marker-coverage.mjs tools/parity/behavior.config.mjs
       - run: node tools/scripts/check-docs-sync.js
       - run: node tools/scripts/gen-llms-txt.mjs --check
       - run: node tools/scripts/check-cookbook-parity.mjs
