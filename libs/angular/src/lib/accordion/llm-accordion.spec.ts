@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { LlmAccordionGroup, LlmAccordionItem, LlmAccordionHeader } from './llm-accordion';
+import { covers } from '../../testing/behavior';
 
 const IMPORTS = [LlmAccordionGroup, LlmAccordionItem, LlmAccordionHeader];
 
@@ -112,8 +113,7 @@ describe('LlmAccordionGroup', () => {
   });
 
   describe('click toggle — single mode', () => {
-    // @behavior expand-on-click
-    it('expands an item on click', async () => {
+    covers('accordion', 'expand-on-click')('expands an item on click', async () => {
       const user = userEvent.setup();
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
 
@@ -121,8 +121,7 @@ describe('LlmAccordionGroup', () => {
       expect(screen.getByRole('button', { name: 'Section 1' })).toHaveAttribute('aria-expanded', 'true');
     });
 
-    // @behavior collapse-on-click
-    it('collapses an expanded item on click', async () => {
+    covers('accordion', 'collapse-on-click')('collapses an expanded item on click', async () => {
       const user = userEvent.setup();
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
 
@@ -131,8 +130,7 @@ describe('LlmAccordionGroup', () => {
       expect(screen.getByRole('button', { name: 'Section 1' })).toHaveAttribute('aria-expanded', 'false');
     });
 
-    // @behavior single-collapse-other
-    it('closes previously open item when opening another in single mode', async () => {
+    covers('accordion', 'single-collapse-other')('closes previously open item when opening another in single mode', async () => {
       const user = userEvent.setup();
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
 
@@ -144,8 +142,7 @@ describe('LlmAccordionGroup', () => {
       expect(screen.getByRole('button', { name: 'Section 2' })).toHaveAttribute('aria-expanded', 'true');
     });
 
-    // @behavior disabled-no-toggle
-    it('does not toggle disabled items on click', async () => {
+    covers('accordion', 'disabled-no-toggle')('does not toggle disabled items on click', async () => {
       const user = userEvent.setup();
       await render(WITH_DISABLED, { imports: IMPORTS });
 
@@ -155,8 +152,7 @@ describe('LlmAccordionGroup', () => {
   });
 
   describe('click toggle — multi mode', () => {
-    // @behavior multi-expand
-    it('allows multiple items to be expanded', async () => {
+    covers('accordion', 'multi-expand')('allows multiple items to be expanded', async () => {
       const user = userEvent.setup();
       await render(MULTI_TEMPLATE, { imports: IMPORTS });
 
@@ -169,8 +165,7 @@ describe('LlmAccordionGroup', () => {
   });
 
   describe('keyboard navigation', () => {
-    // @behavior keyboard-nav
-    it('ArrowDown moves focus to next item', async () => {
+    covers('accordion', 'keyboard-nav')('ArrowDown moves focus to next item', async () => {
       const user = userEvent.setup();
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
 
@@ -190,8 +185,7 @@ describe('LlmAccordionGroup', () => {
       expect(screen.getByRole('button', { name: 'Section 1' })).toHaveFocus();
     });
 
-    // @behavior wrap
-    it('ArrowDown wraps from last to first', async () => {
+    covers('accordion', 'wrap')('ArrowDown wraps from last to first', async () => {
       const user = userEvent.setup();
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
 
@@ -211,8 +205,7 @@ describe('LlmAccordionGroup', () => {
       expect(screen.getByRole('button', { name: 'Section 3' })).toHaveFocus();
     });
 
-    // @behavior home-end
-    it('Home moves focus to first enabled item', async () => {
+    covers('accordion', 'home-end')('Home moves focus to first enabled item', async () => {
       const user = userEvent.setup();
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
 
@@ -232,8 +225,7 @@ describe('LlmAccordionGroup', () => {
       expect(screen.getByRole('button', { name: 'Section 3' })).toHaveFocus();
     });
 
-    // @behavior skip-disabled
-    it('arrow keys skip disabled items', async () => {
+    covers('accordion', 'skip-disabled')('arrow keys skip disabled items', async () => {
       const user = userEvent.setup();
       await render(WITH_DISABLED, { imports: IMPORTS });
 

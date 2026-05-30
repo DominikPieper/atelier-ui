@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { LlmAlert } from './llm-alert';
+import { covers } from '../../testing/behavior';
 
 describe('LlmAlert', () => {
   it('renders projected content', async () => {
@@ -27,8 +28,7 @@ describe('LlmAlert', () => {
   });
 
   describe('aria-live', () => {
-    // @behavior aria-live
-    it('sets aria-live="polite" for non-danger variants', async () => {
+    covers('alert', 'aria-live')('sets aria-live="polite" for non-danger variants', async () => {
       const { container } = await render(
         '<llm-alert variant="info">Info message</llm-alert>',
         { imports: [LlmAlert] }
@@ -62,20 +62,17 @@ describe('LlmAlert', () => {
   });
 
   describe('dismiss button', () => {
-    // @behavior dismiss-hidden
-    it('does not render dismiss button when dismissible=false', async () => {
+    covers('alert', 'dismiss-hidden')('does not render dismiss button when dismissible=false', async () => {
       await render('<llm-alert>Message</llm-alert>', { imports: [LlmAlert] });
       expect(screen.queryByRole('button', { name: 'Dismiss' })).not.toBeInTheDocument();
     });
 
-    // @behavior dismiss-shown
-    it('renders dismiss button when dismissible=true', async () => {
+    covers('alert', 'dismiss-shown')('renders dismiss button when dismissible=true', async () => {
       await render('<llm-alert [dismissible]="true">Message</llm-alert>', { imports: [LlmAlert] });
       expect(screen.getByRole('button', { name: 'Dismiss' })).toBeInTheDocument();
     });
 
-    // @behavior emits-dismiss
-    it('emits dismissed output when dismiss button is clicked', async () => {
+    covers('alert', 'emits-dismiss')('emits dismissed output when dismiss button is clicked', async () => {
       const user = userEvent.setup();
       const dismissed = vi.fn();
       await render('<llm-alert [dismissible]="true" (dismissed)="dismissed()">Message</llm-alert>', {

@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { LlmCombobox } from './llm-combobox';
+import { covers } from '../../testing/behavior';
 
 const OPTIONS = [
   { value: 'apple', label: 'Apple' },
@@ -38,8 +39,7 @@ function getInput(container: Element): HTMLInputElement {
 }
 
 describe('LlmCombobox', () => {
-  // @behavior render-input
-  it('renders an input with role="combobox"', async () => {
+  covers('combobox', 'render-input')('renders an input with role="combobox"', async () => {
     const { container } = await render(TEMPLATE, {
       imports: [LlmCombobox],
       componentProperties: { value: '', options: OPTIONS },
@@ -76,8 +76,7 @@ describe('LlmCombobox', () => {
     expect(screen.getAllByRole('option').length).toBeGreaterThan(0);
   });
 
-  // @behavior filter-on-type
-  it('filters options as user types', async () => {
+  covers('combobox', 'filter-on-type')('filters options as user types', async () => {
     const user = userEvent.setup();
     const { container } = await render(TEMPLATE, {
       imports: [LlmCombobox],
@@ -101,8 +100,7 @@ describe('LlmCombobox', () => {
     expect(screen.getByText('No results found.')).toBeInTheDocument();
   });
 
-  // @behavior select-on-click
-  it('selects an option on click and shows its label in the input', async () => {
+  covers('combobox', 'select-on-click')('selects an option on click and shows its label in the input', async () => {
     const user = userEvent.setup();
     const { container } = await render(TEMPLATE, {
       imports: [LlmCombobox],
@@ -125,8 +123,7 @@ describe('LlmCombobox', () => {
     expect(container.querySelector('llm-combobox')).not.toHaveClass('is-open');
   });
 
-  // @behavior keyboard-nav
-  it('navigates options with ArrowDown and selects with Enter', async () => {
+  covers('combobox', 'keyboard-nav')('navigates options with ArrowDown and selects with Enter', async () => {
     const user = userEvent.setup();
     const { container } = await render(TEMPLATE, {
       imports: [LlmCombobox],
@@ -138,8 +135,7 @@ describe('LlmCombobox', () => {
     expect(input.value).toBe('Apple');
   });
 
-  // @behavior close-on-escape
-  it('closes on Escape (removes is-open class)', async () => {
+  covers('combobox', 'close-on-escape')('closes on Escape (removes is-open class)', async () => {
     const user = userEvent.setup();
     const { container } = await render(TEMPLATE, {
       imports: [LlmCombobox],
@@ -151,8 +147,7 @@ describe('LlmCombobox', () => {
     expect(container.querySelector('llm-combobox')).not.toHaveClass('is-open');
   });
 
-  // @behavior aria-expanded
-  it('sets aria-expanded=true when open', async () => {
+  covers('combobox', 'aria-expanded')('sets aria-expanded=true when open', async () => {
     const user = userEvent.setup();
     const { container } = await render(TEMPLATE, {
       imports: [LlmCombobox],

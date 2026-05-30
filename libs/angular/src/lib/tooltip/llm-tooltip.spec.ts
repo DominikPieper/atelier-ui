@@ -3,6 +3,7 @@ import { userEvent } from '@testing-library/user-event';
 import { LlmTooltip } from './llm-tooltip';
 import { LlmButton } from '../button/llm-button';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { covers } from '../../testing/behavior';
 
 const TOOLTIP_IMPORTS = [LlmTooltip, LlmButton, OverlayModule];
 
@@ -20,8 +21,7 @@ describe('LlmTooltip', () => {
     expect(screen.getByText('Save')).toBeInTheDocument();
   });
 
-  // @behavior hidden-initially
-  it('does not show tooltip initially', async () => {
+  covers('tooltip', 'hidden-initially')('does not show tooltip initially', async () => {
     await render(
       '<llm-button llmTooltip="Save changes">Save</llm-button>',
       { imports: TOOLTIP_IMPORTS },
@@ -37,8 +37,7 @@ describe('LlmTooltip', () => {
     expect(container.querySelector('[aria-describedby]')).toBeNull();
   });
 
-  // @behavior show-on-hover
-  it('shows tooltip on mouseenter after delay', async () => {
+  covers('tooltip', 'show-on-hover')('shows tooltip on mouseenter after delay', async () => {
     vi.useFakeTimers();
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 
@@ -97,8 +96,7 @@ describe('LlmTooltip', () => {
     vi.useRealTimers();
   });
 
-  // @behavior disabled-no-show
-  it('does not show tooltip when disabled', async () => {
+  covers('tooltip', 'disabled-no-show')('does not show tooltip when disabled', async () => {
     vi.useFakeTimers();
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 
@@ -115,8 +113,7 @@ describe('LlmTooltip', () => {
     vi.useRealTimers();
   });
 
-  // @behavior hide-on-leave
-  it('hides tooltip on mouseleave', async () => {
+  covers('tooltip', 'hide-on-leave')('hides tooltip on mouseleave', async () => {
     vi.useFakeTimers();
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 

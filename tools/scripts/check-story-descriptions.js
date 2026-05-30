@@ -16,10 +16,10 @@
  *      export.
  *   2. The value is sourced from the metadata barrel — i.e. it
  *      references a `.purpose` property or imports `metadata` from
- *      `@atelier-ui/spec/metadata/...`. A bare string literal passes
- *      with a warning so the gate can be turned on before the
- *      content rollout is complete; future tightening can flip the
- *      warning to an error.
+ *      `@atelier-ui/spec/metadata/...`. A bare string literal is an
+ *      ERROR: the description must derive from `metadata.purpose` so it
+ *      can never drift from the AI-readiness source of truth (the same
+ *      "derive, don't annotate" rule the behavior gate now follows).
  *
  * Heuristics, not full AST:
  *   The check uses targeted regular expressions against the source.
@@ -48,7 +48,6 @@ const FRAMEWORKS = ['angular', 'react', 'vue'];
 const SKIP_DIRS = new Set(['toast', 'code-block', 'showcase']);
 
 const errors = [];
-const warnings = [];
 let checked = 0;
 let skipped = 0;
 
@@ -82,15 +81,14 @@ for (const fw of FRAMEWORKS) {
         continue;
       }
 
-      // 2. Encourage sourcing the description from metadata rather than a
-      //    bare string literal. This is a warning today; flip to an error
-      //    after Phase 3 is complete.
+      // 2. The description must be sourced from metadata, not a bare string
+      //    literal, so it can never drift from the metadata source of truth.
       const sourcedFromMetadata =
         /component\s*:\s*[A-Za-z_$][\w$]*\.purpose/m.test(src) ||
         /component\s*:\s*metadata\.purpose/m.test(src);
       if (!sourcedFromMetadata) {
-        warnings.push(
-          `[INLINE-DESCRIPTION] ${rel}: description.component is a literal — prefer importing metadata.purpose from '@atelier-ui/spec/metadata/<name>.metadata' so the description never drifts from the metadata.`
+        errors.push(
+          `[INLINE-DESCRIPTION] ${rel}: description.component is a literal — import metadata.purpose from '@atelier-ui/spec/metadata/<name>.metadata' so the description never drifts from the metadata.`
         );
       }
     }
@@ -99,16 +97,12 @@ for (const fw of FRAMEWORKS) {
 
 if (errors.length > 0) {
   errors.forEach((e) => console.error(`✗ ${e}`));
-  warnings.forEach((w) => console.warn(`⚠ ${w}`));
   console.error(
     `\n${errors.length} story description issue(s). Add 'parameters.docs.description.component: metadata.purpose' to the default export.`
   );
   process.exit(1);
 }
 
-warnings.forEach((w) => console.warn(`⚠ ${w}`));
 console.log(
-  `✓ story descriptions present (${checked} story file${checked === 1 ? '' : 's'} scanned, ${skipped} dir${skipped === 1 ? '' : 's'} allowlisted${
-    warnings.length ? `; ${warnings.length} inline literal${warnings.length === 1 ? '' : 's'}` : ''
-  })`
+  `✓ story descriptions present (${checked} story file${checked === 1 ? '' : 's'} scanned, ${skipped} dir${skipped === 1 ? '' : 's'} allowlisted)`
 );

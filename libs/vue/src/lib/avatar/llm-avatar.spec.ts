@@ -1,30 +1,27 @@
 import { render, screen } from '@testing-library/vue';
 import LlmAvatar from './llm-avatar.vue';
 import LlmAvatarGroup from './llm-avatar-group.vue';
+import { covers } from '../../testing/behavior';
 
 describe('LlmAvatar', () => {
-  // @behavior initials-when-no-src
-  it('renders with initials when name is provided and no src', () => {
+  covers('avatar', 'initials-when-no-src')('renders with initials when name is provided and no src', () => {
     render(LlmAvatar, { props: { name: 'Jane Doe' } });
     expect(screen.getByText('JD')).toBeInTheDocument();
   });
 
-  // @behavior img-when-src
-  it('renders an img when src is provided', () => {
+  covers('avatar', 'img-when-src')('renders an img when src is provided', () => {
     const { container } = render(LlmAvatar, {
       props: { src: 'https://example.com/photo.jpg', alt: 'Jane' },
     });
     expect(container.querySelector('img')).toBeInTheDocument();
   });
 
-  // @behavior icon-when-empty
-  it('renders icon placeholder when no src or name', () => {
+  covers('avatar', 'icon-when-empty')('renders icon placeholder when no src or name', () => {
     const { container } = render(LlmAvatar);
     expect(container.querySelector('.icon')).toBeInTheDocument();
   });
 
-  // @behavior aria-label-from-name
-  it('uses name as aria-label', () => {
+  covers('avatar', 'aria-label-from-name')('uses name as aria-label', () => {
     render(LlmAvatar, { props: { name: 'Alice' } });
     expect(screen.getByRole('img', { name: 'Alice' })).toBeInTheDocument();
   });

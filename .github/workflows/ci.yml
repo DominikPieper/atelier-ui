@@ -64,13 +64,16 @@ jobs:
       - run: npm ci
       - run: node tools/scripts/check-sync.js
       - run: node tools/scripts/sync-spec.mjs --check
+      - run: node tools/scripts/gen-behaviors.mjs --check
       - run: node tools/scripts/sync-tokens.mjs --check
       - run: node tools/scripts/check-variants.js
       - run: node tools/scripts/check-css-tokens.js
       - run: node tools/scripts/check-exports.js
       - run: node tools/scripts/check-defaults.js
-      - run: node tools/parity/marker-coverage.mjs tools/parity/behavior.config.mjs
+      - run: node tools/parity/behavior-coverage.mjs tools/parity/behavior.config.mjs
       - run: node tools/scripts/check-docs-sync.js
+      - run: node tools/scripts/check-metadata.js
+      - run: node tools/scripts/check-story-descriptions.js
       - run: node tools/scripts/gen-llms-txt.mjs --check
       - run: node tools/scripts/check-cookbook-parity.mjs
       - run: node tools/scripts/gen-cookbook-manifest.mjs --check

@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
+import { covers } from '../../testing/behavior';
 import { LlmInput } from './llm-input';
 
 describe('LlmInput', () => {
-  // @behavior renders-input
-  it('renders a native input element', async () => {
+  covers('input', 'renders-input')('renders a native input element', async () => {
     const { container } = await render('<llm-input />', {
       imports: [LlmInput],
     });
@@ -52,8 +52,7 @@ describe('LlmInput', () => {
   });
 
   describe('value binding', () => {
-    // @behavior updates-value
-    it('updates value when user types', async () => {
+    covers('input', 'updates-value')('updates value when user types', async () => {
       const user = userEvent.setup();
       await render('<llm-input />', {
         imports: [LlmInput],
@@ -73,8 +72,7 @@ describe('LlmInput', () => {
       expect(container.querySelector('llm-input')).toHaveClass('is-disabled');
     });
 
-    // @behavior disabled
-    it('sets disabled attribute on native input', async () => {
+    covers('input', 'disabled')('sets disabled attribute on native input', async () => {
       const { container } = await render(
         '<llm-input [disabled]="true" />',
         { imports: [LlmInput] }
@@ -102,8 +100,7 @@ describe('LlmInput', () => {
   });
 
   describe('invalid and error display', () => {
-    // @behavior invalid
-    it('applies is-invalid class when invalid', async () => {
+    covers('input', 'invalid')('applies is-invalid class when invalid', async () => {
       const { container } = await render(
         '<llm-input [invalid]="true" />',
         { imports: [LlmInput] }
@@ -135,8 +132,7 @@ describe('LlmInput', () => {
       expect(container.querySelector('.errors')).not.toBeInTheDocument();
     });
 
-    // @behavior errors
-    it('shows error messages when touched and invalid', async () => {
+    covers('input', 'errors')('shows error messages when touched and invalid', async () => {
       const user = userEvent.setup();
       const { container } = await render(
         `<llm-input [invalid]="true" [errors]="errors" />`,

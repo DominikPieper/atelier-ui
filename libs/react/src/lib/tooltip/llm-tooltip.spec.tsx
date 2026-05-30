@@ -1,10 +1,10 @@
 import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LlmTooltip } from './llm-tooltip';
+import { covers } from '../../testing/behavior';
 
 describe('LlmTooltip', () => {
-  // @behavior hidden-initially
-  it('does not show tooltip initially', () => {
+  covers('tooltip', 'hidden-initially')('does not show tooltip initially', () => {
     render(
       <LlmTooltip llmTooltip="Save your changes" llmTooltipShowDelay={0}>
         <button>Save</button>
@@ -13,8 +13,7 @@ describe('LlmTooltip', () => {
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   });
 
-  // @behavior show-on-hover
-  it('shows tooltip on hover after delay', async () => {
+  covers('tooltip', 'show-on-hover')('shows tooltip on hover after delay', async () => {
     const user = userEvent.setup();
     render(
       <LlmTooltip llmTooltip="Save your changes" llmTooltipShowDelay={0}>
@@ -29,8 +28,7 @@ describe('LlmTooltip', () => {
     expect(screen.getByRole('tooltip')).toHaveTextContent('Save your changes');
   });
 
-  // @behavior hide-on-leave
-  it('hides tooltip on mouse leave', async () => {
+  covers('tooltip', 'hide-on-leave')('hides tooltip on mouse leave', async () => {
     const user = userEvent.setup();
     render(
       <LlmTooltip llmTooltip="Save your changes" llmTooltipShowDelay={0} llmTooltipHideDelay={0}>
@@ -45,8 +43,7 @@ describe('LlmTooltip', () => {
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   });
 
-  // @behavior disabled-no-show
-  it('does not show tooltip when disabled', async () => {
+  covers('tooltip', 'disabled-no-show')('does not show tooltip when disabled', async () => {
     const user = userEvent.setup();
     render(
       <LlmTooltip llmTooltip="Save your changes" llmTooltipDisabled llmTooltipShowDelay={0}>

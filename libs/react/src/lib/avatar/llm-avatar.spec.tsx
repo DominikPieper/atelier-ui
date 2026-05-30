@@ -1,21 +1,19 @@
 import { render, screen } from '@testing-library/react';
+import { covers } from '../../testing/behavior';
 import { LlmAvatar, LlmAvatarGroup } from './llm-avatar';
 
 describe('LlmAvatar', () => {
-  // @behavior img-when-src
-  it('renders image when src is provided', () => {
+  covers('avatar', 'img-when-src')('renders image when src is provided', () => {
     render(<LlmAvatar src="https://example.com/photo.jpg" alt="Jane Doe" />);
     expect(screen.getByAltText('Jane Doe')).toBeInTheDocument();
   });
 
-  // @behavior icon-when-empty
-  it('shows icon placeholder when no src or name', () => {
+  covers('avatar', 'icon-when-empty')('shows icon placeholder when no src or name', () => {
     const { container } = render(<LlmAvatar />);
     expect(container.querySelector('svg.icon')).toBeInTheDocument();
   });
 
-  // @behavior initials-when-no-src
-  it('shows initials when no src', () => {
+  covers('avatar', 'initials-when-no-src')('shows initials when no src', () => {
     render(<LlmAvatar name="John Smith" />);
     expect(screen.getByText('JS')).toBeInTheDocument();
   });
@@ -40,8 +38,7 @@ describe('LlmAvatar', () => {
     expect(screen.getByRole('img')).toBeInTheDocument();
   });
 
-  // @behavior aria-label-from-name
-  it('uses name as aria-label when no alt provided', () => {
+  covers('avatar', 'aria-label-from-name')('uses name as aria-label when no alt provided', () => {
     render(<LlmAvatar name="Jane Doe" />);
     expect(screen.getByRole('img')).toHaveAttribute('aria-label', 'Jane Doe');
   });

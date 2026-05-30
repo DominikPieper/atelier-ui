@@ -19,6 +19,7 @@ cd "$ROOT"
 
 # Regenerate quietly. All scripts are idempotent.
 node tools/scripts/sync-spec.mjs > /dev/null 2>&1 || true
+node tools/scripts/gen-behaviors.mjs > /dev/null 2>&1 || true
 node tools/scripts/gen-llms-txt.mjs > /dev/null 2>&1 || true
 node tools/scripts/sync-skill-discovery.mjs figma-workspace-architect > /dev/null 2>&1 || true
 
@@ -26,6 +27,7 @@ drift=$(git diff --name-only -- \
   libs/angular/src/lib/spec.ts \
   libs/react/src/lib/spec.ts \
   libs/vue/src/lib/spec.ts \
+  libs/spec/src/behaviors.generated.ts \
   docs/public/llms.txt \
   docs/public/llms-full.txt \
   'docs/public/.well-known/agent-skills/**' 2>/dev/null)

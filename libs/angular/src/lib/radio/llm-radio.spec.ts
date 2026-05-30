@@ -2,12 +2,12 @@ import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { LlmRadioGroup } from '../radio-group/llm-radio-group';
 import { LlmRadio } from './llm-radio';
+import { covers } from '../../testing/behavior';
 
 const GROUP_IMPORTS = [LlmRadioGroup, LlmRadio];
 
 describe('LlmRadio', () => {
-  // @behavior renders-input
-  it('renders a native radio input', async () => {
+  covers('radio', 'renders-input')('renders a native radio input', async () => {
     const { container } = await render(
       `<llm-radio-group name="test">
         <llm-radio radioValue="a">Option A</llm-radio>
@@ -38,8 +38,7 @@ describe('LlmRadio', () => {
   });
 
   describe('checked state', () => {
-    // @behavior checked-from-group
-    it('is checked when group value matches radioValue', async () => {
+    covers('radio', 'checked-from-group')('is checked when group value matches radioValue', async () => {
       const { container } = await render(
         `<llm-radio-group [(value)]="value" name="test">
           <llm-radio radioValue="a">Option A</llm-radio>
@@ -62,8 +61,7 @@ describe('LlmRadio', () => {
       expect(container.querySelector('llm-radio')).toHaveClass('is-checked');
     });
 
-    // @behavior select-on-click
-    it('becomes checked when clicked', async () => {
+    covers('radio', 'select-on-click')('becomes checked when clicked', async () => {
       const user = userEvent.setup();
       const { container } = await render(
         `<llm-radio-group [(value)]="value" name="test">
@@ -78,8 +76,7 @@ describe('LlmRadio', () => {
   });
 
   describe('disabled state', () => {
-    // @behavior disabled
-    it('is disabled when individually disabled', async () => {
+    covers('radio', 'disabled')('is disabled when individually disabled', async () => {
       const { container } = await render(
         `<llm-radio-group name="test">
           <llm-radio radioValue="a" [disabled]="true">Option A</llm-radio>

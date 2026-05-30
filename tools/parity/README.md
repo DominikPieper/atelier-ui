@@ -27,8 +27,9 @@ Pick the gate type per kind of drift:
 | **barrel-export** | each entry is re-exported from the public entry point | every component is in `src/index.ts` |
 | **union-in-css** | each member of a typed union has a matching CSS class | spec `variant`/`size` members ↔ `.variant-*` classes |
 | **value-parity** | a value extracted from N sources is equal | default of each axis prop matches across adapters + docs |
-| **marker-coverage** | each manifest id is tagged in every implementation | `// @behavior <id>` in each adapter's spec |
-| **generated** | a generated artifact equals a fresh regeneration | `llms.txt`, cookbook manifest (`gen … --check`) |
+| **marker-coverage** | each manifest id is tagged in every implementation | (generic, language-agnostic) a `<marker> <id>` string tag per impl |
+| **typed-coverage** | each manifest id is *bound to a test* by a typed call | `covers('<subject>','<id>')(…)` in each adapter's spec — Atelier's actual behavior gate |
+| **generated** | a generated artifact equals a fresh regeneration | `llms.txt`, cookbook manifest, `behaviors.generated.ts` (`gen … --check`) |
 
 `mirror`, `dir-parity`, `file-present`, `barrel-export`, `generated` are a few
 lines each — write them inline. `union-in-css` and `value-parity` need light
@@ -68,13 +69,46 @@ Manifest entries marked `default-is-base`-style exceptions, per-implementation
 allowances, etc. are kept in the manifest / a small allowlist — see how
 `check-variants.js` documents its exceptions.
 
+## behavior-coverage (the typed gate Atelier actually runs)
+
+`marker-coverage` proves a *string* exists somewhere in the joined files — it
+can sit above the wrong test, in dead code, or be mistyped silently. When the
+implementations are TypeScript, `behavior-coverage.mjs` is strictly better: the
+manifest is also code-generated into `libs/spec/src/behaviors.generated.ts`
+(`gen-behaviors.mjs`, a `generated` gate), and tests declare coverage with a
+typed call instead of a comment:
+
+```ts
+import { covers } from '../../testing/behavior';
+covers('button', 'click-emits')('emits a click', async () => { /* … */ });
+```
+
+`covers<S>(subject, id)` types `id` as `BehaviorId<S>`, so a wrong id is a
+**compile error** (not a silent miss). The gate AST-scans for `covers('s','id')`
+call expressions — still static, never runs the tests — and counts a binding
+only when the call is actually invoked as a test (not a bare statement, a
+comment, a string, or a `.skip`/`.only`/`.todo` chain), enforcing the same
+cross-framework parity:
+
+```
+node tools/parity/behavior-coverage.mjs tools/parity/behavior.config.mjs
+```
+
+Same config as `marker-coverage` minus `marker` (it scans the `binder` call,
+default `covers`). Prefer this whenever the implementations are TypeScript;
+keep `marker-coverage` for language-agnostic repos.
+
 ## Reuse in another repo
 
 1. Copy `tools/parity/marker-coverage.mjs` (no Atelier paths are baked in — they
    all live in the config).
 2. Write a `*.config.mjs` for your subjects/implementations.
-3. Add `"check:behavior": "node tools/parity/marker-coverage.mjs path/to/config.mjs"`
-   to `package.json`, fold it into a `check:all` aggregate.
+3. Wire it into `package.json` and fold into a `check:all` aggregate. For a
+   language-agnostic repo:
+   `"check:behavior": "node tools/parity/marker-coverage.mjs path/to/config.mjs"`.
+   For a TypeScript repo, prefer the typed gate above:
+   `"check:behavior": "node tools/parity/behavior-coverage.mjs path/to/config.mjs"`
+   (paired with a generated typed manifest + a `--check` drift gate).
 4. Run `check:all` from a **pre-push hook** (so drift is caught locally) and a
    **CI** step (so it is caught for everyone). Atelier's hook lives at
    `tools/git-hooks/pre-push`; install with `tools/scripts/install-hooks.sh`.

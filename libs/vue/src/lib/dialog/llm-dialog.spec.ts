@@ -4,6 +4,7 @@ import LlmDialog from './llm-dialog.vue';
 import LlmDialogHeader from './llm-dialog-header.vue';
 import LlmDialogContent from './llm-dialog-content.vue';
 import LlmDialogFooter from './llm-dialog-footer.vue';
+import { covers } from '../../testing/behavior';
 
 // jsdom does not implement showModal/close natively; polyfill for tests
 beforeEach(() => {
@@ -30,14 +31,12 @@ const DialogFixture = {
 };
 
 describe('LlmDialog', () => {
-  // @behavior render-dialog-element
-  it('renders dialog element', () => {
+  covers('dialog', 'render-dialog-element')('renders dialog element', () => {
     const { container } = render(DialogFixture, { props: { open: false } });
     expect(container.querySelector('dialog')).toBeInTheDocument();
   });
 
-  // @behavior open-shows-modal
-  it('calls showModal when open becomes true', async () => {
+  covers('dialog', 'open-shows-modal')('calls showModal when open becomes true', async () => {
     const { rerender } = render(DialogFixture, { props: { open: false } });
     await rerender({ open: true });
     const dialog = document.querySelector('dialog') as HTMLDialogElement;
@@ -51,8 +50,7 @@ describe('LlmDialog', () => {
     expect(screen.getByText('Footer actions')).toBeInTheDocument();
   });
 
-  // @behavior close-button
-  it('close button emits update:open with false', async () => {
+  covers('dialog', 'close-button')('close button emits update:open with false', async () => {
     const user = userEvent.setup();
     const { emitted } = render(DialogFixture, { props: { open: true } });
     const closeBtn = screen.getByRole('button', { name: 'Close dialog' });
@@ -60,14 +58,12 @@ describe('LlmDialog', () => {
     expect(emitted()['update:open']).toEqual([[false]]);
   });
 
-  // @behavior size-class
-  it('applies size class to panel', () => {
+  covers('dialog', 'size-class')('applies size class to panel', () => {
     const { container } = render(LlmDialog, { props: { open: true, size: 'lg' } });
     expect(container.querySelector('.panel')).toHaveClass('size-lg');
   });
 
-  // @behavior aria-modal
-  it('sets aria-modal', () => {
+  covers('dialog', 'aria-modal')('sets aria-modal', () => {
     const { container } = render(LlmDialog, { props: { open: false } });
     expect(container.querySelector('dialog')).toHaveAttribute('aria-modal', 'true');
   });

@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
+import { covers } from '../../testing/behavior';
 import { LlmBadge } from './llm-badge';
 
 describe('LlmBadge', () => {
-  // @behavior render-default
-  it('renders without error', () => {
+  covers('badge', 'render-default')('renders without error', () => {
     render(<LlmBadge>Active</LlmBadge>);
     expect(screen.getByText('Active')).toBeInTheDocument();
   });

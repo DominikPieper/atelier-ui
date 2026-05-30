@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
+import { covers } from '../../testing/behavior';
 import { LlmToggle } from './llm-toggle';
 
 describe('LlmToggle', () => {
-  // @behavior role-switch
-  it('renders a native checkbox input with role=switch', async () => {
+  covers('toggle', 'role-switch')('renders a native checkbox input with role=switch', async () => {
     const { container } = await render('<llm-toggle>Label</llm-toggle>', {
       imports: [LlmToggle],
     });
@@ -26,8 +26,7 @@ describe('LlmToggle', () => {
   });
 
   describe('checked state', () => {
-    // @behavior reflects-checked
-    it('reflects checked=true via attribute', async () => {
+    covers('toggle', 'reflects-checked')('reflects checked=true via attribute', async () => {
       const { container } = await render(
         '<llm-toggle [checked]="true">Label</llm-toggle>',
         { imports: [LlmToggle] }
@@ -43,8 +42,7 @@ describe('LlmToggle', () => {
       expect(container.querySelector('llm-toggle')).toHaveClass('is-checked');
     });
 
-    // @behavior toggle-emits
-    it('toggles checked when clicked', async () => {
+    covers('toggle', 'toggle-emits')('toggles checked when clicked', async () => {
       const user = userEvent.setup();
       const { container } = await render('<llm-toggle>Label</llm-toggle>', {
         imports: [LlmToggle],
@@ -56,8 +54,7 @@ describe('LlmToggle', () => {
       expect(input).not.toBeChecked();
     });
 
-    // @behavior aria-checked
-    it('sets aria-checked attribute', async () => {
+    covers('toggle', 'aria-checked')('sets aria-checked attribute', async () => {
       const { container } = await render(
         '<llm-toggle [checked]="true">Label</llm-toggle>',
         { imports: [LlmToggle] }
@@ -70,8 +67,7 @@ describe('LlmToggle', () => {
   });
 
   describe('disabled state', () => {
-    // @behavior disabled
-    it('disables the native input', async () => {
+    covers('toggle', 'disabled')('disables the native input', async () => {
       const { container } = await render(
         '<llm-toggle [disabled]="true">Label</llm-toggle>',
         { imports: [LlmToggle] }
@@ -185,8 +181,7 @@ describe('LlmToggle', () => {
       expect(container.querySelector('.errors')).not.toBeInTheDocument();
     });
 
-    // @behavior errors
-    it('shows errors when touched and invalid', async () => {
+    covers('toggle', 'errors')('shows errors when touched and invalid', async () => {
       const user = userEvent.setup();
       const { container } = await render(
         '<llm-toggle [invalid]="true" [errors]="errors">Label</llm-toggle>',

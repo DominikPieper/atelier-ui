@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/vue';
 import userEvent from '@testing-library/user-event';
 import LlmRadio from './llm-radio.vue';
 import LlmRadioGroup from '../radio-group/llm-radio-group.vue';
+import { covers } from '../../testing/behavior';
 
 const RadioWithGroup = {
   components: { LlmRadioGroup, LlmRadio },
@@ -21,8 +22,7 @@ const RadioWithGroup = {
 };
 
 describe('LlmRadio', () => {
-  // @behavior renders-input
-  it('renders a native radio input', () => {
+  covers('radio', 'renders-input')('renders a native radio input', () => {
     const { container } = render(RadioWithGroup, { props: { modelValue: '' } });
     expect(container.querySelector('input[type="radio"]')).toBeInTheDocument();
   });
@@ -37,23 +37,20 @@ describe('LlmRadio', () => {
     expect(screen.getByRole('radio', { name: 'Option A' })).not.toBeChecked();
   });
 
-  // @behavior checked-from-group
-  it('is checked when group value matches radioValue', () => {
+  covers('radio', 'checked-from-group')('is checked when group value matches radioValue', () => {
     render(RadioWithGroup, { props: { modelValue: 'a' } });
     expect(screen.getByRole('radio', { name: 'Option A' })).toBeChecked();
     expect(screen.getByRole('radio', { name: 'Option B' })).not.toBeChecked();
   });
 
-  // @behavior select-on-click
-  it('becomes checked when clicked', async () => {
+  covers('radio', 'select-on-click')('becomes checked when clicked', async () => {
     const user = userEvent.setup();
     const { emitted } = render(RadioWithGroup, { props: { modelValue: '' } });
     await user.click(screen.getByRole('radio', { name: 'Option A' }));
     expect(emitted()['update:modelValue']).toEqual([['a']]);
   });
 
-  // @behavior disabled
-  it('is disabled when individually disabled', () => {
+  covers('radio', 'disabled')('is disabled when individually disabled', () => {
     render(RadioWithGroup, { props: { modelValue: '', radioDisabled: true } });
     expect(screen.getByRole('radio', { name: 'Option A' })).toBeDisabled();
   });

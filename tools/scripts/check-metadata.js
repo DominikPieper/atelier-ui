@@ -155,10 +155,21 @@ function validateMetadata(specName, meta, file) {
 
   if (!Array.isArray(meta.specNames) || meta.specNames.length === 0) {
     errors.push(`${tag}: 'specNames' must be a non-empty array.`);
-  } else if (!meta.specNames.includes(specName)) {
-    errors.push(
-      `${tag}: 'specNames' (${JSON.stringify(meta.specNames)}) does not include '${specName}'.`
-    );
+  } else {
+    if (!meta.specNames.includes(specName)) {
+      errors.push(
+        `${tag}: 'specNames' (${JSON.stringify(meta.specNames)}) does not include '${specName}'.`
+      );
+    }
+    // Every listed spec must resolve to a real exported Llm*Spec interface, so
+    // a renamed or mistyped spec in a metadata file can't drift unnoticed.
+    for (const sn of meta.specNames) {
+      if (!specInterfaces.includes(sn)) {
+        errors.push(
+          `${tag}: 'specNames' references '${sn}' which is not an exported Llm*Spec interface in libs/spec/src/index.ts.`
+        );
+      }
+    }
   }
   if (typeof meta.purpose !== 'string' || meta.purpose.trim().length === 0) {
     errors.push(`${tag}: 'purpose' must be a non-empty string.`);

@@ -4,6 +4,7 @@ import { flushPromises } from '@vue/test-utils';
 import { ref } from 'vue';
 import LlmStepper from './llm-stepper.vue';
 import LlmStep from './llm-step.vue';
+import { covers } from '../../testing/behavior';
 
 const Controlled = {
   components: { LlmStepper, LlmStep },
@@ -23,8 +24,7 @@ const Controlled = {
 
 describe('LlmStepper', () => {
   describe('rendering', () => {
-    // @behavior renders-tablist
-    it('renders a tablist', async () => {
+    covers('stepper', 'renders-tablist')('renders a tablist', async () => {
       render(Controlled);
       await flushPromises();
       expect(screen.getByRole('tablist')).toBeInTheDocument();
@@ -44,8 +44,7 @@ describe('LlmStepper', () => {
       expect(screen.getByRole('tab', { name: /Review/i })).toBeInTheDocument();
     });
 
-    // @behavior first-panel-default
-    it('shows first step panel by default', async () => {
+    covers('stepper', 'first-panel-default')('shows first step panel by default', async () => {
       render(Controlled);
       await flushPromises();
       const panels = screen.getAllByRole('tabpanel', { hidden: true });
@@ -64,8 +63,7 @@ describe('LlmStepper', () => {
   });
 
   describe('ARIA attributes', () => {
-    // @behavior aria-selected-active
-    it('sets aria-selected on active step', async () => {
+    covers('stepper', 'aria-selected-active')('sets aria-selected on active step', async () => {
       render(Controlled);
       await flushPromises();
       const tabs = screen.getAllByRole('tab');
@@ -86,8 +84,7 @@ describe('LlmStepper', () => {
   });
 
   describe('click navigation', () => {
-    // @behavior click-navigates
-    it('clicking a step navigates to it', async () => {
+    covers('stepper', 'click-navigates')('clicking a step navigates to it', async () => {
       const user = userEvent.setup();
       render(Controlled);
       await flushPromises();
@@ -97,8 +94,7 @@ describe('LlmStepper', () => {
       expect(screen.getByRole('tab', { name: /Profile/i })).toHaveAttribute('aria-selected', 'true');
     });
 
-    // @behavior disabled-step-noop
-    it('clicking a disabled step does nothing', async () => {
+    covers('stepper', 'disabled-step-noop')('clicking a disabled step does nothing', async () => {
       const user = userEvent.setup();
       const { emitted } = render(LlmStepper, {
         props: { activeStep: 0 },
@@ -139,8 +135,7 @@ describe('LlmStepper', () => {
   });
 
   describe('states', () => {
-    // @behavior completed-class
-    it('applies is-completed class to completed non-active steps', async () => {
+    covers('stepper', 'completed-class')('applies is-completed class to completed non-active steps', async () => {
       const { container } = render({
         components: { LlmStepper, LlmStep },
         template: `
@@ -155,8 +150,7 @@ describe('LlmStepper', () => {
       expect(items[0]).toHaveClass('is-completed');
     });
 
-    // @behavior error-class
-    it('applies is-error class to error steps', async () => {
+    covers('stepper', 'error-class')('applies is-error class to error steps', async () => {
       const { container } = render({
         components: { LlmStepper, LlmStep },
         template: `
@@ -179,8 +173,7 @@ describe('LlmStepper', () => {
       expect(container.querySelector('.llm-stepper')).toHaveClass('orientation-horizontal');
     });
 
-    // @behavior orientation-vertical
-    it('applies orientation-vertical class', async () => {
+    covers('stepper', 'orientation-vertical')('applies orientation-vertical class', async () => {
       const { container } = render({
         components: { LlmStepper, LlmStep },
         template: `

@@ -12,6 +12,7 @@
     "src/**/*.spec.ts",
     "src/**/*.test.ts",
     "src/test-setup.ts",
-    "src/**/*.stories.ts"
+    "src/**/*.stories.ts",
+    "src/**/testing/**"
   ]
 }

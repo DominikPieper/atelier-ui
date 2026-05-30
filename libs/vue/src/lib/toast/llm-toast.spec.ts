@@ -4,6 +4,7 @@ import { defineComponent } from 'vue';
 import LlmToastProvider from './llm-toast-provider.vue';
 import LlmToastContainer from './llm-toast-container.vue';
 import { useLlmToast } from './llm-toast';
+import { covers } from '../../testing/behavior';
 
 
 const TriggerChild = defineComponent({
@@ -23,8 +24,7 @@ const TriggerChild = defineComponent({
 });
 
 describe('LlmToast', () => {
-  // @behavior show-adds
-  it('shows a toast when show() is called', async () => {
+  covers('toast', 'show-adds')('shows a toast when show() is called', async () => {
     const user = userEvent.setup();
     render({
       components: { LlmToastProvider, LlmToastContainer, TriggerChild },
@@ -34,8 +34,7 @@ describe('LlmToast', () => {
     expect(screen.getByText('Hello!')).toBeInTheDocument();
   });
 
-  // @behavior variant-class
-  it('applies variant class to toast', async () => {
+  covers('toast', 'variant-class')('applies variant class to toast', async () => {
     const user = userEvent.setup();
     const { container } = render({
       components: { LlmToastProvider, LlmToastContainer, TriggerChild },
@@ -45,8 +44,7 @@ describe('LlmToast', () => {
     expect(container.querySelector('.llm-toast')).toHaveClass('variant-danger');
   });
 
-  // @behavior dismiss-button-click
-  it('dismisses a toast when dismiss button is clicked', async () => {
+  covers('toast', 'dismiss-button-click')('dismisses a toast when dismiss button is clicked', async () => {
     const user = userEvent.setup();
     render({
       components: { LlmToastProvider, LlmToastContainer, TriggerChild },
@@ -73,8 +71,7 @@ describe('LlmToast', () => {
     expect(screen.queryByText('Error occurred')).not.toBeInTheDocument();
   });
 
-  // @behavior position-class
-  it('applies position class to container', () => {
+  covers('toast', 'position-class')('applies position class to container', () => {
     const { container } = render({
       components: { LlmToastProvider, LlmToastContainer },
       template: `<LlmToastProvider><LlmToastContainer position="top-center" /></LlmToastProvider>`,

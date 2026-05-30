@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
+import { covers } from '../../testing/behavior';
 import {
   LlmChat,
   LlmChatHeader,
@@ -36,8 +37,7 @@ beforeAll(() => {
 
 describe('LlmChat', () => {
   describe('variant classes', () => {
-    // @behavior variant-class
-    it.each(['drawer', 'popup', 'inline'] as const)(
+    covers('chat', 'variant-class').each(['drawer', 'popup', 'inline'] as const)(
       'applies variant-%s class to host',
       async (variant) => {
         const { container } = await render(
@@ -62,8 +62,7 @@ describe('LlmChat', () => {
     );
   });
 
-  // @behavior inline-variant
-  it('inline variant renders content without overlay chrome', async () => {
+  covers('chat', 'inline-variant')('inline variant renders content without overlay chrome', async () => {
     const { container } = await render(
       `<llm-chat variant="inline" [open]="true">Hello</llm-chat>`,
       { imports: ALL_CHAT },
@@ -74,8 +73,7 @@ describe('LlmChat', () => {
     expect(screen.getByText('Hello')).toBeInTheDocument();
   });
 
-  // @behavior popup-variant
-  it('popup variant renders the floating bubble', async () => {
+  covers('chat', 'popup-variant')('popup variant renders the floating bubble', async () => {
     const { container } = await render(
       `<llm-chat variant="popup" [open]="true">Body</llm-chat>`,
       { imports: ALL_CHAT },
@@ -104,8 +102,7 @@ describe('LlmChat', () => {
       },
     );
 
-    // @behavior is-failed
-    it('applies is-failed class when failed=true', async () => {
+    covers('chat', 'is-failed')('applies is-failed class when failed=true', async () => {
       const { container } = await render(
         `<llm-chat-message role="assistant" [failed]="true">err</llm-chat-message>`,
         { imports: ALL_CHAT },
@@ -128,8 +125,7 @@ describe('LlmChat', () => {
   });
 
   describe('LlmChatInput', () => {
-    // @behavior send-button-idle
-    it('renders a Send button when status is idle', async () => {
+    covers('chat', 'send-button-idle')('renders a Send button when status is idle', async () => {
       const { container } = await render(
         `<llm-chat variant="inline" status="idle" [open]="true">
           <llm-chat-input />
@@ -139,8 +135,7 @@ describe('LlmChat', () => {
       expect(container.querySelector('button.variant-primary')).toHaveTextContent('Send');
     });
 
-    // @behavior stop-button-streaming
-    it('renders a Stop button when status is streaming', async () => {
+    covers('chat', 'stop-button-streaming')('renders a Stop button when status is streaming', async () => {
       const { container } = await render(
         `<llm-chat variant="inline" status="streaming" [open]="true">
           <llm-chat-input />
@@ -151,8 +146,7 @@ describe('LlmChat', () => {
       expect(container.querySelector('textarea')).toBeDisabled();
     });
 
-    // @behavior emits-send
-    it('emits send with the typed text on Enter', async () => {
+    covers('chat', 'emits-send')('emits send with the typed text on Enter', async () => {
       const user = userEvent.setup();
       const onSend = vi.fn();
       const { container } = await render(
@@ -166,8 +160,7 @@ describe('LlmChat', () => {
       expect(onSend).toHaveBeenCalledWith('hello');
     });
 
-    // @behavior emits-stop
-    it('emits stop when Stop button is clicked while streaming', async () => {
+    covers('chat', 'emits-stop')('emits stop when Stop button is clicked while streaming', async () => {
       const user = userEvent.setup();
       const onStop = vi.fn();
       const { container } = await render(

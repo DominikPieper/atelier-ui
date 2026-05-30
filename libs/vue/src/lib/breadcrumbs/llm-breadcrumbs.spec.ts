@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/vue';
 import LlmBreadcrumbs from './llm-breadcrumbs.vue';
 import LlmBreadcrumbItem from './llm-breadcrumb-item.vue';
+import { covers } from '../../testing/behavior';
 
 describe('LlmBreadcrumbs', () => {
-  // @behavior nav-aria-label
-  it('renders a nav with aria-label', () => {
+  covers('breadcrumbs', 'nav-aria-label')('renders a nav with aria-label', () => {
     render(LlmBreadcrumbs);
     const nav = screen.getByRole('navigation', { name: 'Breadcrumb' });
     expect(nav).toBeInTheDocument();
@@ -20,8 +20,7 @@ describe('LlmBreadcrumbs', () => {
 });
 
 describe('LlmBreadcrumbItem', () => {
-  // @behavior link-when-href
-  it('renders a link when href is provided and current is false', () => {
+  covers('breadcrumbs', 'link-when-href')('renders a link when href is provided and current is false', () => {
     render(LlmBreadcrumbItem, {
       props: { href: '/home' },
       slots: { default: 'Home' },
@@ -48,8 +47,7 @@ describe('LlmBreadcrumbItem', () => {
     expect(span).not.toHaveAttribute('aria-current');
   });
 
-  // @behavior current-class
-  it('applies is-current class when current', () => {
+  covers('breadcrumbs', 'current-class')('applies is-current class when current', () => {
     const { container } = render(LlmBreadcrumbItem, { props: { current: true } });
     expect(container.firstChild).toHaveClass('is-current');
   });

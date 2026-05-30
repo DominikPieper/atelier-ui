@@ -6,6 +6,7 @@ import {
   LlmToastContainer,
   LlmToastService,
 } from './llm-toast';
+import { covers } from '../../testing/behavior';
 
 describe('LlmToastService', () => {
   let service: LlmToastService;
@@ -22,8 +23,7 @@ describe('LlmToastService', () => {
     expect(service.toasts()).toEqual([]);
   });
 
-  // @behavior show-adds
-  it('show() adds a toast and returns an id', () => {
+  covers('toast', 'show-adds')('show() adds a toast and returns an id', () => {
     const id = service.show('Hello');
     expect(id).toBeTruthy();
     expect(service.toasts()).toHaveLength(1);
@@ -107,8 +107,7 @@ describe('LlmToast', () => {
     expect(screen.getByText('Hello world')).toBeInTheDocument();
   });
 
-  // @behavior variant-class
-  it.each(['default', 'success', 'warning', 'danger', 'info'] as const)(
+  covers('toast', 'variant-class').each(['default', 'success', 'warning', 'danger', 'info'] as const)(
     'applies variant-%s class to host',
     async (variant) => {
       const { container } = await render(
@@ -140,8 +139,7 @@ describe('LlmToast', () => {
     expect(screen.queryByRole('button', { name: 'Dismiss' })).not.toBeInTheDocument();
   });
 
-  // @behavior dismiss-button-click
-  it('emits dismissed with toastId when dismiss button is clicked', async () => {
+  covers('toast', 'dismiss-button-click')('emits dismissed with toastId when dismiss button is clicked', async () => {
     const user = userEvent.setup();
     const dismissed = vi.fn();
     await render(
@@ -188,8 +186,7 @@ describe('LlmToastContainer', () => {
     expect(screen.getByText('Second toast')).toBeInTheDocument();
   });
 
-  // @behavior position-class
-  it('applies position class to host', async () => {
+  covers('toast', 'position-class')('applies position class to host', async () => {
     const { container } = await render(
       '<llm-toast-container position="top-center" />',
       { imports: [LlmToastContainer] }

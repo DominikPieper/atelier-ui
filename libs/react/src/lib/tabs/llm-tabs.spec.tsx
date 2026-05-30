@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { covers } from '../../testing/behavior';
 import { LlmTabGroup, LlmTab } from './llm-tabs';
 
 describe('LlmTabGroup', () => {
@@ -14,8 +15,7 @@ describe('LlmTabGroup', () => {
     expect(screen.getByRole('tab', { name: 'Tab Two' })).toBeInTheDocument();
   });
 
-  // @behavior keyboard-nav
-  it('ArrowRight moves focus to the next tab', async () => {
+  covers('tabs', 'keyboard-nav')('ArrowRight moves focus to the next tab', async () => {
     const user = userEvent.setup();
     render(
       <LlmTabGroup>
@@ -28,8 +28,7 @@ describe('LlmTabGroup', () => {
     expect(screen.getByRole('tab', { name: 'Tab Two' })).toHaveFocus();
   });
 
-  // @behavior home-end
-  it('Home focuses the first tab and End the last', async () => {
+  covers('tabs', 'home-end')('Home focuses the first tab and End the last', async () => {
     const user = userEvent.setup();
     render(
       <LlmTabGroup>
@@ -45,8 +44,7 @@ describe('LlmTabGroup', () => {
     expect(screen.getByRole('tab', { name: 'Tab One' })).toHaveFocus();
   });
 
-  // @behavior wrap
-  it('ArrowRight wraps from the last tab to the first', async () => {
+  covers('tabs', 'wrap')('ArrowRight wraps from the last tab to the first', async () => {
     const user = userEvent.setup();
     render(
       <LlmTabGroup>
@@ -60,8 +58,7 @@ describe('LlmTabGroup', () => {
     expect(screen.getByRole('tab', { name: 'Tab One' })).toHaveFocus();
   });
 
-  // @behavior skip-disabled
-  it('arrow navigation skips disabled tabs', async () => {
+  covers('tabs', 'skip-disabled')('arrow navigation skips disabled tabs', async () => {
     const user = userEvent.setup();
     render(
       <LlmTabGroup>
@@ -75,8 +72,7 @@ describe('LlmTabGroup', () => {
     expect(screen.getByRole('tab', { name: 'Tab Three' })).toHaveFocus();
   });
 
-  // @behavior first-tab-default
-  it('selects the first tab by default', () => {
+  covers('tabs', 'first-tab-default')('selects the first tab by default', () => {
     render(
       <LlmTabGroup>
         <LlmTab label="Tab One">Content One</LlmTab>
@@ -99,8 +95,7 @@ describe('LlmTabGroup', () => {
     expect(panels[1]).toHaveAttribute('hidden');
   });
 
-  // @behavior switch-on-click
-  it('switches tab on click', async () => {
+  covers('tabs', 'switch-on-click')('switches tab on click', async () => {
     const user = userEvent.setup();
     render(
       <LlmTabGroup>
@@ -136,8 +131,7 @@ describe('LlmTabGroup', () => {
     expect(screen.getByRole('tab', { name: 'Tab Two' })).toHaveAttribute('aria-selected', 'true');
   });
 
-  // @behavior disabled-tab-noop
-  it('does not select a disabled tab on click', async () => {
+  covers('tabs', 'disabled-tab-noop')('does not select a disabled tab on click', async () => {
     const user = userEvent.setup();
     render(
       <LlmTabGroup>
@@ -179,8 +173,7 @@ describe('LlmTabGroup', () => {
     expect(screen.getByRole('tab', { name: 'Tab One' })).toHaveAttribute('aria-selected', 'true');
   });
 
-  // @behavior variant-class
-  it('applies variant-pills class', () => {
+  covers('tabs', 'variant-class')('applies variant-pills class', () => {
     const { container } = render(
       <LlmTabGroup variant="pills">
         <LlmTab label="Tab One">Content</LlmTab>

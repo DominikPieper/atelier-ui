@@ -1,4 +1,5 @@
 import { render } from '@testing-library/angular';
+import { covers } from '../../testing/behavior';
 import { LlmProgress } from './llm-progress';
 
 describe('LlmProgress', () => {
@@ -12,8 +13,7 @@ describe('LlmProgress', () => {
     expect(container.querySelector('llm-progress')).toHaveAttribute('aria-valuemin', '0');
   });
 
-  // @behavior aria-value
-  it('sets aria-valuenow to the current value', async () => {
+  covers('progress', 'aria-value')('sets aria-valuenow to the current value', async () => {
     const { container } = await render('<llm-progress [value]="60" />', {
       imports: [LlmProgress],
     });
@@ -34,8 +34,7 @@ describe('LlmProgress', () => {
     expect(container.querySelector('llm-progress')).toHaveAttribute('aria-valuenow', '0');
   });
 
-  // @behavior clamp
-  it('clamps values exceeding max to max', async () => {
+  covers('progress', 'clamp')('clamps values exceeding max to max', async () => {
     const { container } = await render('<llm-progress [value]="150" />', {
       imports: [LlmProgress],
     });
@@ -96,8 +95,7 @@ describe('LlmProgress', () => {
       expect(container.querySelector('llm-progress')).toHaveClass('is-indeterminate');
     });
 
-    // @behavior indeterminate-omits-valuenow
-    it('does not set aria-valuenow when indeterminate', async () => {
+    covers('progress', 'indeterminate-omits-valuenow')('does not set aria-valuenow when indeterminate', async () => {
       const { container } = await render('<llm-progress [indeterminate]="true" />', {
         imports: [LlmProgress],
       });

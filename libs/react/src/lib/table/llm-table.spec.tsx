@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LlmTable, LlmThead, LlmTbody, LlmTr, LlmTh, LlmTd } from './llm-table';
+import { covers } from '../../testing/behavior';
 
 function BasicTable() {
   return (
@@ -27,14 +28,12 @@ function BasicTable() {
 
 describe('LlmTable', () => {
   describe('rendering', () => {
-    // @behavior renders-table
-    it('renders a table element', () => {
+    covers('table', 'renders-table')('renders a table element', () => {
       const { container } = render(<BasicTable />);
       expect(container.querySelector('table')).toBeInTheDocument();
     });
 
-    // @behavior thead-tbody
-    it('renders thead and tbody', () => {
+    covers('table', 'thead-tbody')('renders thead and tbody', () => {
       const { container } = render(<BasicTable />);
       expect(container.querySelector('thead')).toBeInTheDocument();
       expect(container.querySelector('tbody')).toBeInTheDocument();
@@ -46,8 +45,7 @@ describe('LlmTable', () => {
       expect(screen.getByText('Bob')).toBeInTheDocument();
     });
 
-    // @behavior variant-default
-    it('applies variant-default class by default', () => {
+    covers('table', 'variant-default')('applies variant-default class by default', () => {
       const { container } = render(<BasicTable />);
       expect(container.querySelector('.llm-table')).toHaveClass('variant-default');
     });
@@ -57,8 +55,7 @@ describe('LlmTable', () => {
       expect(container.querySelector('.llm-table')).toHaveClass('size-md');
     });
 
-    // @behavior sticky-header
-    it('applies is-sticky-header class when stickyHeader=true', () => {
+    covers('table', 'sticky-header')('applies is-sticky-header class when stickyHeader=true', () => {
       const { container } = render(
         <LlmTable stickyHeader>
           <LlmThead><LlmTr><LlmTh>Col</LlmTh></LlmTr></LlmThead>
@@ -70,8 +67,7 @@ describe('LlmTable', () => {
   });
 
   describe('LlmTh — sorting', () => {
-    // @behavior sort-button
-    it('renders a sort button when sortable=true', () => {
+    covers('table', 'sort-button')('renders a sort button when sortable=true', () => {
       const { container } = render(
         <LlmTable>
           <LlmThead><LlmTr><LlmTh sortable>Name</LlmTh></LlmTr></LlmThead>
@@ -81,8 +77,7 @@ describe('LlmTable', () => {
       expect(container.querySelector('.llm-th-sort-btn')).toBeInTheDocument();
     });
 
-    // @behavior no-sort-button
-    it('does not render a sort button when sortable=false', () => {
+    covers('table', 'no-sort-button')('does not render a sort button when sortable=false', () => {
       const { container } = render(
         <LlmTable>
           <LlmThead><LlmTr><LlmTh>Name</LlmTh></LlmTr></LlmThead>
@@ -182,8 +177,7 @@ describe('LlmTable', () => {
       expect(container.querySelector('input[type="checkbox"]')).not.toBeInTheDocument();
     });
 
-    // @behavior checkbox-selectable
-    it('renders a checkbox when selectable=true', () => {
+    covers('table', 'checkbox-selectable')('renders a checkbox when selectable=true', () => {
       const { container } = render(
         <LlmTable>
           <LlmTbody><LlmTr selectable><LlmTd>Row</LlmTd></LlmTr></LlmTbody>
@@ -252,8 +246,7 @@ describe('LlmTable', () => {
       expect(screen.getByText('Alice')).toBeInTheDocument();
     });
 
-    // @behavior empty-state
-    it('hides rows and shows empty state when empty=true', () => {
+    covers('table', 'empty-state')('hides rows and shows empty state when empty=true', () => {
       render(
         <LlmTable>
           <LlmTbody empty colSpan={2} emptyContent="No results found.">

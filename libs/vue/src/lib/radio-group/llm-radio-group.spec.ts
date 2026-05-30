@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/vue';
 import userEvent from '@testing-library/user-event';
+import { covers } from '../../testing/behavior';
 import LlmRadioGroup from './llm-radio-group.vue';
 import LlmRadio from '../radio/llm-radio.vue';
 
@@ -24,8 +25,7 @@ const RadioGroupWithOptions = {
 };
 
 describe('LlmRadioGroup', () => {
-  // @behavior role
-  it('renders with role radiogroup', () => {
+  covers('radio-group', 'role')('renders with role radiogroup', () => {
     render(LlmRadioGroup);
     expect(screen.getByRole('radiogroup')).toBeInTheDocument();
   });
@@ -37,23 +37,20 @@ describe('LlmRadioGroup', () => {
     expect(screen.getByRole('radio', { name: 'Enterprise' })).toBeInTheDocument();
   });
 
-  // @behavior checks-matching-value
-  it('checks the radio matching the value', () => {
+  covers('radio-group', 'checks-matching-value')('checks the radio matching the value', () => {
     render(RadioGroupWithOptions, { props: { modelValue: 'pro' } });
     expect(screen.getByRole('radio', { name: 'Pro' })).toBeChecked();
     expect(screen.getByRole('radio', { name: 'Free' })).not.toBeChecked();
   });
 
-  // @behavior value-change
-  it('emits update:value when a radio is selected', async () => {
+  covers('radio-group', 'value-change')('emits update:value when a radio is selected', async () => {
     const user = userEvent.setup();
     const { emitted } = render(RadioGroupWithOptions, { props: { modelValue: '' } });
     await user.click(screen.getByRole('radio', { name: 'Pro' }));
     expect(emitted()['update:modelValue']).toEqual([['pro']]);
   });
 
-  // @behavior keyboard-nav
-  it('ArrowDown selects the next radio', async () => {
+  covers('radio-group', 'keyboard-nav')('ArrowDown selects the next radio', async () => {
     const user = userEvent.setup();
     const { emitted } = render(RadioGroupWithOptions, { props: { modelValue: 'free' } });
     (screen.getByRole('radio', { name: 'Free' }) as HTMLElement).focus();
@@ -76,14 +73,12 @@ describe('LlmRadioGroup', () => {
     }
   });
 
-  // @behavior invalid
-  it('sets aria-invalid when invalid', () => {
+  covers('radio-group', 'invalid')('sets aria-invalid when invalid', () => {
     render(RadioGroupWithOptions, { props: { modelValue: '', invalid: true } });
     expect(screen.getByRole('radiogroup')).toHaveAttribute('aria-invalid', 'true');
   });
 
-  // @behavior errors
-  it('renders error messages', () => {
+  covers('radio-group', 'errors')('renders error messages', () => {
     render(RadioGroupWithOptions, {
       props: { modelValue: '', errors: ['Please select a plan'], invalid: true },
     });

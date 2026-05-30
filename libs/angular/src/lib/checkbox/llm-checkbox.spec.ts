@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
+import { covers } from '../../testing/behavior';
 import { LlmCheckbox } from './llm-checkbox';
 
 describe('LlmCheckbox', () => {
@@ -25,8 +26,7 @@ describe('LlmCheckbox', () => {
   });
 
   describe('checked state', () => {
-    // @behavior reflects-checked
-    it('reflects checked=true via attribute', async () => {
+    covers('checkbox', 'reflects-checked')('reflects checked=true via attribute', async () => {
       const { container } = await render(
         '<llm-checkbox [checked]="true">Label</llm-checkbox>',
         { imports: [LlmCheckbox] }
@@ -42,8 +42,7 @@ describe('LlmCheckbox', () => {
       expect(container.querySelector('llm-checkbox')).toHaveClass('is-checked');
     });
 
-    // @behavior toggle-emits
-    it('toggles checked when clicked', async () => {
+    covers('checkbox', 'toggle-emits')('toggles checked when clicked', async () => {
       const user = userEvent.setup();
       const { container } = await render('<llm-checkbox>Label</llm-checkbox>', {
         imports: [LlmCheckbox],
@@ -57,8 +56,7 @@ describe('LlmCheckbox', () => {
   });
 
   describe('disabled state', () => {
-    // @behavior disabled
-    it('disables the native input', async () => {
+    covers('checkbox', 'disabled')('disables the native input', async () => {
       const { container } = await render(
         '<llm-checkbox [disabled]="true">Label</llm-checkbox>',
         { imports: [LlmCheckbox] }
@@ -76,8 +74,7 @@ describe('LlmCheckbox', () => {
   });
 
   describe('invalid state', () => {
-    // @behavior invalid
-    it('sets aria-invalid on native input', async () => {
+    covers('checkbox', 'invalid')('sets aria-invalid on native input', async () => {
       const { container } = await render(
         '<llm-checkbox [invalid]="true">Label</llm-checkbox>',
         { imports: [LlmCheckbox] }
@@ -162,8 +159,7 @@ describe('LlmCheckbox', () => {
       expect(container.querySelector('.errors')).not.toBeInTheDocument();
     });
 
-    // @behavior errors
-    it('shows errors when touched and invalid', async () => {
+    covers('checkbox', 'errors')('shows errors when touched and invalid', async () => {
       const user = userEvent.setup();
       const { container } = await render(
         '<llm-checkbox [invalid]="true" [errors]="errors">Label</llm-checkbox>',
@@ -239,8 +235,7 @@ describe('LlmCheckbox', () => {
   });
 
   describe('indeterminate state', () => {
-    // @behavior indeterminate
-    it('sets the indeterminate DOM property when true', async () => {
+    covers('checkbox', 'indeterminate')('sets the indeterminate DOM property when true', async () => {
       const { container } = await render(
         '<llm-checkbox [indeterminate]="true">Label</llm-checkbox>',
         { imports: [LlmCheckbox] }

@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { flushPromises } from '@vue/test-utils';
 import LlmTabGroup from './llm-tab-group.vue';
 import LlmTab from './llm-tab.vue';
+import { covers } from '../../testing/behavior';
 
 const TabsFixture = {
   components: { LlmTabGroup, LlmTab },
@@ -24,10 +25,9 @@ describe('LlmTabGroup', () => {
     expect(screen.getByRole('tab', { name: 'Tab Three' })).toBeInTheDocument();
   });
 
-  // @behavior keyboard-nav
   // Vue tabs use automatic activation: ArrowRight selects the next tab
   // (React/Angular use manual activation — arrow moves focus, Enter selects).
-  it('ArrowRight activates the next tab', async () => {
+  covers('tabs', 'keyboard-nav')('ArrowRight activates the next tab', async () => {
     const user = userEvent.setup();
     render(TabsFixture);
     await flushPromises();
@@ -36,8 +36,7 @@ describe('LlmTabGroup', () => {
     expect(screen.getByRole('tab', { name: 'Tab Two' })).toHaveAttribute('aria-selected', 'true');
   });
 
-  // @behavior home-end
-  it('Home activates the first tab and End the last', async () => {
+  covers('tabs', 'home-end')('Home activates the first tab and End the last', async () => {
     const user = userEvent.setup();
     render(TabsFixture);
     await flushPromises();
@@ -48,8 +47,7 @@ describe('LlmTabGroup', () => {
     expect(screen.getByRole('tab', { name: 'Tab One' })).toHaveAttribute('aria-selected', 'true');
   });
 
-  // @behavior wrap
-  it('ArrowRight wraps from the last tab to the first', async () => {
+  covers('tabs', 'wrap')('ArrowRight wraps from the last tab to the first', async () => {
     const user = userEvent.setup();
     render(TabsFixture);
     await flushPromises();
@@ -58,8 +56,7 @@ describe('LlmTabGroup', () => {
     expect(screen.getByRole('tab', { name: 'Tab One' })).toHaveAttribute('aria-selected', 'true');
   });
 
-  // @behavior skip-disabled
-  it('arrow navigation skips disabled tabs', async () => {
+  covers('tabs', 'skip-disabled')('arrow navigation skips disabled tabs', async () => {
     const user = userEvent.setup();
     render({
       components: { LlmTabGroup, LlmTab },
@@ -77,8 +74,7 @@ describe('LlmTabGroup', () => {
     expect(screen.getByRole('tab', { name: 'Last' })).toHaveAttribute('aria-selected', 'true');
   });
 
-  // @behavior first-tab-default
-  it('first tab is selected by default', async () => {
+  covers('tabs', 'first-tab-default')('first tab is selected by default', async () => {
     render(TabsFixture);
     await flushPromises();
     expect(screen.getByRole('tab', { name: 'Tab One' })).toHaveAttribute('aria-selected', 'true');
@@ -93,8 +89,7 @@ describe('LlmTabGroup', () => {
     expect(panels[1]).toHaveAttribute('hidden');
   });
 
-  // @behavior switch-on-click
-  it('switches active tab on click', async () => {
+  covers('tabs', 'switch-on-click')('switches active tab on click', async () => {
     const user = userEvent.setup();
     render(TabsFixture);
     await flushPromises();
@@ -113,8 +108,7 @@ describe('LlmTabGroup', () => {
     expect(panels[0]).toHaveAttribute('hidden');
   });
 
-  // @behavior variant-class
-  it('applies variant class', () => {
+  covers('tabs', 'variant-class')('applies variant class', () => {
     const { container } = render({
       components: { LlmTabGroup, LlmTab },
       template: `<LlmTabGroup variant="pills"><LlmTab label="A">A</LlmTab></LlmTabGroup>`,
@@ -122,8 +116,7 @@ describe('LlmTabGroup', () => {
     expect(container.querySelector('.llm-tab-group')).toHaveClass('variant-pills');
   });
 
-  // @behavior disabled-tab-noop
-  it('disabled tab cannot be selected', async () => {
+  covers('tabs', 'disabled-tab-noop')('disabled tab cannot be selected', async () => {
     render({
       components: { LlmTabGroup, LlmTab },
       template: `

@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
+import { covers } from '../../testing/behavior';
 import { LlmPagination } from './llm-pagination';
 
 describe('LlmPagination', () => {
@@ -27,8 +28,7 @@ describe('LlmPagination', () => {
     expect(screen.getByRole('button', { name: 'Last page' })).toBeInTheDocument();
   });
 
-  // @behavior hide-first-last
-  it('does not render first/last buttons when showFirstLast=false', async () => {
+  covers('pagination', 'hide-first-last')('does not render first/last buttons when showFirstLast=false', async () => {
     await render('<llm-pagination [pageCount]="5" [showFirstLast]="false" />', {
       imports: [LlmPagination],
     });
@@ -36,22 +36,19 @@ describe('LlmPagination', () => {
     expect(screen.queryByRole('button', { name: 'Last page' })).not.toBeInTheDocument();
   });
 
-  // @behavior disables-prev-first
-  it('disables prev/first buttons on page 1', async () => {
+  covers('pagination', 'disables-prev-first')('disables prev/first buttons on page 1', async () => {
     await render('<llm-pagination [page]="1" [pageCount]="5" />', { imports: [LlmPagination] });
     expect(screen.getByRole('button', { name: 'Previous page' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'First page' })).toBeDisabled();
   });
 
-  // @behavior disables-next-last
-  it('disables next/last buttons on last page', async () => {
+  covers('pagination', 'disables-next-last')('disables next/last buttons on last page', async () => {
     await render('<llm-pagination [page]="5" [pageCount]="5" />', { imports: [LlmPagination] });
     expect(screen.getByRole('button', { name: 'Next page' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Last page' })).toBeDisabled();
   });
 
-  // @behavior aria-current
-  it('sets aria-current="page" on the active page button', async () => {
+  covers('pagination', 'aria-current')('sets aria-current="page" on the active page button', async () => {
     await render('<llm-pagination [page]="3" [pageCount]="5" />', { imports: [LlmPagination] });
     expect(screen.getByRole('button', { name: 'Page 3' })).toHaveAttribute(
       'aria-current',
@@ -152,8 +149,7 @@ describe('LlmPagination', () => {
       expect(container.querySelector('.page-btn.is-active')).toHaveTextContent('5');
     });
 
-    // @behavior page-change-on-click
-    it('navigates to a specific page on click', async () => {
+    covers('pagination', 'page-change-on-click')('navigates to a specific page on click', async () => {
       const user = userEvent.setup();
       const { container } = await render(
         '<llm-pagination [(page)]="page" [pageCount]="10" [siblingCount]="2" />',

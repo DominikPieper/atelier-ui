@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { covers } from '../../testing/behavior';
 import { LlmRadioGroup } from '../radio-group/llm-radio-group';
 import { LlmRadio } from './llm-radio';
 
@@ -7,8 +8,7 @@ import { LlmRadio } from './llm-radio';
 // Standalone tests ensure it renders correctly in isolation (with default context).
 
 describe('LlmRadio (standalone / default context)', () => {
-  // @behavior renders-input
-  it('renders a radio input', () => {
+  covers('radio', 'renders-input')('renders a radio input', () => {
     render(<LlmRadio radioValue="a">Option A</LlmRadio>);
     expect(screen.getByRole('radio')).toBeInTheDocument();
   });
@@ -23,8 +23,7 @@ describe('LlmRadio (standalone / default context)', () => {
     expect(screen.getByRole('radio')).not.toBeChecked();
   });
 
-  // @behavior disabled
-  it('is disabled when disabled prop is true', () => {
+  covers('radio', 'disabled')('is disabled when disabled prop is true', () => {
     render(<LlmRadio radioValue="a" disabled>A</LlmRadio>);
     expect(screen.getByRole('radio')).toBeDisabled();
   });
@@ -40,8 +39,7 @@ describe('LlmRadio (standalone / default context)', () => {
 });
 
 describe('LlmRadio (within LlmRadioGroup)', () => {
-  // @behavior checked-from-group
-  it('reflects checked state from group value', () => {
+  covers('radio', 'checked-from-group')('reflects checked state from group value', () => {
     render(
       <LlmRadioGroup value="b" name="g">
         <LlmRadio radioValue="a">A</LlmRadio>
@@ -52,8 +50,7 @@ describe('LlmRadio (within LlmRadioGroup)', () => {
     expect(screen.getByDisplayValue('b')).toBeChecked();
   });
 
-  // @behavior select-on-click
-  it('calls group onValueChange on change', async () => {
+  covers('radio', 'select-on-click')('calls group onValueChange on change', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(

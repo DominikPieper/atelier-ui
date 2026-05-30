@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
+import { covers } from '../../testing/behavior';
 import { LlmButton } from './llm-button';
 
 describe('LlmButton', () => {
-  // @behavior default-render
-  it('renders without error with default inputs', async () => {
+  covers('button', 'default-render')('renders without error with default inputs', async () => {
     await render('<llm-button>Click me</llm-button>', { imports: [LlmButton] });
     expect(screen.getByText('Click me')).toBeInTheDocument();
   });
@@ -37,8 +37,7 @@ describe('LlmButton', () => {
   });
 
   describe('disabled state', () => {
-    // @behavior disabled-state
-    it('sets aria-disabled when disabled input is true', async () => {
+    covers('button', 'disabled-state')('sets aria-disabled when disabled input is true', async () => {
       const { container } = await render(
         '<llm-button [disabled]="true">Btn</llm-button>',
         { imports: [LlmButton] }
@@ -56,8 +55,7 @@ describe('LlmButton', () => {
   });
 
   describe('loading state', () => {
-    // @behavior loading-spinner
-    it('renders spinner when loading', async () => {
+    covers('button', 'loading-spinner')('renders spinner when loading', async () => {
       const { container } = await render(
         '<llm-button [loading]="true">Btn</llm-button>',
         { imports: [LlmButton] }
@@ -87,8 +85,7 @@ describe('LlmButton', () => {
     expect(screen.getByText('Save Changes')).toBeInTheDocument();
   });
 
-  // @behavior click-emits
-  it('emits native click events when not disabled', async () => {
+  covers('button', 'click-emits')('emits native click events when not disabled', async () => {
     const user = userEvent.setup();
     const onClick = vi.fn();
     const { container } = await render(
@@ -99,8 +96,7 @@ describe('LlmButton', () => {
     expect(onClick).toHaveBeenCalledOnce();
   });
 
-  // @behavior disabled-no-click
-  it('does not emit click when disabled', async () => {
+  covers('button', 'disabled-no-click')('does not emit click when disabled', async () => {
     const user = userEvent.setup();
     const onClick = vi.fn();
     const { container } = await render(

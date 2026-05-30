@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LlmRadioGroup } from './llm-radio-group';
 import { LlmRadio } from '../radio/llm-radio';
+import { covers } from '../../testing/behavior';
 
 describe('LlmRadioGroup', () => {
   it('renders children', () => {
@@ -15,8 +16,7 @@ describe('LlmRadioGroup', () => {
     expect(screen.getByText('Pro')).toBeInTheDocument();
   });
 
-  // @behavior role
-  it('has role="radiogroup"', () => {
+  covers('radio-group', 'role')('has role="radiogroup"', () => {
     render(
       <LlmRadioGroup name="plan">
         <LlmRadio radioValue="free">Free</LlmRadio>
@@ -25,8 +25,7 @@ describe('LlmRadioGroup', () => {
     expect(screen.getByRole('radiogroup')).toBeInTheDocument();
   });
 
-  // @behavior checks-matching-value
-  it('checks the radio matching value', () => {
+  covers('radio-group', 'checks-matching-value')('checks the radio matching value', () => {
     render(
       <LlmRadioGroup value="pro" name="plan">
         <LlmRadio radioValue="free">Free</LlmRadio>
@@ -38,8 +37,7 @@ describe('LlmRadioGroup', () => {
     expect(radios[1]).toBeChecked();
   });
 
-  // @behavior value-change
-  it('calls onValueChange when a radio is selected', async () => {
+  covers('radio-group', 'value-change')('calls onValueChange when a radio is selected', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
@@ -52,8 +50,7 @@ describe('LlmRadioGroup', () => {
     expect(onChange).toHaveBeenCalledWith('pro');
   });
 
-  // @behavior keyboard-nav
-  it('ArrowDown selects the next radio', async () => {
+  covers('radio-group', 'keyboard-nav')('ArrowDown selects the next radio', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
@@ -105,8 +102,7 @@ describe('LlmRadioGroup', () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  // @behavior invalid
-  it('applies is-invalid class when invalid', () => {
+  covers('radio-group', 'invalid')('applies is-invalid class when invalid', () => {
     const { container } = render(
       <LlmRadioGroup invalid name="plan">
         <LlmRadio radioValue="free">Free</LlmRadio>
@@ -115,8 +111,7 @@ describe('LlmRadioGroup', () => {
     expect(container.firstChild).toHaveClass('is-invalid');
   });
 
-  // @behavior errors
-  it('shows error messages when invalid and errors provided', () => {
+  covers('radio-group', 'errors')('shows error messages when invalid and errors provided', () => {
     render(
       <LlmRadioGroup invalid errors={['Please select a plan']} name="plan">
         <LlmRadio radioValue="free">Free</LlmRadio>

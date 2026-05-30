@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { covers } from '../../testing/behavior';
 import { LlmDrawer, LlmDrawerHeader, LlmDrawerContent, LlmDrawerFooter } from './llm-drawer';
 
 beforeEach(() => {
@@ -8,14 +9,12 @@ beforeEach(() => {
 });
 
 describe('LlmDrawer', () => {
-  // @behavior render-dialog-element
-  it('renders dialog element', () => {
+  covers('drawer', 'render-dialog-element')('renders dialog element', () => {
     render(<LlmDrawer open={false} />);
     expect(document.querySelector('dialog')).toBeInTheDocument();
   });
 
-  // @behavior open-shows-modal
-  it('calls showModal when open becomes true', () => {
+  covers('drawer', 'open-shows-modal')('calls showModal when open becomes true', () => {
     render(<LlmDrawer open={true} />);
     expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalled();
   });
@@ -47,8 +46,7 @@ describe('LlmDrawer', () => {
     expect(screen.getByText('Footer')).toBeInTheDocument();
   });
 
-  // @behavior close-button
-  it('close button calls onOpenChange with false', async () => {
+  covers('drawer', 'close-button')('close button calls onOpenChange with false', async () => {
     const user = userEvent.setup();
     const onOpenChange = vi.fn();
     const { container } = render(
@@ -82,8 +80,7 @@ describe('LlmDrawer', () => {
     }
   );
 
-  // @behavior is-open-class
-  it('applies is-open class when open', () => {
+  covers('drawer', 'is-open-class')('applies is-open class when open', () => {
     const { container } = render(<LlmDrawer open={true} />);
     expect(container.firstChild).toHaveClass('is-open');
   });
@@ -93,8 +90,7 @@ describe('LlmDrawer', () => {
     expect(container.firstChild).not.toHaveClass('is-open');
   });
 
-  // @behavior aria-modal
-  it('renders with aria-modal on dialog element', () => {
+  covers('drawer', 'aria-modal')('renders with aria-modal on dialog element', () => {
     render(<LlmDrawer open={true} />);
     expect(document.querySelector('dialog')).toHaveAttribute('aria-modal', 'true');
   });

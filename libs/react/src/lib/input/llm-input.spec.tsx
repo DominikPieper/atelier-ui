@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LlmInput } from './llm-input';
+import { covers } from '../../testing/behavior';
 
 describe('LlmInput', () => {
-  // @behavior renders-input
-  it('renders an input element', () => {
+  covers('input', 'renders-input')('renders an input element', () => {
     render(<LlmInput placeholder="Enter text" />);
     expect(screen.getByRole('textbox')).toBeInTheDocument();
   });
@@ -19,8 +19,7 @@ describe('LlmInput', () => {
     expect(screen.getByLabelText('Email')).toBeInTheDocument();
   });
 
-  // @behavior disabled
-  it('is disabled when disabled prop is true', () => {
+  covers('input', 'disabled')('is disabled when disabled prop is true', () => {
     render(<LlmInput disabled />);
     expect(screen.getByRole('textbox')).toBeDisabled();
   });
@@ -30,8 +29,7 @@ describe('LlmInput', () => {
     expect(container.firstChild).toHaveClass('is-disabled');
   });
 
-  // @behavior invalid
-  it('applies is-invalid class when invalid', () => {
+  covers('input', 'invalid')('applies is-invalid class when invalid', () => {
     const { container } = render(<LlmInput invalid />);
     expect(container.firstChild).toHaveClass('is-invalid');
   });
@@ -46,8 +44,7 @@ describe('LlmInput', () => {
     expect(screen.getByRole('textbox')).toHaveAttribute('aria-invalid', 'true');
   });
 
-  // @behavior errors
-  it('shows error messages', () => {
+  covers('input', 'errors')('shows error messages', () => {
     render(<LlmInput invalid errors={['Required field']} />);
     expect(screen.getByText('Required field')).toBeInTheDocument();
   });
@@ -58,8 +55,7 @@ describe('LlmInput', () => {
     expect(screen.getByText('Invalid format')).toBeInTheDocument();
   });
 
-  // @behavior updates-value
-  it('calls onValueChange on input', async () => {
+  covers('input', 'updates-value')('calls onValueChange on input', async () => {
     const user = userEvent.setup();
     const onValueChange = vi.fn();
     render(<LlmInput onValueChange={onValueChange} />);

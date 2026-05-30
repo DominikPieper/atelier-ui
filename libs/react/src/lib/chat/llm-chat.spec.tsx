@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { covers } from '../../testing/behavior';
 import {
   LlmChat,
   LlmChatHeader,
@@ -17,8 +18,7 @@ beforeEach(() => {
 
 describe('LlmChat', () => {
   describe.each(['drawer', 'popup', 'inline'] as const)('variant=%s', (variant) => {
-    // @behavior variant-class
-    it('applies the variant class on the host', () => {
+    covers('chat', 'variant-class')('applies the variant class on the host', () => {
       const { container } = render(
         <LlmChat variant={variant} open>
           Body
@@ -39,8 +39,7 @@ describe('LlmChat', () => {
     });
   });
 
-  // @behavior inline-variant
-  it('inline variant renders a section, no dialog or fab', () => {
+  covers('chat', 'inline-variant')('inline variant renders a section, no dialog or fab', () => {
     const { container } = render(
       <LlmChat variant="inline" open>
         Hello
@@ -52,8 +51,7 @@ describe('LlmChat', () => {
     expect(screen.getByText('Hello')).toBeInTheDocument();
   });
 
-  // @behavior popup-variant
-  it('popup variant renders the floating bubble + popup window', () => {
+  covers('chat', 'popup-variant')('popup variant renders the floating bubble + popup window', () => {
     const { container } = render(
       <LlmChat variant="popup" open>
         Body
@@ -81,8 +79,7 @@ describe('LlmChat', () => {
       },
     );
 
-    // @behavior is-failed
-    it('applies is-failed when failed=true', () => {
+    covers('chat', 'is-failed')('applies is-failed when failed=true', () => {
       render(<LlmChatMessage failed>err</LlmChatMessage>);
       expect(screen.getByText('err')).toHaveClass('is-failed');
     });
@@ -107,8 +104,7 @@ describe('LlmChat', () => {
   });
 
   describe('LlmChatInput', () => {
-    // @behavior send-button-idle
-    it('renders a Send button when status is idle', () => {
+    covers('chat', 'send-button-idle')('renders a Send button when status is idle', () => {
       const { container } = render(
         <LlmChat variant="inline" status="idle" open>
           <LlmChatInput />
@@ -118,8 +114,7 @@ describe('LlmChat', () => {
       expect(btn).toHaveTextContent('Send');
     });
 
-    // @behavior stop-button-streaming
-    it('renders a Stop button when status is streaming', () => {
+    covers('chat', 'stop-button-streaming')('renders a Stop button when status is streaming', () => {
       const { container } = render(
         <LlmChat variant="inline" status="streaming" open>
           <LlmChatInput />
@@ -130,8 +125,7 @@ describe('LlmChat', () => {
       expect(container.querySelector('textarea')).toBeDisabled();
     });
 
-    // @behavior emits-send
-    it('emits onSend with the typed text on Enter', async () => {
+    covers('chat', 'emits-send')('emits onSend with the typed text on Enter', async () => {
       const user = userEvent.setup();
       const onSend = vi.fn();
       render(
@@ -144,8 +138,7 @@ describe('LlmChat', () => {
       expect(onSend).toHaveBeenCalledWith('hello');
     });
 
-    // @behavior emits-stop
-    it('emits onStop when Stop is clicked while streaming', async () => {
+    covers('chat', 'emits-stop')('emits onStop when Stop is clicked while streaming', async () => {
       const user = userEvent.setup();
       const onStop = vi.fn();
       render(

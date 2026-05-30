@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LlmAccordionGroup, LlmAccordionItem, LlmAccordionHeader } from './llm-accordion';
+import { covers } from '../../testing/behavior';
 
 describe('LlmAccordionGroup', () => {
   it('renders accordion items', () => {
@@ -32,8 +33,7 @@ describe('LlmAccordionGroup', () => {
     expect(screen.getByRole('button')).toHaveAttribute('aria-expanded', 'false');
   });
 
-  // @behavior keyboard-nav
-  it('ArrowDown moves focus to the next header', async () => {
+  covers('accordion', 'keyboard-nav')('ArrowDown moves focus to the next header', async () => {
     const user = userEvent.setup();
     render(
       <LlmAccordionGroup>
@@ -53,8 +53,7 @@ describe('LlmAccordionGroup', () => {
     expect(second).toHaveFocus();
   });
 
-  // @behavior home-end
-  it('Home focuses the first header and End the last', async () => {
+  covers('accordion', 'home-end')('Home focuses the first header and End the last', async () => {
     const user = userEvent.setup();
     render(
       <LlmAccordionGroup>
@@ -71,8 +70,7 @@ describe('LlmAccordionGroup', () => {
     expect(btns[0]).toHaveFocus();
   });
 
-  // @behavior wrap
-  it('ArrowDown wraps from the last header to the first', async () => {
+  covers('accordion', 'wrap')('ArrowDown wraps from the last header to the first', async () => {
     const user = userEvent.setup();
     render(
       <LlmAccordionGroup>
@@ -86,8 +84,7 @@ describe('LlmAccordionGroup', () => {
     expect(btns[0]).toHaveFocus();
   });
 
-  // @behavior skip-disabled
-  it('arrow navigation skips disabled items', async () => {
+  covers('accordion', 'skip-disabled')('arrow navigation skips disabled items', async () => {
     const user = userEvent.setup();
     render(
       <LlmAccordionGroup>
@@ -101,8 +98,7 @@ describe('LlmAccordionGroup', () => {
     expect(screen.getByRole('button', { name: 'Section Three' })).toHaveFocus();
   });
 
-  // @behavior expand-on-click
-  it('expands an item on click', async () => {
+  covers('accordion', 'expand-on-click')('expands an item on click', async () => {
     const user = userEvent.setup();
     render(
       <LlmAccordionGroup>
@@ -116,8 +112,7 @@ describe('LlmAccordionGroup', () => {
     expect(screen.getByRole('button')).toHaveAttribute('aria-expanded', 'true');
   });
 
-  // @behavior collapse-on-click
-  it('collapses an expanded item on second click', async () => {
+  covers('accordion', 'collapse-on-click')('collapses an expanded item on second click', async () => {
     const user = userEvent.setup();
     render(
       <LlmAccordionGroup>
@@ -133,8 +128,7 @@ describe('LlmAccordionGroup', () => {
     expect(btn).toHaveAttribute('aria-expanded', 'false');
   });
 
-  // @behavior single-collapse-other
-  it('in single-expand mode, opening one collapses another', async () => {
+  covers('accordion', 'single-collapse-other')('in single-expand mode, opening one collapses another', async () => {
     const user = userEvent.setup();
     render(
       <LlmAccordionGroup multi={false}>
@@ -156,8 +150,7 @@ describe('LlmAccordionGroup', () => {
     expect(btn2).toHaveAttribute('aria-expanded', 'true');
   });
 
-  // @behavior multi-expand
-  it('in multi mode, multiple items can be open simultaneously', async () => {
+  covers('accordion', 'multi-expand')('in multi mode, multiple items can be open simultaneously', async () => {
     const user = userEvent.setup();
     render(
       <LlmAccordionGroup multi>
@@ -178,8 +171,7 @@ describe('LlmAccordionGroup', () => {
     expect(btn2).toHaveAttribute('aria-expanded', 'true');
   });
 
-  // @behavior disabled-no-toggle
-  it('does not toggle a disabled item', async () => {
+  covers('accordion', 'disabled-no-toggle')('does not toggle a disabled item', async () => {
     const user = userEvent.setup();
     render(
       <LlmAccordionGroup>

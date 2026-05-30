@@ -1,5 +1,6 @@
 import { render } from '@testing-library/angular';
 import { LlmSkeleton } from './llm-skeleton';
+import { covers } from '../../testing/behavior';
 
 describe('LlmSkeleton', () => {
   it('renders with default variant class', async () => {
@@ -35,8 +36,7 @@ describe('LlmSkeleton', () => {
     );
   });
 
-  // @behavior custom-size
-  it('sets width and height styles', async () => {
+  covers('skeleton', 'custom-size')('sets width and height styles', async () => {
     const { container } = await render(
       '<llm-skeleton width="200px" height="50px" />',
       { imports: [LlmSkeleton] }
@@ -55,8 +55,7 @@ describe('LlmSkeleton', () => {
       expect(el.style.height).toBe('1em');
     });
 
-    // @behavior circular-height
-    it('defaults to width for circular variant', async () => {
+    covers('skeleton', 'circular-height')('defaults to width for circular variant', async () => {
       const { container } = await render(
         '<llm-skeleton variant="circular" width="40px" />',
         { imports: [LlmSkeleton] }
@@ -82,8 +81,7 @@ describe('LlmSkeleton', () => {
     expect(container.querySelector('llm-skeleton')).toHaveClass('is-animated');
   });
 
-  // @behavior not-animated
-  it('does not apply is-animated class when animated is false', async () => {
+  covers('skeleton', 'not-animated')('does not apply is-animated class when animated is false', async () => {
     const { container } = await render(
       '<llm-skeleton [animated]="false" />',
       { imports: [LlmSkeleton] }

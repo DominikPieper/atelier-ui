@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { covers } from '../../testing/behavior';
 import { LlmTextarea } from './llm-textarea';
 
 describe('LlmTextarea', () => {
-  // @behavior renders-textarea
-  it('renders a textarea element', () => {
+  covers('textarea', 'renders-textarea')('renders a textarea element', () => {
     render(<LlmTextarea placeholder="Enter text" />);
     expect(screen.getByRole('textbox')).toBeInTheDocument();
   });
@@ -19,8 +19,7 @@ describe('LlmTextarea', () => {
     expect(screen.getByLabelText('Description')).toBeInTheDocument();
   });
 
-  // @behavior disabled
-  it('is disabled when disabled prop is true', () => {
+  covers('textarea', 'disabled')('is disabled when disabled prop is true', () => {
     render(<LlmTextarea disabled />);
     expect(screen.getByRole('textbox')).toBeDisabled();
   });
@@ -50,14 +49,12 @@ describe('LlmTextarea', () => {
     expect(screen.getByRole('textbox')).toHaveAttribute('aria-invalid', 'true');
   });
 
-  // @behavior errors
-  it('shows error messages', () => {
+  covers('textarea', 'errors')('shows error messages', () => {
     render(<LlmTextarea invalid errors={['Required field']} />);
     expect(screen.getByText('Required field')).toBeInTheDocument();
   });
 
-  // @behavior rows
-  it('renders with rows attribute', () => {
+  covers('textarea', 'rows')('renders with rows attribute', () => {
     render(<LlmTextarea rows={5} />);
     expect(screen.getByRole('textbox')).toHaveAttribute('rows', '5');
   });
@@ -67,8 +64,7 @@ describe('LlmTextarea', () => {
     expect(screen.getByRole('textbox')).toHaveAttribute('rows', '3');
   });
 
-  // @behavior updates-value
-  it('calls onValueChange on input', async () => {
+  covers('textarea', 'updates-value')('calls onValueChange on input', async () => {
     const user = userEvent.setup();
     const onValueChange = vi.fn();
     render(<LlmTextarea onValueChange={onValueChange} />);

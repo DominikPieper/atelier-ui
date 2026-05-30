@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LlmMenu, LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger } from './llm-menu';
+import { covers } from '../../testing/behavior';
 
 describe('LlmMenu', () => {
   it('renders with role="menu"', () => {
@@ -12,8 +13,7 @@ describe('LlmMenu', () => {
     expect(screen.getByRole('menu')).toBeInTheDocument();
   });
 
-  // @behavior variant-class
-  it('applies variant class', () => {
+  covers('menu', 'variant-class')('applies variant class', () => {
     const { container } = render(<LlmMenu variant="compact" />);
     expect(container.firstChild).toHaveClass('variant-compact');
   });
@@ -46,8 +46,7 @@ describe('LlmMenuItem', () => {
     expect(onTriggered).toHaveBeenCalled();
   });
 
-  // @behavior disabled-item
-  it('does not call onTriggered when disabled', async () => {
+  covers('menu', 'disabled-item')('does not call onTriggered when disabled', async () => {
     const user = userEvent.setup();
     const onTriggered = vi.fn();
     render(
@@ -79,8 +78,7 @@ describe('LlmMenuSeparator', () => {
 });
 
 describe('LlmMenuTrigger', () => {
-  // @behavior closed-initially
-  it('does not show menu initially', () => {
+  covers('menu', 'closed-initially')('does not show menu initially', () => {
     render(
       <LlmMenuTrigger
         menu={
@@ -99,8 +97,7 @@ describe('LlmMenuTrigger', () => {
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
   });
 
-  // @behavior open-on-trigger
-  it('shows menu when trigger is clicked', async () => {
+  covers('menu', 'open-on-trigger')('shows menu when trigger is clicked', async () => {
     const user = userEvent.setup();
     render(
       <LlmMenuTrigger
@@ -144,8 +141,7 @@ describe('LlmMenuTrigger', () => {
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
   });
 
-  // @behavior close-on-item-click
-  it('closes menu when a menu item is clicked', async () => {
+  covers('menu', 'close-on-item-click')('closes menu when a menu item is clicked', async () => {
     const user = userEvent.setup();
     render(
       <LlmMenuTrigger

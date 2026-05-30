@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { LlmMenu, LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger } from './llm-menu';
 import { LlmButton } from '../button/llm-button';
+import { covers } from '../../testing/behavior';
 
 const MENU_IMPORTS = [LlmMenu, LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger, LlmButton];
 
@@ -31,8 +32,7 @@ describe('LlmMenu', () => {
     expect(menu).toHaveClass('variant-default');
   });
 
-  // @behavior variant-class
-  it('applies compact variant class', async () => {
+  covers('menu', 'variant-class')('applies compact variant class', async () => {
     await render(
       `
         <llm-button [llmMenuTriggerFor]="menu">Open</llm-button>
@@ -49,14 +49,12 @@ describe('LlmMenu', () => {
     expect(menu).toHaveClass('variant-compact');
   });
 
-  // @behavior closed-initially
-  it('does not render the menu until the trigger is clicked', async () => {
+  covers('menu', 'closed-initially')('does not render the menu until the trigger is clicked', async () => {
     await render(MENU_TEMPLATE, { imports: MENU_IMPORTS });
     expect(document.querySelector('llm-menu')).toBeNull();
   });
 
-  // @behavior open-on-trigger
-  it('opens menu on trigger click and renders items', async () => {
+  covers('menu', 'open-on-trigger')('opens menu on trigger click and renders items', async () => {
     await render(MENU_TEMPLATE, { imports: MENU_IMPORTS });
     screen.getByText('Open Menu').click();
     expect(screen.getByText('Copy')).toBeInTheDocument();
@@ -70,8 +68,7 @@ describe('LlmMenu', () => {
   // test it via their own handlers; for Angular it is covered by CDK + e2e, so
   // `close-on-escape` is intentionally absent from the behavior contract.
 
-  // @behavior close-on-item-click
-  it('closes the menu when a menu item is clicked', async () => {
+  covers('menu', 'close-on-item-click')('closes the menu when a menu item is clicked', async () => {
     const user = userEvent.setup();
     await render(MENU_TEMPLATE, { imports: MENU_IMPORTS });
     await user.click(screen.getByText('Open Menu'));
@@ -87,8 +84,7 @@ describe('LlmMenu', () => {
     expect(separator).toHaveAttribute('role', 'separator');
   });
 
-  // @behavior disabled-item
-  it('applies is-disabled class on disabled item', async () => {
+  covers('menu', 'disabled-item')('applies is-disabled class on disabled item', async () => {
     await render(MENU_TEMPLATE, { imports: MENU_IMPORTS });
     screen.getByText('Open Menu').click();
     const deleteItem = screen.getByText('Delete').closest('llm-menu-item');

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-unnecessary-condition */
 import { render, screen, fireEvent } from '@testing-library/angular';
 import { LlmAvatar, LlmAvatarGroup } from './llm-avatar';
+import { covers } from '../../testing/behavior';
 
 describe('LlmAvatar', () => {
   it('renders without error with default inputs', async () => {
@@ -21,8 +22,7 @@ describe('LlmAvatar', () => {
     expect(container.querySelector('llm-avatar')).toHaveAttribute('aria-label', 'Profile photo');
   });
 
-  // @behavior aria-label-from-name
-  it('falls back to name for aria-label when no alt', async () => {
+  covers('avatar', 'aria-label-from-name')('falls back to name for aria-label when no alt', async () => {
     const { container } = await render(
       '<llm-avatar name="Jane Doe" />',
       { imports: [LlmAvatar] }
@@ -36,8 +36,7 @@ describe('LlmAvatar', () => {
   });
 
   describe('content fallback', () => {
-    // @behavior img-when-src
-    it('renders an img when src is provided', async () => {
+    covers('avatar', 'img-when-src')('renders an img when src is provided', async () => {
       const { container } = await render(
         '<llm-avatar src="https://example.com/photo.jpg" alt="User" />',
         { imports: [LlmAvatar] }
@@ -46,8 +45,7 @@ describe('LlmAvatar', () => {
       expect(container.querySelector('img')).toHaveAttribute('src', 'https://example.com/photo.jpg');
     });
 
-    // @behavior initials-when-no-src
-    it('shows initials derived from name when no src', async () => {
+    covers('avatar', 'initials-when-no-src')('shows initials derived from name when no src', async () => {
       await render('<llm-avatar name="John Doe" />', { imports: [LlmAvatar] });
       expect(screen.getByText('JD')).toBeInTheDocument();
     });
@@ -62,8 +60,7 @@ describe('LlmAvatar', () => {
       expect(screen.getByText('AB')).toBeInTheDocument();
     });
 
-    // @behavior icon-when-empty
-    it('shows icon SVG when neither src nor name is given', async () => {
+    covers('avatar', 'icon-when-empty')('shows icon SVG when neither src nor name is given', async () => {
       const { container } = await render('<llm-avatar />', { imports: [LlmAvatar] });
       expect(container.querySelector('svg.icon')).toBeInTheDocument();
     });

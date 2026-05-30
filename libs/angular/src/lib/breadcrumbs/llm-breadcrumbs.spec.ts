@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { render, screen } from '@testing-library/angular';
 import { LlmBreadcrumbs, LlmBreadcrumbItem } from './llm-breadcrumbs';
+import { covers } from '../../testing/behavior';
 
 const ALL_IMPORTS = [LlmBreadcrumbs, LlmBreadcrumbItem];
 
 describe('LlmBreadcrumbs', () => {
-  // @behavior nav-aria-label
-  it('renders a <nav> with aria-label="Breadcrumb"', async () => {
+  covers('breadcrumbs', 'nav-aria-label')('renders a <nav> with aria-label="Breadcrumb"', async () => {
     const { container } = await render(
       `<llm-breadcrumbs><llm-breadcrumb-item>Home</llm-breadcrumb-item></llm-breadcrumbs>`,
       { imports: ALL_IMPORTS }
@@ -27,8 +27,7 @@ describe('LlmBreadcrumbs', () => {
   });
 
   describe('LlmBreadcrumbItem', () => {
-    // @behavior link-when-href
-    it('renders an <a href> for non-current items with href', async () => {
+    covers('breadcrumbs', 'link-when-href')('renders an <a href> for non-current items with href', async () => {
       const { container } = await render(
         `<llm-breadcrumbs>
           <llm-breadcrumb-item href="/home">Home</llm-breadcrumb-item>
@@ -83,8 +82,7 @@ describe('LlmBreadcrumbs', () => {
       expect(firstItem!.querySelector('[aria-current]')).not.toBeInTheDocument();
     });
 
-    // @behavior current-class
-    it('adds is-current class to host of last item', async () => {
+    covers('breadcrumbs', 'current-class')('adds is-current class to host of last item', async () => {
       const { container } = await render(
         `<llm-breadcrumbs>
           <llm-breadcrumb-item>Home</llm-breadcrumb-item>

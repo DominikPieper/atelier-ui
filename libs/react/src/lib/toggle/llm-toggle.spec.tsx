@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LlmToggle } from './llm-toggle';
+import { covers } from '../../testing/behavior';
 
 describe('LlmToggle', () => {
-  // @behavior role-switch
-  it('renders a checkbox input with role switch', () => {
+  covers('toggle', 'role-switch')('renders a checkbox input with role switch', () => {
     render(<LlmToggle>Enable</LlmToggle>);
     expect(screen.getByRole('switch')).toBeInTheDocument();
   });
@@ -24,8 +24,7 @@ describe('LlmToggle', () => {
     expect(screen.getByRole('switch')).not.toBeChecked();
   });
 
-  // @behavior reflects-checked
-  it('renders as checked when checked=true', () => {
+  covers('toggle', 'reflects-checked')('renders as checked when checked=true', () => {
     render(<LlmToggle checked>Enable</LlmToggle>);
     expect(screen.getByRole('switch')).toBeChecked();
   });
@@ -35,8 +34,7 @@ describe('LlmToggle', () => {
     expect(container.firstChild).toHaveClass('is-checked');
   });
 
-  // @behavior disabled
-  it('is disabled when disabled prop is true', () => {
+  covers('toggle', 'disabled')('is disabled when disabled prop is true', () => {
     render(<LlmToggle disabled />);
     expect(screen.getByRole('switch')).toBeDisabled();
   });
@@ -56,8 +54,7 @@ describe('LlmToggle', () => {
     expect(screen.getByRole('switch')).toHaveAttribute('aria-invalid', 'true');
   });
 
-  // @behavior toggle-emits
-  it('calls onCheckedChange on click', async () => {
+  covers('toggle', 'toggle-emits')('calls onCheckedChange on click', async () => {
     const user = userEvent.setup();
     const onCheckedChange = vi.fn();
     render(<LlmToggle onCheckedChange={onCheckedChange}>Enable</LlmToggle>);
@@ -66,14 +63,12 @@ describe('LlmToggle', () => {
     expect(onCheckedChange).toHaveBeenCalledWith(true);
   });
 
-  // @behavior errors
-  it('shows error messages', () => {
+  covers('toggle', 'errors')('shows error messages', () => {
     render(<LlmToggle invalid errors={['Required']}>Enable</LlmToggle>);
     expect(screen.getByText('Required')).toBeInTheDocument();
   });
 
-  // @behavior aria-checked
-  it('sets aria-checked attribute', () => {
+  covers('toggle', 'aria-checked')('sets aria-checked attribute', () => {
     render(<LlmToggle checked />);
     expect(screen.getByRole('switch')).toHaveAttribute('aria-checked', 'true');
   });

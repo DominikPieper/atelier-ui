@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { covers } from '../../testing/behavior';
 import { LlmAlert } from './llm-alert';
 
 describe('LlmAlert', () => {
@@ -26,20 +27,17 @@ describe('LlmAlert', () => {
     expect(container.firstChild).toHaveClass('variant-info');
   });
 
-  // @behavior dismiss-hidden
-  it('does not show dismiss button by default', () => {
+  covers('alert', 'dismiss-hidden')('does not show dismiss button by default', () => {
     render(<LlmAlert>Msg</LlmAlert>);
     expect(screen.queryByRole('button', { name: 'Dismiss' })).not.toBeInTheDocument();
   });
 
-  // @behavior dismiss-shown
-  it('shows dismiss button when dismissible', () => {
+  covers('alert', 'dismiss-shown')('shows dismiss button when dismissible', () => {
     render(<LlmAlert dismissible>Msg</LlmAlert>);
     expect(screen.getByRole('button', { name: 'Dismiss' })).toBeInTheDocument();
   });
 
-  // @behavior emits-dismiss
-  it('calls onDismissed when dismiss clicked', async () => {
+  covers('alert', 'emits-dismiss')('calls onDismissed when dismiss clicked', async () => {
     const user = userEvent.setup();
     const onDismissed = vi.fn();
     render(
@@ -56,8 +54,7 @@ describe('LlmAlert', () => {
     expect(container.firstChild).toHaveAttribute('role', 'alert');
   });
 
-  // @behavior aria-live
-  it('sets aria-live to assertive for danger', () => {
+  covers('alert', 'aria-live')('sets aria-live to assertive for danger', () => {
     const { container } = render(<LlmAlert variant="danger">Msg</LlmAlert>);
     expect(container.firstChild).toHaveAttribute('aria-live', 'assertive');
   });

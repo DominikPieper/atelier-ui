@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { LlmStepper, LlmStep } from './llm-stepper';
+import { covers } from '../../testing/behavior';
 
 const IMPORTS = [LlmStepper, LlmStep];
 
@@ -14,8 +15,7 @@ const BASIC_TEMPLATE = `
 
 describe('LlmStepper', () => {
   describe('rendering', () => {
-    // @behavior renders-tablist
-    it('renders a tablist', async () => {
+    covers('stepper', 'renders-tablist')('renders a tablist', async () => {
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
       expect(screen.getByRole('tablist')).toBeInTheDocument();
     });
@@ -32,8 +32,7 @@ describe('LlmStepper', () => {
       expect(screen.getByRole('tab', { name: /Review/i })).toBeInTheDocument();
     });
 
-    // @behavior first-panel-default
-    it('shows first step panel by default', async () => {
+    covers('stepper', 'first-panel-default')('shows first step panel by default', async () => {
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
       expect(screen.getByRole('tabpanel')).toHaveTextContent('Account content');
     });
@@ -54,8 +53,7 @@ describe('LlmStepper', () => {
   });
 
   describe('ARIA attributes', () => {
-    // @behavior aria-selected-active
-    it('sets aria-selected on active step', async () => {
+    covers('stepper', 'aria-selected-active')('sets aria-selected on active step', async () => {
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
       const tabs = screen.getAllByRole('tab');
       expect(tabs[0]).toHaveAttribute('aria-selected', 'true');
@@ -78,8 +76,7 @@ describe('LlmStepper', () => {
   });
 
   describe('click navigation', () => {
-    // @behavior click-navigates
-    it('clicking a step navigates to it', async () => {
+    covers('stepper', 'click-navigates')('clicking a step navigates to it', async () => {
       const user = userEvent.setup();
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
 
@@ -89,8 +86,7 @@ describe('LlmStepper', () => {
       expect(screen.getByRole('tab', { name: /Profile/i })).toHaveAttribute('aria-selected', 'true');
     });
 
-    // @behavior disabled-step-noop
-    it('clicking a disabled step does nothing', async () => {
+    covers('stepper', 'disabled-step-noop')('clicking a disabled step does nothing', async () => {
       const user = userEvent.setup();
       await render(
         `<llm-stepper>
@@ -123,8 +119,7 @@ describe('LlmStepper', () => {
   });
 
   describe('completed and error states', () => {
-    // @behavior completed-class
-    it('applies is-completed class to completed steps', async () => {
+    covers('stepper', 'completed-class')('applies is-completed class to completed steps', async () => {
       const { container } = await render(
         `<llm-stepper [activeStep]="activeStep">
           <llm-step label="Done" [completed]="completed">Done content</llm-step>
@@ -136,8 +131,7 @@ describe('LlmStepper', () => {
       expect(stepItems[0]).toHaveClass('is-completed');
     });
 
-    // @behavior error-class
-    it('applies is-error class to error steps', async () => {
+    covers('stepper', 'error-class')('applies is-error class to error steps', async () => {
       const { container } = await render(
         `<llm-stepper [activeStep]="1">
           <llm-step label="Failed" [error]="true">Error content</llm-step>
@@ -156,8 +150,7 @@ describe('LlmStepper', () => {
       expect(container.querySelector('llm-stepper')).toHaveClass('orientation-horizontal');
     });
 
-    // @behavior orientation-vertical
-    it('applies orientation-vertical class', async () => {
+    covers('stepper', 'orientation-vertical')('applies orientation-vertical class', async () => {
       const { container } = await render(
         `<llm-stepper orientation="vertical">
           <llm-step label="A">A</llm-step>

@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LlmDialog, LlmDialogHeader, LlmDialogContent, LlmDialogFooter } from './llm-dialog';
+import { covers } from '../../testing/behavior';
 
 // jsdom doesn't implement showModal/close on <dialog>, so we mock them
 beforeEach(() => {
@@ -9,14 +10,12 @@ beforeEach(() => {
 });
 
 describe('LlmDialog', () => {
-  // @behavior render-dialog-element
-  it('renders dialog element', () => {
+  covers('dialog', 'render-dialog-element')('renders dialog element', () => {
     render(<LlmDialog open={false} />);
     expect(document.querySelector('dialog')).toBeInTheDocument();
   });
 
-  // @behavior open-shows-modal
-  it('calls showModal when open becomes true', () => {
+  covers('dialog', 'open-shows-modal')('calls showModal when open becomes true', () => {
     render(<LlmDialog open={true} />);
     expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalled();
   });
@@ -48,8 +47,7 @@ describe('LlmDialog', () => {
     expect(screen.getByText('Footer content')).toBeInTheDocument();
   });
 
-  // @behavior close-button
-  it('close button calls onOpenChange with false', async () => {
+  covers('dialog', 'close-button')('close button calls onOpenChange with false', async () => {
     const user = userEvent.setup();
     const onOpenChange = vi.fn();
     const { container } = render(
@@ -67,8 +65,7 @@ describe('LlmDialog', () => {
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
-  // @behavior size-class
-  it('applies size class to dialog element', () => {
+  covers('dialog', 'size-class')('applies size class to dialog element', () => {
     render(<LlmDialog open={true} size="lg" />);
     expect(document.querySelector('dialog')).toHaveClass('size-lg');
   });
@@ -82,8 +79,7 @@ describe('LlmDialog', () => {
     }
   });
 
-  // @behavior aria-modal
-  it('renders with aria-modal on dialog element', () => {
+  covers('dialog', 'aria-modal')('renders with aria-modal on dialog element', () => {
     render(<LlmDialog open={true} />);
     expect(document.querySelector('dialog')).toHaveAttribute('aria-modal', 'true');
   });

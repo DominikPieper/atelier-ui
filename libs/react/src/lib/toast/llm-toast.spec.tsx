@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LlmToastProvider, LlmToastContainer, useLlmToast } from './llm-toast';
+import { covers } from '../../testing/behavior';
 
 function TestHarness({ position = 'bottom-right' as const }) {
   const { show } = useLlmToast();
@@ -20,16 +21,14 @@ function renderWithProvider(ui = <TestHarness />) {
 }
 
 describe('LlmToast', () => {
-  // @behavior show-adds
-  it('shows a toast when show() is called', async () => {
+  covers('toast', 'show-adds')('shows a toast when show() is called', async () => {
     const user = userEvent.setup();
     renderWithProvider();
     await user.click(screen.getByRole('button', { name: 'Show default' }));
     expect(screen.getByText('Hello world')).toBeInTheDocument();
   });
 
-  // @behavior variant-class
-  it('shows toast with success variant class', async () => {
+  covers('toast', 'variant-class')('shows toast with success variant class', async () => {
     const user = userEvent.setup();
     renderWithProvider();
     await user.click(screen.getByRole('button', { name: 'Show success' }));
@@ -57,8 +56,7 @@ describe('LlmToast', () => {
     expect(screen.queryByRole('button', { name: 'Dismiss' })).not.toBeInTheDocument();
   });
 
-  // @behavior dismiss-button-click
-  it('dismisses toast when dismiss button is clicked', async () => {
+  covers('toast', 'dismiss-button-click')('dismisses toast when dismiss button is clicked', async () => {
     const user = userEvent.setup();
     renderWithProvider();
     await user.click(screen.getByRole('button', { name: 'Show default' }));
@@ -76,8 +74,7 @@ describe('LlmToast', () => {
     expect(screen.getByText('Success!')).toBeInTheDocument();
   });
 
-  // @behavior position-class
-  it('container applies position class', () => {
+  covers('toast', 'position-class')('container applies position class', () => {
     renderWithProvider(<TestHarness position="top-center" />);
     expect(document.querySelector('.llm-toast-container')).toHaveClass('position-top-center');
   });

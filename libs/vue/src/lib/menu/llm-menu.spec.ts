@@ -4,6 +4,7 @@ import LlmMenuTrigger from './llm-menu-trigger.vue';
 import LlmMenu from './llm-menu.vue';
 import LlmMenuItem from './llm-menu-item.vue';
 import LlmMenuSeparator from './llm-menu-separator.vue';
+import { covers } from '../../testing/behavior';
 
 const MenuFixture = {
   components: { LlmMenuTrigger, LlmMenu, LlmMenuItem, LlmMenuSeparator },
@@ -31,30 +32,26 @@ const MenuFixture = {
 };
 
 describe('LlmMenu', () => {
-  // @behavior variant-class
-  it('applies the variant class to the menu', () => {
+  covers('menu', 'variant-class')('applies the variant class to the menu', () => {
     const { container } = render(LlmMenu, { props: { variant: 'compact' } });
     expect(container.querySelector('[role="menu"]')).toHaveClass('variant-compact');
   });
 });
 
 describe('LlmMenuTrigger', () => {
-  // @behavior closed-initially
-  it('does not show menu initially', () => {
+  covers('menu', 'closed-initially')('does not show menu initially', () => {
     render(MenuFixture);
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
   });
 
-  // @behavior open-on-trigger
-  it('shows menu on trigger click', async () => {
+  covers('menu', 'open-on-trigger')('shows menu on trigger click', async () => {
     const user = userEvent.setup();
     render(MenuFixture);
     await user.click(screen.getByRole('button', { name: 'Open Menu' }));
     expect(screen.getByRole('menu')).toBeInTheDocument();
   });
 
-  // @behavior close-on-item-click
-  it('hides menu after clicking a menu item', async () => {
+  covers('menu', 'close-on-item-click')('hides menu after clicking a menu item', async () => {
     const user = userEvent.setup();
     render(MenuFixture);
     await user.click(screen.getByRole('button', { name: 'Open Menu' }));
@@ -78,8 +75,7 @@ describe('LlmMenuTrigger', () => {
     expect(container.querySelector('.llm-menu-separator')).toBeInTheDocument();
   });
 
-  // @behavior disabled-item
-  it('disabled menu item cannot be triggered', async () => {
+  covers('menu', 'disabled-item')('disabled menu item cannot be triggered', async () => {
     const user = userEvent.setup();
     render(MenuFixture);
     await user.click(screen.getByRole('button', { name: 'Open Menu' }));

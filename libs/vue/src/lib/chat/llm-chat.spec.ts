@@ -7,6 +7,7 @@ import LlmChatMessage from './llm-chat-message.vue';
 import LlmChatTyping from './llm-chat-typing.vue';
 import LlmChatSuggestion from './llm-chat-suggestion.vue';
 import LlmChatInput from './llm-chat-input.vue';
+import { covers } from '../../testing/behavior';
 
 beforeEach(() => {
   HTMLDialogElement.prototype.showModal ??= function () {
@@ -34,8 +35,7 @@ const ChatFixture = {
 
 describe('LlmChat', () => {
   describe.each(['drawer', 'popup', 'inline'] as const)('variant=%s', (variant) => {
-    // @behavior variant-class
-    it('applies the variant class on the host', () => {
+    covers('chat', 'variant-class')('applies the variant class on the host', () => {
       const { container } = render(ChatFixture, { props: { variant, status: 'idle', open: true } });
       expect(container.firstChild).toHaveClass(`variant-${variant}`);
     });
@@ -48,16 +48,14 @@ describe('LlmChat', () => {
     });
   });
 
-  // @behavior inline-variant
-  it('inline variant renders a section, no dialog or fab', () => {
+  covers('chat', 'inline-variant')('inline variant renders a section, no dialog or fab', () => {
     const { container } = render(ChatFixture, { props: { variant: 'inline', status: 'idle', open: true } });
     expect(container.querySelector('section.inline-surface')).toBeInTheDocument();
     expect(container.querySelector('dialog')).not.toBeInTheDocument();
     expect(container.querySelector('.fab-bubble')).not.toBeInTheDocument();
   });
 
-  // @behavior popup-variant
-  it('popup variant renders the floating bubble + popup window', () => {
+  covers('chat', 'popup-variant')('popup variant renders the floating bubble + popup window', () => {
     const { container } = render(ChatFixture, { props: { variant: 'popup', status: 'idle', open: true } });
     expect(container.querySelector('button.fab-bubble')).toBeInTheDocument();
     expect(container.querySelector('.popup-surface')).toBeInTheDocument();
@@ -79,8 +77,7 @@ describe('LlmChat', () => {
       },
     );
 
-    // @behavior is-failed
-    it('applies is-failed when failed=true', () => {
+    covers('chat', 'is-failed')('applies is-failed when failed=true', () => {
       const { container } = render(LlmChatMessage, { props: { failed: true }, slots: { default: 'err' } });
       expect(container.querySelector('.llm-chat-message')).toHaveClass('is-failed');
     });
@@ -115,29 +112,25 @@ describe('LlmChat', () => {
       `,
     };
 
-    // @behavior send-button-idle
-    it('renders a Send button when status is idle', () => {
+    covers('chat', 'send-button-idle')('renders a Send button when status is idle', () => {
       const { container } = render(InputFixture, { props: { status: 'idle' } });
       expect(container.querySelector('button.variant-primary')).toHaveTextContent('Send');
     });
 
-    // @behavior stop-button-streaming
-    it('renders a Stop button when status is streaming', () => {
+    covers('chat', 'stop-button-streaming')('renders a Stop button when status is streaming', () => {
       const { container } = render(InputFixture, { props: { status: 'streaming' } });
       expect(container.querySelector('button.variant-danger')).toHaveTextContent('Stop');
       expect(container.querySelector('textarea')).toBeDisabled();
     });
 
-    // @behavior emits-send
-    it('emits send with the typed text on Enter', async () => {
+    covers('chat', 'emits-send')('emits send with the typed text on Enter', async () => {
       const user = userEvent.setup();
       const { emitted } = render(InputFixture, { props: { status: 'idle' } });
       await user.type(screen.getByRole('textbox'), 'hello{Enter}');
       expect(emitted('send')).toEqual([['hello']]);
     });
 
-    // @behavior emits-stop
-    it('emits stop when Stop is clicked while streaming', async () => {
+    covers('chat', 'emits-stop')('emits stop when Stop is clicked while streaming', async () => {
       const user = userEvent.setup();
       const { emitted } = render(InputFixture, { props: { status: 'streaming' } });
       await user.click(screen.getByRole('button', { name: /Stop/ }));

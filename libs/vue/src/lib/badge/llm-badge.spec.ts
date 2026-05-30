@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/vue';
+import { covers } from '../../testing/behavior';
 import LlmBadge from './llm-badge.vue';
 
 describe('LlmBadge', () => {
-  // @behavior render-default
-  it('renders with default props', () => {
+  covers('badge', 'render-default')('renders with default props', () => {
     render(LlmBadge, { slots: { default: 'Active' } });
     const badge = screen.getByRole('status');
     expect(badge).toBeInTheDocument();

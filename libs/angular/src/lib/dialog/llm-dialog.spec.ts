@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { LlmDialog, LlmDialogContent, LlmDialogFooter, LlmDialogHeader } from './llm-dialog';
+import { covers } from '../../testing/behavior';
 
 const ALL_IMPORTS = [LlmDialog, LlmDialogHeader, LlmDialogContent, LlmDialogFooter];
 
@@ -18,9 +19,14 @@ beforeAll(() => {
 });
 
 describe('LlmDialog', () => {
-  // @behavior render-dialog-element
-  // @behavior aria-modal
-  it('renders a <dialog> element with aria-modal="true"', async () => {
+  covers('dialog', 'aria-modal')('sets aria-modal="true" on the dialog element', async () => {
+    const { container } = await render('<llm-dialog>Content</llm-dialog>', {
+      imports: [LlmDialog],
+    });
+    expect(container.querySelector('dialog')).toHaveAttribute('aria-modal', 'true');
+  });
+
+  covers('dialog', 'render-dialog-element')('renders a <dialog> element with aria-modal="true"', async () => {
     const { container } = await render('<llm-dialog>Content</llm-dialog>', {
       imports: [LlmDialog],
     });
@@ -36,8 +42,7 @@ describe('LlmDialog', () => {
     expect(container.querySelector('dialog')).not.toHaveAttribute('open');
   });
 
-  // @behavior open-shows-modal
-  it('opens the dialog when open=true', async () => {
+  covers('dialog', 'open-shows-modal')('opens the dialog when open=true', async () => {
     const { container, fixture } = await render('<llm-dialog [open]="true">Content</llm-dialog>', {
       imports: [LlmDialog],
     });
@@ -61,8 +66,7 @@ describe('LlmDialog', () => {
 
   describe('size variants', () => {
     for (const size of ['sm', 'md', 'lg', 'xl', 'full'] as const) {
-      // @behavior size-class
-      it(`applies size-${size} class to .panel`, async () => {
+      covers('dialog', 'size-class')(`applies size-${size} class to .panel`, async () => {
         const { container } = await render(
           `<llm-dialog size="${size}">Content</llm-dialog>`,
           { imports: [LlmDialog] }
@@ -153,8 +157,7 @@ describe('LlmDialog', () => {
       expect(closeBtn).toHaveAttribute('aria-label', 'Close dialog');
     });
 
-    // @behavior close-button
-    it('closes the dialog when close button is clicked', async () => {
+    covers('dialog', 'close-button')('closes the dialog when close button is clicked', async () => {
       const user = userEvent.setup();
       const { container } = await render(
         `<llm-dialog [(open)]="open">

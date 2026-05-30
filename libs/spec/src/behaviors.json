@@ -1,5 +1,5 @@
 {
-  "$comment": "Behavior contract: runtime behaviors every framework adapter must test, keyed by component. The check-behavior-coverage.mjs script asserts each id is tagged (// @behavior <id>) in every framework's spec file, so behavioral parity is enforced the way shape parity is by the type contract. This is a ratchet: it locks behaviors currently covered in all three adapters. Add ids here as you backfill divergent coverage (see the gap report in the Gap-3 commit).",
+  "$comment": "Behavior contract: runtime behaviors every framework adapter must test, keyed by component. tools/scripts/gen-behaviors.mjs generates a typed behaviors.generated.ts from this file; each id is bound to its covering test via covers('<subject>', '<id>')(...) from libs/<fw>/src/testing/behavior.ts (a wrong id is a compile error). tools/parity/behavior-coverage.mjs AST-scans those covers() calls and asserts every id is bound in all three adapters, so behavioral parity is enforced the way shape parity is by the type contract. This is a ratchet: it locks behaviors currently covered in all three adapters. Add ids here (then regenerate) as you backfill divergent coverage.",
   "button": [
     { "id": "default-render", "describe": "renders with default props/inputs without error" },
     { "id": "disabled-state", "describe": "is disabled / aria-disabled when disabled is true" },

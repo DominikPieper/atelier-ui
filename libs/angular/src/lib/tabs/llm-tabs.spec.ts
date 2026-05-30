@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
+import { covers } from '../../testing/behavior';
 import { LlmTabGroup, LlmTab } from './llm-tabs';
 
 const IMPORTS = [LlmTabGroup, LlmTab];
@@ -39,8 +40,7 @@ describe('LlmTabGroup', () => {
       expect(screen.getByRole('tab', { name: 'Third' })).toBeInTheDocument();
     });
 
-    // @behavior first-tab-default
-    it('shows first tab panel by default', async () => {
+    covers('tabs', 'first-tab-default')('shows first tab panel by default', async () => {
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
       expect(screen.getByRole('tabpanel')).toHaveTextContent('First content');
     });
@@ -97,8 +97,7 @@ describe('LlmTabGroup', () => {
   });
 
   describe('click interaction', () => {
-    // @behavior switch-on-click
-    it('clicking a tab selects it and shows its panel', async () => {
+    covers('tabs', 'switch-on-click')('clicking a tab selects it and shows its panel', async () => {
       const user = userEvent.setup();
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
 
@@ -108,8 +107,7 @@ describe('LlmTabGroup', () => {
       expect(screen.getByRole('tab', { name: 'Second' })).toHaveAttribute('aria-selected', 'true');
     });
 
-    // @behavior disabled-tab-noop
-    it('clicking a disabled tab does nothing', async () => {
+    covers('tabs', 'disabled-tab-noop')('clicking a disabled tab does nothing', async () => {
       const user = userEvent.setup();
       await render(WITH_DISABLED, { imports: IMPORTS });
 
@@ -120,8 +118,7 @@ describe('LlmTabGroup', () => {
   });
 
   describe('keyboard navigation', () => {
-    // @behavior keyboard-nav
-    it('ArrowRight moves to next tab', async () => {
+    covers('tabs', 'keyboard-nav')('ArrowRight moves to next tab', async () => {
       const user = userEvent.setup();
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
 
@@ -145,8 +142,7 @@ describe('LlmTabGroup', () => {
       expect(screen.getByRole('tabpanel')).toHaveTextContent('First content');
     });
 
-    // @behavior wrap
-    it('ArrowRight wraps from last to first', async () => {
+    covers('tabs', 'wrap')('ArrowRight wraps from last to first', async () => {
       const user = userEvent.setup();
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
 
@@ -167,8 +163,7 @@ describe('LlmTabGroup', () => {
       expect(screen.getByRole('tab', { name: 'Third' })).toHaveFocus();
     });
 
-    // @behavior home-end
-    it('Home selects first enabled tab', async () => {
+    covers('tabs', 'home-end')('Home selects first enabled tab', async () => {
       const user = userEvent.setup();
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
 
@@ -191,8 +186,7 @@ describe('LlmTabGroup', () => {
       expect(screen.getByRole('tabpanel')).toHaveTextContent('Third content');
     });
 
-    // @behavior skip-disabled
-    it('arrow keys skip disabled tabs', async () => {
+    covers('tabs', 'skip-disabled')('arrow keys skip disabled tabs', async () => {
       const user = userEvent.setup();
       await render(WITH_DISABLED, { imports: IMPORTS });
 
@@ -230,8 +224,7 @@ describe('LlmTabGroup', () => {
       expect(container.querySelector('llm-tab-group')).toHaveClass('variant-default');
     });
 
-    // @behavior variant-class
-    it('applies variant-pills class', async () => {
+    covers('tabs', 'variant-class')('applies variant-pills class', async () => {
       const { container } = await render(
         `<llm-tab-group variant="pills">
           <llm-tab label="A">A</llm-tab>

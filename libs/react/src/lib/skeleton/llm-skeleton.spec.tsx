@@ -1,4 +1,5 @@
 import { render } from '@testing-library/react';
+import { covers } from '../../testing/behavior';
 import { LlmSkeleton } from './llm-skeleton';
 
 describe('LlmSkeleton', () => {
@@ -15,8 +16,7 @@ describe('LlmSkeleton', () => {
     }
   );
 
-  // @behavior custom-size
-  it('applies custom width', () => {
+  covers('skeleton', 'custom-size')('applies custom width', () => {
     const { container } = render(<LlmSkeleton width="60%" />);
     expect((container.firstChild as HTMLElement).style.width).toBe('60%');
   });
@@ -36,14 +36,12 @@ describe('LlmSkeleton', () => {
     expect(container.firstChild).toHaveClass('is-animated');
   });
 
-  // @behavior not-animated
-  it('does not apply is-animated class when animated is false', () => {
+  covers('skeleton', 'not-animated')('does not apply is-animated class when animated is false', () => {
     const { container } = render(<LlmSkeleton animated={false} />);
     expect(container.firstChild).not.toHaveClass('is-animated');
   });
 
-  // @behavior circular-height
-  it('sets circular height equal to width when no height provided', () => {
+  covers('skeleton', 'circular-height')('sets circular height equal to width when no height provided', () => {
     const { container } = render(<LlmSkeleton variant="circular" width="48px" />);
     expect((container.firstChild as HTMLElement).style.height).toBe('48px');
   });

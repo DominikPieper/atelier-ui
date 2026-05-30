@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { covers } from '../../testing/behavior';
 import { LlmCheckbox } from './llm-checkbox';
 
 describe('LlmCheckbox', () => {
@@ -23,8 +24,7 @@ describe('LlmCheckbox', () => {
     expect(screen.getByRole('checkbox')).not.toBeChecked();
   });
 
-  // @behavior reflects-checked
-  it('renders as checked when checked=true', () => {
+  covers('checkbox', 'reflects-checked')('renders as checked when checked=true', () => {
     render(<LlmCheckbox checked>Accept</LlmCheckbox>);
     expect(screen.getByRole('checkbox')).toBeChecked();
   });
@@ -34,8 +34,7 @@ describe('LlmCheckbox', () => {
     expect(container.firstChild).toHaveClass('is-checked');
   });
 
-  // @behavior disabled
-  it('is disabled when disabled prop is true', () => {
+  covers('checkbox', 'disabled')('is disabled when disabled prop is true', () => {
     render(<LlmCheckbox disabled />);
     expect(screen.getByRole('checkbox')).toBeDisabled();
   });
@@ -50,14 +49,12 @@ describe('LlmCheckbox', () => {
     expect(container.firstChild).toHaveClass('is-invalid');
   });
 
-  // @behavior invalid
-  it('sets aria-invalid when invalid', () => {
+  covers('checkbox', 'invalid')('sets aria-invalid when invalid', () => {
     render(<LlmCheckbox invalid />);
     expect(screen.getByRole('checkbox')).toHaveAttribute('aria-invalid', 'true');
   });
 
-  // @behavior toggle-emits
-  it('calls onCheckedChange on click', async () => {
+  covers('checkbox', 'toggle-emits')('calls onCheckedChange on click', async () => {
     const user = userEvent.setup();
     const onCheckedChange = vi.fn();
     render(<LlmCheckbox onCheckedChange={onCheckedChange}>Accept</LlmCheckbox>);
@@ -66,15 +63,13 @@ describe('LlmCheckbox', () => {
     expect(onCheckedChange).toHaveBeenCalledWith(true);
   });
 
-  // @behavior indeterminate
-  it('sets indeterminate state on checkbox element', () => {
+  covers('checkbox', 'indeterminate')('sets indeterminate state on checkbox element', () => {
     render(<LlmCheckbox indeterminate />);
     const checkbox = screen.getByRole('checkbox') as HTMLInputElement;
     expect(checkbox.indeterminate).toBe(true);
   });
 
-  // @behavior errors
-  it('shows error messages', () => {
+  covers('checkbox', 'errors')('shows error messages', () => {
     render(<LlmCheckbox invalid errors={['Required']}>Accept</LlmCheckbox>);
     expect(screen.getByText('Required')).toBeInTheDocument();
   });

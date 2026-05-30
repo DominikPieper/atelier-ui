@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
+import { covers } from '../../testing/behavior';
 import { LlmCodeBlock } from './llm-code-block';
 
 const CODE = `const greeting = 'Hello, World!';\nconsole.log(greeting);`;
@@ -17,8 +18,7 @@ function defaults(): {
 }
 
 describe('LlmCodeBlock', () => {
-  // @behavior renders-code
-  it('renders the code content', async () => {
+  covers('code-block', 'renders-code')('renders the code content', async () => {
     await render(TEMPLATE, {
       imports: [LlmCodeBlock],
       componentProperties: defaults(),
@@ -26,8 +26,7 @@ describe('LlmCodeBlock', () => {
     expect(screen.getByText(/Hello, World!/)).toBeInTheDocument();
   });
 
-  // @behavior language-label
-  it('shows the language label when no filename is provided', async () => {
+  covers('code-block', 'language-label')('shows the language label when no filename is provided', async () => {
     await render(TEMPLATE, {
       imports: [LlmCodeBlock],
       componentProperties: defaults(),
@@ -35,8 +34,7 @@ describe('LlmCodeBlock', () => {
     expect(screen.getByText('typescript')).toBeInTheDocument();
   });
 
-  // @behavior filename-label
-  it('shows the filename label instead of language when filename is set', async () => {
+  covers('code-block', 'filename-label')('shows the filename label instead of language when filename is set', async () => {
     await render(TEMPLATE, {
       imports: [LlmCodeBlock],
       componentProperties: { ...defaults(), filename: 'app.ts' },
@@ -45,8 +43,7 @@ describe('LlmCodeBlock', () => {
     expect(screen.queryByText('typescript')).not.toBeInTheDocument();
   });
 
-  // @behavior copy-button
-  it('renders a copy button when copyable is true', async () => {
+  covers('code-block', 'copy-button')('renders a copy button when copyable is true', async () => {
     await render(TEMPLATE, {
       imports: [LlmCodeBlock],
       componentProperties: defaults(),
@@ -54,8 +51,7 @@ describe('LlmCodeBlock', () => {
     expect(screen.getByRole('button', { name: /copy/i })).toBeInTheDocument();
   });
 
-  // @behavior no-copy-button
-  it('does not render a copy button when copyable is false', async () => {
+  covers('code-block', 'no-copy-button')('does not render a copy button when copyable is false', async () => {
     await render(TEMPLATE, {
       imports: [LlmCodeBlock],
       componentProperties: { ...defaults(), copyable: false },
@@ -63,8 +59,7 @@ describe('LlmCodeBlock', () => {
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 
-  // @behavior line-numbers
-  it('shows line numbers when showLineNumbers is true', async () => {
+  covers('code-block', 'line-numbers')('shows line numbers when showLineNumbers is true', async () => {
     const { container } = await render(TEMPLATE, {
       imports: [LlmCodeBlock],
       componentProperties: { ...defaults(), showLineNumbers: true },
@@ -83,8 +78,7 @@ describe('LlmCodeBlock', () => {
     expect(container.querySelectorAll('.code-line-number').length).toBe(0);
   });
 
-  // @behavior copied-state
-  it('shows copied state after clicking copy button', async () => {
+  covers('code-block', 'copied-state')('shows copied state after clicking copy button', async () => {
     const user = userEvent.setup();
     Object.defineProperty(navigator, 'clipboard', {
       value: { writeText: vi.fn().mockResolvedValue(undefined) },

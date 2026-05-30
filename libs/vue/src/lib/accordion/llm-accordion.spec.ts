@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import LlmAccordionGroup from './llm-accordion-group.vue';
 import LlmAccordionItem from './llm-accordion-item.vue';
 import LlmAccordionHeader from './llm-accordion-header.vue';
+import { covers } from '../../testing/behavior';
 
 const AccordionFixture = {
   components: { LlmAccordionGroup, LlmAccordionItem, LlmAccordionHeader },
@@ -27,8 +28,7 @@ describe('LlmAccordionGroup', () => {
     expect(screen.getByText('Question 2')).toBeInTheDocument();
   });
 
-  // @behavior keyboard-nav
-  it('ArrowDown moves focus to the next header', async () => {
+  covers('accordion', 'keyboard-nav')('ArrowDown moves focus to the next header', async () => {
     const user = userEvent.setup();
     render(AccordionFixture);
     const first = screen.getByRole('button', { name: /Question 1/i });
@@ -38,8 +38,7 @@ describe('LlmAccordionGroup', () => {
     expect(second).toHaveFocus();
   });
 
-  // @behavior home-end
-  it('Home focuses the first header and End the last', async () => {
+  covers('accordion', 'home-end')('Home focuses the first header and End the last', async () => {
     const user = userEvent.setup();
     render({
       components: { LlmAccordionGroup, LlmAccordionItem },
@@ -59,8 +58,7 @@ describe('LlmAccordionGroup', () => {
     expect(btns[0]).toHaveFocus();
   });
 
-  // @behavior wrap
-  it('ArrowDown wraps from the last header to the first', async () => {
+  covers('accordion', 'wrap')('ArrowDown wraps from the last header to the first', async () => {
     const user = userEvent.setup();
     render(AccordionFixture);
     const first = screen.getByRole('button', { name: /Question 1/i });
@@ -70,8 +68,7 @@ describe('LlmAccordionGroup', () => {
     expect(first).toHaveFocus();
   });
 
-  // @behavior skip-disabled
-  it('arrow navigation skips disabled items', async () => {
+  covers('accordion', 'skip-disabled')('arrow navigation skips disabled items', async () => {
     const user = userEvent.setup();
     render({
       components: { LlmAccordionGroup, LlmAccordionItem },
@@ -90,8 +87,7 @@ describe('LlmAccordionGroup', () => {
     expect(q3).toHaveFocus();
   });
 
-  // @behavior expand-on-click
-  it('expands an item on click', async () => {
+  covers('accordion', 'expand-on-click')('expands an item on click', async () => {
     const user = userEvent.setup();
     render(AccordionFixture);
     const btn = screen.getByRole('button', { name: /Question 1/i });
@@ -100,8 +96,7 @@ describe('LlmAccordionGroup', () => {
     expect(btn).toHaveAttribute('aria-expanded', 'true');
   });
 
-  // @behavior collapse-on-click
-  it('collapses an open item on second click', async () => {
+  covers('accordion', 'collapse-on-click')('collapses an open item on second click', async () => {
     const user = userEvent.setup();
     render(AccordionFixture);
     const btn = screen.getByRole('button', { name: /Question 1/i });
@@ -110,8 +105,7 @@ describe('LlmAccordionGroup', () => {
     expect(btn).toHaveAttribute('aria-expanded', 'false');
   });
 
-  // @behavior single-collapse-other
-  it('collapses previously open item when multi is false', async () => {
+  covers('accordion', 'single-collapse-other')('collapses previously open item when multi is false', async () => {
     const user = userEvent.setup();
     render(AccordionFixture);
     const btn1 = screen.getByRole('button', { name: /Question 1/i });
@@ -123,8 +117,7 @@ describe('LlmAccordionGroup', () => {
     expect(btn1).toHaveAttribute('aria-expanded', 'false');
   });
 
-  // @behavior multi-expand
-  it('allows multiple open items when multi is true', async () => {
+  covers('accordion', 'multi-expand')('allows multiple open items when multi is true', async () => {
     const user = userEvent.setup();
     render({
       components: { LlmAccordionGroup, LlmAccordionItem },
@@ -143,8 +136,7 @@ describe('LlmAccordionGroup', () => {
     expect(btn2).toHaveAttribute('aria-expanded', 'true');
   });
 
-  // @behavior disabled-no-toggle
-  it('does not expand a disabled item', async () => {
+  covers('accordion', 'disabled-no-toggle')('does not expand a disabled item', async () => {
     render({
       components: { LlmAccordionGroup, LlmAccordionItem },
       template: `

@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/angular';
+import { covers } from '../../testing/behavior';
 import { LlmIcon } from './llm-icon';
 
 describe('LlmIcon', () => {
-  // @behavior renders-glyph
-  it('renders the glyph for the named icon', async () => {
+  covers('icon', 'renders-glyph')('renders the glyph for the named icon', async () => {
     await render('<llm-icon name="success" />', { imports: [LlmIcon] });
     expect(screen.getByText('✓')).toBeInTheDocument();
   });
@@ -19,16 +19,14 @@ describe('LlmIcon', () => {
     expect(screen.getByText(glyph)).toBeInTheDocument();
   });
 
-  // @behavior decorative-hidden
-  it('is hidden from assistive tech by default (decorative)', async () => {
+  covers('icon', 'decorative-hidden')('is hidden from assistive tech by default (decorative)', async () => {
     const { container } = await render('<llm-icon name="info" />', { imports: [LlmIcon] });
     const host = container.querySelector('llm-icon');
     expect(host).toHaveAttribute('aria-hidden', 'true');
     expect(host).not.toHaveAttribute('role');
   });
 
-  // @behavior labelled-img
-  it('exposes role=img and aria-label when label is provided', async () => {
+  covers('icon', 'labelled-img')('exposes role=img and aria-label when label is provided', async () => {
     const { container } = await render(
       '<llm-icon name="info" label="Information" />',
       { imports: [LlmIcon] }

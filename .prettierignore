@@ -6,3 +6,6 @@
 .angular
 
 .nx/self-healing
+
+# Generated from behaviors.json by tools/scripts/gen-behaviors.mjs
+libs/spec/src/behaviors.generated.ts

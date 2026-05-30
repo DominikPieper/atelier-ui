@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/vue';
 import { userEvent } from '@testing-library/user-event';
 import LlmCheckbox from './llm-checkbox.vue';
+import { covers } from '../../testing/behavior';
 
 describe('LlmCheckbox', () => {
   it('renders with a label', () => {
@@ -8,40 +9,34 @@ describe('LlmCheckbox', () => {
     expect(screen.getByLabelText('Accept terms')).toBeInTheDocument();
   });
 
-  // @behavior reflects-checked
-  it('reflects checked prop', () => {
+  covers('checkbox', 'reflects-checked')('reflects checked prop', () => {
     render(LlmCheckbox, { props: { checked: true }, slots: { default: 'Checked' } });
     expect(screen.getByRole('checkbox', { name: 'Checked' })).toBeChecked();
   });
 
-  // @behavior toggle-emits
-  it('emits update:checked on change', async () => {
+  covers('checkbox', 'toggle-emits')('emits update:checked on change', async () => {
     const user = userEvent.setup();
     const { emitted } = render(LlmCheckbox, { props: { checked: false }, slots: { default: 'Toggle' } });
     await user.click(screen.getByRole('checkbox', { name: 'Toggle' }));
     expect(emitted()['update:checked']).toEqual([[true]]);
   });
 
-  // @behavior disabled
-  it('is disabled when disabled prop is true', () => {
+  covers('checkbox', 'disabled')('is disabled when disabled prop is true', () => {
     render(LlmCheckbox, { props: { disabled: true }, slots: { default: 'Disabled' } });
     expect(screen.getByRole('checkbox', { name: 'Disabled' })).toBeDisabled();
   });
 
-  // @behavior errors
-  it('displays error messages', () => {
+  covers('checkbox', 'errors')('displays error messages', () => {
     render(LlmCheckbox, { props: { errors: ['Field is required'] }, slots: { default: 'Required' } });
     expect(screen.getByText('Field is required')).toBeInTheDocument();
   });
 
-  // @behavior invalid
-  it('marks input as invalid when invalid prop is true', () => {
+  covers('checkbox', 'invalid')('marks input as invalid when invalid prop is true', () => {
     render(LlmCheckbox, { props: { invalid: true }, slots: { default: 'Invalid' } });
     expect(screen.getByRole('checkbox', { name: 'Invalid' })).toHaveAttribute('aria-invalid', 'true');
   });
 
-  // @behavior indeterminate
-  it('sets the indeterminate property on the input when indeterminate is true', () => {
+  covers('checkbox', 'indeterminate')('sets the indeterminate property on the input when indeterminate is true', () => {
     const { container } = render(LlmCheckbox, {
       props: { indeterminate: true },
       slots: { default: 'Partial' },

@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { covers } from '../../testing/behavior';
 import { LlmButton } from './llm-button';
 
 describe('LlmButton', () => {
-  // @behavior default-render
-  it('renders without error with default props', () => {
+  covers('button', 'default-render')('renders without error with default props', () => {
     render(<LlmButton>Click me</LlmButton>);
     expect(screen.getByRole('button', { name: 'Click me' })).toBeInTheDocument();
   });
@@ -22,8 +22,7 @@ describe('LlmButton', () => {
     expect(screen.getByRole('button')).toHaveClass(`size-${size}`);
   });
 
-  // @behavior disabled-state
-  it('is disabled when disabled prop is true', () => {
+  covers('button', 'disabled-state')('is disabled when disabled prop is true', () => {
     render(<LlmButton disabled>Btn</LlmButton>);
     expect(screen.getByRole('button')).toBeDisabled();
   });
@@ -33,8 +32,7 @@ describe('LlmButton', () => {
     expect(screen.getByRole('button')).toHaveClass('is-disabled');
   });
 
-  // @behavior loading-spinner
-  it('renders spinner when loading', () => {
+  covers('button', 'loading-spinner')('renders spinner when loading', () => {
     const { container } = render(<LlmButton loading>Btn</LlmButton>);
     expect(container.querySelector('.spinner')).toBeInTheDocument();
   });
@@ -44,8 +42,7 @@ describe('LlmButton', () => {
     expect(screen.getByRole('button')).toBeDisabled();
   });
 
-  // @behavior click-emits
-  it('fires click event when not disabled', async () => {
+  covers('button', 'click-emits')('fires click event when not disabled', async () => {
     const user = userEvent.setup();
     const onClick = vi.fn();
     render(<LlmButton onClick={onClick}>Click me</LlmButton>);
@@ -53,8 +50,7 @@ describe('LlmButton', () => {
     expect(onClick).toHaveBeenCalledOnce();
   });
 
-  // @behavior disabled-no-click
-  it('does not fire click when disabled', async () => {
+  covers('button', 'disabled-no-click')('does not fire click when disabled', async () => {
     const user = userEvent.setup();
     const onClick = vi.fn();
     render(

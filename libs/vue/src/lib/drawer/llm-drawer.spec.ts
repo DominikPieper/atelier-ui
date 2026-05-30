@@ -4,6 +4,7 @@ import LlmDrawer from './llm-drawer.vue';
 import LlmDrawerHeader from './llm-drawer-header.vue';
 import LlmDrawerContent from './llm-drawer-content.vue';
 import LlmDrawerFooter from './llm-drawer-footer.vue';
+import { covers } from '../../testing/behavior';
 
 beforeEach(() => {
   HTMLDialogElement.prototype.showModal ??= function () {
@@ -29,14 +30,12 @@ const DrawerFixture = {
 };
 
 describe('LlmDrawer', () => {
-  // @behavior render-dialog-element
-  it('renders a dialog element', () => {
+  covers('drawer', 'render-dialog-element')('renders a dialog element', () => {
     const { container } = render(DrawerFixture, { props: { open: false } });
     expect(container.querySelector('dialog')).toBeInTheDocument();
   });
 
-  // @behavior open-shows-modal
-  it('calls showModal when open becomes true', async () => {
+  covers('drawer', 'open-shows-modal')('calls showModal when open becomes true', async () => {
     const { rerender } = render(DrawerFixture, { props: { open: false } });
     await rerender({ open: true });
     expect(document.querySelector('dialog')).toHaveAttribute('open');
@@ -49,8 +48,7 @@ describe('LlmDrawer', () => {
     expect(screen.getByText('Drawer footer.')).toBeInTheDocument();
   });
 
-  // @behavior close-button
-  it('close button emits update:open with false', async () => {
+  covers('drawer', 'close-button')('close button emits update:open with false', async () => {
     const user = userEvent.setup();
     const { emitted } = render(DrawerFixture, { props: { open: true } });
     const closeBtn = screen.getByRole('button', { name: 'Close drawer' });
@@ -70,14 +68,12 @@ describe('LlmDrawer', () => {
     expect(container.querySelector('dialog')).toHaveClass('size-lg');
   });
 
-  // @behavior is-open-class
-  it('applies is-open class when open', () => {
+  covers('drawer', 'is-open-class')('applies is-open class when open', () => {
     const { container } = render(LlmDrawer, { props: { open: true } });
     expect(container.querySelector('dialog')).toHaveClass('is-open');
   });
 
-  // @behavior aria-modal
-  it('sets aria-modal', () => {
+  covers('drawer', 'aria-modal')('sets aria-modal', () => {
     const { container } = render(LlmDrawer, { props: { open: false } });
     expect(container.querySelector('dialog')).toHaveAttribute('aria-modal', 'true');
   });

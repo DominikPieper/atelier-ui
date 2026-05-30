@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
+import { covers } from '../../testing/behavior';
 import { LlmCombobox } from './llm-combobox';
 
 const OPTIONS = [
@@ -23,8 +24,7 @@ function Controlled(props: { initialValue?: string }) {
 }
 
 describe('LlmCombobox', () => {
-  // @behavior render-input
-  it('renders an input with role="combobox"', () => {
+  covers('combobox', 'render-input')('renders an input with role="combobox"', () => {
     const { container } = render(<Controlled />);
     expect(container.querySelector('input[role="combobox"]')).toBeInTheDocument();
   });
@@ -41,8 +41,7 @@ describe('LlmCombobox', () => {
     expect(screen.getByRole('listbox')).toBeInTheDocument();
   });
 
-  // @behavior filter-on-type
-  it('filters options as user types', async () => {
+  covers('combobox', 'filter-on-type')('filters options as user types', async () => {
     const user = userEvent.setup();
     render(<Controlled />);
     await user.click(screen.getByRole('combobox'));
@@ -60,8 +59,7 @@ describe('LlmCombobox', () => {
     expect(screen.getByText('No results found.')).toBeInTheDocument();
   });
 
-  // @behavior select-on-click
-  it('selects an option on click', async () => {
+  covers('combobox', 'select-on-click')('selects an option on click', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(<LlmCombobox value="" onValueChange={onChange} options={OPTIONS} />);
@@ -86,8 +84,7 @@ describe('LlmCombobox', () => {
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 
-  // @behavior keyboard-nav
-  it('navigates with ArrowDown and selects with Enter', async () => {
+  covers('combobox', 'keyboard-nav')('navigates with ArrowDown and selects with Enter', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(<LlmCombobox value="" onValueChange={onChange} options={OPTIONS} />);
@@ -106,8 +103,7 @@ describe('LlmCombobox', () => {
     expect(onChange).toHaveBeenCalledWith('apple');
   });
 
-  // @behavior close-on-escape
-  it('closes on Escape', async () => {
+  covers('combobox', 'close-on-escape')('closes on Escape', async () => {
     const user = userEvent.setup();
     render(<Controlled />);
     await user.click(screen.getByRole('combobox'));
@@ -116,8 +112,7 @@ describe('LlmCombobox', () => {
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 
-  // @behavior aria-expanded
-  it('sets aria-expanded=true when open', async () => {
+  covers('combobox', 'aria-expanded')('sets aria-expanded=true when open', async () => {
     const user = userEvent.setup();
     render(<Controlled />);
     await user.click(screen.getByRole('combobox'));
