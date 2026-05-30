@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { LlmRadio } from './llm-radio';
 import { LlmRadioGroup } from '../radio-group/llm-radio-group';
 
+import { metadata } from '@atelier-ui/spec/metadata/radio.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -15,6 +16,7 @@ const meta: Meta<typeof LlmRadio> = {
   tags: ['autodocs'],
   parameters: {
     design: figmaNode('420-185'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

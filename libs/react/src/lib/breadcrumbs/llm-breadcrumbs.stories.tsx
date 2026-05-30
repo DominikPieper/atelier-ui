@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LlmBreadcrumbs, LlmBreadcrumbItem } from './llm-breadcrumbs';
 
+import { metadata } from '@atelier-ui/spec/metadata/breadcrumbs.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -13,6 +14,7 @@ const meta: Meta<typeof LlmBreadcrumbs> = {
   tags: ['autodocs'],
   parameters: {
     design: figmaNode('55-141'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

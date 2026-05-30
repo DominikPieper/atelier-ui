@@ -11,6 +11,7 @@ import LlmBadge from '../badge/llm-badge.vue';
 import LlmAlert from '../alert/llm-alert.vue';
 import LlmCodeBlock from '../code-block/llm-code-block.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/chat.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 const figmaNode = (nodeId: string) => ({ type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` });
 
@@ -33,7 +34,7 @@ const meta: Meta<typeof LlmChat> = {
     open: { control: 'boolean' },
   },
   args: { variant: 'drawer', status: 'idle', open: true },
-  parameters: { design: figmaNode('507-2953') },
+  parameters: { design: figmaNode('507-2953'), docs: { description: { component: metadata.purpose } } },
 };
 
 export default meta;

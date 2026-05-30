@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { LlmAvatar, LlmAvatarGroup } from './llm-avatar';
 
+import { metadata } from '@atelier-ui/spec/metadata/avatar.metadata';
 const SAMPLE_SRC = 'https://i.pravatar.cc/150?img=1';
 
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
@@ -42,6 +43,7 @@ const meta: Meta<LlmAvatar> = {
   },
   parameters: {
     design: figmaNode('55-151'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

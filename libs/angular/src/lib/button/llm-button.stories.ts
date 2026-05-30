@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { LlmButton } from './llm-button';
 
+import { metadata } from '@atelier-ui/spec/metadata/button.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -36,6 +37,7 @@ const meta: Meta<LlmButton> = {
   },
   parameters: {
     design: figmaNode('129-20'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LlmTooltip } from './llm-tooltip';
 import { LlmButton } from '../button/llm-button';
 
+import { metadata } from '@atelier-ui/spec/metadata/tooltip.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -14,6 +15,7 @@ const meta: Meta<typeof LlmTooltip> = {
   tags: ['autodocs'],
   parameters: {
     design: figmaNode('55-52'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

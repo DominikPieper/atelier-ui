@@ -3,6 +3,7 @@ import type { ComponentProps } from 'react';
 import { useState } from 'react';
 import { LlmCombobox } from './llm-combobox';
 
+import { metadata } from '@atelier-ui/spec/metadata/combobox.metadata';
 const FRUITS = [
   { value: 'apple', label: 'Apple' },
   { value: 'banana', label: 'Banana' },
@@ -34,7 +35,7 @@ const meta: Meta<typeof LlmCombobox> = {
   title: 'Components/Inputs/LlmCombobox',
   component: LlmCombobox,
   tags: ['autodocs'],
-  parameters: { design: figmaNode('421-339') },
+  parameters: { design: figmaNode('421-339'), docs: { description: { component: metadata.purpose } } },
 };
 
 export default meta;

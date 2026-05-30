@@ -5,6 +5,7 @@ import { LlmButton } from '../button/llm-button';
 import { LlmBadge } from '../badge/llm-badge';
 import { LlmCard, LlmCardContent } from '../card/llm-card';
 
+import { metadata } from '@atelier-ui/spec/metadata/tabs.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -26,6 +27,7 @@ const meta: Meta<LlmTabGroup> = {
   },
   parameters: {
     design: figmaNode('55-123'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

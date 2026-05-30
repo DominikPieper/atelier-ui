@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import LlmAvatar from './llm-avatar.vue';
 import LlmAvatarGroup from './llm-avatar-group.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/avatar.metadata';
 const SAMPLE_SRC = 'https://i.pravatar.cc/150?img=1';
 
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
@@ -34,6 +35,7 @@ const meta: Meta<typeof LlmAvatar> = {
   },
   parameters: {
     design: figmaNode('55-151'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

@@ -3,6 +3,7 @@ import { signal } from '@angular/core';
 import { expect, userEvent } from 'storybook/test';
 import { LlmPagination } from './llm-pagination';
 
+import { metadata } from '@atelier-ui/spec/metadata/pagination.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -27,6 +28,7 @@ const meta: Meta<LlmPagination> = {
   },
   parameters: {
     design: figmaNode('55-145'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

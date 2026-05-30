@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import { ref } from 'vue';
 import LlmCombobox from './llm-combobox.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/combobox.metadata';
 const FRUITS = [
   { value: 'apple', label: 'Apple' },
   { value: 'banana', label: 'Banana' },
@@ -39,7 +40,7 @@ const meta: Meta<typeof LlmCombobox> = {
     required: { control: 'boolean' },
     placeholder: { control: 'text' },
   },
-  parameters: { design: figmaNode('421-339') },
+  parameters: { design: figmaNode('421-339'), docs: { description: { component: metadata.purpose } } },
 };
 
 export default meta;

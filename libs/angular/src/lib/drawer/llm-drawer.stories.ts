@@ -5,6 +5,7 @@ import { LlmButton } from '../button/llm-button';
 import { LlmInput } from '../input/llm-input';
 import { LlmDrawer, LlmDrawerContent, LlmDrawerFooter, LlmDrawerHeader } from './llm-drawer';
 
+import { metadata } from '@atelier-ui/spec/metadata/drawer.metadata';
 const ALL_IMPORTS = [LlmDrawer, LlmDrawerHeader, LlmDrawerContent, LlmDrawerFooter, LlmButton];
 
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
@@ -33,7 +34,7 @@ const meta: Meta<LlmDrawer> = {
     size: 'md',
     closeOnBackdrop: true,
   },
-  parameters: { design: figmaNode('421-398') },
+  parameters: { design: figmaNode('421-398'), docs: { description: { component: metadata.purpose } } },
 };
 
 export default meta;

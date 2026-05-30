@@ -8,6 +8,7 @@ import LlmBadge from '../badge/llm-badge.vue';
 import LlmCard from '../card/llm-card.vue';
 import LlmCardContent from '../card/llm-card-content.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/tabs.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -28,6 +29,7 @@ const meta: Meta<typeof LlmTabGroup> = {
   },
   parameters: {
     design: figmaNode('55-123'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

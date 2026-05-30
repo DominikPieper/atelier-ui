@@ -4,6 +4,7 @@ import LlmAccordionGroup from './llm-accordion-group.vue';
 import LlmAccordionItem from './llm-accordion-item.vue';
 import LlmAccordionHeader from './llm-accordion-header.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/accordion.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -24,6 +25,7 @@ const meta: Meta<typeof LlmAccordionGroup> = {
   },
   parameters: {
     design: figmaNode('55-127'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

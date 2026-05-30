@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { LlmBadge } from './llm-badge';
 
+import { metadata } from '@atelier-ui/spec/metadata/badge.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -32,6 +33,7 @@ const meta: Meta<LlmBadge> = {
   },
   parameters: {
     design: figmaNode('55-22'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import LlmProgress from './llm-progress.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/progress.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
@@ -30,7 +31,7 @@ const meta: Meta<typeof LlmProgress> = {
     size: 'md',
     indeterminate: false,
   },
-  parameters: { design: figmaNode('420-153') },
+  parameters: { design: figmaNode('420-153'), docs: { description: { component: metadata.purpose } } },
 };
 
 export default meta;

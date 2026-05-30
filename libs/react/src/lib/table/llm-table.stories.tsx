@@ -5,6 +5,7 @@ import { LlmBadge } from '../badge/llm-badge';
 import { LlmButton } from '../button/llm-button';
 import { LlmCheckbox } from '../checkbox/llm-checkbox';
 
+import { metadata } from '@atelier-ui/spec/metadata/table.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
@@ -25,7 +26,7 @@ const meta: Meta<typeof LlmTable> = {
     size: 'md',
     stickyHeader: false,
   },
-  parameters: { design: figmaNode('421-1183') },
+  parameters: { design: figmaNode('421-1183'), docs: { description: { component: metadata.purpose } } },
 };
 
 export default meta;

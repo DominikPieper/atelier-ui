@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { LlmCombobox } from './llm-combobox';
 
+import { metadata } from '@atelier-ui/spec/metadata/combobox.metadata';
 const FRUITS = [
   { value: 'apple', label: 'Apple' },
   { value: 'banana', label: 'Banana' },
@@ -39,7 +40,7 @@ const meta: Meta<LlmCombobox> = {
     required: { control: 'boolean' },
     placeholder: { control: 'text' },
   },
-  parameters: { design: figmaNode('421-339') },
+  parameters: { design: figmaNode('421-339'), docs: { description: { component: metadata.purpose } } },
 };
 
 export default meta;

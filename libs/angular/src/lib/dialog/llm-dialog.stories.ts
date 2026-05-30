@@ -7,6 +7,7 @@ import { LlmOption } from '../select/llm-option';
 import { LlmSelect } from '../select/llm-select';
 import { LlmDialog, LlmDialogContent, LlmDialogFooter, LlmDialogHeader } from './llm-dialog';
 
+import { metadata } from '@atelier-ui/spec/metadata/dialog.metadata';
 const ALL_IMPORTS = [
   LlmDialog,
   LlmDialogHeader,
@@ -38,6 +39,7 @@ const meta: Meta<LlmDialog> = {
   },
   parameters: {
     design: figmaNode('55-94'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { LlmAccordionGroup, LlmAccordionItem, LlmAccordionHeader } from './llm-accordion';
 
+import { metadata } from '@atelier-ui/spec/metadata/accordion.metadata';
 const IMPORTS = [LlmAccordionGroup, LlmAccordionItem, LlmAccordionHeader];
 
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
@@ -24,6 +25,7 @@ const meta: Meta<LlmAccordionGroup> = {
   },
   parameters: {
     design: figmaNode('55-127'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

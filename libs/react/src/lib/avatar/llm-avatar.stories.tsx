@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LlmAvatar, LlmAvatarGroup } from './llm-avatar';
 
+import { metadata } from '@atelier-ui/spec/metadata/avatar.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -19,6 +20,7 @@ const meta: Meta<typeof LlmAvatar> = {
   args: { size: 'md', shape: 'circle', status: '' },
   parameters: {
     design: figmaNode('55-151'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

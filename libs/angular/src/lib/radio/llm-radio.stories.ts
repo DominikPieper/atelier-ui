@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { LlmRadioGroup } from '../radio-group/llm-radio-group';
 import { LlmRadio } from './llm-radio';
 
+import { metadata } from '@atelier-ui/spec/metadata/radio.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -30,6 +31,7 @@ const meta: Meta<LlmRadio> = {
   },
   parameters: {
     design: figmaNode('420-185'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

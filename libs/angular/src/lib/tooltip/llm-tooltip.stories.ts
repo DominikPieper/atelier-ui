@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { LlmTooltip } from './llm-tooltip';
 import { LlmButton } from '../button/llm-button';
 
+import { metadata } from '@atelier-ui/spec/metadata/tooltip.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -29,6 +30,7 @@ const meta: Meta<LlmTooltip> = {
   },
   parameters: {
     design: figmaNode('55-52'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

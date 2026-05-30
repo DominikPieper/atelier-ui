@@ -18,47 +18,30 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 import ts from 'typescript';
+
+// Shared TS-eval helpers live in CommonJS so check-*.js scripts can require
+// them without an ESM wrapper. Pull them in via createRequire here.
+const require = createRequire(import.meta.url);
+const { evalNode, parseExportedVars } = require('./lib/ts-eval.js');
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const DATA_FILE = resolve(ROOT, 'docs/src/data/components.ts');
 const VERSION_FILE = resolve(ROOT, 'libs/angular/package.json');
 const LLMS_TXT = resolve(ROOT, 'docs/public/llms.txt');
 const LLMS_FULL_TXT = resolve(ROOT, 'docs/public/llms-full.txt');
+const METADATA_INDEX = resolve(ROOT, 'libs/spec/src/metadata/index.ts');
+const METADATA_DIR = resolve(ROOT, 'libs/spec/src/metadata');
+const TOKEN_MANIFEST = resolve(ROOT, 'libs/spec/src/tokens.manifest.ts');
 
 const SITE_URL = 'https://atelier.pieper.io';
 
 // ---------------------------------------------------------------------------
-// Parse components.ts via TypeScript Compiler API.
+// Parse components.ts via TypeScript Compiler API. `evalNode` is shared with
+// `tools/scripts/lib/ts-eval.js`; the walker below extracts the two named
+// exports this generator needs.
 // ---------------------------------------------------------------------------
-
-function evalNode(node) {
-  if (!node) return null;
-  if (ts.isStringLiteralLike(node)) return node.text;
-  if (node.kind === ts.SyntaxKind.TrueKeyword) return true;
-  if (node.kind === ts.SyntaxKind.FalseKeyword) return false;
-  if (ts.isNumericLiteral(node)) return Number(node.text);
-  if (ts.isPrefixUnaryExpression(node) && node.operator === ts.SyntaxKind.MinusToken) {
-    const v = evalNode(node.operand);
-    return typeof v === 'number' ? -v : null;
-  }
-  if (ts.isArrayLiteralExpression(node)) return node.elements.map(evalNode);
-  if (ts.isObjectLiteralExpression(node)) {
-    const obj = {};
-    for (const prop of node.properties) {
-      if (!ts.isPropertyAssignment(prop)) continue;
-      const key = ts.isStringLiteralLike(prop.name)
-        ? prop.name.text
-        : ts.isIdentifier(prop.name)
-          ? prop.name.text
-          : null;
-      if (!key) continue;
-      obj[key] = evalNode(prop.initializer);
-    }
-    return obj;
-  }
-  return null;
-}
 
 function parseComponents() {
   const program = ts.createProgram([DATA_FILE], {
@@ -92,6 +75,39 @@ function parseComponents() {
 function readVersion() {
   const pkg = JSON.parse(readFileSync(VERSION_FILE, 'utf-8'));
   return pkg.version;
+}
+
+// ---------------------------------------------------------------------------
+// Load AI-readiness metadata: per-component .metadata.ts files keyed by spec
+// name, and the global token-annotation manifest. Both are optional today —
+// when the registry is empty the generator behaves exactly as before so the
+// `--check` gate stays green during Phase 2 rollout.
+// ---------------------------------------------------------------------------
+
+function loadMetadata() {
+  const { COMPONENT_METADATA_REGISTRY: registry = {} } = parseExportedVars(METADATA_INDEX);
+  const bySpec = {};
+  const seenFiles = new Map();
+  for (const [specName, modulePath] of Object.entries(registry)) {
+    const file = resolve(METADATA_DIR, `${modulePath}.metadata.ts`);
+    if (!seenFiles.has(file)) {
+      try {
+        const exported = parseExportedVars(file);
+        seenFiles.set(file, exported.metadata || null);
+      } catch {
+        seenFiles.set(file, null);
+      }
+    }
+    const meta = seenFiles.get(file);
+    if (meta) bySpec[specName] = meta;
+  }
+  return bySpec;
+}
+
+function loadTokenManifest() {
+  const exported = parseExportedVars(TOKEN_MANIFEST);
+  const tokens = exported.tokens;
+  return tokens && typeof tokens === 'object' ? tokens : {};
 }
 
 // ---------------------------------------------------------------------------
@@ -305,7 +321,59 @@ const STATIC_A11Y = `## Accessibility Notes
 - Color is never the sole indicator of state — icons and text labels accompany color changes
 - All form controls support invalid, disabled, required, and readonly states with proper aria- attributes`;
 
-function buildFullReference({ categories, docs }, version) {
+function buildMetadataBlock(meta) {
+  // Indented to slot under each component's `### Selector` heading.
+  const lines = [];
+  lines.push('  Metadata:');
+  if (meta.purpose) lines.push(`    purpose: ${meta.purpose}`);
+  if (Array.isArray(meta.whenToUse) && meta.whenToUse.length) {
+    lines.push('    whenToUse:');
+    for (const w of meta.whenToUse) lines.push(`      - ${w}`);
+  }
+  if (Array.isArray(meta.antiPatterns) && meta.antiPatterns.length) {
+    lines.push('    antiPatterns:');
+    for (const ap of meta.antiPatterns) {
+      lines.push(`      - ${ap.pattern} → use ${ap.useInstead}`);
+    }
+  }
+  if (Array.isArray(meta.relatedComponents) && meta.relatedComponents.length) {
+    lines.push(`    relatedComponents: ${meta.relatedComponents.join(', ')}`);
+  }
+  if (meta.accessibility) {
+    const a = meta.accessibility;
+    if (a.role) lines.push(`    accessibility.role: ${a.role}`);
+    if (a.keyboardBehavior) {
+      lines.push(`    accessibility.keyboardBehavior: ${a.keyboardBehavior}`);
+    }
+  }
+  return lines.join('\n');
+}
+
+function buildTokenAnnotationsBlock(manifest) {
+  const names = Object.keys(manifest).sort();
+  if (names.length === 0) return null;
+  const lines = [];
+  lines.push('## Token Annotations');
+  lines.push('');
+  lines.push(
+    'Each `--ui-*` token carries an intent and a list of constraints. Reach for the token whose intent matches what you are building; respect its constraints.'
+  );
+  lines.push('');
+  for (const name of names) {
+    const annot = manifest[name];
+    if (!annot) continue;
+    lines.push(`  ${name}`);
+    if (annot.intent) lines.push(`    intent: ${annot.intent}`);
+    if (Array.isArray(annot.constraints) && annot.constraints.length) {
+      lines.push(`    constraints: ${annot.constraints.join('; ')}`);
+    }
+    if (annot.darkMode) lines.push(`    darkMode: ${annot.darkMode}`);
+    lines.push('');
+  }
+  return lines.join('\n').replace(/\n+$/, '');
+}
+
+function buildFullReference({ categories, docs }, version, { metadataBySpec, tokenManifest }) {
   const total = orderedKeys(categories).length;
   const lines = [];
 
@@ -347,6 +415,14 @@ function buildFullReference({ categories, docs }, version) {
     lines.push('');
     lines.push('  Usage:');
     lines.push(indent(comp.codeExample, '    '));
+    // Optional metadata block — only present once the component has a
+    // `.metadata.ts` file registered. The lookup goes via selector →
+    // spec name (selector + 'Spec').
+    const meta = metadataBySpec[`${comp.selector}Spec`];
+    if (meta) {
+      lines.push('');
+      lines.push(buildMetadataBlock(meta));
+    }
     lines.push('');
     lines.push('---');
     lines.push('');
@@ -356,6 +432,17 @@ function buildFullReference({ categories, docs }, version) {
   lines.push('');
   lines.push('---');
   lines.push('');
+
+  // Optional token-annotation block — only present once at least one token
+  // has been annotated in libs/spec/src/tokens.manifest.ts.
+  const tokensBlock = buildTokenAnnotationsBlock(tokenManifest);
+  if (tokensBlock) {
+    lines.push(tokensBlock);
+    lines.push('');
+    lines.push('---');
+    lines.push('');
+  }
+
   lines.push(STATIC_A11Y);
   lines.push('');
   return lines.join('\n');
@@ -369,8 +456,10 @@ const mode = process.argv[2];
 
 const parsed = parseComponents();
 const version = readVersion();
+const metadataBySpec = loadMetadata();
+const tokenManifest = loadTokenManifest();
 const shortOut = buildShortIndex(parsed, version);
-const fullOut = buildFullReference(parsed, version);
+const fullOut = buildFullReference(parsed, version, { metadataBySpec, tokenManifest });
 
 if (mode === '--check') {
   const drift = [];

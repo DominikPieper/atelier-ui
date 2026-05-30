@@ -78,6 +78,20 @@ Each entry lists:
     <LlmButton loading={true}>Loading</LlmButton>
     <LlmButton disabled={true}>Disabled</LlmButton>
 
+  Metadata:
+    purpose: Primary action trigger. Renders a labelled button users press to commit an action — submit a form, open a dialog, advance a flow.
+    whenToUse:
+      - Initiating an action that changes state on the current page (submit, save, delete, open).
+      - Triggering navigation in flows where a button is more semantically correct than a link.
+      - Surfacing the primary call-to-action in a form, dialog, or empty state.
+    antiPatterns:
+      - Navigating to a new URL where the destination is the meaning of the interaction. → use A plain `<a>` link — links say "go somewhere", buttons say "do something".
+      - Toggling a binary on/off state. → use LlmToggle — communicates the persistent state to assistive tech.
+      - Selecting an option from a list. → use LlmSelect, LlmCombobox, or LlmRadioGroup, depending on cardinality and search needs.
+    relatedComponents: LlmToggle, LlmMenuSpec, LlmDialogSpec
+    accessibility.role: button
+    accessibility.keyboardBehavior: Activates on Enter or Space. Receives focus via Tab in source order. Disabled and loading states block activation and remove the button from the tab order respectively (loading retains focus but ignores activation).
+
 ---
 
 ### LlmInput
@@ -101,6 +115,20 @@ Each entry lists:
     <LlmInput invalid={true} placeholder="Invalid state" />
     <LlmInput disabled={true} placeholder="Disabled" />
 
+  Metadata:
+    purpose: Single-line text field. Renders an `<input>` bound to a form value with the standard validation and disabled states.
+    whenToUse:
+      - Collecting a short freeform string — name, title, search query.
+      - Capturing a typed value (email, password, number, tel, url) where the browser keyboard hint matters.
+      - Driving a typeahead or filter where the user types and the page reacts on each change.
+    antiPatterns:
+      - Accepting multi-line prose, descriptions, or comments. → use LlmTextarea — sized for wrapping text with an optional auto-resize.
+      - Picking one option from a known list. → use LlmSelect for short lists, LlmCombobox when the list is long enough to need search.
+      - Toggling a boolean. → use LlmCheckbox or LlmToggle — both encode the binary state for assistive tech.
+    relatedComponents: LlmTextareaSpec, LlmSelectSpec, LlmComboboxSpec
+    accessibility.role: textbox
+    accessibility.keyboardBehavior: Receives focus via Tab. Characters insert at the caret, Home/End and arrow keys move the caret, and form submission triggers on Enter when inside a form. `invalid` toggles `aria-invalid`, `required` toggles `aria-required`.
+
 ---
 
 ### LlmTextarea
@@ -123,6 +151,19 @@ Each entry lists:
     <LlmTextarea placeholder="Tell us about yourself" rows={4} />
     <LlmTextarea autoResize={true} placeholder="Auto-resizes as you type..." />
     <LlmTextarea disabled={true} placeholder="Disabled" />
+
+  Metadata:
+    purpose: Multi-line text field. Renders a `<textarea>` sized for wrapping prose, with optional auto-resize as content grows.
+    whenToUse:
+      - Collecting a description, comment, or message body where line breaks are part of the input.
+      - Capturing a code snippet, log paste, or long-form note.
+      - Editing freeform content where the visible height should grow with the text (`autoResize: true`).
+    antiPatterns:
+      - Collecting a single short value such as a title or email. → use LlmInput — sized for one-line entry with type-specific keyboard hints.
+      - Building a rich-text editor with formatting toolbars. → use A dedicated editor (Tiptap, Lexical) — textarea is plain text only.
+    relatedComponents: LlmInputSpec
+    accessibility.role: textbox
+    accessibility.keyboardBehavior: Receives focus via Tab. Enter inserts a newline (it does not submit). Arrow keys, Home/End, and PageUp/PageDown navigate within the text. `invalid` toggles `aria-invalid`, `required` toggles `aria-required`.
 
 ---
 
@@ -148,6 +189,19 @@ Each entry lists:
     <LlmCheckbox indeterminate={true}>Indeterminate</LlmCheckbox>
     <LlmCheckbox disabled={true}>Disabled</LlmCheckbox>
 
+  Metadata:
+    purpose: Binary or tri-state toggle bound to a form field. Renders an `<input type="checkbox">` with optional indeterminate state.
+    whenToUse:
+      - Opting into a single boolean choice (terms accepted, remember me, subscribe).
+      - Selecting zero or more items from a list — each row is its own checkbox.
+      - Driving a "select all" header that flips to indeterminate when only some children are checked.
+    antiPatterns:
+      - Switching a setting on/off where the change applies immediately. → use LlmToggle — communicates the "switch" affordance and instant effect to assistive tech.
+      - Picking exactly one option from a small set. → use LlmRadioGroup — radios enforce single-select and announce the group.
+    relatedComponents: LlmToggleSpec, LlmRadioSpec, LlmRadioGroupSpec
+    accessibility.role: checkbox
+    accessibility.keyboardBehavior: Receives focus via Tab. Space toggles checked. `indeterminate` is conveyed via `aria-checked="mixed"` and clears on the next user toggle. Disabled removes the control from activation.
+
 ---
 
 ### LlmToggle
@@ -169,6 +223,19 @@ Each entry lists:
     <LlmToggle>Enable notifications</LlmToggle>
     <LlmToggle checked={true}>Active toggle</LlmToggle>
     <LlmToggle disabled={true}>Disabled</LlmToggle>
+
+  Metadata:
+    purpose: On/off switch for a setting that takes effect immediately. Renders a switch control bound to a boolean form value.
+    whenToUse:
+      - Flipping a setting that applies the moment it changes (dark mode, notifications, autosave).
+      - Enabling or disabling a feature inside a settings panel or preferences row.
+      - Acting as the trigger for revealing a dependent block of controls when on.
+    antiPatterns:
+      - Choosing among more than two states. → use LlmRadioGroup or LlmSelect — switches only encode true/false.
+      - Collecting a binary value that is only committed on form submit. → use LlmCheckbox — checkboxes carry the "stage a change" semantics; switches imply immediate effect.
+    relatedComponents: LlmCheckboxSpec
+    accessibility.role: switch
+    accessibility.keyboardBehavior: Receives focus via Tab. Space and Enter both toggle the checked state. Disabled removes the control from activation. `aria-checked` reflects the boolean value.
 
 ---
 
@@ -239,6 +306,20 @@ Each entry lists:
       ]}
     />
 
+  Metadata:
+    purpose: Searchable picker. Renders a text input plus a filtered option list so users can type to narrow a long set of choices.
+    whenToUse:
+      - Picking one value from a list long enough that scrolling beats scanning (countries, currencies, users).
+      - Letting the user type a few characters to filter options instead of opening every group.
+      - Driving an autocomplete where the available values are known upfront, not free text.
+    antiPatterns:
+      - Accepting any freeform string the user types. → use LlmInput — combobox commits to a value from the option list.
+      - Picking from a list short enough to fit a native dropdown. → use LlmSelect — no search overhead, inherits native mobile UI.
+      - Selecting many values at once. → use A multi-select combobox (not in this spec) or a list of LlmCheckbox rows.
+    relatedComponents: LlmSelectSpec, LlmInputSpec
+    accessibility.role: combobox
+    accessibility.keyboardBehavior: Receives focus via Tab. Typing filters the list and opens the popup; Down/Up moves through options, Enter commits the highlighted one, Escape closes the popup without changing the value. Home and End jump to the first/last option when the popup is open.
+
 ---
 
 ### LlmBadge
@@ -257,6 +338,20 @@ Each entry lists:
     <LlmBadge variant="info">Info</LlmBadge>
     <LlmBadge size="sm" variant="success">Small</LlmBadge>
 
+  Metadata:
+    purpose: Compact inline label. Renders a small pill carrying a status word, count, or category alongside other content.
+    whenToUse:
+      - Marking the status of a row or card (active, pending, error) next to its title.
+      - Showing a numeric count attached to a navigation item (unread, queued, total).
+      - Tagging a list entry with a short category or version label.
+      - Annotating a heading or button with a "new" / "beta" marker.
+    antiPatterns:
+      - Surfacing a dismissable system-level message. → use LlmAlert — alerts carry a role and live region, badges do not.
+      - Holding a removable user-entered chip (filter, recipient). → use A dedicated chip/tag component with its own remove affordance; badges are display-only.
+    relatedComponents: LlmAlertSpec, LlmAvatarSpec
+    accessibility.role: status
+    accessibility.keyboardBehavior: Non-interactive. Not focusable and ignores all keyboard input — the surrounding context (row, button, nav item) handles focus.
+
 ---
 
 ### LlmIcon
@@ -272,6 +367,20 @@ Each entry lists:
     <LlmIcon name="success" />
     <LlmIcon name="warning" size="lg" label="Warning" />
     <LlmIcon name="chevron-down" size="sm" />
+
+  Metadata:
+    purpose: Inline SVG glyph. Renders one icon from the library catalog at a fixed size, with an optional accessible label.
+    whenToUse:
+      - Reinforcing the meaning of a button or menu item with a recognisable glyph.
+      - Carrying status meaning inside a badge, alert, or toast (success, warning, danger, info).
+      - Indicating direction or affordance (chevrons for disclosure, arrows for navigation, sort markers in headers).
+      - Standing alone as a meaningful symbol — in which case `label` is required so assistive tech can announce it.
+    antiPatterns:
+      - Rendering a user avatar or product image. → use LlmAvatar or a plain `<img>` — icons are abstract glyphs, not raster content.
+      - Conveying status without an adjacent label and without setting `label`. → use Pair the icon with visible text or pass `label` — decorative icons are hidden from screen readers.
+    relatedComponents: LlmButtonSpec, LlmBadgeSpec, LlmAlertSpec
+    accessibility.role: img
+    accessibility.keyboardBehavior: Not focusable; no key handling.
 
 ---
 
@@ -294,6 +403,21 @@ Each entry lists:
         <LlmButton variant="primary" size="sm">Action</LlmButton>
       </LlmCardFooter>
     </LlmCard>
+
+  Metadata:
+    purpose: Container that groups related content into a single visual block. Renders a padded surface with optional elevation or border; does not add a landmark role unless explicitly opted in.
+    whenToUse:
+      - Wrapping a self-contained piece of content (a post, a stat, a settings panel) so it reads as one unit.
+      - Building a grid or list of comparable items — products, plans, dashboard tiles.
+      - Separating a form section or summary panel from surrounding page chrome.
+      - Highlighting a feature, callout, or empty-state block within a larger view.
+    antiPatterns:
+      - Showing a dismissable system message inside a card. → use LlmAlert — alerts carry the right role and live-region semantics for transient messages.
+      - Using a card as a modal container layered over the page. → use LlmDialog — dialogs handle focus trapping, scrim, and dismiss behaviour.
+      - Adding `role="article"` to every card by default to look more semantic. → use Leave `role` unset for visual grouping; only set it when the card is a real landmark in the page outline.
+    relatedComponents: LlmDialogSpec, LlmAlertSpec
+    accessibility.role: none
+    accessibility.keyboardBehavior: Non-interactive by default. Not focusable; any interactive children (buttons, links) handle their own focus and activation. When `role` is set to `region` pair with `aria-label` or `aria-labelledby` so screen readers announce the landmark.
 
 ---
 
@@ -325,6 +449,21 @@ Each entry lists:
         <div llmTableEmpty>No results found</div>
       </LlmTbody>
     </LlmTable>
+
+  Metadata:
+    purpose: Tabular data grid. Renders rows of records with column headers, optional sorting, sticky headers, and per-cell alignment.
+    whenToUse:
+      - Displaying a list of records where each record has the same set of comparable fields.
+      - Surfacing data users need to scan across rows or columns (totals, status, timestamps).
+      - Wrapping a sortable column set where header clicks reorder rows.
+      - Showing data dense enough to benefit from a sticky header while scrolling.
+    antiPatterns:
+      - Laying out two-dimensional UI that is not actually tabular data (cards in a grid). → use A CSS grid layout — `<table>` semantics confuse assistive tech when there is no row/column meaning.
+      - Rendering a single record with field/value pairs. → use A description list or a labelled key/value layout — tables imply multiple comparable rows.
+      - Picking one option from a list. → use LlmSelect, LlmCombobox, or LlmRadioGroup depending on cardinality.
+    relatedComponents: LlmPaginationSpec, LlmCheckboxSpec, LlmBadgeSpec
+    accessibility.role: table
+    accessibility.keyboardBehavior: The scrollable wrapper is focusable (tabindex=0) so users can pan horizontally with arrow keys. Sortable headers are buttons reached via Tab; Enter or Space toggles the sort direction and updates `aria-sort` on the header.
 
 ---
 
@@ -368,6 +507,19 @@ Each entry lists:
     <LlmSkeleton variant="circular" width="40px" />
     <LlmSkeleton variant="rectangular" height="200px" />
 
+  Metadata:
+    purpose: Loading placeholder. Renders a sized block in the shape of the content that will replace it once data resolves.
+    whenToUse:
+      - Filling the slot where a chunk of fetched data — card body, table row, avatar — will land, so the layout does not jump on arrival.
+      - Standing in for a single line of text while a label or value loads.
+      - Reserving the footprint of an image or media thumbnail during async load.
+    antiPatterns:
+      - Communicating an indeterminate background operation with no associated content slot. → use LlmProgress with `indeterminate` — has the right role and announces progress.
+      - Holding empty space when there is genuinely nothing to render. → use An empty state with explanation; skeletons promise content that is coming.
+    relatedComponents: LlmProgressSpec, LlmAvatarSpec
+    accessibility.role: status
+    accessibility.keyboardBehavior: Not focusable; no key handling.
+
 ---
 
 ### LlmProgress
@@ -387,6 +539,20 @@ Each entry lists:
     <LlmProgress value={60} variant="success" label="Form completion" />
     <LlmProgress value={85} variant="warning" label="Quota usage" />
     <LlmProgress indeterminate label="Loading…" />
+
+  Metadata:
+    purpose: Determinate or indeterminate progress bar. Renders the share of work completed for a task whose duration is measurable, or an indeterminate animation when it is not.
+    whenToUse:
+      - Reporting upload, download, or file-processing progress where bytes or items completed are known.
+      - Showing form completion across multiple steps as a percentage.
+      - Indicating an in-flight background operation with `indeterminate` when the total is unknown.
+      - Visualising quota or capacity usage against a maximum.
+    antiPatterns:
+      - Reserving the layout slot for content that has not loaded yet. → use LlmSkeleton — sized to the missing content, not a generic bar.
+      - Acknowledging a momentary action (saved, copied). → use LlmToast — transient confirmation belongs in a live region, not a progress bar.
+    relatedComponents: LlmSkeletonSpec, LlmToastSpec
+    accessibility.role: progressbar
+    accessibility.keyboardBehavior: Not focusable; no key handling.
 
 ---
 
@@ -479,6 +645,19 @@ Each entry lists:
       onPageChange={(p) => console.log(p)}
     />
 
+  Metadata:
+    purpose: Page navigator. Renders numbered page buttons plus previous/next (and optional first/last) controls for a paged list or table.
+    whenToUse:
+      - Splitting a long list or table into fixed-size pages where the total count is known.
+      - Letting users jump directly to a specific page rather than scrolling.
+      - Surfacing position within a result set (current page out of total).
+    antiPatterns:
+      - Loading more rows continuously as the user scrolls. → use An infinite-scroll pattern with a sentinel — pagination implies discrete, addressable pages.
+      - Stepping through a fixed multi-step flow. → use A stepper — steps represent ordered stages, not interchangeable pages of data.
+    relatedComponents: LlmTableSpec, LlmButtonSpec
+    accessibility.role: navigation
+    accessibility.keyboardBehavior: Page controls are buttons reached via Tab in source order. Enter or Space activates the focused control. The current page is marked with `aria-current="page"` and the disabled prev/next buttons drop out of the tab order at the boundaries.
+
 ---
 
 ### LlmMenu + LlmMenuItem + LlmMenuTrigger
@@ -521,6 +700,21 @@ Each entry lists:
       </LlmDialogFooter>
     </LlmDialog>
 
+  Metadata:
+    purpose: Modal overlay that interrupts the page to demand focused attention. Traps focus, dims the background with a scrim, and blocks interaction with the rest of the page until it is dismissed.
+    whenToUse:
+      - Confirming a destructive action (delete, discard, sign out) before it commits.
+      - Hosting a short focused task — edit a row, pick a date, complete a one-step form — without navigating away.
+      - Showing detail content (preview, full-size image, expanded record) on top of the current view.
+      - Asking for a decision that must be answered before the user can continue with the underlying flow.
+    antiPatterns:
+      - Showing a transient, non-blocking system message. → use LlmToast or LlmAlert — neither demands focus or blocks interaction.
+      - Sliding in a side panel for secondary navigation or filters. → use LlmDrawer — drawers anchor to an edge and are the right primitive for persistent side surfaces.
+      - Hosting a long, multi-step workflow that needs its own URL and history. → use A dedicated route or wizard page — dialogs should not own deep flows the user might want to share or refresh.
+    relatedComponents: LlmDrawerSpec, LlmAlertSpec, LlmButtonSpec
+    accessibility.role: dialog
+    accessibility.keyboardBehavior: On open, focus moves to the first focusable element inside the dialog and is trapped within it. Tab and Shift+Tab cycle through dialog descendants only. Escape closes the dialog and returns focus to the trigger that opened it.
+
 ---
 
 ### LlmDrawer
@@ -545,6 +739,21 @@ Each entry lists:
         <LlmButton onClick={() => setOpen(false)}>Close</LlmButton>
       </LlmDrawerFooter>
     </LlmDrawer>
+
+  Metadata:
+    purpose: Edge-anchored panel that slides in from one side of the viewport. Hosts secondary navigation, filters, or detail views without taking the user away from the underlying page.
+    whenToUse:
+      - Surfacing primary navigation on narrow viewports where a persistent sidebar does not fit.
+      - Exposing filters, settings, or facets that the user toggles on and off while scanning a list.
+      - Inspecting a record or row in a detail panel without losing the surrounding list context.
+      - Presenting a longer task or form that benefits from screen-edge anchoring rather than a centred modal.
+    antiPatterns:
+      - Blocking the page for a short confirmation or single-decision prompt. → use LlmDialog — dialogs are centred, scoped, and the right primitive for one focused decision.
+      - Showing a transient notification that should not require dismissal. → use LlmToast — toasts auto-dismiss and do not anchor to a screen edge.
+      - Building a dropdown menu attached to a trigger button. → use LlmMenu — menus position relative to the trigger and use roving focus, not focus trapping.
+    relatedComponents: LlmDialogSpec, LlmMenuSpec
+    accessibility.role: dialog
+    accessibility.keyboardBehavior: On open, focus moves into the drawer and is trapped while it is visible. Tab and Shift+Tab cycle through drawer descendants only. Escape closes the drawer and returns focus to the trigger that opened it.
 
 ---
 
@@ -631,6 +840,21 @@ Each entry lists:
     <LlmAlert variant="warning" dismissible={true}>Your session expires in 5 minutes.</LlmAlert>
     <LlmAlert variant="danger">Something went wrong. Please try again.</LlmAlert>
 
+  Metadata:
+    purpose: Inline contextual message. Renders a block carrying status content (info, success, warning, danger) with an optional dismiss control.
+    whenToUse:
+      - Surfacing a result after a form submit (saved, failed, partial success) above or below the form.
+      - Warning the user about a consequence of a destructive action before they confirm.
+      - Communicating a system-level notice that should stay visible until acknowledged (`dismissible: true`).
+      - Highlighting a tip or note inside documentation or a settings panel.
+    antiPatterns:
+      - Tagging an item with a short status word next to other content. → use LlmBadge — badges are inline labels, alerts are block-level messages with a role.
+      - Showing a transient confirmation that disappears on its own. → use A toast/snackbar component — alerts stay in the layout until dismissed or unmounted.
+      - Blocking the page to demand a decision. → use LlmDialog — modal dialogs interrupt; alerts coexist with the surrounding content.
+    relatedComponents: LlmBadgeSpec, LlmDialogSpec
+    accessibility.role: alert
+    accessibility.keyboardBehavior: The alert body is non-interactive and not focusable. When `dismissible: true`, the close button is reachable via Tab and activates on Enter or Space, moving focus back to the document after dismissal.
+
 ---
 
 ### LlmChat
@@ -659,6 +883,20 @@ Each entry lists:
       </LlmChatMessages>
       <LlmChatInput onSend={onSend} onStop={onStop} />
     </LlmChat>
+
+  Metadata:
+    purpose: AI chat surface. Renders a conversation log with a composer for sending messages and a live status for streaming or errored replies.
+    whenToUse:
+      - Embedding an assistant alongside the current page as a side drawer that does not displace the workspace.
+      - Offering a focused, modal-like popup chat anchored to a launcher button.
+      - Composing a chat inline inside a larger layout (a docs page, a settings panel).
+      - Reflecting in-flight assistant work via `status="streaming"` and surfacing failures via `status="error"`.
+    antiPatterns:
+      - Confirming or asking the user for a single decision. → use LlmDialog — short-lived, focused, with explicit confirm/cancel actions.
+      - Showing transient system notifications. → use LlmToast — notifications are unidirectional and ephemeral, chat is a two-way log.
+    relatedComponents: LlmDrawerSpec, LlmDialogSpec, LlmTextareaSpec
+    accessibility.role: log
+    accessibility.keyboardBehavior: The message log is a live region — new messages are announced as they stream in. Tab moves focus into the composer; Enter submits and Shift+Enter inserts a newline. In drawer and popup variants, Escape closes the surface and focus returns to the launcher.
 
 ---
 
@@ -703,6 +941,416 @@ Custom theme example:
     --ui-color-primary-light: #d1fae5;
     --ui-radius-md: 2px; /* sharp corners */
   }
+
+---
+
+## Token Annotations
+
+Each `--ui-*` token carries an intent and a list of constraints. Reach for the token whose intent matches what you are building; respect its constraints.
+
+  --ui-color-border
+    intent: Decorative border for cards, dividers, and resting input outlines. Below 3:1 contrast — informational only.
+    constraints: Decorative only — do not use as the sole indicator of a functional boundary (WCAG 1.4.11).; For functional borders (interactive controls), use --ui-color-border-strong.
+
+  --ui-color-border-hover
+    intent: Hover state for decorative borders — slightly deeper than --ui-color-border.
+    constraints: Only use as :hover state — never as a resting border.
+
+  --ui-color-border-strong
+    intent: Functional border meeting >=3:1 contrast (WCAG 1.4.11). Use for input outlines, focus rings, and meaningful dividers.
+    constraints: Use whenever the border carries meaning (control boundaries, separators users must perceive).; Do not use for purely decorative chrome — use --ui-color-border instead.
+
+  --ui-color-brand-agile
+    intent: Conciso Agile sub-brand colour (mint). Opt-in for Agile-themed surfaces.
+    constraints: Reserve for explicit Agile-branded surfaces — do not use as a generic success colour (use --ui-color-success).; Contrast not guaranteed against arbitrary text colours; verify per use.
+
+  --ui-color-brand-ai
+    intent: Conciso AI sub-brand colour (lime). Opt-in for AI-themed surfaces and accents.
+    constraints: Reserve for explicit AI-branded surfaces — do not use as a generic warning or highlight.; Contrast not guaranteed against arbitrary text colours; verify per use.
+
+  --ui-color-brand-architecture
+    intent: Conciso Architecture sub-brand colour (deep teal). Opt-in for Architecture-themed surfaces.
+    constraints: Reserve for explicit Architecture-branded surfaces — do not use as a generic UI fill.; Contrast not guaranteed against arbitrary text colours; verify per use.
+
+  --ui-color-brand-corporate
+    intent: Conciso corporate teal. Reference brand colour — opt-in for components that need it.
+    constraints: Reserve for explicit brand surfaces (logos, marketing accents) — do not use as a generic UI fill.; Contrast not guaranteed against arbitrary text colours; verify per use.
+
+  --ui-color-brand-development
+    intent: Conciso Development sub-brand colour (bright blue). Opt-in for Development-themed surfaces.
+    constraints: Reserve for explicit Development-branded surfaces — do not use as a generic info colour (use --ui-color-info).; Contrast not guaranteed against arbitrary text colours; verify per use.
+
+  --ui-color-brand-light-blue
+    intent: Conciso light-blue accent. Opt-in for bright brand highlights and gradients.
+    constraints: Reserve for explicit brand accents — do not use as a generic UI fill.; Contrast not guaranteed against arbitrary text colours; verify per use.
+
+  --ui-color-brand-light-green
+    intent: Conciso light-green accent. Opt-in for bright brand highlights and gradients.
+    constraints: Reserve for explicit brand accents — do not use as a generic success indicator.; Contrast not guaranteed against arbitrary text colours; verify per use.
+
+  --ui-color-brand-petrol
+    intent: Conciso deep petrol accent. Opt-in for dark brand surfaces and accents.
+    constraints: Reserve for explicit brand surfaces — do not use as a generic dark fill (use --ui-color-surface variants).; Contrast not guaranteed against arbitrary text colours; verify per use.
+
+  --ui-color-danger
+    intent: Destructive action and error signal colour. Use for delete buttons and form errors.
+    constraints: Pair with text + icon — never rely on colour alone for state.; Do not use for decorative emphasis.; Pair foreground text with --ui-color-text-on-danger when used as a fill.
+
+  --ui-color-danger-active
+    intent: Pressed / active state for danger surfaces — deepest step of the danger ramp.
+    constraints: Only use as :active state — never as a resting fill.
+
+  --ui-color-danger-bg
+    intent: Tinted background for danger badges, alerts, and toasts. AA-safe pair with --ui-color-danger-text.
+    constraints: Only use as a fill — pair foreground with --ui-color-danger-text for guaranteed contrast.; Do not place arbitrary text colours on this surface — the AA pairing is specific.
+
+  --ui-color-danger-hover
+    intent: Hover state for danger surfaces — one shade deeper than --ui-color-danger.
+    constraints: Only use as :hover / :focus-visible state — never as a resting fill.
+
+  --ui-color-danger-text
+    intent: AA-safe foreground for use on --ui-color-danger-bg in danger badges, alerts, and toasts.
+    constraints: Only use as foreground on --ui-color-danger-bg; contrast is guaranteed against that surface and no other.
+
+  --ui-color-error-text
+    intent: Foreground colour for inline form error messages. Aliased to --ui-color-danger-text.
+    constraints: Pair with --ui-color-input-border-invalid on the associated input — colour alone is not a sufficient error signal.; Do not use as a generic body-text colour — its meaning is "error".
+
+  --ui-color-info
+    intent: Informational signal colour. Use for info alerts and neutral notifications.
+    constraints: Pair with text + icon — never rely on colour alone for state.; Do not use for decorative emphasis.
+
+  --ui-color-info-bg
+    intent: Tinted background for info badges, alerts, and toasts. AA-safe pair with --ui-color-info-text.
+    constraints: Only use as a fill — pair foreground with --ui-color-info-text for guaranteed contrast.; Do not place arbitrary text colours on this surface — the AA pairing is specific.
+
+  --ui-color-info-text
+    intent: AA-safe foreground for use on --ui-color-info-bg in info badges, alerts, and toasts.
+    constraints: Only use as foreground on --ui-color-info-bg; contrast is guaranteed against that surface and no other.
+
+  --ui-color-input-bg
+    intent: Resting background for text inputs, selects, and textareas. Sunken to read as fillable.
+    constraints: Pair with --ui-color-text for foreground; do not place tinted text on input surfaces.; Switch to --ui-color-input-bg-focus on :focus to signal interaction.
+
+  --ui-color-input-bg-focus
+    intent: Focused background for text inputs — lifts to surface level to signal active editing.
+    constraints: Only use as :focus / :focus-within state — never as a resting fill.
+
+  --ui-color-input-border
+    intent: Resting border for text inputs, selects, and textareas. Functional (>=3:1 contrast).
+    constraints: Functional border — do not swap for --ui-color-border (decorative, sub-3:1).; Switch to --ui-color-input-border-focus on :focus, --ui-color-input-border-invalid on error.
+
+  --ui-color-input-border-focus
+    intent: Focused border for inputs — primary-coloured to match the focus ring.
+    constraints: Only use as :focus / :focus-within state — never as a resting border.; Pair with --ui-focus-ring on the same element for the full focus treatment.
+
+  --ui-color-input-border-hover
+    intent: Hover state for input borders — one shade deeper than --ui-color-input-border.
+    constraints: Only use as :hover state — never as a resting border.
+
+  --ui-color-input-border-invalid
+    intent: Border for inputs in an error / aria-invalid state.
+    constraints: Pair with a visible error message (via --ui-color-error-text) — never rely on colour alone for state.; Apply when aria-invalid="true" or the equivalent framework signal is present.
+
+  --ui-color-overlay
+    intent: Scrim behind modals, drawers, and full-screen overlays.
+    constraints: Only use as a backdrop layer — never as a fill for interactive surfaces.; Pair with --ui-z-overlay or higher; do not place at base z-index.
+
+  --ui-color-placeholder
+    intent: Placeholder text colour for inputs. Sub-AA contrast — informational only.
+    constraints: Reserve for true placeholders (input::placeholder) — never use as a substitute for a real label.; Do not use as a foreground for content users need to read; use --ui-color-text-muted instead.
+
+  --ui-color-primary
+    intent: Primary call-to-action colour and link text. Brand anchor on light backgrounds.
+    constraints: Must meet >=4.5:1 contrast against the surface it renders on.; Reserve for one primary action per view — do not stack two side-by-side.; Pair foreground text with --ui-color-text-on-primary when used as a fill.
+
+  --ui-color-primary-active
+    intent: Pressed / active state for primary surfaces — deepest step of the primary ramp.
+    constraints: Only use as :active state — never as a resting fill.
+
+  --ui-color-primary-hover
+    intent: Hover state for primary surfaces and links — one shade deeper than --ui-color-primary.
+    constraints: Only use as :hover / :focus-visible state — never as a resting fill.; Must preserve >=4.5:1 contrast against text-on-primary.
+
+  --ui-color-primary-light
+    intent: Soft tinted background for selected / hovered ghost states and subtle primary surfaces.
+    constraints: Decorative only — does not meet text-contrast requirements as a fill.; Pair with --ui-color-primary or --ui-color-text for foreground content.
+
+  --ui-color-secondary
+    intent: Neutral secondary action colour (slate). Use for opt-in secondary buttons and chrome.
+    constraints: Reserve for components that explicitly opt in — primary actions should use --ui-color-primary.; Pair foreground text with --ui-color-text-on-secondary when used as a fill.
+
+  --ui-color-secondary-active
+    intent: Pressed / active state for secondary surfaces — deepest step of the secondary ramp.
+    constraints: Only use as :active state — never as a resting fill.
+
+  --ui-color-secondary-hover
+    intent: Hover state for secondary surfaces — one shade deeper than --ui-color-secondary.
+    constraints: Only use as :hover / :focus-visible state — never as a resting fill.
+
+  --ui-color-success
+    intent: Positive confirmation signal colour. Use for success buttons and confirmation icons.
+    constraints: Pair with text + icon — never rely on colour alone for state.; Do not use for decorative emphasis.; Pair foreground text with --ui-color-text-on-success when used as a fill.
+
+  --ui-color-success-bg
+    intent: Tinted background for success badges, alerts, and toasts. AA-safe pair with --ui-color-success-text.
+    constraints: Only use as a fill — pair foreground with --ui-color-success-text for guaranteed contrast.; Do not place arbitrary text colours on this surface — the AA pairing is specific.
+
+  --ui-color-success-text
+    intent: AA-safe foreground for use on --ui-color-success-bg in success badges, alerts, and toasts.
+    constraints: Only use as foreground on --ui-color-success-bg; contrast is guaranteed against that surface and no other.
+
+  --ui-color-surface
+    intent: Base page background. The canvas every other surface elevates from.
+    constraints: Pair with --ui-color-text or --ui-color-text-muted only — never raw black/white.; Do not stack two surfaces of the same level on top of each other — use -raised or -sunken.
+
+  --ui-color-surface-raised
+    intent: Slightly elevated surface for cards, popovers, and panels resting above the page.
+    constraints: Pair with --ui-color-text or --ui-color-text-muted only — never raw black/white.; Combine with --ui-shadow-sm or --ui-shadow-md for perceived elevation.
+
+  --ui-color-surface-sunken
+    intent: Recessed surface for input fields, code blocks, and inset containers.
+    constraints: Pair with --ui-color-text or --ui-color-text-muted only — never raw black/white.; Do not combine with elevation shadows — sunken surfaces should read as inset.
+
+  --ui-color-text
+    intent: Primary body and heading text colour. Use on --ui-color-surface and its raised/sunken variants.
+    constraints: Must meet >=4.5:1 contrast against the surface it renders on (verified for all --ui-color-surface* pairs).; Do not use as a fill colour — this is a foreground token.
+
+  --ui-color-text-muted
+    intent: Secondary text colour for helper copy, captions, and de-emphasised content.
+    constraints: Must meet >=4.5:1 contrast — verified against --ui-color-surface* but not against tinted surfaces.; Do not use for primary actions, form labels, or anything users must scan quickly.
+
+  --ui-color-text-on-danger
+    intent: Foreground colour for text and icons rendered on --ui-color-danger fills.
+    constraints: Only use as foreground on the matching brand surface; contrast is guaranteed against that surface and no other.
+
+  --ui-color-text-on-primary
+    intent: Foreground colour for text and icons rendered on --ui-color-primary fills.
+    constraints: Only use as foreground on the matching brand surface; contrast is guaranteed against that surface and no other.
+
+  --ui-color-text-on-secondary
+    intent: Foreground colour for text and icons rendered on --ui-color-secondary fills.
+    constraints: Only use as foreground on the matching brand surface; contrast is guaranteed against that surface and no other.
+
+  --ui-color-text-on-success
+    intent: Foreground colour for text and icons rendered on --ui-color-success fills.
+    constraints: Only use as foreground on the matching brand surface; contrast is guaranteed against that surface and no other.
+
+  --ui-color-warning
+    intent: Caution signal colour. Use for warning alerts and pending states.
+    constraints: Pair with text + icon — never rely on colour alone for state.; Do not use for decorative emphasis.
+
+  --ui-color-warning-bg
+    intent: Tinted background for warning badges, alerts, and toasts. AA-safe pair with --ui-color-warning-text.
+    constraints: Only use as a fill — pair foreground with --ui-color-warning-text for guaranteed contrast.; Do not place arbitrary text colours on this surface — the AA pairing is specific.
+
+  --ui-color-warning-text
+    intent: AA-safe foreground for use on --ui-color-warning-bg in warning badges, alerts, and toasts.
+    constraints: Only use as foreground on --ui-color-warning-bg; contrast is guaranteed against that surface and no other.
+
+  --ui-duration-fast
+    intent: Short transition (150ms). Use for hover/focus state changes and micro-interactions.
+    constraints: Respects prefers-reduced-motion via the @media block — do not override durations elsewhere.; Do not interpolate between scale steps; pick the nearest defined value.
+
+  --ui-duration-normal
+    intent: Default transition (200ms). Use for property changes on interactive components.
+    constraints: Respects prefers-reduced-motion via the @media block — do not override durations elsewhere.; Treat as the baseline — only step up/down for emphasis.
+
+  --ui-duration-slow
+    intent: Long transition (300ms). Use for enter/exit animations on overlays and panels.
+    constraints: Respects prefers-reduced-motion via the @media block — do not override durations elsewhere.; Avoid for state changes users repeat often — it feels sluggish.
+
+  --ui-ease-in-out
+    intent: Symmetrical easing curve. Use for elements moving across the screen.
+    constraints: Use --ui-ease-out for entrances, --ui-ease-in-out for movement, --ui-ease-spring for emphasised transitions.
+
+  --ui-ease-out
+    intent: Decelerating easing curve. Use for entrances and elements arriving on screen.
+    constraints: Use --ui-ease-out for entrances, --ui-ease-in-out for movement, --ui-ease-spring for emphasised transitions.
+
+  --ui-ease-spring
+    intent: Overshoot easing curve. Use sparingly for emphasised transitions (e.g. toasts, success confirmations).
+    constraints: Use --ui-ease-out for entrances, --ui-ease-in-out for movement, --ui-ease-spring for emphasised transitions.; Collapses to "ease" under prefers-reduced-motion — do not rely on the overshoot for meaning.
+
+  --ui-focus-ring
+    intent: Double-ring box-shadow for :focus-visible — surface-coloured inner + primary outer for light/dark compatibility.
+    constraints: Apply via box-shadow on :focus-visible — never on :focus alone (mouse focus would flash the ring).; Do not override per component; consistency is the entire point of a global focus ring.
+
+  --ui-font-family
+    intent: Default UI typeface stack. Inter first, with system fallbacks for offline / first-paint.
+    constraints: Apply on :root or the app shell — do not respecify per component.; Do not swap for display fonts inside product surfaces; reserve display faces for marketing.
+
+  --ui-font-size-2xl
+    intent: Largest in-app heading (1.5rem). Use for page titles inside product surfaces.
+    constraints: Reserve for one top-level title per view — do not stack two side-by-side.; Do not interpolate between scale steps; pick the nearest defined value.
+
+  --ui-font-size-lg
+    intent: Emphasised body / small headings (1.125rem). Use for card titles and dialog headings.
+    constraints: Pair with --ui-font-weight-semibold or --ui-font-weight-medium for hierarchy.; Do not interpolate between scale steps; pick the nearest defined value.
+
+  --ui-font-size-md
+    intent: Body copy size (1rem). The default for paragraphs and form inputs.
+    constraints: Do not interpolate between scale steps; pick the nearest defined value.; Treat this as the baseline — only step up/down when a hierarchy demands it.
+
+  --ui-font-size-sm
+    intent: Compact size (0.875rem). Use for secondary text, helper messages, and dense form labels.
+    constraints: Do not interpolate between scale steps; pick the nearest defined value.; Avoid combining with --ui-line-height-tight for multi-line copy — readability suffers.
+
+  --ui-font-size-xl
+    intent: Section heading size (1.25rem). Use for page sub-headings and modal titles.
+    constraints: Pair with --ui-line-height-tight for compact headings.; Do not interpolate between scale steps; pick the nearest defined value.
+
+  --ui-font-size-xs
+    intent: Smallest readable size (0.75rem). Use for badges, captions, table meta, and dense labels.
+    constraints: Do not use for body copy or interactive labels users must read at a glance.; Pair with --ui-color-text-muted for secondary information.
+
+  --ui-font-weight-medium
+    intent: Subtle emphasis weight (500). Use for form labels, button text, and table headers.
+    constraints: Prefer this over bold for inline emphasis inside body copy.
+
+  --ui-font-weight-normal
+    intent: Default body weight (400). Use for paragraphs and regular UI text.
+    constraints: Avoid stacking with --ui-color-text-muted on small sizes — contrast drops fast.
+
+  --ui-font-weight-semibold
+    intent: Strong emphasis weight (600). Use for headings and primary calls-to-action.
+    constraints: Do not use weights above 600 — the type stack is not loaded with heavier cuts.
+
+  --ui-letter-spacing-normal
+    intent: Default tracking (0). Use for body copy and most UI text.
+    constraints: This is the implicit baseline — only set explicitly when overriding a parent.
+
+  --ui-letter-spacing-tight
+    intent: Negative tracking (-0.01em) for large headings to prevent loose appearance.
+    constraints: Use only at --ui-font-size-xl and above; tightening small text hurts legibility.
+
+  --ui-letter-spacing-wide
+    intent: Positive tracking (0.01em) for all-caps labels, badges, and eyebrows.
+    constraints: Pair with --ui-font-size-xs or --ui-font-size-sm and uppercase casing.; Do not apply to lowercase running text.
+
+  --ui-line-height-normal
+    intent: Default leading (1.5) for body copy and multi-line UI text.
+    constraints: This is the implicit baseline — only set explicitly when overriding a parent.
+
+  --ui-line-height-tight
+    intent: Compact leading (1.25) for headings and single-line UI text.
+    constraints: Do not use for multi-line body copy — readability suffers.
+
+  --ui-opacity-disabled
+    intent: Opacity applied to disabled interactive controls so their colour reads as inert.
+    constraints: Apply via opacity on the disabled element — do not bake into colour tokens.; Do not use for de-emphasis of non-disabled content; use --ui-color-text-muted instead.
+
+  --ui-radius-full
+    intent: Fully rounded (pill) shape. Use for avatar masks, status dots, and pill buttons.
+    constraints: Use on equal-sided elements (circles) or fixed-height pills — applied to rectangles it produces inconsistent corners.
+
+  --ui-radius-lg
+    intent: Large rounding for prominent panels — modals, popovers, hero cards.
+    constraints: Do not interpolate between scale steps; pick the nearest defined value.
+
+  --ui-radius-md
+    intent: Default rounding for interactive surfaces — buttons, inputs, cards. Modern, mildly soft.
+    constraints: Treat as the baseline radius — only step up/down for hierarchy or emphasis.; Do not interpolate between scale steps; pick the nearest defined value.
+
+  --ui-radius-sm
+    intent: Small rounding (0.5rem) for compact controls — badges, tags, inline chips.
+    constraints: Do not interpolate between scale steps; pick the nearest defined value.
+
+  --ui-radius-xl
+    intent: Extra-large rounding for marketing surfaces and oversized panels.
+    constraints: Reserve for large surfaces — applied to small controls it reads as a misuse.; Do not interpolate between scale steps; pick the nearest defined value.
+
+  --ui-shadow-lg
+    intent: High elevation for popovers, menus, and floating panels detached from the page.
+    constraints: Reserve for transient floating UI — overusing flattens the elevation hierarchy.; Avoid stacking with --ui-shadow-xl on the same surface.
+
+  --ui-shadow-md
+    intent: Default elevation for raised surfaces (cards, dropdowns at rest).
+    constraints: Combine with a 1px subtle border for clarity on busy backgrounds.; Avoid stacking with --ui-shadow-lg on the same surface.
+
+  --ui-shadow-sm
+    intent: Low elevation for resting cards and panels that lift slightly off the page.
+    constraints: Combine with a 1px subtle border for clarity on busy backgrounds.; Avoid stacking with --ui-shadow-lg on the same surface.
+
+  --ui-shadow-xl
+    intent: Maximum elevation for modals and command palettes that own the screen.
+    constraints: Reserve for top-level dialogs — there is no higher step.; Pair with --ui-color-overlay to anchor the elevation.
+
+  --ui-shadow-xs
+    intent: Minimal elevation — a faint shadow used for inputs and resting interactive controls.
+    constraints: Combine with a 1px subtle border for clarity on busy backgrounds.; Avoid stacking with --ui-shadow-md or above on the same surface.
+
+  --ui-spacing-1
+    intent: Hairline spacing (0.25rem). Use for icon-to-label gaps and tightest groupings.
+    constraints: Do not interpolate between scale steps; pick the nearest defined value.
+
+  --ui-spacing-10
+    intent: Wide section spacing (2.5rem). Use for separation between major page sections.
+    constraints: Do not interpolate between scale steps; pick the nearest defined value.
+
+  --ui-spacing-12
+    intent: Generous section spacing (3rem). Use for page-level layout gutters.
+    constraints: Do not interpolate between scale steps; pick the nearest defined value.
+
+  --ui-spacing-16
+    intent: Largest scale step (4rem). Use for hero/landing-page rhythm and top-level layout offsets.
+    constraints: Reserve for marketing / hero surfaces — inside product UI it usually signals a missing structural component.; Do not interpolate between scale steps; pick the nearest defined value.
+
+  --ui-spacing-2
+    intent: Tight spacing (0.5rem). Use for compact button padding and dense list rows.
+    constraints: Do not interpolate between scale steps; pick the nearest defined value.
+
+  --ui-spacing-3
+    intent: Snug spacing (0.75rem). Use for default form-control padding and chip insets.
+    constraints: Do not interpolate between scale steps; pick the nearest defined value.
+
+  --ui-spacing-4
+    intent: Default inter-element spacing (1rem). Use for gaps inside cards, between form fields, between list items.
+    constraints: Treat as the baseline spacing — only step up/down for hierarchy or density.; Do not interpolate between scale steps; pick the nearest defined value.
+
+  --ui-spacing-5
+    intent: Comfortable spacing (1.25rem). Use for card padding and form section gaps.
+    constraints: Do not interpolate between scale steps; pick the nearest defined value.
+
+  --ui-spacing-6
+    intent: Loose spacing (1.5rem). Use for dialog padding and prominent component insets.
+    constraints: Do not interpolate between scale steps; pick the nearest defined value.
+
+  --ui-spacing-8
+    intent: Section spacing (2rem). Use between distinct content blocks on a page.
+    constraints: Do not interpolate between scale steps; pick the nearest defined value.
+
+  --ui-transition-fast
+    intent: Composed transition shorthand: fast duration + ease-out. Use for hover/focus micro-interactions.
+    constraints: Apply to the `transition` property with the property name (e.g. `color var(--ui-transition-fast)`).; Respects prefers-reduced-motion through its constituent --ui-duration-fast token.
+
+  --ui-transition-normal
+    intent: Composed transition shorthand: normal duration + ease-out. Default for interactive state changes.
+    constraints: Apply to the `transition` property with the property name (e.g. `background var(--ui-transition-normal)`).; Respects prefers-reduced-motion through its constituent --ui-duration-normal token.
+
+  --ui-transition-slow
+    intent: Composed transition shorthand: slow duration + ease-out. Use for enter/exit animations.
+    constraints: Apply to the `transition` property with the property name.; Respects prefers-reduced-motion through its constituent --ui-duration-slow token.
+
+  --ui-z-base
+    intent: Base layer (0). The implicit stacking context for page content.
+    constraints: Layer ordering: base < dropdown < overlay < modal < toast. Do not exceed the scale; if you need more, restructure.
+
+  --ui-z-dropdown
+    intent: Stacking level for popovers, dropdowns, and menus that float above page content.
+    constraints: Layer ordering: base < dropdown < overlay < modal < toast. Do not exceed the scale; if you need more, restructure.
+
+  --ui-z-modal
+    intent: Stacking level for modal dialogs and drawers that own the foreground.
+    constraints: Layer ordering: base < dropdown < overlay < modal < toast. Do not exceed the scale; if you need more, restructure.; Always paired with --ui-z-overlay underneath for the backdrop.
+
+  --ui-z-overlay
+    intent: Stacking level for the modal scrim / backdrop layer.
+    constraints: Layer ordering: base < dropdown < overlay < modal < toast. Do not exceed the scale; if you need more, restructure.; Pair with --ui-color-overlay for the visual scrim.
+
+  --ui-z-toast
+    intent: Top stacking level for transient toasts and notifications — above modals so they remain visible.
+    constraints: Layer ordering: base < dropdown < overlay < modal < toast. Do not exceed the scale; if you need more, restructure.; Reserve for transient, dismissible notifications — anything persistent should sit lower.
 
 ---
 

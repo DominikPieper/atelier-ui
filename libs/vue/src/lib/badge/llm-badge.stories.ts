@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import LlmBadge from './llm-badge.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/badge.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -26,6 +27,7 @@ const meta: Meta<typeof LlmBadge> = {
   },
   parameters: {
     design: figmaNode('55-22'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

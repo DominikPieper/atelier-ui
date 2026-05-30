@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import LlmSelect from './llm-select.vue';
 import LlmOption from './llm-option.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/select.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -42,6 +43,7 @@ const meta: Meta<typeof LlmSelect> = {
   },
   parameters: {
     design: figmaNode('55-92'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

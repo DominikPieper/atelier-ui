@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import LlmSkeleton from './llm-skeleton.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/skeleton.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -29,6 +30,7 @@ const meta: Meta<typeof LlmSkeleton> = {
   },
   parameters: {
     design: figmaNode('55-102'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

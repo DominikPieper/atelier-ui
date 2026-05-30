@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { LlmTabGroup, LlmTab } from './llm-tabs';
 
+import { metadata } from '@atelier-ui/spec/metadata/tabs.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -19,6 +20,7 @@ const meta: Meta<typeof LlmTabGroup> = {
   args: { variant: 'default' },
   parameters: {
     design: figmaNode('55-123'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { LlmProgress } from './llm-progress';
 
+import { metadata } from '@atelier-ui/spec/metadata/progress.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
@@ -34,6 +35,7 @@ const meta: Meta<LlmProgress> = {
   },
   parameters: {
     design: figmaNode('420-153'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import LlmButton from './llm-button.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/button.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -30,6 +31,7 @@ const meta: Meta<typeof LlmButton> = {
   },
   parameters: {
     design: figmaNode('129-20'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

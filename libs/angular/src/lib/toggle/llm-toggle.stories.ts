@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { LlmToggle } from './llm-toggle';
 
+import { metadata } from '@atelier-ui/spec/metadata/toggle.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -30,6 +31,7 @@ const meta: Meta<LlmToggle> = {
   },
   parameters: {
     design: figmaNode('55-41'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

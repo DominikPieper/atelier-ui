@@ -8,6 +8,7 @@ function figmaNode(nodeId: string) {
 }
 import LlmAvatar from './llm-avatar.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/avatar.metadata';
 const meta: Meta<typeof LlmAvatarGroup> = {
   title: 'Components/Display/LlmAvatarGroup',
   component: LlmAvatarGroup,
@@ -22,6 +23,7 @@ const meta: Meta<typeof LlmAvatarGroup> = {
   },
   parameters: {
     design: figmaNode('508-7221'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

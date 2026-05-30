@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { LlmSelect, LlmOption } from './llm-select';
 
+import { metadata } from '@atelier-ui/spec/metadata/select.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -14,6 +15,7 @@ const meta: Meta<typeof LlmSelect> = {
   tags: ['autodocs'],
   parameters: {
     design: figmaNode('55-92'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

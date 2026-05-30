@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LlmCard, LlmCardHeader, LlmCardContent, LlmCardFooter } from './llm-card';
 
+import { metadata } from '@atelier-ui/spec/metadata/card.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -18,6 +19,7 @@ const meta: Meta<typeof LlmCard> = {
   args: { variant: 'elevated', padding: 'md' },
   parameters: {
     design: figmaNode('55-65'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

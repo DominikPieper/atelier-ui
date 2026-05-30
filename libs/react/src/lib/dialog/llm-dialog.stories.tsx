@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { LlmDialog, LlmDialogHeader, LlmDialogContent, LlmDialogFooter } from './llm-dialog';
 
+import { metadata } from '@atelier-ui/spec/metadata/dialog.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -20,6 +21,7 @@ const meta: Meta<typeof LlmDialog> = {
   args: { size: 'md', closeOnBackdrop: true },
   parameters: {
     design: figmaNode('55-94'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

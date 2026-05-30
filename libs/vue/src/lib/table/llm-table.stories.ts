@@ -7,6 +7,7 @@ import LlmTr from './llm-tr.vue';
 import LlmTh from './llm-th.vue';
 import LlmTd from './llm-td.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/table.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
@@ -22,7 +23,7 @@ const meta: Meta<typeof LlmTable> = {
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
     stickyHeader: { control: 'boolean' },
   },
-  parameters: { design: figmaNode('421-1183') },
+  parameters: { design: figmaNode('421-1183'), docs: { description: { component: metadata.purpose } } },
 };
 
 export default meta;

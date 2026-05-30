@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import LlmRadioGroup from './llm-radio-group.vue';
 import LlmRadio from '../radio/llm-radio.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/radio.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -41,6 +42,7 @@ const meta: Meta<typeof LlmRadioGroup> = {
   },
   parameters: {
     design: figmaNode('55-137'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

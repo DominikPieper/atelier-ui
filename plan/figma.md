@@ -192,6 +192,7 @@ Node IDs below point to the actual `COMPONENT_SET` nodes (the parent of all vari
 2. Build a `COMPONENT_SET` with variant properties that match the code spec (`libs/spec/src/index.ts`).
 3. Apply text styles (`text/*`) and variables — never raw hex/px.
 4. Write a component description (variants · sizes · states · a11y). It becomes the Assets-panel tooltip and the Dev Mode spec.
+5. **Run the [Figma component pre-release checklist](./figma-component-checklist.md)** before merging the matching PR. The PR template reproduces it as a required section.
 5. Run generator: `nx generate @atelier-ui/generators:llm-component --name=<name>`.
 6. Implement Angular + React simultaneously, referencing Figma values.
 7. Verify parity with Storybook screenshot.

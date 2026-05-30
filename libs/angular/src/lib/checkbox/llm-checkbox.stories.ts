@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { LlmCheckbox } from './llm-checkbox';
 
+import { metadata } from '@atelier-ui/spec/metadata/checkbox.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -32,6 +33,7 @@ const meta: Meta<LlmCheckbox> = {
   },
   parameters: {
     design: figmaNode('55-36'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

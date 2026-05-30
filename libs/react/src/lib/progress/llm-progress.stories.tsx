@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LlmProgress } from './llm-progress';
 
+import { metadata } from '@atelier-ui/spec/metadata/progress.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
@@ -18,7 +19,7 @@ const meta: Meta<typeof LlmProgress> = {
     indeterminate: { control: 'boolean' },
   },
   args: { value: 50, max: 100, variant: 'default', size: 'md', indeterminate: false },
-  parameters: { design: figmaNode('420-153') },
+  parameters: { design: figmaNode('420-153'), docs: { description: { component: metadata.purpose } } },
 };
 
 export default meta;

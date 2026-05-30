@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import LlmTooltip from './llm-tooltip.vue';
 import LlmButton from '../button/llm-button.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/tooltip.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -27,6 +28,7 @@ const meta: Meta<typeof LlmTooltip> = {
   },
   parameters: {
     design: figmaNode('55-52'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

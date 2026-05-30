@@ -7,6 +7,7 @@ import LlmDrawerFooter from './llm-drawer-footer.vue';
 import LlmButton from '../button/llm-button.vue';
 import LlmInput from '../input/llm-input.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/drawer.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
@@ -28,7 +29,7 @@ const meta: Meta<typeof LlmDrawer> = {
     size: 'md',
     closeOnBackdrop: true,
   },
-  parameters: { design: figmaNode('421-398') },
+  parameters: { design: figmaNode('421-398'), docs: { description: { component: metadata.purpose } } },
 };
 
 export default meta;

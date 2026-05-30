@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { LlmAlert } from './llm-alert';
 
+import { metadata } from '@atelier-ui/spec/metadata/alert.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -32,6 +33,7 @@ const meta: Meta<LlmAlert> = {
   },
   parameters: {
     design: figmaNode('55-31'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

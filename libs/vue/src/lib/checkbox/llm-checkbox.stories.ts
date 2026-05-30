@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import { ref } from 'vue';
 import LlmCheckbox from './llm-checkbox.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/checkbox.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -33,6 +34,7 @@ const meta: Meta<typeof LlmCheckbox> = {
   },
   parameters: {
     design: figmaNode('55-36'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

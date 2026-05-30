@@ -14,6 +14,7 @@ import { LlmBadge } from '../badge/llm-badge';
 import { LlmAlert } from '../alert/llm-alert';
 import { LlmCodeBlock } from '../code-block/llm-code-block';
 
+import { metadata } from '@atelier-ui/spec/metadata/chat.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
@@ -51,6 +52,7 @@ const meta: Meta<LlmChat> = {
   },
   parameters: {
     design: figmaNode('507-2953'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

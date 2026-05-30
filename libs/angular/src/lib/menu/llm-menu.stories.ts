@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { LlmMenu, LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger } from './llm-menu';
 import { LlmButton } from '../button/llm-button';
 
+import { metadata } from '@atelier-ui/spec/metadata/menu.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -23,6 +24,7 @@ const meta: Meta<LlmMenu> = {
   },
   parameters: {
     design: figmaNode('55-130'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

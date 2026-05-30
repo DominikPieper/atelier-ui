@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import { ref } from 'vue';
 import LlmTextarea from './llm-textarea.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/textarea.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -40,6 +41,7 @@ const meta: Meta<typeof LlmTextarea> = {
   },
   parameters: {
     design: figmaNode('55-87'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

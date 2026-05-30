@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import { ref } from 'vue';
 import LlmToggle from './llm-toggle.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/toggle.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -31,6 +32,7 @@ const meta: Meta<typeof LlmToggle> = {
   },
   parameters: {
     design: figmaNode('55-41'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

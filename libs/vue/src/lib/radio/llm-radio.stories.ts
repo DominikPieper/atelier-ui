@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import LlmRadio from './llm-radio.vue';
 import LlmRadioGroup from '../radio-group/llm-radio-group.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/radio.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
@@ -21,7 +22,7 @@ const meta: Meta<typeof LlmRadio> = {
     radioValue: 'option',
     disabled: false,
   },
-  parameters: { design: figmaNode('420-185') },
+  parameters: { design: figmaNode('420-185'), docs: { description: { component: metadata.purpose } } },
 };
 
 export default meta;

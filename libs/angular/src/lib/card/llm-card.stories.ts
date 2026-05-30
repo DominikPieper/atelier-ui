@@ -3,6 +3,7 @@ import { argsToTemplate } from '@storybook/angular';
 import { LlmCard, LlmCardContent, LlmCardFooter, LlmCardHeader } from './llm-card';
 import { LlmButton } from '../button/llm-button';
 
+import { metadata } from '@atelier-ui/spec/metadata/card.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -60,6 +61,7 @@ const meta: Meta<LlmCard> = {
   ],
   parameters: {
     design: figmaNode('55-65'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

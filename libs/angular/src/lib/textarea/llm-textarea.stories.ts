@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { LlmTextarea } from './llm-textarea';
 
+import { metadata } from '@atelier-ui/spec/metadata/textarea.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -36,6 +37,7 @@ const meta: Meta<LlmTextarea> = {
   },
   parameters: {
     design: figmaNode('55-87'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

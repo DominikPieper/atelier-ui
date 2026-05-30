@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { LlmSkeleton } from './llm-skeleton';
 
+import { metadata } from '@atelier-ui/spec/metadata/skeleton.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -33,6 +34,7 @@ const meta: Meta<LlmSkeleton> = {
   },
   parameters: {
     design: figmaNode('55-102'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { LlmIcon } from './llm-icon';
 
+import { metadata } from '@atelier-ui/spec/metadata/icon.metadata';
 const ICON_NAMES = [
   'success', 'warning', 'danger', 'info', 'error',
   'chevron-up', 'chevron-down', 'chevron-left', 'chevron-right',
@@ -23,6 +24,7 @@ const meta: Meta<LlmIcon> = {
     label: { control: 'text' },
   },
   args: { name: 'success', size: 'md' },
+  parameters: { docs: { description: { component: metadata.purpose } } },
 };
 
 export default meta;

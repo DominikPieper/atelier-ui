@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { LlmDrawer, LlmDrawerHeader, LlmDrawerContent, LlmDrawerFooter } from './llm-drawer';
 
+import { metadata } from '@atelier-ui/spec/metadata/drawer.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
@@ -19,7 +20,7 @@ const meta: Meta<typeof LlmDrawer> = {
     closeOnBackdrop: { control: 'boolean' },
   },
   args: { position: 'right', size: 'md', closeOnBackdrop: true },
-  parameters: { design: figmaNode('421-398') },
+  parameters: { design: figmaNode('421-398'), docs: { description: { component: metadata.purpose } } },
 };
 
 export default meta;

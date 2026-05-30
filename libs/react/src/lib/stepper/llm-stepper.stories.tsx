@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { LlmStepper, LlmStep, useLlmStepper } from './llm-stepper';
 import { LlmButton } from '../button/llm-button';
 
+import { metadata } from '@atelier-ui/spec/metadata/stepper.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
@@ -13,7 +14,7 @@ const meta: Meta<typeof LlmStepper> = {
   title: 'Components/Navigation/LlmStepper',
   component: LlmStepper,
   tags: ['autodocs'],
-  parameters: { design: figmaNode('421-505') },
+  parameters: { design: figmaNode('421-505'), docs: { description: { component: metadata.purpose } } },
 };
 
 export default meta;

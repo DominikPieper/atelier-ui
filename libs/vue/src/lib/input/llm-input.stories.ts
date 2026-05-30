@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import { ref } from 'vue';
 import LlmInput from './llm-input.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/input.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -38,6 +39,7 @@ const meta: Meta<typeof LlmInput> = {
   },
   parameters: {
     design: figmaNode('129-33'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

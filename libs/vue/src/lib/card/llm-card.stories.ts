@@ -5,6 +5,7 @@ import LlmCardContent from './llm-card-content.vue';
 import LlmCardFooter from './llm-card-footer.vue';
 import LlmButton from '../button/llm-button.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/card.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -39,6 +40,7 @@ const meta: Meta<typeof LlmCard> = {
   },
   parameters: {
     design: figmaNode('55-65'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

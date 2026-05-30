@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { LlmCheckbox } from './llm-checkbox';
 
+import { metadata } from '@atelier-ui/spec/metadata/checkbox.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -21,6 +22,7 @@ const meta: Meta<typeof LlmCheckbox> = {
   args: { checked: false, disabled: false, invalid: false, indeterminate: false },
   parameters: {
     design: figmaNode('55-36'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

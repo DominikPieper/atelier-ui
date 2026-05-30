@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { LlmToggle } from './llm-toggle';
 
+import { metadata } from '@atelier-ui/spec/metadata/toggle.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -20,6 +21,7 @@ const meta: Meta<typeof LlmToggle> = {
   args: { checked: false, disabled: false, invalid: false },
   parameters: {
     design: figmaNode('55-41'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

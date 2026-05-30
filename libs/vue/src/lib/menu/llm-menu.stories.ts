@@ -10,6 +10,7 @@ import LlmMenu from './llm-menu.vue';
 import LlmMenuItem from './llm-menu-item.vue';
 import LlmMenuSeparator from './llm-menu-separator.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/menu.metadata';
 const meta: Meta<typeof LlmMenu> = {
   title: 'Components/Navigation/LlmMenu',
   component: LlmMenu,
@@ -22,6 +23,7 @@ const meta: Meta<typeof LlmMenu> = {
   },
   parameters: {
     design: figmaNode('55-130'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

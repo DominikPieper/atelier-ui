@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import LlmAlert from './llm-alert.vue';
 
+import { metadata } from '@atelier-ui/spec/metadata/alert.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -26,6 +27,7 @@ const meta: Meta<typeof LlmAlert> = {
   },
   parameters: {
     design: figmaNode('55-31'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

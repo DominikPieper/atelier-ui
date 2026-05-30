@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LlmMenu, LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger } from './llm-menu';
 import { LlmButton } from '../button/llm-button';
 
+import { metadata } from '@atelier-ui/spec/metadata/menu.metadata';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -14,6 +15,7 @@ const meta: Meta<typeof LlmMenu> = {
   tags: ['autodocs'],
   parameters: {
     design: figmaNode('55-130'),
+    docs: { description: { component: metadata.purpose } },
   },
 };
 

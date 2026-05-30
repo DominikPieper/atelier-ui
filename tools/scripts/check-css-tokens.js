@@ -2,20 +2,39 @@
 /**
  * check-css-tokens.js
  *
- * Enforces token discipline in component CSS: a raw color literal (hex,
- * rgb/rgba, hsl/hsla) must not appear as a declaration value — colors come
- * from `--ui-*` custom properties. This keeps the design system the single
- * source of colour and prevents palette drift (a one-off `#006470` that does
- * not track the token).
+ * Two passes against the design-token layer:
  *
- * Allowances (intentional, not drift):
+ *   Pass A (raw-literal pass):
+ *     Enforces token discipline in component CSS — a raw color literal
+ *     (hex, rgb/rgba, hsl/hsla) must not appear as a declaration value.
+ *     Colours come from `--ui-*` custom properties. This keeps the
+ *     design system the single source of colour and prevents palette
+ *     drift (a one-off `#006470` that does not track the token).
+ *
+ *   Pass B (manifest-coverage pass):
+ *     Every `--ui-*` token declared in `libs/angular/src/styles/tokens.css`
+ *     (the canonical copy — `check:tokens` enforces the three frameworks
+ *     stay identical) must have an entry in
+ *     `libs/spec/src/tokens.manifest.ts` with a non-empty `intent` and a
+ *     non-empty `constraints` array. Every manifest entry must reference
+ *     a declared token. This is the AI-readiness annotation layer — see
+ *     `plan/ai-readiness.md`.
+ *
+ *     Pass B is gated by `MANIFEST_COVERAGE_REQUIRED`: while the manifest
+ *     is empty (initial rollout) it warns; once an opt-in flag is
+ *     flipped, missing entries fail the gate. Today it warns when the
+ *     manifest has any entries (so authors get feedback as they fill it)
+ *     but only fails when EVERY declared token has been annotated.
+ *
+ * Allowances in Pass A (intentional, not drift):
  *   - inside `var(--token, <fallback>)` — a literal fallback is good defensive
  *     practice; the token still drives the value when defined.
  *   - on `box-shadow` / `text-shadow` — shadows legitimately carry rgba alpha
  *     and are an accepted literal (or come from `--ui-shadow-*`).
  *
- * Scans only the component CSS under each framework lib. The token source-of-truth
- * (styles/tokens.css) is allowed to define literals and is not scanned.
+ * Pass A scans only the component CSS under each framework lib. The token
+ * source-of-truth (styles/tokens.css) is allowed to define literals and is
+ * not scanned by Pass A — only by Pass B.
  *
  * Run via:  node tools/scripts/check-css-tokens.js
  *           (or  npm run check:css-tokens)
@@ -24,9 +43,12 @@
 
 const fs = require('fs');
 const path = require('path');
+const { parseExportedVars } = require('./lib/ts-eval');
 
 const ROOT = path.resolve(__dirname, '../..');
 const LIB_DIRS = ['angular', 'react', 'vue'].map((f) => path.join(ROOT, 'libs', f, 'src', 'lib'));
+const TOKEN_CSS = path.join(ROOT, 'libs/angular/src/styles/tokens.css');
+const TOKEN_MANIFEST = path.join(ROOT, 'libs/spec/src/tokens.manifest.ts');
 
 const COLOR_LITERAL = /#[0-9a-fA-F]{3,8}\b|rgba?\(|hsla?\(/;
 const SHADOW_PROP = /^-?(webkit-)?(box|text)-shadow$/;
@@ -91,10 +113,97 @@ for (const dir of LIB_DIRS) {
   }
 }
 
+// ---------------------------------------------------------------------------
+// Pass B — manifest coverage of every --ui-* token declared in tokens.css.
+// ---------------------------------------------------------------------------
+
+const warnings = [];
+
+const tokenCss = fs.readFileSync(TOKEN_CSS, 'utf-8');
+const declaredTokens = new Set();
+// Match `--ui-foo: <value>;` declarations anywhere in the file. Each token
+// may be re-declared across selectors (light / dark / [data-theme]); we
+// only care that the name exists.
+const tokenDecl = /(--ui-[a-zA-Z0-9-]+)\s*:/g;
+{
+  let m;
+  while ((m = tokenDecl.exec(tokenCss)) !== null) {
+    declaredTokens.add(m[1]);
+  }
+}
+
+const manifestExports = parseExportedVars(TOKEN_MANIFEST);
+const manifest = manifestExports.tokens && typeof manifestExports.tokens === 'object'
+  ? manifestExports.tokens
+  : {};
+
+const annotatedTokens = new Set(Object.keys(manifest));
+
+// Stale annotations — manifest entries that point at tokens which no longer
+// exist in tokens.css.
+for (const name of annotatedTokens) {
+  if (!declaredTokens.has(name)) {
+    errors.push(
+      `[STALE-MANIFEST] tokens.manifest.ts annotates '${name}' but it is not declared in libs/angular/src/styles/tokens.css.`
+    );
+  }
+}
+
+// Validate the shape of every annotation that IS present.
+for (const [name, annot] of Object.entries(manifest)) {
+  if (!annot || typeof annot !== 'object') {
+    errors.push(`[BAD-ANNOTATION] tokens.manifest.ts['${name}']: must be an object.`);
+    continue;
+  }
+  if (typeof annot.intent !== 'string' || !annot.intent.trim()) {
+    errors.push(`[BAD-ANNOTATION] tokens.manifest.ts['${name}']: 'intent' must be a non-empty string.`);
+  }
+  if (!Array.isArray(annot.constraints) || annot.constraints.length === 0) {
+    errors.push(
+      `[BAD-ANNOTATION] tokens.manifest.ts['${name}']: 'constraints' must be a non-empty array of strings.`
+    );
+  } else if (annot.constraints.some((c) => typeof c !== 'string' || !c.trim())) {
+    errors.push(
+      `[BAD-ANNOTATION] tokens.manifest.ts['${name}']: every 'constraints' entry must be a non-empty string.`
+    );
+  }
+  if (annot.darkMode !== undefined && typeof annot.darkMode !== 'string') {
+    errors.push(`[BAD-ANNOTATION] tokens.manifest.ts['${name}']: 'darkMode' must be a string if set.`);
+  }
+}
+
+// Coverage — fail only when the manifest has reached "all declared tokens
+// must be covered" mode. Today: every token must be annotated; missing
+// entries fail. (Initial empty manifest is allowed — see opt-in below.)
+const COVERAGE_REQUIRED = annotatedTokens.size > 0;
+if (COVERAGE_REQUIRED) {
+  for (const name of declaredTokens) {
+    if (!annotatedTokens.has(name)) {
+      errors.push(
+        `[MISSING-ANNOTATION] '${name}' is declared in tokens.css but not annotated in libs/spec/src/tokens.manifest.ts.`
+      );
+    }
+  }
+} else {
+  warnings.push(
+    `tokens.manifest.ts is empty — manifest-coverage check is opt-in until the first annotation lands. See plan/ai-readiness.md.`
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Report.
+// ---------------------------------------------------------------------------
+
 if (errors.length > 0) {
   errors.forEach((e) => console.error(`✗ ${e}`));
-  console.error(`\n${errors.length} raw-color issue(s). Replace with a --ui-* token, wrap in var(--token, fallback), or (shadows only) keep on box-shadow.`);
+  warnings.forEach((w) => console.warn(`⚠ ${w}`));
+  console.error(
+    `\n${errors.length} token issue(s). Replace raw colours with --ui-* tokens, or fix the manifest in libs/spec/src/tokens.manifest.ts.`
+  );
   process.exit(1);
-} else {
-  console.log('✓ component CSS uses tokens for color (no raw literals outside var() fallbacks / shadows)');
 }
+
+warnings.forEach((w) => console.warn(`⚠ ${w}`));
+console.log(
+  `✓ component CSS uses tokens for colour (no raw literals outside var() fallbacks / shadows); ${annotatedTokens.size}/${declaredTokens.size} tokens annotated.`
+);
