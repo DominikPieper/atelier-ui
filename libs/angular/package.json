@@ -1,6 +1,6 @@
 {
   "name": "@atelier-ui/angular",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Atelier component library for Angular — LLM-optimised, accessible, design-token-driven",
   "keywords": [
     "angular",

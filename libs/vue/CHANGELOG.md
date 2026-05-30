@@ -1,3 +1,16 @@
+## 0.1.7 (2026-05-30)
+
+### 🚀 Features
+
+- **tooling:** replace @behavior comment marker with typed covers() gate ([ff36fe9](https://github.com/DominikPieper/atelier-ui/commit/ff36fe9))
+- **spec:** AI-readiness metadata + token manifest layer ([d7f6235](https://github.com/DominikPieper/atelier-ui/commit/d7f6235))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Claude Opus 4.8 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.1.6 (2026-05-27)
 
 ### 🚀 Features
