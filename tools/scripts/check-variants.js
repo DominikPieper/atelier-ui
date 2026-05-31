@@ -21,39 +21,11 @@ const path = require('path');
 const fs = require('fs');
 const ts = require('typescript');
 const { UNION_TO_COMPONENT, AXIS_PREFIX } = require('./lib/component-axes');
+const { VARIANT_AXIS_EXCEPTIONS, DEFAULT_IS_BASE } = require('./lib/allowlists');
 
 const ROOT = path.resolve(__dirname, '../..');
 const SPEC_FILE = path.join(ROOT, 'libs/spec/src/index.ts');
 const FRAMEWORKS = ['angular', 'react', 'vue'];
-
-/**
- * `framework:union:member` triples that intentionally have no CSS class — the
- * axis is realised by a non-class mechanism in that framework. Keep this list
- * short and justified; each entry is re-verified when the component changes.
- */
-const ALLOW = new Set([
-  // Angular tooltip positions via the CDK overlay's flexible-connected
-  // position strategy (inline transforms), not .position-* CSS classes.
-  // React/Vue use CSS classes, so they stay enforced.
-  'angular:LlmTooltipPosition:above',
-  'angular:LlmTooltipPosition:below',
-  'angular:LlmTooltipPosition:left',
-  'angular:LlmTooltipPosition:right',
-]);
-
-/**
- * Unions whose `'default'` member is the unmodified base style (styled on the
- * component root, e.g. `.llm-table { … }`) with only non-default variants
- * getting a `.variant-<x>` modifier — so `.variant-default` legitimately does
- * not exist. (badge / toast / accordion DO style `default` explicitly and are
- * intentionally absent here, so their `default` stays enforced.)
- */
-const DEFAULT_IS_BASE = new Set([
-  'LlmTabGroupVariant',
-  'LlmMenuVariant',
-  'LlmProgressVariant',
-  'LlmTableVariant',
-]);
 
 /** Extract string-literal members of a type alias, or null if not a pure literal union. */
 function literalsOfAlias(node, checker) {
@@ -126,7 +98,7 @@ for (const { union, axis, members } of unions) {
     for (const member of members) {
       if (!member) continue; // skip '' members
       if (member === 'default' && DEFAULT_IS_BASE.has(union)) continue;
-      if (ALLOW.has(`${framework}:${union}:${member}`)) continue;
+      if (VARIANT_AXIS_EXCEPTIONS.has(`${framework}:${union}:${member}`)) continue;
       if (!classes.has(`${prefix}-${member}`)) {
         errors.push(
           `[VARIANT-DRIFT] ${framework}/${component}: spec ${union} allows '${member}' ` +
@@ -139,7 +111,7 @@ for (const { union, axis, members } of unions) {
 
 if (errors.length > 0) {
   errors.forEach((e) => console.error(`✗ ${e}`));
-  console.error(`\n${errors.length} variant/size drift issue(s). Add the missing CSS class, or allowlist a non-class axis in check-variants.js.`);
+  console.error(`\n${errors.length} variant/size drift issue(s). Add the missing CSS class, or allowlist a non-class axis in tools/scripts/lib/allowlists.js.`);
   process.exit(1);
 } else {
   console.log(`✓ variant/size CSS in sync (${unions.length} unions × ${FRAMEWORKS.length} frameworks)`);

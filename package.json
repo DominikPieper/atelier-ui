@@ -27,6 +27,7 @@
     "gen:llms": "node tools/scripts/gen-llms-txt.mjs",
     "gen:cookbook-manifest": "node tools/scripts/gen-cookbook-manifest.mjs",
     "gen:behaviors": "node tools/scripts/gen-behaviors.mjs",
+    "sync:generated": "node tools/scripts/sync-spec.mjs && node tools/scripts/gen-behaviors.mjs && node tools/scripts/gen-llms-txt.mjs && node tools/scripts/sync-skill-discovery.mjs figma-workspace-architect",
     "preflight": "node tools/scripts/preflight.mjs"
   },
   "private": true,

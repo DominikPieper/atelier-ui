@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import DiagramFigure from '../components/DiagramFigure.astro';
+import Callout from '../components/Callout.astro';
 import Jargon from '../components/Jargon.astro';
 import HelpFooter from '../components/HelpFooter.astro';
 import PageHero from '../components/PageHero.astro';
@@ -211,7 +212,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         <pre class="mcp-compare-prompt">"build component for node-id 695-313 using figma-console + storybook-react MCP."</pre>
         <ol class="mcp-compare-list" start="3">
           <li>Token-exact code lands</li>
-          <li>Optional: <code>figma_check_design_parity</code></li>
+          <li>Verify: <code>figma_check_design_parity</code></li>
         </ol>
         <p class="mcp-compare-foot">Single source of truth · no drift.</p>
       </div>
@@ -448,6 +449,11 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           <div style="flex: 1">
             <h3 class="docs-h3">AI matches to Atelier UI components</h3>
             <p class="docs-step-desc">Claude Code queries the Storybook MCP (<code>list-all-documentation</code> → <code>get-documentation</code>) for the matching component. It gets exact prop names and variants — no guessing.</p>
+            <Callout tone="note" title="Storybook MCP is React-only for component metadata">
+              <p style="margin: 0; font-size: 0.82rem; line-height: 1.6; color: var(--ui-color-text-muted)">
+                Storybook 10.4 emits component metadata over MCP for React only. On Angular and Vue, read the spec at <code>libs/spec/src/index.ts</code> (or query the React Storybook MCP as cross-framework reference) — the API contract is identical across all three.
+              </p>
+            </Callout>
           </div>
         </div>
 
@@ -462,8 +468,8 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         <div class="docs-step-row" data-step="5">
           <span class="docs-step-badge">E</span>
           <div style="flex: 1">
-            <h3 class="docs-h3">Verify design parity (optional)</h3>
-            <p class="docs-step-desc"><code>figma_check_design_parity</code> compares the generated code against the Figma spec and returns a parity score plus specific discrepancies. Pass the prompt below to close the loop.</p>
+            <h3 class="docs-h3">Verify design parity</h3>
+            <p class="docs-step-desc">Don't stop at "looks right" — close the loop. <code>figma_check_design_parity</code> compares the generated code against the Figma spec and returns a parity score plus specific discrepancies. Pass the prompt below; fix anything it flags before you call the component done.</p>
             <Code code={PARITY_PROMPT} lang="text" title="parity check prompt" />
           </div>
         </div>

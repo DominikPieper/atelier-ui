@@ -14,32 +14,12 @@
 
 const fs = require('fs');
 const path = require('path');
+const { isComponentDir, getComponentDirs, hasStory } = require('./lib/component-discovery');
 
 const ROOT = path.resolve(__dirname, '../..');
 const ANGULAR_LIB = path.join(ROOT, 'libs/angular/src/lib');
 const REACT_LIB = path.join(ROOT, 'libs/react/src/lib');
 const VUE_LIB = path.join(ROOT, 'libs/vue/src/lib');
-
-/** @returns {Set<string>} */
-function getComponentDirs(dir) {
-  if (!fs.existsSync(dir)) return new Set();
-  return new Set(
-    fs
-      .readdirSync(dir)
-      .filter((entry) => fs.statSync(path.join(dir, entry)).isDirectory())
-  );
-}
-
-/** A dir is a component when it holds an `llm-*` source that is not a spec/story. */
-function isComponentDir(dirPath) {
-  return fs
-    .readdirSync(dirPath)
-    .some((f) => /^llm-.*\.(ts|tsx|vue)$/.test(f) && !/\.(spec|stories)\./.test(f));
-}
-
-function hasStory(dirPath) {
-  return fs.readdirSync(dirPath).some((f) => /\.stories\./.test(f));
-}
 
 const angular = getComponentDirs(ANGULAR_LIB);
 const react = getComponentDirs(REACT_LIB);

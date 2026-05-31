@@ -1,0 +1,214 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Code } from 'astro-expressive-code/components';
+import DiagramFigure from '../components/DiagramFigure.astro';
+import Callout from '../components/Callout.astro';
+import HelpFooter from '../components/HelpFooter.astro';
+import PageHero from '../components/PageHero.astro';
+import BottomNav from '../components/BottomNav.astro';
+import FwSwitcher from '../components/FwSwitcher.astro';
+
+const FRAMEWORKS = ['React', 'Angular', 'Vue'] as const;
+
+// Step 3 — a representative "generate" prompt per framework. The only
+// difference between them is the framework name and which Storybook MCP
+// surface (or spec fallback) Claude reads for component docs.
+const GENERATE_PROMPT: Record<string, string> = {
+  React: `Build the Settings / Card Figma frame as a React Atelier UI component.
+
+1. figma-console MCP (figma_get_component_for_development) on the node —
+   read boundVariables, the component tree, and the rendered preview.
+2. storybook-react MCP (list-all-documentation, then get-documentation)
+   to look up LlmCard and LlmInput props.
+3. Generate the component with the exact Atelier UI props and the exact
+   --ui-* token names from boundVariables. No hardcoded colors or paddings.`,
+
+  Angular: `Build the Settings / Card Figma frame as an Angular Atelier UI component.
+
+1. figma-console MCP (figma_get_component_for_development) on the node —
+   read boundVariables, the component tree, and the rendered preview.
+2. Read the component API contract from libs/spec/src/index.ts (LlmCardSpec,
+   LlmInputSpec) — Angular metadata isn't on the Storybook MCP yet.
+3. Generate the component with the exact Atelier UI props and the exact
+   --ui-* token names from boundVariables. No hardcoded colors or paddings.`,
+
+  Vue: `Build the Settings / Card Figma frame as a Vue Atelier UI component.
+
+1. figma-console MCP (figma_get_component_for_development) on the node —
+   read boundVariables, the component tree, and the rendered preview.
+2. Read the component API contract from libs/spec/src/index.ts (LlmCardSpec,
+   LlmInputSpec) — Vue metadata isn't on the Storybook MCP yet.
+3. Generate the component with the exact Atelier UI props and the exact
+   --ui-* token names from boundVariables. No hardcoded colors or paddings.`,
+};
+
+// Per-framework note for the Generate step: where component docs come from.
+const GENERATE_NOTE: Record<string, string> = {
+  React: 'React exposes component metadata over the hosted Storybook MCP — list-all-documentation gives Claude every prop and variant before it writes a line.',
+  Angular: 'Storybook 10.4 only emits components.json for React, so Angular falls back to reading the spec at libs/spec/src/index.ts directly. The API contract is identical across all three frameworks.',
+  Vue: 'Storybook 10.4 only emits components.json for React, so Vue falls back to reading the spec at libs/spec/src/index.ts directly. The API contract is identical across all three frameworks.',
+};
+
+const PARITY_PROMPT = `Run figma_check_design_parity on the settings card node against
+the component I just generated. Fix every discrepancy it reports.`;
+---
+
+<BaseLayout
+  title="Design to code"
+  description="From a Figma component to a verified, framework-native component — the Atelier loop. Inspect, spec, generate, verify in one signposted walkthrough."
+  currentPath="/design-to-code"
+>
+  <div class="docs-inline-page">
+
+    <PageHero
+      kind="explanation"
+      tag="The loop · Figma → Code"
+      title="Design to Code"
+      ledeMax="560px"
+    >
+      From a Figma component to a verified, framework-native component — the Atelier loop. This is the map; the <a href="/first-component" class="docs-link-primary">kata</a> and the <a href="/tutorial" class="docs-link-primary">tutorial</a> are the territory.
+    </PageHero>
+
+    <!-- Framing: one framework per session -->
+    <Callout tone="note" title="Pick one framework per session">
+      <p style="margin: 0; font-size: 0.85rem; line-height: 1.6; color: var(--ui-color-text-muted)">
+        Every workshop runs in a <strong style="color: var(--ui-color-text)">single framework</strong> — pick Angular, React, or Vue with the switcher in the Generate step below. The other two adapters are reference infrastructure that keeps the API contract honest; you don't touch them in a session.
+      </p>
+    </Callout>
+
+    <!-- The loop at a glance -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">The loop at a glance</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
+        Four steps turn a design into shipped code. Each one hands concrete data to the next — no screenshots, no copy-paste guessing.
+      </p>
+
+      <DiagramFigure caption="The four-step loop. Inspect reads the design, Spec is the shared contract, Generate writes framework-native code, Verify proves parity against Figma.">
+        <svg viewBox="0 0 940 200" role="img" aria-labelledby="d2c-title d2c-desc" preserveAspectRatio="xMidYMid meet">
+          <title id="d2c-title">Design-to-code four-step loop</title>
+          <desc id="d2c-desc">Four boxes left to right: Inspect in Figma, Spec in libs/spec, Generate with Claude and the Storybook MCP, Verify in Storybook with figma_check_design_parity. Accent arrows connect each step forward; the Generate step is highlighted as the AI step.</desc>
+
+          <defs>
+            <marker id="d2c-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--accent"/>
+            </marker>
+          </defs>
+
+          <!-- Step 1: Inspect -->
+          <rect x="20"  y="56" width="200" height="88" rx="12" ry="12" class="diagram-node"/>
+          <text x="120" y="88"  text-anchor="middle" font-size="14" font-weight="700">1 · Inspect</text>
+          <text x="120" y="110" text-anchor="middle" font-size="11" class="diagram-muted">Figma component</text>
+          <text x="120" y="128" text-anchor="middle" font-size="10" class="diagram-mono diagram-muted">figma-console MCP</text>
+
+          <!-- Step 2: Spec -->
+          <rect x="260" y="56" width="200" height="88" rx="12" ry="12" class="diagram-node"/>
+          <text x="360" y="88"  text-anchor="middle" font-size="14" font-weight="700">2 · Spec</text>
+          <text x="360" y="110" text-anchor="middle" font-size="11" class="diagram-muted">shared API contract</text>
+          <text x="360" y="128" text-anchor="middle" font-size="10" class="diagram-mono diagram-muted">libs/spec</text>
+
+          <!-- Step 3: Generate (accent — AI step) -->
+          <rect x="500" y="52" width="200" height="96" rx="12" ry="12" class="diagram-node diagram-node--accent"/>
+          <text x="600" y="86"  text-anchor="middle" font-size="14" font-weight="700" style="fill: var(--ui-color-primary)">3 · Generate</text>
+          <text x="600" y="108" text-anchor="middle" font-size="11" class="diagram-muted">Claude writes code</text>
+          <text x="600" y="126" text-anchor="middle" font-size="10" class="diagram-mono diagram-muted">+ Storybook MCP</text>
+
+          <!-- Step 4: Verify -->
+          <rect x="740" y="56" width="200" height="88" rx="12" ry="12" class="diagram-node"/>
+          <text x="840" y="88"  text-anchor="middle" font-size="14" font-weight="700">4 · Verify</text>
+          <text x="840" y="110" text-anchor="middle" font-size="11" class="diagram-muted">Storybook + parity</text>
+          <text x="840" y="128" text-anchor="middle" font-size="10" class="diagram-mono diagram-muted">check_design_parity</text>
+
+          <!-- Forward arrows -->
+          <line x1="220" y1="100" x2="260" y2="100" class="diagram-connector diagram-connector--accent" marker-end="url(#d2c-arr)"/>
+          <line x1="460" y1="100" x2="500" y2="100" class="diagram-connector diagram-connector--accent" marker-end="url(#d2c-arr)"/>
+          <line x1="700" y1="100" x2="740" y2="100" class="diagram-connector diagram-connector--accent" marker-end="url(#d2c-arr)"/>
+        </svg>
+      </DiagramFigure>
+    </div>
+
+    <!-- Step 1 — Inspect -->
+    <div class="docs-section">
+      <div class="docs-step-row" data-step="1">
+        <span class="docs-step-badge">1</span>
+        <div style="flex: 1">
+          <h2 class="docs-h3">Inspect — read the Figma component</h2>
+          <p class="docs-step-desc">
+            Run <code>figma_get_component_for_development</code> (figma-console MCP) on the node, or open the master on the <strong style="color: var(--ui-color-text)">Components page</strong> of the
+            <a href="https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI" target="_blank" rel="noopener noreferrer" class="docs-link-primary">Atelier UI Figma file</a>.
+            Note the <strong style="color: var(--ui-color-text)">variants</strong>, the <code>--ui-*</code> tokens bound to each property (<code>boundVariables</code>), and any accessibility annotations. These map one-to-one to CSS custom properties — no conversion needed.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2 — Spec -->
+    <div class="docs-section">
+      <div class="docs-step-row" data-step="2">
+        <span class="docs-step-badge">2</span>
+        <div style="flex: 1">
+          <h2 class="docs-h3">Spec — the framework-agnostic contract</h2>
+          <p class="docs-step-desc">
+            The API contract lives in <code>libs/spec/src/index.ts</code> (plus <code>metadata/</code>, <code>tokens.manifest.ts</code>, and <code>behaviors.json</code>). It is the <strong style="color: var(--ui-color-text)">same contract across all three frameworks</strong>: identical prop names, identical variant unions, identical token names. Whichever framework you pick, the props you'll write are defined here.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 — Generate -->
+    <div class="docs-section">
+      <div class="docs-step-row" data-step="3">
+        <span class="docs-step-badge">3</span>
+        <div style="flex: 1">
+          <h2 class="docs-h3">Generate — prompt Claude in your framework</h2>
+          <p class="docs-step-desc">
+            Prompt Claude Code to build or edit the component in your chosen framework, using the Storybook MCP for exact component docs. Pick a framework — the prompt and the source-of-docs note update to match:
+          </p>
+
+          <FwSwitcher variant="tabs" frameworks={['react', 'angular', 'vue']} label="Choose a framework for the generate step" />
+          {FRAMEWORKS.map((fw, i) => (
+            <div data-fw-panel={fw} hidden={i !== 0}>
+              <Callout tone="note">
+                <p style="margin: 0; font-size: 0.82rem; line-height: 1.6; color: var(--ui-color-text-muted)">{GENERATE_NOTE[fw]}</p>
+              </Callout>
+              <Code code={GENERATE_PROMPT[fw]} lang="text" title={`generate prompt — ${fw}`} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4 — Verify -->
+    <div class="docs-section">
+      <div class="docs-step-row" data-step="4">
+        <span class="docs-step-badge">4</span>
+        <div style="flex: 1">
+          <h2 class="docs-h3">Verify — prove design parity</h2>
+          <p class="docs-step-desc">
+            Run the story in Storybook (<code>nx storybook &lt;fw&gt;</code>) to see the component in isolation, then run <code>figma_check_design_parity</code> to catch padding, colour, and variant drift against the Figma spec.
+            <strong style="color: var(--ui-color-text)">This step is required</strong> — it's what turns "looks about right" into a verified component.
+          </p>
+          <Code code={PARITY_PROMPT} lang="text" title="parity check prompt" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Where to go next -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">Where to go next</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; font-size: 0.85rem">
+        Run the loop hands-on in the <a href="/first-component" class="docs-link-primary docs-link-primary--bold">15-min kata</a>, or read the <a href="/tutorial" class="docs-link-primary docs-link-primary--bold">tutorial</a> for the deeper MCP mechanics behind each step.
+      </p>
+    </div>
+
+    <HelpFooter page="design-to-code" />
+
+    <BottomNav items={[
+      { to: '/first-component', label: 'Hands-on', title: 'First component', icon: 'check_circle' },
+      { to: '/tutorial',        label: 'The why',  title: 'Tutorial',        icon: 'school' },
+      { to: '/figma',           label: 'No-MCP',   title: 'Figma — manual',  icon: 'palette' },
+    ]} />
+
+  </div>
+</BaseLayout>
+
+<!-- Framework tabs handled by shared framework-pref-init script in BaseLayout. -->

@@ -177,16 +177,17 @@ const EXPECTED: Record<Framework, { file: string; cmd: string; port: number }> =
       </p>
     </section>
 
-    <!-- Optional Step 6 -->
-    <section data-step="6" class="kata-step kata-step--optional">
+    <!-- Step 6 -->
+    <section data-step="6" class="kata-step">
       <div class="kata-step-head">
-        <span class="kata-step-num kata-step-num--optional">+</span>
-        <h2 class="kata-step-title">Optional &middot; run the parity check</h2>
+        <span class="kata-step-num">6</span>
+        <h2 class="kata-step-title">Run the parity check</h2>
       </div>
       <p class="kata-step-desc">
-        <code>figma_check_design_parity</code> compares the generated code against the Figma
-        spec and lists discrepancies — exact paddings, exact colors, missing variants.
-        Pass this prompt to close the loop:
+        Eyeballing the result isn't enough — close the loop. <code>figma_check_design_parity</code>
+        compares the generated code against the Figma spec and lists every discrepancy —
+        exact paddings, exact colors, missing variants — so you ship a verified component, not a lookalike.
+        Pass this prompt:
       </p>
       <Code code={PARITY_PROMPT} lang="text" title="parity check prompt" />
     </section>
@@ -371,9 +372,6 @@ const EXPECTED: Record<Framework, { file: string; cmd: string; port: number }> =
     border-bottom: 1px solid var(--ui-color-border);
   }
   .kata-step:last-of-type { border-bottom: 0; }
-  .kata-step--optional {
-    opacity: 0.92;
-  }
   .kata-step-head {
     display: flex;
     align-items: center;
@@ -393,12 +391,6 @@ const EXPECTED: Record<Framework, { file: string; cmd: string; port: number }> =
     font-family: var(--font-mono), ui-monospace, monospace;
     font-size: 0.82rem;
     font-weight: 700;
-  }
-  .kata-step-num--optional {
-    background: var(--ui-color-surface-raised);
-    color: var(--ui-color-text-muted);
-    border: 1px solid var(--ui-color-border);
-    font-size: 1rem;
   }
   .kata-step-title {
     margin: 0;

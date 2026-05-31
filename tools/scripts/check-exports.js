@@ -20,16 +20,9 @@
 
 const fs = require('fs');
 const path = require('path');
+const { FRAMEWORKS, isComponentDir } = require('./lib/component-discovery');
 
 const ROOT = path.resolve(__dirname, '../..');
-const FRAMEWORKS = ['angular', 'react', 'vue'];
-
-/** A dir is a component when it holds an `llm-*` source that is not a spec/story. */
-function isComponentDir(dirPath) {
-  return fs
-    .readdirSync(dirPath)
-    .some((f) => /^llm-.*\.(ts|tsx|vue)$/.test(f) && !/\.(spec|stories)\./.test(f));
-}
 
 const errors = [];
 

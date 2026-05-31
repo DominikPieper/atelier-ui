@@ -18,10 +18,8 @@ ROOT=$(git rev-parse --show-toplevel)
 cd "$ROOT"
 
 # Regenerate quietly. All scripts are idempotent.
-node tools/scripts/sync-spec.mjs > /dev/null 2>&1 || true
-node tools/scripts/gen-behaviors.mjs > /dev/null 2>&1 || true
-node tools/scripts/gen-llms-txt.mjs > /dev/null 2>&1 || true
-node tools/scripts/sync-skill-discovery.mjs figma-workspace-architect > /dev/null 2>&1 || true
+# sync:generated = spec mirror + behaviors.generated + llms.txt + skill discovery.
+npm run --silent sync:generated > /dev/null 2>&1 || true
 
 drift=$(git diff --name-only -- \
   libs/angular/src/lib/spec.ts \

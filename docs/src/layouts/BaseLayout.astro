@@ -72,6 +72,7 @@ const BREADCRUMB_LABELS: Record<string, string> = {
   troubleshooting: 'Troubleshooting',
   figma: 'Figma as source',
   tutorial: 'Figma to code',
+  'design-to-code': 'Design to code',
   storybook: 'Storybook',
   mcp: 'AI tools',
   components: 'Components',
@@ -277,14 +278,19 @@ const breadcrumbSchema = {
               <span class="docs-nav-link-num">5</span>
               Tutorial
             </a>
+            <a href="/design-to-code" class={`docs-nav-link${isActive('/design-to-code') ? ' active' : ''}`}>
+              <Icon name="schema" class="docs-nav-link-icon" />
+              <span class="docs-nav-link-num">6</span>
+              Design to code
+            </a>
             <a href="/first-component" class={`docs-nav-link${isActive('/first-component') ? ' active' : ''}`}>
               <Icon name="check_circle" class="docs-nav-link-icon" />
-              <span class="docs-nav-link-num">6</span>
+              <span class="docs-nav-link-num">7</span>
               First component
             </a>
             <a href="/patterns" class={`docs-nav-link${isActive('/patterns') ? ' active' : ''}`}>
               <Icon name="menu_book" class="docs-nav-link-icon" />
-              <span class="docs-nav-link-num">7</span>
+              <span class="docs-nav-link-num">8</span>
               Patterns
             </a>
           </div>

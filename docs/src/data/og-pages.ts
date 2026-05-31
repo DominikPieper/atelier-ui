@@ -61,6 +61,11 @@ export const OG_PAGES = {
     description:
       'Step-by-step tutorial for turning a Figma component into framework-agnostic Atelier UI code.',
   },
+  'design-to-code': {
+    title: 'Design to Code',
+    description:
+      'From a Figma component to a verified, framework-native component — the Atelier loop: inspect, spec, generate, verify.',
+  },
   'first-component': {
     title: 'First Component (kata)',
     description:

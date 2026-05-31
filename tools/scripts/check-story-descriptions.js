@@ -36,16 +36,10 @@
 
 const fs = require('fs');
 const path = require('path');
+const { STORY_DESCRIPTION_SKIP_DIRS } = require('./lib/allowlists');
 
 const ROOT = path.resolve(__dirname, '../..');
 const FRAMEWORKS = ['angular', 'react', 'vue'];
-
-// Component dirs that intentionally do not have a metadata file:
-//   - toast:       no LlmToastSpec interface; toast is a service + container
-//                  pair documented manually in components.ts.
-//   - code-block:  docs-site widget, not part of the public component API.
-//   - showcase:    composite docs sandbox; not a shipped component.
-const SKIP_DIRS = new Set(['toast', 'code-block', 'showcase']);
 
 const errors = [];
 let checked = 0;
@@ -56,7 +50,7 @@ for (const fw of FRAMEWORKS) {
   if (!fs.existsSync(libDir)) continue;
   for (const entry of fs.readdirSync(libDir, { withFileTypes: true })) {
     if (!entry.isDirectory()) continue;
-    if (SKIP_DIRS.has(entry.name)) {
+    if (STORY_DESCRIPTION_SKIP_DIRS.has(entry.name)) {
       skipped++;
       continue;
     }

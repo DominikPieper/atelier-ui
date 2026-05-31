@@ -49,6 +49,8 @@ npx nx serve workshop-<framework>
 
 Full setup guide (prerequisites, Claude Code install, Figma access token, MCP config): [atelier.pieper.io/workshop](https://atelier.pieper.io/workshop).
 
+New here? Read the end-to-end design→code path at [atelier.pieper.io/design-to-code](https://atelier.pieper.io/design-to-code), then run the hands-on kata at [atelier.pieper.io/first-component](https://atelier.pieper.io/first-component).
+
 ---
 
 ## Hosted MCP endpoints

@@ -24,19 +24,11 @@
 const fs = require('fs');
 const path = require('path');
 const { UNION_TO_COMPONENT, AXIS_PREFIX, axisOf } = require('./lib/component-axes');
+const { DEFAULT_PROP_EXCEPTIONS } = require('./lib/allowlists');
 
 const ROOT = path.resolve(__dirname, '../..');
 const DOCS_FILE = path.join(ROOT, 'docs/src/data/components.ts');
 const FRAMEWORKS = ['angular', 'react', 'vue'];
-
-/** Axis props whose default is set by a non-component-prop mechanism, so this
- *  check's extraction does not apply (the values do still agree — verified). */
-const ALLOW = new Set([
-  // Toast is imperative: the variant default lives in the show() options merge
-  // (`options.variant ?? 'default'`) in React/Vue, not a component prop default.
-  // All three adapters default to 'default'.
-  'toast:variant',
-]);
 
 function componentSource(framework, component) {
   const dir = path.join(ROOT, 'libs', framework, 'src', 'lib', component);
@@ -100,7 +92,7 @@ let checked = 0;
 for (const [union, component] of Object.entries(UNION_TO_COMPONENT)) {
   const axis = axisOf(union);
   const prop = AXIS_PREFIX[axis];
-  if (ALLOW.has(`${component}:${prop}`)) continue;
+  if (DEFAULT_PROP_EXCEPTIONS.has(`${component}:${prop}`)) continue;
 
   const found = {};
   for (const fw of FRAMEWORKS) {
