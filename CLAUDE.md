@@ -89,6 +89,37 @@ File key: `QMnDD8uZQPldPrlCwZZ58T`. Page conventions:
 - **Minimal Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
 - **Big Picture**: the project idea / plan docs live in `plan/`.
 
+## Decision Records (ADR)
+
+When a non-trivial decision is made, record it as an ADR so the *why* stays
+traceable and reusable later (blog posts, talks, teaching). `plan/adr/` is the
+canonical decision log.
+
+**Record an ADR when** you choose one approach over alternatives, set a
+convention, change the architecture / spec contract / API shape, the tooling &
+gates, the design-system & tokens, the Figma→code workflow, or build/release —
+i.e. any tradeoff with a rationale worth keeping. **Skip it** for trivial or
+mechanical work (typos, renames, dependency bumps, routine bugfixes).
+
+How:
+1. Create `plan/adr/NNNN-kebab-title.md` with the next sequential number.
+2. Follow the MADR format already in `plan/adr/`: YAML frontmatter
+   (`status: accepted`, `date: <YYYY-MM-DD>`, `sources`, optional
+   `supersedes`/`superseded-by`) + sections `## Status`, `## Context`,
+   `## Decision`, `## Consequences`. New ADRs are recorded-at-the-time, so they
+   need no `confidence` field (that marks the older reconstructed records).
+3. Capture the reasoning richly — the forces/context, the decision, **why**
+   (and which alternatives were rejected and why), and the consequences/
+   tradeoffs. That "why" is the content that gets reused later.
+4. Add a row to the `plan/adr/README.md` index. If the decision reverses an
+   earlier one, set `supersedes` here and flip the old ADR's `status:` to
+   `superseded`.
+5. Write the ADR as part of finishing the decision-bearing task (same bar as
+   "Verification Before Done"), not retroactively.
+
+Deeper rationale lives in `plan/big-picture.md`, `plan/design-principles.md`,
+and `tasks/rationale.md` — cross-link rather than duplicate.
+
 ---
 
 ## Working Agreement (how I want you to work)
