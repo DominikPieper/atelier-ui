@@ -15,6 +15,14 @@ on:
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      mode:
+        description: 'release = version + changelog + publish (normal). publish-only = publish the current tagged versions without a bump (recovery, e.g. after a failed publish left a tag unpublished).'
+        type: choice
+        options:
+          - release
+          - publish-only
+        default: release
 
 permissions:
   contents: write
@@ -47,7 +55,16 @@ jobs:
           git config user.name "github-actions[bot]"
 
       - name: Release and Publish
-        run: npx nx release --yes
+        # `nx release --yes` skips publishing when there is no version bump, so a
+        # tag left unpublished by an earlier failed run can't be republished that
+        # way. `publish-only` runs the explicit publish subcommand to push the
+        # current tagged versions regardless of bump.
+        run: |
+          if [ "${{ github.event.inputs.mode }}" = "publish-only" ]; then
+            npx nx release publish
+          else
+            npx nx release --yes
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
