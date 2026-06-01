@@ -23,6 +23,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0015](0015-docs-astro-diataxis-design-to-code.md) | Docs: Astro + Diátaxis + single Design-to-Code narrative | Accepted | Reconstructed |
 | [0016](0016-release-nx-release-not-for-production.md) | Release: nx release, 0.0.x not-for-production, automation-token publish + publish-only recovery | Accepted | Reconstructed |
 | [0017](0017-record-adr-for-every-decision.md) | Record an ADR for every non-trivial decision | Accepted | Recorded |
+| [0018](0018-figma-token-tiering-and-css-projection.md) | Figma token tiering (Primitive→UI→Component) + UI-only CSS projection | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

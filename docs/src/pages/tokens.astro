@@ -110,6 +110,37 @@ const motion = [
       Use the theme toggle in the topbar to flip between light and dark — every swatch and value below updates instantly. In your own app, set <code>data-theme="dark"</code> on <code>&lt;html&gt;</code> to force dark mode, <code>data-theme="light"</code> to force light. With neither attribute set, the user’s OS preference wins.
     </Callout>
 
+    <!-- Architecture -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">How the tiers fit together</h2>
+      <p style="color: var(--ui-color-text-muted); font-size: 0.82rem; line-height: 1.6; margin-bottom: 1.5rem; max-width: 60ch">
+        Tokens are layered, and each layer only ever points one step down. Raw <strong>values</strong> live in <strong>Primitives</strong> (a palette like <code>teal/500</code>). <strong>Meaning</strong> lives in the <strong>UI tier</strong> — the <code>--ui-*</code> tokens on this page — which alias a primitive and decide what it is <em>for</em> (<code>color/primary</code>). This is also the only tier that carries light and dark modes. On top sit <strong>Component tokens</strong>, component-local names (<code>button/bg-primary</code>) that alias a UI token.
+      </p>
+
+      <div style="display: flex; align-items: stretch; gap: 0; flex-wrap: wrap; border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-lg); overflow: hidden; background: var(--ui-color-surface-raised)">
+        {[
+          { tier: 'Primitive', sub: 'raw value · single mode', ex: 'teal/500', val: '#006470' },
+          { tier: 'UI (semantic)', sub: 'meaning · light + dark', ex: 'color/primary', val: '--ui-color-primary' },
+          { tier: 'Component', sub: 'component role · Figma only', ex: 'button/bg-primary', val: 'aliases color/primary' },
+        ].map((step, i) => (
+          <div style="flex: 1 1 180px; padding: 1rem 1.1rem; border-left: 1px solid var(--ui-color-border); position: relative">
+            <div style="font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ui-color-text-muted)">{`Tier ${i + 1}`}</div>
+            <div style="font-size: 0.92rem; font-weight: 600; color: var(--ui-color-text); margin: 0.15rem 0 0.1rem">{step.tier}</div>
+            <div style="font-size: 0.68rem; color: var(--ui-color-text-muted); margin-bottom: 0.7rem">{step.sub}</div>
+            <div style="font-family: monospace; font-size: 0.74rem; font-weight: 600; color: var(--ui-color-primary)">{step.ex}</div>
+            <div style="font-family: monospace; font-size: 0.68rem; color: var(--ui-color-text-muted); margin-top: 0.15rem">{step.val}</div>
+            {i < 2 && (
+              <span aria-hidden="true" style="position: absolute; top: 1.1rem; right: -0.55rem; font-size: 0.9rem; color: var(--ui-color-text-muted); background: var(--ui-color-surface-raised); padding: 0 0.1rem; z-index: 1">→</span>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <Callout tone="note" title="Figma has three tiers, the CSS has two.">
+        The code (<code>tokens.css</code>) materializes only the UI tier as <code>--ui-*</code>, and components reference those directly — there is no <code>--button-bg-primary</code> CSS layer. The Component tier exists in the Figma file as a handoff and teaching aid, but it is <strong>not</strong> projected into code. So if you map a Figma <code>button/bg-primary</code> looking for its CSS twin, you will only find the UI token it aliases. That asymmetry is deliberate — the reasoning is recorded in <code>ADR-0018</code> (<code>plan/adr/0018-figma-token-tiering-and-css-projection.md</code>).
+      </Callout>
+    </div>
+
     <!-- Colors -->
     <div class="docs-section">
       <h2 class="docs-section-title">Colors</h2>
