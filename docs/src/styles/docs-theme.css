@@ -76,6 +76,10 @@
 :root {
   --docs-font: var(--font-sans), 'Inter', system-ui, sans-serif;
   --docs-font-code: var(--font-mono), 'Fira Code', 'Menlo', monospace;
+  /* Authorial-signature accent — serif italic for one emphasised keyword in a
+   * heading (rendered in teal --ui-color-primary via .docs-accent). Shared
+   * brand DNA with pieper.io; Georgia is a metric-near fallback for swap. */
+  --docs-font-accent: var(--font-accent), 'Instrument Serif', Georgia, serif;
   --docs-topbar-border: var(--ui-color-border);
   /* Diagram-secondary tier — used by /a11y-workflow Venn circles, the
    * /patterns "updated" tag, and a few other dual-category visuals.

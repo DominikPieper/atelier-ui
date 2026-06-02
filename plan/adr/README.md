@@ -24,6 +24,8 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0016](0016-release-nx-release-not-for-production.md) | Release: nx release, 0.0.x not-for-production, automation-token publish + publish-only recovery | Accepted | Reconstructed |
 | [0017](0017-record-adr-for-every-decision.md) | Record an ADR for every non-trivial decision | Accepted | Recorded |
 | [0018](0018-figma-token-tiering-and-css-projection.md) | Figma token tiering (Primitive→UI→Component) + UI-only CSS projection | Accepted | Recorded |
+| [0019](0019-figma-conformance-gate.md) | Figma conformance gate (`check:figma`) via committed snapshot + offline check | Accepted | Recorded |
+| [0020](0020-personal-authorial-signature.md) | Personal authorial signature (serif-italic heading accent + shared motion grammar) | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

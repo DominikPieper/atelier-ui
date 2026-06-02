@@ -62,8 +62,8 @@ const hasSlot = Astro.slots.has('default');
     opacity: 0;
     pointer-events: none;
     transition:
-      opacity 150ms ease,
-      transform 150ms ease;
+      opacity var(--ui-transition-fast),
+      transform var(--ui-transition-fast);
     z-index: 50;
     display: flex;
     flex-direction: column;

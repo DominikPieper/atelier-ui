@@ -1,0 +1,221 @@
+{
+  "meta": {
+    "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
+    "fileName": "Atelier UI",
+    "figmaLastModified": null,
+    "generatedAt": "2026-06-01T16:29:20.000Z",
+    "gitSha": null,
+    "serverVersion": "1.29.1",
+    "coverage": "P0 core (3 of 27 masters: LlmButton, LlmBadge, LlmCard). Token/auto-layout checks sample each master's default variant. Run `npm run figma:snapshot` with the Figma Desktop Bridge connected to capture all 27 masters.",
+    "note": "Facts captured from Figma via figma-console MCP read-tools. The gate (check-figma) applies the rules — this file holds no judgements beyond bound/unbound/raw determinations made at capture time."
+  },
+  "uiTokens": [
+    "color/primary", "color/primary-hover", "color/primary-active", "color/primary-light",
+    "color/secondary", "color/secondary-hover", "color/secondary-active",
+    "color/danger", "color/danger-hover", "color/danger-active",
+    "color/success", "color/warning", "color/info",
+    "color/surface", "color/surface-raised", "color/surface-sunken",
+    "color/border", "color/border-hover", "color/text", "color/text-muted", "color/text-on-primary",
+    "color/input-bg", "color/input-bg-focus", "color/input-border", "color/input-border-hover",
+    "color/input-border-focus", "color/input-border-invalid", "color/placeholder",
+    "spacing/1", "spacing/2", "spacing/3", "spacing/4", "spacing/5", "spacing/6", "spacing/8", "spacing/10", "spacing/12", "spacing/16",
+    "radius/sm", "radius/md", "radius/lg", "radius/xl", "radius/full",
+    "font-size/xs", "font-size/sm", "font-size/md", "font-size/lg", "font-size/xl", "font-size/2xl",
+    "font-weight/normal", "font-weight/medium", "font-weight/semibold",
+    "line-height/tight", "line-height/normal"
+  ],
+  "components": [
+    {
+      "name": "Action/LlmButton",
+      "selector": "LlmButton",
+      "nodeId": "129:20",
+      "description": "Action button. Maps to LlmButtonSpec in libs/spec.\n\nUse when: a user-initiated action — submit, save, delete, navigate. Pick the visual based on hierarchy: primary for the screen's main action (one per screen), secondary for supporting actions, outline for tertiary/inline, danger for destructive actions.\n\nAPI surface (Figma → spec):\n- Variant variant: primary | secondary | outline | danger — maps to LlmButtonSpec.variant\n- Variant size: sm | md | lg — maps to LlmButtonSpec.size\n- Variant state: default | hover | focus | active — interaction state\n- Boolean disabled / loading / hasIcon",
+      "variantAxes": {
+        "variant": ["primary", "secondary", "outline", "danger"],
+        "size": ["sm", "md", "lg"],
+        "state": ["default", "focus", "hover", "active"]
+      },
+      "variants": [
+        { "variant": "primary", "size": "sm", "state": "default" },
+        { "variant": "primary", "size": "md", "state": "default" },
+        { "variant": "primary", "size": "lg", "state": "default" },
+        { "variant": "secondary", "size": "sm", "state": "default" },
+        { "variant": "secondary", "size": "md", "state": "default" },
+        { "variant": "secondary", "size": "lg", "state": "default" },
+        { "variant": "outline", "size": "sm", "state": "default" },
+        { "variant": "outline", "size": "md", "state": "default" },
+        { "variant": "outline", "size": "lg", "state": "default" },
+        { "variant": "primary", "size": "md", "state": "focus" },
+        { "variant": "primary", "size": "md", "state": "hover" },
+        { "variant": "primary", "size": "md", "state": "active" },
+        { "variant": "danger", "size": "sm", "state": "default" },
+        { "variant": "danger", "size": "md", "state": "default" },
+        { "variant": "danger", "size": "lg", "state": "default" },
+        { "variant": "danger", "size": "md", "state": "hover" },
+        { "variant": "danger", "size": "md", "state": "active" },
+        { "variant": "danger", "size": "md", "state": "focus" },
+        { "variant": "secondary", "size": "md", "state": "hover" },
+        { "variant": "secondary", "size": "md", "state": "active" },
+        { "variant": "secondary", "size": "md", "state": "focus" },
+        { "variant": "outline", "size": "md", "state": "hover" },
+        { "variant": "outline", "size": "md", "state": "active" },
+        { "variant": "outline", "size": "md", "state": "focus" }
+      ],
+      "sampledVariant": "129:4",
+      "nodes": [
+        {
+          "name": "variant=primary, size=md, state=default",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": ["paddingLeft", "paddingRight", "paddingTop", "paddingBottom"],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Button",
+          "type": "TEXT",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Display/LlmBadge",
+      "selector": "LlmBadge",
+      "nodeId": "55:22",
+      "description": "Inline status pill. Maps to LlmBadgeSpec in libs/spec.\n\nUse when: a small label needs to convey status, count, or category alongside other content. For larger callouts use Feedback/LlmAlert.\n\nAPI surface:\n- Variant variant: default | success | warning | danger | info → LlmBadgeSpec.variant\n- Variant size: sm | md → LlmBadgeSpec.size\n- Text Label: visible label",
+      "variantAxes": {
+        "variant": ["default", "success", "warning", "danger", "info"],
+        "size": ["md", "sm"]
+      },
+      "variants": [
+        { "variant": "default", "size": "md" },
+        { "variant": "success", "size": "md" },
+        { "variant": "warning", "size": "md" },
+        { "variant": "danger", "size": "md" },
+        { "variant": "info", "size": "md" },
+        { "variant": "default", "size": "sm" },
+        { "variant": "success", "size": "sm" },
+        { "variant": "warning", "size": "sm" },
+        { "variant": "danger", "size": "sm" },
+        { "variant": "info", "size": "sm" }
+      ],
+      "sampledVariant": "55:12",
+      "nodes": [
+        {
+          "name": "variant=default, size=md",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 9999,
+          "unboundSpacing": ["paddingLeft", "paddingRight", "paddingTop", "paddingBottom"],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Default",
+          "type": "TEXT",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Display/LlmCard",
+      "selector": "LlmCard",
+      "nodeId": "55:65",
+      "description": "Container for grouped content. Maps to LlmCardSpec in libs/spec.\n\nUse when: distinct grouped content needs a visual container — list items, summaries, dashboard tiles. For overlay content use Overlay/LlmDialog or Overlay/LlmDrawer.\n\nAPI surface:\n- Variant variant: elevated | outlined | flat → LlmCardSpec.variant\n- Variant padding: none | sm | md | lg → LlmCardSpec.padding\n- Text Title, Body: content slots\n- (code-only: role — landmark role, default plain div)",
+      "variantAxes": {
+        "variant": ["elevated", "outlined", "flat"],
+        "padding": ["none", "sm", "md", "lg"]
+      },
+      "variants": [
+        { "variant": "elevated", "padding": "none" },
+        { "variant": "outlined", "padding": "none" },
+        { "variant": "flat", "padding": "none" },
+        { "variant": "elevated", "padding": "sm" },
+        { "variant": "outlined", "padding": "sm" },
+        { "variant": "flat", "padding": "sm" },
+        { "variant": "elevated", "padding": "md" },
+        { "variant": "outlined", "padding": "md" },
+        { "variant": "flat", "padding": "md" },
+        { "variant": "elevated", "padding": "lg" },
+        { "variant": "outlined", "padding": "lg" },
+        { "variant": "flat", "padding": "lg" }
+      ],
+      "sampledVariant": "55:59",
+      "nodes": [
+        {
+          "name": "variant=elevated, padding=md",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 12,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "card-header",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": ["paddingLeft", "paddingRight", "paddingTop", "paddingBottom"],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "card-section-2",
+          "type": "FRAME",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "card-content",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": ["paddingLeft", "paddingRight", "paddingTop", "paddingBottom"],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "card-section-4",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": ["paddingLeft", "paddingRight", "paddingTop", "paddingBottom"],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "card-inner-group",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 6,
+          "unboundSpacing": ["paddingLeft", "paddingRight", "paddingTop", "paddingBottom"],
+          "nonSemanticTokens": []
+        }
+      ]
+    }
+  ]
+}

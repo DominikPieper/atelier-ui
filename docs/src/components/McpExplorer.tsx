@@ -564,13 +564,13 @@ export default function McpExplorer() {
           </div>
 
           {request && (
-            <div style={{ opacity: requestVisible ? 1 : 0, transform: requestVisible ? 'translateY(0)' : 'translateY(6px)', transition: 'opacity 0.2s ease, transform 0.2s ease' }}>
+            <div style={{ opacity: requestVisible ? 1 : 0, transform: requestVisible ? 'translateY(0)' : 'translateY(6px)', transition: 'opacity var(--ui-transition-normal), transform var(--ui-transition-normal)' }}>
               <CodePane code={JSON.stringify(request, null, 2)} label="tool_call" labelColor="var(--ui-color-primary)" />
             </div>
           )}
 
           {response && (
-            <div style={{ opacity: responseVisible ? 1 : 0, transform: responseVisible ? 'translateY(0)' : 'translateY(6px)', transition: 'opacity 0.3s ease, transform 0.3s ease' }}>
+            <div style={{ opacity: responseVisible ? 1 : 0, transform: responseVisible ? 'translateY(0)' : 'translateY(6px)', transition: 'opacity var(--ui-transition-slow), transform var(--ui-transition-slow)' }}>
               <CodePane code={JSON.stringify(response, null, 2)} label="tool_result" labelColor="#34d399" />
               <div style={{
                 marginTop: '0.75rem', padding: '0.75rem 1rem',

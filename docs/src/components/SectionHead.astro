@@ -2,6 +2,12 @@
 interface Props {
   eyebrow?: string;
   title: string;
+  /**
+   * Optional keyword within `title` to render as the serif-italic signature
+   * accent. Must be an exact substring of `title`; the first match is wrapped.
+   * Keep it to one keyword. Omit for a plain heading.
+   */
+  titleAccent?: string;
   sub?: string;
   align?: 'left' | 'center';
   /**
@@ -15,6 +21,7 @@ interface Props {
 const {
   eyebrow,
   title,
+  titleAccent,
   sub,
   align = 'left',
   level = 2,
@@ -22,11 +29,16 @@ const {
 } = Astro.props;
 
 const Tag = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4';
+const accentAt = titleAccent ? title.indexOf(titleAccent) : -1;
 ---
 
 <header class:list={['docs-section-head', `docs-section-head--${align}`]}>
   {eyebrow && <span class="docs-section-eyebrow">{eyebrow}</span>}
-  <Tag class="docs-section-title" id={id}>{title}</Tag>
+  <Tag class="docs-section-title" id={id}>
+    {accentAt === -1 ? title : (
+      <Fragment>{title.slice(0, accentAt)}<em class="docs-accent">{titleAccent}</em>{title.slice(accentAt + titleAccent!.length)}</Fragment>
+    )}
+  </Tag>
   {sub && <p class="docs-section-sub">{sub}</p>}
 </header>
 

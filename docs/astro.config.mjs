@@ -28,6 +28,16 @@ export default defineConfig({
       styles: ['normal'],
       display: 'swap',
     },
+    {
+      // Authorial signature accent (serif-italic keyword in headings).
+      // Shared brand DNA with pieper.io — typography, not palette. See ADR-0020.
+      name: 'Instrument Serif',
+      cssVariable: '--font-accent',
+      provider: fontProviders.google(),
+      weights: [400],
+      styles: ['italic'],
+      display: 'swap',
+    },
   ],
   integrations: [
     expressiveCode(),

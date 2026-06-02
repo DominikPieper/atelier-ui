@@ -134,7 +134,7 @@ The full checklist lives at `plan/figma-component-checklist.md` and is reproduce
 
 ### Enforcement
 
-Manual pre-release checklist enforced via the PR template. No automated drift-gate runs against Figma today — Figma API integration is a deferred follow-up tracked under "Future work" below.
+Automated via **`check:figma`** (ADR-0019) plus the PR-template checklist for the items the gate cannot cover (per-variant descriptions, Inventory page). The gate is offline: it reads a committed snapshot (`tools/figma/snapshot.json`), refreshed by `npm run figma:snapshot` over the figma-console Desktop Bridge. It is run manually (not yet in `check:all`/CI) because the snapshot's freshness depends on that bridge-connected refresh — see ADR-0019 for the trade-off.
 
 ---
 
@@ -146,6 +146,7 @@ Manual pre-release checklist enforced via the PR template. No automated drift-ga
 | `check:story-descriptions` | **new** | Every story sets `parameters.docs.description.component` and sources it from `metadata.purpose` |
 | `check:css-tokens` | **extend** | (existing) no raw literals + (new) every `--ui-*` token has manifest entry with `intent` + `constraints` |
 | `check:llms` (via `gen-llms-txt --check`) | **extend** | Generator now reads `metadata/` + `tokens.manifest.ts`; existing drift-check covers it |
+| `check:figma` (via `figma-snapshot` + offline check) | **new** (ADR-0019) | Per master: name alignment + variant-matrix (Blocker), token-link coverage + auto-layout (Critical), description congruence (Warning). Runs offline against a committed snapshot; standalone, not in `check:all`. |
 
 Existing gates unchanged: `check:sync`, `check:variants`, `check:exports`, `check:defaults`, `check:docs`, `check:behavior`, `check:spec`, `check:tokens`, `check:cookbook`, `check:cookbook-manifest`.
 
@@ -153,6 +154,6 @@ Existing gates unchanged: `check:sync`, `check:variants`, `check:exports`, `chec
 
 ## Future work
 
-- **Automated Figma audit** (`tools/scripts/gen-figma-report.mjs`) — figma-console MCP could be scripted to audit token-link coverage, name alignment, and variant completeness against the metadata files. Not in scope today.
+- ~~**Automated Figma audit**~~ — shipped as `check:figma` (ADR-0019). Remaining follow-ups: expand the committed snapshot from the P0 core to all 27 masters, and add a snapshot-freshness check so the gate can safely join `check:all`/CI.
 - **`llms.json` sidecar** — a machine-readable JSON alongside `llms.txt` for agents that prefer structured input over Markdown.
 - **Three-tier token rename** — `--ui-color-{intent}-{layer}-{state}` taxonomy. Revisit when the annotation layer has been used in anger.

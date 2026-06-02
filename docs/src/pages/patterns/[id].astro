@@ -267,7 +267,7 @@ const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
     padding: 0.18rem 0.5rem;
     border-radius: 3px;
     text-decoration: none;
-    transition: background 0.12s ease, border-color 0.12s ease;
+    transition: background var(--ui-transition-fast), border-color var(--ui-transition-fast);
   }
   .pattern-tag-link:hover {
     background: color-mix(in srgb, var(--docs-secondary) 10%, var(--ui-color-surface-raised));
@@ -405,7 +405,7 @@ const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
     text-decoration: none;
     color: var(--ui-color-text);
     background: var(--ui-color-surface-raised);
-    transition: background 0.12s ease, border-color 0.12s ease;
+    transition: background var(--ui-transition-fast), border-color var(--ui-transition-fast);
   }
   .pattern-pager-link:hover {
     border-color: var(--ui-color-primary);

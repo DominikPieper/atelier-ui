@@ -9,6 +9,12 @@ interface Props {
   time?: string;
   tag?: string;
   title: string;
+  /**
+   * Optional keyword within `title` to render as the serif-italic signature
+   * accent. Must be an exact substring of `title`; the first match is wrapped.
+   * Keep it to one keyword. Omit for a plain heading.
+   */
+  titleAccent?: string;
   /** Plain-text lede. For rich markup, use the default slot instead. */
   lede?: string;
   /** Max-width on the lede paragraph. Defaults to a comfortable 36rem. */
@@ -21,16 +27,22 @@ const {
   time,
   tag,
   title,
+  titleAccent,
   lede,
   ledeMax = '36rem',
 } = Astro.props;
 
 const hasLedeSlot = Astro.slots.has('default');
+const accentAt = titleAccent ? title.indexOf(titleAccent) : -1;
 ---
 
 <header class="docs-page-hero">
   {kind && <PageEyebrow kind={kind} kindLabel={kindLabel} time={time} tag={tag} />}
-  <h1 class="docs-page-h1">{title}</h1>
+  <h1 class="docs-page-h1">
+    {accentAt === -1 ? title : (
+      <Fragment>{title.slice(0, accentAt)}<em class="docs-accent">{titleAccent}</em>{title.slice(accentAt + titleAccent!.length)}</Fragment>
+    )}
+  </h1>
   {(lede || hasLedeSlot) && (
     <p class="docs-page-hero-lede" style={`max-width: ${ledeMax}`}>
       {lede ?? <slot />}

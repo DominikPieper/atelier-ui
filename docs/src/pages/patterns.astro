@@ -169,7 +169,7 @@ function frameworkCode(p: typeof PATTERNS[number], fw: Framework): string {
     text-decoration: none;
   }
   .pattern-tag--link {
-    transition: background 0.12s ease, border-color 0.12s ease;
+    transition: background var(--ui-transition-fast), border-color var(--ui-transition-fast);
   }
   .pattern-tag--link:hover {
     background: color-mix(in srgb, var(--docs-secondary) 10%, var(--ui-color-surface-raised));

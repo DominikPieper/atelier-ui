@@ -1,5 +1,25 @@
 # Atelier — Status
 
+## Review — Personal authorial signature (2026-06-02)
+
+Typography + motion signature on top of Direction A (palette untouched). See ADR-0020.
+
+- **Heading accent:** `Instrument Serif` 400 italic loaded via Astro Fonts API
+  (`astro.config` 3rd entry → `--font-accent`; rendered in `BaseLayout`). New
+  `--docs-font-accent` token + `.docs-accent` class (teal, serif-italic, inherits heading
+  size). `PageHero` + `SectionHead` gained `titleAccent?: string` (first exact substring →
+  `<em class="docs-accent">`; plain string otherwise — backward-compatible). Applied to
+  `first-component` ("component"), `design-to-code` ("Code"), `tokens` ("tokens"),
+  `index` SectionHead ("loop").
+- **Motion sweep:** all ~27 hardcoded `transition:` in `docs/src/**` → `var(--ui-transition-*)`
+  (`global.css`, `Jargon.astro`, `patterns/[id].astro`, `McpExplorer.tsx`, 3 inline pages).
+  No new tokens; 520ms theme-reveal keyframe left as the deliberate one-off.
+- **Verified:** `nx lint docs` clean (2 pre-existing warnings); `nx build docs` 57 pages OK;
+  `.docs-accent` + Instrument @font-face + 3 woff2 subsets emitted; Astro auto-generated an
+  Arial-metric fallback (CLS-safe). Reduced-motion now applies uniformly (all transitions
+  derive from `--ui-duration-*`, zeroed under the media query).
+- **Remaining manual step:** eyeball serif accent teal in light/dark in a browser.
+
 ## Shipped ✅
 
 ### Component libraries
@@ -179,3 +199,70 @@ Shipped for the 90-minute workshop onboarding:
 Verified: preflight exits 0 locally (12 ok, 1 warn for missing FIGMA token — expected), docs build succeeds (43 pages), create-workspace test suite passes (29/29).
 
 Out of scope this round (per plan): StackBlitz, challenges, wow-demos, CI pipeline, visual regression, CLI e2e.
+
+## Active — `check:figma` Figma-Konformitäts-Gate (2026-06-01)
+
+Plan: `~/.claude/plans/wir-schlie-en-die-einzige-eager-sun.md` (approved). Closes the
+last AI-readiness layer without a drift gate (`plan/ai-readiness.md` §4).
+
+**Decisions (locked via clarification):**
+- Committed snapshot (`tools/figma/snapshot.json`) + offline `check:figma`.
+- Refresh via figma-console MCP read-tools (spawn stdio client; devDep `@modelcontextprotocol/sdk`).
+- Standalone npm script only — NOT in `check:all`, NOT pre-push.
+- 5 core checks only; no `figma_lint_design` pass.
+
+**Items:**
+- [x] Capture real figma-console MCP output shapes to ground the snapshot schema
+- [x] Add `@modelcontextprotocol/sdk` devDependency (`^1.29.0`)
+- [x] `tools/scripts/figma-snapshot.mjs` — spawn MCP, probe (fail-loud if no plugin), write snapshot
+- [x] Generate committed `tools/figma/snapshot.json` (P0 core: Button, Badge, Card)
+- [x] `tools/scripts/check-figma.js` — offline gate, 5 checks, severity→exit, prioritized report
+- [x] Extend `tools/scripts/lib/allowlists.js` with `FIGMA_CONFORMANCE_EXCEPTIONS`
+- [x] `package.json`: `check:figma` + `figma:snapshot` (NOT in check:all)
+- [x] `plan/figma-component-checklist.md`: annotate automated vs manual (+ `plan/ai-readiness.md` §4)
+- [x] ADR `plan/adr/0019-figma-conformance-gate.md` + README index row
+- [x] Verify: real findings · synthetic drift caught · `check:all` green · lint clean
+
+### Review
+
+Shipped `check:figma`, the drift gate for the last AI-readiness layer that had none.
+
+**Architecture:** committed-snapshot + offline-check, in the repo's `gen-*/--check` idiom.
+The only Figma-connected part is the refresh (`figma:snapshot`), which spawns
+`figma-console-mcp` as a stdio MCP client; the gate itself reads `tools/figma/snapshot.json`
+and is fully offline/deterministic. The snapshot holds Figma *facts* (names, variant axes,
+descriptions, `layoutMode`, bound/unbound/raw per node); the gate holds the *rules*.
+
+**Five checks:** name alignment (Blocker), variant-matrix completeness (Blocker), token-link
+coverage (Critical), auto-layout (Critical), description congruence (Warning). Blocker+Critical
+→ exit 1; Warning → exit 0 (symmetric with the other gates).
+
+**Files:** new `tools/scripts/check-figma.js`, `tools/scripts/figma-snapshot.mjs`,
+`tools/figma/snapshot.json`, `plan/adr/0019-figma-conformance-gate.md`; edited
+`tools/scripts/lib/allowlists.js` (+`FIGMA_CONFORMANCE_EXCEPTIONS`), `package.json`,
+`plan/adr/README.md`, `plan/figma-component-checklist.md`, `plan/ai-readiness.md`.
+
+**Verification (all passed):**
+- `npm run check:figma` → 5 real Critical token findings (unbound radii on Badge `9999`/Card
+  `12`,`6`; unbound padding across Button/Badge/Card), exit 1. Not an empty pass.
+- Allowlist proven: `LlmCardRole` (code-only landmark prop) raised a name Blocker; one
+  `LlmCard:name:role` entry suppressed it correctly.
+- Synthetic drift: added `'xl'` to `LlmButtonSize` → gate flagged `[BLOCKER] [NAME] LlmButton.size:
+  Figma is missing value(s) ['xl']`; reverted clean.
+- `npm run check:all` → exit 0 (no regressions). `eslint` on touched scripts → exit 0.
+
+**Decisions worth remembering** (see ADR-0019 for full why):
+- Description check is presence + spec-reference, not verbatim `== purpose` (Figma descriptions
+  are intentionally richer; verbatim would warn on all 27 — pure noise).
+- Component-set names are section-prefixed (`Action/LlmButton`) → compare the leaf.
+- Figma's interaction `state` axis has no spec union → ignored by the name check.
+- Childless frames (1px dividers) are exempt from the auto-layout check.
+
+**Known follow-ups (documented, not silent):** committed snapshot covers 3 of 27 masters
+(run `figma:snapshot` with the bridge for all 27); token/auto-layout sample the default variant;
+masters without a spec interface (CodeBlock, Toast) will need allowlist entries on a full
+snapshot; a snapshot-freshness check is the prerequisite to ever putting `check:figma` in CI.
+
+**Note on in-session refresh:** `figma:snapshot` could not be executed live because this Claude
+Code session already held the figma-console bridge (single-plugin-attachment); the committed
+snapshot was built from the same MCP read-tools the generator uses, in the identical schema.
