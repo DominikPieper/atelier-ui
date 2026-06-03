@@ -6,6 +6,7 @@ import '../styles/tokens.css';
 import '../styles/docs-theme.css';
 import '../styles/global.css';
 import Search from '../components/Search';
+import WipBanner from '../components/WipBanner.astro';
 import Icon from '../components/Icon.astro';
 import Footer from '../components/Footer.astro';
 import { COMPONENT_CATEGORIES, CATEGORY_ICONS, SECTION_ICONS } from '../data/components';
@@ -179,6 +180,7 @@ const breadcrumbSchema = {
 </head>
 <body>
   <a href="#main" class="docs-skip-link">Skip to content</a>
+  <WipBanner />
   <div class="docs-shell" id="docs-shell">
     <!-- Top Bar -->
     <header class="docs-topbar">

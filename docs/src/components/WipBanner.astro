@@ -1,0 +1,42 @@
+---
+import Icon from './Icon.astro';
+---
+
+<aside class="docs-wip-banner" role="note">
+  <span class="docs-wip-banner-icon" aria-hidden="true">
+    <Icon name="warning" />
+  </span>
+  <p class="docs-wip-banner-text">
+    <strong>Work in progress</strong> — Atelier is under active development;
+    content and APIs may change.
+  </p>
+</aside>
+
+<style>
+  .docs-wip-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: var(--ui-spacing-2) var(--ui-spacing-4);
+    background: var(--ui-color-warning-bg);
+    color: var(--ui-color-warning-text);
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--ui-color-warning) 30%, transparent);
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  .docs-wip-banner-icon {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    color: var(--ui-color-warning);
+    font-size: 1rem;
+  }
+
+  .docs-wip-banner-text {
+    margin: 0;
+  }
+</style>
