@@ -39,7 +39,7 @@ To keep scope sharp, this skill **does not** cover:
 
 When the user asks something out-of-scope, say so briefly and either point them at the right tool (the dashboard, code-gen workflows) or proceed with general knowledge — do not pretend this skill covers it.
 
-## Four modes — pick one based on the user's intent
+## Five modes — pick one based on the user's intent
 
 ### Build mode
 
