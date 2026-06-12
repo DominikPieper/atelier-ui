@@ -74,24 +74,34 @@
   overflow: hidden;
 }
 
-/* ── Size variants ───────────────────────────────────────────────────────── */
-.size-sm {
+/* ── Size variants ───────────────────────────────────────────────────────────
+ * Scoped to the dialog. React applies size-* on the <dialog class="llm-dialog">
+ * itself; Angular/Vue apply it on the inner .panel — hence the selector pair
+ * (`dialog > .panel` covers both, including Angular's emulated-scoped template,
+ * which never carries the `llm-dialog` class). Bare `.size-*` selectors leaked
+ * globally and resized unrelated elements (e.g. `llm-button size-md`). */
+.llm-dialog.size-sm,
+dialog > .panel.size-sm {
   width: min(24rem, 90vw);
 }
 
-.size-md {
+.llm-dialog.size-md,
+dialog > .panel.size-md {
   width: min(36rem, 90vw);
 }
 
-.size-lg {
+.llm-dialog.size-lg,
+dialog > .panel.size-lg {
   width: min(48rem, 90vw);
 }
 
-.size-xl {
+.llm-dialog.size-xl,
+dialog > .panel.size-xl {
   width: min(64rem, 90vw);
 }
 
-.size-full {
+.llm-dialog.size-full,
+dialog > .panel.size-full {
   width: 100vw;
   height: 100dvh;
   max-width: 100vw;
