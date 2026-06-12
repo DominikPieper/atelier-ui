@@ -27,7 +27,7 @@ import PageHero from '../components/PageHero.astro';
       <strong>Storybook 10.4 MCP at a glance.</strong> Three toolsets — <code>docs</code> (<code>list-all-documentation</code>, <code>get-documentation</code>, <code>get-documentation-for-story</code>), <code>dev</code> (<code>get-storybook-story-instructions</code>, <code>preview-stories</code>, <code>get-changed-stories</code>), <code>test</code> (<code>run-story-tests</code>). Hosted MCPs ship the <code>docs</code> toolset only; <code>dev</code> + <code>test</code> live in <code>@storybook/addon-mcp</code> behind a running Storybook. See <a href="/storybook/#toolset-configuration">Storybook → Toolset configuration</a> for the full matrix, 10.4 highlights (<code>experimentalReactComponentMeta</code>, Change Review, MCP Apps preview, multi-source composition, self-host API), and gating rules.
     </aside>
 
-    <DiagramFigure caption="One AI client talks to three parallel Storybook MCP servers — one per framework. The request format (JSON-RPC) is identical; only the returned props change.">
+    <DiagramFigure caption="One AI client talks to three parallel Storybook MCP servers — one per framework. The request format (JSON-RPC) is identical. On the hosted surface only React emits components.json per-component prop data; the Angular and Vue endpoints serve MDX docs and stories.">
       <svg viewBox="0 0 960 340" role="img" aria-labelledby="mcp-title mcp-desc" preserveAspectRatio="xMidYMid meet">
         <title id="mcp-title">MCP data flow from client to Storybook servers</title>
         <desc id="mcp-desc">A client application sends user intent to Claude. Claude then issues JSON-RPC tools/list and tools/call requests to three parallel Storybook MCP servers — one each for Angular, React, and Vue. Each server returns exact component documentation.</desc>
@@ -83,7 +83,7 @@ import PageHero from '../components/PageHero.astro';
           <text x="624" y="82" text-anchor="middle" font-size="13" font-weight="800" style="fill: #e23237">A</text>
           <text x="660" y="70" font-size="12" font-weight="700">storybook-angular</text>
           <text x="660" y="88" font-size="10" class="diagram-mono diagram-muted">/storybook-angular/mcp</text>
-          <text x="660" y="105" font-size="10" class="diagram-muted">docs · props · stories</text>
+          <text x="660" y="105" font-size="10" class="diagram-muted">docs · stories</text>
         </g>
 
         <!-- Node: Storybook React -->
@@ -103,7 +103,7 @@ import PageHero from '../components/PageHero.astro';
           <text x="624" y="266" text-anchor="middle" font-size="13" font-weight="800" style="fill: #42b883">V</text>
           <text x="660" y="254" font-size="12" font-weight="700">storybook-vue</text>
           <text x="660" y="272" font-size="10" class="diagram-mono diagram-muted">/storybook-vue/mcp</text>
-          <text x="660" y="289" font-size="10" class="diagram-muted">docs · props · stories</text>
+          <text x="660" y="289" font-size="10" class="diagram-muted">docs · stories</text>
         </g>
 
         <!-- Label: Identical protocol -->

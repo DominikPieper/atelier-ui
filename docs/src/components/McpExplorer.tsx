@@ -344,7 +344,9 @@ export default function McpExplorer() {
         <h2 className="docs-section-title" style={{ marginTop: 0 }}>Try a tool</h2>
         <p style={{ fontSize: '0.9rem', color: 'var(--ui-color-text-muted)', margin: 0, maxWidth: '560px', lineHeight: '1.65' }}>
           Pick a framework, select a tool, set parameters, and call it
-          to see exactly what structured data an AI receives.
+          to see exactly what structured data an AI receives. The tools here are
+          a simplified conceptual model — the real hosted servers expose the
+          Storybook docs toolset described above.
         </p>
       </div>
 

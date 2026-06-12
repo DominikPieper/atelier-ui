@@ -53,7 +53,7 @@ hardcoded hex values or pixel sizes — always reference a token.
 Key tokens:
 - Colors:   --ui-color-primary, --ui-color-text, --ui-color-surface-raised, --ui-color-border
 - Spacing:  --ui-spacing-4 (1rem), --ui-spacing-6 (1.5rem), --ui-spacing-8 (2rem)
-- Radius:   --ui-radius-sm (0.375rem), --ui-radius-md (0.5rem), --ui-radius-lg (0.75rem)
+- Radius:   --ui-radius-sm (0.5rem), --ui-radius-md (0.625rem), --ui-radius-lg (0.875rem)
 
 Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
 
@@ -76,6 +76,9 @@ Full API reference: ${SITE_URL}/llms-full.txt
 1. Call \`list-all-documentation\` to get valid component IDs
 2. Call \`get-documentation\` with the ID — never invent props
 3. Do not use a component that is not in the docs
+4. This server serves docs and stories only — for prop tables, query the
+   \`storybook-react\` MCP (the spec contract is identical across frameworks)
+   or read \`libs/spec/src/index.ts\` in the Atelier repo
 
 ## Component Imports
 \`\`\`ts
@@ -94,7 +97,7 @@ hardcoded hex values or pixel sizes — always reference a token.
 Key tokens:
 - Colors:   --ui-color-primary, --ui-color-text, --ui-color-surface-raised, --ui-color-border
 - Spacing:  --ui-spacing-4 (1rem), --ui-spacing-6 (1.5rem), --ui-spacing-8 (2rem)
-- Radius:   --ui-radius-sm (0.375rem), --ui-radius-md (0.5rem), --ui-radius-lg (0.75rem)
+- Radius:   --ui-radius-sm (0.5rem), --ui-radius-md (0.625rem), --ui-radius-lg (0.875rem)
 
 Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
 
@@ -117,6 +120,9 @@ Full API reference: ${SITE_URL}/llms-full.txt
 1. Call \`list-all-documentation\` to get valid component IDs
 2. Call \`get-documentation\` with the ID — never invent props
 3. Do not use a component that is not in the docs
+4. This server serves docs and stories only — for prop tables, query the
+   \`storybook-react\` MCP (the spec contract is identical across frameworks)
+   or read \`libs/spec/src/index.ts\` in the Atelier repo
 
 ## Component Imports
 \`\`\`ts
@@ -130,7 +136,7 @@ hardcoded hex values or pixel sizes — always reference a token.
 Key tokens:
 - Colors:   --ui-color-primary, --ui-color-text, --ui-color-surface-raised, --ui-color-border
 - Spacing:  --ui-spacing-4 (1rem), --ui-spacing-6 (1.5rem), --ui-spacing-8 (2rem)
-- Radius:   --ui-radius-sm (0.375rem), --ui-radius-md (0.5rem), --ui-radius-lg (0.75rem)
+- Radius:   --ui-radius-sm (0.5rem), --ui-radius-md (0.625rem), --ui-radius-lg (0.875rem)
 
 Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
 
