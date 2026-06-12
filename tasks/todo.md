@@ -1,5 +1,45 @@
 # Atelier — Status
 
+## Fix docs review findings (P1+P2) — 2026-06-12
+
+Plan: ~/.claude/plans/mach-ein-review-von-delightful-axolotl.md · Report: tasks/review-docs-site-2026-06-12.md
+
+- [x] A: Agent 1 — components.ts per-framework examples + gen-llms-txt.mjs + regen llms
+- [x] A2/D2: Agent 2 — ComponentDetail.tsx renderer + Storybook link + H1 class swaps
+- [x] C4: Agent 3 — patterns.ts + glossary.ts API-truth fixes
+- [x] D0: repro demo-stretch/data-list locally (me) → D0/D1/D2-CSS: Agent 4
+- [x] B/F: Agent 5 — build-time derivation (skill-meta.ts, llms.astro, skill pages) + ADR 0021
+- [x] C2: Agent 6 — MCP overclaims (index, mcp, design-principles, claude-md, storybook anchor)
+- [x] C1/C3/C4/C5: Agent 7 — tokens, install, prompts, figma, accessibility, workshop, first-component, schulung
+- [x] A4: framework checker agents (3×) over the 84 examples — 3 Angular fails found & fixed, final 28/28×3
+- [x] Final: check:docs/llms/metadata ✓, nx lint docs ✓, nx build docs ✓, re-screenshots ✓
+- [x] Commits (conventional, batched) + push main
+
+### Review
+
+All 38 P1/P2 findings fixed across 7 batched commits (247a58a..8525cae). Key outcomes:
+- **Root cause of the demo-stretch/data-list P1 was a library bug**, not docs CSS: unscoped
+  `.size-*` width rules in `llm-dialog.css` leaked globally in the React/Vue builds and hit
+  every `size-*`-classed element. Scoped to `.llm-dialog.size-*` / `dialog > .panel.size-*`
+  in all three frameworks (byte-identical). Verified: demo button 576px→96px, data-list
+  View 384px→62px, badges inline again.
+- Per-framework examples shipped for all 28 components, audited 28/28 per framework against
+  spec + exports + stories idioms; llms-full.txt now carries all three usage variants.
+- Build-time derivation (ADR-0021) removes the recurring count-drift class; Figma counts
+  corrected by hand against the live file (7 pages, 54 UI-tier vars, 27 sets).
+- Broken-link warnings for `/storybook-*/?path=/docs/cookbook--*` are checker false
+  positives (Storybook deployed separately on same domain; IDs verified in live index.json).
+
+**Open follow-ups (out of scope, flagged by agents):**
+- checkbox/toggle prop tables advertise an Angular `[(value)]` alias that the Angular
+  adapter never implemented — spec-vs-impl drift, needs a component-trinity/ADR decision.
+- `.panel`/`.close-btn` in llm-dialog.css are still generic global classes (no proven
+  collision today); Angular's `<dialog>` never receives the `.llm-dialog` class (dead base
+  rules). Worth a scoping pass.
+- McpExplorer playground still simulates the 5 conceptual tools (now labeled as such);
+  renaming them to the real toolset would be the deeper fix.
+- P3 findings (15) from the review remain unfixed by decision.
+
 ## Review — Personal authorial signature (2026-06-02)
 
 Typography + motion signature on top of Direction A (palette untouched). See ADR-0020.
