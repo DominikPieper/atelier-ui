@@ -26,6 +26,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0018](0018-figma-token-tiering-and-css-projection.md) | Figma token tiering (Primitive→UI→Component) + UI-only CSS projection | Accepted | Recorded |
 | [0019](0019-figma-conformance-gate.md) | Figma conformance gate (`check:figma`) via committed snapshot + offline check | Accepted | Recorded |
 | [0020](0020-personal-authorial-signature.md) | Personal authorial signature (serif-italic heading accent + shared motion grammar) | Accepted | Recorded |
+| [0021](0021-build-time-derived-docs-counts.md) | Docs counts/sizes derived at build time where the source is local | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

@@ -2,11 +2,12 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import BottomNav from '../../components/BottomNav.astro';
+import { skillVersion, referenceCount } from '../../lib/skill-meta';
 
 const SITE_URL = 'https://atelier.pieper.io';
 const SKILL_URL = `${SITE_URL}/.well-known/agent-skills/figma-workspace-architect/SKILL.md`;
 const SKILL_NAME = 'figma-workspace-architect';
-const SKILL_VERSION = '0.2.0';
+const SKILL_VERSION = skillVersion;
 const REPO_URL = 'https://github.com/DominikPieper/atelier-ui/tree/main/skills/figma-workspace-architect';
 
 const INSTALL_CURL = `# Download the runtime payload (SKILL.md + references/ + assets/)
@@ -35,6 +36,10 @@ const modes = [
       {
         name: 'Scaffold',
         summary: 'One-shot starter: Cover + Tokens + Components pages with placeholder content. For when the user wants a working skeleton in one turn.',
+      },
+      {
+        name: 'Inventory',
+        summary: 'Visual library catalog on a dedicated Inventory page: one data card per published component (header, status badge, default-variant preview, meta row, property table), grouped by slash namespace. Seven-phase pipeline, runs after Validate or stand-alone against an existing library.',
       },
     ],
   },
@@ -66,7 +71,15 @@ const modes = [
       },
     ],
   },
+  {
+    name: 'Sync',
+    triggers: 'propagate to Figma, sync the tokens, keep Figma and code in lockstep',
+    summary: 'Value drift after one side has already moved: direction → diff → batch-or-script → validate. Different from Migrate, which plans a coordinated structural change — Sync catches up on existing shape, and bails to Migrate the moment the diff includes adds, removes, or renames.',
+    subModes: [],
+  },
 ];
+
+const subModeCount = modes.reduce((n, mode) => n + mode.subModes.length, 0);
 
 const references = [
   { file: 'token-architecture.md', summary: 'Three-tier model (Primitive / Semantic / Component), Modes, Variable Scopes, anti-patterns.' },
@@ -80,9 +93,23 @@ const references = [
   { file: 'migration-playbook.md', summary: 'Refactoring an existing file safely. Coordination protocol, recipes, removal-tombstone gotcha.' },
   { file: 'code-verify.md', summary: 'Code-side visual verification recipe. Storybook flow for Figma↔code parity in Light + Dark.' },
   { file: 'code-sync.md', summary: 'Keeping Figma Variables in lockstep with code-side tokens. Drift sources and mode-mapping pitfalls.' },
+  { file: 'sync-workflow.md', summary: 'Sync mode: value drift after one side moved. Direction → diff → batch-or-script → validate; bails to Migrate on structural changes.' },
   { file: 'iconography.md', summary: 'Icon-system architecture: size stops, color binding, library-split signals.' },
   { file: 'scaffold-payload.md', summary: 'Scaffold sub-mode of Build. Three-call recipe producing Cover + Tokens + Components pages.' },
+  { file: 'inventory-generation.md', summary: 'Inventory sub-mode of Build. Seven-phase pipeline producing the visual library catalog: layout token contract, grouping schema, batching rules.' },
+  { file: 'inventory-payload.md', summary: 'Ready-to-paste figma_execute payloads for the seven Inventory phases: discover, scaffold, populate-one-section, mark-ready + TOC.' },
 ];
+
+// Drift gate: the table above is hand-curated, but it must cover exactly the
+// files the skill ships. referenceCount is read from the skill's references/
+// directory at build time, so adding or removing a reference without updating
+// this page fails the docs build.
+if (references.length !== referenceCount) {
+  throw new Error(
+    `figma-workspace-architect docs drift: this page lists ${references.length} references, ` +
+      `but the skill ships ${referenceCount} (see skills/figma-workspace-architect/references/).`,
+  );
+}
 
 const tests = [
   { name: 'audit-existing-system', mode: 'Audit', summary: 'Two-year-old library, prioritised audit report.' },
@@ -98,7 +125,7 @@ const tests = [
 
 <BaseLayout
   title="figma-workspace-architect"
-  description="A Claude Code skill for designing, building, auditing, and migrating Figma workspaces via figma-console-mcp. Four modes, three sub-modes, 13 reference files."
+  description={`A Claude Code skill for designing, building, auditing, and migrating Figma workspaces via figma-console-mcp. ${modes.length} modes, ${subModeCount} sub-modes, ${referenceCount} reference files.`}
   currentPath="/skills/figma-workspace-architect"
 >
   <div class="docs-inline-page">
@@ -121,7 +148,7 @@ const tests = [
       </p>
       <div style="display: inline-flex; gap: 0.65rem; align-items: center; flex-wrap: wrap">
         <span style="font-family: monospace; font-size: 0.75rem; padding: 0.2rem 0.55rem; background: color-mix(in srgb, var(--ui-color-primary) 12%, transparent); border-radius: 999px; color: var(--ui-color-primary); font-weight: 600">v{SKILL_VERSION}</span>
-        <span style="font-size: 0.75rem; color: var(--ui-color-text-muted)">4 modes · 3 sub-modes · 13 references · 8 test scenarios</span>
+        <span style="font-size: 0.75rem; color: var(--ui-color-text-muted)">{modes.length} modes · {subModeCount} sub-modes · {referenceCount} references · {tests.length} test scenarios</span>
       </div>
     </div>
 
@@ -130,7 +157,7 @@ const tests = [
       <h2 class="docs-section-title">What it does</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 1.5rem; font-size: 0.85rem; max-width: 660px">
         The skill activates when a user asks about Figma file architecture, design tokens, components,
-        or a workspace decision. It picks one of four modes based on the user's intent, then loads
+        or a workspace decision. It picks one of {modes.length} modes based on the user's intent, then loads
         only the references it needs — references are scoped, not bundled. Sub-modes handle the
         narrower cases that benefit from a more focused recipe.
       </p>

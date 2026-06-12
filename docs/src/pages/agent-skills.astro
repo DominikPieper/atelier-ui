@@ -5,6 +5,7 @@ import Jargon from '../components/Jargon.astro';
 import PageHero from '../components/PageHero.astro';
 import BottomNav from '../components/BottomNav.astro';
 import Callout from '../components/Callout.astro';
+import { referenceCount } from '../lib/skill-meta';
 
 const SITE_URL = 'https://atelier.pieper.io';
 
@@ -156,7 +157,7 @@ const skills = [
           <div style="flex: 1">
             <h3 class="docs-h3"><a href="/skills/figma-workspace-architect" style="color: inherit; text-decoration: none">figma-workspace-architect <span style="color: var(--ui-color-text-muted); font-size: 0.78em; font-weight: 500">→</span></a></h3>
             <p class="docs-step-desc" style="margin-bottom: 0.5rem">
-              Designs, builds, audits, and migrates Figma workspaces via figma-console-mcp. Four modes (Build, Audit, Decide, Migrate) with three sub-modes (Scaffold, Re-verify, Code-verify). 13 references loaded on demand.
+              Designs, builds, audits, and migrates Figma workspaces via figma-console-mcp. Five modes (Build, Audit, Decide, Migrate, Sync) with four sub-modes (Scaffold, Inventory, Re-verify, Code-verify). {referenceCount} references loaded on demand.
             </p>
             <a href={`${SITE_URL}/.well-known/agent-skills/figma-workspace-architect/SKILL.md`} target="_blank" rel="noopener noreferrer" style="font-size: 0.75rem; font-family: monospace; color: var(--ui-color-text-muted); text-decoration: none">{`${SITE_URL}/.well-known/agent-skills/figma-workspace-architect/SKILL.md`}</a>
           </div>

@@ -1,11 +1,24 @@
 ---
+import { statSync } from 'node:fs';
+import { join } from 'node:path';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import Jargon from '../components/Jargon.astro';
 import PageEyebrow from '../components/PageEyebrow.astro';
 import Callout from '../components/Callout.astro';
+import { ALL_COMPONENTS } from '../data/components';
+import { repoRoot } from '../lib/skill-meta';
 
 const SITE_URL = 'https://atelier.pieper.io';
+
+const componentCount = ALL_COMPONENTS.length;
+
+// Sizes are read from the committed files at build time, so the badges track
+// whatever the last `gen:llms` produced (staleness is gated by `check:llms`).
+const fileSize = (publicFile: string): string => {
+  const { size } = statSync(join(repoRoot, 'docs/public', publicFile));
+  return `~${Math.round(size / 1024)} KB`;
+};
 
 const usageSteps = [
   {
@@ -40,7 +53,7 @@ const whyCards = [
 
 const previewCode = `# Atelier UI — Full API Reference
 
-> Complete component API for LLM consumption. 24 accessible components
+> Complete component API for LLM consumption. ${componentCount} accessible components
 > for Angular, React, and Vue with consistent prop naming.
 
 ---
@@ -76,7 +89,7 @@ const previewCode = `# Atelier UI — Full API Reference
     <LlmCombobox value={country} onValueChange={setCountry}
       options={options} placeholder="Search..." />
 
-...and 22 more components`;
+...and ${componentCount - 2} more components`;
 ---
 
 <BaseLayout
@@ -116,8 +129,8 @@ const previewCode = `# Atelier UI — Full API Reference
       <h2 class="docs-section-title">The files</h2>
       <div style="display: flex; flex-direction: column; gap: 0.85rem">
         {[
-          { filename: 'llms.txt', url: `${SITE_URL}/llms.txt`, size: '~2 KB', desc: 'Short index: component list with one-line prop summaries and links to docs. Use this when your context window is limited or you just need component names and key props.' },
-          { filename: 'llms-full.txt', url: `${SITE_URL}/llms-full.txt`, size: '~12 KB', desc: 'Full reference: every component with all props (name, type, default, description), framework-specific usage examples for Angular, React and Vue, design token system, and accessibility notes.' },
+          { filename: 'llms.txt', url: `${SITE_URL}/llms.txt`, size: fileSize('llms.txt'), desc: 'Short index: component list with one-line prop summaries and links to docs. Use this when your context window is limited or you just need component names and key props.' },
+          { filename: 'llms-full.txt', url: `${SITE_URL}/llms-full.txt`, size: fileSize('llms-full.txt'), desc: 'Full reference: every component with all props (name, type, default, description), framework-specific usage examples for Angular, React and Vue, design token system, and accessibility notes.' },
         ].map(({ filename, url, size, desc }) => (
           <div style="background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); padding: 1.1rem 1.25rem; display: flex; align-items: flex-start; justify-content: space-between; gap: 1.25rem; flex-wrap: wrap">
             <div style="flex: 1; min-width: 0">
