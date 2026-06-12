@@ -55,6 +55,36 @@ function getCategory(name: string): string {
   return '';
 }
 
+const EXAMPLE_LANG: Record<Framework, string> = {
+  angular: 'html',
+  react: 'jsx',
+  vue: 'vue',
+};
+
+// Docs-site categories → Storybook title categories (lowercased path segments).
+// They match 1:1 except "Layout" (accordion, alert), which Storybook files under "Feedback".
+const STORYBOOK_CATEGORY: Record<string, string> = {
+  Inputs: 'inputs',
+  Display: 'display',
+  Navigation: 'navigation',
+  Overlay: 'overlay',
+  Layout: 'feedback',
+  AI: 'ai',
+};
+
+// Storybook docs IDs follow `components-<category>-<component>--docs`, where
+// <component> is the primary selector lowercased (e.g. LlmTabGroup → llmtabgroup).
+function storybookDocsUrl(framework: Framework, name: string, category: string, selector: string): string {
+  const base = `https://atelier.pieper.io/storybook-${framework}/`;
+  const cat = STORYBOOK_CATEGORY[category];
+  // Toast's docs selector is "LlmToastProvider + useLlmToast" but its Storybook id is llmtoast.
+  const segment = name === 'toast'
+    ? 'llmtoast'
+    : selector.split(' + ')[0].replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+  if (!cat || !segment) return base;
+  return `${base}?path=/docs/components-${cat}-${segment}--docs`;
+}
+
 function CodeBlock({ code, lang }: { code: string; lang: string }) {
   const [copied, setCopied] = useState(false);
   function copy() {
@@ -416,7 +446,7 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
-            <h1 className="docs-page-title">{doc.name}</h1>
+            <h1 className="docs-page-h1">{doc.name}</h1>
             <p className="docs-page-description">{doc.description}</p>
             <code className="docs-selector-badge">{doc.selector}</code>
             <div className="docs-meta-chips">
@@ -449,7 +479,7 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
           <div className="docs-demo-canvas docs-demo-canvas--column">
             <ComponentDemo name={name} />
           </div>
-          <CodeBlock lang="jsx" code={doc.codeExample} />
+          <CodeBlock lang={EXAMPLE_LANG[framework]} code={doc.examples[framework]} />
         </div>
       </div>
 
@@ -561,7 +591,7 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
       {/* Storybook link */}
       <div className="docs-section">
         <a
-          href={`https://atelier.pieper.io/storybook-react/?path=/docs/${name}`}
+          href={storybookDocsUrl(framework, name, category, doc.selector)}
           target="_blank"
           rel="noopener noreferrer"
           className="docs-btn docs-btn-outline"

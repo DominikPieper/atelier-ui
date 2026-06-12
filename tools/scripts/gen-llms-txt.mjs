@@ -398,7 +398,7 @@ function buildFullReference({ categories, docs }, version, { metadataBySpec, tok
   lines.push('');
   lines.push('Each entry lists:');
   lines.push('  Props: name | type | default | description');
-  lines.push('  Then a generic Usage example (apply the Framework Syntax Cheatsheet above).');
+  lines.push('  Then framework-specific Usage examples for Angular, React, and Vue.');
   lines.push('');
   lines.push('---');
   lines.push('');
@@ -414,7 +414,13 @@ function buildFullReference({ categories, docs }, version, { metadataBySpec, tok
     lines.push(formatPropsTable(comp.props));
     lines.push('');
     lines.push('  Usage:');
-    lines.push(indent(comp.codeExample, '    '));
+    const ex = comp.examples ?? {};
+    lines.push('    Angular:');
+    lines.push(indent(ex.angular ?? '', '      '));
+    lines.push('    React:');
+    lines.push(indent(ex.react ?? '', '      '));
+    lines.push('    Vue:');
+    lines.push(indent(ex.vue ?? '', '      '));
     // Optional metadata block — only present once the component has a
     // `.metadata.ts` file registered. The lookup goes via selector →
     // spec name (selector + 'Spec').

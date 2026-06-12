@@ -31,7 +31,7 @@ export default function ComponentGallery() {
     <>
       <div className="docs-page-header">
         <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
-          <h1 className="docs-page-title">Components</h1>
+          <h1 className="docs-page-h1">Components</h1>
           <span className="docs-count-badge">{visibleCount} of {ALL_COMPONENTS.length}</span>
         </div>
         <p className="docs-page-description">

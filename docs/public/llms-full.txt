@@ -56,7 +56,7 @@ Import lines are identical across frameworks: adjust the package path.
 
 Each entry lists:
   Props: name | type | default | description
-  Then a generic Usage example (apply the Framework Syntax Cheatsheet above).
+  Then framework-specific Usage examples for Angular, React, and Vue.
 
 ---
 
@@ -72,11 +72,24 @@ Each entry lists:
     aria-label  string                                          —          Accessible name. Required for icon-only buttons (no children). React enforces this at compile time via a discriminated union; Angular/Vue warn at runtime in dev mode.
 
   Usage:
-    <LlmButton variant="primary">Primary</LlmButton>
-    <LlmButton variant="secondary">Secondary</LlmButton>
-    <LlmButton variant="outline">Outline</LlmButton>
-    <LlmButton loading={true}>Loading</LlmButton>
-    <LlmButton disabled={true}>Disabled</LlmButton>
+    Angular:
+      <llm-button variant="primary">Primary</llm-button>
+      <llm-button variant="secondary">Secondary</llm-button>
+      <llm-button variant="outline">Outline</llm-button>
+      <llm-button [loading]="true">Loading</llm-button>
+      <llm-button [disabled]="true">Disabled</llm-button>
+    React:
+      <LlmButton variant="primary">Primary</LlmButton>
+      <LlmButton variant="secondary">Secondary</LlmButton>
+      <LlmButton variant="outline">Outline</LlmButton>
+      <LlmButton loading={true}>Loading</LlmButton>
+      <LlmButton disabled={true}>Disabled</LlmButton>
+    Vue:
+      <LlmButton variant="primary">Primary</LlmButton>
+      <LlmButton variant="secondary">Secondary</LlmButton>
+      <LlmButton variant="outline">Outline</LlmButton>
+      <LlmButton :loading="true">Loading</LlmButton>
+      <LlmButton :disabled="true">Disabled</LlmButton>
 
   Metadata:
     purpose: Primary action trigger. Renders a labelled button users press to commit an action — submit a form, open a dialog, advance a flow.
@@ -110,10 +123,21 @@ Each entry lists:
     name           string                                                    ''      HTML name attribute for form submission
 
   Usage:
-    <LlmInput type="email" placeholder="you@example.com" />
-    <LlmInput type="password" placeholder="Password" />
-    <LlmInput invalid={true} placeholder="Invalid state" />
-    <LlmInput disabled={true} placeholder="Disabled" />
+    Angular:
+      <llm-input type="email" placeholder="you@example.com" [(value)]="email" />
+      <llm-input type="password" placeholder="Password" [(value)]="password" />
+      <llm-input [invalid]="true" placeholder="Invalid state" />
+      <llm-input [disabled]="true" placeholder="Disabled" />
+    React:
+      <LlmInput type="email" placeholder="you@example.com" value={email} onValueChange={setEmail} />
+      <LlmInput type="password" placeholder="Password" value={password} onValueChange={setPassword} />
+      <LlmInput invalid={true} placeholder="Invalid state" />
+      <LlmInput disabled={true} placeholder="Disabled" />
+    Vue:
+      <LlmInput type="email" placeholder="you@example.com" v-model:value="email" />
+      <LlmInput type="password" placeholder="Password" v-model:value="password" />
+      <LlmInput :invalid="true" placeholder="Invalid state" />
+      <LlmInput :disabled="true" placeholder="Disabled" />
 
   Metadata:
     purpose: Single-line text field. Renders an `<input>` bound to a form value with the standard validation and disabled states.
@@ -148,9 +172,18 @@ Each entry lists:
     autoResize     boolean                  false  Grows height automatically as content grows
 
   Usage:
-    <LlmTextarea placeholder="Tell us about yourself" rows={4} />
-    <LlmTextarea autoResize={true} placeholder="Auto-resizes as you type..." />
-    <LlmTextarea disabled={true} placeholder="Disabled" />
+    Angular:
+      <llm-textarea placeholder="Tell us about yourself" [rows]="4" [(value)]="bio" />
+      <llm-textarea [autoResize]="true" placeholder="Auto-resizes as you type..." />
+      <llm-textarea [disabled]="true" placeholder="Disabled" />
+    React:
+      <LlmTextarea placeholder="Tell us about yourself" rows={4} value={bio} onValueChange={setBio} />
+      <LlmTextarea autoResize={true} placeholder="Auto-resizes as you type..." />
+      <LlmTextarea disabled={true} placeholder="Disabled" />
+    Vue:
+      <LlmTextarea placeholder="Tell us about yourself" :rows="4" v-model:value="bio" />
+      <LlmTextarea :autoResize="true" placeholder="Auto-resizes as you type..." />
+      <LlmTextarea :disabled="true" placeholder="Disabled" />
 
   Metadata:
     purpose: Multi-line text field. Renders a `<textarea>` sized for wrapping prose, with optional auto-resize as content grows.
@@ -184,10 +217,21 @@ Each entry lists:
     name             string                      ''     HTML name attribute for form submission
 
   Usage:
-    <LlmCheckbox>I agree to the terms</LlmCheckbox>
-    <LlmCheckbox checked={true}>Pre-checked</LlmCheckbox>
-    <LlmCheckbox indeterminate={true}>Indeterminate</LlmCheckbox>
-    <LlmCheckbox disabled={true}>Disabled</LlmCheckbox>
+    Angular:
+      <llm-checkbox [(checked)]="agreed">I agree to the terms</llm-checkbox>
+      <llm-checkbox [(checked)]="pre">Pre-checked</llm-checkbox>
+      <llm-checkbox [indeterminate]="true">Indeterminate</llm-checkbox>
+      <llm-checkbox [disabled]="true">Disabled</llm-checkbox>
+    React:
+      <LlmCheckbox checked={agreed} onCheckedChange={setAgreed}>I agree to the terms</LlmCheckbox>
+      <LlmCheckbox checked={true}>Pre-checked</LlmCheckbox>
+      <LlmCheckbox indeterminate={true}>Indeterminate</LlmCheckbox>
+      <LlmCheckbox disabled={true}>Disabled</LlmCheckbox>
+    Vue:
+      <LlmCheckbox v-model:checked="agreed">I agree to the terms</LlmCheckbox>
+      <LlmCheckbox v-model:checked="pre">Pre-checked</LlmCheckbox>
+      <LlmCheckbox :indeterminate="true">Indeterminate</LlmCheckbox>
+      <LlmCheckbox :disabled="true">Disabled</LlmCheckbox>
 
   Metadata:
     purpose: Binary or tri-state toggle bound to a form field. Renders an `<input type="checkbox">` with optional indeterminate state.
@@ -220,9 +264,18 @@ Each entry lists:
     name             string                      ''     HTML name attribute for form submission
 
   Usage:
-    <LlmToggle>Enable notifications</LlmToggle>
-    <LlmToggle checked={true}>Active toggle</LlmToggle>
-    <LlmToggle disabled={true}>Disabled</LlmToggle>
+    Angular:
+      <llm-toggle [(checked)]="notifications">Enable notifications</llm-toggle>
+      <llm-toggle [(checked)]="active">Active toggle</llm-toggle>
+      <llm-toggle [disabled]="true">Disabled</llm-toggle>
+    React:
+      <LlmToggle checked={notifications} onCheckedChange={setNotifications}>Enable notifications</LlmToggle>
+      <LlmToggle checked={true}>Active toggle</LlmToggle>
+      <LlmToggle disabled={true}>Disabled</LlmToggle>
+    Vue:
+      <LlmToggle v-model:checked="notifications">Enable notifications</LlmToggle>
+      <LlmToggle v-model:checked="active">Active toggle</LlmToggle>
+      <LlmToggle :disabled="true">Disabled</LlmToggle>
 
   Metadata:
     purpose: On/off switch for a setting that takes effect immediately. Renders a switch control bound to a boolean form value.
@@ -253,11 +306,24 @@ Each entry lists:
     name           string                   ''     HTML name attribute (propagated to radios)
 
   Usage:
-    <LlmRadioGroup name="plan" value="free" onValueChange={(v) => console.log(v)}>
-      <LlmRadio radioValue="free">Free</LlmRadio>
-      <LlmRadio radioValue="pro">Pro</LlmRadio>
-      <LlmRadio radioValue="enterprise">Enterprise</LlmRadio>
-    </LlmRadioGroup>
+    Angular:
+      <llm-radio-group name="plan" [(value)]="plan">
+        <llm-radio radioValue="free">Free</llm-radio>
+        <llm-radio radioValue="pro">Pro</llm-radio>
+        <llm-radio radioValue="enterprise">Enterprise</llm-radio>
+      </llm-radio-group>
+    React:
+      <LlmRadioGroup name="plan" value="free" onValueChange={(v) => console.log(v)}>
+        <LlmRadio radioValue="free">Free</LlmRadio>
+        <LlmRadio radioValue="pro">Pro</LlmRadio>
+        <LlmRadio radioValue="enterprise">Enterprise</LlmRadio>
+      </LlmRadioGroup>
+    Vue:
+      <LlmRadioGroup name="plan" v-model:value="plan">
+        <LlmRadio radioValue="free">Free</LlmRadio>
+        <LlmRadio radioValue="pro">Pro</LlmRadio>
+        <LlmRadio radioValue="enterprise">Enterprise</LlmRadio>
+      </LlmRadioGroup>
 
 ---
 
@@ -276,11 +342,24 @@ Each entry lists:
     name           string                   ''     HTML name attribute for form submission
 
   Usage:
-    <LlmSelect placeholder="Select a country" onValueChange={(v) => console.log(v)}>
-      <LlmOption optionValue="us">United States</LlmOption>
-      <LlmOption optionValue="ca">Canada</LlmOption>
-      <LlmOption optionValue="uk" disabled={true}>United Kingdom (unavailable)</LlmOption>
-    </LlmSelect>
+    Angular:
+      <llm-select placeholder="Select a country" [(value)]="country">
+        <llm-option optionValue="us">United States</llm-option>
+        <llm-option optionValue="ca">Canada</llm-option>
+        <llm-option optionValue="uk" [disabled]="true">United Kingdom (unavailable)</llm-option>
+      </llm-select>
+    React:
+      <LlmSelect placeholder="Select a country" value={country} onValueChange={setCountry}>
+        <LlmOption optionValue="us">United States</LlmOption>
+        <LlmOption optionValue="ca">Canada</LlmOption>
+        <LlmOption optionValue="uk" disabled={true}>United Kingdom (unavailable)</LlmOption>
+      </LlmSelect>
+    Vue:
+      <LlmSelect placeholder="Select a country" v-model:value="country">
+        <LlmOption optionValue="us">United States</LlmOption>
+        <LlmOption optionValue="ca">Canada</LlmOption>
+        <LlmOption optionValue="uk" :disabled="true">United Kingdom (unavailable)</LlmOption>
+      </LlmSelect>
 
 ---
 
@@ -297,14 +376,37 @@ Each entry lists:
     invalid        boolean                  false  Applies invalid/error styling
 
   Usage:
-    <LlmCombobox
-      placeholder="Search framework..."
-      options={[
-        { label: 'Angular', value: 'ng' },
-        { label: 'React', value: 'react' },
-        { label: 'Vue', value: 'vue' }
-      ]}
-    />
+    Angular:
+      <llm-combobox
+        placeholder="Search framework..."
+        [(value)]="framework"
+        [options]="[
+          { label: 'Angular', value: 'ng' },
+          { label: 'React', value: 'react' },
+          { label: 'Vue', value: 'vue' }
+        ]"
+      />
+    React:
+      <LlmCombobox
+        placeholder="Search framework..."
+        value={framework}
+        onValueChange={setFramework}
+        options={[
+          { label: 'Angular', value: 'ng' },
+          { label: 'React', value: 'react' },
+          { label: 'Vue', value: 'vue' }
+        ]}
+      />
+    Vue:
+      <LlmCombobox
+        placeholder="Search framework..."
+        v-model:value="framework"
+        :options="[
+          { label: 'Angular', value: 'ng' },
+          { label: 'React', value: 'react' },
+          { label: 'Vue', value: 'vue' }
+        ]"
+      />
 
   Metadata:
     purpose: Searchable picker. Renders a text input plus a filtered option list so users can type to narrow a long set of choices.
@@ -331,12 +433,27 @@ Each entry lists:
     size     'sm' | 'md'                                            'md'       Size of the badge
 
   Usage:
-    <LlmBadge>Default</LlmBadge>
-    <LlmBadge variant="success">Active</LlmBadge>
-    <LlmBadge variant="warning">Pending</LlmBadge>
-    <LlmBadge variant="danger">Error</LlmBadge>
-    <LlmBadge variant="info">Info</LlmBadge>
-    <LlmBadge size="sm" variant="success">Small</LlmBadge>
+    Angular:
+      <llm-badge>Default</llm-badge>
+      <llm-badge variant="success">Active</llm-badge>
+      <llm-badge variant="warning">Pending</llm-badge>
+      <llm-badge variant="danger">Error</llm-badge>
+      <llm-badge variant="info">Info</llm-badge>
+      <llm-badge size="sm" variant="success">Small</llm-badge>
+    React:
+      <LlmBadge>Default</LlmBadge>
+      <LlmBadge variant="success">Active</LlmBadge>
+      <LlmBadge variant="warning">Pending</LlmBadge>
+      <LlmBadge variant="danger">Error</LlmBadge>
+      <LlmBadge variant="info">Info</LlmBadge>
+      <LlmBadge size="sm" variant="success">Small</LlmBadge>
+    Vue:
+      <LlmBadge>Default</LlmBadge>
+      <LlmBadge variant="success">Active</LlmBadge>
+      <LlmBadge variant="warning">Pending</LlmBadge>
+      <LlmBadge variant="danger">Error</LlmBadge>
+      <LlmBadge variant="info">Info</LlmBadge>
+      <LlmBadge size="sm" variant="success">Small</LlmBadge>
 
   Metadata:
     purpose: Compact inline label. Renders a small pill carrying a status word, count, or category alongside other content.
@@ -364,9 +481,18 @@ Each entry lists:
     label  string                                                                                                                                                                                                                                                                undefined  Accessible label. When provided, the icon is announced as an image with this label. When omitted, the icon is hidden from assistive tech (treated as decorative).
 
   Usage:
-    <LlmIcon name="success" />
-    <LlmIcon name="warning" size="lg" label="Warning" />
-    <LlmIcon name="chevron-down" size="sm" />
+    Angular:
+      <llm-icon name="success" />
+      <llm-icon name="warning" size="lg" label="Warning" />
+      <llm-icon name="chevron-down" size="sm" />
+    React:
+      <LlmIcon name="success" />
+      <LlmIcon name="warning" size="lg" label="Warning" />
+      <LlmIcon name="chevron-down" size="sm" />
+    Vue:
+      <LlmIcon name="success" />
+      <LlmIcon name="warning" size="lg" label="Warning" />
+      <LlmIcon name="chevron-down" size="sm" />
 
   Metadata:
     purpose: Inline SVG glyph. Renders one icon from the library catalog at a fixed size, with an optional accessible label.
@@ -394,15 +520,36 @@ Each entry lists:
     role     'article' | 'region' | 'section'  —           Opt-in landmark role. Default is no role (plain div). Use article for self-contained content, region for a perceivable area (pair with aria-label), section for HTML <section> semantics.
 
   Usage:
-    <LlmCard variant="elevated" padding="md">
-      <LlmCardHeader>Card Title</LlmCardHeader>
-      <LlmCardContent>
-        This is the card body content. It can contain anything.
-      </LlmCardContent>
-      <LlmCardFooter>
-        <LlmButton variant="primary" size="sm">Action</LlmButton>
-      </LlmCardFooter>
-    </LlmCard>
+    Angular:
+      <llm-card variant="elevated" padding="md">
+        <llm-card-header>Card Title</llm-card-header>
+        <llm-card-content>
+          This is the card body content. It can contain anything.
+        </llm-card-content>
+        <llm-card-footer>
+          <llm-button variant="primary" size="sm">Action</llm-button>
+        </llm-card-footer>
+      </llm-card>
+    React:
+      <LlmCard variant="elevated" padding="md">
+        <LlmCardHeader>Card Title</LlmCardHeader>
+        <LlmCardContent>
+          This is the card body content. It can contain anything.
+        </LlmCardContent>
+        <LlmCardFooter>
+          <LlmButton variant="primary" size="sm">Action</LlmButton>
+        </LlmCardFooter>
+      </LlmCard>
+    Vue:
+      <LlmCard variant="elevated" padding="md">
+        <LlmCardHeader>Card Title</LlmCardHeader>
+        <LlmCardContent>
+          This is the card body content. It can contain anything.
+        </LlmCardContent>
+        <LlmCardFooter>
+          <LlmButton variant="primary" size="sm">Action</LlmButton>
+        </LlmCardFooter>
+      </LlmCard>
 
   Metadata:
     purpose: Container that groups related content into a single visual block. Renders a padded surface with optional elevation or border; does not add a landmark role unless explicitly opted in.
@@ -432,23 +579,57 @@ Each entry lists:
     aria-label    string                              'Table'    Accessible name for the scrollable wrapper region. Announced by screen readers when keyboard users focus the wrapper to scroll horizontally.
 
   Usage:
-    <LlmTable variant="striped">
-      <LlmThead>
-        <LlmTr>
-          <LlmTh sortable>Name</LlmTh>
-          <LlmTh>Status</LlmTh>
-        </LlmTr>
-      </LlmThead>
-      <LlmTbody empty={rows.length === 0} colSpan={2}>
-        {rows.map(row => (
-          <LlmTr key={row.id} selectable>
-            <LlmTd>{row.name}</LlmTd>
-            <LlmTd>{row.status}</LlmTd>
+    Angular:
+      <llm-table variant="striped">
+        <llm-thead>
+          <llm-tr>
+            <llm-th [sortable]="true">Name</llm-th>
+            <llm-th>Status</llm-th>
+          </llm-tr>
+        </llm-thead>
+        <llm-tbody [empty]="rows.length === 0" [colSpan]="2">
+          @for (row of rows; track row.id) {
+            <llm-tr [selectable]="true">
+              <llm-td>{{ row.name }}</llm-td>
+              <llm-td>{{ row.status }}</llm-td>
+            </llm-tr>
+          }
+          <div llmTableEmpty>No results found</div>
+        </llm-tbody>
+      </llm-table>
+    React:
+      <LlmTable variant="striped">
+        <LlmThead>
+          <LlmTr>
+            <LlmTh sortable>Name</LlmTh>
+            <LlmTh>Status</LlmTh>
           </LlmTr>
-        ))}
-        <div llmTableEmpty>No results found</div>
-      </LlmTbody>
-    </LlmTable>
+        </LlmThead>
+        <LlmTbody empty={rows.length === 0} colSpan={2} emptyContent="No results found">
+          {rows.map((row) => (
+            <LlmTr key={row.id} selectable>
+              <LlmTd>{row.name}</LlmTd>
+              <LlmTd>{row.status}</LlmTd>
+            </LlmTr>
+          ))}
+        </LlmTbody>
+      </LlmTable>
+    Vue:
+      <LlmTable variant="striped">
+        <LlmThead>
+          <LlmTr>
+            <LlmTh :sortable="true">Name</LlmTh>
+            <LlmTh>Status</LlmTh>
+          </LlmTr>
+        </LlmThead>
+        <LlmTbody :empty="rows.length === 0" :colSpan="2">
+          <LlmTr v-for="row in rows" :key="row.id" :selectable="true">
+            <LlmTd>{{ row.name }}</LlmTd>
+            <LlmTd>{{ row.status }}</LlmTd>
+          </LlmTr>
+          <template #empty>No results found</template>
+        </LlmTbody>
+      </LlmTable>
 
   Metadata:
     purpose: Tabular data grid. Renders rows of records with column headers, optional sorting, sticky headers, and per-cell alignment.
@@ -480,14 +661,33 @@ Each entry lists:
     status  'online' | 'offline' | 'away' | 'busy' | ''  ''        Status dot indicator
 
   Usage:
-    <LlmAvatar name="Jane Doe" size="md" status="online" />
-    <LlmAvatar name="John Smith" size="lg" shape="square" />
-    <LlmAvatarGroup max={3} size="md">
-      <LlmAvatar name="Alice" />
-      <LlmAvatar name="Bob" />
-      <LlmAvatar name="Carol" />
-      <LlmAvatar name="Dave" />
-    </LlmAvatarGroup>
+    Angular:
+      <llm-avatar name="Jane Doe" size="md" status="online" />
+      <llm-avatar name="John Smith" size="lg" shape="square" />
+      <llm-avatar-group [max]="3" size="md">
+        <llm-avatar name="Alice" />
+        <llm-avatar name="Bob" />
+        <llm-avatar name="Carol" />
+        <llm-avatar name="Dave" />
+      </llm-avatar-group>
+    React:
+      <LlmAvatar name="Jane Doe" size="md" status="online" />
+      <LlmAvatar name="John Smith" size="lg" shape="square" />
+      <LlmAvatarGroup max={3} size="md">
+        <LlmAvatar name="Alice" />
+        <LlmAvatar name="Bob" />
+        <LlmAvatar name="Carol" />
+        <LlmAvatar name="Dave" />
+      </LlmAvatarGroup>
+    Vue:
+      <LlmAvatar name="Jane Doe" size="md" status="online" />
+      <LlmAvatar name="John Smith" size="lg" shape="square" />
+      <LlmAvatarGroup :max="3" size="md">
+        <LlmAvatar name="Alice" />
+        <LlmAvatar name="Bob" />
+        <LlmAvatar name="Carol" />
+        <LlmAvatar name="Dave" />
+      </LlmAvatarGroup>
 
 ---
 
@@ -502,10 +702,21 @@ Each entry lists:
     animated  boolean                              true    Enables shimmer animation
 
   Usage:
-    <LlmSkeleton variant="text" />
-    <LlmSkeleton variant="text" width="60%" />
-    <LlmSkeleton variant="circular" width="40px" />
-    <LlmSkeleton variant="rectangular" height="200px" />
+    Angular:
+      <llm-skeleton variant="text" />
+      <llm-skeleton variant="text" width="60%" />
+      <llm-skeleton variant="circular" width="40px" />
+      <llm-skeleton variant="rectangular" height="200px" />
+    React:
+      <LlmSkeleton variant="text" />
+      <LlmSkeleton variant="text" width="60%" />
+      <LlmSkeleton variant="circular" width="40px" />
+      <LlmSkeleton variant="rectangular" height="200px" />
+    Vue:
+      <LlmSkeleton variant="text" />
+      <LlmSkeleton variant="text" width="60%" />
+      <LlmSkeleton variant="circular" width="40px" />
+      <LlmSkeleton variant="rectangular" height="200px" />
 
   Metadata:
     purpose: Loading placeholder. Renders a sized block in the shape of the content that will replace it once data resolves.
@@ -535,10 +746,21 @@ Each entry lists:
     label          string                                        —          Accessible name (aria-label). Required by ARIA when no visible label is nearby.
 
   Usage:
-    <LlmProgress value={25} label="Upload progress" />
-    <LlmProgress value={60} variant="success" label="Form completion" />
-    <LlmProgress value={85} variant="warning" label="Quota usage" />
-    <LlmProgress indeterminate label="Loading…" />
+    Angular:
+      <llm-progress [value]="25" label="Upload progress" />
+      <llm-progress [value]="60" variant="success" label="Form completion" />
+      <llm-progress [value]="85" variant="warning" label="Quota usage" />
+      <llm-progress [indeterminate]="true" label="Loading…" />
+    React:
+      <LlmProgress value={25} label="Upload progress" />
+      <LlmProgress value={60} variant="success" label="Form completion" />
+      <LlmProgress value={85} variant="warning" label="Quota usage" />
+      <LlmProgress indeterminate label="Loading…" />
+    Vue:
+      <LlmProgress :value="25" label="Upload progress" />
+      <LlmProgress :value="60" variant="success" label="Form completion" />
+      <LlmProgress :value="85" variant="warning" label="Quota usage" />
+      <LlmProgress :indeterminate="true" label="Loading…" />
 
   Metadata:
     purpose: Determinate or indeterminate progress bar. Renders the share of work completed for a task whose duration is measurable, or an indeterminate animation when it is not.
@@ -568,10 +790,21 @@ Each entry lists:
     showLineNumbers  boolean  false   Whether to display line numbers alongside the code
 
   Usage:
-    <LlmCodeBlock code="const x = 1;" language="typescript" />
-    <LlmCodeBlock code={tsCode} filename="app.ts" showLineNumbers={true} />
-    <LlmCodeBlock code={shellCmd} language="shell" />
-    <LlmCodeBlock code={jsonStr} filename="package.json" />
+    Angular:
+      <llm-code-block code="const x = 1;" language="typescript" />
+      <llm-code-block [code]="tsCode" filename="app.ts" [showLineNumbers]="true" />
+      <llm-code-block [code]="shellCmd" language="shell" />
+      <llm-code-block [code]="jsonStr" filename="package.json" />
+    React:
+      <LlmCodeBlock code="const x = 1;" language="typescript" />
+      <LlmCodeBlock code={tsCode} filename="app.ts" showLineNumbers={true} />
+      <LlmCodeBlock code={shellCmd} language="shell" />
+      <LlmCodeBlock code={jsonStr} filename="package.json" />
+    Vue:
+      <LlmCodeBlock code="const x = 1;" language="typescript" />
+      <LlmCodeBlock :code="tsCode" filename="app.ts" :showLineNumbers="true" />
+      <LlmCodeBlock :code="shellCmd" language="shell" />
+      <LlmCodeBlock :code="jsonStr" filename="package.json" />
 
 ---
 
@@ -583,11 +816,24 @@ Each entry lists:
     separator  string  '/'  Separator character between items
 
   Usage:
-    <LlmBreadcrumbs>
-      <LlmBreadcrumbItem href="/">Home</LlmBreadcrumbItem>
-      <LlmBreadcrumbItem href="/components">Components</LlmBreadcrumbItem>
-      <LlmBreadcrumbItem>Breadcrumbs</LlmBreadcrumbItem>
-    </LlmBreadcrumbs>
+    Angular:
+      <llm-breadcrumbs>
+        <llm-breadcrumb-item href="/">Home</llm-breadcrumb-item>
+        <llm-breadcrumb-item href="/components">Components</llm-breadcrumb-item>
+        <llm-breadcrumb-item>Breadcrumbs</llm-breadcrumb-item>
+      </llm-breadcrumbs>
+    React:
+      <LlmBreadcrumbs>
+        <LlmBreadcrumbItem href="/">Home</LlmBreadcrumbItem>
+        <LlmBreadcrumbItem href="/components">Components</LlmBreadcrumbItem>
+        <LlmBreadcrumbItem current>Breadcrumbs</LlmBreadcrumbItem>
+      </LlmBreadcrumbs>
+    Vue:
+      <LlmBreadcrumbs>
+        <LlmBreadcrumbItem href="/">Home</LlmBreadcrumbItem>
+        <LlmBreadcrumbItem href="/components">Components</LlmBreadcrumbItem>
+        <LlmBreadcrumbItem :current="true">Breadcrumbs</LlmBreadcrumbItem>
+      </LlmBreadcrumbs>
 
 ---
 
@@ -601,11 +847,24 @@ Each entry lists:
     variant                'default' | 'pills'      'default'  Visual style of the tab strip
 
   Usage:
-    <LlmTabGroup selectedIndex={0}>
-      <LlmTab label="Account">Account settings content.</LlmTab>
-      <LlmTab label="Notifications">Notification preferences.</LlmTab>
-      <LlmTab label="Billing" disabled={true}>Billing info.</LlmTab>
-    </LlmTabGroup>
+    Angular:
+      <llm-tab-group [selectedIndex]="0">
+        <llm-tab label="Account">Account settings content.</llm-tab>
+        <llm-tab label="Notifications">Notification preferences.</llm-tab>
+        <llm-tab label="Billing" [disabled]="true">Billing info.</llm-tab>
+      </llm-tab-group>
+    React:
+      <LlmTabGroup selectedIndex={0}>
+        <LlmTab label="Account">Account settings content.</LlmTab>
+        <LlmTab label="Notifications">Notification preferences.</LlmTab>
+        <LlmTab label="Billing" disabled={true}>Billing info.</LlmTab>
+      </LlmTabGroup>
+    Vue:
+      <LlmTabGroup :selectedIndex="0">
+        <LlmTab label="Account">Account settings content.</LlmTab>
+        <LlmTab label="Notifications">Notification preferences.</LlmTab>
+        <LlmTab label="Billing" :disabled="true">Billing info.</LlmTab>
+      </LlmTabGroup>
 
 ---
 
@@ -619,11 +878,24 @@ Each entry lists:
     orientation  'horizontal' | 'vertical'  'horizontal'  Stepper layout direction
 
   Usage:
-    <LlmStepper activeStep={0}>
-      <LlmStep label="Basic Info">Step 1 content</LlmStep>
-      <LlmStep label="Verification">Step 2 content</LlmStep>
-      <LlmStep label="Complete">Step 3 content</LlmStep>
-    </LlmStepper>
+    Angular:
+      <llm-stepper [activeStep]="0">
+        <llm-step label="Basic Info">Step 1 content</llm-step>
+        <llm-step label="Verification">Step 2 content</llm-step>
+        <llm-step label="Complete">Step 3 content</llm-step>
+      </llm-stepper>
+    React:
+      <LlmStepper activeStep={0}>
+        <LlmStep label="Basic Info">Step 1 content</LlmStep>
+        <LlmStep label="Verification">Step 2 content</LlmStep>
+        <LlmStep label="Complete">Step 3 content</LlmStep>
+      </LlmStepper>
+    Vue:
+      <LlmStepper :activeStep="0">
+        <LlmStep label="Basic Info">Step 1 content</LlmStep>
+        <LlmStep label="Verification">Step 2 content</LlmStep>
+        <LlmStep label="Complete">Step 3 content</LlmStep>
+      </LlmStepper>
 
 ---
 
@@ -639,11 +911,23 @@ Each entry lists:
     showFirstLast  boolean                 true  Show first/last page jump buttons
 
   Usage:
-    <LlmPagination
-      page={3}
-      pageCount={10}
-      onPageChange={(p) => console.log(p)}
-    />
+    Angular:
+      <llm-pagination
+        [(page)]="page"
+        [pageCount]="10"
+      />
+    React:
+      <LlmPagination
+        page={page}
+        pageCount={10}
+        onPageChange={setPage}
+      />
+    Vue:
+      <LlmPagination
+        :page="page"
+        :pageCount="10"
+        @pageChange="page = $event"
+      />
 
   Metadata:
     purpose: Page navigator. Renders numbered page buttons plus previous/next (and optional first/last) controls for a paged list or table.
@@ -668,14 +952,47 @@ Each entry lists:
     variant  'default' | 'compact'  'default'  Density of the menu
 
   Usage:
-    <LlmButton llmMenuTriggerFor={actionsMenu}>Actions ▾</LlmButton>
-    {/* In template: */}
-    <LlmMenu ref={actionsMenu}>
-      <LlmMenuItem onTriggered={() => console.log('copy')}>Copy</LlmMenuItem>
-      <LlmMenuItem onTriggered={() => console.log('paste')}>Paste</LlmMenuItem>
-      <LlmMenuSeparator />
-      <LlmMenuItem disabled={true}>Delete</LlmMenuItem>
-    </LlmMenu>
+    Angular:
+      <llm-button [llmMenuTriggerFor]="actions">Actions ▾</llm-button>
+      <ng-template #actions>
+        <llm-menu>
+          <llm-menu-item (triggered)="copy()">Copy</llm-menu-item>
+          <llm-menu-item (triggered)="paste()">Paste</llm-menu-item>
+          <llm-menu-separator />
+          <llm-menu-item [disabled]="true">Delete</llm-menu-item>
+        </llm-menu>
+      </ng-template>
+    React:
+      <LlmMenuTrigger
+        menu={
+          <LlmMenu>
+            <LlmMenuItem onTriggered={() => console.log('copy')}>Copy</LlmMenuItem>
+            <LlmMenuItem onTriggered={() => console.log('paste')}>Paste</LlmMenuItem>
+            <LlmMenuSeparator />
+            <LlmMenuItem disabled>Delete</LlmMenuItem>
+          </LlmMenu>
+        }
+      >
+        {({ onClick, ref }) => (
+          <LlmButton ref={ref as React.RefObject<HTMLButtonElement>} onClick={onClick}>
+            Actions ▾
+          </LlmButton>
+        )}
+      </LlmMenuTrigger>
+    Vue:
+      <LlmMenuTrigger>
+        <template #trigger>
+          <LlmButton>Actions ▾</LlmButton>
+        </template>
+        <template #menu>
+          <LlmMenu>
+            <LlmMenuItem @triggered="copy">Copy</LlmMenuItem>
+            <LlmMenuItem @triggered="paste">Paste</LlmMenuItem>
+            <LlmMenuSeparator />
+            <LlmMenuItem :disabled="true">Delete</LlmMenuItem>
+          </LlmMenu>
+        </template>
+      </LlmMenuTrigger>
 
 ---
 
@@ -690,15 +1007,36 @@ Each entry lists:
     size             'sm' | 'md' | 'lg' | 'xl' | 'full'  'md'   Max-width of the dialog
 
   Usage:
-    <LlmButton onClick={() => setOpen(true)}>Open Dialog</LlmButton>
-    <LlmDialog open={open} onOpenChange={setOpen} size="sm">
-      <LlmDialogHeader>Confirm Delete</LlmDialogHeader>
-      <LlmDialogContent>Are you sure? This cannot be undone.</LlmDialogContent>
-      <LlmDialogFooter>
-        <LlmButton variant="outline" onClick={() => setOpen(false)}>Cancel</LlmButton>
-        <LlmButton variant="primary" onClick={() => setOpen(false)}>Delete</LlmButton>
-      </LlmDialogFooter>
-    </LlmDialog>
+    Angular:
+      <llm-button (click)="open = true">Open Dialog</llm-button>
+      <llm-dialog [(open)]="open" size="sm">
+        <llm-dialog-header>Confirm Delete</llm-dialog-header>
+        <llm-dialog-content>Are you sure? This cannot be undone.</llm-dialog-content>
+        <llm-dialog-footer>
+          <llm-button variant="outline" (click)="open = false">Cancel</llm-button>
+          <llm-button variant="primary" (click)="open = false">Delete</llm-button>
+        </llm-dialog-footer>
+      </llm-dialog>
+    React:
+      <LlmButton onClick={() => setOpen(true)}>Open Dialog</LlmButton>
+      <LlmDialog open={open} onOpenChange={setOpen} size="sm">
+        <LlmDialogHeader>Confirm Delete</LlmDialogHeader>
+        <LlmDialogContent>Are you sure? This cannot be undone.</LlmDialogContent>
+        <LlmDialogFooter>
+          <LlmButton variant="outline" onClick={() => setOpen(false)}>Cancel</LlmButton>
+          <LlmButton variant="primary" onClick={() => setOpen(false)}>Delete</LlmButton>
+        </LlmDialogFooter>
+      </LlmDialog>
+    Vue:
+      <LlmButton @click="open = true">Open Dialog</LlmButton>
+      <LlmDialog v-model:open="open" size="sm">
+        <LlmDialogHeader>Confirm Delete</LlmDialogHeader>
+        <LlmDialogContent>Are you sure? This cannot be undone.</LlmDialogContent>
+        <LlmDialogFooter>
+          <LlmButton variant="outline" @click="open = false">Cancel</LlmButton>
+          <LlmButton variant="primary" @click="open = false">Delete</LlmButton>
+        </LlmDialogFooter>
+      </LlmDialog>
 
   Metadata:
     purpose: Modal overlay that interrupts the page to demand focused attention. Traps focus, dims the background with a scrim, and blocks interaction with the rest of the page until it is dismissed.
@@ -729,16 +1067,39 @@ Each entry lists:
     closeOnBackdrop  boolean                              true     Close when clicking the backdrop
 
   Usage:
-    <LlmButton onClick={() => setOpen(true)}>Open Drawer</LlmButton>
-    <LlmDrawer open={open} onOpenChange={setOpen} position="right">
-      <LlmDrawerHeader>Settings</LlmDrawerHeader>
-      <LlmDrawerContent>
-        <LlmInput placeholder="Search..." />
-      </LlmDrawerContent>
-      <LlmDrawerFooter>
-        <LlmButton onClick={() => setOpen(false)}>Close</LlmButton>
-      </LlmDrawerFooter>
-    </LlmDrawer>
+    Angular:
+      <llm-button (click)="open = true">Open Drawer</llm-button>
+      <llm-drawer [(open)]="open" position="right">
+        <llm-drawer-header>Settings</llm-drawer-header>
+        <llm-drawer-content>
+          <llm-input placeholder="Search..." />
+        </llm-drawer-content>
+        <llm-drawer-footer>
+          <llm-button (click)="open = false">Close</llm-button>
+        </llm-drawer-footer>
+      </llm-drawer>
+    React:
+      <LlmButton onClick={() => setOpen(true)}>Open Drawer</LlmButton>
+      <LlmDrawer open={open} onOpenChange={setOpen} position="right">
+        <LlmDrawerHeader>Settings</LlmDrawerHeader>
+        <LlmDrawerContent>
+          <LlmInput placeholder="Search..." />
+        </LlmDrawerContent>
+        <LlmDrawerFooter>
+          <LlmButton onClick={() => setOpen(false)}>Close</LlmButton>
+        </LlmDrawerFooter>
+      </LlmDrawer>
+    Vue:
+      <LlmButton @click="open = true">Open Drawer</LlmButton>
+      <LlmDrawer v-model:open="open" position="right">
+        <LlmDrawerHeader>Settings</LlmDrawerHeader>
+        <LlmDrawerContent>
+          <LlmInput placeholder="Search..." />
+        </LlmDrawerContent>
+        <LlmDrawerFooter>
+          <LlmButton @click="open = false">Close</LlmButton>
+        </LlmDrawerFooter>
+      </LlmDrawer>
 
   Metadata:
     purpose: Edge-anchored panel that slides in from one side of the viewport. Hosts secondary navigation, filters, or detail views without taking the user away from the underlying page.
@@ -769,16 +1130,31 @@ Each entry lists:
     llmTooltipHideDelay  number                                0        Delay in ms before hiding
 
   Usage:
-    <LlmTooltip tooltip="Save your changes">
-      <LlmButton>Save</LlmButton>
-    </LlmTooltip>
-    <LlmTooltip tooltip="Copy to clipboard" position="right">
-      <LlmButton variant="outline">Copy</LlmButton>
-    </LlmTooltip>
+    Angular:
+      <llm-button llmTooltip="Save your changes">Save</llm-button>
+      <llm-button
+        llmTooltip="Copy to clipboard"
+        llmTooltipPosition="right"
+        variant="outline"
+      >Copy</llm-button>
+    React:
+      <LlmTooltip llmTooltip="Save your changes">
+        <LlmButton>Save</LlmButton>
+      </LlmTooltip>
+      <LlmTooltip llmTooltip="Copy to clipboard" llmTooltipPosition="right">
+        <LlmButton variant="outline">Copy</LlmButton>
+      </LlmTooltip>
+    Vue:
+      <LlmTooltip llmTooltip="Save your changes">
+        <LlmButton>Save</LlmButton>
+      </LlmTooltip>
+      <LlmTooltip llmTooltip="Copy to clipboard" llmTooltipPosition="right">
+        <LlmButton variant="outline">Copy</LlmButton>
+      </LlmTooltip>
 
 ---
 
-### LlmToastProvider + useLlmToast
+### Toast (service / hook + LlmToastContainer)
 
   Transient notifications that auto-dismiss. Service/hook-based API — place LlmToastContainer once in app root.
 
@@ -789,17 +1165,44 @@ Each entry lists:
     position     'top-right' | 'top-center' | 'bottom-right' | 'bottom-center'  'bottom-right'  Container position (on LlmToastContainer)
 
   Usage:
-    // App root:
-    <LlmToastProvider>
-      <App />
-      <LlmToastContainer position="bottom-right" />
-    </LlmToastProvider>
+    Angular:
+      // Place the container once (e.g. in app root template):
+      // <llm-toast-container position="bottom-right" />
 
-    // In any component:
-    const { show } = useLlmToast();
-    show('Saved!', { variant: 'success' });
-    show('Error occurred', { variant: 'danger', duration: 8000 });
-    show('Persistent', { duration: 0 });
+      // In any component — inject the service, no provider needed:
+      import { LlmToastService } from '@atelier-ui/angular';
+
+      private readonly toast = inject(LlmToastService);
+
+      this.toast.show('Saved!', { variant: 'success' });
+      this.toast.show('Error occurred', { variant: 'danger', duration: 8000 });
+      this.toast.show('Persistent', { duration: 0 });
+    React:
+      // App root:
+      <LlmToastProvider>
+        <App />
+        <LlmToastContainer position="bottom-right" />
+      </LlmToastProvider>
+
+      // In any component inside the provider:
+      const { show } = useLlmToast();
+      show('Saved!', { variant: 'success' });
+      show('Error occurred', { variant: 'danger', duration: 8000 });
+      show('Persistent', { duration: 0 });
+    Vue:
+      <!-- App root: -->
+      <LlmToastProvider>
+        <App />
+        <LlmToastContainer position="bottom-right" />
+      </LlmToastProvider>
+
+      <!-- In any component inside the provider, in <script setup>: -->
+      import { useLlmToast } from '@atelier-ui/vue';
+
+      const { show } = useLlmToast();
+      show('Saved!', { variant: 'success' });
+      show('Error occurred', { variant: 'danger', duration: 8000 });
+      show('Persistent', { duration: 0 });
 
 ---
 
@@ -812,16 +1215,39 @@ Each entry lists:
     variant  'default' | 'bordered' | 'separated'  'default'  Visual style of the group
 
   Usage:
-    <LlmAccordionGroup variant="separated">
-      <LlmAccordionItem>
-        <span llmAccordionHeader>Question 1</span>
-        Answer content goes here.
-      </LlmAccordionItem>
-      <LlmAccordionItem>
-        <span llmAccordionHeader>Question 2</span>
-        Another answer here.
-      </LlmAccordionItem>
-    </LlmAccordionGroup>
+    Angular:
+      <llm-accordion-group variant="separated">
+        <llm-accordion-item>
+          <span llmAccordionHeader>Question 1</span>
+          Answer content goes here.
+        </llm-accordion-item>
+        <llm-accordion-item>
+          <span llmAccordionHeader>Question 2</span>
+          Another answer here.
+        </llm-accordion-item>
+      </llm-accordion-group>
+    React:
+      <LlmAccordionGroup variant="separated">
+        <LlmAccordionItem>
+          <LlmAccordionHeader>Question 1</LlmAccordionHeader>
+          Answer content goes here.
+        </LlmAccordionItem>
+        <LlmAccordionItem>
+          <LlmAccordionHeader>Question 2</LlmAccordionHeader>
+          Another answer here.
+        </LlmAccordionItem>
+      </LlmAccordionGroup>
+    Vue:
+      <LlmAccordionGroup variant="separated">
+        <LlmAccordionItem>
+          <template #header><LlmAccordionHeader>Question 1</LlmAccordionHeader></template>
+          Answer content goes here.
+        </LlmAccordionItem>
+        <LlmAccordionItem>
+          <template #header><LlmAccordionHeader>Question 2</LlmAccordionHeader></template>
+          Another answer here.
+        </LlmAccordionItem>
+      </LlmAccordionGroup>
 
 ---
 
@@ -835,10 +1261,21 @@ Each entry lists:
     onDismissed  () => void                                 —       Called when the dismiss button is clicked
 
   Usage:
-    <LlmAlert variant="info">This is an informational message.</LlmAlert>
-    <LlmAlert variant="success">Your changes were saved successfully.</LlmAlert>
-    <LlmAlert variant="warning" dismissible={true}>Your session expires in 5 minutes.</LlmAlert>
-    <LlmAlert variant="danger">Something went wrong. Please try again.</LlmAlert>
+    Angular:
+      <llm-alert variant="info">This is an informational message.</llm-alert>
+      <llm-alert variant="success">Your changes were saved successfully.</llm-alert>
+      <llm-alert variant="warning" [dismissible]="true">Your session expires in 5 minutes.</llm-alert>
+      <llm-alert variant="danger">Something went wrong. Please try again.</llm-alert>
+    React:
+      <LlmAlert variant="info">This is an informational message.</LlmAlert>
+      <LlmAlert variant="success">Your changes were saved successfully.</LlmAlert>
+      <LlmAlert variant="warning" dismissible={true}>Your session expires in 5 minutes.</LlmAlert>
+      <LlmAlert variant="danger">Something went wrong. Please try again.</LlmAlert>
+    Vue:
+      <LlmAlert variant="info">This is an informational message.</LlmAlert>
+      <LlmAlert variant="success">Your changes were saved successfully.</LlmAlert>
+      <LlmAlert variant="warning" :dismissible="true">Your session expires in 5 minutes.</LlmAlert>
+      <LlmAlert variant="danger">Something went wrong. Please try again.</LlmAlert>
 
   Metadata:
     purpose: Inline contextual message. Renders a block carrying status content (info, success, warning, danger) with an optional dismiss control.
@@ -868,21 +1305,54 @@ Each entry lists:
     onOpenChange  (open: boolean) => void         —         React: emitted when the open state should change. Vue uses v-model:open; Angular uses [(open)].
 
   Usage:
-    <LlmChat variant="drawer" open={open} onOpenChange={setOpen} status="idle">
-      <LlmChatHeader>
-        <LlmAvatar size="sm" name="AI" />
-        <span>AI Assistant</span>
-        <LlmBadge variant="success" size="sm">Online</LlmBadge>
-      </LlmChatHeader>
-      <LlmChatMessages>
-        <LlmChatMessage role="assistant">Hi! How can I help today?</LlmChatMessage>
-        <LlmChatMessage role="user">Show me a sorting function.</LlmChatMessage>
-        <LlmChatMessage role="assistant">
-          <LlmCodeBlock language="ts" code={snippet} />
-        </LlmChatMessage>
-      </LlmChatMessages>
-      <LlmChatInput onSend={onSend} onStop={onStop} />
-    </LlmChat>
+    Angular:
+      <llm-chat variant="drawer" [(open)]="open" status="idle">
+        <llm-chat-header>
+          <llm-avatar size="sm" name="AI" />
+          <span>AI Assistant</span>
+          <llm-badge variant="success" size="sm">Online</llm-badge>
+        </llm-chat-header>
+        <llm-chat-messages>
+          <llm-chat-message role="assistant">Hi! How can I help today?</llm-chat-message>
+          <llm-chat-message role="user">Show me a sorting function.</llm-chat-message>
+          <llm-chat-message role="assistant">
+            <llm-code-block language="ts" [code]="snippet" />
+          </llm-chat-message>
+        </llm-chat-messages>
+        <llm-chat-input (send)="onSend($event)" (stop)="onStop()" />
+      </llm-chat>
+    React:
+      <LlmChat variant="drawer" open={open} onOpenChange={setOpen} status="idle">
+        <LlmChatHeader>
+          <LlmAvatar size="sm" name="AI" />
+          <span>AI Assistant</span>
+          <LlmBadge variant="success" size="sm">Online</LlmBadge>
+        </LlmChatHeader>
+        <LlmChatMessages>
+          <LlmChatMessage role="assistant">Hi! How can I help today?</LlmChatMessage>
+          <LlmChatMessage role="user">Show me a sorting function.</LlmChatMessage>
+          <LlmChatMessage role="assistant">
+            <LlmCodeBlock language="ts" code={snippet} />
+          </LlmChatMessage>
+        </LlmChatMessages>
+        <LlmChatInput onSend={onSend} onStop={onStop} />
+      </LlmChat>
+    Vue:
+      <LlmChat variant="drawer" v-model:open="open" status="idle">
+        <LlmChatHeader>
+          <LlmAvatar size="sm" name="AI" />
+          <span>AI Assistant</span>
+          <LlmBadge variant="success" size="sm">Online</LlmBadge>
+        </LlmChatHeader>
+        <LlmChatMessages>
+          <LlmChatMessage role="assistant">Hi! How can I help today?</LlmChatMessage>
+          <LlmChatMessage role="user">Show me a sorting function.</LlmChatMessage>
+          <LlmChatMessage role="assistant">
+            <LlmCodeBlock language="ts" :code="snippet" />
+          </LlmChatMessage>
+        </LlmChatMessages>
+        <LlmChatInput @send="onSend" @stop="onStop" />
+      </LlmChat>
 
   Metadata:
     purpose: AI chat surface. Renders a conversation log with a composer for sending messages and a live status for streaming or errored replies.

@@ -37,7 +37,7 @@ export interface ComponentDoc {
   description: string;
   category: string;
   props: PropRow[];
-  codeExample: string;
+  examples: { angular: string; react: string; vue: string };
   status?: 'new' | 'updated' | 'stable';
   aiUsage?: {
     bestPractices: string[];
@@ -98,11 +98,23 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'loading', type: 'boolean', default: 'false', description: 'Shows a loading spinner, disables interaction' },
       { name: 'aria-label', type: 'string', default: '—', description: 'Accessible name. Required for icon-only buttons (no children). React enforces this at compile time via a discriminated union; Angular/Vue warn at runtime in dev mode.' },
     ],
-    codeExample: `<LlmButton variant="primary">Primary</LlmButton>
+    examples: {
+      angular: `<llm-button variant="primary">Primary</llm-button>
+<llm-button variant="secondary">Secondary</llm-button>
+<llm-button variant="outline">Outline</llm-button>
+<llm-button [loading]="true">Loading</llm-button>
+<llm-button [disabled]="true">Disabled</llm-button>`,
+      react: `<LlmButton variant="primary">Primary</LlmButton>
 <LlmButton variant="secondary">Secondary</LlmButton>
 <LlmButton variant="outline">Outline</LlmButton>
 <LlmButton loading={true}>Loading</LlmButton>
 <LlmButton disabled={true}>Disabled</LlmButton>`,
+      vue: `<LlmButton variant="primary">Primary</LlmButton>
+<LlmButton variant="secondary">Secondary</LlmButton>
+<LlmButton variant="outline">Outline</LlmButton>
+<LlmButton :loading="true">Loading</LlmButton>
+<LlmButton :disabled="true">Disabled</LlmButton>`,
+    },
     aiUsage: {
       bestPractices: [
         'Always specify the "variant" to communicate the visual intent to the model.',
@@ -133,10 +145,20 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'required', type: 'boolean', default: 'false', description: 'Marks field as required' },
       { name: 'name', type: 'string', default: "''", description: 'HTML name attribute for form submission' },
     ],
-    codeExample: `<LlmInput type="email" placeholder="you@example.com" />
-<LlmInput type="password" placeholder="Password" />
+    examples: {
+      angular: `<llm-input type="email" placeholder="you@example.com" [(value)]="email" />
+<llm-input type="password" placeholder="Password" [(value)]="password" />
+<llm-input [invalid]="true" placeholder="Invalid state" />
+<llm-input [disabled]="true" placeholder="Disabled" />`,
+      react: `<LlmInput type="email" placeholder="you@example.com" value={email} onValueChange={setEmail} />
+<LlmInput type="password" placeholder="Password" value={password} onValueChange={setPassword} />
 <LlmInput invalid={true} placeholder="Invalid state" />
 <LlmInput disabled={true} placeholder="Disabled" />`,
+      vue: `<LlmInput type="email" placeholder="you@example.com" v-model:value="email" />
+<LlmInput type="password" placeholder="Password" v-model:value="password" />
+<LlmInput :invalid="true" placeholder="Invalid state" />
+<LlmInput :disabled="true" placeholder="Disabled" />`,
+    },
     aiUsage: {
       bestPractices: [
         'Explicitly state the "type" property to ensure correct mobile keyboards.',
@@ -168,9 +190,17 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'name', type: 'string', default: "''", description: 'HTML name attribute for form submission' },
       { name: 'autoResize', type: 'boolean', default: 'false', description: 'Grows height automatically as content grows' },
     ],
-    codeExample: `<LlmTextarea placeholder="Tell us about yourself" rows={4} />
+    examples: {
+      angular: `<llm-textarea placeholder="Tell us about yourself" [rows]="4" [(value)]="bio" />
+<llm-textarea [autoResize]="true" placeholder="Auto-resizes as you type..." />
+<llm-textarea [disabled]="true" placeholder="Disabled" />`,
+      react: `<LlmTextarea placeholder="Tell us about yourself" rows={4} value={bio} onValueChange={setBio} />
 <LlmTextarea autoResize={true} placeholder="Auto-resizes as you type..." />
 <LlmTextarea disabled={true} placeholder="Disabled" />`,
+      vue: `<LlmTextarea placeholder="Tell us about yourself" :rows="4" v-model:value="bio" />
+<LlmTextarea :autoResize="true" placeholder="Auto-resizes as you type..." />
+<LlmTextarea :disabled="true" placeholder="Disabled" />`,
+    },
   },
 
   checkbox: {
@@ -190,10 +220,20 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'required', type: 'boolean', default: 'false', description: 'Marks field as required' },
       { name: 'name', type: 'string', default: "''", description: 'HTML name attribute for form submission' },
     ],
-    codeExample: `<LlmCheckbox>I agree to the terms</LlmCheckbox>
+    examples: {
+      angular: `<llm-checkbox [(checked)]="agreed">I agree to the terms</llm-checkbox>
+<llm-checkbox [(checked)]="pre">Pre-checked</llm-checkbox>
+<llm-checkbox [indeterminate]="true">Indeterminate</llm-checkbox>
+<llm-checkbox [disabled]="true">Disabled</llm-checkbox>`,
+      react: `<LlmCheckbox checked={agreed} onCheckedChange={setAgreed}>I agree to the terms</LlmCheckbox>
 <LlmCheckbox checked={true}>Pre-checked</LlmCheckbox>
 <LlmCheckbox indeterminate={true}>Indeterminate</LlmCheckbox>
 <LlmCheckbox disabled={true}>Disabled</LlmCheckbox>`,
+      vue: `<LlmCheckbox v-model:checked="agreed">I agree to the terms</LlmCheckbox>
+<LlmCheckbox v-model:checked="pre">Pre-checked</LlmCheckbox>
+<LlmCheckbox :indeterminate="true">Indeterminate</LlmCheckbox>
+<LlmCheckbox :disabled="true">Disabled</LlmCheckbox>`,
+    },
   },
 
   toggle: {
@@ -212,9 +252,17 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'required', type: 'boolean', default: 'false', description: 'Marks field as required' },
       { name: 'name', type: 'string', default: "''", description: 'HTML name attribute for form submission' },
     ],
-    codeExample: `<LlmToggle>Enable notifications</LlmToggle>
+    examples: {
+      angular: `<llm-toggle [(checked)]="notifications">Enable notifications</llm-toggle>
+<llm-toggle [(checked)]="active">Active toggle</llm-toggle>
+<llm-toggle [disabled]="true">Disabled</llm-toggle>`,
+      react: `<LlmToggle checked={notifications} onCheckedChange={setNotifications}>Enable notifications</LlmToggle>
 <LlmToggle checked={true}>Active toggle</LlmToggle>
 <LlmToggle disabled={true}>Disabled</LlmToggle>`,
+      vue: `<LlmToggle v-model:checked="notifications">Enable notifications</LlmToggle>
+<LlmToggle v-model:checked="active">Active toggle</LlmToggle>
+<LlmToggle :disabled="true">Disabled</LlmToggle>`,
+    },
   },
 
   'radio-group': {
@@ -231,11 +279,23 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'required', type: 'boolean', default: 'false', description: 'Marks field as required' },
       { name: 'name', type: 'string', default: "''", description: 'HTML name attribute (propagated to radios)' },
     ],
-    codeExample: `<LlmRadioGroup name="plan" value="free" onValueChange={(v) => console.log(v)}>
+    examples: {
+      angular: `<llm-radio-group name="plan" [(value)]="plan">
+  <llm-radio radioValue="free">Free</llm-radio>
+  <llm-radio radioValue="pro">Pro</llm-radio>
+  <llm-radio radioValue="enterprise">Enterprise</llm-radio>
+</llm-radio-group>`,
+      react: `<LlmRadioGroup name="plan" value="free" onValueChange={(v) => console.log(v)}>
   <LlmRadio radioValue="free">Free</LlmRadio>
   <LlmRadio radioValue="pro">Pro</LlmRadio>
   <LlmRadio radioValue="enterprise">Enterprise</LlmRadio>
 </LlmRadioGroup>`,
+      vue: `<LlmRadioGroup name="plan" v-model:value="plan">
+  <LlmRadio radioValue="free">Free</LlmRadio>
+  <LlmRadio radioValue="pro">Pro</LlmRadio>
+  <LlmRadio radioValue="enterprise">Enterprise</LlmRadio>
+</LlmRadioGroup>`,
+    },
     composition: [
       {
         name: 'LlmRadio',
@@ -276,11 +336,23 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'required', type: 'boolean', default: 'false', description: 'Marks field as required' },
       { name: 'name', type: 'string', default: "''", description: 'HTML name attribute for form submission' },
     ],
-    codeExample: `<LlmSelect placeholder="Select a country" onValueChange={(v) => console.log(v)}>
+    examples: {
+      angular: `<llm-select placeholder="Select a country" [(value)]="country">
+  <llm-option optionValue="us">United States</llm-option>
+  <llm-option optionValue="ca">Canada</llm-option>
+  <llm-option optionValue="uk" [disabled]="true">United Kingdom (unavailable)</llm-option>
+</llm-select>`,
+      react: `<LlmSelect placeholder="Select a country" value={country} onValueChange={setCountry}>
   <LlmOption optionValue="us">United States</LlmOption>
   <LlmOption optionValue="ca">Canada</LlmOption>
   <LlmOption optionValue="uk" disabled={true}>United Kingdom (unavailable)</LlmOption>
 </LlmSelect>`,
+      vue: `<LlmSelect placeholder="Select a country" v-model:value="country">
+  <LlmOption optionValue="us">United States</LlmOption>
+  <LlmOption optionValue="ca">Canada</LlmOption>
+  <LlmOption optionValue="uk" :disabled="true">United Kingdom (unavailable)</LlmOption>
+</LlmSelect>`,
+    },
     composition: [
       {
         name: 'LlmOption',
@@ -334,14 +406,36 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the combobox' },
       { name: 'invalid', type: 'boolean', default: 'false', description: 'Applies invalid/error styling' },
     ],
-    codeExample: `<LlmCombobox
+    examples: {
+      angular: `<llm-combobox
   placeholder="Search framework..."
+  [(value)]="framework"
+  [options]="[
+    { label: 'Angular', value: 'ng' },
+    { label: 'React', value: 'react' },
+    { label: 'Vue', value: 'vue' }
+  ]"
+/>`,
+      react: `<LlmCombobox
+  placeholder="Search framework..."
+  value={framework}
+  onValueChange={setFramework}
   options={[
     { label: 'Angular', value: 'ng' },
     { label: 'React', value: 'react' },
     { label: 'Vue', value: 'vue' }
   ]}
 />`,
+      vue: `<LlmCombobox
+  placeholder="Search framework..."
+  v-model:value="framework"
+  :options="[
+    { label: 'Angular', value: 'ng' },
+    { label: 'React', value: 'react' },
+    { label: 'Vue', value: 'vue' }
+  ]"
+/>`,
+    },
     a11y: {
       role: 'combobox',
       keyboard: [
@@ -367,12 +461,26 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'variant', type: "'default' | 'success' | 'warning' | 'danger' | 'info'", default: "'default'", description: 'Color scheme of the badge' },
       { name: 'size', type: "'sm' | 'md'", default: "'md'", description: 'Size of the badge' },
     ],
-    codeExample: `<LlmBadge>Default</LlmBadge>
+    examples: {
+      angular: `<llm-badge>Default</llm-badge>
+<llm-badge variant="success">Active</llm-badge>
+<llm-badge variant="warning">Pending</llm-badge>
+<llm-badge variant="danger">Error</llm-badge>
+<llm-badge variant="info">Info</llm-badge>
+<llm-badge size="sm" variant="success">Small</llm-badge>`,
+      react: `<LlmBadge>Default</LlmBadge>
 <LlmBadge variant="success">Active</LlmBadge>
 <LlmBadge variant="warning">Pending</LlmBadge>
 <LlmBadge variant="danger">Error</LlmBadge>
 <LlmBadge variant="info">Info</LlmBadge>
 <LlmBadge size="sm" variant="success">Small</LlmBadge>`,
+      vue: `<LlmBadge>Default</LlmBadge>
+<LlmBadge variant="success">Active</LlmBadge>
+<LlmBadge variant="warning">Pending</LlmBadge>
+<LlmBadge variant="danger">Error</LlmBadge>
+<LlmBadge variant="info">Info</LlmBadge>
+<LlmBadge size="sm" variant="success">Small</LlmBadge>`,
+    },
   },
 
   icon: {
@@ -385,9 +493,17 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Icon size. Maps to the framework font-size scale.' },
       { name: 'label', type: 'string', default: 'undefined', description: 'Accessible label. When provided, the icon is announced as an image with this label. When omitted, the icon is hidden from assistive tech (treated as decorative).' },
     ],
-    codeExample: `<LlmIcon name="success" />
+    examples: {
+      angular: `<llm-icon name="success" />
+<llm-icon name="warning" size="lg" label="Warning" />
+<llm-icon name="chevron-down" size="sm" />`,
+      react: `<LlmIcon name="success" />
 <LlmIcon name="warning" size="lg" label="Warning" />
 <LlmIcon name="chevron-down" size="sm" />`,
+      vue: `<LlmIcon name="success" />
+<LlmIcon name="warning" size="lg" label="Warning" />
+<LlmIcon name="chevron-down" size="sm" />`,
+    },
   },
 
   card: {
@@ -400,7 +516,17 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'padding', type: "'none' | 'sm' | 'md' | 'lg'", default: "'md'", description: 'Padding size inside the card' },
       { name: 'role', type: "'article' | 'region' | 'section'", default: '—', description: 'Opt-in landmark role. Default is no role (plain div). Use article for self-contained content, region for a perceivable area (pair with aria-label), section for HTML <section> semantics.' },
     ],
-    codeExample: `<LlmCard variant="elevated" padding="md">
+    examples: {
+      angular: `<llm-card variant="elevated" padding="md">
+  <llm-card-header>Card Title</llm-card-header>
+  <llm-card-content>
+    This is the card body content. It can contain anything.
+  </llm-card-content>
+  <llm-card-footer>
+    <llm-button variant="primary" size="sm">Action</llm-button>
+  </llm-card-footer>
+</llm-card>`,
+      react: `<LlmCard variant="elevated" padding="md">
   <LlmCardHeader>Card Title</LlmCardHeader>
   <LlmCardContent>
     This is the card body content. It can contain anything.
@@ -409,6 +535,16 @@ export const componentDocs: Record<string, ComponentDoc> = {
     <LlmButton variant="primary" size="sm">Action</LlmButton>
   </LlmCardFooter>
 </LlmCard>`,
+      vue: `<LlmCard variant="elevated" padding="md">
+  <LlmCardHeader>Card Title</LlmCardHeader>
+  <LlmCardContent>
+    This is the card body content. It can contain anything.
+  </LlmCardContent>
+  <LlmCardFooter>
+    <LlmButton variant="primary" size="sm">Action</LlmButton>
+  </LlmCardFooter>
+</LlmCard>`,
+    },
     composition: [
       { name: 'LlmCardHeader',  description: 'Title row at the top of the card. Slot-only — takes no props.',      props: [] },
       { name: 'LlmCardContent', description: 'Main body of the card. Slot-only — takes no props.',                  props: [] },
@@ -428,23 +564,56 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'stickyHeader', type: 'boolean', default: 'false', description: 'Makes header row stick to the top on scroll' },
       { name: 'aria-label', type: 'string', default: "'Table'", description: 'Accessible name for the scrollable wrapper region. Announced by screen readers when keyboard users focus the wrapper to scroll horizontally.' },
     ],
-    codeExample: `<LlmTable variant="striped">
+    examples: {
+      angular: `<llm-table variant="striped">
+  <llm-thead>
+    <llm-tr>
+      <llm-th [sortable]="true">Name</llm-th>
+      <llm-th>Status</llm-th>
+    </llm-tr>
+  </llm-thead>
+  <llm-tbody [empty]="rows.length === 0" [colSpan]="2">
+    @for (row of rows; track row.id) {
+      <llm-tr [selectable]="true">
+        <llm-td>{{ row.name }}</llm-td>
+        <llm-td>{{ row.status }}</llm-td>
+      </llm-tr>
+    }
+    <div llmTableEmpty>No results found</div>
+  </llm-tbody>
+</llm-table>`,
+      react: `<LlmTable variant="striped">
   <LlmThead>
     <LlmTr>
       <LlmTh sortable>Name</LlmTh>
       <LlmTh>Status</LlmTh>
     </LlmTr>
   </LlmThead>
-  <LlmTbody empty={rows.length === 0} colSpan={2}>
-    {rows.map(row => (
+  <LlmTbody empty={rows.length === 0} colSpan={2} emptyContent="No results found">
+    {rows.map((row) => (
       <LlmTr key={row.id} selectable>
         <LlmTd>{row.name}</LlmTd>
         <LlmTd>{row.status}</LlmTd>
       </LlmTr>
     ))}
-    <div llmTableEmpty>No results found</div>
   </LlmTbody>
 </LlmTable>`,
+      vue: `<LlmTable variant="striped">
+  <LlmThead>
+    <LlmTr>
+      <LlmTh :sortable="true">Name</LlmTh>
+      <LlmTh>Status</LlmTh>
+    </LlmTr>
+  </LlmThead>
+  <LlmTbody :empty="rows.length === 0" :colSpan="2">
+    <LlmTr v-for="row in rows" :key="row.id" :selectable="true">
+      <LlmTd>{{ row.name }}</LlmTd>
+      <LlmTd>{{ row.status }}</LlmTd>
+    </LlmTr>
+    <template #empty>No results found</template>
+  </LlmTbody>
+</LlmTable>`,
+    },
     composition: [
       {
         name: 'LlmThead',
@@ -501,7 +670,16 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'shape', type: "'circle' | 'square'", default: "'circle'", description: 'Shape of the avatar' },
       { name: 'status', type: "'online' | 'offline' | 'away' | 'busy' | ''", default: "''", description: 'Status dot indicator' },
     ],
-    codeExample: `<LlmAvatar name="Jane Doe" size="md" status="online" />
+    examples: {
+      angular: `<llm-avatar name="Jane Doe" size="md" status="online" />
+<llm-avatar name="John Smith" size="lg" shape="square" />
+<llm-avatar-group [max]="3" size="md">
+  <llm-avatar name="Alice" />
+  <llm-avatar name="Bob" />
+  <llm-avatar name="Carol" />
+  <llm-avatar name="Dave" />
+</llm-avatar-group>`,
+      react: `<LlmAvatar name="Jane Doe" size="md" status="online" />
 <LlmAvatar name="John Smith" size="lg" shape="square" />
 <LlmAvatarGroup max={3} size="md">
   <LlmAvatar name="Alice" />
@@ -509,6 +687,15 @@ export const componentDocs: Record<string, ComponentDoc> = {
   <LlmAvatar name="Carol" />
   <LlmAvatar name="Dave" />
 </LlmAvatarGroup>`,
+      vue: `<LlmAvatar name="Jane Doe" size="md" status="online" />
+<LlmAvatar name="John Smith" size="lg" shape="square" />
+<LlmAvatarGroup :max="3" size="md">
+  <LlmAvatar name="Alice" />
+  <LlmAvatar name="Bob" />
+  <LlmAvatar name="Carol" />
+  <LlmAvatar name="Dave" />
+</LlmAvatarGroup>`,
+    },
     composition: [
       {
         name: 'LlmAvatarGroup',
@@ -532,10 +719,20 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'height', type: 'string', default: "''", description: 'CSS height. Auto per variant if not set.' },
       { name: 'animated', type: 'boolean', default: 'true', description: 'Enables shimmer animation' },
     ],
-    codeExample: `<LlmSkeleton variant="text" />
+    examples: {
+      angular: `<llm-skeleton variant="text" />
+<llm-skeleton variant="text" width="60%" />
+<llm-skeleton variant="circular" width="40px" />
+<llm-skeleton variant="rectangular" height="200px" />`,
+      react: `<LlmSkeleton variant="text" />
 <LlmSkeleton variant="text" width="60%" />
 <LlmSkeleton variant="circular" width="40px" />
 <LlmSkeleton variant="rectangular" height="200px" />`,
+      vue: `<LlmSkeleton variant="text" />
+<LlmSkeleton variant="text" width="60%" />
+<LlmSkeleton variant="circular" width="40px" />
+<LlmSkeleton variant="rectangular" height="200px" />`,
+    },
   },
 
   progress: {
@@ -551,10 +748,20 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Size of the progress bar' },
       { name: 'label', type: 'string', default: '—', description: 'Accessible name (aria-label). Required by ARIA when no visible label is nearby.' },
     ],
-    codeExample: `<LlmProgress value={25} label="Upload progress" />
+    examples: {
+      angular: `<llm-progress [value]="25" label="Upload progress" />
+<llm-progress [value]="60" variant="success" label="Form completion" />
+<llm-progress [value]="85" variant="warning" label="Quota usage" />
+<llm-progress [indeterminate]="true" label="Loading…" />`,
+      react: `<LlmProgress value={25} label="Upload progress" />
 <LlmProgress value={60} variant="success" label="Form completion" />
 <LlmProgress value={85} variant="warning" label="Quota usage" />
 <LlmProgress indeterminate label="Loading…" />`,
+      vue: `<LlmProgress :value="25" label="Upload progress" />
+<LlmProgress :value="60" variant="success" label="Form completion" />
+<LlmProgress :value="85" variant="warning" label="Quota usage" />
+<LlmProgress :indeterminate="true" label="Loading…" />`,
+    },
   },
 
   breadcrumbs: {
@@ -565,11 +772,23 @@ export const componentDocs: Record<string, ComponentDoc> = {
     props: [
       { name: 'separator', type: 'string', default: "'/'", description: 'Separator character between items' },
     ],
-    codeExample: `<LlmBreadcrumbs>
+    examples: {
+      angular: `<llm-breadcrumbs>
+  <llm-breadcrumb-item href="/">Home</llm-breadcrumb-item>
+  <llm-breadcrumb-item href="/components">Components</llm-breadcrumb-item>
+  <llm-breadcrumb-item>Breadcrumbs</llm-breadcrumb-item>
+</llm-breadcrumbs>`,
+      react: `<LlmBreadcrumbs>
   <LlmBreadcrumbItem href="/">Home</LlmBreadcrumbItem>
   <LlmBreadcrumbItem href="/components">Components</LlmBreadcrumbItem>
-  <LlmBreadcrumbItem>Breadcrumbs</LlmBreadcrumbItem>
+  <LlmBreadcrumbItem current>Breadcrumbs</LlmBreadcrumbItem>
 </LlmBreadcrumbs>`,
+      vue: `<LlmBreadcrumbs>
+  <LlmBreadcrumbItem href="/">Home</LlmBreadcrumbItem>
+  <LlmBreadcrumbItem href="/components">Components</LlmBreadcrumbItem>
+  <LlmBreadcrumbItem :current="true">Breadcrumbs</LlmBreadcrumbItem>
+</LlmBreadcrumbs>`,
+    },
     composition: [
       {
         name: 'LlmBreadcrumbItem',
@@ -592,11 +811,23 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'onSelectedIndexChange', type: '(index: number) => void', default: '—', description: 'Called when selection changes' },
       { name: 'variant', type: "'default' | 'pills'", default: "'default'", description: 'Visual style of the tab strip' },
     ],
-    codeExample: `<LlmTabGroup selectedIndex={0}>
+    examples: {
+      angular: `<llm-tab-group [selectedIndex]="0">
+  <llm-tab label="Account">Account settings content.</llm-tab>
+  <llm-tab label="Notifications">Notification preferences.</llm-tab>
+  <llm-tab label="Billing" [disabled]="true">Billing info.</llm-tab>
+</llm-tab-group>`,
+      react: `<LlmTabGroup selectedIndex={0}>
   <LlmTab label="Account">Account settings content.</LlmTab>
   <LlmTab label="Notifications">Notification preferences.</LlmTab>
   <LlmTab label="Billing" disabled={true}>Billing info.</LlmTab>
 </LlmTabGroup>`,
+      vue: `<LlmTabGroup :selectedIndex="0">
+  <LlmTab label="Account">Account settings content.</LlmTab>
+  <LlmTab label="Notifications">Notification preferences.</LlmTab>
+  <LlmTab label="Billing" :disabled="true">Billing info.</LlmTab>
+</LlmTabGroup>`,
+    },
     composition: [
       {
         name: 'LlmTab',
@@ -632,11 +863,23 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'linear', type: 'boolean', default: 'false', description: 'Forces user to complete steps in order' },
       { name: 'orientation', type: "'horizontal' | 'vertical'", default: "'horizontal'", description: 'Stepper layout direction' },
     ],
-    codeExample: `<LlmStepper activeStep={0}>
+    examples: {
+      angular: `<llm-stepper [activeStep]="0">
+  <llm-step label="Basic Info">Step 1 content</llm-step>
+  <llm-step label="Verification">Step 2 content</llm-step>
+  <llm-step label="Complete">Step 3 content</llm-step>
+</llm-stepper>`,
+      react: `<LlmStepper activeStep={0}>
   <LlmStep label="Basic Info">Step 1 content</LlmStep>
   <LlmStep label="Verification">Step 2 content</LlmStep>
   <LlmStep label="Complete">Step 3 content</LlmStep>
 </LlmStepper>`,
+      vue: `<LlmStepper :activeStep="0">
+  <LlmStep label="Basic Info">Step 1 content</LlmStep>
+  <LlmStep label="Verification">Step 2 content</LlmStep>
+  <LlmStep label="Complete">Step 3 content</LlmStep>
+</LlmStepper>`,
+    },
     composition: [
       {
         name: 'LlmStep',
@@ -665,11 +908,22 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'siblingCount', type: 'number', default: '1', description: 'Number of page buttons on each side of current page' },
       { name: 'showFirstLast', type: 'boolean', default: 'true', description: 'Show first/last page jump buttons' },
     ],
-    codeExample: `<LlmPagination
-  page={3}
-  pageCount={10}
-  onPageChange={(p) => console.log(p)}
+    examples: {
+      angular: `<llm-pagination
+  [(page)]="page"
+  [pageCount]="10"
 />`,
+      react: `<LlmPagination
+  page={page}
+  pageCount={10}
+  onPageChange={setPage}
+/>`,
+      vue: `<LlmPagination
+  :page="page"
+  :pageCount="10"
+  @pageChange="page = $event"
+/>`,
+    },
   },
 
   menu: {
@@ -680,14 +934,46 @@ export const componentDocs: Record<string, ComponentDoc> = {
     props: [
       { name: 'variant', type: "'default' | 'compact'", default: "'default'", description: 'Density of the menu' },
     ],
-    codeExample: `<LlmButton llmMenuTriggerFor={actionsMenu}>Actions ▾</LlmButton>
-{/* In template: */}
-<LlmMenu ref={actionsMenu}>
-  <LlmMenuItem onTriggered={() => console.log('copy')}>Copy</LlmMenuItem>
-  <LlmMenuItem onTriggered={() => console.log('paste')}>Paste</LlmMenuItem>
-  <LlmMenuSeparator />
-  <LlmMenuItem disabled={true}>Delete</LlmMenuItem>
-</LlmMenu>`,
+    examples: {
+      angular: `<llm-button [llmMenuTriggerFor]="actions">Actions ▾</llm-button>
+<ng-template #actions>
+  <llm-menu>
+    <llm-menu-item (triggered)="copy()">Copy</llm-menu-item>
+    <llm-menu-item (triggered)="paste()">Paste</llm-menu-item>
+    <llm-menu-separator />
+    <llm-menu-item [disabled]="true">Delete</llm-menu-item>
+  </llm-menu>
+</ng-template>`,
+      react: `<LlmMenuTrigger
+  menu={
+    <LlmMenu>
+      <LlmMenuItem onTriggered={() => console.log('copy')}>Copy</LlmMenuItem>
+      <LlmMenuItem onTriggered={() => console.log('paste')}>Paste</LlmMenuItem>
+      <LlmMenuSeparator />
+      <LlmMenuItem disabled>Delete</LlmMenuItem>
+    </LlmMenu>
+  }
+>
+  {({ onClick, ref }) => (
+    <LlmButton ref={ref as React.RefObject<HTMLButtonElement>} onClick={onClick}>
+      Actions ▾
+    </LlmButton>
+  )}
+</LlmMenuTrigger>`,
+      vue: `<LlmMenuTrigger>
+  <template #trigger>
+    <LlmButton>Actions ▾</LlmButton>
+  </template>
+  <template #menu>
+    <LlmMenu>
+      <LlmMenuItem @triggered="copy">Copy</LlmMenuItem>
+      <LlmMenuItem @triggered="paste">Paste</LlmMenuItem>
+      <LlmMenuSeparator />
+      <LlmMenuItem :disabled="true">Delete</LlmMenuItem>
+    </LlmMenu>
+  </template>
+</LlmMenuTrigger>`,
+    },
     composition: [
       {
         name: 'LlmMenuItem',
@@ -731,7 +1017,17 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'closeOnBackdrop', type: 'boolean', default: 'true', description: 'Close when clicking the backdrop' },
       { name: 'size', type: "'sm' | 'md' | 'lg' | 'xl' | 'full'", default: "'md'", description: 'Max-width of the dialog' },
     ],
-    codeExample: `<LlmButton onClick={() => setOpen(true)}>Open Dialog</LlmButton>
+    examples: {
+      angular: `<llm-button (click)="open = true">Open Dialog</llm-button>
+<llm-dialog [(open)]="open" size="sm">
+  <llm-dialog-header>Confirm Delete</llm-dialog-header>
+  <llm-dialog-content>Are you sure? This cannot be undone.</llm-dialog-content>
+  <llm-dialog-footer>
+    <llm-button variant="outline" (click)="open = false">Cancel</llm-button>
+    <llm-button variant="primary" (click)="open = false">Delete</llm-button>
+  </llm-dialog-footer>
+</llm-dialog>`,
+      react: `<LlmButton onClick={() => setOpen(true)}>Open Dialog</LlmButton>
 <LlmDialog open={open} onOpenChange={setOpen} size="sm">
   <LlmDialogHeader>Confirm Delete</LlmDialogHeader>
   <LlmDialogContent>Are you sure? This cannot be undone.</LlmDialogContent>
@@ -740,6 +1036,16 @@ export const componentDocs: Record<string, ComponentDoc> = {
     <LlmButton variant="primary" onClick={() => setOpen(false)}>Delete</LlmButton>
   </LlmDialogFooter>
 </LlmDialog>`,
+      vue: `<LlmButton @click="open = true">Open Dialog</LlmButton>
+<LlmDialog v-model:open="open" size="sm">
+  <LlmDialogHeader>Confirm Delete</LlmDialogHeader>
+  <LlmDialogContent>Are you sure? This cannot be undone.</LlmDialogContent>
+  <LlmDialogFooter>
+    <LlmButton variant="outline" @click="open = false">Cancel</LlmButton>
+    <LlmButton variant="primary" @click="open = false">Delete</LlmButton>
+  </LlmDialogFooter>
+</LlmDialog>`,
+    },
     composition: [
       { name: 'LlmDialogHeader',  description: 'Title area. The text becomes the dialog\'s accessible name. Slot-only.', props: [] },
       { name: 'LlmDialogContent', description: 'Main body. Receives initial focus when the dialog opens. Slot-only.', props: [] },
@@ -771,7 +1077,18 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'size', type: "'sm' | 'md' | 'lg' | 'full'", default: "'md'", description: 'Width (or height for top/bottom)' },
       { name: 'closeOnBackdrop', type: 'boolean', default: 'true', description: 'Close when clicking the backdrop' },
     ],
-    codeExample: `<LlmButton onClick={() => setOpen(true)}>Open Drawer</LlmButton>
+    examples: {
+      angular: `<llm-button (click)="open = true">Open Drawer</llm-button>
+<llm-drawer [(open)]="open" position="right">
+  <llm-drawer-header>Settings</llm-drawer-header>
+  <llm-drawer-content>
+    <llm-input placeholder="Search..." />
+  </llm-drawer-content>
+  <llm-drawer-footer>
+    <llm-button (click)="open = false">Close</llm-button>
+  </llm-drawer-footer>
+</llm-drawer>`,
+      react: `<LlmButton onClick={() => setOpen(true)}>Open Drawer</LlmButton>
 <LlmDrawer open={open} onOpenChange={setOpen} position="right">
   <LlmDrawerHeader>Settings</LlmDrawerHeader>
   <LlmDrawerContent>
@@ -781,6 +1098,17 @@ export const componentDocs: Record<string, ComponentDoc> = {
     <LlmButton onClick={() => setOpen(false)}>Close</LlmButton>
   </LlmDrawerFooter>
 </LlmDrawer>`,
+      vue: `<LlmButton @click="open = true">Open Drawer</LlmButton>
+<LlmDrawer v-model:open="open" position="right">
+  <LlmDrawerHeader>Settings</LlmDrawerHeader>
+  <LlmDrawerContent>
+    <LlmInput placeholder="Search..." />
+  </LlmDrawerContent>
+  <LlmDrawerFooter>
+    <LlmButton @click="open = false">Close</LlmButton>
+  </LlmDrawerFooter>
+</LlmDrawer>`,
+    },
     composition: [
       { name: 'LlmDrawerHeader',  description: 'Title area — doubles as the drag handle on touch. Slot-only.', props: [] },
       { name: 'LlmDrawerContent', description: 'Scrollable body. Slot-only.',                                   props: [] },
@@ -811,12 +1139,26 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'llmTooltipShowDelay', type: 'number', default: '300', description: 'Delay in ms before showing' },
       { name: 'llmTooltipHideDelay', type: 'number', default: '0', description: 'Delay in ms before hiding' },
     ],
-    codeExample: `<LlmTooltip tooltip="Save your changes">
+    examples: {
+      angular: `<llm-button llmTooltip="Save your changes">Save</llm-button>
+<llm-button
+  llmTooltip="Copy to clipboard"
+  llmTooltipPosition="right"
+  variant="outline"
+>Copy</llm-button>`,
+      react: `<LlmTooltip llmTooltip="Save your changes">
   <LlmButton>Save</LlmButton>
 </LlmTooltip>
-<LlmTooltip tooltip="Copy to clipboard" position="right">
+<LlmTooltip llmTooltip="Copy to clipboard" llmTooltipPosition="right">
   <LlmButton variant="outline">Copy</LlmButton>
 </LlmTooltip>`,
+      vue: `<LlmTooltip llmTooltip="Save your changes">
+  <LlmButton>Save</LlmButton>
+</LlmTooltip>
+<LlmTooltip llmTooltip="Copy to clipboard" llmTooltipPosition="right">
+  <LlmButton variant="outline">Copy</LlmButton>
+</LlmTooltip>`,
+    },
     a11y: {
       role: 'tooltip',
       keyboard: [
@@ -833,7 +1175,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
 
   toast: {
     name: 'Toast',
-    selector: 'LlmToastProvider + useLlmToast',
+    selector: 'Toast (service / hook + LlmToastContainer)',
     description: 'Transient notifications that auto-dismiss. Service/hook-based API — place LlmToastContainer once in app root.',
     category: 'Overlay',
     props: [
@@ -842,17 +1184,43 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'dismissible', type: 'boolean', default: 'true', description: 'Show a dismiss button' },
       { name: 'position', type: "'top-right' | 'top-center' | 'bottom-right' | 'bottom-center'", default: "'bottom-right'", description: 'Container position (on LlmToastContainer)' },
     ],
-    codeExample: `// App root:
+    examples: {
+      angular: `// Place the container once (e.g. in app root template):
+// <llm-toast-container position="bottom-right" />
+
+// In any component — inject the service, no provider needed:
+import { LlmToastService } from '@atelier-ui/angular';
+
+private readonly toast = inject(LlmToastService);
+
+this.toast.show('Saved!', { variant: 'success' });
+this.toast.show('Error occurred', { variant: 'danger', duration: 8000 });
+this.toast.show('Persistent', { duration: 0 });`,
+      react: `// App root:
 <LlmToastProvider>
   <App />
   <LlmToastContainer position="bottom-right" />
 </LlmToastProvider>
 
-// In any component:
+// In any component inside the provider:
 const { show } = useLlmToast();
 show('Saved!', { variant: 'success' });
 show('Error occurred', { variant: 'danger', duration: 8000 });
 show('Persistent', { duration: 0 });`,
+      vue: `<!-- App root: -->
+<LlmToastProvider>
+  <App />
+  <LlmToastContainer position="bottom-right" />
+</LlmToastProvider>
+
+<!-- In any component inside the provider, in <script setup>: -->
+import { useLlmToast } from '@atelier-ui/vue';
+
+const { show } = useLlmToast();
+show('Saved!', { variant: 'success' });
+show('Error occurred', { variant: 'danger', duration: 8000 });
+show('Persistent', { duration: 0 });`,
+    },
     a11y: {
       role: 'status / alert',
       keyboard: [
@@ -876,16 +1244,38 @@ show('Persistent', { duration: 0 });`,
       { name: 'multi', type: 'boolean', default: 'false', description: 'Allow multiple items expanded simultaneously' },
       { name: 'variant', type: "'default' | 'bordered' | 'separated'", default: "'default'", description: 'Visual style of the group' },
     ],
-    codeExample: `<LlmAccordionGroup variant="separated">
-  <LlmAccordionItem>
+    examples: {
+      angular: `<llm-accordion-group variant="separated">
+  <llm-accordion-item>
     <span llmAccordionHeader>Question 1</span>
+    Answer content goes here.
+  </llm-accordion-item>
+  <llm-accordion-item>
+    <span llmAccordionHeader>Question 2</span>
+    Another answer here.
+  </llm-accordion-item>
+</llm-accordion-group>`,
+      react: `<LlmAccordionGroup variant="separated">
+  <LlmAccordionItem>
+    <LlmAccordionHeader>Question 1</LlmAccordionHeader>
     Answer content goes here.
   </LlmAccordionItem>
   <LlmAccordionItem>
-    <span llmAccordionHeader>Question 2</span>
+    <LlmAccordionHeader>Question 2</LlmAccordionHeader>
     Another answer here.
   </LlmAccordionItem>
 </LlmAccordionGroup>`,
+      vue: `<LlmAccordionGroup variant="separated">
+  <LlmAccordionItem>
+    <template #header><LlmAccordionHeader>Question 1</LlmAccordionHeader></template>
+    Answer content goes here.
+  </LlmAccordionItem>
+  <LlmAccordionItem>
+    <template #header><LlmAccordionHeader>Question 2</LlmAccordionHeader></template>
+    Another answer here.
+  </LlmAccordionItem>
+</LlmAccordionGroup>`,
+    },
     composition: [
       {
         name: 'LlmAccordionItem',
@@ -923,10 +1313,20 @@ show('Persistent', { duration: 0 });`,
       { name: 'dismissible', type: 'boolean', default: 'false', description: 'Show a close button' },
       { name: 'onDismissed', type: '() => void', default: '—', description: 'Called when the dismiss button is clicked' },
     ],
-    codeExample: `<LlmAlert variant="info">This is an informational message.</LlmAlert>
+    examples: {
+      angular: `<llm-alert variant="info">This is an informational message.</llm-alert>
+<llm-alert variant="success">Your changes were saved successfully.</llm-alert>
+<llm-alert variant="warning" [dismissible]="true">Your session expires in 5 minutes.</llm-alert>
+<llm-alert variant="danger">Something went wrong. Please try again.</llm-alert>`,
+      react: `<LlmAlert variant="info">This is an informational message.</LlmAlert>
 <LlmAlert variant="success">Your changes were saved successfully.</LlmAlert>
 <LlmAlert variant="warning" dismissible={true}>Your session expires in 5 minutes.</LlmAlert>
 <LlmAlert variant="danger">Something went wrong. Please try again.</LlmAlert>`,
+      vue: `<LlmAlert variant="info">This is an informational message.</LlmAlert>
+<LlmAlert variant="success">Your changes were saved successfully.</LlmAlert>
+<LlmAlert variant="warning" :dismissible="true">Your session expires in 5 minutes.</LlmAlert>
+<LlmAlert variant="danger">Something went wrong. Please try again.</LlmAlert>`,
+    },
   },
 
   'code-block': {
@@ -942,10 +1342,20 @@ show('Persistent', { duration: 0 });`,
       { name: 'copyable', type: 'boolean', default: 'true', description: 'Whether to show a copy-to-clipboard button' },
       { name: 'showLineNumbers', type: 'boolean', default: 'false', description: 'Whether to display line numbers alongside the code' },
     ],
-    codeExample: `<LlmCodeBlock code="const x = 1;" language="typescript" />
+    examples: {
+      angular: `<llm-code-block code="const x = 1;" language="typescript" />
+<llm-code-block [code]="tsCode" filename="app.ts" [showLineNumbers]="true" />
+<llm-code-block [code]="shellCmd" language="shell" />
+<llm-code-block [code]="jsonStr" filename="package.json" />`,
+      react: `<LlmCodeBlock code="const x = 1;" language="typescript" />
 <LlmCodeBlock code={tsCode} filename="app.ts" showLineNumbers={true} />
 <LlmCodeBlock code={shellCmd} language="shell" />
 <LlmCodeBlock code={jsonStr} filename="package.json" />`,
+      vue: `<LlmCodeBlock code="const x = 1;" language="typescript" />
+<LlmCodeBlock :code="tsCode" filename="app.ts" :showLineNumbers="true" />
+<LlmCodeBlock :code="shellCmd" language="shell" />
+<LlmCodeBlock :code="jsonStr" filename="package.json" />`,
+    },
   },
 
   chat: {
@@ -960,7 +1370,23 @@ show('Persistent', { duration: 0 });`,
       { name: 'open', type: 'boolean', default: 'false', description: 'Whether the chat is open. Only used by drawer and popup variants. Two-way bindable.' },
       { name: 'onOpenChange', type: '(open: boolean) => void', default: '—', description: 'React: emitted when the open state should change. Vue uses v-model:open; Angular uses [(open)].' },
     ],
-    codeExample: `<LlmChat variant="drawer" open={open} onOpenChange={setOpen} status="idle">
+    examples: {
+      angular: `<llm-chat variant="drawer" [(open)]="open" status="idle">
+  <llm-chat-header>
+    <llm-avatar size="sm" name="AI" />
+    <span>AI Assistant</span>
+    <llm-badge variant="success" size="sm">Online</llm-badge>
+  </llm-chat-header>
+  <llm-chat-messages>
+    <llm-chat-message role="assistant">Hi! How can I help today?</llm-chat-message>
+    <llm-chat-message role="user">Show me a sorting function.</llm-chat-message>
+    <llm-chat-message role="assistant">
+      <llm-code-block language="ts" [code]="snippet" />
+    </llm-chat-message>
+  </llm-chat-messages>
+  <llm-chat-input (send)="onSend($event)" (stop)="onStop()" />
+</llm-chat>`,
+      react: `<LlmChat variant="drawer" open={open} onOpenChange={setOpen} status="idle">
   <LlmChatHeader>
     <LlmAvatar size="sm" name="AI" />
     <span>AI Assistant</span>
@@ -975,6 +1401,22 @@ show('Persistent', { duration: 0 });`,
   </LlmChatMessages>
   <LlmChatInput onSend={onSend} onStop={onStop} />
 </LlmChat>`,
+      vue: `<LlmChat variant="drawer" v-model:open="open" status="idle">
+  <LlmChatHeader>
+    <LlmAvatar size="sm" name="AI" />
+    <span>AI Assistant</span>
+    <LlmBadge variant="success" size="sm">Online</LlmBadge>
+  </LlmChatHeader>
+  <LlmChatMessages>
+    <LlmChatMessage role="assistant">Hi! How can I help today?</LlmChatMessage>
+    <LlmChatMessage role="user">Show me a sorting function.</LlmChatMessage>
+    <LlmChatMessage role="assistant">
+      <LlmCodeBlock language="ts" :code="snippet" />
+    </LlmChatMessage>
+  </LlmChatMessages>
+  <LlmChatInput @send="onSend" @stop="onStop" />
+</LlmChat>`,
+    },
     composition: [
       { name: 'LlmChatHeader', description: 'Title block (avatar / name / status badge) plus the close button. Slot-only. The close button is auto-hidden on the inline variant.', props: [] },
       { name: 'LlmChatMessages', description: 'Scrollable message list. Project LlmChatMessage, LlmChatTyping, and LlmChatSuggestion children inside.', props: [] },
