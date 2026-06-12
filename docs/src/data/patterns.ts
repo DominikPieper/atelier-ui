@@ -128,8 +128,14 @@ const loginVue = `<LlmCard variant="elevated" padding="lg">
 
 const settingsAngular = `<llm-tab-group [(selectedIndex)]="activeTab">
   <llm-tab label="Account">
-    <llm-input label="Full Name" placeholder="John Doe" />
-    <llm-input label="Email" placeholder="john@example.com" />
+    <label>
+      Full Name
+      <llm-input placeholder="John Doe" />
+    </label>
+    <label>
+      Email
+      <llm-input placeholder="john@example.com" />
+    </label>
   </llm-tab>
   <llm-tab label="Notifications">
     <llm-toggle [(checked)]="emailOn">Email notifications</llm-toggle>
@@ -473,7 +479,7 @@ export const PATTERNS: PatternMeta[] = [
       'Nested settings that need their own sub-tabs — collapse to an accordion or a list-detail layout instead of nesting tab groups.',
     ],
     a11yNotes: [
-      'LlmTabGroup uses CDK FocusKeyManager: arrow keys move focus between tabs, Home/End jump to ends, Tab moves into the active panel. Don\'t override these.',
+      'LlmTabGroup uses a roving-tabindex keyboard handler: arrow keys move focus between tabs, Home/End jump to ends, Tab moves into the active panel. Don\'t override these.',
       'Each LlmToggle is a `role="switch"` — its label must describe the on-state ("Email notifications") not the action ("Toggle email").',
       'Autosaving silently is a screen-reader trap. Either keep an explicit Save button (current pattern) or surface autosave with an `aria-live="polite"` region after the fact.',
     ],
@@ -515,7 +521,7 @@ export const PATTERNS: PatternMeta[] = [
     ],
     a11yNotes: [
       'LlmDialog uses the native `<dialog>` element with `cdkTrapFocus` — focus moves to the first focusable inside, restores on close. Don\'t reimplement.',
-      'Escape closes the dialog by default (`closeOnEscape={true}`). Disable it only when an in-progress operation cannot be cancelled mid-flight.',
+      'Escape-to-close comes from the native `<dialog>` element\'s cancel event — the component intercepts it and routes it through the `open` binding as a close request. If an in-flight operation must not be interrupted, ignore that request (keep `open` true) until the mutation settles.',
       'The destructive button must remain the *secondary* visual call to action — Cancel as `outline`, "Delete permanently" as `primary`. Reversing colour just to make red prominent is a contrast trap.',
     ],
     pitfalls: [

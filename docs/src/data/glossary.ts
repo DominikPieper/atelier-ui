@@ -54,7 +54,7 @@ export const GLOSSARY: Record<string, GlossaryEntry> = {
 
   'signal input': {
     definition:
-      'Angular’s modern reactive input primitive — `input()` returns a signal that components can `.read()` reactively. Replaces @Input() + getters.',
+      'Angular’s modern reactive input primitive — `input()` returns a signal you read by calling it (`this.disabled()`); reads inside reactive contexts (templates, `computed`, `effect`) are tracked automatically. Replaces @Input() + getters.',
     hint: 'Part of Angular’s signal-based reactivity, introduced in v17 and stabilized in later versions.',
   },
 

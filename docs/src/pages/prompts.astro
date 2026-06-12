@@ -33,7 +33,7 @@ const SECTIONS: Section[] = [
       {
         title: 'Chat interface',
         description: 'A chat UI with message history, a text input, and a send button. Shows a skeleton while the response streams.',
-        prompt: (fw) => `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a chat interface using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- Message list with user and assistant message bubbles (different alignment/background)\n- LlmInput with autoResize for the chat input field\n- LlmButton (primary, "Send") to submit the message\n- LlmSkeleton (3 rows) shown while the assistant response is loading\n- LlmCard wrapping the whole chat panel\n- Keyboard shortcut: pressing Enter submits the message\n\nState to manage:\n- messages: Array<{ role: 'user' | 'assistant'; content: string }>\n- inputValue: string\n- isLoading: boolean\n\nDo not call a real API — use a 1.5s setTimeout to simulate a response.`,
+        prompt: (fw) => `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a chat interface using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- Message list with user and assistant message bubbles (different alignment/background)\n- LlmTextarea with autoResize for the chat input field\n- LlmButton (primary, "Send") to submit the message\n- LlmSkeleton (3 rows) shown while the assistant response is loading\n- LlmCard wrapping the whole chat panel\n- Keyboard shortcut: pressing Enter submits the message\n\nState to manage:\n- messages: Array<{ role: 'user' | 'assistant'; content: string }>\n- inputValue: string\n- isLoading: boolean\n\nDo not call a real API — use a 1.5s setTimeout to simulate a response.`,
       },
       {
         title: 'Generated code output',

@@ -43,7 +43,10 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
       <h2 class="docs-section-title">The Figma file</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem">
         <a href={FIGMA_URL} target="_blank" rel="noopener noreferrer" class="docs-link-primary docs-link-primary--bold">Atelier UI</a> is the single Figma file for the Atelier UI design system —
-        the component library Atelier ships. It contains two pages and a variable collection that maps 1:1 to the CSS token system.
+        the component library Atelier ships. It carries a tiered variable collection whose UI tier holds the
+        <Jargon term="design tokens">design tokens</Jargon> (Light and Dark modes) that map 1:1 to the CSS token system,
+        plus several pages — foundation pages for colors, typography, and spacing, a cookbook, and an icon set.
+        Two pages are the ones you will actually work from in the workshop:
       </p>
       <table class="docs-props-table" style="margin-bottom: 1.25rem">
         <thead>
@@ -54,12 +57,12 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
         </thead>
         <tbody>
           <tr>
-            <td><code>Tokens</code></td>
-            <td>Variable collection viewer — all 56 <Jargon term="design tokens">design tokens</Jargon> across Light and Dark modes</td>
+            <td><code>Components</code></td>
+            <td>The master component sets organized by section — every variant, size, and state. Source of truth for design-to-code.</td>
           </tr>
           <tr>
-            <td><code>Components</code></td>
-            <td>All component frames organized by section — every variant, size, and state</td>
+            <td><code>Inventory</code></td>
+            <td>Condensed catalog — one instance of every master on Components, for browsing the library at a glance</td>
           </tr>
         </tbody>
       </table>
@@ -227,7 +230,7 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
         </li>
       </ul>
       <p style="font-size: 0.8rem; color: var(--ui-color-text-muted); margin: 0">
-        56 variables total: 29 color, 10 spacing, 5 radius, 12 typography. Full list in <code>libs/angular/src/styles/tokens.css</code>.
+        54 UI-tier variables: 28 color, 10 spacing, 5 radius, 11 typography (the file also carries primitive and component tiers that stay Figma-side). The full <code>--ui-*</code> list — including shadow, motion, and z-index tokens that exist only in CSS — lives in <code>libs/angular/src/styles/tokens.css</code>.
       </p>
     </div>
 
@@ -250,12 +253,12 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
           <tr>
             <td><code>LlmButton</code></td>
             <td>P0 — Core</td>
-            <td>3 variants × 3 sizes × 4 states (default / hover / disabled / loading)</td>
+            <td>4 variants (primary / secondary / outline / danger) × 3 sizes × 4 states (default / hover / focus / active) + disabled and loading booleans</td>
           </tr>
           <tr>
             <td><code>LlmInput</code></td>
             <td>P0 — Core</td>
-            <td>3 types × 5 states + error message</td>
+            <td>6 types (text / email / password / number / tel / url) × 5 states + error message</td>
           </tr>
           <tr>
             <td><code>LlmCard</code></td>
@@ -268,7 +271,7 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
             <td>5 variants × 2 sizes + inline usage example</td>
           </tr>
           <tr>
-            <td>14 more…</td>
+            <td>23 more…</td>
             <td>P1 + P2</td>
             <td>Select, Dialog, Tabs, Accordion, Menu, Tooltip, Alert, Checkbox, Toggle, and more</td>
           </tr>
