@@ -1,3 +1,14 @@
+## 0.2.45 (2026-06-12)
+
+### 🚀 Features
+
+- **docs:** derive counts and sizes at build time (ADR-0021) ([d9987de](https://github.com/DominikPieper/atelier-ui/commit/d9987de))
+
+### ❤️ Thank You
+
+- Claude Fable 5
+- Dominik Pieper @DominikPieper
+
 ## 0.2.44 (2026-06-02)
 
 This was a version bump only for figma-workspace-architect to align it with other projects, there were no code changes.

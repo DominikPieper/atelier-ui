@@ -1,3 +1,14 @@
+## 0.1.9 (2026-06-12)
+
+### 🩹 Fixes
+
+- **ui:** scope dialog size-* selectors to dialog/panel ([247a58a](https://github.com/DominikPieper/atelier-ui/commit/247a58a))
+
+### ❤️ Thank You
+
+- Claude Fable 5
+- Dominik Pieper @DominikPieper
+
 ## 0.1.8 (2026-06-02)
 
 This was a version bump only for vue to align it with other projects, there were no code changes.
