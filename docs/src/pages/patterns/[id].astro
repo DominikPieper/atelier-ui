@@ -306,6 +306,12 @@ const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
     background: color-mix(in srgb, var(--ui-color-danger) 5%, var(--ui-color-surface-raised));
     border-color: color-mix(in srgb, var(--ui-color-danger) 25%, var(--ui-color-border));
   }
+  /* Dark mode: a 5% danger tint is imperceptible on the dark raised surface,
+   * so bump tint and border for the negative block to keep reading as a warning. */
+  :global([data-theme='dark']) .pattern-block--neg {
+    background: color-mix(in srgb, var(--ui-color-danger) 14%, var(--ui-color-surface-raised));
+    border-color: color-mix(in srgb, var(--ui-color-danger) 38%, var(--ui-color-border));
+  }
   .pattern-list {
     margin: 0;
     padding-left: 1.1rem;

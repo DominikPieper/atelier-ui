@@ -80,3 +80,12 @@ both would fork the vocabulary instead of sharing it, which is the whole point.
   web font is loaded (italic 400 only, subset), a minor extra request offset by `swap`.
 - pieper.io is now expected to adopt the same `--ui-duration-*` / `--ui-ease-*` names and
   the `Instrument Serif` accent for the signature to actually be shared.
+
+### Amendment (2026-06-12)
+
+H1 treatment is now unified site-wide: `.docs-page-h1` (solid primary teal) is the
+single H1 style for every inner page, and `.docs-accent` applies wherever the title
+has a natural keyword. The near-black `.docs-page-title` variant still used on
+component pages was an unintended divergence from this rule and has been removed;
+single-word reference titles (component names, index pages) render plain
+`.docs-page-h1` without an accent.
