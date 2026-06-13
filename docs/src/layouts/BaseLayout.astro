@@ -123,6 +123,18 @@ const breadcrumbItems = [
   })),
 ];
 
+// Show the visible trail only when there's a real intermediate crumb
+// (Home / Section / Page, i.e. length > 2). On home (length 1) and on
+// depth-1 pages (length 2, e.g. "Home / Workshop") the topbar + sidebar
+// already mark the active top-level item, so a two-crumb trail would just
+// restate it. The URLs above are absolute (for JSON-LD); strip SITE_URL for
+// in-app links so the client router handles them.
+const showBreadcrumb = breadcrumbItems.length > 2;
+const breadcrumbTrail = breadcrumbItems.map((item) => ({
+  name: item.name,
+  href: item.url.slice(SITE_URL.length) || '/',
+}));
+
 const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
@@ -196,6 +208,9 @@ const breadcrumbSchema = {
 </head>
 <body>
   <a href="#main" class="docs-skip-link">Skip to content</a>
+  <!-- Scroll progress bar — fixed at the very top of the viewport; width is
+       driven by the scroll handler below (initPage). -->
+  <div class="docs-scroll-progress" id="scroll-progress" aria-hidden="true"></div>
   <WipBanner />
   <div class="docs-shell" id="docs-shell">
     <!-- Top Bar -->
@@ -379,6 +394,14 @@ const breadcrumbSchema = {
         </>
       ) : (
         <>
+          {/* Persistent escape hatch back to the workshop track. The components
+              sidebar replaces the whole workshop nav, so without this a learner
+              who clicked into Components has no obvious way back to the path. */}
+          <a href="/workshop" class="docs-nav-link docs-nav-link--return">
+            <Icon name="arrow_back" class="docs-nav-link-icon" />
+            Return to workshop
+          </a>
+
           <div class="docs-nav-section">
             <div class="docs-nav-heading">
               <Icon name={SECTION_ICONS['Overview']} class="docs-nav-heading-icon" />
@@ -429,6 +452,20 @@ const breadcrumbSchema = {
     <!-- Main -->
     <main id="main" class={`docs-main${hasToc ? ' docs-main--with-toc' : ''}`}>
       <div class="docs-main-content" data-pagefind-body>
+        {showBreadcrumb && (
+          <nav class="docs-breadcrumb docs-breadcrumb--page" aria-label="Breadcrumb">
+            {breadcrumbTrail.map((crumb, i) =>
+              i === breadcrumbTrail.length - 1 ? (
+                <span aria-current="page">{crumb.name}</span>
+              ) : (
+                <>
+                  <a href={crumb.href}>{crumb.name}</a>
+                  <span aria-hidden="true">/</span>
+                </>
+              )
+            )}
+          </nav>
+        )}
         {hasTocItems && (
           <details class="docs-toc-mobile">
             <summary class="docs-toc-mobile-summary">On this page</summary>
@@ -680,14 +717,24 @@ const breadcrumbSchema = {
       // Set the initial inert state for the current viewport on every page load.
       syncInert();
 
-      // Scroll to top button
+      // Scroll to top button + top progress bar
       var scrollTopBtn = document.getElementById('scroll-top');
+      var progressBar = document.getElementById('scroll-progress');
       var mainEl = document.querySelector('.docs-main');
 
       function handleScroll() {
+        // `.docs-main` is the scroll container on desktop; the window scrolls
+        // when there's no scrollable main (e.g. short pages / mobile fallback).
         var scrollY = mainEl ? mainEl.scrollTop : window.scrollY;
         if (scrollTopBtn) {
           scrollTopBtn.classList.toggle('docs-scroll-top--visible', scrollY > 400);
+        }
+        if (progressBar) {
+          var max = mainEl
+            ? mainEl.scrollHeight - mainEl.clientHeight
+            : (document.documentElement.scrollHeight - window.innerHeight);
+          var pct = max > 0 ? Math.min(100, Math.max(0, (scrollY / max) * 100)) : 0;
+          progressBar.style.width = pct + '%';
         }
       }
 
@@ -697,6 +744,10 @@ const breadcrumbSchema = {
         window.__atelierScrollBound = true;
         window.addEventListener('scroll', handleScroll);
       }
+
+      // Run once on every page load so the progress bar resets to the correct
+      // width for the new page (ClientRouter keeps the body around).
+      handleScroll();
 
       bindOnce(scrollTopBtn, 'click', function() {
         if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
@@ -791,6 +842,26 @@ const breadcrumbSchema = {
       min-height: 44px;
       align-items: center;
       justify-content: center;
+    }
+    /* Touch-target floor for the scroll-to-top button (was 40px). */
+    .docs-scroll-top {
+      width: 44px;
+      height: 44px;
+    }
+
+    /* Scroll-progress indicator: a thin fixed bar at the very top of the
+     * viewport whose width tracks scroll position (set inline by handleScroll).
+     * Sits above the WIP banner / topbar (z-index 300 > topbar's 100) so it's
+     * never occluded. Positional, not animated — fine under reduced-motion. */
+    .docs-scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background: var(--ui-color-primary);
+      z-index: 300;
+      pointer-events: none;
     }
   </style>
 </body>

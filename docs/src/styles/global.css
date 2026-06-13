@@ -298,6 +298,28 @@ body {
 
 .docs-nav-link--back:hover { opacity: 1; }
 
+/* Persistent "Return to workshop" link pinned at the top of the components
+ * sidebar. Styled as a clear, primary-tinted band (vs. the muted --back link)
+ * so it reads as the main escape hatch back to the learning path. */
+.docs-nav-link--return {
+  margin: 0.75rem 0.75rem 0.5rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--ui-color-primary) 30%, transparent);
+  border-left-width: 1px;
+  border-radius: var(--ui-radius-md, 8px);
+  background: var(--ui-color-primary-light);
+  color: var(--ui-color-primary);
+  font-weight: 600;
+  white-space: normal;
+}
+
+.docs-nav-link--return:hover {
+  background: color-mix(in srgb, var(--ui-color-primary) 16%, transparent);
+  color: var(--ui-color-primary);
+  border-color: var(--ui-color-primary);
+  border-left-color: var(--ui-color-primary);
+}
+
 /* ── Main Content ─────────────────────────────────────── */
 .docs-main {
   overflow-y: auto;
@@ -1159,6 +1181,19 @@ summary:focus-visible,
 
 .docs-breadcrumb a { color: inherit; text-decoration: none; }
 .docs-breadcrumb a:hover { color: var(--ui-color-primary); }
+
+/* Page-level trail rendered by BaseLayout above the hero on nested routes.
+ * Reuses the base breadcrumb look; allows wrapping on narrow viewports and
+ * dims the current (last, non-link) crumb so the trail reads as context. */
+.docs-breadcrumb--page {
+  flex-wrap: wrap;
+  row-gap: 0.25rem;
+}
+
+.docs-breadcrumb--page [aria-current='page'] {
+  color: var(--ui-color-text);
+  font-weight: 600;
+}
 
 /* ── Selector badge ──────────────────────────────────── */
 .docs-selector-badge {

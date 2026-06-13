@@ -444,14 +444,9 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
 
   return (
     <>
-      {/* Breadcrumb */}
-      <nav className="docs-breadcrumb">
-        <a href="/">Home</a>
-        <span>/</span>
-        <a href="/components">Components</a>
-        <span>/</span>
-        <span>{doc.name}</span>
-      </nav>
+      {/* Breadcrumb is now rendered once at the layout level (BaseLayout) for
+          every nested route, so the in-island trail was removed to avoid a
+          duplicate. */}
 
       {/* Page header */}
       <div className="docs-page-header">
