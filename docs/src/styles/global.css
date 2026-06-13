@@ -358,6 +358,13 @@ body {
   border-left-color: var(--ui-color-primary);
 }
 
+/* ── Mobile TOC (in-flow disclosure, <768px only) ────────
+ * Data-driven counterpart to the desktop `.docs-toc` aside: the same
+ * `tocItems` feed renders this collapsed "On this page" disclosure at the top
+ * of the content so it's reachable without scrolling. Hidden on desktop where
+ * the sticky aside takes over (see the max-width:768px block for the reveal). */
+.docs-toc-mobile { display: none; }
+
 /* ── Bottom Nav (mobile only) ─────────────────────────── */
 .docs-bottom-nav { display: none; }
 
@@ -1821,6 +1828,13 @@ summary:focus-visible,
     z-index: 60;
     transition: left var(--ui-transition-normal);
     box-shadow: 4px 0 24px rgba(0, 0, 0, 0.35);
+    /* Clear the sticky bottom-nav (≈56px) so the last group (Reference /
+     * Explanation) isn't hidden behind it when the drawer is scrolled to end. */
+    padding-bottom: calc(56px + 1.5rem);
+    /* Bottom fade hints there's more to scroll. mask-image affects only paint
+     * (not layout / the inert toggle, which is pure JS attribute work). */
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 2.5rem), transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 2.5rem), transparent 100%);
   }
 
   .docs-sidebar--open { left: 0; }
@@ -1829,6 +1843,52 @@ summary:focus-visible,
   .docs-main { padding: 1.25rem 1rem; }
   .docs-main--with-toc { display: block; }
   .docs-toc { display: none; }
+
+  /* In-flow mobile TOC disclosure (rendered from `tocItems`). */
+  .docs-toc-mobile {
+    display: block;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md, 8px);
+    background: var(--ui-color-surface);
+  }
+  .docs-toc-mobile-summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ui-color-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .docs-toc-mobile-summary::-webkit-details-marker { display: none; }
+  /* Disclosure caret, rotates when open. */
+  .docs-toc-mobile-summary::after {
+    content: '';
+    width: 0.45rem;
+    height: 0.45rem;
+    margin-left: auto;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform var(--ui-transition-fast);
+  }
+  .docs-toc-mobile[open] .docs-toc-mobile-summary::after {
+    transform: rotate(-135deg);
+  }
+  .docs-toc-mobile-list {
+    display: flex;
+    flex-direction: column;
+    padding: 0.25rem 0.85rem 0.6rem;
+    border-top: 1px solid var(--ui-color-border);
+  }
+  .docs-toc-mobile-list .docs-toc-link {
+    padding-left: 0.75rem;
+  }
 
   .docs-topbar-links { display: none; }
   .docs-topbar-sep { display: none; }

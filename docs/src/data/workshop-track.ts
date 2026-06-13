@@ -1,9 +1,14 @@
-// Single source of truth for the numbered 1–8 workshop learning path.
+// Single source of truth for the numbered workshop learning path.
 //
 // The sidebar WORKSHOP group (BaseLayout.astro), the in-page prev/next pager
-// (TrackNav.astro), and any "Step N of 8" indicator all derive from this one
+// (TrackNav.astro), and any "Step N of M" indicator all derive from this one
 // ordered array — so the path's order, labels, and icons stay consistent
-// across every surface. Adding/reordering a step here updates them all.
+// across every surface. Adding/reordering/removing a step here updates them all.
+//
+// `step` is DERIVED from array position (1-based), never hand-numbered: the
+// array below is the order, and the exported `WORKSHOP_TRACK` stamps the badge
+// number from each entry's index. So removing the second entry renumbers the
+// rest automatically and `TRACK_LENGTH` follows the array length.
 //
 // Each entry mirrors exactly what the sidebar rendered before this extraction:
 // the same href, the same visible label, and the same Material icon name.
@@ -24,16 +29,21 @@ export interface TrackStep {
   title?: string;
 }
 
-export const WORKSHOP_TRACK: readonly TrackStep[] = [
-  { step: 1, href: '/', label: 'Overview', icon: 'dashboard' },
-  { step: 2, href: '/schulung', label: 'Schulung (2 Tage)', icon: 'schedule' },
-  { step: 3, href: '/workshop', label: 'Setup', icon: 'build_circle', title: 'Workshop setup' },
-  { step: 4, href: '/figma-token', label: 'Figma access', icon: 'cable' },
-  { step: 5, href: '/tutorial', label: 'Tutorial', icon: 'school' },
-  { step: 6, href: '/design-to-code', label: 'Design to code', icon: 'schema' },
-  { step: 7, href: '/first-component', label: 'First component', icon: 'check_circle' },
-  { step: 8, href: '/patterns', label: 'Patterns', icon: 'menu_book' },
+/** The ordered path, without step numbers — those are derived below. */
+const TRACK_ORDER: readonly Omit<TrackStep, 'step'>[] = [
+  { href: '/', label: 'Overview', icon: 'dashboard' },
+  { href: '/workshop', label: 'Setup', icon: 'build_circle', title: 'Workshop setup' },
+  { href: '/figma-token', label: 'Figma access', icon: 'cable' },
+  { href: '/tutorial', label: 'Tutorial', icon: 'school' },
+  { href: '/design-to-code', label: 'Design to code', icon: 'schema' },
+  { href: '/first-component', label: 'First component', icon: 'check_circle' },
+  { href: '/patterns', label: 'Patterns', icon: 'menu_book' },
 ];
+
+export const WORKSHOP_TRACK: readonly TrackStep[] = TRACK_ORDER.map((s, i) => ({
+  ...s,
+  step: i + 1,
+}));
 
 /** Total number of steps — for "Step N of {TRACK_LENGTH}" copy. */
 export const TRACK_LENGTH = WORKSHOP_TRACK.length;

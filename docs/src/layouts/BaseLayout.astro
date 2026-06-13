@@ -22,6 +22,15 @@ interface Props {
   ogTitle?: string;
   ogImage?: string;
   currentPath: string;
+  /**
+   * Data-driven "On this page" table of contents. When provided (length > 0)
+   * it renders BOTH the desktop `.docs-toc` aside and the mobile in-flow
+   * `.docs-toc-mobile` disclosure from one source. Prefer this over the
+   * `slot="toc"` idiom — the slot only feeds the desktop aside (slot content
+   * can't be duplicated into the mobile disclosure) and is kept solely for
+   * backward compatibility with pages not yet migrated.
+   */
+  tocItems?: { id: string; label: string }[];
 }
 
 const SITE_URL = 'https://atelier.pieper.io';
@@ -40,9 +49,15 @@ const {
   ogTitle,
   ogImage = defaultOgImage,
   currentPath,
+  tocItems,
 } = Astro.props;
 
-const hasToc = Astro.slots.has('toc');
+// The TOC renders from EITHER the legacy `slot="toc"` markup OR the
+// data-driven `tocItems` prop. `hasToc` drives the two-column layout; the
+// mobile disclosure renders only from `tocItems` (slot content can't be
+// duplicated across both surfaces).
+const hasTocItems = (tocItems?.length ?? 0) > 0;
+const hasToc = Astro.slots.has('toc') || hasTocItems;
 const pageTitle = title !== SITE_NAME ? `${title} — ${SITE_NAME}` : SITE_NAME;
 const canonicalUrl = `${SITE_URL}${currentPath}`;
 const shareTitle = ogTitle ?? pageTitle;
@@ -204,7 +219,7 @@ const breadcrumbSchema = {
         <a href="/workshop"  class={`docs-topbar-link${isTopActive('/workshop') ? ' active' : ''}`} aria-current={isTopActive('/workshop') ? 'page' : undefined}>Workshop</a>
         <a href="/storybook" class={`docs-topbar-link${isTopActive('/storybook') ? ' active' : ''}`} aria-current={isTopActive('/storybook') ? 'page' : undefined}>Storybook</a>
         <a href="/figma"     class={`docs-topbar-link${isTopActive('/figma') ? ' active' : ''}`} aria-current={isTopActive('/figma') ? 'page' : undefined}>Figma</a>
-        <a href="/mcp"       class={`docs-topbar-link${isTopActive('/mcp') ? ' active' : ''}`} aria-current={isTopActive('/mcp') ? 'page' : undefined}>MCP Explorer</a>
+        <a href="/mcp"       class={`docs-topbar-link${isTopActive('/mcp') ? ' active' : ''}`} aria-current={isTopActive('/mcp') ? 'page' : undefined}>MCP playground</a>
       </nav>
 
       <Search client:idle />
@@ -264,6 +279,20 @@ const breadcrumbSchema = {
                 {s.label}
               </a>
             ))}
+          </div>
+
+          {/* For instructors — off the numbered learner path. The 2-day
+              Schulung outline lives here so it doesn't read as a workshop step
+              (see workshop-track.ts: Schulung is intentionally not on the track). */}
+          <div class="docs-nav-section">
+            <div class="docs-nav-heading">
+              <Icon name="school" class="docs-nav-heading-icon" />
+              For instructors
+            </div>
+            <a href="/schulung" class={`docs-nav-link${isActive('/schulung') ? ' active' : ''}`}>
+              <Icon name="schedule" class="docs-nav-link-icon" />
+              Schulung (2 Tage)
+            </a>
           </div>
 
           {/* How-To — problem-oriented recipes. Look here when stuck or when
@@ -400,12 +429,30 @@ const breadcrumbSchema = {
     <!-- Main -->
     <main id="main" class={`docs-main${hasToc ? ' docs-main--with-toc' : ''}`}>
       <div class="docs-main-content" data-pagefind-body>
+        {hasTocItems && (
+          <details class="docs-toc-mobile">
+            <summary class="docs-toc-mobile-summary">On this page</summary>
+            <nav class="docs-toc-mobile-list" aria-label="On this page">
+              {tocItems!.map((item) => (
+                <a href={`#${item.id}`} class="docs-toc-link">{item.label}</a>
+              ))}
+            </nav>
+          </details>
+        )}
         <slot />
       </div>
       {hasToc && (
         <aside class="docs-toc" aria-label="On this page">
           <div class="docs-toc-header">On this page</div>
-          <slot name="toc" />
+          {hasTocItems ? (
+            <nav>
+              {tocItems!.map((item) => (
+                <a href={`#${item.id}`} class="docs-toc-link">{item.label}</a>
+              ))}
+            </nav>
+          ) : (
+            <slot name="toc" />
+          )}
         </aside>
       )}
     </main>
