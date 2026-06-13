@@ -5,8 +5,14 @@ import DiagramFigure from '../components/DiagramFigure.astro';
 import Callout from '../components/Callout.astro';
 import HelpFooter from '../components/HelpFooter.astro';
 import PageHero from '../components/PageHero.astro';
-import BottomNav from '../components/BottomNav.astro';
+import TrackNav from '../components/TrackNav.astro';
 import FwSwitcher from '../components/FwSwitcher.astro';
+import { getTrackStep, TRACK_LENGTH } from '../data/workshop-track';
+
+// "Step 6 of 8" hero tag, derived from the single source of truth so a
+// reordering of the workshop track updates this page automatically.
+const trackStep = getTrackStep('/design-to-code');
+const heroTag = trackStep ? `Step ${trackStep.step} of ${TRACK_LENGTH}` : undefined;
 
 const FRAMEWORKS = ['React', 'Angular', 'Vue'] as const;
 
@@ -62,7 +68,7 @@ the component I just generated. Fix every discrepancy it reports.`;
 
     <PageHero
       kind="explanation"
-      tag="The loop · Figma → Code"
+      tag={heroTag}
       title="Design to Code"
       titleAccent="Code"
       ledeMax="560px"
@@ -203,11 +209,7 @@ the component I just generated. Fix every discrepancy it reports.`;
 
     <HelpFooter page="design-to-code" />
 
-    <BottomNav items={[
-      { to: '/first-component', label: 'Hands-on', title: 'First component', icon: 'check_circle' },
-      { to: '/tutorial',        label: 'The why',  title: 'Tutorial',        icon: 'school' },
-      { to: '/figma',           label: 'No-MCP',   title: 'Figma — manual',  icon: 'palette' },
-    ]} />
+    <TrackNav />
 
   </div>
 </BaseLayout>

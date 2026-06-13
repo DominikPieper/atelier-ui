@@ -6,10 +6,18 @@ import Callout from '../components/Callout.astro';
 import Jargon from '../components/Jargon.astro';
 import HelpFooter from '../components/HelpFooter.astro';
 import PageHero from '../components/PageHero.astro';
-import BottomNav from '../components/BottomNav.astro';
+import TrackNav from '../components/TrackNav.astro';
+import Checkpoint from '../components/Checkpoint.astro';
+import Icon from '../components/Icon.astro';
 import FwSwitcher from '../components/FwSwitcher.astro';
+import { getTrackStep, TRACK_LENGTH } from '../data/workshop-track';
 
 const FRAMEWORKS = ['React', 'Angular', 'Vue'] as const;
+
+// "Step N of 8" hero tag — derived from the single source of truth so a
+// reorder in workshop-track.ts updates this page automatically.
+const trackStep = getTrackStep('/tutorial')!;
+const stepTag = `Step ${trackStep.step} of ${TRACK_LENGTH}`;
 
 const EXAMPLE_PROMPT = `I've selected the "Settings / Card" frame in Figma.
 
@@ -133,7 +141,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
     <PageHero
       kind="tutorial"
       time="~30 min"
-      tag="Hands-on · Figma → Code"
+      tag={stepTag}
       title="Tutorial"
       ledeMax="520px"
     >
@@ -566,13 +574,17 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
       </table>
     </div>
 
+    <Checkpoint variant="done" title="You ran the loop end to end">
+      <ul class="checkpoint-checks">
+        <li><Icon name="check_circle" /> Claude read the Figma spec and matched the Atelier UI components through the Storybook MCP</li>
+        <li><Icon name="check_circle" /> The generated component renders in Storybook</li>
+        <li><Icon name="check_circle" /> <code>figma_check_design_parity</code> reports the node and code in sync</li>
+      </ul>
+    </Checkpoint>
+
     <HelpFooter page="tutorial" />
 
-    <BottomNav items={[
-      { to: '/figma',     label: 'Design',  title: 'Figma File', icon: 'palette' },
-      { to: '/workshop',  label: 'Setup',   title: 'Workshop',   icon: 'build_circle' },
-      { to: '/storybook', label: 'Explore', title: 'Storybook',  icon: 'book' },
-    ]} />
+    <TrackNav />
 
   </div>
 </BaseLayout>

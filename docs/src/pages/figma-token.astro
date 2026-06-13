@@ -3,11 +3,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import DiagramFigure from '../components/DiagramFigure.astro';
 import PageHero from '../components/PageHero.astro';
-import BottomNav from '../components/BottomNav.astro';
+import TrackNav from '../components/TrackNav.astro';
+import Checkpoint from '../components/Checkpoint.astro';
+import { getTrackStep, TRACK_LENGTH } from '../data/workshop-track';
 import personalAccessTokenScreenshot from '../assets/screenshots/personal-access-token.png';
 
 const FIGMA_FILE_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
+
+// "Step N of 8" derived from the single source of truth in workshop-track.ts.
+const trackStep = getTrackStep('/figma-token');
+const stepTag = trackStep ? `Step ${trackStep.step} of ${TRACK_LENGTH}` : undefined;
 ---
 
 <BaseLayout
@@ -17,7 +23,7 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
 >
   <div class="docs-inline-page">
 
-    <PageHero kind="howto" title="Figma access" ledeMax="660px">
+    <PageHero kind="howto" tag={stepTag} title="Figma access" ledeMax="660px">
       Figma is the single source of truth, and the <code>figma-console</code> MCP server reads it through a
       <strong>Desktop Bridge plugin</strong> running inside Figma Desktop. A REST access token is
       a <em>secondary</em> channel — it only authorizes read-only metadata calls and is not
@@ -320,11 +326,15 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
       </p>
     </section>
 
-    <BottomNav items={[
-      { to: '/tutorial',        label: 'Next',   title: 'Figma to code',    icon: 'school' },
-      { to: '/figma',           label: 'Design', title: 'Figma as source',  icon: 'palette' },
-      { to: '/troubleshooting', label: 'Stuck?', title: 'Troubleshooting',  icon: 'help' },
-    ]} />
+    <Checkpoint variant="done" title="Figma is connected">
+      You should now have the Desktop Bridge plugin running in Figma Desktop and the smoke test
+      passing — <code>figma_get_status</code> reports the WebSocket bridge as connected. If you did
+      Steps 2–3, <code>FIGMA_ACCESS_TOKEN</code> is set and wired into <code>.mcp.json</code> so
+      metadata reads work too. If <code>figma_get_status</code> returns "not connected", re-check
+      Step 1 or see <a href="/troubleshooting#figma-bridge-plugin-not-connected" class="docs-link-primary">troubleshooting</a>.
+    </Checkpoint>
+
+    <TrackNav />
 
   </div>
 </BaseLayout>

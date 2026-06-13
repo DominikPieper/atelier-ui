@@ -4,18 +4,29 @@ import { Code } from 'astro-expressive-code/components';
 import HelpFooter from '../components/HelpFooter.astro';
 import Icon from '../components/Icon.astro';
 import PageHero from '../components/PageHero.astro';
-import BottomNav from '../components/BottomNav.astro';
+import TrackNav from '../components/TrackNav.astro';
+import { getTrackStep, TRACK_LENGTH } from '../data/workshop-track';
 
 const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI?node-id=695-313';
 const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
 type Framework = typeof FRAMEWORKS[number];
 
-const PROMPT = `Build the Settings / Card Figma frame as an Atelier UI component.
+// Step indicator for the hero — derived from the workshop track so it tracks
+// any reordering in workshop-track.ts rather than being hardcoded here.
+const step = getTrackStep('/first-component');
+const stepTag = step ? `Step ${step.step} of ${TRACK_LENGTH}` : undefined;
+
+// The prompt is rendered once per framework with the participant's framework
+// already substituted into `storybook-{framework}`, so the copied text contains
+// a concrete token (storybook-angular / -react / -vue). The global
+// framework-pref-init script toggles which [data-fw-panel] is visible, keeping
+// the shown prompt in sync with the tabs the same way step 4 already works.
+const prompt = (fw: Framework) => `Build the Settings / Card Figma frame as an Atelier UI component.
 
 1. Use figma-console MCP (figma_get_component_for_development) on
    node-id 695-313 — read the component spec, boundVariables, and
    the rendered preview.
-2. Use the storybook-{framework} MCP (list-all-documentation, then
+2. Use the storybook-${fw.toLowerCase()} MCP (list-all-documentation, then
    get-documentation) to look up LlmCard and LlmInput props.
 3. Generate the component using:
    - Atelier UI components matched from Storybook
@@ -55,7 +66,7 @@ const EXPECTED: Record<Framework, { file: string; cmd: string; port: number }> =
     <PageHero
       kind="tutorial"
       time="~15 min"
-      tag="Kata · copy-paste"
+      tag={stepTag}
       title="First component"
       titleAccent="component"
       ledeMax="580px"
@@ -125,11 +136,20 @@ const EXPECTED: Record<Framework, { file: string; cmd: string; port: number }> =
         <h2 class="kata-step-title">Paste this prompt into Claude Code</h2>
       </div>
       <p class="kata-step-desc">
-        Copy verbatim. Replace <code>{`{framework}`}</code> with your framework
-        (<code>angular</code>, <code>react</code>, or <code>vue</code>). Claude will fetch the
-        Figma spec and Storybook props, then write the component.
+        Copy it verbatim — the prompt below is already set to the framework you
+        picked in Step 2 (the <code>storybook-*</code> MCP name is filled in). Claude
+        fetches the Figma spec and Storybook props, then writes the component.
       </p>
-      <Code code={PROMPT} lang="text" title="prompt — paste into Claude Code" />
+      <p class="kata-step-desc" style="margin-top: 0.4rem">
+        On Angular and Vue the <code>storybook-*</code> MCP serves docs and stories only —
+        Claude reads component props from the <code>storybook-react</code> MCP (the spec is
+        identical across frameworks) or from <code>libs/spec</code>.
+      </p>
+      {FRAMEWORKS.map((fw, i) => (
+        <div data-fw-panel={fw} hidden={i !== 0}>
+          <Code code={prompt(fw)} lang="text" title="prompt — paste into Claude Code" />
+        </div>
+      ))}
     </section>
 
     <!-- Step 4 -->
@@ -208,11 +228,7 @@ const EXPECTED: Record<Framework, { file: string; cmd: string; port: number }> =
 
     <HelpFooter page="first-component" />
 
-    <BottomNav items={[
-      { to: '/tutorial',  label: 'The why', title: 'Tutorial',  icon: 'school' },
-      { to: '/patterns',  label: 'More',    title: 'Patterns',  icon: 'menu_book' },
-      { to: '/storybook', label: 'API',     title: 'Storybook', icon: 'book' },
-    ]} />
+    <TrackNav />
 
   </div>
 </BaseLayout>

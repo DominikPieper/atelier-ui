@@ -2,8 +2,12 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import HelpFooter from '../components/HelpFooter.astro';
-import BottomNav from '../components/BottomNav.astro';
+import TrackNav from '../components/TrackNav.astro';
 import Callout from '../components/Callout.astro';
+import { getTrackStep, TRACK_LENGTH } from '../data/workshop-track';
+
+const trackStep = getTrackStep('/schulung');
+const stepTag = trackStep ? `Step ${trackStep.step} of ${TRACK_LENGTH}` : undefined;
 
 type Block = {
   num: string;
@@ -219,12 +223,19 @@ const DAYS: Day[] = [
     <PageHero
       kind="tutorial"
       time="2 Tage · je ~7–8 h"
-      tag="Schulung · Curriculum"
+      tag={stepTag}
       title="2-Tages-Schulung"
       ledeMax="640px"
     >
       KI-gestützter Design-to-Code-Workflow für Entwickler mit solider Frontend-Basis. Jeder Teilnehmer wählt sein eigenes Framework (Angular / React / Vue) — am Ende steht eine <strong>selbst designte und implementierte Komponente</strong> in Figma, Storybook und Code.
     </PageHero>
+
+    <Callout tone="note" title="For instructors">
+      <p>
+        This page is the German two-day training curriculum, aimed at instructors planning a
+        cohort. Workshop participants can skip straight to <a href="/workshop" class="docs-link-primary">Setup</a>.
+      </p>
+    </Callout>
 
     <div class="objective-box">
       <div class="objective-col">
@@ -310,11 +321,7 @@ const DAYS: Day[] = [
 
     <HelpFooter page="schulung" />
 
-    <BottomNav items={[
-      { to: '/workshop', label: 'Setup',    title: 'Workshop setup', icon: 'build_circle' },
-      { to: '/tutorial', label: 'Tutorial', title: 'Figma to code',  icon: 'school' },
-      { to: '/prompts',  label: 'Prompts',  title: 'Prompt templates', icon: 'chat' },
-    ]} />
+    <TrackNav />
 
   </div>
 </BaseLayout>

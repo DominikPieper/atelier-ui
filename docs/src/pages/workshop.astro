@@ -4,11 +4,19 @@ import { Code } from 'astro-expressive-code/components';
 import Jargon from '../components/Jargon.astro';
 import HelpFooter from '../components/HelpFooter.astro';
 import PageHero from '../components/PageHero.astro';
-import BottomNav from '../components/BottomNav.astro';
+import TrackNav from '../components/TrackNav.astro';
+import Checkpoint from '../components/Checkpoint.astro';
+import Icon from '../components/Icon.astro';
 import Callout from '../components/Callout.astro';
 import FwSwitcher from '../components/FwSwitcher.astro';
+import { getTrackStep, TRACK_LENGTH } from '../data/workshop-track';
 
 const SITE_URL = 'https://atelier.pieper.io';
+
+// "Step N of M" hero tag — derived from the single source of truth so the
+// number stays correct if the track is ever reordered.
+const trackStep = getTrackStep('/workshop');
+const stepTag = trackStep ? `Step ${trackStep.step} of ${TRACK_LENGTH}` : undefined;
 
 const SERVE_CMD = {
   Angular: 'npx nx serve workshop-angular',
@@ -63,7 +71,7 @@ const MCP_CONFIG = `{
     <PageHero
       kind="tutorial"
       time="~25 min"
-      tag="Hands-on · Setup"
+      tag={stepTag}
       title="Workshop setup"
       ledeMax="520px"
     >
@@ -365,13 +373,17 @@ const MCP_CONFIG = `{
       </p>
     </div>
 
+    <Checkpoint variant="done" title="Your workspace is ready">
+      <ul class="checkpoint-checks">
+        <li><Icon name="check_circle" /> <code>npm run preflight</code> reports all checks green</li>
+        <li><Icon name="check_circle" /> Dev server running on your framework's port — <code>4200</code> (Angular), <code>4201</code> (React), or <code>4202</code> (Vue)</li>
+        <li><Icon name="check_circle" /> Claude Code open in the workspace with the MCP servers connected</li>
+      </ul>
+    </Checkpoint>
+
     <HelpFooter page="workshop" />
 
-    <BottomNav items={[
-      { to: '/storybook', label: 'Next',   title: 'Storybook',    icon: 'book' },
-      { to: '/figma',     label: 'Design', title: 'Figma File',   icon: 'palette' },
-      { to: '/mcp',       label: 'Tools',  title: 'MCP Explorer', icon: 'cable' },
-    ]} />
+    <TrackNav />
 
   </div>
 </BaseLayout>
