@@ -1,0 +1,133 @@
+---
+// Checkpoint block for workshop-track pages — a participant's "am I on track?"
+// signal. Two variants, both lifted verbatim (markup + tokens) from the proven
+// kata patterns in first-component.astro so wave 2 can swap them in without
+// visual regression:
+//   variant="target" → the "What you'll build / have" pre-step box (.kata-target)
+//   variant="done"   → the "You should now have X" closer box (.kata-done)
+//
+// The eyebrow defaults match the kata ("What you'll build" / "Done") but can be
+// overridden via `eyebrow`. Body content goes in the default slot — typically a
+// check-list (<ul>) for target, prose for done.
+
+interface Props {
+  variant: 'target' | 'done';
+  /** Heading shown below the eyebrow. */
+  title: string;
+  /** Small uppercase kicker. Defaults per variant. */
+  eyebrow?: string;
+  /** Accessible label for the region. Defaults to the title. */
+  ariaLabel?: string;
+}
+
+const { variant, title, eyebrow, ariaLabel } = Astro.props;
+const defaultEyebrow = variant === 'done' ? 'Done' : "What you'll build";
+const kicker = eyebrow ?? defaultEyebrow;
+---
+
+<div class={`checkpoint checkpoint--${variant}`} aria-label={ariaLabel ?? title}>
+  <div class="checkpoint-head">
+    <span class="checkpoint-eyebrow">{kicker}</span>
+    <h2 class="checkpoint-title">{title}</h2>
+  </div>
+  <div class="checkpoint-body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  /* ── variant="target" — mirrors .kata-target from first-component.astro ── */
+  .checkpoint--target {
+    margin-bottom: 2.5rem;
+    padding: 1.25rem 1.4rem;
+    background: var(--ui-color-surface-raised);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+  }
+  .checkpoint--target .checkpoint-eyebrow {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ui-color-primary);
+  }
+  /* The kata renders only the eyebrow before the body; keep that spacing when
+   * no title is needed, but still support a heading for the generic case. */
+  .checkpoint--target .checkpoint-head {
+    margin-bottom: 1rem;
+  }
+  .checkpoint--target .checkpoint-title {
+    margin: 0.5rem 0 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ui-color-text);
+  }
+
+  /* ── variant="done" — mirrors .kata-done from first-component.astro ── */
+  .checkpoint--done {
+    margin: 2rem 0 1.5rem;
+    padding: 1.25rem 1.4rem;
+    background: var(--ui-color-primary-light);
+    border: 1px solid color-mix(in srgb, var(--ui-color-primary) 30%, transparent);
+    border-radius: var(--ui-radius-md);
+  }
+  .checkpoint--done .checkpoint-head {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-bottom: 0.6rem;
+  }
+  .checkpoint--done .checkpoint-eyebrow {
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ui-color-primary);
+  }
+  .checkpoint--done .checkpoint-title {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ui-color-text);
+  }
+  .checkpoint--done .checkpoint-body {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--ui-color-text-muted);
+    line-height: 1.6;
+  }
+
+  /* ── Shared check-list affordance (mirrors .kata-target-checks) so a
+   *    target checkpoint can host a tick-list without per-page CSS. ── */
+  .checkpoint-body :global(.checkpoint-checks) {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--ui-color-text);
+    line-height: 1.4;
+  }
+  .checkpoint-body :global(.checkpoint-checks li) {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+  }
+  .checkpoint-body :global(.checkpoint-checks li svg) {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    color: var(--ui-color-primary);
+    margin-top: 1px;
+  }
+  .checkpoint-body :global(.checkpoint-checks code) {
+    font-size: 0.78rem;
+    padding: 0 0.25rem;
+    background: var(--ui-color-primary-light);
+    border-radius: 3px;
+  }
+</style>

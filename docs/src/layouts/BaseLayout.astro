@@ -10,6 +10,7 @@ import WipBanner from '../components/WipBanner.astro';
 import Icon from '../components/Icon.astro';
 import Footer from '../components/Footer.astro';
 import { COMPONENT_CATEGORIES, CATEGORY_ICONS, SECTION_ICONS } from '../data/components';
+import { WORKSHOP_TRACK } from '../data/workshop-track';
 import { isOgSlug, slugFromPath } from '../data/og-pages';
 import libPkg from '../../../libs/angular/package.json';
 
@@ -184,7 +185,7 @@ const breadcrumbSchema = {
   <div class="docs-shell" id="docs-shell">
     <!-- Top Bar -->
     <header class="docs-topbar">
-      <button class="docs-menu-btn" id="menu-btn" aria-label="Toggle navigation">
+      <button class="docs-menu-btn" id="menu-btn" aria-label="Toggle navigation" aria-controls="sidebar" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
 
@@ -256,46 +257,13 @@ const breadcrumbSchema = {
               <Icon name={SECTION_ICONS['Workshop']} class="docs-nav-heading-icon" />
               <span>Workshop</span>
             </div>
-            <a href="/" class={`docs-nav-link${isActive('/') ? ' active' : ''}`}>
-              <Icon name="dashboard" class="docs-nav-link-icon" />
-              <span class="docs-nav-link-num">1</span>
-              Overview
-            </a>
-            <a href="/schulung" class={`docs-nav-link${isActive('/schulung') ? ' active' : ''}`}>
-              <Icon name="schedule" class="docs-nav-link-icon" />
-              <span class="docs-nav-link-num">2</span>
-              Schulung (2 Tage)
-            </a>
-            <a href="/workshop" class={`docs-nav-link${isActive('/workshop') ? ' active' : ''}`}>
-              <Icon name="build_circle" class="docs-nav-link-icon" />
-              <span class="docs-nav-link-num">3</span>
-              Setup
-            </a>
-            <a href="/figma-token" class={`docs-nav-link${isActive('/figma-token') ? ' active' : ''}`}>
-              <Icon name="cable" class="docs-nav-link-icon" />
-              <span class="docs-nav-link-num">4</span>
-              Figma access
-            </a>
-            <a href="/tutorial" class={`docs-nav-link${isActive('/tutorial') ? ' active' : ''}`}>
-              <Icon name="school" class="docs-nav-link-icon" />
-              <span class="docs-nav-link-num">5</span>
-              Tutorial
-            </a>
-            <a href="/design-to-code" class={`docs-nav-link${isActive('/design-to-code') ? ' active' : ''}`}>
-              <Icon name="schema" class="docs-nav-link-icon" />
-              <span class="docs-nav-link-num">6</span>
-              Design to code
-            </a>
-            <a href="/first-component" class={`docs-nav-link${isActive('/first-component') ? ' active' : ''}`}>
-              <Icon name="check_circle" class="docs-nav-link-icon" />
-              <span class="docs-nav-link-num">7</span>
-              First component
-            </a>
-            <a href="/patterns" class={`docs-nav-link${isActive('/patterns') ? ' active' : ''}`}>
-              <Icon name="menu_book" class="docs-nav-link-icon" />
-              <span class="docs-nav-link-num">8</span>
-              Patterns
-            </a>
+            {WORKSHOP_TRACK.map((s) => (
+              <a href={s.href} class={`docs-nav-link${isActive(s.href) ? ' active' : ''}`}>
+                <Icon name={s.icon} class="docs-nav-link-icon" />
+                <span class="docs-nav-link-num">{s.step}</span>
+                {s.label}
+              </a>
+            ))}
           </div>
 
           {/* How-To — problem-oriented recipes. Look here when stuck or when
@@ -558,25 +526,62 @@ const breadcrumbSchema = {
             });
         });
 
-      // Mobile sidebar
+      // ── Mobile sidebar (drawer) ──────────────────────────────────────────
+      // The sidebar is the SAME node on desktop (sticky, always visible) and
+      // mobile (off-canvas drawer). So focus-trap / Escape / inert apply ONLY
+      // below the 768px breakpoint — on desktop the drawer concept doesn't
+      // exist and we must never make the sidebar inert or steal focus.
       var menuBtn  = document.getElementById('menu-btn');
       var sidebar  = document.getElementById('sidebar');
       var backdrop = document.getElementById('sidebar-backdrop');
       var closeBtn = document.getElementById('sidebar-close');
+      var mobileMq = window.matchMedia('(max-width: 768px)');
+
+      function isMobile() { return mobileMq.matches; }
+
+      // `inert` (Baseline 2023; all evergreen browsers) removes the closed
+      // drawer's links from the tab order and the a11y tree in one attribute —
+      // no manual tabindex bookkeeping. We only set it on mobile; on desktop
+      // the attribute is always cleared so the sticky sidebar stays reachable.
+      function syncInert() {
+        if (!sidebar) return;
+        var hidden = isMobile() && !sidebar.classList.contains('docs-sidebar--open');
+        if (hidden) sidebar.setAttribute('inert', '');
+        else sidebar.removeAttribute('inert');
+      }
+
+      function getFocusable() {
+        if (!sidebar) return [];
+        return Array.prototype.slice.call(
+          sidebar.querySelectorAll('a[href], button:not([disabled])')
+        ).filter(function (el) { return el.offsetParent !== null; });
+      }
 
       function openSidebar() {
         if (sidebar && backdrop && menuBtn) {
           sidebar.classList.add('docs-sidebar--open');
           backdrop.classList.add('docs-sidebar-backdrop--visible');
           menuBtn.classList.add('docs-menu-btn--open');
+          menuBtn.setAttribute('aria-expanded', 'true');
+          syncInert();
+          // Move focus into the drawer so keyboard/SR users land inside it.
+          if (isMobile()) {
+            var first = closeBtn || getFocusable()[0];
+            if (first) first.focus();
+          }
         }
       }
 
       function closeSidebar() {
         if (sidebar && backdrop && menuBtn) {
+          var wasOpen = sidebar.classList.contains('docs-sidebar--open');
           sidebar.classList.remove('docs-sidebar--open');
           backdrop.classList.remove('docs-sidebar-backdrop--visible');
           menuBtn.classList.remove('docs-menu-btn--open');
+          menuBtn.setAttribute('aria-expanded', 'false');
+          syncInert();
+          // Restore focus to the toggle that opened the drawer.
+          if (wasOpen && isMobile()) menuBtn.focus();
         }
       }
 
@@ -588,6 +593,45 @@ const breadcrumbSchema = {
 
       bindOnce(backdrop, 'click', closeSidebar);
       bindOnce(closeBtn, 'click', closeSidebar);
+
+      // Escape closes the drawer; Tab is trapped inside it while open (mobile).
+      bindOnce(sidebar, 'keydown', function (e) {
+        if (!isMobile() || !sidebar.classList.contains('docs-sidebar--open')) return;
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closeSidebar();
+          return;
+        }
+        if (e.key !== 'Tab') return;
+        var focusable = getFocusable();
+        if (!focusable.length) return;
+        var firstEl = focusable[0];
+        var lastEl = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === firstEl) {
+          e.preventDefault();
+          lastEl.focus();
+        } else if (!e.shiftKey && document.activeElement === lastEl) {
+          e.preventDefault();
+          firstEl.focus();
+        }
+      });
+
+      // Keep inert correct across rotation / resize across the breakpoint
+      // (e.g. desktop→mobile must hide a non-open drawer; mobile→desktop must
+      // un-hide it). Listener is registered once per window.
+      if (!window.__atelierDrawerMqBound) {
+        window.__atelierDrawerMqBound = true;
+        mobileMq.addEventListener('change', function () {
+          var sb = document.getElementById('sidebar');
+          if (!sb) return;
+          var hidden = mobileMq.matches && !sb.classList.contains('docs-sidebar--open');
+          if (hidden) sb.setAttribute('inert', '');
+          else sb.removeAttribute('inert');
+        });
+      }
+
+      // Set the initial inert state for the current viewport on every page load.
+      syncInert();
 
       // Scroll to top button
       var scrollTopBtn = document.getElementById('scroll-top');
@@ -679,5 +723,28 @@ const breadcrumbSchema = {
   <script>
     import '../scripts/framework-pref-init';
   </script>
+
+  <style>
+    /* Touch-target floor (≥44px, WCAG 2.5.5 / 2.5.8) for the two header/drawer
+     * controls that were under-sized. Scoped to BaseLayout so global.css stays
+     * untouched. min-width/height grows the hit area without shifting the
+     * hamburger bars or the close glyph (both stay centered, same visual size). */
+    .docs-menu-btn {
+      min-width: 44px;
+      min-height: 44px;
+      align-items: center;
+      justify-content: center;
+    }
+    .docs-sidebar-close {
+      width: 44px;
+      height: 44px;
+    }
+    .docs-theme-btn {
+      min-width: 44px;
+      min-height: 44px;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
 </body>
 </html>

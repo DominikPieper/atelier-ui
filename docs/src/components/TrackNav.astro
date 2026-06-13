@@ -1,0 +1,100 @@
+---
+import Icon from './Icon.astro';
+import { getPrevNext, getTrackStep, TRACK_LENGTH } from '../data/workshop-track';
+
+// Prev/next pager for pages on the numbered 1–8 workshop track. Takes no
+// props — it derives everything from the current pathname against the single
+// source of truth in workshop-track.ts. Renders nothing when the page is not
+// on the track, so it's safe to drop into any layout/page unconditionally.
+const pathname = Astro.url.pathname;
+const current = getTrackStep(pathname);
+const { prev, next } = getPrevNext(pathname);
+---
+
+{current && (prev || next) && (
+  <nav class="track-nav" aria-label="Workshop track">
+    {prev ? (
+      <a href={prev.href} class="bottom-nav-card track-nav-card track-nav-card--prev">
+        <span class="track-nav-arrow" aria-hidden="true">
+          <Icon name="arrow_left" />
+        </span>
+        <div class="track-nav-text">
+          <div class="bottom-nav-label">Step {prev.step} of {TRACK_LENGTH} · Previous</div>
+          <div class="bottom-nav-title">{prev.title ?? prev.label}</div>
+        </div>
+      </a>
+    ) : (
+      <span class="track-nav-spacer" aria-hidden="true"></span>
+    )}
+
+    {next ? (
+      <a href={next.href} class="bottom-nav-card track-nav-card track-nav-card--next">
+        <div class="track-nav-text">
+          <div class="bottom-nav-label">Step {next.step} of {TRACK_LENGTH} · Next</div>
+          <div class="bottom-nav-title">{next.title ?? next.label}</div>
+        </div>
+        <span class="track-nav-arrow" aria-hidden="true">
+          <Icon name="arrow_right" />
+        </span>
+      </a>
+    ) : (
+      <span class="track-nav-spacer" aria-hidden="true"></span>
+    )}
+  </nav>
+)}
+
+<style>
+  /* Two-column pager: prev pinned left, next pinned right. Reuses the
+   * .bottom-nav-card visual language (surface, border, hover lift) from
+   * global.css; only the row layout, arrows, and emphasis are scoped here. */
+  .track-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+    margin-top: 2.5rem;
+  }
+
+  /* The card layout is justify-between so the arrow hugs the outer edge:
+   * back-arrow leads the prev card, forward-arrow trails the next card. */
+  .track-nav-card {
+    justify-content: space-between;
+  }
+  .track-nav-card--next {
+    /* Primary affordance — the forward step gets the accent border. */
+    border-color: color-mix(in srgb, var(--ui-color-primary) 40%, var(--ui-color-border));
+    text-align: right;
+  }
+
+  .track-nav-text {
+    min-width: 0;
+  }
+
+  .track-nav-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    color: var(--ui-color-primary);
+  }
+  .track-nav-arrow :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Keeps the surviving card on its side when only one of prev/next exists. */
+  .track-nav-spacer {
+    display: block;
+  }
+
+  @media (max-width: 540px) {
+    .track-nav {
+      grid-template-columns: 1fr;
+    }
+    /* Stacked: drop empty spacers so a lone card doesn't leave a gap. */
+    .track-nav-spacer {
+      display: none;
+    }
+  }
+</style>
