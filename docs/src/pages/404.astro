@@ -1,0 +1,88 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Branded 404 (review 2026-06-12, idea #8). Netlify serves the built
+// dist/docs/404.html for any unknown URL automatically — no _redirects
+// entry needed. The full BaseLayout chrome (topbar, sidebar, search) IS
+// the recovery mechanism; the cards below just shortcut the common paths.
+const recoveryLinks = [
+  {
+    href: '/',
+    eyebrow: 'Start',
+    title: 'Home',
+    desc: 'The workshop overview — the path through the whole atelier begins here.',
+  },
+  {
+    href: '/workshop',
+    eyebrow: 'Workshop',
+    title: 'Workshop setup',
+    desc: 'Get your tools, tokens, and MCP servers wired up for the hands-on session.',
+  },
+  {
+    href: '/components',
+    eyebrow: 'Reference',
+    title: 'Components',
+    desc: 'The full catalog — every piece that did make it into the collection.',
+  },
+];
+---
+
+<BaseLayout
+  title="Page not found"
+  description="This page isn't in the Atelier collection. Find your way back via the workshop overview, setup guide, or component catalog."
+  currentPath="/404"
+>
+  <div class="docs-inline-page notfound">
+    <p class="notfound-code" aria-hidden="true">404</p>
+    <h1 class="docs-page-h1">
+      This piece isn't in the <span class="docs-accent">collection</span>.
+    </h1>
+    <p class="notfound-lede">
+      The page you're looking for was moved, renamed, or never made it past the sketch.
+      The navigation and search above still work — or pick up the trail here:
+    </p>
+
+    <nav class="notfound-cards" aria-label="Recovery links">
+      {recoveryLinks.map(({ href, eyebrow, title, desc }) => (
+        <a href={href} class="docs-pagepair-card">
+          <span class="docs-pagepair-eyebrow">{eyebrow}</span>
+          <span class="docs-pagepair-title">{title}</span>
+          <span class="docs-pagepair-desc">{desc}</span>
+        </a>
+      ))}
+    </nav>
+  </div>
+</BaseLayout>
+
+<style>
+  /* Cards reuse .docs-pagepair-card from global.css; only the grid wrapper
+   * is page-specific (pagepair's own grid is a 1fr-auto-1fr arrow layout). */
+  .notfound {
+    padding-top: 2rem;
+  }
+  .notfound-code {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--ui-color-text-muted);
+    margin: 0 0 0.5rem;
+  }
+  .notfound-lede {
+    font-size: 0.9rem;
+    color: var(--ui-color-text-muted);
+    line-height: 1.65;
+    max-width: 520px;
+    margin: 0 0 2rem;
+  }
+  .notfound-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.85rem;
+  }
+  /* .docs-pagepair-card--here/--next/--prev normally promote the eyebrow to
+   * primary; these cards carry none of those modifiers, so do it here. */
+  .notfound-cards :global(.docs-pagepair-eyebrow) {
+    color: var(--ui-color-primary);
+  }
+</style>
