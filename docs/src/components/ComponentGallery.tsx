@@ -141,7 +141,48 @@ export default function ComponentGallery() {
 
       {Object.keys(filteredCategories).length === 0 && (
         <div className="docs-not-found">
-          <p>No components found matching "{query}"</p>
+          <p style={{ fontWeight: 600, color: 'var(--ui-color-text)' }}>
+            {query.trim() && activeCategory
+              ? <>No components in <strong>{activeCategory}</strong> match "{query.trim()}".</>
+              : query.trim()
+                ? <>No components match "{query.trim()}".</>
+                : <>No components in <strong>{activeCategory}</strong> yet.</>}
+          </p>
+          <p style={{ margin: '0.25rem 0 0' }}>
+            {activeCategory
+              ? 'Try another category, or clear the filters to browse everything.'
+              : 'Try a broader term like “button”, “dialog”, or “select”.'}
+          </p>
+
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '0.5rem',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: '1.25rem',
+            }}
+          >
+            <button
+              type="button"
+              className="docs-category-pill active"
+              onClick={() => { setQuery(''); setActiveCategory(null); }}
+            >
+              Clear filters
+            </button>
+            {(query.trim() || !activeCategory ? categories : categories.filter(c => c !== activeCategory)).map(cat => (
+              <button
+                key={cat}
+                type="button"
+                className={`docs-category-pill${activeCategory === cat ? ' active' : ''}`}
+                aria-pressed={activeCategory === cat}
+                onClick={() => { setQuery(''); setActiveCategory(cat); }}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </>

@@ -325,7 +325,15 @@ export default function Search() {
           )}
 
           {showEmptyState && (
-            <div className="docs-search-empty">No matches for "{query}".</div>
+            <div className="docs-search-empty">
+              <div style={{ fontWeight: 600, color: 'var(--ui-color-text)' }}>
+                No matches for "{query.trim()}".
+              </div>
+              <div style={{ marginTop: '4px' }}>
+                Try a component name (<strong>button</strong>, <strong>dialog</strong>)
+                {' '}or a page (<strong>install</strong>, <strong>tokens</strong>).
+              </div>
+            </div>
           )}
         </div>
       )}
