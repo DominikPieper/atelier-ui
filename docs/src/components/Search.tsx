@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { ALL_COMPONENTS, CATEGORY_ICONS, componentDocs } from '../data/components';
+import type { KeyboardEvent as ReactKeyboardEvent, ReactNode } from 'react';
+import { ALL_COMPONENTS, componentDocs } from '../data/components';
 
 type PageResult = {
   url: string;
@@ -35,10 +36,27 @@ function loadPagefind(): Promise<Pagefind | null> {
   return pagefindPromise;
 }
 
+const LISTBOX_ID = 'docs-search-listbox';
+const optionId = (index: number) => `docs-search-option-${index}`;
+
+/* Component-scoped styles that global.css cannot express for the new
+ * markup: the keyboard-active state (mirrors .docs-search-result:hover)
+ * and the group separator (the global `:not(:first-child)` rule no longer
+ * matches once headings sit inside role="group" wrappers). */
+const SCOPED_STYLES = `
+.docs-search-result.is-active { background: var(--ui-color-surface-sunken); }
+.docs-search-results [role='group'] + [role='group'] > .docs-search-group-heading {
+  border-top: 1px solid var(--ui-color-border);
+  margin-top: 4px;
+}
+`;
+
 export default function Search() {
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
   const [pageResults, setPageResults] = useState<PageResult[]>([]);
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const [announcement, setAnnouncement] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -51,6 +69,13 @@ export default function Search() {
           return name.includes(trimmed) || doc?.name.toLowerCase().includes(trimmed);
         })
         .slice(0, 6);
+
+  // Flattened navigation order: components first, then pages — matching
+  // the rendered order of the two groups.
+  const flatUrls = [
+    ...componentResults.map(name => `/components/${name}`),
+    ...pageResults.map(p => p.url),
+  ];
 
   useEffect(() => {
     if (trimmed === '') {
@@ -72,6 +97,38 @@ export default function Search() {
     })();
     return () => { cancelled = true; };
   }, [trimmed]);
+
+  // Reset keyboard selection whenever the query changes or the dropdown closes.
+  useEffect(() => { setActiveIndex(-1); }, [trimmed]);
+  useEffect(() => { if (!open) setActiveIndex(-1); }, [open]);
+
+  // Clamp if async page results shrink the list under the active index.
+  useEffect(() => {
+    if (activeIndex >= flatUrls.length) {
+      setActiveIndex(flatUrls.length - 1);
+    }
+  }, [flatUrls.length, activeIndex]);
+
+  // Keep the keyboard-active option visible.
+  useEffect(() => {
+    if (activeIndex < 0) return;
+    document.getElementById(optionId(activeIndex))
+      ?.scrollIntoView({ block: 'nearest' });
+  }, [activeIndex]);
+
+  // Politely announce the result count, debounced so intermediate
+  // keystrokes (and the async pagefind round-trip) don't spam SRs.
+  useEffect(() => {
+    if (trimmed === '') {
+      setAnnouncement('');
+      return;
+    }
+    const count = componentResults.length + pageResults.length;
+    const timer = setTimeout(() => {
+      setAnnouncement(count === 0 ? 'No results' : `${count} result${count === 1 ? '' : 's'}`);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [trimmed, componentResults.length, pageResults.length]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -99,11 +156,64 @@ export default function Search() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const navigateTo = (url: string) => {
+    window.location.href = url;
+    setOpen(false);
+    setQuery('');
+  };
+
+  const handleInputKeyDown = (e: ReactKeyboardEvent<HTMLInputElement>) => {
+    if (!open || flatUrls.length === 0) return;
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        setActiveIndex(i => (i + 1) % flatUrls.length);
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setActiveIndex(i => (i <= 0 ? flatUrls.length - 1 : i - 1));
+        break;
+      case 'Enter': {
+        e.preventDefault();
+        const url = flatUrls[activeIndex >= 0 ? activeIndex : 0];
+        if (url) navigateTo(url);
+        break;
+      }
+      default:
+        break;
+    }
+  };
+
   const hasResults = componentResults.length > 0 || pageResults.length > 0;
   const showEmptyState = open && trimmed !== '' && !hasResults;
+  const listboxVisible = open && hasResults;
+
+  const renderOption = (
+    index: number,
+    url: string,
+    key: string,
+    children: ReactNode,
+  ) => (
+    <button
+      key={key}
+      id={optionId(index)}
+      role="option"
+      aria-selected={index === activeIndex}
+      tabIndex={-1}
+      className={`docs-search-result${index === activeIndex ? ' is-active' : ''}`}
+      onClick={() => navigateTo(url)}
+      onMouseEnter={() => setActiveIndex(index)}
+    >
+      {children}
+    </button>
+  );
 
   return (
     <div className="docs-search">
+      <style>{SCOPED_STYLES}</style>
+      <div className="sr-only" role="status" aria-live="polite">
+        {announcement}
+      </div>
       <div className="docs-search-input-wrapper">
         <svg
           className="docs-search-icon"
@@ -129,77 +239,89 @@ export default function Search() {
           value={query}
           onChange={e => { setQuery(e.target.value); setOpen(true); }}
           onFocus={() => setOpen(true)}
+          onKeyDown={handleInputKeyDown}
           aria-label="Search docs and components"
+          role="combobox"
+          aria-expanded={listboxVisible}
+          aria-controls={LISTBOX_ID}
+          aria-autocomplete="list"
+          aria-activedescendant={
+            listboxVisible && activeIndex >= 0 ? optionId(activeIndex) : undefined
+          }
         />
         <kbd className="docs-search-kbd">⌘K</kbd>
       </div>
 
       {open && (hasResults || showEmptyState) && (
         <div ref={dropdownRef} className="docs-search-results">
-          {componentResults.length > 0 && (
-            <>
-              <div className="docs-search-group-heading">Components</div>
-              {componentResults.map(name => (
-                <button
-                  key={`c-${name}`}
-                  className="docs-search-result"
-                  onClick={() => {
-                    window.location.href = `/components/${name}`;
-                    setOpen(false);
-                    setQuery('');
-                  }}
-                >
-                  <span className="docs-search-result-icon" aria-hidden="true">
-                    {(componentDocs[name]?.name ?? name).replace(/^Llm/, '').charAt(0)}
-                  </span>
-                  <div className="docs-search-result-content">
-                    <div className="docs-search-result-name">{componentDocs[name]?.name ?? name}</div>
-                    <div className="docs-search-result-category">{componentDocs[name]?.category}</div>
-                  </div>
-                </button>
-              ))}
-            </>
-          )}
-
-          {pageResults.length > 0 && (
-            <>
-              <div className="docs-search-group-heading">Pages</div>
-              {pageResults.map(p => (
-                <button
-                  key={`p-${p.url}`}
-                  className="docs-search-result"
-                  onClick={() => {
-                    window.location.href = p.url;
-                    setOpen(false);
-                    setQuery('');
-                  }}
-                >
-                  <svg
-                    className="docs-search-result-icon"
-                    viewBox="0 0 24 24"
-                    width="16"
-                    height="16"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.75"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                    focusable="false"
+          {hasResults && (
+            <div role="listbox" id={LISTBOX_ID} aria-label="Search results">
+              {componentResults.length > 0 && (
+                <div role="group" aria-labelledby="docs-search-group-components">
+                  <div
+                    className="docs-search-group-heading"
+                    role="presentation"
+                    id="docs-search-group-components"
                   >
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <polyline points="14 2 14 8 20 8" />
-                  </svg>
-                  <div className="docs-search-result-content">
-                    <div className="docs-search-result-name">{p.title}</div>
-                    <div
-                      className="docs-search-result-category docs-search-result-excerpt"
-                      dangerouslySetInnerHTML={{ __html: p.excerpt }}
-                    />
+                    Components
                   </div>
-                </button>
-              ))}
-            </>
+                  {componentResults.map((name, i) =>
+                    renderOption(i, `/components/${name}`, `c-${name}`, (
+                      <>
+                        <span className="docs-search-result-icon" aria-hidden="true">
+                          {(componentDocs[name]?.name ?? name).replace(/^Llm/, '').charAt(0)}
+                        </span>
+                        <div className="docs-search-result-content">
+                          <div className="docs-search-result-name">{componentDocs[name]?.name ?? name}</div>
+                          <div className="docs-search-result-category">{componentDocs[name]?.category}</div>
+                        </div>
+                      </>
+                    ))
+                  )}
+                </div>
+              )}
+
+              {pageResults.length > 0 && (
+                <div role="group" aria-labelledby="docs-search-group-pages">
+                  <div
+                    className="docs-search-group-heading"
+                    role="presentation"
+                    id="docs-search-group-pages"
+                  >
+                    Pages
+                  </div>
+                  {pageResults.map((p, i) =>
+                    renderOption(componentResults.length + i, p.url, `p-${p.url}`, (
+                      <>
+                        <svg
+                          className="docs-search-result-icon"
+                          viewBox="0 0 24 24"
+                          width="16"
+                          height="16"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.75"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                          focusable="false"
+                        >
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                          <polyline points="14 2 14 8 20 8" />
+                        </svg>
+                        <div className="docs-search-result-content">
+                          <div className="docs-search-result-name">{p.title}</div>
+                          <div
+                            className="docs-search-result-category docs-search-result-excerpt"
+                            dangerouslySetInnerHTML={{ __html: p.excerpt }}
+                          />
+                        </div>
+                      </>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
           )}
 
           {showEmptyState && (
