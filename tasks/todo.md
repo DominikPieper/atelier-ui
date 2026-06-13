@@ -1,5 +1,15 @@
 # Atelier — Status
 
+## Spec hygiene: checkbox/toggle value (ADR-0022) — 2026-06-13
+
+- [x] Decision: spec-hygiene + docs (not adapter parity / not docs-only)
+- [x] LlmCheckboxSpec/LlmToggleSpec → Omit<LlmFormFieldSpec,'value'|'onValueChange'>
+- [x] Dropped phantom value/[(value)] rows from checkbox+toggle docs prop tables
+- [x] sync-spec + gen-behaviors + gen-llms; check:all green; build 58 pages
+- [x] ADR-0022 + README row; commit
+- [ ] push
+- Remaining open: .panel/.close-btn dialog scoping (component-trinity); McpExplorer tool rename (lossy, disclaimer'd); ideas 11-29
+
 ## Quick-win ideas batch — 2026-06-13
 
 - [x] Edit-this-page link (BaseLayout + source-path helper; dynamic routes link template, 404 excluded)
