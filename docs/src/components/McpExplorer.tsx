@@ -1,6 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
-
-type Framework = 'angular' | 'react' | 'vue';
+import {
+  getFramework,
+  setFramework as setSharedFramework,
+  subscribeFramework,
+  type Framework,
+} from '../lib/framework-pref';
 
 const SITE_URL = 'https://atelier.pieper.io';
 
@@ -165,7 +169,7 @@ const MOCK_RESPONSES: Record<string, (params: Record<string, string>, fw: Framew
         'text-muted': 'var(--ui-color-text-muted)',
         'border': 'var(--ui-color-border)',
       },
-      spacing: { 'radius-sm': '4px', 'radius-md': '8px', 'radius-lg': '12px' },
+      spacing: { 'radius-sm': '8px', 'radius-md': '10px', 'radius-lg': '14px' },
     },
     dark_mode: 'Set data-theme="dark" on <html> — all tokens switch automatically',
   }),
@@ -235,7 +239,7 @@ function CodePane({ code, label, labelColor = 'var(--ui-color-primary)' }: { cod
 }
 
 export default function McpExplorer() {
-  const [framework, setFramework] = useState<Framework>('angular');
+  const [framework, setFramework] = useState<Framework>(() => getFramework());
   const [selectedTool, setSelectedTool] = useState('get_component_docs');
   const [params, setParams] = useState<Record<string, string>>({ component: 'button' });
   const [request, setRequest] = useState<object | null>(null);
@@ -275,12 +279,20 @@ export default function McpExplorer() {
     setResponseVisible(false);
   }
 
-  function switchFramework(fw: Framework) {
+  // Keep this explorer in sync with the shared framework preference used by the
+  // docs header / component pages, so switching framework anywhere updates here.
+  useEffect(() => subscribeFramework((fw) => {
     setFramework(fw);
     setRequest(null);
     setRequestVisible(false);
     setResponse(null);
     setResponseVisible(false);
+  }), []);
+
+  function switchFramework(fw: Framework) {
+    // Write back to the shared preference; the subscription above applies the
+    // state update + pane reset (and reflects it on every other surface).
+    setSharedFramework(fw);
   }
 
   function handleCall() {
@@ -360,7 +372,7 @@ export default function McpExplorer() {
             const active = framework === fw;
             const color = FRAMEWORK_COLORS[fw];
             return (
-              <button key={fw} onClick={() => switchFramework(fw)} style={{
+              <button key={fw} type="button" aria-pressed={active} onClick={() => switchFramework(fw)} style={{
                 // Brand-coloured border carries the active cue; the text uses
                 // --ui-color-text (AA-safe). Brand colours like #61dafb (React
                 // light blue) and #42b883 (Vue green) only hit 1.5–2.4:1 on
@@ -443,6 +455,8 @@ export default function McpExplorer() {
             return (
               <button
                 key={tool.name}
+                type="button"
+                aria-pressed={active}
                 onClick={() => supported && selectTool(tool.name)}
                 disabled={!supported}
                 aria-disabled={!supported || undefined}
@@ -521,6 +535,7 @@ export default function McpExplorer() {
                   </div>
                   <input
                     type="text"
+                    aria-label={`${param.name} parameter${param.type ? ` (${param.type})` : ''}`}
                     value={params[param.name] ?? ''}
                     onChange={e => { setParams(p => ({ ...p, [param.name]: e.target.value })); setResponse(null); }}
                     style={{
@@ -536,7 +551,7 @@ export default function McpExplorer() {
                       {param.suggestions.slice(0, 12).map(s => {
                         const isActive = params[param.name] === s;
                         return (
-                          <button key={s} onClick={() => { setParams(p => ({ ...p, [param.name]: s })); setResponse(null); }} style={{
+                          <button key={s} type="button" aria-pressed={isActive} aria-label={`Set ${param.name} to ${s}`} onClick={() => { setParams(p => ({ ...p, [param.name]: s })); setResponse(null); }} style={{
                             minHeight: '24px', padding: '0.4rem 0.65rem', borderRadius: 'var(--ui-radius-sm)', border: 'none',
                             background: isActive ? 'var(--ui-color-primary-light)' : 'var(--ui-color-surface-sunken)',
                             color: isActive ? 'var(--ui-color-primary)' : 'var(--ui-color-text-muted)',
@@ -553,7 +568,7 @@ export default function McpExplorer() {
 
           {/* Call button */}
           <div>
-            <button onClick={handleCall} disabled={calling} style={{
+            <button onClick={handleCall} type="button" disabled={calling} aria-label={calling ? `Calling ${selectedTool}` : `Call ${selectedTool}`} style={{
               padding: '0.55rem 1.75rem', borderRadius: 'var(--ui-radius-md)', border: 'none',
               background: calling ? 'var(--ui-color-surface-raised)' : 'var(--ui-color-primary)',
               color: calling ? 'var(--ui-color-text-muted)' : 'var(--ui-color-text-on-primary)',
@@ -561,7 +576,8 @@ export default function McpExplorer() {
               fontWeight: 700, fontSize: '0.85rem', fontFamily: 'monospace', letterSpacing: '0.03em',
               animation: calling ? 'mcp-pulse 1.4s ease-in-out infinite' : 'none',
             }}>
-              {calling ? '··· calling' : '▶  call'}
+              {/* aria-label carries the accessible name; the glyph is decorative. */}
+              <span aria-hidden="true">{calling ? '··· calling' : '▶  call'}</span>
             </button>
           </div>
 
@@ -570,6 +586,24 @@ export default function McpExplorer() {
               <CodePane code={JSON.stringify(request, null, 2)} label="tool_call" labelColor="var(--ui-color-primary)" />
             </div>
           )}
+
+          {/* Polite live region announcement, mounted before the call so AT
+              hears the result arrive (a region added to the DOM at the same
+              moment as its content is not reliably announced). Only this
+              concise sentence is the announcement; the visual tool_result pane
+              below stays in the normal a11y tree (its Copy button + JSON remain
+              reachable on demand) but sits outside the live region so the raw
+              JSON isn't read aloud automatically. */}
+          <div role="status" aria-live="polite" style={{
+            position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px',
+            overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap', border: 0,
+          }}>
+            {calling
+              ? `Calling ${selectedTool}…`
+              : response
+                ? `Result received for ${selectedTool}.`
+                : ''}
+          </div>
 
           {response && (
             <div style={{ opacity: responseVisible ? 1 : 0, transform: responseVisible ? 'translateY(0)' : 'translateY(6px)', transition: 'opacity var(--ui-transition-slow), transform var(--ui-transition-slow)' }}>

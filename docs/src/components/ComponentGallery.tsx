@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { ALL_COMPONENTS, COMPONENT_CATEGORIES, componentDocs, CATEGORY_ICONS } from '../data/components';
+import { ALL_COMPONENTS, COMPONENT_CATEGORIES, componentDocs } from '../data/components';
 
 export default function ComponentGallery() {
   const [query, setQuery] = useState('');

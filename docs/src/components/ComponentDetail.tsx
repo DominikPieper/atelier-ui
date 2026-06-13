@@ -104,21 +104,40 @@ function CodeBlock({ code, lang }: { code: string; lang: string }) {
   );
 }
 
-function MultiCodeBlock({ symbols }: { symbols: string[] }) {
-  const [active, setActive] = useState(0);
-  const frameworks = ['Angular', 'React', 'Vue'];
-  const pkgs = ['@atelier-ui/angular', '@atelier-ui/react', '@atelier-ui/vue'];
-  const codes = pkgs.map(pkg => `import { ${symbols.join(', ')} } from '${pkg}';`);
+// Order mirrors the page-header framework switcher so the import tabs map 1:1
+// onto the shared `Framework` preference rather than tracking a separate index.
+const MULTI_CODE_FRAMEWORKS: Framework[] = ['angular', 'react', 'vue'];
+
+function MultiCodeBlock({ symbols, framework }: { symbols: string[]; framework: Framework }) {
+  const pkgs: Record<Framework, string> = {
+    angular: '@atelier-ui/angular',
+    react: '@atelier-ui/react',
+    vue: '@atelier-ui/vue',
+  };
+  const code = `import { ${symbols.join(', ')} } from '${pkgs[framework]}';`;
   return (
     <div>
+      {/* aria-pressed toggle buttons (not role=tab): clicking writes the shared
+          framework preference, which drives several scattered surfaces on the
+          page (demo, props, import) rather than a single tabpanel — so the
+          honest pattern is a group of toggle buttons, not a tablist. */}
       <div className="docs-multi-code-tabs" style={{ borderRadius: '8px 8px 0 0', marginBottom: 0 }}>
-        {frameworks.map((fw, i) => (
-          <button key={fw} className={`docs-multi-code-tab${active === i ? ' active' : ''}`} onClick={() => setActive(i)}>
-            {fw}
-          </button>
-        ))}
+        {MULTI_CODE_FRAMEWORKS.map(fw => {
+          const active = framework === fw;
+          return (
+            <button
+              key={fw}
+              type="button"
+              aria-pressed={active}
+              className={`docs-multi-code-tab${active ? ' active' : ''}`}
+              onClick={() => setFramework(fw)}
+            >
+              {fw.charAt(0).toUpperCase() + fw.slice(1)}
+            </button>
+          );
+        })}
       </div>
-      <CodeBlock lang="ts" code={codes[active]} />
+      <CodeBlock lang="ts" code={code} />
     </div>
   );
 }
@@ -458,6 +477,8 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
             {(['angular', 'react', 'vue'] as const).map(fw => (
               <button
                 key={fw}
+                type="button"
+                aria-pressed={framework === fw}
                 className={`docs-framework-btn${framework === fw ? ' is-active' : ''}`}
                 onClick={() => setFramework(fw)}
               >
@@ -547,7 +568,7 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
       {importSymbols.length > 0 && (
         <div className="docs-section">
           <h2 className="docs-section-title">Import</h2>
-          <MultiCodeBlock symbols={importSymbols} />
+          <MultiCodeBlock symbols={importSymbols} framework={framework} />
         </div>
       )}
 
