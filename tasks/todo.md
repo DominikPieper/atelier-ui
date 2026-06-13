@@ -1,5 +1,31 @@
 # Atelier — Status
 
+## UX Top-5 implementation — 2026-06-12 (eve)
+
+Report: tasks/review-docs-ux-2026-06-12.md · Top-5: track infra, 404, framework-state, checkpoints, search/drawer a11y
+
+- [x] Wave 1A: workshop-track.ts + TrackNav.astro + Checkpoint.astro + BaseLayout (sidebar derive + drawer a11y + 44px targets)
+- [x] Wave 1B: branded 404.astro
+- [x] Wave 1C: ComponentDetail (import tabs framework-aware + aria-pressed) + McpExplorer (framework-pref + a11y + radius mock)
+- [x] Wave 1D: Search.tsx keyboard nav + ARIA combobox + live region
+- [x] Wave 2: TrackNav + Checkpoint + step indicator on 7 track pages; first-component {framework}-substituting prompt
+- [x] Verify: nx lint (clean) + build (58 pages) + local screenshots + functional asserts
+- [x] Commits (5 batches) + push
+
+### Review
+
+Wave-2 page agents hit the session limit mid-run (reset 00:20). State on resume: workshop + figma-token complete; design-to-code build-broken (left a BottomNav ref + renamed PROMPT→prompt(fw) without updating the body); tutorial/patterns/first-component/schulung partial or untouched. Finished all 7 by hand (mechanical, API was clear from the two completed pages).
+
+**Two real bugs the agents introduced, caught at build:**
+1. `design-to-code` referenced removed `BottomNav` and an undefined `PROMPT` — fixed by completing the TrackNav swap and per-framework prompt rendering.
+2. **TrackNav used `arrow_forward`, which isn't in the Icon registry** (only arrow_back/left/right exist) — it never surfaced in wave 1 because TrackNav renders nothing until placed on a track page, so the bad icon name was only exercised once wave 2 wired it in. Switched to arrow_left/arrow_right.
+
+Verified live (local): first-component shows "Step 7 of 8", prompt contains concrete `storybook-angular`, TrackNav prev=Design to code / next=Patterns; patterns renders prev-only (last step); workshop checkpoint present; schulung "for instructors" note + "Step 2 of 8"; 404 full chrome + studio metaphor; search ArrowDown sets aria-activedescendant + aria-expanded.
+
+**Open (user decision):** Schulung placement — it's now flagged in-page as instructor material, but still sits as numbered step 2 of the participant path. Moving it out of the numbered sequence is a content/IA call.
+
+**Not done (deferred ideas, report ranks 9–29):** framework-aware home routing, interactive token playground, "Edit this page", persisted progress checkmarks, embedded Storybook previews, changelog-from-ADRs, etc.
+
 ## Fix docs review findings (P1+P2) — 2026-06-12
 
 Plan: ~/.claude/plans/mach-ein-review-von-delightful-axolotl.md · Report: tasks/review-docs-site-2026-06-12.md
