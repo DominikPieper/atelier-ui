@@ -1,5 +1,14 @@
 # Atelier — Status
 
+## UX P2 batch — 2026-06-13
+
+- [x] Agent 1: workshop-track.ts (Schulung→7 steps), BaseLayout (instructor group + MCP label + tocItems API + drawer pad), global.css (.docs-toc-mobile + scroll-fade)
+- [x] Agent 2: TOC adoption — 6 pages migrated to tocItems; tokens+schulung gain TOC; schulung manual pager
+- [x] Verify: nx lint clean + build 58 pages + screenshots; commits + push
+
+### Review
+6 open P2 closed. Verified live (local): tokens/schulung desktop TOC (7/6 sections), mobile "On this page" disclosure visible+expandable, drawer shows For-instructors group and scrolls with 80px bottom clearance, first-component "Step 6 of 7", topbar "MCP playground". One icon note: the instructor-group heading uses `school` (Icon.astro only registers a fixed set; unregistered names crash the build — same constraint hit twice). Still open: UX P3 list (~14), deferred ideas 9-29, content follow-ups (checkbox/toggle [(value)] alias, .panel/.close-btn scoping, McpExplorer tool rename).
+
 ## UX Top-5 implementation — 2026-06-12 (eve)
 
 Report: tasks/review-docs-ux-2026-06-12.md · Top-5: track infra, 404, framework-state, checkpoints, search/drawer a11y
