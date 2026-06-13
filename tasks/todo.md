@@ -1,5 +1,17 @@
 # Atelier — Status
 
+## P3 polish batch — 2026-06-13
+
+- [x] Agent A chrome: visible breadcrumb, components return link, scroll-top 44px + progress bar
+- [x] Agent B pages: figma-console-mcp literal, home jargon, d2c named link, kata code title, accessibility note (FRAMEWORKS order + mcp overflow rerouted to me)
+- [x] Agent C data: CDK-leak neutralized, 'Yes, delete' label, vertical-tab pills clarification
+- [x] Agent D a11y: gallery filtered-count live region
+- [x] Inline (orchestrator): McpExplorer 'Use with AI tools' single-col; tutorial+d2c FRAMEWORKS→Angular-first (match FW_DEFAULT); ComponentDetail duplicate breadcrumb removed; McpExplorer radius mock already fixed prior
+- [x] Verify nx lint/build/check:docs clean (58 pages); screenshots (single breadcrumb, progress bar, MCP single-col, home jargon) + commits
+
+### Review
+P3 polish batch done, 4 commits. Moot (already fixed earlier): skill version + ref count (derived), kata {framework} (substituted). Skipped: og:image (accepted placeholder). Agent B correctly rejected an inverted premise — FW_DEFAULT is 'angular', so first-component (Angular-first) was already right; tutorial+d2c were the divergent ones (fixed inline). Remaining open: deferred ideas 9-29, content follow-ups (checkbox/toggle [(value)] alias, .panel/.close-btn scoping, McpExplorer tool rename), content-review-1 P3 (figma-console-mcp suffix now done; rest minor).
+
 ## UX P2 batch — 2026-06-13
 
 - [x] Agent 1: workshop-track.ts (Schulung→7 steps), BaseLayout (instructor group + MCP label + tocItems API + drawer pad), global.css (.docs-toc-mobile + scroll-fade)

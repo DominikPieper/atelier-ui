@@ -946,7 +946,7 @@ Each entry lists:
 
 ### LlmMenu + LlmMenuItem + LlmMenuTrigger
 
-  A dropdown context menu built on @angular/cdk/menu. Handles keyboard navigation, focus management, ARIA, and nested submenus.
+  A dropdown context menu. Handles keyboard navigation, focus management, ARIA, and nested submenus.
 
   Props:
     variant  'default' | 'compact'  'default'  Density of the menu
@@ -1120,7 +1120,7 @@ Each entry lists:
 
 ### [llmTooltip]
 
-  An attribute directive that adds a tooltip to any element. Built on @angular/cdk/overlay for viewport-aware positioning.
+  An attribute directive that adds a tooltip to any element. Uses a viewport-aware overlay layer so the tooltip flips to stay on-screen.
 
   Props:
     llmTooltip           string                                —        Tooltip text content (required)
