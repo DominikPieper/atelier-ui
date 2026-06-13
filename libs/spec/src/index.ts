@@ -122,13 +122,16 @@ export interface LlmTextareaSpec extends LlmFormFieldSpec {
 // ---------------------------------------------------------------------------
 // Checkbox / Toggle
 // ---------------------------------------------------------------------------
-export interface LlmCheckboxSpec extends LlmFormFieldSpec {
+// Checkbox/Toggle are checked-based, not value-based, so they omit the
+// inherited `value`/`onValueChange` — their state is `checked`/`onCheckedChange`.
+// (Input/Textarea/RadioGroup/Select/Combobox keep the value-based pair.)
+export interface LlmCheckboxSpec extends Omit<LlmFormFieldSpec, 'value' | 'onValueChange'> {
   checked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
   indeterminate?: boolean;
 }
 
-export interface LlmToggleSpec extends LlmFormFieldSpec {
+export interface LlmToggleSpec extends Omit<LlmFormFieldSpec, 'value' | 'onValueChange'> {
   checked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
 }

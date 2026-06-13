@@ -27,6 +27,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0019](0019-figma-conformance-gate.md) | Figma conformance gate (`check:figma`) via committed snapshot + offline check | Accepted | Recorded |
 | [0020](0020-personal-authorial-signature.md) | Personal authorial signature (serif-italic heading accent + shared motion grammar) | Accepted | Recorded |
 | [0021](0021-build-time-derived-docs-counts.md) | Docs counts/sizes derived at build time where the source is local | Accepted | Recorded |
+| [0022](0022-checkbox-toggle-omit-value.md) | Checkbox/Toggle omit the inherited `value`/`onValueChange` | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

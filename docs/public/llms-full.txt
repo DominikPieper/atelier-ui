@@ -207,8 +207,6 @@ Each entry lists:
   Props:
     checked          boolean                     false  Controlled checked state
     onCheckedChange  (checked: boolean) => void  —      Called when the checked state changes
-    value            boolean                     false  Alias for checked (Signal Forms integration)
-    onValueChange    (checked: boolean) => void  —      Alias for onCheckedChange (Signal Forms integration)
     indeterminate    boolean                     false  Shows a dash (indeterminate state)
     disabled         boolean                     false  Disables the checkbox
     readonly         boolean                     false  Makes the checkbox read-only
@@ -255,8 +253,6 @@ Each entry lists:
   Props:
     checked          boolean                     false  Controlled checked state
     onCheckedChange  (checked: boolean) => void  —      Called when the checked state changes
-    value            boolean                     false  Alias for checked (Signal Forms integration)
-    onValueChange    (checked: boolean) => void  —      Alias for onCheckedChange (Signal Forms integration)
     disabled         boolean                     false  Disables the toggle
     readonly         boolean                     false  Makes the toggle read-only
     invalid          boolean                     false  Applies invalid/error styling

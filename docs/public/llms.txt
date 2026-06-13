@@ -24,8 +24,8 @@ Docs: https://atelier.pieper.io
 - [Button](https://atelier.pieper.io/components/button): variant (primary|secondary|outline|danger), size (sm|md|lg), disabled, loading, aria-label
 - [Input](https://atelier.pieper.io/components/input): value, type (text|email|password|number|tel|url), placeholder, disabled, readonly, invalid
 - [Textarea](https://atelier.pieper.io/components/textarea): value, rows, placeholder, disabled, readonly, invalid
-- [Checkbox](https://atelier.pieper.io/components/checkbox): checked, value, indeterminate, disabled, readonly, invalid
-- [Toggle](https://atelier.pieper.io/components/toggle): checked, value, disabled, readonly, invalid, required
+- [Checkbox](https://atelier.pieper.io/components/checkbox): checked, indeterminate, disabled, readonly, invalid, required
+- [Toggle](https://atelier.pieper.io/components/toggle): checked, disabled, readonly, invalid, required, name
 - [RadioGroup](https://atelier.pieper.io/components/radio-group): value, disabled, readonly, invalid, required, name
 - [Select](https://atelier.pieper.io/components/select): value, placeholder, disabled, readonly, invalid, required
 - [Combobox](https://atelier.pieper.io/components/combobox): value, options, placeholder, disabled, invalid
