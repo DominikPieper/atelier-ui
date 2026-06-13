@@ -491,7 +491,7 @@ export const PATTERNS: PatternMeta[] = [
     variations: [
       {
         title: 'Vertical-tab variant for ≥ 6 sections',
-        note: 'Set `variant="pills"` and a vertical container — the same TabGroup primitive renders side-tabs without changing keyboard semantics.',
+        note: 'TabGroup has no orientation prop — `variant="pills"` only restyles the tabs, it doesn\'t turn them vertical. You supply the side-tab layout in surrounding CSS (e.g. a flex row with the tablist in a column); the same primitive keeps its keyboard semantics either way.',
       },
       {
         title: 'With unsaved-changes prompt',
@@ -522,7 +522,7 @@ export const PATTERNS: PatternMeta[] = [
     a11yNotes: [
       'LlmDialog uses the native `<dialog>` element with `cdkTrapFocus` — focus moves to the first focusable inside, restores on close. Don\'t reimplement.',
       'Escape-to-close comes from the native `<dialog>` element\'s cancel event — the component intercepts it and routes it through the `open` binding as a close request. If an in-flight operation must not be interrupted, ignore that request (keep `open` true) until the mutation settles.',
-      'The destructive button must remain the *secondary* visual call to action — Cancel as `outline`, "Delete permanently" as `primary`. Reversing colour just to make red prominent is a contrast trap.',
+      'The destructive button must remain the *secondary* visual call to action — Cancel as `outline`, "Yes, delete" as `primary`. Reversing colour just to make red prominent is a contrast trap.',
     ],
     pitfalls: [
       'LLMs frequently add `autoFocus` to the destructive button — this nudges users into an accidental confirm. The first Tab stop should be Cancel.',

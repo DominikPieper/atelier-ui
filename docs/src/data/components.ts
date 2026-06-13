@@ -929,7 +929,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
   menu: {
     name: 'Menu',
     selector: 'LlmMenu + LlmMenuItem + LlmMenuTrigger',
-    description: 'A dropdown context menu built on @angular/cdk/menu. Handles keyboard navigation, focus management, ARIA, and nested submenus.',
+    description: 'A dropdown context menu. Handles keyboard navigation, focus management, ARIA, and nested submenus.',
     category: 'Navigation',
     props: [
       { name: 'variant', type: "'default' | 'compact'", default: "'default'", description: 'Density of the menu' },
@@ -1130,7 +1130,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
   tooltip: {
     name: 'Tooltip',
     selector: '[llmTooltip]',
-    description: 'An attribute directive that adds a tooltip to any element. Built on @angular/cdk/overlay for viewport-aware positioning.',
+    description: 'An attribute directive that adds a tooltip to any element. Uses a viewport-aware overlay layer so the tooltip flips to stay on-screen.',
     category: 'Overlay',
     props: [
       { name: 'llmTooltip', type: 'string', default: '—', description: 'Tooltip text content (required)' },
