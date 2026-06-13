@@ -33,13 +33,8 @@ function frameworkCode(p: typeof PATTERNS[number], fw: Framework): string {
   title="Cookbook patterns"
   description="Reusable Atelier UI patterns — form layouts, data tables, dialogs, navigation shells, and other multi-component recipes."
   currentPath="/patterns"
+  tocItems={PATTERNS.map((p) => ({ id: `pattern-${p.num}`, label: p.title }))}
 >
-  <nav slot="toc">
-    {PATTERNS.map((p) => (
-      <a href={`#pattern-${p.num}`} class="docs-toc-link">{p.title}</a>
-    ))}
-  </nav>
-
   <div class="docs-inline-page">
 
     <PageHero

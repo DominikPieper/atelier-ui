@@ -99,6 +99,15 @@ const motion = [
   title="Design tokens"
   description="The Atelier UI design token system — colors, spacing, radii, and typography primitives that flow from Figma into every component."
   currentPath="/tokens"
+  tocItems={[
+    { id: 'tiers',            label: 'How the tiers fit together' },
+    { id: 'colors',           label: 'Colors' },
+    { id: 'spacing',          label: 'Spacing' },
+    { id: 'border-radius',    label: 'Border radius' },
+    { id: 'typography-scale', label: 'Typography scale' },
+    { id: 'shadows',          label: 'Shadows' },
+    { id: 'motion',           label: 'Motion' },
+  ]}
 >
   <div class="docs-inline-page">
 
@@ -112,7 +121,7 @@ const motion = [
 
     <!-- Architecture -->
     <div class="docs-section">
-      <h2 class="docs-section-title">How the tiers fit together</h2>
+      <h2 id="tiers" class="docs-section-title">How the tiers fit together</h2>
       <p style="color: var(--ui-color-text-muted); font-size: 0.82rem; line-height: 1.6; margin-bottom: 1.5rem; max-width: 60ch">
         Tokens are layered, and each layer only ever points one step down. Raw <strong>values</strong> live in <strong>Primitives</strong> (a palette like <code>teal/500</code>). <strong>Meaning</strong> lives in the <strong>UI tier</strong> — the <code>--ui-*</code> tokens on this page — which alias a primitive and decide what it is <em>for</em> (<code>color/primary</code>). This is also the only tier that carries light and dark modes. On top sit <strong>Component tokens</strong>, component-local names (<code>button/bg-primary</code>) that alias a UI token.
       </p>
@@ -143,7 +152,7 @@ const motion = [
 
     <!-- Colors -->
     <div class="docs-section">
-      <h2 class="docs-section-title">Colors</h2>
+      <h2 id="colors" class="docs-section-title">Colors</h2>
       <p style="color: var(--ui-color-text-muted); font-size: 0.82rem; line-height: 1.6; margin-bottom: 1.5rem">
         Swatches reflect the current theme. Toggle dark/light mode to see both.
       </p>
@@ -172,7 +181,7 @@ const motion = [
 
     <!-- Spacing -->
     <div class="docs-section">
-      <h2 class="docs-section-title">Spacing</h2>
+      <h2 id="spacing" class="docs-section-title">Spacing</h2>
       <p style="color: var(--ui-color-text-muted); font-size: 0.82rem; line-height: 1.6; margin-bottom: 1rem">
         The same scale drives padding, gap, and margin. Pick the smallest token that gives the surface room to breathe — bigger numbers belong at higher levels of layout (sections, hero blocks).
       </p>
@@ -191,7 +200,7 @@ const motion = [
 
     <!-- Radius -->
     <div class="docs-section">
-      <h2 class="docs-section-title">Border radius</h2>
+      <h2 id="border-radius" class="docs-section-title">Border radius</h2>
       <p style="color: var(--ui-color-text-muted); font-size: 0.82rem; line-height: 1.6; margin-bottom: 1rem">
         Radius scales with surface importance. <code>md</code> is the project default; reach for <code>lg</code> when the surface lifts above the page (cards, dialogs).
       </p>
@@ -209,7 +218,7 @@ const motion = [
 
     <!-- Typography -->
     <div class="docs-section">
-      <h2 class="docs-section-title">Typography scale</h2>
+      <h2 id="typography-scale" class="docs-section-title">Typography scale</h2>
       <p style="color: var(--ui-color-text-muted); font-size: 0.82rem; line-height: 1.6; margin-bottom: 1rem">
         Body copy starts at <code>md</code>. Step down to <code>sm</code> / <code>xs</code> for secondary text and labels; up to <code>lg</code>+ for headings. Pair every step change with a heading-level shift in markup.
       </p>
@@ -228,7 +237,7 @@ const motion = [
 
     <!-- Shadows -->
     <div class="docs-section">
-      <h2 class="docs-section-title">Shadows</h2>
+      <h2 id="shadows" class="docs-section-title">Shadows</h2>
       <p style="color: var(--ui-color-text-muted); font-size: 0.82rem; line-height: 1.6; margin-bottom: 1rem">
         Shadows encode elevation. Larger token = higher layer in the stacking order. Keep the difference between hovered and resting states one step apart so movement reads as deliberate.
       </p>
@@ -246,7 +255,7 @@ const motion = [
 
     <!-- Motion -->
     <div class="docs-section">
-      <h2 class="docs-section-title">Motion</h2>
+      <h2 id="motion" class="docs-section-title">Motion</h2>
       <p style="color: var(--ui-color-text-muted); font-size: 0.82rem; line-height: 1.6; margin-bottom: 1rem">
         Durations match perceived weight: tiny things move fast, surfaces move slowly. Easing curves carry intent — <code>ease-out</code> for entrances, <code>ease-spring</code> for affirmative actions, <code>ease-in-out</code> for everything else.
       </p>

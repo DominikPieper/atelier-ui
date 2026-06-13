@@ -72,14 +72,8 @@ const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
   title={`${pattern.title} — Cookbook Pattern`}
   description={pattern.description}
   currentPath={`/patterns/${pattern.id}`}
+  tocItems={sections.map((s) => ({ id: s.id, label: s.label }))}
 >
-  <nav slot="toc">
-    <a href="/patterns" class="docs-toc-link" style="font-weight: 600">← All patterns</a>
-    {sections.map((s) => (
-      <a href={`#${s.id}`} class="docs-toc-link">{s.label}</a>
-    ))}
-  </nav>
-
   <div class="docs-inline-page">
 
     <div style="margin-bottom: 1.25rem">

@@ -71,19 +71,18 @@ const RECENT_A11Y: RecentA11y[] = [
   title="Accessibility"
   description="Accessibility stance for Atelier UI — WCAG 2.1 AA targets, non-color indicators, keyboard maps, and screen-reader support."
   currentPath="/accessibility"
+  tocItems={[
+    { id: 'stance',         label: 'Stance' },
+    { id: 'non-color',      label: 'Non-color indicators' },
+    { id: 'contrast',       label: 'Contrast & tokens' },
+    { id: 'keyboard',       label: 'Keyboard navigation' },
+    { id: 'screen-readers', label: 'Screen readers' },
+    { id: 'focus',          label: 'Focus management' },
+    { id: 'your-job',       label: "What's still your job" },
+    { id: 'recent',         label: 'Recent improvements' },
+    { id: 'reporting',      label: 'Reporting issues' },
+  ]}
 >
-  <nav slot="toc">
-    <a href="#stance"          class="docs-toc-link">Stance</a>
-    <a href="#non-color"       class="docs-toc-link">Non-color indicators</a>
-    <a href="#contrast"        class="docs-toc-link">Contrast &amp; tokens</a>
-    <a href="#keyboard"        class="docs-toc-link">Keyboard navigation</a>
-    <a href="#screen-readers"  class="docs-toc-link">Screen readers</a>
-    <a href="#focus"           class="docs-toc-link">Focus management</a>
-    <a href="#your-job"        class="docs-toc-link">What's still your job</a>
-    <a href="#recent"          class="docs-toc-link">Recent improvements</a>
-    <a href="#reporting"       class="docs-toc-link">Reporting issues</a>
-  </nav>
-
   <div class="docs-inline-page">
 
     <PageHero kind="explanation" title="Accessibility" ledeMax="560px">

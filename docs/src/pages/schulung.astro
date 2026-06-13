@@ -2,12 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import HelpFooter from '../components/HelpFooter.astro';
-import TrackNav from '../components/TrackNav.astro';
+import BottomNav from '../components/BottomNav.astro';
 import Callout from '../components/Callout.astro';
-import { getTrackStep, TRACK_LENGTH } from '../data/workshop-track';
-
-const trackStep = getTrackStep('/schulung');
-const stepTag = trackStep ? `Step ${trackStep.step} of ${TRACK_LENGTH}` : undefined;
 
 type Block = {
   num: string;
@@ -217,13 +213,20 @@ const DAYS: Day[] = [
   title="2-Tages-Schulung"
   description="Curriculum für die Atelier 2-Tages-Schulung — KI-gestützter Design-to-Code-Workflow mit Figma, Storybook, MCP und Claude Code. Jeder Teilnehmer im Wunsch-Framework (Angular / React / Vue)."
   currentPath="/schulung"
+  tocItems={[
+    { id: 'zielgruppe',    label: 'Zielgruppe' },
+    { id: 'hauptlernziel', label: 'Hauptlernziel' },
+    { id: 'format',        label: 'Format pro Tag' },
+    { id: 'day-tag-1',     label: 'Tag 1' },
+    { id: 'day-tag-2',     label: 'Tag 2' },
+    { id: 'verify-title',  label: 'Erfolgs-Verifizierung' },
+  ]}
 >
   <div class="docs-inline-page">
 
     <PageHero
       kind="tutorial"
       time="2 Tage · je ~7–8 h"
-      tag={stepTag}
       title="2-Tages-Schulung"
       ledeMax="640px"
     >
@@ -239,7 +242,7 @@ const DAYS: Day[] = [
 
     <div class="objective-box">
       <div class="objective-col">
-        <h2 class="objective-heading objective-heading--accent">Zielgruppe</h2>
+        <h2 id="zielgruppe" class="objective-heading objective-heading--accent">Zielgruppe</h2>
         <ul class="objective-list">
           <li>Entwickler mit Frontend-Basis (Angular, React oder Vue)</li>
           <li>Wenig Erfahrung mit Figma, Storybook, MCP oder AI-Codegen</li>
@@ -248,7 +251,7 @@ const DAYS: Day[] = [
         </ul>
       </div>
       <div class="objective-col">
-        <h2 class="objective-heading">Hauptlernziel</h2>
+        <h2 id="hauptlernziel" class="objective-heading">Hauptlernziel</h2>
         <ul class="objective-list objective-list--muted">
           <li>Die vier Pillars verstehen: Figma · Storybook · MCP · Claude Code</li>
           <li>End-to-End Design-to-Code-Workflow beherrschen</li>
@@ -258,6 +261,7 @@ const DAYS: Day[] = [
       </div>
     </div>
 
+    <div id="format" style="scroll-margin-top: 88px">
     <Callout tone="tip" title="Format pro Tag">
       <p>
         ~7–8 h netto · 60 min Mittagspause · 2× 15 min Kaffeepausen · kleine Mikro-Pausen. Pre-Workshop-Setup
@@ -265,6 +269,7 @@ const DAYS: Day[] = [
         siehe <a href="/workshop" class="docs-link-primary">Workshop Setup</a>.
       </p>
     </Callout>
+    </div>
 
     {DAYS.map((day) => (
       <section class="schulung-day" aria-labelledby={`day-${day.day.replace(' ', '-').toLowerCase()}`}>
@@ -321,7 +326,10 @@ const DAYS: Day[] = [
 
     <HelpFooter page="schulung" />
 
-    <TrackNav />
+    <BottomNav items={[
+      { to: '/',         label: 'Prev', title: 'Overview', icon: 'dashboard' },
+      { to: '/workshop', label: 'Next', title: 'Setup',    icon: 'build_circle' },
+    ]} />
 
   </div>
 </BaseLayout>

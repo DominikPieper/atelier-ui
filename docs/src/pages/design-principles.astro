@@ -8,15 +8,14 @@ import PageHero from '../components/PageHero.astro';
   title="LLM-optimized APIs"
   description="Design principles behind Atelier UI — API shapes that help language models generate correct, idiomatic component code on the first try."
   currentPath="/design-principles"
+  tocItems={[
+    { id: 'principle-1', label: 'One name for one concept' },
+    { id: 'principle-2', label: 'Narrow literal types' },
+    { id: 'principle-3', label: 'Sensible defaults' },
+    { id: 'principle-4', label: 'Single reactivity model' },
+    { id: 'principle-5', label: 'MCP server closes the loop' },
+  ]}
 >
-  <nav slot="toc">
-    <a href="#principle-1" class="docs-toc-link">One name for one concept</a>
-    <a href="#principle-2" class="docs-toc-link">Narrow literal types</a>
-    <a href="#principle-3" class="docs-toc-link">Sensible defaults</a>
-    <a href="#principle-4" class="docs-toc-link">Single reactivity model</a>
-    <a href="#principle-5" class="docs-toc-link">MCP server closes the loop</a>
-  </nav>
-
   <div class="docs-inline-page">
     <PageHero kind="explanation" title="LLM-optimized API design" ledeMax="580px">
       <strong>Predictable APIs across frameworks.</strong>
