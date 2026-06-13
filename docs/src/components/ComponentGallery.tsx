@@ -32,7 +32,10 @@ export default function ComponentGallery() {
       <div className="docs-page-header">
         <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
           <h1 className="docs-page-h1">Components</h1>
-          <span className="docs-count-badge">{visibleCount} of {ALL_COMPONENTS.length}</span>
+          <span className="docs-count-badge" aria-hidden="true">{visibleCount} of {ALL_COMPONENTS.length}</span>
+          <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+            Showing {visibleCount} of {ALL_COMPONENTS.length} components
+          </span>
         </div>
         <p className="docs-page-description">
           Identical APIs across Angular, React, and Vue. Designed for AI-assisted development.
