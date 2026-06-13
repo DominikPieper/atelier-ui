@@ -14,7 +14,7 @@ import { getTrackStep, TRACK_LENGTH } from '../data/workshop-track';
 const trackStep = getTrackStep('/design-to-code');
 const heroTag = trackStep ? `Step ${trackStep.step} of ${TRACK_LENGTH}` : undefined;
 
-const FRAMEWORKS = ['React', 'Angular', 'Vue'] as const;
+const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
 
 // Step 3 — a representative "generate" prompt per framework. The only
 // difference between them is the framework name and which Storybook MCP
@@ -79,7 +79,7 @@ the component I just generated. Fix every discrepancy it reports.`;
     <!-- Framing: one framework per session -->
     <Callout tone="note" title="Pick one framework per session">
       <p style="margin: 0; font-size: 0.85rem; line-height: 1.6; color: var(--ui-color-text-muted)">
-        Every workshop runs in a <strong style="color: var(--ui-color-text)">single framework</strong> — pick Angular, React, or Vue with the switcher in the Generate step below. The other two adapters are reference infrastructure that keeps the API contract honest; you don't touch them in a session.
+        Every workshop runs in a <strong style="color: var(--ui-color-text)">single framework</strong> — pick Angular, React, or Vue with the switcher in the <a href="#step-generate" class="docs-link-primary">Generate step</a> below. The other two adapters are reference infrastructure that keeps the API contract honest; you don't touch them in a session.
       </p>
     </Callout>
 
@@ -162,7 +162,7 @@ the component I just generated. Fix every discrepancy it reports.`;
     </div>
 
     <!-- Step 3 — Generate -->
-    <div class="docs-section">
+    <div class="docs-section" id="step-generate">
       <div class="docs-step-row" data-step="3">
         <span class="docs-step-badge">3</span>
         <div style="flex: 1">

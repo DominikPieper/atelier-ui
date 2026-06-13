@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import SectionHead from '../components/SectionHead.astro';
 import CodeCard from '../components/CodeCard.astro';
+import Jargon from '../components/Jargon.astro';
 
 const MCP_CONFIG = `{
   "mcpServers": {
@@ -88,7 +89,7 @@ const SCAFFOLD_CMD = 'npx create-atelier-ui-workspace';
         <div class="docs-pillar-icon" aria-hidden="true"><Icon name="book" /></div>
         <h3 class="docs-pillar-name">Storybook</h3>
         <p class="docs-pillar-desc">
-          Per-framework live explorer. Each instance hosts an MCP endpoint Claude can call.
+          Per-framework live explorer. Each instance hosts an <Jargon term="MCP">MCP</Jargon> endpoint Claude can call.
         </p>
         <div class="docs-pillar-meta">
           <span class="docs-pill-tag">/mcp</span>
