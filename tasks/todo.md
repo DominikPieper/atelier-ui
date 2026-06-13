@@ -1,5 +1,12 @@
 # Atelier — Status
 
+## Quick-win ideas batch — 2026-06-13
+
+- [x] Edit-this-page link (BaseLayout + source-path helper; dynamic routes link template, 404 excluded)
+- [x] Teaching empty states (gallery: specific msg + Clear filters + category chips; search: type-hint)
+- [x] Verify (lint/build/58 pages) + screenshots + commit + push
+- Skipped: copy "inked" polish (multiple impls, low value); content follow-ups [(value)] alias still a docs-vs-library decision
+
 ## P3 polish batch — 2026-06-13
 
 - [x] Agent A chrome: visible breadcrumb, components return link, scroll-top 44px + progress bar
