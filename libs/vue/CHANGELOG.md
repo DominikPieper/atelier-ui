@@ -1,3 +1,14 @@
+## 0.1.10 (2026-07-06)
+
+### 🚀 Features
+
+- **a11y:** cross-framework a11y-tree conformance gate (ADR-0025) ([ebf980d](https://github.com/DominikPieper/atelier-ui/commit/ebf980d))
+
+### ❤️ Thank You
+
+- Claude Fable 5
+- Dominik Pieper @DominikPieper
+
 ## 0.1.9 (2026-06-12)
 
 ### 🩹 Fixes
