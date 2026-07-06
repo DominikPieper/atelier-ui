@@ -28,6 +28,9 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0020](0020-personal-authorial-signature.md) | Personal authorial signature (serif-italic heading accent + shared motion grammar) | Accepted | Recorded |
 | [0021](0021-build-time-derived-docs-counts.md) | Docs counts/sizes derived at build time where the source is local | Accepted | Recorded |
 | [0022](0022-checkbox-toggle-omit-value.md) | Checkbox/Toggle omit the inherited `value`/`onValueChange` | Accepted | Recorded |
+| [0023](0023-version-band-0-1-x.md) | Version band moves to 0.1.x (revises ADR-0016's 0.0.x signal) | Accepted | Recorded |
+| [0024](0024-design-parity-persistence-gate.md) | Design-parity persistence gate (`check:parity`) | Accepted | Recorded |
+| [0025](0025-cross-framework-a11y-conformance.md) | Cross-framework accessibility conformance gate (`check:a11y-parity`) | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

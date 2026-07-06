@@ -1,5 +1,53 @@
 # Atelier — Status
 
+## Approach audit: gaps / improvements / blind-spots — 2026-06-17
+
+Source: read-only audit workflow `wf_9736c813-eca` (26 agents, 73 verified findings, 0 refuted).
+Full roadmap: `~/.claude/plans/validated-sniffing-lamport.md`. Core finding: gates prove a
+string/binding EXISTS, not that it is TRUE; verify-loop + LLM-thesis eval are unenforced/unmeasured.
+
+Safe mechanical fixes (no decision needed) — landing now:
+- [x] `.gitignore`: fix malformed line 53 (`settings.local.json.netlify/state.json` was one jammed line); add `.env`/`.env.*`/`.dev.vars`/`*.log`
+- [x] Untrack `debug-storybook.log` (`git rm --cached`)
+- [x] `plan/figma.md:142` LlmButton variant → add `danger` (spec has it; doc was stale)
+
+DONE this session (Close-the-loop, group A):
+- [x] Version band: accept 0.1.x → ADR-0023 (+ ADR-0016 note, README row). User decision.
+- [x] **A2 — parity persistence gate**: `tools/scripts/check-parity.js` + `parity-record.mjs` + `lib/parity-inputs.js` + `tools/figma/parity.json`; `check:parity`/`parity:record` scripts; ADR-0024; docs verify-step wired (loop page only — kata builds composed SettingsCard, not a master). Verified: baseline 3-unverified/exit0, record→OK, input drift→BLOCKER/exit1, revert clean; check:all green.
+- [~] A1 — generation eval: DEFERRED by user (kept on roadmap; needs a model + API key to run).
+- [x] **A3 — cross-framework a11y-tree conformance**: jsdom a11y-snapshot per fw + offline diff gate. New: `libs/<fw>/src/testing/a11y-tree.ts` (normalizer, ×3 like behavior.ts), `llm-button.a11y.spec.*` (×3), `tools/parity/a11y/llm-button.<fw>.json` (×3), `tools/scripts/check-a11y-parity.js`; `check:a11y-parity` (in check:all) + `gen:a11y`; ADR-0025. Proof: LlmButton — all 3 produce byte-identical a11y tree despite native-button (React/Vue) vs role-host (Angular). Verified: gate green, synthetic divergence→BLOCKER, per-fw drift guard passes in `nx test`, lint clean all 3, check:all green.
+
+## H1 acute fixes (full review follow-up) — 2026-07-06
+
+Source: full-material review (4-agent fan-out: gate impl, ADR rationale, workflow, alternatives research).
+H1 = acute fixes; H2-H9 (Playwright aria-snapshot gate, DTCG token pipeline, shared testing lib,
+visual regression, contract projections, deploy consolidation) reviewed but not yet decided.
+
+- [x] CI `checks` job → `npm run check:all` (was a hand-copied 15-gate list that had already
+      drifted: `check:a11y-parity` missing). Gate list now single-sourced from package.json.
+- [x] pre-push hook staleness self-check (`cmp` installed copy vs `tools/git-hooks/pre-push`,
+      refuse + point to install-hooks.sh). Local hook reinstalled; installed copy from May 27
+      had silently missed the May 31 gen-behaviors addition.
+- [x] Commit in-flight parity/a11y work: a11y baselines land in the SAME commit as the specs
+      that `readFileSync` them (fresh-checkout `nx test` would otherwise ENOENT).
+- Review verification: `check:all` green incl. a11y-parity; full `nx test` green in all 3 libs.
+
+Decision-bearing quick wins (deferred — not this session's scope):
+- [ ] Dark-mode contrast: add `--ui-color-text-on-success` to both dark blocks (#fff/#4ade80 = 1.74:1 today) — needs chosen dark fg value, touches 3 synced tokens.css copies
+- [x] Version band: re-pin 0.0.x **or** ADR for the 0.1.x move → resolved by ADR-0023 (accept 0.1.x)
+- [ ] Node baseline: align .node-version(24)/engines(>=22)/preflight(>=22.12.0)/agenda(20|22) to one
+- [ ] `coverage.thresholds` in 3 vite configs (measure current coverage first — may fail CI)
+- [ ] `docs-old/` (42 tracked files, not in nx graph): remove or justify
+- [ ] Wire `check:figma` into CI — BLOCKED: it currently exits 1 (real unbound-token findings) + snapshot 3/27 stale; needs snapshot regen + freshness first
+
+Larger workstreams (ranked, see plan file A–D):
+- [ ] A1 generation eval (thesis unmeasured) · A2 persist+gate parity result · A3 cross-fw a11y-tree conformance
+- [ ] B4 storybook-test+axe in CI · B5 contrast gate · B6 meta-test for the gates
+- [ ] C7 capture bound-token name/value in snapshot · C8 check:figma+freshness · C9 full 27-master snapshot
+- [ ] D10 React CSS/tokens packaging defect · D11 gate publish on CI · D12 de-personalize host+deploy wf · D13 metadata a11y cross-check · D14 invert check-docs-sync · D15 secret/RCE defaults
+
+Blind spots (decisions): SSR stance (Vue Math.random IDs) · reduced-motion gate · 3-fw maintenance/generator · toolchain version-drift · CONTRIBUTING.md · API-stability contract · fw-agnostic contrast gate
+
 ## Spec hygiene: checkbox/toggle value (ADR-0022) — 2026-06-13
 
 - [x] Decision: spec-hygiene + docs (not adapter parity / not docs-only)

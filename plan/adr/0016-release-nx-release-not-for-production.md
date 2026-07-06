@@ -22,6 +22,6 @@ nx release for versioning/publish; packages are 0.0.x ("not for production"); CI
 
 ## Consequences
 
-- Versions stay at 0.0.x to signal "not for production".
+- Versions stay at 0.0.x to signal "not for production". *(Revised by [ADR-0023](0023-version-band-0-1-x.md): the band moved to `0.1.x`; the not-for-production signal is now carried by being pre-1.0, not by the second zero.)*
 - CI uses an npm Automation token because classic Publish tokens require OTP in CI.
 - A workflow_dispatch publish-only mode recovers a tagged-but-unpublished version after a failed run.
