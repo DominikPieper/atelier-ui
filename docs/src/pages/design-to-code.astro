@@ -195,6 +195,9 @@ the component I just generated. Fix every discrepancy it reports.`;
             <strong style="color: var(--ui-color-text)">This step is required</strong> — it's what turns "looks about right" into a verified component.
           </p>
           <Code code={PARITY_PROMPT} lang="text" title="parity check prompt" />
+          <p class="docs-step-desc">
+            When the component maps to a <strong style="color: var(--ui-color-text)">library master</strong>, persist the result so drift is caught later: <code>npm run parity:record -- --component &lt;LlmFoo&gt; --score &lt;score&gt;</code>. The offline <code>npm run check:parity</code> gate then flags that component if its code changes after this verify (see ADR-0024).
+          </p>
         </div>
       </div>
     </div>

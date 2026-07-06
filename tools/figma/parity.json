@@ -1,0 +1,8 @@
+{
+  "meta": {
+    "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
+    "note": "Per-component design-parity records. Written by `npm run parity:record` after a human/agent runs figma_check_design_parity; read by `npm run check:parity`. Each record's inputsHash covers libs/{angular,react,vue}/src/lib/<module>/ so a spec/story/impl/css change since the last verify makes the gate ask for a re-verify. See plan/adr/0024.",
+    "generatedAt": null
+  },
+  "components": {}
+}
