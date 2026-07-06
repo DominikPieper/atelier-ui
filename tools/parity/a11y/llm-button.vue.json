@@ -1,0 +1,26 @@
+{
+  "default": [
+    {
+      "role": "button",
+      "name": "Click me"
+    }
+  ],
+  "disabled": [
+    {
+      "role": "button",
+      "name": "Click me",
+      "states": {
+        "disabled": true
+      }
+    }
+  ],
+  "loading": [
+    {
+      "role": "button",
+      "name": "Click me",
+      "states": {
+        "disabled": true
+      }
+    }
+  ]
+}
