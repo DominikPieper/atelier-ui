@@ -17,6 +17,25 @@ set -e
 ROOT=$(git rev-parse --show-toplevel)
 cd "$ROOT"
 
+# Staleness self-check — install-hooks.sh copies this file into .git/hooks, so
+# an installed copy silently goes stale when the source hook changes. Compare
+# the executing hook ($0) against the source and refuse to run if they differ.
+# Skipped when the source file does not exist (e.g. shallow tooling checkouts).
+SOURCE_HOOK="$ROOT/tools/git-hooks/pre-push"
+if [ -f "$SOURCE_HOOK" ]; then
+  if ! cmp -s "$0" "$SOURCE_HOOK"; then
+    echo ""
+    echo "✗ pre-push aborted: installed hook is stale"
+    echo ""
+    echo "  This hook ($0) differs from the source at"
+    echo "  tools/git-hooks/pre-push. Reinstall it:"
+    echo ""
+    echo "    bash tools/scripts/install-hooks.sh"
+    echo ""
+    exit 1
+  fi
+fi
+
 # Regenerate quietly. All scripts are idempotent.
 # sync:generated = spec mirror + behaviors.generated + llms.txt + skill discovery.
 npm run --silent sync:generated > /dev/null 2>&1 || true

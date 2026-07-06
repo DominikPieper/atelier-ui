@@ -48,6 +48,8 @@ jobs:
 
   # ---------------------------------------------------------------------------
   # Lightweight sync / docs checks. No Nx, no affected — these always run.
+  # The gate list is single-sourced from the `check:all` script in package.json;
+  # add new gates there, not here.
   # ---------------------------------------------------------------------------
   checks:
     name: Sync checks
@@ -62,21 +64,7 @@ jobs:
           cache: 'npm'
       - run: corepack enable
       - run: npm ci
-      - run: node tools/scripts/check-sync.js
-      - run: node tools/scripts/sync-spec.mjs --check
-      - run: node tools/scripts/gen-behaviors.mjs --check
-      - run: node tools/scripts/sync-tokens.mjs --check
-      - run: node tools/scripts/check-variants.js
-      - run: node tools/scripts/check-css-tokens.js
-      - run: node tools/scripts/check-exports.js
-      - run: node tools/scripts/check-defaults.js
-      - run: node tools/parity/behavior-coverage.mjs tools/parity/behavior.config.mjs
-      - run: node tools/scripts/check-docs-sync.js
-      - run: node tools/scripts/check-metadata.js
-      - run: node tools/scripts/check-story-descriptions.js
-      - run: node tools/scripts/gen-llms-txt.mjs --check
-      - run: node tools/scripts/check-cookbook-parity.mjs
-      - run: node tools/scripts/gen-cookbook-manifest.mjs --check
+      - run: npm run check:all
 
   # ---------------------------------------------------------------------------
   # Lint — fastest gate, fails early if style/type rules break.
