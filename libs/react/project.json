@@ -22,7 +22,11 @@
         "outputPath": "dist/{projectRoot}",
         "main": "libs/react/src/index.ts",
         "tsConfig": "libs/react/tsconfig.lib.json",
-        "assets": ["libs/react/*.md"]
+        "assets": [
+          "libs/react/*.md",
+          { "input": "libs/react/src", "glob": "lib/**/*.css", "output": "src" },
+          { "input": "libs/react/src", "glob": "styles/tokens.css", "output": "." }
+        ]
       },
       "dependsOn": ["^build"]
     },

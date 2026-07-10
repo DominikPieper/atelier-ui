@@ -19,7 +19,7 @@
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
       "options": {
-        "command": "vite build --config libs/vue/vite.config.mts",
+        "command": "vite build --config libs/vue/vite.config.mts && mkdir -p dist/libs/vue/styles && cp libs/vue/src/styles/tokens.css dist/libs/vue/styles/tokens.css",
         "cwd": "{workspaceRoot}"
       },
       "dependsOn": ["^build"]

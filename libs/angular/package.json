@@ -12,6 +12,12 @@
   ],
   "author": "Atelier",
   "license": "MIT",
+  "exports": {
+    "./styles/tokens.css": {
+      "style": "./src/styles/tokens.css",
+      "default": "./src/styles/tokens.css"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/DominikPieper/atelier-ui.git",

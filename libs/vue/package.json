@@ -13,6 +13,19 @@
   ],
   "author": "Atelier",
   "license": "MIT",
+  "main": "./index.mjs",
+  "module": "./index.mjs",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.mjs",
+      "default": "./index.mjs"
+    },
+    "./index.css": "./index.css",
+    "./styles/tokens.css": "./styles/tokens.css",
+    "./package.json": "./package.json"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/DominikPieper/atelier-ui.git",

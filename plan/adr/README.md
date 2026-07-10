@@ -31,6 +31,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0023](0023-version-band-0-1-x.md) | Version band moves to 0.1.x (revises ADR-0016's 0.0.x signal) | Accepted | Recorded |
 | [0024](0024-design-parity-persistence-gate.md) | Design-parity persistence gate (`check:parity`) | Accepted | Recorded |
 | [0025](0025-cross-framework-a11y-conformance.md) | Cross-framework accessibility conformance gate (`check:a11y-parity`) | Accepted | Recorded |
+| [0026](0026-ship-css-and-tokens-in-packages.md) | Ship component CSS + `styles/tokens.css` inside the npm packages | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

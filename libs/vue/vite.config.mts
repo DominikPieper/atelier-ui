@@ -14,6 +14,7 @@ export default defineConfig(() => ({
     nxCopyAssetsPlugin(['*.md']),
     dts({
       tsconfigPath: './tsconfig.lib.json',
+      entryRoot: 'src',
       rollupTypes: false,
     }),
   ],
@@ -25,6 +26,11 @@ export default defineConfig(() => ({
     },
     rollupOptions: {
       external: ['vue'],
+      output: {
+        // Vite lib mode extracts all component CSS into index.css but emits no
+        // import for it; without this consumers get unstyled components.
+        banner: "import './index.css';",
+      },
     },
     outDir: '../../dist/libs/vue',
     emptyOutDir: true,
