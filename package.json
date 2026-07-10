@@ -4,7 +4,7 @@
   "license": "MIT",
   "packageManager": "npm@11.12.1",
   "engines": {
-    "node": ">=22"
+    "node": ">=22.12.0"
   },
   "scripts": {
     "check:sync": "node tools/scripts/check-sync.js",
