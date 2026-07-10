@@ -1,5 +1,42 @@
 # Atelier — Status
 
+## Defect batch: packaging + dark contrast + cleanup — 2026-07-10
+
+Scope: the three "real defects" from the H1 list (dark-mode contrast, D10
+packaging, Node baseline) + repo cleanup. ADR-0026.
+
+- [x] Cleanup: deleted untracked `CLAUDE-FABLE-5.md` (system-prompt dump) and
+      stray ignored junk `libs/vue/{Users,dist,tmp}` (old copy-command artifact
+      with `angular-llm-components` paths + stale local build outputs).
+- [x] **Dark-mode contrast**: `--ui-color-text-on-success: #0a1116` added to both
+      dark blocks (was #fff on #4ade80 = 1.74:1; now ≈10.9:1). Also fixed the
+      **asymmetric `[data-theme="light"]` block** (pre-existing bug: OS-dark +
+      explicit light leaked dark values): re-declares `text-on-secondary`,
+      `text-on-danger`, `text-on-success`, `opacity-disabled` now. Edited in the
+      preset canonical copy, synced via `sync-tokens.mjs` (4 files).
+- [x] **D10 packaging** (ADR-0026): React dist now ships `lib/**/*.css` next to
+      compiled JS + `styles/tokens.css` (project.json assets). **New discovery
+      while fixing: the Vue package had NO entry point at all** (no
+      main/module/types/exports in package.json) and Vite lib mode emitted
+      `index.css` that nothing imported → fixed via package.json exports map,
+      dts `entryRoot: 'src'`, rollup `banner: "import './index.css';"`, and a
+      tokens copy step in the build command. Angular ships tokens via
+      ng-package assets + merged `exports` subpath. README tokens-import claim
+      (`@atelier-ui/<fw>/styles/tokens.css`) is now true for all three.
+- [x] **Node baseline**: `engines` `>=22` → `>=22.12.0` (matches preflight; floor
+      story now: engines/preflight 22.12.0, schulung "Node 22 LTS",
+      `.node-version` 24 = dev/CI pin above the floor). Audit's "agenda 20|22"
+      was already fixed. The pnpm mentions in install.astro are legit
+      pkg-manager tabs, not stale — no change.
+- Verified: consumer proof (packed all 3 dist tarballs → scratch npm install →
+  esbuild bundle: React resolves component CSS + tokens, Vue resolves entry +
+  auto-loads index.css, Angular tokens subpath resolves); `check:all` green;
+  `check:parity` unchanged baseline (3 unverified, non-blocking); preset + CLI
+  tests green; lint green (react, vue, angular, create-workspace); cli-e2e run.
+- Follow-up (new): cli-e2e never renders a component, so dist-packaging
+  regressions stay invisible — make the scaffolded app or an e2e step import a
+  component (see ADR-0026 consequences).
+
 ## Approach audit: gaps / improvements / blind-spots — 2026-06-17
 
 Source: read-only audit workflow `wf_9736c813-eca` (26 agents, 73 verified findings, 0 refuted).
@@ -33,9 +70,9 @@ visual regression, contract projections, deploy consolidation) reviewed but not 
 - Review verification: `check:all` green incl. a11y-parity; full `nx test` green in all 3 libs.
 
 Decision-bearing quick wins (deferred — not this session's scope):
-- [ ] Dark-mode contrast: add `--ui-color-text-on-success` to both dark blocks (#fff/#4ade80 = 1.74:1 today) — needs chosen dark fg value, touches 3 synced tokens.css copies
+- [x] Dark-mode contrast: `--ui-color-text-on-success` in both dark blocks + light-block symmetry → done 2026-07-10 (see top section)
 - [x] Version band: re-pin 0.0.x **or** ADR for the 0.1.x move → resolved by ADR-0023 (accept 0.1.x)
-- [ ] Node baseline: align .node-version(24)/engines(>=22)/preflight(>=22.12.0)/agenda(20|22) to one
+- [x] Node baseline: engines → >=22.12.0; rest already coherent → done 2026-07-10
 - [ ] `coverage.thresholds` in 3 vite configs (measure current coverage first — may fail CI)
 - [ ] `docs-old/` (42 tracked files, not in nx graph): remove or justify
 - [ ] Wire `check:figma` into CI — BLOCKED: it currently exits 1 (real unbound-token findings) + snapshot 3/27 stale; needs snapshot regen + freshness first
@@ -44,7 +81,7 @@ Larger workstreams (ranked, see plan file A–D):
 - [ ] A1 generation eval (thesis unmeasured) · A2 persist+gate parity result · A3 cross-fw a11y-tree conformance
 - [ ] B4 storybook-test+axe in CI · B5 contrast gate · B6 meta-test for the gates
 - [ ] C7 capture bound-token name/value in snapshot · C8 check:figma+freshness · C9 full 27-master snapshot
-- [ ] D10 React CSS/tokens packaging defect · D11 gate publish on CI · D12 de-personalize host+deploy wf · D13 metadata a11y cross-check · D14 invert check-docs-sync · D15 secret/RCE defaults
+- [ ] ~~D10 React CSS/tokens packaging defect~~ (done 2026-07-10, ADR-0026; incl. Vue entry-point fix) · D11 gate publish on CI · D12 de-personalize host+deploy wf · D13 metadata a11y cross-check · D14 invert check-docs-sync · D15 secret/RCE defaults
 
 Blind spots (decisions): SSR stance (Vue Math.random IDs) · reduced-motion gate · 3-fw maintenance/generator · toolchain version-drift · CONTRIBUTING.md · API-stability contract · fw-agnostic contrast gate
 
