@@ -1,3 +1,14 @@
+## 0.1.11 (2026-07-10)
+
+### 🩹 Fixes
+
+- **tokens:** dark-mode on-success fg + light-theme symmetry ([#4](https://github.com/DominikPieper/atelier-ui/issues/4), [#0](https://github.com/DominikPieper/atelier-ui/issues/0))
+
+### ❤️ Thank You
+
+- Claude Fable 5
+- Dominik Pieper @DominikPieper
+
 ## 0.1.10 (2026-07-06)
 
 This was a version bump only for create-workspace to align it with other projects, there were no code changes.

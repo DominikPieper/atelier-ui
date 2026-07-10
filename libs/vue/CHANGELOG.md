@@ -1,3 +1,15 @@
+## 0.1.11 (2026-07-10)
+
+### 🩹 Fixes
+
+- **build:** ship component CSS + tokens.css in packages ([10d19ad](https://github.com/DominikPieper/atelier-ui/commit/10d19ad))
+- **tokens:** dark-mode on-success fg + light-theme symmetry ([#4](https://github.com/DominikPieper/atelier-ui/issues/4), [#0](https://github.com/DominikPieper/atelier-ui/issues/0))
+
+### ❤️ Thank You
+
+- Claude Fable 5
+- Dominik Pieper @DominikPieper
+
 ## 0.1.10 (2026-07-06)
 
 ### 🚀 Features
