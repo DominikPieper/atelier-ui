@@ -190,7 +190,7 @@
     --ui-color-surface: #0a1116;
     --ui-color-surface-raised: #131c24;
     --ui-color-surface-sunken: #060c10;
-  --ui-color-overlay: rgba(0, 0, 0, 0.7);
+    --ui-color-overlay: rgba(0, 0, 0, 0.7);
 
     --ui-color-border: #1e293b;
     --ui-color-border-hover: #334155;
@@ -201,6 +201,7 @@
     --ui-color-text-on-primary: #0a1116;
     --ui-color-text-on-secondary: #0f172a;
     --ui-color-text-on-danger: #0a1116;
+    --ui-color-text-on-success: #0a1116;
 
     --ui-opacity-disabled: 0.65;
 
@@ -260,6 +261,7 @@
   --ui-color-text-on-primary: #0a1116;
   --ui-color-text-on-secondary: #0f172a;
   --ui-color-text-on-danger: #0a1116;
+  --ui-color-text-on-success: #0a1116;
 
   --ui-opacity-disabled: 0.65;
 
@@ -317,6 +319,11 @@
   --ui-color-text: #0f172a;
   --ui-color-text-muted: #475569;
   --ui-color-text-on-primary: #ffffff;
+  --ui-color-text-on-secondary: #ffffff;
+  --ui-color-text-on-danger: #ffffff;
+  --ui-color-text-on-success: #ffffff;
+
+  --ui-opacity-disabled: 0.5;
 
   --ui-color-input-border: var(--ui-color-border-strong);
   --ui-color-input-border-hover: #475569;
