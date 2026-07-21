@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmTextareaSpec'],
+  specNames: ['AtlTextareaSpec'],
   purpose:
     'Multi-line text field. Renders a `<textarea>` sized for wrapping prose, with optional auto-resize as content grows.',
   whenToUse: [
@@ -12,14 +12,14 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Collecting a single short value such as a title or email.',
-      useInstead: 'LlmInput — sized for one-line entry with type-specific keyboard hints.',
+      useInstead: 'AtlInput — sized for one-line entry with type-specific keyboard hints.',
     },
     {
       pattern: 'Building a rich-text editor with formatting toolbars.',
       useInstead: 'A dedicated editor (Tiptap, Lexical) — textarea is plain text only.',
     },
   ],
-  relatedComponents: ['LlmInputSpec'],
+  relatedComponents: ['AtlInputSpec'],
   variantMatrix: [
     { rows: 3, autoResize: false },
     { rows: 6, autoResize: false },

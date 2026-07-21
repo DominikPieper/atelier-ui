@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmBadgeSpec'],
+  specNames: ['AtlBadgeSpec'],
   purpose:
     'Compact inline label. Renders a small pill carrying a status word, count, or category alongside other content.',
   whenToUse: [
@@ -13,14 +13,14 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Surfacing a dismissable system-level message.',
-      useInstead: 'LlmAlert — alerts carry a role and live region, badges do not.',
+      useInstead: 'AtlAlert — alerts carry a role and live region, badges do not.',
     },
     {
       pattern: 'Holding a removable user-entered chip (filter, recipient).',
       useInstead: 'A dedicated chip/tag component with its own remove affordance; badges are display-only.',
     },
   ],
-  relatedComponents: ['LlmAlertSpec', 'LlmAvatarSpec'],
+  relatedComponents: ['AtlAlertSpec', 'AtlAvatarSpec'],
   variantMatrix: [
     { variant: 'default', size: 'sm' },
     { variant: 'default', size: 'md' },

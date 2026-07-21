@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmSelectSpec', 'LlmOptionSpec'],
+  specNames: ['AtlSelectSpec', 'AtlOptionSpec'],
   purpose:
     'Dropdown picker built on the native `<select>` element. Option children declare the available values.',
   whenToUse: [
@@ -12,18 +12,18 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Picking from a list long enough that scanning becomes painful.',
-      useInstead: 'LlmCombobox — adds typeahead search over the same options.',
+      useInstead: 'AtlCombobox — adds typeahead search over the same options.',
     },
     {
       pattern: 'Showing every option inline so users can compare them.',
-      useInstead: 'LlmRadioGroup — keeps the choices visible without an open/close step.',
+      useInstead: 'AtlRadioGroup — keeps the choices visible without an open/close step.',
     },
     {
       pattern: 'Triggering navigation when an option is picked.',
       useInstead: 'A menu of links — a select implies a form value, not a route change.',
     },
   ],
-  relatedComponents: ['LlmRadioGroupSpec', 'LlmComboboxSpec'],
+  relatedComponents: ['AtlRadioGroupSpec', 'AtlComboboxSpec'],
   variantMatrix: [
     { state: 'empty' },
     { state: 'selected' },

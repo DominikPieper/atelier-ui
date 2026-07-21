@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmTooltipSpec'],
+  specNames: ['AtlTooltipSpec'],
   purpose:
     'Hover- and focus-triggered label that names or briefly explains the element it is attached to. Appears on a delay, disappears when the pointer or focus moves away, and never takes focus itself.',
   whenToUse: [
@@ -17,19 +17,19 @@ export const metadata: ComponentMetadata = {
     },
     {
       pattern: 'Communicating critical information that the user must read to complete a task.',
-      useInstead: 'LlmAlert, inline help text, or visible labels — tooltips disappear on blur and are skipped on touch.',
+      useInstead: 'AtlAlert, inline help text, or visible labels — tooltips disappear on blur and are skipped on touch.',
     },
     {
       pattern: 'Acting as the only accessible name for an interactive element.',
       useInstead: 'A proper `aria-label` or visible label — pair the tooltip with that label rather than relying on it alone.',
     },
   ],
-  relatedComponents: ['LlmButtonSpec', 'LlmMenuSpec'],
+  relatedComponents: ['AtlButtonSpec', 'AtlMenuSpec'],
   variantMatrix: [
-    { llmTooltipPosition: 'above' },
-    { llmTooltipPosition: 'below' },
-    { llmTooltipPosition: 'left' },
-    { llmTooltipPosition: 'right' },
+    { atlTooltipPosition: 'above' },
+    { atlTooltipPosition: 'below' },
+    { atlTooltipPosition: 'left' },
+    { atlTooltipPosition: 'right' },
   ],
   accessibility: {
     role: 'tooltip',

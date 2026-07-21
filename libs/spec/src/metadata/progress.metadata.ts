@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmProgressSpec'],
+  specNames: ['AtlProgressSpec'],
   purpose:
     'Determinate or indeterminate progress bar. Renders the share of work completed for a task whose duration is measurable, or an indeterminate animation when it is not.',
   whenToUse: [
@@ -13,14 +13,14 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Reserving the layout slot for content that has not loaded yet.',
-      useInstead: 'LlmSkeleton — sized to the missing content, not a generic bar.',
+      useInstead: 'AtlSkeleton — sized to the missing content, not a generic bar.',
     },
     {
       pattern: 'Acknowledging a momentary action (saved, copied).',
-      useInstead: 'LlmToast — transient confirmation belongs in a live region, not a progress bar.',
+      useInstead: 'AtlToast — transient confirmation belongs in a live region, not a progress bar.',
     },
   ],
-  relatedComponents: ['LlmSkeletonSpec', 'LlmToastSpec'],
+  relatedComponents: ['AtlSkeletonSpec', 'AtlToastSpec'],
   variantMatrix: [
     { variant: 'default', size: 'sm' },
     { variant: 'default', size: 'md' },

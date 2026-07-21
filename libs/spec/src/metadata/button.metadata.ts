@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmButtonSpec'],
+  specNames: ['AtlButtonSpec'],
   purpose:
     'Primary action trigger. Renders a labelled button users press to commit an action — submit a form, open a dialog, advance a flow.',
   whenToUse: [
@@ -16,14 +16,14 @@ export const metadata: ComponentMetadata = {
     },
     {
       pattern: 'Toggling a binary on/off state.',
-      useInstead: 'LlmToggle — communicates the persistent state to assistive tech.',
+      useInstead: 'AtlToggle — communicates the persistent state to assistive tech.',
     },
     {
       pattern: 'Selecting an option from a list.',
-      useInstead: 'LlmSelect, LlmCombobox, or LlmRadioGroup, depending on cardinality and search needs.',
+      useInstead: 'AtlSelect, AtlCombobox, or AtlRadioGroup, depending on cardinality and search needs.',
     },
   ],
-  relatedComponents: ['LlmToggle', 'LlmMenuSpec', 'LlmDialogSpec'],
+  relatedComponents: ['AtlToggle', 'AtlMenuSpec', 'AtlDialogSpec'],
   variantMatrix: [
     { variant: 'primary', size: 'sm' },
     { variant: 'primary', size: 'md' },

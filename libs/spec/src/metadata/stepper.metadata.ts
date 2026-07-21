@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmStepperSpec', 'LlmStepSpec'],
+  specNames: ['AtlStepperSpec', 'AtlStepSpec'],
   purpose:
     'Multi-step progress indicator. Stepper owns the active index; each Step child labels one stage with completed/error/optional state.',
   whenToUse: [
@@ -12,7 +12,7 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Navigating between sibling sections that have no inherent order.',
-      useInstead: 'LlmTabGroup — tabs imply parallel views, steppers imply progression.',
+      useInstead: 'AtlTabGroup — tabs imply parallel views, steppers imply progression.',
     },
     {
       pattern: 'Reporting a single percentage or determinate loading state.',
@@ -20,10 +20,10 @@ export const metadata: ComponentMetadata = {
     },
     {
       pattern: 'Collapsing and expanding sections of a form on one page.',
-      useInstead: 'LlmAccordionGroup — accordions are spatial, steppers are sequential.',
+      useInstead: 'AtlAccordionGroup — accordions are spatial, steppers are sequential.',
     },
   ],
-  relatedComponents: ['LlmTabGroupSpec', 'LlmAccordionGroupSpec'],
+  relatedComponents: ['AtlTabGroupSpec', 'AtlAccordionGroupSpec'],
   variantMatrix: [
     { orientation: 'horizontal', linear: true, activeStep: 0 },
     { orientation: 'horizontal', linear: true, activeStep: 1 },

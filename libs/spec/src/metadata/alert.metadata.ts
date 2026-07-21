@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmAlertSpec'],
+  specNames: ['AtlAlertSpec'],
   purpose:
     'Inline contextual message. Renders a block carrying status content (info, success, warning, danger) with an optional dismiss control.',
   whenToUse: [
@@ -13,7 +13,7 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Tagging an item with a short status word next to other content.',
-      useInstead: 'LlmBadge — badges are inline labels, alerts are block-level messages with a role.',
+      useInstead: 'AtlBadge — badges are inline labels, alerts are block-level messages with a role.',
     },
     {
       pattern: 'Showing a transient confirmation that disappears on its own.',
@@ -21,10 +21,10 @@ export const metadata: ComponentMetadata = {
     },
     {
       pattern: 'Blocking the page to demand a decision.',
-      useInstead: 'LlmDialog — modal dialogs interrupt; alerts coexist with the surrounding content.',
+      useInstead: 'AtlDialog — modal dialogs interrupt; alerts coexist with the surrounding content.',
     },
   ],
-  relatedComponents: ['LlmBadgeSpec', 'LlmDialogSpec'],
+  relatedComponents: ['AtlBadgeSpec', 'AtlDialogSpec'],
   variantMatrix: [
     { variant: 'info', dismissible: false },
     { variant: 'success', dismissible: false },

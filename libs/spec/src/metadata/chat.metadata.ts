@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmChatSpec'],
+  specNames: ['AtlChatSpec'],
   purpose:
     'AI chat surface. Renders a conversation log with a composer for sending messages and a live status for streaming or errored replies.',
   whenToUse: [
@@ -13,14 +13,14 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Confirming or asking the user for a single decision.',
-      useInstead: 'LlmDialog — short-lived, focused, with explicit confirm/cancel actions.',
+      useInstead: 'AtlDialog — short-lived, focused, with explicit confirm/cancel actions.',
     },
     {
       pattern: 'Showing transient system notifications.',
-      useInstead: 'LlmToast — notifications are unidirectional and ephemeral, chat is a two-way log.',
+      useInstead: 'AtlToast — notifications are unidirectional and ephemeral, chat is a two-way log.',
     },
   ],
-  relatedComponents: ['LlmDrawerSpec', 'LlmDialogSpec', 'LlmTextareaSpec'],
+  relatedComponents: ['AtlDrawerSpec', 'AtlDialogSpec', 'AtlTextareaSpec'],
   variantMatrix: [
     { variant: 'drawer', status: 'idle', open: true },
     { variant: 'drawer', status: 'streaming', open: true },

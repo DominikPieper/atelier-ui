@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmInputSpec'],
+  specNames: ['AtlInputSpec'],
   purpose:
     'Single-line text field. Renders an `<input>` bound to a form value with the standard validation and disabled states.',
   whenToUse: [
@@ -12,18 +12,18 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Accepting multi-line prose, descriptions, or comments.',
-      useInstead: 'LlmTextarea — sized for wrapping text with an optional auto-resize.',
+      useInstead: 'AtlTextarea — sized for wrapping text with an optional auto-resize.',
     },
     {
       pattern: 'Picking one option from a known list.',
-      useInstead: 'LlmSelect for short lists, LlmCombobox when the list is long enough to need search.',
+      useInstead: 'AtlSelect for short lists, AtlCombobox when the list is long enough to need search.',
     },
     {
       pattern: 'Toggling a boolean.',
-      useInstead: 'LlmCheckbox or LlmToggle — both encode the binary state for assistive tech.',
+      useInstead: 'AtlCheckbox or AtlToggle — both encode the binary state for assistive tech.',
     },
   ],
-  relatedComponents: ['LlmTextareaSpec', 'LlmSelectSpec', 'LlmComboboxSpec'],
+  relatedComponents: ['AtlTextareaSpec', 'AtlSelectSpec', 'AtlComboboxSpec'],
   variantMatrix: [
     { type: 'text', disabled: false },
     { type: 'email', disabled: false },

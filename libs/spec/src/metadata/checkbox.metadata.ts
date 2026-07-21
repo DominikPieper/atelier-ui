@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmCheckboxSpec'],
+  specNames: ['AtlCheckboxSpec'],
   purpose:
     'Binary or tri-state toggle bound to a form field. Renders an `<input type="checkbox">` with optional indeterminate state.',
   whenToUse: [
@@ -12,14 +12,14 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Switching a setting on/off where the change applies immediately.',
-      useInstead: 'LlmToggle — communicates the "switch" affordance and instant effect to assistive tech.',
+      useInstead: 'AtlToggle — communicates the "switch" affordance and instant effect to assistive tech.',
     },
     {
       pattern: 'Picking exactly one option from a small set.',
-      useInstead: 'LlmRadioGroup — radios enforce single-select and announce the group.',
+      useInstead: 'AtlRadioGroup — radios enforce single-select and announce the group.',
     },
   ],
-  relatedComponents: ['LlmToggleSpec', 'LlmRadioSpec', 'LlmRadioGroupSpec'],
+  relatedComponents: ['AtlToggleSpec', 'AtlRadioSpec', 'AtlRadioGroupSpec'],
   variantMatrix: [
     { checked: false },
     { checked: true },

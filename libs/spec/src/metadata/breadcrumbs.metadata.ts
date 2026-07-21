@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmBreadcrumbsSpec', 'LlmBreadcrumbItemSpec'],
+  specNames: ['AtlBreadcrumbsSpec', 'AtlBreadcrumbItemSpec'],
   purpose:
     'Hierarchical location trail. Renders the path from a root section down to the current page so users can see and jump back through the hierarchy.',
   whenToUse: [
@@ -12,14 +12,14 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Switching between sibling sections of a flat app.',
-      useInstead: 'LlmTabs — tabs communicate peer relationships, breadcrumbs communicate depth.',
+      useInstead: 'AtlTabs — tabs communicate peer relationships, breadcrumbs communicate depth.',
     },
     {
       pattern: 'Stepping through an ordered flow (wizard, checkout).',
       useInstead: 'A dedicated stepper component — steps imply forward/backward progress, not nested location.',
     },
   ],
-  relatedComponents: ['LlmTabsSpec', 'LlmMenuSpec'],
+  relatedComponents: ['AtlTabsSpec', 'AtlMenuSpec'],
   variantMatrix: [
     { separator: '/', current: false },
     { separator: '/', current: true },

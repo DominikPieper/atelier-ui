@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmTableSpec', 'LlmTbodySpec', 'LlmTrSpec', 'LlmThSpec', 'LlmTdSpec'],
+  specNames: ['AtlTableSpec', 'AtlTbodySpec', 'AtlTrSpec', 'AtlThSpec', 'AtlTdSpec'],
   purpose:
     'Tabular data grid. Renders rows of records with column headers, optional sorting, sticky headers, and per-cell alignment.',
   whenToUse: [
@@ -21,10 +21,10 @@ export const metadata: ComponentMetadata = {
     },
     {
       pattern: 'Picking one option from a list.',
-      useInstead: 'LlmSelect, LlmCombobox, or LlmRadioGroup depending on cardinality.',
+      useInstead: 'AtlSelect, AtlCombobox, or AtlRadioGroup depending on cardinality.',
     },
   ],
-  relatedComponents: ['LlmPaginationSpec', 'LlmCheckboxSpec', 'LlmBadgeSpec'],
+  relatedComponents: ['AtlPaginationSpec', 'AtlCheckboxSpec', 'AtlBadgeSpec'],
   variantMatrix: [
     { variant: 'default', size: 'sm' },
     { variant: 'default', size: 'md' },

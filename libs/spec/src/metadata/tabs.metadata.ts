@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmTabGroupSpec', 'LlmTabSpec'],
+  specNames: ['AtlTabGroupSpec', 'AtlTabSpec'],
   purpose:
     'Switches between sibling views that share the same parent context. Renders a labelled tab strip wired to a single visible panel at a time.',
   whenToUse: [
@@ -17,14 +17,14 @@ export const metadata: ComponentMetadata = {
     },
     {
       pattern: 'Hiding optional, rarely-read content behind a tab to reduce page length.',
-      useInstead: 'LlmAccordion — accordions are the right primitive for collapsing supplementary sections.',
+      useInstead: 'AtlAccordion — accordions are the right primitive for collapsing supplementary sections.',
     },
     {
       pattern: 'Presenting a linear, ordered workflow as tabs.',
-      useInstead: 'LlmStepper — steppers communicate progress and ordering, tabs do not.',
+      useInstead: 'AtlStepper — steppers communicate progress and ordering, tabs do not.',
     },
   ],
-  relatedComponents: ['LlmAccordionGroupSpec', 'LlmStepperSpec'],
+  relatedComponents: ['AtlAccordionGroupSpec', 'AtlStepperSpec'],
   variantMatrix: [
     { variant: 'default' },
     { variant: 'pills' },

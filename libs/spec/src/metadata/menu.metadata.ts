@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmMenuSpec', 'LlmMenuItemSpec'],
+  specNames: ['AtlMenuSpec', 'AtlMenuItemSpec'],
   purpose:
     'Floating list of actions attached to a trigger. Renders a temporary surface of menu items the user opens, navigates with the keyboard, and dismisses after picking one.',
   whenToUse: [
@@ -13,7 +13,7 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Letting the user pick a value to fill a form field.',
-      useInstead: 'LlmSelect or LlmCombobox — those carry the right form-control semantics and value state.',
+      useInstead: 'AtlSelect or AtlCombobox — those carry the right form-control semantics and value state.',
     },
     {
       pattern: 'Hosting site-level navigation links.',
@@ -21,10 +21,10 @@ export const metadata: ComponentMetadata = {
     },
     {
       pattern: 'Anchoring a persistent side panel of filters or controls.',
-      useInstead: 'LlmDrawer — drawers stay open and anchor to a screen edge; menus are transient.',
+      useInstead: 'AtlDrawer — drawers stay open and anchor to a screen edge; menus are transient.',
     },
   ],
-  relatedComponents: ['LlmButtonSpec', 'LlmSelectSpec', 'LlmDrawerSpec'],
+  relatedComponents: ['AtlButtonSpec', 'AtlSelectSpec', 'AtlDrawerSpec'],
   variantMatrix: [
     { variant: 'default' },
     { variant: 'compact' },

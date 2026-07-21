@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmPaginationSpec'],
+  specNames: ['AtlPaginationSpec'],
   purpose:
     'Page navigator. Renders numbered page buttons plus previous/next (and optional first/last) controls for a paged list or table.',
   whenToUse: [
@@ -19,7 +19,7 @@ export const metadata: ComponentMetadata = {
       useInstead: 'A stepper — steps represent ordered stages, not interchangeable pages of data.',
     },
   ],
-  relatedComponents: ['LlmTableSpec', 'LlmButtonSpec'],
+  relatedComponents: ['AtlTableSpec', 'AtlButtonSpec'],
   variantMatrix: [
     { page: 1, pageCount: 10, showFirstLast: false },
     { page: 5, pageCount: 10, showFirstLast: false },

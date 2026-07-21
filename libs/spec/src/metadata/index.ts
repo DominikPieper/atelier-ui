@@ -9,8 +9,8 @@
  *   4. Run `npm run check:metadata` to confirm wiring.
  *
  * The registry is the authoritative list of "this spec interface needs a
- * metadata file". Some spec interfaces (LlmFormFieldSpec, LlmToastOptions,
- * LlmComboboxOption, LlmChatMessageSpec, LlmChatSuggestionSpec) are shared
+ * metadata file". Some spec interfaces (AtlFormFieldSpec, AtlToastOptions,
+ * AtlComboboxOption, AtlChatMessageSpec, AtlChatSuggestionSpec) are shared
  * shapes or options, not standalone components; they are explicitly
  * excluded here so the drift-gate does not demand metadata for them.
  */
@@ -28,51 +28,51 @@ export type { ComponentMetadata } from './types';
  */
 export const COMPONENT_METADATA_REGISTRY: Record<string, string> = {
   // Inputs / forms
-  LlmButtonSpec: 'button',
-  LlmInputSpec: 'input',
-  LlmTextareaSpec: 'textarea',
-  LlmCheckboxSpec: 'checkbox',
-  LlmToggleSpec: 'toggle',
-  LlmRadioSpec: 'radio',
-  LlmRadioGroupSpec: 'radio',
-  LlmSelectSpec: 'select',
-  LlmOptionSpec: 'select',
-  LlmComboboxSpec: 'combobox',
-  LlmStepperSpec: 'stepper',
-  LlmStepSpec: 'stepper',
+  AtlButtonSpec: 'button',
+  AtlInputSpec: 'input',
+  AtlTextareaSpec: 'textarea',
+  AtlCheckboxSpec: 'checkbox',
+  AtlToggleSpec: 'toggle',
+  AtlRadioSpec: 'radio',
+  AtlRadioGroupSpec: 'radio',
+  AtlSelectSpec: 'select',
+  AtlOptionSpec: 'select',
+  AtlComboboxSpec: 'combobox',
+  AtlStepperSpec: 'stepper',
+  AtlStepSpec: 'stepper',
   // Display
-  LlmBadgeSpec: 'badge',
-  LlmAvatarSpec: 'avatar',
-  LlmAvatarGroupSpec: 'avatar',
-  LlmCardSpec: 'card',
-  LlmSkeletonSpec: 'skeleton',
-  LlmProgressSpec: 'progress',
-  LlmIconSpec: 'icon',
+  AtlBadgeSpec: 'badge',
+  AtlAvatarSpec: 'avatar',
+  AtlAvatarGroupSpec: 'avatar',
+  AtlCardSpec: 'card',
+  AtlSkeletonSpec: 'skeleton',
+  AtlProgressSpec: 'progress',
+  AtlIconSpec: 'icon',
   // Navigation
-  LlmTabGroupSpec: 'tabs',
-  LlmTabSpec: 'tabs',
-  LlmBreadcrumbsSpec: 'breadcrumbs',
-  LlmBreadcrumbItemSpec: 'breadcrumbs',
-  LlmPaginationSpec: 'pagination',
-  LlmMenuSpec: 'menu',
-  LlmMenuItemSpec: 'menu',
+  AtlTabGroupSpec: 'tabs',
+  AtlTabSpec: 'tabs',
+  AtlBreadcrumbsSpec: 'breadcrumbs',
+  AtlBreadcrumbItemSpec: 'breadcrumbs',
+  AtlPaginationSpec: 'pagination',
+  AtlMenuSpec: 'menu',
+  AtlMenuItemSpec: 'menu',
   // Overlays
-  LlmDialogSpec: 'dialog',
-  LlmDrawerSpec: 'drawer',
-  LlmTooltipSpec: 'tooltip',
+  AtlDialogSpec: 'dialog',
+  AtlDrawerSpec: 'drawer',
+  AtlTooltipSpec: 'tooltip',
   // Containers
-  LlmAccordionGroupSpec: 'accordion',
-  LlmAccordionItemSpec: 'accordion',
+  AtlAccordionGroupSpec: 'accordion',
+  AtlAccordionItemSpec: 'accordion',
   // Feedback
-  LlmAlertSpec: 'alert',
+  AtlAlertSpec: 'alert',
   // Data
-  LlmTableSpec: 'table',
-  LlmTbodySpec: 'table',
-  LlmTrSpec: 'table',
-  LlmThSpec: 'table',
-  LlmTdSpec: 'table',
+  AtlTableSpec: 'table',
+  AtlTbodySpec: 'table',
+  AtlTrSpec: 'table',
+  AtlThSpec: 'table',
+  AtlTdSpec: 'table',
   // AI surfaces
-  LlmChatSpec: 'chat',
+  AtlChatSpec: 'chat',
 };
 
 /**
@@ -81,9 +81,9 @@ export const COMPONENT_METADATA_REGISTRY: Record<string, string> = {
  * which `Llm*Spec` exports it is allowed to skip.
  */
 export const NON_COMPONENT_SPECS = new Set<string>([
-  'LlmFormFieldSpec', // base for every form input
-  'LlmToastOptions', // options passed to toast service, not a component
-  'LlmComboboxOption', // option shape inside LlmComboboxSpec
-  'LlmChatMessageSpec', // message shape rendered by LlmChatSpec
-  'LlmChatSuggestionSpec', // suggestion shape rendered by LlmChatSpec
+  'AtlFormFieldSpec', // base for every form input
+  'AtlToastOptions', // options passed to toast service, not a component
+  'AtlComboboxOption', // option shape inside AtlComboboxSpec
+  'AtlChatMessageSpec', // message shape rendered by AtlChatSpec
+  'AtlChatSuggestionSpec', // suggestion shape rendered by AtlChatSpec
 ]);

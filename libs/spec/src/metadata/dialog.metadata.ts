@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmDialogSpec'],
+  specNames: ['AtlDialogSpec'],
   purpose:
     'Modal overlay that interrupts the page to demand focused attention. Traps focus, dims the background with a scrim, and blocks interaction with the rest of the page until it is dismissed.',
   whenToUse: [
@@ -13,18 +13,18 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Showing a transient, non-blocking system message.',
-      useInstead: 'LlmToast or LlmAlert — neither demands focus or blocks interaction.',
+      useInstead: 'AtlToast or AtlAlert — neither demands focus or blocks interaction.',
     },
     {
       pattern: 'Sliding in a side panel for secondary navigation or filters.',
-      useInstead: 'LlmDrawer — drawers anchor to an edge and are the right primitive for persistent side surfaces.',
+      useInstead: 'AtlDrawer — drawers anchor to an edge and are the right primitive for persistent side surfaces.',
     },
     {
       pattern: 'Hosting a long, multi-step workflow that needs its own URL and history.',
       useInstead: 'A dedicated route or wizard page — dialogs should not own deep flows the user might want to share or refresh.',
     },
   ],
-  relatedComponents: ['LlmDrawerSpec', 'LlmAlertSpec', 'LlmButtonSpec'],
+  relatedComponents: ['AtlDrawerSpec', 'AtlAlertSpec', 'AtlButtonSpec'],
   variantMatrix: [
     { size: 'sm' },
     { size: 'md' },

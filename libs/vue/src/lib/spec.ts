@@ -6,7 +6,7 @@
  * @atelier-ui/spec
  *
  * Framework-agnostic TypeScript interfaces defining the public API contract
- * for every llm-components component. Both the Angular and React libraries
+ * for every Atelier component. Both the Angular and React libraries
  * import from here so the compiler enforces parity.
  *
  * Angular: use the union types as `input<T>()` type parameters.
@@ -16,11 +16,11 @@
 // ---------------------------------------------------------------------------
 // Button
 // ---------------------------------------------------------------------------
-export type LlmButtonVariant = 'primary' | 'secondary' | 'outline' | 'danger';
-export type LlmButtonSize = 'sm' | 'md' | 'lg';
-export interface LlmButtonSpec {
-  variant?: LlmButtonVariant;
-  size?: LlmButtonSize;
+export type AtlButtonVariant = 'primary' | 'secondary' | 'outline' | 'danger';
+export type AtlButtonSize = 'sm' | 'md' | 'lg';
+export interface AtlButtonSpec {
+  variant?: AtlButtonVariant;
+  size?: AtlButtonSize;
   disabled?: boolean;
   loading?: boolean;
   /**
@@ -37,37 +37,37 @@ export interface LlmButtonSpec {
 // ---------------------------------------------------------------------------
 // Badge
 // ---------------------------------------------------------------------------
-export type LlmBadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info';
-export type LlmBadgeSize = 'sm' | 'md';
-export interface LlmBadgeSpec {
-  variant?: LlmBadgeVariant;
-  size?: LlmBadgeSize;
+export type AtlBadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info';
+export type AtlBadgeSize = 'sm' | 'md';
+export interface AtlBadgeSpec {
+  variant?: AtlBadgeVariant;
+  size?: AtlBadgeSize;
 }
 
 // ---------------------------------------------------------------------------
 // Avatar / AvatarGroup
 // ---------------------------------------------------------------------------
-export type LlmAvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-export type LlmAvatarShape = 'circle' | 'square';
-export type LlmAvatarStatus = 'online' | 'offline' | 'away' | 'busy' | '';
-export interface LlmAvatarSpec {
+export type AtlAvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type AtlAvatarShape = 'circle' | 'square';
+export type AtlAvatarStatus = 'online' | 'offline' | 'away' | 'busy' | '';
+export interface AtlAvatarSpec {
   src?: string;
   alt?: string;
   name?: string;
-  size?: LlmAvatarSize;
-  shape?: LlmAvatarShape;
-  status?: LlmAvatarStatus;
+  size?: AtlAvatarSize;
+  shape?: AtlAvatarShape;
+  status?: AtlAvatarStatus;
 }
-export interface LlmAvatarGroupSpec {
+export interface AtlAvatarGroupSpec {
   max?: number;
-  size?: LlmAvatarSize;
+  size?: AtlAvatarSize;
 }
 
 // ---------------------------------------------------------------------------
 // Card
 // ---------------------------------------------------------------------------
-export type LlmCardVariant = 'elevated' | 'outlined' | 'flat';
-export type LlmCardPadding = 'none' | 'sm' | 'md' | 'lg';
+export type AtlCardVariant = 'elevated' | 'outlined' | 'flat';
+export type AtlCardPadding = 'none' | 'sm' | 'md' | 'lg';
 /**
  * Optional landmark role for the card. Default behaviour is a plain
  * `<div>` — most cards group content visually and shouldn't add a
@@ -81,15 +81,15 @@ export type LlmCardPadding = 'none' | 'sm' | 'md' | 'lg';
  *   - `'section'` is not a landmark by itself — equivalent to a
  *     `<section>` element. Useful when nesting structure matters.
  */
-export type LlmCardRole = 'article' | 'region' | 'section';
-export interface LlmCardSpec {
-  variant?: LlmCardVariant;
-  padding?: LlmCardPadding;
+export type AtlCardRole = 'article' | 'region' | 'section';
+export interface AtlCardSpec {
+  variant?: AtlCardVariant;
+  padding?: AtlCardPadding;
   /**
    * Opt-in landmark role. Default is no role (plain `<div>`).
-   * See {@link LlmCardRole} for when to use each value.
+   * See {@link AtlCardRole} for when to use each value.
    */
-  role?: LlmCardRole;
+  role?: AtlCardRole;
 }
 
 // ---------------------------------------------------------------------------
@@ -100,7 +100,7 @@ export interface LlmCardSpec {
 // Using `unknown` would force every downstream consumer to redeclare the
 // property, defeating the purpose of the shared spec.
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export interface LlmFormFieldSpec {
+export interface AtlFormFieldSpec {
   value?: any;
   onValueChange?: (value: any) => void;
   disabled?: boolean;
@@ -111,13 +111,13 @@ export interface LlmFormFieldSpec {
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
-export type LlmInputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
-export interface LlmInputSpec extends LlmFormFieldSpec {
-  type?: LlmInputType;
+export type AtlInputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
+export interface AtlInputSpec extends AtlFormFieldSpec {
+  type?: AtlInputType;
   placeholder?: string;
 }
 
-export interface LlmTextareaSpec extends LlmFormFieldSpec {
+export interface AtlTextareaSpec extends AtlFormFieldSpec {
   rows?: number;
   placeholder?: string;
   autoResize?: boolean;
@@ -129,13 +129,13 @@ export interface LlmTextareaSpec extends LlmFormFieldSpec {
 // Checkbox/Toggle are checked-based, not value-based, so they omit the
 // inherited `value`/`onValueChange` — their state is `checked`/`onCheckedChange`.
 // (Input/Textarea/RadioGroup/Select/Combobox keep the value-based pair.)
-export interface LlmCheckboxSpec extends Omit<LlmFormFieldSpec, 'value' | 'onValueChange'> {
+export interface AtlCheckboxSpec extends Omit<AtlFormFieldSpec, 'value' | 'onValueChange'> {
   checked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
   indeterminate?: boolean;
 }
 
-export interface LlmToggleSpec extends Omit<LlmFormFieldSpec, 'value' | 'onValueChange'> {
+export interface AtlToggleSpec extends Omit<AtlFormFieldSpec, 'value' | 'onValueChange'> {
   checked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
 }
@@ -143,23 +143,23 @@ export interface LlmToggleSpec extends Omit<LlmFormFieldSpec, 'value' | 'onValue
 // ---------------------------------------------------------------------------
 // Radio / RadioGroup
 // ---------------------------------------------------------------------------
-export interface LlmRadioSpec {
+export interface AtlRadioSpec {
   radioValue: string;
   disabled?: boolean;
 }
 
-export interface LlmRadioGroupSpec extends LlmFormFieldSpec {
+export interface AtlRadioGroupSpec extends AtlFormFieldSpec {
   value?: string;
 }
 
 // ---------------------------------------------------------------------------
 // Select / Option
 // ---------------------------------------------------------------------------
-export interface LlmSelectSpec extends LlmFormFieldSpec {
+export interface AtlSelectSpec extends AtlFormFieldSpec {
   placeholder?: string;
 }
 
-export interface LlmOptionSpec {
+export interface AtlOptionSpec {
   optionValue: string;
   disabled?: boolean;
 }
@@ -167,13 +167,13 @@ export interface LlmOptionSpec {
 // ---------------------------------------------------------------------------
 // Stepper
 // ---------------------------------------------------------------------------
-export interface LlmStepperSpec {
+export interface AtlStepperSpec {
   activeStep?: number;
   orientation?: 'horizontal' | 'vertical';
   linear?: boolean;
 }
 
-export interface LlmStepSpec {
+export interface AtlStepSpec {
   label: string;
   description?: string;
   completed?: boolean;
@@ -185,48 +185,48 @@ export interface LlmStepSpec {
 // ---------------------------------------------------------------------------
 // Combobox
 // ---------------------------------------------------------------------------
-export interface LlmComboboxOption {
+export interface AtlComboboxOption {
   value: string;
   label: string;
   disabled?: boolean;
 }
 
-export interface LlmComboboxSpec extends LlmFormFieldSpec {
-  options?: LlmComboboxOption[];
+export interface AtlComboboxSpec extends AtlFormFieldSpec {
+  options?: AtlComboboxOption[];
   placeholder?: string;
 }
 
 // ---------------------------------------------------------------------------
 // Alert
 // ---------------------------------------------------------------------------
-export type LlmAlertVariant = 'info' | 'success' | 'warning' | 'danger';
-export interface LlmAlertSpec {
-  variant?: LlmAlertVariant;
+export type AtlAlertVariant = 'info' | 'success' | 'warning' | 'danger';
+export interface AtlAlertSpec {
+  variant?: AtlAlertVariant;
   dismissible?: boolean;
 }
 
 // ---------------------------------------------------------------------------
 // Dialog
 // ---------------------------------------------------------------------------
-export type LlmDialogSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
-export interface LlmDialogSpec {
+export type AtlDialogSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
+export interface AtlDialogSpec {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   closeOnBackdrop?: boolean;
-  size?: LlmDialogSize;
+  size?: AtlDialogSize;
 }
 
 // ---------------------------------------------------------------------------
 // TabGroup / Tab
 // ---------------------------------------------------------------------------
-export type LlmTabGroupVariant = 'default' | 'pills';
-export interface LlmTabGroupSpec {
+export type AtlTabGroupVariant = 'default' | 'pills';
+export interface AtlTabGroupSpec {
   selectedIndex?: number;
   onSelectedIndexChange?: (index: number) => void;
-  variant?: LlmTabGroupVariant;
+  variant?: AtlTabGroupVariant;
 }
 
-export interface LlmTabSpec {
+export interface AtlTabSpec {
   label: string;
   disabled?: boolean;
 }
@@ -234,14 +234,14 @@ export interface LlmTabSpec {
 // ---------------------------------------------------------------------------
 // AccordionGroup / AccordionItem
 // ---------------------------------------------------------------------------
-export type LlmAccordionGroupVariant = 'default' | 'bordered' | 'separated';
-export interface LlmAccordionGroupSpec {
+export type AtlAccordionGroupVariant = 'default' | 'bordered' | 'separated';
+export interface AtlAccordionGroupSpec {
   multi?: boolean;
-  variant?: LlmAccordionGroupVariant;
+  variant?: AtlAccordionGroupVariant;
 }
 
-export type LlmAccordionHeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
-export interface LlmAccordionItemSpec {
+export type AtlAccordionHeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
+export interface AtlAccordionItemSpec {
   expanded?: boolean;
   onExpandedChange?: (expanded: boolean) => void;
   disabled?: boolean;
@@ -253,44 +253,44 @@ export interface LlmAccordionItemSpec {
    * `headingLevel={3}` (default); if nested under an `<h3>`, pass
    * `headingLevel={4}`.
    */
-  headingLevel?: LlmAccordionHeadingLevel;
+  headingLevel?: AtlAccordionHeadingLevel;
 }
 
 // ---------------------------------------------------------------------------
 // Menu / MenuItem
 // ---------------------------------------------------------------------------
-export type LlmMenuVariant = 'default' | 'compact';
-export interface LlmMenuSpec {
-  variant?: LlmMenuVariant;
+export type AtlMenuVariant = 'default' | 'compact';
+export interface AtlMenuSpec {
+  variant?: AtlMenuVariant;
 }
 
-export interface LlmMenuItemSpec {
+export interface AtlMenuItemSpec {
   disabled?: boolean;
 }
 
 // ---------------------------------------------------------------------------
 // Tooltip
 // ---------------------------------------------------------------------------
-export type LlmTooltipPosition = 'above' | 'below' | 'left' | 'right';
-export interface LlmTooltipSpec {
-  llmTooltip: string;
-  llmTooltipPosition?: LlmTooltipPosition;
-  llmTooltipDisabled?: boolean;
-  llmTooltipShowDelay?: number;
-  llmTooltipHideDelay?: number;
+export type AtlTooltipPosition = 'above' | 'below' | 'left' | 'right';
+export interface AtlTooltipSpec {
+  atlTooltip: string;
+  atlTooltipPosition?: AtlTooltipPosition;
+  atlTooltipDisabled?: boolean;
+  atlTooltipShowDelay?: number;
+  atlTooltipHideDelay?: number;
 }
 
 // ---------------------------------------------------------------------------
 // Toast
 // ---------------------------------------------------------------------------
-export type LlmToastVariant = 'default' | 'success' | 'warning' | 'danger' | 'info';
-export type LlmToastContainerPosition =
+export type AtlToastVariant = 'default' | 'success' | 'warning' | 'danger' | 'info';
+export type AtlToastContainerPosition =
   | 'top-right'
   | 'top-center'
   | 'bottom-right'
   | 'bottom-center';
-export interface LlmToastOptions {
-  variant?: LlmToastVariant;
+export interface AtlToastOptions {
+  variant?: AtlToastVariant;
   duration?: number;
   dismissible?: boolean;
 }
@@ -298,9 +298,9 @@ export interface LlmToastOptions {
 // ---------------------------------------------------------------------------
 // Skeleton
 // ---------------------------------------------------------------------------
-export type LlmSkeletonVariant = 'text' | 'circular' | 'rectangular';
-export interface LlmSkeletonSpec {
-  variant?: LlmSkeletonVariant;
+export type AtlSkeletonVariant = 'text' | 'circular' | 'rectangular';
+export interface AtlSkeletonSpec {
+  variant?: AtlSkeletonVariant;
   width?: string;
   height?: string;
   animated?: boolean;
@@ -309,11 +309,11 @@ export interface LlmSkeletonSpec {
 // ---------------------------------------------------------------------------
 // Breadcrumbs / BreadcrumbItem
 // ---------------------------------------------------------------------------
-export interface LlmBreadcrumbsSpec {
+export interface AtlBreadcrumbsSpec {
   separator?: string;
 }
 
-export interface LlmBreadcrumbItemSpec {
+export interface AtlBreadcrumbItemSpec {
   href?: string;
   current?: boolean;
 }
@@ -321,7 +321,7 @@ export interface LlmBreadcrumbItemSpec {
 // ---------------------------------------------------------------------------
 // Pagination
 // ---------------------------------------------------------------------------
-export interface LlmPaginationSpec {
+export interface AtlPaginationSpec {
   page?: number;
   pageCount?: number;
   siblingCount?: number;
@@ -331,13 +331,13 @@ export interface LlmPaginationSpec {
 // ---------------------------------------------------------------------------
 // Progress
 // ---------------------------------------------------------------------------
-export type LlmProgressVariant = 'default' | 'success' | 'warning' | 'danger';
-export type LlmProgressSize = 'sm' | 'md' | 'lg';
-export interface LlmProgressSpec {
+export type AtlProgressVariant = 'default' | 'success' | 'warning' | 'danger';
+export type AtlProgressSize = 'sm' | 'md' | 'lg';
+export interface AtlProgressSpec {
   value?: number;
   max?: number;
-  variant?: LlmProgressVariant;
-  size?: LlmProgressSize;
+  variant?: AtlProgressVariant;
+  size?: AtlProgressSize;
   indeterminate?: boolean;
   /**
    * Accessible name for the progress bar — rendered as `aria-label`.
@@ -351,26 +351,26 @@ export interface LlmProgressSpec {
 // ---------------------------------------------------------------------------
 // Drawer
 // ---------------------------------------------------------------------------
-export type LlmDrawerPosition = 'left' | 'right' | 'top' | 'bottom';
-export type LlmDrawerSize = 'sm' | 'md' | 'lg' | 'full';
-export interface LlmDrawerSpec {
+export type AtlDrawerPosition = 'left' | 'right' | 'top' | 'bottom';
+export type AtlDrawerSize = 'sm' | 'md' | 'lg' | 'full';
+export interface AtlDrawerSpec {
   open?: boolean;
-  position?: LlmDrawerPosition;
-  size?: LlmDrawerSize;
+  position?: AtlDrawerPosition;
+  size?: AtlDrawerSize;
   closeOnBackdrop?: boolean;
 }
 
 // ---------------------------------------------------------------------------
 // Table
 // ---------------------------------------------------------------------------
-export type LlmTableVariant = 'default' | 'striped' | 'bordered';
-export type LlmTableSize = 'sm' | 'md' | 'lg';
-export type LlmSortDirection = 'asc' | 'desc' | null;
-export type LlmTableAlign = 'start' | 'center' | 'end';
+export type AtlTableVariant = 'default' | 'striped' | 'bordered';
+export type AtlTableSize = 'sm' | 'md' | 'lg';
+export type AtlSortDirection = 'asc' | 'desc' | null;
+export type AtlTableAlign = 'start' | 'center' | 'end';
 
-export interface LlmTableSpec {
-  variant?: LlmTableVariant;
-  size?: LlmTableSize;
+export interface AtlTableSpec {
+  variant?: AtlTableVariant;
+  size?: AtlTableSize;
   stickyHeader?: boolean;
   /**
    * Accessible name for the scrollable table region. The wrapper
@@ -381,32 +381,32 @@ export interface LlmTableSpec {
   'aria-label'?: string;
 }
 
-export interface LlmTbodySpec {
+export interface AtlTbodySpec {
   empty?: boolean;
   colSpan?: number;
 }
 
-export interface LlmTrSpec {
+export interface AtlTrSpec {
   selected?: boolean;
   selectable?: boolean;
   rowId?: string;
 }
 
-export interface LlmThSpec {
+export interface AtlThSpec {
   sortable?: boolean;
-  sortDirection?: LlmSortDirection;
-  align?: LlmTableAlign;
+  sortDirection?: AtlSortDirection;
+  align?: AtlTableAlign;
   width?: string;
 }
 
-export interface LlmTdSpec {
-  align?: LlmTableAlign;
+export interface AtlTdSpec {
+  align?: AtlTableAlign;
 }
 
 // ---------------------------------------------------------------------------
 // Icon
 // ---------------------------------------------------------------------------
-export type LlmIconName =
+export type AtlIconName =
   | 'success'
   | 'warning'
   | 'danger'
@@ -428,10 +428,10 @@ export type LlmIconName =
   | 'close'
   | 'more'
   | 'default-toast';
-export type LlmIconSize = 'sm' | 'md' | 'lg';
-export interface LlmIconSpec {
-  name: LlmIconName;
-  size?: LlmIconSize;
+export type AtlIconSize = 'sm' | 'md' | 'lg';
+export interface AtlIconSpec {
+  name: AtlIconName;
+  size?: AtlIconSize;
   /**
    * Accessible label. When provided, the icon is announced as an image with
    * this label. When omitted, the icon is hidden from assistive tech (treated
@@ -443,25 +443,25 @@ export interface LlmIconSpec {
 // ---------------------------------------------------------------------------
 // Chat (AI surface)
 // ---------------------------------------------------------------------------
-export type LlmChatVariant = 'drawer' | 'popup' | 'inline';
-export type LlmChatStatus = 'idle' | 'streaming' | 'error';
-export type LlmChatMessageRole = 'user' | 'assistant' | 'system';
+export type AtlChatVariant = 'drawer' | 'popup' | 'inline';
+export type AtlChatStatus = 'idle' | 'streaming' | 'error';
+export type AtlChatMessageRole = 'user' | 'assistant' | 'system';
 
-export interface LlmChatMessageSpec {
+export interface AtlChatMessageSpec {
   id: string;
-  role: LlmChatMessageRole;
+  role: AtlChatMessageRole;
   content: string;
   failed?: boolean;
 }
 
-export interface LlmChatSuggestionSpec {
+export interface AtlChatSuggestionSpec {
   id: string;
   label: string;
   hint?: string;
 }
 
-export interface LlmChatSpec {
-  variant?: LlmChatVariant;
-  status?: LlmChatStatus;
+export interface AtlChatSpec {
+  variant?: AtlChatVariant;
+  status?: AtlChatStatus;
   open?: boolean;
 }

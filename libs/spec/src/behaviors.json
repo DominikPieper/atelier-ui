@@ -70,9 +70,9 @@
   ],
   "card": [
     { "id": "renders-content", "describe": "renders projected/slotted content" },
-    { "id": "header-subcomponent", "describe": "the header sub-component applies llm-card-header" },
-    { "id": "content-subcomponent", "describe": "the content sub-component applies llm-card-content" },
-    { "id": "footer-subcomponent", "describe": "the footer sub-component applies llm-card-footer" }
+    { "id": "header-subcomponent", "describe": "the header sub-component applies atl-card-header" },
+    { "id": "content-subcomponent", "describe": "the content sub-component applies atl-card-content" },
+    { "id": "footer-subcomponent", "describe": "the footer sub-component applies atl-card-footer" }
   ],
   "chat": [
     { "id": "inline-variant", "describe": "inline variant renders without overlay chrome" },

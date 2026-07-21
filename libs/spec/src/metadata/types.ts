@@ -2,7 +2,7 @@
  * Component metadata — the agent-readable context layer for every spec
  * interface in libs/spec/src/index.ts.
  *
- * Why this exists: `LlmButtonSpec` tells the type checker what shape the
+ * Why this exists: `AtlButtonSpec` tells the type checker what shape the
  * props have; it does not tell an LLM agent *why* the component exists,
  * *when* to reach for it, or *when not to*. Without that context the agent
  * reverse-engineers it from source or — worse — invents it. A co-located
@@ -21,9 +21,9 @@
  */
 export interface ComponentMetadata {
   /** Spec interface names covered by this metadata file. Most components
-   *  have a single spec (`['LlmButtonSpec']`); compound components
-   *  cover several (`['LlmTableSpec', 'LlmTbodySpec', 'LlmTrSpec',
-   *  'LlmThSpec', 'LlmTdSpec']`). Every name must exactly match an
+   *  have a single spec (`['AtlButtonSpec']`); compound components
+   *  cover several (`['AtlTableSpec', 'AtlTbodySpec', 'AtlTrSpec',
+   *  'AtlThSpec', 'AtlTdSpec']`). Every name must exactly match an
    *  exported interface in `libs/spec/src/index.ts`. */
   specNames: string[];
 

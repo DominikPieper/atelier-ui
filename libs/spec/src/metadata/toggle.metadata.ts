@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmToggleSpec'],
+  specNames: ['AtlToggleSpec'],
   purpose:
     'On/off switch for a setting that takes effect immediately. Renders a switch control bound to a boolean form value.',
   whenToUse: [
@@ -12,14 +12,14 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Choosing among more than two states.',
-      useInstead: 'LlmRadioGroup or LlmSelect — switches only encode true/false.',
+      useInstead: 'AtlRadioGroup or AtlSelect — switches only encode true/false.',
     },
     {
       pattern: 'Collecting a binary value that is only committed on form submit.',
-      useInstead: 'LlmCheckbox — checkboxes carry the "stage a change" semantics; switches imply immediate effect.',
+      useInstead: 'AtlCheckbox — checkboxes carry the "stage a change" semantics; switches imply immediate effect.',
     },
   ],
-  relatedComponents: ['LlmCheckboxSpec'],
+  relatedComponents: ['AtlCheckboxSpec'],
   variantMatrix: [
     { checked: false },
     { checked: true },

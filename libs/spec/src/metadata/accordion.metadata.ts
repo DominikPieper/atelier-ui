@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmAccordionGroupSpec', 'LlmAccordionItemSpec'],
+  specNames: ['AtlAccordionGroupSpec', 'AtlAccordionItemSpec'],
   purpose:
     'Vertical stack of collapsible sections with labelled triggers. Each item expands and collapses independently or as part of a single-open group, hiding supplementary detail until the user asks for it.',
   whenToUse: [
@@ -13,18 +13,18 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Switching between sibling views of the same parent context.',
-      useInstead: 'LlmTabs — tabs swap one panel at a time and are the right primitive for peer views.',
+      useInstead: 'AtlTabs — tabs swap one panel at a time and are the right primitive for peer views.',
     },
     {
       pattern: 'Presenting a linear ordered workflow as collapsible sections.',
-      useInstead: 'LlmStepper — steppers communicate progress and ordering, accordions do not.',
+      useInstead: 'AtlStepper — steppers communicate progress and ordering, accordions do not.',
     },
     {
       pattern: 'Building a tree of nested categories the user can drill into.',
       useInstead: 'A dedicated tree component with `role="tree"` and proper expanded-state semantics.',
     },
   ],
-  relatedComponents: ['LlmTabGroupSpec', 'LlmStepperSpec'],
+  relatedComponents: ['AtlTabGroupSpec', 'AtlStepperSpec'],
   variantMatrix: [
     { variant: 'default', multi: false },
     { variant: 'default', multi: true },

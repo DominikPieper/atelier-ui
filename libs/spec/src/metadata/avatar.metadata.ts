@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmAvatarSpec', 'LlmAvatarGroupSpec'],
+  specNames: ['AtlAvatarSpec', 'AtlAvatarGroupSpec'],
   purpose:
     'Identity marker for a person or entity. Renders a circular or square image, falling back to initials or a placeholder when no image is available; AvatarGroup stacks several with an overflow counter.',
   whenToUse: [
@@ -17,10 +17,10 @@ export const metadata: ComponentMetadata = {
     },
     {
       pattern: 'Communicating standalone status without an identity (system online, build healthy).',
-      useInstead: 'LlmBadge — badges are the right primitive for status pills that do not belong to a person.',
+      useInstead: 'AtlBadge — badges are the right primitive for status pills that do not belong to a person.',
     },
   ],
-  relatedComponents: ['LlmBadgeSpec', 'LlmMenuSpec'],
+  relatedComponents: ['AtlBadgeSpec', 'AtlMenuSpec'],
   variantMatrix: [
     { size: 'xs', shape: 'circle' },
     { size: 'sm', shape: 'circle' },

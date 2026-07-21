@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmDrawerSpec'],
+  specNames: ['AtlDrawerSpec'],
   purpose:
     'Edge-anchored panel that slides in from one side of the viewport. Hosts secondary navigation, filters, or detail views without taking the user away from the underlying page.',
   whenToUse: [
@@ -13,18 +13,18 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Blocking the page for a short confirmation or single-decision prompt.',
-      useInstead: 'LlmDialog — dialogs are centred, scoped, and the right primitive for one focused decision.',
+      useInstead: 'AtlDialog — dialogs are centred, scoped, and the right primitive for one focused decision.',
     },
     {
       pattern: 'Showing a transient notification that should not require dismissal.',
-      useInstead: 'LlmToast — toasts auto-dismiss and do not anchor to a screen edge.',
+      useInstead: 'AtlToast — toasts auto-dismiss and do not anchor to a screen edge.',
     },
     {
       pattern: 'Building a dropdown menu attached to a trigger button.',
-      useInstead: 'LlmMenu — menus position relative to the trigger and use roving focus, not focus trapping.',
+      useInstead: 'AtlMenu — menus position relative to the trigger and use roving focus, not focus trapping.',
     },
   ],
-  relatedComponents: ['LlmDialogSpec', 'LlmMenuSpec'],
+  relatedComponents: ['AtlDialogSpec', 'AtlMenuSpec'],
   variantMatrix: [
     { position: 'left', size: 'sm' },
     { position: 'left', size: 'md' },

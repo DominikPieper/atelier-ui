@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmRadioSpec', 'LlmRadioGroupSpec'],
+  specNames: ['AtlRadioSpec', 'AtlRadioGroupSpec'],
   purpose:
     'Single-select control. RadioGroup owns the bound value; each Radio child contributes one mutually exclusive option.',
   whenToUse: [
@@ -12,18 +12,18 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Picking one option from a long list that would dominate the layout.',
-      useInstead: 'LlmSelect, or LlmCombobox once the list needs search.',
+      useInstead: 'AtlSelect, or AtlCombobox once the list needs search.',
     },
     {
       pattern: 'Allowing zero or more selections.',
-      useInstead: 'LlmCheckbox — one per option, no single-select constraint.',
+      useInstead: 'AtlCheckbox — one per option, no single-select constraint.',
     },
     {
       pattern: 'Flipping a single boolean.',
-      useInstead: 'LlmCheckbox or LlmToggle — a one-option radio group is never the right shape.',
+      useInstead: 'AtlCheckbox or AtlToggle — a one-option radio group is never the right shape.',
     },
   ],
-  relatedComponents: ['LlmCheckboxSpec', 'LlmSelectSpec', 'LlmComboboxSpec'],
+  relatedComponents: ['AtlCheckboxSpec', 'AtlSelectSpec', 'AtlComboboxSpec'],
   variantMatrix: [
     { value: 'a', disabled: false },
     { value: 'b', disabled: false },

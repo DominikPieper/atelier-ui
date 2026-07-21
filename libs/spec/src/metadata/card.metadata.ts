@@ -1,7 +1,7 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['LlmCardSpec'],
+  specNames: ['AtlCardSpec'],
   purpose:
     'Container that groups related content into a single visual block. Renders a padded surface with optional elevation or border; does not add a landmark role unless explicitly opted in.',
   whenToUse: [
@@ -13,18 +13,18 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Showing a dismissable system message inside a card.',
-      useInstead: 'LlmAlert — alerts carry the right role and live-region semantics for transient messages.',
+      useInstead: 'AtlAlert — alerts carry the right role and live-region semantics for transient messages.',
     },
     {
       pattern: 'Using a card as a modal container layered over the page.',
-      useInstead: 'LlmDialog — dialogs handle focus trapping, scrim, and dismiss behaviour.',
+      useInstead: 'AtlDialog — dialogs handle focus trapping, scrim, and dismiss behaviour.',
     },
     {
       pattern: 'Adding `role="article"` to every card by default to look more semantic.',
       useInstead: 'Leave `role` unset for visual grouping; only set it when the card is a real landmark in the page outline.',
     },
   ],
-  relatedComponents: ['LlmDialogSpec', 'LlmAlertSpec'],
+  relatedComponents: ['AtlDialogSpec', 'AtlAlertSpec'],
   variantMatrix: [
     { variant: 'elevated', padding: 'none' },
     { variant: 'elevated', padding: 'sm' },
