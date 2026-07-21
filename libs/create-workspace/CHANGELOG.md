@@ -1,3 +1,13 @@
+## 0.2.1 (2026-07-21)
+
+### 🩹 Fixes
+
+- repair Llm->Atl rename residue the codemod regexes missed ([7bedf22](https://github.com/DominikPieper/atelier-ui/commit/7bedf22))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.2.0 (2026-07-21)
 
 ### 🚀 Features
