@@ -1,0 +1,120 @@
+.atl-tab-group {
+  display: block;
+  font-family: var(--ui-font-family);
+  color: var(--ui-color-text);
+}
+
+/* ─── Tab list ─── */
+.atl-tab-group .tablist {
+  display: flex;
+  gap: var(--ui-spacing-2);
+  border-bottom: 1px solid var(--ui-color-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.atl-tab-group .tablist::-webkit-scrollbar {
+  display: none;
+}
+
+/* ─── Tab button ─── */
+.atl-tab-group .tablist button {
+  all: unset;
+  box-sizing: border-box;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  padding: var(--ui-spacing-3) var(--ui-spacing-4);
+  font-size: var(--ui-font-size-sm);
+  font-weight: var(--ui-font-weight-medium);
+  color: var(--ui-color-text-muted);
+  cursor: pointer;
+  transition: var(--ui-transition-fast);
+  transition-property: color, background-color;
+  border-radius: var(--ui-radius-md) var(--ui-radius-md) 0 0;
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Active indicator (underline) — 3px for modern weight */
+.atl-tab-group .tablist button::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: var(--ui-spacing-2);
+  right: var(--ui-spacing-2);
+  height: 3px;
+  background: transparent;
+  border-radius: var(--ui-radius-full) var(--ui-radius-full) 0 0;
+  transition: background var(--ui-transition-fast);
+}
+
+.atl-tab-group .tablist button.is-active {
+  color: var(--ui-color-primary);
+}
+
+.atl-tab-group .tablist button.is-active::after {
+  background: var(--ui-color-primary);
+}
+
+/* Hover */
+.atl-tab-group .tablist button:hover:not(.is-disabled):not(.is-active) {
+  color: var(--ui-color-text);
+  background: var(--ui-color-surface-sunken);
+}
+
+/* Focus */
+.atl-tab-group .tablist button:focus-visible {
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
+  border-radius: var(--ui-radius-md);
+}
+
+/* Disabled */
+.atl-tab-group .tablist button.is-disabled {
+  opacity: var(--ui-opacity-disabled);
+  cursor: not-allowed;
+}
+
+/* ─── Tab panel ─── */
+.atl-tab-group [role="tabpanel"] {
+  padding: var(--ui-spacing-5) 0;
+}
+
+.atl-tab-group [role="tabpanel"]:focus-visible {
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
+  border-radius: var(--ui-radius-md);
+}
+
+/* ─── Pills variant ─── */
+.atl-tab-group.variant-pills .tablist {
+  border-bottom: none;
+  gap: var(--ui-spacing-2);
+  padding: var(--ui-spacing-1);
+  background: var(--ui-color-surface-sunken);
+  border-radius: var(--ui-radius-lg);
+}
+
+.atl-tab-group.variant-pills .tablist button {
+  border-radius: var(--ui-radius-md);
+  min-height: 2rem;
+  padding: var(--ui-spacing-2) var(--ui-spacing-4);
+  font-size: var(--ui-font-size-sm);
+}
+
+.atl-tab-group.variant-pills .tablist button::after {
+  display: none;
+}
+
+.atl-tab-group.variant-pills .tablist button.is-active {
+  background: var(--ui-color-surface);
+  color: var(--ui-color-text);
+  box-shadow: var(--ui-shadow-sm);
+}
+
+.atl-tab-group.variant-pills .tablist button:hover:not(.is-disabled):not(.is-active) {
+  background: transparent;
+  color: var(--ui-color-text);
+}

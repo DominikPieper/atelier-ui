@@ -6,7 +6,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 A workshop toolkit for hands-on AI development training. 22 LLM-optimized components, zero runtime dependencies, and a built-in MCP server so your AI assistant can look up exact prop names instead of guessing them.
 
-**Package:** `@atelier-ui/vue` &nbsp;·&nbsp; **Elements:** `LlmButton`, `LlmDialog`, … &nbsp;·&nbsp; **Style:** CSS custom properties
+**Package:** `@atelier-ui/vue` &nbsp;·&nbsp; **Elements:** `AtlButton`, `AtlDialog`, … &nbsp;·&nbsp; **Style:** CSS custom properties
 
 ---
 
@@ -31,11 +31,11 @@ createApp(App).mount('#app');
 
 ```vue
 <script setup lang="ts">
-import { LlmButton } from '@atelier-ui/vue';
+import { AtlButton } from '@atelier-ui/vue';
 </script>
 
 <template>
-  <LlmButton variant="primary">Save</LlmButton>
+  <AtlButton variant="primary">Save</AtlButton>
 </template>
 ```
 
@@ -51,7 +51,7 @@ import { LlmButton } from '@atelier-ui/vue';
 | **Overlay** | Dialog, Drawer, Tooltip, Toast |
 | **Layout** | Accordion, Alert |
 
-Two-way binding uses `v-model` and `v-model:value` conventions where applicable. Toast exposes a `useLlmToast` composable.
+Two-way binding uses `v-model` and `v-model:value` conventions where applicable. Toast exposes a `useAtlToast` composable.
 
 ---
 

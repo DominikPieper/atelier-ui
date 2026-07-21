@@ -1,0 +1,70 @@
+.atl-card {
+  display: block;
+  border-radius: var(--ui-radius-xl);
+  background-color: var(--ui-color-surface-raised);
+  overflow: hidden;
+}
+
+/* Modernised variants — single soft shadow on elevated, no shadow on
+ * outlined or flat. Cards rest on the page; they don't float off it. */
+.atl-card.variant-elevated {
+  box-shadow: var(--ui-shadow-sm);
+  border: 1px solid var(--ui-color-border);
+}
+
+.atl-card.variant-outlined {
+  border: 1px solid var(--ui-color-border);
+  background-color: var(--ui-color-surface-raised);
+}
+
+.atl-card.variant-flat {
+  background-color: var(--ui-color-surface-sunken);
+}
+
+/* Padding on .atl-card directly affects all slots */
+.atl-card.padding-none .atl-card-header,
+.atl-card.padding-none .atl-card-content,
+.atl-card.padding-none .atl-card-footer {
+  padding: 0;
+}
+
+.atl-card.padding-sm .atl-card-header,
+.atl-card.padding-sm .atl-card-content,
+.atl-card.padding-sm .atl-card-footer {
+  padding: var(--ui-spacing-4);
+}
+
+.atl-card.padding-md .atl-card-header,
+.atl-card.padding-md .atl-card-content,
+.atl-card.padding-md .atl-card-footer {
+  padding: var(--ui-spacing-6);
+}
+
+.atl-card.padding-lg .atl-card-header,
+.atl-card.padding-lg .atl-card-content,
+.atl-card.padding-lg .atl-card-footer {
+  padding: var(--ui-spacing-8);
+}
+
+/* Sub-component layouts */
+.atl-card-header {
+  display: block;
+  font-size: var(--ui-font-size-lg);
+  font-weight: var(--ui-font-weight-semibold);
+  color: var(--ui-color-text);
+  border-bottom: 1px solid var(--ui-color-border);
+  letter-spacing: var(--ui-letter-spacing-tight);
+}
+
+.atl-card-content {
+  display: block;
+  color: var(--ui-color-text);
+  line-height: var(--ui-line-height-normal);
+}
+
+.atl-card-footer {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-spacing-3);
+  border-top: 1px solid var(--ui-color-border);
+}

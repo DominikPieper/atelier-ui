@@ -3,7 +3,7 @@
  *
  * Cross-framework parity compares what the three adapters EXPOSE to assistive
  * tech, not the DOM they emit. The DOM legitimately differs — React/Vue render a
- * native `<button>`; Angular renders `<llm-button role="button">` — but the
+ * native `<button>`; Angular renders `<atl-button role="button">` — but the
  * accessibility tree must match. This walks a rendered root and produces a
  * normalized {role, name, states} list so each framework's `*.a11y.spec.*` can
  * write a snapshot that `tools/scripts/check-a11y-parity.js` diffs across adapters.

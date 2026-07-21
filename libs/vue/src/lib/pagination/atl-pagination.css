@@ -1,0 +1,80 @@
+.atl-pagination {
+  display: block;
+  font-family: var(--ui-font-family);
+}
+
+.page-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ui-spacing-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Page button */
+.page-btn {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.25rem;
+  height: 2.25rem;
+  padding: 0 var(--ui-spacing-2);
+  border-radius: var(--ui-radius-md);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ui-color-text);
+  font-size: var(--ui-font-size-sm);
+  font-weight: var(--ui-font-weight-medium);
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color var(--ui-transition-fast),
+    border-color var(--ui-transition-fast),
+    color var(--ui-transition-fast);
+}
+
+.page-btn:hover:not(:disabled) {
+  background-color: var(--ui-color-surface-sunken);
+  color: var(--ui-color-text);
+}
+
+.page-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
+}
+
+/* Active (current) page — primary fill */
+.page-btn.is-active {
+  background-color: var(--ui-color-primary);
+  border-color: var(--ui-color-primary);
+  color: var(--ui-color-text-on-primary);
+  font-weight: var(--ui-font-weight-semibold);
+}
+
+.page-btn.is-active:hover {
+  background-color: var(--ui-color-primary-hover);
+  border-color: var(--ui-color-primary-hover);
+}
+
+/* Disabled */
+.page-btn.is-disabled,
+.page-btn:disabled {
+  opacity: var(--ui-opacity-disabled);
+  pointer-events: none;
+  cursor: default;
+}
+
+/* Ellipsis */
+.ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.25rem;
+  height: 2.25rem;
+  color: var(--ui-color-text-muted);
+  font-size: var(--ui-font-size-sm);
+  user-select: none;
+}

@@ -1,0 +1,91 @@
+import { render, screen } from '@testing-library/vue';
+import userEvent from '@testing-library/user-event';
+import { defineComponent } from 'vue';
+import AtlToastProvider from './atl-toast-provider.vue';
+import AtlToastContainer from './atl-toast-container.vue';
+import { useAtlToast } from './atl-toast';
+import { covers } from '../../testing/behavior';
+
+
+const TriggerChild = defineComponent({
+  name: 'TriggerChild',
+  setup() {
+    const toast = useAtlToast();
+    return { toast };
+  },
+  template: `
+    <div>
+      <button type="button" @click="toast.show('Hello!', { variant: 'success' })">Show success</button>
+      <button type="button" @click="toast.show('Error occurred', { variant: 'danger' })">Show danger</button>
+      <button type="button" @click="toast.show('Persistent', { duration: 0 })">Show persistent</button>
+      <button type="button" @click="toast.clear()">Clear all</button>
+    </div>
+  `,
+});
+
+describe('AtlToast', () => {
+  covers('toast', 'show-adds')('shows a toast when show() is called', async () => {
+    const user = userEvent.setup();
+    render({
+      components: { AtlToastProvider, AtlToastContainer, TriggerChild },
+      template: `<AtlToastProvider><TriggerChild /><AtlToastContainer /></AtlToastProvider>`,
+    });
+    await user.click(screen.getByRole('button', { name: 'Show success' }));
+    expect(screen.getByText('Hello!')).toBeInTheDocument();
+  });
+
+  covers('toast', 'variant-class')('applies variant class to toast', async () => {
+    const user = userEvent.setup();
+    const { container } = render({
+      components: { AtlToastProvider, AtlToastContainer, TriggerChild },
+      template: `<AtlToastProvider><TriggerChild /><AtlToastContainer /></AtlToastProvider>`,
+    });
+    await user.click(screen.getByRole('button', { name: 'Show danger' }));
+    expect(container.querySelector('.atl-toast')).toHaveClass('variant-danger');
+  });
+
+  covers('toast', 'dismiss-button-click')('dismisses a toast when dismiss button is clicked', async () => {
+    const user = userEvent.setup();
+    render({
+      components: { AtlToastProvider, AtlToastContainer, TriggerChild },
+      template: `<AtlToastProvider><TriggerChild /><AtlToastContainer /></AtlToastProvider>`,
+    });
+    await user.click(screen.getByRole('button', { name: 'Show success' }));
+    expect(screen.getByText('Hello!')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Dismiss' }));
+    expect(screen.queryByText('Hello!')).not.toBeInTheDocument();
+  });
+
+  it('clears all toasts when clear() is called', async () => {
+    const user = userEvent.setup();
+    render({
+      components: { AtlToastProvider, AtlToastContainer, TriggerChild },
+      template: `<AtlToastProvider><TriggerChild /><AtlToastContainer /></AtlToastProvider>`,
+    });
+    await user.click(screen.getByRole('button', { name: 'Show success' }));
+    await user.click(screen.getByRole('button', { name: 'Show danger' }));
+    expect(screen.getByText('Hello!')).toBeInTheDocument();
+    expect(screen.getByText('Error occurred')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Clear all' }));
+    expect(screen.queryByText('Hello!')).not.toBeInTheDocument();
+    expect(screen.queryByText('Error occurred')).not.toBeInTheDocument();
+  });
+
+  covers('toast', 'position-class')('applies position class to container', () => {
+    const { container } = render({
+      components: { AtlToastProvider, AtlToastContainer },
+      template: `<AtlToastProvider><AtlToastContainer position="top-center" /></AtlToastProvider>`,
+    });
+    expect(container.querySelector('.atl-toast-container')).toHaveClass('position-top-center');
+  });
+
+  it('throws if useAtlToast is used outside provider', () => {
+    const BadComponent = defineComponent({
+      setup() {
+        expect(() => useAtlToast()).toThrow();
+      },
+      template: `<div />`,
+    });
+    render(BadComponent);
+  });
+});

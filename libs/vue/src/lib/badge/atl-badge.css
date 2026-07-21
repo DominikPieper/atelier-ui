@@ -1,0 +1,60 @@
+.atl-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ui-radius-full);
+  font-family: var(--ui-font-family);
+  font-weight: var(--ui-font-weight-semibold);
+  line-height: var(--ui-line-height-tight);
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+/* Sizes */
+.atl-badge.size-sm {
+  padding: 0.1875rem var(--ui-spacing-2);
+  font-size: var(--ui-font-size-xs);
+}
+
+.atl-badge.size-md {
+  padding: 0.3125rem var(--ui-spacing-3);
+  font-size: var(--ui-font-size-sm);
+}
+
+/* Variants */
+.atl-badge.variant-default {
+  background-color: var(--ui-color-surface-sunken);
+  color: var(--ui-color-text-muted);
+  border: 1px solid var(--ui-color-border);
+}
+
+.atl-badge.variant-success {
+  background-color: var(--ui-color-success-bg);
+  color: var(--ui-color-success-text);
+  border: 1px solid color-mix(in srgb, var(--ui-color-success-text) 25%, transparent);
+}
+
+.atl-badge.variant-warning {
+  background-color: var(--ui-color-warning-bg);
+  color: var(--ui-color-warning-text);
+  border: 1px solid color-mix(in srgb, var(--ui-color-warning-text) 25%, transparent);
+}
+
+.atl-badge.variant-danger {
+  background-color: var(--ui-color-danger-bg);
+  color: var(--ui-color-danger-text);
+  border: 1px solid color-mix(in srgb, var(--ui-color-danger-text) 25%, transparent);
+}
+
+.atl-badge.variant-info {
+  background-color: var(--ui-color-info-bg);
+  color: var(--ui-color-info-text);
+  border: 1px solid color-mix(in srgb, var(--ui-color-info-text) 25%, transparent);
+}
+
+/* Semantic indicator glyph — non-color differentiation (WCAG 1.4.1). */
+.atl-badge .variant-icon {
+  font-weight: 700;
+  margin-right: 0.3em;
+  line-height: 1;
+}

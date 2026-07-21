@@ -2,39 +2,39 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import { userEvent, expect, screen } from 'storybook/test';
 import { ref } from 'vue';
 
-import LlmButton from './button/llm-button.vue';
-import LlmCard from './card/llm-card.vue';
-import LlmCardHeader from './card/llm-card-header.vue';
-import LlmCardContent from './card/llm-card-content.vue';
-import LlmCardFooter from './card/llm-card-footer.vue';
-import LlmBadge from './badge/llm-badge.vue';
-import LlmInput from './input/llm-input.vue';
-import LlmCheckbox from './checkbox/llm-checkbox.vue';
-import LlmToggle from './toggle/llm-toggle.vue';
-import LlmAlert from './alert/llm-alert.vue';
-import LlmSelect from './select/llm-select.vue';
-import LlmOption from './select/llm-option.vue';
-import LlmDialog from './dialog/llm-dialog.vue';
-import LlmDialogHeader from './dialog/llm-dialog-header.vue';
-import LlmDialogContent from './dialog/llm-dialog-content.vue';
-import LlmDialogFooter from './dialog/llm-dialog-footer.vue';
-import LlmTabGroup from './tabs/llm-tab-group.vue';
-import LlmTab from './tabs/llm-tab.vue';
-import LlmAccordionGroup from './accordion/llm-accordion-group.vue';
-import LlmAccordionItem from './accordion/llm-accordion-item.vue';
-import LlmAccordionHeader from './accordion/llm-accordion-header.vue';
-import LlmTable from './table/llm-table.vue';
-import LlmThead from './table/llm-thead.vue';
-import LlmTbody from './table/llm-tbody.vue';
-import LlmTr from './table/llm-tr.vue';
-import LlmTh from './table/llm-th.vue';
-import LlmTd from './table/llm-td.vue';
-import LlmProgress from './progress/llm-progress.vue';
-import LlmMenu from './menu/llm-menu.vue';
-import LlmMenuItem from './menu/llm-menu-item.vue';
-import LlmMenuSeparator from './menu/llm-menu-separator.vue';
-import LlmMenuTrigger from './menu/llm-menu-trigger.vue';
-import LlmTooltip from './tooltip/llm-tooltip.vue';
+import AtlButton from './button/atl-button.vue';
+import AtlCard from './card/atl-card.vue';
+import AtlCardHeader from './card/atl-card-header.vue';
+import AtlCardContent from './card/atl-card-content.vue';
+import AtlCardFooter from './card/atl-card-footer.vue';
+import AtlBadge from './badge/atl-badge.vue';
+import AtlInput from './input/atl-input.vue';
+import AtlCheckbox from './checkbox/atl-checkbox.vue';
+import AtlToggle from './toggle/atl-toggle.vue';
+import AtlAlert from './alert/atl-alert.vue';
+import AtlSelect from './select/atl-select.vue';
+import AtlOption from './select/atl-option.vue';
+import AtlDialog from './dialog/atl-dialog.vue';
+import AtlDialogHeader from './dialog/atl-dialog-header.vue';
+import AtlDialogContent from './dialog/atl-dialog-content.vue';
+import AtlDialogFooter from './dialog/atl-dialog-footer.vue';
+import AtlTabGroup from './tabs/atl-tab-group.vue';
+import AtlTab from './tabs/atl-tab.vue';
+import AtlAccordionGroup from './accordion/atl-accordion-group.vue';
+import AtlAccordionItem from './accordion/atl-accordion-item.vue';
+import AtlAccordionHeader from './accordion/atl-accordion-header.vue';
+import AtlTable from './table/atl-table.vue';
+import AtlThead from './table/atl-thead.vue';
+import AtlTbody from './table/atl-tbody.vue';
+import AtlTr from './table/atl-tr.vue';
+import AtlTh from './table/atl-th.vue';
+import AtlTd from './table/atl-td.vue';
+import AtlProgress from './progress/atl-progress.vue';
+import AtlMenu from './menu/atl-menu.vue';
+import AtlMenuItem from './menu/atl-menu-item.vue';
+import AtlMenuSeparator from './menu/atl-menu-separator.vue';
+import AtlMenuTrigger from './menu/atl-menu-trigger.vue';
+import AtlTooltip from './tooltip/atl-tooltip.vue';
 
 // ---------------------------------------------------------------------------
 // Shared inline style fragments. Keeping them in one place avoids duplicating
@@ -57,47 +57,47 @@ const S = {
 
 const loginTemplate = (showErrors: boolean) => `
   <div style="${S.wrapper(400)}">
-    <LlmCard variant="elevated" padding="lg">
-      <LlmCardHeader>
+    <AtlCard variant="elevated" padding="lg">
+      <AtlCardHeader>
         <div>
           <h2 style="${S.title}">Sign in</h2>
           <p style="${S.subtitle}">Enter your credentials to continue</p>
         </div>
-      </LlmCardHeader>
-      <LlmCardContent>
-        ${showErrors ? '<LlmAlert variant="danger">Invalid email or password. Please try again.</LlmAlert>' : ''}
+      </AtlCardHeader>
+      <AtlCardContent>
+        ${showErrors ? '<AtlAlert variant="danger">Invalid email or password. Please try again.</AtlAlert>' : ''}
         <div style="${S.stack}gap:var(--ui-spacing-4);margin-top:var(--ui-spacing-4);">
           <div style="${S.formField}">
             <label style="${S.fieldLabel}">Email</label>
-            <LlmInput type="email" placeholder="you@example.com" :invalid="${showErrors}" />
+            <AtlInput type="email" placeholder="you@example.com" :invalid="${showErrors}" />
           </div>
           <div style="${S.formField}">
             <label style="${S.fieldLabel}">Password</label>
-            <LlmInput type="password" placeholder="Enter your password" :invalid="${showErrors}" />
+            <AtlInput type="password" placeholder="Enter your password" :invalid="${showErrors}" />
           </div>
-          <LlmCheckbox>Remember me</LlmCheckbox>
+          <AtlCheckbox>Remember me</AtlCheckbox>
         </div>
-      </LlmCardContent>
-      <LlmCardFooter>
-        <LlmButton variant="primary" size="md" :loading="loading" @click="onSubmit">
+      </AtlCardContent>
+      <AtlCardFooter>
+        <AtlButton variant="primary" size="md" :loading="loading" @click="onSubmit">
           Sign in
-        </LlmButton>
-      </LlmCardFooter>
-    </LlmCard>
+        </AtlButton>
+      </AtlCardFooter>
+    </AtlCard>
   </div>
 `;
 
 const LoginFormStory = (showErrors: boolean): StoryObj => ({
   render: () => ({
     components: {
-      LlmButton,
-      LlmCard,
-      LlmCardHeader,
-      LlmCardContent,
-      LlmCardFooter,
-      LlmInput,
-      LlmCheckbox,
-      LlmAlert,
+      AtlButton,
+      AtlCard,
+      AtlCardHeader,
+      AtlCardContent,
+      AtlCardFooter,
+      AtlInput,
+      AtlCheckbox,
+      AtlAlert,
     },
     setup() {
       const loading = ref(false);
@@ -118,59 +118,59 @@ const LoginFormStory = (showErrors: boolean): StoryObj => ({
 const settingsTemplate = `
   <div style="${S.wrapper(560)}">
     <h2 style="${S.title}">Settings</h2>
-    <LlmTabGroup v-model:selectedIndex="tab">
-      <LlmTab label="Account">
+    <AtlTabGroup v-model:selectedIndex="tab">
+      <AtlTab label="Account">
         <div style="${S.stack}gap:var(--ui-spacing-4);padding:var(--ui-spacing-4) 0;">
           <div style="${S.formField}">
             <label style="${S.fieldLabel}">Display name</label>
-            <LlmInput placeholder="Jane Doe" />
+            <AtlInput placeholder="Jane Doe" />
           </div>
           <div style="${S.formField}">
             <label style="${S.fieldLabel}">Email</label>
-            <LlmInput type="email" placeholder="you@example.com" />
+            <AtlInput type="email" placeholder="you@example.com" />
           </div>
           <div style="${S.formField}">
             <label style="${S.fieldLabel}">Timezone</label>
-            <LlmSelect placeholder="Select timezone">
-              <LlmOption optionValue="utc">UTC</LlmOption>
-              <LlmOption optionValue="cet">Central European Time</LlmOption>
-              <LlmOption optionValue="pst">Pacific Standard Time</LlmOption>
-            </LlmSelect>
+            <AtlSelect placeholder="Select timezone">
+              <AtlOption optionValue="utc">UTC</AtlOption>
+              <AtlOption optionValue="cet">Central European Time</AtlOption>
+              <AtlOption optionValue="pst">Pacific Standard Time</AtlOption>
+            </AtlSelect>
           </div>
         </div>
-      </LlmTab>
-      <LlmTab label="Notifications">
+      </AtlTab>
+      <AtlTab label="Notifications">
         <div style="${S.stack}gap:var(--ui-spacing-4);padding:var(--ui-spacing-4) 0;">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--ui-spacing-4)">
             <div>
               <div style="font-size:0.9375rem;font-weight:500;color:var(--ui-color-text)">Product updates</div>
               <div style="font-size:0.8125rem;color:var(--ui-color-text-muted)">Release notes and feature announcements</div>
             </div>
-            <LlmToggle :checked="true" />
+            <AtlToggle :checked="true" />
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--ui-spacing-4)">
             <div>
               <div style="font-size:0.9375rem;font-weight:500;color:var(--ui-color-text)">Weekly digest</div>
               <div style="font-size:0.8125rem;color:var(--ui-color-text-muted)">Activity summary every Monday</div>
             </div>
-            <LlmToggle :checked="false" />
+            <AtlToggle :checked="false" />
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--ui-spacing-4)">
             <div>
               <div style="font-size:0.9375rem;font-weight:500;color:var(--ui-color-text)">Security alerts</div>
               <div style="font-size:0.8125rem;color:var(--ui-color-text-muted)">Critical account notifications</div>
             </div>
-            <LlmToggle :checked="true" />
+            <AtlToggle :checked="true" />
           </div>
         </div>
-      </LlmTab>
-      <LlmTab label="Billing">
+      </AtlTab>
+      <AtlTab label="Billing">
         <div style="${S.stack}gap:var(--ui-spacing-4);padding:var(--ui-spacing-4) 0;">
-          <LlmAlert variant="info">Your next invoice of $29.00 will be charged on Apr 30.</LlmAlert>
-          <LlmButton variant="outline" size="sm">Manage payment method</LlmButton>
+          <AtlAlert variant="info">Your next invoice of $29.00 will be charged on Apr 30.</AtlAlert>
+          <AtlButton variant="outline" size="sm">Manage payment method</AtlButton>
         </div>
-      </LlmTab>
-    </LlmTabGroup>
+      </AtlTab>
+    </AtlTabGroup>
   </div>
 `;
 
@@ -180,20 +180,20 @@ const settingsTemplate = `
 
 const confirmationTemplate = `
   <div style="${S.wrapper(400)}">
-    <LlmButton variant="outline" @click="open = true">Delete account</LlmButton>
-    <LlmDialog v-model:open="open" size="sm">
-      <LlmDialogHeader>Delete this account?</LlmDialogHeader>
-      <LlmDialogContent>
-        <LlmAlert variant="warning">This action cannot be undone.</LlmAlert>
+    <AtlButton variant="outline" @click="open = true">Delete account</AtlButton>
+    <AtlDialog v-model:open="open" size="sm">
+      <AtlDialogHeader>Delete this account?</AtlDialogHeader>
+      <AtlDialogContent>
+        <AtlAlert variant="warning">This action cannot be undone.</AtlAlert>
         <p style="margin:var(--ui-spacing-3) 0 0;color:var(--ui-color-text-muted);font-size:0.875rem">
           All your data, workspaces, and API keys will be removed immediately.
         </p>
-      </LlmDialogContent>
-      <LlmDialogFooter>
-        <LlmButton variant="outline" @click="open = false">Cancel</LlmButton>
-        <LlmButton variant="primary" @click="open = false">Delete permanently</LlmButton>
-      </LlmDialogFooter>
-    </LlmDialog>
+      </AtlDialogContent>
+      <AtlDialogFooter>
+        <AtlButton variant="outline" @click="open = false">Cancel</AtlButton>
+        <AtlButton variant="primary" @click="open = false">Delete permanently</AtlButton>
+      </AtlDialogFooter>
+    </AtlDialog>
   </div>
 `;
 
@@ -236,41 +236,41 @@ const dataListTemplate = `
   <div style="${S.wrapper(640)}display:flex;flex-direction:column;gap:var(--ui-spacing-3);">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--ui-spacing-2)">
       <h2 style="${S.title}">Projects</h2>
-      <LlmButton variant="primary" size="sm">New project</LlmButton>
+      <AtlButton variant="primary" size="sm">New project</AtlButton>
     </div>
-    <LlmCard v-for="item in items" :key="item.id" variant="outlined" padding="md">
-      <LlmCardContent>
+    <AtlCard v-for="item in items" :key="item.id" variant="outlined" padding="md">
+      <AtlCardContent>
         <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--ui-spacing-4)">
           <div style="flex:1;min-width:0">
             <div style="display:flex;align-items:center;gap:var(--ui-spacing-2)">
               <span style="font-size:0.9375rem;font-weight:600;color:var(--ui-color-text)">{{ item.name }}</span>
-              <LlmBadge :variant="item.statusVariant" size="sm">{{ item.status }}</LlmBadge>
+              <AtlBadge :variant="item.statusVariant" size="sm">{{ item.status }}</AtlBadge>
             </div>
             <p style="margin:var(--ui-spacing-1) 0 0;font-size:0.8125rem;color:var(--ui-color-text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ item.description }}</p>
           </div>
           <div style="display:flex;gap:var(--ui-spacing-2);flex-shrink:0">
-            <LlmTooltip llmTooltip="View details" llmTooltipPosition="above">
-              <LlmButton variant="outline" size="sm">View</LlmButton>
-            </LlmTooltip>
-            <LlmMenuTrigger>
+            <AtlTooltip atlTooltip="View details" atlTooltipPosition="above">
+              <AtlButton variant="outline" size="sm">View</AtlButton>
+            </AtlTooltip>
+            <AtlMenuTrigger>
               <template #trigger>
-                <LlmTooltip llmTooltip="More actions" llmTooltipPosition="above">
-                  <LlmButton variant="outline" size="sm">...</LlmButton>
-                </LlmTooltip>
+                <AtlTooltip atlTooltip="More actions" atlTooltipPosition="above">
+                  <AtlButton variant="outline" size="sm">...</AtlButton>
+                </AtlTooltip>
               </template>
               <template #menu>
-                <LlmMenu variant="compact">
-                  <LlmMenuItem>Edit</LlmMenuItem>
-                  <LlmMenuItem>Duplicate</LlmMenuItem>
-                  <LlmMenuSeparator />
-                  <LlmMenuItem>Delete</LlmMenuItem>
-                </LlmMenu>
+                <AtlMenu variant="compact">
+                  <AtlMenuItem>Edit</AtlMenuItem>
+                  <AtlMenuItem>Duplicate</AtlMenuItem>
+                  <AtlMenuSeparator />
+                  <AtlMenuItem>Delete</AtlMenuItem>
+                </AtlMenu>
               </template>
-            </LlmMenuTrigger>
+            </AtlMenuTrigger>
           </div>
         </div>
-      </LlmCardContent>
-    </LlmCard>
+      </AtlCardContent>
+    </AtlCard>
   </div>
 `;
 
@@ -282,67 +282,67 @@ const notificationTemplate = `
   <div style="${S.wrapper(560)}">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--ui-spacing-4)">
       <h2 style="${S.title}">Notifications</h2>
-      <LlmButton variant="outline" size="sm" @click="clearAll">Clear all</LlmButton>
+      <AtlButton variant="outline" size="sm" @click="clearAll">Clear all</AtlButton>
     </div>
-    <LlmAccordionGroup :multi="true" variant="separated">
-      <LlmAccordionItem v-if="errors.length > 0" :expanded="true">
+    <AtlAccordionGroup :multi="true" variant="separated">
+      <AtlAccordionItem v-if="errors.length > 0" :expanded="true">
         <template #header>
-          <LlmAccordionHeader>
+          <AtlAccordionHeader>
             <span style="display:inline-flex;align-items:center;gap:var(--ui-spacing-2)">
               Errors
-              <LlmBadge variant="danger" size="sm">{{ errors.length }}</LlmBadge>
+              <AtlBadge variant="danger" size="sm">{{ errors.length }}</AtlBadge>
             </span>
-          </LlmAccordionHeader>
+          </AtlAccordionHeader>
         </template>
         <div style="display:flex;flex-direction:column;gap:var(--ui-spacing-2);padding:var(--ui-spacing-3) 0">
-          <LlmAlert
+          <AtlAlert
             v-for="e in errors"
             :key="e.id"
             variant="danger"
             :dismissible="true"
             @dismissed="dismissError(e.id)"
-          >{{ e.message }}</LlmAlert>
+          >{{ e.message }}</AtlAlert>
         </div>
-      </LlmAccordionItem>
-      <LlmAccordionItem v-if="warnings.length > 0">
+      </AtlAccordionItem>
+      <AtlAccordionItem v-if="warnings.length > 0">
         <template #header>
-          <LlmAccordionHeader>
+          <AtlAccordionHeader>
             <span style="display:inline-flex;align-items:center;gap:var(--ui-spacing-2)">
               Warnings
-              <LlmBadge variant="warning" size="sm">{{ warnings.length }}</LlmBadge>
+              <AtlBadge variant="warning" size="sm">{{ warnings.length }}</AtlBadge>
             </span>
-          </LlmAccordionHeader>
+          </AtlAccordionHeader>
         </template>
         <div style="display:flex;flex-direction:column;gap:var(--ui-spacing-2);padding:var(--ui-spacing-3) 0">
-          <LlmAlert
+          <AtlAlert
             v-for="w in warnings"
             :key="w.id"
             variant="warning"
             :dismissible="true"
             @dismissed="dismissWarning(w.id)"
-          >{{ w.message }}</LlmAlert>
+          >{{ w.message }}</AtlAlert>
         </div>
-      </LlmAccordionItem>
-      <LlmAccordionItem v-if="infos.length > 0">
+      </AtlAccordionItem>
+      <AtlAccordionItem v-if="infos.length > 0">
         <template #header>
-          <LlmAccordionHeader>
+          <AtlAccordionHeader>
             <span style="display:inline-flex;align-items:center;gap:var(--ui-spacing-2)">
               Info
-              <LlmBadge variant="info" size="sm">{{ infos.length }}</LlmBadge>
+              <AtlBadge variant="info" size="sm">{{ infos.length }}</AtlBadge>
             </span>
-          </LlmAccordionHeader>
+          </AtlAccordionHeader>
         </template>
         <div style="display:flex;flex-direction:column;gap:var(--ui-spacing-2);padding:var(--ui-spacing-3) 0">
-          <LlmAlert
+          <AtlAlert
             v-for="i in infos"
             :key="i.id"
             variant="info"
             :dismissible="true"
             @dismissed="dismissInfo(i.id)"
-          >{{ i.message }}</LlmAlert>
+          >{{ i.message }}</AtlAlert>
         </div>
-      </LlmAccordionItem>
-    </LlmAccordionGroup>
+      </AtlAccordionItem>
+    </AtlAccordionGroup>
   </div>
 `;
 
@@ -372,93 +372,93 @@ const dashboardTemplate = `
         <h2 style="${S.title}">Operations Overview</h2>
         <p style="${S.subtitle}">Snapshot across the selected time range</p>
       </div>
-      <LlmTabGroup variant="pills" v-model:selectedIndex="rangeIndex">
-        <LlmTab label="7D">&nbsp;</LlmTab>
-        <LlmTab label="30D">&nbsp;</LlmTab>
-        <LlmTab label="90D">&nbsp;</LlmTab>
-      </LlmTabGroup>
+      <AtlTabGroup variant="pills" v-model:selectedIndex="rangeIndex">
+        <AtlTab label="7D">&nbsp;</AtlTab>
+        <AtlTab label="30D">&nbsp;</AtlTab>
+        <AtlTab label="90D">&nbsp;</AtlTab>
+      </AtlTabGroup>
     </div>
-    <LlmAlert v-if="quotaPercent >= 85" variant="warning" :dismissible="true">
+    <AtlAlert v-if="quotaPercent >= 85" variant="warning" :dismissible="true">
       API request quota is at {{ quotaPercent }}%. Upgrade your plan before
       the monthly reset to avoid throttling.
-    </LlmAlert>
+    </AtlAlert>
     <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:var(--ui-spacing-3)">
-      <LlmCard v-for="metric in metrics" :key="metric.label" variant="elevated" padding="md">
-        <LlmCardContent>
+      <AtlCard v-for="metric in metrics" :key="metric.label" variant="elevated" padding="md">
+        <AtlCardContent>
           <div style="font-size:0.8125rem;color:var(--ui-color-text-muted);text-transform:uppercase;letter-spacing:0.04em">
             {{ metric.label }}
           </div>
           <div style="display:flex;align-items:baseline;gap:var(--ui-spacing-2);margin-top:var(--ui-spacing-2)">
             <span style="font-size:1.75rem;font-weight:700;color:var(--ui-color-text)">{{ metric.value }}</span>
-            <LlmBadge :variant="metric.deltaVariant" size="sm">{{ metric.delta }}</LlmBadge>
+            <AtlBadge :variant="metric.deltaVariant" size="sm">{{ metric.delta }}</AtlBadge>
           </div>
           <p style="margin:var(--ui-spacing-2) 0 0;font-size:0.75rem;color:var(--ui-color-text-muted)">
             {{ metric.foot }}
           </p>
-        </LlmCardContent>
-      </LlmCard>
+        </AtlCardContent>
+      </AtlCard>
     </div>
     <div style="display:grid;grid-template-columns:2fr 1fr;gap:var(--ui-spacing-3)">
-      <LlmCard variant="elevated" padding="none">
-        <LlmCardHeader>
+      <AtlCard variant="elevated" padding="none">
+        <AtlCardHeader>
           <div style="display:flex;align-items:center;justify-content:space-between">
             <h3 style="${S.panelTitle}">Recent Activity</h3>
-            <LlmButton variant="outline" size="sm">Export</LlmButton>
+            <AtlButton variant="outline" size="sm">Export</AtlButton>
           </div>
-        </LlmCardHeader>
-        <LlmCardContent>
-          <LlmTable variant="striped" size="sm">
-            <LlmThead>
-              <LlmTr>
-                <LlmTh>User</LlmTh>
-                <LlmTh>Action</LlmTh>
-                <LlmTh>Status</LlmTh>
-                <LlmTh align="end">Time</LlmTh>
-              </LlmTr>
-            </LlmThead>
-            <LlmTbody>
-              <LlmTr v-for="row in activity" :key="row.id">
-                <LlmTd>{{ row.user }}</LlmTd>
-                <LlmTd>{{ row.action }}</LlmTd>
-                <LlmTd>
-                  <LlmBadge :variant="row.statusVariant" size="sm">{{ row.status }}</LlmBadge>
-                </LlmTd>
-                <LlmTd align="end">{{ row.time }}</LlmTd>
-              </LlmTr>
-            </LlmTbody>
-          </LlmTable>
-        </LlmCardContent>
-      </LlmCard>
-      <LlmCard variant="elevated" padding="md">
-        <LlmCardHeader>
+        </AtlCardHeader>
+        <AtlCardContent>
+          <AtlTable variant="striped" size="sm">
+            <AtlThead>
+              <AtlTr>
+                <AtlTh>User</AtlTh>
+                <AtlTh>Action</AtlTh>
+                <AtlTh>Status</AtlTh>
+                <AtlTh align="end">Time</AtlTh>
+              </AtlTr>
+            </AtlThead>
+            <AtlTbody>
+              <AtlTr v-for="row in activity" :key="row.id">
+                <AtlTd>{{ row.user }}</AtlTd>
+                <AtlTd>{{ row.action }}</AtlTd>
+                <AtlTd>
+                  <AtlBadge :variant="row.statusVariant" size="sm">{{ row.status }}</AtlBadge>
+                </AtlTd>
+                <AtlTd align="end">{{ row.time }}</AtlTd>
+              </AtlTr>
+            </AtlTbody>
+          </AtlTable>
+        </AtlCardContent>
+      </AtlCard>
+      <AtlCard variant="elevated" padding="md">
+        <AtlCardHeader>
           <h3 style="${S.panelTitle}">Plan Usage</h3>
-        </LlmCardHeader>
-        <LlmCardContent>
+        </AtlCardHeader>
+        <AtlCardContent>
           <div style="display:flex;flex-direction:column;gap:var(--ui-spacing-4)">
             <div>
               <div style="display:flex;justify-content:space-between;margin-bottom:var(--ui-spacing-1);font-size:0.8125rem">
                 <span style="color:var(--ui-color-text);font-weight:500">API requests</span>
                 <span style="color:var(--ui-color-text-muted);font-variant-numeric:tabular-nums">{{ quotaPercent }}%</span>
               </div>
-              <LlmProgress :value="quotaPercent" variant="warning" size="sm" />
+              <AtlProgress :value="quotaPercent" variant="warning" size="sm" />
             </div>
             <div>
               <div style="display:flex;justify-content:space-between;margin-bottom:var(--ui-spacing-1);font-size:0.8125rem">
                 <span style="color:var(--ui-color-text);font-weight:500">Storage</span>
                 <span style="color:var(--ui-color-text-muted);font-variant-numeric:tabular-nums">42%</span>
               </div>
-              <LlmProgress :value="42" variant="success" size="sm" />
+              <AtlProgress :value="42" variant="success" size="sm" />
             </div>
             <div>
               <div style="display:flex;justify-content:space-between;margin-bottom:var(--ui-spacing-1);font-size:0.8125rem">
                 <span style="color:var(--ui-color-text);font-weight:500">Seats</span>
                 <span style="color:var(--ui-color-text-muted);font-variant-numeric:tabular-nums">9 / 12</span>
               </div>
-              <LlmProgress :value="75" variant="default" size="sm" />
+              <AtlProgress :value="75" variant="default" size="sm" />
             </div>
           </div>
-        </LlmCardContent>
-      </LlmCard>
+        </AtlCardContent>
+      </AtlCard>
     </div>
   </div>
 `;
@@ -489,14 +489,14 @@ export const LoginFormWithValidationErrors: Story = {
 export const SettingsPage: Story = {
   render: () => ({
     components: {
-      LlmTabGroup,
-      LlmTab,
-      LlmInput,
-      LlmSelect,
-      LlmOption,
-      LlmToggle,
-      LlmAlert,
-      LlmButton,
+      AtlTabGroup,
+      AtlTab,
+      AtlInput,
+      AtlSelect,
+      AtlOption,
+      AtlToggle,
+      AtlAlert,
+      AtlButton,
     },
     setup() {
       const tab = ref(0);
@@ -513,12 +513,12 @@ export const SettingsPage: Story = {
 export const ConfirmationDialog: Story = {
   render: () => ({
     components: {
-      LlmButton,
-      LlmDialog,
-      LlmDialogHeader,
-      LlmDialogContent,
-      LlmDialogFooter,
-      LlmAlert,
+      AtlButton,
+      AtlDialog,
+      AtlDialogHeader,
+      AtlDialogContent,
+      AtlDialogFooter,
+      AtlAlert,
     },
     setup() {
       const open = ref(false);
@@ -543,15 +543,15 @@ export const DataListWithActions: Story = {
   name: 'Data List with Actions',
   render: () => ({
     components: {
-      LlmCard,
-      LlmCardContent,
-      LlmButton,
-      LlmBadge,
-      LlmMenu,
-      LlmMenuItem,
-      LlmMenuSeparator,
-      LlmMenuTrigger,
-      LlmTooltip,
+      AtlCard,
+      AtlCardContent,
+      AtlButton,
+      AtlBadge,
+      AtlMenu,
+      AtlMenuItem,
+      AtlMenuSeparator,
+      AtlMenuTrigger,
+      AtlTooltip,
     },
     setup() {
       return { items: dataListItems };
@@ -568,12 +568,12 @@ export const DataListWithActions: Story = {
 export const NotificationCenter: Story = {
   render: () => ({
     components: {
-      LlmAccordionGroup,
-      LlmAccordionItem,
-      LlmAccordionHeader,
-      LlmAlert,
-      LlmBadge,
-      LlmButton,
+      AtlAccordionGroup,
+      AtlAccordionItem,
+      AtlAccordionHeader,
+      AtlAlert,
+      AtlBadge,
+      AtlButton,
     },
     setup() {
       const errors = ref([
@@ -617,21 +617,21 @@ export const NotificationCenter: Story = {
 export const ManagementDashboard: Story = {
   render: () => ({
     components: {
-      LlmCard,
-      LlmCardHeader,
-      LlmCardContent,
-      LlmBadge,
-      LlmButton,
-      LlmTable,
-      LlmThead,
-      LlmTbody,
-      LlmTr,
-      LlmTh,
-      LlmTd,
-      LlmTabGroup,
-      LlmTab,
-      LlmAlert,
-      LlmProgress,
+      AtlCard,
+      AtlCardHeader,
+      AtlCardContent,
+      AtlBadge,
+      AtlButton,
+      AtlTable,
+      AtlThead,
+      AtlTbody,
+      AtlTr,
+      AtlTh,
+      AtlTd,
+      AtlTabGroup,
+      AtlTab,
+      AtlAlert,
+      AtlProgress,
     },
     setup() {
       const rangeIndex = ref(1);
