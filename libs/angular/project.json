@@ -2,7 +2,7 @@
   "name": "angular",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/angular/src",
-  "prefix": "llm",
+  "prefix": "atl",
   "projectType": "library",
   "release": {
     "version": {

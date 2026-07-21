@@ -2,48 +2,48 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { userEvent, expect, screen } from 'storybook/test';
 import { Component, signal } from '@angular/core';
-import { LlmButton } from './button/llm-button';
+import { AtlButton } from './button/atl-button';
 import {
-  LlmCard,
-  LlmCardHeader,
-  LlmCardContent,
-  LlmCardFooter,
-} from './card/llm-card';
-import { LlmBadge } from './badge/llm-badge';
-import { LlmInput } from './input/llm-input';
-import { LlmCheckbox } from './checkbox/llm-checkbox';
-import { LlmToggle } from './toggle/llm-toggle';
-import { LlmAlert } from './alert/llm-alert';
-import { LlmSelect } from './select/llm-select';
-import { LlmOption } from './select/llm-option';
+  AtlCard,
+  AtlCardHeader,
+  AtlCardContent,
+  AtlCardFooter,
+} from './card/atl-card';
+import { AtlBadge } from './badge/atl-badge';
+import { AtlInput } from './input/atl-input';
+import { AtlCheckbox } from './checkbox/atl-checkbox';
+import { AtlToggle } from './toggle/atl-toggle';
+import { AtlAlert } from './alert/atl-alert';
+import { AtlSelect } from './select/atl-select';
+import { AtlOption } from './select/atl-option';
 import {
-  LlmDialog,
-  LlmDialogHeader,
-  LlmDialogContent,
-  LlmDialogFooter,
-} from './dialog/llm-dialog';
-import { LlmTabGroup, LlmTab } from './tabs/llm-tabs';
+  AtlDialog,
+  AtlDialogHeader,
+  AtlDialogContent,
+  AtlDialogFooter,
+} from './dialog/atl-dialog';
+import { AtlTabGroup, AtlTab } from './tabs/atl-tabs';
 import {
-  LlmAccordionGroup,
-  LlmAccordionItem,
-  LlmAccordionHeader,
-} from './accordion/llm-accordion';
+  AtlAccordionGroup,
+  AtlAccordionItem,
+  AtlAccordionHeader,
+} from './accordion/atl-accordion';
 import {
-  LlmMenu,
-  LlmMenuItem,
-  LlmMenuSeparator,
-  LlmMenuTrigger,
-} from './menu/llm-menu';
-import { LlmTooltip } from './tooltip/llm-tooltip';
+  AtlMenu,
+  AtlMenuItem,
+  AtlMenuSeparator,
+  AtlMenuTrigger,
+} from './menu/atl-menu';
+import { AtlTooltip } from './tooltip/atl-tooltip';
 import {
-  LlmTable,
-  LlmThead,
-  LlmTbody,
-  LlmTr,
-  LlmTh,
-  LlmTd,
-} from './table/llm-table';
-import { LlmProgress } from './progress/llm-progress';
+  AtlTable,
+  AtlThead,
+  AtlTbody,
+  AtlTr,
+  AtlTh,
+  AtlTd,
+} from './table/atl-table';
+import { AtlProgress } from './progress/atl-progress';
 
 // ---------------------------------------------------------------------------
 // 1. Login Form
@@ -58,35 +58,35 @@ import { LlmProgress } from './progress/llm-progress';
   selector: 'cookbook-login-form',
   standalone: true,
   imports: [
-    LlmButton,
-    LlmCard,
-    LlmCardHeader,
-    LlmCardContent,
-    LlmCardFooter,
-    LlmInput,
-    LlmCheckbox,
-    LlmAlert,
+    AtlButton,
+    AtlCard,
+    AtlCardHeader,
+    AtlCardContent,
+    AtlCardFooter,
+    AtlInput,
+    AtlCheckbox,
+    AtlAlert,
   ],
   template: `
     <!-- eslint-disable -->
     <div class="wrapper">
-      <llm-card variant="elevated" padding="lg">
-        <llm-card-header>
+      <atl-card variant="elevated" padding="lg">
+        <atl-card-header>
           <div class="login-header">
             <h2 class="login-title">Sign in</h2>
             <p class="login-subtitle">Enter your credentials to continue</p>
           </div>
-        </llm-card-header>
-        <llm-card-content>
+        </atl-card-header>
+        <atl-card-content>
           @if (showErrors) {
-            <llm-alert variant="danger">
+            <atl-alert variant="danger">
               Invalid email or password. Please try again.
-            </llm-alert>
+            </atl-alert>
           }
           <div class="form-stack">
             <div class="form-field">
               <label class="field-label">Email</label>
-              <llm-input
+              <atl-input
                 type="email"
                 placeholder="you@example.com"
                 [invalid]="showErrors"
@@ -94,26 +94,26 @@ import { LlmProgress } from './progress/llm-progress';
             </div>
             <div class="form-field">
               <label class="field-label">Password</label>
-              <llm-input
+              <atl-input
                 type="password"
                 placeholder="Enter your password"
                 [invalid]="showErrors"
               />
             </div>
-            <llm-checkbox>Remember me</llm-checkbox>
+            <atl-checkbox>Remember me</atl-checkbox>
           </div>
-        </llm-card-content>
-        <llm-card-footer>
-          <llm-button
+        </atl-card-content>
+        <atl-card-footer>
+          <atl-button
             variant="primary"
             size="md"
             [loading]="loading()"
             (click)="onSubmit()"
           >
             Sign in
-          </llm-button>
-        </llm-card-footer>
-      </llm-card>
+          </atl-button>
+        </atl-card-footer>
+      </atl-card>
     </div>
   `,
   styles: [
@@ -172,33 +172,33 @@ class LoginFormComponent {
   selector: 'cookbook-login-form-errors',
   standalone: true,
   imports: [
-    LlmButton,
-    LlmCard,
-    LlmCardHeader,
-    LlmCardContent,
-    LlmCardFooter,
-    LlmInput,
-    LlmCheckbox,
-    LlmAlert,
+    AtlButton,
+    AtlCard,
+    AtlCardHeader,
+    AtlCardContent,
+    AtlCardFooter,
+    AtlInput,
+    AtlCheckbox,
+    AtlAlert,
   ],
   template: `
     <!-- eslint-disable -->
     <div class="wrapper">
-      <llm-card variant="elevated" padding="lg">
-        <llm-card-header>
+      <atl-card variant="elevated" padding="lg">
+        <atl-card-header>
           <div class="login-header">
             <h2 class="login-title">Sign in</h2>
             <p class="login-subtitle">Enter your credentials to continue</p>
           </div>
-        </llm-card-header>
-        <llm-card-content>
-          <llm-alert variant="danger">
+        </atl-card-header>
+        <atl-card-content>
+          <atl-alert variant="danger">
             Invalid email or password. Please try again.
-          </llm-alert>
+          </atl-alert>
           <div class="form-stack">
             <div class="form-field">
               <label class="field-label">Email</label>
-              <llm-input
+              <atl-input
                 type="email"
                 placeholder="you@example.com"
                 [invalid]="true"
@@ -206,21 +206,21 @@ class LoginFormComponent {
             </div>
             <div class="form-field">
               <label class="field-label">Password</label>
-              <llm-input
+              <atl-input
                 type="password"
                 placeholder="Enter your password"
                 [invalid]="true"
               />
             </div>
-            <llm-checkbox>Remember me</llm-checkbox>
+            <atl-checkbox>Remember me</atl-checkbox>
           </div>
-        </llm-card-content>
-        <llm-card-footer>
-          <llm-button variant="primary" size="md" [loading]="loading()">
+        </atl-card-content>
+        <atl-card-footer>
+          <atl-button variant="primary" size="md" [loading]="loading()">
             Sign in
-          </llm-button>
-        </llm-card-footer>
-      </llm-card>
+          </atl-button>
+        </atl-card-footer>
+      </atl-card>
     </div>
   `,
   styles: [
@@ -281,14 +281,14 @@ class LoginFormWithErrorsComponent {
   selector: 'cookbook-settings-page',
   standalone: true,
   imports: [
-    LlmButton,
-    LlmInput,
-    LlmToggle,
-    LlmSelect,
-    LlmOption,
-    LlmAlert,
-    LlmTabGroup,
-    LlmTab,
+    AtlButton,
+    AtlInput,
+    AtlToggle,
+    AtlSelect,
+    AtlOption,
+    AtlAlert,
+    AtlTabGroup,
+    AtlTab,
   ],
   template: `
     <!-- eslint-disable -->
@@ -297,72 +297,72 @@ class LoginFormWithErrorsComponent {
       <p class="page-subtitle">Manage your account preferences.</p>
 
       @if (showSuccess()) {
-        <llm-alert
+        <atl-alert
           variant="success"
           [dismissible]="true"
           (dismissed)="showSuccess.set(false)"
         >
           Your settings have been saved successfully.
-        </llm-alert>
+        </atl-alert>
       }
 
-      <llm-tab-group [(selectedIndex)]="activeTab">
-        <llm-tab label="Account">
+      <atl-tab-group [(selectedIndex)]="activeTab">
+        <atl-tab label="Account">
           <div class="tab-content">
             <div class="form-grid">
               <div class="form-field">
                 <label class="field-label">Full Name</label>
-                <llm-input type="text" placeholder="John Doe" />
+                <atl-input type="text" placeholder="John Doe" />
               </div>
               <div class="form-field">
                 <label class="field-label">Email</label>
-                <llm-input type="email" placeholder="john@example.com" />
+                <atl-input type="email" placeholder="john@example.com" />
               </div>
             </div>
           </div>
-        </llm-tab>
+        </atl-tab>
 
-        <llm-tab label="Notifications">
+        <atl-tab label="Notifications">
           <div class="tab-content">
             <div class="toggle-list">
-              <llm-toggle [(checked)]="emailNotifications">
+              <atl-toggle [(checked)]="emailNotifications">
                 Email notifications
-              </llm-toggle>
-              <llm-toggle [(checked)]="pushNotifications">
+              </atl-toggle>
+              <atl-toggle [(checked)]="pushNotifications">
                 Push notifications
-              </llm-toggle>
-              <llm-toggle [(checked)]="weeklyDigest">
+              </atl-toggle>
+              <atl-toggle [(checked)]="weeklyDigest">
                 Weekly digest
-              </llm-toggle>
-              <llm-toggle [(checked)]="marketingEmails">
+              </atl-toggle>
+              <atl-toggle [(checked)]="marketingEmails">
                 Marketing emails
-              </llm-toggle>
+              </atl-toggle>
             </div>
           </div>
-        </llm-tab>
+        </atl-tab>
 
-        <llm-tab label="Privacy">
+        <atl-tab label="Privacy">
           <div class="tab-content">
             <div class="form-field">
               <label class="field-label">Profile visibility</label>
-              <llm-select
+              <atl-select
                 [(value)]="visibility"
                 placeholder="Select visibility"
               >
-                <llm-option optionValue="public">Public</llm-option>
-                <llm-option optionValue="friends">Friends only</llm-option>
-                <llm-option optionValue="private">Private</llm-option>
-              </llm-select>
+                <atl-option optionValue="public">Public</atl-option>
+                <atl-option optionValue="friends">Friends only</atl-option>
+                <atl-option optionValue="private">Private</atl-option>
+              </atl-select>
             </div>
           </div>
-        </llm-tab>
-      </llm-tab-group>
+        </atl-tab>
+      </atl-tab-group>
 
       <div class="actions">
-        <llm-button variant="primary" (click)="onSave()">
+        <atl-button variant="primary" (click)="onSave()">
           Save changes
-        </llm-button>
-        <llm-button variant="outline">Cancel</llm-button>
+        </atl-button>
+        <atl-button variant="outline">Cancel</atl-button>
       </div>
     </div>
   `,
@@ -444,12 +444,12 @@ class SettingsPageComponent {
   selector: 'cookbook-confirmation-dialog',
   standalone: true,
   imports: [
-    LlmButton,
-    LlmDialog,
-    LlmDialogHeader,
-    LlmDialogContent,
-    LlmDialogFooter,
-    LlmAlert,
+    AtlButton,
+    AtlDialog,
+    AtlDialogHeader,
+    AtlDialogContent,
+    AtlDialogFooter,
+    AtlAlert,
   ],
   template: `
     <div class="wrapper">
@@ -458,37 +458,37 @@ class SettingsPageComponent {
         <p class="demo-description">
           Once you delete your account, there is no going back. Please be certain.
         </p>
-        <llm-button variant="primary" (click)="isOpen.set(true)">
+        <atl-button variant="primary" (click)="isOpen.set(true)">
           Delete account
-        </llm-button>
+        </atl-button>
       </div>
 
-      <llm-dialog [(open)]="isOpen" size="sm">
-        <llm-dialog-header>Delete Account</llm-dialog-header>
-        <llm-dialog-content>
-          <llm-alert variant="warning">
+      <atl-dialog [(open)]="isOpen" size="sm">
+        <atl-dialog-header>Delete Account</atl-dialog-header>
+        <atl-dialog-content>
+          <atl-alert variant="warning">
             This action cannot be undone. All your data will be permanently removed.
-          </llm-alert>
+          </atl-alert>
           <p class="confirm-text">
             Are you sure you want to delete your account? This will remove all of
             your data including projects, settings, and team associations.
           </p>
-        </llm-dialog-content>
-        <llm-dialog-footer>
-          <llm-button variant="outline" (click)="isOpen.set(false)">
+        </atl-dialog-content>
+        <atl-dialog-footer>
+          <atl-button variant="outline" (click)="isOpen.set(false)">
             Cancel
-          </llm-button>
-          <llm-button variant="primary" (click)="onConfirm()">
+          </atl-button>
+          <atl-button variant="primary" (click)="onConfirm()">
             Yes, delete my account
-          </llm-button>
-        </llm-dialog-footer>
-      </llm-dialog>
+          </atl-button>
+        </atl-dialog-footer>
+      </atl-dialog>
 
       @if (confirmed()) {
         <div class="result">
-          <llm-alert variant="success" [dismissible]="true" (dismissed)="confirmed.set(false)">
+          <atl-alert variant="success" [dismissible]="true" (dismissed)="confirmed.set(false)">
             Account deletion confirmed (demo only).
-          </llm-alert>
+          </atl-alert>
         </div>
       }
     </div>
@@ -552,66 +552,66 @@ class ConfirmationDialogComponent {
   selector: 'cookbook-data-list',
   standalone: true,
   imports: [
-    LlmCard,
-    LlmCardContent,
-    LlmBadge,
-    LlmButton,
-    LlmMenu,
-    LlmMenuItem,
-    LlmMenuSeparator,
-    LlmMenuTrigger,
-    LlmTooltip,
+    AtlCard,
+    AtlCardContent,
+    AtlBadge,
+    AtlButton,
+    AtlMenu,
+    AtlMenuItem,
+    AtlMenuSeparator,
+    AtlMenuTrigger,
+    AtlTooltip,
   ],
   template: `
     <div class="wrapper">
       <div class="list-header">
         <h2 class="list-title">Projects</h2>
-        <llm-button variant="primary" size="sm">New project</llm-button>
+        <atl-button variant="primary" size="sm">New project</atl-button>
       </div>
 
       @for (item of items; track item.id) {
-        <llm-card variant="outlined" padding="md">
-          <llm-card-content>
+        <atl-card variant="outlined" padding="md">
+          <atl-card-content>
             <div class="list-row">
               <div class="row-info">
                 <div class="row-title-line">
                   <span class="row-title">{{ item.name }}</span>
-                  <llm-badge [variant]="item.statusVariant" size="sm">
+                  <atl-badge [variant]="item.statusVariant" size="sm">
                     {{ item.status }}
-                  </llm-badge>
+                  </atl-badge>
                 </div>
                 <p class="row-description">{{ item.description }}</p>
               </div>
               <div class="row-actions">
-                <llm-button
+                <atl-button
                   variant="outline"
                   size="sm"
-                  llmTooltip="View details"
-                  llmTooltipPosition="above"
+                  atlTooltip="View details"
+                  atlTooltipPosition="above"
                 >
                   View
-                </llm-button>
-                <llm-button
+                </atl-button>
+                <atl-button
                   variant="outline"
                   size="sm"
-                  [llmMenuTriggerFor]="actionsMenu"
-                  llmTooltip="More actions"
-                  llmTooltipPosition="above"
+                  [atlMenuTriggerFor]="actionsMenu"
+                  atlTooltip="More actions"
+                  atlTooltipPosition="above"
                 >
                   ...
-                </llm-button>
+                </atl-button>
                 <ng-template #actionsMenu>
-                  <llm-menu>
-                    <llm-menu-item>Edit</llm-menu-item>
-                    <llm-menu-item>Duplicate</llm-menu-item>
-                    <llm-menu-separator />
-                    <llm-menu-item>Delete</llm-menu-item>
-                  </llm-menu>
+                  <atl-menu>
+                    <atl-menu-item>Edit</atl-menu-item>
+                    <atl-menu-item>Duplicate</atl-menu-item>
+                    <atl-menu-separator />
+                    <atl-menu-item>Delete</atl-menu-item>
+                  </atl-menu>
                 </ng-template>
               </div>
             </div>
-          </llm-card-content>
-        </llm-card>
+          </atl-card-content>
+        </atl-card>
       }
     </div>
   `,
@@ -719,95 +719,95 @@ class DataListComponent {
   selector: 'cookbook-notification-center',
   standalone: true,
   imports: [
-    LlmAccordionGroup,
-    LlmAccordionItem,
-    LlmAccordionHeader,
-    LlmAlert,
-    LlmBadge,
-    LlmButton,
+    AtlAccordionGroup,
+    AtlAccordionItem,
+    AtlAccordionHeader,
+    AtlAlert,
+    AtlBadge,
+    AtlButton,
   ],
   template: `
     <div class="wrapper">
       <div class="header">
         <h2 class="header-title">Notifications</h2>
-        <llm-button variant="outline" size="sm" (click)="dismissAll()">
+        <atl-button variant="outline" size="sm" (click)="dismissAll()">
           Clear all
-        </llm-button>
+        </atl-button>
       </div>
 
-      <llm-accordion-group [multi]="true" variant="separated">
+      <atl-accordion-group [multi]="true" variant="separated">
         @if (errors().length > 0) {
-          <llm-accordion-item [expanded]="true">
-            <span llmAccordionHeader>
+          <atl-accordion-item [expanded]="true">
+            <span atlAccordionHeader>
               <span class="group-header">
                 Errors
-                <llm-badge variant="danger" size="sm">
+                <atl-badge variant="danger" size="sm">
                   {{ errors().length }}
-                </llm-badge>
+                </atl-badge>
               </span>
             </span>
             <div class="alert-list">
               @for (error of errors(); track error.id) {
-                <llm-alert
+                <atl-alert
                   variant="danger"
                   [dismissible]="true"
                   (dismissed)="dismissError(error.id)"
                 >
                   {{ error.message }}
-                </llm-alert>
+                </atl-alert>
               }
             </div>
-          </llm-accordion-item>
+          </atl-accordion-item>
         }
 
         @if (warnings().length > 0) {
-          <llm-accordion-item>
-            <span llmAccordionHeader>
+          <atl-accordion-item>
+            <span atlAccordionHeader>
               <span class="group-header">
                 Warnings
-                <llm-badge variant="warning" size="sm">
+                <atl-badge variant="warning" size="sm">
                   {{ warnings().length }}
-                </llm-badge>
+                </atl-badge>
               </span>
             </span>
             <div class="alert-list">
               @for (warning of warnings(); track warning.id) {
-                <llm-alert
+                <atl-alert
                   variant="warning"
                   [dismissible]="true"
                   (dismissed)="dismissWarning(warning.id)"
                 >
                   {{ warning.message }}
-                </llm-alert>
+                </atl-alert>
               }
             </div>
-          </llm-accordion-item>
+          </atl-accordion-item>
         }
 
         @if (infos().length > 0) {
-          <llm-accordion-item>
-            <span llmAccordionHeader>
+          <atl-accordion-item>
+            <span atlAccordionHeader>
               <span class="group-header">
                 Info
-                <llm-badge variant="info" size="sm">
+                <atl-badge variant="info" size="sm">
                   {{ infos().length }}
-                </llm-badge>
+                </atl-badge>
               </span>
             </span>
             <div class="alert-list">
               @for (info of infos(); track info.id) {
-                <llm-alert
+                <atl-alert
                   variant="info"
                   [dismissible]="true"
                   (dismissed)="dismissInfo(info.id)"
                 >
                   {{ info.message }}
-                </llm-alert>
+                </atl-alert>
               }
             </div>
-          </llm-accordion-item>
+          </atl-accordion-item>
         }
-      </llm-accordion-group>
+      </atl-accordion-group>
     </div>
   `,
   styles: [
@@ -892,21 +892,21 @@ class NotificationCenterComponent {
   selector: 'cookbook-management-dashboard',
   standalone: true,
   imports: [
-    LlmCard,
-    LlmCardHeader,
-    LlmCardContent,
-    LlmBadge,
-    LlmButton,
-    LlmTable,
-    LlmThead,
-    LlmTbody,
-    LlmTr,
-    LlmTh,
-    LlmTd,
-    LlmTabGroup,
-    LlmTab,
-    LlmAlert,
-    LlmProgress,
+    AtlCard,
+    AtlCardHeader,
+    AtlCardContent,
+    AtlBadge,
+    AtlButton,
+    AtlTable,
+    AtlThead,
+    AtlTbody,
+    AtlTr,
+    AtlTh,
+    AtlTd,
+    AtlTabGroup,
+    AtlTab,
+    AtlAlert,
+    AtlProgress,
   ],
   template: `
     <div class="wrapper">
@@ -917,89 +917,89 @@ class NotificationCenterComponent {
             Snapshot across the selected time range
           </p>
         </div>
-        <llm-tab-group
+        <atl-tab-group
           variant="pills"
           [selectedIndex]="rangeIndex()"
           (selectedIndexChange)="rangeIndex.set($event)"
         >
-          <llm-tab label="7D">&nbsp;</llm-tab>
-          <llm-tab label="30D">&nbsp;</llm-tab>
-          <llm-tab label="90D">&nbsp;</llm-tab>
-        </llm-tab-group>
+          <atl-tab label="7D">&nbsp;</atl-tab>
+          <atl-tab label="30D">&nbsp;</atl-tab>
+          <atl-tab label="90D">&nbsp;</atl-tab>
+        </atl-tab-group>
       </div>
 
       @if (quotaPercent() >= 85) {
-        <llm-alert variant="warning" [dismissible]="true">
+        <atl-alert variant="warning" [dismissible]="true">
           API request quota is at {{ quotaPercent() }}%. Upgrade your plan
           before the monthly reset to avoid throttling.
-        </llm-alert>
+        </atl-alert>
       }
 
       <div class="metrics-grid">
         @for (metric of metrics(); track metric.label) {
-          <llm-card variant="elevated" padding="md">
-            <llm-card-content>
+          <atl-card variant="elevated" padding="md">
+            <atl-card-content>
               <div class="metric-label">{{ metric.label }}</div>
               <div class="metric-value-row">
                 <span class="metric-value">{{ metric.value }}</span>
-                <llm-badge [variant]="metric.deltaVariant" size="sm">
+                <atl-badge [variant]="metric.deltaVariant" size="sm">
                   {{ metric.delta }}
-                </llm-badge>
+                </atl-badge>
               </div>
               <p class="metric-foot">{{ metric.foot }}</p>
-            </llm-card-content>
-          </llm-card>
+            </atl-card-content>
+          </atl-card>
         }
       </div>
 
       <div class="lower-grid">
-        <llm-card variant="elevated" padding="none">
-          <llm-card-header>
+        <atl-card variant="elevated" padding="none">
+          <atl-card-header>
             <div class="panel-header">
               <h3 class="panel-title">Recent Activity</h3>
-              <llm-button variant="outline" size="sm">Export</llm-button>
+              <atl-button variant="outline" size="sm">Export</atl-button>
             </div>
-          </llm-card-header>
-          <llm-card-content>
-            <llm-table variant="striped" size="sm">
-              <llm-thead>
-                <llm-tr>
-                  <llm-th>User</llm-th>
-                  <llm-th>Action</llm-th>
-                  <llm-th>Status</llm-th>
-                  <llm-th align="end">Time</llm-th>
-                </llm-tr>
-              </llm-thead>
-              <llm-tbody>
+          </atl-card-header>
+          <atl-card-content>
+            <atl-table variant="striped" size="sm">
+              <atl-thead>
+                <atl-tr>
+                  <atl-th>User</atl-th>
+                  <atl-th>Action</atl-th>
+                  <atl-th>Status</atl-th>
+                  <atl-th align="end">Time</atl-th>
+                </atl-tr>
+              </atl-thead>
+              <atl-tbody>
                 @for (row of activity(); track row.id) {
-                  <llm-tr>
-                    <llm-td>{{ row.user }}</llm-td>
-                    <llm-td>{{ row.action }}</llm-td>
-                    <llm-td>
-                      <llm-badge [variant]="row.statusVariant" size="sm">
+                  <atl-tr>
+                    <atl-td>{{ row.user }}</atl-td>
+                    <atl-td>{{ row.action }}</atl-td>
+                    <atl-td>
+                      <atl-badge [variant]="row.statusVariant" size="sm">
                         {{ row.status }}
-                      </llm-badge>
-                    </llm-td>
-                    <llm-td align="end">{{ row.time }}</llm-td>
-                  </llm-tr>
+                      </atl-badge>
+                    </atl-td>
+                    <atl-td align="end">{{ row.time }}</atl-td>
+                  </atl-tr>
                 }
-              </llm-tbody>
-            </llm-table>
-          </llm-card-content>
-        </llm-card>
+              </atl-tbody>
+            </atl-table>
+          </atl-card-content>
+        </atl-card>
 
-        <llm-card variant="elevated" padding="md">
-          <llm-card-header>
+        <atl-card variant="elevated" padding="md">
+          <atl-card-header>
             <h3 class="panel-title">Plan Usage</h3>
-          </llm-card-header>
-          <llm-card-content>
+          </atl-card-header>
+          <atl-card-content>
             <div class="quota-stack">
               <div class="quota-item">
                 <div class="quota-label-row">
                   <span class="quota-label">API requests</span>
                   <span class="quota-number">{{ quotaPercent() }}%</span>
                 </div>
-                <llm-progress
+                <atl-progress
                   [value]="quotaPercent()"
                   variant="warning"
                   size="sm"
@@ -1010,18 +1010,18 @@ class NotificationCenterComponent {
                   <span class="quota-label">Storage</span>
                   <span class="quota-number">42%</span>
                 </div>
-                <llm-progress [value]="42" variant="success" size="sm" />
+                <atl-progress [value]="42" variant="success" size="sm" />
               </div>
               <div class="quota-item">
                 <div class="quota-label-row">
                   <span class="quota-label">Seats</span>
                   <span class="quota-number">9 / 12</span>
                 </div>
-                <llm-progress [value]="75" variant="default" size="sm" />
+                <atl-progress [value]="75" variant="default" size="sm" />
               </div>
             </div>
-          </llm-card-content>
-        </llm-card>
+          </atl-card-content>
+        </atl-card>
       </div>
     </div>
   `,

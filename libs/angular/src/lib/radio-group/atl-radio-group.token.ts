@@ -1,0 +1,22 @@
+import { InjectionToken } from '@angular/core';
+import type { Signal, WritableSignal } from '@angular/core';
+import type { FocusableOption } from '@angular/cdk/a11y';
+
+/** @internal — shape required by AtlRadioGroup's FocusKeyManager */
+export interface RadioItem extends FocusableOption {
+  focus(): void; // matches FocusableOption
+  disabled?: boolean; // matches FocusableOption
+  readonly radioValue: Signal<string>;
+}
+
+export interface AtlRadioGroupContext {
+  readonly value: WritableSignal<string>;
+  readonly name: Signal<string>;
+  readonly disabled: Signal<boolean>;
+  select(v: string): void;
+  markTouched(): void;
+  registerItem(item: RadioItem): void;
+  unregisterItem(item: RadioItem): void;
+}
+
+export const ATL_RADIO_GROUP = new InjectionToken<AtlRadioGroupContext>('ATL_RADIO_GROUP');

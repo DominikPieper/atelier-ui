@@ -1,0 +1,83 @@
+import type { Meta, StoryObj } from '@storybook/angular';
+import { argsToTemplate } from '@storybook/angular';
+import { AtlToggle } from './atl-toggle';
+
+import { metadata } from '@atelier-ui/spec/metadata/toggle.metadata';
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+
+function figmaNode(nodeId: string): { type: "figma"; url: string } {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
+const meta: Meta<AtlToggle> = {
+  title: 'Components/Inputs/AtlToggle',
+  component: AtlToggle,
+  tags: ['autodocs'],
+  render: (args) => ({
+    props: args,
+    template: `<atl-toggle ${argsToTemplate(args)}>Enable notifications</atl-toggle>`,
+  }),
+  argTypes: {
+    checked: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    required: { control: 'boolean' },
+  },
+  args: {
+    checked: false,
+    disabled: false,
+    invalid: false,
+    required: false,
+  },
+  parameters: {
+    design: figmaNode('55-41'),
+    docs: { description: { component: metadata.purpose } },
+  },
+};
+
+export default meta;
+type Story = StoryObj<AtlToggle>;
+
+export const Default: Story = {
+  parameters: { design: figmaNode('55-37') },
+};
+
+export const Checked: Story = {
+  args: { checked: true },
+  parameters: { design: figmaNode('55-38') },
+};
+
+export const Disabled: Story = {
+  args: { disabled: true },
+};
+
+export const DisabledChecked: Story = {
+  args: { disabled: true, checked: true },
+};
+
+export const Invalid: Story = {
+  args: { invalid: true },
+};
+
+export const WithErrors: Story = {
+  args: { invalid: true },
+  render: (args) => ({
+    props: {
+      ...args,
+      errors: [{ kind: 'required', message: 'You must enable this setting' }],
+      touched: true,
+    },
+    template: `<atl-toggle ${argsToTemplate(args)} [errors]="errors" [touched]="touched">Enable notifications</atl-toggle>`,
+  }),
+};
+
+export const Required: Story = {
+  args: { required: true },
+};
+
+export const Playground: Story = {
+  render: (args) => ({
+    props: args,
+    template: `<atl-toggle ${argsToTemplate(args)}>Playground label</atl-toggle>`,
+  }),
+};

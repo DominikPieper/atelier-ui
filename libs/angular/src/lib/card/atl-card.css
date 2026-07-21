@@ -1,0 +1,72 @@
+:host(.atl-card) {
+  display: block;
+  border-radius: var(--ui-radius-xl);
+  background-color: var(--ui-color-surface-raised);
+  overflow: hidden;
+}
+
+/* Modernised variants — single soft shadow on elevated, no shadow on
+ * outlined or flat. Cards rest on the page; they don't float off it. */
+:host(.atl-card.variant-elevated) {
+  box-shadow: var(--ui-shadow-sm);
+  border: 1px solid var(--ui-color-border);
+}
+
+:host(.atl-card.variant-outlined) {
+  border: 1px solid var(--ui-color-border);
+  background-color: var(--ui-color-surface-raised);
+}
+
+:host(.atl-card.variant-flat) {
+  background-color: var(--ui-color-surface-sunken);
+}
+
+/* Padding on the card directly affects all slots — each slot reads its
+ * parent's padding-* class via :host-context() since they're separate
+ * components composed inside <atl-card>, not descendants in one template. */
+:host(.atl-card-header):host-context(.padding-none),
+:host(.atl-card-content):host-context(.padding-none),
+:host(.atl-card-footer):host-context(.padding-none) {
+  padding: 0;
+}
+
+:host(.atl-card-header):host-context(.padding-sm),
+:host(.atl-card-content):host-context(.padding-sm),
+:host(.atl-card-footer):host-context(.padding-sm) {
+  padding: var(--ui-spacing-4);
+}
+
+:host(.atl-card-header):host-context(.padding-md),
+:host(.atl-card-content):host-context(.padding-md),
+:host(.atl-card-footer):host-context(.padding-md) {
+  padding: var(--ui-spacing-6);
+}
+
+:host(.atl-card-header):host-context(.padding-lg),
+:host(.atl-card-content):host-context(.padding-lg),
+:host(.atl-card-footer):host-context(.padding-lg) {
+  padding: var(--ui-spacing-8);
+}
+
+/* Sub-component layouts */
+:host(.atl-card-header) {
+  display: block;
+  font-size: var(--ui-font-size-lg);
+  font-weight: var(--ui-font-weight-semibold);
+  color: var(--ui-color-text);
+  border-bottom: 1px solid var(--ui-color-border);
+  letter-spacing: var(--ui-letter-spacing-tight);
+}
+
+:host(.atl-card-content) {
+  display: block;
+  color: var(--ui-color-text);
+  line-height: var(--ui-line-height-normal);
+}
+
+:host(.atl-card-footer) {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-spacing-3);
+  border-top: 1px solid var(--ui-color-border);
+}

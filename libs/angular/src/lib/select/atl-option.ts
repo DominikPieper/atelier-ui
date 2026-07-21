@@ -1,0 +1,89 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  computed,
+  inject,
+  input,
+} from '@angular/core';
+import { ATL_SELECT } from './atl-select.token';
+
+let nextOptionId = 0;
+
+/**
+ * Option item for use inside `<atl-select>`.
+ *
+ * Usage:
+ * ```html
+ * <atl-option optionValue="us">United States</atl-option>
+ * ```
+ */
+@Component({
+  selector: 'atl-option',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
+    <div
+      role="option"
+      [attr.id]="optionId"
+      [attr.aria-selected]="isSelected()"
+      [attr.aria-disabled]="disabled() || null"
+      [class.is-selected]="isSelected()"
+      [class.is-active]="isActive()"
+      [class.is-disabled]="disabled()"
+      (click)="onClick()"
+      (mouseenter)="onMouseEnter()"
+    >
+      <ng-content />
+    </div>
+  `,
+})
+export class AtlOption implements OnInit, OnDestroy {
+  /** The value this option represents. Required. */
+  readonly optionValue = input.required<string>();
+
+  /** Whether this option is disabled. */
+  readonly disabled = input(false);
+
+  /** @internal */
+  protected readonly optionId = `atl-option-${nextOptionId++}`;
+
+  /** @internal */
+  private readonly context = inject(ATL_SELECT);
+
+  /** @internal */
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** @internal */
+  protected readonly isSelected = computed(() => this.context.value() === this.optionValue());
+
+  /** @internal */
+  protected readonly isActive = computed(() => this.context.activeOptionId() === this.optionId);
+
+  ngOnInit(): void {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    const labelText = (this.elementRef.nativeElement.textContent ?? '').trim();
+    this.context.registerOption(this.optionId, this.optionValue(), labelText, this.disabled());
+  }
+
+  ngOnDestroy(): void {
+    this.context.unregisterOption(this.optionId);
+  }
+
+  /** @internal */
+  protected onClick(): void {
+    if (this.disabled()) return;
+    this.context.select(this.optionValue());
+    this.context.markTouched();
+  }
+
+  /** @internal */
+  protected onMouseEnter(): void {
+    if (!this.disabled()) {
+      this.context.activeOptionId.set(this.optionId);
+    }
+  }
+}
