@@ -3,129 +3,265 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-06-01T16:29:20.000Z",
-    "gitSha": null,
-    "serverVersion": "1.29.1",
-    "coverage": "P0 core (3 of 27 masters: AtlButton, AtlBadge, AtlCard). Token/auto-layout checks sample each master's default variant. Run `npm run figma:snapshot` with the Figma Desktop Bridge connected to capture all 27 masters.",
-    "note": "Facts captured from Figma via figma-console MCP read-tools. The gate (check-figma) applies the rules — this file holds no judgements beyond bound/unbound/raw determinations made at capture time."
+    "generatedAt": "2026-07-21T20:29:01.423Z",
+    "gitSha": "2ac9047",
+    "serverVersion": null,
+    "coverage": "All 29 masters. Token/auto-layout checks sample each master's default variant.",
+    "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
   },
   "uiTokens": [
-    "color/primary", "color/primary-hover", "color/primary-active", "color/primary-light",
-    "color/secondary", "color/secondary-hover", "color/secondary-active",
-    "color/danger", "color/danger-hover", "color/danger-active",
-    "color/success", "color/warning", "color/info",
-    "color/surface", "color/surface-raised", "color/surface-sunken",
-    "color/border", "color/border-hover", "color/text", "color/text-muted", "color/text-on-primary",
-    "color/input-bg", "color/input-bg-focus", "color/input-border", "color/input-border-hover",
-    "color/input-border-focus", "color/input-border-invalid", "color/placeholder",
-    "spacing/1", "spacing/2", "spacing/3", "spacing/4", "spacing/5", "spacing/6", "spacing/8", "spacing/10", "spacing/12", "spacing/16",
-    "radius/sm", "radius/md", "radius/lg", "radius/xl", "radius/full",
-    "font-size/xs", "font-size/sm", "font-size/md", "font-size/lg", "font-size/xl", "font-size/2xl",
-    "font-weight/normal", "font-weight/medium", "font-weight/semibold",
-    "line-height/tight", "line-height/normal"
+    "area/co-50",
+    "area/es-50",
+    "area/ki-50",
+    "area/ki-ink",
+    "area/ro-50",
+    "area/wo-50",
+    "badge/err-text",
+    "badge/neu-bg",
+    "badge/neu-text",
+    "badge/ok-text",
+    "badge/warn-text",
+    "bg/code",
+    "bg/overlay",
+    "bg/page",
+    "bg/surface",
+    "border/default",
+    "border/field",
+    "border/strong",
+    "c/error",
+    "c/error-bg",
+    "c/success",
+    "c/success-bg",
+    "c/warning",
+    "c/warning-bg",
+    "cbadge/aa-bg",
+    "cbadge/aa-text",
+    "cbadge/aaa-bg",
+    "cbadge/aaa-text",
+    "cbadge/fail-bg",
+    "cbadge/fail-text",
+    "focus/aa-inner",
+    "focus/ring-inner",
+    "focus/ring-outer",
+    "n/n-100",
+    "n/n-50",
+    "tx/brand",
+    "tx/muted",
+    "tx/primary",
+    "tx/secondary"
   ],
   "components": [
     {
       "name": "Action/AtlButton",
       "selector": "AtlButton",
       "nodeId": "129:20",
-      "description": "Action button. Maps to AtlButtonSpec in libs/spec.\n\nUse when: a user-initiated action — submit, save, delete, navigate. Pick the visual based on hierarchy: primary for the screen's main action (one per screen), secondary for supporting actions, outline for tertiary/inline, danger for destructive actions.\n\nAPI surface (Figma → spec):\n- Variant variant: primary | secondary | outline | danger — maps to AtlButtonSpec.variant\n- Variant size: sm | md | lg — maps to AtlButtonSpec.size\n- Variant state: default | hover | focus | active — interaction state\n- Boolean disabled / loading / hasIcon",
+      "description": "Action button. Maps to AtlButtonSpec in libs/spec.\n\nUse when: a user-initiated action — submit, save, delete, navigate. Pick the visual based on hierarchy: `primary` for the screen's main action (one per screen), `secondary` for supporting actions, `outline` for tertiary/inline, `danger` for destructive actions (delete, irreversible).\n\nDon't use when: the action is a navigation link (use a real `<a>` element, not a styled button), the choice is between two states (use Form/AtlToggle), or the user is filling a form field (use Form/AtlInput / Form/AtlSelect).\n\nAPI surface (Figma → spec):\n- Variant `variant`: primary | secondary | outline | danger — maps to AtlButtonSpec.variant\n- Variant `size`: sm | md | lg — maps to AtlButtonSpec.size\n- Variant `state`: default | hover | focus | active — interaction state\n- Boolean `disabled`: maps to AtlButtonSpec.disabled\n- Boolean `loading`: maps to AtlButtonSpec.loading — shows spinner, disables interaction\n- Boolean `hasIcon`: toggles the leading icon slot (Instance Swap → Icon library)\n\nA11y: native HTML <button>. When the button has no visible label (icon-only), supply `aria-label` — required by spec. Disabled state uses HTML `disabled` (not aria-disabled) for buttons since they're never expected to remain in the tab order.\n\nStatus: structural restructure 2026-04-27 — `state` enum slimmed to interaction (default/hover/focus/active); `loading` and `disabled` moved out as Booleans matching AtlButtonSpec; `hasIcon` Boolean added for icon-slot toggle.",
       "variantAxes": {
-        "variant": ["primary", "secondary", "outline", "danger"],
-        "size": ["sm", "md", "lg"],
-        "state": ["default", "focus", "hover", "active"]
+        "variant": [
+          "primary",
+          "secondary",
+          "outline",
+          "danger"
+        ],
+        "size": [
+          "sm",
+          "md",
+          "lg"
+        ],
+        "state": [
+          "default",
+          "focus",
+          "hover",
+          "active"
+        ]
       },
       "variants": [
-        { "variant": "primary", "size": "sm", "state": "default" },
-        { "variant": "primary", "size": "md", "state": "default" },
-        { "variant": "primary", "size": "lg", "state": "default" },
-        { "variant": "secondary", "size": "sm", "state": "default" },
-        { "variant": "secondary", "size": "md", "state": "default" },
-        { "variant": "secondary", "size": "lg", "state": "default" },
-        { "variant": "outline", "size": "sm", "state": "default" },
-        { "variant": "outline", "size": "md", "state": "default" },
-        { "variant": "outline", "size": "lg", "state": "default" },
-        { "variant": "primary", "size": "md", "state": "focus" },
-        { "variant": "primary", "size": "md", "state": "hover" },
-        { "variant": "primary", "size": "md", "state": "active" },
-        { "variant": "danger", "size": "sm", "state": "default" },
-        { "variant": "danger", "size": "md", "state": "default" },
-        { "variant": "danger", "size": "lg", "state": "default" },
-        { "variant": "danger", "size": "md", "state": "hover" },
-        { "variant": "danger", "size": "md", "state": "active" },
-        { "variant": "danger", "size": "md", "state": "focus" },
-        { "variant": "secondary", "size": "md", "state": "hover" },
-        { "variant": "secondary", "size": "md", "state": "active" },
-        { "variant": "secondary", "size": "md", "state": "focus" },
-        { "variant": "outline", "size": "md", "state": "hover" },
-        { "variant": "outline", "size": "md", "state": "active" },
-        { "variant": "outline", "size": "md", "state": "focus" }
+        {
+          "variant": "primary",
+          "size": "sm",
+          "state": "default"
+        },
+        {
+          "variant": "primary",
+          "size": "md",
+          "state": "default"
+        },
+        {
+          "variant": "primary",
+          "size": "lg",
+          "state": "default"
+        },
+        {
+          "variant": "secondary",
+          "size": "sm",
+          "state": "default"
+        },
+        {
+          "variant": "secondary",
+          "size": "md",
+          "state": "default"
+        },
+        {
+          "variant": "secondary",
+          "size": "lg",
+          "state": "default"
+        },
+        {
+          "variant": "outline",
+          "size": "sm",
+          "state": "default"
+        },
+        {
+          "variant": "outline",
+          "size": "md",
+          "state": "default"
+        },
+        {
+          "variant": "outline",
+          "size": "lg",
+          "state": "default"
+        },
+        {
+          "variant": "primary",
+          "size": "md",
+          "state": "focus"
+        },
+        {
+          "variant": "primary",
+          "size": "md",
+          "state": "hover"
+        },
+        {
+          "variant": "primary",
+          "size": "md",
+          "state": "active"
+        },
+        {
+          "variant": "danger",
+          "size": "sm",
+          "state": "default"
+        },
+        {
+          "variant": "danger",
+          "size": "md",
+          "state": "default"
+        },
+        {
+          "variant": "danger",
+          "size": "lg",
+          "state": "default"
+        },
+        {
+          "variant": "danger",
+          "size": "md",
+          "state": "hover"
+        },
+        {
+          "variant": "danger",
+          "size": "md",
+          "state": "active"
+        },
+        {
+          "variant": "danger",
+          "size": "md",
+          "state": "focus"
+        },
+        {
+          "variant": "secondary",
+          "size": "md",
+          "state": "hover"
+        },
+        {
+          "variant": "secondary",
+          "size": "md",
+          "state": "active"
+        },
+        {
+          "variant": "secondary",
+          "size": "md",
+          "state": "focus"
+        },
+        {
+          "variant": "outline",
+          "size": "md",
+          "state": "hover"
+        },
+        {
+          "variant": "outline",
+          "size": "md",
+          "state": "active"
+        },
+        {
+          "variant": "outline",
+          "size": "md",
+          "state": "focus"
+        }
       ],
-      "sampledVariant": "129:4",
+      "sampledVariant": "129:2",
       "nodes": [
         {
-          "name": "variant=primary, size=md, state=default",
+          "name": "variant=primary, size=sm, state=default",
           "type": "COMPONENT",
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": ["paddingLeft", "paddingRight", "paddingTop", "paddingBottom"],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "Button",
-          "type": "TEXT",
-          "hasChildren": false,
-          "layoutMode": "NONE",
-          "rawColors": [],
-          "unboundRadius": 0,
-          "unboundSpacing": [],
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
           "nonSemanticTokens": []
         }
       ]
     },
     {
-      "name": "Display/AtlBadge",
-      "selector": "AtlBadge",
-      "nodeId": "55:22",
-      "description": "Inline status pill. Maps to AtlBadgeSpec in libs/spec.\n\nUse when: a small label needs to convey status, count, or category alongside other content. For larger callouts use Feedback/AtlAlert.\n\nAPI surface:\n- Variant variant: default | success | warning | danger | info → AtlBadgeSpec.variant\n- Variant size: sm | md → AtlBadgeSpec.size\n- Text Label: visible label",
+      "name": "Form/AtlInput",
+      "selector": "AtlInput",
+      "nodeId": "129:33",
+      "description": "Single-line text input. Maps to AtlInputSpec in libs/spec.\n\nUse when: a user needs to enter a short string (text, email, password, number, tel, url). For multi-line use Form/AtlTextarea. For options use Form/AtlSelect or Form/AtlCombobox.\n\nDon't use when: input is binary (use Form/AtlCheckbox or Form/AtlToggle), the value is one-of-many (use Form/AtlRadioGroup), or the user is choosing from a set (use Form/AtlSelect).\n\nAPI surface (Figma → spec):\n- Variant `state`: default | hover | focus | invalid | filled — interaction + form state\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Boolean `readonly`: maps to AtlFormFieldSpec.readonly\n- Boolean `required`: maps to AtlFormFieldSpec.required\n- (code-only props on AtlInputSpec: `type`, `placeholder`, `value`, `onValueChange`, `name`)\n\nA11y: native HTML <input>; ARIA roles and keyboard come from the browser. Disabled state uses aria-disabled (not HTML disabled) so screen readers still announce it — pair with a tooltip/helper text explaining why.\n\nStatus: structural restructure 2026-04-27 — old `state` enum (default/filled/focus/invalid/disabled/hover/active/loading) replaced by interaction Variant + orthogonal Booleans matching libs/spec.",
       "variantAxes": {
-        "variant": ["default", "success", "warning", "danger", "info"],
-        "size": ["md", "sm"]
+        "state": [
+          "default",
+          "filled",
+          "focus",
+          "invalid",
+          "hover"
+        ]
       },
       "variants": [
-        { "variant": "default", "size": "md" },
-        { "variant": "success", "size": "md" },
-        { "variant": "warning", "size": "md" },
-        { "variant": "danger", "size": "md" },
-        { "variant": "info", "size": "md" },
-        { "variant": "default", "size": "sm" },
-        { "variant": "success", "size": "sm" },
-        { "variant": "warning", "size": "sm" },
-        { "variant": "danger", "size": "sm" },
-        { "variant": "info", "size": "sm" }
+        {
+          "state": "default"
+        },
+        {
+          "state": "filled"
+        },
+        {
+          "state": "focus"
+        },
+        {
+          "state": "invalid"
+        },
+        {
+          "state": "hover"
+        }
       ],
-      "sampledVariant": "55:12",
+      "sampledVariant": "129:23",
       "nodes": [
         {
-          "name": "variant=default, size=md",
+          "name": "state=default",
           "type": "COMPONENT",
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 9999,
-          "unboundSpacing": ["paddingLeft", "paddingRight", "paddingTop", "paddingBottom"],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "Default",
-          "type": "TEXT",
-          "hasChildren": false,
-          "layoutMode": "NONE",
-          "rawColors": [],
-          "unboundRadius": 0,
-          "unboundSpacing": [],
+          "unboundRadius": 6,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
           "nonSemanticTokens": []
         }
       ]
@@ -134,29 +270,74 @@
       "name": "Display/AtlCard",
       "selector": "AtlCard",
       "nodeId": "55:65",
-      "description": "Container for grouped content. Maps to AtlCardSpec in libs/spec.\n\nUse when: distinct grouped content needs a visual container — list items, summaries, dashboard tiles. For overlay content use Overlay/AtlDialog or Overlay/AtlDrawer.\n\nAPI surface:\n- Variant variant: elevated | outlined | flat → AtlCardSpec.variant\n- Variant padding: none | sm | md | lg → AtlCardSpec.padding\n- Text Title, Body: content slots\n- (code-only: role — landmark role, default plain div)",
+      "description": "Container for grouped content. Maps to AtlCardSpec in libs/spec.\n\nUse when: distinct grouped content needs a visual container — list items, summaries, dashboard tiles. For overlay content use Overlay/AtlDialog or Overlay/AtlDrawer.\n\nAPI surface:\n- Variant `variant`: elevated | outlined | flat → AtlCardSpec.variant\n- Variant `padding`: none | sm | md | lg → AtlCardSpec.padding\n- Text `Title`, `Body`: content slots\n- (code-only: `role` — landmark role, default plain div)\n\nA11y: defaults to <div>. Set `role` only when the card is meaningful as a landmark (article, region) — adding a landmark for every card pollutes the page outline.",
       "variantAxes": {
-        "variant": ["elevated", "outlined", "flat"],
-        "padding": ["none", "sm", "md", "lg"]
+        "variant": [
+          "elevated",
+          "outlined",
+          "flat"
+        ],
+        "padding": [
+          "none",
+          "sm",
+          "md",
+          "lg"
+        ]
       },
       "variants": [
-        { "variant": "elevated", "padding": "none" },
-        { "variant": "outlined", "padding": "none" },
-        { "variant": "flat", "padding": "none" },
-        { "variant": "elevated", "padding": "sm" },
-        { "variant": "outlined", "padding": "sm" },
-        { "variant": "flat", "padding": "sm" },
-        { "variant": "elevated", "padding": "md" },
-        { "variant": "outlined", "padding": "md" },
-        { "variant": "flat", "padding": "md" },
-        { "variant": "elevated", "padding": "lg" },
-        { "variant": "outlined", "padding": "lg" },
-        { "variant": "flat", "padding": "lg" }
+        {
+          "variant": "elevated",
+          "padding": "none"
+        },
+        {
+          "variant": "outlined",
+          "padding": "none"
+        },
+        {
+          "variant": "flat",
+          "padding": "none"
+        },
+        {
+          "variant": "elevated",
+          "padding": "sm"
+        },
+        {
+          "variant": "outlined",
+          "padding": "sm"
+        },
+        {
+          "variant": "flat",
+          "padding": "sm"
+        },
+        {
+          "variant": "elevated",
+          "padding": "md"
+        },
+        {
+          "variant": "outlined",
+          "padding": "md"
+        },
+        {
+          "variant": "flat",
+          "padding": "md"
+        },
+        {
+          "variant": "elevated",
+          "padding": "lg"
+        },
+        {
+          "variant": "outlined",
+          "padding": "lg"
+        },
+        {
+          "variant": "flat",
+          "padding": "lg"
+        }
       ],
-      "sampledVariant": "55:59",
+      "sampledVariant": "55:53",
       "nodes": [
         {
-          "name": "variant=elevated, padding=md",
+          "name": "variant=elevated, padding=none",
           "type": "COMPONENT",
           "hasChildren": true,
           "layoutMode": "VERTICAL",
@@ -172,17 +353,12 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": ["paddingLeft", "paddingRight", "paddingTop", "paddingBottom"],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "card-section-2",
-          "type": "FRAME",
-          "hasChildren": false,
-          "layoutMode": "NONE",
-          "rawColors": [],
-          "unboundRadius": 0,
-          "unboundSpacing": [],
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
           "nonSemanticTokens": []
         },
         {
@@ -192,7 +368,12 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": ["paddingLeft", "paddingRight", "paddingTop", "paddingBottom"],
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
           "nonSemanticTokens": []
         },
         {
@@ -202,7 +383,12 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": ["paddingLeft", "paddingRight", "paddingTop", "paddingBottom"],
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
           "nonSemanticTokens": []
         },
         {
@@ -212,7 +398,3211 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 6,
-          "unboundSpacing": ["paddingLeft", "paddingRight", "paddingTop", "paddingBottom"],
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Display/AtlBadge",
+      "selector": "AtlBadge",
+      "nodeId": "55:22",
+      "description": "Inline status pill. Maps to AtlBadgeSpec in libs/spec.\n\nUse when: a small label needs to convey status, count, or category alongside other content. For larger callouts use Feedback/AtlAlert.\n\nDon't use when: the content is a control (use Action/AtlButton) or it's the primary content of the screen.\n\nAPI surface:\n- Variant `variant`: default | success | warning | danger | info → AtlBadgeSpec.variant\n- Variant `size`: sm | md → AtlBadgeSpec.size\n- Text `Label`: visible label\n\nA11y: badges are decorative by default. If they convey state changes important to assistive tech, wrap in role=\"status\".",
+      "variantAxes": {
+        "variant": [
+          "default",
+          "success",
+          "warning",
+          "danger",
+          "info"
+        ],
+        "size": [
+          "md",
+          "sm"
+        ]
+      },
+      "variants": [
+        {
+          "variant": "default",
+          "size": "md"
+        },
+        {
+          "variant": "success",
+          "size": "md"
+        },
+        {
+          "variant": "warning",
+          "size": "md"
+        },
+        {
+          "variant": "danger",
+          "size": "md"
+        },
+        {
+          "variant": "info",
+          "size": "md"
+        },
+        {
+          "variant": "default",
+          "size": "sm"
+        },
+        {
+          "variant": "success",
+          "size": "sm"
+        },
+        {
+          "variant": "warning",
+          "size": "sm"
+        },
+        {
+          "variant": "danger",
+          "size": "sm"
+        },
+        {
+          "variant": "info",
+          "size": "sm"
+        }
+      ],
+      "sampledVariant": "55:12",
+      "nodes": [
+        {
+          "name": "variant=default, size=md",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 9999,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Form/AtlSelect",
+      "selector": "AtlSelect",
+      "nodeId": "55:92",
+      "description": "Dropdown selector. Maps to AtlSelectSpec in libs/spec.\n\nUse when: user picks one value from a fixed list of <50 options. For searchable lists use Form/AtlCombobox. For 2–7 visible options use Form/AtlRadioGroup. For multi-select use a Combobox or stacked Form/AtlCheckbox.\n\nDon't use when: options are dynamic / fetched (use Form/AtlCombobox), the choice is binary (use Form/AtlToggle), or users benefit from seeing all options simultaneously (use Form/AtlRadioGroup).\n\nAPI surface (Figma → spec):\n- Variant `state`: default | hover | focus | open | filled\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Boolean `invalid`: maps to AtlFormFieldSpec.invalid\n- Boolean `required`: maps to AtlFormFieldSpec.required\n- Text `Placeholder`: maps to placeholder\n\nA11y: native popover via the HTML Popover API. Keyboard: ArrowUp/Down navigate, Enter selects, Escape closes. Disabled state uses aria-disabled (not HTML disabled).\n\nStatus: structural restructure 2026-04-27 — `state` enum slimmed to interaction + open + filled; disabled/invalid/required moved to Booleans matching spec.",
+      "variantAxes": {
+        "state": [
+          "default",
+          "filled",
+          "open",
+          "hover",
+          "focus"
+        ]
+      },
+      "variants": [
+        {
+          "state": "default"
+        },
+        {
+          "state": "filled"
+        },
+        {
+          "state": "open"
+        },
+        {
+          "state": "hover"
+        },
+        {
+          "state": "focus"
+        }
+      ],
+      "sampledVariant": "55:88",
+      "nodes": [
+        {
+          "name": "state=default",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 8,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Overlay/AtlDialog",
+      "selector": "AtlDialog",
+      "nodeId": "55:94",
+      "description": "Modal dialog. Maps to AtlDialogSpec in libs/spec.\n\nUse when: user input is required before continuing (confirmation, form, error). For non-blocking notifications use Overlay/AtlToast; for side panels use Overlay/AtlDrawer.\n\nAPI surface:\n- Variant `size`: sm | md | lg | xl | full → AtlDialogSpec.size\n- Text `Title`, `Message`, `ConfirmLabel`, `CancelLabel`: content slots\n- (code-only: `open`, `closeOnBackdrop`, `onOpenChange`)\n\nA11y: ARIA dialog pattern with focus trap. Esc closes; first focusable element receives focus on open.",
+      "variantAxes": {
+        "size": [
+          "md",
+          "sm",
+          "lg",
+          "xl",
+          "full"
+        ]
+      },
+      "variants": [
+        {
+          "size": "md"
+        },
+        {
+          "size": "sm"
+        },
+        {
+          "size": "lg"
+        },
+        {
+          "size": "xl"
+        },
+        {
+          "size": "full"
+        }
+      ],
+      "sampledVariant": "55:93",
+      "nodes": [
+        {
+          "name": "size=md",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 12,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom",
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 8,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 8,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Navigation/AtlTabGroup",
+      "selector": "AtlTabGroup",
+      "nodeId": "55:123",
+      "description": "Tabbed content switcher. Maps to AtlTabGroupSpec in libs/spec.\n\nUse when: peer content panels share a context and user picks one to view. For sequential steps use Navigation/AtlStepper.\n\nAPI surface (Figma → spec):\n- Variant `variant`: default | pills → AtlTabGroupSpec.variant\n- Variant `selected`: 0 | 1 — illustrative selection state\n- Variant `state`: default — interaction state (legacy mash-up removed)\n- Boolean `disabled`: disables every contained Tab\n- Boolean `loading`: shows tab-bar skeleton / panel spinner\n\nA11y: ARIA tabs pattern. Arrow keys move selection inside the tablist; Tab moves out. aria-controls links each tab to its panel.\n\nStatus: 2026-04-27 — `state` Variant slimmed from {default,focus,hover,active,loading,disabled,error} to default-only; disabled/loading moved to Booleans matching the Form/* pattern.",
+      "variantAxes": {
+        "variant": [
+          "default",
+          "pills"
+        ],
+        "selected": [
+          "0",
+          "1"
+        ],
+        "state": [
+          "default"
+        ]
+      },
+      "variants": [
+        {
+          "variant": "default",
+          "selected": "0",
+          "state": "default"
+        },
+        {
+          "variant": "default",
+          "selected": "1",
+          "state": "default"
+        },
+        {
+          "variant": "pills",
+          "selected": "0",
+          "state": "default"
+        }
+      ],
+      "sampledVariant": "55:120",
+      "nodes": [
+        {
+          "name": "variant=default, selected=0, state=default",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 8,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [
+            "#f8fafc"
+          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Feedback/AtlAccordionGroup",
+      "selector": "AtlAccordionGroup",
+      "nodeId": "55:127",
+      "description": "Collapsible content sections. Maps to AtlAccordionGroupSpec in libs/spec.\n\nUse when: content is partitioned into sections that don't all need to be visible simultaneously (FAQ, settings groups). For peer content where one is always visible use Navigation/AtlTabGroup.\n\nAPI surface:\n- Variant `variant`: default | bordered | separated → AtlAccordionGroupSpec.variant\n- (code-only: `multi` — boolean for allowing multiple panels open)\n\nA11y: ARIA accordion pattern. Each panel's heading wraps a button; aria-expanded reflects state.",
+      "variantAxes": {
+        "variant": [
+          "default",
+          "bordered",
+          "separated"
+        ]
+      },
+      "variants": [
+        {
+          "variant": "default"
+        },
+        {
+          "variant": "bordered"
+        },
+        {
+          "variant": "separated"
+        }
+      ],
+      "sampledVariant": "55:124",
+      "nodes": [
+        {
+          "name": "variant=default",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 8,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Navigation/AtlMenu",
+      "selector": "AtlMenu",
+      "nodeId": "55:130",
+      "description": "Action menu. Maps to AtlMenuSpec in libs/spec.\n\nUse when: secondary actions on an item, triggered by a control (button, more icon). For navigation use a sidebar or Navigation/AtlTabGroup.\n\nAPI surface:\n- Variant `variant`: default | compact → AtlMenuSpec.variant\n\nA11y: ARIA menu pattern with roving tabindex; arrow keys navigate, Enter/Space activates, Escape closes.",
+      "variantAxes": {
+        "variant": [
+          "default",
+          "compact"
+        ]
+      },
+      "variants": [
+        {
+          "variant": "default"
+        },
+        {
+          "variant": "compact"
+        }
+      ],
+      "sampledVariant": "55:128",
+      "nodes": [
+        {
+          "name": "variant=default",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 8,
+          "unboundSpacing": [
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Overlay/AtlTooltip",
+      "selector": "AtlTooltip",
+      "nodeId": "55:52",
+      "description": "Floating context label. Maps to AtlTooltipSpec in libs/spec.\n\nUse when: brief non-essential clarification on hover/focus (e.g. icon-only buttons, abbreviations).\n\nDon't use when: information is essential (put it in the visible label) or content is a paragraph (use Overlay/AtlDialog or a popover).\n\nAPI surface:\n- Variant `position`: above | below | left | right → AtlTooltipSpec.atlTooltipPosition\n- Text `Content`: tooltip text → AtlTooltipSpec.atlTooltip\n- (code-only: `disabled`, `showDelay`, `hideDelay`)\n\nA11y: tooltip role, anchored via aria-describedby on the trigger. Mobile users have no hover, so don't put critical info here.",
+      "variantAxes": {
+        "position": [
+          "above",
+          "below",
+          "left",
+          "right"
+        ]
+      },
+      "variants": [
+        {
+          "position": "above"
+        },
+        {
+          "position": "below"
+        },
+        {
+          "position": "left"
+        },
+        {
+          "position": "right"
+        }
+      ],
+      "sampledVariant": "55:48",
+      "nodes": [
+        {
+          "name": "position=above",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 6,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Feedback/AtlAlert",
+      "selector": "AtlAlert",
+      "nodeId": "55:31",
+      "description": "Inline notification with intent. Maps to AtlAlertSpec in libs/spec.\n\nUse when: a persistent message conveys status that the user should see while continuing on the page (form errors, banner notices). For transient feedback use Overlay/AtlToast.\n\nAPI surface:\n- Variant `variant`: info | success | warning | danger → AtlAlertSpec.variant\n- Boolean `dismissible` → AtlAlertSpec.dismissible\n- Text `Message`: alert content\n\nA11y: role=\"alert\" for danger/warning (interrupts assistive tech); role=\"status\" otherwise.\n\nStatus: 2026-04-27 — `dismissible` moved from Variant axis (false/true) to Boolean Property matching spec.",
+      "variantAxes": {
+        "variant": [
+          "info",
+          "success",
+          "warning",
+          "danger"
+        ]
+      },
+      "variants": [
+        {
+          "variant": "info"
+        },
+        {
+          "variant": "success"
+        },
+        {
+          "variant": "warning"
+        },
+        {
+          "variant": "danger"
+        }
+      ],
+      "sampledVariant": "55:23",
+      "nodes": [
+        {
+          "name": "variant=info",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 8,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom",
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Form/AtlCheckbox",
+      "selector": "AtlCheckbox",
+      "nodeId": "55:36",
+      "description": "Boolean form control for opt-in selections. Maps to AtlCheckboxSpec in libs/spec.\n\nUse when: user opts in to one or more independent options (Accept terms, Subscribe to newsletter, parent rows in a tree). Indeterminate state represents a partially-selected parent of mixed children.\n\nDon't use when: choice is mutually exclusive (use Form/AtlRadio + Form/AtlRadioGroup) or binary settings toggle (use Form/AtlToggle — feels more like a switch than a form input).\n\nAPI surface (Figma → spec):\n- Variant `selection`: unchecked | checked | indeterminate — maps to `checked` + `indeterminate` Booleans\n- Variant `state`: default | hover | focus — interaction state\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Boolean `invalid`: maps to AtlFormFieldSpec.invalid\n- Boolean `required`: maps to AtlFormFieldSpec.required\n- Text `Label`: visible label\n\nA11y: native HTML <input type=\"checkbox\">. Indeterminate set via JS property (not HTML attribute). Disabled state uses aria-disabled.\n\nStatus: structural restructure 2026-04-27 — single `state` enum split into orthogonal `selection` (unchecked/checked/indeterminate) + `state` (default/hover/focus) Variant Properties; disabled moved to Boolean.",
+      "variantAxes": {
+        "selection": [
+          "unchecked",
+          "checked",
+          "indeterminate"
+        ],
+        "state": [
+          "default",
+          "focus",
+          "hover"
+        ]
+      },
+      "variants": [
+        {
+          "selection": "unchecked",
+          "state": "default"
+        },
+        {
+          "selection": "checked",
+          "state": "default"
+        },
+        {
+          "selection": "indeterminate",
+          "state": "default"
+        },
+        {
+          "selection": "unchecked",
+          "state": "focus"
+        },
+        {
+          "selection": "unchecked",
+          "state": "hover"
+        }
+      ],
+      "sampledVariant": "55:32",
+      "nodes": [
+        {
+          "name": "selection=unchecked, state=default",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 4,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Form/AtlToggle",
+      "selector": "AtlToggle",
+      "nodeId": "55:41",
+      "description": "On/off switch control. Maps to AtlToggleSpec in libs/spec.\n\nUse when: a binary setting takes effect immediately (notifications on/off, dark mode, sync). Visually distinct from Checkbox — the switch metaphor implies \"this changes a setting now\", not \"this opts into a form value on submit\".\n\nDon't use when: the binary is part of a form submission (use Form/AtlCheckbox), the setting requires a confirmation step (use Form/AtlCheckbox plus Action/AtlButton), or the choice is one-of-three (use Form/AtlRadioGroup).\n\nAPI surface (Figma → spec):\n- Variant `selection`: off | on — maps to AtlToggleSpec.checked (false/true)\n- Variant `state`: default | hover | focus — interaction state\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Text `Label`: visible label\n\nA11y: native HTML <input type=\"checkbox\"> with role=\"switch\" wrapper. The label should describe the setting being toggled, not \"Off/On\". Disabled state uses aria-disabled.\n\nStatus: structural restructure 2026-04-27 — collapsed Cartesian (`disabled-off`/`disabled-on`) into orthogonal `selection` Variant + `disabled` Boolean. Old `state` enum (off/on/disabled-off/disabled-on/focus/hover/active/loading) replaced.",
+      "variantAxes": {
+        "selection": [
+          "off",
+          "on"
+        ],
+        "state": [
+          "default",
+          "focus",
+          "hover"
+        ]
+      },
+      "variants": [
+        {
+          "selection": "off",
+          "state": "default"
+        },
+        {
+          "selection": "on",
+          "state": "default"
+        },
+        {
+          "selection": "off",
+          "state": "focus"
+        },
+        {
+          "selection": "off",
+          "state": "hover"
+        }
+      ],
+      "sampledVariant": "55:37",
+      "nodes": [
+        {
+          "name": "selection=off, state=default",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 9999,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 9999,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Form/AtlTextarea",
+      "selector": "AtlTextarea",
+      "nodeId": "55:87",
+      "description": "Multi-line text input. Maps to AtlTextareaSpec in libs/spec.\n\nUse when: user enters a paragraph or block of text (comment, description, message body). For single-line use Form/AtlInput.\n\nDon't use when: input is a small fixed-shape value (use Form/AtlInput) or a one-of-many choice (use Form/AtlSelect).\n\nAPI surface (Figma → spec):\n- Variant `state`: default | hover | focus | invalid | filled\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Boolean `readonly`: maps to AtlFormFieldSpec.readonly\n- Boolean `required`: maps to AtlFormFieldSpec.required\n- Boolean `autoResize`: maps to AtlTextareaSpec.autoResize — grow to fit content\n- Text `Placeholder`: maps to placeholder\n\nA11y: native HTML <textarea>. Disabled state uses aria-disabled (not HTML disabled) so the element remains focusable and is announced by screen readers — pair with helper text or aria-describedby explaining why.\n\nStatus: structural restructure 2026-04-27 — old `state` enum collapsed; orthogonal Booleans now match AtlFormFieldSpec.",
+      "variantAxes": {
+        "state": [
+          "default",
+          "filled",
+          "focus",
+          "invalid",
+          "hover"
+        ]
+      },
+      "variants": [
+        {
+          "state": "default"
+        },
+        {
+          "state": "filled"
+        },
+        {
+          "state": "focus"
+        },
+        {
+          "state": "invalid"
+        },
+        {
+          "state": "hover"
+        }
+      ],
+      "sampledVariant": "55:82",
+      "nodes": [
+        {
+          "name": "state=default",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 8,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Form/AtlRadioGroup",
+      "selector": "AtlRadioGroup",
+      "nodeId": "55:137",
+      "description": "Mutually exclusive option selector. Maps to AtlRadioGroupSpec in libs/spec.\n\nUse when: user picks exactly one of 2–7 visible options where seeing every option is valuable. Wrap Form/AtlRadio children inside the group — the group manages keyboard navigation (arrow keys move selection) and value binding.\n\nDon't use when: option count exceeds ~7 (use Form/AtlSelect or Form/AtlCombobox), choices are independent (use Form/AtlCheckbox), or the choice is binary (use Form/AtlToggle).\n\nAPI surface (Figma → spec):\n- Variant `selection`: unselected | selected — group-level selection state for the gallery\n- Variant `state`: default | hover | focus — interaction state\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled — disables every contained Radio\n- (code-only: `value: string` — the selected radio's `radioValue`)\n\nA11y: ARIA radiogroup pattern with roving tabindex. Arrow keys move selection inside the group. Wrap in a fieldset + legend if the group has a visible label.\n\nStatus: structural restructure 2026-04-27 — single `state` enum split into orthogonal `selection` (unselected/selected) + `state` (default/hover/focus); disabled moved to Boolean.",
+      "variantAxes": {
+        "selection": [
+          "unselected",
+          "selected"
+        ],
+        "state": [
+          "default",
+          "focus",
+          "hover"
+        ]
+      },
+      "variants": [
+        {
+          "selection": "unselected",
+          "state": "default"
+        },
+        {
+          "selection": "selected",
+          "state": "default"
+        },
+        {
+          "selection": "unselected",
+          "state": "focus"
+        },
+        {
+          "selection": "unselected",
+          "state": "hover"
+        }
+      ],
+      "sampledVariant": "55:131",
+      "nodes": [
+        {
+          "name": "selection=unselected, state=default",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 9999,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Form/AtlRadio",
+      "selector": "AtlRadio",
+      "nodeId": "420:185",
+      "description": "Individual radio button. Maps to AtlRadioSpec in libs/spec.\n\nUse when: a single option among a mutually-exclusive set. Always wrap in Form/AtlRadioGroup — the group manages keyboard navigation, focus, and value binding.\n\nDon't use when: option is independent (use Form/AtlCheckbox), the choice is binary (use Form/AtlToggle), or the option set is long enough to need search (use Form/AtlCombobox).\n\nAPI surface (Figma → spec):\n- Variant `selection`: unchecked | checked\n- Variant `state`: default | hover | focus\n- Boolean `disabled`: maps to AtlRadioSpec.disabled\n- Boolean `invalid`: maps to AtlFormFieldSpec.invalid\n- (code-only: `radioValue: string`)\n\nA11y: native HTML <input type=\"radio\"> participating in a roving-tabindex group via the parent AtlRadioGroup.\n\nStatus: structural restructure 2026-04-27 — single `state` enum split into orthogonal `selection` (unchecked/checked) + `state` (default/hover/focus); disabled/invalid moved to Booleans.",
+      "variantAxes": {
+        "selection": [
+          "unchecked",
+          "checked"
+        ],
+        "state": [
+          "default",
+          "focus",
+          "hover"
+        ]
+      },
+      "variants": [
+        {
+          "selection": "unchecked",
+          "state": "default"
+        },
+        {
+          "selection": "checked",
+          "state": "default"
+        },
+        {
+          "selection": "unchecked",
+          "state": "focus"
+        },
+        {
+          "selection": "unchecked",
+          "state": "hover"
+        }
+      ],
+      "sampledVariant": "420:165",
+      "nodes": [
+        {
+          "name": "selection=unchecked, state=default",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingTop",
+            "paddingBottom",
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "indicator",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 9999,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Display/AtlSkeleton",
+      "selector": "AtlSkeleton",
+      "nodeId": "55:102",
+      "description": "Loading placeholder. Maps to AtlSkeletonSpec in libs/spec.\n\nUse when: content is being fetched and a layout-stable placeholder prevents layout shift on load.\n\nDon't use when: load is <300ms (no perceived benefit) or the loading state is decorative — use Display/AtlProgress.\n\nAPI surface:\n- Variant `variant`: text | circular | rectangular → AtlSkeletonSpec.variant\n- (code-only: `width`, `height`, `animated`)\n\nA11y: hidden from screen readers via aria-hidden — assistive tech announces the loading state via the parent region's aria-busy.",
+      "variantAxes": {
+        "variant": [
+          "text",
+          "circular",
+          "rectangular"
+        ]
+      },
+      "variants": [
+        {
+          "variant": "text"
+        },
+        {
+          "variant": "circular"
+        },
+        {
+          "variant": "rectangular"
+        }
+      ],
+      "sampledVariant": "55:99",
+      "nodes": [
+        {
+          "name": "variant=text",
+          "type": "COMPONENT",
+          "hasChildren": false,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [
+            "#e2e8f0"
+          ],
+          "unboundRadius": 4,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Display/AtlProgress",
+      "selector": "AtlProgress",
+      "nodeId": "420:153",
+      "description": "Linear progress indicator. Maps to AtlProgressSpec in libs/spec.\n\nUse when: an ongoing operation has known or unknown duration. Determinate (with value) shows progress; indeterminate just signals activity.\n\nDon't use when: state isn't quantifiable nor ongoing — use Display/AtlSkeleton or a transient Overlay/AtlToast.\n\nAPI surface:\n- Variant `variant`: default | success | warning | danger → AtlProgressSpec.variant\n- Variant `size`: sm | md | lg → AtlProgressSpec.size\n- Boolean `indeterminate` → AtlProgressSpec.indeterminate\n- (code-only: `value`, `max`, `label` — required aria-label for screen readers)\n\nA11y: `label` prop is required by ARIA when no visible label is nearby; otherwise screen readers announce only \"progress bar 47%\".",
+      "variantAxes": {
+        "variant": [
+          "default",
+          "success",
+          "warning",
+          "danger"
+        ],
+        "size": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "variants": [
+        {
+          "variant": "default",
+          "size": "sm"
+        },
+        {
+          "variant": "default",
+          "size": "md"
+        },
+        {
+          "variant": "default",
+          "size": "lg"
+        },
+        {
+          "variant": "success",
+          "size": "sm"
+        },
+        {
+          "variant": "success",
+          "size": "md"
+        },
+        {
+          "variant": "success",
+          "size": "lg"
+        },
+        {
+          "variant": "warning",
+          "size": "sm"
+        },
+        {
+          "variant": "warning",
+          "size": "md"
+        },
+        {
+          "variant": "warning",
+          "size": "lg"
+        },
+        {
+          "variant": "danger",
+          "size": "sm"
+        },
+        {
+          "variant": "danger",
+          "size": "md"
+        },
+        {
+          "variant": "danger",
+          "size": "lg"
+        }
+      ],
+      "sampledVariant": "420:81",
+      "nodes": [
+        {
+          "name": "variant=default, size=sm",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "track",
+          "type": "RECTANGLE",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 9999,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "fill",
+          "type": "RECTANGLE",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 9999,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Display/AtlAvatar",
+      "selector": "AtlAvatar",
+      "nodeId": "55:151",
+      "description": "Avatar with graceful image → initials → icon fallback. Maps to AtlAvatarSpec in libs/spec.\n\nUse when: representing a user or entity. For multiple stacked avatars, use AtlAvatarGroup (deferred — currently illustrated by sibling frames in this section).\n\nAPI surface:\n- Variant `shape`: circle | square → AtlAvatarSpec.shape\n- Variant `size`: xs | sm | md | lg | xl → AtlAvatarSpec.size\n- Text `Initials`: fallback text shown when no image available\n- (code-only: `src`, `alt`, `name`, `status`)\n\nStatus: spec field `status` (online/offline/away/busy) is illustrated alongside but not yet a Variant axis — follow-up.",
+      "variantAxes": {
+        "shape": [
+          "circle",
+          "square"
+        ],
+        "size": [
+          "xs",
+          "sm",
+          "md",
+          "lg",
+          "xl"
+        ]
+      },
+      "variants": [
+        {
+          "shape": "circle",
+          "size": "xs"
+        },
+        {
+          "shape": "circle",
+          "size": "sm"
+        },
+        {
+          "shape": "circle",
+          "size": "md"
+        },
+        {
+          "shape": "circle",
+          "size": "lg"
+        },
+        {
+          "shape": "circle",
+          "size": "xl"
+        },
+        {
+          "shape": "square",
+          "size": "xs"
+        },
+        {
+          "shape": "square",
+          "size": "sm"
+        },
+        {
+          "shape": "square",
+          "size": "md"
+        },
+        {
+          "shape": "square",
+          "size": "lg"
+        },
+        {
+          "shape": "square",
+          "size": "xl"
+        }
+      ],
+      "sampledVariant": "55:146",
+      "nodes": [
+        {
+          "name": "shape=circle, size=xs",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 9999,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Overlay/AtlToast",
+      "selector": "AtlToast",
+      "nodeId": "55:47",
+      "description": "Transient notification. Maps to AtlToastVariant + AtlToastOptions + AtlToastContainerPosition in libs/spec.\n\nUse when: non-blocking feedback for an async action (saved, copied, error). For critical interruptions use Overlay/AtlDialog.\n\nAPI surface (Figma → spec):\n- Variant `variant`: default | success | warning | danger | info → AtlToastVariant\n- Variant `position`: top-right | top-center | bottom-right | bottom-center → AtlToastContainerPosition (where the toast container anchors on the page)\n- Boolean `dismissible` → AtlToastOptions.dismissible\n- Text `Message`: notification content\n- (code-only: `duration: number` → AtlToastOptions.duration)\n\nA11y: aria-live=\"polite\" for default/success/info; aria-live=\"assertive\" for warning/danger.\n\nStatus: 2026-04-27 — `position` Variant axis added per AtlToastContainerPosition. Asymmetric matrix: 5 variants × top-right + 3 illustrative (default × top-center, bottom-right, bottom-center). Cross-product (5×4) can be filled later. `dismissible` Boolean added.",
+      "variantAxes": {
+        "variant": [
+          "default",
+          "success",
+          "warning",
+          "danger",
+          "info"
+        ],
+        "position": [
+          "top-right",
+          "top-center",
+          "bottom-right",
+          "bottom-center"
+        ]
+      },
+      "variants": [
+        {
+          "variant": "default",
+          "position": "top-right"
+        },
+        {
+          "variant": "success",
+          "position": "top-right"
+        },
+        {
+          "variant": "warning",
+          "position": "top-right"
+        },
+        {
+          "variant": "danger",
+          "position": "top-right"
+        },
+        {
+          "variant": "info",
+          "position": "top-right"
+        },
+        {
+          "variant": "default",
+          "position": "top-center"
+        },
+        {
+          "variant": "default",
+          "position": "bottom-right"
+        },
+        {
+          "variant": "default",
+          "position": "bottom-center"
+        }
+      ],
+      "sampledVariant": "55:42",
+      "nodes": [
+        {
+          "name": "variant=default, position=top-right",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [
+            "#1e293b",
+            "#334155"
+          ],
+          "unboundRadius": 10,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom",
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "💬",
+          "type": "TEXT",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#f1f5f9"
+          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Action completed.",
+          "type": "TEXT",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#f1f5f9"
+          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "✕",
+          "type": "TEXT",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#f1f5f9"
+          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Navigation/AtlBreadcrumbs",
+      "selector": "AtlBreadcrumbs",
+      "nodeId": "55:141",
+      "description": "Hierarchical navigation trail. Maps to AtlBreadcrumbsSpec in libs/spec.\n\nUse when: pages live in a hierarchy and the user benefits from seeing where they are. For top-level navigation use Navigation/AtlTabGroup or a sidebar.\n\nAPI surface:\n- Variant `items`: 3 | 4 | 5 — illustrative item-count Variants\n- (code-only: `separator` string)\n\nA11y: aria-label=\"Breadcrumb\" on the nav element; current page marked aria-current=\"page\".",
+      "variantAxes": {
+        "items": [
+          "3",
+          "4",
+          "5"
+        ]
+      },
+      "variants": [
+        {
+          "items": "3"
+        },
+        {
+          "items": "4"
+        },
+        {
+          "items": "5"
+        }
+      ],
+      "sampledVariant": "55:138",
+      "nodes": [
+        {
+          "name": "items=3",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Navigation/AtlPagination",
+      "selector": "AtlPagination",
+      "nodeId": "55:145",
+      "description": "Page navigator for paged data. Maps to AtlPaginationSpec in libs/spec.\n\nUse when: data spans many pages and user navigates incrementally. For infinite scroll surfaces, omit pagination entirely.\n\nAPI surface:\n- Variant `page`: first | middle | last — illustrative position\n- (code-only: `page`, `pageCount`, `siblingCount`, `showFirstLast`)\n\nA11y: nav with aria-label=\"Pagination\"; current page marked aria-current=\"page\".",
+      "variantAxes": {
+        "page": [
+          "first",
+          "middle",
+          "last"
+        ]
+      },
+      "variants": [
+        {
+          "page": "first"
+        },
+        {
+          "page": "middle"
+        },
+        {
+          "page": "last"
+        }
+      ],
+      "sampledVariant": "55:142",
+      "nodes": [
+        {
+          "name": "page=first",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [
+            "#f8fafc"
+          ],
+          "unboundRadius": 6,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 6,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [
+            "#f8fafc"
+          ],
+          "unboundRadius": 6,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [
+            "#f8fafc"
+          ],
+          "unboundRadius": 6,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [
+            "#f8fafc"
+          ],
+          "unboundRadius": 6,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [
+            "#f8fafc"
+          ],
+          "unboundRadius": 6,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [
+            "#f8fafc"
+          ],
+          "unboundRadius": 6,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [
+            "#f8fafc"
+          ],
+          "unboundRadius": 6,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [
+            "#f8fafc"
+          ],
+          "unboundRadius": 6,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Overlay/AtlDrawer",
+      "selector": "AtlDrawer",
+      "nodeId": "421:398",
+      "description": "Side panel. Maps to AtlDrawerSpec in libs/spec.\n\nUse when: content needs more room than a Tooltip but should not block the underlying view (filters, settings, multi-section content).\n\nAPI surface (Figma → spec):\n- Variant `position`: right | left | top | bottom → AtlDrawerSpec.position\n- Variant `size`: sm | md | lg | full → AtlDrawerSpec.size\n- Boolean `closeOnBackdrop` → AtlDrawerSpec.closeOnBackdrop\n- (code-only: `open: boolean`)\n\nA11y: ARIA dialog with focus trap; aria-labelledby names the drawer's heading. Esc closes. First focusable element receives focus on open.\n\nStatus: 2026-04-27 — `size` Variant filled out per spec. Asymmetric matrix: 4 positions on `md` + 3 sizes (sm/lg/full) on `right`. Cross-product (4×4) can be filled later by cloning.",
+      "variantAxes": {
+        "position": [
+          "right",
+          "left",
+          "top",
+          "bottom"
+        ],
+        "size": [
+          "md",
+          "sm",
+          "lg",
+          "full"
+        ]
+      },
+      "variants": [
+        {
+          "position": "right",
+          "size": "md"
+        },
+        {
+          "position": "left",
+          "size": "md"
+        },
+        {
+          "position": "top",
+          "size": "md"
+        },
+        {
+          "position": "bottom",
+          "size": "md"
+        },
+        {
+          "position": "right",
+          "size": "sm"
+        },
+        {
+          "position": "right",
+          "size": "lg"
+        },
+        {
+          "position": "right",
+          "size": "full"
+        }
+      ],
+      "sampledVariant": "421:342",
+      "nodes": [
+        {
+          "name": "position=right, size=md",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [
+            "#f0f0f7"
+          ],
+          "unboundRadius": 8,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "backdrop",
+          "type": "RECTANGLE",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#000000"
+          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "panel",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "header",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom",
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "close",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 6,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "content",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom",
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "footer",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom",
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 6,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 6,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Display/AtlTable",
+      "selector": "AtlTable",
+      "nodeId": "421:1183",
+      "description": "Tabular data display. Maps to AtlTableSpec in libs/spec.\n\nUse when: rows of comparable data need scanning by column. For lists of dissimilar items use Display/AtlCard stacks.\n\nAPI surface (Figma → spec):\n- Variant `variant`: default | striped | bordered → AtlTableSpec.variant\n- Variant `size`: sm | md | lg → AtlTableSpec.size\n- Variant `state`: default — interaction state (legacy mash-up removed; specific states moved to Booleans)\n- Boolean `sortable` → AtlTableSpec.sortable\n- Boolean `selectable` → AtlTableSpec.selectable\n- Boolean `stickyHeader` → AtlTableSpec.stickyHeader\n- Boolean `disabled` → AtlFormFieldSpec.disabled (whole-table disabled)\n- Boolean `loading` → row skeletons / spinner overlay\n- Boolean `empty` → empty-state placeholder rendered instead of rows\n- Boolean `error` → error banner / row replacement\n\nA11y: aria-label required for screen-reader region announcement. Wrapper is keyboard-focusable (tabindex=0) for horizontal scroll.\n\nStatus: 2026-04-27 — `state` Variant slimmed from {default,empty,focus,hover,active,loading,disabled,error} to default-only; visual states moved to orthogonal Booleans matching AtlFormFieldSpec patterns used across Form/*.",
+      "variantAxes": {
+        "variant": [
+          "default",
+          "striped",
+          "bordered"
+        ],
+        "size": [
+          "md",
+          "sm",
+          "lg"
+        ],
+        "state": [
+          "default"
+        ]
+      },
+      "variants": [
+        {
+          "variant": "default",
+          "size": "md",
+          "state": "default"
+        },
+        {
+          "variant": "striped",
+          "size": "md",
+          "state": "default"
+        },
+        {
+          "variant": "bordered",
+          "size": "md",
+          "state": "default"
+        },
+        {
+          "variant": "default",
+          "size": "sm",
+          "state": "default"
+        },
+        {
+          "variant": "default",
+          "size": "lg",
+          "state": "default"
+        }
+      ],
+      "sampledVariant": "421:884",
+      "nodes": [
+        {
+          "name": "variant=default, size=md, state=default",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "AtlTable / default-md",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 8,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "thead",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "tbody",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "tr-1",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "tr-2",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "tr-3",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "tr-4",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight"
+          ],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Display/AtlCodeBlock",
+      "selector": "AtlCodeBlock",
+      "nodeId": "420:286",
+      "description": "Code snippet display. Not in libs/spec — UI helper component for rendering source code.\n\nUse when: showing source code, command-line examples, or other technical content with monospace formatting.\n\nAPI surface:\n- Variant `variant`: default | with-filename | with-line-numbers | no-copy\n\nA11y: <pre><code> with role=\"region\" + aria-label naming the language.",
+      "variantAxes": {
+        "variant": [
+          "default",
+          "with-filename",
+          "with-line-numbers",
+          "no-copy"
+        ]
+      },
+      "variants": [
+        {
+          "variant": "default"
+        },
+        {
+          "variant": "with-filename"
+        },
+        {
+          "variant": "with-line-numbers"
+        },
+        {
+          "variant": "no-copy"
+        }
+      ],
+      "sampledVariant": "420:186",
+      "nodes": [
+        {
+          "name": "variant=default",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 8,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "header",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom",
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "copy-btn",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 6,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom",
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Rectangle",
+          "type": "RECTANGLE",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 2,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "body",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom",
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "line-1",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "line-2",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "line-3",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "line-4",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "line-5",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "line-6",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "line-7",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "line-8",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Form/AtlCombobox",
+      "selector": "AtlCombobox",
+      "nodeId": "421:339",
+      "description": "Combobox — searchable select. Maps to AtlComboboxSpec in libs/spec.\n\nUse when: user picks one value from a long or dynamic list (50+ options, fetched data, type-ahead). For short fixed lists use Form/AtlSelect.\n\nDon't use when: list is short and known up-front (use Form/AtlSelect), or user must compare options side by side (use Form/AtlRadioGroup).\n\nAPI surface (Figma → spec):\n- Variant `state`: default | hover | focus | open | filtered | selected\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Boolean `invalid`: maps to AtlFormFieldSpec.invalid\n- Boolean `required`: maps to AtlFormFieldSpec.required\n- (code-only: `options: AtlComboboxOption[]`, `placeholder`)\n\nA11y: combines a text input with a dropdown list. Arrow keys navigate, Enter selects, Escape closes. Disabled state uses aria-disabled.\n\nStatus: structural restructure 2026-04-27 — `state` enum slimmed to interaction + open + filtered + selected; disabled/invalid/required moved to Booleans matching spec.",
+      "variantAxes": {
+        "state": [
+          "default",
+          "open",
+          "filtered",
+          "selected",
+          "hover",
+          "focus"
+        ]
+      },
+      "variants": [
+        {
+          "state": "default"
+        },
+        {
+          "state": "open"
+        },
+        {
+          "state": "filtered"
+        },
+        {
+          "state": "selected"
+        },
+        {
+          "state": "hover"
+        },
+        {
+          "state": "focus"
+        }
+      ],
+      "sampledVariant": "421:291",
+      "nodes": [
+        {
+          "name": "state=default",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "input",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 8,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Navigation/AtlStepper",
+      "selector": "AtlStepper",
+      "nodeId": "421:505",
+      "description": "Sequential progress through a multi-step flow. Maps to AtlStepperSpec + AtlStepSpec in libs/spec.\n\nUse when: a task is broken into clear sequential steps where progress matters (checkout, onboarding, multi-page form).\n\nDon't use when: steps are independent (use Navigation/AtlTabGroup) or step count is dynamic.\n\nAPI surface (Figma → spec):\n- Variant `orientation`: horizontal | vertical → AtlStepperSpec.orientation\n- Variant `state`: default | completed | error | optional → maps to AtlStepSpec flags (completed/error/optional)\n- Boolean `linear` → AtlStepperSpec.linear (when true, only the active and completed steps are clickable)\n- (code-only: `activeStep: number`)\n\nA11y: ol with aria-label naming the flow; current step aria-current=\"step\". Each step's clickability reflects `linear` + completed state.\n\nStatus: 2026-04-27 — single `variant` axis (default|completed|error|optional|vertical) split into orthogonal `orientation` + `state` Variant Properties. Full 2×4 matrix populated (8 variants total). Vertical-state visual indicators (V/completed, V/error, V/optional) currently inherit V/default content as placeholder — designer polish deferred. Horizontal-state variants carry the canonical state visuals.",
+      "variantAxes": {
+        "orientation": [
+          "horizontal",
+          "vertical"
+        ],
+        "state": [
+          "default",
+          "completed",
+          "error",
+          "optional"
+        ]
+      },
+      "variants": [
+        {
+          "orientation": "horizontal",
+          "state": "default"
+        },
+        {
+          "orientation": "horizontal",
+          "state": "completed"
+        },
+        {
+          "orientation": "horizontal",
+          "state": "error"
+        },
+        {
+          "orientation": "horizontal",
+          "state": "optional"
+        },
+        {
+          "orientation": "vertical",
+          "state": "default"
+        },
+        {
+          "orientation": "vertical",
+          "state": "completed"
+        },
+        {
+          "orientation": "vertical",
+          "state": "error"
+        },
+        {
+          "orientation": "vertical",
+          "state": "optional"
+        }
+      ],
+      "sampledVariant": "421:407",
+      "nodes": [
+        {
+          "name": "orientation=horizontal, state=default",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom",
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "header",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "step-1",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "circle-active",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 9999,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "text",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "connector-wrap",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "step-2",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "circle-default",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 9999,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "text",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "connector-wrap",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "step-3",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "circle-default",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 9999,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "text",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Display/AtlAvatarGroup",
+      "selector": "AtlAvatarGroup",
+      "nodeId": "508:7221",
+      "description": "Stacked avatar group with overflow indicator. Maps to AtlAvatarGroupSpec in libs/spec.\n\nUse when: representing a small set of users (a team, collaborators on a doc, attendees) where individual identity matters less than the count. For a single user use Display/AtlAvatar.\n\nDon't use when: each user needs to be addressable (use a list of Display/AtlAvatar) or the group has more than ~7 members worth showing (use a count + link).\n\nAPI surface (Figma → spec):\n- Variant `size`: xs | sm | md | lg | xl → AtlAvatarGroupSpec.size — mirrors AtlAvatar's size axis\n- Text `max`: maximum visible avatars before overflow (default \"3\") → AtlAvatarGroupSpec.max\n\nVisual: HORIZONTAL auto-layout with negative item spacing for overlap. The trailing \"+N\" frame is the overflow indicator. Item spacing scales with size (-6 at xs through -12 at xl).\n\nA11y: wrap in a list with aria-label naming the group (\"Team members\"). Each avatar's accessible name should be the user's name; the overflow indicator should have aria-label like \"and 2 more\".\n\nStatus: 2026-04-27 — promoted from standalone Component to Component Set with `size` Variant axis matching AtlAvatarGroupSpec.size. 5 variants total (xs/sm/md/lg/xl).",
+      "variantAxes": {
+        "size": [
+          "md",
+          "xs",
+          "sm",
+          "lg",
+          "xl"
+        ]
+      },
+      "variants": [
+        {
+          "size": "md"
+        },
+        {
+          "size": "xs"
+        },
+        {
+          "size": "sm"
+        },
+        {
+          "size": "lg"
+        },
+        {
+          "size": "xl"
+        }
+      ],
+      "sampledVariant": "507:6305",
+      "nodes": [
+        {
+          "name": "size=md",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#e2e8f0"
+          ],
+          "unboundRadius": 9999,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 9999,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 9999,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 9999,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "AI/AtlChat",
+      "selector": "AtlChat",
+      "nodeId": "507:2953",
+      "description": "Conversational AI surface. Maps to AtlChatSpec in libs/spec.\n\nUse when: a model-driven interaction needs a UI surface. Pick the variant by attention demand: `drawer` for a side panel that coexists with the page, `popup` for a transient floating bubble, `inline` for embedded chat that lives in the page flow.\n\nDon't use when: the user is filling a structured form (use Form/* components) or initiating a single action (use Action/AtlButton).\n\nAPI surface (Figma → spec):\n- Variant `variant`: drawer | popup | inline → AtlChatSpec.variant\n- Boolean `open` → AtlChatSpec.open\n- (code-only: `status: idle | streaming | error`, message handling)\n\nA11y: ARIA dialog (drawer/popup) or region (inline). aria-live=\"polite\" on the message log so streamed assistant tokens announce as they arrive. Status changes (streaming → idle/error) announced via aria-live region.\n\nStatus: 2026-04-27 — merged from three separate Sections (AtlChat / drawer, AtlChat / popup, AtlChat / inline) into one Component Set with `variant` Variant Property matching AtlChatSpec. Old `status` (idle/streaming/error) and `empty` mockup frames remain illustrated as sibling frames in the AI section pending follow-up Variant axis.",
+      "variantAxes": {
+        "variant": [
+          "drawer",
+          "popup",
+          "inline"
+        ]
+      },
+      "variants": [
+        {
+          "variant": "drawer"
+        },
+        {
+          "variant": "popup"
+        },
+        {
+          "variant": "inline"
+        }
+      ],
+      "sampledVariant": "507:2950",
+      "nodes": [
+        {
+          "name": "variant=drawer",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [
+            "#f1f3f6"
+          ],
+          "unboundRadius": 12,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "app-header",
+          "type": "RECTANGLE",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#ffffff",
+            "#e5e7eb"
+          ],
+          "unboundRadius": 8,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "app-title",
+          "type": "TEXT",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#0f172a"
+          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "content-block-1",
+          "type": "RECTANGLE",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#ffffff",
+            "#e5e7eb"
+          ],
+          "unboundRadius": 8,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "content-block-2",
+          "type": "RECTANGLE",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#ffffff",
+            "#e5e7eb"
+          ],
+          "unboundRadius": 8,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "content-block-3",
+          "type": "RECTANGLE",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#ffffff",
+            "#e5e7eb"
+          ],
+          "unboundRadius": 8,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "content-block-4",
+          "type": "RECTANGLE",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#ffffff",
+            "#e5e7eb"
+          ],
+          "unboundRadius": 8,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "drawer-panel",
+          "type": "RECTANGLE",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#ffffff"
+          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "header-divider",
+          "type": "RECTANGLE",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#e5e7eb"
+          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "ai-avatar",
+          "type": "ELLIPSE",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#b5e61c"
+          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "avatar-glyph",
+          "type": "TEXT",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#0f172a"
+          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "drawer-title",
+          "type": "TEXT",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#0f172a"
+          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "close-bg",
+          "type": "RECTANGLE",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#ffffff",
+            "#e5e7eb"
+          ],
+          "unboundRadius": 6,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "close-x",
+          "type": "TEXT",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#64748b"
+          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "msg-asst-1",
+          "type": "RECTANGLE",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#f5f5f5"
+          ],
+          "unboundRadius": 12,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "msg-asst-1-text",
+          "type": "TEXT",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#0f172a"
+          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "msg-user-1",
+          "type": "RECTANGLE",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#007070"
+          ],
+          "unboundRadius": 12,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "msg-user-1-text",
+          "type": "TEXT",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#ffffff"
+          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "msg-asst-2",
+          "type": "RECTANGLE",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#f5f5f5"
+          ],
+          "unboundRadius": 12,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "msg-asst-2-text",
+          "type": "TEXT",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#0f172a"
+          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "msg-user-2",
+          "type": "RECTANGLE",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#007070"
+          ],
+          "unboundRadius": 12,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "msg-user-2-text",
+          "type": "TEXT",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#ffffff"
+          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "footer-bg",
+          "type": "RECTANGLE",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#ffffff"
+          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "footer-divider",
+          "type": "RECTANGLE",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [
+            "#e5e7eb"
+          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "status-badge",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 9999,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom",
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "input-textarea",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 8,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "send-button",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "code-block-instance",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 8,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "header",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom",
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "copy-btn",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 6,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom",
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Rectangle",
+          "type": "RECTANGLE",
+          "hasChildren": false,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 2,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "body",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom",
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "line-1",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "line-2",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "line-3",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "line-4",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "line-5",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "line-6",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "line-7",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "line-8",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
           "nonSemanticTokens": []
         }
       ]

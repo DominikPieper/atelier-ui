@@ -455,3 +455,50 @@ snapshot; a snapshot-freshness check is the prerequisite to ever putting `check:
 **Note on in-session refresh:** `figma:snapshot` could not be executed live because this Claude
 Code session already held the figma-console bridge (single-plugin-attachment); the committed
 snapshot was built from the same MCP read-tools the generator uses, in the identical schema.
+
+## Follow-ups from post-rename full review — 2026-07-21
+
+Source: high-effort workflow code review of the Llm→Atl rename diff (8
+distinct defects, all fixed same day) + repo-health sweep. These are the
+items deliberately NOT fixed in that pass:
+
+- [ ] **a11y-parity coverage is 1 of 31** — only Button has `.a11y.spec` in
+      each framework; `gen:a11y` hardcodes `atl-button.a11y`. Expanding is a
+      per-component effort (ADR-0025 scope decision): parametrize `gen:a11y`,
+      add specs component-by-component starting with the interaction-heavy
+      ones (Dialog, Menu, Tabs, Select).
+- [ ] **4 hand-maintained spec→component maps drift-prone** —
+      `libs/spec/src/metadata/index.ts` (registry),
+      `tools/scripts/check-docs-sync.js` (SPEC_TO_DOCS),
+      `tools/scripts/lib/component-axes.js` (UNION_TO_COMPONENT),
+      `tools/scripts/check-cookbook-parity.mjs` (SUBCOMPONENT_MAP). The
+      metadata registry is the closest fit as single source; deriving the
+      others needs an ADR (shapes differ, e.g. radio vs radio-group slugs).
+- [ ] **`@nx/eslint:lint` executor deprecated** (removal in Nx v24) in
+      `libs/{angular,react,vue}/project.json` — migrate via
+      `nx g @nx/eslint:convert-to-inferred`, separate mechanical commit.
+- [ ] **29 jsx-a11y/aria-role warnings in libs/react** — `AtlChatMessage`'s
+      domain prop is literally named `role` (`'user' | 'assistant' |
+      'system'`); it never reaches the DOM as an ARIA role (DOM gets
+      `role="listitem"`), but the linter flags the JSX attribute statically.
+      Decide: eslint override for chat files vs renaming the spec prop
+      (breaking, all three frameworks).
+- [ ] **astro-og-canvas TODO** (`docs/astro.config.mjs`) — deps
+      (`astro-og-canvas`, `canvaskit-wasm`) installed but unwired since the
+      docs redesign; either implement the OGImageRoute endpoint or drop the
+      two deps.
+- [ ] **AtlOption still unstyled** (documented in ADR-0028) — the option row
+      inside `<atl-select>` never had a stylesheet; needs design work, not a
+      scoping fix.
+- [x] **`check:parity` activated** — added to `check:all` (exit 0, warnings
+      non-blocking); AtlButton recorded (score 0.90). Remaining 28 masters
+      still UNVERIFIED-warn — record them via `figma_check_design_parity` +
+      `npm run parity:record` component-by-component.
+- [ ] **`check:figma` NOT yet in `check:all`/CI** — the full 29-master
+      snapshot surfaced 77 pre-existing conformance findings (16 blocker /
+      61 critical / 2 warning): missing variant axes (Input.type,
+      Avatar.status, Table.align, Chat.status/messageRole), missing
+      variantMatrix entries (Select, Pagination, Drawer, Combobox), unbound
+      colors/radii/spacing across ~20 masters, Toast/CodeBlock without spec
+      interfaces. Fix Figma-side (figma-workspace-architect job) or
+      allowlist the deliberate gaps, then activate the gate.

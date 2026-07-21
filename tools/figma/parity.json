@@ -2,7 +2,32 @@
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "note": "Per-component design-parity records. Written by `npm run parity:record` after a human/agent runs figma_check_design_parity; read by `npm run check:parity`. Each record's inputsHash covers libs/{angular,react,vue}/src/lib/<module>/ so a spec/story/impl/css change since the last verify makes the gate ask for a re-verify. See plan/adr/0024.",
-    "generatedAt": null
+    "generatedAt": "2026-07-21T20:29:42.293Z"
   },
-  "components": {}
+  "components": {
+    "AtlButton": {
+      "figmaNodeId": "129:20",
+      "parityScore": 0.9,
+      "verifiedAt": "2026-07-21T20:29:42.246Z",
+      "verifiedSha": "2ac9047",
+      "inputsHash": "sha256:b2c35e6fecb55e637038897704fd6d2ce1c89d5df01fee7be7ac917218e38452",
+      "inputs": [
+        "libs/angular/src/lib/button/atl-button.a11y.spec.ts",
+        "libs/angular/src/lib/button/atl-button.css",
+        "libs/angular/src/lib/button/atl-button.spec.ts",
+        "libs/angular/src/lib/button/atl-button.stories.ts",
+        "libs/angular/src/lib/button/atl-button.ts",
+        "libs/react/src/lib/button/atl-button.a11y.spec.tsx",
+        "libs/react/src/lib/button/atl-button.css",
+        "libs/react/src/lib/button/atl-button.spec.tsx",
+        "libs/react/src/lib/button/atl-button.stories.tsx",
+        "libs/react/src/lib/button/atl-button.tsx",
+        "libs/vue/src/lib/button/atl-button.a11y.spec.ts",
+        "libs/vue/src/lib/button/atl-button.css",
+        "libs/vue/src/lib/button/atl-button.spec.ts",
+        "libs/vue/src/lib/button/atl-button.stories.ts",
+        "libs/vue/src/lib/button/atl-button.vue"
+      ]
+    }
+  }
 }

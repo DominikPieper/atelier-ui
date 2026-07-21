@@ -49,7 +49,8 @@ const MASTERS = [
   { nodeId: '55:41' }, { nodeId: '55:87' }, { nodeId: '55:137' }, { nodeId: '420:185' },
   { nodeId: '55:102' }, { nodeId: '420:153' }, { nodeId: '55:151' }, { nodeId: '55:47' },
   { nodeId: '55:141' }, { nodeId: '55:145' }, { nodeId: '421:398' }, { nodeId: '421:1183' },
-  { nodeId: '420:286' }, { nodeId: '421:339' }, { nodeId: '421:505' },
+  { nodeId: '420:286' }, { nodeId: '421:339' }, { nodeId: '421:505' }, { nodeId: '508:7221' },
+  { nodeId: '507:2953' },
 ];
 
 main().catch((err) => {
@@ -68,7 +69,16 @@ async function main() {
 
   try {
     // 1. Probe the bridge — fail loud if the plugin is not connected.
-    const status = await call(client, 'figma_get_status', { probe: true });
+    // The plugin discovers a freshly-spawned server via the advertised port
+    // file and attaches ~0.5s after startup, so retry the probe briefly
+    // instead of failing on the first attempt (observed race: probe at
+    // t+0ms, plugin connect at t+400ms).
+    let status = null;
+    for (let attempt = 0; attempt < 10; attempt++) {
+      status = await call(client, 'figma_get_status', { probe: true });
+      if (isConnected(status)) break;
+      await new Promise((r) => setTimeout(r, 1000));
+    }
     if (!isConnected(status)) {
       console.error(
         '✗ Figma Desktop Bridge not connected. Open Figma Desktop with the file and the\n' +
@@ -157,7 +167,12 @@ function isConnected(status) {
     status?.connected ||
       status?.plugin?.connected ||
       status?.details?.plugin?.connected ||
-      status?.probeResult?.success
+      status?.probeResult?.success ||
+      // figma-console-mcp >= 1.35 moved the probe result under `setup` and
+      // reports the live transport under `transport.websocket.available`.
+      status?.setup?.probeResult?.success ||
+      status?.setup?.valid ||
+      status?.transport?.websocket?.available
   );
 }
 
