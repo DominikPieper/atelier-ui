@@ -1,0 +1,86 @@
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { AtlInput } from './atl-input';
+import { covers } from '../../testing/behavior';
+
+describe('AtlInput', () => {
+  covers('input', 'renders-input')('renders an input element', () => {
+    render(<AtlInput placeholder="Enter text" />);
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
+  });
+
+  it('applies atl-input class to wrapper', () => {
+    const { container } = render(<AtlInput />);
+    expect(container.firstChild).toHaveClass('atl-input');
+  });
+
+  it('renders with label', () => {
+    render(<AtlInput label="Email" type="email" />);
+    expect(screen.getByLabelText('Email')).toBeInTheDocument();
+  });
+
+  covers('input', 'disabled')('is disabled when disabled prop is true', () => {
+    render(<AtlInput disabled />);
+    expect(screen.getByRole('textbox')).toBeDisabled();
+  });
+
+  it('applies is-disabled class when disabled', () => {
+    const { container } = render(<AtlInput disabled />);
+    expect(container.firstChild).toHaveClass('is-disabled');
+  });
+
+  covers('input', 'invalid')('applies is-invalid class when invalid', () => {
+    const { container } = render(<AtlInput invalid />);
+    expect(container.firstChild).toHaveClass('is-invalid');
+  });
+
+  it('applies is-readonly class when readOnly', () => {
+    const { container } = render(<AtlInput readOnly />);
+    expect(container.firstChild).toHaveClass('is-readonly');
+  });
+
+  it('sets aria-invalid when invalid', () => {
+    render(<AtlInput invalid />);
+    expect(screen.getByRole('textbox')).toHaveAttribute('aria-invalid', 'true');
+  });
+
+  covers('input', 'errors')('shows error messages', () => {
+    render(<AtlInput invalid errors={['Required field']} />);
+    expect(screen.getByText('Required field')).toBeInTheDocument();
+  });
+
+  it('shows multiple error messages', () => {
+    render(<AtlInput invalid errors={['Required field', 'Invalid format']} />);
+    expect(screen.getByText('Required field')).toBeInTheDocument();
+    expect(screen.getByText('Invalid format')).toBeInTheDocument();
+  });
+
+  covers('input', 'updates-value')('calls onValueChange on input', async () => {
+    const user = userEvent.setup();
+    const onValueChange = vi.fn();
+    render(<AtlInput onValueChange={onValueChange} />);
+    await user.type(screen.getByRole('textbox'), 'Hello');
+    expect(onValueChange).toHaveBeenCalled();
+    expect(onValueChange).toHaveBeenLastCalledWith('Hello');
+  });
+
+  it('calls onChange on input', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(<AtlInput onChange={onChange} />);
+    await user.type(screen.getByRole('textbox'), 'A');
+    expect(onChange).toHaveBeenCalled();
+  });
+
+  it('forwards placeholder', () => {
+    render(<AtlInput placeholder="Type here" />);
+    expect(screen.getByPlaceholderText('Type here')).toBeInTheDocument();
+  });
+
+  it('renders password type input', () => {
+    render(<AtlInput type="password" />);
+    // password inputs don't have textbox role
+    const input = document.querySelector('input[type="password"]');
+    expect(input).toBeInTheDocument();
+  });
+});

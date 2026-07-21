@@ -1,47 +1,47 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { userEvent, expect, screen } from 'storybook/test';
 import { useState } from 'react';
-import { LlmButton } from './button/llm-button';
+import { AtlButton } from './button/atl-button';
 import {
-  LlmCard,
-  LlmCardHeader,
-  LlmCardContent,
-  LlmCardFooter,
-} from './card/llm-card';
-import { LlmBadge } from './badge/llm-badge';
-import { LlmInput } from './input/llm-input';
-import { LlmCheckbox } from './checkbox/llm-checkbox';
-import { LlmToggle } from './toggle/llm-toggle';
-import { LlmAlert } from './alert/llm-alert';
-import { LlmSelect, LlmOption } from './select/llm-select';
+  AtlCard,
+  AtlCardHeader,
+  AtlCardContent,
+  AtlCardFooter,
+} from './card/atl-card';
+import { AtlBadge } from './badge/atl-badge';
+import { AtlInput } from './input/atl-input';
+import { AtlCheckbox } from './checkbox/atl-checkbox';
+import { AtlToggle } from './toggle/atl-toggle';
+import { AtlAlert } from './alert/atl-alert';
+import { AtlSelect, AtlOption } from './select/atl-select';
 import {
-  LlmDialog,
-  LlmDialogHeader,
-  LlmDialogContent,
-  LlmDialogFooter,
-} from './dialog/llm-dialog';
-import { LlmTabGroup, LlmTab } from './tabs/llm-tabs';
+  AtlDialog,
+  AtlDialogHeader,
+  AtlDialogContent,
+  AtlDialogFooter,
+} from './dialog/atl-dialog';
+import { AtlTabGroup, AtlTab } from './tabs/atl-tabs';
 import {
-  LlmAccordionGroup,
-  LlmAccordionItem,
-  LlmAccordionHeader,
-} from './accordion/llm-accordion';
+  AtlAccordionGroup,
+  AtlAccordionItem,
+  AtlAccordionHeader,
+} from './accordion/atl-accordion';
 import {
-  LlmTable,
-  LlmThead,
-  LlmTbody,
-  LlmTr,
-  LlmTh,
-  LlmTd,
-} from './table/llm-table';
-import { LlmProgress } from './progress/llm-progress';
+  AtlTable,
+  AtlThead,
+  AtlTbody,
+  AtlTr,
+  AtlTh,
+  AtlTd,
+} from './table/atl-table';
+import { AtlProgress } from './progress/atl-progress';
 import {
-  LlmMenu,
-  LlmMenuItem,
-  LlmMenuSeparator,
-  LlmMenuTrigger,
-} from './menu/llm-menu';
-import { LlmTooltip } from './tooltip/llm-tooltip';
+  AtlMenu,
+  AtlMenuItem,
+  AtlMenuSeparator,
+  AtlMenuTrigger,
+} from './menu/atl-menu';
+import { AtlTooltip } from './tooltip/atl-tooltip';
 
 // ---------------------------------------------------------------------------
 // 1. Login Form
@@ -51,23 +51,23 @@ function LoginFormPattern({ showErrors = false }: { showErrors?: boolean }) {
   const [loading, setLoading] = useState(false);
   return (
     <div style={wrapper(400)}>
-      <LlmCard variant="elevated" padding="lg">
-        <LlmCardHeader>
+      <AtlCard variant="elevated" padding="lg">
+        <AtlCardHeader>
           <div>
             <h2 style={titleStyle}>Sign in</h2>
             <p style={subtitleStyle}>Enter your credentials to continue</p>
           </div>
-        </LlmCardHeader>
-        <LlmCardContent>
+        </AtlCardHeader>
+        <AtlCardContent>
           {showErrors && (
-            <LlmAlert variant="danger">
+            <AtlAlert variant="danger">
               Invalid email or password. Please try again.
-            </LlmAlert>
+            </AtlAlert>
           )}
           <div style={formStackStyle}>
             <div style={formFieldStyle}>
               <label style={fieldLabelStyle}>Email</label>
-              <LlmInput
+              <AtlInput
                 type="email"
                 placeholder="you@example.com"
                 invalid={showErrors}
@@ -75,17 +75,17 @@ function LoginFormPattern({ showErrors = false }: { showErrors?: boolean }) {
             </div>
             <div style={formFieldStyle}>
               <label style={fieldLabelStyle}>Password</label>
-              <LlmInput
+              <AtlInput
                 type="password"
                 placeholder="Enter your password"
                 invalid={showErrors}
               />
             </div>
-            <LlmCheckbox>Remember me</LlmCheckbox>
+            <AtlCheckbox>Remember me</AtlCheckbox>
           </div>
-        </LlmCardContent>
-        <LlmCardFooter>
-          <LlmButton
+        </AtlCardContent>
+        <AtlCardFooter>
+          <AtlButton
             variant="primary"
             size="md"
             loading={loading}
@@ -95,9 +95,9 @@ function LoginFormPattern({ showErrors = false }: { showErrors?: boolean }) {
             }}
           >
             Sign in
-          </LlmButton>
-        </LlmCardFooter>
-      </LlmCard>
+          </AtlButton>
+        </AtlCardFooter>
+      </AtlCard>
     </div>
   );
 }
@@ -111,28 +111,28 @@ function SettingsPagePattern() {
   return (
     <div style={wrapper(560)}>
       <h2 style={titleStyle}>Settings</h2>
-      <LlmTabGroup selectedIndex={tab} onSelectedIndexChange={setTab}>
-        <LlmTab label="Account">
+      <AtlTabGroup selectedIndex={tab} onSelectedIndexChange={setTab}>
+        <AtlTab label="Account">
           <div style={sectionStackStyle}>
             <div style={formFieldStyle}>
               <label style={fieldLabelStyle}>Display name</label>
-              <LlmInput placeholder="Jane Doe" />
+              <AtlInput placeholder="Jane Doe" />
             </div>
             <div style={formFieldStyle}>
               <label style={fieldLabelStyle}>Email</label>
-              <LlmInput type="email" placeholder="you@example.com" />
+              <AtlInput type="email" placeholder="you@example.com" />
             </div>
             <div style={formFieldStyle}>
               <label style={fieldLabelStyle}>Timezone</label>
-              <LlmSelect placeholder="Select timezone">
-                <LlmOption optionValue="utc">UTC</LlmOption>
-                <LlmOption optionValue="cet">Central European Time</LlmOption>
-                <LlmOption optionValue="pst">Pacific Standard Time</LlmOption>
-              </LlmSelect>
+              <AtlSelect placeholder="Select timezone">
+                <AtlOption optionValue="utc">UTC</AtlOption>
+                <AtlOption optionValue="cet">Central European Time</AtlOption>
+                <AtlOption optionValue="pst">Pacific Standard Time</AtlOption>
+              </AtlSelect>
             </div>
           </div>
-        </LlmTab>
-        <LlmTab label="Notifications">
+        </AtlTab>
+        <AtlTab label="Notifications">
           <div style={sectionStackStyle}>
             <div style={toggleRowStyle}>
               <div>
@@ -141,35 +141,35 @@ function SettingsPagePattern() {
                   Release notes and feature announcements
                 </div>
               </div>
-              <LlmToggle checked={true} />
+              <AtlToggle checked={true} />
             </div>
             <div style={toggleRowStyle}>
               <div>
                 <div style={toggleLabelStyle}>Weekly digest</div>
                 <div style={toggleHintStyle}>Activity summary every Monday</div>
               </div>
-              <LlmToggle checked={false} />
+              <AtlToggle checked={false} />
             </div>
             <div style={toggleRowStyle}>
               <div>
                 <div style={toggleLabelStyle}>Security alerts</div>
                 <div style={toggleHintStyle}>Critical account notifications</div>
               </div>
-              <LlmToggle checked={true} />
+              <AtlToggle checked={true} />
             </div>
           </div>
-        </LlmTab>
-        <LlmTab label="Billing">
+        </AtlTab>
+        <AtlTab label="Billing">
           <div style={sectionStackStyle}>
-            <LlmAlert variant="info">
+            <AtlAlert variant="info">
               Your next invoice of $29.00 will be charged on Apr 30.
-            </LlmAlert>
-            <LlmButton variant="outline" size="sm">
+            </AtlAlert>
+            <AtlButton variant="outline" size="sm">
               Manage payment method
-            </LlmButton>
+            </AtlButton>
           </div>
-        </LlmTab>
-      </LlmTabGroup>
+        </AtlTab>
+      </AtlTabGroup>
     </div>
   );
 }
@@ -182,26 +182,26 @@ function ConfirmationDialogPattern() {
   const [open, setOpen] = useState(false);
   return (
     <div style={wrapper(400)}>
-      <LlmButton variant="outline" onClick={() => setOpen(true)}>
+      <AtlButton variant="outline" onClick={() => setOpen(true)}>
         Delete account
-      </LlmButton>
-      <LlmDialog open={open} onOpenChange={setOpen} size="sm">
-        <LlmDialogHeader>Delete this account?</LlmDialogHeader>
-        <LlmDialogContent>
-          <LlmAlert variant="warning">This action cannot be undone.</LlmAlert>
+      </AtlButton>
+      <AtlDialog open={open} onOpenChange={setOpen} size="sm">
+        <AtlDialogHeader>Delete this account?</AtlDialogHeader>
+        <AtlDialogContent>
+          <AtlAlert variant="warning">This action cannot be undone.</AtlAlert>
           <p style={{ margin: 'var(--ui-spacing-3) 0 0', color: 'var(--ui-color-text-muted)', fontSize: '0.875rem' }}>
             All your data, workspaces, and API keys will be removed immediately.
           </p>
-        </LlmDialogContent>
-        <LlmDialogFooter>
-          <LlmButton variant="outline" onClick={() => setOpen(false)}>
+        </AtlDialogContent>
+        <AtlDialogFooter>
+          <AtlButton variant="outline" onClick={() => setOpen(false)}>
             Cancel
-          </LlmButton>
-          <LlmButton variant="primary" onClick={() => setOpen(false)}>
+          </AtlButton>
+          <AtlButton variant="primary" onClick={() => setOpen(false)}>
             Delete permanently
-          </LlmButton>
-        </LlmDialogFooter>
-      </LlmDialog>
+          </AtlButton>
+        </AtlDialogFooter>
+      </AtlDialog>
     </div>
   );
 }
@@ -253,56 +253,56 @@ function DataListPattern() {
     <div style={{ ...wrapper(640), gap: 'var(--ui-spacing-3)', display: 'flex', flexDirection: 'column' }}>
       <div style={listHeaderStyle}>
         <h2 style={titleStyle}>Projects</h2>
-        <LlmButton variant="primary" size="sm">
+        <AtlButton variant="primary" size="sm">
           New project
-        </LlmButton>
+        </AtlButton>
       </div>
       {dataListItems.map((item) => (
-        <LlmCard key={item.id} variant="outlined" padding="md">
-          <LlmCardContent>
+        <AtlCard key={item.id} variant="outlined" padding="md">
+          <AtlCardContent>
             <div style={listRowStyle}>
               <div style={rowInfoStyle}>
                 <div style={rowTitleLineStyle}>
                   <span style={rowTitleStyle}>{item.name}</span>
-                  <LlmBadge variant={item.statusVariant} size="sm">
+                  <AtlBadge variant={item.statusVariant} size="sm">
                     {item.status}
-                  </LlmBadge>
+                  </AtlBadge>
                 </div>
                 <p style={rowDescStyle}>{item.description}</p>
               </div>
               <div style={rowActionsStyle}>
-                <LlmTooltip llmTooltip="View details" llmTooltipPosition="above">
-                  <LlmButton variant="outline" size="sm">
+                <AtlTooltip atlTooltip="View details" atlTooltipPosition="above">
+                  <AtlButton variant="outline" size="sm">
                     View
-                  </LlmButton>
-                </LlmTooltip>
-                <LlmMenuTrigger
+                  </AtlButton>
+                </AtlTooltip>
+                <AtlMenuTrigger
                   menu={
-                    <LlmMenu variant="compact">
-                      <LlmMenuItem>Edit</LlmMenuItem>
-                      <LlmMenuItem>Duplicate</LlmMenuItem>
-                      <LlmMenuSeparator />
-                      <LlmMenuItem>Delete</LlmMenuItem>
-                    </LlmMenu>
+                    <AtlMenu variant="compact">
+                      <AtlMenuItem>Edit</AtlMenuItem>
+                      <AtlMenuItem>Duplicate</AtlMenuItem>
+                      <AtlMenuSeparator />
+                      <AtlMenuItem>Delete</AtlMenuItem>
+                    </AtlMenu>
                   }
                 >
                   {({ onClick, ref }) => (
-                    <LlmTooltip llmTooltip="More actions" llmTooltipPosition="above">
-                      <LlmButton
+                    <AtlTooltip atlTooltip="More actions" atlTooltipPosition="above">
+                      <AtlButton
                         ref={ref as React.RefObject<HTMLButtonElement>}
                         onClick={onClick}
                         variant="outline"
                         size="sm"
                       >
                         ...
-                      </LlmButton>
-                    </LlmTooltip>
+                      </AtlButton>
+                    </AtlTooltip>
                   )}
-                </LlmMenuTrigger>
+                </AtlMenuTrigger>
               </div>
             </div>
-          </LlmCardContent>
-        </LlmCard>
+          </AtlCardContent>
+        </AtlCard>
       ))}
     </div>
   );
@@ -331,7 +331,7 @@ function NotificationCenterPattern() {
     <div style={wrapper(560)}>
       <div style={listHeaderStyle}>
         <h2 style={titleStyle}>Notifications</h2>
-        <LlmButton
+        <AtlButton
           variant="outline"
           size="sm"
           onClick={() => {
@@ -341,22 +341,22 @@ function NotificationCenterPattern() {
           }}
         >
           Clear all
-        </LlmButton>
+        </AtlButton>
       </div>
-      <LlmAccordionGroup multi={true} variant="separated">
+      <AtlAccordionGroup multi={true} variant="separated">
         {errors.length > 0 && (
-          <LlmAccordionItem expanded={true}>
-            <LlmAccordionHeader>
+          <AtlAccordionItem expanded={true}>
+            <AtlAccordionHeader>
               <span style={groupHeaderStyle}>
                 Errors
-                <LlmBadge variant="danger" size="sm">
+                <AtlBadge variant="danger" size="sm">
                   {errors.length}
-                </LlmBadge>
+                </AtlBadge>
               </span>
-            </LlmAccordionHeader>
+            </AtlAccordionHeader>
             <div style={alertListStyle}>
               {errors.map((e) => (
-                <LlmAlert
+                <AtlAlert
                   key={e.id}
                   variant="danger"
                   dismissible={true}
@@ -365,24 +365,24 @@ function NotificationCenterPattern() {
                   }
                 >
                   {e.message}
-                </LlmAlert>
+                </AtlAlert>
               ))}
             </div>
-          </LlmAccordionItem>
+          </AtlAccordionItem>
         )}
         {warnings.length > 0 && (
-          <LlmAccordionItem>
-            <LlmAccordionHeader>
+          <AtlAccordionItem>
+            <AtlAccordionHeader>
               <span style={groupHeaderStyle}>
                 Warnings
-                <LlmBadge variant="warning" size="sm">
+                <AtlBadge variant="warning" size="sm">
                   {warnings.length}
-                </LlmBadge>
+                </AtlBadge>
               </span>
-            </LlmAccordionHeader>
+            </AtlAccordionHeader>
             <div style={alertListStyle}>
               {warnings.map((w) => (
-                <LlmAlert
+                <AtlAlert
                   key={w.id}
                   variant="warning"
                   dismissible={true}
@@ -391,24 +391,24 @@ function NotificationCenterPattern() {
                   }
                 >
                   {w.message}
-                </LlmAlert>
+                </AtlAlert>
               ))}
             </div>
-          </LlmAccordionItem>
+          </AtlAccordionItem>
         )}
         {infos.length > 0 && (
-          <LlmAccordionItem>
-            <LlmAccordionHeader>
+          <AtlAccordionItem>
+            <AtlAccordionHeader>
               <span style={groupHeaderStyle}>
                 Info
-                <LlmBadge variant="info" size="sm">
+                <AtlBadge variant="info" size="sm">
                   {infos.length}
-                </LlmBadge>
+                </AtlBadge>
               </span>
-            </LlmAccordionHeader>
+            </AtlAccordionHeader>
             <div style={alertListStyle}>
               {infos.map((i) => (
-                <LlmAlert
+                <AtlAlert
                   key={i.id}
                   variant="info"
                   dismissible={true}
@@ -417,12 +417,12 @@ function NotificationCenterPattern() {
                   }
                 >
                   {i.message}
-                </LlmAlert>
+                </AtlAlert>
               ))}
             </div>
-          </LlmAccordionItem>
+          </AtlAccordionItem>
         )}
-      </LlmAccordionGroup>
+      </AtlAccordionGroup>
     </div>
   );
 }
@@ -471,91 +471,91 @@ function ManagementDashboardPattern() {
           <h2 style={titleStyle}>Operations Overview</h2>
           <p style={subtitleStyle}>Snapshot across the selected time range</p>
         </div>
-        <LlmTabGroup
+        <AtlTabGroup
           variant="pills"
           selectedIndex={rangeIndex}
           onSelectedIndexChange={setRangeIndex}
         >
-          <LlmTab label="7D">{' '}</LlmTab>
-          <LlmTab label="30D">{' '}</LlmTab>
-          <LlmTab label="90D">{' '}</LlmTab>
-        </LlmTabGroup>
+          <AtlTab label="7D">{' '}</AtlTab>
+          <AtlTab label="30D">{' '}</AtlTab>
+          <AtlTab label="90D">{' '}</AtlTab>
+        </AtlTabGroup>
       </div>
 
       {quotaPercent >= 85 && (
-        <LlmAlert variant="warning" dismissible={true}>
+        <AtlAlert variant="warning" dismissible={true}>
           API request quota is at {quotaPercent}%. Upgrade your plan before
           the monthly reset to avoid throttling.
-        </LlmAlert>
+        </AtlAlert>
       )}
 
       <div style={metricsGridStyle}>
         {metrics.map((metric) => (
-          <LlmCard key={metric.label} variant="elevated" padding="md">
-            <LlmCardContent>
+          <AtlCard key={metric.label} variant="elevated" padding="md">
+            <AtlCardContent>
               <div style={metricLabelStyle}>{metric.label}</div>
               <div style={metricValueRowStyle}>
                 <span style={metricValueStyle}>{metric.value}</span>
-                <LlmBadge variant={metric.deltaVariant} size="sm">
+                <AtlBadge variant={metric.deltaVariant} size="sm">
                   {metric.delta}
-                </LlmBadge>
+                </AtlBadge>
               </div>
               <p style={metricFootStyle}>{metric.foot}</p>
-            </LlmCardContent>
-          </LlmCard>
+            </AtlCardContent>
+          </AtlCard>
         ))}
       </div>
 
       <div style={lowerGridStyle}>
-        <LlmCard variant="elevated" padding="none">
-          <LlmCardHeader>
+        <AtlCard variant="elevated" padding="none">
+          <AtlCardHeader>
             <div style={panelHeaderStyle}>
               <h3 style={panelTitleStyle}>Recent Activity</h3>
-              <LlmButton variant="outline" size="sm">
+              <AtlButton variant="outline" size="sm">
                 Export
-              </LlmButton>
+              </AtlButton>
             </div>
-          </LlmCardHeader>
-          <LlmCardContent>
-            <LlmTable variant="striped" size="sm">
-              <LlmThead>
-                <LlmTr>
-                  <LlmTh>User</LlmTh>
-                  <LlmTh>Action</LlmTh>
-                  <LlmTh>Status</LlmTh>
-                  <LlmTh align="end">Time</LlmTh>
-                </LlmTr>
-              </LlmThead>
-              <LlmTbody>
+          </AtlCardHeader>
+          <AtlCardContent>
+            <AtlTable variant="striped" size="sm">
+              <AtlThead>
+                <AtlTr>
+                  <AtlTh>User</AtlTh>
+                  <AtlTh>Action</AtlTh>
+                  <AtlTh>Status</AtlTh>
+                  <AtlTh align="end">Time</AtlTh>
+                </AtlTr>
+              </AtlThead>
+              <AtlTbody>
                 {activity.map((row) => (
-                  <LlmTr key={row.id}>
-                    <LlmTd>{row.user}</LlmTd>
-                    <LlmTd>{row.action}</LlmTd>
-                    <LlmTd>
-                      <LlmBadge variant={row.statusVariant} size="sm">
+                  <AtlTr key={row.id}>
+                    <AtlTd>{row.user}</AtlTd>
+                    <AtlTd>{row.action}</AtlTd>
+                    <AtlTd>
+                      <AtlBadge variant={row.statusVariant} size="sm">
                         {row.status}
-                      </LlmBadge>
-                    </LlmTd>
-                    <LlmTd align="end">{row.time}</LlmTd>
-                  </LlmTr>
+                      </AtlBadge>
+                    </AtlTd>
+                    <AtlTd align="end">{row.time}</AtlTd>
+                  </AtlTr>
                 ))}
-              </LlmTbody>
-            </LlmTable>
-          </LlmCardContent>
-        </LlmCard>
+              </AtlTbody>
+            </AtlTable>
+          </AtlCardContent>
+        </AtlCard>
 
-        <LlmCard variant="elevated" padding="md">
-          <LlmCardHeader>
+        <AtlCard variant="elevated" padding="md">
+          <AtlCardHeader>
             <h3 style={panelTitleStyle}>Plan Usage</h3>
-          </LlmCardHeader>
-          <LlmCardContent>
+          </AtlCardHeader>
+          <AtlCardContent>
             <div style={quotaStackStyle}>
               <QuotaRow label="API requests" value={quotaPercent} display={`${quotaPercent}%`} variant="warning" />
               <QuotaRow label="Storage" value={42} display="42%" variant="success" />
               <QuotaRow label="Seats" value={75} display="9 / 12" variant="default" />
             </div>
-          </LlmCardContent>
-        </LlmCard>
+          </AtlCardContent>
+        </AtlCard>
       </div>
     </div>
   );
@@ -578,7 +578,7 @@ function QuotaRow({
         <span style={quotaLabelStyle}>{label}</span>
         <span style={quotaNumberStyle}>{display}</span>
       </div>
-      <LlmProgress value={value} variant={variant} size="sm" />
+      <AtlProgress value={value} variant={variant} size="sm" />
     </div>
   );
 }

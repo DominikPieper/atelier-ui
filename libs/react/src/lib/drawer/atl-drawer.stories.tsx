@@ -1,0 +1,117 @@
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useState } from 'react';
+import { AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter } from './atl-drawer';
+
+import { metadata } from '@atelier-ui/spec/metadata/drawer.metadata';
+const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
+  return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
+}
+
+const meta: Meta<typeof AtlDrawer> = {
+  title: 'Components/Overlay/AtlDrawer',
+  component: AtlDrawer,
+  tags: ['autodocs'],
+  argTypes: {
+    open: { control: 'boolean' },
+    position: { control: 'select', options: ['left', 'right', 'top', 'bottom'] },
+    size: { control: 'select', options: ['sm', 'md', 'lg', 'full'] },
+    closeOnBackdrop: { control: 'boolean' },
+  },
+  args: { position: 'right', size: 'md', closeOnBackdrop: true },
+  parameters: { design: figmaNode('421-398'), docs: { description: { component: metadata.purpose } } },
+};
+
+export default meta;
+type Story = StoryObj<typeof AtlDrawer>;
+
+function DrawerDemo({
+  position = 'right',
+  size = 'md',
+  closeOnBackdrop = true,
+  label = 'Open Drawer',
+}: {
+  position?: 'left' | 'right' | 'top' | 'bottom';
+  size?: 'sm' | 'md' | 'lg' | 'full';
+  closeOnBackdrop?: boolean;
+  label?: string;
+}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button
+        style={{ padding: '0.5rem 1rem', cursor: 'pointer' }}
+        onClick={() => setOpen(true)}
+      >
+        {label}
+      </button>
+      <AtlDrawer
+        open={open}
+        onOpenChange={setOpen}
+        position={position}
+        size={size}
+        closeOnBackdrop={closeOnBackdrop}
+      >
+        <AtlDrawerHeader>Settings</AtlDrawerHeader>
+        <AtlDrawerContent>
+          <p>Drawer content goes here. This area scrolls if content is long.</p>
+          <p style={{ marginTop: '1rem' }}>You can put forms, lists, or any content here.</p>
+        </AtlDrawerContent>
+        <AtlDrawerFooter>
+          <button onClick={() => setOpen(false)}>Cancel</button>
+          <button onClick={() => setOpen(false)}>Save</button>
+        </AtlDrawerFooter>
+      </AtlDrawer>
+    </>
+  );
+}
+
+export const Default: Story = {
+  render: () => <DrawerDemo />,
+  parameters: { design: figmaNode('421-342') },
+};
+
+export const LeftPosition: Story = {
+  render: () => <DrawerDemo position="left" label="Open Left Drawer" />,
+  parameters: { design: figmaNode('421-356') },
+};
+
+export const TopPosition: Story = {
+  render: () => <DrawerDemo position="top" label="Open Top Drawer" />,
+  parameters: { design: figmaNode('421-370') },
+};
+
+export const BottomPosition: Story = {
+  render: () => <DrawerDemo position="bottom" label="Open Bottom Drawer" />,
+  parameters: { design: figmaNode('421-384') },
+};
+
+export const SmallSize: Story = {
+  render: () => <DrawerDemo size="sm" label="Open Small Drawer" />,
+  parameters: { design: figmaNode('421-342') },
+};
+
+export const LargeSize: Story = {
+  render: () => <DrawerDemo size="lg" label="Open Large Drawer" />,
+  parameters: { design: figmaNode('421-342') },
+};
+
+export const NoBackdropClose: Story = {
+  render: () => (
+    <DrawerDemo closeOnBackdrop={false} label="Open (no backdrop close)" />
+  ),
+  parameters: { design: figmaNode('421-342') },
+};
+
+export const AllPositions: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+      <DrawerDemo position="right" label="Right" />
+      <DrawerDemo position="left" label="Left" />
+      <DrawerDemo position="top" label="Top" />
+      <DrawerDemo position="bottom" label="Bottom" />
+    </div>
+  ),
+  parameters: { design: figmaNode('421-398') },
+};

@@ -6,7 +6,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 A workshop toolkit for hands-on AI development training. 22 LLM-optimized components, zero runtime dependencies, and a built-in MCP server so your AI assistant can look up exact prop names instead of guessing them.
 
-**Package:** `@atelier-ui/react` &nbsp;·&nbsp; **Elements:** `LlmButton`, `LlmDialog`, … &nbsp;·&nbsp; **Style:** CSS custom properties
+**Package:** `@atelier-ui/react` &nbsp;·&nbsp; **Elements:** `AtlButton`, `AtlDialog`, … &nbsp;·&nbsp; **Style:** CSS custom properties
 
 ---
 
@@ -22,10 +22,10 @@ npm install @atelier-ui/react
 ```
 
 ```tsx
-import { LlmButton } from '@atelier-ui/react';
+import { AtlButton } from '@atelier-ui/react';
 
 export function MyComponent() {
-  return <LlmButton variant="primary">Save</LlmButton>;
+  return <AtlButton variant="primary">Save</AtlButton>;
 }
 ```
 
@@ -41,7 +41,7 @@ export function MyComponent() {
 | **Overlay** | Dialog, Drawer, Tooltip, Toast |
 | **Layout** | Accordion, Alert |
 
-All event handlers follow the `onXxx` / `onXxxChange` convention. Toast exposes a `useLlmToast` hook.
+All event handlers follow the `onXxx` / `onXxxChange` convention. Toast exposes a `useAtlToast` hook.
 
 ---
 

@@ -1,0 +1,120 @@
+/* ── AccordionGroup ──────────────────────────────────────────────────────── */
+.atl-accordion-group {
+  display: block;
+  font-family: var(--ui-font-family);
+  color: var(--ui-color-text);
+}
+
+/* ── Default variant — shared borders between items ──────────────────────── */
+.atl-accordion-group.variant-default {
+  border-top: 1px solid var(--ui-color-border);
+}
+
+.atl-accordion-group.variant-default .atl-accordion-item {
+  border-bottom: 1px solid var(--ui-color-border);
+}
+
+/* ── Bordered variant — outer border + radius ────────────────────────────── */
+.atl-accordion-group.variant-bordered {
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-lg);
+  overflow: hidden;
+}
+
+.atl-accordion-group.variant-bordered .atl-accordion-item:not(:last-child) {
+  border-bottom: 1px solid var(--ui-color-border);
+}
+
+/* ── Separated variant — card-like items with gap ────────────────────────── */
+.atl-accordion-group.variant-separated {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-spacing-2);
+}
+
+.atl-accordion-group.variant-separated .atl-accordion-item {
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-lg);
+  overflow: hidden;
+}
+
+/* ── AccordionItem ──────────────────────────────────────────────────────────── */
+.atl-accordion-item {
+  display: block;
+}
+
+/* ── Heading reset ─────────────────────────────────────────────────────────── */
+.accordion-heading {
+  all: unset;
+  display: block;
+}
+
+/* ── Trigger button ────────────────────────────────────────────────────────── */
+.accordion-trigger {
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-spacing-3);
+  width: 100%;
+  min-height: 3.25rem;
+  padding: var(--ui-spacing-4) var(--ui-spacing-5);
+  font-size: var(--ui-font-size-md);
+  font-weight: var(--ui-font-weight-semibold);
+  color: var(--ui-color-text);
+  cursor: pointer;
+  transition: background-color var(--ui-transition-fast);
+  user-select: none;
+}
+
+.accordion-trigger:hover:not(.is-disabled) {
+  background: var(--ui-color-surface-sunken);
+}
+
+.accordion-trigger:focus-visible {
+  outline: none;
+  box-shadow: var(--ui-focus-ring);
+  position: relative;
+  z-index: 1;
+}
+
+.accordion-trigger.is-disabled {
+  opacity: var(--ui-opacity-disabled);
+  cursor: not-allowed;
+}
+
+/* ── Chevron icon ──────────────────────────────────────────────────────────── */
+.chevron {
+  flex-shrink: 0;
+  color: var(--ui-color-text-muted);
+  transition: transform var(--ui-duration-normal) var(--ui-ease-out);
+}
+
+.chevron.is-expanded {
+  transform: rotate(180deg);
+}
+
+/* ── Collapsible panel wrapper — CSS grid height animation ─────────────────── */
+.accordion-panel-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--ui-duration-normal) var(--ui-ease-out);
+}
+
+.accordion-panel-wrapper.is-expanded {
+  grid-template-rows: 1fr;
+}
+
+/* ── Inner panel ───────────────────────────────────────────────────────────── */
+.accordion-panel {
+  overflow: hidden;
+}
+
+.accordion-panel-wrapper.is-expanded .accordion-panel {
+  padding: 0 var(--ui-spacing-5) var(--ui-spacing-5);
+}
+
+.accordion-panel-wrapper:not(.is-expanded) .accordion-panel {
+  padding: 0 var(--ui-spacing-5);
+}

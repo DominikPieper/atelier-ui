@@ -1,0 +1,100 @@
+.atl-textarea {
+  display: block;
+  font-family: var(--ui-font-family);
+  font-size: var(--ui-font-size-md);
+}
+
+.atl-textarea textarea {
+  display: block;
+  width: 100%;
+  padding: 0.625rem var(--ui-spacing-4);
+  font-size: inherit;
+  font-family: inherit;
+  line-height: var(--ui-line-height-normal);
+  color: var(--ui-color-text);
+  background-color: var(--ui-color-input-bg);
+  border: 1px solid var(--ui-color-input-border);
+  border-radius: var(--ui-radius-md);
+  transition: border-color var(--ui-transition-fast),
+              box-shadow var(--ui-transition-fast),
+              background-color var(--ui-transition-fast);
+  outline: none;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 5rem;
+}
+
+.atl-textarea textarea::placeholder {
+  color: var(--ui-color-placeholder);
+}
+
+.atl-textarea textarea:hover:not(:disabled):not(:read-only) {
+  border-color: var(--ui-color-input-border-hover);
+}
+
+.atl-textarea textarea:focus {
+  border-color: var(--ui-color-input-border-focus);
+  background-color: var(--ui-color-input-bg-focus);
+  box-shadow: var(--ui-focus-ring);
+}
+
+.atl-textarea .textarea-field {
+  position: relative;
+}
+
+/* Invalid state */
+.atl-textarea.is-invalid textarea {
+  border-color: var(--ui-color-input-border-invalid);
+  padding-right: 2.25rem;
+}
+
+.atl-textarea.is-invalid textarea:focus {
+  border-color: var(--ui-color-input-border-invalid);
+  box-shadow: 0 0 0 2px var(--ui-color-surface), 0 0 0 4px var(--ui-color-danger);
+}
+
+/* Non-color invalid indicator (WCAG 1.4.1) */
+.atl-textarea.is-invalid .textarea-field::before {
+  content: '✕';
+  position: absolute;
+  top: 0.75rem;
+  right: 0.875rem;
+  color: var(--ui-color-danger);
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* Disabled state */
+.atl-textarea.is-disabled {
+  opacity: var(--ui-opacity-disabled);
+  cursor: not-allowed;
+}
+
+.atl-textarea.is-disabled textarea {
+  cursor: not-allowed;
+}
+
+/* Readonly state */
+.atl-textarea.is-readonly textarea {
+  background-color: var(--ui-color-surface-sunken);
+  cursor: default;
+}
+
+/* Auto-resize: hide manual resize handle when autoResize is active */
+.atl-textarea.is-auto-resize textarea {
+  resize: none;
+  overflow: hidden;
+}
+
+/* Error messages */
+.atl-textarea .errors {
+  margin-top: var(--ui-spacing-2);
+}
+
+.atl-textarea .error-message {
+  margin: 0;
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-color-error-text);
+  line-height: var(--ui-line-height-normal);
+}
