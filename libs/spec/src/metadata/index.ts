@@ -23,7 +23,7 @@ export type { ComponentMetadata } from './types';
  *
  * `check-metadata` reads both this map and `libs/spec/src/index.ts` and
  * verifies (a) every entry resolves to a populated metadata file and
- * (b) every exported `Llm*Spec` is either listed here or in the
+ * (b) every exported `Atl*Spec` is either listed here or in the
  * NON_COMPONENT_SPECS set below.
  */
 export const COMPONENT_METADATA_REGISTRY: Record<string, string> = {
@@ -78,7 +78,7 @@ export const COMPONENT_METADATA_REGISTRY: Record<string, string> = {
 /**
  * Spec interfaces that are NOT standalone components — shared base shapes,
  * option types, sub-spec shapes. The drift-gate consults this set to know
- * which `Llm*Spec` exports it is allowed to skip.
+ * which `Atl*Spec` exports it is allowed to skip.
  */
 export const NON_COMPONENT_SPECS = new Set<string>([
   'AtlFormFieldSpec', // base for every form input

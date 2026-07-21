@@ -286,7 +286,7 @@ describe('preset generator', () => {
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
     expect(md).toContain('@atelier-ui/angular');
-    expect(md).toContain('AtlButtonComponent');
+    expect(md).toContain("import { AtlButton } from '@atelier-ui/angular';");
     expect(md).toContain('atl-button');
   });
 

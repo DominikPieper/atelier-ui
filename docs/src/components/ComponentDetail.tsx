@@ -73,13 +73,13 @@ const STORYBOOK_CATEGORY: Record<string, string> = {
 };
 
 // Storybook docs IDs follow `components-<category>-<component>--docs`, where
-// <component> is the primary selector lowercased (e.g. AtlTabGroup → llmtabgroup).
+// <component> is the primary selector lowercased (e.g. AtlTabGroup → atltabgroup).
 function storybookDocsUrl(framework: Framework, name: string, category: string, selector: string): string {
   const base = `https://atelier.pieper.io/storybook-${framework}/`;
   const cat = STORYBOOK_CATEGORY[category];
-  // Toast's docs selector is "AtlToastProvider + useAtlToast" but its Storybook id is llmtoast.
+  // Toast's docs selector is "AtlToastProvider + useAtlToast" but its Storybook id is atltoast.
   const segment = name === 'toast'
-    ? 'llmtoast'
+    ? 'atltoast'
     : selector.split(' + ')[0].replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
   if (!cat || !segment) return base;
   return `${base}?path=/docs/components-${cat}-${segment}--docs`;

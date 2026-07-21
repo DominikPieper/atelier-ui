@@ -110,8 +110,8 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
       if (f === 'angular') {
         return `### Angular (\`@atelier-ui/angular\`)
 - Selectors: \`atl-button\`, \`atl-input\`, \`atl-dialog\`, …
-- Import: \`import { AtlButtonComponent } from '@atelier-ui/angular';\`
-- Add to \`@Component({ imports: [AtlButtonComponent] })\`
+- Import: \`import { AtlButton } from '@atelier-ui/angular';\`
+- Add to \`@Component({ imports: [AtlButton] })\`
 - Form controls implement Signal Forms (\`FormValueControl\` / \`FormCheckboxControl\`)`;
       }
       if (f === 'react') {
