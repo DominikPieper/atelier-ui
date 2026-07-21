@@ -6,7 +6,7 @@
     "generatedAt": "2026-06-01T16:29:20.000Z",
     "gitSha": null,
     "serverVersion": "1.29.1",
-    "coverage": "P0 core (3 of 27 masters: LlmButton, LlmBadge, LlmCard). Token/auto-layout checks sample each master's default variant. Run `npm run figma:snapshot` with the Figma Desktop Bridge connected to capture all 27 masters.",
+    "coverage": "P0 core (3 of 27 masters: AtlButton, AtlBadge, AtlCard). Token/auto-layout checks sample each master's default variant. Run `npm run figma:snapshot` with the Figma Desktop Bridge connected to capture all 27 masters.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. The gate (check-figma) applies the rules — this file holds no judgements beyond bound/unbound/raw determinations made at capture time."
   },
   "uiTokens": [
@@ -26,10 +26,10 @@
   ],
   "components": [
     {
-      "name": "Action/LlmButton",
-      "selector": "LlmButton",
+      "name": "Action/AtlButton",
+      "selector": "AtlButton",
       "nodeId": "129:20",
-      "description": "Action button. Maps to LlmButtonSpec in libs/spec.\n\nUse when: a user-initiated action — submit, save, delete, navigate. Pick the visual based on hierarchy: primary for the screen's main action (one per screen), secondary for supporting actions, outline for tertiary/inline, danger for destructive actions.\n\nAPI surface (Figma → spec):\n- Variant variant: primary | secondary | outline | danger — maps to LlmButtonSpec.variant\n- Variant size: sm | md | lg — maps to LlmButtonSpec.size\n- Variant state: default | hover | focus | active — interaction state\n- Boolean disabled / loading / hasIcon",
+      "description": "Action button. Maps to AtlButtonSpec in libs/spec.\n\nUse when: a user-initiated action — submit, save, delete, navigate. Pick the visual based on hierarchy: primary for the screen's main action (one per screen), secondary for supporting actions, outline for tertiary/inline, danger for destructive actions.\n\nAPI surface (Figma → spec):\n- Variant variant: primary | secondary | outline | danger — maps to AtlButtonSpec.variant\n- Variant size: sm | md | lg — maps to AtlButtonSpec.size\n- Variant state: default | hover | focus | active — interaction state\n- Boolean disabled / loading / hasIcon",
       "variantAxes": {
         "variant": ["primary", "secondary", "outline", "danger"],
         "size": ["sm", "md", "lg"],
@@ -86,10 +86,10 @@
       ]
     },
     {
-      "name": "Display/LlmBadge",
-      "selector": "LlmBadge",
+      "name": "Display/AtlBadge",
+      "selector": "AtlBadge",
       "nodeId": "55:22",
-      "description": "Inline status pill. Maps to LlmBadgeSpec in libs/spec.\n\nUse when: a small label needs to convey status, count, or category alongside other content. For larger callouts use Feedback/LlmAlert.\n\nAPI surface:\n- Variant variant: default | success | warning | danger | info → LlmBadgeSpec.variant\n- Variant size: sm | md → LlmBadgeSpec.size\n- Text Label: visible label",
+      "description": "Inline status pill. Maps to AtlBadgeSpec in libs/spec.\n\nUse when: a small label needs to convey status, count, or category alongside other content. For larger callouts use Feedback/AtlAlert.\n\nAPI surface:\n- Variant variant: default | success | warning | danger | info → AtlBadgeSpec.variant\n- Variant size: sm | md → AtlBadgeSpec.size\n- Text Label: visible label",
       "variantAxes": {
         "variant": ["default", "success", "warning", "danger", "info"],
         "size": ["md", "sm"]
@@ -131,10 +131,10 @@
       ]
     },
     {
-      "name": "Display/LlmCard",
-      "selector": "LlmCard",
+      "name": "Display/AtlCard",
+      "selector": "AtlCard",
       "nodeId": "55:65",
-      "description": "Container for grouped content. Maps to LlmCardSpec in libs/spec.\n\nUse when: distinct grouped content needs a visual container — list items, summaries, dashboard tiles. For overlay content use Overlay/LlmDialog or Overlay/LlmDrawer.\n\nAPI surface:\n- Variant variant: elevated | outlined | flat → LlmCardSpec.variant\n- Variant padding: none | sm | md | lg → LlmCardSpec.padding\n- Text Title, Body: content slots\n- (code-only: role — landmark role, default plain div)",
+      "description": "Container for grouped content. Maps to AtlCardSpec in libs/spec.\n\nUse when: distinct grouped content needs a visual container — list items, summaries, dashboard tiles. For overlay content use Overlay/AtlDialog or Overlay/AtlDrawer.\n\nAPI surface:\n- Variant variant: elevated | outlined | flat → AtlCardSpec.variant\n- Variant padding: none | sm | md | lg → AtlCardSpec.padding\n- Text Title, Body: content slots\n- (code-only: role — landmark role, default plain div)",
       "variantAxes": {
         "variant": ["elevated", "outlined", "flat"],
         "padding": ["none", "sm", "md", "lg"]
