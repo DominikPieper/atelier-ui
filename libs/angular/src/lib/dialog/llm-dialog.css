@@ -111,7 +111,7 @@ dialog > .panel.size-full {
 }
 
 /* ── Sub-components ──────────────────────────────────────────────────────── */
-.llm-dialog-header {
+:host(.llm-dialog-header) {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -124,7 +124,7 @@ dialog > .panel.size-full {
   flex-shrink: 0;
 }
 
-.llm-dialog-content {
+:host(.llm-dialog-content) {
   display: block;
   padding: var(--ui-spacing-6);
   overflow-y: auto;
@@ -132,7 +132,7 @@ dialog > .panel.size-full {
   color: var(--ui-color-text);
 }
 
-.llm-dialog-footer {
+:host(.llm-dialog-footer) {
   display: flex;
   align-items: center;
   justify-content: flex-end;

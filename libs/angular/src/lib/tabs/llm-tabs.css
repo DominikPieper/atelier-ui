@@ -1,11 +1,11 @@
-.llm-tab-group {
+:host {
   display: block;
   font-family: var(--ui-font-family);
   color: var(--ui-color-text);
 }
 
 /* ─── Tab list ─── */
-.llm-tab-group .tablist {
+.tablist {
   display: flex;
   gap: var(--ui-spacing-2);
   border-bottom: 1px solid var(--ui-color-border);
@@ -13,12 +13,12 @@
   scrollbar-width: none;
 }
 
-.llm-tab-group .tablist::-webkit-scrollbar {
+.tablist::-webkit-scrollbar {
   display: none;
 }
 
 /* ─── Tab button ─── */
-.llm-tab-group .tablist button {
+.tablist button {
   all: unset;
   box-sizing: border-box;
   position: relative;
@@ -38,7 +38,7 @@
 }
 
 /* Active indicator (underline) — 3px for modern weight */
-.llm-tab-group .tablist button::after {
+.tablist button::after {
   content: '';
   position: absolute;
   bottom: -1px;
@@ -50,46 +50,35 @@
   transition: background var(--ui-transition-fast);
 }
 
-.llm-tab-group .tablist button.is-active {
+.tablist button.is-active {
   color: var(--ui-color-primary);
 }
 
-.llm-tab-group .tablist button.is-active::after {
+.tablist button.is-active::after {
   background: var(--ui-color-primary);
 }
 
 /* Hover */
-.llm-tab-group .tablist button:hover:not(.is-disabled):not(.is-active) {
+.tablist button:hover:not(.is-disabled):not(.is-active) {
   color: var(--ui-color-text);
   background: var(--ui-color-surface-sunken);
 }
 
 /* Focus */
-.llm-tab-group .tablist button:focus-visible {
+.tablist button:focus-visible {
   outline: none;
   box-shadow: var(--ui-focus-ring);
   border-radius: var(--ui-radius-md);
 }
 
 /* Disabled */
-.llm-tab-group .tablist button.is-disabled {
+.tablist button.is-disabled {
   opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }
 
-/* ─── Tab panel ─── */
-.llm-tab-group [role="tabpanel"] {
-  padding: var(--ui-spacing-5) 0;
-}
-
-.llm-tab-group [role="tabpanel"]:focus-visible {
-  outline: none;
-  box-shadow: var(--ui-focus-ring);
-  border-radius: var(--ui-radius-md);
-}
-
 /* ─── Pills variant ─── */
-.llm-tab-group.variant-pills .tablist {
+:host(.variant-pills) .tablist {
   border-bottom: none;
   gap: var(--ui-spacing-2);
   padding: var(--ui-spacing-1);
@@ -97,24 +86,24 @@
   border-radius: var(--ui-radius-lg);
 }
 
-.llm-tab-group.variant-pills .tablist button {
+:host(.variant-pills) .tablist button {
   border-radius: var(--ui-radius-md);
   min-height: 2rem;
   padding: var(--ui-spacing-2) var(--ui-spacing-4);
   font-size: var(--ui-font-size-sm);
 }
 
-.llm-tab-group.variant-pills .tablist button::after {
+:host(.variant-pills) .tablist button::after {
   display: none;
 }
 
-.llm-tab-group.variant-pills .tablist button.is-active {
+:host(.variant-pills) .tablist button.is-active {
   background: var(--ui-color-surface);
   color: var(--ui-color-text);
   box-shadow: var(--ui-shadow-sm);
 }
 
-.llm-tab-group.variant-pills .tablist button:hover:not(.is-disabled):not(.is-active) {
+:host(.variant-pills) .tablist button:hover:not(.is-disabled):not(.is-active) {
   background: transparent;
   color: var(--ui-color-text);
 }

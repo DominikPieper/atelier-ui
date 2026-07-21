@@ -1,4 +1,4 @@
-.llm-stepper {
+:host {
   display: block;
   font-family: var(--ui-font-family);
 }
@@ -144,25 +144,25 @@
 }
 
 /* ─── Vertical orientation ─── */
-.llm-stepper.orientation-vertical .stepper-header {
+:host(.orientation-vertical) .stepper-header {
   flex-direction: column;
   align-items: stretch;
 }
 
-.llm-stepper.orientation-vertical .step-item {
+:host(.orientation-vertical) .step-item {
   flex-direction: row;
   align-items: flex-start;
   gap: var(--ui-spacing-3);
 }
 
-.llm-stepper.orientation-vertical .step-text {
+:host(.orientation-vertical) .step-text {
   align-items: flex-start;
   text-align: left;
   margin-top: 0;
   padding-top: var(--ui-spacing-1);
 }
 
-.llm-stepper.orientation-vertical .step-connector {
+:host(.orientation-vertical) .step-connector {
   flex: none;
   width: 2px;
   height: var(--ui-spacing-6);

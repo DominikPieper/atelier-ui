@@ -51,7 +51,7 @@ export class LlmAccordionGroup implements LlmAccordionGroupContext {
   readonly variant = input<'default' | 'bordered' | 'separated'>('default');
 
   /** @internal */
-  protected readonly hostClasses = computed(() => `variant-${this.variant()}`);
+  protected readonly hostClasses = computed(() => `llm-accordion-group variant-${this.variant()}`);
 
   /** @internal */
   get hostClassesValue(): string {
@@ -175,6 +175,7 @@ export class LlmAccordionHeader {}
   `,
   styleUrl: './llm-accordion.css',
   host: {
+    class: 'llm-accordion-item',
     '[attr.data-accordion-id]': 'id',
   },
 })

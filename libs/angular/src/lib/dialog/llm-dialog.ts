@@ -50,6 +50,7 @@ let nextId = 0;
     <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
     <dialog
       #dialogEl
+      class="llm-dialog"
       [attr.aria-label]="ariaLabel() || null"
       [attr.aria-labelledby]="ariaLabel() ? null : (ariaLabelledby() || headerId)"
       aria-modal="true"
@@ -157,6 +158,7 @@ export class LlmDialog {
   `,
   styleUrl: './llm-dialog.css',
   host: {
+    class: 'llm-dialog-header',
     '[attr.id]': 'context.headerId',
   },
 })
@@ -173,6 +175,7 @@ export class LlmDialogHeader {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content />`,
   styleUrl: './llm-dialog.css',
+  host: { class: 'llm-dialog-content' },
 })
 export class LlmDialogContent {}
 
@@ -185,5 +188,6 @@ export class LlmDialogContent {}
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content />`,
   styleUrl: './llm-dialog.css',
+  host: { class: 'llm-dialog-footer' },
 })
 export class LlmDialogFooter {}

@@ -1,4 +1,4 @@
-.llm-pagination {
+:host {
   display: block;
   font-family: var(--ui-font-family);
 }

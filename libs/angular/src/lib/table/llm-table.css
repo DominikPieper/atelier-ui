@@ -73,8 +73,10 @@
    Table variants
    --------------------------------------------------------------------------- */
 
-/* Striped: alternate even row background */
-.llm-table.variant-striped tbody tr:nth-child(even) td {
+/* Striped: alternate even row background. Each <tr> is wrapped in its own
+ * <llm-tr display:contents>, so it's always an only-child — :nth-child has
+ * to count the llm-tr wrappers (the real tbody children), not the <tr>s. */
+.llm-table.variant-striped tbody llm-tr:nth-child(even) td {
   background-color: var(--ui-color-surface-sunken);
 }
 

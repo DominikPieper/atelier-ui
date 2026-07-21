@@ -75,7 +75,7 @@ export class LlmTabGroup implements LlmTabGroupContext {
   protected readonly tabBtns = viewChildren<ElementRef<HTMLButtonElement>>('tabBtn');
 
   /** @internal */
-  protected readonly hostClasses = computed(() => `variant-${this.variant()}`);
+  protected readonly hostClasses = computed(() => `llm-tab-group variant-${this.variant()}`);
 
   /** @internal — called by LlmTab on init */
   registerTab(info: TabInfo): void {
@@ -157,6 +157,16 @@ export class LlmTabGroup implements LlmTabGroupContext {
   styles: `
     :host {
       display: contents;
+    }
+
+    [role='tabpanel'] {
+      padding: var(--ui-spacing-5) 0;
+    }
+
+    [role='tabpanel']:focus-visible {
+      outline: none;
+      box-shadow: var(--ui-focus-ring);
+      border-radius: var(--ui-radius-md);
     }
   `,
 })

@@ -1,4 +1,4 @@
-.llm-progress {
+:host {
   display: block;
   width: 100%;
   font-family: var(--ui-font-family);
@@ -13,15 +13,15 @@
 }
 
 /* Size variants — modernised for visibility (sm was 4px → 6px) */
-.llm-progress.size-sm .track {
+:host(.size-sm) .track {
   height: 6px;
 }
 
-.llm-progress.size-md .track {
+:host(.size-md) .track {
   height: 10px;
 }
 
-.llm-progress.size-lg .track {
+:host(.size-lg) .track {
   height: 14px;
 }
 
@@ -34,15 +34,15 @@
 }
 
 /* Color variants */
-.llm-progress.variant-success .fill {
+:host(.variant-success) .fill {
   background-color: var(--ui-color-success);
 }
 
-.llm-progress.variant-warning .fill {
+:host(.variant-warning) .fill {
   background-color: var(--ui-color-warning);
 }
 
-.llm-progress.variant-danger .fill {
+:host(.variant-danger) .fill {
   background-color: var(--ui-color-danger);
 }
 
@@ -56,13 +56,13 @@
   }
 }
 
-.llm-progress.is-indeterminate .fill {
+:host(.is-indeterminate) .fill {
   width: 40% !important;
   animation: progress-indeterminate 1.4s var(--ui-ease-in-out) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .llm-progress.is-indeterminate .fill {
+  :host(.is-indeterminate) .fill {
     animation: none;
     opacity: 0.5;
   }

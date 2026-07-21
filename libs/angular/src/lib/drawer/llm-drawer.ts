@@ -92,7 +92,7 @@ export class LlmDrawer {
 
   protected readonly hostClasses = computed(
     () =>
-      `position-${this.position()} size-${this.size()}${this.open() ? ' is-open' : ''}`
+      `llm-drawer position-${this.position()} size-${this.size()}${this.open() ? ' is-open' : ''}`
   );
 
   constructor() {
@@ -158,6 +158,7 @@ export class LlmDrawer {
   `,
   styleUrl: './llm-drawer.css',
   host: {
+    class: 'llm-drawer-header',
     '[attr.id]': 'context.headerId',
   },
 })
@@ -174,6 +175,7 @@ export class LlmDrawerHeader {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content />`,
   styleUrl: './llm-drawer.css',
+  host: { class: 'llm-drawer-content' },
 })
 export class LlmDrawerContent {}
 
@@ -186,5 +188,6 @@ export class LlmDrawerContent {}
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content />`,
   styleUrl: './llm-drawer.css',
+  host: { class: 'llm-drawer-footer' },
 })
 export class LlmDrawerFooter {}

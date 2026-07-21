@@ -1,10 +1,10 @@
-.llm-toggle {
+:host {
   display: block;
   font-family: var(--ui-font-family);
   font-size: var(--ui-font-size-md);
 }
 
-.llm-toggle label {
+label {
   display: inline-flex;
   align-items: center;
   gap: var(--ui-spacing-3);
@@ -16,7 +16,7 @@
 }
 
 /* Hide native checkbox visually but keep it accessible */
-.llm-toggle input[type='checkbox'] {
+input[type='checkbox'] {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -29,7 +29,7 @@
 }
 
 /* Track — pill-shaped container */
-.llm-toggle .track {
+.track {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -46,7 +46,7 @@
 }
 
 /* Thumb — circular slider */
-.llm-toggle .thumb {
+.thumb {
   position: absolute;
   left: 0.125rem;
   width: 1.125rem;
@@ -59,58 +59,58 @@
 }
 
 /* Hover state */
-.llm-toggle label:hover:not(:has(input:disabled)) .track {
+label:hover:not(:has(input:disabled)) .track {
   border-color: var(--ui-color-primary);
 }
 
 /* Focus ring on track when native input is focused */
-.llm-toggle input[type='checkbox']:focus-visible + .track {
+input[type='checkbox']:focus-visible + .track {
   box-shadow: var(--ui-focus-ring);
   border-color: var(--ui-color-primary);
 }
 
 /* Checked state — track */
-.llm-toggle.is-checked .track {
+:host(.is-checked) .track {
   background-color: var(--ui-color-primary);
   border-color: var(--ui-color-primary);
 }
 
 /* Checked state — thumb slides right */
-.llm-toggle.is-checked .thumb {
+:host(.is-checked) .thumb {
   transform: translateX(1.25rem);
   background-color: var(--ui-color-text-on-primary);
 }
 
 /* Invalid state — track border */
-.llm-toggle.is-invalid .track {
+:host(.is-invalid) .track {
   border-color: var(--ui-color-input-border-invalid);
 }
 
-.llm-toggle.is-invalid input[type='checkbox']:focus-visible + .track {
+:host(.is-invalid) input[type='checkbox']:focus-visible + .track {
   border-color: var(--ui-color-input-border-invalid);
   box-shadow: 0 0 0 2px var(--ui-color-surface), 0 0 0 4px var(--ui-color-danger);
 }
 
 /* Disabled state */
-.llm-toggle.is-disabled {
+:host(.is-disabled) {
   opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }
 
-.llm-toggle.is-disabled label {
+:host(.is-disabled) label {
   cursor: not-allowed;
 }
 
-.llm-toggle.is-disabled .track {
+:host(.is-disabled) .track {
   cursor: not-allowed;
 }
 
 /* Error messages */
-.llm-toggle .errors {
+.errors {
   margin-top: var(--ui-spacing-2);
 }
 
-.llm-toggle .error-message {
+.error-message {
   margin: 0;
   font-size: var(--ui-font-size-sm);
   color: var(--ui-color-error-text);

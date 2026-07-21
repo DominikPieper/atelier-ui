@@ -48,6 +48,7 @@ import { LLM_BREADCRUMBS } from './llm-breadcrumbs.token';
   `,
   styleUrl: './llm-breadcrumbs.css',
   host: {
+    class: 'llm-breadcrumbs',
     '[style.--llm-separator]': 'separatorCssVar()',
   },
 })
@@ -96,6 +97,7 @@ export class LlmBreadcrumbs {
   `,
   styleUrl: './llm-breadcrumbs.css',
   host: {
+    class: 'llm-breadcrumb-item',
     '[class.is-current]': 'isCurrent()',
   },
 })

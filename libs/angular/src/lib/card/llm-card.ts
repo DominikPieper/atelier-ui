@@ -52,7 +52,7 @@ export class LlmCard {
   readonly role = input<'article' | 'region' | 'section' | undefined>(undefined);
 
   protected readonly hostClasses = computed(
-    () => `variant-${this.variant()} padding-${this.padding()}`
+    () => `llm-card variant-${this.variant()} padding-${this.padding()}`
   );
 }
 
@@ -70,6 +70,7 @@ export class LlmCard {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content />`,
   styleUrl: './llm-card.css',
+  host: { class: 'llm-card-header' },
 })
 export class LlmCardHeader {}
 
@@ -87,6 +88,7 @@ export class LlmCardHeader {}
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content />`,
   styleUrl: './llm-card.css',
+  host: { class: 'llm-card-content' },
 })
 export class LlmCardContent {}
 
@@ -106,5 +108,6 @@ export class LlmCardContent {}
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content />`,
   styleUrl: './llm-card.css',
+  host: { class: 'llm-card-footer' },
 })
 export class LlmCardFooter {}

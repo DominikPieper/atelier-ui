@@ -1,45 +1,45 @@
 /* ── AccordionGroup ──────────────────────────────────────────────────────── */
-.llm-accordion-group {
+:host(.llm-accordion-group) {
   display: block;
   font-family: var(--ui-font-family);
   color: var(--ui-color-text);
 }
 
 /* ── Default variant — shared borders between items ──────────────────────── */
-.llm-accordion-group.variant-default {
+:host(.llm-accordion-group.variant-default) {
   border-top: 1px solid var(--ui-color-border);
 }
 
-.llm-accordion-group.variant-default .llm-accordion-item {
+:host(.llm-accordion-item):host-context(.variant-default) {
   border-bottom: 1px solid var(--ui-color-border);
 }
 
 /* ── Bordered variant — outer border + radius ────────────────────────────── */
-.llm-accordion-group.variant-bordered {
+:host(.llm-accordion-group.variant-bordered) {
   border: 1px solid var(--ui-color-border);
   border-radius: var(--ui-radius-lg);
   overflow: hidden;
 }
 
-.llm-accordion-group.variant-bordered .llm-accordion-item:not(:last-child) {
+:host(.llm-accordion-item:not(:last-child)):host-context(.variant-bordered) {
   border-bottom: 1px solid var(--ui-color-border);
 }
 
 /* ── Separated variant — card-like items with gap ────────────────────────── */
-.llm-accordion-group.variant-separated {
+:host(.llm-accordion-group.variant-separated) {
   display: flex;
   flex-direction: column;
   gap: var(--ui-spacing-2);
 }
 
-.llm-accordion-group.variant-separated .llm-accordion-item {
+:host(.llm-accordion-item):host-context(.variant-separated) {
   border: 1px solid var(--ui-color-border);
   border-radius: var(--ui-radius-lg);
   overflow: hidden;
 }
 
 /* ── AccordionItem ──────────────────────────────────────────────────────────── */
-.llm-accordion-item {
+:host(.llm-accordion-item) {
   display: block;
 }
 

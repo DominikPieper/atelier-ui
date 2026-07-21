@@ -33,6 +33,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0025](0025-cross-framework-a11y-conformance.md) | Cross-framework accessibility conformance gate (`check:a11y-parity`) | Accepted | Recorded |
 | [0026](0026-ship-css-and-tokens-in-packages.md) | Ship component CSS + `styles/tokens.css` inside the npm packages | Accepted | Recorded |
 | [0027](0027-angular-22-nx-23-upgrade.md) | Upgrade Angular to 22 and Nx to 23 | Accepted | Recorded |
+| [0028](0028-host-encapsulation-css-fix.md) | Fix the host-encapsulation CSS bug across 19 more Angular components | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

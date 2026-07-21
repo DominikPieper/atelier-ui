@@ -1,10 +1,10 @@
 /* LlmBreadcrumbs */
-.llm-breadcrumbs {
+:host(.llm-breadcrumbs) {
   display: block;
   font-family: var(--ui-font-family);
 }
 
-.breadcrumbs-list {
+.list {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -17,13 +17,13 @@
 }
 
 /* LlmBreadcrumbItem */
-.llm-breadcrumb-item {
+:host(.llm-breadcrumb-item) {
   display: flex;
   align-items: center;
 }
 
 /* Separator — chevron, CSS-generated, not read by screen readers */
-.llm-breadcrumb-item::after {
+:host(.llm-breadcrumb-item)::after {
   content: var(--llm-separator, '›');
   margin: 0 var(--ui-spacing-2);
   color: var(--ui-color-border-hover);
@@ -31,12 +31,12 @@
   line-height: 1;
 }
 
-.llm-breadcrumb-item.is-current::after {
+:host(.llm-breadcrumb-item.is-current)::after {
   display: none;
 }
 
-/* Links (navigable breadcrumbs) */
-.llm-breadcrumb-item .breadcrumb-link {
+/* Link (always an <a>; href is omitted for the current item) */
+a {
   color: var(--ui-color-text-muted);
   text-decoration: none;
   border-radius: var(--ui-radius-sm);
@@ -45,18 +45,18 @@
   transition: color var(--ui-transition-fast), background-color var(--ui-transition-fast);
 }
 
-.llm-breadcrumb-item .breadcrumb-link:hover {
+a:hover {
   color: var(--ui-color-text);
   background-color: var(--ui-color-surface-sunken);
 }
 
-.llm-breadcrumb-item .breadcrumb-link:focus-visible {
+a:focus-visible {
   outline: none;
   box-shadow: var(--ui-focus-ring);
 }
 
-/* Current item (plain text) */
-.llm-breadcrumb-item .breadcrumb-current {
+/* Current item (plain text look, no href) */
+:host(.llm-breadcrumb-item.is-current) a {
   color: var(--ui-color-text);
   font-weight: var(--ui-font-weight-semibold);
 }

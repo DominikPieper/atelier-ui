@@ -1,4 +1,4 @@
-.llm-alert {
+:host {
   display: flex;
   align-items: flex-start;
   gap: var(--ui-spacing-3);
@@ -12,37 +12,37 @@
   width: 100%;
 }
 
-.llm-alert .content {
+.content {
   flex: 1;
 }
 
 /* Variants — semantic-tinted bg + matching text + faint border. */
-.llm-alert.variant-info {
+:host(.variant-info) {
   background-color: var(--ui-color-info-bg);
   color: var(--ui-color-info-text);
   border-color: color-mix(in srgb, var(--ui-color-info-text) 20%, transparent);
 }
 
-.llm-alert.variant-success {
+:host(.variant-success) {
   background-color: var(--ui-color-success-bg);
   color: var(--ui-color-success-text);
   border-color: color-mix(in srgb, var(--ui-color-success-text) 20%, transparent);
 }
 
-.llm-alert.variant-warning {
+:host(.variant-warning) {
   background-color: var(--ui-color-warning-bg);
   color: var(--ui-color-warning-text);
   border-color: color-mix(in srgb, var(--ui-color-warning-text) 20%, transparent);
 }
 
-.llm-alert.variant-danger {
+:host(.variant-danger) {
   background-color: var(--ui-color-danger-bg);
   color: var(--ui-color-danger-text);
   border-color: color-mix(in srgb, var(--ui-color-danger-text) 20%, transparent);
 }
 
 /* Dismiss button */
-.llm-alert .dismiss {
+.dismiss {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -60,19 +60,19 @@
   line-height: 1;
 }
 
-.llm-alert .dismiss:hover {
+.dismiss:hover {
   opacity: 1;
   background-color: color-mix(in srgb, currentColor 10%, transparent);
 }
 
-.llm-alert .dismiss:focus-visible {
+.dismiss:focus-visible {
   outline: none;
   box-shadow: var(--ui-focus-ring);
   opacity: 1;
 }
 
 /* Semantic indicator glyph — non-color differentiation (WCAG 1.4.1). */
-.llm-alert .content .variant-icon {
+.content .variant-icon {
   display: inline-block;
   font-weight: 700;
   margin-right: 0.4em;

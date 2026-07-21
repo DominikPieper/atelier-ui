@@ -98,7 +98,7 @@ export class LlmTable implements LlmTableContext {
 
   /** @internal */
   protected readonly hostClasses = computed(() => {
-    const classes = [`variant-${this.variant()}`, `size-${this.size()}`];
+    const classes = ['llm-table', `variant-${this.variant()}`, `size-${this.size()}`];
     if (this.stickyHeader()) classes.push('is-sticky-header');
     return classes.join(' ');
   });

@@ -1,10 +1,5 @@
-/* ── Host wrapper ──────────────────────────────────────────────────────────── */
-.llm-drawer-host {
-  display: contents;
-}
-
 /* ── Native <dialog> base ──────────────────────────────────────────────────── */
-.llm-drawer-host dialog {
+:host(.llm-drawer) dialog {
   all: unset;
   position: fixed;
   display: none;
@@ -19,13 +14,13 @@
     overlay var(--ui-duration-slow) allow-discrete;
 }
 
-.llm-drawer-host dialog[open] {
+:host(.llm-drawer) dialog[open] {
   display: flex;
   transform: translate(0, 0) !important;
 }
 
 /* ── Backdrop ──────────────────────────────────────────────────────────────── */
-.llm-drawer-host dialog::backdrop {
+:host(.llm-drawer) dialog::backdrop {
   background: var(--ui-color-overlay);
   backdrop-filter: blur(2px);
   transition:
@@ -35,23 +30,23 @@
 }
 
 @starting-style {
-  .llm-drawer-host dialog[open]::backdrop {
+  :host(.llm-drawer) dialog[open]::backdrop {
     opacity: 0;
   }
 }
 
 @media (prefers-color-scheme: dark) {
-  .llm-drawer-host dialog::backdrop {
+  :host(.llm-drawer) dialog::backdrop {
     background: var(--ui-color-overlay);
   }
 }
 
-[data-theme='dark'] .llm-drawer-host dialog::backdrop {
+:host-context([data-theme='dark']) dialog::backdrop {
   background: var(--ui-color-overlay);
 }
 
 /* ── Panel (inner wrapper) ─────────────────────────────────────────────────── */
-.llm-drawer-host .panel {
+.panel {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -64,53 +59,53 @@
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
 /* ── Right ─────────────────────────────────────────────────────────────────── */
-.llm-drawer-host.position-right dialog {
+:host(.llm-drawer.position-right) dialog {
   inset: 0 0 0 auto;
   height: 100dvh;
   transform: translateX(100%);
 }
 
 @starting-style {
-  .llm-drawer-host.position-right dialog[open] {
+  :host(.llm-drawer.position-right) dialog[open] {
     transform: translateX(100%);
   }
 }
 
 /* ── Left ──────────────────────────────────────────────────────────────────── */
-.llm-drawer-host.position-left dialog {
+:host(.llm-drawer.position-left) dialog {
   inset: 0 auto 0 0;
   height: 100dvh;
   transform: translateX(-100%);
 }
 
 @starting-style {
-  .llm-drawer-host.position-left dialog[open] {
+  :host(.llm-drawer.position-left) dialog[open] {
     transform: translateX(-100%);
   }
 }
 
 /* ── Top ───────────────────────────────────────────────────────────────────── */
-.llm-drawer-host.position-top dialog {
+:host(.llm-drawer.position-top) dialog {
   inset: 0 0 auto 0;
   width: 100vw;
   transform: translateY(-100%);
 }
 
 @starting-style {
-  .llm-drawer-host.position-top dialog[open] {
+  :host(.llm-drawer.position-top) dialog[open] {
     transform: translateY(-100%);
   }
 }
 
 /* ── Bottom ────────────────────────────────────────────────────────────────── */
-.llm-drawer-host.position-bottom dialog {
+:host(.llm-drawer.position-bottom) dialog {
   inset: auto 0 0 0;
   width: 100vw;
   transform: translateY(100%);
 }
 
 @starting-style {
-  .llm-drawer-host.position-bottom dialog[open] {
+  :host(.llm-drawer.position-bottom) dialog[open] {
     transform: translateY(100%);
   }
 }
@@ -120,44 +115,44 @@
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
 /* Left / Right widths */
-.llm-drawer-host.position-right.size-sm dialog,
-.llm-drawer-host.position-left.size-sm dialog {
+:host(.llm-drawer.position-right.size-sm) dialog,
+:host(.llm-drawer.position-left.size-sm) dialog {
   width: 20rem;
 }
 
-.llm-drawer-host.position-right.size-md dialog,
-.llm-drawer-host.position-left.size-md dialog {
+:host(.llm-drawer.position-right.size-md) dialog,
+:host(.llm-drawer.position-left.size-md) dialog {
   width: 28rem;
 }
 
-.llm-drawer-host.position-right.size-lg dialog,
-.llm-drawer-host.position-left.size-lg dialog {
+:host(.llm-drawer.position-right.size-lg) dialog,
+:host(.llm-drawer.position-left.size-lg) dialog {
   width: 40rem;
 }
 
-.llm-drawer-host.position-right.size-full dialog,
-.llm-drawer-host.position-left.size-full dialog {
+:host(.llm-drawer.position-right.size-full) dialog,
+:host(.llm-drawer.position-left.size-full) dialog {
   width: 100vw;
 }
 
 /* Top / Bottom heights */
-.llm-drawer-host.position-top.size-sm dialog,
-.llm-drawer-host.position-bottom.size-sm dialog {
+:host(.llm-drawer.position-top.size-sm) dialog,
+:host(.llm-drawer.position-bottom.size-sm) dialog {
   height: 12rem;
 }
 
-.llm-drawer-host.position-top.size-md dialog,
-.llm-drawer-host.position-bottom.size-md dialog {
+:host(.llm-drawer.position-top.size-md) dialog,
+:host(.llm-drawer.position-bottom.size-md) dialog {
   height: 20rem;
 }
 
-.llm-drawer-host.position-top.size-lg dialog,
-.llm-drawer-host.position-bottom.size-lg dialog {
+:host(.llm-drawer.position-top.size-lg) dialog,
+:host(.llm-drawer.position-bottom.size-lg) dialog {
   height: 32rem;
 }
 
-.llm-drawer-host.position-top.size-full dialog,
-.llm-drawer-host.position-bottom.size-full dialog {
+:host(.llm-drawer.position-top.size-full) dialog,
+:host(.llm-drawer.position-bottom.size-full) dialog {
   height: 100dvh;
 }
 
@@ -165,7 +160,7 @@
 /* SUB-COMPONENTS                                                              */
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
-.llm-drawer-header {
+:host(.llm-drawer-header) {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -178,7 +173,7 @@
   flex-shrink: 0;
 }
 
-.llm-drawer-content {
+:host(.llm-drawer-content) {
   display: block;
   padding: var(--ui-spacing-6);
   overflow-y: auto;
@@ -186,7 +181,7 @@
   color: var(--ui-color-text);
 }
 
-.llm-drawer-footer {
+:host(.llm-drawer-footer) {
   display: flex;
   align-items: center;
   justify-content: flex-end;

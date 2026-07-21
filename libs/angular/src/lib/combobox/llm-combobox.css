@@ -2,7 +2,7 @@
    llm-combobox.css
    ============================================================ */
 
-.llm-combobox {
+:host {
   display: block;
   position: relative;
   font-family: var(--ui-font-family);
@@ -12,13 +12,13 @@
 /* ---------------------------------------------------------------------------
    Input wrapper
    --------------------------------------------------------------------------- */
-.llm-combobox-wrapper {
+.combobox-wrapper {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.llm-combobox-input {
+.combobox-input {
   width: 100%;
   min-height: 2.5rem;
   box-sizing: border-box;
@@ -37,42 +37,42 @@
   cursor: text;
 }
 
-.llm-combobox-input::placeholder {
+.combobox-input::placeholder {
   color: var(--ui-color-placeholder);
 }
 
-.llm-combobox-input:hover:not(:disabled) {
+.combobox-input:hover:not(:disabled) {
   border-color: var(--ui-color-input-border-hover);
 }
 
-.llm-combobox-input:focus-visible,
-.llm-combobox.is-open .llm-combobox-input {
+.combobox-input:focus-visible,
+:host(.is-open) .combobox-input {
   border-color: var(--ui-color-input-border-focus);
   box-shadow: var(--ui-focus-ring);
 }
 
-.llm-combobox.is-invalid .llm-combobox-input {
+:host(.is-invalid) .combobox-input {
   border-color: var(--ui-color-input-border-invalid);
 }
 
-.llm-combobox.is-invalid .llm-combobox-input:focus-visible {
+:host(.is-invalid) .combobox-input:focus-visible {
   border-color: var(--ui-color-input-border-invalid);
   box-shadow: 0 0 0 2px var(--ui-color-surface), 0 0 0 4px var(--ui-color-danger);
 }
 
-.llm-combobox.is-disabled {
+:host(.is-disabled) {
   opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }
 
-.llm-combobox.is-disabled .llm-combobox-input {
+:host(.is-disabled) .combobox-input {
   cursor: not-allowed;
 }
 
 /* ---------------------------------------------------------------------------
    Chevron icon
    --------------------------------------------------------------------------- */
-.llm-combobox-icon {
+.combobox-icon {
   position: absolute;
   right: var(--ui-spacing-4);
   pointer-events: none;
@@ -82,14 +82,14 @@
   align-items: center;
 }
 
-.llm-combobox.is-open .llm-combobox-icon {
+:host(.is-open) .combobox-icon {
   transform: rotate(180deg);
 }
 
 /* ---------------------------------------------------------------------------
    Panel
    --------------------------------------------------------------------------- */
-.llm-combobox-panel {
+.panel {
   position: absolute;
   left: 0;
   top: calc(100% + var(--ui-spacing-2));
@@ -109,7 +109,7 @@
 /* ---------------------------------------------------------------------------
    Options
    --------------------------------------------------------------------------- */
-.llm-combobox-option {
+.option {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -121,25 +121,25 @@
   transition: background-color var(--ui-transition-fast);
 }
 
-.llm-combobox-option:hover:not(.is-disabled) {
+.option:hover:not(.is-disabled) {
   background-color: var(--ui-color-surface-sunken);
 }
 
-.llm-combobox-option.is-active {
+.option.is-active {
   background-color: var(--ui-color-primary-light);
   color: var(--ui-color-primary);
 }
 
-.llm-combobox-option.is-selected {
+.option.is-selected {
   font-weight: var(--ui-font-weight-semibold);
 }
 
-.llm-combobox-option.is-disabled {
+.option.is-disabled {
   opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }
 
-.llm-combobox-check {
+.option-check {
   color: var(--ui-color-primary);
   flex-shrink: 0;
 }
@@ -147,7 +147,7 @@
 /* ---------------------------------------------------------------------------
    No results
    --------------------------------------------------------------------------- */
-.llm-combobox-no-results {
+.no-results {
   padding: var(--ui-spacing-4);
   text-align: center;
   color: var(--ui-color-text-muted);
@@ -157,11 +157,11 @@
 /* ---------------------------------------------------------------------------
    Errors
    --------------------------------------------------------------------------- */
-.llm-combobox-errors {
+.errors {
   margin-top: var(--ui-spacing-2);
 }
 
-.llm-combobox-error-message {
+.error-message {
   margin: 0;
   font-size: var(--ui-font-size-sm);
   color: var(--ui-color-error-text);
