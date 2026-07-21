@@ -1,3 +1,27 @@
+## 0.2.0 (2026-07-21)
+
+### 🚀 Features
+
+- ⚠️  **docs:** rename Llm prefix to Atl across docs, generated artifacts, and tooling docs ([965787d](https://github.com/DominikPieper/atelier-ui/commit/965787d))
+- ⚠️  **vue:** rename Llm prefix to Atl across the Vue library ([ac331ea](https://github.com/DominikPieper/atelier-ui/commit/ac331ea))
+- ⚠️  **spec:** rename Llm prefix to Atl in spec contract ([6860cc4](https://github.com/DominikPieper/atelier-ui/commit/6860cc4))
+
+### ⚠️  Breaking Changes
+
+- **docs:** rename Llm prefix to Atl across docs, generated artifacts, and tooling docs  ([965787d](https://github.com/DominikPieper/atelier-ui/commit/965787d))
+- **vue:** rename Llm prefix to Atl across the Vue library  ([ac331ea](https://github.com/DominikPieper/atelier-ui/commit/ac331ea))
+  every Vue component, camelCase prop (llmTooltip ->
+  atlTooltip etc.), and CSS class renamed Llm/llm- -> Atl/atl-
+  (ADR-0029). nx lint/test/build vue all green (262/262 tests).
+- **spec:** rename Llm prefix to Atl in spec contract  ([6860cc4](https://github.com/DominikPieper/atelier-ui/commit/6860cc4))
+  every exported spec type/interface renamed
+  Llm* -> Atl* (ADR-0029). Framework libs will fail to typecheck
+  until each is renamed in turn (next commits) — expected mid-migration.
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.1.12 (2026-07-21)
 
 This was a version bump only for vue to align it with other projects, there were no code changes.

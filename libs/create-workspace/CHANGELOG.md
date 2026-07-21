@@ -1,3 +1,17 @@
+## 0.2.0 (2026-07-21)
+
+### 🚀 Features
+
+- ⚠️  **docs:** rename Llm prefix to Atl across docs, generated artifacts, and tooling docs ([965787d](https://github.com/DominikPieper/atelier-ui/commit/965787d))
+
+### ⚠️  Breaking Changes
+
+- **docs:** rename Llm prefix to Atl across docs, generated artifacts, and tooling docs  ([965787d](https://github.com/DominikPieper/atelier-ui/commit/965787d))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.1.12 (2026-07-21)
 
 This was a version bump only for create-workspace to align it with other projects, there were no code changes.
