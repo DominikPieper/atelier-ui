@@ -27,7 +27,7 @@ HTTP (MCP over HTTP)
 ```
 
 ## Components Covered
-25+ Angular components including LlmButton, LlmCard, LlmInput, LlmTextarea, LlmCheckbox, LlmToggle, LlmBadge, LlmAlert, LlmSelect, LlmDialog, LlmTabGroup, LlmAccordionGroup, LlmMenu, LlmTooltip, LlmToast, LlmSkeleton, LlmAvatar, and more.
+25+ Angular components including AtlButton, AtlCard, AtlInput, AtlTextarea, AtlCheckbox, AtlToggle, AtlBadge, AtlAlert, AtlSelect, AtlDialog, AtlTabGroup, AtlAccordionGroup, AtlMenu, AtlTooltip, AtlToast, AtlSkeleton, AtlAvatar, and more.
 
 ## Usage Pattern
 1. Call `list-all-documentation` to get valid component IDs

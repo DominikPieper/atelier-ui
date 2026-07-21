@@ -54,7 +54,7 @@ The repo ships an Astro 5 docs site + three parallel component libraries (`@atel
 - `atelier-ui` — package/repo, always lower-kebab
 - `@atelier-ui/{spec,angular,react,vue}` — scoped npm packages, lowercased
 - `MCP`, `ARIA`, `WCAG` — uppercased acronyms
-- Component names: `LlmButton`, `LlmCard`, `LlmCardHeader` — PascalCase with the `Llm` prefix (the prefix is a relic of "LLM components" — kept consistent across all three frameworks)
+- Component names: `AtlButton`, `AtlCard`, `AtlCardHeader` — PascalCase with the `Atl` prefix (Atelier — kept consistent across all three frameworks; see ADR-0029)
 - Headings: sentence case (`The three pillars`), never title case
 
 **Tagline.** Three sentences, em-dash separated:
@@ -135,7 +135,7 @@ copy · paste · add · edit · delete · close · more · default-toast
 
 **Style.** Line glyphs, 1.5–2px stroke, 24px nominal box, `currentColor` so they inherit text colour. Closest CDN match is **Lucide** (same outlined geometry, same stroke weight) — used here as substitute since the original SVG sources weren't extracted.
 
-**Decorative vs. labelled.** Every `LlmIcon` accepts a `label` prop. When provided, the icon is announced as an image with that name. When omitted, it's marked decorative (`aria-hidden`). This is enforced by spec.
+**Decorative vs. labelled.** Every `AtlIcon` accepts a `label` prop. When provided, the icon is announced as an image with that name. When omitted, it's marked decorative (`aria-hidden`). This is enforced by spec.
 
 **Emoji.** Never. The codebase is emoji-free.
 
@@ -156,5 +156,5 @@ copy · paste · add · edit · delete · close · more · default-toast
 ## Caveats / substitutions
 
 - **Fonts.** `assets/colors_and_type.css` is a 1:1 mirror of the upstream `libs/react/src/styles/tokens.css` and intentionally does **not** load any web font — the Astro docs site supplies Inter + Fira Code through its own pipeline. When using this file standalone (slides, throwaway artifacts), prepend `@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap');` and add `--ui-font-mono: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, monospace;` to `:root`. To vendor fonts, drop `.woff2` files into a `fonts/` folder and swap the import.
-- **Icons.** The actual SVG sources live in `libs/{framework}/src/lib/icon/`. They were not pulled here to keep the asset surface small. The `LlmIcon` name list is canonical; substitute Lucide at the same names for high-fidelity recreations.
+- **Icons.** The actual SVG sources live in `libs/{framework}/src/lib/icon/`. They were not pulled here to keep the asset surface small. The `AtlIcon` name list is canonical; substitute Lucide at the same names for high-fidelity recreations.
 - **Logo.** User-supplied PNG. No SVG version available.

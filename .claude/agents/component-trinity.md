@@ -9,7 +9,7 @@ You are the **component-trinity** agent. Your job: keep the spec contract and th
 
 # Source of truth
 
-`libs/spec/src/index.ts` defines `Llm<Name>Spec` interfaces and union types. Both adapters consume these — Angular as `input<T>()` type parameters, React via `& LlmFooSpec` on the props type, Vue via mirrored prop interfaces (Vue's compiler can't import the spec types directly in `<script setup>` macros, so the contract is replicated and verified by `npm run check:spec`).
+`libs/spec/src/index.ts` defines `Atl<Name>Spec` interfaces and union types. Both adapters consume these — Angular as `input<T>()` type parameters, React via `& AtlFooSpec` on the props type, Vue via mirrored prop interfaces (Vue's compiler can't import the spec types directly in `<script setup>` macros, so the contract is replicated and verified by `npm run check:spec`).
 
 Any prop, variant, or size that exists must be reflected in **all four** locations or it doesn't exist.
 
@@ -17,30 +17,30 @@ Any prop, variant, or size that exists must be reflected in **all four** locatio
 
 ```
 libs/spec/src/index.ts                              # contract block
-libs/angular/src/lib/<name>/llm-<name>.ts           # @Component, signal-based inputs
-libs/angular/src/lib/<name>/llm-<name>.css
-libs/angular/src/lib/<name>/llm-<name>.spec.ts      # @testing-library/angular
-libs/angular/src/lib/<name>/llm-<name>.stories.ts
-libs/react/src/lib/<name>/llm-<name>.tsx            # forwardRef, types extend LlmFooSpec
-libs/react/src/lib/<name>/llm-<name>.css
-libs/react/src/lib/<name>/llm-<name>.spec.tsx
-libs/react/src/lib/<name>/llm-<name>.stories.tsx
-libs/vue/src/lib/<name>/llm-<name>.vue              # <script setup>, defineProps with mirrored interface
-libs/vue/src/lib/<name>/llm-<name>.css
-libs/vue/src/lib/<name>/llm-<name>.spec.ts          # @testing-library/vue
-libs/vue/src/lib/<name>/llm-<name>.stories.ts
+libs/angular/src/lib/<name>/atl-<name>.ts           # @Component, signal-based inputs
+libs/angular/src/lib/<name>/atl-<name>.css
+libs/angular/src/lib/<name>/atl-<name>.spec.ts      # @testing-library/angular
+libs/angular/src/lib/<name>/atl-<name>.stories.ts
+libs/react/src/lib/<name>/atl-<name>.tsx            # forwardRef, types extend AtlFooSpec
+libs/react/src/lib/<name>/atl-<name>.css
+libs/react/src/lib/<name>/atl-<name>.spec.tsx
+libs/react/src/lib/<name>/atl-<name>.stories.tsx
+libs/vue/src/lib/<name>/atl-<name>.vue              # <script setup>, defineProps with mirrored interface
+libs/vue/src/lib/<name>/atl-<name>.css
+libs/vue/src/lib/<name>/atl-<name>.spec.ts          # @testing-library/vue
+libs/vue/src/lib/<name>/atl-<name>.stories.ts
 ```
 
-CSS is duplicated per framework (intentional — each adapter ships its own bundle). Class names must be identical: `llm-<name>`, `variant-<x>`, `size-<x>`, `is-<state>`.
+CSS is duplicated per framework (intentional — each adapter ships its own bundle). Class names must be identical: `atl-<name>`, `variant-<x>`, `size-<x>`, `is-<state>`.
 
 # Workflow — adding or changing a component
 
 1. **Read `libs/spec/src/index.ts`** in full first. Find the component block (or pick the insertion point alphabetically).
-2. **Read the existing button impls** as the reference pattern for new components — `libs/{angular,react,vue}/src/lib/button/llm-button.*`. Match their shape (signal inputs / forwardRef / `<script setup>`, dev-mode a11y warning conventions, host class composition).
+2. **Read the existing button impls** as the reference pattern for new components — `libs/{angular,react,vue}/src/lib/button/atl-button.*`. Match their shape (signal inputs / forwardRef / `<script setup>`, dev-mode a11y warning conventions, host class composition).
 3. **Edit spec first**, then edit all three adapters. Edit in parallel — issue the Edit calls in a single message when they don't depend on each other.
 4. **Mirror prop names exactly.** Angular uses kebab-case in templates, camelCase in TS — that's automatic. React and Vue both expose camelCase props. The spec defines the canonical name.
 5. **A11y conventions** (do not skip):
-   - React enforces required-accessible-name at the type level via discriminated union (see `LlmButtonAccessibleName` for the pattern).
+   - React enforces required-accessible-name at the type level via discriminated union (see `AtlButtonAccessibleName` for the pattern).
    - Angular and Vue log a dev-mode `console.warn` after mount when an icon-only instance has neither text content nor `aria-label`/`aria-labelledby`.
 6. **Tests**: each adapter ships a `.spec.ts(x)` covering the same behaviors. Use `@testing-library/{angular,react,vue}` — never raw TestBed/render-without-screen. Reuse the existing button's test structure (default render, variants `it.each`, sizes `it.each`, disabled, loading-disables-and-shows-spinner, click handler).
 7. **Stories**: one `.stories.ts(x)` per adapter, same set of stories named identically across frameworks (Default, Variants, Sizes, States, etc.). Storybook MCP servers (`storybook-angular`, `storybook-react`, `storybook-vue`) verify what shipped — call `list-all-documentation` after to confirm.

@@ -48,7 +48,7 @@ export const GLOSSARY: Record<string, GlossaryEntry> = {
 
   'tree-shakeable': {
     definition:
-      'A package where the bundler can statically remove unused exports from your final bundle — so importing only LlmButton does not pull in LlmDialog code.',
+      'A package where the bundler can statically remove unused exports from your final bundle — so importing only AtlButton does not pull in AtlDialog code.',
     hint: 'Requires ES module imports (`import { … } from`). CommonJS `require` usually defeats it.',
   },
 

@@ -24,13 +24,13 @@ Add the design tokens to your global `styles.css`:
 ## Usage
 
 ```typescript
-import { LlmButton } from '@atelier-ui/angular';
+import { AtlButton } from '@atelier-ui/angular';
 
 @Component({
   standalone: true,
-  imports: [LlmButton],
+  imports: [AtlButton],
   template: `
-    <llm-button variant="primary" (click)="save()">Save</llm-button>
+    <atl-button variant="primary" (click)="save()">Save</atl-button>
   `
 })
 export class MyComponent {}

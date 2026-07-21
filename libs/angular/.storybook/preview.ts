@@ -2,7 +2,7 @@ import type { Preview } from '@storybook/angular';
 
 // Side-effect import: Vite injects tokens.css globally into the page
 import '../src/styles/tokens.css';
-// CDK overlay container styles (required for LlmMenu, LlmTooltip)
+// CDK overlay container styles (required for AtlMenu, AtlTooltip)
 import '@angular/cdk/overlay-prebuilt.css';
 
 const preview: Preview = {

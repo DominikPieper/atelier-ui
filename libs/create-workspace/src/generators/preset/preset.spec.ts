@@ -286,8 +286,8 @@ describe('preset generator', () => {
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
     expect(md).toContain('@atelier-ui/angular');
-    expect(md).toContain('LlmButtonComponent');
-    expect(md).toContain('llm-button');
+    expect(md).toContain('AtlButtonComponent');
+    expect(md).toContain('atl-button');
   });
 
   it('CLAUDE.md includes React-specific import pattern', async () => {
@@ -295,7 +295,7 @@ describe('preset generator', () => {
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
     expect(md).toContain('@atelier-ui/react');
-    expect(md).toContain('useLlmToast');
+    expect(md).toContain('useAtlToast');
     expect(md).toContain('onXxx');
   });
 
@@ -305,7 +305,7 @@ describe('preset generator', () => {
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
     expect(md).toContain('@atelier-ui/vue');
     expect(md).toContain('v-model');
-    expect(md).toContain('useLlmToast');
+    expect(md).toContain('useAtlToast');
   });
 
   it('CLAUDE.md includes all three frameworks when all selected', async () => {

@@ -111,7 +111,7 @@ Authoritative list: [`libs/angular/src/index.ts`](libs/angular/src/index.ts), [`
 `@atelier-ui/spec` contains one TypeScript interface per component. All three framework libraries import from it so the compiler enforces parity.
 
 ```typescript
-export interface LlmButtonSpec {
+export interface AtlButtonSpec {
   variant?: 'primary' | 'secondary' | 'outline';
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
@@ -131,7 +131,7 @@ export interface LlmButtonSpec {
 
 **Predictable APIs.** Same prop names for the same concepts (`variant`, `size`, `disabled`). String literal unions — no enums, no numeric codes.
 
-**Composition over configuration.** Sub-components follow a naming pattern (`LlmCard` + `LlmCardHeader` + `LlmCardContent` + `LlmCardFooter`). No config objects.
+**Composition over configuration.** Sub-components follow a naming pattern (`AtlCard` + `AtlCardHeader` + `AtlCardContent` + `AtlCardFooter`). No config objects.
 
 **Design tokens, not utility classes.** Everything visual is a `--ui-*` CSS custom property. Theming = token override. Dark mode ships via `prefers-color-scheme` with `data-theme="dark"` escape hatch.
 
@@ -209,7 +209,7 @@ npm run check:sync
 ├── talk/              # Conference talk materials (Storybook MCPs: Die Zukunft des Frontend Engineerings)
 ├── plan/              # Design guide, roadmap, Figma notes
 ├── tools/
-│   ├── generators/    # Nx generators (e.g. llm-component, llm-component-react)
+│   ├── generators/    # Nx generators (e.g. atl-component, atl-component-react)
 │   └── scripts/       # check-sync.js, check-docs-sync.js, preflight.mjs
 ├── .github/workflows/ # ci.yml, publish.yml
 └── netlify.toml       # Deploy config — docs + 3 Storybooks + MCP redirects

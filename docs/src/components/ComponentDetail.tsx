@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import {
-  LlmButton, LlmBadge, LlmCard, LlmCardHeader, LlmCardContent, LlmCardFooter,
-  LlmInput, LlmTextarea, LlmCheckbox, LlmToggle, LlmRadioGroup, LlmRadio,
-  LlmSelect, LlmOption, LlmAlert, LlmAvatar, LlmAvatarGroup, LlmSkeleton,
-  LlmTabGroup, LlmTab, LlmAccordionGroup, LlmAccordionItem, LlmTooltip,
-  LlmProgress, LlmAccordionHeader, LlmBreadcrumbs, LlmBreadcrumbItem,
-  LlmPagination, LlmDialog, LlmDialogHeader, LlmDialogContent, LlmDialogFooter,
-  LlmDrawer, LlmDrawerHeader, LlmDrawerContent, LlmDrawerFooter, LlmCodeBlock,
+  AtlButton, AtlBadge, AtlCard, AtlCardHeader, AtlCardContent, AtlCardFooter,
+  AtlInput, AtlTextarea, AtlCheckbox, AtlToggle, AtlRadioGroup, AtlRadio,
+  AtlSelect, AtlOption, AtlAlert, AtlAvatar, AtlAvatarGroup, AtlSkeleton,
+  AtlTabGroup, AtlTab, AtlAccordionGroup, AtlAccordionItem, AtlTooltip,
+  AtlProgress, AtlAccordionHeader, AtlBreadcrumbs, AtlBreadcrumbItem,
+  AtlPagination, AtlDialog, AtlDialogHeader, AtlDialogContent, AtlDialogFooter,
+  AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter, AtlCodeBlock,
 } from '@atelier-ui/react';
 import { componentDocs, COMPONENT_CATEGORIES } from '../data/components';
 import { getFramework, setFramework, subscribeFramework, type Framework } from '../lib/framework-pref';
@@ -20,32 +20,32 @@ const CATEGORY_TONE: Record<string, string> = {
 };
 
 const IMPORT_MAP: Record<string, string[]> = {
-  button: ['LlmButton'],
-  input: ['LlmInput'],
-  textarea: ['LlmTextarea'],
-  checkbox: ['LlmCheckbox'],
-  toggle: ['LlmToggle'],
-  'radio-group': ['LlmRadioGroup', 'LlmRadio'],
-  select: ['LlmSelect', 'LlmOption'],
-  badge: ['LlmBadge'],
-  card: ['LlmCard', 'LlmCardHeader', 'LlmCardContent', 'LlmCardFooter'],
-  avatar: ['LlmAvatar', 'LlmAvatarGroup'],
-  skeleton: ['LlmSkeleton'],
-  progress: ['LlmProgress'],
-  breadcrumbs: ['LlmBreadcrumbs', 'LlmBreadcrumbItem'],
-  tabs: ['LlmTabGroup', 'LlmTab'],
-  pagination: ['LlmPagination'],
-  menu: ['LlmMenu', 'LlmMenuItem', 'LlmMenuSeparator', 'LlmMenuTrigger'],
-  dialog: ['LlmDialog', 'LlmDialogHeader', 'LlmDialogContent', 'LlmDialogFooter'],
-  drawer: ['LlmDrawer', 'LlmDrawerHeader', 'LlmDrawerContent', 'LlmDrawerFooter'],
-  tooltip: ['LlmTooltip'],
-  toast: ['LlmToastProvider', 'LlmToastContainer', 'useLlmToast'],
-  accordion: ['LlmAccordionGroup', 'LlmAccordionItem'],
-  alert: ['LlmAlert'],
-  'code-block': ['LlmCodeBlock'],
-  table: ['LlmTable', 'LlmThead', 'LlmTbody', 'LlmTr', 'LlmTh', 'LlmTd'],
-  stepper: ['LlmStepper', 'LlmStep'],
-  combobox: ['LlmCombobox'],
+  button: ['AtlButton'],
+  input: ['AtlInput'],
+  textarea: ['AtlTextarea'],
+  checkbox: ['AtlCheckbox'],
+  toggle: ['AtlToggle'],
+  'radio-group': ['AtlRadioGroup', 'AtlRadio'],
+  select: ['AtlSelect', 'AtlOption'],
+  badge: ['AtlBadge'],
+  card: ['AtlCard', 'AtlCardHeader', 'AtlCardContent', 'AtlCardFooter'],
+  avatar: ['AtlAvatar', 'AtlAvatarGroup'],
+  skeleton: ['AtlSkeleton'],
+  progress: ['AtlProgress'],
+  breadcrumbs: ['AtlBreadcrumbs', 'AtlBreadcrumbItem'],
+  tabs: ['AtlTabGroup', 'AtlTab'],
+  pagination: ['AtlPagination'],
+  menu: ['AtlMenu', 'AtlMenuItem', 'AtlMenuSeparator', 'AtlMenuTrigger'],
+  dialog: ['AtlDialog', 'AtlDialogHeader', 'AtlDialogContent', 'AtlDialogFooter'],
+  drawer: ['AtlDrawer', 'AtlDrawerHeader', 'AtlDrawerContent', 'AtlDrawerFooter'],
+  tooltip: ['AtlTooltip'],
+  toast: ['AtlToastProvider', 'AtlToastContainer', 'useAtlToast'],
+  accordion: ['AtlAccordionGroup', 'AtlAccordionItem'],
+  alert: ['AtlAlert'],
+  'code-block': ['AtlCodeBlock'],
+  table: ['AtlTable', 'AtlThead', 'AtlTbody', 'AtlTr', 'AtlTh', 'AtlTd'],
+  stepper: ['AtlStepper', 'AtlStep'],
+  combobox: ['AtlCombobox'],
 };
 
 function getCategory(name: string): string {
@@ -73,11 +73,11 @@ const STORYBOOK_CATEGORY: Record<string, string> = {
 };
 
 // Storybook docs IDs follow `components-<category>-<component>--docs`, where
-// <component> is the primary selector lowercased (e.g. LlmTabGroup → llmtabgroup).
+// <component> is the primary selector lowercased (e.g. AtlTabGroup → llmtabgroup).
 function storybookDocsUrl(framework: Framework, name: string, category: string, selector: string): string {
   const base = `https://atelier.pieper.io/storybook-${framework}/`;
   const cat = STORYBOOK_CATEGORY[category];
-  // Toast's docs selector is "LlmToastProvider + useLlmToast" but its Storybook id is llmtoast.
+  // Toast's docs selector is "AtlToastProvider + useAtlToast" but its Storybook id is llmtoast.
   const segment = name === 'toast'
     ? 'llmtoast'
     : selector.split(' + ')[0].replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
@@ -159,112 +159,112 @@ function ComponentDemo({ name }: { name: string }) {
     case 'button':
       return (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'center' }}>
-          <LlmButton variant="primary">Primary</LlmButton>
-          <LlmButton variant="secondary">Secondary</LlmButton>
-          <LlmButton variant="outline">Outline</LlmButton>
-          <LlmButton variant="primary" size="sm">Small</LlmButton>
-          <LlmButton variant="primary" size="lg">Large</LlmButton>
-          <LlmButton variant="primary" loading={true}>Loading</LlmButton>
-          <LlmButton variant="primary" disabled={true}>Disabled</LlmButton>
+          <AtlButton variant="primary">Primary</AtlButton>
+          <AtlButton variant="secondary">Secondary</AtlButton>
+          <AtlButton variant="outline">Outline</AtlButton>
+          <AtlButton variant="primary" size="sm">Small</AtlButton>
+          <AtlButton variant="primary" size="lg">Large</AtlButton>
+          <AtlButton variant="primary" loading={true}>Loading</AtlButton>
+          <AtlButton variant="primary" disabled={true}>Disabled</AtlButton>
         </div>
       );
     case 'input':
       return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', width: '100%', maxWidth: '400px' }}>
-          <LlmInput type="text" placeholder="Default input" value={inputValue} onValueChange={setInputValue} />
-          <LlmInput type="email" placeholder="Email address" />
-          <LlmInput type="password" placeholder="Password" />
-          <LlmInput invalid={true} placeholder="Invalid state" />
-          <LlmInput disabled={true} placeholder="Disabled" />
+          <AtlInput type="text" placeholder="Default input" value={inputValue} onValueChange={setInputValue} />
+          <AtlInput type="email" placeholder="Email address" />
+          <AtlInput type="password" placeholder="Password" />
+          <AtlInput invalid={true} placeholder="Invalid state" />
+          <AtlInput disabled={true} placeholder="Disabled" />
         </div>
       );
     case 'textarea':
       return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', width: '100%', maxWidth: '400px' }}>
-          <LlmTextarea placeholder="Tell us about yourself..." rows={3} />
-          <LlmTextarea placeholder="Disabled" disabled={true} />
+          <AtlTextarea placeholder="Tell us about yourself..." rows={3} />
+          <AtlTextarea placeholder="Disabled" disabled={true} />
         </div>
       );
     case 'checkbox':
       return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          <LlmCheckbox checked={checkboxChecked} onCheckedChange={setCheckboxChecked}>I agree to the terms</LlmCheckbox>
-          <LlmCheckbox indeterminate={true}>Indeterminate state</LlmCheckbox>
-          <LlmCheckbox checked={true} disabled={true}>Disabled checked</LlmCheckbox>
+          <AtlCheckbox checked={checkboxChecked} onCheckedChange={setCheckboxChecked}>I agree to the terms</AtlCheckbox>
+          <AtlCheckbox indeterminate={true}>Indeterminate state</AtlCheckbox>
+          <AtlCheckbox checked={true} disabled={true}>Disabled checked</AtlCheckbox>
         </div>
       );
     case 'toggle':
       return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          <LlmToggle checked={toggleChecked} onCheckedChange={setToggleChecked}>Email notifications</LlmToggle>
-          <LlmToggle>Push notifications</LlmToggle>
-          <LlmToggle checked={true} disabled={true}>Always enabled</LlmToggle>
+          <AtlToggle checked={toggleChecked} onCheckedChange={setToggleChecked}>Email notifications</AtlToggle>
+          <AtlToggle>Push notifications</AtlToggle>
+          <AtlToggle checked={true} disabled={true}>Always enabled</AtlToggle>
         </div>
       );
     case 'radio-group':
       return (
-        <LlmRadioGroup name="plan" value={radioValue} onValueChange={setRadioValue}>
-          <LlmRadio radioValue="free">Free — Basic features</LlmRadio>
-          <LlmRadio radioValue="pro">Pro — $9/month</LlmRadio>
-          <LlmRadio radioValue="enterprise">Enterprise — Custom pricing</LlmRadio>
-        </LlmRadioGroup>
+        <AtlRadioGroup name="plan" value={radioValue} onValueChange={setRadioValue}>
+          <AtlRadio radioValue="free">Free — Basic features</AtlRadio>
+          <AtlRadio radioValue="pro">Pro — $9/month</AtlRadio>
+          <AtlRadio radioValue="enterprise">Enterprise — Custom pricing</AtlRadio>
+        </AtlRadioGroup>
       );
     case 'select':
       return (
         <div style={{ width: '100%', maxWidth: '300px' }}>
-          <LlmSelect placeholder="Select a country" value={selectValue} onValueChange={setSelectValue}>
-            <LlmOption optionValue="us">United States</LlmOption>
-            <LlmOption optionValue="ca">Canada</LlmOption>
-            <LlmOption optionValue="uk">United Kingdom</LlmOption>
-            <LlmOption optionValue="de">Germany</LlmOption>
-          </LlmSelect>
+          <AtlSelect placeholder="Select a country" value={selectValue} onValueChange={setSelectValue}>
+            <AtlOption optionValue="us">United States</AtlOption>
+            <AtlOption optionValue="ca">Canada</AtlOption>
+            <AtlOption optionValue="uk">United Kingdom</AtlOption>
+            <AtlOption optionValue="de">Germany</AtlOption>
+          </AtlSelect>
         </div>
       );
     case 'badge':
       return (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}>
-          <LlmBadge>Default</LlmBadge>
-          <LlmBadge variant="success">Active</LlmBadge>
-          <LlmBadge variant="warning">Pending</LlmBadge>
-          <LlmBadge variant="danger">Error</LlmBadge>
-          <LlmBadge variant="info">Info</LlmBadge>
-          <LlmBadge size="sm" variant="success">Small</LlmBadge>
+          <AtlBadge>Default</AtlBadge>
+          <AtlBadge variant="success">Active</AtlBadge>
+          <AtlBadge variant="warning">Pending</AtlBadge>
+          <AtlBadge variant="danger">Error</AtlBadge>
+          <AtlBadge variant="info">Info</AtlBadge>
+          <AtlBadge size="sm" variant="success">Small</AtlBadge>
         </div>
       );
     case 'card':
       return (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', width: '100%' }}>
-          <LlmCard variant="elevated" padding="md" style={{ flex: '1 1 220px', minWidth: 0 }}>
-            <LlmCardHeader>Elevated Card</LlmCardHeader>
-            <LlmCardContent>Default card with box shadow.</LlmCardContent>
-            <LlmCardFooter><LlmButton variant="primary" size="sm">Action</LlmButton></LlmCardFooter>
-          </LlmCard>
-          <LlmCard variant="outlined" padding="md" style={{ flex: '1 1 220px', minWidth: 0 }}>
-            <LlmCardHeader>Outlined Card</LlmCardHeader>
-            <LlmCardContent>Card with a visible border.</LlmCardContent>
-            <LlmCardFooter><LlmButton variant="outline" size="sm">Action</LlmButton></LlmCardFooter>
-          </LlmCard>
+          <AtlCard variant="elevated" padding="md" style={{ flex: '1 1 220px', minWidth: 0 }}>
+            <AtlCardHeader>Elevated Card</AtlCardHeader>
+            <AtlCardContent>Default card with box shadow.</AtlCardContent>
+            <AtlCardFooter><AtlButton variant="primary" size="sm">Action</AtlButton></AtlCardFooter>
+          </AtlCard>
+          <AtlCard variant="outlined" padding="md" style={{ flex: '1 1 220px', minWidth: 0 }}>
+            <AtlCardHeader>Outlined Card</AtlCardHeader>
+            <AtlCardContent>Card with a visible border.</AtlCardContent>
+            <AtlCardFooter><AtlButton variant="outline" size="sm">Action</AtlButton></AtlCardFooter>
+          </AtlCard>
         </div>
       );
     case 'avatar':
       return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-            <LlmAvatar name="Jane Doe" size="xs" />
-            <LlmAvatar name="John Smith" size="sm" />
-            <LlmAvatar name="Alice Johnson" size="md" status="online" />
-            <LlmAvatar name="Bob Brown" size="lg" status="away" />
-            <LlmAvatar name="Carol White" size="xl" shape="square" />
+            <AtlAvatar name="Jane Doe" size="xs" />
+            <AtlAvatar name="John Smith" size="sm" />
+            <AtlAvatar name="Alice Johnson" size="md" status="online" />
+            <AtlAvatar name="Bob Brown" size="lg" status="away" />
+            <AtlAvatar name="Carol White" size="xl" shape="square" />
           </div>
           <div>
             <p style={{ margin: '0 0 0.5rem', fontSize: '0.85rem', opacity: 0.7 }}>Group with overflow</p>
-            <LlmAvatarGroup max={3} size="md">
-              <LlmAvatar name="Alice" />
-              <LlmAvatar name="Bob" />
-              <LlmAvatar name="Carol" />
-              <LlmAvatar name="Dave" />
-              <LlmAvatar name="Eve" />
-            </LlmAvatarGroup>
+            <AtlAvatarGroup max={3} size="md">
+              <AtlAvatar name="Alice" />
+              <AtlAvatar name="Bob" />
+              <AtlAvatar name="Carol" />
+              <AtlAvatar name="Dave" />
+              <AtlAvatar name="Eve" />
+            </AtlAvatarGroup>
           </div>
         </div>
       );
@@ -272,146 +272,146 @@ function ComponentDemo({ name }: { name: string }) {
       return (
         <div style={{ width: '100%', maxWidth: '400px', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-            <LlmSkeleton variant="circular" width="48px" />
+            <AtlSkeleton variant="circular" width="48px" />
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <LlmSkeleton variant="text" width="40%" />
-              <LlmSkeleton variant="text" />
-              <LlmSkeleton variant="text" width="80%" />
+              <AtlSkeleton variant="text" width="40%" />
+              <AtlSkeleton variant="text" />
+              <AtlSkeleton variant="text" width="80%" />
             </div>
           </div>
-          <LlmSkeleton variant="rectangular" height="120px" />
+          <AtlSkeleton variant="rectangular" height="120px" />
         </div>
       );
     case 'progress':
       return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', maxWidth: '400px' }}>
-          <div><p style={{ margin: '0 0 0.5rem', fontSize: '0.8rem', opacity: 0.7 }}>25%</p><LlmProgress value={25} /></div>
-          <div><p style={{ margin: '0 0 0.5rem', fontSize: '0.8rem', opacity: 0.7 }}>60% — Success</p><LlmProgress value={60} variant="success" /></div>
-          <div><p style={{ margin: '0 0 0.5rem', fontSize: '0.8rem', opacity: 0.7 }}>85% — Warning</p><LlmProgress value={85} variant="warning" /></div>
-          <div><p style={{ margin: '0 0 0.5rem', fontSize: '0.8rem', opacity: 0.7 }}>Indeterminate</p><LlmProgress indeterminate={true} /></div>
+          <div><p style={{ margin: '0 0 0.5rem', fontSize: '0.8rem', opacity: 0.7 }}>25%</p><AtlProgress value={25} /></div>
+          <div><p style={{ margin: '0 0 0.5rem', fontSize: '0.8rem', opacity: 0.7 }}>60% — Success</p><AtlProgress value={60} variant="success" /></div>
+          <div><p style={{ margin: '0 0 0.5rem', fontSize: '0.8rem', opacity: 0.7 }}>85% — Warning</p><AtlProgress value={85} variant="warning" /></div>
+          <div><p style={{ margin: '0 0 0.5rem', fontSize: '0.8rem', opacity: 0.7 }}>Indeterminate</p><AtlProgress indeterminate={true} /></div>
         </div>
       );
     case 'breadcrumbs':
       return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          <LlmBreadcrumbs>
-            <LlmBreadcrumbItem href="/">Home</LlmBreadcrumbItem>
-            <LlmBreadcrumbItem href="/components">Components</LlmBreadcrumbItem>
-            <LlmBreadcrumbItem>Breadcrumbs</LlmBreadcrumbItem>
-          </LlmBreadcrumbs>
+          <AtlBreadcrumbs>
+            <AtlBreadcrumbItem href="/">Home</AtlBreadcrumbItem>
+            <AtlBreadcrumbItem href="/components">Components</AtlBreadcrumbItem>
+            <AtlBreadcrumbItem>Breadcrumbs</AtlBreadcrumbItem>
+          </AtlBreadcrumbs>
         </div>
       );
     case 'tabs':
       return (
         <div style={{ width: '100%' }}>
-          <LlmTabGroup selectedIndex={tabIndex} onSelectedIndexChange={setTabIndex}>
-            <LlmTab label="Account">
-              <div style={{ padding: '1rem 0' }}><LlmInput type="text" placeholder="Display name" /></div>
-            </LlmTab>
-            <LlmTab label="Notifications">
+          <AtlTabGroup selectedIndex={tabIndex} onSelectedIndexChange={setTabIndex}>
+            <AtlTab label="Account">
+              <div style={{ padding: '1rem 0' }}><AtlInput type="text" placeholder="Display name" /></div>
+            </AtlTab>
+            <AtlTab label="Notifications">
               <div style={{ padding: '1rem 0', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <LlmToggle>Email notifications</LlmToggle>
-                <LlmToggle checked={true}>Push notifications</LlmToggle>
+                <AtlToggle>Email notifications</AtlToggle>
+                <AtlToggle checked={true}>Push notifications</AtlToggle>
               </div>
-            </LlmTab>
-            <LlmTab label="Billing" disabled={true}>Billing (disabled)</LlmTab>
-          </LlmTabGroup>
+            </AtlTab>
+            <AtlTab label="Billing" disabled={true}>Billing (disabled)</AtlTab>
+          </AtlTabGroup>
         </div>
       );
     case 'pagination':
-      return <LlmPagination page={currentPage} pageCount={10} onPageChange={setCurrentPage} siblingCount={1} />;
+      return <AtlPagination page={currentPage} pageCount={10} onPageChange={setCurrentPage} siblingCount={1} />;
     case 'dialog':
       return (
         <div style={{ display: 'flex', gap: '1rem' }}>
-          <LlmButton variant="primary" onClick={() => setDialogOpen(true)}>Open Dialog</LlmButton>
-          <LlmDialog open={dialogOpen} onOpenChange={setDialogOpen} size="md">
-            <LlmDialogHeader>Component Specification</LlmDialogHeader>
-            <LlmDialogContent>
+          <AtlButton variant="primary" onClick={() => setDialogOpen(true)}>Open Dialog</AtlButton>
+          <AtlDialog open={dialogOpen} onOpenChange={setDialogOpen} size="md">
+            <AtlDialogHeader>Component Specification</AtlDialogHeader>
+            <AtlDialogContent>
               <p style={{ margin: 0, fontSize: '0.9375rem' }}>
-                The <code>LlmDialog</code> uses the native <code>&lt;dialog&gt;</code> element with
+                The <code>AtlDialog</code> uses the native <code>&lt;dialog&gt;</code> element with
                 built-in focus trapping and Escape key handling.
               </p>
-            </LlmDialogContent>
-            <LlmDialogFooter>
-              <LlmButton variant="outline" onClick={() => setDialogOpen(false)}>Cancel</LlmButton>
-              <LlmButton variant="primary" onClick={() => setDialogOpen(false)}>Got it</LlmButton>
-            </LlmDialogFooter>
-          </LlmDialog>
+            </AtlDialogContent>
+            <AtlDialogFooter>
+              <AtlButton variant="outline" onClick={() => setDialogOpen(false)}>Cancel</AtlButton>
+              <AtlButton variant="primary" onClick={() => setDialogOpen(false)}>Got it</AtlButton>
+            </AtlDialogFooter>
+          </AtlDialog>
         </div>
       );
     case 'drawer':
       return (
         <div>
-          <LlmButton variant="outline" onClick={() => setDrawerOpen(true)}>Open Drawer</LlmButton>
-          <LlmDrawer open={drawerOpen} onOpenChange={setDrawerOpen} position="right" size="sm">
-            <LlmDrawerHeader>Settings</LlmDrawerHeader>
-            <LlmDrawerContent>
+          <AtlButton variant="outline" onClick={() => setDrawerOpen(true)}>Open Drawer</AtlButton>
+          <AtlDrawer open={drawerOpen} onOpenChange={setDrawerOpen} position="right" size="sm">
+            <AtlDrawerHeader>Settings</AtlDrawerHeader>
+            <AtlDrawerContent>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <LlmInput type="text" placeholder="Search..." />
-                <LlmToggle checked={true}>Dark mode</LlmToggle>
+                <AtlInput type="text" placeholder="Search..." />
+                <AtlToggle checked={true}>Dark mode</AtlToggle>
               </div>
-            </LlmDrawerContent>
-            <LlmDrawerFooter>
-              <LlmButton variant="outline" onClick={() => setDrawerOpen(false)}>Close</LlmButton>
-              <LlmButton variant="primary" onClick={() => setDrawerOpen(false)}>Save</LlmButton>
-            </LlmDrawerFooter>
-          </LlmDrawer>
+            </AtlDrawerContent>
+            <AtlDrawerFooter>
+              <AtlButton variant="outline" onClick={() => setDrawerOpen(false)}>Close</AtlButton>
+              <AtlButton variant="primary" onClick={() => setDrawerOpen(false)}>Save</AtlButton>
+            </AtlDrawerFooter>
+          </AtlDrawer>
         </div>
       );
     case 'tooltip':
       return (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-          <LlmTooltip llmTooltip="Save your changes"><LlmButton variant="primary">Above</LlmButton></LlmTooltip>
-          <LlmTooltip llmTooltip="Copy to clipboard" llmTooltipPosition="right"><LlmButton variant="outline">Right</LlmButton></LlmTooltip>
-          <LlmTooltip llmTooltip="Delete item" llmTooltipPosition="below"><LlmButton variant="outline">Below</LlmButton></LlmTooltip>
+          <AtlTooltip atlTooltip="Save your changes"><AtlButton variant="primary">Above</AtlButton></AtlTooltip>
+          <AtlTooltip atlTooltip="Copy to clipboard" atlTooltipPosition="right"><AtlButton variant="outline">Right</AtlButton></AtlTooltip>
+          <AtlTooltip atlTooltip="Delete item" atlTooltipPosition="below"><AtlButton variant="outline">Below</AtlButton></AtlTooltip>
         </div>
       );
     case 'accordion':
       return (
         <div style={{ width: '100%' }}>
-          <LlmAccordionGroup variant="bordered">
-            <LlmAccordionItem expanded={accordionExpanded} onExpandedChange={setAccordionExpanded}>
-              <LlmAccordionHeader>What is Atelier UI?</LlmAccordionHeader>
+          <AtlAccordionGroup variant="bordered">
+            <AtlAccordionItem expanded={accordionExpanded} onExpandedChange={setAccordionExpanded}>
+              <AtlAccordionHeader>What is Atelier UI?</AtlAccordionHeader>
               A component library designed for AI-generated applications with consistent APIs.
-            </LlmAccordionItem>
-            <LlmAccordionItem>
-              <LlmAccordionHeader>How do I install it?</LlmAccordionHeader>
+            </AtlAccordionItem>
+            <AtlAccordionItem>
+              <AtlAccordionHeader>How do I install it?</AtlAccordionHeader>
               Run <code>npm install @atelier-ui/react</code> and import the styles.
-            </LlmAccordionItem>
-          </LlmAccordionGroup>
+            </AtlAccordionItem>
+          </AtlAccordionGroup>
         </div>
       );
     case 'alert':
       return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', width: '100%' }}>
-          <LlmAlert variant="info">This is an informational message.</LlmAlert>
-          <LlmAlert variant="success">Your changes were saved successfully.</LlmAlert>
-          <LlmAlert variant="warning" dismissible={true}>Your session expires in 5 minutes.</LlmAlert>
-          <LlmAlert variant="danger">Something went wrong. Please try again.</LlmAlert>
+          <AtlAlert variant="info">This is an informational message.</AtlAlert>
+          <AtlAlert variant="success">Your changes were saved successfully.</AtlAlert>
+          <AtlAlert variant="warning" dismissible={true}>Your session expires in 5 minutes.</AtlAlert>
+          <AtlAlert variant="danger">Something went wrong. Please try again.</AtlAlert>
         </div>
       );
     case 'code-block':
       return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%' }}>
-          <LlmCodeBlock
+          <AtlCodeBlock
             language="typescript"
             filename="greeting.ts"
-            code={`import { LlmButton } from '@atelier-ui/react';\n\nexport function GreetingButton({ name }: { name: string }) {\n  return (\n    <LlmButton variant="primary">\n      Hello, {name}!\n    </LlmButton>\n  );\n}`}
+            code={`import { AtlButton } from '@atelier-ui/react';\n\nexport function GreetingButton({ name }: { name: string }) {\n  return (\n    <AtlButton variant="primary">\n      Hello, {name}!\n    </AtlButton>\n  );\n}`}
           />
         </div>
       );
     case 'menu':
       return (
-        <LlmAlert variant="info">
+        <AtlAlert variant="info">
           Menu is built on @angular/cdk/menu. See the <strong>Data List with Actions</strong> cookbook pattern for a live interactive demo.
-        </LlmAlert>
+        </AtlAlert>
       );
     case 'toast':
       return (
-        <LlmAlert variant="info">
-          Toast requires <code>LlmToastProvider</code> wrapping your app root.
-          Use the <code>useLlmToast()</code> hook to show toasts imperatively.
-        </LlmAlert>
+        <AtlAlert variant="info">
+          Toast requires <code>AtlToastProvider</code> wrapping your app root.
+          Use the <code>useAtlToast()</code> hook to show toasts imperatively.
+        </AtlAlert>
       );
     default:
       return <p style={{ opacity: 0.6, fontSize: '0.875rem' }}>Interactive demo coming soon. See the code example above.</p>;

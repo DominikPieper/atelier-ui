@@ -23,73 +23,73 @@ const EXAMPLE_PROMPT = `I've selected the "Settings / Card" frame in Figma.
 
 1. Use figma-console MCP (figma_get_component_for_development) to read
    the component spec — I need the boundVariables and the visual reference.
-2. Use storybook-react MCP to look up LlmCard and LlmInput props.
+2. Use storybook-react MCP to look up AtlCard and AtlInput props.
 3. Generate the React component using:
    - The Atelier UI components matched from Storybook
    - The exact token names from boundVariables (they map 1-to-1 to CSS
      custom properties — no conversion needed)`;
 
 const OUTPUT: Record<string, string> = {
-  React: `import { LlmCard, LlmInput, LlmButton } from '@atelier-ui/react';
+  React: `import { AtlCard, AtlInput, AtlButton } from '@atelier-ui/react';
 
 export function SettingsCard() {
   return (
-    <LlmCard
+    <AtlCard
       variant="elevated"
       style={{ padding: 'var(--ui-spacing-6)', display: 'flex', flexDirection: 'column', gap: 'var(--ui-spacing-4)' }}
     >
       <h2 style={{ fontSize: 'var(--ui-font-size-lg)', fontWeight: 600, color: 'var(--ui-color-text)', margin: 0 }}>
         Account Settings
       </h2>
-      <LlmInput label="Name" placeholder="Jane Smith" />
-      <LlmInput label="Email" type="email" placeholder="jane@example.com" />
+      <AtlInput label="Name" placeholder="Jane Smith" />
+      <AtlInput label="Email" type="email" placeholder="jane@example.com" />
       <div>
-        <LlmButton variant="primary">Save Changes</LlmButton>
+        <AtlButton variant="primary">Save Changes</AtlButton>
       </div>
-    </LlmCard>
+    </AtlCard>
   );
 }`,
 
   Angular: `import { Component } from '@angular/core';
-import { LlmCard, LlmInput, LlmButton } from '@atelier-ui/angular';
+import { AtlCard, AtlInput, AtlButton } from '@atelier-ui/angular';
 
 @Component({
   selector: 'app-settings-card',
   standalone: true,
-  imports: [LlmCard, LlmInput, LlmButton],
+  imports: [AtlCard, AtlInput, AtlButton],
   template: \`
-    <llm-card variant="elevated" style="padding: var(--ui-spacing-6); display: flex; flex-direction: column; gap: var(--ui-spacing-4)">
+    <atl-card variant="elevated" style="padding: var(--ui-spacing-6); display: flex; flex-direction: column; gap: var(--ui-spacing-4)">
       <h2 style="font-size: var(--ui-font-size-lg); font-weight: 600; color: var(--ui-color-text); margin: 0">
         Account Settings
       </h2>
-      <llm-input label="Name" placeholder="Jane Smith" />
-      <llm-input label="Email" type="email" placeholder="jane@example.com" />
+      <atl-input label="Name" placeholder="Jane Smith" />
+      <atl-input label="Email" type="email" placeholder="jane@example.com" />
       <div>
-        <llm-button variant="primary">Save Changes</llm-button>
+        <atl-button variant="primary">Save Changes</atl-button>
       </div>
-    </llm-card>
+    </atl-card>
   \`,
 })
 export class SettingsCardComponent {}`,
 
   Vue: `<script setup lang="ts">
-import { LlmCard, LlmInput, LlmButton } from '@atelier-ui/vue';
+import { AtlCard, AtlInput, AtlButton } from '@atelier-ui/vue';
 </script>
 
 <template>
-  <LlmCard
+  <AtlCard
     variant="elevated"
     style="padding: var(--ui-spacing-6); display: flex; flex-direction: column; gap: var(--ui-spacing-4)"
   >
     <h2 style="font-size: var(--ui-font-size-lg); font-weight: 600; color: var(--ui-color-text); margin: 0">
       Account Settings
     </h2>
-    <LlmInput label="Name" placeholder="Jane Smith" />
-    <LlmInput label="Email" type="email" placeholder="jane@example.com" />
+    <AtlInput label="Name" placeholder="Jane Smith" />
+    <AtlInput label="Email" type="email" placeholder="jane@example.com" />
     <div>
-      <LlmButton variant="primary">Save Changes</LlmButton>
+      <AtlButton variant="primary">Save Changes</AtlButton>
     </div>
-  </LlmCard>
+  </AtlCard>
 </template>`,
 };
 
@@ -498,7 +498,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
     <div class="docs-section">
       <h2 class="docs-section-title">Generated output</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
-        What Claude Code produces — using <code>LlmCard</code> and <code>LlmInput</code> from Atelier UI with tokens drawn directly from Figma <code>boundVariables</code>:
+        What Claude Code produces — using <code>AtlCard</code> and <code>AtlInput</code> from Atelier UI with tokens drawn directly from Figma <code>boundVariables</code>:
       </p>
       <FwSwitcher variant="tabs" frameworks={['react', 'angular', 'vue']} label="Choose a framework for the generated output" />
       {FRAMEWORKS.map((fw, i) => (

@@ -27,7 +27,7 @@ HTTP (MCP over HTTP)
 ```
 
 ## Components Covered
-25+ Vue components including LlmButton, LlmCard, LlmInput, LlmTextarea, LlmCheckbox, LlmToggle, LlmBadge, LlmAlert, LlmSelect, LlmDialog, LlmTabGroup, LlmAccordionGroup, LlmMenu, LlmTooltip, LlmSkeleton, LlmAvatar, LlmAvatarGroup, and more.
+25+ Vue components including AtlButton, AtlCard, AtlInput, AtlTextarea, AtlCheckbox, AtlToggle, AtlBadge, AtlAlert, AtlSelect, AtlDialog, AtlTabGroup, AtlAccordionGroup, AtlMenu, AtlTooltip, AtlSkeleton, AtlAvatar, AtlAvatarGroup, and more.
 
 ## Usage Pattern
 1. Call `list-all-documentation` to get valid component IDs

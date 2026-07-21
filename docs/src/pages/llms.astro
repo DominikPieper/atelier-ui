@@ -39,7 +39,7 @@ const usageSteps = [
     n: '03',
     title: 'Add to CLAUDE.md or .cursorrules',
     desc: "For persistent project-level context, reference llms.txt from your project's AI instructions file so every session starts with component awareness.",
-    code: `# UI Components\n\nThis project uses Atelier. Full API reference:\n${SITE_URL}/llms-full.txt\n\nKey import pattern:\nimport { LlmButton, LlmInput, LlmCard } from '@atelier-ui/react';`,
+    code: `# UI Components\n\nThis project uses Atelier. Full API reference:\n${SITE_URL}/llms-full.txt\n\nKey import pattern:\nimport { AtlButton, AtlInput, AtlCard } from '@atelier-ui/react';`,
     lang: 'markdown',
   },
 ];
@@ -58,7 +58,7 @@ const previewCode = `# Atelier UI — Full API Reference
 
 ---
 
-### LlmButton
+### AtlButton
 
   Props:
     variant   'primary' | 'secondary' | 'outline' | 'danger'   'primary'   Visual style
@@ -66,17 +66,17 @@ const previewCode = `# Atelier UI — Full API Reference
     disabled  boolean                                 false       Prevents interaction
     loading   boolean                                 false       Shows spinner
 
-  Angular:  <llm-button variant="primary" [loading]="isSaving">Save</llm-button>
-  React:    <LlmButton variant="primary" loading={isSaving}>Save</LlmButton>
-  Vue:      <LlmButton variant="primary" :loading="isSaving">Save</LlmButton>
+  Angular:  <atl-button variant="primary" [loading]="isSaving">Save</atl-button>
+  React:    <AtlButton variant="primary" loading={isSaving}>Save</AtlButton>
+  Vue:      <AtlButton variant="primary" :loading="isSaving">Save</AtlButton>
 
 ---
 
-### LlmCombobox
+### AtlCombobox
 
   Props:
     value        string               ''    Selected option value
-    options      LlmComboboxOption[]  []    Array of {value, label, disabled?}
+    options      AtlComboboxOption[]  []    Array of {value, label, disabled?}
     placeholder  string               ''    Input placeholder
     disabled     boolean              false Disables the combobox
     invalid      boolean              false Error styling
@@ -86,7 +86,7 @@ const previewCode = `# Atelier UI — Full API Reference
       { value: 'us', label: 'United States' },
       { value: 'ca', label: 'Canada' },
     ];
-    <LlmCombobox value={country} onValueChange={setCountry}
+    <AtlCombobox value={country} onValueChange={setCountry}
       options={options} placeholder="Search..." />
 
 ...and ${componentCount - 2} more components`;

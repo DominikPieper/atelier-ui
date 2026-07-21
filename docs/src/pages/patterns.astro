@@ -47,7 +47,7 @@ function frameworkCode(p: typeof PATTERNS[number], fw: Framework): string {
 
     <!-- Composition over configuration. -->
     <Callout tone="tip" title="Composition over configuration.">
-      <code>LlmCard</code> breaks into <code>LlmCardHeader</code>, <code>LlmCardContent</code>, and <code>LlmCardFooter</code> instead of flat props like <code>header={'…'}</code> / <code>footer={'…'}</code>.
+      <code>AtlCard</code> breaks into <code>AtlCardHeader</code>, <code>AtlCardContent</code>, and <code>AtlCardFooter</code> instead of flat props like <code>header={'…'}</code> / <code>footer={'…'}</code>.
       Composition wins three things an LLM cannot: you can drop sections you don’t need (no empty <code>footer</code> slot to null-guard), you can put any JSX/markup inside each part (buttons, badges, form controls), and screen readers get a real DOM landmark for each section instead of a flat container.
       All Atelier UI container components follow the same pattern.
     </Callout>

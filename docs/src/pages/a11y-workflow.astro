@@ -62,9 +62,9 @@ const SPEC_AUDIT = `// Static spec-side audit — read libs/spec/src/index.ts pl
 // Bad: optional aria-label on an icon-only-capable button.
 // Good: discriminated union — children OR aria-label required.
 
-export type LlmButtonProps =
+export type AtlButtonProps =
   Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'aria-label'>
-  & LlmButtonSpec
+  & AtlButtonSpec
   & (
     | { children: ReactNode;       'aria-label'?: string }
     | { children?: undefined;      'aria-label': string  }
@@ -286,7 +286,7 @@ export type LlmButtonProps =
 
     <!-- ── Worked example ─────────────────────────────────────────────── -->
     <div class="docs-section">
-      <h2 class="docs-section-title">Worked example — LlmProgress</h2>
+      <h2 class="docs-section-title">Worked example — AtlProgress</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
         A component all three lanes touched. Figma said it was perfect;
         axe said it was broken; the spec told us why and where to fix.
@@ -294,8 +294,8 @@ export type LlmButtonProps =
 
       <DiagramFigure caption="Each lane tells a different part of the same story. The fix lands in the spec; all three turn green.">
         <svg viewBox="0 0 880 280" role="img" aria-labelledby="case-title case-desc" preserveAspectRatio="xMidYMid meet">
-          <title id="case-title">LlmProgress drilldown across the three audit lanes</title>
-          <desc id="case-desc">Four stacked panels showing the LlmProgress audit story. Figma reports 100/100. axe reports aria-progressbar-name violations. The spec audit shows label prop is missing. After the fix, all three lanes are green.</desc>
+          <title id="case-title">AtlProgress drilldown across the three audit lanes</title>
+          <desc id="case-desc">Four stacked panels showing the AtlProgress audit story. Figma reports 100/100. axe reports aria-progressbar-name violations. The spec audit shows label prop is missing. After the fix, all three lanes are green.</desc>
 
           <g font-family="system-ui">
             <!-- Panel 1: Figma -->
@@ -323,7 +323,7 @@ export type LlmButtonProps =
             <text x="500" y="68"  font-size="10" font-weight="800" letter-spacing="0.1em" style="fill: var(--docs-tertiary, #a6d644)">SPEC AUDIT</text>
             <text x="500" y="100" font-size="36" font-weight="800" style="fill: var(--ui-color-warning, #f59e0b)">!</text>
             <text x="500" y="120" font-size="11" class="diagram-muted">API gap</text>
-            <text x="500" y="148" font-size="10" class="diagram-mono diagram-muted">LlmProgressSpec</text>
+            <text x="500" y="148" font-size="10" class="diagram-mono diagram-muted">AtlProgressSpec</text>
             <text x="500" y="166" font-size="10" class="diagram-muted">has no label prop</text>
             <text x="500" y="184" font-size="10" class="diagram-muted">consumers can't pass</text>
             <text x="500" y="208" font-size="10" font-style="italic" class="diagram-muted">"the why"</text>
@@ -350,7 +350,7 @@ export type LlmButtonProps =
           </g>
         </svg>
 
-        <div slot="mobile-fallback" class="case-stack" role="img" aria-label="LlmProgress drilldown across three audit lanes, then the fix">
+        <div slot="mobile-fallback" class="case-stack" role="img" aria-label="AtlProgress drilldown across three audit lanes, then the fix">
           <div class="case-stack__panel">
             <span class="case-stack__eyebrow case-stack__eyebrow--figma">Figma audit</span>
             <span class="case-stack__score case-stack__score--ok">100</span>
@@ -366,7 +366,7 @@ export type LlmButtonProps =
           <div class="case-stack__panel">
             <span class="case-stack__eyebrow case-stack__eyebrow--spec">Spec audit</span>
             <span class="case-stack__score case-stack__score--warn">!</span>
-            <p class="case-stack__body">API gap · <code>LlmProgressSpec</code> has no <code>label</code> prop · consumers can't pass one</p>
+            <p class="case-stack__body">API gap · <code>AtlProgressSpec</code> has no <code>label</code> prop · consumers can't pass one</p>
             <p class="case-stack__quote">"the why"</p>
           </div>
           <div class="case-stack__panel case-stack__panel--accent">
@@ -516,7 +516,7 @@ export type LlmButtonProps =
         <code>/mcp</code>) and the Figma file's worst component-set
         score is 92. Three findings are deferred to a designer
         (state-axis convention, protanopia rebinding, the
-        <code>LlmTabGroup</code> focus reading) — none block release.
+        <code>AtlTabGroup</code> focus reading) — none block release.
       </p>
     </div>
 

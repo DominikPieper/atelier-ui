@@ -27,7 +27,7 @@ const prompt = (fw: Framework) => `Build the Settings / Card Figma frame as an A
    node-id 695-313 — read the component spec, boundVariables, and
    the rendered preview.
 2. Use the storybook-${fw.toLowerCase()} MCP (list-all-documentation, then
-   get-documentation) to look up LlmCard and LlmInput props.
+   get-documentation) to look up AtlCard and AtlInput props.
 3. Generate the component using:
    - Atelier UI components matched from Storybook
    - The exact CSS custom property names from the boundVariables
@@ -94,9 +94,9 @@ const EXPECTED: Record<Framework, { file: string; cmd: string; port: number }> =
           </div>
         </div>
         <ul class="kata-target-checks">
-          <li><Icon name="check_circle" /> LlmCard <code>variant="elevated"</code></li>
-          <li><Icon name="check_circle" /> Two LlmInputs (Name, Email)</li>
-          <li><Icon name="check_circle" /> LlmButton <code>variant="primary"</code></li>
+          <li><Icon name="check_circle" /> AtlCard <code>variant="elevated"</code></li>
+          <li><Icon name="check_circle" /> Two AtlInputs (Name, Email)</li>
+          <li><Icon name="check_circle" /> AtlButton <code>variant="primary"</code></li>
           <li><Icon name="check_circle" /> Tokens: <code>--ui-spacing-6</code> · <code>--ui-spacing-4</code> · <code>--ui-color-surface-raised</code></li>
         </ul>
       </div>

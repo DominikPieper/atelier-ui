@@ -107,7 +107,7 @@ export default function ComponentGallery() {
                   className="docs-component-card"
                 >
                   <div className="docs-component-card-icon" aria-hidden="true">
-                    {(doc?.name ?? formatComponentName(name)).replace(/^Llm/, '').charAt(0)}
+                    {(doc?.name ?? formatComponentName(name)).charAt(0)}
                   </div>
                   <div className="docs-component-card-header">
                     <div className="docs-component-card-name">

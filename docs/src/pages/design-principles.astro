@@ -30,8 +30,8 @@ import PageHero from '../components/PageHero.astro';
     <div class="docs-section">
       <h2 id="principle-1" class="docs-section-title">1. One name for one concept — everywhere</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin-bottom: 0.75rem">
-        If <code>LlmButton</code> takes a <code>variant</code> prop, then <code>LlmBadge</code>,
-        <code>LlmAlert</code>, and <code>LlmCard</code> use <code>variant</code> too.
+        If <code>AtlButton</code> takes a <code>variant</code> prop, then <code>AtlBadge</code>,
+        <code>AtlAlert</code>, and <code>AtlCard</code> use <code>variant</code> too.
         If <code>size</code> controls scale on a button, it controls scale on every component
         that has scale. No synonyms, no renamings.
       </p>
@@ -52,7 +52,7 @@ import PageHero from '../components/PageHero.astro';
           <div class="docs-comparison-label">LLM-optimized</div>
           <div class="docs-code-block">
             <div class="docs-code-block-header"><span class="docs-code-block-lang">jsx</span></div>
-            <pre><code>{"// One pattern, every component\n<LlmButton variant=\"primary\" size=\"lg\" />\n<LlmBadge variant=\"success\" />\n<LlmAlert variant=\"warning\" />"}</code></pre>
+            <pre><code>{"// One pattern, every component\n<AtlButton variant=\"primary\" size=\"lg\" />\n<AtlBadge variant=\"success\" />\n<AtlAlert variant=\"warning\" />"}</code></pre>
           </div>
         </div>
       </div>
@@ -97,7 +97,7 @@ import PageHero from '../components/PageHero.astro';
     <div class="docs-section">
       <h2 id="principle-3" class="docs-section-title">3. Sensible defaults so bare usage always works</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin-bottom: 1rem">
-        Every input has a default. <code>&lt;llm-button&gt;Click&lt;/llm-button&gt;</code> renders
+        Every input has a default. <code>&lt;atl-button&gt;Click&lt;/atl-button&gt;</code> renders
         a correct, styled, accessible button without a single prop. This matters for AI output
         because the model can scaffold something working first and add customization in the next
         turn — instead of needing every prop correct on the first attempt.
@@ -114,7 +114,7 @@ import PageHero from '../components/PageHero.astro';
           <div class="docs-comparison-label">LLM-optimized</div>
           <div class="docs-code-block">
             <div class="docs-code-block-header"><span class="docs-code-block-lang">jsx</span></div>
-            <pre><code>{"// Always works — customize only what you need\n<llm-button>Click</llm-button>\n<llm-card>Content</llm-card>"}</code></pre>
+            <pre><code>{"// Always works — customize only what you need\n<atl-button>Click</atl-button>\n<atl-card>Content</atl-card>"}</code></pre>
           </div>
         </div>
       </div>

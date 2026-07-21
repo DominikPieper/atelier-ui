@@ -38,7 +38,7 @@ const RECENT_A11Y: RecentA11y[] = [
     release: '2026-04-26 audit',
     title: 'Three-source audit cycle (axe + Figma + spec)',
     detail:
-      'Median Figma component-a11y score 94 → 100, worst 77 → 92, 22 of 28 component-sets now perfect. Triangulated audit across axe-core (DOM-time), figma_audit_component_accessibility (design-time), and a static spec read (API-time); 8 P-critical findings landed across 4 phases. Headlines: LlmProgress gained a label prop, LlmAccordionItem gained headingLevel, LlmButton gained a discriminated-union aria-label requirement, LlmTable wrapper got tabindex=0 + role=region, --ui-color-text-muted darkened past the protanopia AA threshold, and LlmButton danger picked up a 1px darker border for non-color differentiation.',
+      'Median Figma component-a11y score 94 → 100, worst 77 → 92, 22 of 28 component-sets now perfect. Triangulated audit across axe-core (DOM-time), figma_audit_component_accessibility (design-time), and a static spec read (API-time); 8 P-critical findings landed across 4 phases. Headlines: AtlProgress gained a label prop, AtlAccordionItem gained headingLevel, AtlButton gained a discriminated-union aria-label requirement, AtlTable wrapper got tabindex=0 + role=region, --ui-color-text-muted darkened past the protanopia AA threshold, and AtlButton danger picked up a 1px darker border for non-color differentiation.',
   },
   {
     release: 'v0.0.21',
@@ -113,10 +113,10 @@ const RECENT_A11Y: RecentA11y[] = [
         WCAG 1.4.1 requires that color never be the sole carrier of meaning. Atelier UI satisfies this at the primitive level:
       </p>
       <ul style="color: var(--ui-color-text-muted); line-height: 1.75; padding-left: 1.25rem">
-        <li><code>LlmBadge</code> and <code>LlmAlert</code> render a semantic glyph next to the label for every non-default variant.</li>
-        <li><code>LlmInput</code> and <code>LlmTextarea</code> render a glyph in the invalid state in addition to the red border.</li>
-        <li><code>LlmStepper</code> steps expose their status (<em>active</em>, <em>completed</em>, <em>error</em>) as text to assistive tech, not only via color.</li>
-        <li><code>LlmProgress</code> has an accessible name and exposes its value to assistive tech via <code>aria-valuenow</code>.</li>
+        <li><code>AtlBadge</code> and <code>AtlAlert</code> render a semantic glyph next to the label for every non-default variant.</li>
+        <li><code>AtlInput</code> and <code>AtlTextarea</code> render a glyph in the invalid state in addition to the red border.</li>
+        <li><code>AtlStepper</code> steps expose their status (<em>active</em>, <em>completed</em>, <em>error</em>) as text to assistive tech, not only via color.</li>
+        <li><code>AtlProgress</code> has an accessible name and exposes its value to assistive tech via <code>aria-valuenow</code>.</li>
       </ul>
     </section>
 
@@ -142,7 +142,7 @@ const RECENT_A11Y: RecentA11y[] = [
       <h2 id="keyboard" class="docs-section-title">Keyboard navigation</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 1rem">
         Every interactive primitive is reachable and operable from the keyboard without a mouse.
-        Component names are shortened here for readability — each maps to its <code>Llm*</code> primitive (e.g. Button → <code>LlmButton</code>, Dialog → <code>LlmDialog</code>).
+        Component names are shortened here for readability — each maps to its <code>Llm*</code> primitive (e.g. Button → <code>AtlButton</code>, Dialog → <code>AtlDialog</code>).
       </p>
       <table class="docs-props-table">
         <thead>
@@ -169,10 +169,10 @@ const RECENT_A11Y: RecentA11y[] = [
       <h2 id="screen-readers" class="docs-section-title">Screen readers</h2>
       <ul style="color: var(--ui-color-text-muted); line-height: 1.75; padding-left: 1.25rem">
         <li>Form fields expose their <code>label</code>, <code>hint</code>, and <code>error</code> slots through <code>aria-labelledby</code> / <code>aria-describedby</code> automatically — you don't wire them by hand.</li>
-        <li><code>LlmDialog</code> and <code>LlmDrawer</code> set <code>role="dialog"</code> and <code>aria-modal="true"</code>. The header is announced as the accessible name.</li>
-        <li><code>LlmToast</code> announces messages in a polite live region. Error toasts use <code>role="alert"</code>.</li>
-        <li><code>LlmMenu</code>, <code>LlmTabGroup</code>, <code>LlmAccordionGroup</code> set the ARIA roles and relationships required by the WAI-ARIA pattern for each widget.</li>
-        <li><code>LlmTooltip</code> uses <code>aria-describedby</code>, not <code>aria-label</code> — the tooltip supplements the trigger's name, it does not replace it.</li>
+        <li><code>AtlDialog</code> and <code>AtlDrawer</code> set <code>role="dialog"</code> and <code>aria-modal="true"</code>. The header is announced as the accessible name.</li>
+        <li><code>AtlToast</code> announces messages in a polite live region. Error toasts use <code>role="alert"</code>.</li>
+        <li><code>AtlMenu</code>, <code>AtlTabGroup</code>, <code>AtlAccordionGroup</code> set the ARIA roles and relationships required by the WAI-ARIA pattern for each widget.</li>
+        <li><code>AtlTooltip</code> uses <code>aria-describedby</code>, not <code>aria-label</code> — the tooltip supplements the trigger's name, it does not replace it.</li>
       </ul>
     </section>
 
@@ -195,7 +195,7 @@ const RECENT_A11Y: RecentA11y[] = [
       </p>
       <ul style="color: var(--ui-color-text-muted); line-height: 1.75; padding-left: 1.25rem">
         <li><strong style="color: var(--ui-color-text)">Labels.</strong> Every form field needs a <code>label</code> prop — <code>placeholder</code> is not an accessible name.</li>
-        <li><strong style="color: var(--ui-color-text)">Alt text.</strong> Every <code>&lt;img&gt;</code> inside <code>LlmAvatar</code> or user content needs a meaningful <code>alt</code>, or <code>alt=""</code> if decorative.</li>
+        <li><strong style="color: var(--ui-color-text)">Alt text.</strong> Every <code>&lt;img&gt;</code> inside <code>AtlAvatar</code> or user content needs a meaningful <code>alt</code>, or <code>alt=""</code> if decorative.</li>
         <li><strong style="color: var(--ui-color-text)">Heading hierarchy.</strong> Use <code>&lt;h1&gt;</code>–<code>&lt;h6&gt;</code> in source order. Don't skip levels for styling reasons.</li>
         <li><strong style="color: var(--ui-color-text)">Localized messages.</strong> Error text, empty states, and confirmation dialogs should be translated for your users' locale.</li>
         <li><strong style="color: var(--ui-color-text)">Motion preferences.</strong> Respect <code>prefers-reduced-motion</code> when adding your own transitions. Atelier UI's built-in animations already do.</li>

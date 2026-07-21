@@ -25,10 +25,10 @@ Add the design tokens to your global `main.css`:
 
 ```vue
 <script setup>
-import { LlmButton } from '@atelier-ui/vue';
+import { AtlButton } from '@atelier-ui/vue';
 </script>
 
 <template>
-  <LlmButton variant="primary" @click="save">Save</LlmButton>
+  <AtlButton variant="primary" @click="save">Save</AtlButton>
 </template>
 ```

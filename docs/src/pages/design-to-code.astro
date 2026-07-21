@@ -25,7 +25,7 @@ const GENERATE_PROMPT: Record<string, string> = {
 1. figma-console MCP (figma_get_component_for_development) on the node —
    read boundVariables, the component tree, and the rendered preview.
 2. storybook-react MCP (list-all-documentation, then get-documentation)
-   to look up LlmCard and LlmInput props.
+   to look up AtlCard and AtlInput props.
 3. Generate the component with the exact Atelier UI props and the exact
    --ui-* token names from boundVariables. No hardcoded colors or paddings.`,
 
@@ -33,8 +33,8 @@ const GENERATE_PROMPT: Record<string, string> = {
 
 1. figma-console MCP (figma_get_component_for_development) on the node —
    read boundVariables, the component tree, and the rendered preview.
-2. Read the component API contract from libs/spec/src/index.ts (LlmCardSpec,
-   LlmInputSpec) — Angular metadata isn't on the Storybook MCP yet.
+2. Read the component API contract from libs/spec/src/index.ts (AtlCardSpec,
+   AtlInputSpec) — Angular metadata isn't on the Storybook MCP yet.
 3. Generate the component with the exact Atelier UI props and the exact
    --ui-* token names from boundVariables. No hardcoded colors or paddings.`,
 
@@ -42,8 +42,8 @@ const GENERATE_PROMPT: Record<string, string> = {
 
 1. figma-console MCP (figma_get_component_for_development) on the node —
    read boundVariables, the component tree, and the rendered preview.
-2. Read the component API contract from libs/spec/src/index.ts (LlmCardSpec,
-   LlmInputSpec) — Vue metadata isn't on the Storybook MCP yet.
+2. Read the component API contract from libs/spec/src/index.ts (AtlCardSpec,
+   AtlInputSpec) — Vue metadata isn't on the Storybook MCP yet.
 3. Generate the component with the exact Atelier UI props and the exact
    --ui-* token names from boundVariables. No hardcoded colors or paddings.`,
 };
@@ -196,7 +196,7 @@ the component I just generated. Fix every discrepancy it reports.`;
           </p>
           <Code code={PARITY_PROMPT} lang="text" title="parity check prompt" />
           <p class="docs-step-desc">
-            When the component maps to a <strong style="color: var(--ui-color-text)">library master</strong>, persist the result so drift is caught later: <code>npm run parity:record -- --component &lt;LlmFoo&gt; --score &lt;score&gt;</code>. The offline <code>npm run check:parity</code> gate then flags that component if its code changes after this verify (see ADR-0024).
+            When the component maps to a <strong style="color: var(--ui-color-text)">library master</strong>, persist the result so drift is caught later: <code>npm run parity:record -- --component &lt;AtlFoo&gt; --score &lt;score&gt;</code>. The offline <code>npm run check:parity</code> gate then flags that component if its code changes after this verify (see ADR-0024).
           </p>
         </div>
       </div>

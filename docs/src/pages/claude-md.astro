@@ -21,9 +21,9 @@ const MCP_NAME: Record<string, string> = {
 };
 
 const IMPORT_EXAMPLE: Record<string, string> = {
-  React:   "import { LlmButton, LlmCard, LlmInput } from '@atelier-ui/react';",
-  Angular: "import { LlmButton, LlmCard, LlmInput } from '@atelier-ui/angular';",
-  Vue:     "import { LlmButton, LlmCard, LlmInput } from '@atelier-ui/vue';",
+  React:   "import { AtlButton, AtlCard, AtlInput } from '@atelier-ui/react';",
+  Angular: "import { AtlButton, AtlCard, AtlInput } from '@atelier-ui/angular';",
+  Vue:     "import { AtlButton, AtlCard, AtlInput } from '@atelier-ui/vue';",
 };
 
 const TEMPLATE: Record<string, string> = {
@@ -87,7 +87,7 @@ ${IMPORT_EXAMPLE.Angular}
 
 Angular components use the \`llm-*\` selector in templates:
 \`\`\`html
-<llm-button variant="primary" [loading]="isSaving">Save</llm-button>
+<atl-button variant="primary" [loading]="isSaving">Save</atl-button>
 \`\`\`
 
 ## Design Tokens

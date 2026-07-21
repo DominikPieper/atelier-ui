@@ -78,7 +78,7 @@ const MOCK_RESPONSES: Record<string, (params: Record<string, string>, fw: Framew
     const comp = params.component ?? 'button';
     if (fw === 'angular') {
       return {
-        component: comp, selector: `llm-${comp}`, package: `@atelier-ui/angular`, type: 'standalone',
+        component: comp, selector: `atl-${comp}`, package: `@atelier-ui/angular`, type: 'standalone',
         inputs: {
           variant: "'primary' | 'secondary' | 'outline' | 'danger' (default: 'primary')",
           size: "'sm' | 'md' | 'lg' (default: 'md')",
@@ -91,7 +91,7 @@ const MOCK_RESPONSES: Record<string, (params: Record<string, string>, fw: Framew
     }
     if (fw === 'react') {
       return {
-        component: comp, element: `Llm${comp.charAt(0).toUpperCase() + comp.slice(1)}`,
+        component: comp, element: `Atl${comp.charAt(0).toUpperCase() + comp.slice(1)}`,
         package: `@atelier-ui/react`,
         props: {
           variant: "'primary' | 'secondary' | 'outline' | 'danger' (default: 'primary')",
@@ -104,7 +104,7 @@ const MOCK_RESPONSES: Record<string, (params: Record<string, string>, fw: Framew
       };
     }
     return {
-      component: comp, element: `Llm${comp.charAt(0).toUpperCase() + comp.slice(1)}`,
+      component: comp, element: `Atl${comp.charAt(0).toUpperCase() + comp.slice(1)}`,
       package: `@atelier-ui/vue`,
       props: {
         variant: "'primary' | 'secondary' | 'outline' | 'danger' (default: 'primary')",

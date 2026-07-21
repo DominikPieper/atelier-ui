@@ -68,18 +68,18 @@ const COMPONENT_FILE: Record<string, { file: string; notes: string }> = {
 };
 
 const COMPONENT_IMPORT: Record<string, string> = {
-  Angular: `import {\n  LlmButton, LlmCard, LlmInput, LlmTextarea,\n  LlmCheckbox, LlmToggle, LlmBadge, LlmAlert,\n  LlmSelect, LlmOption, LlmDialog, LlmTabGroup,\n  LlmTab, LlmAccordionGroup, LlmMenu, LlmMenuItem,\n  LlmTooltip, LlmToastContainer, LlmToastService,\n  LlmSkeleton, LlmAvatar, LlmAvatarGroup\n} from '@atelier-ui/angular';`,
-  React:   `import {\n  LlmButton, LlmCard, LlmInput, LlmTextarea,\n  LlmCheckbox, LlmToggle, LlmBadge, LlmAlert,\n  LlmSelect, LlmOption, LlmDialog, LlmTabGroup,\n  LlmTab, LlmAccordionGroup, LlmMenu, LlmMenuItem,\n  LlmTooltip, LlmToastProvider, useLlmToast,\n  LlmSkeleton, LlmAvatar, LlmAvatarGroup\n} from '@atelier-ui/react';`,
-  Vue:     `import {\n  LlmButton, LlmCard, LlmInput, LlmTextarea,\n  LlmCheckbox, LlmToggle, LlmBadge, LlmAlert,\n  LlmSelect, LlmOption, LlmDialog, LlmTabGroup,\n  LlmTab, LlmAccordionGroup, LlmMenu, LlmMenuItem,\n  LlmTooltip, LlmToastProvider, useLlmToast,\n  LlmSkeleton, LlmAvatar, LlmAvatarGroup\n} from '@atelier-ui/vue';`,
+  Angular: `import {\n  AtlButton, AtlCard, AtlInput, AtlTextarea,\n  AtlCheckbox, AtlToggle, AtlBadge, AtlAlert,\n  AtlSelect, AtlOption, AtlDialog, AtlTabGroup,\n  AtlTab, AtlAccordionGroup, AtlMenu, AtlMenuItem,\n  AtlTooltip, AtlToastContainer, AtlToastService,\n  AtlSkeleton, AtlAvatar, AtlAvatarGroup\n} from '@atelier-ui/angular';`,
+  React:   `import {\n  AtlButton, AtlCard, AtlInput, AtlTextarea,\n  AtlCheckbox, AtlToggle, AtlBadge, AtlAlert,\n  AtlSelect, AtlOption, AtlDialog, AtlTabGroup,\n  AtlTab, AtlAccordionGroup, AtlMenu, AtlMenuItem,\n  AtlTooltip, AtlToastProvider, useAtlToast,\n  AtlSkeleton, AtlAvatar, AtlAvatarGroup\n} from '@atelier-ui/react';`,
+  Vue:     `import {\n  AtlButton, AtlCard, AtlInput, AtlTextarea,\n  AtlCheckbox, AtlToggle, AtlBadge, AtlAlert,\n  AtlSelect, AtlOption, AtlDialog, AtlTabGroup,\n  AtlTab, AtlAccordionGroup, AtlMenu, AtlMenuItem,\n  AtlTooltip, AtlToastProvider, useAtlToast,\n  AtlSkeleton, AtlAvatar, AtlAvatarGroup\n} from '@atelier-ui/vue';`,
 };
 
 // Why the import sets differ across frameworks: each framework wires toasts
 // in the idiomatic way for its own DI / composition model. The underlying
 // component set is otherwise identical.
 const IMPORT_NOTE: Record<string, string> = {
-  Angular: 'Toasts render through a <llm-toast-container> host element; an injectable LlmToastService triggers them. No Provider tree needed — Angular DI handles it.',
-  React:   'Toasts need a root <LlmToastProvider>. Call useLlmToast() inside any descendant component to push messages.',
-  Vue:     'Toasts need a root <LlmToastProvider> too — useLlmToast() injects its context and throws outside of it. Call it inside any descendant <script setup> to push messages.',
+  Angular: 'Toasts render through a <atl-toast-container> host element; an injectable AtlToastService triggers them. No Provider tree needed — Angular DI handles it.',
+  React:   'Toasts need a root <AtlToastProvider>. Call useAtlToast() inside any descendant component to push messages.',
+  Vue:     'Toasts need a root <AtlToastProvider> too — useAtlToast() injects its context and throws outside of it. Call it inside any descendant <script setup> to push messages.',
 };
 ---
 

@@ -34,7 +34,7 @@ Apply the following transformations for Angular or Vue:
 
   Construct           JSX / React            Angular                         Vue
   ---------           -------------          ---------------                 --------------
-  Tag name            <LlmButton>            <llm-button>                    <LlmButton>
+  Tag name            <AtlButton>            <atl-button>                    <AtlButton>
   Static attr         variant="primary"      variant="primary"               variant="primary"
   Bool attr           loading={true}         [loading]="true"                :loading="true"
   Expression          count={items.length}   [count]="items.length"          :count="items.length"
@@ -46,9 +46,9 @@ Apply the following transformations for Angular or Vue:
 
 Import lines are identical across frameworks: adjust the package path.
 
-  import { LlmButton } from '@atelier-ui/angular';
-  import { LlmButton } from '@atelier-ui/react';
-  import { LlmButton } from '@atelier-ui/vue';
+  import { AtlButton } from '@atelier-ui/angular';
+  import { AtlButton } from '@atelier-ui/react';
+  import { AtlButton } from '@atelier-ui/vue';
 
 ---
 
@@ -60,7 +60,7 @@ Each entry lists:
 
 ---
 
-### LlmButton
+### AtlButton
 
   A versatile button component with multiple variants and sizes. Supports loading and disabled states.
 
@@ -73,23 +73,23 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-button variant="primary">Primary</llm-button>
-      <llm-button variant="secondary">Secondary</llm-button>
-      <llm-button variant="outline">Outline</llm-button>
-      <llm-button [loading]="true">Loading</llm-button>
-      <llm-button [disabled]="true">Disabled</llm-button>
+      <atl-button variant="primary">Primary</atl-button>
+      <atl-button variant="secondary">Secondary</atl-button>
+      <atl-button variant="outline">Outline</atl-button>
+      <atl-button [loading]="true">Loading</atl-button>
+      <atl-button [disabled]="true">Disabled</atl-button>
     React:
-      <LlmButton variant="primary">Primary</LlmButton>
-      <LlmButton variant="secondary">Secondary</LlmButton>
-      <LlmButton variant="outline">Outline</LlmButton>
-      <LlmButton loading={true}>Loading</LlmButton>
-      <LlmButton disabled={true}>Disabled</LlmButton>
+      <AtlButton variant="primary">Primary</AtlButton>
+      <AtlButton variant="secondary">Secondary</AtlButton>
+      <AtlButton variant="outline">Outline</AtlButton>
+      <AtlButton loading={true}>Loading</AtlButton>
+      <AtlButton disabled={true}>Disabled</AtlButton>
     Vue:
-      <LlmButton variant="primary">Primary</LlmButton>
-      <LlmButton variant="secondary">Secondary</LlmButton>
-      <LlmButton variant="outline">Outline</LlmButton>
-      <LlmButton :loading="true">Loading</LlmButton>
-      <LlmButton :disabled="true">Disabled</LlmButton>
+      <AtlButton variant="primary">Primary</AtlButton>
+      <AtlButton variant="secondary">Secondary</AtlButton>
+      <AtlButton variant="outline">Outline</AtlButton>
+      <AtlButton :loading="true">Loading</AtlButton>
+      <AtlButton :disabled="true">Disabled</AtlButton>
 
   Metadata:
     purpose: Primary action trigger. Renders a labelled button users press to commit an action — submit a form, open a dialog, advance a flow.
@@ -99,15 +99,15 @@ Each entry lists:
       - Surfacing the primary call-to-action in a form, dialog, or empty state.
     antiPatterns:
       - Navigating to a new URL where the destination is the meaning of the interaction. → use A plain `<a>` link — links say "go somewhere", buttons say "do something".
-      - Toggling a binary on/off state. → use LlmToggle — communicates the persistent state to assistive tech.
-      - Selecting an option from a list. → use LlmSelect, LlmCombobox, or LlmRadioGroup, depending on cardinality and search needs.
-    relatedComponents: LlmToggle, LlmMenuSpec, LlmDialogSpec
+      - Toggling a binary on/off state. → use AtlToggle — communicates the persistent state to assistive tech.
+      - Selecting an option from a list. → use AtlSelect, AtlCombobox, or AtlRadioGroup, depending on cardinality and search needs.
+    relatedComponents: AtlToggle, AtlMenuSpec, AtlDialogSpec
     accessibility.role: button
     accessibility.keyboardBehavior: Activates on Enter or Space. Receives focus via Tab in source order. Disabled and loading states block activation and remove the button from the tab order respectively (loading retains focus but ignores activation).
 
 ---
 
-### LlmInput
+### AtlInput
 
   A text input field that integrates with Signal Forms. Supports all standard HTML input types, validation states, and error display.
 
@@ -124,20 +124,20 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-input type="email" placeholder="you@example.com" [(value)]="email" />
-      <llm-input type="password" placeholder="Password" [(value)]="password" />
-      <llm-input [invalid]="true" placeholder="Invalid state" />
-      <llm-input [disabled]="true" placeholder="Disabled" />
+      <atl-input type="email" placeholder="you@example.com" [(value)]="email" />
+      <atl-input type="password" placeholder="Password" [(value)]="password" />
+      <atl-input [invalid]="true" placeholder="Invalid state" />
+      <atl-input [disabled]="true" placeholder="Disabled" />
     React:
-      <LlmInput type="email" placeholder="you@example.com" value={email} onValueChange={setEmail} />
-      <LlmInput type="password" placeholder="Password" value={password} onValueChange={setPassword} />
-      <LlmInput invalid={true} placeholder="Invalid state" />
-      <LlmInput disabled={true} placeholder="Disabled" />
+      <AtlInput type="email" placeholder="you@example.com" value={email} onValueChange={setEmail} />
+      <AtlInput type="password" placeholder="Password" value={password} onValueChange={setPassword} />
+      <AtlInput invalid={true} placeholder="Invalid state" />
+      <AtlInput disabled={true} placeholder="Disabled" />
     Vue:
-      <LlmInput type="email" placeholder="you@example.com" v-model:value="email" />
-      <LlmInput type="password" placeholder="Password" v-model:value="password" />
-      <LlmInput :invalid="true" placeholder="Invalid state" />
-      <LlmInput :disabled="true" placeholder="Disabled" />
+      <AtlInput type="email" placeholder="you@example.com" v-model:value="email" />
+      <AtlInput type="password" placeholder="Password" v-model:value="password" />
+      <AtlInput :invalid="true" placeholder="Invalid state" />
+      <AtlInput :disabled="true" placeholder="Disabled" />
 
   Metadata:
     purpose: Single-line text field. Renders an `<input>` bound to a form value with the standard validation and disabled states.
@@ -146,16 +146,16 @@ Each entry lists:
       - Capturing a typed value (email, password, number, tel, url) where the browser keyboard hint matters.
       - Driving a typeahead or filter where the user types and the page reacts on each change.
     antiPatterns:
-      - Accepting multi-line prose, descriptions, or comments. → use LlmTextarea — sized for wrapping text with an optional auto-resize.
-      - Picking one option from a known list. → use LlmSelect for short lists, LlmCombobox when the list is long enough to need search.
-      - Toggling a boolean. → use LlmCheckbox or LlmToggle — both encode the binary state for assistive tech.
-    relatedComponents: LlmTextareaSpec, LlmSelectSpec, LlmComboboxSpec
+      - Accepting multi-line prose, descriptions, or comments. → use AtlTextarea — sized for wrapping text with an optional auto-resize.
+      - Picking one option from a known list. → use AtlSelect for short lists, AtlCombobox when the list is long enough to need search.
+      - Toggling a boolean. → use AtlCheckbox or AtlToggle — both encode the binary state for assistive tech.
+    relatedComponents: AtlTextareaSpec, AtlSelectSpec, AtlComboboxSpec
     accessibility.role: textbox
     accessibility.keyboardBehavior: Receives focus via Tab. Characters insert at the caret, Home/End and arrow keys move the caret, and form submission triggers on Enter when inside a form. `invalid` toggles `aria-invalid`, `required` toggles `aria-required`.
 
 ---
 
-### LlmTextarea
+### AtlTextarea
 
   A multi-line text input. Supports auto-resize to fit content and integrates with Signal Forms.
 
@@ -173,17 +173,17 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-textarea placeholder="Tell us about yourself" [rows]="4" [(value)]="bio" />
-      <llm-textarea [autoResize]="true" placeholder="Auto-resizes as you type..." />
-      <llm-textarea [disabled]="true" placeholder="Disabled" />
+      <atl-textarea placeholder="Tell us about yourself" [rows]="4" [(value)]="bio" />
+      <atl-textarea [autoResize]="true" placeholder="Auto-resizes as you type..." />
+      <atl-textarea [disabled]="true" placeholder="Disabled" />
     React:
-      <LlmTextarea placeholder="Tell us about yourself" rows={4} value={bio} onValueChange={setBio} />
-      <LlmTextarea autoResize={true} placeholder="Auto-resizes as you type..." />
-      <LlmTextarea disabled={true} placeholder="Disabled" />
+      <AtlTextarea placeholder="Tell us about yourself" rows={4} value={bio} onValueChange={setBio} />
+      <AtlTextarea autoResize={true} placeholder="Auto-resizes as you type..." />
+      <AtlTextarea disabled={true} placeholder="Disabled" />
     Vue:
-      <LlmTextarea placeholder="Tell us about yourself" :rows="4" v-model:value="bio" />
-      <LlmTextarea :autoResize="true" placeholder="Auto-resizes as you type..." />
-      <LlmTextarea :disabled="true" placeholder="Disabled" />
+      <AtlTextarea placeholder="Tell us about yourself" :rows="4" v-model:value="bio" />
+      <AtlTextarea :autoResize="true" placeholder="Auto-resizes as you type..." />
+      <AtlTextarea :disabled="true" placeholder="Disabled" />
 
   Metadata:
     purpose: Multi-line text field. Renders a `<textarea>` sized for wrapping prose, with optional auto-resize as content grows.
@@ -192,15 +192,15 @@ Each entry lists:
       - Capturing a code snippet, log paste, or long-form note.
       - Editing freeform content where the visible height should grow with the text (`autoResize: true`).
     antiPatterns:
-      - Collecting a single short value such as a title or email. → use LlmInput — sized for one-line entry with type-specific keyboard hints.
+      - Collecting a single short value such as a title or email. → use AtlInput — sized for one-line entry with type-specific keyboard hints.
       - Building a rich-text editor with formatting toolbars. → use A dedicated editor (Tiptap, Lexical) — textarea is plain text only.
-    relatedComponents: LlmInputSpec
+    relatedComponents: AtlInputSpec
     accessibility.role: textbox
     accessibility.keyboardBehavior: Receives focus via Tab. Enter inserts a newline (it does not submit). Arrow keys, Home/End, and PageUp/PageDown navigate within the text. `invalid` toggles `aria-invalid`, `required` toggles `aria-required`.
 
 ---
 
-### LlmCheckbox
+### AtlCheckbox
 
   A checkbox input that supports indeterminate state. Integrates with Signal Forms.
 
@@ -216,20 +216,20 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-checkbox [(checked)]="agreed">I agree to the terms</llm-checkbox>
-      <llm-checkbox [(checked)]="pre">Pre-checked</llm-checkbox>
-      <llm-checkbox [indeterminate]="true">Indeterminate</llm-checkbox>
-      <llm-checkbox [disabled]="true">Disabled</llm-checkbox>
+      <atl-checkbox [(checked)]="agreed">I agree to the terms</atl-checkbox>
+      <atl-checkbox [(checked)]="pre">Pre-checked</atl-checkbox>
+      <atl-checkbox [indeterminate]="true">Indeterminate</atl-checkbox>
+      <atl-checkbox [disabled]="true">Disabled</atl-checkbox>
     React:
-      <LlmCheckbox checked={agreed} onCheckedChange={setAgreed}>I agree to the terms</LlmCheckbox>
-      <LlmCheckbox checked={true}>Pre-checked</LlmCheckbox>
-      <LlmCheckbox indeterminate={true}>Indeterminate</LlmCheckbox>
-      <LlmCheckbox disabled={true}>Disabled</LlmCheckbox>
+      <AtlCheckbox checked={agreed} onCheckedChange={setAgreed}>I agree to the terms</AtlCheckbox>
+      <AtlCheckbox checked={true}>Pre-checked</AtlCheckbox>
+      <AtlCheckbox indeterminate={true}>Indeterminate</AtlCheckbox>
+      <AtlCheckbox disabled={true}>Disabled</AtlCheckbox>
     Vue:
-      <LlmCheckbox v-model:checked="agreed">I agree to the terms</LlmCheckbox>
-      <LlmCheckbox v-model:checked="pre">Pre-checked</LlmCheckbox>
-      <LlmCheckbox :indeterminate="true">Indeterminate</LlmCheckbox>
-      <LlmCheckbox :disabled="true">Disabled</LlmCheckbox>
+      <AtlCheckbox v-model:checked="agreed">I agree to the terms</AtlCheckbox>
+      <AtlCheckbox v-model:checked="pre">Pre-checked</AtlCheckbox>
+      <AtlCheckbox :indeterminate="true">Indeterminate</AtlCheckbox>
+      <AtlCheckbox :disabled="true">Disabled</AtlCheckbox>
 
   Metadata:
     purpose: Binary or tri-state toggle bound to a form field. Renders an `<input type="checkbox">` with optional indeterminate state.
@@ -238,15 +238,15 @@ Each entry lists:
       - Selecting zero or more items from a list — each row is its own checkbox.
       - Driving a "select all" header that flips to indeterminate when only some children are checked.
     antiPatterns:
-      - Switching a setting on/off where the change applies immediately. → use LlmToggle — communicates the "switch" affordance and instant effect to assistive tech.
-      - Picking exactly one option from a small set. → use LlmRadioGroup — radios enforce single-select and announce the group.
-    relatedComponents: LlmToggleSpec, LlmRadioSpec, LlmRadioGroupSpec
+      - Switching a setting on/off where the change applies immediately. → use AtlToggle — communicates the "switch" affordance and instant effect to assistive tech.
+      - Picking exactly one option from a small set. → use AtlRadioGroup — radios enforce single-select and announce the group.
+    relatedComponents: AtlToggleSpec, AtlRadioSpec, AtlRadioGroupSpec
     accessibility.role: checkbox
     accessibility.keyboardBehavior: Receives focus via Tab. Space toggles checked. `indeterminate` is conveyed via `aria-checked="mixed"` and clears on the next user toggle. Disabled removes the control from activation.
 
 ---
 
-### LlmToggle
+### AtlToggle
 
   A toggle switch for boolean settings. Integrates with Signal Forms.
 
@@ -261,17 +261,17 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-toggle [(checked)]="notifications">Enable notifications</llm-toggle>
-      <llm-toggle [(checked)]="active">Active toggle</llm-toggle>
-      <llm-toggle [disabled]="true">Disabled</llm-toggle>
+      <atl-toggle [(checked)]="notifications">Enable notifications</atl-toggle>
+      <atl-toggle [(checked)]="active">Active toggle</atl-toggle>
+      <atl-toggle [disabled]="true">Disabled</atl-toggle>
     React:
-      <LlmToggle checked={notifications} onCheckedChange={setNotifications}>Enable notifications</LlmToggle>
-      <LlmToggle checked={true}>Active toggle</LlmToggle>
-      <LlmToggle disabled={true}>Disabled</LlmToggle>
+      <AtlToggle checked={notifications} onCheckedChange={setNotifications}>Enable notifications</AtlToggle>
+      <AtlToggle checked={true}>Active toggle</AtlToggle>
+      <AtlToggle disabled={true}>Disabled</AtlToggle>
     Vue:
-      <LlmToggle v-model:checked="notifications">Enable notifications</LlmToggle>
-      <LlmToggle v-model:checked="active">Active toggle</LlmToggle>
-      <LlmToggle :disabled="true">Disabled</LlmToggle>
+      <AtlToggle v-model:checked="notifications">Enable notifications</AtlToggle>
+      <AtlToggle v-model:checked="active">Active toggle</AtlToggle>
+      <AtlToggle :disabled="true">Disabled</AtlToggle>
 
   Metadata:
     purpose: On/off switch for a setting that takes effect immediately. Renders a switch control bound to a boolean form value.
@@ -280,15 +280,15 @@ Each entry lists:
       - Enabling or disabling a feature inside a settings panel or preferences row.
       - Acting as the trigger for revealing a dependent block of controls when on.
     antiPatterns:
-      - Choosing among more than two states. → use LlmRadioGroup or LlmSelect — switches only encode true/false.
-      - Collecting a binary value that is only committed on form submit. → use LlmCheckbox — checkboxes carry the "stage a change" semantics; switches imply immediate effect.
-    relatedComponents: LlmCheckboxSpec
+      - Choosing among more than two states. → use AtlRadioGroup or AtlSelect — switches only encode true/false.
+      - Collecting a binary value that is only committed on form submit. → use AtlCheckbox — checkboxes carry the "stage a change" semantics; switches imply immediate effect.
+    relatedComponents: AtlCheckboxSpec
     accessibility.role: switch
     accessibility.keyboardBehavior: Receives focus via Tab. Space and Enter both toggle the checked state. Disabled removes the control from activation. `aria-checked` reflects the boolean value.
 
 ---
 
-### LlmRadioGroup + LlmRadio
+### AtlRadioGroup + AtlRadio
 
   A group of radio buttons with keyboard navigation. The group handles arrow key navigation and value management.
 
@@ -303,27 +303,27 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-radio-group name="plan" [(value)]="plan">
-        <llm-radio radioValue="free">Free</llm-radio>
-        <llm-radio radioValue="pro">Pro</llm-radio>
-        <llm-radio radioValue="enterprise">Enterprise</llm-radio>
-      </llm-radio-group>
+      <atl-radio-group name="plan" [(value)]="plan">
+        <atl-radio radioValue="free">Free</atl-radio>
+        <atl-radio radioValue="pro">Pro</atl-radio>
+        <atl-radio radioValue="enterprise">Enterprise</atl-radio>
+      </atl-radio-group>
     React:
-      <LlmRadioGroup name="plan" value="free" onValueChange={(v) => console.log(v)}>
-        <LlmRadio radioValue="free">Free</LlmRadio>
-        <LlmRadio radioValue="pro">Pro</LlmRadio>
-        <LlmRadio radioValue="enterprise">Enterprise</LlmRadio>
-      </LlmRadioGroup>
+      <AtlRadioGroup name="plan" value="free" onValueChange={(v) => console.log(v)}>
+        <AtlRadio radioValue="free">Free</AtlRadio>
+        <AtlRadio radioValue="pro">Pro</AtlRadio>
+        <AtlRadio radioValue="enterprise">Enterprise</AtlRadio>
+      </AtlRadioGroup>
     Vue:
-      <LlmRadioGroup name="plan" v-model:value="plan">
-        <LlmRadio radioValue="free">Free</LlmRadio>
-        <LlmRadio radioValue="pro">Pro</LlmRadio>
-        <LlmRadio radioValue="enterprise">Enterprise</LlmRadio>
-      </LlmRadioGroup>
+      <AtlRadioGroup name="plan" v-model:value="plan">
+        <AtlRadio radioValue="free">Free</AtlRadio>
+        <AtlRadio radioValue="pro">Pro</AtlRadio>
+        <AtlRadio radioValue="enterprise">Enterprise</AtlRadio>
+      </AtlRadioGroup>
 
 ---
 
-### LlmSelect + LlmOption
+### AtlSelect + AtlOption
 
   A custom select dropdown built on the native Popover API. Supports keyboard navigation, type-ahead, and disabled options.
 
@@ -339,41 +339,41 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-select placeholder="Select a country" [(value)]="country">
-        <llm-option optionValue="us">United States</llm-option>
-        <llm-option optionValue="ca">Canada</llm-option>
-        <llm-option optionValue="uk" [disabled]="true">United Kingdom (unavailable)</llm-option>
-      </llm-select>
+      <atl-select placeholder="Select a country" [(value)]="country">
+        <atl-option optionValue="us">United States</atl-option>
+        <atl-option optionValue="ca">Canada</atl-option>
+        <atl-option optionValue="uk" [disabled]="true">United Kingdom (unavailable)</atl-option>
+      </atl-select>
     React:
-      <LlmSelect placeholder="Select a country" value={country} onValueChange={setCountry}>
-        <LlmOption optionValue="us">United States</LlmOption>
-        <LlmOption optionValue="ca">Canada</LlmOption>
-        <LlmOption optionValue="uk" disabled={true}>United Kingdom (unavailable)</LlmOption>
-      </LlmSelect>
+      <AtlSelect placeholder="Select a country" value={country} onValueChange={setCountry}>
+        <AtlOption optionValue="us">United States</AtlOption>
+        <AtlOption optionValue="ca">Canada</AtlOption>
+        <AtlOption optionValue="uk" disabled={true}>United Kingdom (unavailable)</AtlOption>
+      </AtlSelect>
     Vue:
-      <LlmSelect placeholder="Select a country" v-model:value="country">
-        <LlmOption optionValue="us">United States</LlmOption>
-        <LlmOption optionValue="ca">Canada</LlmOption>
-        <LlmOption optionValue="uk" :disabled="true">United Kingdom (unavailable)</LlmOption>
-      </LlmSelect>
+      <AtlSelect placeholder="Select a country" v-model:value="country">
+        <AtlOption optionValue="us">United States</AtlOption>
+        <AtlOption optionValue="ca">Canada</AtlOption>
+        <AtlOption optionValue="uk" :disabled="true">United Kingdom (unavailable)</AtlOption>
+      </AtlSelect>
 
 ---
 
-### LlmCombobox
+### AtlCombobox
 
   A filterable autocomplete input. The user can type to narrow down a large list of options.
 
   Props:
     value          string                   ''     Controlled value
     onValueChange  (value: string) => void  —      Called when selection changes
-    options        LlmComboboxOption[]      []     Array of { label, value } objects
+    options        AtlComboboxOption[]      []     Array of { label, value } objects
     placeholder    string                   ''     Placeholder text
     disabled       boolean                  false  Disables the combobox
     invalid        boolean                  false  Applies invalid/error styling
 
   Usage:
     Angular:
-      <llm-combobox
+      <atl-combobox
         placeholder="Search framework..."
         [(value)]="framework"
         [options]="[
@@ -383,7 +383,7 @@ Each entry lists:
         ]"
       />
     React:
-      <LlmCombobox
+      <AtlCombobox
         placeholder="Search framework..."
         value={framework}
         onValueChange={setFramework}
@@ -394,7 +394,7 @@ Each entry lists:
         ]}
       />
     Vue:
-      <LlmCombobox
+      <AtlCombobox
         placeholder="Search framework..."
         v-model:value="framework"
         :options="[
@@ -411,16 +411,16 @@ Each entry lists:
       - Letting the user type a few characters to filter options instead of opening every group.
       - Driving an autocomplete where the available values are known upfront, not free text.
     antiPatterns:
-      - Accepting any freeform string the user types. → use LlmInput — combobox commits to a value from the option list.
-      - Picking from a list short enough to fit a native dropdown. → use LlmSelect — no search overhead, inherits native mobile UI.
-      - Selecting many values at once. → use A multi-select combobox (not in this spec) or a list of LlmCheckbox rows.
-    relatedComponents: LlmSelectSpec, LlmInputSpec
+      - Accepting any freeform string the user types. → use AtlInput — combobox commits to a value from the option list.
+      - Picking from a list short enough to fit a native dropdown. → use AtlSelect — no search overhead, inherits native mobile UI.
+      - Selecting many values at once. → use A multi-select combobox (not in this spec) or a list of AtlCheckbox rows.
+    relatedComponents: AtlSelectSpec, AtlInputSpec
     accessibility.role: combobox
     accessibility.keyboardBehavior: Receives focus via Tab. Typing filters the list and opens the popup; Down/Up moves through options, Enter commits the highlighted one, Escape closes the popup without changing the value. Home and End jump to the first/last option when the popup is open.
 
 ---
 
-### LlmBadge
+### AtlBadge
 
   A small inline label for status, categories, or counts. Use alongside cards, list items, and table cells.
 
@@ -430,26 +430,26 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-badge>Default</llm-badge>
-      <llm-badge variant="success">Active</llm-badge>
-      <llm-badge variant="warning">Pending</llm-badge>
-      <llm-badge variant="danger">Error</llm-badge>
-      <llm-badge variant="info">Info</llm-badge>
-      <llm-badge size="sm" variant="success">Small</llm-badge>
+      <atl-badge>Default</atl-badge>
+      <atl-badge variant="success">Active</atl-badge>
+      <atl-badge variant="warning">Pending</atl-badge>
+      <atl-badge variant="danger">Error</atl-badge>
+      <atl-badge variant="info">Info</atl-badge>
+      <atl-badge size="sm" variant="success">Small</atl-badge>
     React:
-      <LlmBadge>Default</LlmBadge>
-      <LlmBadge variant="success">Active</LlmBadge>
-      <LlmBadge variant="warning">Pending</LlmBadge>
-      <LlmBadge variant="danger">Error</LlmBadge>
-      <LlmBadge variant="info">Info</LlmBadge>
-      <LlmBadge size="sm" variant="success">Small</LlmBadge>
+      <AtlBadge>Default</AtlBadge>
+      <AtlBadge variant="success">Active</AtlBadge>
+      <AtlBadge variant="warning">Pending</AtlBadge>
+      <AtlBadge variant="danger">Error</AtlBadge>
+      <AtlBadge variant="info">Info</AtlBadge>
+      <AtlBadge size="sm" variant="success">Small</AtlBadge>
     Vue:
-      <LlmBadge>Default</LlmBadge>
-      <LlmBadge variant="success">Active</LlmBadge>
-      <LlmBadge variant="warning">Pending</LlmBadge>
-      <LlmBadge variant="danger">Error</LlmBadge>
-      <LlmBadge variant="info">Info</LlmBadge>
-      <LlmBadge size="sm" variant="success">Small</LlmBadge>
+      <AtlBadge>Default</AtlBadge>
+      <AtlBadge variant="success">Active</AtlBadge>
+      <AtlBadge variant="warning">Pending</AtlBadge>
+      <AtlBadge variant="danger">Error</AtlBadge>
+      <AtlBadge variant="info">Info</AtlBadge>
+      <AtlBadge size="sm" variant="success">Small</AtlBadge>
 
   Metadata:
     purpose: Compact inline label. Renders a small pill carrying a status word, count, or category alongside other content.
@@ -459,17 +459,17 @@ Each entry lists:
       - Tagging a list entry with a short category or version label.
       - Annotating a heading or button with a "new" / "beta" marker.
     antiPatterns:
-      - Surfacing a dismissable system-level message. → use LlmAlert — alerts carry a role and live region, badges do not.
+      - Surfacing a dismissable system-level message. → use AtlAlert — alerts carry a role and live region, badges do not.
       - Holding a removable user-entered chip (filter, recipient). → use A dedicated chip/tag component with its own remove affordance; badges are display-only.
-    relatedComponents: LlmAlertSpec, LlmAvatarSpec
+    relatedComponents: AtlAlertSpec, AtlAvatarSpec
     accessibility.role: status
     accessibility.keyboardBehavior: Non-interactive. Not focusable and ignores all keyboard input — the surrounding context (row, button, nav item) handles focus.
 
 ---
 
-### LlmIcon
+### AtlIcon
 
-  Pictogram glyph icon. 21 named variants matching the Figma `LlmIcon` component set. Decorative by default; pass `label` to announce a meaning to assistive tech.
+  Pictogram glyph icon. 21 named variants matching the Figma `AtlIcon` component set. Decorative by default; pass `label` to announce a meaning to assistive tech.
 
   Props:
     name   'success' | 'warning' | 'danger' | 'info' | 'error' | 'chevron-up' | 'chevron-down' | 'chevron-left' | 'chevron-right' | 'sort-asc' | 'sort-desc' | 'arrow-right' | 'arrow-left' | 'copy' | 'paste' | 'add' | 'edit' | 'delete' | 'close' | 'more' | 'default-toast'  —          The icon name. Required.
@@ -478,17 +478,17 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-icon name="success" />
-      <llm-icon name="warning" size="lg" label="Warning" />
-      <llm-icon name="chevron-down" size="sm" />
+      <atl-icon name="success" />
+      <atl-icon name="warning" size="lg" label="Warning" />
+      <atl-icon name="chevron-down" size="sm" />
     React:
-      <LlmIcon name="success" />
-      <LlmIcon name="warning" size="lg" label="Warning" />
-      <LlmIcon name="chevron-down" size="sm" />
+      <AtlIcon name="success" />
+      <AtlIcon name="warning" size="lg" label="Warning" />
+      <AtlIcon name="chevron-down" size="sm" />
     Vue:
-      <LlmIcon name="success" />
-      <LlmIcon name="warning" size="lg" label="Warning" />
-      <LlmIcon name="chevron-down" size="sm" />
+      <AtlIcon name="success" />
+      <AtlIcon name="warning" size="lg" label="Warning" />
+      <AtlIcon name="chevron-down" size="sm" />
 
   Metadata:
     purpose: Inline SVG glyph. Renders one icon from the library catalog at a fixed size, with an optional accessible label.
@@ -498,17 +498,17 @@ Each entry lists:
       - Indicating direction or affordance (chevrons for disclosure, arrows for navigation, sort markers in headers).
       - Standing alone as a meaningful symbol — in which case `label` is required so assistive tech can announce it.
     antiPatterns:
-      - Rendering a user avatar or product image. → use LlmAvatar or a plain `<img>` — icons are abstract glyphs, not raster content.
+      - Rendering a user avatar or product image. → use AtlAvatar or a plain `<img>` — icons are abstract glyphs, not raster content.
       - Conveying status without an adjacent label and without setting `label`. → use Pair the icon with visible text or pass `label` — decorative icons are hidden from screen readers.
-    relatedComponents: LlmButtonSpec, LlmBadgeSpec, LlmAlertSpec
+    relatedComponents: AtlButtonSpec, AtlBadgeSpec, AtlAlertSpec
     accessibility.role: img
     accessibility.keyboardBehavior: Not focusable; no key handling.
 
 ---
 
-### LlmCard
+### AtlCard
 
-  A container component for grouped content. Compose with LlmCardHeader, LlmCardContent, and LlmCardFooter.
+  A container component for grouped content. Compose with AtlCardHeader, AtlCardContent, and AtlCardFooter.
 
   Props:
     variant  'elevated' | 'outlined' | 'flat'  'elevated'  Visual style of the card
@@ -517,35 +517,35 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-card variant="elevated" padding="md">
-        <llm-card-header>Card Title</llm-card-header>
-        <llm-card-content>
+      <atl-card variant="elevated" padding="md">
+        <atl-card-header>Card Title</atl-card-header>
+        <atl-card-content>
           This is the card body content. It can contain anything.
-        </llm-card-content>
-        <llm-card-footer>
-          <llm-button variant="primary" size="sm">Action</llm-button>
-        </llm-card-footer>
-      </llm-card>
+        </atl-card-content>
+        <atl-card-footer>
+          <atl-button variant="primary" size="sm">Action</atl-button>
+        </atl-card-footer>
+      </atl-card>
     React:
-      <LlmCard variant="elevated" padding="md">
-        <LlmCardHeader>Card Title</LlmCardHeader>
-        <LlmCardContent>
+      <AtlCard variant="elevated" padding="md">
+        <AtlCardHeader>Card Title</AtlCardHeader>
+        <AtlCardContent>
           This is the card body content. It can contain anything.
-        </LlmCardContent>
-        <LlmCardFooter>
-          <LlmButton variant="primary" size="sm">Action</LlmButton>
-        </LlmCardFooter>
-      </LlmCard>
+        </AtlCardContent>
+        <AtlCardFooter>
+          <AtlButton variant="primary" size="sm">Action</AtlButton>
+        </AtlCardFooter>
+      </AtlCard>
     Vue:
-      <LlmCard variant="elevated" padding="md">
-        <LlmCardHeader>Card Title</LlmCardHeader>
-        <LlmCardContent>
+      <AtlCard variant="elevated" padding="md">
+        <AtlCardHeader>Card Title</AtlCardHeader>
+        <AtlCardContent>
           This is the card body content. It can contain anything.
-        </LlmCardContent>
-        <LlmCardFooter>
-          <LlmButton variant="primary" size="sm">Action</LlmButton>
-        </LlmCardFooter>
-      </LlmCard>
+        </AtlCardContent>
+        <AtlCardFooter>
+          <AtlButton variant="primary" size="sm">Action</AtlButton>
+        </AtlCardFooter>
+      </AtlCard>
 
   Metadata:
     purpose: Container that groups related content into a single visual block. Renders a padded surface with optional elevation or border; does not add a landmark role unless explicitly opted in.
@@ -555,16 +555,16 @@ Each entry lists:
       - Separating a form section or summary panel from surrounding page chrome.
       - Highlighting a feature, callout, or empty-state block within a larger view.
     antiPatterns:
-      - Showing a dismissable system message inside a card. → use LlmAlert — alerts carry the right role and live-region semantics for transient messages.
-      - Using a card as a modal container layered over the page. → use LlmDialog — dialogs handle focus trapping, scrim, and dismiss behaviour.
+      - Showing a dismissable system message inside a card. → use AtlAlert — alerts carry the right role and live-region semantics for transient messages.
+      - Using a card as a modal container layered over the page. → use AtlDialog — dialogs handle focus trapping, scrim, and dismiss behaviour.
       - Adding `role="article"` to every card by default to look more semantic. → use Leave `role` unset for visual grouping; only set it when the card is a real landmark in the page outline.
-    relatedComponents: LlmDialogSpec, LlmAlertSpec
+    relatedComponents: AtlDialogSpec, AtlAlertSpec
     accessibility.role: none
     accessibility.keyboardBehavior: Non-interactive by default. Not focusable; any interactive children (buttons, links) handle their own focus and activation. When `role` is set to `region` pair with `aria-label` or `aria-labelledby` so screen readers announce the landmark.
 
 ---
 
-### LlmTable
+### AtlTable
 
   A comprehensive data table component for displaying structured information. Supports sorting, row selection, sticky headers, and custom empty states.
 
@@ -576,56 +576,56 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-table variant="striped">
-        <llm-thead>
-          <llm-tr>
-            <llm-th [sortable]="true">Name</llm-th>
-            <llm-th>Status</llm-th>
-          </llm-tr>
-        </llm-thead>
-        <llm-tbody [empty]="rows.length === 0" [colSpan]="2">
+      <atl-table variant="striped">
+        <atl-thead>
+          <atl-tr>
+            <atl-th [sortable]="true">Name</atl-th>
+            <atl-th>Status</atl-th>
+          </atl-tr>
+        </atl-thead>
+        <atl-tbody [empty]="rows.length === 0" [colSpan]="2">
           @for (row of rows; track row.id) {
-            <llm-tr [selectable]="true">
-              <llm-td>{{ row.name }}</llm-td>
-              <llm-td>{{ row.status }}</llm-td>
-            </llm-tr>
+            <atl-tr [selectable]="true">
+              <atl-td>{{ row.name }}</atl-td>
+              <atl-td>{{ row.status }}</atl-td>
+            </atl-tr>
           }
-          <div llmTableEmpty>No results found</div>
-        </llm-tbody>
-      </llm-table>
+          <div atlTableEmpty>No results found</div>
+        </atl-tbody>
+      </atl-table>
     React:
-      <LlmTable variant="striped">
-        <LlmThead>
-          <LlmTr>
-            <LlmTh sortable>Name</LlmTh>
-            <LlmTh>Status</LlmTh>
-          </LlmTr>
-        </LlmThead>
-        <LlmTbody empty={rows.length === 0} colSpan={2} emptyContent="No results found">
+      <AtlTable variant="striped">
+        <AtlThead>
+          <AtlTr>
+            <AtlTh sortable>Name</AtlTh>
+            <AtlTh>Status</AtlTh>
+          </AtlTr>
+        </AtlThead>
+        <AtlTbody empty={rows.length === 0} colSpan={2} emptyContent="No results found">
           {rows.map((row) => (
-            <LlmTr key={row.id} selectable>
-              <LlmTd>{row.name}</LlmTd>
-              <LlmTd>{row.status}</LlmTd>
-            </LlmTr>
+            <AtlTr key={row.id} selectable>
+              <AtlTd>{row.name}</AtlTd>
+              <AtlTd>{row.status}</AtlTd>
+            </AtlTr>
           ))}
-        </LlmTbody>
-      </LlmTable>
+        </AtlTbody>
+      </AtlTable>
     Vue:
-      <LlmTable variant="striped">
-        <LlmThead>
-          <LlmTr>
-            <LlmTh :sortable="true">Name</LlmTh>
-            <LlmTh>Status</LlmTh>
-          </LlmTr>
-        </LlmThead>
-        <LlmTbody :empty="rows.length === 0" :colSpan="2">
-          <LlmTr v-for="row in rows" :key="row.id" :selectable="true">
-            <LlmTd>{{ row.name }}</LlmTd>
-            <LlmTd>{{ row.status }}</LlmTd>
-          </LlmTr>
+      <AtlTable variant="striped">
+        <AtlThead>
+          <AtlTr>
+            <AtlTh :sortable="true">Name</AtlTh>
+            <AtlTh>Status</AtlTh>
+          </AtlTr>
+        </AtlThead>
+        <AtlTbody :empty="rows.length === 0" :colSpan="2">
+          <AtlTr v-for="row in rows" :key="row.id" :selectable="true">
+            <AtlTd>{{ row.name }}</AtlTd>
+            <AtlTd>{{ row.status }}</AtlTd>
+          </AtlTr>
           <template #empty>No results found</template>
-        </LlmTbody>
-      </LlmTable>
+        </AtlTbody>
+      </AtlTable>
 
   Metadata:
     purpose: Tabular data grid. Renders rows of records with column headers, optional sorting, sticky headers, and per-cell alignment.
@@ -637,16 +637,16 @@ Each entry lists:
     antiPatterns:
       - Laying out two-dimensional UI that is not actually tabular data (cards in a grid). → use A CSS grid layout — `<table>` semantics confuse assistive tech when there is no row/column meaning.
       - Rendering a single record with field/value pairs. → use A description list or a labelled key/value layout — tables imply multiple comparable rows.
-      - Picking one option from a list. → use LlmSelect, LlmCombobox, or LlmRadioGroup depending on cardinality.
-    relatedComponents: LlmPaginationSpec, LlmCheckboxSpec, LlmBadgeSpec
+      - Picking one option from a list. → use AtlSelect, AtlCombobox, or AtlRadioGroup depending on cardinality.
+    relatedComponents: AtlPaginationSpec, AtlCheckboxSpec, AtlBadgeSpec
     accessibility.role: table
     accessibility.keyboardBehavior: The scrollable wrapper is focusable (tabindex=0) so users can pan horizontally with arrow keys. Sortable headers are buttons reached via Tab; Enter or Space toggles the sort direction and updates `aria-sort` on the header.
 
 ---
 
-### LlmAvatar + LlmAvatarGroup
+### AtlAvatar + AtlAvatarGroup
 
-  User avatar with image, initials fallback, and status indicator. Group avatars with LlmAvatarGroup.
+  User avatar with image, initials fallback, and status indicator. Group avatars with AtlAvatarGroup.
 
   Props:
     src     string                                       ''        Image URL
@@ -658,36 +658,36 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-avatar name="Jane Doe" size="md" status="online" />
-      <llm-avatar name="John Smith" size="lg" shape="square" />
-      <llm-avatar-group [max]="3" size="md">
-        <llm-avatar name="Alice" />
-        <llm-avatar name="Bob" />
-        <llm-avatar name="Carol" />
-        <llm-avatar name="Dave" />
-      </llm-avatar-group>
+      <atl-avatar name="Jane Doe" size="md" status="online" />
+      <atl-avatar name="John Smith" size="lg" shape="square" />
+      <atl-avatar-group [max]="3" size="md">
+        <atl-avatar name="Alice" />
+        <atl-avatar name="Bob" />
+        <atl-avatar name="Carol" />
+        <atl-avatar name="Dave" />
+      </atl-avatar-group>
     React:
-      <LlmAvatar name="Jane Doe" size="md" status="online" />
-      <LlmAvatar name="John Smith" size="lg" shape="square" />
-      <LlmAvatarGroup max={3} size="md">
-        <LlmAvatar name="Alice" />
-        <LlmAvatar name="Bob" />
-        <LlmAvatar name="Carol" />
-        <LlmAvatar name="Dave" />
-      </LlmAvatarGroup>
+      <AtlAvatar name="Jane Doe" size="md" status="online" />
+      <AtlAvatar name="John Smith" size="lg" shape="square" />
+      <AtlAvatarGroup max={3} size="md">
+        <AtlAvatar name="Alice" />
+        <AtlAvatar name="Bob" />
+        <AtlAvatar name="Carol" />
+        <AtlAvatar name="Dave" />
+      </AtlAvatarGroup>
     Vue:
-      <LlmAvatar name="Jane Doe" size="md" status="online" />
-      <LlmAvatar name="John Smith" size="lg" shape="square" />
-      <LlmAvatarGroup :max="3" size="md">
-        <LlmAvatar name="Alice" />
-        <LlmAvatar name="Bob" />
-        <LlmAvatar name="Carol" />
-        <LlmAvatar name="Dave" />
-      </LlmAvatarGroup>
+      <AtlAvatar name="Jane Doe" size="md" status="online" />
+      <AtlAvatar name="John Smith" size="lg" shape="square" />
+      <AtlAvatarGroup :max="3" size="md">
+        <AtlAvatar name="Alice" />
+        <AtlAvatar name="Bob" />
+        <AtlAvatar name="Carol" />
+        <AtlAvatar name="Dave" />
+      </AtlAvatarGroup>
 
 ---
 
-### LlmSkeleton
+### AtlSkeleton
 
   Loading placeholder that mimics content shape. Compose multiple skeletons to match your layout.
 
@@ -699,20 +699,20 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-skeleton variant="text" />
-      <llm-skeleton variant="text" width="60%" />
-      <llm-skeleton variant="circular" width="40px" />
-      <llm-skeleton variant="rectangular" height="200px" />
+      <atl-skeleton variant="text" />
+      <atl-skeleton variant="text" width="60%" />
+      <atl-skeleton variant="circular" width="40px" />
+      <atl-skeleton variant="rectangular" height="200px" />
     React:
-      <LlmSkeleton variant="text" />
-      <LlmSkeleton variant="text" width="60%" />
-      <LlmSkeleton variant="circular" width="40px" />
-      <LlmSkeleton variant="rectangular" height="200px" />
+      <AtlSkeleton variant="text" />
+      <AtlSkeleton variant="text" width="60%" />
+      <AtlSkeleton variant="circular" width="40px" />
+      <AtlSkeleton variant="rectangular" height="200px" />
     Vue:
-      <LlmSkeleton variant="text" />
-      <LlmSkeleton variant="text" width="60%" />
-      <LlmSkeleton variant="circular" width="40px" />
-      <LlmSkeleton variant="rectangular" height="200px" />
+      <AtlSkeleton variant="text" />
+      <AtlSkeleton variant="text" width="60%" />
+      <AtlSkeleton variant="circular" width="40px" />
+      <AtlSkeleton variant="rectangular" height="200px" />
 
   Metadata:
     purpose: Loading placeholder. Renders a sized block in the shape of the content that will replace it once data resolves.
@@ -721,15 +721,15 @@ Each entry lists:
       - Standing in for a single line of text while a label or value loads.
       - Reserving the footprint of an image or media thumbnail during async load.
     antiPatterns:
-      - Communicating an indeterminate background operation with no associated content slot. → use LlmProgress with `indeterminate` — has the right role and announces progress.
+      - Communicating an indeterminate background operation with no associated content slot. → use AtlProgress with `indeterminate` — has the right role and announces progress.
       - Holding empty space when there is genuinely nothing to render. → use An empty state with explanation; skeletons promise content that is coming.
-    relatedComponents: LlmProgressSpec, LlmAvatarSpec
+    relatedComponents: AtlProgressSpec, AtlAvatarSpec
     accessibility.role: status
     accessibility.keyboardBehavior: Not focusable; no key handling.
 
 ---
 
-### LlmProgress
+### AtlProgress
 
   A horizontal progress bar for showing completion percentage or indeterminate loading.
 
@@ -743,20 +743,20 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-progress [value]="25" label="Upload progress" />
-      <llm-progress [value]="60" variant="success" label="Form completion" />
-      <llm-progress [value]="85" variant="warning" label="Quota usage" />
-      <llm-progress [indeterminate]="true" label="Loading…" />
+      <atl-progress [value]="25" label="Upload progress" />
+      <atl-progress [value]="60" variant="success" label="Form completion" />
+      <atl-progress [value]="85" variant="warning" label="Quota usage" />
+      <atl-progress [indeterminate]="true" label="Loading…" />
     React:
-      <LlmProgress value={25} label="Upload progress" />
-      <LlmProgress value={60} variant="success" label="Form completion" />
-      <LlmProgress value={85} variant="warning" label="Quota usage" />
-      <LlmProgress indeterminate label="Loading…" />
+      <AtlProgress value={25} label="Upload progress" />
+      <AtlProgress value={60} variant="success" label="Form completion" />
+      <AtlProgress value={85} variant="warning" label="Quota usage" />
+      <AtlProgress indeterminate label="Loading…" />
     Vue:
-      <LlmProgress :value="25" label="Upload progress" />
-      <LlmProgress :value="60" variant="success" label="Form completion" />
-      <LlmProgress :value="85" variant="warning" label="Quota usage" />
-      <LlmProgress :indeterminate="true" label="Loading…" />
+      <AtlProgress :value="25" label="Upload progress" />
+      <AtlProgress :value="60" variant="success" label="Form completion" />
+      <AtlProgress :value="85" variant="warning" label="Quota usage" />
+      <AtlProgress :indeterminate="true" label="Loading…" />
 
   Metadata:
     purpose: Determinate or indeterminate progress bar. Renders the share of work completed for a task whose duration is measurable, or an indeterminate animation when it is not.
@@ -766,15 +766,15 @@ Each entry lists:
       - Indicating an in-flight background operation with `indeterminate` when the total is unknown.
       - Visualising quota or capacity usage against a maximum.
     antiPatterns:
-      - Reserving the layout slot for content that has not loaded yet. → use LlmSkeleton — sized to the missing content, not a generic bar.
-      - Acknowledging a momentary action (saved, copied). → use LlmToast — transient confirmation belongs in a live region, not a progress bar.
-    relatedComponents: LlmSkeletonSpec, LlmToastSpec
+      - Reserving the layout slot for content that has not loaded yet. → use AtlSkeleton — sized to the missing content, not a generic bar.
+      - Acknowledging a momentary action (saved, copied). → use AtlToast — transient confirmation belongs in a live region, not a progress bar.
+    relatedComponents: AtlSkeletonSpec, AtlToastSpec
     accessibility.role: progressbar
     accessibility.keyboardBehavior: Not focusable; no key handling.
 
 ---
 
-### LlmCodeBlock
+### AtlCodeBlock
 
   Displays a block of code with an optional header, language label, filename, and copy-to-clipboard button. Designed for rendering LLM-generated code output, API examples, and inline snippets.
 
@@ -787,24 +787,24 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-code-block code="const x = 1;" language="typescript" />
-      <llm-code-block [code]="tsCode" filename="app.ts" [showLineNumbers]="true" />
-      <llm-code-block [code]="shellCmd" language="shell" />
-      <llm-code-block [code]="jsonStr" filename="package.json" />
+      <atl-code-block code="const x = 1;" language="typescript" />
+      <atl-code-block [code]="tsCode" filename="app.ts" [showLineNumbers]="true" />
+      <atl-code-block [code]="shellCmd" language="shell" />
+      <atl-code-block [code]="jsonStr" filename="package.json" />
     React:
-      <LlmCodeBlock code="const x = 1;" language="typescript" />
-      <LlmCodeBlock code={tsCode} filename="app.ts" showLineNumbers={true} />
-      <LlmCodeBlock code={shellCmd} language="shell" />
-      <LlmCodeBlock code={jsonStr} filename="package.json" />
+      <AtlCodeBlock code="const x = 1;" language="typescript" />
+      <AtlCodeBlock code={tsCode} filename="app.ts" showLineNumbers={true} />
+      <AtlCodeBlock code={shellCmd} language="shell" />
+      <AtlCodeBlock code={jsonStr} filename="package.json" />
     Vue:
-      <LlmCodeBlock code="const x = 1;" language="typescript" />
-      <LlmCodeBlock :code="tsCode" filename="app.ts" :showLineNumbers="true" />
-      <LlmCodeBlock :code="shellCmd" language="shell" />
-      <LlmCodeBlock :code="jsonStr" filename="package.json" />
+      <AtlCodeBlock code="const x = 1;" language="typescript" />
+      <AtlCodeBlock :code="tsCode" filename="app.ts" :showLineNumbers="true" />
+      <AtlCodeBlock :code="shellCmd" language="shell" />
+      <AtlCodeBlock :code="jsonStr" filename="package.json" />
 
 ---
 
-### LlmBreadcrumbs + LlmBreadcrumbItem
+### AtlBreadcrumbs + AtlBreadcrumbItem
 
   Navigation breadcrumb trail showing the current page location within a hierarchy.
 
@@ -813,27 +813,27 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-breadcrumbs>
-        <llm-breadcrumb-item href="/">Home</llm-breadcrumb-item>
-        <llm-breadcrumb-item href="/components">Components</llm-breadcrumb-item>
-        <llm-breadcrumb-item>Breadcrumbs</llm-breadcrumb-item>
-      </llm-breadcrumbs>
+      <atl-breadcrumbs>
+        <atl-breadcrumb-item href="/">Home</atl-breadcrumb-item>
+        <atl-breadcrumb-item href="/components">Components</atl-breadcrumb-item>
+        <atl-breadcrumb-item>Breadcrumbs</atl-breadcrumb-item>
+      </atl-breadcrumbs>
     React:
-      <LlmBreadcrumbs>
-        <LlmBreadcrumbItem href="/">Home</LlmBreadcrumbItem>
-        <LlmBreadcrumbItem href="/components">Components</LlmBreadcrumbItem>
-        <LlmBreadcrumbItem current>Breadcrumbs</LlmBreadcrumbItem>
-      </LlmBreadcrumbs>
+      <AtlBreadcrumbs>
+        <AtlBreadcrumbItem href="/">Home</AtlBreadcrumbItem>
+        <AtlBreadcrumbItem href="/components">Components</AtlBreadcrumbItem>
+        <AtlBreadcrumbItem current>Breadcrumbs</AtlBreadcrumbItem>
+      </AtlBreadcrumbs>
     Vue:
-      <LlmBreadcrumbs>
-        <LlmBreadcrumbItem href="/">Home</LlmBreadcrumbItem>
-        <LlmBreadcrumbItem href="/components">Components</LlmBreadcrumbItem>
-        <LlmBreadcrumbItem :current="true">Breadcrumbs</LlmBreadcrumbItem>
-      </LlmBreadcrumbs>
+      <AtlBreadcrumbs>
+        <AtlBreadcrumbItem href="/">Home</AtlBreadcrumbItem>
+        <AtlBreadcrumbItem href="/components">Components</AtlBreadcrumbItem>
+        <AtlBreadcrumbItem :current="true">Breadcrumbs</AtlBreadcrumbItem>
+      </AtlBreadcrumbs>
 
 ---
 
-### LlmTabGroup + LlmTab
+### AtlTabGroup + AtlTab
 
   An accessible tabbed interface. Supports roving tabindex, arrow key navigation, and a pills variant.
 
@@ -844,27 +844,27 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-tab-group [selectedIndex]="0">
-        <llm-tab label="Account">Account settings content.</llm-tab>
-        <llm-tab label="Notifications">Notification preferences.</llm-tab>
-        <llm-tab label="Billing" [disabled]="true">Billing info.</llm-tab>
-      </llm-tab-group>
+      <atl-tab-group [selectedIndex]="0">
+        <atl-tab label="Account">Account settings content.</atl-tab>
+        <atl-tab label="Notifications">Notification preferences.</atl-tab>
+        <atl-tab label="Billing" [disabled]="true">Billing info.</atl-tab>
+      </atl-tab-group>
     React:
-      <LlmTabGroup selectedIndex={0}>
-        <LlmTab label="Account">Account settings content.</LlmTab>
-        <LlmTab label="Notifications">Notification preferences.</LlmTab>
-        <LlmTab label="Billing" disabled={true}>Billing info.</LlmTab>
-      </LlmTabGroup>
+      <AtlTabGroup selectedIndex={0}>
+        <AtlTab label="Account">Account settings content.</AtlTab>
+        <AtlTab label="Notifications">Notification preferences.</AtlTab>
+        <AtlTab label="Billing" disabled={true}>Billing info.</AtlTab>
+      </AtlTabGroup>
     Vue:
-      <LlmTabGroup :selectedIndex="0">
-        <LlmTab label="Account">Account settings content.</LlmTab>
-        <LlmTab label="Notifications">Notification preferences.</LlmTab>
-        <LlmTab label="Billing" :disabled="true">Billing info.</LlmTab>
-      </LlmTabGroup>
+      <AtlTabGroup :selectedIndex="0">
+        <AtlTab label="Account">Account settings content.</AtlTab>
+        <AtlTab label="Notifications">Notification preferences.</AtlTab>
+        <AtlTab label="Billing" :disabled="true">Billing info.</AtlTab>
+      </AtlTabGroup>
 
 ---
 
-### LlmStepper + LlmStep
+### AtlStepper + AtlStep
 
   A multi-step wizard for complex processes. Supports linear and non-linear navigation.
 
@@ -875,27 +875,27 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-stepper [activeStep]="0">
-        <llm-step label="Basic Info">Step 1 content</llm-step>
-        <llm-step label="Verification">Step 2 content</llm-step>
-        <llm-step label="Complete">Step 3 content</llm-step>
-      </llm-stepper>
+      <atl-stepper [activeStep]="0">
+        <atl-step label="Basic Info">Step 1 content</atl-step>
+        <atl-step label="Verification">Step 2 content</atl-step>
+        <atl-step label="Complete">Step 3 content</atl-step>
+      </atl-stepper>
     React:
-      <LlmStepper activeStep={0}>
-        <LlmStep label="Basic Info">Step 1 content</LlmStep>
-        <LlmStep label="Verification">Step 2 content</LlmStep>
-        <LlmStep label="Complete">Step 3 content</LlmStep>
-      </LlmStepper>
+      <AtlStepper activeStep={0}>
+        <AtlStep label="Basic Info">Step 1 content</AtlStep>
+        <AtlStep label="Verification">Step 2 content</AtlStep>
+        <AtlStep label="Complete">Step 3 content</AtlStep>
+      </AtlStepper>
     Vue:
-      <LlmStepper :activeStep="0">
-        <LlmStep label="Basic Info">Step 1 content</LlmStep>
-        <LlmStep label="Verification">Step 2 content</LlmStep>
-        <LlmStep label="Complete">Step 3 content</LlmStep>
-      </LlmStepper>
+      <AtlStepper :activeStep="0">
+        <AtlStep label="Basic Info">Step 1 content</AtlStep>
+        <AtlStep label="Verification">Step 2 content</AtlStep>
+        <AtlStep label="Complete">Step 3 content</AtlStep>
+      </AtlStepper>
 
 ---
 
-### LlmPagination
+### AtlPagination
 
   Page navigation control for paginated data. Shows page numbers with previous/next buttons.
 
@@ -908,18 +908,18 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-pagination
+      <atl-pagination
         [(page)]="page"
         [pageCount]="10"
       />
     React:
-      <LlmPagination
+      <AtlPagination
         page={page}
         pageCount={10}
         onPageChange={setPage}
       />
     Vue:
-      <LlmPagination
+      <AtlPagination
         :page="page"
         :pageCount="10"
         @pageChange="page = $event"
@@ -934,13 +934,13 @@ Each entry lists:
     antiPatterns:
       - Loading more rows continuously as the user scrolls. → use An infinite-scroll pattern with a sentinel — pagination implies discrete, addressable pages.
       - Stepping through a fixed multi-step flow. → use A stepper — steps represent ordered stages, not interchangeable pages of data.
-    relatedComponents: LlmTableSpec, LlmButtonSpec
+    relatedComponents: AtlTableSpec, AtlButtonSpec
     accessibility.role: navigation
     accessibility.keyboardBehavior: Page controls are buttons reached via Tab in source order. Enter or Space activates the focused control. The current page is marked with `aria-current="page"` and the disabled prev/next buttons drop out of the tab order at the boundaries.
 
 ---
 
-### LlmMenu + LlmMenuItem + LlmMenuTrigger
+### AtlMenu + AtlMenuItem + AtlMenuTrigger
 
   A dropdown context menu. Handles keyboard navigation, focus management, ARIA, and nested submenus.
 
@@ -949,50 +949,50 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-button [llmMenuTriggerFor]="actions">Actions ▾</llm-button>
+      <atl-button [atlMenuTriggerFor]="actions">Actions ▾</atl-button>
       <ng-template #actions>
-        <llm-menu>
-          <llm-menu-item (triggered)="copy()">Copy</llm-menu-item>
-          <llm-menu-item (triggered)="paste()">Paste</llm-menu-item>
-          <llm-menu-separator />
-          <llm-menu-item [disabled]="true">Delete</llm-menu-item>
-        </llm-menu>
+        <atl-menu>
+          <atl-menu-item (triggered)="copy()">Copy</atl-menu-item>
+          <atl-menu-item (triggered)="paste()">Paste</atl-menu-item>
+          <atl-menu-separator />
+          <atl-menu-item [disabled]="true">Delete</atl-menu-item>
+        </atl-menu>
       </ng-template>
     React:
-      <LlmMenuTrigger
+      <AtlMenuTrigger
         menu={
-          <LlmMenu>
-            <LlmMenuItem onTriggered={() => console.log('copy')}>Copy</LlmMenuItem>
-            <LlmMenuItem onTriggered={() => console.log('paste')}>Paste</LlmMenuItem>
-            <LlmMenuSeparator />
-            <LlmMenuItem disabled>Delete</LlmMenuItem>
-          </LlmMenu>
+          <AtlMenu>
+            <AtlMenuItem onTriggered={() => console.log('copy')}>Copy</AtlMenuItem>
+            <AtlMenuItem onTriggered={() => console.log('paste')}>Paste</AtlMenuItem>
+            <AtlMenuSeparator />
+            <AtlMenuItem disabled>Delete</AtlMenuItem>
+          </AtlMenu>
         }
       >
         {({ onClick, ref }) => (
-          <LlmButton ref={ref as React.RefObject<HTMLButtonElement>} onClick={onClick}>
+          <AtlButton ref={ref as React.RefObject<HTMLButtonElement>} onClick={onClick}>
             Actions ▾
-          </LlmButton>
+          </AtlButton>
         )}
-      </LlmMenuTrigger>
+      </AtlMenuTrigger>
     Vue:
-      <LlmMenuTrigger>
+      <AtlMenuTrigger>
         <template #trigger>
-          <LlmButton>Actions ▾</LlmButton>
+          <AtlButton>Actions ▾</AtlButton>
         </template>
         <template #menu>
-          <LlmMenu>
-            <LlmMenuItem @triggered="copy">Copy</LlmMenuItem>
-            <LlmMenuItem @triggered="paste">Paste</LlmMenuItem>
-            <LlmMenuSeparator />
-            <LlmMenuItem :disabled="true">Delete</LlmMenuItem>
-          </LlmMenu>
+          <AtlMenu>
+            <AtlMenuItem @triggered="copy">Copy</AtlMenuItem>
+            <AtlMenuItem @triggered="paste">Paste</AtlMenuItem>
+            <AtlMenuSeparator />
+            <AtlMenuItem :disabled="true">Delete</AtlMenuItem>
+          </AtlMenu>
         </template>
-      </LlmMenuTrigger>
+      </AtlMenuTrigger>
 
 ---
 
-### LlmDialog
+### AtlDialog
 
   A modal dialog using the native <dialog> element. Includes focus trap, Escape to close, backdrop click to close, and smooth animations.
 
@@ -1004,35 +1004,35 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-button (click)="open = true">Open Dialog</llm-button>
-      <llm-dialog [(open)]="open" size="sm">
-        <llm-dialog-header>Confirm Delete</llm-dialog-header>
-        <llm-dialog-content>Are you sure? This cannot be undone.</llm-dialog-content>
-        <llm-dialog-footer>
-          <llm-button variant="outline" (click)="open = false">Cancel</llm-button>
-          <llm-button variant="primary" (click)="open = false">Delete</llm-button>
-        </llm-dialog-footer>
-      </llm-dialog>
+      <atl-button (click)="open = true">Open Dialog</atl-button>
+      <atl-dialog [(open)]="open" size="sm">
+        <atl-dialog-header>Confirm Delete</atl-dialog-header>
+        <atl-dialog-content>Are you sure? This cannot be undone.</atl-dialog-content>
+        <atl-dialog-footer>
+          <atl-button variant="outline" (click)="open = false">Cancel</atl-button>
+          <atl-button variant="primary" (click)="open = false">Delete</atl-button>
+        </atl-dialog-footer>
+      </atl-dialog>
     React:
-      <LlmButton onClick={() => setOpen(true)}>Open Dialog</LlmButton>
-      <LlmDialog open={open} onOpenChange={setOpen} size="sm">
-        <LlmDialogHeader>Confirm Delete</LlmDialogHeader>
-        <LlmDialogContent>Are you sure? This cannot be undone.</LlmDialogContent>
-        <LlmDialogFooter>
-          <LlmButton variant="outline" onClick={() => setOpen(false)}>Cancel</LlmButton>
-          <LlmButton variant="primary" onClick={() => setOpen(false)}>Delete</LlmButton>
-        </LlmDialogFooter>
-      </LlmDialog>
+      <AtlButton onClick={() => setOpen(true)}>Open Dialog</AtlButton>
+      <AtlDialog open={open} onOpenChange={setOpen} size="sm">
+        <AtlDialogHeader>Confirm Delete</AtlDialogHeader>
+        <AtlDialogContent>Are you sure? This cannot be undone.</AtlDialogContent>
+        <AtlDialogFooter>
+          <AtlButton variant="outline" onClick={() => setOpen(false)}>Cancel</AtlButton>
+          <AtlButton variant="primary" onClick={() => setOpen(false)}>Delete</AtlButton>
+        </AtlDialogFooter>
+      </AtlDialog>
     Vue:
-      <LlmButton @click="open = true">Open Dialog</LlmButton>
-      <LlmDialog v-model:open="open" size="sm">
-        <LlmDialogHeader>Confirm Delete</LlmDialogHeader>
-        <LlmDialogContent>Are you sure? This cannot be undone.</LlmDialogContent>
-        <LlmDialogFooter>
-          <LlmButton variant="outline" @click="open = false">Cancel</LlmButton>
-          <LlmButton variant="primary" @click="open = false">Delete</LlmButton>
-        </LlmDialogFooter>
-      </LlmDialog>
+      <AtlButton @click="open = true">Open Dialog</AtlButton>
+      <AtlDialog v-model:open="open" size="sm">
+        <AtlDialogHeader>Confirm Delete</AtlDialogHeader>
+        <AtlDialogContent>Are you sure? This cannot be undone.</AtlDialogContent>
+        <AtlDialogFooter>
+          <AtlButton variant="outline" @click="open = false">Cancel</AtlButton>
+          <AtlButton variant="primary" @click="open = false">Delete</AtlButton>
+        </AtlDialogFooter>
+      </AtlDialog>
 
   Metadata:
     purpose: Modal overlay that interrupts the page to demand focused attention. Traps focus, dims the background with a scrim, and blocks interaction with the rest of the page until it is dismissed.
@@ -1042,16 +1042,16 @@ Each entry lists:
       - Showing detail content (preview, full-size image, expanded record) on top of the current view.
       - Asking for a decision that must be answered before the user can continue with the underlying flow.
     antiPatterns:
-      - Showing a transient, non-blocking system message. → use LlmToast or LlmAlert — neither demands focus or blocks interaction.
-      - Sliding in a side panel for secondary navigation or filters. → use LlmDrawer — drawers anchor to an edge and are the right primitive for persistent side surfaces.
+      - Showing a transient, non-blocking system message. → use AtlToast or AtlAlert — neither demands focus or blocks interaction.
+      - Sliding in a side panel for secondary navigation or filters. → use AtlDrawer — drawers anchor to an edge and are the right primitive for persistent side surfaces.
       - Hosting a long, multi-step workflow that needs its own URL and history. → use A dedicated route or wizard page — dialogs should not own deep flows the user might want to share or refresh.
-    relatedComponents: LlmDrawerSpec, LlmAlertSpec, LlmButtonSpec
+    relatedComponents: AtlDrawerSpec, AtlAlertSpec, AtlButtonSpec
     accessibility.role: dialog
     accessibility.keyboardBehavior: On open, focus moves to the first focusable element inside the dialog and is trapped within it. Tab and Shift+Tab cycle through dialog descendants only. Escape closes the dialog and returns focus to the trigger that opened it.
 
 ---
 
-### LlmDrawer
+### AtlDrawer
 
   A slide-in panel from the edge of the viewport. Useful for sidebars, filter panels, and detail views.
 
@@ -1064,38 +1064,38 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-button (click)="open = true">Open Drawer</llm-button>
-      <llm-drawer [(open)]="open" position="right">
-        <llm-drawer-header>Settings</llm-drawer-header>
-        <llm-drawer-content>
-          <llm-input placeholder="Search..." />
-        </llm-drawer-content>
-        <llm-drawer-footer>
-          <llm-button (click)="open = false">Close</llm-button>
-        </llm-drawer-footer>
-      </llm-drawer>
+      <atl-button (click)="open = true">Open Drawer</atl-button>
+      <atl-drawer [(open)]="open" position="right">
+        <atl-drawer-header>Settings</atl-drawer-header>
+        <atl-drawer-content>
+          <atl-input placeholder="Search..." />
+        </atl-drawer-content>
+        <atl-drawer-footer>
+          <atl-button (click)="open = false">Close</atl-button>
+        </atl-drawer-footer>
+      </atl-drawer>
     React:
-      <LlmButton onClick={() => setOpen(true)}>Open Drawer</LlmButton>
-      <LlmDrawer open={open} onOpenChange={setOpen} position="right">
-        <LlmDrawerHeader>Settings</LlmDrawerHeader>
-        <LlmDrawerContent>
-          <LlmInput placeholder="Search..." />
-        </LlmDrawerContent>
-        <LlmDrawerFooter>
-          <LlmButton onClick={() => setOpen(false)}>Close</LlmButton>
-        </LlmDrawerFooter>
-      </LlmDrawer>
+      <AtlButton onClick={() => setOpen(true)}>Open Drawer</AtlButton>
+      <AtlDrawer open={open} onOpenChange={setOpen} position="right">
+        <AtlDrawerHeader>Settings</AtlDrawerHeader>
+        <AtlDrawerContent>
+          <AtlInput placeholder="Search..." />
+        </AtlDrawerContent>
+        <AtlDrawerFooter>
+          <AtlButton onClick={() => setOpen(false)}>Close</AtlButton>
+        </AtlDrawerFooter>
+      </AtlDrawer>
     Vue:
-      <LlmButton @click="open = true">Open Drawer</LlmButton>
-      <LlmDrawer v-model:open="open" position="right">
-        <LlmDrawerHeader>Settings</LlmDrawerHeader>
-        <LlmDrawerContent>
-          <LlmInput placeholder="Search..." />
-        </LlmDrawerContent>
-        <LlmDrawerFooter>
-          <LlmButton @click="open = false">Close</LlmButton>
-        </LlmDrawerFooter>
-      </LlmDrawer>
+      <AtlButton @click="open = true">Open Drawer</AtlButton>
+      <AtlDrawer v-model:open="open" position="right">
+        <AtlDrawerHeader>Settings</AtlDrawerHeader>
+        <AtlDrawerContent>
+          <AtlInput placeholder="Search..." />
+        </AtlDrawerContent>
+        <AtlDrawerFooter>
+          <AtlButton @click="open = false">Close</AtlButton>
+        </AtlDrawerFooter>
+      </AtlDrawer>
 
   Metadata:
     purpose: Edge-anchored panel that slides in from one side of the viewport. Hosts secondary navigation, filters, or detail views without taking the user away from the underlying page.
@@ -1105,104 +1105,104 @@ Each entry lists:
       - Inspecting a record or row in a detail panel without losing the surrounding list context.
       - Presenting a longer task or form that benefits from screen-edge anchoring rather than a centred modal.
     antiPatterns:
-      - Blocking the page for a short confirmation or single-decision prompt. → use LlmDialog — dialogs are centred, scoped, and the right primitive for one focused decision.
-      - Showing a transient notification that should not require dismissal. → use LlmToast — toasts auto-dismiss and do not anchor to a screen edge.
-      - Building a dropdown menu attached to a trigger button. → use LlmMenu — menus position relative to the trigger and use roving focus, not focus trapping.
-    relatedComponents: LlmDialogSpec, LlmMenuSpec
+      - Blocking the page for a short confirmation or single-decision prompt. → use AtlDialog — dialogs are centred, scoped, and the right primitive for one focused decision.
+      - Showing a transient notification that should not require dismissal. → use AtlToast — toasts auto-dismiss and do not anchor to a screen edge.
+      - Building a dropdown menu attached to a trigger button. → use AtlMenu — menus position relative to the trigger and use roving focus, not focus trapping.
+    relatedComponents: AtlDialogSpec, AtlMenuSpec
     accessibility.role: dialog
     accessibility.keyboardBehavior: On open, focus moves into the drawer and is trapped while it is visible. Tab and Shift+Tab cycle through drawer descendants only. Escape closes the drawer and returns focus to the trigger that opened it.
 
 ---
 
-### [llmTooltip]
+### [atlTooltip]
 
   An attribute directive that adds a tooltip to any element. Uses a viewport-aware overlay layer so the tooltip flips to stay on-screen.
 
   Props:
-    llmTooltip           string                                —        Tooltip text content (required)
-    llmTooltipPosition   'above' | 'below' | 'left' | 'right'  'above'  Preferred position
-    llmTooltipDisabled   boolean                               false    Disables the tooltip
-    llmTooltipShowDelay  number                                300      Delay in ms before showing
-    llmTooltipHideDelay  number                                0        Delay in ms before hiding
+    atlTooltip           string                                —        Tooltip text content (required)
+    atlTooltipPosition   'above' | 'below' | 'left' | 'right'  'above'  Preferred position
+    atlTooltipDisabled   boolean                               false    Disables the tooltip
+    atlTooltipShowDelay  number                                300      Delay in ms before showing
+    atlTooltipHideDelay  number                                0        Delay in ms before hiding
 
   Usage:
     Angular:
-      <llm-button llmTooltip="Save your changes">Save</llm-button>
-      <llm-button
-        llmTooltip="Copy to clipboard"
-        llmTooltipPosition="right"
+      <atl-button atlTooltip="Save your changes">Save</atl-button>
+      <atl-button
+        atlTooltip="Copy to clipboard"
+        atlTooltipPosition="right"
         variant="outline"
-      >Copy</llm-button>
+      >Copy</atl-button>
     React:
-      <LlmTooltip llmTooltip="Save your changes">
-        <LlmButton>Save</LlmButton>
-      </LlmTooltip>
-      <LlmTooltip llmTooltip="Copy to clipboard" llmTooltipPosition="right">
-        <LlmButton variant="outline">Copy</LlmButton>
-      </LlmTooltip>
+      <AtlTooltip atlTooltip="Save your changes">
+        <AtlButton>Save</AtlButton>
+      </AtlTooltip>
+      <AtlTooltip atlTooltip="Copy to clipboard" atlTooltipPosition="right">
+        <AtlButton variant="outline">Copy</AtlButton>
+      </AtlTooltip>
     Vue:
-      <LlmTooltip llmTooltip="Save your changes">
-        <LlmButton>Save</LlmButton>
-      </LlmTooltip>
-      <LlmTooltip llmTooltip="Copy to clipboard" llmTooltipPosition="right">
-        <LlmButton variant="outline">Copy</LlmButton>
-      </LlmTooltip>
+      <AtlTooltip atlTooltip="Save your changes">
+        <AtlButton>Save</AtlButton>
+      </AtlTooltip>
+      <AtlTooltip atlTooltip="Copy to clipboard" atlTooltipPosition="right">
+        <AtlButton variant="outline">Copy</AtlButton>
+      </AtlTooltip>
 
 ---
 
-### Toast (service / hook + LlmToastContainer)
+### Toast (service / hook + AtlToastContainer)
 
-  Transient notifications that auto-dismiss. Service/hook-based API — place LlmToastContainer once in app root.
+  Transient notifications that auto-dismiss. Service/hook-based API — place AtlToastContainer once in app root.
 
   Props:
     variant      'default' | 'success' | 'warning' | 'danger' | 'info'          'default'       Color scheme of the toast
     duration     number                                                         5000            Auto-dismiss delay in ms. 0 = no auto-dismiss
     dismissible  boolean                                                        true            Show a dismiss button
-    position     'top-right' | 'top-center' | 'bottom-right' | 'bottom-center'  'bottom-right'  Container position (on LlmToastContainer)
+    position     'top-right' | 'top-center' | 'bottom-right' | 'bottom-center'  'bottom-right'  Container position (on AtlToastContainer)
 
   Usage:
     Angular:
       // Place the container once (e.g. in app root template):
-      // <llm-toast-container position="bottom-right" />
+      // <atl-toast-container position="bottom-right" />
 
       // In any component — inject the service, no provider needed:
-      import { LlmToastService } from '@atelier-ui/angular';
+      import { AtlToastService } from '@atelier-ui/angular';
 
-      private readonly toast = inject(LlmToastService);
+      private readonly toast = inject(AtlToastService);
 
       this.toast.show('Saved!', { variant: 'success' });
       this.toast.show('Error occurred', { variant: 'danger', duration: 8000 });
       this.toast.show('Persistent', { duration: 0 });
     React:
       // App root:
-      <LlmToastProvider>
+      <AtlToastProvider>
         <App />
-        <LlmToastContainer position="bottom-right" />
-      </LlmToastProvider>
+        <AtlToastContainer position="bottom-right" />
+      </AtlToastProvider>
 
       // In any component inside the provider:
-      const { show } = useLlmToast();
+      const { show } = useAtlToast();
       show('Saved!', { variant: 'success' });
       show('Error occurred', { variant: 'danger', duration: 8000 });
       show('Persistent', { duration: 0 });
     Vue:
       <!-- App root: -->
-      <LlmToastProvider>
+      <AtlToastProvider>
         <App />
-        <LlmToastContainer position="bottom-right" />
-      </LlmToastProvider>
+        <AtlToastContainer position="bottom-right" />
+      </AtlToastProvider>
 
       <!-- In any component inside the provider, in <script setup>: -->
-      import { useLlmToast } from '@atelier-ui/vue';
+      import { useAtlToast } from '@atelier-ui/vue';
 
-      const { show } = useLlmToast();
+      const { show } = useAtlToast();
       show('Saved!', { variant: 'success' });
       show('Error occurred', { variant: 'danger', duration: 8000 });
       show('Persistent', { duration: 0 });
 
 ---
 
-### LlmAccordionGroup + LlmAccordionItem
+### AtlAccordionGroup + AtlAccordionItem
 
   Expandable/collapsible sections. Supports multi-expand mode and smooth CSS grid animations.
 
@@ -1212,42 +1212,42 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-accordion-group variant="separated">
-        <llm-accordion-item>
-          <span llmAccordionHeader>Question 1</span>
+      <atl-accordion-group variant="separated">
+        <atl-accordion-item>
+          <span atlAccordionHeader>Question 1</span>
           Answer content goes here.
-        </llm-accordion-item>
-        <llm-accordion-item>
-          <span llmAccordionHeader>Question 2</span>
+        </atl-accordion-item>
+        <atl-accordion-item>
+          <span atlAccordionHeader>Question 2</span>
           Another answer here.
-        </llm-accordion-item>
-      </llm-accordion-group>
+        </atl-accordion-item>
+      </atl-accordion-group>
     React:
-      <LlmAccordionGroup variant="separated">
-        <LlmAccordionItem>
-          <LlmAccordionHeader>Question 1</LlmAccordionHeader>
+      <AtlAccordionGroup variant="separated">
+        <AtlAccordionItem>
+          <AtlAccordionHeader>Question 1</AtlAccordionHeader>
           Answer content goes here.
-        </LlmAccordionItem>
-        <LlmAccordionItem>
-          <LlmAccordionHeader>Question 2</LlmAccordionHeader>
+        </AtlAccordionItem>
+        <AtlAccordionItem>
+          <AtlAccordionHeader>Question 2</AtlAccordionHeader>
           Another answer here.
-        </LlmAccordionItem>
-      </LlmAccordionGroup>
+        </AtlAccordionItem>
+      </AtlAccordionGroup>
     Vue:
-      <LlmAccordionGroup variant="separated">
-        <LlmAccordionItem>
-          <template #header><LlmAccordionHeader>Question 1</LlmAccordionHeader></template>
+      <AtlAccordionGroup variant="separated">
+        <AtlAccordionItem>
+          <template #header><AtlAccordionHeader>Question 1</AtlAccordionHeader></template>
           Answer content goes here.
-        </LlmAccordionItem>
-        <LlmAccordionItem>
-          <template #header><LlmAccordionHeader>Question 2</LlmAccordionHeader></template>
+        </AtlAccordionItem>
+        <AtlAccordionItem>
+          <template #header><AtlAccordionHeader>Question 2</AtlAccordionHeader></template>
           Another answer here.
-        </LlmAccordionItem>
-      </LlmAccordionGroup>
+        </AtlAccordionItem>
+      </AtlAccordionGroup>
 
 ---
 
-### LlmAlert
+### AtlAlert
 
   Inline status messages for feedback, warnings, and errors. Optionally dismissible.
 
@@ -1258,20 +1258,20 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-alert variant="info">This is an informational message.</llm-alert>
-      <llm-alert variant="success">Your changes were saved successfully.</llm-alert>
-      <llm-alert variant="warning" [dismissible]="true">Your session expires in 5 minutes.</llm-alert>
-      <llm-alert variant="danger">Something went wrong. Please try again.</llm-alert>
+      <atl-alert variant="info">This is an informational message.</atl-alert>
+      <atl-alert variant="success">Your changes were saved successfully.</atl-alert>
+      <atl-alert variant="warning" [dismissible]="true">Your session expires in 5 minutes.</atl-alert>
+      <atl-alert variant="danger">Something went wrong. Please try again.</atl-alert>
     React:
-      <LlmAlert variant="info">This is an informational message.</LlmAlert>
-      <LlmAlert variant="success">Your changes were saved successfully.</LlmAlert>
-      <LlmAlert variant="warning" dismissible={true}>Your session expires in 5 minutes.</LlmAlert>
-      <LlmAlert variant="danger">Something went wrong. Please try again.</LlmAlert>
+      <AtlAlert variant="info">This is an informational message.</AtlAlert>
+      <AtlAlert variant="success">Your changes were saved successfully.</AtlAlert>
+      <AtlAlert variant="warning" dismissible={true}>Your session expires in 5 minutes.</AtlAlert>
+      <AtlAlert variant="danger">Something went wrong. Please try again.</AtlAlert>
     Vue:
-      <LlmAlert variant="info">This is an informational message.</LlmAlert>
-      <LlmAlert variant="success">Your changes were saved successfully.</LlmAlert>
-      <LlmAlert variant="warning" :dismissible="true">Your session expires in 5 minutes.</LlmAlert>
-      <LlmAlert variant="danger">Something went wrong. Please try again.</LlmAlert>
+      <AtlAlert variant="info">This is an informational message.</AtlAlert>
+      <AtlAlert variant="success">Your changes were saved successfully.</AtlAlert>
+      <AtlAlert variant="warning" :dismissible="true">Your session expires in 5 minutes.</AtlAlert>
+      <AtlAlert variant="danger">Something went wrong. Please try again.</AtlAlert>
 
   Metadata:
     purpose: Inline contextual message. Renders a block carrying status content (info, success, warning, danger) with an optional dismiss control.
@@ -1281,16 +1281,16 @@ Each entry lists:
       - Communicating a system-level notice that should stay visible until acknowledged (`dismissible: true`).
       - Highlighting a tip or note inside documentation or a settings panel.
     antiPatterns:
-      - Tagging an item with a short status word next to other content. → use LlmBadge — badges are inline labels, alerts are block-level messages with a role.
+      - Tagging an item with a short status word next to other content. → use AtlBadge — badges are inline labels, alerts are block-level messages with a role.
       - Showing a transient confirmation that disappears on its own. → use A toast/snackbar component — alerts stay in the layout until dismissed or unmounted.
-      - Blocking the page to demand a decision. → use LlmDialog — modal dialogs interrupt; alerts coexist with the surrounding content.
-    relatedComponents: LlmBadgeSpec, LlmDialogSpec
+      - Blocking the page to demand a decision. → use AtlDialog — modal dialogs interrupt; alerts coexist with the surrounding content.
+    relatedComponents: AtlBadgeSpec, AtlDialogSpec
     accessibility.role: alert
     accessibility.keyboardBehavior: The alert body is non-interactive and not focusable. When `dismissible: true`, the close button is reachable via Tab and activates on Enter or Space, moving focus back to the document after dismissal.
 
 ---
 
-### LlmChat
+### AtlChat
 
   Composable AI assistant surface. Three layout variants (drawer, popup, inline) share the same content slots and a status-driven Send/Stop button toggle. Provider-agnostic — wire it to CopilotKit, Vercel AI SDK, or your own backend by binding the Send/Stop events.
 
@@ -1302,53 +1302,53 @@ Each entry lists:
 
   Usage:
     Angular:
-      <llm-chat variant="drawer" [(open)]="open" status="idle">
-        <llm-chat-header>
-          <llm-avatar size="sm" name="AI" />
+      <atl-chat variant="drawer" [(open)]="open" status="idle">
+        <atl-chat-header>
+          <atl-avatar size="sm" name="AI" />
           <span>AI Assistant</span>
-          <llm-badge variant="success" size="sm">Online</llm-badge>
-        </llm-chat-header>
-        <llm-chat-messages>
-          <llm-chat-message role="assistant">Hi! How can I help today?</llm-chat-message>
-          <llm-chat-message role="user">Show me a sorting function.</llm-chat-message>
-          <llm-chat-message role="assistant">
-            <llm-code-block language="ts" [code]="snippet" />
-          </llm-chat-message>
-        </llm-chat-messages>
-        <llm-chat-input (send)="onSend($event)" (stop)="onStop()" />
-      </llm-chat>
+          <atl-badge variant="success" size="sm">Online</atl-badge>
+        </atl-chat-header>
+        <atl-chat-messages>
+          <atl-chat-message role="assistant">Hi! How can I help today?</atl-chat-message>
+          <atl-chat-message role="user">Show me a sorting function.</atl-chat-message>
+          <atl-chat-message role="assistant">
+            <atl-code-block language="ts" [code]="snippet" />
+          </atl-chat-message>
+        </atl-chat-messages>
+        <atl-chat-input (send)="onSend($event)" (stop)="onStop()" />
+      </atl-chat>
     React:
-      <LlmChat variant="drawer" open={open} onOpenChange={setOpen} status="idle">
-        <LlmChatHeader>
-          <LlmAvatar size="sm" name="AI" />
+      <AtlChat variant="drawer" open={open} onOpenChange={setOpen} status="idle">
+        <AtlChatHeader>
+          <AtlAvatar size="sm" name="AI" />
           <span>AI Assistant</span>
-          <LlmBadge variant="success" size="sm">Online</LlmBadge>
-        </LlmChatHeader>
-        <LlmChatMessages>
-          <LlmChatMessage role="assistant">Hi! How can I help today?</LlmChatMessage>
-          <LlmChatMessage role="user">Show me a sorting function.</LlmChatMessage>
-          <LlmChatMessage role="assistant">
-            <LlmCodeBlock language="ts" code={snippet} />
-          </LlmChatMessage>
-        </LlmChatMessages>
-        <LlmChatInput onSend={onSend} onStop={onStop} />
-      </LlmChat>
+          <AtlBadge variant="success" size="sm">Online</AtlBadge>
+        </AtlChatHeader>
+        <AtlChatMessages>
+          <AtlChatMessage role="assistant">Hi! How can I help today?</AtlChatMessage>
+          <AtlChatMessage role="user">Show me a sorting function.</AtlChatMessage>
+          <AtlChatMessage role="assistant">
+            <AtlCodeBlock language="ts" code={snippet} />
+          </AtlChatMessage>
+        </AtlChatMessages>
+        <AtlChatInput onSend={onSend} onStop={onStop} />
+      </AtlChat>
     Vue:
-      <LlmChat variant="drawer" v-model:open="open" status="idle">
-        <LlmChatHeader>
-          <LlmAvatar size="sm" name="AI" />
+      <AtlChat variant="drawer" v-model:open="open" status="idle">
+        <AtlChatHeader>
+          <AtlAvatar size="sm" name="AI" />
           <span>AI Assistant</span>
-          <LlmBadge variant="success" size="sm">Online</LlmBadge>
-        </LlmChatHeader>
-        <LlmChatMessages>
-          <LlmChatMessage role="assistant">Hi! How can I help today?</LlmChatMessage>
-          <LlmChatMessage role="user">Show me a sorting function.</LlmChatMessage>
-          <LlmChatMessage role="assistant">
-            <LlmCodeBlock language="ts" :code="snippet" />
-          </LlmChatMessage>
-        </LlmChatMessages>
-        <LlmChatInput @send="onSend" @stop="onStop" />
-      </LlmChat>
+          <AtlBadge variant="success" size="sm">Online</AtlBadge>
+        </AtlChatHeader>
+        <AtlChatMessages>
+          <AtlChatMessage role="assistant">Hi! How can I help today?</AtlChatMessage>
+          <AtlChatMessage role="user">Show me a sorting function.</AtlChatMessage>
+          <AtlChatMessage role="assistant">
+            <AtlCodeBlock language="ts" :code="snippet" />
+          </AtlChatMessage>
+        </AtlChatMessages>
+        <AtlChatInput @send="onSend" @stop="onStop" />
+      </AtlChat>
 
   Metadata:
     purpose: AI chat surface. Renders a conversation log with a composer for sending messages and a live status for streaming or errored replies.
@@ -1358,9 +1358,9 @@ Each entry lists:
       - Composing a chat inline inside a larger layout (a docs page, a settings panel).
       - Reflecting in-flight assistant work via `status="streaming"` and surfacing failures via `status="error"`.
     antiPatterns:
-      - Confirming or asking the user for a single decision. → use LlmDialog — short-lived, focused, with explicit confirm/cancel actions.
-      - Showing transient system notifications. → use LlmToast — notifications are unidirectional and ephemeral, chat is a two-way log.
-    relatedComponents: LlmDrawerSpec, LlmDialogSpec, LlmTextareaSpec
+      - Confirming or asking the user for a single decision. → use AtlDialog — short-lived, focused, with explicit confirm/cancel actions.
+      - Showing transient system notifications. → use AtlToast — notifications are unidirectional and ephemeral, chat is a two-way log.
+    relatedComponents: AtlDrawerSpec, AtlDialogSpec, AtlTextareaSpec
     accessibility.role: log
     accessibility.keyboardBehavior: The message log is a live region — new messages are announced as they stream in. Tab moves focus into the composer; Enter submits and Shift+Enter inserts a newline. In drawer and popup variants, Escape closes the surface and focus returns to the launcher.
 

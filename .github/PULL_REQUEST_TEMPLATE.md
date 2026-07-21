@@ -25,7 +25,7 @@ PRs.
 - [ ] Descriptions annotated — Figma component description matches `metadata.purpose`; each variant has a one-line description.
 - [ ] Token-linked styles — no hardcoded colour, spacing, typography, radius, or shadow values; all bound via Figma Variables to `--ui-*` tokens.
 - [ ] Auto layout throughout — no absolute positioning.
-- [ ] Name alignment — Figma component name matches the spec selector (`LlmButton`); variant property names + values match the spec unions.
+- [ ] Name alignment — Figma component name matches the spec selector (`AtlButton`); variant property names + values match the spec unions.
 - [ ] Inventory page — one `INSTANCE` of the new master added; TOC count + date bumped.
 
 ## Drift gates

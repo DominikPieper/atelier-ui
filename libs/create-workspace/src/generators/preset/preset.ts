@@ -109,24 +109,24 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
     .map((f) => {
       if (f === 'angular') {
         return `### Angular (\`@atelier-ui/angular\`)
-- Selectors: \`llm-button\`, \`llm-input\`, \`llm-dialog\`, …
-- Import: \`import { LlmButtonComponent } from '@atelier-ui/angular';\`
-- Add to \`@Component({ imports: [LlmButtonComponent] })\`
+- Selectors: \`atl-button\`, \`atl-input\`, \`atl-dialog\`, …
+- Import: \`import { AtlButtonComponent } from '@atelier-ui/angular';\`
+- Add to \`@Component({ imports: [AtlButtonComponent] })\`
 - Form controls implement Signal Forms (\`FormValueControl\` / \`FormCheckboxControl\`)`;
       }
       if (f === 'react') {
         return `### React (\`@atelier-ui/react\`)
-- Elements: \`<LlmButton>\`, \`<LlmInput>\`, \`<LlmDialog>\`, …
-- Import: \`import { LlmButton } from '@atelier-ui/react';\`
+- Elements: \`<AtlButton>\`, \`<AtlInput>\`, \`<AtlDialog>\`, …
+- Import: \`import { AtlButton } from '@atelier-ui/react';\`
 - Event handlers follow \`onXxx\` / \`onXxxChange\` convention
-- Toast: use \`useLlmToast()\` hook inside \`<LlmToastProvider>\``;
+- Toast: use \`useAtlToast()\` hook inside \`<AtlToastProvider>\``;
       }
       if (f === 'vue') {
         return `### Vue (\`@atelier-ui/vue\`)
-- Elements: \`<LlmButton>\`, \`<LlmInput>\`, \`<LlmDialog>\`, …
-- Import: \`import { LlmButton } from '@atelier-ui/vue';\`
+- Elements: \`<AtlButton>\`, \`<AtlInput>\`, \`<AtlDialog>\`, …
+- Import: \`import { AtlButton } from '@atelier-ui/vue';\`
 - Two-way binding: \`v-model\` and \`v-model:value\` where applicable
-- Toast: use \`useLlmToast()\` composable`;
+- Toast: use \`useAtlToast()\` composable`;
       }
       return '';
     })

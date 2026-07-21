@@ -9,16 +9,16 @@
       "description": "The most frequent AI-generated page. Shows Card composition, validation error display, and loading states.",
       "url": "https://atelier.pieper.io/patterns/login-form",
       "components": [
-        "LlmCard",
-        "LlmInput",
-        "LlmButton",
-        "LlmAlert",
-        "LlmCheckbox"
+        "AtlCard",
+        "AtlInput",
+        "AtlButton",
+        "AtlAlert",
+        "AtlCheckbox"
       ],
       "frameworks": {
-        "angular": "<llm-card variant=\"elevated\" padding=\"lg\">\n  <llm-card-header>\n    <h3>Sign in</h3>\n  </llm-card-header>\n  <llm-card-content>\n    @if (showError()) {\n      <llm-alert variant=\"danger\">Invalid email or password.</llm-alert>\n    }\n    <llm-input type=\"email\" placeholder=\"you@example.com\" [invalid]=\"showError()\" />\n    <llm-input type=\"password\" placeholder=\"••••••••\" [invalid]=\"showError()\" />\n    <llm-checkbox>Remember me</llm-checkbox>\n  </llm-card-content>\n  <llm-card-footer>\n    <llm-button variant=\"primary\" [loading]=\"loading()\" (click)=\"signIn()\">\n      Sign in\n    </llm-button>\n  </llm-card-footer>\n</llm-card>",
-        "react": "<LlmCard variant=\"elevated\" padding=\"lg\">\n  <LlmCardHeader><h3>Sign in</h3></LlmCardHeader>\n  <LlmCardContent>\n    {showError && <LlmAlert variant=\"danger\">Invalid email or password.</LlmAlert>}\n    <LlmInput type=\"email\" placeholder=\"you@example.com\" invalid={showError} />\n    <LlmInput type=\"password\" placeholder=\"••••••••\" invalid={showError} />\n    <LlmCheckbox>Remember me</LlmCheckbox>\n  </LlmCardContent>\n  <LlmCardFooter>\n    <LlmButton variant=\"primary\" loading={loading} onClick={signIn}>\n      Sign in\n    </LlmButton>\n  </LlmCardFooter>\n</LlmCard>",
-        "vue": "<LlmCard variant=\"elevated\" padding=\"lg\">\n  <LlmCardHeader>Sign in</LlmCardHeader>\n  <LlmCardContent>\n    <LlmAlert v-if=\"showError\" variant=\"danger\">Invalid email or password.</LlmAlert>\n    <LlmInput type=\"email\" placeholder=\"you@example.com\" v-model:value=\"email\" />\n    <LlmInput type=\"password\" placeholder=\"••••••••\" v-model:value=\"password\" />\n    <LlmCheckbox v-model:checked=\"remember\">Remember me</LlmCheckbox>\n  </LlmCardContent>\n  <LlmCardFooter>\n    <LlmButton variant=\"primary\" :loading=\"loading\" @click=\"signIn\">Sign in</LlmButton>\n  </LlmCardFooter>\n</LlmCard>"
+        "angular": "<atl-card variant=\"elevated\" padding=\"lg\">\n  <atl-card-header>\n    <h3>Sign in</h3>\n  </atl-card-header>\n  <atl-card-content>\n    @if (showError()) {\n      <atl-alert variant=\"danger\">Invalid email or password.</atl-alert>\n    }\n    <atl-input type=\"email\" placeholder=\"you@example.com\" [invalid]=\"showError()\" />\n    <atl-input type=\"password\" placeholder=\"••••••••\" [invalid]=\"showError()\" />\n    <atl-checkbox>Remember me</atl-checkbox>\n  </atl-card-content>\n  <atl-card-footer>\n    <atl-button variant=\"primary\" [loading]=\"loading()\" (click)=\"signIn()\">\n      Sign in\n    </atl-button>\n  </atl-card-footer>\n</atl-card>",
+        "react": "<AtlCard variant=\"elevated\" padding=\"lg\">\n  <AtlCardHeader><h3>Sign in</h3></AtlCardHeader>\n  <AtlCardContent>\n    {showError && <AtlAlert variant=\"danger\">Invalid email or password.</AtlAlert>}\n    <AtlInput type=\"email\" placeholder=\"you@example.com\" invalid={showError} />\n    <AtlInput type=\"password\" placeholder=\"••••••••\" invalid={showError} />\n    <AtlCheckbox>Remember me</AtlCheckbox>\n  </AtlCardContent>\n  <AtlCardFooter>\n    <AtlButton variant=\"primary\" loading={loading} onClick={signIn}>\n      Sign in\n    </AtlButton>\n  </AtlCardFooter>\n</AtlCard>",
+        "vue": "<AtlCard variant=\"elevated\" padding=\"lg\">\n  <AtlCardHeader>Sign in</AtlCardHeader>\n  <AtlCardContent>\n    <AtlAlert v-if=\"showError\" variant=\"danger\">Invalid email or password.</AtlAlert>\n    <AtlInput type=\"email\" placeholder=\"you@example.com\" v-model:value=\"email\" />\n    <AtlInput type=\"password\" placeholder=\"••••••••\" v-model:value=\"password\" />\n    <AtlCheckbox v-model:checked=\"remember\">Remember me</AtlCheckbox>\n  </AtlCardContent>\n  <AtlCardFooter>\n    <AtlButton variant=\"primary\" :loading=\"loading\" @click=\"signIn\">Sign in</AtlButton>\n  </AtlCardFooter>\n</AtlCard>"
       }
     },
     {
@@ -28,17 +28,17 @@
       "description": "Exercises tabs, form controls, and layout composition. The bread and butter of SaaS applications.",
       "url": "https://atelier.pieper.io/patterns/settings-page",
       "components": [
-        "LlmTabGroup",
-        "LlmToggle",
-        "LlmSelect",
-        "LlmInput",
-        "LlmButton",
-        "LlmAlert"
+        "AtlTabGroup",
+        "AtlToggle",
+        "AtlSelect",
+        "AtlInput",
+        "AtlButton",
+        "AtlAlert"
       ],
       "frameworks": {
-        "angular": "<llm-tab-group [(selectedIndex)]=\"activeTab\">\n  <llm-tab label=\"Account\">\n    <label>\n      Full Name\n      <llm-input placeholder=\"John Doe\" />\n    </label>\n    <label>\n      Email\n      <llm-input placeholder=\"john@example.com\" />\n    </label>\n  </llm-tab>\n  <llm-tab label=\"Notifications\">\n    <llm-toggle [(checked)]=\"emailOn\">Email notifications</llm-toggle>\n    <llm-toggle [(checked)]=\"pushOn\">Push notifications</llm-toggle>\n  </llm-tab>\n</llm-tab-group>\n<llm-button variant=\"primary\" (click)=\"save()\">Save changes</llm-button>",
-        "react": "<LlmTabGroup selectedIndex={tab} onSelectedIndexChange={setTab}>\n  <LlmTab label=\"Account\">\n    <LlmInput label=\"Full Name\" placeholder=\"John Doe\" />\n    <LlmInput label=\"Email\" placeholder=\"john@example.com\" />\n  </LlmTab>\n  <LlmTab label=\"Notifications\">\n    <LlmToggle checked={emailOn} onCheckedChange={setEmailOn}>Email</LlmToggle>\n    <LlmToggle checked={pushOn} onCheckedChange={setPushOn}>Push</LlmToggle>\n  </LlmTab>\n</LlmTabGroup>\n<LlmButton variant=\"primary\" onClick={save}>Save changes</LlmButton>",
-        "vue": "<LlmTabGroup v-model:selectedIndex=\"activeTab\">\n  <LlmTab label=\"Account\">\n    <LlmInput v-model:value=\"name\" label=\"Full Name\" />\n    <LlmInput v-model:value=\"email\" label=\"Email\" />\n  </LlmTab>\n  <LlmTab label=\"Notifications\">\n    <LlmToggle v-model:checked=\"emailOn\">Email notifications</LlmToggle>\n  </LlmTab>\n</LlmTabGroup>\n<LlmButton variant=\"primary\" @click=\"save\">Save changes</LlmButton>"
+        "angular": "<atl-tab-group [(selectedIndex)]=\"activeTab\">\n  <atl-tab label=\"Account\">\n    <label>\n      Full Name\n      <atl-input placeholder=\"John Doe\" />\n    </label>\n    <label>\n      Email\n      <atl-input placeholder=\"john@example.com\" />\n    </label>\n  </atl-tab>\n  <atl-tab label=\"Notifications\">\n    <atl-toggle [(checked)]=\"emailOn\">Email notifications</atl-toggle>\n    <atl-toggle [(checked)]=\"pushOn\">Push notifications</atl-toggle>\n  </atl-tab>\n</atl-tab-group>\n<atl-button variant=\"primary\" (click)=\"save()\">Save changes</atl-button>",
+        "react": "<AtlTabGroup selectedIndex={tab} onSelectedIndexChange={setTab}>\n  <AtlTab label=\"Account\">\n    <AtlInput label=\"Full Name\" placeholder=\"John Doe\" />\n    <AtlInput label=\"Email\" placeholder=\"john@example.com\" />\n  </AtlTab>\n  <AtlTab label=\"Notifications\">\n    <AtlToggle checked={emailOn} onCheckedChange={setEmailOn}>Email</AtlToggle>\n    <AtlToggle checked={pushOn} onCheckedChange={setPushOn}>Push</AtlToggle>\n  </AtlTab>\n</AtlTabGroup>\n<AtlButton variant=\"primary\" onClick={save}>Save changes</AtlButton>",
+        "vue": "<AtlTabGroup v-model:selectedIndex=\"activeTab\">\n  <AtlTab label=\"Account\">\n    <AtlInput v-model:value=\"name\" label=\"Full Name\" />\n    <AtlInput v-model:value=\"email\" label=\"Email\" />\n  </AtlTab>\n  <AtlTab label=\"Notifications\">\n    <AtlToggle v-model:checked=\"emailOn\">Email notifications</AtlToggle>\n  </AtlTab>\n</AtlTabGroup>\n<AtlButton variant=\"primary\" @click=\"save\">Save changes</AtlButton>"
       }
     },
     {
@@ -48,14 +48,14 @@
       "description": "Accessible modal flow for destructive actions. Shows trigger → dialog → action logic.",
       "url": "https://atelier.pieper.io/patterns/confirmation-dialog",
       "components": [
-        "LlmDialog",
-        "LlmAlert",
-        "LlmButton"
+        "AtlDialog",
+        "AtlAlert",
+        "AtlButton"
       ],
       "frameworks": {
-        "angular": "<llm-button variant=\"primary\" (click)=\"isOpen.set(true)\">Delete account</llm-button>\n\n<llm-dialog [(open)]=\"isOpen\" size=\"sm\">\n  <llm-dialog-header>Delete Account</llm-dialog-header>\n  <llm-dialog-content>\n    <llm-alert variant=\"warning\">This action cannot be undone.</llm-alert>\n  </llm-dialog-content>\n  <llm-dialog-footer>\n    <llm-button variant=\"outline\" (click)=\"isOpen.set(false)\">Cancel</llm-button>\n    <llm-button variant=\"primary\" (click)=\"confirm()\">Yes, delete</llm-button>\n  </llm-dialog-footer>\n</llm-dialog>",
-        "react": "<LlmButton onClick={() => setOpen(true)}>Delete account</LlmButton>\n\n<LlmDialog open={open} onOpenChange={setOpen} size=\"sm\">\n  <LlmDialogHeader>Delete Account</LlmDialogHeader>\n  <LlmDialogContent>\n    <LlmAlert variant=\"warning\">This action cannot be undone.</LlmAlert>\n  </LlmDialogContent>\n  <LlmDialogFooter>\n    <LlmButton variant=\"outline\" onClick={() => setOpen(false)}>Cancel</LlmButton>\n    <LlmButton variant=\"primary\" onClick={confirm}>Yes, delete</LlmButton>\n  </LlmDialogFooter>\n</LlmDialog>",
-        "vue": "<LlmButton variant=\"primary\" @click=\"isOpen = true\">Delete account</LlmButton>\n\n<LlmDialog v-model:open=\"isOpen\" size=\"sm\">\n  <LlmDialogHeader>Delete Account</LlmDialogHeader>\n  <LlmDialogContent>\n    <LlmAlert variant=\"warning\">This action cannot be undone.</LlmAlert>\n  </LlmDialogContent>\n  <LlmDialogFooter>\n    <LlmButton variant=\"outline\" @click=\"isOpen = false\">Cancel</LlmButton>\n    <LlmButton variant=\"primary\" @click=\"confirm\">Yes, delete</LlmButton>\n  </LlmDialogFooter>\n</LlmDialog>"
+        "angular": "<atl-button variant=\"primary\" (click)=\"isOpen.set(true)\">Delete account</atl-button>\n\n<atl-dialog [(open)]=\"isOpen\" size=\"sm\">\n  <atl-dialog-header>Delete Account</atl-dialog-header>\n  <atl-dialog-content>\n    <atl-alert variant=\"warning\">This action cannot be undone.</atl-alert>\n  </atl-dialog-content>\n  <atl-dialog-footer>\n    <atl-button variant=\"outline\" (click)=\"isOpen.set(false)\">Cancel</atl-button>\n    <atl-button variant=\"primary\" (click)=\"confirm()\">Yes, delete</atl-button>\n  </atl-dialog-footer>\n</atl-dialog>",
+        "react": "<AtlButton onClick={() => setOpen(true)}>Delete account</AtlButton>\n\n<AtlDialog open={open} onOpenChange={setOpen} size=\"sm\">\n  <AtlDialogHeader>Delete Account</AtlDialogHeader>\n  <AtlDialogContent>\n    <AtlAlert variant=\"warning\">This action cannot be undone.</AtlAlert>\n  </AtlDialogContent>\n  <AtlDialogFooter>\n    <AtlButton variant=\"outline\" onClick={() => setOpen(false)}>Cancel</AtlButton>\n    <AtlButton variant=\"primary\" onClick={confirm}>Yes, delete</AtlButton>\n  </AtlDialogFooter>\n</AtlDialog>",
+        "vue": "<AtlButton variant=\"primary\" @click=\"isOpen = true\">Delete account</AtlButton>\n\n<AtlDialog v-model:open=\"isOpen\" size=\"sm\">\n  <AtlDialogHeader>Delete Account</AtlDialogHeader>\n  <AtlDialogContent>\n    <AtlAlert variant=\"warning\">This action cannot be undone.</AtlAlert>\n  </AtlDialogContent>\n  <AtlDialogFooter>\n    <AtlButton variant=\"outline\" @click=\"isOpen = false\">Cancel</AtlButton>\n    <AtlButton variant=\"primary\" @click=\"confirm\">Yes, delete</AtlButton>\n  </AtlDialogFooter>\n</AtlDialog>"
       }
     },
     {
@@ -65,16 +65,16 @@
       "description": "Inline actions on a list of items. The core pattern for dashboards and admin panels — Card + Badge + Button composition.",
       "url": "https://atelier.pieper.io/patterns/data-list",
       "components": [
-        "LlmCard",
-        "LlmBadge",
-        "LlmButton",
-        "LlmMenu",
-        "LlmTooltip"
+        "AtlCard",
+        "AtlBadge",
+        "AtlButton",
+        "AtlMenu",
+        "AtlTooltip"
       ],
       "frameworks": {
-        "angular": "<div class=\"list-header\">\n  <h2>Projects</h2>\n  <llm-button variant=\"primary\" size=\"sm\">New project</llm-button>\n</div>\n@for (item of items(); track item.id) {\n  <llm-card variant=\"outlined\" padding=\"md\">\n    <llm-card-content>\n      <span>{{ item.name }}</span>\n      <llm-badge [variant]=\"item.statusVariant\" size=\"sm\">{{ item.status }}</llm-badge>\n      <p>{{ item.description }}</p>\n      <llm-button variant=\"outline\" size=\"sm\" llmTooltip=\"View details\">View</llm-button>\n      <llm-button\n        variant=\"outline\"\n        size=\"sm\"\n        [llmMenuTriggerFor]=\"actionsMenu\"\n        llmTooltip=\"More actions\"\n      >...</llm-button>\n      <ng-template #actionsMenu>\n        <llm-menu>\n          <llm-menu-item>Edit</llm-menu-item>\n          <llm-menu-item>Duplicate</llm-menu-item>\n          <llm-menu-separator />\n          <llm-menu-item>Delete</llm-menu-item>\n        </llm-menu>\n      </ng-template>\n    </llm-card-content>\n  </llm-card>\n}",
-        "react": "<div className=\"list-header\">\n  <h2>Projects</h2>\n  <LlmButton variant=\"primary\" size=\"sm\">New project</LlmButton>\n</div>\n{items.map(item => (\n  <LlmCard key={item.id} variant=\"outlined\" padding=\"md\">\n    <LlmCardContent>\n      <span>{item.name}</span>\n      <LlmBadge variant={item.statusVariant} size=\"sm\">{item.status}</LlmBadge>\n      <p>{item.description}</p>\n      <LlmTooltip llmTooltip=\"View details\">\n        <LlmButton variant=\"outline\" size=\"sm\">View</LlmButton>\n      </LlmTooltip>\n      <LlmMenuTrigger\n        menu={\n          <LlmMenu variant=\"compact\">\n            <LlmMenuItem>Edit</LlmMenuItem>\n            <LlmMenuItem>Duplicate</LlmMenuItem>\n            <LlmMenuSeparator />\n            <LlmMenuItem>Delete</LlmMenuItem>\n          </LlmMenu>\n        }\n      >\n        {({ onClick, ref }) => (\n          <LlmTooltip llmTooltip=\"More actions\">\n            <LlmButton ref={ref} onClick={onClick} variant=\"outline\" size=\"sm\">...</LlmButton>\n          </LlmTooltip>\n        )}\n      </LlmMenuTrigger>\n    </LlmCardContent>\n  </LlmCard>\n))}",
-        "vue": "<div class=\"list-header\">\n  <h2>Projects</h2>\n  <LlmButton variant=\"primary\" size=\"sm\">New project</LlmButton>\n</div>\n<LlmCard v-for=\"item in items\" :key=\"item.id\" variant=\"outlined\" padding=\"md\">\n  <LlmCardContent>\n    <span>{{ item.name }}</span>\n    <LlmBadge :variant=\"item.statusVariant\" size=\"sm\">{{ item.status }}</LlmBadge>\n    <p>{{ item.description }}</p>\n    <LlmTooltip llmTooltip=\"View details\">\n      <LlmButton variant=\"outline\" size=\"sm\">View</LlmButton>\n    </LlmTooltip>\n    <LlmMenuTrigger>\n      <template #trigger>\n        <LlmTooltip llmTooltip=\"More actions\">\n          <LlmButton variant=\"outline\" size=\"sm\">...</LlmButton>\n        </LlmTooltip>\n      </template>\n      <template #menu>\n        <LlmMenu variant=\"compact\">\n          <LlmMenuItem>Edit</LlmMenuItem>\n          <LlmMenuItem>Duplicate</LlmMenuItem>\n          <LlmMenuSeparator />\n          <LlmMenuItem>Delete</LlmMenuItem>\n        </LlmMenu>\n      </template>\n    </LlmMenuTrigger>\n  </LlmCardContent>\n</LlmCard>"
+        "angular": "<div class=\"list-header\">\n  <h2>Projects</h2>\n  <atl-button variant=\"primary\" size=\"sm\">New project</atl-button>\n</div>\n@for (item of items(); track item.id) {\n  <atl-card variant=\"outlined\" padding=\"md\">\n    <atl-card-content>\n      <span>{{ item.name }}</span>\n      <atl-badge [variant]=\"item.statusVariant\" size=\"sm\">{{ item.status }}</atl-badge>\n      <p>{{ item.description }}</p>\n      <atl-button variant=\"outline\" size=\"sm\" atlTooltip=\"View details\">View</atl-button>\n      <atl-button\n        variant=\"outline\"\n        size=\"sm\"\n        [atlMenuTriggerFor]=\"actionsMenu\"\n        atlTooltip=\"More actions\"\n      >...</atl-button>\n      <ng-template #actionsMenu>\n        <atl-menu>\n          <atl-menu-item>Edit</atl-menu-item>\n          <atl-menu-item>Duplicate</atl-menu-item>\n          <atl-menu-separator />\n          <atl-menu-item>Delete</atl-menu-item>\n        </atl-menu>\n      </ng-template>\n    </atl-card-content>\n  </atl-card>\n}",
+        "react": "<div className=\"list-header\">\n  <h2>Projects</h2>\n  <AtlButton variant=\"primary\" size=\"sm\">New project</AtlButton>\n</div>\n{items.map(item => (\n  <AtlCard key={item.id} variant=\"outlined\" padding=\"md\">\n    <AtlCardContent>\n      <span>{item.name}</span>\n      <AtlBadge variant={item.statusVariant} size=\"sm\">{item.status}</AtlBadge>\n      <p>{item.description}</p>\n      <AtlTooltip atlTooltip=\"View details\">\n        <AtlButton variant=\"outline\" size=\"sm\">View</AtlButton>\n      </AtlTooltip>\n      <AtlMenuTrigger\n        menu={\n          <AtlMenu variant=\"compact\">\n            <AtlMenuItem>Edit</AtlMenuItem>\n            <AtlMenuItem>Duplicate</AtlMenuItem>\n            <AtlMenuSeparator />\n            <AtlMenuItem>Delete</AtlMenuItem>\n          </AtlMenu>\n        }\n      >\n        {({ onClick, ref }) => (\n          <AtlTooltip atlTooltip=\"More actions\">\n            <AtlButton ref={ref} onClick={onClick} variant=\"outline\" size=\"sm\">...</AtlButton>\n          </AtlTooltip>\n        )}\n      </AtlMenuTrigger>\n    </AtlCardContent>\n  </AtlCard>\n))}",
+        "vue": "<div class=\"list-header\">\n  <h2>Projects</h2>\n  <AtlButton variant=\"primary\" size=\"sm\">New project</AtlButton>\n</div>\n<AtlCard v-for=\"item in items\" :key=\"item.id\" variant=\"outlined\" padding=\"md\">\n  <AtlCardContent>\n    <span>{{ item.name }}</span>\n    <AtlBadge :variant=\"item.statusVariant\" size=\"sm\">{{ item.status }}</AtlBadge>\n    <p>{{ item.description }}</p>\n    <AtlTooltip atlTooltip=\"View details\">\n      <AtlButton variant=\"outline\" size=\"sm\">View</AtlButton>\n    </AtlTooltip>\n    <AtlMenuTrigger>\n      <template #trigger>\n        <AtlTooltip atlTooltip=\"More actions\">\n          <AtlButton variant=\"outline\" size=\"sm\">...</AtlButton>\n        </AtlTooltip>\n      </template>\n      <template #menu>\n        <AtlMenu variant=\"compact\">\n          <AtlMenuItem>Edit</AtlMenuItem>\n          <AtlMenuItem>Duplicate</AtlMenuItem>\n          <AtlMenuSeparator />\n          <AtlMenuItem>Delete</AtlMenuItem>\n        </AtlMenu>\n      </template>\n    </AtlMenuTrigger>\n  </AtlCardContent>\n</AtlCard>"
       }
     },
     {
@@ -84,15 +84,15 @@
       "description": "Structural feedback grouping using Accordion and Alert. Useful for monitoring and admin tools.",
       "url": "https://atelier.pieper.io/patterns/notification-center",
       "components": [
-        "LlmAccordionGroup",
-        "LlmAlert",
-        "LlmBadge",
-        "LlmButton"
+        "AtlAccordionGroup",
+        "AtlAlert",
+        "AtlBadge",
+        "AtlButton"
       ],
       "frameworks": {
-        "angular": "<llm-accordion-group [multi]=\"true\" variant=\"separated\">\n  <llm-accordion-item [expanded]=\"true\">\n    <span llmAccordionHeader>\n      Errors <llm-badge variant=\"danger\" size=\"sm\">2</llm-badge>\n    </span>\n    <llm-alert variant=\"danger\">Database failed.</llm-alert>\n    <llm-alert variant=\"danger\">Service 503.</llm-alert>\n  </llm-accordion-item>\n  <llm-accordion-item>\n    <span llmAccordionHeader>\n      Warnings <llm-badge variant=\"warning\" size=\"sm\">1</llm-badge>\n    </span>\n    <llm-alert variant=\"warning\">Disk at 89%.</llm-alert>\n  </llm-accordion-item>\n</llm-accordion-group>",
-        "react": "<LlmAccordionGroup multi variant=\"separated\">\n  <LlmAccordionItem expanded>\n    <span>Errors <LlmBadge variant=\"danger\" size=\"sm\">2</LlmBadge></span>\n    <LlmAlert variant=\"danger\">Database failed.</LlmAlert>\n    <LlmAlert variant=\"danger\">Service 503.</LlmAlert>\n  </LlmAccordionItem>\n  <LlmAccordionItem>\n    <span>Warnings <LlmBadge variant=\"warning\" size=\"sm\">1</LlmBadge></span>\n    <LlmAlert variant=\"warning\">Disk at 89%.</LlmAlert>\n  </LlmAccordionItem>\n</LlmAccordionGroup>",
-        "vue": "<LlmAccordionGroup :multi=\"true\" variant=\"separated\">\n  <LlmAccordionItem :expanded=\"true\">\n    <template #header>\n      Errors <LlmBadge variant=\"danger\">2</LlmBadge>\n    </template>\n    <LlmAlert variant=\"danger\">Database failed.</LlmAlert>\n  </LlmAccordionItem>\n  <LlmAccordionItem>\n    <template #header>\n      Warnings <LlmBadge variant=\"warning\">1</LlmBadge>\n    </template>\n    <LlmAlert variant=\"warning\">Disk at 89%.</LlmAlert>\n  </LlmAccordionItem>\n</LlmAccordionGroup>"
+        "angular": "<atl-accordion-group [multi]=\"true\" variant=\"separated\">\n  <atl-accordion-item [expanded]=\"true\">\n    <span atlAccordionHeader>\n      Errors <atl-badge variant=\"danger\" size=\"sm\">2</atl-badge>\n    </span>\n    <atl-alert variant=\"danger\">Database failed.</atl-alert>\n    <atl-alert variant=\"danger\">Service 503.</atl-alert>\n  </atl-accordion-item>\n  <atl-accordion-item>\n    <span atlAccordionHeader>\n      Warnings <atl-badge variant=\"warning\" size=\"sm\">1</atl-badge>\n    </span>\n    <atl-alert variant=\"warning\">Disk at 89%.</atl-alert>\n  </atl-accordion-item>\n</atl-accordion-group>",
+        "react": "<AtlAccordionGroup multi variant=\"separated\">\n  <AtlAccordionItem expanded>\n    <span>Errors <AtlBadge variant=\"danger\" size=\"sm\">2</AtlBadge></span>\n    <AtlAlert variant=\"danger\">Database failed.</AtlAlert>\n    <AtlAlert variant=\"danger\">Service 503.</AtlAlert>\n  </AtlAccordionItem>\n  <AtlAccordionItem>\n    <span>Warnings <AtlBadge variant=\"warning\" size=\"sm\">1</AtlBadge></span>\n    <AtlAlert variant=\"warning\">Disk at 89%.</AtlAlert>\n  </AtlAccordionItem>\n</AtlAccordionGroup>",
+        "vue": "<AtlAccordionGroup :multi=\"true\" variant=\"separated\">\n  <AtlAccordionItem :expanded=\"true\">\n    <template #header>\n      Errors <AtlBadge variant=\"danger\">2</AtlBadge>\n    </template>\n    <AtlAlert variant=\"danger\">Database failed.</AtlAlert>\n  </AtlAccordionItem>\n  <AtlAccordionItem>\n    <template #header>\n      Warnings <AtlBadge variant=\"warning\">1</AtlBadge>\n    </template>\n    <AtlAlert variant=\"warning\">Disk at 89%.</AtlAlert>\n  </AtlAccordionItem>\n</AtlAccordionGroup>"
       }
     },
     {
@@ -102,18 +102,18 @@
       "description": "The densest cookbook pattern — metric cards, activity table, and quota indicators combined. Shows how Card, Table, TabGroup, Badge, Alert, and Progress fit together.",
       "url": "https://atelier.pieper.io/patterns/management-dashboard",
       "components": [
-        "LlmCard",
-        "LlmTable",
-        "LlmTabGroup",
-        "LlmBadge",
-        "LlmAlert",
-        "LlmProgress",
-        "LlmButton"
+        "AtlCard",
+        "AtlTable",
+        "AtlTabGroup",
+        "AtlBadge",
+        "AtlAlert",
+        "AtlProgress",
+        "AtlButton"
       ],
       "frameworks": {
-        "angular": "<!-- Metric cards + activity table + quota widget.\n     Uses Card, Table, TabGroup, Badge, Alert, Progress. -->\n<llm-tab-group variant=\"pills\" [(selectedIndex)]=\"range\">\n  <llm-tab label=\"7D\" />\n  <llm-tab label=\"30D\" />\n  <llm-tab label=\"90D\" />\n</llm-tab-group>\n@if (quota() >= 85) {\n  <llm-alert variant=\"warning\">API quota at {{ quota() }}%.</llm-alert>\n}\n<!-- ...metric cards grid (LlmCard + LlmBadge delta)... -->\n<llm-table variant=\"striped\" size=\"sm\">\n  <llm-thead>\n    <llm-tr><llm-th>User</llm-th><llm-th>Action</llm-th></llm-tr>\n  </llm-thead>\n  <llm-tbody>\n    @for (row of activity(); track row.id) {\n      <llm-tr>\n        <llm-td>{{ row.user }}</llm-td>\n        <llm-td>{{ row.action }}</llm-td>\n      </llm-tr>\n    }\n  </llm-tbody>\n</llm-table>\n<llm-progress [value]=\"quota()\" variant=\"warning\" size=\"sm\" />",
-        "react": "<LlmTabGroup variant=\"pills\" selectedIndex={range} onSelectedIndexChange={setRange}>\n  <LlmTab label=\"7D\">{' '}</LlmTab>\n  <LlmTab label=\"30D\">{' '}</LlmTab>\n  <LlmTab label=\"90D\">{' '}</LlmTab>\n</LlmTabGroup>\n{quota >= 85 && <LlmAlert variant=\"warning\">API quota at {quota}%.</LlmAlert>}\n{/* ...metric cards grid (LlmCard + LlmBadge delta)... */}\n<LlmTable variant=\"striped\" size=\"sm\">\n  <LlmThead>\n    <LlmTr><LlmTh>User</LlmTh><LlmTh>Action</LlmTh></LlmTr>\n  </LlmThead>\n  <LlmTbody>\n    {activity.map(row => (\n      <LlmTr key={row.id}>\n        <LlmTd>{row.user}</LlmTd>\n        <LlmTd>{row.action}</LlmTd>\n      </LlmTr>\n    ))}\n  </LlmTbody>\n</LlmTable>\n<LlmProgress value={quota} variant=\"warning\" size=\"sm\" />",
-        "vue": "<LlmTabGroup variant=\"pills\" v-model:selectedIndex=\"range\">\n  <LlmTab label=\"7D\">&nbsp;</LlmTab>\n  <LlmTab label=\"30D\">&nbsp;</LlmTab>\n  <LlmTab label=\"90D\">&nbsp;</LlmTab>\n</LlmTabGroup>\n<LlmAlert v-if=\"quota >= 85\" variant=\"warning\">API quota at {{ quota }}%.</LlmAlert>\n<!-- ...metric cards grid (LlmCard + LlmBadge delta)... -->\n<LlmTable variant=\"striped\" size=\"sm\">\n  <LlmThead>\n    <LlmTr><LlmTh>User</LlmTh><LlmTh>Action</LlmTh></LlmTr>\n  </LlmThead>\n  <LlmTbody>\n    <LlmTr v-for=\"row in activity\" :key=\"row.id\">\n      <LlmTd>{{ row.user }}</LlmTd>\n      <LlmTd>{{ row.action }}</LlmTd>\n    </LlmTr>\n  </LlmTbody>\n</LlmTable>\n<LlmProgress :value=\"quota\" variant=\"warning\" size=\"sm\" />"
+        "angular": "<!-- Metric cards + activity table + quota widget.\n     Uses Card, Table, TabGroup, Badge, Alert, Progress. -->\n<atl-tab-group variant=\"pills\" [(selectedIndex)]=\"range\">\n  <atl-tab label=\"7D\" />\n  <atl-tab label=\"30D\" />\n  <atl-tab label=\"90D\" />\n</atl-tab-group>\n@if (quota() >= 85) {\n  <atl-alert variant=\"warning\">API quota at {{ quota() }}%.</atl-alert>\n}\n<!-- ...metric cards grid (AtlCard + AtlBadge delta)... -->\n<atl-table variant=\"striped\" size=\"sm\">\n  <atl-thead>\n    <atl-tr><atl-th>User</atl-th><atl-th>Action</atl-th></atl-tr>\n  </atl-thead>\n  <atl-tbody>\n    @for (row of activity(); track row.id) {\n      <atl-tr>\n        <atl-td>{{ row.user }}</atl-td>\n        <atl-td>{{ row.action }}</atl-td>\n      </atl-tr>\n    }\n  </atl-tbody>\n</atl-table>\n<atl-progress [value]=\"quota()\" variant=\"warning\" size=\"sm\" />",
+        "react": "<AtlTabGroup variant=\"pills\" selectedIndex={range} onSelectedIndexChange={setRange}>\n  <AtlTab label=\"7D\">{' '}</AtlTab>\n  <AtlTab label=\"30D\">{' '}</AtlTab>\n  <AtlTab label=\"90D\">{' '}</AtlTab>\n</AtlTabGroup>\n{quota >= 85 && <AtlAlert variant=\"warning\">API quota at {quota}%.</AtlAlert>}\n{/* ...metric cards grid (AtlCard + AtlBadge delta)... */}\n<AtlTable variant=\"striped\" size=\"sm\">\n  <AtlThead>\n    <AtlTr><AtlTh>User</AtlTh><AtlTh>Action</AtlTh></AtlTr>\n  </AtlThead>\n  <AtlTbody>\n    {activity.map(row => (\n      <AtlTr key={row.id}>\n        <AtlTd>{row.user}</AtlTd>\n        <AtlTd>{row.action}</AtlTd>\n      </AtlTr>\n    ))}\n  </AtlTbody>\n</AtlTable>\n<AtlProgress value={quota} variant=\"warning\" size=\"sm\" />",
+        "vue": "<AtlTabGroup variant=\"pills\" v-model:selectedIndex=\"range\">\n  <AtlTab label=\"7D\">&nbsp;</AtlTab>\n  <AtlTab label=\"30D\">&nbsp;</AtlTab>\n  <AtlTab label=\"90D\">&nbsp;</AtlTab>\n</AtlTabGroup>\n<AtlAlert v-if=\"quota >= 85\" variant=\"warning\">API quota at {{ quota }}%.</AtlAlert>\n<!-- ...metric cards grid (AtlCard + AtlBadge delta)... -->\n<AtlTable variant=\"striped\" size=\"sm\">\n  <AtlThead>\n    <AtlTr><AtlTh>User</AtlTh><AtlTh>Action</AtlTh></AtlTr>\n  </AtlThead>\n  <AtlTbody>\n    <AtlTr v-for=\"row in activity\" :key=\"row.id\">\n      <AtlTd>{{ row.user }}</AtlTd>\n      <AtlTd>{{ row.action }}</AtlTd>\n    </AtlTr>\n  </AtlTbody>\n</AtlTable>\n<AtlProgress :value=\"quota\" variant=\"warning\" size=\"sm\" />"
       }
     }
   ]

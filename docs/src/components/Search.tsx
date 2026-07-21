@@ -269,7 +269,7 @@ export default function Search() {
                     renderOption(i, `/components/${name}`, `c-${name}`, (
                       <>
                         <span className="docs-search-result-icon" aria-hidden="true">
-                          {(componentDocs[name]?.name ?? name).replace(/^Llm/, '').charAt(0)}
+                          {(componentDocs[name]?.name ?? name).charAt(0)}
                         </span>
                         <div className="docs-search-result-content">
                           <div className="docs-search-result-name">{componentDocs[name]?.name ?? name}</div>

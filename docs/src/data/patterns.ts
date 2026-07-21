@@ -50,364 +50,364 @@ export interface PatternMeta {
  * can render every tag as a link to its component reference.
  */
 export const TAG_TO_SLUG: Record<string, string> = {
-  LlmAccordionGroup: 'accordion',
-  LlmAlert: 'alert',
-  LlmAvatar: 'avatar',
-  LlmBadge: 'badge',
-  LlmBreadcrumbs: 'breadcrumbs',
-  LlmButton: 'button',
-  LlmCard: 'card',
-  LlmCheckbox: 'checkbox',
-  LlmCodeBlock: 'code-block',
-  LlmCombobox: 'combobox',
-  LlmDialog: 'dialog',
-  LlmDrawer: 'drawer',
-  LlmIcon: 'icon',
-  LlmInput: 'input',
-  LlmMenu: 'menu',
-  LlmPagination: 'pagination',
-  LlmProgress: 'progress',
-  LlmRadioGroup: 'radio-group',
-  LlmSelect: 'select',
-  LlmSkeleton: 'skeleton',
-  LlmStepper: 'stepper',
-  LlmTabGroup: 'tabs',
-  LlmTable: 'table',
-  LlmTextarea: 'textarea',
-  LlmToast: 'toast',
-  LlmToggle: 'toggle',
-  LlmTooltip: 'tooltip',
+  AtlAccordionGroup: 'accordion',
+  AtlAlert: 'alert',
+  AtlAvatar: 'avatar',
+  AtlBadge: 'badge',
+  AtlBreadcrumbs: 'breadcrumbs',
+  AtlButton: 'button',
+  AtlCard: 'card',
+  AtlCheckbox: 'checkbox',
+  AtlCodeBlock: 'code-block',
+  AtlCombobox: 'combobox',
+  AtlDialog: 'dialog',
+  AtlDrawer: 'drawer',
+  AtlIcon: 'icon',
+  AtlInput: 'input',
+  AtlMenu: 'menu',
+  AtlPagination: 'pagination',
+  AtlProgress: 'progress',
+  AtlRadioGroup: 'radio-group',
+  AtlSelect: 'select',
+  AtlSkeleton: 'skeleton',
+  AtlStepper: 'stepper',
+  AtlTabGroup: 'tabs',
+  AtlTable: 'table',
+  AtlTextarea: 'textarea',
+  AtlToast: 'toast',
+  AtlToggle: 'toggle',
+  AtlTooltip: 'tooltip',
 };
 
-const loginAngular = `<llm-card variant="elevated" padding="lg">
-  <llm-card-header>
+const loginAngular = `<atl-card variant="elevated" padding="lg">
+  <atl-card-header>
     <h3>Sign in</h3>
-  </llm-card-header>
-  <llm-card-content>
+  </atl-card-header>
+  <atl-card-content>
     @if (showError()) {
-      <llm-alert variant="danger">Invalid email or password.</llm-alert>
+      <atl-alert variant="danger">Invalid email or password.</atl-alert>
     }
-    <llm-input type="email" placeholder="you@example.com" [invalid]="showError()" />
-    <llm-input type="password" placeholder="••••••••" [invalid]="showError()" />
-    <llm-checkbox>Remember me</llm-checkbox>
-  </llm-card-content>
-  <llm-card-footer>
-    <llm-button variant="primary" [loading]="loading()" (click)="signIn()">
+    <atl-input type="email" placeholder="you@example.com" [invalid]="showError()" />
+    <atl-input type="password" placeholder="••••••••" [invalid]="showError()" />
+    <atl-checkbox>Remember me</atl-checkbox>
+  </atl-card-content>
+  <atl-card-footer>
+    <atl-button variant="primary" [loading]="loading()" (click)="signIn()">
       Sign in
-    </llm-button>
-  </llm-card-footer>
-</llm-card>`;
+    </atl-button>
+  </atl-card-footer>
+</atl-card>`;
 
-const loginReact = `<LlmCard variant="elevated" padding="lg">
-  <LlmCardHeader><h3>Sign in</h3></LlmCardHeader>
-  <LlmCardContent>
-    {showError && <LlmAlert variant="danger">Invalid email or password.</LlmAlert>}
-    <LlmInput type="email" placeholder="you@example.com" invalid={showError} />
-    <LlmInput type="password" placeholder="••••••••" invalid={showError} />
-    <LlmCheckbox>Remember me</LlmCheckbox>
-  </LlmCardContent>
-  <LlmCardFooter>
-    <LlmButton variant="primary" loading={loading} onClick={signIn}>
+const loginReact = `<AtlCard variant="elevated" padding="lg">
+  <AtlCardHeader><h3>Sign in</h3></AtlCardHeader>
+  <AtlCardContent>
+    {showError && <AtlAlert variant="danger">Invalid email or password.</AtlAlert>}
+    <AtlInput type="email" placeholder="you@example.com" invalid={showError} />
+    <AtlInput type="password" placeholder="••••••••" invalid={showError} />
+    <AtlCheckbox>Remember me</AtlCheckbox>
+  </AtlCardContent>
+  <AtlCardFooter>
+    <AtlButton variant="primary" loading={loading} onClick={signIn}>
       Sign in
-    </LlmButton>
-  </LlmCardFooter>
-</LlmCard>`;
+    </AtlButton>
+  </AtlCardFooter>
+</AtlCard>`;
 
-const loginVue = `<LlmCard variant="elevated" padding="lg">
-  <LlmCardHeader>Sign in</LlmCardHeader>
-  <LlmCardContent>
-    <LlmAlert v-if="showError" variant="danger">Invalid email or password.</LlmAlert>
-    <LlmInput type="email" placeholder="you@example.com" v-model:value="email" />
-    <LlmInput type="password" placeholder="••••••••" v-model:value="password" />
-    <LlmCheckbox v-model:checked="remember">Remember me</LlmCheckbox>
-  </LlmCardContent>
-  <LlmCardFooter>
-    <LlmButton variant="primary" :loading="loading" @click="signIn">Sign in</LlmButton>
-  </LlmCardFooter>
-</LlmCard>`;
+const loginVue = `<AtlCard variant="elevated" padding="lg">
+  <AtlCardHeader>Sign in</AtlCardHeader>
+  <AtlCardContent>
+    <AtlAlert v-if="showError" variant="danger">Invalid email or password.</AtlAlert>
+    <AtlInput type="email" placeholder="you@example.com" v-model:value="email" />
+    <AtlInput type="password" placeholder="••••••••" v-model:value="password" />
+    <AtlCheckbox v-model:checked="remember">Remember me</AtlCheckbox>
+  </AtlCardContent>
+  <AtlCardFooter>
+    <AtlButton variant="primary" :loading="loading" @click="signIn">Sign in</AtlButton>
+  </AtlCardFooter>
+</AtlCard>`;
 
-const settingsAngular = `<llm-tab-group [(selectedIndex)]="activeTab">
-  <llm-tab label="Account">
+const settingsAngular = `<atl-tab-group [(selectedIndex)]="activeTab">
+  <atl-tab label="Account">
     <label>
       Full Name
-      <llm-input placeholder="John Doe" />
+      <atl-input placeholder="John Doe" />
     </label>
     <label>
       Email
-      <llm-input placeholder="john@example.com" />
+      <atl-input placeholder="john@example.com" />
     </label>
-  </llm-tab>
-  <llm-tab label="Notifications">
-    <llm-toggle [(checked)]="emailOn">Email notifications</llm-toggle>
-    <llm-toggle [(checked)]="pushOn">Push notifications</llm-toggle>
-  </llm-tab>
-</llm-tab-group>
-<llm-button variant="primary" (click)="save()">Save changes</llm-button>`;
+  </atl-tab>
+  <atl-tab label="Notifications">
+    <atl-toggle [(checked)]="emailOn">Email notifications</atl-toggle>
+    <atl-toggle [(checked)]="pushOn">Push notifications</atl-toggle>
+  </atl-tab>
+</atl-tab-group>
+<atl-button variant="primary" (click)="save()">Save changes</atl-button>`;
 
-const settingsReact = `<LlmTabGroup selectedIndex={tab} onSelectedIndexChange={setTab}>
-  <LlmTab label="Account">
-    <LlmInput label="Full Name" placeholder="John Doe" />
-    <LlmInput label="Email" placeholder="john@example.com" />
-  </LlmTab>
-  <LlmTab label="Notifications">
-    <LlmToggle checked={emailOn} onCheckedChange={setEmailOn}>Email</LlmToggle>
-    <LlmToggle checked={pushOn} onCheckedChange={setPushOn}>Push</LlmToggle>
-  </LlmTab>
-</LlmTabGroup>
-<LlmButton variant="primary" onClick={save}>Save changes</LlmButton>`;
+const settingsReact = `<AtlTabGroup selectedIndex={tab} onSelectedIndexChange={setTab}>
+  <AtlTab label="Account">
+    <AtlInput label="Full Name" placeholder="John Doe" />
+    <AtlInput label="Email" placeholder="john@example.com" />
+  </AtlTab>
+  <AtlTab label="Notifications">
+    <AtlToggle checked={emailOn} onCheckedChange={setEmailOn}>Email</AtlToggle>
+    <AtlToggle checked={pushOn} onCheckedChange={setPushOn}>Push</AtlToggle>
+  </AtlTab>
+</AtlTabGroup>
+<AtlButton variant="primary" onClick={save}>Save changes</AtlButton>`;
 
-const settingsVue = `<LlmTabGroup v-model:selectedIndex="activeTab">
-  <LlmTab label="Account">
-    <LlmInput v-model:value="name" label="Full Name" />
-    <LlmInput v-model:value="email" label="Email" />
-  </LlmTab>
-  <LlmTab label="Notifications">
-    <LlmToggle v-model:checked="emailOn">Email notifications</LlmToggle>
-  </LlmTab>
-</LlmTabGroup>
-<LlmButton variant="primary" @click="save">Save changes</LlmButton>`;
+const settingsVue = `<AtlTabGroup v-model:selectedIndex="activeTab">
+  <AtlTab label="Account">
+    <AtlInput v-model:value="name" label="Full Name" />
+    <AtlInput v-model:value="email" label="Email" />
+  </AtlTab>
+  <AtlTab label="Notifications">
+    <AtlToggle v-model:checked="emailOn">Email notifications</AtlToggle>
+  </AtlTab>
+</AtlTabGroup>
+<AtlButton variant="primary" @click="save">Save changes</AtlButton>`;
 
-const confirmAngular = `<llm-button variant="primary" (click)="isOpen.set(true)">Delete account</llm-button>
+const confirmAngular = `<atl-button variant="primary" (click)="isOpen.set(true)">Delete account</atl-button>
 
-<llm-dialog [(open)]="isOpen" size="sm">
-  <llm-dialog-header>Delete Account</llm-dialog-header>
-  <llm-dialog-content>
-    <llm-alert variant="warning">This action cannot be undone.</llm-alert>
-  </llm-dialog-content>
-  <llm-dialog-footer>
-    <llm-button variant="outline" (click)="isOpen.set(false)">Cancel</llm-button>
-    <llm-button variant="primary" (click)="confirm()">Yes, delete</llm-button>
-  </llm-dialog-footer>
-</llm-dialog>`;
+<atl-dialog [(open)]="isOpen" size="sm">
+  <atl-dialog-header>Delete Account</atl-dialog-header>
+  <atl-dialog-content>
+    <atl-alert variant="warning">This action cannot be undone.</atl-alert>
+  </atl-dialog-content>
+  <atl-dialog-footer>
+    <atl-button variant="outline" (click)="isOpen.set(false)">Cancel</atl-button>
+    <atl-button variant="primary" (click)="confirm()">Yes, delete</atl-button>
+  </atl-dialog-footer>
+</atl-dialog>`;
 
-const confirmReact = `<LlmButton onClick={() => setOpen(true)}>Delete account</LlmButton>
+const confirmReact = `<AtlButton onClick={() => setOpen(true)}>Delete account</AtlButton>
 
-<LlmDialog open={open} onOpenChange={setOpen} size="sm">
-  <LlmDialogHeader>Delete Account</LlmDialogHeader>
-  <LlmDialogContent>
-    <LlmAlert variant="warning">This action cannot be undone.</LlmAlert>
-  </LlmDialogContent>
-  <LlmDialogFooter>
-    <LlmButton variant="outline" onClick={() => setOpen(false)}>Cancel</LlmButton>
-    <LlmButton variant="primary" onClick={confirm}>Yes, delete</LlmButton>
-  </LlmDialogFooter>
-</LlmDialog>`;
+<AtlDialog open={open} onOpenChange={setOpen} size="sm">
+  <AtlDialogHeader>Delete Account</AtlDialogHeader>
+  <AtlDialogContent>
+    <AtlAlert variant="warning">This action cannot be undone.</AtlAlert>
+  </AtlDialogContent>
+  <AtlDialogFooter>
+    <AtlButton variant="outline" onClick={() => setOpen(false)}>Cancel</AtlButton>
+    <AtlButton variant="primary" onClick={confirm}>Yes, delete</AtlButton>
+  </AtlDialogFooter>
+</AtlDialog>`;
 
-const confirmVue = `<LlmButton variant="primary" @click="isOpen = true">Delete account</LlmButton>
+const confirmVue = `<AtlButton variant="primary" @click="isOpen = true">Delete account</AtlButton>
 
-<LlmDialog v-model:open="isOpen" size="sm">
-  <LlmDialogHeader>Delete Account</LlmDialogHeader>
-  <LlmDialogContent>
-    <LlmAlert variant="warning">This action cannot be undone.</LlmAlert>
-  </LlmDialogContent>
-  <LlmDialogFooter>
-    <LlmButton variant="outline" @click="isOpen = false">Cancel</LlmButton>
-    <LlmButton variant="primary" @click="confirm">Yes, delete</LlmButton>
-  </LlmDialogFooter>
-</LlmDialog>`;
+<AtlDialog v-model:open="isOpen" size="sm">
+  <AtlDialogHeader>Delete Account</AtlDialogHeader>
+  <AtlDialogContent>
+    <AtlAlert variant="warning">This action cannot be undone.</AtlAlert>
+  </AtlDialogContent>
+  <AtlDialogFooter>
+    <AtlButton variant="outline" @click="isOpen = false">Cancel</AtlButton>
+    <AtlButton variant="primary" @click="confirm">Yes, delete</AtlButton>
+  </AtlDialogFooter>
+</AtlDialog>`;
 
 const dataListAngular = `<div class="list-header">
   <h2>Projects</h2>
-  <llm-button variant="primary" size="sm">New project</llm-button>
+  <atl-button variant="primary" size="sm">New project</atl-button>
 </div>
 @for (item of items(); track item.id) {
-  <llm-card variant="outlined" padding="md">
-    <llm-card-content>
+  <atl-card variant="outlined" padding="md">
+    <atl-card-content>
       <span>{{ item.name }}</span>
-      <llm-badge [variant]="item.statusVariant" size="sm">{{ item.status }}</llm-badge>
+      <atl-badge [variant]="item.statusVariant" size="sm">{{ item.status }}</atl-badge>
       <p>{{ item.description }}</p>
-      <llm-button variant="outline" size="sm" llmTooltip="View details">View</llm-button>
-      <llm-button
+      <atl-button variant="outline" size="sm" atlTooltip="View details">View</atl-button>
+      <atl-button
         variant="outline"
         size="sm"
-        [llmMenuTriggerFor]="actionsMenu"
-        llmTooltip="More actions"
-      >...</llm-button>
+        [atlMenuTriggerFor]="actionsMenu"
+        atlTooltip="More actions"
+      >...</atl-button>
       <ng-template #actionsMenu>
-        <llm-menu>
-          <llm-menu-item>Edit</llm-menu-item>
-          <llm-menu-item>Duplicate</llm-menu-item>
-          <llm-menu-separator />
-          <llm-menu-item>Delete</llm-menu-item>
-        </llm-menu>
+        <atl-menu>
+          <atl-menu-item>Edit</atl-menu-item>
+          <atl-menu-item>Duplicate</atl-menu-item>
+          <atl-menu-separator />
+          <atl-menu-item>Delete</atl-menu-item>
+        </atl-menu>
       </ng-template>
-    </llm-card-content>
-  </llm-card>
+    </atl-card-content>
+  </atl-card>
 }`;
 
 const dataListReact = `<div className="list-header">
   <h2>Projects</h2>
-  <LlmButton variant="primary" size="sm">New project</LlmButton>
+  <AtlButton variant="primary" size="sm">New project</AtlButton>
 </div>
 {items.map(item => (
-  <LlmCard key={item.id} variant="outlined" padding="md">
-    <LlmCardContent>
+  <AtlCard key={item.id} variant="outlined" padding="md">
+    <AtlCardContent>
       <span>{item.name}</span>
-      <LlmBadge variant={item.statusVariant} size="sm">{item.status}</LlmBadge>
+      <AtlBadge variant={item.statusVariant} size="sm">{item.status}</AtlBadge>
       <p>{item.description}</p>
-      <LlmTooltip llmTooltip="View details">
-        <LlmButton variant="outline" size="sm">View</LlmButton>
-      </LlmTooltip>
-      <LlmMenuTrigger
+      <AtlTooltip atlTooltip="View details">
+        <AtlButton variant="outline" size="sm">View</AtlButton>
+      </AtlTooltip>
+      <AtlMenuTrigger
         menu={
-          <LlmMenu variant="compact">
-            <LlmMenuItem>Edit</LlmMenuItem>
-            <LlmMenuItem>Duplicate</LlmMenuItem>
-            <LlmMenuSeparator />
-            <LlmMenuItem>Delete</LlmMenuItem>
-          </LlmMenu>
+          <AtlMenu variant="compact">
+            <AtlMenuItem>Edit</AtlMenuItem>
+            <AtlMenuItem>Duplicate</AtlMenuItem>
+            <AtlMenuSeparator />
+            <AtlMenuItem>Delete</AtlMenuItem>
+          </AtlMenu>
         }
       >
         {({ onClick, ref }) => (
-          <LlmTooltip llmTooltip="More actions">
-            <LlmButton ref={ref} onClick={onClick} variant="outline" size="sm">...</LlmButton>
-          </LlmTooltip>
+          <AtlTooltip atlTooltip="More actions">
+            <AtlButton ref={ref} onClick={onClick} variant="outline" size="sm">...</AtlButton>
+          </AtlTooltip>
         )}
-      </LlmMenuTrigger>
-    </LlmCardContent>
-  </LlmCard>
+      </AtlMenuTrigger>
+    </AtlCardContent>
+  </AtlCard>
 ))}`;
 
 const dataListVue = `<div class="list-header">
   <h2>Projects</h2>
-  <LlmButton variant="primary" size="sm">New project</LlmButton>
+  <AtlButton variant="primary" size="sm">New project</AtlButton>
 </div>
-<LlmCard v-for="item in items" :key="item.id" variant="outlined" padding="md">
-  <LlmCardContent>
+<AtlCard v-for="item in items" :key="item.id" variant="outlined" padding="md">
+  <AtlCardContent>
     <span>{{ item.name }}</span>
-    <LlmBadge :variant="item.statusVariant" size="sm">{{ item.status }}</LlmBadge>
+    <AtlBadge :variant="item.statusVariant" size="sm">{{ item.status }}</AtlBadge>
     <p>{{ item.description }}</p>
-    <LlmTooltip llmTooltip="View details">
-      <LlmButton variant="outline" size="sm">View</LlmButton>
-    </LlmTooltip>
-    <LlmMenuTrigger>
+    <AtlTooltip atlTooltip="View details">
+      <AtlButton variant="outline" size="sm">View</AtlButton>
+    </AtlTooltip>
+    <AtlMenuTrigger>
       <template #trigger>
-        <LlmTooltip llmTooltip="More actions">
-          <LlmButton variant="outline" size="sm">...</LlmButton>
-        </LlmTooltip>
+        <AtlTooltip atlTooltip="More actions">
+          <AtlButton variant="outline" size="sm">...</AtlButton>
+        </AtlTooltip>
       </template>
       <template #menu>
-        <LlmMenu variant="compact">
-          <LlmMenuItem>Edit</LlmMenuItem>
-          <LlmMenuItem>Duplicate</LlmMenuItem>
-          <LlmMenuSeparator />
-          <LlmMenuItem>Delete</LlmMenuItem>
-        </LlmMenu>
+        <AtlMenu variant="compact">
+          <AtlMenuItem>Edit</AtlMenuItem>
+          <AtlMenuItem>Duplicate</AtlMenuItem>
+          <AtlMenuSeparator />
+          <AtlMenuItem>Delete</AtlMenuItem>
+        </AtlMenu>
       </template>
-    </LlmMenuTrigger>
-  </LlmCardContent>
-</LlmCard>`;
+    </AtlMenuTrigger>
+  </AtlCardContent>
+</AtlCard>`;
 
-const notificationsAngular = `<llm-accordion-group [multi]="true" variant="separated">
-  <llm-accordion-item [expanded]="true">
-    <span llmAccordionHeader>
-      Errors <llm-badge variant="danger" size="sm">2</llm-badge>
+const notificationsAngular = `<atl-accordion-group [multi]="true" variant="separated">
+  <atl-accordion-item [expanded]="true">
+    <span atlAccordionHeader>
+      Errors <atl-badge variant="danger" size="sm">2</atl-badge>
     </span>
-    <llm-alert variant="danger">Database failed.</llm-alert>
-    <llm-alert variant="danger">Service 503.</llm-alert>
-  </llm-accordion-item>
-  <llm-accordion-item>
-    <span llmAccordionHeader>
-      Warnings <llm-badge variant="warning" size="sm">1</llm-badge>
+    <atl-alert variant="danger">Database failed.</atl-alert>
+    <atl-alert variant="danger">Service 503.</atl-alert>
+  </atl-accordion-item>
+  <atl-accordion-item>
+    <span atlAccordionHeader>
+      Warnings <atl-badge variant="warning" size="sm">1</atl-badge>
     </span>
-    <llm-alert variant="warning">Disk at 89%.</llm-alert>
-  </llm-accordion-item>
-</llm-accordion-group>`;
+    <atl-alert variant="warning">Disk at 89%.</atl-alert>
+  </atl-accordion-item>
+</atl-accordion-group>`;
 
-const notificationsReact = `<LlmAccordionGroup multi variant="separated">
-  <LlmAccordionItem expanded>
-    <span>Errors <LlmBadge variant="danger" size="sm">2</LlmBadge></span>
-    <LlmAlert variant="danger">Database failed.</LlmAlert>
-    <LlmAlert variant="danger">Service 503.</LlmAlert>
-  </LlmAccordionItem>
-  <LlmAccordionItem>
-    <span>Warnings <LlmBadge variant="warning" size="sm">1</LlmBadge></span>
-    <LlmAlert variant="warning">Disk at 89%.</LlmAlert>
-  </LlmAccordionItem>
-</LlmAccordionGroup>`;
+const notificationsReact = `<AtlAccordionGroup multi variant="separated">
+  <AtlAccordionItem expanded>
+    <span>Errors <AtlBadge variant="danger" size="sm">2</AtlBadge></span>
+    <AtlAlert variant="danger">Database failed.</AtlAlert>
+    <AtlAlert variant="danger">Service 503.</AtlAlert>
+  </AtlAccordionItem>
+  <AtlAccordionItem>
+    <span>Warnings <AtlBadge variant="warning" size="sm">1</AtlBadge></span>
+    <AtlAlert variant="warning">Disk at 89%.</AtlAlert>
+  </AtlAccordionItem>
+</AtlAccordionGroup>`;
 
-const notificationsVue = `<LlmAccordionGroup :multi="true" variant="separated">
-  <LlmAccordionItem :expanded="true">
+const notificationsVue = `<AtlAccordionGroup :multi="true" variant="separated">
+  <AtlAccordionItem :expanded="true">
     <template #header>
-      Errors <LlmBadge variant="danger">2</LlmBadge>
+      Errors <AtlBadge variant="danger">2</AtlBadge>
     </template>
-    <LlmAlert variant="danger">Database failed.</LlmAlert>
-  </LlmAccordionItem>
-  <LlmAccordionItem>
+    <AtlAlert variant="danger">Database failed.</AtlAlert>
+  </AtlAccordionItem>
+  <AtlAccordionItem>
     <template #header>
-      Warnings <LlmBadge variant="warning">1</LlmBadge>
+      Warnings <AtlBadge variant="warning">1</AtlBadge>
     </template>
-    <LlmAlert variant="warning">Disk at 89%.</LlmAlert>
-  </LlmAccordionItem>
-</LlmAccordionGroup>`;
+    <AtlAlert variant="warning">Disk at 89%.</AtlAlert>
+  </AtlAccordionItem>
+</AtlAccordionGroup>`;
 
 const dashboardAngular = `<!-- Metric cards + activity table + quota widget.
      Uses Card, Table, TabGroup, Badge, Alert, Progress. -->
-<llm-tab-group variant="pills" [(selectedIndex)]="range">
-  <llm-tab label="7D" />
-  <llm-tab label="30D" />
-  <llm-tab label="90D" />
-</llm-tab-group>
+<atl-tab-group variant="pills" [(selectedIndex)]="range">
+  <atl-tab label="7D" />
+  <atl-tab label="30D" />
+  <atl-tab label="90D" />
+</atl-tab-group>
 @if (quota() >= 85) {
-  <llm-alert variant="warning">API quota at {{ quota() }}%.</llm-alert>
+  <atl-alert variant="warning">API quota at {{ quota() }}%.</atl-alert>
 }
-<!-- ...metric cards grid (LlmCard + LlmBadge delta)... -->
-<llm-table variant="striped" size="sm">
-  <llm-thead>
-    <llm-tr><llm-th>User</llm-th><llm-th>Action</llm-th></llm-tr>
-  </llm-thead>
-  <llm-tbody>
+<!-- ...metric cards grid (AtlCard + AtlBadge delta)... -->
+<atl-table variant="striped" size="sm">
+  <atl-thead>
+    <atl-tr><atl-th>User</atl-th><atl-th>Action</atl-th></atl-tr>
+  </atl-thead>
+  <atl-tbody>
     @for (row of activity(); track row.id) {
-      <llm-tr>
-        <llm-td>{{ row.user }}</llm-td>
-        <llm-td>{{ row.action }}</llm-td>
-      </llm-tr>
+      <atl-tr>
+        <atl-td>{{ row.user }}</atl-td>
+        <atl-td>{{ row.action }}</atl-td>
+      </atl-tr>
     }
-  </llm-tbody>
-</llm-table>
-<llm-progress [value]="quota()" variant="warning" size="sm" />`;
+  </atl-tbody>
+</atl-table>
+<atl-progress [value]="quota()" variant="warning" size="sm" />`;
 
-const dashboardReact = `<LlmTabGroup variant="pills" selectedIndex={range} onSelectedIndexChange={setRange}>
-  <LlmTab label="7D">{' '}</LlmTab>
-  <LlmTab label="30D">{' '}</LlmTab>
-  <LlmTab label="90D">{' '}</LlmTab>
-</LlmTabGroup>
-{quota >= 85 && <LlmAlert variant="warning">API quota at {quota}%.</LlmAlert>}
-{/* ...metric cards grid (LlmCard + LlmBadge delta)... */}
-<LlmTable variant="striped" size="sm">
-  <LlmThead>
-    <LlmTr><LlmTh>User</LlmTh><LlmTh>Action</LlmTh></LlmTr>
-  </LlmThead>
-  <LlmTbody>
+const dashboardReact = `<AtlTabGroup variant="pills" selectedIndex={range} onSelectedIndexChange={setRange}>
+  <AtlTab label="7D">{' '}</AtlTab>
+  <AtlTab label="30D">{' '}</AtlTab>
+  <AtlTab label="90D">{' '}</AtlTab>
+</AtlTabGroup>
+{quota >= 85 && <AtlAlert variant="warning">API quota at {quota}%.</AtlAlert>}
+{/* ...metric cards grid (AtlCard + AtlBadge delta)... */}
+<AtlTable variant="striped" size="sm">
+  <AtlThead>
+    <AtlTr><AtlTh>User</AtlTh><AtlTh>Action</AtlTh></AtlTr>
+  </AtlThead>
+  <AtlTbody>
     {activity.map(row => (
-      <LlmTr key={row.id}>
-        <LlmTd>{row.user}</LlmTd>
-        <LlmTd>{row.action}</LlmTd>
-      </LlmTr>
+      <AtlTr key={row.id}>
+        <AtlTd>{row.user}</AtlTd>
+        <AtlTd>{row.action}</AtlTd>
+      </AtlTr>
     ))}
-  </LlmTbody>
-</LlmTable>
-<LlmProgress value={quota} variant="warning" size="sm" />`;
+  </AtlTbody>
+</AtlTable>
+<AtlProgress value={quota} variant="warning" size="sm" />`;
 
-const dashboardVue = `<LlmTabGroup variant="pills" v-model:selectedIndex="range">
-  <LlmTab label="7D">&nbsp;</LlmTab>
-  <LlmTab label="30D">&nbsp;</LlmTab>
-  <LlmTab label="90D">&nbsp;</LlmTab>
-</LlmTabGroup>
-<LlmAlert v-if="quota >= 85" variant="warning">API quota at {{ quota }}%.</LlmAlert>
-<!-- ...metric cards grid (LlmCard + LlmBadge delta)... -->
-<LlmTable variant="striped" size="sm">
-  <LlmThead>
-    <LlmTr><LlmTh>User</LlmTh><LlmTh>Action</LlmTh></LlmTr>
-  </LlmThead>
-  <LlmTbody>
-    <LlmTr v-for="row in activity" :key="row.id">
-      <LlmTd>{{ row.user }}</LlmTd>
-      <LlmTd>{{ row.action }}</LlmTd>
-    </LlmTr>
-  </LlmTbody>
-</LlmTable>
-<LlmProgress :value="quota" variant="warning" size="sm" />`;
+const dashboardVue = `<AtlTabGroup variant="pills" v-model:selectedIndex="range">
+  <AtlTab label="7D">&nbsp;</AtlTab>
+  <AtlTab label="30D">&nbsp;</AtlTab>
+  <AtlTab label="90D">&nbsp;</AtlTab>
+</AtlTabGroup>
+<AtlAlert v-if="quota >= 85" variant="warning">API quota at {{ quota }}%.</AtlAlert>
+<!-- ...metric cards grid (AtlCard + AtlBadge delta)... -->
+<AtlTable variant="striped" size="sm">
+  <AtlThead>
+    <AtlTr><AtlTh>User</AtlTh><AtlTh>Action</AtlTh></AtlTr>
+  </AtlThead>
+  <AtlTbody>
+    <AtlTr v-for="row in activity" :key="row.id">
+      <AtlTd>{{ row.user }}</AtlTd>
+      <AtlTd>{{ row.action }}</AtlTd>
+    </AtlTr>
+  </AtlTbody>
+</AtlTable>
+<AtlProgress :value="quota" variant="warning" size="sm" />`;
 
 function storybookLinks(storyId: string): PatternMeta['storybook'] {
   return {
@@ -423,7 +423,7 @@ export const PATTERNS: PatternMeta[] = [
     num: 1,
     title: 'Login Form',
     description: 'The most frequent AI-generated page. Shows Card composition, validation error display, and loading states.',
-    tags: ['LlmCard', 'LlmInput', 'LlmButton', 'LlmAlert', 'LlmCheckbox'],
+    tags: ['AtlCard', 'AtlInput', 'AtlButton', 'AtlAlert', 'AtlCheckbox'],
     angular: loginAngular,
     react: loginReact,
     vue: loginVue,
@@ -433,12 +433,12 @@ export const PATTERNS: PatternMeta[] = [
       'You need an inline error region that does not navigate the user away from the form.',
     ],
     whenNotToUse: [
-      'Multi-step onboarding flows — reach for LlmStepper instead.',
+      'Multi-step onboarding flows — reach for AtlStepper instead.',
       'Passwordless / magic-link flows where the response is a separate state, not a form error.',
       'When the form needs more than one Card column or section — switch to a Settings-style tabbed layout.',
     ],
     a11yNotes: [
-      'LlmInput exposes invalid + describedBy linkage automatically when paired with the Alert via aria-describedby — keep the Alert above the inputs so screen readers reach the error first.',
+      'AtlInput exposes invalid + describedBy linkage automatically when paired with the Alert via aria-describedby — keep the Alert above the inputs so screen readers reach the error first.',
       'The submit button needs an explicit loading state, not a disabled state with a spinner — disabled buttons are skipped by some assistive tech.',
       'Label every input. Placeholder is a hint, not a label — never the only descriptor for a field.',
     ],
@@ -450,7 +450,7 @@ export const PATTERNS: PatternMeta[] = [
     variations: [
       {
         title: 'With "Forgot password?" link',
-        note: 'Add an LlmCardFooter row with a secondary link aligned opposite to the submit button — same Card / form structure, no new components.',
+        note: 'Add an AtlCardFooter row with a secondary link aligned opposite to the submit button — same Card / form structure, no new components.',
       },
       {
         title: 'Social-login alternates',
@@ -464,7 +464,7 @@ export const PATTERNS: PatternMeta[] = [
     num: 2,
     title: 'Settings Page',
     description: 'Exercises tabs, form controls, and layout composition. The bread and butter of SaaS applications.',
-    tags: ['LlmTabGroup', 'LlmToggle', 'LlmSelect', 'LlmInput', 'LlmButton', 'LlmAlert'],
+    tags: ['AtlTabGroup', 'AtlToggle', 'AtlSelect', 'AtlInput', 'AtlButton', 'AtlAlert'],
     angular: settingsAngular,
     react: settingsReact,
     vue: settingsVue,
@@ -474,19 +474,19 @@ export const PATTERNS: PatternMeta[] = [
       'You need stable URLs per tab so screenshots and support links survive navigation — wire `selectedIndex` to the route.',
     ],
     whenNotToUse: [
-      'Single-screen inline edit of one or two values — use an LlmCard with the input directly, not a tabbed shell.',
-      'Wizard-style sequences where order matters — LlmStepper enforces progression that TabGroup intentionally does not.',
+      'Single-screen inline edit of one or two values — use an AtlCard with the input directly, not a tabbed shell.',
+      'Wizard-style sequences where order matters — AtlStepper enforces progression that TabGroup intentionally does not.',
       'Nested settings that need their own sub-tabs — collapse to an accordion or a list-detail layout instead of nesting tab groups.',
     ],
     a11yNotes: [
-      'LlmTabGroup uses a roving-tabindex keyboard handler: arrow keys move focus between tabs, Home/End jump to ends, Tab moves into the active panel. Don\'t override these.',
-      'Each LlmToggle is a `role="switch"` — its label must describe the on-state ("Email notifications") not the action ("Toggle email").',
+      'AtlTabGroup uses a roving-tabindex keyboard handler: arrow keys move focus between tabs, Home/End jump to ends, Tab moves into the active panel. Don\'t override these.',
+      'Each AtlToggle is a `role="switch"` — its label must describe the on-state ("Email notifications") not the action ("Toggle email").',
       'Autosaving silently is a screen-reader trap. Either keep an explicit Save button (current pattern) or surface autosave with an `aria-live="polite"` region after the fact.',
     ],
     pitfalls: [
-      'LLMs frequently hoist tab content into a giant switch in the parent. Each LlmTab\'s body is the projected child — keep state co-located with the inputs, not the parent.',
+      'LLMs frequently hoist tab content into a giant switch in the parent. Each AtlTab\'s body is the projected child — keep state co-located with the inputs, not the parent.',
       'Saving a partial form across tab switches breaks the user\'s mental model. Either persist optimistically per change or block the save button until the user returns to a complete state.',
-      'Don\'t bind `LlmSelect` to a tuple `{value, label}` — bind the primitive value and let the option element project the label.',
+      'Don\'t bind `AtlSelect` to a tuple `{value, label}` — bind the primitive value and let the option element project the label.',
     ],
     variations: [
       {
@@ -505,7 +505,7 @@ export const PATTERNS: PatternMeta[] = [
     num: 3,
     title: 'Confirmation Dialog',
     description: 'Accessible modal flow for destructive actions. Shows trigger → dialog → action logic.',
-    tags: ['LlmDialog', 'LlmAlert', 'LlmButton'],
+    tags: ['AtlDialog', 'AtlAlert', 'AtlButton'],
     angular: confirmAngular,
     react: confirmReact,
     vue: confirmVue,
@@ -515,28 +515,28 @@ export const PATTERNS: PatternMeta[] = [
       'When the operation is fast enough that a modal is acceptable — anything > ~3 s should open a separate destination, not a dialog.',
     ],
     whenNotToUse: [
-      'Reversible actions with an undo affordance — show an LlmToast with an "Undo" action instead.',
-      'Form-style multi-field confirmation ("type the project name to confirm") — that\'s a destructive form, render it on its own page or in an LlmDrawer.',
+      'Reversible actions with an undo affordance — show an AtlToast with an "Undo" action instead.',
+      'Form-style multi-field confirmation ("type the project name to confirm") — that\'s a destructive form, render it on its own page or in an AtlDrawer.',
       'As an "are you sure?" wrapper around every save button. Confirmation fatigue trains users to click through.',
     ],
     a11yNotes: [
-      'LlmDialog uses the native `<dialog>` element with `cdkTrapFocus` — focus moves to the first focusable inside, restores on close. Don\'t reimplement.',
+      'AtlDialog uses the native `<dialog>` element with `cdkTrapFocus` — focus moves to the first focusable inside, restores on close. Don\'t reimplement.',
       'Escape-to-close comes from the native `<dialog>` element\'s cancel event — the component intercepts it and routes it through the `open` binding as a close request. If an in-flight operation must not be interrupted, ignore that request (keep `open` true) until the mutation settles.',
       'The destructive button must remain the *secondary* visual call to action — Cancel as `outline`, "Yes, delete" as `primary`. Reversing colour just to make red prominent is a contrast trap.',
     ],
     pitfalls: [
       'LLMs frequently add `autoFocus` to the destructive button — this nudges users into an accidental confirm. The first Tab stop should be Cancel.',
       'Forgetting to gate the trigger when the action is already in flight produces double-deletes; flip the dialog\'s `open` to false only after the mutation resolves.',
-      'Putting body content as a raw string inside `LlmDialogContent` skips the LlmAlert composition the cookbook recommends — the Alert is what carries the warning role for assistive tech.',
+      'Putting body content as a raw string inside `AtlDialogContent` skips the AtlAlert composition the cookbook recommends — the Alert is what carries the warning role for assistive tech.',
     ],
     variations: [
       {
         title: 'With type-to-confirm input',
-        note: 'Add an LlmInput inside `LlmDialogContent` that the user must type the resource name into. Disable the destructive button until match.',
+        note: 'Add an AtlInput inside `AtlDialogContent` that the user must type the resource name into. Disable the destructive button until match.',
       },
       {
         title: 'Loading state',
-        note: 'Bind `loading={pending}` on the destructive LlmButton; keep the dialog open so a slow network failure doesn\'t lose context.',
+        note: 'Bind `loading={pending}` on the destructive AtlButton; keep the dialog open so a slow network failure doesn\'t lose context.',
       },
     ],
     storybook: storybookLinks('confirmation-dialog'),
@@ -546,7 +546,7 @@ export const PATTERNS: PatternMeta[] = [
     num: 4,
     title: 'Data List with Actions',
     description: 'Inline actions on a list of items. The core pattern for dashboards and admin panels — Card + Badge + Button composition.',
-    tags: ['LlmCard', 'LlmBadge', 'LlmButton', 'LlmMenu', 'LlmTooltip'],
+    tags: ['AtlCard', 'AtlBadge', 'AtlButton', 'AtlMenu', 'AtlTooltip'],
     angular: dataListAngular,
     react: dataListReact,
     vue: dataListVue,
@@ -556,24 +556,24 @@ export const PATTERNS: PatternMeta[] = [
       'You want each row independently focusable so keyboard users can act on it without tab-trapping in a Table.',
     ],
     whenNotToUse: [
-      'More than ~50 items — switch to LlmTable with sorting, sticky header, and pagination.',
+      'More than ~50 items — switch to AtlTable with sorting, sticky header, and pagination.',
       'Items whose primary affordance is reading, not acting — use a plain styled list without per-row buttons.',
       'Lists that need column alignment across rows — Cards collapse content; Tables align it.',
     ],
     a11yNotes: [
-      'LlmMenuTrigger from CDK Menu manages roving focus inside the popped menu — don\'t hand-roll arrow-key handlers, you\'ll fight the focus manager.',
+      'AtlMenuTrigger from CDK Menu manages roving focus inside the popped menu — don\'t hand-roll arrow-key handlers, you\'ll fight the focus manager.',
       'Each "..." button needs an `aria-label` ("More actions for Marketing Website"). Tooltips improve hover but don\'t replace the accessible name.',
       'When status changes async, surface the Badge update via an `aria-live="polite"` region on the list, not a per-row live region — fewer announcements.',
     ],
     pitfalls: [
       'LLMs render `<a>` and `<button>` interchangeably for row actions — use `<button>` for "Edit", `<a>` only for navigation. Mixing breaks Cmd-click behaviour.',
       'Putting the entire row inside a `<button>` swallows the inner buttons\' click handlers. Use a clickable region pattern (cursor + keydown) rather than a wrapping button.',
-      'The cookbook story uses LlmMenu for Edit / Duplicate / Delete because each is a separate operation. If you only have one secondary action, drop the menu and inline the button.',
+      'The cookbook story uses AtlMenu for Edit / Duplicate / Delete because each is a separate operation. If you only have one secondary action, drop the menu and inline the button.',
     ],
     variations: [
       {
         title: 'With selection checkboxes',
-        note: 'Add an LlmCheckbox at the row start; lift selection state to the parent and surface a bulk-action bar above the list.',
+        note: 'Add an AtlCheckbox at the row start; lift selection state to the parent and surface a bulk-action bar above the list.',
       },
       {
         title: 'With drag-handle reorder',
@@ -587,7 +587,7 @@ export const PATTERNS: PatternMeta[] = [
     num: 5,
     title: 'Notification Center',
     description: 'Structural feedback grouping using Accordion and Alert. Useful for monitoring and admin tools.',
-    tags: ['LlmAccordionGroup', 'LlmAlert', 'LlmBadge', 'LlmButton'],
+    tags: ['AtlAccordionGroup', 'AtlAlert', 'AtlBadge', 'AtlButton'],
     angular: notificationsAngular,
     react: notificationsReact,
     vue: notificationsVue,
@@ -597,24 +597,24 @@ export const PATTERNS: PatternMeta[] = [
       'You expect 10–200 items — fewer than 10 should render flat without the accordion wrapper.',
     ],
     whenNotToUse: [
-      'Transient toast-style notifications — use LlmToast with `aria-live="assertive"` (error) or `polite` (info), not an accordion.',
-      'A single critical message — inline LlmAlert above the page is louder and harder to ignore than a collapsed accordion section.',
+      'Transient toast-style notifications — use AtlToast with `aria-live="assertive"` (error) or `polite` (info), not an accordion.',
+      'A single critical message — inline AtlAlert above the page is louder and harder to ignore than a collapsed accordion section.',
       'Real-time logs / streaming output — the accordion expansion animation fights the auto-scroll. Use a virtual-scrolled list instead.',
     ],
     a11yNotes: [
-      'LlmAccordionGroup with `multi={true}` lets users keep severity sections open simultaneously — match the user\'s mental model of triage.',
-      'Each LlmAlert\'s `role` is bound to its variant (`alert` for danger/warning, `status` for info/success). Don\'t override.',
+      'AtlAccordionGroup with `multi={true}` lets users keep severity sections open simultaneously — match the user\'s mental model of triage.',
+      'Each AtlAlert\'s `role` is bound to its variant (`alert` for danger/warning, `status` for info/success). Don\'t override.',
       'The badge counts beside each accordion header must update when items are dismissed — assistive tech reads the header text on focus, not the changing count below.',
     ],
     pitfalls: [
-      'LLMs frequently nest LlmAccordionGroup inside another accordion — flat groupings work better; switch to LlmTabs if you really need two axes.',
+      'LLMs frequently nest AtlAccordionGroup inside another accordion — flat groupings work better; switch to AtlTabs if you really need two axes.',
       'Auto-collapsing the section when its last item is dismissed is jarring on keyboard users mid-action — leave it open and show an empty-state row.',
       'Marking everything as `variant="danger"` so the user "really sees it" trains them to ignore the colour. Reserve danger for actual failures.',
     ],
     variations: [
       {
         title: 'With "Mark all read" + filter chips',
-        note: 'Add a LlmTabGroup above the accordion with severity filters; drive the visible groups from selected filter state.',
+        note: 'Add a AtlTabGroup above the accordion with severity filters; drive the visible groups from selected filter state.',
       },
       {
         title: 'Inline-only (no accordion)',
@@ -628,7 +628,7 @@ export const PATTERNS: PatternMeta[] = [
     num: 6,
     title: 'Management Dashboard',
     description: 'The densest cookbook pattern — metric cards, activity table, and quota indicators combined. Shows how Card, Table, TabGroup, Badge, Alert, and Progress fit together.',
-    tags: ['LlmCard', 'LlmTable', 'LlmTabGroup', 'LlmBadge', 'LlmAlert', 'LlmProgress', 'LlmButton'],
+    tags: ['AtlCard', 'AtlTable', 'AtlTabGroup', 'AtlBadge', 'AtlAlert', 'AtlProgress', 'AtlButton'],
     angular: dashboardAngular,
     react: dashboardReact,
     vue: dashboardVue,
@@ -643,23 +643,23 @@ export const PATTERNS: PatternMeta[] = [
       'Real-time dashboards with sub-second updates — these fight the static layout; use an SVG/canvas chart and drop the Card grids.',
     ],
     a11yNotes: [
-      'LlmProgress for quota uses `role="progressbar"` with `aria-valuenow` — don\'t add a duplicate visible-text-only readout for screen readers; the role surfaces the value automatically.',
+      'AtlProgress for quota uses `role="progressbar"` with `aria-valuenow` — don\'t add a duplicate visible-text-only readout for screen readers; the role surfaces the value automatically.',
       'The metric card delta uses a Badge whose colour encodes direction. Pair every coloured delta with a `+` / `-` glyph so the meaning survives without colour.',
       'Recent-activity table\'s status column is colour-only when read alone — keep the textual label ("Success", "Pending", "Failed") inside the Badge.',
     ],
     pitfalls: [
       'LLMs love to project tab content into a giant `ngSwitch` / ternary that re-renders the entire grid on each tab change. Bind only the data-fetch scope to the tab; let the layout stay static.',
       'Using `variant="warning"` Alerts for every quota above 50 % numbs the signal. Reserve for crossings of the actual SLA / billing threshold.',
-      'Putting the table and the side panel into a single LlmCard collapses their independent scroll regions. They\'re siblings, not parent/child.',
+      'Putting the table and the side panel into a single AtlCard collapses their independent scroll regions. They\'re siblings, not parent/child.',
     ],
     variations: [
       {
         title: 'With drill-down per metric',
-        note: 'Add an `onClick` that opens an LlmDrawer with the metric\'s history — Drawer keeps the dashboard context, Dialog would dim it.',
+        note: 'Add an `onClick` that opens an AtlDrawer with the metric\'s history — Drawer keeps the dashboard context, Dialog would dim it.',
       },
       {
         title: 'Empty state',
-        note: 'When no activity exists, replace the table with a centered LlmAlert + LlmButton ("Invite your first member") inside the same Card.',
+        note: 'When no activity exists, replace the table with a centered AtlAlert + AtlButton ("Invite your first member") inside the same Card.',
       },
     ],
     storybook: storybookLinks('management-dashboard'),

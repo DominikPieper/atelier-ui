@@ -24,11 +24,11 @@ Add the design tokens to your global `index.css`:
 ## Usage
 
 ```tsx
-import { LlmButton } from '@atelier-ui/react';
+import { AtlButton } from '@atelier-ui/react';
 
 export const MyComponent = () => (
-  <LlmButton variant="primary" onClick={() => console.log('save')}>
+  <AtlButton variant="primary" onClick={() => console.log('save')}>
     Save
-  </LlmButton>
+  </AtlButton>
 );
 ```

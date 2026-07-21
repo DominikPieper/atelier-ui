@@ -26,20 +26,20 @@ Bevor wir uns ansehen, wie KI mit Storybook interagiert, klären wir, was es üb
 ### Was ist eine "Story"?
 Eine "Story" fängt einen einzelnen, spezifischen State einer UI Component ein. Anstatt dich durch eine komplexe Anwendung zu klicken, um zu sehen, wie ein Button aussieht, wenn er deaktiviert ist, schreibst du eine Story dafür.
 
-### Beispiel: Der LLMButton
+### Beispiel: Der AtlButton
 So sieht eine Story im Code aus. Wir definieren die Standard-Component und exportieren dann verschiedene "Stories" (States) wie `Primary`, `Small` oder `Disabled`:
 
 ```tsx
 import type { Meta, StoryObj } from '@storybook/react';
-import { LlmButton } from './llm-button';
+import { AtlButton } from './atl-button';
 
-const meta: Meta<typeof LlmButton> = {
-  title: 'Components/LlmButton',
-  component: LlmButton,
+const meta: Meta<typeof AtlButton> = {
+  title: 'Components/AtlButton',
+  component: AtlButton,
 };
 export default meta;
 
-type Story = StoryObj<typeof LlmButton>;
+type Story = StoryObj<typeof AtlButton>;
 
 // Story: The primary variant of the button
 export const Primary: Story = { 
@@ -128,17 +128,17 @@ Das Storybook MCP stellt sicher, dass die KI möglichst keine API halluziniert.
 ### Discovery API (`list-all-documentation`)
 Die KI beginnt damit, das gesamte System zu scannen, um etablierte Components zu finden:
 ```text
-- LlmAlert (components-llmalert)
-- LlmAvatar (components-llmavatar)
-- LlmButton (components-llmbutton)
-- LlmCheckbox (components-llmcheckbox)
+- AtlAlert (components-atlalert)
+- AtlAvatar (components-atlavatar)
+- AtlButton (components-atlbutton)
+- AtlCheckbox (components-atlcheckbox)
 ...
 ```
 
 ### Documentation API (`get-documentation`)
 Sobald eine Component ausgewählt ist, liest die KI ihre **Living Specification**:
 ```markdown
-# LlmButton (components-llmbutton)
+# AtlButton (components-atlbutton)
 
 ## Props
 - variant: 'primary' | 'secondary' | 'outline' (default: 'primary')
@@ -149,7 +149,7 @@ Sobald eine Component ausgewählt ist, liest die KI ihre **Living Specification*
 ## Real Usage Examples (from existing stories)
 ```
 ```typescript
-<LlmButton variant="primary" size="md">Button</LlmButton>
+<AtlButton variant="primary" size="md">Button</AtlButton>
 ```
 
 ---
@@ -217,7 +217,7 @@ class ToastStoryWrapper { ... }
 Die KI nutzt `useState` in Story-Rendern, um komplexe Interaktionen zu handhaben:
 ```tsx
 const [open, setOpen] = useState(false);
-return <LlmDialog open={open} onOpenChange={setOpen} />;
+return <AtlDialog open={open} onOpenChange={setOpen} />;
 ```
 
 ---
@@ -242,7 +242,7 @@ User: "Implement the login form from Figma"
 AI: Reads Figma Tokens → Discovers SB Components → Scans SB9 Rules
           │
           ▼
-AI: Writes implementation using <LlmInput> & <LlmButton>
+AI: Writes implementation using <AtlInput> & <AtlButton>
           │
           ▼
 AI: Runs Story Tests → Performs A11y Audit → Captures Screenshot
