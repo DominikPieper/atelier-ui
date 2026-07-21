@@ -94,7 +94,7 @@ Angular MCP currently focuses on documentation and prop discovery; previews and 
 
 ## Components
 
-~27 components ship in all three libraries with identical prop names, identical variant unions, and the same `--ui-*` CSS token system.
+31 components ship in all three libraries with identical prop names, identical variant unions, and the same `--ui-*` CSS token system.
 
 **Inputs** — Button · Input · Textarea · Checkbox · Toggle · Radio / RadioGroup · Select · Combobox
 **Display** — Badge · Icon · Card · Avatar · Skeleton · Progress · Table · CodeBlock
