@@ -24,7 +24,7 @@ export default defineConfig(() => ({
       formats: ['es' as const],
       fileName: 'index',
     },
-    rollupOptions: {
+    rolldownOptions: {
       external: ['vue'],
       output: {
         // Vite lib mode extracts all component CSS into index.css but emits no

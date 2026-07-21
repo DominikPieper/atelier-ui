@@ -85,7 +85,7 @@ Angular MCP currently focuses on documentation and prop discovery; previews and 
 |---|---|
 | `create-atelier-ui-workspace` | `npx` scaffolder — bootstraps a workshop workspace with framework choice |
 | `@atelier-ui/create-workspace` | Nx preset used by the scaffolder |
-| `@atelier-ui/angular` | Angular 21 component library (teaching artifact) |
+| `@atelier-ui/angular` | Angular 22 component library (teaching artifact) |
 | `@atelier-ui/react` | React 19 component library (teaching artifact) |
 | `@atelier-ui/vue` | Vue 3 component library (teaching artifact) |
 | `@atelier-ui/spec` | Framework-agnostic TypeScript interfaces — enforces API parity across all three libraries |
@@ -143,8 +143,8 @@ Full design guide: [`plan/big-picture.md`](plan/big-picture.md).
 
 ## Tech stack
 
-- **Monorepo**: Nx 22
-- **Angular library**: Angular 21, Signals, Signal Forms, Angular CDK
+- **Monorepo**: Nx 23
+- **Angular library**: Angular 22, Signals, Signal Forms, Angular CDK
 - **React library**: React 19
 - **Vue library**: Vue 3 + `<script setup>`
 - **Spec**: `@atelier-ui/spec` — shared TypeScript interfaces

@@ -1,4 +1,4 @@
-.llm-button {
+:host {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -20,56 +20,56 @@
   user-select: none;
 }
 
-.llm-button:focus-visible {
+:host(:focus-visible) {
   outline: none;
   box-shadow: var(--ui-focus-ring);
 }
 
 /* Variants — flat by default; subtle state shifts only */
-.llm-button.variant-primary {
+:host(.variant-primary) {
   background-color: var(--ui-color-primary);
   color: var(--ui-color-text-on-primary);
   border-color: var(--ui-color-primary);
 }
 
-.llm-button.variant-primary:hover:not(.is-disabled) {
+:host(.variant-primary:hover:not(.is-disabled)) {
   background-color: var(--ui-color-primary-hover);
   border-color: var(--ui-color-primary-hover);
 }
 
-.llm-button.variant-primary:active:not(.is-disabled) {
+:host(.variant-primary:active:not(.is-disabled)) {
   background-color: var(--ui-color-primary-active);
   border-color: var(--ui-color-primary-active);
 }
 
-.llm-button.variant-secondary {
+:host(.variant-secondary) {
   background-color: var(--ui-color-secondary);
   color: var(--ui-color-text-on-secondary);
   border-color: var(--ui-color-secondary);
 }
 
-.llm-button.variant-secondary:hover:not(.is-disabled) {
+:host(.variant-secondary:hover:not(.is-disabled)) {
   background-color: var(--ui-color-secondary-hover);
   border-color: var(--ui-color-secondary-hover);
 }
 
-.llm-button.variant-secondary:active:not(.is-disabled) {
+:host(.variant-secondary:active:not(.is-disabled)) {
   background-color: var(--ui-color-secondary-active);
   border-color: var(--ui-color-secondary-active);
 }
 
-.llm-button.variant-outline {
+:host(.variant-outline) {
   background-color: var(--ui-color-surface-raised);
   color: var(--ui-color-primary);
   border-color: var(--ui-color-border-strong);
 }
 
-.llm-button.variant-outline:hover:not(.is-disabled) {
+:host(.variant-outline:hover:not(.is-disabled)) {
   background-color: var(--ui-color-surface-sunken);
   border-color: var(--ui-color-primary);
 }
 
-.llm-button.variant-outline:active:not(.is-disabled) {
+:host(.variant-outline:active:not(.is-disabled)) {
   background-color: var(--ui-color-surface-sunken);
   border-color: var(--ui-color-primary-active);
 }
@@ -77,46 +77,46 @@
 /* Non-color differentiation (WCAG 1.4.1): danger variant carries
  * a darker inset border so its silhouette is recognizable in greyscale
  * and color-blind simulations, not only by red fill. */
-.llm-button.variant-danger {
+:host(.variant-danger) {
   background-color: var(--ui-color-danger);
   color: var(--ui-color-text-on-danger);
   border-color: var(--ui-color-danger);
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
 }
 
-.llm-button.variant-danger:hover:not(.is-disabled) {
+:host(.variant-danger:hover:not(.is-disabled)) {
   background-color: var(--ui-color-danger-hover);
   border-color: var(--ui-color-danger-hover);
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
 }
 
-.llm-button.variant-danger:active:not(.is-disabled) {
+:host(.variant-danger:active:not(.is-disabled)) {
   background-color: var(--ui-color-danger-active);
   border-color: var(--ui-color-danger-active);
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
 }
 
 /* Sizes — modern target heights (sm 32px / md 40px / lg 48px) */
-.llm-button.size-sm {
+:host(.size-sm) {
   padding: 0.375rem 0.875rem;
   font-size: var(--ui-font-size-sm);
   min-height: 2rem;
 }
 
-.llm-button.size-md {
+:host(.size-md) {
   padding: 0.5625rem 1.125rem;
   font-size: var(--ui-font-size-md);
   min-height: 2.5rem;
 }
 
-.llm-button.size-lg {
+:host(.size-lg) {
   padding: 0.75rem 1.5rem;
   font-size: var(--ui-font-size-lg);
   min-height: 3rem;
 }
 
 /* Disabled */
-.llm-button.is-disabled {
+:host(.is-disabled) {
   opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
   pointer-events: none;

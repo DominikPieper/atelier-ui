@@ -1,6 +1,10 @@
 {
   "extends": "../tsconfig.json",
-  "compilerOptions": { "outDir": "", "types": ["node"] },
+  "compilerOptions": {
+    "outDir": "",
+    "types": ["node"],
+    "ignoreDeprecations": "6.0"
+  },
   "include": [
     "../src/**/*.stories.tsx",
     "../src/**/*.mdx",

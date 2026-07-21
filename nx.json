@@ -100,7 +100,6 @@
   },
   "analytics": false,
   "release": {
-    "releaseTagPattern": "v{version}",
     "groups": {
       "libraries": {
         "projects": [
@@ -117,10 +116,12 @@
       "skills": {
         "projects": ["figma-workspace-architect"],
         "projectsRelationship": "independent",
-        "releaseTagPattern": "skill-{projectName}-{version}",
         "version": {
           "conventionalCommits": true,
           "fallbackCurrentVersionResolver": "disk"
+        },
+        "releaseTag": {
+          "pattern": "skill-{projectName}-{version}"
         }
       }
     },
@@ -130,6 +131,9 @@
         "createRelease": "github"
       },
       "automaticFromRef": true
+    },
+    "releaseTag": {
+      "pattern": "v{version}"
     }
   }
 }

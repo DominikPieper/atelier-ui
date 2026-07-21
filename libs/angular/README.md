@@ -1,6 +1,6 @@
 # @atelier-ui/angular
 
-LLM-optimized component library for Angular 21.
+LLM-optimized component library for Angular 22.
 
 ## Features
 

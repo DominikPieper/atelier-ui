@@ -25,5 +25,13 @@
     "src/**/*.stories.ts",
     "src/**/*.stories.tsx",
     "src/**/*.mdx"
-  ]
+  ],
+  "angularCompilerOptions": {
+    "extendedDiagnostics": {
+      "checks": {
+        "nullishCoalescingNotNullable": "suppress",
+        "optionalChainNotNullable": "suppress"
+      }
+    }
+  }
 }

@@ -8,7 +8,8 @@
       "@atelier-ui/spec": ["libs/spec/src/index.ts"],
       "@atelier-ui/vue": ["libs/vue/src/index.ts"],
       "@atelier-ui/create-workspace": ["libs/create-workspace/src/index.ts"]
-    }
+    },
+    "ignoreDeprecations": "6.0"
   },
   "include": ["src"],
   "exclude": ["dist", "../node_modules"]

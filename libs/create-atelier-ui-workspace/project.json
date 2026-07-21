@@ -43,7 +43,10 @@
       "dependsOn": [
         "^build",
         "build",
-        { "target": "build", "projects": ["angular", "react", "vue"] }
+        {
+          "target": "build",
+          "projects": ["angular", "react", "vue"]
+        }
       ]
     }
   },

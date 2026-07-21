@@ -37,7 +37,7 @@ scale = input<number>(2);
 
 ## 2. Signals as the Single Reactivity Model
 
-Use Angular 21 signal primitives exclusively. No `@Input()` / `@Output()` decorators. One mental model means one pattern for the LLM to follow.
+Use Angular 22 signal primitives exclusively. No `@Input()` / `@Output()` decorators. One mental model means one pattern for the LLM to follow.
 
 **Rules:**
 
@@ -249,7 +249,7 @@ export class LlmDialog {
 
 ## 8. Form Integration: Angular Signal Forms
 
-Form controls integrate with Angular 21's Signal Forms (`@angular/forms/signals`). This replaces `ControlValueAccessor` entirely and aligns with our signal-only reactivity model.
+Form controls integrate with Angular 22's Signal Forms (`@angular/forms/signals`). This replaces `ControlValueAccessor` entirely and aligns with our signal-only reactivity model.
 
 **Rules:**
 

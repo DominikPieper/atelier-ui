@@ -18,11 +18,18 @@
       "@atelier-ui/angular": ["libs/angular/src/index.ts"],
       "@atelier-ui/react": ["libs/react/src/index.ts"],
       "@atelier-ui/spec": ["libs/spec/src/index.ts"],
-      "@atelier-ui/spec/behaviors.generated": ["libs/spec/src/behaviors.generated.ts"],
+      "@atelier-ui/spec/behaviors.generated": [
+        "libs/spec/src/behaviors.generated.ts"
+      ],
       "@atelier-ui/spec/metadata/*": ["libs/spec/src/metadata/*"],
       "@atelier-ui/vue": ["libs/vue/src/index.ts"],
       "@atelier-ui/create-workspace": ["libs/create-workspace/src/index.ts"]
-    }
+    },
+    "strict": false,
+    "noUncheckedSideEffectImports": false,
+    "types": ["*"],
+    "esModuleInterop": false,
+    "ignoreDeprecations": "6.0"
   },
   "exclude": ["node_modules", "tmp"]
 }

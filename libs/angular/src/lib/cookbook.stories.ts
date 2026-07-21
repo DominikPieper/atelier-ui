@@ -1,4 +1,4 @@
-/* eslint-disable @angular-eslint/prefer-on-push-component-change-detection, @angular-eslint/component-selector */
+/* eslint-disable @angular-eslint/component-selector */
 import type { Meta, StoryObj } from '@storybook/angular';
 import { userEvent, expect, screen } from 'storybook/test';
 import { Component, signal } from '@angular/core';

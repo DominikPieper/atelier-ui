@@ -1,5 +1,5 @@
 // For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
-import storybook from "eslint-plugin-storybook";
+import storybook from 'eslint-plugin-storybook';
 
 import nx from '@nx/eslint-plugin';
 import tseslint from 'typescript-eslint';
@@ -43,7 +43,6 @@ export default tseslint.config(
       '@angular-eslint/prefer-signals': 'error',
       '@angular-eslint/relative-url-prefix': 'error',
       '@angular-eslint/sort-lifecycle-methods': 'error',
-      '@angular-eslint/no-conflicting-lifecycle': 'error',
       '@angular-eslint/no-duplicates-in-metadata-arrays': 'error',
       '@angular-eslint/no-lifecycle-call': 'error',
       '@angular-eslint/no-pipe-impure': 'error',
@@ -92,7 +91,10 @@ export default tseslint.config(
     rules: {
       '@angular-eslint/template/no-negated-async': 'error',
       '@angular-eslint/template/no-duplicate-attributes': 'error',
-      '@angular-eslint/template/eqeqeq': ['error', { allowNullOrUndefined: true }],
+      '@angular-eslint/template/eqeqeq': [
+        'error',
+        { allowNullOrUndefined: true },
+      ],
       '@angular-eslint/template/no-interpolation-in-attributes': 'error',
       '@angular-eslint/template/prefer-self-closing-tags': 'error',
       '@angular-eslint/template/use-track-by-function': 'error',
@@ -113,5 +115,5 @@ export default tseslint.config(
       '@angular-eslint/template/no-call-expression': 'off',
     },
   },
-  storybook.configs["flat/recommended"]
+  storybook.configs['flat/recommended'],
 );

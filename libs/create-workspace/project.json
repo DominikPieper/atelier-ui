@@ -40,8 +40,7 @@
             "input": "./libs/create-workspace",
             "glob": "executors.json",
             "output": "."
-          },
-
+          }
         ]
       }
     },

@@ -14,5 +14,8 @@
     "src/**/*.test.ts",
     "bin/**/*.spec.ts",
     "bin/**/*.test.ts"
-  ]
+  ],
+  "angularCompilerOptions": {
+    "strictTemplates": false
+  }
 }
