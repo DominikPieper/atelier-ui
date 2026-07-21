@@ -1,3 +1,14 @@
+## 0.1.12 (2026-07-21)
+
+### 🩹 Fixes
+
+- **angular:** repair dead CSS across 19 components (host-encapsulation bug) ([3c2e3b9](https://github.com/DominikPieper/atelier-ui/commit/3c2e3b9))
+
+### ❤️ Thank You
+
+- Claude Sonnet 5
+- Dominik Pieper @DominikPieper
+
 ## 0.1.11 (2026-07-10)
 
 ### 🩹 Fixes
