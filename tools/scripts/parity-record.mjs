@@ -5,8 +5,8 @@
  * Persist a design-parity result so check-parity.js can later catch drift.
  * Run this right after figma_check_design_parity, while you know the score:
  *
- *   npm run parity:record -- --component LlmButton --score 0.98
- *   npm run parity:record -- --component LlmCard --score 0.97 --node 55:65
+ *   npm run parity:record -- --component AtlButton --score 0.98
+ *   npm run parity:record -- --component AtlCard --score 0.97 --node 55:65
  *
  * It records the component's Figma node (looked up from the snapshot when --node
  * is omitted), the score, the verifying git sha + timestamp, and an inputsHash
@@ -49,7 +49,7 @@ function fail(msg) {
 
 const args = parseArgs(process.argv.slice(2));
 if (!args.component) {
-  fail('missing --component <Selector> (e.g. --component LlmButton). Usage:\n  npm run parity:record -- --component LlmButton --score 0.98 [--node 129:20]');
+  fail('missing --component <Selector> (e.g. --component AtlButton). Usage:\n  npm run parity:record -- --component AtlButton --score 0.98 [--node 129:20]');
 }
 const selector = args.component;
 

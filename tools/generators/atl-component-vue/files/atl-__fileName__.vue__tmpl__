@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import './llm-<%= fileName %>.css';
+import './atl-<%= fileName %>.css';
 
 defineOptions({ name: '<%= className %>' });
 
@@ -14,7 +14,7 @@ const props = withDefaults(defineProps<<%= className %>Props>(), {
 });
 
 const classes = computed(() => [
-  'llm-<%= fileName %>',
+  'atl-<%= fileName %>',
   `variant-${props.variant}`,
 ]);
 </script>

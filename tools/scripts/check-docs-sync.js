@@ -32,33 +32,33 @@ const DOCS_FILE = path.join(ROOT, 'docs/src/data/components.ts');
 /**
  * Maps spec interface names to their docs component key.
  * Only "primary" interfaces (one per docs entry) are listed here.
- * Child interfaces (LlmRadioSpec, LlmTabSpec, etc.) and the base
- * LlmFormFieldSpec are intentionally omitted.
+ * Child interfaces (AtlRadioSpec, AtlTabSpec, etc.) and the base
+ * AtlFormFieldSpec are intentionally omitted.
  */
 const SPEC_TO_DOCS = {
-  LlmButtonSpec: 'button',
-  LlmBadgeSpec: 'badge',
-  LlmAvatarSpec: 'avatar',
-  LlmCardSpec: 'card',
-  LlmInputSpec: 'input',
-  LlmTextareaSpec: 'textarea',
-  LlmCheckboxSpec: 'checkbox',
-  LlmToggleSpec: 'toggle',
-  LlmRadioGroupSpec: 'radio-group',
-  LlmSelectSpec: 'select',
-  LlmAlertSpec: 'alert',
-  LlmDialogSpec: 'dialog',
-  LlmTabGroupSpec: 'tabs',
-  LlmAccordionGroupSpec: 'accordion',
-  LlmMenuSpec: 'menu',
-  LlmTooltipSpec: 'tooltip',
-  LlmToastOptions: 'toast',
-  LlmSkeletonSpec: 'skeleton',
-  LlmPaginationSpec: 'pagination',
-  LlmProgressSpec: 'progress',
-  LlmDrawerSpec: 'drawer',
-  LlmBreadcrumbsSpec: 'breadcrumbs',
-  LlmChatSpec: 'chat',
+  AtlButtonSpec: 'button',
+  AtlBadgeSpec: 'badge',
+  AtlAvatarSpec: 'avatar',
+  AtlCardSpec: 'card',
+  AtlInputSpec: 'input',
+  AtlTextareaSpec: 'textarea',
+  AtlCheckboxSpec: 'checkbox',
+  AtlToggleSpec: 'toggle',
+  AtlRadioGroupSpec: 'radio-group',
+  AtlSelectSpec: 'select',
+  AtlAlertSpec: 'alert',
+  AtlDialogSpec: 'dialog',
+  AtlTabGroupSpec: 'tabs',
+  AtlAccordionGroupSpec: 'accordion',
+  AtlMenuSpec: 'menu',
+  AtlTooltipSpec: 'tooltip',
+  AtlToastOptions: 'toast',
+  AtlSkeletonSpec: 'skeleton',
+  AtlPaginationSpec: 'pagination',
+  AtlProgressSpec: 'progress',
+  AtlDrawerSpec: 'drawer',
+  AtlBreadcrumbsSpec: 'breadcrumbs',
+  AtlChatSpec: 'chat',
 };
 
 /**

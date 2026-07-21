@@ -18,7 +18,7 @@ import {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content />`,
-  styleUrl: './llm-<%= fileName %>.css',
+  styleUrl: './atl-<%= fileName %>.css',
   host: {
     '[class]': 'hostClasses()',
   },

@@ -255,7 +255,7 @@ Apply the following transformations for Angular or Vue:
 
   Construct           JSX / React            Angular                         Vue
   ---------           -------------          ---------------                 --------------
-  Tag name            <LlmButton>            <llm-button>                    <LlmButton>
+  Tag name            <AtlButton>            <atl-button>                    <AtlButton>
   Static attr         variant="primary"      variant="primary"               variant="primary"
   Bool attr           loading={true}         [loading]="true"                :loading="true"
   Expression          count={items.length}   [count]="items.length"          :count="items.length"
@@ -267,9 +267,9 @@ Apply the following transformations for Angular or Vue:
 
 Import lines are identical across frameworks: adjust the package path.
 
-  import { LlmButton } from '@atelier-ui/angular';
-  import { LlmButton } from '@atelier-ui/react';
-  import { LlmButton } from '@atelier-ui/vue';`;
+  import { AtlButton } from '@atelier-ui/angular';
+  import { AtlButton } from '@atelier-ui/react';
+  import { AtlButton } from '@atelier-ui/vue';`;
 
 const STATIC_DESIGN_TOKENS = `## Design Token System
 

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
-import { <%= className %> } from './llm-<%= fileName %>';
+import { <%= className %> } from './atl-<%= fileName %>';
 
 const meta: Meta<<%= className %>> = {
   title: 'Components/<%= className %>',

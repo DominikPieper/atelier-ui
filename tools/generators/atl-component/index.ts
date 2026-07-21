@@ -1,14 +1,14 @@
 import { formatFiles, generateFiles, names, Tree } from '@nx/devkit';
 import * as path from 'path';
 
-interface LlmComponentSchema {
+interface AtlComponentSchema {
   name: string;
   directory?: string;
   /** Which framework(s) to scaffold. Defaults to 'all'. */
   framework?: 'angular' | 'react' | 'vue' | 'both' | 'all';
 }
 
-export default async function generator(tree: Tree, options: LlmComponentSchema) {
+export default async function generator(tree: Tree, options: AtlComponentSchema) {
   const framework = options.framework ?? 'all';
   const componentNames = names(options.name);
   const dir = options.directory ?? options.name;
@@ -21,14 +21,14 @@ export default async function generator(tree: Tree, options: LlmComponentSchema)
 
     generateFiles(tree, path.join(__dirname, 'files'), angularDir, {
       ...componentNames,
-      selector: `llm-${componentNames.fileName}`,
-      className: `Llm${componentNames.className}`,
+      selector: `atl-${componentNames.fileName}`,
+      className: `Atl${componentNames.className}`,
       tmpl: '',
     });
 
     const indexPath = 'libs/angular/src/index.ts';
     const currentContent = tree.read(indexPath, 'utf-8') ?? '';
-    const exportLine = `export { Llm${componentNames.className} } from './lib/${dir}/llm-${componentNames.fileName}';\n`;
+    const exportLine = `export { Atl${componentNames.className} } from './lib/${dir}/atl-${componentNames.fileName}';\n`;
     if (!currentContent.includes(exportLine.trim())) {
       tree.write(indexPath, currentContent + exportLine);
     }
@@ -36,18 +36,18 @@ export default async function generator(tree: Tree, options: LlmComponentSchema)
 
   if (framework === 'react' || isBoth || isAll) {
     const reactDir = `libs/react/src/lib/${dir}`;
-    const reactFilesDir = path.join(__dirname, '../llm-component-react/files');
+    const reactFilesDir = path.join(__dirname, '../atl-component-react/files');
 
     generateFiles(tree, reactFilesDir, reactDir, {
       ...componentNames,
-      className: `Llm${componentNames.className}`,
+      className: `Atl${componentNames.className}`,
       fileName: componentNames.fileName,
       tmpl: '',
     });
 
     const indexPath = 'libs/react/src/index.ts';
     const currentContent = tree.read(indexPath, 'utf-8') ?? '';
-    const exportLine = `export * from './lib/${dir}/llm-${componentNames.fileName}';\n`;
+    const exportLine = `export * from './lib/${dir}/atl-${componentNames.fileName}';\n`;
     if (!currentContent.includes(exportLine.trim())) {
       tree.write(indexPath, currentContent + exportLine);
     }
@@ -55,18 +55,18 @@ export default async function generator(tree: Tree, options: LlmComponentSchema)
 
   if (framework === 'vue' || isAll) {
     const vueDir = `libs/vue/src/lib/${dir}`;
-    const vueFilesDir = path.join(__dirname, '../llm-component-vue/files');
+    const vueFilesDir = path.join(__dirname, '../atl-component-vue/files');
 
     generateFiles(tree, vueFilesDir, vueDir, {
       ...componentNames,
-      className: `Llm${componentNames.className}`,
+      className: `Atl${componentNames.className}`,
       fileName: componentNames.fileName,
       tmpl: '',
     });
 
     const indexPath = 'libs/vue/src/index.ts';
     const currentContent = tree.read(indexPath, 'utf-8') ?? '';
-    const exportLine = `export { default as Llm${componentNames.className} } from './lib/${dir}/llm-${componentNames.fileName}.vue';\n`;
+    const exportLine = `export { default as Atl${componentNames.className} } from './lib/${dir}/atl-${componentNames.fileName}.vue';\n`;
     if (!currentContent.includes(exportLine.trim())) {
       tree.write(indexPath, currentContent + exportLine);
     }

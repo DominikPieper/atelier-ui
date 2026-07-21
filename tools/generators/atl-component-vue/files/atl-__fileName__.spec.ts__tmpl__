@@ -9,6 +9,6 @@ describe('<%= className %>', () => {
 
   it('applies the default variant class', () => {
     const { container } = render(<%= className %>, { slots: { default: 'Content' } });
-    expect(container.firstChild).toHaveClass('llm-<%= fileName %>', 'variant-default');
+    expect(container.firstChild).toHaveClass('atl-<%= fileName %>', 'variant-default');
   });
 });

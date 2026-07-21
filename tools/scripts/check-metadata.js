@@ -4,7 +4,7 @@
  *
  * Verifies the AI-readiness metadata layer (`libs/spec/src/metadata/`):
  *
- *   1. Every exported `Llm*Spec` interface in `libs/spec/src/index.ts` is
+ *   1. Every exported `Atl*Spec` interface in `libs/spec/src/index.ts` is
  *      either listed in COMPONENT_METADATA_REGISTRY (it has a metadata
  *      file) or in NON_COMPONENT_SPECS (it is a shared shape / option
  *      type that intentionally has none).
@@ -63,11 +63,11 @@ if (!registry || typeof registry !== 'object') {
 const nonComponent = readNonComponentSet(METADATA_INDEX);
 
 // ---------------------------------------------------------------------------
-// Step 2 — discover every Llm*Spec interface in the source of truth.
+// Step 2 — discover every Atl*Spec interface in the source of truth.
 // ---------------------------------------------------------------------------
 const specInterfaces = findExportedInterfaces(SPEC_FILE, 'Spec');
 
-// Also capture every Llm* union type (for variantMatrix coverage). Parse the
+// Also capture every Atl* union type (for variantMatrix coverage). Parse the
 // file once for both axes.
 const { unionMembers, propsBySpec } = parseSpec(SPEC_FILE);
 
@@ -161,12 +161,12 @@ function validateMetadata(specName, meta, file) {
         `${tag}: 'specNames' (${JSON.stringify(meta.specNames)}) does not include '${specName}'.`
       );
     }
-    // Every listed spec must resolve to a real exported Llm*Spec interface, so
+    // Every listed spec must resolve to a real exported Atl*Spec interface, so
     // a renamed or mistyped spec in a metadata file can't drift unnoticed.
     for (const sn of meta.specNames) {
       if (!specInterfaces.includes(sn)) {
         errors.push(
-          `${tag}: 'specNames' references '${sn}' which is not an exported Llm*Spec interface in libs/spec/src/index.ts.`
+          `${tag}: 'specNames' references '${sn}' which is not an exported Atl*Spec interface in libs/spec/src/index.ts.`
         );
       }
     }
@@ -247,7 +247,7 @@ function validateMetadata(specName, meta, file) {
   }
 
   // Use the unionMembers map for indirect references — when a prop's type is
-  // a named union alias like `LlmButtonVariant`, look it up there.
+  // a named union alias like `AtlButtonVariant`, look it up there.
   if (Array.isArray(meta.variantMatrix) && meta.variantMatrix.length > 0) {
     for (const prop of props) {
       const alias = aliasFromPropType(prop.typeText);
@@ -299,10 +299,10 @@ function readNonComponentSet(file) {
 }
 
 /** Parse libs/spec/src/index.ts once and return:
- *    unionMembers: { LlmFooVariant: ['primary', 'secondary', ...], ... }
- *    propsBySpec:  { LlmFooSpec: [{ name, typeText }, ...], ... }
+ *    unionMembers: { AtlFooVariant: ['primary', 'secondary', ...], ... }
+ *    propsBySpec:  { AtlFooSpec: [{ name, typeText }, ...], ... }
  *
- *  Inheritance is not flattened — base props (LlmFormFieldSpec) are tracked on
+ *  Inheritance is not flattened — base props (AtlFormFieldSpec) are tracked on
  *  the base interface. The variant-coverage check looks at the interface's own
  *  declared props which is what the metadata is supposed to describe.
  */
@@ -361,11 +361,11 @@ function literalMembersForPropType(typeText) {
   return parts.map((p) => p.slice(1, -1));
 }
 
-/** If a propType is a single identifier (a named alias like `LlmButtonVariant`),
+/** If a propType is a single identifier (a named alias like `AtlButtonVariant`),
  *  return the alias name. Otherwise null. */
 function aliasFromPropType(typeText) {
   if (!typeText) return null;
   const text = typeText.trim();
-  if (!/^Llm[A-Za-z]+$/.test(text)) return null;
+  if (!/^Atl[A-Za-z]+$/.test(text)) return null;
   return text;
 }

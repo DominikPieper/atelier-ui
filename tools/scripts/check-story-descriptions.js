@@ -10,7 +10,7 @@
  * raw source — wasteful and lossy.
  *
  * What this gate checks:
- *   1. Every `llm-*.stories.{ts,tsx}` file under
+ *   1. Every `atl-*.stories.{ts,tsx}` file under
  *      `libs/{angular,react,vue}/src/lib/<component>/` declares
  *      `parameters.docs.description.component: <value>` on the default
  *      export.

@@ -1,11 +1,11 @@
 /* ── <%= className %> ──────────────────────────────────────────────────── */
 
-.llm-<%= fileName %> {
+.atl-<%= fileName %> {
   display: block;
   font-family: var(--ui-font-family);
 }
 
 /* Variants */
-.llm-<%= fileName %>.variant-default {
+.atl-<%= fileName %>.variant-default {
   /* default styles */
 }

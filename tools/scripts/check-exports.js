@@ -9,8 +9,8 @@
  * ships source that consumers cannot import.
  *
  * Robust without TS resolution: every barrel references a component by its
- * module path (`export * from './lib/button/llm-button'` in React,
- * `export { LlmButton } from './lib/button/llm-button'` in Angular/Vue), so the
+ * module path (`export * from './lib/button/atl-button'` in React,
+ * `export { AtlButton } from './lib/button/atl-button'` in Angular/Vue), so the
  * check asserts the barrel text references `lib/<dir>/` for each component dir.
  *
  * Run via:  node tools/scripts/check-exports.js

@@ -13,8 +13,8 @@
  *   [EXTRA]    A story section uses a component that is not in tags[]
  *              (catalog under-reports — agents may miss a relevant component).
  *
- * The catalog uses parent-component names (LlmCard, LlmDialog, LlmTable, ...).
- * Stories use sub-components (LlmCardHeader, LlmDialogFooter, LlmTd, ...).
+ * The catalog uses parent-component names (AtlCard, AtlDialog, AtlTable, ...).
+ * Stories use sub-components (AtlCardHeader, AtlDialogFooter, AtlTd, ...).
  * SUBCOMPONENT_MAP normalizes sub-components to their parent before comparison.
  *
  * Run via:  node tools/scripts/check-cookbook-parity.mjs
@@ -36,33 +36,33 @@ const STORY_FILES = {
 // Sub-component → parent component. Catalog uses parent names; story imports
 // pull sub-components individually. Normalize before comparing.
 const SUBCOMPONENT_MAP = {
-  LlmCardHeader: 'LlmCard',
-  LlmCardContent: 'LlmCard',
-  LlmCardFooter: 'LlmCard',
-  LlmDialogHeader: 'LlmDialog',
-  LlmDialogContent: 'LlmDialog',
-  LlmDialogFooter: 'LlmDialog',
-  LlmDrawerHeader: 'LlmDrawer',
-  LlmDrawerContent: 'LlmDrawer',
-  LlmDrawerFooter: 'LlmDrawer',
-  LlmTab: 'LlmTabGroup',
-  LlmThead: 'LlmTable',
-  LlmTbody: 'LlmTable',
-  LlmTr: 'LlmTable',
-  LlmTh: 'LlmTable',
-  LlmTd: 'LlmTable',
-  LlmAccordionItem: 'LlmAccordionGroup',
-  LlmAccordionHeader: 'LlmAccordionGroup',
-  LlmOption: 'LlmSelect',
-  LlmMenuItem: 'LlmMenu',
-  LlmMenuSeparator: 'LlmMenu',
-  LlmMenuTrigger: 'LlmMenu',
+  AtlCardHeader: 'AtlCard',
+  AtlCardContent: 'AtlCard',
+  AtlCardFooter: 'AtlCard',
+  AtlDialogHeader: 'AtlDialog',
+  AtlDialogContent: 'AtlDialog',
+  AtlDialogFooter: 'AtlDialog',
+  AtlDrawerHeader: 'AtlDrawer',
+  AtlDrawerContent: 'AtlDrawer',
+  AtlDrawerFooter: 'AtlDrawer',
+  AtlTab: 'AtlTabGroup',
+  AtlThead: 'AtlTable',
+  AtlTbody: 'AtlTable',
+  AtlTr: 'AtlTable',
+  AtlTh: 'AtlTable',
+  AtlTd: 'AtlTable',
+  AtlAccordionItem: 'AtlAccordionGroup',
+  AtlAccordionHeader: 'AtlAccordionGroup',
+  AtlOption: 'AtlSelect',
+  AtlMenuItem: 'AtlMenu',
+  AtlMenuSeparator: 'AtlMenu',
+  AtlMenuTrigger: 'AtlMenu',
 };
 
-// Identifiers that look like Llm* but are not components. Strip these from
+// Identifiers that look like Atl* but are not components. Strip these from
 // extracted sets before reporting.
 const IGNORE_TOKENS = new Set([
-  'LlmComponentName',
+  'AtlComponentName',
 ]);
 
 function normalize(component) {
@@ -74,7 +74,7 @@ function readPatterns() {
   const src = readFileSync(PATTERNS_FILE, 'utf8');
   // Each pattern object has the shape:
   //   { id: '...', num: N, title: '...', description: '...',
-  //     tags: ['LlmX', ...], angular: ..., react: ..., vue: ... }
+  //     tags: ['AtlX', ...], angular: ..., react: ..., vue: ... }
   const re = /\{\s*id:\s*'([^']+)',\s*num:\s*(\d+),\s*title:\s*'([^']+)',[\s\S]*?tags:\s*\[([^\]]+)\]/g;
   const out = [];
   let m;
@@ -101,7 +101,7 @@ function readPatterns() {
  * The Vue stories file (and similarly-shaped React/Angular files) end with
  * a `// Storybook Meta & Stories` block that registers components per
  * exported story. That block must NOT bleed into the last pattern's
- * section, otherwise Vue's `components: { LlmInput, LlmSelect, ... }`
+ * section, otherwise Vue's `components: { AtlInput, AtlSelect, ... }`
  * registrations get attributed to whichever pattern happened to be last.
  * Same applies to a `// Shared inline styles` block in the React file.
  */
@@ -134,10 +134,10 @@ function splitStoryByNum(src) {
   return sections;
 }
 
-/** Scans a chunk of source for `Llm[A-Z]\w*` identifiers. */
+/** Scans a chunk of source for `Atl[A-Z]\w*` identifiers. */
 function extractComponents(chunk) {
   const set = new Set();
-  for (const m of chunk.matchAll(/\bLlm[A-Z][A-Za-z0-9]*/g)) {
+  for (const m of chunk.matchAll(/\bAtl[A-Z][A-Za-z0-9]*/g)) {
     if (IGNORE_TOKENS.has(m[0])) continue;
     set.add(m[0]);
   }

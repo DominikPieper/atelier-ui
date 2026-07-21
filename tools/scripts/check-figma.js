@@ -90,10 +90,10 @@ if (!snapshot || !Array.isArray(snapshot.components) || snapshot.components.leng
 }
 
 // ---------------------------------------------------------------------------
-// Load the spec side: exported Llm*Spec interfaces + the string-literal unions.
+// Load the spec side: exported Atl*Spec interfaces + the string-literal unions.
 // ---------------------------------------------------------------------------
 const specInterfaces = new Set(findExportedInterfaces(SPEC_FILE, 'Spec'));
-const unionMembers = parseSpecUnions(SPEC_FILE); // { LlmButtonVariant: ['primary', ...], ... }
+const unionMembers = parseSpecUnions(SPEC_FILE); // { AtlButtonVariant: ['primary', ...], ... }
 
 const registry = parseExportedVars(METADATA_INDEX).COMPONENT_METADATA_REGISTRY || {};
 const metadataCache = new Map();
@@ -111,7 +111,7 @@ function metadataForSpec(specName) {
 // Run the five checks per component.
 // ---------------------------------------------------------------------------
 for (const comp of snapshot.components) {
-  const selector = comp.selector; // e.g. 'LlmButton'
+  const selector = comp.selector; // e.g. 'AtlButton'
   const specName = `${selector}Spec`;
 
   checkNameAlignment(comp, selector, specName);
@@ -144,7 +144,7 @@ function checkNameAlignment(comp, selector, specName) {
   // exist and its values must match the literals exactly.
   for (const [unionName, members] of Object.entries(unionMembers)) {
     if (!unionName.startsWith(selector)) continue;
-    const axisProp = lowerFirst(unionName.slice(selector.length)); // LlmButtonVariant -> 'variant'
+    const axisProp = lowerFirst(unionName.slice(selector.length)); // AtlButtonVariant -> 'variant'
     if (!axisProp) continue;
     const figmaValues = axes[axisProp];
     if (!figmaValues) {
@@ -301,7 +301,7 @@ function q(s) {
   return `'${s}'`;
 }
 
-/** Parse libs/spec/src/index.ts for `type Llm... = 'a' | 'b'` string-literal
+/** Parse libs/spec/src/index.ts for `type Atl... = 'a' | 'b'` string-literal
  *  unions. Syntactic parse (createSourceFile) — fast, no type resolution. */
 function parseSpecUnions(file) {
   const src = fs.readFileSync(file, 'utf8');

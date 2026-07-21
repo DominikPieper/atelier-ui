@@ -39,7 +39,7 @@ const FILE_KEY = 'QMnDD8uZQPldPrlCwZZ58T';
  * Master COMPONENT_SET node IDs — the source of truth is plan/figma.md's
  * component table. Keep this in sync when masters are added/removed (the same
  * discipline plan/figma.md already documents). Masters with no spec interface
- * (e.g. LlmCodeBlock, LlmToast) are captured too; the gate's name check will
+ * (e.g. AtlCodeBlock, AtlToast) are captured too; the gate's name check will
  * flag them unless allowlisted in lib/allowlists.js.
  */
 const MASTERS = [
@@ -165,7 +165,7 @@ function isConnected(status) {
 // Shape helpers
 // ---------------------------------------------------------------------------
 
-/** "Action/LlmButton" -> "LlmButton" (strip section path prefix). */
+/** "Action/AtlButton" -> "AtlButton" (strip section path prefix). */
 function leafName(name) {
   return String(name || '').split('/').pop().trim();
 }

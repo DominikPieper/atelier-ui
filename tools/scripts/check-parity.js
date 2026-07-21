@@ -82,7 +82,7 @@ for (const comp of snapshot.components) {
   const selector = comp.selector;
   const moduleName = moduleForSelector(selector);
   if (!moduleName) {
-    // No spec/registry entry (e.g. LlmCodeBlock, LlmToast) — can't locate its
+    // No spec/registry entry (e.g. AtlCodeBlock, AtlToast) — can't locate its
     // files, so parity is untrackable here. Advisory, matches check-figma's
     // treatment of spec-less masters.
     warning('MAP', `${selector}: no spec/registry mapping, parity inputs cannot be located. Add it to COMPONENT_METADATA_REGISTRY or allowlist it.`);

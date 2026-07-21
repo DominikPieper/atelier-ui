@@ -8,9 +8,9 @@
  * renders unstyled" drift that the type contract cannot see (the prop compiles
  * fine; only the visual treatment is missing).
  *
- * Source of truth: the `Llm<Component><Axis>` string-literal unions in
+ * Source of truth: the `Atl<Component><Axis>` string-literal unions in
  * libs/spec/src/index.ts. For each, the matching CSS class is
- * `.<axis-lowercased>-<member>` (e.g. LlmButtonVariant 'primary' -> .variant-primary).
+ * `.<axis-lowercased>-<member>` (e.g. AtlButtonVariant 'primary' -> .variant-primary).
  *
  * Run via:  node tools/scripts/check-variants.mjs
  *           (or  npm run check:variants)
@@ -53,7 +53,7 @@ function parseSpecUnions() {
   ts.forEachChild(sf, (node) => {
     if (!ts.isTypeAliasDeclaration(node)) return;
     const name = node.name.text;
-    const m = /^Llm.+(Variant|Size|Shape|Position|Orientation)$/.exec(name);
+    const m = /^Atl.+(Variant|Size|Shape|Position|Orientation)$/.exec(name);
     if (!m) return;
     found.push({ union: name, axis: m[1], members: literalsOfAlias(node, checker) });
   });

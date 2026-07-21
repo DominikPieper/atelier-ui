@@ -16,24 +16,24 @@ const VARIANT_AXIS_EXCEPTIONS = new Set([
   // Angular tooltip positions via the CDK overlay's flexible-connected
   // position strategy (inline transforms), not .position-* CSS classes.
   // React/Vue use CSS classes, so they stay enforced.
-  'angular:LlmTooltipPosition:above',
-  'angular:LlmTooltipPosition:below',
-  'angular:LlmTooltipPosition:left',
-  'angular:LlmTooltipPosition:right',
+  'angular:AtlTooltipPosition:above',
+  'angular:AtlTooltipPosition:below',
+  'angular:AtlTooltipPosition:left',
+  'angular:AtlTooltipPosition:right',
 ]);
 
 /**
  * Unions whose `'default'` member is the unmodified base style (styled on the
- * component root, e.g. `.llm-table { … }`) with only non-default variants
+ * component root, e.g. `.atl-table { … }`) with only non-default variants
  * getting a `.variant-<x>` modifier — so `.variant-default` legitimately does
  * not exist. (badge / toast / accordion DO style `default` explicitly and are
  * intentionally absent here, so their `default` stays enforced.) (check-variants)
  */
 const DEFAULT_IS_BASE = new Set([
-  'LlmTabGroupVariant',
-  'LlmMenuVariant',
-  'LlmProgressVariant',
-  'LlmTableVariant',
+  'AtlTabGroupVariant',
+  'AtlMenuVariant',
+  'AtlProgressVariant',
+  'AtlTableVariant',
 ]);
 
 /**
@@ -63,8 +63,8 @@ const STORY_DESCRIPTION_SKIP_DIRS = new Set(['toast', 'code-block', 'showcase'])
  *
  * `check` is one of: name | variant | token | autolayout | desc. `detail` is the
  * gate's per-finding key:
- *   name      → `<axisProp>=<value>`        (e.g. 'LlmButton:name:size=xl')
- *   variant   → comma-joined axis row       (e.g. 'LlmDialog:variant:size=full')
+ *   name      → `<axisProp>=<value>`        (e.g. 'AtlButton:name:size=xl')
+ *   variant   → comma-joined axis row       (e.g. 'AtlDialog:variant:size=full')
  *   token     → `color:<node>` | `radius:<node>` | `spacing:<node>` | `nonsemantic:<token>`
  *   autolayout→ `<node name>`
  *   desc      → 'spec-ref'
@@ -74,11 +74,11 @@ const STORY_DESCRIPTION_SKIP_DIRS = new Set(['toast', 'code-block', 'showcase'])
  * when a finding is a genuine, documented false-positive. (check-figma)
  */
 const FIGMA_CONFORMANCE_EXCEPTIONS = new Set([
-  // LlmCardSpec.role (LlmCardRole: article | region | section) is a code-only
+  // AtlCardSpec.role (AtlCardRole: article | region | section) is a code-only
   // landmark prop — deliberately NOT a Figma variant axis (adding a landmark to
-  // every card pollutes the page outline). The LlmCard Figma description marks it
+  // every card pollutes the page outline). The AtlCard Figma description marks it
   // "code-only: role". So the missing "role" variant axis is expected, not drift.
-  'LlmCard:name:role',
+  'AtlCard:name:role',
 ]);
 
 module.exports = {

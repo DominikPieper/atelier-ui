@@ -23,7 +23,7 @@
  *         "title": "Login Form",
  *         "description": "...",
  *         "url": "https://atelier.pieper.io/patterns#pattern-1",
- *         "components": ["LlmCard", "LlmInput", ...],
+ *         "components": ["AtlCard", "AtlInput", ...],
  *         "frameworks": { "angular": "...", "react": "...", "vue": "..." }
  *       }
  *     ]

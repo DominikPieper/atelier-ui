@@ -35,9 +35,9 @@ function registry() {
 }
 
 /**
- * Map a Figma selector (e.g. `LlmButton`) to its metadata/lib module name
+ * Map a Figma selector (e.g. `AtlButton`) to its metadata/lib module name
  * (e.g. `button`) via the authoritative COMPONENT_METADATA_REGISTRY. Returns
- * null when the selector has no spec/registry entry (e.g. LlmCodeBlock, LlmToast)
+ * null when the selector has no spec/registry entry (e.g. AtlCodeBlock, AtlToast)
  * — the caller decides how to report an untrackable component.
  */
 function moduleForSelector(selector) {
