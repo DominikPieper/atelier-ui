@@ -490,10 +490,15 @@ items deliberately NOT fixed in that pass:
 - [ ] **AtlOption still unstyled** (documented in ADR-0028) — the option row
       inside `<atl-select>` never had a stylesheet; needs design work, not a
       scoping fix.
-- [x] **`check:parity` activated** — added to `check:all` (exit 0, warnings
-      non-blocking); AtlButton recorded (score 0.90). Remaining 28 masters
-      still UNVERIFIED-warn — record them via `figma_check_design_parity` +
-      `npm run parity:record` component-by-component.
+- [x] **`check:parity` activated & populated** — added to `check:all`;
+      27/29 masters now carry a parity record (scores 0.67–1.0, recorded
+      2026-07-22 via figma_check_design_parity). AtlToast/AtlCodeBlock are
+      untrackable by design (no spec interface — same exemption as the
+      check:figma spec-interface allowlist); their MAP warnings are
+      non-blocking. Low scores worth a look someday: Textarea 0.67,
+      Combobox 0.72, Input 0.72, Checkbox 0.73, Select 0.74 — mostly the
+      parity tool not matching Figma #suffix property ids, partly real
+      code-only props with no Figma axis.
 - [x] **`check:figma` activated in `check:all`** (2026-07-22) — the 77
       findings were resolved: code-only spec axes allowlisted with
       rationale (Input.type, Avatar.status, Table.align,
