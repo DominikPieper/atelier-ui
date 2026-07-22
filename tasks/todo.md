@@ -476,13 +476,12 @@ items deliberately NOT fixed in that pass:
 - [ ] **a11y-parity: remaining 26 components** — same per-component recipe;
       Select/Combobox next (needs a CDK-overlay-aware capture like Menu's
       document.body approach).
-- [ ] **4 hand-maintained spec→component maps drift-prone** —
-      `libs/spec/src/metadata/index.ts` (registry),
-      `tools/scripts/check-docs-sync.js` (SPEC_TO_DOCS),
-      `tools/scripts/lib/component-axes.js` (UNION_TO_COMPONENT),
-      `tools/scripts/check-cookbook-parity.mjs` (SUBCOMPONENT_MAP). The
-      metadata registry is the closest fit as single source; deriving the
-      others needs an ADR (shapes differ, e.g. radio vs radio-group slugs).
+- [x] **4 hand-maintained spec→component maps consolidated** (2026-07-22,
+      ADR-0031) — metadata/index.ts is the single source; DOCS_PRIMARY_SPECS
+      + SUBCOMPONENT_PARENTS moved there declaratively, union→component is
+      DERIVED from the registry (verified 24/24 identical) via the new
+      tools/scripts/lib/component-map.js reader; the three consumer scripts
+      read centrally, adding a component now touches one file.
 - [x] **eslint + vitest executors migrated to inferred targets**
       (2026-07-22, `convert-to-inferred` for both). Note: the inferred lint
       target also lints `.storybook/` — the addon-installed check needed
