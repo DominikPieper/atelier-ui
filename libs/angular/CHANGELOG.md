@@ -1,3 +1,13 @@
+## 0.2.3 (2026-07-22)
+
+### 🚀 Features
+
+- **a11y:** extend cross-framework a11y-parity gate to Dialog, Menu, Tabs, Alert ([4e6c297](https://github.com/DominikPieper/atelier-ui/commit/4e6c297))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.2.2 (2026-07-22)
 
 This was a version bump only for angular to align it with other projects, there were no code changes.
