@@ -16,6 +16,8 @@
     "build": {
       "executor": "@nx/angular:package",
       "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "defaultConfiguration": "production",
+      "dependsOn": ["^build"],
       "options": {
         "project": "libs/angular/ng-package.json",
         "tsConfig": "libs/angular/tsconfig.lib.json"
@@ -25,9 +27,7 @@
           "tsConfig": "libs/angular/tsconfig.lib.prod.json"
         },
         "development": {}
-      },
-      "defaultConfiguration": "production",
-      "dependsOn": ["^build"]
+      }
     },
     "nx-release-publish": {
       "options": {
@@ -35,14 +35,26 @@
       }
     },
     "test": {
-      "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{projectRoot}/{options.coverage.reportsDirectory}",
+        "{workspaceRoot}/coverage/angular"
+      ],
       "options": {
-        "reportsDirectory": "{projectRoot}/../../coverage/angular"
+        "coverage.reportsDirectory": "../../../coverage/angular"
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/.eslintrc.json",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.mjs",
+        "{workspaceRoot}/tools/eslint-rules/**/*",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
     },
     "storybook": {
       "executor": "nx:run-commands",

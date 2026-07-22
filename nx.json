@@ -81,6 +81,14 @@
       "options": {
         "targetName": "lint"
       }
+    },
+    {
+      "plugin": "@nx/vitest",
+      "options": {
+        "testTargetName": "test",
+        "testMode": "watch"
+      },
+      "include": ["libs/angular/**/*", "libs/react/**/*", "libs/vue/**/*"]
     }
   ],
   "generators": {

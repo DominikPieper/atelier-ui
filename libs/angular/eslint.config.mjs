@@ -116,4 +116,17 @@ export default tseslint.config(
     },
   },
   storybook.configs['flat/recommended'],
+  {
+    // Storybook addons are installed in the workspace root, not per-lib —
+    // point the addon-installed check at the root package.json. (The inferred
+    // lint target lints `.storybook/` too, which the old executor's
+    // src-only file patterns never reached.)
+    files: ['.storybook/main.ts'],
+    rules: {
+      'storybook/no-uninstalled-addons': [
+        'error',
+        { packageJsonLocation: '../../package.json' },
+      ],
+    },
+  },
 );

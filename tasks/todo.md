@@ -483,19 +483,22 @@ items deliberately NOT fixed in that pass:
       `tools/scripts/check-cookbook-parity.mjs` (SUBCOMPONENT_MAP). The
       metadata registry is the closest fit as single source; deriving the
       others needs an ADR (shapes differ, e.g. radio vs radio-group slugs).
-- [ ] **`@nx/eslint:lint` executor deprecated** (removal in Nx v24) in
-      `libs/{angular,react,vue}/project.json` — migrate via
-      `nx g @nx/eslint:convert-to-inferred`, separate mechanical commit.
-- [ ] **29 jsx-a11y/aria-role warnings in libs/react** — `AtlChatMessage`'s
-      domain prop is literally named `role` (`'user' | 'assistant' |
-      'system'`); it never reaches the DOM as an ARIA role (DOM gets
-      `role="listitem"`), but the linter flags the JSX attribute statically.
-      Decide: eslint override for chat files vs renaming the spec prop
-      (breaking, all three frameworks).
-- [ ] **astro-og-canvas TODO** (`docs/astro.config.mjs`) — deps
-      (`astro-og-canvas`, `canvaskit-wasm`) installed but unwired since the
-      docs redesign; either implement the OGImageRoute endpoint or drop the
-      two deps.
+- [x] **eslint + vitest executors migrated to inferred targets**
+      (2026-07-22, `convert-to-inferred` for both). Note: the inferred lint
+      target also lints `.storybook/` — the addon-installed check needed
+      `packageJsonLocation` pointed at the root package.json. Still
+      deprecated (lower urgency): `nxViteTsPaths`, `nxCopyAssetsPlugin`
+      (Vite plugins), `@nx/jest:jest` (the two scaffolding-tool projects).
+- [x] **jsx-a11y/aria-role warnings resolved** (2026-07-22) —
+      `ignoreNonDOM: true` keeps the check for real DOM elements and skips
+      custom-component props like `<AtlChatMessage role="user">`.
+- [ ] **Breaking batch (collect, ship together)**: AtlChatMessageSpec
+      `role` → `messageRole` across all three frameworks (removes the
+      ARIA-name collision for good).
+- [x] **astro-og-canvas: the TODO was stale** (2026-07-22) — the
+      OGImageRoute at docs/src/pages/og/[...slug].ts already exists and
+      BaseLayout wires per-page og:image URLs; removed the outdated
+      config comment.
 - [ ] **AtlOption still unstyled** (documented in ADR-0028) — the option row
       inside `<atl-select>` never had a stylesheet; needs design work, not a
       scoping fix.
