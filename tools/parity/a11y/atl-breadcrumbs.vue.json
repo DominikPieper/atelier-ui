@@ -1,0 +1,32 @@
+{
+  "default": [
+    {
+      "role": "navigation",
+      "name": "Breadcrumb"
+    },
+    {
+      "role": "list",
+      "name": "Home Products Shoes"
+    },
+    {
+      "role": "listitem",
+      "name": "Home"
+    },
+    {
+      "role": "link",
+      "name": "Home"
+    },
+    {
+      "role": "listitem",
+      "name": "Products"
+    },
+    {
+      "role": "link",
+      "name": "Products"
+    },
+    {
+      "role": "listitem",
+      "name": "Shoes"
+    }
+  ]
+}

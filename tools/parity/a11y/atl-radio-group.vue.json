@@ -1,0 +1,40 @@
+{
+  "default": [
+    {
+      "role": "radiogroup",
+      "name": "Small Large"
+    },
+    {
+      "role": "radio",
+      "name": "Small",
+      "states": {
+        "checked": true
+      }
+    },
+    {
+      "role": "radio",
+      "name": "Large"
+    }
+  ],
+  "disabled": [
+    {
+      "role": "radiogroup",
+      "name": "Small Large"
+    },
+    {
+      "role": "radio",
+      "name": "Small",
+      "states": {
+        "disabled": true,
+        "checked": true
+      }
+    },
+    {
+      "role": "radio",
+      "name": "Large",
+      "states": {
+        "disabled": true
+      }
+    }
+  ]
+}

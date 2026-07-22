@@ -1,0 +1,26 @@
+{
+  "off": [
+    {
+      "role": "switch",
+      "name": "Notifications"
+    }
+  ],
+  "on": [
+    {
+      "role": "switch",
+      "name": "Notifications",
+      "states": {
+        "checked": true
+      }
+    }
+  ],
+  "disabled": [
+    {
+      "role": "switch",
+      "name": "Notifications",
+      "states": {
+        "disabled": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "unchecked": [
+    {
+      "role": "checkbox",
+      "name": "Accept terms"
+    }
+  ],
+  "checked": [
+    {
+      "role": "checkbox",
+      "name": "Accept terms",
+      "states": {
+        "checked": true
+      }
+    }
+  ],
+  "disabled": [
+    {
+      "role": "checkbox",
+      "name": "Accept terms",
+      "states": {
+        "disabled": true
+      }
+    }
+  ]
+}

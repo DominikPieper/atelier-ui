@@ -473,9 +473,24 @@ items deliberately NOT fixed in that pass:
       provided through the tab-group context), and the a11y-tree normalizer
       glued adjacent element texts together (element boundaries are now
       word boundaries) plus missed `<hr>`'s implicit `separator` role.
-- [ ] **a11y-parity: remaining 26 components** — same per-component recipe;
-      Select/Combobox next (needs a CDK-overlay-aware capture like Menu's
-      document.body approach).
+- [x] **a11y-parity batch 2** (2026-07-22) — Input, Checkbox, Toggle,
+      RadioGroup, Progress, Breadcrumbs added (11/31 components now
+      gated). Found+fixed a real Vue bug (input missing aria-required).
+      Normalizer hardened: native checked/required states and label/for
+      name association now captured (checkbox checked/unchecked snapshots
+      were identical before — the gate compared nothing there).
+- [ ] **a11y-parity: Select/Combobox are OUT of the gate by design** —
+      React/Vue render a native <select> while Angular is a CDK-overlay
+      listbox (ADR-0007); their accessibility trees legitimately differ
+      (native options always in the DOM vs overlay panel). Cross-framework
+      tree equality would force rebuilding an adapter. If ever revisited:
+      either align the implementations or give the gate a
+      per-component-scenario exemption mechanism.
+- [ ] **a11y-parity: remaining components** — Card, Dialog-family done;
+      still open: Avatar/AvatarGroup, Badge, Skeleton, Table-family,
+      Pagination, Stepper, Tooltip (CDK overlay — Menu-style body
+      capture), Drawer, Chat, Icon, Textarea, Code-Block, Toast
+      (options-based — needs a container-render scenario).
 - [x] **4 hand-maintained spec→component maps consolidated** (2026-07-22,
       ADR-0031) — metadata/index.ts is the single source; DOCS_PRIMARY_SPECS
       + SUBCOMPONENT_PARENTS moved there declaratively, union→component is

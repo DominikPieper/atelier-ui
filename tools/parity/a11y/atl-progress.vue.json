@@ -1,0 +1,14 @@
+{
+  "default": [
+    {
+      "role": "progressbar",
+      "name": "Upload progress"
+    }
+  ],
+  "indeterminate": [
+    {
+      "role": "progressbar",
+      "name": "Upload progress"
+    }
+  ]
+}

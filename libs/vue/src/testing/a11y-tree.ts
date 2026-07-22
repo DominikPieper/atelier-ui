@@ -130,10 +130,21 @@ function visibleText(el: Element): string {
   return out;
 }
 
-/** Pragmatic accessible-name: aria-label → aria-labelledby → visible text. */
+/** Pragmatic accessible-name: aria-label → aria-labelledby → <label> association → visible text. */
 function accessibleName(el: Element): string {
   const label = el.getAttribute('aria-label');
   if (label && label.trim()) return label.trim();
+  // Native label association (label[for] or wrapping label) — what names
+  // native checkboxes/radios/switches in the real accessibility tree.
+  const labels = (el as unknown as { labels?: ArrayLike<Element> }).labels;
+  if (labels && labels.length) {
+    const text = Array.from(labels)
+      .map((l) => visibleText(l))
+      .join(' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    if (text) return text;
+  }
   const labelledby = el.getAttribute('aria-labelledby');
   if (labelledby) {
     // Global `document` (non-null in every lib.dom config) — avoids el.ownerDocument,
@@ -159,6 +170,12 @@ function normalizedStates(el: Element): Record<string, string | boolean> | undef
       ? Boolean((el as unknown as { disabled?: boolean }).disabled)
       : el.hasAttribute('disabled');
   if (nativeDisabled || el.getAttribute('aria-disabled') === 'true') states.disabled = true;
+
+  // Same unification for the other native form states: a native
+  // checkbox/radio/switch input and a role+aria host must compare equal.
+  const asInput = el as unknown as { checked?: boolean; required?: boolean };
+  if (typeof asInput.checked === 'boolean' && asInput.checked) states.checked = true;
+  if (typeof asInput.required === 'boolean' && asInput.required) states.required = true;
 
   for (const attr of STATE_ATTRS) {
     const v = el.getAttribute(attr);

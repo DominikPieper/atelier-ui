@@ -57,6 +57,7 @@ function onInput(event: Event) {
         :required="required"
         :name="name"
         :aria-invalid="invalid || undefined"
+        :aria-required="required || undefined"
         @input="onInput"
       />
     </div>
