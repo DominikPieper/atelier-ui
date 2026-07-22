@@ -35,6 +35,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0027](0027-angular-22-nx-23-upgrade.md) | Upgrade Angular to 22 and Nx to 23 | Accepted | Recorded |
 | [0028](0028-host-encapsulation-css-fix.md) | Fix the host-encapsulation CSS bug across 19 more Angular components | Accepted | Recorded |
 | [0029](0029-atl-naming-convention.md) | Rename component naming prefix from `Llm` to `Atl` | Accepted | Recorded |
+| [0030](0030-library-tokens-collection.md) | Library Tokens: a code-generated semantic tier in Figma | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 
