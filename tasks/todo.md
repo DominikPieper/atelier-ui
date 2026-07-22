@@ -529,9 +529,20 @@ items deliberately NOT fixed in that pass:
       --ui-color-surface(-raised). Real open design decision (align Figma
       to code, or redesign the code toast); fills are allowlisted in
       lib/allowlists.js until resolved.
-- [ ] **Figma token VALUES drift from code tokens** — e.g. UI tx/primary
-      #333e48 vs code --ui-color-text #0f172a; no Figma token carries the
-      code's --ui-color-primary #006470 except Component:button/bg-primary.
-      Needs a code→Figma value-sync pass (sync-workflow) across the
-      UI/Primitive/Component collections plus rebinding — separate,
-      design-reviewed effort.
+- [x] **Figma↔Code token sync landed** (2026-07-22) — new "Library
+      Tokens" collection (78 variables, Light+Dark, scoped, 6 in-collection
+      aliases) generated 1:1 from tokens.css via
+      tools/scripts/gen-figma-library-tokens.mjs; 4398 master bindings
+      migrated onto it (including ~3500 that pointed at ZOMBIE variables —
+      deleted-but-referenced remnants of the old UI-Tokens structure).
+      Component Tokens re-aliased onto the library tier; the docs-brand
+      collection renamed to "Docs Brand Tokens"; snapshot/gate now treat
+      "Library Tokens" as the semantic tier. Library dark mode previews
+      correctly for the first time (verified Button/Input screenshots
+      against the code's dark values). Toast resolved: the dark drawing
+      WAS the dark rendering — now bound to surface-raised/text and
+      correct in both modes; Badge-default's dark pill fixed the same way.
+      Follow-ups: typography tokens exist as variables but text nodes are
+      not yet bound (audit finding 6); docs-brand collection still holds
+      raw literals (finding 5); UI-Tokens zombie cleanup happened
+      implicitly (nothing references them anymore).

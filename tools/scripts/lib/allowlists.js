@@ -101,12 +101,6 @@ const FIGMA_CONFORMANCE_EXCEPTIONS = new Set([
   // design, so the masters are exempt from the interface-existence check.
   'AtlToast:name:spec-interface',
   'AtlCodeBlock:name:spec-interface',
-  // The Figma Toast is drawn as a DARK notification card (#1e293b/#334155)
-  // while the code renders a light surface-raised toast — a real, OPEN
-  // design decision (align Figma to code or redesign the code toast), not
-  // a mechanical binding fix. Tracked in tasks/todo.md; unblock the gate
-  // until a designer resolves it.
-  'AtlToast:token:color:variant=default, position=top-right',
   // Decorative "code line" rectangles inside the CodeBlock/Chat mockups —
   // 2px illustration bars, not component chrome.
   'AtlCodeBlock:token:radius:Rectangle',

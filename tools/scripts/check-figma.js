@@ -226,7 +226,7 @@ function checkTokenLinks(comp, selector) {
     critical('TOKEN', `${selector}: raw padding/gap (not bound) on ${rawSpacingNodes.length} node(s) [${rawSpacingNodes.join(', ')}]. Bind to a spacing variable (--ui-spacing-*).`);
   }
   if (nonSemantic.length) {
-    warning('TOKEN', `${selector}: bound to non-semantic collection — ${nonSemantic.join('; ')}. Components should bind to the UI Tokens (semantic) layer, not primitives.`);
+    warning('TOKEN', `${selector}: bound to non-semantic collection — ${nonSemantic.join('; ')}. Components should bind to the Library Tokens (semantic) layer, not primitives.`);
   }
 }
 

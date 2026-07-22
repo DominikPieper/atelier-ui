@@ -91,10 +91,10 @@ async function main() {
     const figmaLastModified =
       status?.details?.lastModified ?? status?.lastModified ?? null;
 
-    // 2. UI Tokens collection — the valid --ui-* semantic layer.
+    // 2. Library Tokens collection — the semantic tier mirroring tokens.css (--ui-*).
     const vars = await call(client, 'figma_get_variables', {
       format: 'filtered',
-      collection: 'UI Tokens',
+      collection: 'Library Tokens',
       verbosity: 'summary',
     });
     const uiTokens = (vars?.data?.variables ?? []).map((v) => v.name).sort();
@@ -266,7 +266,7 @@ function walk(node, out) {
       // layer, so binding to them is correct, not a smell.
       if (
         v?.collection &&
-        !['UI Tokens', 'Component Tokens'].includes(v.collection) &&
+        !['Library Tokens', 'Component Tokens'].includes(v.collection) &&
         v.name &&
         !/^(spacing|radius|icon-stroke)\//.test(v.name)
       )
