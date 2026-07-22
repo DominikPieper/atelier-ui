@@ -30,36 +30,10 @@ const SPEC_FILE = path.join(ROOT, 'libs/spec/src/index.ts');
 const DOCS_FILE = path.join(ROOT, 'docs/src/data/components.ts');
 
 /**
- * Maps spec interface names to their docs component key.
- * Only "primary" interfaces (one per docs entry) are listed here.
- * Child interfaces (AtlRadioSpec, AtlTabSpec, etc.) and the base
- * AtlFormFieldSpec are intentionally omitted.
+ * Primary spec interface -> docs slug. Single-sourced from
+ * libs/spec/src/metadata/index.ts (DOCS_PRIMARY_SPECS) since ADR-0031.
  */
-const SPEC_TO_DOCS = {
-  AtlButtonSpec: 'button',
-  AtlBadgeSpec: 'badge',
-  AtlAvatarSpec: 'avatar',
-  AtlCardSpec: 'card',
-  AtlInputSpec: 'input',
-  AtlTextareaSpec: 'textarea',
-  AtlCheckboxSpec: 'checkbox',
-  AtlToggleSpec: 'toggle',
-  AtlRadioGroupSpec: 'radio-group',
-  AtlSelectSpec: 'select',
-  AtlAlertSpec: 'alert',
-  AtlDialogSpec: 'dialog',
-  AtlTabGroupSpec: 'tabs',
-  AtlAccordionGroupSpec: 'accordion',
-  AtlMenuSpec: 'menu',
-  AtlTooltipSpec: 'tooltip',
-  AtlToastOptions: 'toast',
-  AtlSkeletonSpec: 'skeleton',
-  AtlPaginationSpec: 'pagination',
-  AtlProgressSpec: 'progress',
-  AtlDrawerSpec: 'drawer',
-  AtlBreadcrumbsSpec: 'breadcrumbs',
-  AtlChatSpec: 'chat',
-};
+const SPEC_TO_DOCS = require('./lib/component-map').maps().docsPrimary;
 
 /**
  * Returns the set of string-literal values a type permits, or null when the

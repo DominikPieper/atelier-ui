@@ -1,38 +1,14 @@
 'use strict';
 /**
- * Shared map of the CSS-/default-bearing spec axis unions to their component
- * directory. Consumed by check-variants.js (CSS class parity) and
- * check-defaults.js (cross-framework default parity) so the two gates agree on
- * which unions exist and where they live. The directory cannot always be
- * derived from the type name (AtlTabGroupVariant lives in `tabs`,
- * AtlToastContainerPosition in `toast`), hence the explicit map.
+ * CSS-/default-bearing spec axis unions mapped to their component directory.
+ * Consumed by check-variants.js (CSS class parity) and check-defaults.js
+ * (cross-framework default parity). Since ADR-0031 the map is DERIVED in
+ * lib/component-map.js from the spec's axis unions + the metadata registry
+ * (plus UNION_COMPONENT_EXCEPTIONS for the spec-less Toast) — nothing to
+ * maintain here when adding a component.
  */
-const UNION_TO_COMPONENT = {
-  AtlButtonVariant: 'button',
-  AtlButtonSize: 'button',
-  AtlBadgeVariant: 'badge',
-  AtlBadgeSize: 'badge',
-  AtlAvatarSize: 'avatar',
-  AtlAvatarShape: 'avatar',
-  AtlCardVariant: 'card',
-  AtlAlertVariant: 'alert',
-  AtlDialogSize: 'dialog',
-  AtlTabGroupVariant: 'tabs',
-  AtlAccordionGroupVariant: 'accordion',
-  AtlMenuVariant: 'menu',
-  AtlTooltipPosition: 'tooltip',
-  AtlToastVariant: 'toast',
-  AtlToastContainerPosition: 'toast',
-  AtlSkeletonVariant: 'skeleton',
-  AtlProgressVariant: 'progress',
-  AtlProgressSize: 'progress',
-  AtlDrawerPosition: 'drawer',
-  AtlDrawerSize: 'drawer',
-  AtlTableVariant: 'table',
-  AtlTableSize: 'table',
-  AtlIconSize: 'icon',
-  AtlChatVariant: 'chat',
-};
+const { maps } = require('./component-map');
+const UNION_TO_COMPONENT = maps().unionToComponent;
 
 /** Axis suffix -> CSS class prefix AND the prop name that carries the axis. */
 const AXIS_PREFIX = {

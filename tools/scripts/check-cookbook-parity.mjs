@@ -23,6 +23,8 @@
 import { readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
+const { maps } = createRequire(import.meta.url)('./lib/component-map.js');
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, '../..');
@@ -33,31 +35,9 @@ const STORY_FILES = {
   vue: resolve(ROOT, 'libs/vue/src/lib/cookbook.stories.ts'),
 };
 
-// Sub-component → parent component. Catalog uses parent names; story imports
-// pull sub-components individually. Normalize before comparing.
-const SUBCOMPONENT_MAP = {
-  AtlCardHeader: 'AtlCard',
-  AtlCardContent: 'AtlCard',
-  AtlCardFooter: 'AtlCard',
-  AtlDialogHeader: 'AtlDialog',
-  AtlDialogContent: 'AtlDialog',
-  AtlDialogFooter: 'AtlDialog',
-  AtlDrawerHeader: 'AtlDrawer',
-  AtlDrawerContent: 'AtlDrawer',
-  AtlDrawerFooter: 'AtlDrawer',
-  AtlTab: 'AtlTabGroup',
-  AtlThead: 'AtlTable',
-  AtlTbody: 'AtlTable',
-  AtlTr: 'AtlTable',
-  AtlTh: 'AtlTable',
-  AtlTd: 'AtlTable',
-  AtlAccordionItem: 'AtlAccordionGroup',
-  AtlAccordionHeader: 'AtlAccordionGroup',
-  AtlOption: 'AtlSelect',
-  AtlMenuItem: 'AtlMenu',
-  AtlMenuSeparator: 'AtlMenu',
-  AtlMenuTrigger: 'AtlMenu',
-};
+// Sub-component → parent component. Single-sourced from
+// libs/spec/src/metadata/index.ts (SUBCOMPONENT_PARENTS) since ADR-0031.
+const SUBCOMPONENT_MAP = maps().subcomponentParents;
 
 // Identifiers that look like Atl* but are not components. Strip these from
 // extracted sets before reporting.

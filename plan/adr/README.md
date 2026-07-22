@@ -36,6 +36,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0028](0028-host-encapsulation-css-fix.md) | Fix the host-encapsulation CSS bug across 19 more Angular components | Accepted | Recorded |
 | [0029](0029-atl-naming-convention.md) | Rename component naming prefix from `Llm` to `Atl` | Accepted | Recorded |
 | [0030](0030-library-tokens-collection.md) | Library Tokens: a code-generated semantic tier in Figma | Accepted | Recorded |
+| [0031](0031-single-source-component-maps.md) | Single-source component maps in the metadata registry | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 
