@@ -1,3 +1,13 @@
+## 0.2.4 (2026-07-22)
+
+### 🩹 Fixes
+
+- **angular:** require Angular 22 peers — the library is built with v22 ([dc2e6cf](https://github.com/DominikPieper/atelier-ui/commit/dc2e6cf))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.2.3 (2026-07-22)
 
 ### 🚀 Features
