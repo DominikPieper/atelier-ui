@@ -1,3 +1,13 @@
+## 0.2.6 (2026-07-22)
+
+### 🚀 Features
+
+- **a11y:** gate 10 more components — coverage 11 -> 21 of 31 ([#5](https://github.com/DominikPieper/atelier-ui/issues/5))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.2.5 (2026-07-22)
 
 ### 🚀 Features
