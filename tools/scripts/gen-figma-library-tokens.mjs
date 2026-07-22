@@ -126,40 +126,46 @@ function scopesFor(token) {
   return ['ALL_SCOPES'];
 }
 
-const css = readFileSync(SOURCE, 'utf8');
-const light = parseBlock(css, /:root\s*/);
-const dark = parseBlock(css, /\[data-theme="dark"\]\s*/);
+export function buildDefs() {
+  const css = readFileSync(SOURCE, 'utf8');
+  const light = parseBlock(css, /:root\s*/);
+  const dark = parseBlock(css, /\[data-theme="dark"\]\s*/);
 
-const defs = [];
-for (const [cssVar, rawLight] of Object.entries(light)) {
-  if (SKIP.test(cssVar)) continue;
-  const named = cssName(cssVar);
-  if (!named) continue;
-  const rawDark = dark[cssVar] ?? rawLight;
-  const lightVal = parseValue(rawLight, named.type);
-  const darkVal = parseValue(rawDark, named.type);
-  if (lightVal === null || darkVal === null) {
-    console.error(`skip (unparsed): ${cssVar} = ${rawLight} / ${rawDark}`);
-    continue;
+  const defs = [];
+  for (const [cssVar, rawLight] of Object.entries(light)) {
+    if (SKIP.test(cssVar)) continue;
+    const named = cssName(cssVar);
+    if (!named) continue;
+    const rawDark = dark[cssVar] ?? rawLight;
+    const lightVal = parseValue(rawLight, named.type);
+    const darkVal = parseValue(rawDark, named.type);
+    if (lightVal === null || darkVal === null) {
+      console.error(`skip (unparsed): ${cssVar} = ${rawLight} / ${rawDark}`);
+      continue;
+    }
+    const entry = {
+      cssVar,
+      name: named.token,
+      type: named.type,
+      scopes: scopesFor(named.token),
+    };
+    // Same var() target in both modes → a real in-collection alias.
+    if (lightVal?.ref && darkVal?.ref && lightVal.ref === darkVal.ref) {
+      entry.aliasOf = cssName(lightVal.ref)?.token ?? null;
+    } else {
+      // Resolve any single-mode ref to its literal in that mode.
+      const resolveRef = (val, table) =>
+        val?.ref ? parseValue(table[val.ref] ?? '', named.type) : val;
+      entry.light = resolveRef(lightVal, light);
+      entry.dark = resolveRef(darkVal, { ...light, ...dark });
+    }
+    defs.push(entry);
   }
-  const entry = {
-    cssVar,
-    name: named.token,
-    type: named.type,
-    scopes: scopesFor(named.token),
-  };
-  // Same var() target in both modes → a real in-collection alias.
-  if (lightVal?.ref && darkVal?.ref && lightVal.ref === darkVal.ref) {
-    entry.aliasOf = cssName(lightVal.ref)?.token ?? null;
-  } else {
-    // Resolve any single-mode ref to its literal in that mode.
-    const resolveRef = (val, table) =>
-      val?.ref ? parseValue(table[val.ref] ?? '', named.type) : val;
-    entry.light = resolveRef(lightVal, light);
-    entry.dark = resolveRef(darkVal, { ...light, ...dark });
-  }
-  defs.push(entry);
+  return defs;
 }
 
-process.stdout.write(JSON.stringify(defs, null, 2) + '\n');
-console.error(`${defs.length} token definitions (source: ${SOURCE.replace(ROOT + '/', '')})`);
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  const defs = buildDefs();
+  process.stdout.write(JSON.stringify(defs, null, 2) + '\n');
+  console.error(`${defs.length} token definitions (source: ${SOURCE.replace(ROOT + '/', '')})`);
+}

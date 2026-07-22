@@ -554,14 +554,23 @@ items deliberately NOT fixed in that pass:
       (Library Tokens was scoped at creation).
 - [x] Cover page (finding 9) — added 📕 Cover with version band, update
       date, and the two-token-system note.
-- [ ] **Typography bindings** (finding 6) — `font-size/*`, `font-weight/*`,
-      `line-height/*`, `font/family` variables exist in Library Tokens but
-      the masters' text nodes are not yet bound; needs a careful pass with
-      per-master visual verification (line-height changes reflow).
-- [ ] **Docs Brand Tokens alias pass** (finding 5) — 39 colors hold raw
-      literals; alias the single-hue tints onto Primitive Tokens steps,
-      keep documented mode-switch literals as-is.
-- [ ] **Generator → full sync script** — gen-figma-library-tokens.mjs
-      only prints definitions; extend it in the figma-snapshot.mjs style
-      (spawned MCP client) so a tokens.css change can be pushed into the
-      collection with one command instead of a hand-run figma_execute.
+- [x] **Typography bindings** (finding 6, 2026-07-22) — 648 text nodes
+      bound to `font-size/*` (98%; 13 off-scale mockup sizes 9/13/15/26px
+      left literal). Deliberately NOT bound: `line-height/*` (Figma binds
+      FLOAT as px, the code's 1.25/1.5 are factors — binding would collapse
+      text boxes, same bug class as the lineHeight-as-pixels repair) and
+      `font/family` (token holds a CSS fallback stack, not a Figma family
+      name). `font-weight/*` is not bindable in Figma (fontStyle is a
+      string).
+- [x] **Docs Brand Tokens alias pass** (finding 5, 2026-07-22) — 14
+      mode-values aliased onto exact Primitive steps (including per-mode
+      alias-target switches like area/ki-ink Light→ki/800 / Dark→ki/200);
+      64 mode-values stay deliberate literals (no exact primitive step
+      exists — documented in their descriptions).
+- [x] **Generator → full sync script** (2026-07-22) —
+      `npm run figma:sync-tokens` (tools/scripts/figma-sync-library-tokens.mjs)
+      pushes tokens.css into the Library Tokens collection: idempotent
+      upsert (create/update values, scopes, aliases), float32-safe value
+      comparison, orphan REPORTING without deletion (removing bound
+      variables is a Breaking op). Verified idempotent: second run reports
+      78 unchanged.
