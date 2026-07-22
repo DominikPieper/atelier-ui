@@ -1,0 +1,47 @@
+{
+  "default": [
+    {
+      "role": "tablist",
+      "name": "Tab One Tab Two"
+    },
+    {
+      "role": "tab",
+      "name": "Tab One",
+      "states": {
+        "selected": true
+      }
+    },
+    {
+      "role": "tab",
+      "name": "Tab Two"
+    },
+    {
+      "role": "tabpanel",
+      "name": "Tab One"
+    }
+  ],
+  "withDisabled": [
+    {
+      "role": "tablist",
+      "name": "Tab One Tab Two"
+    },
+    {
+      "role": "tab",
+      "name": "Tab One",
+      "states": {
+        "selected": true
+      }
+    },
+    {
+      "role": "tab",
+      "name": "Tab Two",
+      "states": {
+        "disabled": true
+      }
+    },
+    {
+      "role": "tabpanel",
+      "name": "Tab One"
+    }
+  ]
+}

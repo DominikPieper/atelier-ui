@@ -462,11 +462,20 @@ Source: high-effort workflow code review of the Llm→Atl rename diff (8
 distinct defects, all fixed same day) + repo-health sweep. These are the
 items deliberately NOT fixed in that pass:
 
-- [ ] **a11y-parity coverage is 1 of 31** — only Button has `.a11y.spec` in
-      each framework; `gen:a11y` hardcodes `atl-button.a11y`. Expanding is a
-      per-component effort (ADR-0025 scope decision): parametrize `gen:a11y`,
-      add specs component-by-component starting with the interaction-heavy
-      ones (Dialog, Menu, Tabs, Select).
+- [x] **a11y-parity coverage 1 → 5 of 31** (2026-07-22) — `gen:a11y`
+      de-hardcoded (now regenerates every `*.a11y.spec.*`); Dialog, Menu,
+      Tabs, Alert added across all three frameworks. The new snapshots
+      immediately caught and fixed three real adapter bugs: React/Vue
+      MenuTrigger exposed no `aria-haspopup`/`aria-expanded` (CDK does this
+      automatically in Angular — now both set it on the trigger element),
+      Vue's tab panel had `aria-labelledby="undefined"` and no `id` (the
+      tab button's `aria-controls` pointed at nothing — groupId is now
+      provided through the tab-group context), and the a11y-tree normalizer
+      glued adjacent element texts together (element boundaries are now
+      word boundaries) plus missed `<hr>`'s implicit `separator` role.
+- [ ] **a11y-parity: remaining 26 components** — same per-component recipe;
+      Select/Combobox next (needs a CDK-overlay-aware capture like Menu's
+      document.body approach).
 - [ ] **4 hand-maintained spec→component maps drift-prone** —
       `libs/spec/src/metadata/index.ts` (registry),
       `tools/scripts/check-docs-sync.js` (SPEC_TO_DOCS),

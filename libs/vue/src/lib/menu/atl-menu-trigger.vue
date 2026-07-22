@@ -10,7 +10,7 @@ export const AtlMenuTriggerKey: InjectionKey<AtlMenuTriggerContext> =
 </script>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, provide, ref } from 'vue';
+import { onBeforeUnmount, onMounted, provide, ref, watch } from 'vue';
 import './atl-menu.css';
 
 defineOptions({ name: 'AtlMenuTrigger' });
@@ -18,6 +18,20 @@ defineOptions({ name: 'AtlMenuTrigger' });
 const open = ref(false);
 const triggerRef = ref<HTMLElement | null>(null);
 const menuRef = ref<HTMLElement | null>(null);
+
+// Menu-button ARIA on the slotted trigger element — mirrors what the CDK
+// menu trigger does in the Angular adapter, so consumers get correct
+// semantics without wiring attributes by hand.
+watch(
+  [open, triggerRef],
+  () => {
+    const el = triggerRef.value?.firstElementChild;
+    if (!el) return;
+    el.setAttribute('aria-haspopup', 'menu');
+    el.setAttribute('aria-expanded', String(open.value));
+  },
+  { immediate: true, flush: 'post' }
+);
 
 function toggle() {
   open.value = !open.value;

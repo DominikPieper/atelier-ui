@@ -1,0 +1,24 @@
+{
+  "info": [
+    {
+      "role": "alert",
+      "name": "Session expires soon"
+    }
+  ],
+  "danger": [
+    {
+      "role": "alert",
+      "name": "Session expires soon"
+    }
+  ],
+  "dismissible": [
+    {
+      "role": "alert",
+      "name": "Session expires soon"
+    },
+    {
+      "role": "button",
+      "name": "Dismiss"
+    }
+  ]
+}

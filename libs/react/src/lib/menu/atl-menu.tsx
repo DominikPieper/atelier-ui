@@ -135,6 +135,16 @@ export function AtlMenuTrigger({ menu, children }: AtlMenuTriggerProps) {
   const triggerRef = useRef<HTMLElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
+  // Menu-button ARIA on the trigger element itself (the render prop binds the
+  // ref to it) — mirrors what the CDK menu trigger does in the Angular adapter,
+  // so consumers get correct semantics without wiring attributes by hand.
+  useEffect(() => {
+    const el = triggerRef.current;
+    if (!el) return;
+    el.setAttribute('aria-haspopup', 'menu');
+    el.setAttribute('aria-expanded', String(open));
+  }, [open]);
+
   useEffect(() => {
     if (!open) return;
 

@@ -1,0 +1,11 @@
+{
+  "open": [
+    {
+      "role": "dialog",
+      "name": "Confirm",
+      "states": {
+        "modal": true
+      }
+    }
+  ]
+}

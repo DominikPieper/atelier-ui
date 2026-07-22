@@ -1,0 +1,44 @@
+{
+  "closed": [
+    {
+      "role": "button",
+      "name": "Open Menu",
+      "states": {
+        "haspopup": "menu"
+      }
+    }
+  ],
+  "open": [
+    {
+      "role": "button",
+      "name": "Open Menu",
+      "states": {
+        "expanded": true,
+        "haspopup": "menu"
+      }
+    },
+    {
+      "role": "menu",
+      "name": "Copy Paste Delete"
+    },
+    {
+      "role": "menuitem",
+      "name": "Copy"
+    },
+    {
+      "role": "menuitem",
+      "name": "Paste"
+    },
+    {
+      "role": "separator",
+      "name": ""
+    },
+    {
+      "role": "menuitem",
+      "name": "Delete",
+      "states": {
+        "disabled": true
+      }
+    }
+  ]
+}

@@ -26,7 +26,7 @@
     "check:parity": "node tools/scripts/check-parity.js",
     "check:a11y-parity": "node tools/scripts/check-a11y-parity.js",
     "figma:snapshot": "node tools/scripts/figma-snapshot.mjs",
-    "gen:a11y": "UPDATE_A11Y=1 nx run-many -t test -p react,vue,angular -- atl-button.a11y",
+    "gen:a11y": "UPDATE_A11Y=1 nx run-many -t test -p react,vue,angular -- .a11y",
     "parity:record": "node tools/scripts/parity-record.mjs",
     "check:all": "npm run check:sync && npm run check:spec && npm run check:behaviors-gen && npm run check:tokens && npm run check:variants && npm run check:css-tokens && npm run check:exports && npm run check:defaults && npm run check:behavior && npm run check:docs && npm run check:metadata && npm run check:story-descriptions && npm run check:llms && npm run check:cookbook && npm run check:cookbook-manifest && npm run check:a11y-parity && npm run check:parity && npm run check:figma",
     "sync:tokens": "node tools/scripts/sync-tokens.mjs",

@@ -13,6 +13,8 @@ export interface AtlTabGroupContext {
   registerTab: (tab: AtlTabInfo) => void;
   unregisterTab: (id: string) => void;
   selectTab: (index: number) => void;
+  /** Shared id prefix so panels can derive their own id + aria-labelledby. */
+  groupId: string;
 }
 
 export const AtlTabGroupKey: InjectionKey<AtlTabGroupContext> = Symbol('AtlTabGroup');
@@ -61,12 +63,15 @@ function selectTab(index: number) {
   emit('update:selectedIndex', index);
 }
 
+const groupId = `atl-tab-group-${Math.random().toString(36).slice(2, 9)}`;
+
 provide(AtlTabGroupKey, {
   selectedIndex: internalIndex,
   tabs,
   registerTab,
   unregisterTab,
   selectTab,
+  groupId,
 });
 
 function onKeydown(event: KeyboardEvent) {
@@ -95,7 +100,6 @@ function onKeydown(event: KeyboardEvent) {
   }
 }
 
-const groupId = `atl-tab-group-${Math.random().toString(36).slice(2, 9)}`;
 const classes = computed(() => ['atl-tab-group', `variant-${props.variant}`]);
 </script>
 

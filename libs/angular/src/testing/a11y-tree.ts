@@ -68,6 +68,8 @@ function implicitRole(el: Element): string | null {
       return 'listitem';
     case 'table':
       return 'table';
+    case 'hr':
+      return 'separator';
     case 'dialog':
       return 'dialog';
     case 'h1':
@@ -119,7 +121,10 @@ function visibleText(el: Element): string {
       if (isHidden(child)) return;
       const tag = child.tagName.toLowerCase();
       if (tag === 'script' || tag === 'style' || tag === 'template') return;
-      out += visibleText(child);
+      // Element boundaries are word boundaries — join with a space so
+      // adjacent children compare equal across templates with and without
+      // inter-element whitespace (the caller collapses runs and trims).
+      out += ' ' + visibleText(child) + ' ';
     }
   });
   return out;
