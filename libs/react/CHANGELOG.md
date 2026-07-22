@@ -1,3 +1,13 @@
+## 0.2.5 (2026-07-22)
+
+### 🚀 Features
+
+- **a11y:** gate 6 more components; capture native form states in the normalizer ([6282b4f](https://github.com/DominikPieper/atelier-ui/commit/6282b4f))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.2.4 (2026-07-22)
 
 This was a version bump only for react to align it with other projects, there were no code changes.
