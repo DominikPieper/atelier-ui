@@ -1,0 +1,27 @@
+{
+  "default": [
+    {
+      "role": "tablist",
+      "name": "1 Account 2 Profile 3 Review"
+    },
+    {
+      "role": "tab",
+      "name": "Account"
+    },
+    {
+      "role": "tab",
+      "name": "Profile",
+      "states": {
+        "selected": true
+      }
+    },
+    {
+      "role": "tab",
+      "name": "Review"
+    },
+    {
+      "role": "tabpanel",
+      "name": "2"
+    }
+  ]
+}

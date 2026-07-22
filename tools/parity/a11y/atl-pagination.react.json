@@ -1,0 +1,83 @@
+{
+  "default": [
+    {
+      "role": "navigation",
+      "name": "Pagination"
+    },
+    {
+      "role": "list",
+      "name": "« ‹ 1 2 3 5 › »"
+    },
+    {
+      "role": "listitem",
+      "name": "«"
+    },
+    {
+      "role": "button",
+      "name": "First page"
+    },
+    {
+      "role": "listitem",
+      "name": "‹"
+    },
+    {
+      "role": "button",
+      "name": "Previous page"
+    },
+    {
+      "role": "listitem",
+      "name": "1"
+    },
+    {
+      "role": "button",
+      "name": "Page 1"
+    },
+    {
+      "role": "listitem",
+      "name": "2"
+    },
+    {
+      "role": "button",
+      "name": "Page 2",
+      "states": {
+        "current": "page"
+      }
+    },
+    {
+      "role": "listitem",
+      "name": "3"
+    },
+    {
+      "role": "button",
+      "name": "Page 3"
+    },
+    {
+      "role": "listitem",
+      "name": ""
+    },
+    {
+      "role": "listitem",
+      "name": "5"
+    },
+    {
+      "role": "button",
+      "name": "Page 5"
+    },
+    {
+      "role": "listitem",
+      "name": "›"
+    },
+    {
+      "role": "button",
+      "name": "Next page"
+    },
+    {
+      "role": "listitem",
+      "name": "»"
+    },
+    {
+      "role": "button",
+      "name": "Last page"
+    }
+  ]
+}

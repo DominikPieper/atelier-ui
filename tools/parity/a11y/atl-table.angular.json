@@ -1,0 +1,12 @@
+{
+  "default": [
+    {
+      "role": "region",
+      "name": "Table"
+    },
+    {
+      "role": "table",
+      "name": "Name Role Alice Admin Bob Editor"
+    }
+  ]
+}

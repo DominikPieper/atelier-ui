@@ -1,0 +1,26 @@
+{
+  "default": [
+    {
+      "role": "textbox",
+      "name": ""
+    }
+  ],
+  "invalid": [
+    {
+      "role": "textbox",
+      "name": "",
+      "states": {
+        "invalid": true
+      }
+    }
+  ],
+  "disabled": [
+    {
+      "role": "textbox",
+      "name": "",
+      "states": {
+        "disabled": true
+      }
+    }
+  ]
+}

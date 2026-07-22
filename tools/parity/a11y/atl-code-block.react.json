@@ -1,0 +1,8 @@
+{
+  "default": [
+    {
+      "role": "button",
+      "name": "Copy code"
+    }
+  ]
+}

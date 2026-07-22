@@ -486,11 +486,15 @@ items deliberately NOT fixed in that pass:
       tree equality would force rebuilding an adapter. If ever revisited:
       either align the implementations or give the gate a
       per-component-scenario exemption mechanism.
-- [ ] **a11y-parity: remaining components** — Card, Dialog-family done;
-      still open: Avatar/AvatarGroup, Badge, Skeleton, Table-family,
-      Pagination, Stepper, Tooltip (CDK overlay — Menu-style body
-      capture), Drawer, Chat, Icon, Textarea, Code-Block, Toast
-      (options-based — needs a container-render scenario).
+- [x] **a11y-parity batch 3** (2026-07-22) — Badge, Avatar, Skeleton,
+      Textarea, Card, Icon, Pagination, Stepper, Table, CodeBlock added
+      (21/31 gated). Real bug #5 found+fixed: Vue pagination rendered
+      buttons directly in <nav> without the list/listitem structure
+      Angular+React expose (its .page-list CSS was dead until then).
+- [ ] **a11y-parity: final batch (overlay/options cases)** — Tooltip (CDK
+      overlay — Menu-style document.body capture), Drawer, Toast
+      (options-based — container-render scenario), Chat. AvatarGroup has
+      no own snapshot yet (shares avatar/ module).
 - [x] **4 hand-maintained spec→component maps consolidated** (2026-07-22,
       ADR-0031) — metadata/index.ts is the single source; DOCS_PRIMARY_SPECS
       + SUBCOMPONENT_PARENTS moved there declaratively, union→component is

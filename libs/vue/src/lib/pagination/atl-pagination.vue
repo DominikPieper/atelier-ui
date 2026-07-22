@@ -49,54 +49,65 @@ function goTo(p: number) {
 
 <template>
   <nav class="atl-pagination" aria-label="Pagination">
-    <button
-      v-if="showFirstLast"
-      class="page-btn nav-btn"
-      :disabled="page <= 1"
-      aria-label="First page"
-      @click="goTo(1)"
-    >
-      «
-    </button>
-    <button
-      class="page-btn nav-btn"
-      :disabled="page <= 1"
-      aria-label="Previous page"
-      @click="goTo(page - 1)"
-    >
-      ‹
-    </button>
+    <ul class="page-list">
+      <li v-if="showFirstLast">
+        <button
+          class="page-btn nav-btn"
+          :disabled="page <= 1"
+          aria-label="First page"
+          @click="goTo(1)"
+        >
+          «
+        </button>
+      </li>
+      <li>
+        <button
+          class="page-btn nav-btn"
+          :disabled="page <= 1"
+          aria-label="Previous page"
+          @click="goTo(page - 1)"
+        >
+          ‹
+        </button>
+      </li>
 
-    <template v-for="item in pageItems" :key="item.type === 'page' ? item.page : item.key">
-      <span v-if="item.type === 'ellipsis'" class="ellipsis" aria-hidden="true">…</span>
-      <button
-        v-else
-        class="page-btn"
-        :class="{ active: item.page === page }"
-        :aria-label="`Page ${item.page}`"
-        :aria-current="item.page === page ? 'page' : undefined"
-        @click="goTo(item.page)"
-      >
-        {{ item.page }}
-      </button>
-    </template>
+      <template v-for="item in pageItems" :key="item.type === 'page' ? item.page : item.key">
+        <li v-if="item.type === 'ellipsis'">
+          <span class="ellipsis" aria-hidden="true">…</span>
+        </li>
+        <li v-else>
+          <button
+            class="page-btn"
+            :class="{ active: item.page === page }"
+            :aria-label="`Page ${item.page}`"
+            :aria-current="item.page === page ? 'page' : undefined"
+            @click="goTo(item.page)"
+          >
+            {{ item.page }}
+          </button>
+        </li>
+      </template>
 
-    <button
-      class="page-btn nav-btn"
-      :disabled="page >= pageCount"
-      aria-label="Next page"
-      @click="goTo(page + 1)"
-    >
-      ›
-    </button>
-    <button
-      v-if="showFirstLast"
-      class="page-btn nav-btn"
-      :disabled="page >= pageCount"
-      aria-label="Last page"
-      @click="goTo(pageCount)"
-    >
-      »
-    </button>
+      <li>
+        <button
+          class="page-btn nav-btn"
+          :disabled="page >= pageCount"
+          aria-label="Next page"
+          @click="goTo(page + 1)"
+        >
+          ›
+        </button>
+      </li>
+      <li v-if="showFirstLast">
+        <button
+          class="page-btn nav-btn"
+          :disabled="page >= pageCount"
+          aria-label="Last page"
+          @click="goTo(pageCount)"
+        >
+          »
+        </button>
+      </li>
+    </ul>
   </nav>
 </template>
