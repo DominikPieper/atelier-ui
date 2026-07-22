@@ -136,6 +136,10 @@ report();
  *  with no matching spec union (e.g. interaction `state`) are ignored. */
 function checkNameAlignment(comp, selector, specName) {
   if (!specInterfaces.has(specName)) {
+    // Some masters are deliberately spec-less (Toast is options-based per
+    // ADR-0008, CodeBlock has no spec contract) — allowlist as
+    // `selector:name:spec-interface` instead of inventing an interface.
+    if (allowed(selector, 'name', 'spec-interface')) return;
     blocker('NAME', `${selector}: Figma component "${comp.name}" has no matching spec interface ${specName} in libs/spec/src/index.ts. Rename the Figma component or fix the spec.`);
     return;
   }

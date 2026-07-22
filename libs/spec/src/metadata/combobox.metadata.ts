@@ -25,8 +25,11 @@ export const metadata: ComponentMetadata = {
   ],
   relatedComponents: ['AtlSelectSpec', 'AtlInputSpec'],
   variantMatrix: [
-    { state: 'empty' },
-    { state: 'typing' },
+    // `state` values follow the Figma master's interaction axis
+    // (default | hover | focus | open | filtered | selected) — "filtered"
+    // is the mid-typing state with a narrowed option list.
+    { state: 'default' },
+    { state: 'filtered' },
     { state: 'selected' },
     { disabled: true },
     { invalid: true },

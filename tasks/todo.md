@@ -494,11 +494,27 @@ items deliberately NOT fixed in that pass:
       non-blocking); AtlButton recorded (score 0.90). Remaining 28 masters
       still UNVERIFIED-warn — record them via `figma_check_design_parity` +
       `npm run parity:record` component-by-component.
-- [ ] **`check:figma` NOT yet in `check:all`/CI** — the full 29-master
-      snapshot surfaced 77 pre-existing conformance findings (16 blocker /
-      61 critical / 2 warning): missing variant axes (Input.type,
-      Avatar.status, Table.align, Chat.status/messageRole), missing
-      variantMatrix entries (Select, Pagination, Drawer, Combobox), unbound
-      colors/radii/spacing across ~20 masters, Toast/CodeBlock without spec
-      interfaces. Fix Figma-side (figma-workspace-architect job) or
-      allowlist the deliberate gaps, then activate the gate.
+- [x] **`check:figma` activated in `check:all`** (2026-07-22) — the 77
+      findings were resolved: code-only spec axes allowlisted with
+      rationale (Input.type, Avatar.status, Table.align,
+      Chat.status/messageRole, Toast/CodeBlock spec-interface), stale
+      variantMatrix vocab aligned to the Figma axes (Select/Combobox),
+      Pagination's illustrative `page` axis renamed to `position`,
+      ~2750 token bindings set (colors to UI/Component tier, radius/
+      spacing to the primitive scale), primitive radius values pulled
+      onto the code scale (r-md 12→10, r-lg 16→14, r-xl 28→20),
+      off-scale spacings snapped to the 4px grid, auto-layout enabled on
+      Radio/Combobox/AvatarGroup/Toggle frames, and 28 broken
+      lineHeight-as-pixels text nodes (1.25px!) repaired. Gate green:
+      0 blocker / 0 critical / 3 non-blocking warnings.
+- [ ] **Figma Toast is designed DARK, code renders LIGHT** — the Figma
+      master draws a #1e293b notification card while atl-toast.css uses
+      --ui-color-surface(-raised). Real open design decision (align Figma
+      to code, or redesign the code toast); fills are allowlisted in
+      lib/allowlists.js until resolved.
+- [ ] **Figma token VALUES drift from code tokens** — e.g. UI tx/primary
+      #333e48 vs code --ui-color-text #0f172a; no Figma token carries the
+      code's --ui-color-primary #006470 except Component:button/bg-primary.
+      Needs a code→Figma value-sync pass (sync-workflow) across the
+      UI/Primitive/Component collections plus rebinding — separate,
+      design-reviewed effort.

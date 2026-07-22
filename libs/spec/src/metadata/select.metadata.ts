@@ -25,8 +25,11 @@ export const metadata: ComponentMetadata = {
   ],
   relatedComponents: ['AtlRadioGroupSpec', 'AtlComboboxSpec'],
   variantMatrix: [
-    { state: 'empty' },
-    { state: 'selected' },
+    // `state` values follow the Figma master's interaction axis
+    // (default | hover | focus | open | filled) — "filled" is the
+    // has-a-selection state.
+    { state: 'default' },
+    { state: 'filled' },
     { disabled: true },
     { invalid: true },
     { required: true },

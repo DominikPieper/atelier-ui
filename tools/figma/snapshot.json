@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-07-21T20:29:01.423Z",
-    "gitSha": "2ac9047",
+    "generatedAt": "2026-07-22T06:30:53.106Z",
+    "gitSha": "4cc3b86",
     "serverVersion": null,
     "coverage": "All 29 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -206,12 +206,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         }
       ]
@@ -255,13 +250,8 @@
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 6,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         }
       ]
@@ -342,7 +332,7 @@
           "hasChildren": true,
           "layoutMode": "VERTICAL",
           "rawColors": [],
-          "unboundRadius": 12,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -353,12 +343,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -368,12 +353,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -383,12 +363,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -397,13 +372,8 @@
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 6,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         }
       ]
@@ -476,13 +446,8 @@
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 9999,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         }
       ]
@@ -526,7 +491,7 @@
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 8,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         }
@@ -571,7 +536,7 @@
           "hasChildren": true,
           "layoutMode": "VERTICAL",
           "rawColors": [],
-          "unboundRadius": 12,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -582,12 +547,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -597,12 +557,7 @@
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -612,13 +567,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom",
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -627,13 +576,8 @@
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 8,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -642,13 +586,8 @@
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 8,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         }
       ]
@@ -696,18 +635,6 @@
           "hasChildren": true,
           "layoutMode": "VERTICAL",
           "rawColors": [],
-          "unboundRadius": 8,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "Frame",
-          "type": "FRAME",
-          "hasChildren": true,
-          "layoutMode": "HORIZONTAL",
-          "rawColors": [
-            "#f8fafc"
-          ],
           "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
@@ -719,12 +646,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -734,12 +656,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -749,12 +666,17 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -764,12 +686,7 @@
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         }
       ]
@@ -805,7 +722,7 @@
           "hasChildren": true,
           "layoutMode": "VERTICAL",
           "rawColors": [],
-          "unboundRadius": 8,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -826,12 +743,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -841,11 +753,7 @@
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingBottom"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -865,12 +773,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -890,12 +793,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         }
       ]
@@ -927,11 +825,8 @@
           "hasChildren": true,
           "layoutMode": "VERTICAL",
           "rawColors": [],
-          "unboundRadius": 8,
-          "unboundSpacing": [
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -941,12 +836,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -956,9 +846,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -968,12 +856,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -983,9 +866,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -995,12 +876,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -1010,9 +886,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -1022,12 +896,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -1037,9 +906,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -1049,12 +916,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -1064,9 +926,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -1076,12 +936,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -1091,9 +946,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         }
       ]
@@ -1133,13 +986,8 @@
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 6,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         }
       ]
@@ -1179,14 +1027,8 @@
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 8,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom",
-            "itemSpacing"
-          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         }
       ]
@@ -1239,18 +1081,6 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "Frame",
-          "type": "FRAME",
-          "hasChildren": false,
-          "layoutMode": "NONE",
-          "rawColors": [],
-          "unboundRadius": 4,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         }
@@ -1299,28 +1129,16 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "Frame",
-          "type": "FRAME",
-          "hasChildren": true,
-          "layoutMode": "NONE",
-          "rawColors": [],
-          "unboundRadius": 9999,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
           "name": "Frame",
           "type": "FRAME",
-          "hasChildren": false,
-          "layoutMode": "NONE",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 9999,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         }
@@ -1365,7 +1183,7 @@
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 8,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         }
@@ -1414,18 +1232,6 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "Frame",
-          "type": "FRAME",
-          "hasChildren": false,
-          "layoutMode": "NONE",
-          "rawColors": [],
-          "unboundRadius": 9999,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         }
@@ -1474,20 +1280,16 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingTop",
-            "paddingBottom",
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
           "name": "indicator",
           "type": "FRAME",
           "hasChildren": true,
-          "layoutMode": "NONE",
+          "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 9999,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         }
@@ -1517,20 +1319,7 @@
         }
       ],
       "sampledVariant": "55:99",
-      "nodes": [
-        {
-          "name": "variant=text",
-          "type": "COMPONENT",
-          "hasChildren": false,
-          "layoutMode": "HORIZONTAL",
-          "rawColors": [
-            "#e2e8f0"
-          ],
-          "unboundRadius": 4,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        }
-      ]
+      "nodes": []
     },
     {
       "name": "Display/AtlProgress",
@@ -1611,26 +1400,6 @@
           "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
-        },
-        {
-          "name": "track",
-          "type": "RECTANGLE",
-          "hasChildren": false,
-          "layoutMode": "NONE",
-          "rawColors": [],
-          "unboundRadius": 9999,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "fill",
-          "type": "RECTANGLE",
-          "hasChildren": false,
-          "layoutMode": "NONE",
-          "rawColors": [],
-          "unboundRadius": 9999,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
         }
       ]
     },
@@ -1702,7 +1471,7 @@
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 9999,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         }
@@ -1773,14 +1542,8 @@
             "#1e293b",
             "#334155"
           ],
-          "unboundRadius": 10,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom",
-            "itemSpacing"
-          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -1789,44 +1552,6 @@
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "💬",
-          "type": "TEXT",
-          "hasChildren": false,
-          "layoutMode": "NONE",
-          "rawColors": [
-            "#f1f5f9"
-          ],
-          "unboundRadius": 0,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "Action completed.",
-          "type": "TEXT",
-          "hasChildren": false,
-          "layoutMode": "NONE",
-          "rawColors": [
-            "#f1f5f9"
-          ],
-          "unboundRadius": 0,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "✕",
-          "type": "TEXT",
-          "hasChildren": false,
-          "layoutMode": "NONE",
-          "rawColors": [
-            "#f1f5f9"
-          ],
           "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
@@ -1865,9 +1590,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         }
       ]
@@ -1878,7 +1601,7 @@
       "nodeId": "55:145",
       "description": "Page navigator for paged data. Maps to AtlPaginationSpec in libs/spec.\n\nUse when: data spans many pages and user navigates incrementally. For infinite scroll surfaces, omit pagination entirely.\n\nAPI surface:\n- Variant `page`: first | middle | last — illustrative position\n- (code-only: `page`, `pageCount`, `siblingCount`, `showFirstLast`)\n\nA11y: nav with aria-label=\"Pagination\"; current page marked aria-current=\"page\".",
       "variantAxes": {
-        "page": [
+        "position": [
           "first",
           "middle",
           "last"
@@ -1886,44 +1609,25 @@
       },
       "variants": [
         {
-          "page": "first"
+          "position": "first"
         },
         {
-          "page": "middle"
+          "position": "middle"
         },
         {
-          "page": "last"
+          "position": "last"
         }
       ],
       "sampledVariant": "55:142",
       "nodes": [
         {
-          "name": "page=first",
+          "name": "position=first",
           "type": "COMPONENT",
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "Frame",
-          "type": "FRAME",
-          "hasChildren": true,
-          "layoutMode": "HORIZONTAL",
-          "rawColors": [
-            "#f8fafc"
-          ],
-          "unboundRadius": 6,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -1932,7 +1636,7 @@
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 6,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -1941,10 +1645,8 @@
           "type": "FRAME",
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
-          "rawColors": [
-            "#f8fafc"
-          ],
-          "unboundRadius": 6,
+          "rawColors": [],
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -1953,10 +1655,8 @@
           "type": "FRAME",
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
-          "rawColors": [
-            "#f8fafc"
-          ],
-          "unboundRadius": 6,
+          "rawColors": [],
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -1965,10 +1665,8 @@
           "type": "FRAME",
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
-          "rawColors": [
-            "#f8fafc"
-          ],
-          "unboundRadius": 6,
+          "rawColors": [],
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -1977,10 +1675,8 @@
           "type": "FRAME",
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
-          "rawColors": [
-            "#f8fafc"
-          ],
-          "unboundRadius": 6,
+          "rawColors": [],
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -1989,10 +1685,8 @@
           "type": "FRAME",
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
-          "rawColors": [
-            "#f8fafc"
-          ],
-          "unboundRadius": 6,
+          "rawColors": [],
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -2001,10 +1695,8 @@
           "type": "FRAME",
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
-          "rawColors": [
-            "#f8fafc"
-          ],
-          "unboundRadius": 6,
+          "rawColors": [],
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -2013,16 +1705,19 @@
           "type": "FRAME",
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
-          "rawColors": [
-            "#f8fafc"
-          ],
-          "unboundRadius": 6,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         }
       ]
@@ -2083,21 +1778,7 @@
           "type": "COMPONENT",
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
-          "rawColors": [
-            "#f0f0f7"
-          ],
-          "unboundRadius": 8,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "backdrop",
-          "type": "RECTANGLE",
-          "hasChildren": false,
-          "layoutMode": "NONE",
-          "rawColors": [
-            "#000000"
-          ],
+          "rawColors": [],
           "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
@@ -2119,13 +1800,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom",
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2134,7 +1809,7 @@
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 6,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -2145,13 +1820,7 @@
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom",
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2161,13 +1830,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom",
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2176,13 +1839,8 @@
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 6,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2191,13 +1849,8 @@
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 6,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         }
       ]
@@ -2258,9 +1911,7 @@
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2269,7 +1920,7 @@
           "hasChildren": true,
           "layoutMode": "VERTICAL",
           "rawColors": [],
-          "unboundRadius": 8,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -2290,11 +1941,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2304,11 +1951,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2318,11 +1961,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2352,10 +1991,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2365,10 +2001,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2378,10 +2011,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2401,10 +2031,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2414,10 +2041,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2427,10 +2051,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2450,10 +2071,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2463,10 +2081,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2476,10 +2091,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2499,10 +2111,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2512,10 +2121,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2525,10 +2131,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         }
       ]
@@ -2568,7 +2171,7 @@
           "hasChildren": true,
           "layoutMode": "VERTICAL",
           "rawColors": [],
-          "unboundRadius": 8,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -2579,13 +2182,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom",
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2594,14 +2191,8 @@
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 6,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom",
-            "itemSpacing"
-          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2621,13 +2212,7 @@
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom",
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2637,9 +2222,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2649,9 +2232,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2661,9 +2242,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2673,9 +2252,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2685,9 +2262,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2697,9 +2272,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2709,9 +2282,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2721,9 +2292,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         }
       ]
@@ -2772,18 +2341,16 @@
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
           "name": "input",
           "type": "FRAME",
           "hasChildren": true,
-          "layoutMode": "NONE",
+          "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 8,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         }
@@ -2849,13 +2416,7 @@
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom",
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2865,9 +2426,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2877,9 +2436,7 @@
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2888,7 +2445,7 @@
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 9999,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -2899,9 +2456,7 @@
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2921,9 +2476,7 @@
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2932,7 +2485,7 @@
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 9999,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -2943,9 +2496,7 @@
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2965,9 +2516,7 @@
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -2976,7 +2525,7 @@
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 9999,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -2987,9 +2536,7 @@
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         }
       ]
@@ -3041,11 +2588,9 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
-          "layoutMode": "NONE",
-          "rawColors": [
-            "#e2e8f0"
-          ],
-          "unboundRadius": 9999,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -3053,9 +2598,9 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
-          "layoutMode": "NONE",
+          "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 9999,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -3063,9 +2608,9 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
-          "layoutMode": "NONE",
+          "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 9999,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -3073,9 +2618,9 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
-          "layoutMode": "NONE",
+          "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 9999,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         }
@@ -3114,7 +2659,7 @@
           "rawColors": [
             "#f1f3f6"
           ],
-          "unboundRadius": 12,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -3124,10 +2669,9 @@
           "hasChildren": false,
           "layoutMode": "NONE",
           "rawColors": [
-            "#ffffff",
             "#e5e7eb"
           ],
-          "unboundRadius": 8,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -3149,10 +2693,9 @@
           "hasChildren": false,
           "layoutMode": "NONE",
           "rawColors": [
-            "#ffffff",
             "#e5e7eb"
           ],
-          "unboundRadius": 8,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -3162,10 +2705,9 @@
           "hasChildren": false,
           "layoutMode": "NONE",
           "rawColors": [
-            "#ffffff",
             "#e5e7eb"
           ],
-          "unboundRadius": 8,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -3175,10 +2717,9 @@
           "hasChildren": false,
           "layoutMode": "NONE",
           "rawColors": [
-            "#ffffff",
             "#e5e7eb"
           ],
-          "unboundRadius": 8,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -3188,20 +2729,7 @@
           "hasChildren": false,
           "layoutMode": "NONE",
           "rawColors": [
-            "#ffffff",
             "#e5e7eb"
-          ],
-          "unboundRadius": 8,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "drawer-panel",
-          "type": "RECTANGLE",
-          "hasChildren": false,
-          "layoutMode": "NONE",
-          "rawColors": [
-            "#ffffff"
           ],
           "unboundRadius": 0,
           "unboundSpacing": [],
@@ -3224,12 +2752,12 @@
           "type": "ELLIPSE",
           "hasChildren": false,
           "layoutMode": "NONE",
-          "rawColors": [
-            "#b5e61c"
-          ],
+          "rawColors": [],
           "unboundRadius": 0,
           "unboundSpacing": [],
-          "nonSemanticTokens": []
+          "nonSemanticTokens": [
+            "ki/500"
+          ]
         },
         {
           "name": "avatar-glyph",
@@ -3261,20 +2789,7 @@
           "hasChildren": false,
           "layoutMode": "NONE",
           "rawColors": [
-            "#ffffff",
             "#e5e7eb"
-          ],
-          "unboundRadius": 6,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "close-x",
-          "type": "TEXT",
-          "hasChildren": false,
-          "layoutMode": "NONE",
-          "rawColors": [
-            "#64748b"
           ],
           "unboundRadius": 0,
           "unboundSpacing": [],
@@ -3288,7 +2803,7 @@
           "rawColors": [
             "#f5f5f5"
           ],
-          "unboundRadius": 12,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -3305,30 +2820,6 @@
           "nonSemanticTokens": []
         },
         {
-          "name": "msg-user-1",
-          "type": "RECTANGLE",
-          "hasChildren": false,
-          "layoutMode": "NONE",
-          "rawColors": [
-            "#007070"
-          ],
-          "unboundRadius": 12,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "msg-user-1-text",
-          "type": "TEXT",
-          "hasChildren": false,
-          "layoutMode": "NONE",
-          "rawColors": [
-            "#ffffff"
-          ],
-          "unboundRadius": 0,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        },
-        {
           "name": "msg-asst-2",
           "type": "RECTANGLE",
           "hasChildren": false,
@@ -3336,7 +2827,7 @@
           "rawColors": [
             "#f5f5f5"
           ],
-          "unboundRadius": 12,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -3347,42 +2838,6 @@
           "layoutMode": "NONE",
           "rawColors": [
             "#0f172a"
-          ],
-          "unboundRadius": 0,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "msg-user-2",
-          "type": "RECTANGLE",
-          "hasChildren": false,
-          "layoutMode": "NONE",
-          "rawColors": [
-            "#007070"
-          ],
-          "unboundRadius": 12,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "msg-user-2-text",
-          "type": "TEXT",
-          "hasChildren": false,
-          "layoutMode": "NONE",
-          "rawColors": [
-            "#ffffff"
-          ],
-          "unboundRadius": 0,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "footer-bg",
-          "type": "RECTANGLE",
-          "hasChildren": false,
-          "layoutMode": "NONE",
-          "rawColors": [
-            "#ffffff"
           ],
           "unboundRadius": 0,
           "unboundSpacing": [],
@@ -3406,14 +2861,8 @@
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 9999,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom",
-            "itemSpacing"
-          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -3422,7 +2871,7 @@
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 8,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -3433,12 +2882,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -3447,7 +2891,7 @@
           "hasChildren": true,
           "layoutMode": "VERTICAL",
           "rawColors": [],
-          "unboundRadius": 8,
+          "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
@@ -3458,13 +2902,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom",
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -3473,14 +2911,8 @@
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
-          "unboundRadius": 6,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom",
-            "itemSpacing"
-          ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -3500,13 +2932,7 @@
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "paddingLeft",
-            "paddingRight",
-            "paddingTop",
-            "paddingBottom",
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -3516,9 +2942,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -3528,9 +2952,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -3540,9 +2962,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -3552,9 +2972,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -3564,9 +2982,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -3576,9 +2992,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -3588,9 +3002,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
@@ -3600,9 +3012,7 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [
-            "itemSpacing"
-          ],
+          "unboundSpacing": [],
           "nonSemanticTokens": []
         }
       ]

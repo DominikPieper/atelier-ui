@@ -26,7 +26,9 @@ export const metadata: ComponentMetadata = {
   ],
   relatedComponents: ['AtlDialogSpec', 'AtlMenuSpec'],
   variantMatrix: [
-    { position: 'left', size: 'sm' },
+    // sm is only built on position=right in the Figma master (asymmetric
+    // matrix documented in its description) — keep the row on that combo.
+    { position: 'right', size: 'sm' },
     { position: 'left', size: 'md' },
     { position: 'right', size: 'md' },
     { position: 'right', size: 'lg' },

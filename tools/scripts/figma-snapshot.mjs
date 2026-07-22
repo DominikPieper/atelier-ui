@@ -258,7 +258,19 @@ function walk(node, out) {
   for (const entry of Object.values(bound)) {
     const list = Array.isArray(entry) ? entry : [entry];
     for (const v of list) {
-      if (v?.collection && v.collection !== 'UI Tokens' && v.name) nonSemanticTokens.push(v.name);
+      // Both the semantic UI tier and the component tier (ADR-0018:
+      // Primitive→UI→Component) are legitimate binding targets for
+      // component chrome — only direct primitive COLOR bindings are
+      // flagged. Dimension primitives (spacing/*, radius/*, icon-stroke/*)
+      // have no higher-tier equivalent: the scale itself is the semantic
+      // layer, so binding to them is correct, not a smell.
+      if (
+        v?.collection &&
+        !['UI Tokens', 'Component Tokens'].includes(v.collection) &&
+        v.name &&
+        !/^(spacing|radius|icon-stroke)\//.test(v.name)
+      )
+        nonSemanticTokens.push(v.name);
     }
   }
 
