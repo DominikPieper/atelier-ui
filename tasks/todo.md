@@ -546,3 +546,22 @@ items deliberately NOT fixed in that pass:
       not yet bound (audit finding 6); docs-brand collection still holds
       raw literals (finding 5); UI-Tokens zombie cleanup happened
       implicitly (nothing references them anymore).
+
+## Figma workspace — remaining audit items after the Library-Tokens landing (2026-07-22)
+
+- [x] Scopes on the legacy collections (audit finding 4) — 116 variables
+      across Docs Brand/Primitive/Effects Tokens scoped by name pattern
+      (Library Tokens was scoped at creation).
+- [x] Cover page (finding 9) — added 📕 Cover with version band, update
+      date, and the two-token-system note.
+- [ ] **Typography bindings** (finding 6) — `font-size/*`, `font-weight/*`,
+      `line-height/*`, `font/family` variables exist in Library Tokens but
+      the masters' text nodes are not yet bound; needs a careful pass with
+      per-master visual verification (line-height changes reflow).
+- [ ] **Docs Brand Tokens alias pass** (finding 5) — 39 colors hold raw
+      literals; alias the single-hue tints onto Primitive Tokens steps,
+      keep documented mode-switch literals as-is.
+- [ ] **Generator → full sync script** — gen-figma-library-tokens.mjs
+      only prints definitions; extend it in the figma-snapshot.mjs style
+      (spawned MCP client) so a tokens.css change can be pushed into the
+      collection with one command instead of a hand-run figma_execute.
