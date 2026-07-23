@@ -1,0 +1,12 @@
+{
+  "inline": [
+    {
+      "role": "listitem",
+      "name": "Hello"
+    },
+    {
+      "role": "listitem",
+      "name": "Hi, how can I help?"
+    }
+  ]
+}

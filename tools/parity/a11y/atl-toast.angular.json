@@ -1,0 +1,16 @@
+{
+  "visible": [
+    {
+      "role": "status",
+      "name": "Saved successfully"
+    },
+    {
+      "role": "status",
+      "name": "Saved successfully"
+    },
+    {
+      "role": "button",
+      "name": "Dismiss"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+/**
+ * Cross-framework a11y conformance snapshot (ADR-0025) — Vue adapter.
+ * See the button copy for the UPDATE_A11Y protocol; the committed per-framework
+ * snapshots are diffed by `npm run check:a11y-parity`.
+ *
+ * Toast captures `document.body`: a headless probe shows ONE notification via
+ * the provider (no trigger button rendered), keeping the body-level tree
+ * comparable with the Angular/React adapters. `duration: 0` disables the
+ * auto-dismiss timer so no state escapes the render.
+ */
+import { render, screen } from '@testing-library/vue';
+import { defineComponent, onMounted, nextTick } from 'vue';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
+import { a11yTree } from '../../testing/a11y-tree';
+import AtlToastProvider from './atl-toast-provider.vue';
+import AtlToastContainer from './atl-toast-container.vue';
+import { useAtlToast } from './atl-toast';
+
+const FW = 'vue';
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../../..');
+const SNAP = resolve(ROOT, `tools/parity/a11y/atl-toast.${FW}.json`);
+
+const Probe = defineComponent({
+  name: 'Probe',
+  setup() {
+    const toast = useAtlToast();
+    onMounted(() =>
+      toast.show('Saved successfully', { variant: 'success', dismissible: true, duration: 0 })
+    );
+    return () => null;
+  },
+});
+
+async function capture() {
+  const r = render({
+    components: { AtlToastProvider, AtlToastContainer, Probe },
+    template: `<AtlToastProvider><Probe /><AtlToastContainer /></AtlToastProvider>`,
+  });
+  await screen.findByText('Saved successfully');
+  await nextTick();
+  const tree = a11yTree(document.body);
+  r.unmount();
+  return { visible: tree };
+}
+
+describe('AtlToast — a11y conformance snapshot', () => {
+  it('live render matches the committed a11y snapshot', async () => {
+    const live = await capture();
+    if (process.env.UPDATE_A11Y) {
+      writeFileSync(SNAP, JSON.stringify(live, null, 2) + '\n');
+      return;
+    }
+    expect(live).toEqual(JSON.parse(readFileSync(SNAP, 'utf8')));
+  });
+});

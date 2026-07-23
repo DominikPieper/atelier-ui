@@ -1,0 +1,18 @@
+{
+  "closed": [
+    {
+      "role": "button",
+      "name": "Save"
+    }
+  ],
+  "open": [
+    {
+      "role": "button",
+      "name": "Save"
+    },
+    {
+      "role": "tooltip",
+      "name": "Save your changes"
+    }
+  ]
+}

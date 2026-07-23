@@ -491,10 +491,17 @@ items deliberately NOT fixed in that pass:
       (21/31 gated). Real bug #5 found+fixed: Vue pagination rendered
       buttons directly in <nav> without the list/listitem structure
       Angular+React expose (its .page-list CSS was dead until then).
-- [ ] **a11y-parity: final batch (overlay/options cases)** — Tooltip (CDK
-      overlay — Menu-style document.body capture), Drawer, Toast
-      (options-based — container-render scenario), Chat. AvatarGroup has
-      no own snapshot yet (shares avatar/ module).
+- [x] **a11y-parity final batch** (2026-07-23) — Tooltip, Drawer, Toast,
+      Chat added: 25/31 components gated, zero divergences on first pass.
+      The gate is COMPLETE for all comparable components — remaining 6 are
+      out by design: Select/Combobox (native vs CDK-overlay adapters,
+      documented above), Radio (covered via radio-group scenarios),
+      AvatarGroup (shares avatar/ module), Menu-/Table-family
+      sub-components (covered via their parents).
+- [ ] **Latent Chat divergence (observation, not gated)** — React's
+      AtlChatHeader renders its close button unconditionally while
+      Angular/Vue gate it behind variant !== 'inline'. Align React when
+      touching Chat next.
 - [x] **4 hand-maintained spec→component maps consolidated** (2026-07-22,
       ADR-0031) — metadata/index.ts is the single source; DOCS_PRIMARY_SPECS
       + SUBCOMPONENT_PARENTS moved there declaratively, union→component is
