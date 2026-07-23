@@ -1,3 +1,13 @@
+## 0.2.7 (2026-07-23)
+
+### 🚀 Features
+
+- **a11y:** final gate batch — Tooltip, Drawer, Toast, Chat (25/31, complete) ([18455d5](https://github.com/DominikPieper/atelier-ui/commit/18455d5))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.2.6 (2026-07-22)
 
 ### 🚀 Features
