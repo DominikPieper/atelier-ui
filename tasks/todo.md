@@ -114,6 +114,16 @@ Decision-bearing quick wins (deferred — not this session's scope):
       · **AtlSkeleton** — metadata says `status`; the component renders `aria-hidden="true"`
         and both baseline scenarios are empty. Either the claim is wrong (→ `none`) or a
         loading skeleton should actually be announced. Decide which.
+- [ ] **Reopened: a token-discipline gate for Claude Design artboards** (ADR-0032
+      alternative 4). Rejected on 2026-08-26 for a reason that turned out to be false —
+      the Claude Design prompt prefers `<helmet><style>` utility classes and restricts
+      inline `style="…"` to one-offs, so gating participant `.dc.html` on raw hex would
+      not contradict the tool. Decide whether a `check:artboards` (or a `--ui-*`
+      `:root` starter block generated from `styles/tokens.css`) is worth it, and amend
+      or supersede ADR-0032 accordingly. Prerequisite for Katas 2 and 5 either way.
+- [ ] **Verify Figma *export* from claude.ai/design** — import via Figma links is
+      confirmed first-party (`hifi-design` skill); export is still unverified, and
+      ADR-0032's "the canvas dead-ends" tradeoff rests partly on it.
 - [ ] `coverage.thresholds` in 3 vite configs (measure current coverage first — may fail CI)
 - [ ] `docs-old/` (42 tracked files, not in nx graph): remove or justify
 - [x] Wire `check:figma` into CI — done: it runs inside `check:all`, so the `checks` job

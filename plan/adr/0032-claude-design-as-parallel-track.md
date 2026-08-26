@@ -127,6 +127,49 @@ Alternatives considered:
   which a participant pushes their **employer's** design system is a
   data-processing decision that goes to the DSB first, and org enablement to
   the ISB, before it appears on an agenda a client sees.
+### Verified against the first-party source (2026-08-26, same day)
+
+A `claude-design` MCP server became available in-session, exposing
+`get_claude_design_prompt` (the Claude Design system prompt, including a
+complete `.dc.html` format spec) and `read_design_skill` (`hifi-design`,
+`frontend-design`). Checking this ADR against it **confirmed** the `.dc.html`
+reconstruction verbatim — the `./support.js` head script, the `<x-dc>`
+template, `<helmet>` head-injection, and the `data-dc-script` /
+`class Component extends DCLogic` logic block — and corrected three things:
+
+1. **"No first-party spec for the `.dc.html` format anywhere" is wrong.** The
+   spec is first-party and complete; it ships through the MCP server rather
+   than a public docs page. "Not publicly documented" is the accurate claim.
+2. **"No Figma import" is wrong for claude.ai/design.** The `hifi-design`
+   skill points users at "Claude Design's Import menu (claude.ai/design),
+   where they can link a codebase, provide screenshots or **Figma links**".
+   That `/design import|export|status` is refused in the Claude Code preview
+   remains separately true. Figma **export** is still unverified.
+3. **The stated reason for rejecting alternative 4 does not hold.** This ADR
+   claimed the skill "instructs literal inline style values … prefers inline
+   `style="…"` over classes". The prompt says the opposite: *"Define
+   design-specific values as short single-class utilities in
+   `<helmet><style>` … inline `style="…"` only for genuine one-offs — anything
+   landing on 2+ elements becomes a class."* So a token-discipline gate on
+   participant artboards would **not** be gating against documented
+   behaviour, and `<helmet><style>` is the intended home for a
+   `:root{--ui-*}` block. **Alternative 4 is reopened** as an open question,
+   tracked in `tasks/todo.md`. The decision itself — parallel track at step 0
+   and step 5, Figma as the source of truth — is unaffected: an artboard still
+   has none of the four gate identities.
+
+Also newly established, and better teaching material than anything this ADR
+had: Claude Design ships **its own verify loop** — render → gate on console
+errors/404s/blank mounts → fresh eyes via a `design-verifier` subagent → act,
+with "the screenshot is the ground truth; DOM measurement is for diagnosis".
+So "no gate at all" needs nuance: there is a visual verification loop, just no
+machine-checkable contract. That parallel to Atelier's step 4 is worth
+teaching directly.
+
+Project-scoped tools (`list_projects`, `write_files`, `render_preview`) sit
+behind a per-user consent gate (`/design consent`), which is itself a fact
+worth knowing before planning a room full of participants.
+
 - **Teach the concepts, never the keystrokes.** `/design` appears in no
   CHANGELOG and in no commands reference, there is no first-party spec for
   `.dc.html`, and the skill's own text says the preview is not at parity with
