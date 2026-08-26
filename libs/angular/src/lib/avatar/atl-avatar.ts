@@ -9,6 +9,7 @@ import {
   signal,
   untracked,
 } from '@angular/core';
+import { AtlIcon } from '../icon/atl-icon';
 
 /**
  * Displays a user avatar with image, initials, or icon fallback.
@@ -25,6 +26,7 @@ import {
 @Component({
   selector: 'atl-avatar',
   standalone: true,
+  imports: [AtlIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <!-- eslint-disable -->
@@ -33,9 +35,7 @@ import {
     } @else if (initials()) {
       <span class="initials" aria-hidden="true">{{ initials() }}</span>
     } @else {
-      <svg class="icon" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5zm0 2c-3.314 0-10 1.343-10 4v2h20v-2c0-2.657-6.686-4-10-4z" />
-      </svg>
+      <atl-icon name="person" size="sm" class="icon" />
     }
     @if (status()) {
       <span [class]="'status-dot status-' + status()" aria-hidden="true"></span>

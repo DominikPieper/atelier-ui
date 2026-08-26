@@ -30,7 +30,7 @@ Docs: https://atelier.pieper.io
 - [Select](https://atelier.pieper.io/components/select): value, placeholder, disabled, invalid, required, name
 - [Combobox](https://atelier.pieper.io/components/combobox): value, options, placeholder, disabled, readonly, invalid
 - [Badge](https://atelier.pieper.io/components/badge): variant (default|success|warning|danger|info), size (sm|md)
-- [Icon](https://atelier.pieper.io/components/icon): name (success|warning|danger|info|error|chevron-up|chevron-down|chevron-left|chevron-right|sort-asc|sort-desc|arrow-right|arrow-left|copy|paste|add|edit|delete|close|more|default-toast), size (sm|md|lg), label
+- [Icon](https://atelier.pieper.io/components/icon): name (success|check|warning|danger|info|error|chevron-up|chevron-down|chevron-left|chevron-right|sort-asc|sort-desc|arrow-right|arrow-left|copy|paste|add|edit|delete|close|more|person|default-toast), size (sm|md|lg), label
 - [Card](https://atelier.pieper.io/components/card): variant (elevated|outlined|flat), padding (none|sm|md|lg), role (article|region|section)
 - [Table](https://atelier.pieper.io/components/table): variant (default|striped|bordered), size (sm|md|lg), stickyHeader, aria-label
 - [Avatar](https://atelier.pieper.io/components/avatar): src, alt, name, size (xs|sm|md|lg|xl), shape (circle|square), status (online|offline|away|busy)

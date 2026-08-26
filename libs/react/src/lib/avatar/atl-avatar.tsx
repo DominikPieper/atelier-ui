@@ -4,6 +4,7 @@ import type {
   AtlAvatarGroupSpec,
 } from '../spec';
 import './atl-avatar.css';
+import { AtlIcon } from '../icon/atl-icon';
 
 /**
  * Properties for the AtlAvatar component.
@@ -81,9 +82,7 @@ export function AtlAvatar({
       ) : initials ? (
         <span className="initials" aria-hidden="true">{initials}</span>
       ) : (
-        <svg className="icon" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5zm0 2c-3.314 0-10 1.343-10 4v2h20v-2c0-2.657-6.686-4-10-4z" />
-        </svg>
+        <AtlIcon name="person" size="sm" className="icon" />
       )}
       {status && <span className={`status-dot status-${status}`} aria-hidden="true" />}
     </div>

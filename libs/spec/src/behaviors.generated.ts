@@ -21,7 +21,7 @@ export const BEHAVIORS = {
   checkbox: ['reflects-checked', 'toggle-emits', 'disabled', 'invalid', 'errors', 'indeterminate'],
   'code-block': ['renders-code', 'language-label', 'filename-label', 'copy-button', 'no-copy-button', 'line-numbers', 'copied-state'],
   drawer: ['render-dialog-element', 'open-shows-modal', 'is-open-class', 'close-button', 'aria-modal'],
-  icon: ['renders-glyph', 'decorative-hidden', 'labelled-img'],
+  icon: ['renders-geometry', 'decorative-hidden', 'labelled-img'],
   input: ['renders-input', 'disabled', 'invalid', 'errors', 'updates-value'],
   pagination: ['disables-prev-first', 'disables-next-last', 'aria-current', 'page-change-on-click', 'hide-first-last'],
   progress: ['aria-value', 'clamp', 'indeterminate-omits-valuenow'],

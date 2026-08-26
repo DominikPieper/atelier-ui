@@ -9,6 +9,7 @@ import {
   output,
 } from '@angular/core';
 import { AtlCheckbox } from '../checkbox/atl-checkbox';
+import { AtlIcon } from '../icon/atl-icon';
 
 // ---------------------------------------------------------------------------
 // Context token
@@ -257,6 +258,7 @@ export type AtlSortDirection = 'asc' | 'desc' | null;
 @Component({
   selector: 'atl-th',
   standalone: true,
+  imports: [AtlIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <th
@@ -267,17 +269,10 @@ export type AtlSortDirection = 'asc' | 'desc' | null;
       @if (sortable()) {
         <button type="button" class="atl-th-sort-btn" (click)="cycleSort()">
           <ng-content />
-          <svg
-            class="atl-th-sort-icon"
-            aria-hidden="true"
-            width="12"
-            height="16"
-            viewBox="0 0 12 16"
-            fill="none"
-          >
-            <path class="atl-th-sort-asc-arrow" d="M6 2L11 8H1L6 2Z" fill="currentColor" />
-            <path class="atl-th-sort-desc-arrow" d="M6 14L1 8H11L6 14Z" fill="currentColor" />
-          </svg>
+          <span class="atl-th-sort-icon" aria-hidden="true">
+            <atl-icon name="sort-asc" size="sm" class="atl-th-sort-asc-arrow" />
+            <atl-icon name="sort-desc" size="sm" class="atl-th-sort-desc-arrow" />
+          </span>
         </button>
       } @else {
         <ng-content />

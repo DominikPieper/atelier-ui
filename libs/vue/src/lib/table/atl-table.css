@@ -191,7 +191,18 @@ td.align-end {
 }
 
 .atl-th-sort-icon {
+  /* The asc/desc arrows were two paths in one svg; as two AtlIcons they stack
+   * vertically in the same space the single icon occupied (ADR-0046). */
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+}
+
+.atl-table .atl-th-sort-icon .atl-icon {
+  width: 0.625rem;
+  height: 0.5rem;
 }
 
 .atl-th-sort-asc-arrow,

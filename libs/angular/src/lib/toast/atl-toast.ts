@@ -9,6 +9,7 @@ import {
   output,
   signal,
 } from '@angular/core';
+import { AtlIcon } from '../icon/atl-icon';
 
 /** Variant types for toast notifications. */
 export type ToastVariant = 'default' | 'success' | 'warning' | 'danger' | 'info';
@@ -100,15 +101,13 @@ export class AtlToastService {
 @Component({
   selector: 'atl-toast',
   standalone: true,
+  imports: [AtlIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <span class="message">{{ message() }}</span>
     @if (dismissible()) {
       <button class="dismiss" type="button" aria-label="Dismiss" (click)="onDismiss()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-          <line x1="18" y1="6" x2="6" y2="18" />
-          <line x1="6" y1="6" x2="18" y2="18" />
-        </svg>
+        <atl-icon name="close" size="sm" />
       </button>
     }
   `,

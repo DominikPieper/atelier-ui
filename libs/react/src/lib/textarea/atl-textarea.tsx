@@ -1,6 +1,7 @@
 import { TextareaHTMLAttributes, useRef, useEffect } from 'react';
 import type { AtlTextareaSpec } from '../spec';
 import './atl-textarea.css';
+import { AtlIcon } from '../icon/atl-icon';
 
 /**
  * Properties for the AtlTextarea component.
@@ -102,6 +103,7 @@ export function AtlTextarea({
           aria-describedby={errors.length > 0 ? errorId : undefined}
           {...rest}
         />
+        {invalid && <AtlIcon name="danger" size="sm" className="invalid-icon" />}
       </div>
       {errors.length > 0 && (
         <div className="errors" id={errorId} aria-live="polite">

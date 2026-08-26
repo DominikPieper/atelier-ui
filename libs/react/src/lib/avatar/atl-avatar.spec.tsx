@@ -10,7 +10,7 @@ describe('AtlAvatar', () => {
 
   covers('avatar', 'icon-when-empty')('shows icon placeholder when no src or name', () => {
     const { container } = render(<AtlAvatar />);
-    expect(container.querySelector('svg.icon')).toBeInTheDocument();
+    expect(container.querySelector('.atl-icon.icon svg')).toBeInTheDocument();
   });
 
   covers('avatar', 'initials-when-no-src')('shows initials when no src', () => {

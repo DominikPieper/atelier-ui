@@ -50,7 +50,7 @@ img {
 }
 
 /* Fallback icon */
-.icon {
+atl-icon.icon {
   width: 55%;
   height: 55%;
   opacity: 0.6;

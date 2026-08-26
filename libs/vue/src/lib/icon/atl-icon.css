@@ -37,3 +37,11 @@
   height: 1.5rem;
   font-size: var(--ui-font-size-lg);
 }
+
+/* The size classes define the box; the svg fills it. Geometry is always the
+ * 0 0 24 24 viewBox, so every size is the same shape at a different scale. */
+.atl-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}

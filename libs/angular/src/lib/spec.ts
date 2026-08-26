@@ -1,6 +1,6 @@
 // AUTO-GENERATED from libs/spec/src/index.ts — do not edit here.
 // Run `node tools/scripts/sync-spec.mjs` after editing the source of truth.
-// The framework libs inline these types so @atelier-ui/spec stays internal.
+// The framework libs inline this so @atelier-ui/spec stays internal.
 
 /**
  * @atelier-ui/spec
@@ -423,6 +423,7 @@ export interface AtlTdSpec {
 // ---------------------------------------------------------------------------
 export type AtlIconName =
   | 'success'
+  | 'check'
   | 'warning'
   | 'danger'
   | 'info'
@@ -442,6 +443,7 @@ export type AtlIconName =
   | 'delete'
   | 'close'
   | 'more'
+  | 'person'
   | 'default-toast';
 export type AtlIconSize = 'sm' | 'md' | 'lg';
 export interface AtlIconSpec {

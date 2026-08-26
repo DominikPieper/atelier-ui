@@ -56,7 +56,7 @@
 }
 
 /* Fallback icon */
-.atl-avatar .icon {
+.atl-avatar .atl-icon.icon {
   width: 55%;
   height: 55%;
   opacity: 0.6;

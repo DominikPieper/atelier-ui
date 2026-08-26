@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { CdkAccordion, CdkAccordionItem } from '@angular/cdk/accordion';
 import { ATL_ACCORDION_GROUP, type AccordionItem, type AtlAccordionGroupContext } from './atl-accordion.token';
+import { AtlIcon } from '../icon/atl-icon';
 
 let nextId = 0;
 
@@ -123,7 +124,7 @@ export class AtlAccordionHeader {}
 @Component({
   selector: 'atl-accordion-item',
   standalone: true,
-  imports: [],
+  imports: [AtlIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   hostDirectives: [CdkAccordionItem],
   template: `
@@ -140,23 +141,7 @@ export class AtlAccordionHeader {}
         (keydown)="onKeydown($event)"
       >
         <ng-content select="[atlAccordionHeader]" />
-        <svg
-          class="chevron"
-          [class.is-expanded]="isExpandedValue"
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M4 6L8 10L12 6"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
+        <atl-icon name="chevron-down" size="sm" class="chevron" [class.is-expanded]="isExpandedValue" />
       </button>
     </div>
     <div

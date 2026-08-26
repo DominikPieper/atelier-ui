@@ -15,6 +15,7 @@ import type {
   AtlAccordionItemSpec,
 } from '../spec';
 import './atl-accordion.css';
+import { AtlIcon } from '../icon/atl-icon';
 
 interface AccordionGroupContextValue {
   multi: boolean;
@@ -235,24 +236,7 @@ export function AtlAccordionItem({
           onKeyDown={(e) => ctx.handleKeydown(e, id)}
         >
           {headerNode}
-          <svg
-            className={['chevron', isExpanded && 'is-expanded']
-              .filter(Boolean)
-              .join(' ')}
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M4 6L8 10L12 6"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <AtlIcon name="chevron-down" size="sm" className={['chevron', isExpanded && 'is-expanded'].filter(Boolean).join(' ')} />
         </button>
       </Heading>
       <div

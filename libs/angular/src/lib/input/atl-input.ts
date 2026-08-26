@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
 import { type ValidationError, type WithOptionalFieldTree } from '@angular/forms/signals';
+import { AtlIcon } from '../icon/atl-icon';
 
 let nextId = 0;
 
@@ -22,6 +23,7 @@ let nextId = 0;
 @Component({
   selector: 'atl-input',
   standalone: true,
+  imports: [AtlIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="input-field">
@@ -38,6 +40,9 @@ let nextId = 0;
         [attr.aria-required]="required() || null"
         [attr.aria-describedby]="showErrors() ? errorId : null"
       />
+      @if (invalid()) {
+        <atl-icon name="danger" size="sm" class="invalid-icon" />
+      }
     </div>
     @if (showErrors()) {
       <div class="errors" [id]="errorId" aria-live="polite">

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { AtlIconName, AtlIconSize } from '../spec';
+import { ATL_ICON_GEOMETRY, ATL_ICON_STROKE_WIDTH, ATL_ICON_VIEWBOX } from '../icons';
 import './atl-icon.css';
 
 defineOptions({ name: 'AtlIcon' });
@@ -20,32 +21,10 @@ const props = withDefaults(defineProps<AtlIconProps>(), {
   label: undefined,
 });
 
-const ICON_GLYPHS: Record<AtlIconName, string> = {
-  success: '✓',
-  warning: '⚠',
-  danger: '✕',
-  info: 'ℹ',
-  error: '!',
-  'chevron-up': '▲',
-  'chevron-down': '▼',
-  'chevron-left': '‹',
-  'chevron-right': '›',
-  'sort-asc': '↑',
-  'sort-desc': '↓',
-  'arrow-right': '→',
-  'arrow-left': '←',
-  copy: '⎘',
-  paste: '⎗',
-  add: '⊕',
-  edit: '✏',
-  delete: '🗑',
-  close: '×',
-  more: '…',
-  'default-toast': '💬',
-};
 
 const classes = computed(() => ['atl-icon', `size-${props.size}`]);
-const glyph = computed(() => ICON_GLYPHS[props.name]);
+const geometry = computed(() => ATL_ICON_GEOMETRY[props.name]);
+const isStroke = computed(() => geometry.value.kind === 'stroke');
 </script>
 
 <template>
@@ -54,5 +33,18 @@ const glyph = computed(() => ICON_GLYPHS[props.name]);
     :role="label ? 'img' : undefined"
     :aria-label="label || undefined"
     :aria-hidden="label ? undefined : 'true'"
-  >{{ glyph }}</span>
+  >
+    <svg
+      :viewBox="ATL_ICON_VIEWBOX"
+      :fill="isStroke ? 'none' : 'currentColor'"
+      :stroke="isStroke ? 'currentColor' : undefined"
+      :stroke-width="isStroke ? ATL_ICON_STROKE_WIDTH : undefined"
+      :stroke-linecap="isStroke ? 'round' : undefined"
+      :stroke-linejoin="isStroke ? 'round' : undefined"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path v-for="d in geometry.paths" :key="d" :d="d" />
+    </svg>
+  </span>
 </template>

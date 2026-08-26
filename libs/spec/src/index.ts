@@ -419,6 +419,7 @@ export interface AtlTdSpec {
 // ---------------------------------------------------------------------------
 export type AtlIconName =
   | 'success'
+  | 'check'
   | 'warning'
   | 'danger'
   | 'info'
@@ -438,6 +439,7 @@ export type AtlIconName =
   | 'delete'
   | 'close'
   | 'more'
+  | 'person'
   | 'default-toast';
 export type AtlIconSize = 'sm' | 'md' | 'lg';
 export interface AtlIconSpec {

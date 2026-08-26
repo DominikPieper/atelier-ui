@@ -480,11 +480,11 @@ export const componentDocs: Record<string, ComponentDoc> = {
   icon: {
     name: 'Icon',
     selector: 'AtlIcon',
-    description: 'Pictogram glyph icon. 21 named variants matching the Figma `AtlIcon` component set. Decorative by default; pass `label` to announce a meaning to assistive tech.',
+    description: 'Vector icon. 23 named variants drawn from one geometry source (`libs/spec/src/icons.ts`), so the same shape appears everywhere it is used. Decorative by default; pass `label` to announce a meaning to assistive tech.',
     category: 'Display',
     props: [
-      { name: 'name', type: "'success' | 'warning' | 'danger' | 'info' | 'error' | 'chevron-up' | 'chevron-down' | 'chevron-left' | 'chevron-right' | 'sort-asc' | 'sort-desc' | 'arrow-right' | 'arrow-left' | 'copy' | 'paste' | 'add' | 'edit' | 'delete' | 'close' | 'more' | 'default-toast'", default: '—', description: 'The icon name. Required.' },
-      { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Icon size. Maps to the framework font-size scale.' },
+      { name: 'name', type: "'success' | 'check' | 'warning' | 'danger' | 'info' | 'error' | 'chevron-up' | 'chevron-down' | 'chevron-left' | 'chevron-right' | 'sort-asc' | 'sort-desc' | 'arrow-right' | 'arrow-left' | 'copy' | 'paste' | 'add' | 'edit' | 'delete' | 'close' | 'more' | 'person' | 'default-toast'", default: '—', description: 'The icon name. Required.' },
+      { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Icon size: sm 16px, md 20px, lg 24px. The geometry is one 24-unit viewBox, so every size is the same shape at a different scale.' },
       { name: 'label', type: 'string', default: 'undefined', description: 'Accessible label. When provided, the icon is announced as an image with this label. When omitted, the icon is hidden from assistive tech (treated as decorative).' },
     ],
     examples: {

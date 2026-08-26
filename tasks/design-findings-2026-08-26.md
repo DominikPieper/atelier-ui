@@ -143,10 +143,14 @@ The structural cause is still open: **no gate checks that a spec-declared prop
 exists in all three adapters.** `check:spec` copies the spec file; `check:defaults`
 only compares default values for axis props. That is the next candidate gate.
 
-**Still open — the `✕` glyph.** AtlInput's invalid indicator is a literal
-pseudo-element, not an icon, while the icon union already contains `close` and
-`danger`. The Figma master cannot use an icon instance there, and the glyph will
-not follow the icon set.
+**The `✕` glyph — resolved, and it was the tip of something bigger (ADR-0046).**
+AtlIcon turned out to be a Unicode glyph map with **zero internal consumers**,
+while eleven components drew 14 inline `<svg>`s of their own. Counted by shape:
+`close` existed four ways (one shared X, a differently drawn X in AtlStepper,
+`'×'` in AtlIcon, `'✕'` in CSS), `check` three ways, `chevron-down` two. The
+geometry now lives once in `libs/spec/src/icons.ts`, AtlIcon renders it in all
+three frameworks, every component uses it, and `check:iconography` forbids inline
+svgs, literal `content:` glyphs, and any name/geometry mismatch.
 
 <details><summary>The original finding</summary>
 

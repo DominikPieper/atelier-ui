@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue';
 import './atl-avatar.css';
+import AtlIcon from '../icon/atl-icon.vue';
 
 defineOptions({ name: 'AtlAvatar' });
 
@@ -56,16 +57,7 @@ const classes = computed(() => [
       @error="imgError = true"
     />
     <span v-else-if="initials" class="initials">{{ initials }}</span>
-    <svg
-      v-else
-      class="icon"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden="true"
-    >
-      <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5zm0 2c-3.314 0-10 1.343-10 4v2h20v-2c0-2.657-6.686-4-10-4z" />
-    </svg>
+    <AtlIcon name="person" size="sm" class="icon" />
     <span v-if="status" :class="`status-dot status-${status}`" aria-hidden="true" />
   </div>
 </template>

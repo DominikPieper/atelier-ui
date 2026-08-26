@@ -11,6 +11,7 @@ import {
   signal,
 } from '@angular/core';
 import { ATL_STEPPER, type AtlStepperContext, type StepInfo } from './atl-stepper.token';
+import { AtlIcon } from '../icon/atl-icon';
 
 let nextId = 0;
 
@@ -29,6 +30,7 @@ let nextId = 0;
 @Component({
   selector: 'atl-stepper',
   standalone: true,
+  imports: [AtlIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="stepper-header" role="tablist">
@@ -54,13 +56,9 @@ let nextId = 0;
             (click)="goTo(i)"
           >
             @if (step.completed && !step.error) {
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M2 7L5.5 10.5L12 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+              <atl-icon name="check" size="sm" />
             } @else if (step.error) {
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M3 3L11 11M11 3L3 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
+              <atl-icon name="close" size="sm" />
             } @else {
               {{ i + 1 }}
             }

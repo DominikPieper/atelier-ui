@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import './atl-input.css';
+import AtlIcon from '../icon/atl-icon.vue';
 
 defineOptions({ name: 'AtlInput' });
 
@@ -60,6 +61,7 @@ function onInput(event: Event) {
         :aria-required="required || undefined"
         @input="onInput"
       />
+      <AtlIcon v-if="invalid" name="danger" size="sm" class="invalid-icon" />
     </div>
     <ul v-if="errors.length" class="errors" aria-live="polite">
       <li v-for="(error, i) in errors" :key="i" class="error">{{ error }}</li>

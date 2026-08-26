@@ -1,5 +1,6 @@
 <script lang="ts">
 import type { InjectionKey, Ref } from 'vue';
+import AtlIcon from '../icon/atl-icon.vue';
 
 export interface StepInfo {
   id: string;
@@ -139,14 +140,10 @@ function isConnectorActive(i: number) {
             @click="goTo(i)"
           >
             <template v-if="step.completed && !step.error">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M2 7L5.5 10.5L12 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+              <AtlIcon name="check" size="sm" />
             </template>
             <template v-else-if="step.error">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                <path d="M3 3L11 11M11 3L3 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
+              <AtlIcon name="close" size="sm" />
             </template>
             <template v-else>{{ i + 1 }}</template>
           </button>

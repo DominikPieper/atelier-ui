@@ -2,6 +2,7 @@
 import { computed, onUnmounted, ref, watch } from 'vue';
 import type { AtlComboboxOption } from '../spec';
 import './atl-combobox.css';
+import AtlIcon from '../icon/atl-icon.vue';
 
 defineOptions({ name: 'AtlCombobox' });
 
@@ -190,9 +191,7 @@ function onKeydown(event: KeyboardEvent) {
         @keydown="onKeydown"
       />
       <span class="atl-combobox-icon" aria-hidden="true">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-          <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
+        <AtlIcon name="chevron-down" size="sm" />
       </span>
     </div>
 
@@ -221,17 +220,7 @@ function onKeydown(event: KeyboardEvent) {
           @mouseenter="activeIndex = i"
         >
           <span>{{ option.label }}</span>
-          <svg
-            v-if="option.value === value"
-            class="atl-combobox-check"
-            width="14"
-            height="14"
-            viewBox="0 0 14 14"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path d="M2 7l4 4 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
+          <AtlIcon name="check" size="sm" class="atl-combobox-check" />
         </li>
       </template>
       <li v-else class="atl-combobox-no-results" role="option" aria-disabled="true">

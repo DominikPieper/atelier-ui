@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { A11yModule } from '@angular/cdk/a11y';
 import { ATL_DRAWER } from './atl-drawer.token';
+import { AtlIcon } from '../icon/atl-icon';
 
 let nextId = 0;
 
@@ -129,6 +130,7 @@ export class AtlDrawer {
 @Component({
   selector: 'atl-drawer-header',
   standalone: true,
+  imports: [AtlIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <ng-content />
@@ -138,22 +140,7 @@ export class AtlDrawer {
       aria-label="Close drawer"
       (click)="context.close()"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="14"
-        height="14"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-        focusable="false"
-      >
-        <line x1="18" y1="6" x2="6" y2="18" />
-        <line x1="6" y1="6" x2="18" y2="18" />
-      </svg>
+      <atl-icon name="close" size="sm" />
     </button>
   `,
   styleUrl: './atl-drawer.css',

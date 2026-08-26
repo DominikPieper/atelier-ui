@@ -62,7 +62,7 @@ describe('AtlAvatar', () => {
 
     covers('avatar', 'icon-when-empty')('shows icon SVG when neither src nor name is given', async () => {
       const { container } = await render('<atl-avatar />', { imports: [AtlAvatar] });
-      expect(container.querySelector('svg.icon')).toBeInTheDocument();
+      expect(container.querySelector('atl-icon.icon svg')).toBeInTheDocument();
     });
 
     it('falls back to initials after image load error', async () => {

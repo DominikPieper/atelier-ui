@@ -8,6 +8,7 @@ import {
 import { TextFieldModule } from '@angular/cdk/text-field';
 import type { FormValueControl } from '@angular/forms/signals';
 import { type ValidationError, type WithOptionalFieldTree } from '@angular/forms/signals';
+import { AtlIcon } from '../icon/atl-icon';
 
 let nextId = 0;
 
@@ -23,7 +24,7 @@ let nextId = 0;
 @Component({
   selector: 'atl-textarea',
   standalone: true,
-  imports: [TextFieldModule],
+  imports: [TextFieldModule, AtlIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="textarea-field">
@@ -42,6 +43,9 @@ let nextId = 0;
         [cdkTextareaAutosize]="autoResize()"
         [cdkAutosizeMinRows]="rows()"
       ></textarea>
+      @if (invalid()) {
+        <atl-icon name="danger" size="sm" class="invalid-icon" />
+      }
     </div>
     @if (showErrors()) {
       <div class="errors" [id]="errorId" aria-live="polite">

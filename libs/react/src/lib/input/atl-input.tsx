@@ -1,6 +1,7 @@
 import { InputHTMLAttributes } from 'react';
 import type { AtlInputSpec } from '../spec';
 import './atl-input.css';
+import { AtlIcon } from '../icon/atl-icon';
 
 /**
  * Properties for the AtlInput component.
@@ -94,6 +95,7 @@ export function AtlInput({
           aria-describedby={errors.length > 0 ? errorId : undefined}
           {...rest}
         />
+        {invalid && <AtlIcon name="danger" size="sm" className="invalid-icon" />}
       </div>
       {errors.length > 0 && (
         <div className="errors" id={errorId} aria-live="polite">

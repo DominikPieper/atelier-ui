@@ -67,18 +67,18 @@ input:focus {
   box-shadow: var(--ui-focus-ring-danger);
 }
 
-/* Non-color invalid indicator (WCAG 1.4.1) */
-:host(.is-invalid) .input-field::before {
-  content: '✕';
+/* Non-color invalid indicator (WCAG 1.4.1). A real AtlIcon rather than a CSS
+ * `content: '✕'`: the glyph could not follow the icon set and Figma cannot put an
+ * icon instance behind a pseudo-element (ADR-0046). */
+:host(.is-invalid) .input-field .invalid-icon {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   right: 0.875rem;
   color: var(--ui-color-danger);
-  font-weight: 700;
-  line-height: 1;
   pointer-events: none;
 }
+
 
 /* Disabled state */
 :host(.is-disabled) {

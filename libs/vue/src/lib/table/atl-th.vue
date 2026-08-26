@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import AtlIcon from '../icon/atl-icon.vue';
 
 defineOptions({ name: 'AtlTh' });
 
@@ -49,17 +50,10 @@ function cycleSort() {
   <th :class="classes" :aria-sort="ariaSort" :style="width ? { width } : undefined">
     <button v-if="sortable" type="button" class="atl-th-sort-btn" @click="cycleSort">
       <slot />
-      <svg
-        class="atl-th-sort-icon"
-        aria-hidden="true"
-        width="12"
-        height="16"
-        viewBox="0 0 12 16"
-        fill="none"
-      >
-        <path class="atl-th-sort-asc-arrow" d="M6 2L11 8H1L6 2Z" fill="currentColor" />
-        <path class="atl-th-sort-desc-arrow" d="M6 14L1 8H11L6 14Z" fill="currentColor" />
-      </svg>
+      <span class="atl-th-sort-icon" aria-hidden="true">
+        <AtlIcon name="sort-asc" size="sm" class="atl-th-sort-asc-arrow" />
+        <AtlIcon name="sort-desc" size="sm" class="atl-th-sort-desc-arrow" />
+      </span>
     </button>
     <slot v-else />
   </th>

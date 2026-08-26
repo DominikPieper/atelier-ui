@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, inject, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue';
 import { AtlAccordionGroupKey } from './atl-accordion-group.vue';
+import AtlIcon from '../icon/atl-icon.vue';
 
 defineOptions({ name: 'AtlAccordionItem' });
 
@@ -123,22 +124,7 @@ const chevronClasses = computed(() => ['chevron', isExpanded.value && 'is-expand
         @keydown="onKeydown"
       >
         <slot name="header" />
-        <svg
-          :class="chevronClasses"
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M4 6L8 10L12 6"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
+        <AtlIcon name="chevron-down" size="sm" :class="chevronClasses" />
       </button>
     </component>
     <div class="accordion-panel-wrapper" :class="isExpanded && 'is-expanded'">

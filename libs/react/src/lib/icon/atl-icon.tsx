@@ -1,30 +1,8 @@
 import { HTMLAttributes } from 'react';
 import type { AtlIconName, AtlIconSize, AtlIconSpec } from '../spec';
+import { ATL_ICON_GEOMETRY, ATL_ICON_STROKE_WIDTH, ATL_ICON_VIEWBOX } from '../icons';
 import './atl-icon.css';
 
-const ICON_GLYPHS: Record<AtlIconName, string> = {
-  success: '✓',
-  warning: '⚠',
-  danger: '✕',
-  info: 'ℹ',
-  error: '!',
-  'chevron-up': '▲',
-  'chevron-down': '▼',
-  'chevron-left': '‹',
-  'chevron-right': '›',
-  'sort-asc': '↑',
-  'sort-desc': '↓',
-  'arrow-right': '→',
-  'arrow-left': '←',
-  copy: '⎘',
-  paste: '⎗',
-  add: '⊕',
-  edit: '✏',
-  delete: '🗑',
-  close: '×',
-  more: '…',
-  'default-toast': '💬',
-};
 
 /**
  * Properties for the AtlIcon component.
@@ -44,7 +22,8 @@ export interface AtlIconProps
 }
 
 /**
- * Pictogram glyph icon. 21 named variants matching the Figma `AtlIcon`
+ * Vector icon. 23 named variants, drawn from the geometry in `icons.ts` so the
+ * same shape is used everywhere it appears. Matches the Figma `AtlIcon`
  * component set. Decorative by default; pass `label` to announce a meaning
  * to assistive tech.
  */
@@ -59,9 +38,24 @@ export function AtlIcon({
   const accessibilityProps = label
     ? { role: 'img', 'aria-label': label }
     : { 'aria-hidden': true as const };
+  const geometry = ATL_ICON_GEOMETRY[name];
+  const stroke = geometry.kind === 'stroke';
   return (
     <span className={classes} {...accessibilityProps} {...rest}>
-      {ICON_GLYPHS[name]}
+      <svg
+        viewBox={ATL_ICON_VIEWBOX}
+        fill={stroke ? 'none' : 'currentColor'}
+        stroke={stroke ? 'currentColor' : undefined}
+        strokeWidth={stroke ? ATL_ICON_STROKE_WIDTH : undefined}
+        strokeLinecap={stroke ? 'round' : undefined}
+        strokeLinejoin={stroke ? 'round' : undefined}
+        aria-hidden="true"
+        focusable="false"
+      >
+        {geometry.paths.map((d) => (
+          <path key={d} d={d} />
+        ))}
+      </svg>
     </span>
   );
 }

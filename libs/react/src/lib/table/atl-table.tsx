@@ -9,6 +9,7 @@ import type {
 } from '../spec';
 import { AtlCheckbox } from '../checkbox/atl-checkbox';
 import './atl-table.css';
+import { AtlIcon } from '../icon/atl-icon';
 
 export type { AtlSortDirection };
 
@@ -182,17 +183,10 @@ export function AtlTh({
       {sortable ? (
         <button type="button" className="atl-th-sort-btn" onClick={cycleSort}>
           {children}
-          <svg
-            className="atl-th-sort-icon"
-            aria-hidden="true"
-            width="12"
-            height="16"
-            viewBox="0 0 12 16"
-            fill="none"
-          >
-            <path className="atl-th-sort-asc-arrow" d="M6 2L11 8H1L6 2Z" fill="currentColor" />
-            <path className="atl-th-sort-desc-arrow" d="M6 14L1 8H11L6 14Z" fill="currentColor" />
-          </svg>
+          <span className="atl-th-sort-icon" aria-hidden="true">
+            <AtlIcon name="sort-asc" size="sm" className="atl-th-sort-asc-arrow" />
+            <AtlIcon name="sort-desc" size="sm" className="atl-th-sort-desc-arrow" />
+          </span>
         </button>
       ) : (
         children

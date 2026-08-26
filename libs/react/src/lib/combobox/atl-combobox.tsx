@@ -1,6 +1,7 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { AtlComboboxOption, AtlComboboxSpec } from '../spec';
 import './atl-combobox.css';
+import { AtlIcon } from '../icon/atl-icon';
 
 export type { AtlComboboxOption };
 
@@ -183,9 +184,7 @@ export function AtlCombobox({
           onKeyDown={handleKeydown}
         />
         <span className="atl-combobox-icon" aria-hidden="true">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          <AtlIcon name="chevron-down" size="sm" />
         </span>
       </div>
 
@@ -217,9 +216,7 @@ export function AtlCombobox({
               >
                 <span>{option.label}</span>
                 {option.value === value && (
-                  <svg className="atl-combobox-check" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                    <path d="M2 7l4 4 6-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                  <AtlIcon name="check" size="sm" className="atl-combobox-check" />
                 )}
               </li>
             ))

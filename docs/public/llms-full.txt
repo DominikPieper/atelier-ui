@@ -467,12 +467,12 @@ Each entry lists:
 
 ### AtlIcon
 
-  Pictogram glyph icon. 21 named variants matching the Figma `AtlIcon` component set. Decorative by default; pass `label` to announce a meaning to assistive tech.
+  Vector icon. 23 named variants drawn from one geometry source (`libs/spec/src/icons.ts`), so the same shape appears everywhere it is used. Decorative by default; pass `label` to announce a meaning to assistive tech.
 
   Props:
-    name   'success' | 'warning' | 'danger' | 'info' | 'error' | 'chevron-up' | 'chevron-down' | 'chevron-left' | 'chevron-right' | 'sort-asc' | 'sort-desc' | 'arrow-right' | 'arrow-left' | 'copy' | 'paste' | 'add' | 'edit' | 'delete' | 'close' | 'more' | 'default-toast'  —          The icon name. Required.
-    size   'sm' | 'md' | 'lg'                                                                                                                                                                                                                                                    'md'       Icon size. Maps to the framework font-size scale.
-    label  string                                                                                                                                                                                                                                                                undefined  Accessible label. When provided, the icon is announced as an image with this label. When omitted, the icon is hidden from assistive tech (treated as decorative).
+    name   'success' | 'check' | 'warning' | 'danger' | 'info' | 'error' | 'chevron-up' | 'chevron-down' | 'chevron-left' | 'chevron-right' | 'sort-asc' | 'sort-desc' | 'arrow-right' | 'arrow-left' | 'copy' | 'paste' | 'add' | 'edit' | 'delete' | 'close' | 'more' | 'person' | 'default-toast'  —          The icon name. Required.
+    size   'sm' | 'md' | 'lg'                                                                                                                                                                                                                                                                         'md'       Icon size: sm 16px, md 20px, lg 24px. The geometry is one 24-unit viewBox, so every size is the same shape at a different scale.
+    label  string                                                                                                                                                                                                                                                                                     undefined  Accessible label. When provided, the icon is announced as an image with this label. When omitted, the icon is hidden from assistive tech (treated as decorative).
 
   Usage:
     Angular:
