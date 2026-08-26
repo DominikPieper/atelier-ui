@@ -11,6 +11,8 @@
  * Mono (code), chosen 2026-08-26 — see ADR-0035, which revises ADR-0020's
  * Inter choice. The library declares the stacks; loading the faces is the
  * consumer's job (the docs app does it through Astro's fonts config).
+ * The --ui-type-* roles (ADR-0036) are the layer component CSS should
+ * reference; the individual axes remain for the cases a role does not fit.
  *
  * Plan: ~/.claude/plans/atelier-design-rebrief.md (Direction A pivot)
  *
@@ -34,11 +36,44 @@
   --ui-letter-spacing-tight: -0.01em;
   --ui-letter-spacing-normal: 0;
   --ui-letter-spacing-wide: 0.01em;
+  --ui-letter-spacing-uppercase: 0.08em;
+  --ui-font-size-3xl: 2.25rem;
   --ui-font-weight-normal: 400;
   --ui-font-weight-medium: 500;
   --ui-font-weight-semibold: 600;
+  --ui-font-weight-bold: 700;
   --ui-line-height-tight: 1.25;
   --ui-line-height-normal: 1.5;
+
+  /* ── Type roles ─────────────────────────────────────────────
+   * Composed entirely from the axes above, so sizes and weights stay
+   * single-sourced and a role adds meaning rather than new numbers.
+   * Reference a ROLE from component CSS (`font: var(--ui-type-body-md)`),
+   * not an axis — the role is what carries ADR-0035's rule that weight
+   * comes from the sans and the display face is never bolded.
+   *
+   * `font:` is a shorthand: it resets font-style, font-variant,
+   * font-stretch and line-height, so declare it BEFORE any font-* override
+   * on the same rule. It does not touch letter-spacing — pair the display
+   * role with --ui-letter-spacing-tight and an uppercased label role with
+   * --ui-letter-spacing-uppercase yourself.
+   */
+  --ui-type-display: italic var(--ui-font-weight-normal) var(--ui-font-size-3xl) /
+    var(--ui-line-height-tight) var(--ui-font-display);
+  --ui-type-headline: var(--ui-font-weight-bold) var(--ui-font-size-2xl) /
+    var(--ui-line-height-tight) var(--ui-font-family);
+  --ui-type-title: var(--ui-font-weight-semibold) var(--ui-font-size-lg) /
+    var(--ui-line-height-tight) var(--ui-font-family);
+  --ui-type-body-lg: var(--ui-font-weight-normal) var(--ui-font-size-lg) /
+    var(--ui-line-height-normal) var(--ui-font-family);
+  --ui-type-body-md: var(--ui-font-weight-normal) var(--ui-font-size-md) /
+    var(--ui-line-height-normal) var(--ui-font-family);
+  --ui-type-body-sm: var(--ui-font-weight-normal) var(--ui-font-size-sm) /
+    var(--ui-line-height-normal) var(--ui-font-family);
+  --ui-type-label: var(--ui-font-weight-medium) var(--ui-font-size-xs) /
+    var(--ui-line-height-tight) var(--ui-font-family);
+  --ui-type-code: var(--ui-font-weight-normal) var(--ui-font-size-sm) /
+    var(--ui-line-height-normal) var(--ui-font-mono);
 
   /* ── Colours · light mode (default) ────────────────────────── */
 

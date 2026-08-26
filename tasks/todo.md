@@ -182,9 +182,19 @@ Decision-bearing quick wins (deferred — not this session's scope):
       guide still say Inter and Fira Code, plus the four phantom tokens
       (`--ui-font-size-3xl/4xl/5xl`, `--ui-font-mono` — the last of which the repo now
       really does declare). Reference-only either way, never input.
-- [ ] **Role-based type scale** (`body-md` instead of `font-size-sm`) — deliberately left
-      out of ADR-0035 so the font swap stayed readable. API addition, migration across every
-      component's CSS, needs its own ADR.
+- [x] ~~Role-based type scale~~ — done 2026-08-26, ADR-0036: eight `--ui-type-*` roles as
+      `font:` shorthands composed from the existing axes, plus `--ui-font-size-3xl`,
+      `--ui-font-weight-bold` and `--ui-letter-spacing-uppercase`. Manifest 114/114. All
+      eight verified in a browser against the shipped `tokens.css`, not a fixture.
+- [ ] **Migrate component CSS onto the type roles.** The roles are declared and verified but
+      nothing consumes them yet; 25 of 29 stylesheets still hand-assemble `font-family` +
+      `font-size` + `font-weight`. Do it per component group, one commit each — every group
+      makes its components' parity records stale. Ordering suggestion: the four that already
+      inherit (card, dialog, drawer, skeleton) are the cheapest start, then the form
+      controls, then the rest.
+- [ ] **Consider a gate forbidding `--ui-font-display` outside the role definition.** The
+      point of ADR-0036 is that "serif, italic, never bolded" is one token rather than three
+      declarations to get right; a component naming the family directly can still break it.
 - [ ] **25 of 29 components respecify `font-family`, against their own manifest
       constraint.** `--ui-font-family`'s annotation says *"Apply on :root or the app shell —
       do not respecify per component"*, yet 25 component stylesheets set it themselves;

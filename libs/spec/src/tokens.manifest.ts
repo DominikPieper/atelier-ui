@@ -129,6 +129,21 @@ export const tokens: Record<string, TokenAnnotation> = {
       'Do not apply to lowercase running text.',
     ],
   },
+  '--ui-letter-spacing-uppercase': {
+    intent: 'Tracking for uppercased text (0.08em). Caps need far more space between letters than mixed case.',
+    constraints: [
+      'Only with text-transform: uppercase or genuinely all-caps content — it looks broken on mixed case.',
+      'Pairs with --ui-type-label, which is the role uppercase text usually belongs to.',
+    ],
+  },
+  '--ui-font-size-3xl': {
+    intent:
+      'Display size (2.25rem). The one line per surface that is meant to be looked at rather than read — a wordmark or hero.',
+    constraints: [
+      'Reach for --ui-type-display instead; this axis exists so that role has a size to name.',
+      'Not for headings inside dense product UI — --ui-font-size-xl or -2xl carry those.',
+    ],
+  },
   '--ui-font-weight-normal': {
     intent: 'Default body weight (400). Use for paragraphs and regular UI text.',
     constraints: [
@@ -147,6 +162,13 @@ export const tokens: Record<string, TokenAnnotation> = {
       'Do not use weights above 600 — the type stack is not loaded with heavier cuts.',
     ],
   },
+  '--ui-font-weight-bold': {
+    intent: 'Bold (700). The heaviest weight in the system; carries headline-level emphasis.',
+    constraints: [
+      'Instrument Sans only — the display face ships a single weight, so this must never be applied to --ui-font-display.',
+      'One bold element per view; a second one cancels the first.',
+    ],
+  },
   '--ui-line-height-tight': {
     intent: 'Compact leading (1.25) for headings and single-line UI text.',
     constraints: [
@@ -160,6 +182,54 @@ export const tokens: Record<string, TokenAnnotation> = {
     ],
   },
 
+  // === Type roles (ADR-0036) — compose the axes above ===
+  '--ui-type-display': {
+    intent:
+      'Display role: Instrument Serif italic at 2.25rem. The single largest line on a surface — wordmark, hero, section opener.',
+    constraints: [
+      'At most one per surface; it stops reading as emphasis when repeated.',
+      'Never override its weight — the face has only 400. Scale it with --ui-font-size-* or change the case instead.',
+      'Pair with --ui-letter-spacing-tight; `font:` does not carry letter-spacing.',
+    ],
+  },
+  '--ui-type-headline': {
+    intent:
+      'Headline role: Instrument Sans bold at 1.5rem. Where a surface should feel heavy — this is the weight a UI actually registers.',
+    constraints: [
+      'This is the role that carries emphasis, not the display role above it.',
+      'Declare before any font-* override on the same rule: `font:` is a shorthand and resets style, variant, stretch and line-height.',
+    ],
+  },
+  '--ui-type-title': {
+    intent: 'Title role: semibold 1.125rem. Card headers, dialog titles, section labels inside a component.',
+    constraints: ['Do not use for body copy — the weight fights sustained reading.'],
+  },
+  '--ui-type-body-lg': {
+    intent: 'Body role, large (1.125rem). Lead paragraphs and the first screen of a reading surface.',
+    constraints: ['One lead per surface; the rest of the copy is body-md.'],
+  },
+  '--ui-type-body-md': {
+    intent: 'Body role, default (1rem). The workhorse — every paragraph and every interactive label unless a role says otherwise.',
+    constraints: ['If unsure which role a piece of text is, it is this one.'],
+  },
+  '--ui-type-body-sm': {
+    intent: 'Body role, small (0.875rem). Helper text, table meta, secondary descriptions.',
+    constraints: ['Pair with --ui-color-text-muted so the size and the colour agree about importance.'],
+  },
+  '--ui-type-label': {
+    intent: 'Label role: medium 0.75rem. Eyebrows, overlines, badge text, form labels in dense layouts.',
+    constraints: [
+      'Pair with --ui-letter-spacing-uppercase when uppercased — --ui-letter-spacing-wide (0.01em) is far too tight to open up caps.',
+      'Not a substitute for body-sm in running text — labels are named, not read.',
+    ],
+  },
+  '--ui-type-code': {
+    intent: 'Code role: JetBrains Mono at 0.875rem. Inline code, tokens, prop names, keyboard chips, terminal output.',
+    constraints: [
+      'Monospace at paragraph length costs reading speed — keep it to fragments.',
+      'This is the role that makes --ui-font-mono reachable; do not name the family directly.',
+    ],
+  },
   // === Colour · Primary (brand anchor) ===
   '--ui-color-primary': {
     intent: 'Primary call-to-action colour and link text. Brand anchor on light backgrounds.',
