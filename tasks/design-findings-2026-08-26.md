@@ -389,11 +389,29 @@ AtlPagination's button rendering 38px against its own `height: 2.25rem` (ADR-005
 
 ## Decision I — containers and data (2026-08-26, batch F)
 
-**I1 — prose leading on single-line text, a fourth time.** AtlAccordionGroup's
-trigger is 52px because 16px text at 1.5 gives a 24px line box; at the tight
-line-height it would be 44. AtlCheckbox, AtlRadio and AtlToggle rows have the same
-cause (E1/E3), and so do AtlTable's rows. ADR-0041 fixed exactly this for every
-control; the boxes whose height nobody states never got it.
+**I1 — CORRECTED 2026-08-26.** I claimed AtlAccordionGroup's trigger is 52px because
+16px text at 1.5 gives a 24px line box, and that the tight line-height would give 44.
+**Both halves were wrong**, and I arrived at them by arithmetic on an assumption
+rather than by measuring. Measured, four ways:
+
+| accordion trigger | height | line-height | min-height |
+|---|---|---|---|
+| as shipped | **52px** | `normal` (≈18.4px) | 52px |
+| tight forced | 52px | 20px | 52px |
+| min-height removed | **50px** | `normal` | 0 |
+| tight, min-height removed | **52px** | 20px | 0 |
+
+So the trigger never used prose leading — its line-height resolves to `normal` — and
+the 52px comes from a `min-height: 3.25rem` literal. Stating the tight line-height
+would make the content 52px, i.e. *taller* than the 50px it is now, not shorter. The
+direction of my claim was inverted.
+
+What survives: the pattern is real for AtlCheckbox, AtlRadio, AtlToggle and AtlTable
+(E1/E3), where a stated prose line-height does drive the box. The accordion is not an
+instance of it. And the census found the wider defect that matters more: **32 of 70
+text-bearing boxes move under a perturbed inherited line-height**, so their heights
+depend on which typeface is installed. That is Option C in
+`tasks/rhythm-options-2026-08-26.md`.
 
 **I2 — three type sizes reach off the scale.** AtlTable's `sm` uses 13px,
 AtlAvatar's `xs` initials 10px, AtlCodeBlock's label 0.72rem (≈11.5px). The scale
@@ -481,4 +499,31 @@ settling before the Figma transfer:
 6. **AtlIcon has no master**, and everything now depends on it (J1).
 7. **The masters keep claiming their children's states**, and carrying axes that are
    illustrations rather than props (E4, G6, H2, H3, J4).
+
+---
+
+## Measured, 2026-08-26 late: the rhythm census
+
+A five-agent census measured the row heights, the line-height inheritance, the
+2.25rem uses and the content floor of every row. Full options in
+`tasks/rhythm-options-2026-08-26.md`. Three results change what the seven questions
+above are worth:
+
+**32 of 70 text-bearing boxes move under `* { line-height: 3 }`** — their heights are
+decided by inherited text metrics, so they depend on which typeface is installed.
+This is the measurable core of items 1 and 2, and it is fixable without any height
+token (Option C).
+
+**A root-level line-height does not hold.** `.atl-table { line-height: tight }` still
+leaves `tbody tr` at 67px under the probe; stating it on `td` holds at 42.5px. So the
+declaration has to sit on the measured element, ~118 times across three frameworks.
+
+**ADR-0041's derived-padding formula is wrong for a row.** A size-md table cell with
+derived padding renders 62.5px when it holds an md button; with the block padding
+zeroed and the height stated it renders 41.0px. A row centres its content; a control
+pads it. Two recipes, not one — which the ADR does not currently distinguish.
+
+And one correction to the census itself, which it flagged: its **Angular numbers are
+fixture artifacts** (`:host` matches nothing in a plain document) and must be
+re-measured with the `hostify` technique from `tools/scripts/check-geometry.mjs`.
 
