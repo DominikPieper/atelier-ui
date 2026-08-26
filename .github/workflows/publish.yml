@@ -28,8 +28,59 @@ permissions:
   contents: write
   id-token: write
 
+# Releases must never overlap: `nx release` bumps versions, writes changelogs,
+# commits and tags, then publishes. Two concurrent runs would race on the tag
+# and on npm. Queue instead of cancelling — cancelling mid-publish is how a tag
+# ends up pushed with nothing published on the registry.
+#
+# The group is deliberately ref-independent: this workflow fires on push to
+# main, on `release: published` (a tag ref), and on workflow_dispatch, so a
+# per-ref group would let a push run and a release run overlap. One release at
+# a time, repo-wide.
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
 jobs:
+  # ---------------------------------------------------------------------------
+  # Verify — the release gate. Without this job `publish` fired on push to main
+  # with no dependency on CI, so lint and test never gated a release; only
+  # `build` was covered (nx.json makes it a dependsOn of nx-release-publish)
+  # and only the opt-in, --no-verify-skippable pre-push hook ran the drift
+  # gates. See ADR-0033.
+  #
+  # These are the same three commands CI runs on push to main, and the gate
+  # list inside `check:all` stays single-sourced in package.json. Deliberately
+  # run-many, not affected: a release publishes every package, so "affected"
+  # is the wrong question here.
+  # ---------------------------------------------------------------------------
+  verify:
+    name: Verify (release gate)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: '.node-version'
+          cache: 'npm'
+
+      - run: corepack enable
+
+      - run: npm ci
+
+      - run: npm run check:all
+
+      - run: npx nx run-many -t lint --parallel=4
+
+      - run: npx nx run-many -t test --parallel=2
+
   publish:
+    needs: verify
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
