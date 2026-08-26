@@ -1,17 +1,17 @@
 import { HTMLAttributes, ReactNode } from 'react';
-import type { AtlBadgeSpec } from '../spec';
+import type { AtlBadgeSpec, AtlIconName } from '../spec';
 import './atl-badge.css';
 import { AtlIcon } from '../icon/atl-icon';
 
 /** Which AtlIcon each variant carries. Names, not glyphs: a glyph in a string map
  * was the fifth way this library drew an icon, and the one check:iconography
  * missed (ADR-0050). */
-const VARIANT_ICON_NAMES = {
+const VARIANT_ICON_NAMES: Partial<Record<AtlBadgeVariant, AtlIconName>> = {
   info: 'info',
   success: 'success',
   warning: 'warning',
   danger: 'danger',
-} as const;
+};
 
 
 type AtlBadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info';
@@ -48,7 +48,7 @@ export function AtlBadge({
 }: AtlBadgeProps) {
   const classes = ['atl-badge', `variant-${variant}`, `size-${size}`, className]
     .filter(Boolean).join(' ');
-  const iconName = VARIANT_ICON_NAMES[variant as keyof typeof VARIANT_ICON_NAMES];
+  const iconName = VARIANT_ICON_NAMES[variant];
   return (
     <span className={classes} role="status" {...rest}>
       {iconName && <AtlIcon className="variant-icon" name={iconName} size="sm" />}

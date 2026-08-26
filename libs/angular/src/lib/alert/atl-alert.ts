@@ -5,6 +5,7 @@ import {
   input,
   output,
 } from '@angular/core';
+import type { AtlIconName, AtlAlertVariant } from '../spec';
 import { AtlIcon } from '../icon/atl-icon';
 
 /**
@@ -21,12 +22,12 @@ import { AtlIcon } from '../icon/atl-icon';
 // Which AtlIcon each variant carries. Names, not glyphs: a glyph in a string map
 // was the fifth way this library drew an icon, and the one check:iconography
 // missed (ADR-0050).
-const VARIANT_ICON_NAMES = {
+const VARIANT_ICON_NAMES: Partial<Record<AtlAlertVariant, AtlIconName>> = {
   info: 'info',
   success: 'success',
   warning: 'warning',
   danger: 'danger',
-} as const;
+};
 
 @Component({
   selector: 'atl-alert',
@@ -35,7 +36,9 @@ const VARIANT_ICON_NAMES = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <span class="content">
-      <atl-icon class="variant-icon" [name]="variantIcon()" size="sm" />
+      @if (variantIcon(); as icon) {
+        <atl-icon class="variant-icon" [name]="icon" size="sm" />
+      }
       <ng-content />
     </span>
     @if (isDismissible) {

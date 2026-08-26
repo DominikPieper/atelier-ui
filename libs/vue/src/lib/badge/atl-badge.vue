@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import './atl-badge.css';
+import type { AtlIconName } from '../spec';
 import AtlIcon from '../icon/atl-icon.vue';
 
 defineOptions({ name: 'AtlBadge' });
@@ -15,7 +16,7 @@ interface AtlBadgeProps {
 // Which AtlIcon each variant carries. Names, not glyphs: a glyph in a string map
 // was the fifth way this library drew an icon, and the one check:iconography
 // missed (ADR-0050).
-const VARIANT_ICON_NAMES = {
+const VARIANT_ICON_NAMES: Partial<Record<AtlBadgeVariant, AtlIconName>> = {
   info: 'info',
   success: 'success',
   warning: 'warning',
@@ -33,7 +34,7 @@ const classes = computed(() => [
   `size-${props.size}`,
 ]);
 
-const variantIconName = computed(() => VARIANT_ICON_NAMES[props.variant as keyof typeof VARIANT_ICON_NAMES]);
+const variantIconName = computed(() => VARIANT_ICON_NAMES[props.variant]);
 </script>
 
 <template>

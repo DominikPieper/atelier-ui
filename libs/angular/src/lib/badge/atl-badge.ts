@@ -4,6 +4,7 @@ import {
   computed,
   input,
 } from '@angular/core';
+import type { AtlIconName, AtlBadgeVariant } from '../spec';
 import { AtlIcon } from '../icon/atl-icon';
 
 /**
@@ -19,12 +20,12 @@ import { AtlIcon } from '../icon/atl-icon';
 // Which AtlIcon each variant carries. Names, not glyphs: a glyph in a string map
 // was the fifth way this library drew an icon, and the one check:iconography
 // missed (ADR-0050).
-const VARIANT_ICON_NAMES = {
+const VARIANT_ICON_NAMES: Partial<Record<AtlBadgeVariant, AtlIconName>> = {
   info: 'info',
   success: 'success',
   warning: 'warning',
   danger: 'danger',
-} as const;
+};
 
 @Component({
   selector: 'atl-badge',
