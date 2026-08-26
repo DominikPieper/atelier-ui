@@ -1642,9 +1642,17 @@ Each `--ui-*` token carries an intent and a list of constraints. Reach for the t
     intent: Double-ring box-shadow for :focus-visible — surface-coloured inner + primary outer for light/dark compatibility.
     constraints: Apply via box-shadow on :focus-visible — never on :focus alone (mouse focus would flash the ring).; Do not override per component; consistency is the entire point of a global focus ring.
 
+  --ui-font-display
+    intent: Display typeface stack (Instrument Serif). For the single largest line on a surface — a wordmark, a hero, a section opener.
+    constraints: One display line per surface at most; it stops reading as emphasis when repeated.; Instrument Serif ships a single weight (400) — express emphasis through size and case, never font-weight.; Never for interactive labels, form fields, or dense UI text.
+
   --ui-font-family
-    intent: Default UI typeface stack. Inter first, with system fallbacks for offline / first-paint.
-    constraints: Apply on :root or the app shell — do not respecify per component.; Do not swap for display fonts inside product surfaces; reserve display faces for marketing.
+    intent: Default UI typeface stack. Instrument Sans first, with system fallbacks for offline / first-paint (ADR-0035).
+    constraints: Apply on :root or the app shell — do not respecify per component.; Use --ui-font-display for the one display line per surface; everything interactive stays on this stack.
+
+  --ui-font-mono
+    intent: Monospace stack (JetBrains Mono). For code, tokens, prop names, keyboard chips, and terminal output.
+    constraints: Consumed by the code-block components; declaring it here is what stops them falling back to Menlo.; Do not use for prose — monospace at body length costs reading speed.
 
   --ui-font-size-2xl
     intent: Largest in-app heading (1.5rem). Use for page titles inside product surfaces.

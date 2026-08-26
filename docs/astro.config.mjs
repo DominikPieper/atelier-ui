@@ -13,10 +13,14 @@ export default defineConfig({
   site: 'https://atelier.pieper.io',
   fonts: [
     {
-      name: 'Inter',
+      // UI typeface. Replaced Inter 2026-08-26 (ADR-0035): the library's
+      // --ui-font-family now names Instrument Sans, and the docs follow so the
+      // two surfaces stop running separate type systems. Variable 400-700, so
+      // there is no 800 to load.
+      name: 'Instrument Sans',
       cssVariable: '--font-sans',
       provider: fontProviders.google(),
-      weights: [400, 500, 600, 700, 800],
+      weights: [400, 500, 600, 700],
       styles: ['normal'],
       display: 'swap',
     },
@@ -31,6 +35,9 @@ export default defineConfig({
     {
       // Authorial signature accent (serif-italic keyword in headings).
       // Shared brand DNA with pieper.io — typography, not palette. See ADR-0020.
+      // As of ADR-0035 this face is also the library's --ui-font-display, so the
+      // docs accent and the component display role are one typeface.
+      // Single weight by design: Instrument Serif ships only 400.
       name: 'Instrument Serif',
       cssVariable: '--font-accent',
       provider: fontProviders.google(),

@@ -166,6 +166,25 @@ Decision-bearing quick wins (deferred — not this session's scope):
       the shared brand DNA; Claude Design's own prompt lists Inter among overused
       "AI slop" fonts. The most-used font in the ecosystem is a weak carrier of identity.
       Couple this decision with the role-based type scale — they are one decision.
+- [ ] **The parity gate cannot see the shared token layer.** A component's `inputsHash`
+      covers `libs/{angular,react,vue}/src/lib/<module>/` only, so `styles/tokens.css` is
+      outside it — ADR-0035 changed the UI typeface for all 29 components and triggered no
+      DRIFT blocker. Convenient there, wrong in general. Either fold the token source into
+      every component's inputs (every token edit then re-verifies all 29) or add a separate
+      token-layer verification record. Needs a decision, not a quick patch.
+- [ ] **`check:css-tokens` misses consumed-but-undeclared tokens.** It verifies that
+      *declared* tokens are annotated; it did not notice that all three code-block
+      stylesheets consumed `var(--ui-font-mono, …)` while nothing ever declared it, so every
+      code block silently used the Menlo fallback. Fixed in ADR-0035 by declaring the token;
+      the gate gap remains. Scan component CSS for `var(--ui-*)` references with no
+      declaration in the token source.
+- [ ] **Re-sync the Atelier design system in Claude Design.** Its `_ds_manifest.json` and
+      guide still say Inter and Fira Code, plus the four phantom tokens
+      (`--ui-font-size-3xl/4xl/5xl`, `--ui-font-mono` — the last of which the repo now
+      really does declare). Reference-only either way, never input.
+- [ ] **Role-based type scale** (`body-md` instead of `font-size-sm`) — deliberately left
+      out of ADR-0035 so the font swap stayed readable. API addition, migration across every
+      component's CSS, needs its own ADR.
 - [ ] `coverage.thresholds` in 3 vite configs (measure current coverage first — may fail CI)
 - [ ] `docs-old/` (42 tracked files, not in nx graph): remove or justify
 - [x] Wire `check:figma` into CI — done: it runs inside `check:all`, so the `checks` job

@@ -40,6 +40,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0032](0032-claude-design-as-parallel-track.md) | Claude Design as a parallel track, not a replacement for Figma | Accepted | Recorded |
 | [0033](0033-gate-publish-on-full-check-suite.md) | Gate npm publish on the full check suite | Accepted | Recorded |
 | [0034](0034-what-a-green-check-all-asserts.md) | What a green `check:all` asserts: promoted gates, derived rosters (revises 0019 §5, 0024 §4) | Accepted | Recorded |
+| [0035](0035-typography-instrument-pair.md) | Typography: Instrument Sans + Instrument Serif + JetBrains Mono (revises 0020's Inter choice) | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

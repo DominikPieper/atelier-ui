@@ -44,10 +44,28 @@ export interface TokenAnnotation {
 export const tokens: Record<string, TokenAnnotation> = {
   // === Typography ===
   '--ui-font-family': {
-    intent: 'Default UI typeface stack. Inter first, with system fallbacks for offline / first-paint.',
+    intent:
+      'Default UI typeface stack. Instrument Sans first, with system fallbacks for offline / first-paint (ADR-0035).',
     constraints: [
       'Apply on :root or the app shell — do not respecify per component.',
-      'Do not swap for display fonts inside product surfaces; reserve display faces for marketing.',
+      'Use --ui-font-display for the one display line per surface; everything interactive stays on this stack.',
+    ],
+  },
+  '--ui-font-display': {
+    intent:
+      'Display typeface stack (Instrument Serif). For the single largest line on a surface — a wordmark, a hero, a section opener.',
+    constraints: [
+      'One display line per surface at most; it stops reading as emphasis when repeated.',
+      'Instrument Serif ships a single weight (400) — express emphasis through size and case, never font-weight.',
+      'Never for interactive labels, form fields, or dense UI text.',
+    ],
+  },
+  '--ui-font-mono': {
+    intent:
+      'Monospace stack (JetBrains Mono). For code, tokens, prop names, keyboard chips, and terminal output.',
+    constraints: [
+      'Consumed by the code-block components; declaring it here is what stops them falling back to Menlo.',
+      'Do not use for prose — monospace at body length costs reading speed.',
     ],
   },
   '--ui-font-size-xs': {
