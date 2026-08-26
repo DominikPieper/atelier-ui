@@ -33,6 +33,10 @@
    * 43px against a 40px token, and deriving the padding from the label's metrics
    * only moves the guess — the label's line box is not the header's business.
    * See ADR-0047. */
+  /* Stated, not inherited: an inherited line-height makes the box grow with the
+   * text metrics, which is how three controls measured right on one machine and
+   * wrong on another (ADR-0048). */
+  line-height: var(--ui-line-height-tight);
   padding: 0 var(--ui-spacing-4);
   background: var(--ui-color-surface-raised);
   border-bottom: var(--ui-border-width) solid var(--ui-color-border);

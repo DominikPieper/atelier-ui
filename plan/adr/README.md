@@ -53,6 +53,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0045](0045-readonly-only-where-it-is-enforced.md) | `readonly` lives only where it is enforced | Accepted | Recorded |
 | [0046](0046-one-concept-one-drawing.md) | One concept, one drawing (`check:iconography`) | Accepted | Recorded |
 | [0047](0047-bind-the-literals-that-duplicate-a-token.md) | Bind the literals that duplicate a token (`check:token-bypass`) | Accepted | Recorded |
+| [0048](0048-a-stated-height-cannot-be-content-driven.md) | A stated height cannot be content-driven | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

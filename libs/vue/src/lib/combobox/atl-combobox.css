@@ -54,7 +54,18 @@
   width: 100%;
   min-height: var(--ui-control-height-md);
   box-sizing: border-box;
-  padding: 0.625rem var(--ui-spacing-8) 0.625rem var(--ui-spacing-4);
+  /* Control line-height plus padding derived from the height, so the box does not
+   * depend on which font is installed. Authored 0.625rem padding with an inherited
+   * line-height rendered 40px with Instrument Sans and 41px with the fallback — the
+   * defect only appeared in CI. See ADR-0048. */
+  line-height: var(--ui-line-height-tight);
+  padding: calc(
+      (var(--ui-control-height-md) - var(--ui-line-height-tight) * var(--ui-font-size-md)) / 2 -
+        var(--ui-border-width)
+    ) var(--ui-spacing-8) calc(
+      (var(--ui-control-height-md) - var(--ui-line-height-tight) * var(--ui-font-size-md)) / 2 -
+        var(--ui-border-width)
+    ) var(--ui-spacing-4);
   font-family: inherit;
   font-size: inherit;
   color: var(--ui-color-text);

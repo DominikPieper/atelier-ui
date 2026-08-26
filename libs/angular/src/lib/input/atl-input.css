@@ -19,7 +19,7 @@ input {
   width: 100%;
   min-height: var(--ui-control-height-md);
   padding: calc(
-      (var(--ui-control-height-md) - var(--ui-line-height-tight) * var(--ui-font-size-md)) / 2 - 1px
+      (var(--ui-control-height-md) - var(--ui-line-height-tight) * var(--ui-font-size-md)) / 2 - var(--ui-border-width)
     )
     var(--ui-spacing-4);
   font-size: inherit;

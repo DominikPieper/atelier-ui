@@ -35,6 +35,10 @@
   display: inline-flex;
   align-items: center;
   min-height: var(--ui-control-height-md);
+  /* Stated, not inherited: an inherited line-height makes the box grow with the
+   * text metrics, which is how three controls measured right on one machine and
+   * wrong on another (ADR-0048). */
+  line-height: var(--ui-line-height-tight);
   /* Derived from the height, not authored: 12+12 padding on a 20px line box
    * rendered 41px against a 40px token (ADR-0041's recipe, ADR-0047's finding). */
   padding: calc((var(--ui-control-height-md) - var(--ui-line-height-tight) * var(--ui-font-size-sm)) / 2)
@@ -102,7 +106,12 @@
 :host(.variant-pills) .tablist button {
   border-radius: var(--ui-radius-md);
   min-height: var(--ui-control-height-sm);
-  padding: var(--ui-spacing-2) var(--ui-spacing-4);
+  /* Stated, not inherited: an inherited line-height makes the box grow with the
+   * text metrics, which is how three controls measured right on one machine and
+   * wrong on another (ADR-0048). */
+  line-height: var(--ui-line-height-tight);
+  padding: calc((var(--ui-control-height-sm) - var(--ui-line-height-tight) * var(--ui-font-size-sm)) / 2)
+    var(--ui-spacing-4);
   font-size: var(--ui-font-size-sm);
 }
 

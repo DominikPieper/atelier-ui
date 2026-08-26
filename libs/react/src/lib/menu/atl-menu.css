@@ -44,7 +44,12 @@
 
 .atl-menu.variant-compact .atl-menu-item {
   min-height: var(--ui-control-height-sm);
-  padding: var(--ui-spacing-1) var(--ui-spacing-3);
+  /* Stated, not inherited: an inherited line-height makes the box grow with the
+   * text metrics, which is how three controls measured right on one machine and
+   * wrong on another (ADR-0048). */
+  line-height: var(--ui-line-height-tight);
+  padding: calc((var(--ui-control-height-sm) - var(--ui-line-height-tight) * var(--ui-font-size-sm)) / 2)
+    var(--ui-spacing-3);
 }
 
 @keyframes atl-menu-enter {

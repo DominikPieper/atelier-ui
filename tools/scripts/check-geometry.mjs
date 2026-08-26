@@ -27,6 +27,13 @@
  *    the very thing consumers were missing, so it measured a best case nobody
  *    ships. The fixture now supplies NO reset: what it measures is what an app
  *    with no reset of its own gets.
+ * 3. It measured with whatever fonts the machine happens to have. AtlSelect and
+ *    AtlCombobox derived nothing and inherited their line-height, so they were
+ *    40px with Instrument Sans installed and 41px with the fallback — green on a
+ *    developer's machine, red in CI (ADR-0048). Every case is now measured twice,
+ *    once with the shipped stack and once with a font that cannot resolve, and a
+ *    difference between the two is itself a failure: a control whose height moves
+ *    with the font is not a control of a stated height.
  *
  * The roster is DISCOVERED: any component stylesheet referencing a
  * `--ui-control-height-*` token must appear in CONTROLS below, and every entry in
@@ -47,6 +54,19 @@ const { FRAMEWORKS, isComponentDir, getComponentDirs } = require('./lib/componen
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const QUIET = process.argv.includes('--check');
 const TOL = 0.5; // px — sub-pixel rounding is not a defect; 6px is.
+/**
+ * The discriminator for "is this height content-driven?". `line-height` inherits,
+ * and `*` matches every element, so this declaration lands directly on any element
+ * that does not state its own — while losing (specificity 0) to every element that
+ * does. A box whose height moves under it is sized by inherited text metrics, which
+ * is the same thing as being sized by whichever font happens to be installed.
+ *
+ * Deliberately not a font override: the difference AtlSelect showed between
+ * Instrument Sans and the CI fallback was a fraction of a pixel — under the
+ * tolerance, and therefore undetectable that way. Perturbing the metric directly
+ * is what makes the dependency visible.
+ */
+const INHERITED_METRIC_PROBE = '* { line-height: 3; }';
 
 /**
  * Markup per control. This is knowledge, not something to derive: only the
@@ -280,6 +300,24 @@ for (const fw of FRAMEWORKS) {
         return el ? el.getBoundingClientRect().height : null;
       }, selector);
 
+      // Same box, with inherited line-heights perturbed. Unchanged means the height
+      // is stated; changed means it follows whatever text metrics it inherits.
+      await tab.addStyleTag({ content: INHERITED_METRIC_PROBE });
+      const perturbed = await tab.evaluate((sel) => {
+        const el = document.querySelector(sel);
+        return el ? el.getBoundingClientRect().height : null;
+      }, selector);
+
+      if (measured !== null && perturbed !== null && Math.abs(measured - perturbed) > TOL) {
+        errors.push(
+          `[CONTENT-DRIVEN] ${fw}/${control.label} size=${step} is ${measured}px normally but ${perturbed}px once ` +
+            `inherited line-heights change, so its height is decided by text metrics rather than by its token. ` +
+            `It measures right here only because the content happens to fit — on a machine with different fonts it ` +
+            `does not (that is how AtlSelect passed locally and failed in CI). Declare the control line-height on ` +
+            `the rule and derive the block padding from the height (ADR-0041, ADR-0048).`
+        );
+      }
+
       const want = claimed[step];
       if (measured === null) {
         errors.push(
@@ -313,7 +351,9 @@ if (!QUIET) {
     );
   }
 }
-const summary = `${rows.length} measurement(s): ${CONTROLS.length} component(s) × ${FRAMEWORKS.length} framework(s), with no reset supplied`;
+const summary =
+  `${rows.length} measurement(s): ${CONTROLS.length} component(s) × ${FRAMEWORKS.length} framework(s), ` +
+  `each measured against a perturbed inherited line-height, and no reset supplied`;
 if (errors.length > 0) {
   for (const e of errors) console.error(`✗ ${e}`);
   console.error(`\n${errors.length} geometry issue(s). ${summary}.`);
