@@ -96,6 +96,24 @@ Decision-bearing quick wins (deferred — not this session's scope):
           `"bottom-right"`). Story/spec typing slips, not product bugs; the specs allow
           both members.
       Then add a `typecheck` target per lib and wire it into CI.
+- [ ] **Three a11y-pattern divergences surfaced by the new role cross-check** (2026-08-26).
+      Each is a decision about which side is right, not a typo — all three are recorded in
+      `METADATA_ROLE_EXCEPTIONS` as `kind: 'gap'`, so `check:metadata` warns on every run
+      until they are resolved. Resolve, then delete the exception (the gate errors if an
+      exempt component starts matching).
+      · **AtlStepper** — metadata says `progressbar`; all three adapters render
+        `tablist`/`tab`(+`tabpanel`, and Vue is missing `tabpanel` while React/Angular have
+        it); the Figma master description claims a third pattern (`ol` with
+        `aria-current="step"`). Three sources, three answers. Pick one and write the ADR —
+        a stepper is arguably neither a progressbar nor a tab set. Note the Vue/React
+        `tabpanel` asymmetry is a cross-framework divergence the a11y gate did not catch,
+        which is more evidence for the deepen-scenarios item.
+      · **AtlChat** — metadata says `log`; no adapter renders it (`dialog`, `listitem`,
+        `status` only) and the `listitem`s have no list container, so they are orphaned.
+        Either add the `log`/`list` container in code (fixes both) or drop the claim.
+      · **AtlSkeleton** — metadata says `status`; the component renders `aria-hidden="true"`
+        and both baseline scenarios are empty. Either the claim is wrong (→ `none`) or a
+        loading skeleton should actually be announced. Decide which.
 - [ ] `coverage.thresholds` in 3 vite configs (measure current coverage first — may fail CI)
 - [ ] `docs-old/` (42 tracked files, not in nx graph): remove or justify
 - [x] Wire `check:figma` into CI — done: it runs inside `check:all`, so the `checks` job
@@ -120,7 +138,7 @@ Larger workstreams (ranked, see plan file A–D):
       derives the a11y-parity roster from the component dirs with recorded exemptions; the
       cross-gate roster reconciliation is still open
 - [ ] C7 capture bound-token name/value in snapshot · C8 check:figma+freshness · C9 full 27-master snapshot
-- [ ] ~~D10 React CSS/tokens packaging defect~~ (done 2026-07-10, ADR-0026; incl. Vue entry-point fix) · ~~D11 gate publish on CI~~ (done 2026-08-26, ADR-0033: `verify` job + `needs:`) · D12 de-personalize host+deploy wf · D13 metadata a11y cross-check · D14 invert check-docs-sync · D15 secret/RCE defaults
+- [ ] ~~D10 React CSS/tokens packaging defect~~ (done 2026-07-10, ADR-0026; incl. Vue entry-point fix) · ~~D11 gate publish on CI~~ (done 2026-08-26, ADR-0033: `verify` job + `needs:`) · D12 de-personalize host+deploy wf · ~~D13 metadata a11y cross-check~~ (done 2026-08-26: check:metadata now cross-checks `accessibility.role` against the a11y baselines; 3 real divergences found, see below) · D14 invert check-docs-sync · D15 secret/RCE defaults
 
 Blind spots (decisions): SSR stance (Vue Math.random IDs) · reduced-motion gate · 3-fw maintenance/generator · toolchain version-drift · CONTRIBUTING.md · API-stability contract · fw-agnostic contrast gate
 

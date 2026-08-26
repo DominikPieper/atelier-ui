@@ -37,14 +37,18 @@ const fs = require('fs');
 const path = require('path');
 const ts = require('typescript');
 const { parseExportedVars, findExportedInterfaces } = require('./lib/ts-eval');
+const { METADATA_ROLE_EXCEPTIONS } = require('./lib/allowlists');
 
 const ROOT = path.resolve(__dirname, '../..');
 const SPEC_FILE = path.join(ROOT, 'libs/spec/src/index.ts');
 const METADATA_INDEX = path.join(ROOT, 'libs/spec/src/metadata/index.ts');
 const METADATA_DIR = path.join(ROOT, 'libs/spec/src/metadata');
+const A11Y_DIR = path.join(ROOT, 'tools/parity/a11y');
 
 const errors = [];
 const warnings = [];
+/** Metadata modules whose role has already been cross-checked (several specs share one). */
+const roleCheckedModules = new Set();
 
 // ---------------------------------------------------------------------------
 // Step 1 — read the registry + non-component allowlist.
@@ -129,6 +133,12 @@ for (const [specName, modulePath] of Object.entries(registry || {})) {
   validateMetadata(specName, entry.meta, file);
 }
 
+checkRoleExceptionHygiene(
+  new Set(
+    Object.values(registry || {}).map((m) => path.basename(String(m)))
+  )
+);
+
 // ---------------------------------------------------------------------------
 // Done — report.
 // ---------------------------------------------------------------------------
@@ -148,6 +158,106 @@ console.log(
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
+/**
+ * Cross-check `accessibility.role` against the committed a11y baselines
+ * (tools/parity/a11y/atl-<module>.<framework>.json). The field check above only
+ * proves the role is a non-empty string; without this, metadata could claim
+ * `progressbar` for a component that renders a tablist — and did.
+ *
+ * Components with no baselines are skipped: whether a component should have
+ * them is check-a11y-parity's question (ADR-0034), not this gate's.
+ */
+function checkRoleAgainstA11yBaselines(specName, role, file) {
+  if (typeof role !== 'string' || !role.trim()) return; // already reported
+  const moduleName = path.basename(file).replace(/\.metadata\.ts$/, '');
+  // Several specs can share one metadata module (AtlStepperSpec + AtlStepSpec).
+  // Report per module, so the output scales with defects, not spec count.
+  if (roleCheckedModules.has(moduleName)) return;
+  roleCheckedModules.add(moduleName);
+  const scenarios = readA11yScenarios(moduleName);
+  if (scenarios === null) return; // no baselines — not this gate's business
+
+  const rel = path.relative(ROOT, file);
+  const tag = `[ROLE] ${specName} (${rel})`;
+  const roles = new Set();
+  let hasRolelessScenario = false;
+  for (const nodes of scenarios) {
+    const found = new Set();
+    collectRoles(nodes, found);
+    if (found.size === 0) hasRolelessScenario = true;
+    for (const r of found) roles.add(r);
+  }
+
+  // `role: 'none'` is a claim ABOUT ABSENCE: the component exposes no role of
+  // its own by default. It is satisfied by a scenario that exposes nothing —
+  // opt-in landmarks in other scenarios (AtlCard's `region`) do not refute it.
+  const satisfied = role === 'none' ? hasRolelessScenario : roles.has(role);
+  const exception = METADATA_ROLE_EXCEPTIONS.get(moduleName);
+
+  if (satisfied) {
+    if (exception) {
+      errors.push(
+        `[STALE] ${specName}: METADATA_ROLE_EXCEPTIONS exempts '${moduleName}' (${exception.kind}) ` +
+          `but role '${role}' now appears in its a11y baselines. Remove the entry.`
+      );
+    }
+    return;
+  }
+
+  const have = roles.size ? [...roles].sort().join(', ') : '(no roles exposed)';
+  const detail = `declares role '${role}' but its a11y baselines expose ${have}`;
+  if (!exception) {
+    errors.push(
+      `${tag}: ${detail}. Fix whichever side is wrong, or record why the divergence stands in ` +
+        `tools/scripts/lib/allowlists.js (METADATA_ROLE_EXCEPTIONS).`
+    );
+  } else if (exception.kind === 'gap') {
+    warnings.push(`[ROLE-GAP] ${specName}: ${detail} \u2014 ${exception.reason}`);
+  }
+}
+
+/** All scenario node-arrays across a component's per-framework baselines, or null if it has none. */
+function readA11yScenarios(moduleName) {
+  if (!fs.existsSync(A11Y_DIR)) return null;
+  const prefix = `atl-${moduleName}.`;
+  const files = fs.readdirSync(A11Y_DIR).filter((f) => f.startsWith(prefix) && f.endsWith('.json'));
+  if (files.length === 0) return null;
+  const out = [];
+  for (const f of files) {
+    try {
+      const doc = JSON.parse(fs.readFileSync(path.join(A11Y_DIR, f), 'utf8'));
+      for (const nodes of Object.values(doc)) out.push(nodes);
+    } catch {
+      // A malformed baseline is check-a11y-parity's [PARSE] error, not ours.
+    }
+  }
+  return out;
+}
+
+/** Every `role` string anywhere in a normalized accessibility subtree. */
+function collectRoles(node, out) {
+  if (Array.isArray(node)) {
+    for (const n of node) collectRoles(n, out);
+  } else if (node && typeof node === 'object') {
+    if (typeof node.role === 'string') out.add(node.role);
+    for (const v of Object.values(node)) {
+      if (v && typeof v === 'object') collectRoles(v, out);
+    }
+  }
+}
+
+/** An exception naming a module with no metadata file has outlived its reason. */
+function checkRoleExceptionHygiene(knownModules) {
+  for (const [moduleName, entry] of METADATA_ROLE_EXCEPTIONS) {
+    if (!knownModules.has(moduleName)) {
+      errors.push(
+        `[STALE] METADATA_ROLE_EXCEPTIONS names '${moduleName}' (${entry.kind}), which has no ` +
+          `metadata file. Remove the entry.`
+      );
+    }
+  }
+}
+
 
 function validateMetadata(specName, meta, file) {
   const rel = path.relative(ROOT, file);
@@ -215,6 +325,7 @@ function validateMetadata(specName, meta, file) {
     if (typeof a.keyboardBehavior !== 'string' || !a.keyboardBehavior.trim()) {
       errors.push(`${tag}: 'accessibility.keyboardBehavior' must be a non-empty string.`);
     }
+    checkRoleAgainstA11yBaselines(specName, a.role, file);
   }
 
   // Cross-check variantMatrix against the union members declared on the spec

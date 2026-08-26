@@ -182,6 +182,55 @@ const A11Y_PARITY_EXEMPT = new Map([
   ],
 ]);
 
+/**
+ * Components whose `metadata.accessibility.role` does not appear in their
+ * committed a11y baselines (check-metadata). Same two-kind convention as
+ * A11Y_PARITY_EXEMPT: `design` is a closed question and stays silent, `gap`
+ * is an unresolved defect and warns on every run.
+ *
+ * Without this cross-check the gate only asserted that `role` is a non-empty
+ * string, so metadata could claim `progressbar` for a component that renders
+ * a tablist — and did.
+ *
+ * An entry for a module that has no metadata file, or one whose role now DOES
+ * appear in the baselines, is an error: the exception has outlived its reason.
+ */
+const METADATA_ROLE_EXCEPTIONS = new Map([
+  [
+    'chat',
+    {
+      kind: 'gap',
+      reason:
+        "declares role 'log', but no adapter renders it — the implementations expose dialog / " +
+        'listitem / status only, and the listitems have no list container. Either the log ' +
+        'container is missing from the code or the metadata claims a pattern that was never ' +
+        'built. Unresolved: see tasks/todo.md.',
+    },
+  ],
+  [
+    'skeleton',
+    {
+      kind: 'gap',
+      reason:
+        "declares role 'status', but the component renders aria-hidden=\"true\" and both " +
+        'baseline scenarios are empty, so nothing is exposed to assistive tech. Either the ' +
+        'role claim is wrong or a loading skeleton should be announced. Unresolved: see ' +
+        'tasks/todo.md.',
+    },
+  ],
+  [
+    'stepper',
+    {
+      kind: 'gap',
+      reason:
+        "declares role 'progressbar', all three adapters render tablist/tab(/tabpanel), and the " +
+        "Figma master description claims a third pattern (ol with aria-current=\"step\"). Three " +
+        'sources, three answers — picking one is an ADR, not a typo fix. Unresolved: see ' +
+        'tasks/todo.md.',
+    },
+  ],
+]);
+
 module.exports = {
   VARIANT_AXIS_EXCEPTIONS,
   DEFAULT_IS_BASE,
@@ -189,4 +238,5 @@ module.exports = {
   STORY_DESCRIPTION_SKIP_DIRS,
   FIGMA_CONFORMANCE_EXCEPTIONS,
   A11Y_PARITY_EXEMPT,
+  METADATA_ROLE_EXCEPTIONS,
 };
