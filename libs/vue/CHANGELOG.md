@@ -1,3 +1,14 @@
+## 0.2.11 (2026-08-26)
+
+### 🚀 Features
+
+- **tokens:** type roles instead of a size ladder (ADR-0036) ([32b6e64](https://github.com/DominikPieper/atelier-ui/commit/32b6e64))
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Dominik Pieper @DominikPieper
+
 ## 0.2.10 (2026-08-26)
 
 ### 🩹 Fixes
