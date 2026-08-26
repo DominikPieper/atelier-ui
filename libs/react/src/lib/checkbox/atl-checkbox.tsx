@@ -32,10 +32,6 @@ export interface AtlCheckboxProps
    */
   errors?: string[];
   /**
-   * Whether the checkbox is read-only.
-   */
-  readOnly?: boolean;
-  /**
    * The content to be rendered as the label for the checkbox.
    */
   children?: ReactNode;
@@ -51,8 +47,6 @@ export function AtlCheckbox({
   invalid = false,
   errors = [],
   disabled = false,
-  readOnly: reactReadOnly,
-  readonly: specReadOnly,
   required = false,
   children,
   className,
@@ -60,7 +54,6 @@ export function AtlCheckbox({
   name,
   ...rest
 }: AtlCheckboxProps) {
-  const readOnly = reactReadOnly ?? specReadOnly ?? false;
   const inputRef = useRef<HTMLInputElement>(null);
   const generatedId = useId();
   const inputId = id || `checkbox-${generatedId}`;
@@ -92,7 +85,6 @@ export function AtlCheckbox({
           checked={checked}
           onChange={(e) => onCheckedChange?.(e.target.checked)}
           disabled={disabled}
-          readOnly={readOnly}
           required={required}
           aria-invalid={invalid || undefined}
           aria-required={required || undefined}

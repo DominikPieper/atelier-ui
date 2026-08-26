@@ -9,10 +9,6 @@ export interface AtlToggleProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'checked' | 'onChange' | 'readOnly' | 'value'>,
     AtlToggleSpec {
   /**
-   * Whether the toggle is read-only.
-   */
-  readOnly?: boolean;
-  /**
    * Callback fired when the checked state changes.
    */
   onCheckedChange?: (checked: boolean) => void;
@@ -35,8 +31,6 @@ export function AtlToggle({
   invalid = false,
   errors = [],
   disabled = false,
-  readOnly: reactReadOnly,
-  readonly: specReadOnly,
   required = false,
   children,
   className,
@@ -44,7 +38,6 @@ export function AtlToggle({
   name,
   ...rest
 }: AtlToggleProps) {
-  const readOnly = reactReadOnly ?? specReadOnly ?? false;
   const generatedId = useId();
   const inputId = id || `toggle-${generatedId}`;
   const errorId = `${inputId}-errors`;
@@ -69,7 +62,6 @@ export function AtlToggle({
           checked={checked}
           onChange={(e) => onCheckedChange?.(e.target.checked)}
           disabled={disabled}
-          readOnly={readOnly}
           required={required}
           aria-checked={checked}
           aria-invalid={invalid || undefined}

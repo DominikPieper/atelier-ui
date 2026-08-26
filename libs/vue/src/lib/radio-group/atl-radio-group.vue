@@ -60,6 +60,7 @@ const classes = computed(() => [
   'atl-radio-group',
   props.invalid && 'is-invalid',
   props.disabled && 'is-disabled',
+  props.readonly && 'is-readonly',
 ]);
 
 const groupRef = ref<HTMLDivElement | null>(null);

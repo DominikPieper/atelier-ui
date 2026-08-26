@@ -27,13 +27,11 @@ export interface AtlRadioProps extends AtlRadioSpec {
 export function AtlRadio({ radioValue, disabled = false, children }: AtlRadioProps) {
   const ctx = useRadioGroup();
   const isDisabled = disabled || ctx.disabled;
-  const isReadOnly = ctx.readOnly;
   const isChecked = ctx.value === radioValue;
 
   const classes = [
     'atl-radio',
     isDisabled && 'is-disabled',
-    isReadOnly && 'is-readonly',
     isChecked && 'is-checked',
     ctx.invalid && 'is-invalid',
   ]
@@ -48,8 +46,11 @@ export function AtlRadio({ radioValue, disabled = false, children }: AtlRadioPro
         value={radioValue}
         checked={isChecked}
         disabled={isDisabled}
-        readOnly={isReadOnly}
-        onChange={() => !isDisabled && !isReadOnly && ctx.onSelect(radioValue)}
+        // HTML ignores `readonly` on a radio, so guarding onChange stops the model
+        // but not the input's own DOM state. Cancelling the click makes the browser
+        // restore the previous selection (verified in chromium). See ADR-0045.
+        onClick={(e) => ctx.readOnly && e.preventDefault()}
+        onChange={() => !isDisabled && !ctx.readOnly && ctx.onSelect(radioValue)}
         onBlur={() => ctx.onBlur()}
       />
       {children && <span className="radio-text">{children}</span>}

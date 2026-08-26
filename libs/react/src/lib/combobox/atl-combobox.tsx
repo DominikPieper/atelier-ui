@@ -147,6 +147,7 @@ export function AtlCombobox({
     'atl-combobox',
     isOpen && 'is-open',
     disabled && 'is-disabled',
+    readonly && 'is-readonly',
     invalid && 'is-invalid',
   ]
     .filter(Boolean)

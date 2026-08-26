@@ -35,10 +35,6 @@ export interface AtlSelectProps
    * The label for the select.
    */
   label?: string;
-  /**
-   * Whether the select is read-only.
-   */
-  readOnly?: boolean;
 }
 
 /**
@@ -51,8 +47,6 @@ export function AtlSelect({
   invalid = false,
   errors = [],
   disabled = false,
-  readOnly: reactReadOnly,
-  readonly: specReadOnly,
   required = false,
   label,
   children,
@@ -60,14 +54,12 @@ export function AtlSelect({
   id,
   ...rest
 }: AtlSelectProps) {
-  const readOnly = reactReadOnly ?? specReadOnly ?? false;
   const selectId =
     id || (label ? `select-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined);
   const classes = [
     'atl-select',
     invalid && 'is-invalid',
     disabled && 'is-disabled',
-    readOnly && 'is-readonly',
     className,
   ]
     .filter(Boolean)

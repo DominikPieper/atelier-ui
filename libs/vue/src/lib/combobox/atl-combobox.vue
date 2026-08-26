@@ -62,6 +62,7 @@ const wrapperClasses = computed(() => [
   'atl-combobox',
   isOpen.value && 'is-open',
   props.disabled && 'is-disabled',
+  props.readonly && 'is-readonly',
   props.invalid && 'is-invalid',
 ]);
 

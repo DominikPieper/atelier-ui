@@ -38,6 +38,14 @@ function onChange() {
     ctx.onSelect(props.radioValue);
   }
 }
+
+// HTML ignores `readonly` on a radio, so the guard above stops the model but not
+// the input's own DOM state — and nothing re-renders to correct it, since nothing
+// changed. Cancelling the click makes the browser restore the previous selection
+// (verified in chromium). See ADR-0045.
+function onClick(event: MouseEvent) {
+  if (ctx.readonly) event.preventDefault();
+}
 </script>
 
 <template>
@@ -48,6 +56,7 @@ function onChange() {
       :value="radioValue"
       :checked="isChecked"
       :disabled="isDisabled"
+      @click="onClick"
       class="radio-input"
       @change="onChange"
     />

@@ -88,6 +88,7 @@ export const COMPONENT_METADATA_REGISTRY: Record<string, string> = {
  */
 export const NON_COMPONENT_SPECS = new Set<string>([
   'AtlFormFieldSpec', // base for every form input
+  'AtlReadonlySpec', // readonly mixin, applied only where the state is enforced (ADR-0045)
   'AtlToastOptions', // options passed to toast service, not a component
   'AtlComboboxOption', // option shape inside AtlComboboxSpec
   'AtlChatMessageSpec', // message shape rendered by AtlChatSpec

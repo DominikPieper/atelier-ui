@@ -104,20 +104,35 @@ export interface AtlFormFieldSpec {
   value?: any;
   onValueChange?: (value: any) => void;
   disabled?: boolean;
-  readonly?: boolean;
   invalid?: boolean;
   required?: boolean;
   name?: string;
 }
+
+/**
+ * `readonly` — the value is shown and submitted, but the user cannot change it.
+ *
+ * Deliberately NOT part of `AtlFormFieldSpec`. It used to be, and the four choice
+ * controls that inherited it could not keep the promise: HTML ignores `readonly`
+ * on `<input type="checkbox">` and `<input type="radio">`, and
+ * `HTMLSelectElement` has no `readOnly` property at all — measured, the user
+ * still flipped the control and `onCheckedChange` still fired. A prop that
+ * silently does nothing is worse than an absent one, so this mixin is applied
+ * only where the state is actually enforced: natively by the text fields, and by
+ * an explicit guard in AtlCombobox and AtlRadioGroup. See ADR-0045.
+ */
+export interface AtlReadonlySpec {
+  readonly?: boolean;
+}
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
 export type AtlInputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
-export interface AtlInputSpec extends AtlFormFieldSpec {
+export interface AtlInputSpec extends AtlFormFieldSpec, AtlReadonlySpec {
   type?: AtlInputType;
   placeholder?: string;
 }
 
-export interface AtlTextareaSpec extends AtlFormFieldSpec {
+export interface AtlTextareaSpec extends AtlFormFieldSpec, AtlReadonlySpec {
   rows?: number;
   placeholder?: string;
   autoResize?: boolean;
@@ -148,7 +163,7 @@ export interface AtlRadioSpec {
   disabled?: boolean;
 }
 
-export interface AtlRadioGroupSpec extends AtlFormFieldSpec {
+export interface AtlRadioGroupSpec extends AtlFormFieldSpec, AtlReadonlySpec {
   value?: string;
 }
 
@@ -191,7 +206,7 @@ export interface AtlComboboxOption {
   disabled?: boolean;
 }
 
-export interface AtlComboboxSpec extends AtlFormFieldSpec {
+export interface AtlComboboxSpec extends AtlFormFieldSpec, AtlReadonlySpec {
   options?: AtlComboboxOption[];
   placeholder?: string;
 }

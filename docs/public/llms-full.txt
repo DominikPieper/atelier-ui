@@ -209,7 +209,6 @@ Each entry lists:
     onCheckedChange  (checked: boolean) => void  —      Called when the checked state changes
     indeterminate    boolean                     false  Shows a dash (indeterminate state)
     disabled         boolean                     false  Disables the checkbox
-    readonly         boolean                     false  Makes the checkbox read-only
     invalid          boolean                     false  Applies invalid/error styling
     required         boolean                     false  Marks field as required
     name             string                      ''     HTML name attribute for form submission
@@ -254,7 +253,6 @@ Each entry lists:
     checked          boolean                     false  Controlled checked state
     onCheckedChange  (checked: boolean) => void  —      Called when the checked state changes
     disabled         boolean                     false  Disables the toggle
-    readonly         boolean                     false  Makes the toggle read-only
     invalid          boolean                     false  Applies invalid/error styling
     required         boolean                     false  Marks field as required
     name             string                      ''     HTML name attribute for form submission
@@ -332,7 +330,6 @@ Each entry lists:
     onValueChange  (value: string) => void  —      Called when selection changes
     placeholder    string                   ''     Placeholder text when no option is selected
     disabled       boolean                  false  Disables the select
-    readonly       boolean                  false  Makes the select read-only
     invalid        boolean                  false  Applies invalid/error styling
     required       boolean                  false  Marks field as required
     name           string                   ''     HTML name attribute for form submission
@@ -369,6 +366,7 @@ Each entry lists:
     options        AtlComboboxOption[]      []     Array of { label, value } objects
     placeholder    string                   ''     Placeholder text
     disabled       boolean                  false  Disables the combobox
+    readonly       boolean                  false  Shows the value but blocks typing, opening and selection
     invalid        boolean                  false  Applies invalid/error styling
 
   Usage:

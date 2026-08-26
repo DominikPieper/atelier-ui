@@ -36,6 +36,7 @@ let nextId = 0;
         [checked]="isChecked()"
         [disabled]="isDisabled()"
         [attr.name]="effectiveName() || null"
+        (click)="onClick($event)"
         (change)="onChange()"
         (blur)="onBlur()"
       />
@@ -100,6 +101,16 @@ export class AtlRadio implements RadioItem, OnInit, OnDestroy {
   }
 
   /** @internal */
+  /**
+   * readonly is enforced by cancelling the click, not only by the group's
+   * `select()` guard: HTML ignores `readonly` on a radio, so the input would flip
+   * its own DOM state while the model stayed put — and with OnPush nothing
+   * re-renders to correct it. See ADR-0045.
+   */
+  protected onClick(event: Event): void {
+    if (this.group?.readonly()) event.preventDefault();
+  }
+
   protected onChange(): void {
     this.group?.select(this.radioValue());
   }

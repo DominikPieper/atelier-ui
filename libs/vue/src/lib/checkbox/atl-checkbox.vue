@@ -10,7 +10,6 @@ interface AtlCheckboxProps {
   invalid?: boolean;
   errors?: string[];
   disabled?: boolean;
-  readonly?: boolean;
   required?: boolean;
   name?: string;
   id?: string;
@@ -22,7 +21,6 @@ const props = withDefaults(defineProps<AtlCheckboxProps>(), {
   invalid: false,
   errors: () => [],
   disabled: false,
-  readonly: false,
   required: false,
   name: '',
   id: '',
@@ -62,7 +60,6 @@ function onChange(event: Event) {
         type="checkbox"
         :checked="checked"
         :disabled="disabled"
-        :readonly="readonly"
         :required="required"
         :name="name"
         :aria-invalid="invalid || undefined"

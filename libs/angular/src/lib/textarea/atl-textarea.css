@@ -88,6 +88,10 @@ textarea:focus {
 /* Readonly state */
 :host(.is-readonly) textarea {
   background-color: var(--ui-color-surface-sunken);
+  /* Readonly is content, not a control: the interactive edge goes away while the
+   * filled surface stays. Transparent rather than removed so the 1px border keeps
+   * its space and the height stays exactly --ui-control-height-md (ADR-0045). */
+  border-color: transparent;
   cursor: default;
 }
 

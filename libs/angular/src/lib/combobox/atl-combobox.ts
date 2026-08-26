@@ -54,6 +54,7 @@ let nextId = 0;
         [attr.required]="required() || null"
         [attr.name]="name() || null"
         [placeholder]="placeholder()"
+        [readOnly]="readonly()"
         [value]="query()"
         (input)="onInput($event)"
         (focus)="onFocus()"
@@ -130,6 +131,13 @@ export class AtlCombobox implements FormValueControl<string> {
   /** Whether the combobox is disabled. */
   readonly disabled = input(false);
 
+  /**
+   * Whether the value can be read but not changed. Enforced here rather than by
+   * the DOM: `readonly` on the text input would stop typing, but nothing stops the
+   * panel from opening and an option from being picked. See ADR-0045.
+   */
+  readonly readonly = input(false);
+
   /** Whether the combobox has validation errors. */
   readonly invalid = input(false);
 
@@ -189,6 +197,7 @@ export class AtlCombobox implements FormValueControl<string> {
     const classes: string[] = [];
     if (this.isOpen()) classes.push('is-open');
     if (this.disabled()) classes.push('is-disabled');
+    if (this.readonly()) classes.push('is-readonly');
     if (this.invalid()) classes.push('is-invalid');
     if (this.touched()) classes.push('is-touched');
     return classes.join(' ');
@@ -215,7 +224,7 @@ export class AtlCombobox implements FormValueControl<string> {
 
   /** @internal */
   protected onFocus(): void {
-    if (!this.disabled()) this.open();
+    if (!this.disabled() && !this.readonly()) this.open();
   }
 
   /** @internal */
@@ -227,7 +236,7 @@ export class AtlCombobox implements FormValueControl<string> {
 
   /** @internal */
   protected onOptionSelect(option: AtlComboboxOption): void {
-    if (option.disabled || this.disabled()) return;
+    if (option.disabled || this.disabled() || this.readonly()) return;
     this.value.set(option.value);
     this.query.set(option.label);
     this.touched.set(true);
@@ -237,7 +246,7 @@ export class AtlCombobox implements FormValueControl<string> {
 
   /** @internal */
   protected onKeydown(event: KeyboardEvent): void {
-    if (this.disabled()) return;
+    if (this.disabled() || this.readonly()) return;
 
     switch (event.key) {
       case 'Enter': {
@@ -284,7 +293,7 @@ export class AtlCombobox implements FormValueControl<string> {
 
   private open(): void {
     const panel = this.panelRef();
-    if (!panel || this.isOpen()) return;
+    if (!panel || this.isOpen() || this.readonly()) return;
     (panel.nativeElement as HTMLElement & { showPopover(): void }).showPopover();
     this.isOpen.set(true);
     this.activeIndex.set(-1);

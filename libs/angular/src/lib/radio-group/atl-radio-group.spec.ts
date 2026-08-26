@@ -285,4 +285,52 @@ describe('AtlRadioGroup', () => {
       expect(container.querySelector('atl-radio-group')).toHaveClass('is-touched');
     });
   });
+
+  // readonly is enforced by the group, not the DOM: HTML ignores `readonly` on a
+  // radio input, so both change paths — clicking and the roving arrow keys — have
+  // to be blocked in `select()` and `onKeydown()`. See ADR-0045.
+  describe('readonly', () => {
+    const RO_TEMPLATE = `
+      <atl-radio-group [(value)]="value" name="size" [readonly]="true">
+        <atl-radio radioValue="sm">Small</atl-radio>
+        <atl-radio radioValue="md">Medium</atl-radio>
+        <atl-radio radioValue="lg">Large</atl-radio>
+      </atl-radio-group>
+    `;
+
+    // Asserted on the MODEL, not on the native DOM. A cancelled click is restored
+    // by the browser (verified in chromium: a radio group whose click is
+    // preventDefault-ed keeps its previous selection), but jsdom unchecks the
+    // sibling first and never restores it — so a DOM assertion here would fail on
+    // a jsdom limitation rather than on the component.
+    it('does not change the value on click', async () => {
+      const user = userEvent.setup();
+      const { fixture, container } = await render(RO_TEMPLATE, {
+        imports: [AtlRadioGroup, AtlRadio],
+        componentProperties: { value: 'sm' },
+      });
+      await user.click(screen.getByLabelText('Large'));
+      expect(fixture.componentInstance.value).toBe('sm');
+      expect(container.querySelector('[role="radiogroup"]')).toHaveClass('is-readonly');
+    });
+
+    it('does not change the value on arrow keys', async () => {
+      const user = userEvent.setup();
+      const { fixture, container } = await render(RO_TEMPLATE, {
+        imports: [AtlRadioGroup, AtlRadio],
+        componentProperties: { value: 'sm' },
+      });
+      container.querySelectorAll<HTMLInputElement>('input[type="radio"]')[0].focus();
+      await user.keyboard('{ArrowDown}');
+      expect(fixture.componentInstance.value).toBe('sm');
+    });
+
+    it('carries is-readonly on the group', async () => {
+      const { container } = await render(RO_TEMPLATE, {
+        imports: [AtlRadioGroup, AtlRadio],
+        componentProperties: { value: 'sm' },
+      });
+      expect(container.querySelector('[role="radiogroup"]')).toHaveClass('is-readonly');
+    });
+  });
 });

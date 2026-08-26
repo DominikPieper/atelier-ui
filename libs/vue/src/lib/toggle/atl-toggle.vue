@@ -9,7 +9,6 @@ interface AtlToggleProps {
   invalid?: boolean;
   errors?: string[];
   disabled?: boolean;
-  readonly?: boolean;
   required?: boolean;
   name?: string;
   id?: string;
@@ -20,7 +19,6 @@ const props = withDefaults(defineProps<AtlToggleProps>(), {
   invalid: false,
   errors: () => [],
   disabled: false,
-  readonly: false,
   required: false,
   name: '',
   id: '',
@@ -33,7 +31,6 @@ const emit = defineEmits<{
 const inputId = computed(() => props.id || `toggle-${Math.random().toString(36).slice(2)}`);
 
 function onChange(event: Event) {
-  if (props.readonly) return;
   emit('update:checked', (event.target as HTMLInputElement).checked);
 }
 </script>

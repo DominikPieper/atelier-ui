@@ -126,7 +126,29 @@ exactly why measurements there look tidy and a consumer's might not.
 does (`docs/src/styles/global.css:5`); the three `.storybook` configs do not. So
 Storybook was rendering the drifted geometry — 52px menu items — the whole time.
 
-## Decision C — states that exist in one place only
+## Decision C — PARTLY RESOLVED 2026-08-26 (ADR-0045)
+
+**`readonly` — resolved, and much bigger than the finding.** It rendered
+identically to `default`, which was true but the least of it: the prop was
+declared once on `AtlFormFieldSpec`, inherited by seven specs, and did something
+different in each framework. Measured in chromium: `readonly` on a checkbox or
+radio is ignored by HTML, and `HTMLSelectElement` has no `readOnly` property —
+so React's checkbox and toggle passed the attribute *and* still fired
+`onCheckedChange`. Angular never implemented the prop anywhere except input and
+textarea. It now lives in an `AtlReadonlySpec` mixin on the four components that
+enforce it, with a visual treatment (border transparent, filled surface stays,
+height unchanged at 40px) and tests on the guards.
+
+The structural cause is still open: **no gate checks that a spec-declared prop
+exists in all three adapters.** `check:spec` copies the spec file; `check:defaults`
+only compares default values for axis props. That is the next candidate gate.
+
+**Still open — the `✕` glyph.** AtlInput's invalid indicator is a literal
+pseudo-element, not an icon, while the icon union already contains `close` and
+`danger`. The Figma master cannot use an icon instance there, and the glyph will
+not follow the icon set.
+
+<details><summary>The original finding</summary>
 
 - **`readonly` renders identically to `default`.** `--ui-color-input-bg` already
   *is* `var(--ui-color-surface-sunken)`, and `.is-readonly input` sets the same
@@ -134,11 +156,11 @@ Storybook was rendering the drifted geometry — 52px menu items — the whole t
   see is not a state — so either it gets a visual treatment or it stops
   pretending to be one.
 - **AtlInput's invalid indicator is a literal `✕` pseudo-element**, not an icon,
-  while the icon union already contains `close` and `danger`. The Figma master
-  cannot use an icon instance there, and the glyph will not follow the icon set.
+  while the icon union already contains `close` and `danger`.
 - ~~The invalid focus ring restates the ring formula by hand~~ — **fixed**:
-  `--ui-focus-ring-danger`, declared once beside `--ui-focus-ring` so it follows
-  the mode, and bindable in Figma as the inline formula was not.
+  `--ui-focus-ring-danger`, declared once beside `--ui-focus-ring`.
+
+</details>
 
 ## Decision D — literals that cannot be bound in Figma
 

@@ -10,7 +10,6 @@ interface AtlSelectProps {
   invalid?: boolean;
   errors?: string[];
   disabled?: boolean;
-  readonly?: boolean;
   required?: boolean;
   label?: string;
   name?: string;
@@ -22,7 +21,6 @@ const props = withDefaults(defineProps<AtlSelectProps>(), {
   invalid: false,
   errors: () => [],
   disabled: false,
-  readonly: false,
   required: false,
   label: undefined,
   name: undefined,
@@ -42,7 +40,7 @@ const wrapperClasses = computed(() => [
 ]);
 
 function onChange(event: Event) {
-  if (props.readonly || props.disabled) return;
+  if (props.disabled) return;
   emit('update:value', (event.target as HTMLSelectElement).value);
 }
 </script>

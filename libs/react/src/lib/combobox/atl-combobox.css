@@ -199,3 +199,11 @@
   color: var(--ui-color-error-text);
   line-height: var(--ui-line-height-normal);
 }
+
+/* Readonly state — content, not a control: the interactive edge goes away while
+ * the filled surface stays. Transparent rather than removed so the 1px border
+ * keeps its space and the height stays put (ADR-0045). */
+.atl-combobox.is-readonly .atl-combobox-input {
+  border-color: transparent;
+  cursor: default;
+}

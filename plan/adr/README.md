@@ -50,6 +50,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0042](0042-a-gate-that-measures-rendered-geometry.md) | A gate that measures rendered geometry (`check:geometry`) | Accepted | Recorded |
 | [0043](0043-the-geometry-contract-ships-with-the-component.md) | The geometry contract ships with the component (`check:box-sizing`) | Accepted | Recorded |
 | [0044](0044-parity-drift-during-the-redesign-phase.md) | Parity drift is a warning during the redesign phase | Accepted | Recorded |
+| [0045](0045-readonly-only-where-it-is-enforced.md) | `readonly` lives only where it is enforced | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

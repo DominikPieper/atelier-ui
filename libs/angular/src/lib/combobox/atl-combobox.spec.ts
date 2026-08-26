@@ -192,4 +192,42 @@ describe('AtlCombobox', () => {
     await user.click(grapeOption);
     expect(input.value).toBe(''); // disabled — input stays empty
   });
+
+  // readonly is enforced by the component, not the DOM: `readonly` on the text
+  // input stops typing but nothing stops the panel opening and an option being
+  // picked. See ADR-0045.
+  describe('readonly', () => {
+    const RO_TEMPLATE = `
+      <atl-combobox [(value)]="value" [options]="options" [readonly]="true" />
+    `;
+
+    it('does not open the listbox on focus', async () => {
+      const user = userEvent.setup();
+      const { container } = await render(RO_TEMPLATE, {
+        imports: [AtlCombobox],
+        componentProperties: { value: 'apple', options: OPTIONS },
+      });
+      await user.click(getInput(container));
+      expect(container.querySelector('atl-combobox')).not.toHaveClass('is-open');
+      // jsdom does not honour popover="manual", so the panel element is always
+      // "visible" there — assert the polyfill's open marker instead.
+      expect(screen.getByRole('listbox')).not.toHaveAttribute('popover-open');
+    });
+
+    it('marks the input readonly so typing cannot change the query', async () => {
+      const { container } = await render(RO_TEMPLATE, {
+        imports: [AtlCombobox],
+        componentProperties: { value: 'apple', options: OPTIONS },
+      });
+      expect(getInput(container).readOnly).toBe(true);
+    });
+
+    it('carries is-readonly on the host', async () => {
+      const { container } = await render(RO_TEMPLATE, {
+        imports: [AtlCombobox],
+        componentProperties: { value: 'apple', options: OPTIONS },
+      });
+      expect(container.querySelector('atl-combobox')).toHaveClass('is-readonly');
+    });
+  });
 });

@@ -66,6 +66,13 @@ export class AtlRadioGroup implements FormValueControl<string>, AtlRadioGroupCon
   /** Whether the group is disabled. Bound by [formField] directive. */
   readonly disabled = input(false);
 
+  /**
+   * Whether the selection can be read but not changed. Enforced by the guards in
+   * `select()` and `onKeydown()`: HTML ignores `readonly` on a radio input, so the
+   * group has to block the change itself. See ADR-0045.
+   */
+  readonly readonly = input(false);
+
   /** Whether the group has validation errors. Bound by [formField] directive. */
   readonly invalid = input(false);
 
@@ -96,6 +103,7 @@ export class AtlRadioGroup implements FormValueControl<string>, AtlRadioGroupCon
   protected readonly hostClasses = computed(() => {
     const classes: string[] = [];
     if (this.disabled()) classes.push('is-disabled');
+    if (this.readonly()) classes.push('is-readonly');
     if (this.invalid()) classes.push('is-invalid');
     if (this.touched()) classes.push('is-touched');
     return classes.join(' ');
@@ -103,7 +111,7 @@ export class AtlRadioGroup implements FormValueControl<string>, AtlRadioGroupCon
 
   /** @internal — called by AtlRadio on change */
   select(v: string): void {
-    if (!this.disabled()) {
+    if (!this.disabled() && !this.readonly()) {
       this.value.set(v);
     }
   }
@@ -125,7 +133,7 @@ export class AtlRadioGroup implements FormValueControl<string>, AtlRadioGroupCon
 
   /** @internal */
   protected onKeydown(event: KeyboardEvent): void {
-    if (this.disabled()) return;
+    if (this.disabled() || this.readonly()) return;
 
     if (!this.keyManager) {
       this.keyManager = new FocusKeyManager(this.items())
