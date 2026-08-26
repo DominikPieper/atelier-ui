@@ -166,6 +166,17 @@ the repo. Four results, all verified:
       states). Each card carries its rationale and its cost. Verified headless:
       no console errors, no failed requests, no horizontal overflow, all three
       display faces resolved.
+      **Turn 2 (bolder riffs on 1b)** answers "a little more bold" against a verified
+      constraint: **Instrument Serif ships exactly one weight (400)** — one
+      `@font-face` in the Google Fonts CSS, no bold cut — so the boldness cannot
+      come from that typeface. `2a` bigger + upright (kept as the honest **null
+      result**: high-contrast serif with thin stems reads *bigger*, not bolder),
+      `2b` **recommended** — headline moves to Instrument Sans 700 while the serif
+      keeps the display line, no new font, keeps 1b's character, and it is where
+      the weight a UI actually feels lives; `2c` swaps to Source Serif 4 (real
+      400–700 axis, most literal answer, but gives up Instrument Serif's character
+      and the ADR-0020 docs tie). Instrument Sans is variable 400–700, also
+      verified.
 - [ ] Introduce ramps for Atelier's own palette: 50–900 per colour, anchor
       marked, text-safe shade marked with its measured ratio. Existing semantics
       re-point at ramp steps **without changing their resolved values**.
