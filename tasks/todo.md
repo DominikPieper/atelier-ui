@@ -148,12 +148,18 @@ Decision-bearing quick wins (deferred — not this session's scope):
 - [ ] **AtlStepper Figma master has no focus and no disabled variant**, and its description
       carries no a11y annotations — 5 of the 7 remaining parity findings. Pairs with the
       role question above (metadata says `progressbar`, code renders `tablist`).
-- [ ] **Atelier under the Conciso Design System** — plan in
-      `tasks/conciso-rebrand-plan.md` (2026-08-26). Conciso is the authoritative source;
-      5-component pilot; one source fanned out to code / Figma / Claude Design rather than
-      chained. Claude Design consumer project *Atelier*
-      (`7a6a2f19-9a3c-4dd9-9828-65c7cc67766c`) created and bound; the DS project is
-      read-only. Phase 0 (the ADR-0024 score change) blocks everything else.
+- [ ] **Harden Atelier's own design system; Conciso as theme demo** — plan in
+      `tasks/atelier-design-system-plan.md` (2026-08-26). Reframed away from a Conciso
+      rebrand after finding that ADR-0020 already settled it: the palette is
+      "Direction A: Conciso anchor only" and brand DNA is typography + motion, not
+      colour. Port six brand-neutral patterns from Conciso (tonal ramps with anchor +
+      text-safe shade, annotated contrast, role-based type scale, tonal overlays, the
+      `[data-area]` scope mechanism, `_adherence.oxlintrc.json`); Conciso becomes a
+      `[data-brand="conciso"]` theme demo, which proves the token thesis instead of just
+      swapping values. Work project: Claude Design *Atelier*
+      (`7a6a2f19-9a3c-4dd9-9828-65c7cc67766c`); both DS projects are read-only. The plan
+      is additive, so the 29 parity records stay valid until component CSS migrates onto
+      role tokens — at which point the ADR-0024 change (Phase 0) becomes blocking.
 - [ ] `coverage.thresholds` in 3 vite configs (measure current coverage first — may fail CI)
 - [ ] `docs-old/` (42 tracked files, not in nx graph): remove or justify
 - [x] Wire `check:figma` into CI — done: it runs inside `check:all`, so the `checks` job
