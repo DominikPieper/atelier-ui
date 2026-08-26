@@ -73,6 +73,9 @@ jobs:
 
       - run: npm ci
 
+      # check:all includes check:geometry, which measures rendered boxes.
+      - run: npx playwright install --with-deps chromium
+
       - run: npm run check:all
 
       - run: npx nx run-many -t lint --parallel=4

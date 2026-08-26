@@ -255,12 +255,13 @@ Decision-bearing quick wins (deferred — not this session's scope):
       a stated height still author their padding, so a select next to an input may still
       disagree. Same recipe: state the height token, derive the block padding, use the
       control line-height. Each is a rendered change and re-stales its parity record.
-- [ ] **No gate measures rendered geometry.** ADR-0041's defect — a control 6px taller than
-      its token claimed — survived for months because `check:parity` compares against Figma
-      by hand, the a11y baselines do not record geometry, and nothing else measures a box. A
-      gate that renders each control and asserts `height === var(--ui-control-height-*)`
-      would catch the entire class. The Storybook browser-mode harness already exists to
-      hang it on.
+- [x] ~~No gate measures rendered geometry~~ — done 2026-08-26, ADR-0042:
+      `check:geometry` renders every control claiming a `--ui-control-height-*` token and
+      asserts the box matches, in `check:all`. Roster discovered in both directions, so the
+      remaining control migration is self-gating. Negative-tested against the original
+      defect: restoring the authored padding fails with "renders 46px but claims 40px".
+      **The CI leg is unverified until the first push** — it is plain Playwright rather than
+      vitest browser mode, so it should avoid B4's failure, but that is reasoning.
 - [ ] `coverage.thresholds` in 3 vite configs (measure current coverage first — may fail CI)
 - [ ] `docs-old/` (42 tracked files, not in nx graph): remove or justify
 - [x] Wire `check:figma` into CI — done: it runs inside `check:all`, so the `checks` job
