@@ -1,3 +1,14 @@
+## 0.2.14 (2026-08-26)
+
+### 🩹 Fixes
+
+- **tokens:** the control height is the primitive, padding is derived (ADR-0041) ([df973f7](https://github.com/DominikPieper/atelier-ui/commit/df973f7))
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Dominik Pieper @DominikPieper
+
 ## 0.2.13 (2026-08-26)
 
 ### 🩹 Fixes
