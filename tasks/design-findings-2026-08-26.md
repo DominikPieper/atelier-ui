@@ -312,3 +312,40 @@ not enforcement.
 Resolved in this batch: the Unicode glyph maps in AtlAlert and AtlBadge (ADR-0050),
 which every gate had passed all day.
 
+---
+
+## Decision G — the overlay family (2026-08-26, batch D)
+
+**G1 — three dropdown rows, three heights.** A menu item is 36px, an AtlSelect
+option 36px, an AtlCombobox option 40px. All three are list rows a user reads the
+same way; two of the three numbers are literals, and only AtlMenu's compact row sits
+on a token. One height for all list rows, or a stated reason per component.
+
+**G2 — the dialog and drawer headers sit between two type roles.** Both are 20px at
+600. `--ui-type-title` is 18/600, `--ui-type-headline` is 24/700. Two occurrences of
+the same off-role treatment; a third would settle whether the role set needs a step
+or the headers need to move onto one. Related: the roles still have no consumers
+(ADR-0049).
+
+**G3 — `closeOnBackdrop` is a Figma Boolean on AtlDrawer and code-only on
+AtlDialog.** Same prop, same behaviour, two sibling overlays built on the same native
+`<dialog>`, and only one of them lets a designer see the option.
+
+**G4 — AtlDrawer's `size` axis has two meanings.** A width for left/right, a height
+for top/bottom. The master crosses `position` × `size`, so the axis name alone never
+says which dimension moves. And it draws 7 of the 16 combinations without stating
+that the slice is deliberate — AtlButton's master does state it.
+
+**G5 — AtlTooltip's API carries one framework's idiom.** The props are `atlTooltip`,
+`atlTooltipPosition`, `atlTooltipDisabled`, `atlTooltipShowDelay` — because Angular
+implements it as an attribute directive, where the selector *is* the prop. React and
+Vue inherit a prefix they have no reason for, in a spec whose whole point is being
+framework-agnostic. Angular also positions the bubble with CDK overlay transforms
+rather than `.position-*` classes, which is why it holds all four entries in the
+variant-axis exception allowlist.
+
+**G6 — AtlMenu's master models the panel and not the items.** Its only axis is
+`variant` = default | compact, while every state that matters — active, disabled, a
+shortcut, the separator — lives on `AtlMenuItem`, which has no master. A designer
+opening it sees two panels and none of the behaviour.
+

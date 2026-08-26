@@ -83,6 +83,26 @@
     },
     {
       "project": "atelier",
+      "file": "AtlDialog.dc.html",
+      "kind": "component",
+      "subject": "AtlDialog",
+      "covers": [
+        "AtlDialog"
+      ],
+      "note": "Five sizes drawn as panels on a backdrop stage, measured anatomy, and the finding that the header's 20px/600 treatment sits between two type roles — the same treatment AtlDrawer uses, so two occurrences with no role."
+    },
+    {
+      "project": "atelier",
+      "file": "AtlDrawer.dc.html",
+      "kind": "component",
+      "subject": "AtlDrawer",
+      "covers": [
+        "AtlDrawer"
+      ],
+      "note": "Four positions and four sizes drawn as stages, making visible that size means a width for left/right and a height for top/bottom — one axis, two dimensions. Records that the master draws 7 of 16 combinations without saying it is a deliberate slice."
+    },
+    {
+      "project": "atelier",
       "file": "AtlInput.dc.html",
       "kind": "component",
       "subject": "AtlInput",
@@ -90,6 +110,16 @@
         "AtlInput"
       ],
       "note": "Eight states (the five Figma variant states plus the disabled/readonly Booleans and invalid+focus), a measured anatomy table, and findings. Rewritten 2026-08-26 after ADRs 0043-0049 turned three of its open findings into fixed ones: readonly now has a visual treatment, the invalid indicator is an AtlIcon instance rather than a literal glyph, and the border width has a token. Now links the shared _sheet.css."
+    },
+    {
+      "project": "atelier",
+      "file": "AtlMenu.dc.html",
+      "kind": "component",
+      "subject": "AtlMenu",
+      "covers": [
+        "AtlMenu"
+      ],
+      "note": "Both variants with the item states the master does not model (active, disabled, shortcut, separator), plus a ruler specimen for the two row heights. Records that a menu item is 36px, an AtlSelect option 36px and an AtlCombobox option 40px — three dropdown rows, three heights, two of them literals."
     },
     {
       "project": "atelier",
@@ -160,6 +190,16 @@
         "AtlToggle"
       ],
       "note": "Selection x state plus disabled, and invalid drawn as code-only. Anatomy names the four literals that make up the switch shape (44x24 track, 18px thumb, 2px inset) and argues a small component-tier token set is defensible here where a hundred single-use tokens were not."
+    },
+    {
+      "project": "atelier",
+      "file": "AtlTooltip.dc.html",
+      "kind": "component",
+      "subject": "AtlTooltip",
+      "covers": [
+        "AtlTooltip"
+      ],
+      "note": "Four positions relative to an anchor. Records two structural findings: the spec's prop names carry Angular's directive idiom (atlTooltip, atlTooltipPosition) into a framework-agnostic contract, and Angular places the bubble with CDK overlay transforms so the position axis has no CSS counterpart there."
     }
   ]
 }

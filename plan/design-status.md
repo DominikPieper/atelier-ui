@@ -4,7 +4,7 @@
      Every column but "Artboard" is derived from the repo; that one comes from
      tools/design/artboards.json, because Claude Design is not in the repo. -->
 
-**29 components.** Claude Design coverage: **13 designed**, 1 appearing only as a fragment inside a study, 15 untouched.
+**29 components.** Claude Design coverage: **17 designed**, 1 appearing only as a fragment inside a study, 11 untouched.
 
 > **Redesign phase, active since 2026-08-26.** Figma is the *target* of
 > the transfer, not the reference for it, so the masters are stale by definition until they are
@@ -30,11 +30,11 @@ a typography study says nothing about how the component should look.
 | `checkbox` | **AtlCheckbox.dc.html** | selection · state | 5 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
 | `code-block` | — | — *(no master)* | — | — *(never)* | all 3 | — | yes |
 | `combobox` | **AtlCombobox.dc.html** | state | 6 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
-| `dialog` | — | size | 5 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
-| `drawer` | — | position · size | 7 | 2026-07-23 (`2715827`) | all 3 | — | yes |
+| `dialog` | **AtlDialog.dc.html** | size | 5 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
+| `drawer` | **AtlDrawer.dc.html** | position · size | 7 | 2026-07-23 (`2715827`) | all 3 | — | yes |
 | `icon` | — | — *(no master)* | — | — *(never)* | all 3 | — | yes |
 | `input` | **AtlInput.dc.html** | state | 5 | 2026-08-26 (`0bdaddd`) | all 3 | — | yes |
-| `menu` | — | variant | 2 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
+| `menu` | **AtlMenu.dc.html** | variant | 2 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
 | `pagination` | — | position | 3 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `progress` | **AtlProgress.dc.html** | variant · size | 12 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
 | `radio` | **AtlRadio.dc.html** | selection · state | 4 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
@@ -47,7 +47,7 @@ a typography study says nothing about how the component should look.
 | `textarea` | **AtlTextarea.dc.html** | state | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `toast` | **AtlToast.dc.html** | — *(no master)* | — | — *(never)* | all 3 | — | yes |
 | `toggle` | **AtlToggle.dc.html** | selection · state | 4 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
-| `tooltip` | — | position | 4 | 2026-07-23 (`2715827`) | all 3 | — | yes |
+| `tooltip` | **AtlTooltip.dc.html** | position | 4 | 2026-07-23 (`2715827`) | all 3 | — | yes |
 
 ## How to read the last two columns
 
@@ -108,6 +108,22 @@ Selection x state (3 x 3 axes drawn as seven specimens) plus the invalid and dis
 
 Eight specimens: the six Figma variant states (open/filtered/selected each drawn with their panel), the no-results state that has no Figma variant, and the invalid and readonly cases. Records that readonly exists in the code but not on the master, so the transfer has to add the Boolean.
 
+### AtlDialog.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlDialog
+- Covers: AtlDialog
+
+Five sizes drawn as panels on a backdrop stage, measured anatomy, and the finding that the header's 20px/600 treatment sits between two type roles — the same treatment AtlDrawer uses, so two occurrences with no role.
+
+### AtlDrawer.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlDrawer
+- Covers: AtlDrawer
+
+Four positions and four sizes drawn as stages, making visible that size means a width for left/right and a height for top/bottom — one axis, two dimensions. Records that the master draws 7 of 16 combinations without saying it is a deliberate slice.
+
 ### AtlInput.dc.html
 
 - Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
@@ -115,6 +131,14 @@ Eight specimens: the six Figma variant states (open/filtered/selected each drawn
 - Covers: AtlInput
 
 Eight states (the five Figma variant states plus the disabled/readonly Booleans and invalid+focus), a measured anatomy table, and findings. Rewritten 2026-08-26 after ADRs 0043-0049 turned three of its open findings into fixed ones: readonly now has a visual treatment, the invalid indicator is an AtlIcon instance rather than a literal glyph, and the border width has a token. Now links the shared _sheet.css.
+
+### AtlMenu.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlMenu
+- Covers: AtlMenu
+
+Both variants with the item states the master does not model (active, disabled, shortcut, separator), plus a ruler specimen for the two row heights. Records that a menu item is 36px, an AtlSelect option 36px and an AtlCombobox option 40px — three dropdown rows, three heights, two of them literals.
 
 ### AtlProgress.dc.html
 
@@ -171,4 +195,12 @@ Five variants, and the position axis drawn as four container stages rather than 
 - Covers: AtlToggle
 
 Selection x state plus disabled, and invalid drawn as code-only. Anatomy names the four literals that make up the switch shape (44x24 track, 18px thumb, 2px inset) and argues a small component-tier token set is defensible here where a hundred single-use tokens were not.
+
+### AtlTooltip.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlTooltip
+- Covers: AtlTooltip
+
+Four positions relative to an anchor. Records two structural findings: the spec's prop names carry Angular's directive idiom (atlTooltip, atlTooltipPosition) into a framework-agnostic contract, and Angular places the bubble with CDK overlay transforms so the position axis has no CSS counterpart there.
 
