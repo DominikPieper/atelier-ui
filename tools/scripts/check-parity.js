@@ -45,14 +45,12 @@ const { ROOT, moduleForSelector, computeInputsHash } = require('./lib/parity-inp
 const SNAPSHOT_FILE = path.join(ROOT, 'tools/figma/snapshot.json');
 const PARITY_FILE = path.join(ROOT, 'tools/figma/parity.json');
 
-// Optional minimum parity score. Unset by default (figma_check_design_parity's
-// scale is the verify tool's, not ours to assume) — set ATELIER_PARITY_MIN to
-// enforce a floor once the team agrees on the scale.
-const PARITY_MIN = process.env.ATELIER_PARITY_MIN ? Number(process.env.ATELIER_PARITY_MIN) : null;
-
 const errors = [];
 const warnings = [];
 function blocker(tag, msg) { errors.push({ sev: 'BLOCKER', tag, msg }); }
+// Kept for future findings: the CRITICAL severity is part of this gate's
+// vocabulary (see report()), even though no current check emits one.
+// eslint-disable-next-line no-unused-vars
 function critical(tag, msg) { errors.push({ sev: 'CRITICAL', tag, msg }); }
 function warning(tag, msg) { warnings.push({ sev: 'WARNING', tag, msg }); }
 
@@ -91,21 +89,18 @@ for (const comp of snapshot.components) {
 
   const rec = records[selector];
   if (!rec) {
-    warning('UNVERIFIED', `${selector}: never design-parity-verified. Run figma_check_design_parity (node ${comp.nodeId}), then: npm run parity:record -- --component ${selector} --score <score>`);
+    warning('UNVERIFIED', `${selector}: never design-parity-verified. Run figma_check_design_parity (node ${comp.nodeId}), then: npm run parity:record -- --component ${selector}`);
     continue;
   }
   recorded++;
 
   const { hash } = computeInputsHash(moduleName);
   if (rec.inputsHash !== hash) {
-    blocker('DRIFT', `${selector}: component files changed since the last parity check (verified ${rec.verifiedSha || '?'} on ${rec.verifiedAt || '?'}). Re-run figma_check_design_parity and: npm run parity:record -- --component ${selector} --score <score>`);
+    blocker('DRIFT', `${selector}: component files changed since the last parity check (verified ${rec.verifiedSha || '?'} on ${rec.verifiedAt || '?'}). Re-run figma_check_design_parity and: npm run parity:record -- --component ${selector}`);
     continue;
   }
   if (rec.figmaNodeId && comp.nodeId && rec.figmaNodeId !== comp.nodeId) {
     warning('NODE', `${selector}: recorded Figma node ${rec.figmaNodeId} != snapshot node ${comp.nodeId}. The master may have been renumbered; re-verify to be safe.`);
-  }
-  if (PARITY_MIN != null && typeof rec.parityScore === 'number' && rec.parityScore < PARITY_MIN) {
-    critical('SCORE', `${selector}: recorded parity score ${rec.parityScore} is below the ATELIER_PARITY_MIN floor (${PARITY_MIN}).`);
   }
 }
 

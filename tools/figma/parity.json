@@ -1,13 +1,12 @@
 {
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
-    "note": "Per-component design-parity records. Written by `npm run parity:record` after a human/agent runs figma_check_design_parity; read by `npm run check:parity`. Each record's inputsHash covers libs/{angular,react,vue}/src/lib/<module>/ so a spec/story/impl/css change since the last verify makes the gate ask for a re-verify. See plan/adr/0024.",
+    "note": "Per-component design-parity records. Written by `npm run parity:record` after a human/agent runs figma_check_design_parity; read by `npm run check:parity`. Each record's inputsHash covers libs/{angular,react,vue}/src/lib/<module>/ so a spec/story/impl/css change since the last verify makes the gate ask for a re-verify. The parity SCORE is deliberately not stored: it is not comparable across runs (it tracks how much of codeSpec was declared and which node was sampled, not the component) \u2014 three runs on one commit for AtlStepper returned 70, 52 and 83. See plan/adr/0024 and its 2026-08-26 amendment.",
     "generatedAt": "2026-08-26T09:04:31.670Z"
   },
   "components": {
     "AtlAccordionGroup": {
       "figmaNodeId": "55:127",
-      "parityScore": 0.97,
       "verifiedAt": "2026-07-22T13:29:13.694Z",
       "verifiedSha": "fe4d5f4",
       "inputsHash": "sha256:9358b1bb0365e3153d5814e45f27e3956dd6a27bd252a0cc11825117a2b420f2",
@@ -31,7 +30,6 @@
     },
     "AtlAlert": {
       "figmaNodeId": "55:31",
-      "parityScore": 0.95,
       "verifiedAt": "2026-07-22T14:10:58.427Z",
       "verifiedSha": "26a8a7e",
       "inputsHash": "sha256:881ca45b3f76e29166ad3d10d7beb72a928feb403b2cfd62618f08473f35b5c0",
@@ -55,7 +53,6 @@
     },
     "AtlAvatar": {
       "figmaNodeId": "55:151",
-      "parityScore": 0.87,
       "verifiedAt": "2026-07-22T20:25:48.131Z",
       "verifiedSha": "6282b4f",
       "inputsHash": "sha256:03705f7dae9e4cb74ae1276489ec6d4bd224e4b65527b71f6311c43fa586bed1",
@@ -81,7 +78,6 @@
     },
     "AtlAvatarGroup": {
       "figmaNodeId": "508:7221",
-      "parityScore": 0.96,
       "verifiedAt": "2026-07-22T20:25:49.558Z",
       "verifiedSha": "6282b4f",
       "inputsHash": "sha256:03705f7dae9e4cb74ae1276489ec6d4bd224e4b65527b71f6311c43fa586bed1",
@@ -107,7 +103,6 @@
     },
     "AtlBadge": {
       "figmaNodeId": "55:22",
-      "parityScore": 0.99,
       "verifiedAt": "2026-07-22T20:25:46.711Z",
       "verifiedSha": "6282b4f",
       "inputsHash": "sha256:84f1f7a401d7c60b550507bacb6dc36aab1103579376e13cb731d8f924dc0b3d",
@@ -131,7 +126,6 @@
     },
     "AtlBreadcrumbs": {
       "figmaNodeId": "55:141",
-      "parityScore": 0.96,
       "verifiedAt": "2026-07-22T19:41:47.154Z",
       "verifiedSha": "d05f789",
       "inputsHash": "sha256:3e4ae185b6c559e61824e5399bef6499b42dcafc31ba330ac649c1a38c2c8f99",
@@ -157,7 +151,6 @@
     },
     "AtlButton": {
       "figmaNodeId": "129:20",
-      "parityScore": 0.9,
       "verifiedAt": "2026-07-21T20:29:42.246Z",
       "verifiedSha": "2ac9047",
       "inputsHash": "sha256:b2c35e6fecb55e637038897704fd6d2ce1c89d5df01fee7be7ac917218e38452",
@@ -181,7 +174,6 @@
     },
     "AtlCard": {
       "figmaNodeId": "55:65",
-      "parityScore": 0.95,
       "verifiedAt": "2026-07-22T20:25:54.069Z",
       "verifiedSha": "6282b4f",
       "inputsHash": "sha256:a1286ba8ea64f715a60068b74de2c291457fa797ce8da72bc8fc0bcc4d492306",
@@ -208,7 +200,6 @@
     },
     "AtlChat": {
       "figmaNodeId": "507:2953",
-      "parityScore": 0.93,
       "verifiedAt": "2026-07-23T05:07:48.288Z",
       "verifiedSha": "2715827",
       "inputsHash": "sha256:c262a7144195f98803f17d40f6ce41fdadaa2ff520144937e383af38e46ecb80",
@@ -239,7 +230,6 @@
     },
     "AtlCheckbox": {
       "figmaNodeId": "55:36",
-      "parityScore": 0.73,
       "verifiedAt": "2026-07-22T19:41:42.829Z",
       "verifiedSha": "d05f789",
       "inputsHash": "sha256:0b0e3dfcbc7edc9cd444a46b17d10f359f5b73a6368c04d561f24391f770148c",
@@ -263,7 +253,6 @@
     },
     "AtlCombobox": {
       "figmaNodeId": "421:339",
-      "parityScore": 0.72,
       "verifiedAt": "2026-07-22T13:35:18.661Z",
       "verifiedSha": "fe4d5f4",
       "inputsHash": "sha256:3c64a69143ba0219fca7ebebc0f628d87e3f1bd6477e036eae34383a011d81b6",
@@ -284,7 +273,6 @@
     },
     "AtlDialog": {
       "figmaNodeId": "55:94",
-      "parityScore": 0.9,
       "verifiedAt": "2026-07-22T14:10:54.016Z",
       "verifiedSha": "26a8a7e",
       "inputsHash": "sha256:40dcd7d888b9366e4f26cf59934426497a046fa9a257421d98900bb8f0e3ded7",
@@ -312,7 +300,6 @@
     },
     "AtlDrawer": {
       "figmaNodeId": "421:398",
-      "parityScore": 0.94,
       "verifiedAt": "2026-07-23T05:07:46.868Z",
       "verifiedSha": "2715827",
       "inputsHash": "sha256:d6ed455ef0aaaba7771b685017cce9a9c8de331500d06966e4544bf74718b17c",
@@ -340,7 +327,6 @@
     },
     "AtlInput": {
       "figmaNodeId": "129:33",
-      "parityScore": 0.72,
       "verifiedAt": "2026-07-22T19:41:41.379Z",
       "verifiedSha": "d05f789",
       "inputsHash": "sha256:7bd9f0d962e316f261a6178de7254aaea1f12149cd33be5d8ebd94530edf0062",
@@ -364,7 +350,6 @@
     },
     "AtlMenu": {
       "figmaNodeId": "55:130",
-      "parityScore": 1,
       "verifiedAt": "2026-07-22T14:10:56.956Z",
       "verifiedSha": "26a8a7e",
       "inputsHash": "sha256:fc2472a2177f837da78ea676662418c5822d9d4af9c9e669b98f71f26df7d047",
@@ -391,7 +376,6 @@
     },
     "AtlPagination": {
       "figmaNodeId": "55:145",
-      "parityScore": 0.87,
       "verifiedAt": "2026-07-22T20:25:55.585Z",
       "verifiedSha": "6282b4f",
       "inputsHash": "sha256:7e15ed13255b76b6d40bf8a5a8e27ca8a49ec24da40f90766ab686702584f9a4",
@@ -415,7 +399,6 @@
     },
     "AtlProgress": {
       "figmaNodeId": "420:153",
-      "parityScore": 0.87,
       "verifiedAt": "2026-07-22T19:41:45.727Z",
       "verifiedSha": "d05f789",
       "inputsHash": "sha256:267adab7086ad66aec97f204a045e65e2cf1f7802574de4cd9036cbf3408d9ea",
@@ -439,7 +422,6 @@
     },
     "AtlRadio": {
       "figmaNodeId": "420:185",
-      "parityScore": 0.9,
       "verifiedAt": "2026-07-22T13:31:32.342Z",
       "verifiedSha": "fe4d5f4",
       "inputsHash": "sha256:1cf08f9eff88c2a84991c52c05e65a85bb1669cddb10e9668cfd55a35e1a2f1d",
@@ -460,7 +442,6 @@
     },
     "AtlRadioGroup": {
       "figmaNodeId": "55:137",
-      "parityScore": 0.79,
       "verifiedAt": "2026-07-22T13:31:14.553Z",
       "verifiedSha": "fe4d5f4",
       "inputsHash": "sha256:1cf08f9eff88c2a84991c52c05e65a85bb1669cddb10e9668cfd55a35e1a2f1d",
@@ -481,7 +462,6 @@
     },
     "AtlSelect": {
       "figmaNodeId": "55:92",
-      "parityScore": 0.74,
       "verifiedAt": "2026-07-22T13:28:20.567Z",
       "verifiedSha": "fe4d5f4",
       "inputsHash": "sha256:587f26fb3404b31501a2dccecfabc7b341210458d1afff08004f90fef1542cab",
@@ -505,7 +485,6 @@
     },
     "AtlSkeleton": {
       "figmaNodeId": "55:102",
-      "parityScore": 0.91,
       "verifiedAt": "2026-07-22T20:25:51.061Z",
       "verifiedSha": "6282b4f",
       "inputsHash": "sha256:9cb9f37368f74aca34b7fb8a32e190399c11c7da9d889cd8c2be24136ce39aeb",
@@ -529,7 +508,6 @@
     },
     "AtlStepper": {
       "figmaNodeId": "421:505",
-      "parityScore": 0.83,
       "verifiedAt": "2026-08-26T09:04:31.617Z",
       "verifiedSha": "f4c20b6",
       "inputsHash": "sha256:35e06ad70299ba97576cba258f498f9eba443de27dd98455352f790c2c93bc92",
@@ -555,7 +533,6 @@
     },
     "AtlTabGroup": {
       "figmaNodeId": "55:123",
-      "parityScore": 0.93,
       "verifiedAt": "2026-07-22T14:10:55.476Z",
       "verifiedSha": "26a8a7e",
       "inputsHash": "sha256:3a9004bd4bacd9badc7f3f9ddcf9e7110d83f3b3b21155c1dbda17f76232c6cb",
@@ -581,7 +558,6 @@
     },
     "AtlTable": {
       "figmaNodeId": "421:1183",
-      "parityScore": 0.86,
       "verifiedAt": "2026-07-22T20:25:57.111Z",
       "verifiedSha": "6282b4f",
       "inputsHash": "sha256:50dc21c5f14d7711484404b8491b6729935d872cd34941396f5098fe45c9ccc8",
@@ -610,7 +586,6 @@
     },
     "AtlTextarea": {
       "figmaNodeId": "55:87",
-      "parityScore": 0.67,
       "verifiedAt": "2026-07-22T20:25:52.559Z",
       "verifiedSha": "6282b4f",
       "inputsHash": "sha256:fe09c5046b17fc24914bd27d3efa45f8a7d6e89e131e6a6dbc0fdc2615f7e24e",
@@ -634,7 +609,6 @@
     },
     "AtlToggle": {
       "figmaNodeId": "55:41",
-      "parityScore": 0.78,
       "verifiedAt": "2026-07-22T19:41:44.254Z",
       "verifiedSha": "d05f789",
       "inputsHash": "sha256:51a3f6d4574016daafcadad5a7a4d6948a681c5360c781a2901beb94d88fb2f9",
@@ -658,7 +632,6 @@
     },
     "AtlTooltip": {
       "figmaNodeId": "55:52",
-      "parityScore": 0.83,
       "verifiedAt": "2026-07-23T05:07:45.434Z",
       "verifiedSha": "2715827",
       "inputsHash": "sha256:3af80a67cacb11338e43d8f4675266e7d432e3b14a8a3458fbf4d70421afc106",

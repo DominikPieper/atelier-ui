@@ -27,7 +27,7 @@ export const metadata: ComponentMetadata = {
     { variant: 'rectangular', animated: false },
   ],
   accessibility: {
-    role: 'status',
+    role: 'none',
     keyboardBehavior: 'Not focusable; no key handling.',
   },
 };

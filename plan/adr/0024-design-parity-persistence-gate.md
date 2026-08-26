@@ -106,3 +106,62 @@ manual record step exactly as ADR-0019 isolated it into `figma:snapshot`.
   `tools/scripts/lib/parity-inputs.js`, `tools/figma/parity.json`; `package.json`
   gains `check:parity` + `parity:record`. No new dependency (offline gate); the
   writer uses only Node built-ins.
+
+## Amendment 2026-08-26: the score is no longer stored
+
+**What changed.** `parityScore` is gone from the record and from the gate.
+`parity:record` still accepts `--score` (older notes and muscle memory keep
+working) but echoes it and drops it. `check-parity`'s `ATELIER_PARITY_MIN` floor
+and its `SCORE` critical are removed. What remains is what is reproducible:
+`figmaNodeId`, `verifiedAt`, `verifiedSha`, `inputsHash`. The gate now asserts
+exactly one thing — *this component was design-parity-verified after its files
+last changed* — which is what it was always able to prove.
+
+**Why.** The score is not a property of the component. Three
+`figma_check_design_parity` runs on one commit for AtlStepper returned **70, 52
+and 83**, and both sources of variance are in the caller's hands, not the code's:
+
+1. **Which node you sample.** `421:505` is the `COMPONENT_SET`; its padding, gap
+   and size describe how the eight variants are arranged on the canvas, not the
+   component. Sampling the default variant `421:407` instead moved the score by
+   31 points. This ADR's own §"…snapshot" text and ADR-0019 already say the
+   default variant is what gets sampled — the parity tool does not enforce it,
+   and the recorded node is the set.
+2. **How much `codeSpec` you declare.** Omitting a field means it is not
+   compared. Declaring `padding: 0` honestly turned four previously-unexamined
+   properties into four `major` mismatches. A sparser, lazier `codeSpec` scores
+   *higher*.
+
+So the July 0.92 and the August 0.83 were never the same measurement, and
+storing them in one series invited a trend reading that the numbers cannot
+support. A stored number that only looks comparable is worse than no number:
+it would have been read as "parity regressed 9 points" when nothing about the
+component had changed.
+
+**Alternatives considered.**
+
+- **Keep the score, derive `codeSpec` mechanically, and pin the sampled node to
+  the default variant.** Rejected *for now*, not on principle — this is the
+  version of the idea that would actually work, and `figma_scan_code_accessibility`
+  with `mapToCodeSpec: true` already exists for the a11y part. But deriving the
+  visual/spacing/typography sections mechanically from CSS is its own project,
+  and until it exists the honest move is to stop storing a number we cannot
+  reproduce. If that derivation lands, this amendment should be revisited.
+- **Keep storing it, labelled "informational".** Rejected: a number in a
+  committed JSON series gets read as a series regardless of its label.
+- **Raise the floor instead** (`ATELIER_PARITY_MIN`) so the score gates rather
+  than trends. Rejected: it would gate on the same unreproducible quantity, and
+  a floor that a sparser `codeSpec` can clear is an invitation to declare less.
+
+**Consequences.**
+
+- The verify step still runs and is still required — the DRIFT blocker is
+  untouched. Only the number stops being persisted.
+- 27 existing records were migrated by stripping `parityScore`; nothing else in
+  them changed, so no component needs re-verification because of this.
+- `tools/figma/parity.json`'s `meta.note` now carries the reason, so the next
+  reader does not have to find this amendment first.
+- The docs (`design-to-code`) no longer teach `--score`.
+- The `critical()` helper in `check-parity.js` is left in place and marked
+  unused: CRITICAL stays part of the gate's severity vocabulary for a future
+  finding, and deleting it would only invite re-adding it.

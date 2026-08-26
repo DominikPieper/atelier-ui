@@ -3,14 +3,21 @@
  * parity-record.mjs
  *
  * Persist a design-parity result so check-parity.js can later catch drift.
- * Run this right after figma_check_design_parity, while you know the score:
+ * Run this right after figma_check_design_parity:
  *
- *   npm run parity:record -- --component AtlButton --score 0.98
- *   npm run parity:record -- --component AtlCard --score 0.97 --node 55:65
+ *   npm run parity:record -- --component AtlButton
+ *   npm run parity:record -- --component AtlCard --node 55:65
  *
  * It records the component's Figma node (looked up from the snapshot when --node
- * is omitted), the score, the verifying git sha + timestamp, and an inputsHash
- * over the component's files across all three frameworks (lib/parity-inputs.js).
+ * is omitted), the verifying git sha + timestamp, and an inputsHash over the
+ * component's files across all three frameworks (lib/parity-inputs.js).
+ *
+ * The parity SCORE is deliberately not stored. It is not comparable across
+ * runs: it tracks how much of `codeSpec` you declared and which node you
+ * sampled, not the component's state. Three runs on one commit for AtlStepper
+ * returned 70, 52 and 83 — see ADR-0024's 2026-08-26 amendment. `--score` is
+ * still accepted so muscle memory and older notes keep working; it is echoed
+ * and dropped.
  * The hash is what check-parity compares against on a later run — if any of those
  * files changed since this record, the gate asks for a re-verify. See plan/adr/0024.
  *
@@ -49,17 +56,19 @@ function fail(msg) {
 
 const args = parseArgs(process.argv.slice(2));
 if (!args.component) {
-  fail('missing --component <Selector> (e.g. --component AtlButton). Usage:\n  npm run parity:record -- --component AtlButton --score 0.98 [--node 129:20]');
+  fail('missing --component <Selector> (e.g. --component AtlButton). Usage:\n  npm run parity:record -- --component AtlButton [--node 129:20]');
 }
 const selector = args.component;
 
 const moduleName = moduleForSelector(selector);
 if (!moduleName) fail(`${selector} has no COMPONENT_METADATA_REGISTRY entry, so its parity inputs cannot be located.`);
 
-let score = null;
+// Accepted, echoed, and deliberately NOT stored — see the header note.
 if (args.score !== undefined) {
-  score = Number(args.score);
-  if (Number.isNaN(score)) fail(`--score "${args.score}" is not a number.`);
+  console.log(
+    `note: --score ${args.score} is not stored. The score is not comparable across runs ` +
+      `(it tracks how much codeSpec was declared and which node was sampled). ADR-0024.`
+  );
 }
 
 // Resolve the Figma node id: explicit --node wins, else look it up in the snapshot.
@@ -82,7 +91,6 @@ parity.components = parity.components || {};
 
 parity.components[selector] = {
   figmaNodeId,
-  parityScore: score,
   verifiedAt: new Date().toISOString(),
   verifiedSha: gitSha(),
   inputsHash: hash,
@@ -97,7 +105,7 @@ for (const k of Object.keys(parity.components).sort()) ordered[k] = parity.compo
 parity.components = ordered;
 
 writeFileSync(PARITY_FILE, JSON.stringify(parity, null, 2) + '\n');
-console.log(`✓ recorded parity for ${selector} (node ${figmaNodeId || '?'}, score ${score ?? 'n/a'}, ${inputs.length} input file(s)).`);
+console.log(`✓ recorded parity for ${selector} (node ${figmaNodeId || '?'}, ${inputs.length} input file(s)).`);
 
 function gitSha() {
   try {

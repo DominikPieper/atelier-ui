@@ -208,17 +208,6 @@ const METADATA_ROLE_EXCEPTIONS = new Map([
     },
   ],
   [
-    'skeleton',
-    {
-      kind: 'gap',
-      reason:
-        "declares role 'status', but the component renders aria-hidden=\"true\" and both " +
-        'baseline scenarios are empty, so nothing is exposed to assistive tech. Either the ' +
-        'role claim is wrong or a loading skeleton should be announced. Unresolved: see ' +
-        'tasks/todo.md.',
-    },
-  ],
-  [
     'stepper',
     {
       kind: 'gap',

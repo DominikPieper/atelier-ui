@@ -724,7 +724,7 @@ Each entry lists:
       - Communicating an indeterminate background operation with no associated content slot. → use AtlProgress with `indeterminate` — has the right role and announces progress.
       - Holding empty space when there is genuinely nothing to render. → use An empty state with explanation; skeletons promise content that is coming.
     relatedComponents: AtlProgressSpec, AtlAvatarSpec
-    accessibility.role: status
+    accessibility.role: none
     accessibility.keyboardBehavior: Not focusable; no key handling.
 
 ---
