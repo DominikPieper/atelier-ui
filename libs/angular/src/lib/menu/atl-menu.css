@@ -18,6 +18,11 @@
   border-radius: var(--ui-radius-lg);
   box-shadow: var(--ui-shadow-lg);
   font-family: var(--ui-font-family);
+  /* The leading every descendant inherits. Stated here so the component keeps
+     its own vertical rhythm instead of adopting the consuming app's prose
+     leading — the defect that made the row boxes measure differently in a
+     Storybook page and in a docs page (ADR-0052). Single-line chrome, so tight. */
+  line-height: var(--ui-line-height-tight);
   font-size: var(--ui-font-size-md);
   color: var(--ui-color-text);
   outline: none;

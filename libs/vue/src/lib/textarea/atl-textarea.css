@@ -11,6 +11,10 @@
 .atl-textarea {
   display: block;
   font-family: var(--ui-font-family);
+  /* The leading every descendant inherits, stated so the component keeps its
+     own rhythm rather than the consuming app's prose leading (ADR-0052).
+     The field carries prose, so normal. */
+  line-height: var(--ui-line-height-normal);
   font-size: var(--ui-font-size-md);
 }
 

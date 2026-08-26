@@ -24,6 +24,11 @@
    * Sans — measured: a card next to a button showed two typefaces. Declared once
    * per component root, never on a descendant (ADR-0049). */
   font-family: var(--ui-font-family);
+  /* The leading every descendant inherits. Stated here so the component keeps
+     its own vertical rhythm instead of adopting the consuming app's prose
+     leading — the defect that made the row boxes measure differently in a
+     Storybook page and in a docs page (ADR-0052). This one carries prose, so normal. */
+  line-height: var(--ui-line-height-normal);
   display: block;
   border-radius: var(--ui-radius-xl);
   background-color: var(--ui-color-surface-raised);

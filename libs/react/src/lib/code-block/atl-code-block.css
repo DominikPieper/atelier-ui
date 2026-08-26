@@ -18,6 +18,10 @@
   border-radius: var(--ui-radius-lg);
   overflow: hidden;
   font-family: var(--ui-font-family);
+  /* The leading every descendant inherits, stated so the component keeps its
+     own rhythm rather than the consuming app's prose leading (ADR-0052).
+     Chrome around the code, so tight — the code element states the code leading itself. */
+  line-height: var(--ui-line-height-tight);
 }
 
 /* ---------------------------------------------------------------------------

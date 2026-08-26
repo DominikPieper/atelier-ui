@@ -22,6 +22,12 @@
  *                  it means the root does not, and the component is then only
  *                  correct when that particular descendant is on screen (which is
  *                  how AtlChat ended up with four declarations and no root one).
+ *   [NO-LEADING]   the root must also state a line-height. A typeface without a
+ *                  leading is only half the metric: the component still takes the
+ *                  consuming app’s prose leading, which is what made the table
+ *                  cell 42px in one page and 51px in another (ADR-0052). Stating
+ *                  it on the root gives every descendant a leading the library
+ *                  controls, without reaching into content the app supplies.
  *   [RESET-AFTER]  `all: unset` resets font-family, so a declaration before it in
  *                  the same rule does nothing. This one is measured-from-experience:
  *                  the dialog's declaration was silently wiped exactly this way.
@@ -67,6 +73,11 @@ for (const fw of FRAMEWORKS) {
     checked++;
 
     let declaresSomewhere = false;
+    // Tied to the rule that carries the typeface rather than to any root-shaped
+    // selector: `.atl-combobox-input` has no combinator either, so a structural
+    // test accepted a descendant and let two comboboxes through.
+    let rootFamilyRules = 0;
+    let rootFamilyRulesWithLeading = 0;
     for (const file of files) {
       const rel = `libs/${fw}/src/lib/${dir}/${file}`;
       const css = fs.readFileSync(path.join(dirPath, file), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
@@ -86,12 +97,18 @@ for (const fw of FRAMEWORKS) {
 
         declaresSomewhere = true;
 
+
         // --ui-font-mono and --ui-font-display are content typefaces: the code
         // element and the one display line carry them, not the component root.
         const isContentFace = /var\(--ui-font-(mono|display)\)/.test(value);
         // An element that resets everything with `all: unset` has to restate the
         // typeface itself — inheritance cannot reach it.
         const resetsItself = /(^|;)\s*all\s*:\s*(unset|initial|revert)/.test(body);
+
+        if (isRootSelector(selector) && !isContentFace) {
+          rootFamilyRules++;
+          if (/(^|;)\s*line-height\s*:/.test(body)) rootFamilyRulesWithLeading++;
+        }
 
         if (!isRootSelector(selector) && !isContentFace && !resetsItself) {
           errors.push(
@@ -113,6 +130,12 @@ for (const fw of FRAMEWORKS) {
       }
     }
 
+    if (rootFamilyRules > 0 && rootFamilyRulesWithLeading === 0) {
+      errors.push(
+        `[NO-LEADING] libs/${fw}/src/lib/${dir}/ states its typeface but no line-height on the root, so every line inside it is led by whatever the consuming app sets. State the leading on the same root: --ui-line-height-tight for single-line chrome, --ui-line-height-normal where the component carries prose.`
+      );
+    }
+
     if (!declaresSomewhere) {
       errors.push(
         `[NO-TYPEFACE] libs/${fw}/src/lib/${dir}/ never declares var(--ui-font-family) (or -display / -mono), ` +
@@ -128,4 +151,4 @@ if (errors.length > 0) {
   console.error(`\n${errors.length} typeface issue(s) across ${checked} component stylesheet set(s).`);
   process.exit(1);
 }
-console.log(`✓ every component states its typeface on its own root (${checked} component(s) × framework).`);
+console.log(`✓ every component states its own typeface and leading on its root (${checked} component(s) × framework).`);

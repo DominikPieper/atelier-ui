@@ -38,6 +38,10 @@
   display: block;
   position: relative;
   font-family: var(--ui-font-family);
+  /* The leading every descendant inherits, stated so the component keeps its
+     own rhythm rather than the consuming app's prose leading (ADR-0052).
+     A single-line field over a list of rows, so tight. */
+  line-height: var(--ui-line-height-tight);
   font-size: var(--ui-font-size-md);
 }
 
