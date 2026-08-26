@@ -148,6 +148,12 @@ Decision-bearing quick wins (deferred — not this session's scope):
 - [ ] **AtlStepper Figma master has no focus and no disabled variant**, and its description
       carries no a11y annotations — 5 of the 7 remaining parity findings. Pairs with the
       role question above (metadata says `progressbar`, code renders `tablist`).
+- [ ] **Atelier under the Conciso Design System** — plan in
+      `tasks/conciso-rebrand-plan.md` (2026-08-26). Conciso is the authoritative source;
+      5-component pilot; one source fanned out to code / Figma / Claude Design rather than
+      chained. Claude Design consumer project *Atelier*
+      (`7a6a2f19-9a3c-4dd9-9828-65c7cc67766c`) created and bound; the DS project is
+      read-only. Phase 0 (the ADR-0024 score change) blocks everything else.
 - [ ] `coverage.thresholds` in 3 vite configs (measure current coverage first — may fail CI)
 - [ ] `docs-old/` (42 tracked files, not in nx graph): remove or justify
 - [x] Wire `check:figma` into CI — done: it runs inside `check:all`, so the `checks` job
