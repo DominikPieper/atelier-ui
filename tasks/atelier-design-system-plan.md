@@ -153,7 +153,19 @@ the repo. Four results, all verified:
       reconnaissance above. Conciso's remains unread; Atelier's already answered
       the question.
 - [ ] Decide the Inter question (finding 4) before touching the type scale — the
-      role scale and the font choice are one decision, not two.
+      role scale and the font choice are one decision, not two. **Three directions
+      are drawn and verified** (2026-08-26) in project *Atelier*:
+      `Typography Directions.dc.html` —
+      <https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c?file=Typography+Directions.dc.html>.
+      Same role scale, sizes and colours in all three so only the typeface varies:
+      **1a** Inter + Fira Code (the control — roles added, identity unchanged);
+      **1b** Instrument Serif + Instrument Sans (promotes ADR-0020's docs accent
+      into a library role, so docs and components stop running two type systems);
+      **1c** IBM Plex Sans with Fira Code promoted to the label role (matches the
+      "engineering handbook, not SaaS marketing" voice the DS guide already
+      states). Each card carries its rationale and its cost. Verified headless:
+      no console errors, no failed requests, no horizontal overflow, all three
+      display faces resolved.
 - [ ] Introduce ramps for Atelier's own palette: 50–900 per colour, anchor
       marked, text-safe shade marked with its measured ratio. Existing semantics
       re-point at ramp steps **without changing their resolved values**.
