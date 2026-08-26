@@ -1,3 +1,14 @@
+## 0.2.18 (2026-08-26)
+
+### 🩹 Fixes
+
+- **icons:** type the variant icon-name maps as partial records ([e59b45a](https://github.com/DominikPieper/atelier-ui/commit/e59b45a))
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Dominik Pieper @DominikPieper
+
 ## 0.2.17 (2026-08-26)
 
 ### 🚀 Features
