@@ -1,3 +1,14 @@
+## 0.2.12 (2026-08-26)
+
+### 🚀 Features
+
+- **tokens:** teal ramp as the primitive tier, with checked annotations (ADR-0038) ([6b4309c](https://github.com/DominikPieper/atelier-ui/commit/6b4309c))
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Dominik Pieper @DominikPieper
+
 ## 0.2.11 (2026-08-26)
 
 ### 🚀 Features
