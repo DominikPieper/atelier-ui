@@ -214,6 +214,23 @@ Decision-bearing quick wins (deferred — not this session's scope):
       component stylesheets against three primitive patterns. Ramp steps and
       `--ui-font-display` are enforced with zero violations; code-block's
       `--ui-font-mono` is a recorded `gap` until it moves to `--ui-type-code`.
+- [ ] **AtlButton hardcodes `-0.01em` where `--ui-letter-spacing-tight` holds the same
+      value.** Surfaced by drawing the anatomy (2026-08-26). One-line fix in all three
+      `atl-button.css`, but it touches component CSS so it re-stales the parity record —
+      bundle it with the next button change rather than alone.
+- [ ] **AtlButton: six of nine anatomy values are literals**, not tokens — min-height
+      (32/40/48) and padding (6/9/12 block, 14/18/24 inline), of which only `24px` lands on
+      the spacing scale. `check:figma`'s token-link coverage can therefore never be complete
+      for this component. Either the size steps get tokens or the gap gets recorded as
+      intended; right now it is neither.
+- [ ] **AtlButton `size=lg` measures 49px against a stated 48px min-height.** A 22.5px line
+      box + 24px padding + 2px border is 48.5, which min-height cannot shrink. Measured on
+      the artboard, so re-measure in Storybook before calling it a bug — if it holds, the lg
+      target height is aspirational.
+- [ ] **The AtlButton Figma master has 24 variants for a 4x3x4 matrix (48).** Half the
+      state combinations are unpopulated. Confirm against the master before the transfer
+      decides what to add — `check:figma`'s variant-matrix completeness passes today, which
+      suggests the metadata `variantMatrix` does not claim the full cross-product either.
 - [ ] `coverage.thresholds` in 3 vite configs (measure current coverage first — may fail CI)
 - [ ] `docs-old/` (42 tracked files, not in nx graph): remove or justify
 - [x] Wire `check:figma` into CI — done: it runs inside `check:all`, so the `checks` job

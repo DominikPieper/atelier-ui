@@ -22,6 +22,16 @@
         "AtlCard"
       ],
       "note": "Turn 1 compares three type directions, turn 2 three readings of \"bolder\" on the chosen pair. Decided ADR-0035 / ADR-0036. The button row, input field and mini card inside each option card are specimens sized to show type \u2014 not component designs, and deliberately not counted as coverage."
+    },
+    {
+      "project": "atelier",
+      "file": "AtlButton.dc.html",
+      "kind": "component",
+      "subject": "AtlButton",
+      "covers": [
+        "AtlButton"
+      ],
+      "note": "Variant x size matrix (12 of the 24 Figma variants), all six states at size=md with the four that are Figma axes marked apart from the two code-only props, an anatomy table naming the token behind every value, and a findings section. Built on ADR-0035/0036/0038 values. Its point is transferability: whoever builds the Figma master reads --ui-radius-md, not 10px."
     }
   ]
 }
