@@ -89,9 +89,15 @@ Alternatives considered:
 - **Coverage is honest and small: four control sizes across two components.**
   Everything else still authors its padding and is not measured — the gate reports
   what it measured rather than implying more.
-- **The CI leg is unverified until the first push.** It is plain Playwright rather
-  than vitest browser mode, so it should not hit B4's failure, but that is
-  reasoning, not evidence.
+- **The CI leg works** (verified 2026-08-26, run 32967483005, commit `0ce4fe9`):
+  `Sync checks` installs chromium and the gate reports
+  `every control renders the height its token claims` in 2.6s. Publish's `verify`
+  job runs the same list, so a release is gated on it too.
+- **That also narrows B4.** Plain Playwright driving a `file://` fixture is fine on
+  the runner, while vitest browser mode fails there with `CI` set. So B4 is not
+  "browsers do not work in CI" — it is specific to how vitest's browser provider
+  has the served page connect back to its server. Next diagnosis should start
+  there, not at the browser.
 - **This closes the class, not the instance.** Any future control whose padding
   drifts from its height fails here, in every framework, without anyone opening
   Figma.

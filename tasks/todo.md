@@ -280,8 +280,11 @@ Larger workstreams (ranked, see plan file A–D):
       server. Ruled out: missing browser binary, `--no-sandbox`,
       `--disable-dev-shm-usage`, `--no-file-parallelism`,
       `--browser.connectTimeout=180000`, and any `CI` branch in this repo's `.storybook`
-      config or in vitest's connect path. Next: bisect `@storybook/addon-vitest` /
-      `@vitest/browser` versions, or capture the served page's console.
+      config or in vitest's connect path. **Narrowed 2026-08-26** by ADR-0042's gate:
+      `check:geometry` drives real chromium on the runner and passes, so the runner is
+      not the problem and neither is headless chromium — the fault is specific to how
+      vitest's browser provider gets the served page to connect back. Next: capture the
+      served page's console in CI, or bisect `@storybook/addon-vitest` / `@vitest/browser`.
       · ~~B5 contrast gate~~ (done 2026-08-26, ADR-0037: `check:contrast` in `check:all`, palette read from the token source, 104 pairs / 4 modes) · B6 meta-test for the gates — *partial*: ADR-0034
       derives the a11y-parity roster from the component dirs with recorded exemptions; the
       cross-gate roster reconciliation is still open
