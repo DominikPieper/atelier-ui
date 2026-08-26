@@ -1,3 +1,19 @@
+## 0.2.20 (2026-08-26)
+
+### 🚀 Features
+
+- **rhythm:** every component root states its own leading ([7a7f473](https://github.com/DominikPieper/atelier-ui/commit/7a7f473))
+- **rows:** put the remaining row boxes on the row ladder ([cc6dd13](https://github.com/DominikPieper/atelier-ui/commit/cc6dd13))
+
+### 🩹 Fixes
+
+- **select:** Angular's option rows had no styles at all ([2fcaade](https://github.com/DominikPieper/atelier-ui/commit/2fcaade))
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Dominik Pieper @DominikPieper
+
 ## 0.2.19 (2026-08-26)
 
 ### 🚀 Features
