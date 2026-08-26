@@ -139,7 +139,7 @@
       "covers": [
         "AtlCombobox"
       ],
-      "note": "STALE 2026-08-26 (Decision K3): the anatomy says 'option height 40px — --ui-control-height-md'. The option was 36px until the row recipe; it is 40px now but on the ROW ladder (--ui-row-height-sm), and what was bound to the control height today was the input. Eight specimens: the six Figma variant states (open/filtered/selected each drawn with their panel), the no-results state that has no Figma variant, and the invalid and readonly cases. Records that readonly exists in the code but not on the master, so the transfer has to add the Boolean."
+      "note": "Eight specimens: the six Figma variant states (open/filtered/selected each drawn with their panel), the no-results state that has no Figma variant, and the invalid and readonly cases. Draws both ladders in one component — the input is a control (40px, padding derived) and each option is a row (40px on --ui-row-height-sm, padding zero, centred), the same 40 reached two different ways. Records that readonly exists in the code but not on the master, so the transfer has to add the Boolean."
     },
     {
       "project": "atelier",
@@ -239,7 +239,7 @@
       "covers": [
         "AtlSelect"
       ],
-      "note": "STALE 2026-08-26 (Decision K2): this sheet draws a panel with option rows and an anatomy row 'option height 36px'. That is Angular's implementation — React and Vue render a native <select>, where the OS draws the dropdown and no option rows exist. The sheet needs the divergence drawn rather than one framework's version of it. Seven specimens: the five Figma variant states (default | filled | hover | focus | open, the open one drawn with its panel and option states) plus the invalid and disabled Booleans. Measured anatomy. Findings include two open cross-component questions this sheet surfaced: invalid is carried by border colour alone here and in AtlCombobox while AtlInput and AtlTextarea draw an indicator, and an option row is 36px here against AtlCombobox's 40."
+      "note": "Draws the native-vs-custom divergence rather than one framework's version of it: React and Vue render a native <select> whose list the OS draws (marked, not mocked), Angular renders a custom listbox whose option rows are 40px on --ui-row-height-sm. Six trigger specimens shared by all three frameworks, plus the open state twice. Measured anatomy. Findings: the Angular option rows had no styles at all until 2026-08-27 — is-selected, is-active and is-disabled all rendered identically; the 36-vs-40 disagreement with AtlCombobox is resolved on the row ladder; readonly is deliberately absent (HTMLSelectElement has no readOnly). Two open questions: one master cannot describe two implementations, and invalid is carried by border colour alone here and in AtlCombobox while AtlInput and AtlTextarea draw an indicator."
     },
     {
       "project": "atelier",
