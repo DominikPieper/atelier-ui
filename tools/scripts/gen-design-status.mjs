@@ -86,15 +86,38 @@ for (const [selector, rec] of Object.entries(parity.components || {})) {
 }
 
 // artboards
+/**
+ * Which component directory an artboard's subject credits.
+ *
+ * `moduleForSelector` answers a different question — which metadata module a spec
+ * belongs to — and two of its answers are wrong for coverage. `AtlRadioGroupSpec`
+ * maps to `radio` because it shares a metadata file with AtlRadio, so a radio-group
+ * artboard credited the radio directory and radio-group never got credit. And
+ * `AtlToast` resolves to nothing at all, because a toast is created by a service and
+ * has no `AtlToastSpec` — so the toast directory read as untouched with its artboard
+ * already written.
+ *
+ * The subject's own name is the better key when it names a directory: kebab-case it,
+ * drop the `Atl`, and use it if that directory exists. Fall back to the metadata
+ * module for the cases where it does not (AtlTabGroup lives in `tabs`).
+ */
+function dirForSubject(selector) {
+  const kebab = selector
+    .replace(/^Atl/, '')
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .toLowerCase();
+  if (dirs.has(kebab)) return kebab;
+  return moduleForSelector(selector) || selector;
+}
+
 const covers = new Map();
 const fragments = new Map();
 for (const a of registry.artboards || []) {
   for (const sel of a.covers || []) {
-    const mod = moduleForSelector(sel) || sel;
-    covers.set(mod, a);
+    covers.set(dirForSubject(sel), a);
   }
   for (const sel of a.appearsAsFragment || []) {
-    const mod = moduleForSelector(sel) || sel;
+    const mod = dirForSubject(sel);
     if (!fragments.has(mod)) fragments.set(mod, a);
   }
 }
