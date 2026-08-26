@@ -1,3 +1,14 @@
+## 0.2.16 (2026-08-26)
+
+### 🩹 Fixes
+
+- **typography:** every component states its typeface ([8fb67f1](https://github.com/DominikPieper/atelier-ui/commit/8fb67f1))
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Dominik Pieper @DominikPieper
+
 ## 0.2.15 (2026-08-26)
 
 ### 🚀 Features
