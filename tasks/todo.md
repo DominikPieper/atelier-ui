@@ -75,13 +75,19 @@ Decision-bearing quick wins (deferred — not this session's scope):
 - [x] Node baseline: engines → >=22.12.0; rest already coherent → done 2026-07-10
 - [ ] `coverage.thresholds` in 3 vite configs (measure current coverage first — may fail CI)
 - [ ] `docs-old/` (42 tracked files, not in nx graph): remove or justify
-- [ ] Wire `check:figma` into CI — BLOCKED: it currently exits 1 (real unbound-token findings) + snapshot 3/27 stale; needs snapshot regen + freshness first
+- [x] Wire `check:figma` into CI — done: it runs inside `check:all`, so the `checks` job
+      covers it (recorded in ADR-0034, which revises ADR-0019 §5). It exits 0 with 2
+      non-blocking `[DESC]` warnings and a 29/29 snapshot. **Freshness is still open** —
+      the gate never checks snapshot age and `figmaLastModified` is `null` (see C8).
 
 Larger workstreams (ranked, see plan file A–D):
 - [ ] A1 generation eval (thesis unmeasured) · A2 persist+gate parity result · A3 cross-fw a11y-tree conformance
-- [ ] B4 storybook-test+axe in CI · B5 contrast gate · B6 meta-test for the gates
+- [ ] ~~B4 storybook-test+axe in CI~~ (done 2026-08-26: own CI job, 216 React + 242 Vue in
+      headless Chromium) · B5 contrast gate · B6 meta-test for the gates — *partial*: ADR-0034
+      derives the a11y-parity roster from the component dirs with recorded exemptions; the
+      cross-gate roster reconciliation is still open
 - [ ] C7 capture bound-token name/value in snapshot · C8 check:figma+freshness · C9 full 27-master snapshot
-- [ ] ~~D10 React CSS/tokens packaging defect~~ (done 2026-07-10, ADR-0026; incl. Vue entry-point fix) · D11 gate publish on CI · D12 de-personalize host+deploy wf · D13 metadata a11y cross-check · D14 invert check-docs-sync · D15 secret/RCE defaults
+- [ ] ~~D10 React CSS/tokens packaging defect~~ (done 2026-07-10, ADR-0026; incl. Vue entry-point fix) · ~~D11 gate publish on CI~~ (done 2026-08-26, ADR-0033: `verify` job + `needs:`) · D12 de-personalize host+deploy wf · D13 metadata a11y cross-check · D14 invert check-docs-sync · D15 secret/RCE defaults
 
 Blind spots (decisions): SSR stance (Vue Math.random IDs) · reduced-motion gate · 3-fw maintenance/generator · toolchain version-drift · CONTRIBUTING.md · API-stability contract · fw-agnostic contrast gate
 

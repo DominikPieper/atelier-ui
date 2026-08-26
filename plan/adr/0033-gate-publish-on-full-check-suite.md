@@ -85,12 +85,16 @@ Alternatives considered:
   waits on `verify`. Shipping past a red gate becomes an explicit human act
   (temporarily dropping `needs:`) instead of the silent default.
 - **This raises the floor; it does not make the floor sound.** Three known
-  holes survive: `storybook-test` (458 interaction tests + the axe scan on
-  React and Vue) runs in no workflow at all; `check:a11y-parity` builds its
-  roster by globbing the snapshot directory, so four components with no
-  snapshots are invisible; and `check:figma` never checks snapshot age
+  holes survive at the time of writing: `storybook-test` (458 interaction
+  tests + the axe scan on React and Vue) runs in no workflow at all;
+  `check:a11y-parity` builds its roster by globbing the snapshot directory, so
+  four components with no snapshots are invisible; and `check:figma` never
+  checks snapshot age
   (`tools/figma/snapshot.json` carries `figmaLastModified: null`). "Green
   `check:all`" asserts less than it looks like it does. Those are tracked
   separately in `tasks/review-state-2026-08-26.md`.
+  *Update, same day:* the first two are closed — `storybook-test` now runs as
+  its own CI job, and the a11y roster is derived from the component dirs per
+  ADR-0034. Snapshot freshness remains open.
 - The longer release window makes overlapping runs likelier, which is why
   the `concurrency` group ships in the same change rather than later.

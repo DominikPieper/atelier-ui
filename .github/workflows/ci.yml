@@ -115,6 +115,44 @@ jobs:
         run: npx nx run-many -t test --parallel=2
 
   # ---------------------------------------------------------------------------
+  # Storybook tests — the story-level interaction suite plus the addon-a11y axe
+  # scan, run in real Chromium through Vitest browser mode. 216 React + 242 Vue
+  # tests that previously only ever ran by hand.
+  #
+  # React and Vue only: Angular has no `storybook-test` target (see
+  # tasks/angular-storybook-vitest-triage-2026-04-28.md), and Storybook 10.4's
+  # preview/test tooling is experimental outside React anyway.
+  #
+  # Separate job rather than a step on `test`: this is the only job that needs a
+  # browser, and `playwright install` is slow enough that it should not sit in
+  # front of the unit tests.
+  # ---------------------------------------------------------------------------
+  storybook-test:
+    name: Storybook tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: nrwl/nx-set-shas@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: '.node-version'
+          cache: 'npm'
+      - run: corepack enable
+      - run: npm ci
+      - name: Install Chromium for Vitest browser mode
+        run: npx playwright install --with-deps chromium
+      # --parallel=1: both projects drive a headless browser, and serialising
+      # them costs ~11s each rather than risking contention on the runner.
+      - name: Storybook tests affected (PR)
+        if: github.event_name == 'pull_request'
+        run: npx nx affected -t storybook-test --parallel=1
+      - name: Storybook tests all (push to main)
+        if: github.event_name != 'pull_request'
+        run: npx nx run-many -t storybook-test -p react,vue --parallel=1
+
+  # ---------------------------------------------------------------------------
   # Build — library packaging + docs site. Validates that every project still
   # compiles cleanly under production settings.
   # ---------------------------------------------------------------------------
