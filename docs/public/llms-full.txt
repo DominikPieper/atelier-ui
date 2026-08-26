@@ -1654,6 +1654,18 @@ Each `--ui-*` token carries an intent and a list of constraints. Reach for the t
     intent: AA-safe foreground for use on --ui-color-warning-bg in warning badges, alerts, and toasts.
     constraints: Only use as foreground on --ui-color-warning-bg; contrast is guaranteed against that surface and no other.
 
+  --ui-control-height-lg
+    intent: Height of a large interactive control (3rem). Primary actions and touch-first surfaces.
+    constraints: Derive block padding from this, do not state it.; The derived padding is fractional (11.75px at the current type scale). That is correct: the height is the round number, not the padding.
+
+  --ui-control-height-md
+    intent: Height of the default interactive control (2.5rem). The size a form row is built from.
+    constraints: Derive block padding from this, do not state it.; Use the control line-height (--ui-line-height-tight) in the derivation; the prose line-height makes the box taller than the token claims.
+
+  --ui-control-height-sm
+    intent: Height of a small interactive control (2rem). Buttons, inputs, selects, chips that sit in dense rows.
+    constraints: Derive block padding from this, do not state it: calc((height - line-height * font-size) / 2 - border).; Two controls of the same size step must resolve to the same height — that is the entire point of the token.
+
   --ui-duration-fast
     intent: Short transition (150ms). Use for hover/focus state changes and micro-interactions.
     constraints: Respects prefers-reduced-motion via the @media block — do not override durations elsewhere.; Do not interpolate between scale steps; pick the nearest defined value.

@@ -250,6 +250,17 @@ Decision-bearing quick wins (deferred — not this session's scope):
 - [ ] **Both component artboards need a correction pass** for the two claims above (the
       "code-only props" labels and AtlButton's "half a matrix" note). Listed at the end of
       `tasks/design-findings-2026-08-26.md`.
+- [ ] **Migrate the remaining controls onto `--ui-control-height-*`** (ADR-0041 did button
+      and input). Select, textarea, combobox, checkbox, toggle, radio and anything else with
+      a stated height still author their padding, so a select next to an input may still
+      disagree. Same recipe: state the height token, derive the block padding, use the
+      control line-height. Each is a rendered change and re-stales its parity record.
+- [ ] **No gate measures rendered geometry.** ADR-0041's defect — a control 6px taller than
+      its token claimed — survived for months because `check:parity` compares against Figma
+      by hand, the a11y baselines do not record geometry, and nothing else measures a box. A
+      gate that renders each control and asserts `height === var(--ui-control-height-*)`
+      would catch the entire class. The Storybook browser-mode harness already exists to
+      hang it on.
 - [ ] `coverage.thresholds` in 3 vite configs (measure current coverage first — may fail CI)
 - [ ] `docs-old/` (42 tracked files, not in nx graph): remove or justify
 - [x] Wire `check:figma` into CI — done: it runs inside `check:all`, so the `checks` job

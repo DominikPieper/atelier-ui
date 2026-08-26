@@ -136,6 +136,28 @@ export const tokens: Record<string, TokenAnnotation> = {
       'Pairs with --ui-type-label, which is the role uppercase text usually belongs to.',
     ],
   },
+  // === Control heights (ADR-0041) ===
+  '--ui-control-height-sm': {
+    intent: 'Height of a small interactive control (2rem). Buttons, inputs, selects, chips that sit in dense rows.',
+    constraints: [
+      'Derive block padding from this, do not state it: calc((height - line-height * font-size) / 2 - border).',
+      'Two controls of the same size step must resolve to the same height — that is the entire point of the token.',
+    ],
+  },
+  '--ui-control-height-md': {
+    intent: 'Height of the default interactive control (2.5rem). The size a form row is built from.',
+    constraints: [
+      'Derive block padding from this, do not state it.',
+      'Use the control line-height (--ui-line-height-tight) in the derivation; the prose line-height makes the box taller than the token claims.',
+    ],
+  },
+  '--ui-control-height-lg': {
+    intent: 'Height of a large interactive control (3rem). Primary actions and touch-first surfaces.',
+    constraints: [
+      'Derive block padding from this, do not state it.',
+      'The derived padding is fractional (11.75px at the current type scale). That is correct: the height is the round number, not the padding.',
+    ],
+  },
   '--ui-font-size-3xl': {
     intent:
       'Display size (2.25rem). The one line per surface that is meant to be looked at rather than read — a wordmark or hero.',

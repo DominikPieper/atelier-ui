@@ -7,11 +7,16 @@
 input {
   display: block;
   width: 100%;
-  min-height: 2.5rem;
-  padding: 0.625rem var(--ui-spacing-4);
+  min-height: var(--ui-control-height-md);
+  padding: calc(
+      (var(--ui-control-height-md) - var(--ui-line-height-tight) * var(--ui-font-size-md)) / 2 - 1px
+    )
+    var(--ui-spacing-4);
   font-size: inherit;
   font-family: inherit;
-  line-height: var(--ui-line-height-normal);
+  /* Control line-height, not the prose one: a single-line field has nothing to
+   * read across lines, and 1.5 is what made it 6px taller than a button. */
+  line-height: var(--ui-line-height-tight);
   color: var(--ui-color-text);
   background-color: var(--ui-color-input-bg);
   border: 1px solid var(--ui-color-input-border);

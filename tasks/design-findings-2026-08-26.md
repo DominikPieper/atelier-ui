@@ -50,7 +50,22 @@ under "wrong on its own terms" has to be decided.
 
 ---
 
-## Decision A — the size system states heights it does not deliver
+## Decision A — RESOLVED 2026-08-26 (ADR-0041)
+
+The height is now the token and the block padding is derived from it
+(`--ui-control-height-sm/md/lg`), and controls use the control line-height rather
+than the prose one. Verified against the shipped CSS: buttons compute exactly
+32 / 40 / 48 and the input exactly 40, so **an input and a button of the same size
+step are finally the same height**. The remaining controls still state their
+padding and follow the same recipe.
+
+Also worth stating: nothing gates this. A gate that renders each control and
+asserts its height equals its token would catch the whole class, and its absence
+is why the defect survived for months.
+
+<details><summary>The original finding</summary>
+
+### the size system states heights it does not deliver
 
 Three findings, one root cause.
 
@@ -68,6 +83,8 @@ line-height, or `height` replaces `min-height`) or **minimums that content may
 exceed** (then the stated 32/40/48 are aspirational and should be renamed).
 Either answer is defensible; the current state is that the code says one thing
 and renders another, which is a defect no matter what Figma holds.
+
+</details>
 
 ## Decision B — the library ships no `box-sizing` reset
 

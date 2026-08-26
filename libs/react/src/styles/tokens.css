@@ -38,6 +38,18 @@
   --ui-letter-spacing-wide: 0.01em;
   --ui-letter-spacing-uppercase: 0.08em;
   --ui-font-size-3xl: 2.25rem;
+
+  /* ── Control heights ────────────────────────────────────────
+   * The height of an interactive control is the primitive; its block padding
+   * is DERIVED from it (ADR-0041):
+   *   padding-block: calc((height - line-height * font-size) / 2 - border)
+   * Stating the height and deriving the padding is what makes an input and a
+   * button the same height. Stating the padding and hoping, which is what the
+   * library did until 2026-08-26, made them 6px apart.
+   */
+  --ui-control-height-sm: 2rem;
+  --ui-control-height-md: 2.5rem;
+  --ui-control-height-lg: 3rem;
   --ui-font-weight-normal: 400;
   --ui-font-weight-medium: 500;
   --ui-font-weight-semibold: 600;
