@@ -45,6 +45,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0037](0037-contrast-gate-reads-the-token-source.md) | The contrast gate reads the token source (`check:contrast`) | Accepted | Recorded |
 | [0038](0038-tonal-ramps-with-checked-annotations.md) | Tonal ramps with checked annotations (teal; primitive tier in CSS) | Accepted | Recorded |
 | [0039](0039-primitive-tier-gate.md) | A gate for the primitive tier (`check:primitives`) | Accepted | Recorded |
+| [0040](0040-design-status-is-derived.md) | Design status is derived, and a fragment is not coverage | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

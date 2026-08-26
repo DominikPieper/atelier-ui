@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "note": "Which components have a Claude Design artboard, and what that artboard actually covers. This is the ONE column of plan/design-status.md that cannot be derived from the repo \u2014 Claude Design lives outside it, so this registry is hand-maintained. Keep `covers` honest: a component that appears as a small fragment inside a study is NOT designed, and saying so is the point of the file.",
+    "projects": {
+      "atelier": {
+        "id": "7a6a2f19-9a3c-4dd9-9828-65c7cc67766c",
+        "url": "https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c",
+        "designSystem": "Atelier Design System (019de217-489c-7441-8275-2efe020086b5)"
+      }
+    }
+  },
+  "artboards": [
+    {
+      "project": "atelier",
+      "file": "Typography Directions.dc.html",
+      "kind": "study",
+      "subject": "typography",
+      "covers": [],
+      "appearsAsFragment": [
+        "AtlButton",
+        "AtlInput",
+        "AtlCard"
+      ],
+      "note": "Turn 1 compares three type directions, turn 2 three readings of \"bolder\" on the chosen pair. Decided ADR-0035 / ADR-0036. The button row, input field and mini card inside each option card are specimens sized to show type \u2014 not component designs, and deliberately not counted as coverage."
+    }
+  ]
+}

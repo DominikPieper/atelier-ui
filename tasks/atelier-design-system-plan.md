@@ -100,6 +100,20 @@ libs/*/src/styles/tokens.css   (Atelier's own values — the source of truth)
                                     └─→ Phase 4: [data-brand="conciso"] overlay
 ```
 
+## Where the design actually stands (2026-08-26)
+
+`plan/design-status.md` is generated and answers this per component. Today:
+**29 components, 0 designed in Claude Design, 3 appearing only as a fragment
+inside the typography study, 26 untouched.** ADR-0040 records why a fragment is
+deliberately not counted.
+
+Phase 1 (the token layer) is substantively done — ADR-0035 fonts, ADR-0036 type
+roles, ADR-0037 contrast gate, ADR-0038 the first ramp, ADR-0039 the primitive
+gate. Phase 2 (artboards per component) has not started, and it is the phase the
+Figma transfer depends on. Worth stating plainly: the token work grew out of one
+line of this plan and consumed a whole session, while the coverage number stayed
+at zero.
+
 ## Phases
 
 ### Phase 0 — ADR-0024 amendment — DONE 2026-08-26 (`57a24b1`)
