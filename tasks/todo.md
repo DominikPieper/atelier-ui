@@ -77,6 +77,22 @@ Decision-bearing quick wins (deferred — not this session's scope):
       (2026-08-26) because the Docker daemon was down. `npm ci` works, but ~47 `dev` ↔
       `devOptional` marker flips may be flavor drift rather than real. Run
       `tools/scripts/relock.sh` with Docker up and commit the diff.
+- [ ] **No target type-checks the stories** — this is the mechanism behind the
+      "fabricated props" class of defect. Stories *are* in `tsconfig.spec.json`, but
+      nothing runs `tsc` over it: `nx test` (vitest) transpiles only, and `nx build` uses
+      `tsconfig.lib.json`, which excludes `*.stories.tsx`. Found 2026-08-26 after a story
+      passed `totalPages` to `AtlPagination` (the prop is `pageCount`) — it fell into
+      `...rest`, spread onto `<nav>`, and rendered a 1-page pagination while the Vue
+      showcase rendered 10. `cd libs/react && npx tsc -p tsconfig.spec.json --noEmit`
+      currently reports 7 errors, so the gate cannot just be switched on:
+        · 5 × `toHaveBeenCalledOnce does not exist on JestMatchers` — `@types/jest`
+          (needed by the two jest-based CLI libs) shadows Vitest's matcher types in the
+          vitest libs. Fix by scoping `types` in each `tsconfig.spec.json`.
+        · `atl-stepper.stories.tsx:88` and `atl-toast.spec.tsx:78` — local helpers whose
+          prop type narrows to a single literal from its default (`"horizontal"`,
+          `"bottom-right"`). Story/spec typing slips, not product bugs; the specs allow
+          both members.
+      Then add a `typecheck` target per lib and wire it into CI.
 - [ ] `coverage.thresholds` in 3 vite configs (measure current coverage first — may fail CI)
 - [ ] `docs-old/` (42 tracked files, not in nx graph): remove or justify
 - [x] Wire `check:figma` into CI — done: it runs inside `check:all`, so the `checks` job

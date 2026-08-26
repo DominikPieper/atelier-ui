@@ -324,7 +324,7 @@ function Showcase() {
 
         {/* ── Pagination ──────────────────────────────────────────── */}
         <Section title="Pagination">
-          <AtlPagination page={page} totalPages={10} onPageChange={setPage} />
+          <AtlPagination page={page} pageCount={10} onPageChange={setPage} />
         </Section>
 
         {/* ── Tooltip ─────────────────────────────────────────────── */}
