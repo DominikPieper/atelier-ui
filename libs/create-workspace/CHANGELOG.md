@@ -1,3 +1,14 @@
+## 0.2.13 (2026-08-26)
+
+### 🩹 Fixes
+
+- **tokens:** letter-spacing and danger focus-ring tokens; consolidate design findings ([0bdaddd](https://github.com/DominikPieper/atelier-ui/commit/0bdaddd))
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Dominik Pieper @DominikPieper
+
 ## 0.2.12 (2026-08-26)
 
 ### 🚀 Features
