@@ -160,13 +160,35 @@ hold without a convention — the price is +6px on the size-md table row.
    Tokenising an inert value adds a manifest entry and a Figma Variable that no
    layout reads.
 
-## A caveat the census flagged about itself
+## A caveat the census flagged about itself — resolved 2026-08-27
 
 The Angular numbers in the census are **fixture artifacts** and must be ignored: its
 stylesheets use `:host(...)` selectors that match nothing in a plain document. Vue
 rendered identically to React on the five boxes checked in both. Angular needs
 re-measuring with the `hostify` technique from `tools/scripts/check-geometry.mjs`
 before any delta is committed.
+
+**Resolved, and it was two bugs rather than one.** The first is the one the caveat
+names: `:host(...)` selectors match nothing in a plain document, so an un-hostified
+Angular fixture measures an unstyled box. The second only appeared when the fixture
+was hostified: the harness concatenated the component's stylesheet *and*
+`atl-icon.css` and rewrote both with the component's tag, so
+`:host { display: inline-flex }` from the icon landed on `atl-checkbox`,
+`atl-radio` and `atl-toggle`. That made three Angular roots inline-flex and every
+Angular number in that run wrong in a way that looked plausible — 40 where React
+read 48, which reads like Angular being *more* correct.
+
+`tools/scripts/check-geometry.mjs` had a latent version of the same bug: it
+hostified per directory, which was safe only while no directory held two components.
+`select/` now holds `atl-select.css` and `atl-option.css`, so it hostifies per
+stylesheet, taking the tag from the file name. `gen-box-sizing.mjs` and
+`check-typeface.js` were checked and already work per stylesheet.
+
+Re-measured with both fixed: **all 73 gated measurements agree across the three
+frameworks**, including every box this document proposed to move. Angular differs
+from React and Vue nowhere the gate can see. The two Angular deltas noted during the
+night run — radio 28 vs 32, toggle 24 vs 27 — were artifacts of the icon-stylesheet
+bug and not real.
 
 ---
 
