@@ -18,12 +18,15 @@ import { AtlIcon } from '../icon/atl-icon';
  * </atl-alert>
  * ```
  */
-const VARIANT_ICONS: Record<'info' | 'success' | 'warning' | 'danger', string> = {
-  info: 'ℹ',
-  success: '✓',
-  warning: '⚠',
-  danger: '✕',
-};
+// Which AtlIcon each variant carries. Names, not glyphs: a glyph in a string map
+// was the fifth way this library drew an icon, and the one check:iconography
+// missed (ADR-0050).
+const VARIANT_ICON_NAMES = {
+  info: 'info',
+  success: 'success',
+  warning: 'warning',
+  danger: 'danger',
+} as const;
 
 @Component({
   selector: 'atl-alert',
@@ -32,7 +35,7 @@ const VARIANT_ICONS: Record<'info' | 'success' | 'warning' | 'danger', string> =
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <span class="content">
-      <span class="variant-icon" aria-hidden="true">{{ variantIcon() }}</span>
+      <atl-icon class="variant-icon" [name]="variantIcon()" size="sm" />
       <ng-content />
     </span>
     @if (isDismissible) {
@@ -60,7 +63,7 @@ export class AtlAlert {
 
   protected readonly hostClasses = computed(() => `variant-${this.variant()}`);
 
-  protected readonly variantIcon = computed(() => VARIANT_ICONS[this.variant()]);
+  protected readonly variantIcon = computed(() => VARIANT_ICON_NAMES[this.variant()]);
 
   /** @internal */
   get isDismissible(): boolean {

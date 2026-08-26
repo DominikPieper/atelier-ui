@@ -4,7 +4,7 @@
      Every column but "Artboard" is derived from the repo; that one comes from
      tools/design/artboards.json, because Claude Design is not in the repo. -->
 
-**29 components.** Claude Design coverage: **8 designed**, 1 appearing only as a fragment inside a study, 20 untouched.
+**29 components.** Claude Design coverage: **11 designed**, 1 appearing only as a fragment inside a study, 17 untouched.
 
 > **Redesign phase, active since 2026-08-26.** Figma is the *target* of
 > the transfer, not the reference for it, so the masters are stale by definition until they are
@@ -20,9 +20,9 @@ a typography study says nothing about how the component should look.
 | Component | Artboard | Figma axes | Variants | Parity verified | a11y baseline | Type roles | Respecifies font |
 |---|---|---|---|---|---|---|---|
 | `accordion` | — | variant | 3 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
-| `alert` | — | variant | 4 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
+| `alert` | **AtlAlert.dc.html** | variant | 4 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
 | `avatar` | — | size | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
-| `badge` | — | variant · size | 10 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
+| `badge` | **AtlBadge.dc.html** | variant · size | 10 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `breadcrumbs` | — | items | 3 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
 | `button` | **AtlButton.dc.html** | variant · size · state | 24 | 2026-08-26 (`0bdaddd`) | all 3 | — | yes |
 | `card` | fragment only | variant · padding | 12 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
@@ -36,7 +36,7 @@ a typography study says nothing about how the component should look.
 | `input` | **AtlInput.dc.html** | state | 5 | 2026-08-26 (`0bdaddd`) | all 3 | — | yes |
 | `menu` | — | variant | 2 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
 | `pagination` | — | position | 3 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
-| `progress` | — | variant · size | 12 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
+| `progress` | **AtlProgress.dc.html** | variant · size | 12 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
 | `radio` | **AtlRadioGroup.dc.html** | selection · state | 4 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
 | `radio-group` | — | — *(no master)* | — | — *(never)* | all 3 | — | yes |
 | `select` | **AtlSelect.dc.html** | state | 5 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
@@ -67,6 +67,22 @@ the first.
 - Appears as a fragment: AtlButton, AtlInput, AtlCard
 
 Turn 1 compares three type directions, turn 2 three readings of "bolder" on the chosen pair. Decided ADR-0035 / ADR-0036. The button row, input field and mini card inside each option card are specimens sized to show type — not component designs, and deliberately not counted as coverage.
+
+### AtlAlert.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlAlert
+- Covers: AtlAlert
+
+Four variants with the dismissible Boolean on two of them, measured anatomy, and the cross-component finding this batch surfaced: four status components offer the same semantic colours in four different variant sets. Records that the variant colours are literals — the missing status ramps from ADR-0038.
+
+### AtlBadge.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlBadge
+- Covers: AtlBadge
+
+The complete 5 x 2 variant/size matrix plus a ruler specimen showing the real boxes: md is 29.5px tall, a half pixel, because nothing states the height. Records the letter-spacing bypass fixed by ADR-0047.
 
 ### AtlButton.dc.html
 
@@ -100,6 +116,14 @@ Eight specimens: the six Figma variant states (open/filtered/selected each drawn
 
 Eight states (the five Figma variant states plus the disabled/readonly Booleans and invalid+focus), a measured anatomy table, and findings. Rewritten 2026-08-26 after ADRs 0043-0049 turned three of its open findings into fixed ones: readonly now has a visual treatment, the invalid indicator is an AtlIcon instance rather than a literal glyph, and the border width has a token. Now links the shared _sheet.css.
 
+### AtlProgress.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlProgress
+- Covers: AtlProgress
+
+The three sizes (6/10/14px, an undeclared scale) and four variants including the indeterminate Boolean. Records that label is documented as required by ARIA and typed optional, so a consumer can ship a bar that announces only 'progress bar 47%'.
+
 ### AtlRadio.dc.html
 
 - Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
@@ -131,6 +155,14 @@ Seven specimens: the five Figma variant states (default | filled | hover | focus
 - Covers: AtlTextarea
 
 Eight specimens: the five Figma variant states plus the readonly, disabled and autoResize Booleans. States explicitly that this is the one control that keeps the prose line-height (1.5) and whose height is content-driven by design, so the difference from every other control reads as a decision rather than as drift.
+
+### AtlToast.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlToast
+- Covers: AtlToast
+
+Five variants, and the position axis drawn as four container stages rather than as four toasts — because position anchors the container, not the toast. Records that the master crosses two axes that do not belong together, and that there is no AtlToastSpec: a service creates a toast, so the Figma instance has no direct code counterpart.
 
 ### AtlToggle.dc.html
 

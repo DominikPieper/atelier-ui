@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import './atl-badge.css';
+import AtlIcon from '../icon/atl-icon.vue';
 
 defineOptions({ name: 'AtlBadge' });
 
@@ -11,12 +12,14 @@ interface AtlBadgeProps {
   size?: 'sm' | 'md';
 }
 
-const VARIANT_ICONS: Record<AtlBadgeVariant, string | null> = {
-  default: null,
-  success: '✓',
-  warning: '⚠',
-  danger: '✕',
-  info: 'ℹ',
+// Which AtlIcon each variant carries. Names, not glyphs: a glyph in a string map
+// was the fifth way this library drew an icon, and the one check:iconography
+// missed (ADR-0050).
+const VARIANT_ICON_NAMES = {
+  info: 'info',
+  success: 'success',
+  warning: 'warning',
+  danger: 'danger',
 };
 
 const props = withDefaults(defineProps<AtlBadgeProps>(), {
@@ -30,12 +33,12 @@ const classes = computed(() => [
   `size-${props.size}`,
 ]);
 
-const variantIcon = computed(() => VARIANT_ICONS[props.variant]);
+const variantIconName = computed(() => VARIANT_ICON_NAMES[props.variant as keyof typeof VARIANT_ICON_NAMES]);
 </script>
 
 <template>
   <span :class="classes" role="status">
-    <span v-if="variantIcon" class="variant-icon" aria-hidden="true">{{ variantIcon }}</span>
+    <AtlIcon v-if="variantIconName" class="variant-icon" :name="variantIconName" size="sm" />
     <slot />
   </span>
 </template>

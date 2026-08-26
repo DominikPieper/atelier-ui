@@ -12,9 +12,14 @@
  *     AtlStepper, `'×'` in AtlIcon and `'✕'` in CSS, and `check` had three
  *     unrelated paths.
  *
- * Four checks, each closing one of those doors:
+ * Five checks, each closing one of those doors:
  *   [INLINE-SVG]  a component source draws its own svg instead of using AtlIcon
  *   [CSS-GLYPH]   a stylesheet puts a literal glyph in `content:`
+ *   [GLYPH-MAP]   a component source quotes a non-ASCII glyph — the fifth mechanism,
+ *                 added after AtlAlert and AtlBadge were found still mapping their
+ *                 variants to 'ℹ' / '✓' / '⚠' / '✕' in a local const, months after
+ *                 AtlIcon stopped rendering glyphs. The first four rules all passed
+ *                 them: the glyph was neither an svg nor a CSS `content:` (ADR-0050)
  *   [NO-GEOMETRY] a name in AtlIconName has no entry in icons.ts
  *   [ORPHAN]      an entry in icons.ts is not in AtlIconName
  *
@@ -60,6 +65,21 @@ for (const fw of FRAMEWORKS) {
           `[INLINE-SVG] ${rel} draws its own <svg>. Use AtlIcon so the shape has one definition; ` +
             `add the geometry to libs/spec/src/icons.ts if the icon does not exist yet.`
         );
+      }
+
+      // A quoted non-ASCII character in a component source is an icon drawn as text.
+      // Comments are stripped first: a rule's own explanation may quote the glyph it
+      // replaced, exactly as this file's header does.
+      if (isSource && !isStory(file) && !isIconComponent(dir)) {
+        const code = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+        const glyphs = [...new Set([...code.matchAll(/['"`]([^\x00-\x7F]{1,2})['"`]/g)].map((m) => m[1]))];
+        if (glyphs.length > 0) {
+          errors.push(
+            `[GLYPH-MAP] ${rel} quotes ${glyphs.map((g) => JSON.stringify(g)).join(', ')} as an icon. ` +
+              `Render an AtlIcon by name instead — a glyph cannot follow the icon set, cannot be an icon ` +
+              `instance in Figma, and depends on whichever font happens to have the character.`
+          );
+        }
       }
 
       if (isCss) {
@@ -110,7 +130,7 @@ if (!unionMatch) {
   }
   if (errors.length === 0) {
     console.log(
-      `✓ iconography single-sourced (${names.length} names, all with geometry; no component draws its own svg or glyph).`
+      `✓ iconography single-sourced (${names.length} names, all with geometry; no component draws its own svg, css glyph or glyph map).`
     );
     process.exit(0);
   }

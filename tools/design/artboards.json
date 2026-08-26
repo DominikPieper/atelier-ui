@@ -33,6 +33,26 @@
     },
     {
       "project": "atelier",
+      "file": "AtlAlert.dc.html",
+      "kind": "component",
+      "subject": "AtlAlert",
+      "covers": [
+        "AtlAlert"
+      ],
+      "note": "Four variants with the dismissible Boolean on two of them, measured anatomy, and the cross-component finding this batch surfaced: four status components offer the same semantic colours in four different variant sets. Records that the variant colours are literals — the missing status ramps from ADR-0038."
+    },
+    {
+      "project": "atelier",
+      "file": "AtlBadge.dc.html",
+      "kind": "component",
+      "subject": "AtlBadge",
+      "covers": [
+        "AtlBadge"
+      ],
+      "note": "The complete 5 x 2 variant/size matrix plus a ruler specimen showing the real boxes: md is 29.5px tall, a half pixel, because nothing states the height. Records the letter-spacing bypass fixed by ADR-0047."
+    },
+    {
+      "project": "atelier",
       "file": "AtlButton.dc.html",
       "kind": "component",
       "subject": "AtlButton",
@@ -73,6 +93,16 @@
     },
     {
       "project": "atelier",
+      "file": "AtlProgress.dc.html",
+      "kind": "component",
+      "subject": "AtlProgress",
+      "covers": [
+        "AtlProgress"
+      ],
+      "note": "The three sizes (6/10/14px, an undeclared scale) and four variants including the indeterminate Boolean. Records that label is documented as required by ARIA and typed optional, so a consumer can ship a bar that announces only 'progress bar 47%'."
+    },
+    {
+      "project": "atelier",
       "file": "AtlRadio.dc.html",
       "kind": "component",
       "subject": "AtlRadio",
@@ -110,6 +140,16 @@
         "AtlTextarea"
       ],
       "note": "Eight specimens: the five Figma variant states plus the readonly, disabled and autoResize Booleans. States explicitly that this is the one control that keeps the prose line-height (1.5) and whose height is content-driven by design, so the difference from every other control reads as a decision rather than as drift."
+    },
+    {
+      "project": "atelier",
+      "file": "AtlToast.dc.html",
+      "kind": "component",
+      "subject": "AtlToast",
+      "covers": [
+        "AtlToast"
+      ],
+      "note": "Five variants, and the position axis drawn as four container stages rather than as four toasts — because position anchors the container, not the toast. Records that the master crosses two axes that do not belong together, and that there is no AtlToastSpec: a service creates a toast, so the Figma instance has no direct code counterpart."
     },
     {
       "project": "atelier",

@@ -3,14 +3,18 @@ import type { AtlAlertSpec } from '../spec';
 import './atl-alert.css';
 import { AtlIcon } from '../icon/atl-icon';
 
-type AtlAlertVariant = 'info' | 'success' | 'warning' | 'danger';
+/** Which AtlIcon each variant carries. Names, not glyphs: a glyph in a string map
+ * was the fifth way this library drew an icon, and the one check:iconography
+ * missed (ADR-0050). */
+const VARIANT_ICON_NAMES = {
+  info: 'info',
+  success: 'success',
+  warning: 'warning',
+  danger: 'danger',
+} as const;
 
-const VARIANT_ICONS: Record<AtlAlertVariant, string> = {
-  info: 'ℹ',
-  success: '✓',
-  warning: '⚠',
-  danger: '✕',
-};
+
+type AtlAlertVariant = 'info' | 'success' | 'warning' | 'danger';
 
 /**
  * Properties for the AtlAlert component.
@@ -53,7 +57,7 @@ export function AtlAlert({
   return (
     <div className={classes} role="alert" aria-live={ariaLive} {...rest}>
       <span className="content">
-        <span className="variant-icon" aria-hidden="true">{VARIANT_ICONS[variant]}</span>
+        <AtlIcon className="variant-icon" name={VARIANT_ICON_NAMES[variant]} size="sm" />
         {children}
       </span>
       {dismissible && (

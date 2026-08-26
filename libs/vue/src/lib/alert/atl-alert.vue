@@ -12,11 +12,14 @@ interface AtlAlertProps {
   dismissible?: boolean;
 }
 
-const VARIANT_ICONS: Record<AtlAlertVariant, string> = {
-  info: 'ℹ',
-  success: '✓',
-  warning: '⚠',
-  danger: '✕',
+// Which AtlIcon each variant carries. Names, not glyphs: a glyph in a string map
+// was the fifth way this library drew an icon, and the one check:iconography
+// missed (ADR-0050).
+const VARIANT_ICON_NAMES = {
+  info: 'info',
+  success: 'success',
+  warning: 'warning',
+  danger: 'danger',
 };
 
 const props = withDefaults(defineProps<AtlAlertProps>(), {
@@ -34,13 +37,13 @@ const ariaLive = computed(() =>
   props.variant === 'danger' || props.variant === 'warning' ? 'assertive' : 'polite'
 );
 
-const variantIcon = computed(() => VARIANT_ICONS[props.variant]);
+const variantIconName = computed(() => VARIANT_ICON_NAMES[props.variant as keyof typeof VARIANT_ICON_NAMES]);
 </script>
 
 <template>
   <div :class="classes" role="alert" :aria-live="ariaLive">
     <span class="content">
-      <span class="variant-icon" aria-hidden="true">{{ variantIcon }}</span>
+      <AtlIcon v-if="variantIconName" class="variant-icon" :name="variantIconName" size="sm" />
       <slot />
     </span>
     <button

@@ -4,6 +4,7 @@ import {
   computed,
   input,
 } from '@angular/core';
+import { AtlIcon } from '../icon/atl-icon';
 
 /**
  * Inline status badge for labeling items with semantic color variants.
@@ -15,21 +16,24 @@ import {
  * <atl-badge variant="warning">Pending</atl-badge>
  * ```
  */
-const VARIANT_ICONS: Record<'default' | 'success' | 'warning' | 'danger' | 'info', string | null> = {
-  default: null,
-  success: '✓',
-  warning: '⚠',
-  danger: '✕',
-  info: 'ℹ',
-};
+// Which AtlIcon each variant carries. Names, not glyphs: a glyph in a string map
+// was the fifth way this library drew an icon, and the one check:iconography
+// missed (ADR-0050).
+const VARIANT_ICON_NAMES = {
+  info: 'info',
+  success: 'success',
+  warning: 'warning',
+  danger: 'danger',
+} as const;
 
 @Component({
   selector: 'atl-badge',
   standalone: true,
+  imports: [AtlIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (variantIcon(); as icon) {
-      <span class="variant-icon" aria-hidden="true">{{ icon }}</span>
+      <atl-icon class="variant-icon" [name]="icon" size="sm" />
     }
     <ng-content />
   `,
@@ -50,5 +54,5 @@ export class AtlBadge {
     () => `variant-${this.variant()} size-${this.size()}`
   );
 
-  protected readonly variantIcon = computed(() => VARIANT_ICONS[this.variant()]);
+  protected readonly variantIcon = computed(() => VARIANT_ICON_NAMES[this.variant()]);
 }

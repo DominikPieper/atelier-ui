@@ -275,3 +275,40 @@ axes describe a gallery — group-level `selection` and `state` — where the co
 both on a child. The snapshot cannot see any of this: it records `variantAxes` but
 not Boolean properties, which survive only as prose in the master description
 (the same gap that produced two false claims earlier today).
+
+---
+
+## Decision F — the status family (2026-08-26, batch C)
+
+**F1 — four components, four variant sets.** AtlAlert is `info | success | warning
+| danger`. AtlBadge and AtlToast add `default`. AtlProgress has `default` and drops
+`info`. The same four semantic colours, offered in four combinations, so the set
+cannot be learned once. Either it is uniform or each omission gets a reason.
+
+**F2 — the status colours are literals.** Every variant's background, text and
+border alpha is written into its component's stylesheet. ADR-0038 built the teal
+ramp and stopped; danger, success, warning, info and the neutrals never got one. So
+a rebuilt master cannot bind a Variable to any of the status colours on three
+sheets, and the same hue is spelled out three times.
+
+**F3 — AtlBadge md is 29.5px tall.** Five pixels of padding each side, a 17.5px
+line box (14px at 1.25) and two 1px borders. A badge in a table row cannot align on
+a whole pixel, and the two sizes cannot share a baseline grid. Nothing states the
+height, which is the same root cause as Decision E1.
+
+**F4 — AtlProgress's size scale is undeclared.** 6 / 10 / 14px is plainly a
+progression and exists only as three literals. Unlike the ~116 one-off dimensions
+ADR-0047 deliberately left alone, a scale is exactly what a token set is for.
+
+**F5 — AtlToast's master crosses a container axis with a component axis.**
+`position` anchors `AtlToastContainerPosition`; `variant` describes the toast.
+Crossing them yields 8 variants for 5 appearances and 4 anchors, and implies a
+per-toast position the API does not offer.
+
+**F6 — `label` on AtlProgress is documented as required and typed optional.** The
+spec's own comment says ARIA needs it; the type lets it be omitted. A comment is
+not enforcement.
+
+Resolved in this batch: the Unicode glyph maps in AtlAlert and AtlBadge (ADR-0050),
+which every gate had passed all day.
+
