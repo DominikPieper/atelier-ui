@@ -73,10 +73,13 @@ Decision-bearing quick wins (deferred — not this session's scope):
 - [x] Dark-mode contrast: `--ui-color-text-on-success` in both dark blocks + light-block symmetry → done 2026-07-10 (see top section)
 - [x] Version band: re-pin 0.0.x **or** ADR for the 0.1.x move → resolved by ADR-0023 (accept 0.1.x)
 - [x] Node baseline: engines → >=22.12.0; rest already coherent → done 2026-07-10
-- [ ] Relock on Linux — `package-lock.json` was regenerated on macOS for dep-batch A
-      (2026-08-26) because the Docker daemon was down. `npm ci` works, but ~47 `dev` ↔
-      `devOptional` marker flips may be flavor drift rather than real. Run
-      `tools/scripts/relock.sh` with Docker up and commit the diff.
+- [ ] Confirm the lockfile flavor — `package-lock.json` was regenerated on macOS for
+      dep-batch A (2026-08-26, Docker daemon down). The publish job's `nx release` then
+      rewrote it on Linux (7cca39c), pruning 27 macOS-only transitive entries
+      (@module-federation/*, @napi-rs/wasm-runtime, …), so main is Linux-written again.
+      What that commit did *not* visibly touch is the ~47 `dev` ↔ `devOptional` marker
+      flips from the same install. Run `tools/scripts/relock.sh` with Docker up once and
+      check whether it produces an empty diff; if it does, close this.
 - [ ] **No target type-checks the stories** — this is the mechanism behind the
       "fabricated props" class of defect. Stories *are* in `tsconfig.spec.json`, but
       nothing runs `tsc` over it: `nx test` (vitest) transpiles only, and `nx build` uses
