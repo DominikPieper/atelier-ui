@@ -110,6 +110,9 @@ root and gate it. Not a free choice; pick deliberately.
 - **AtlInput's invalid indicator is a literal `✕` pseudo-element**, not an icon,
   while the icon union already contains `close` and `danger`. The Figma master
   cannot use an icon instance there, and the glyph will not follow the icon set.
+- ~~The invalid focus ring restates the ring formula by hand~~ — **fixed**:
+  `--ui-focus-ring-danger`, declared once beside `--ui-focus-ring` so it follows
+  the mode, and bindable in Figma as the inline formula was not.
 
 ## Decision D — literals that cannot be bound in Figma
 
@@ -139,7 +142,10 @@ which is the worst of the three.
 
 ## Corrected — things I asserted about Figma without checking
 
-Both artboards currently contain these errors and need a correction pass:
+**Both artboards were corrected on 2026-08-26** and re-verified headless: no
+"code-only prop" labels remain, the Boolean surface is named, and the anatomy
+tables now show the post-ADR-0041 geometry (32/40/48 exact with derived padding;
+the input at exactly 40, matching AtlButton md).
 
 - **`disabled` and `loading` are not "code-only props".** They are Figma
   **Booleans** on the AtlButton set, as are `disabled`, `readonly` and `required`

@@ -68,7 +68,7 @@ Turn 1 compares three type directions, turn 2 three readings of "bolder" on the 
 - Kind: **component** · subject: AtlButton
 - Covers: AtlButton
 
-Variant x size matrix (12 of the 24 Figma variants), all six states at size=md with the four that are Figma axes marked apart from the two code-only props, an anatomy table naming the token behind every value, and a findings section. Built on ADR-0035/0036/0038 values. Its point is transferability: whoever builds the Figma master reads --ui-radius-md, not 10px.
+Variant x size matrix (the default-state slice, 12 of the master's 24), all states at size=md with the four variant states separated from the disabled/loading Booleans, an anatomy table naming the token behind every value, and findings. Corrected 2026-08-26: disabled/loading are Figma Booleans not code-only props, the 24 variants are a deliberate two-slice cross rather than half a 4x3x4 matrix, and the anatomy reflects ADR-0041 (heights exact at 32/40/48, block padding derived).
 
 ### AtlInput.dc.html
 
@@ -76,5 +76,5 @@ Variant x size matrix (12 of the 24 Figma variants), all six states at size=md w
 - Kind: **component** · subject: AtlInput
 - Covers: AtlInput
 
-Eight states (the five Figma ones plus disabled, readonly and invalid+focus, each marked as Figma axis or code-only), an anatomy table naming the token behind every value, and six findings of which three are defects: the 46-vs-40px height mismatch with AtlButton md, the missing box-sizing reset, and readonly rendering identically to default.
+Eight states (the five Figma variant states plus the disabled/readonly Booleans and invalid+focus), an anatomy table naming the token behind every value, and findings: two fixed (the 46-vs-40 height, now exactly 40 and matching AtlButton md per ADR-0041; the hand-restated invalid focus ring, now --ui-focus-ring-danger) and three open (readonly indistinguishable from default, the literal cross glyph instead of an icon, three values with no token to bind).
 
