@@ -98,6 +98,15 @@ Alternatives considered:
 - **Open: the remaining controls still state their padding.** Until they are
   migrated, a select next to an input may still disagree. Tracked in
   `tasks/todo.md`.
+- **Amended by [ADR-0052](0052-the-row-is-the-second-ladder.md): the derived padding
+  is for controls only.** A control pads because its content is one line of its own
+  text. A row holds a control, so adding derived padding around one is adding it
+  twice — measured: a size-md table cell with 11px of derived padding renders 62.5px
+  against a 48px token. Rows state the height, zero the block padding and centre.
+  The two recipes are siblings, not one rule with an exception.
+- **Superseded in one place: `min-height` is not universal.** It is the right
+  property everywhere except `display: table-cell`, which does not honour it;
+  there `height` is defined to act as a minimum and is what the cells use.
 - **Open: nothing gates this.** A gate that renders each control and asserts its
   height equals its `--ui-control-height-*` token would catch the whole class.
   That is a real gap — the defect existed for months precisely because no gate
