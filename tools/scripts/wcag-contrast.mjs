@@ -203,6 +203,62 @@ const runMode = (mode) => {
   return { lines: lines.join('\n'), pass, fail };
 };
 
+// ── Annotated ramp steps ──────────────────────────────────────────────────
+// A step may claim, in a trailing comment, that it carries normal text on a
+// named canvas at a stated ratio:
+//     --ui-color-teal-600: #0d7f89; /* T on surface(light) 4.76 */
+// and one step per ramp family may carry the brand anchor mark:
+//     --ui-color-teal-700: #006470; /* ★ · T on surface(light) 6.87 */
+// Both are re-measured here. An annotation that is decorative is an annotation
+// that goes stale, so a wrong number is a failure, not a note.
+const annotationIssues = [];
+const annotationChecks = [];
+
+const canvases = {
+  light: tokens.light['surface'],
+  dark: tokens.dark['surface'],
+};
+
+const anchorsByFamily = new Map();
+const rootBlock = blockFor(':root');
+const ANNOTATED = /--ui-color-([a-z]+)-(\d{2,3})\s*:\s*(#[0-9a-fA-F]{6})\s*;\s*\/\*([^*]*)\*\//g;
+
+for (const m of rootBlock.matchAll(ANNOTATED)) {
+  const [, family, step, hex, comment] = m;
+  const token = `--ui-color-${family}-${step}`;
+
+  if (comment.includes('\u2605')) {
+    const seen = anchorsByFamily.get(family);
+    if (seen) {
+      annotationIssues.push(`${token}: a second \u2605 anchor for the "${family}" ramp — ${seen} already claims it. One anchor per ramp.`);
+    } else {
+      anchorsByFamily.set(family, token);
+    }
+  }
+
+  for (const t of comment.matchAll(/T on surface\((light|dark)\)\s+([0-9.]+)/g)) {
+    const [, canvas, statedRaw] = t;
+    const bg = canvases[canvas];
+    if (!bg) {
+      annotationIssues.push(`${token}: claims text on surface(${canvas}), which the token source does not define`);
+      continue;
+    }
+    const measured = ratio(hex, bg);
+    const stated = Number(statedRaw);
+    annotationChecks.push({ token, canvas, measured, stated });
+    if (Math.abs(measured - stated) >= 0.005) {
+      annotationIssues.push(
+        `${token}: comment claims ${stated.toFixed(2)} against surface(${canvas}), measured ${measured.toFixed(2)}. Fix the comment or the colour.`
+      );
+    }
+    if (measured < 4.5) {
+      annotationIssues.push(
+        `${token}: marked T (carries normal text) on surface(${canvas}) but measures ${measured.toFixed(2)}, below the 4.5 AA target.`
+      );
+    }
+  }
+}
+
 const MODES = Object.keys(tokens);
 const args = process.argv.slice(2);
 const checkOnly = args.includes('--check');
@@ -248,13 +304,24 @@ if (reportAt) {
   console.log(`\nWrote ${reportAt}`);
 }
 
-if (failures > 0) {
-  console.error(
-    `\n\u2717 ${failures} token pair(s) below their WCAG 2.2 AA target across ${MODES.length} modes. ` +
-      `Adjust the hex values in the token source — this gate reads them, so there is nothing else to update.`
-  );
+if (!QUIET && annotationChecks.length) {
+  console.log(`\nAnnotated ramp steps: ${annotationChecks.length} claim(s) re-measured, ${anchorsByFamily.size} anchor(s).`);
+}
+for (const issue of annotationIssues) console.error(`\u2717 ${issue}`);
+
+if (failures > 0 || annotationIssues.length > 0) {
+  if (failures > 0) {
+    console.error(
+      `\n\u2717 ${failures} token pair(s) below their WCAG 2.2 AA target across ${MODES.length} modes. ` +
+        `Adjust the hex values in the token source — this gate reads them, so there is nothing else to update.`
+    );
+  }
+  if (annotationIssues.length > 0) {
+    console.error(`\n\u2717 ${annotationIssues.length} ramp annotation(s) do not hold.`);
+  }
   process.exit(1);
 }
 console.log(
-  `\u2713 contrast in sync (${total} pair(s) at or above WCAG 2.2 AA across ${MODES.length} modes: ${MODES.join(', ')}).`
+  `\u2713 contrast in sync (${total} pair(s) at or above WCAG 2.2 AA across ${MODES.length} modes; ` +
+    `${annotationChecks.length} annotated ramp step(s) re-measured).`
 );

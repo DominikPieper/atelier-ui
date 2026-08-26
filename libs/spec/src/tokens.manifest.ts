@@ -231,6 +231,71 @@ export const tokens: Record<string, TokenAnnotation> = {
     ],
   },
   // === Colour · Primary (brand anchor) ===
+  // === Teal ramp . primitive tier (ADR-0038) ===
+  '--ui-color-teal-50': {
+    intent: 'Lightest teal. Tints and washes only, 1.26:1 on white.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+      'Never for text on the light canvas; these steps are for fills and dark-theme surfaces.',
+    ],
+  },
+  '--ui-color-teal-100': {
+    intent: 'Very light teal. The pressed state of a primary control in the dark theme.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+      'Never for text on the light canvas; these steps are for fills and dark-theme surfaces.',
+    ],
+  },
+  '--ui-color-teal-200': {
+    intent: 'Light teal. Primary hover in the dark theme.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+      'Never for text on the light canvas; these steps are for fills and dark-theme surfaces.',
+    ],
+  },
+  '--ui-color-teal-300': {
+    intent: 'Light-mid teal. The primary of the dark theme; carries text on the dark canvas at 10.83:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-teal-400': {
+    intent: 'Mid teal. Fills and illustration on dark; on the light canvas it clears 3:1 for UI but not 4.5:1 for text.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+      'Not for normal text on light: 2.37:1. Large text and UI borders only.',
+    ],
+  },
+  '--ui-color-teal-500': {
+    intent: 'Mid teal, the lightest step that still carries normal text on the DARK canvas (5.73:1).',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-teal-600': {
+    intent: 'Deep teal, the lightest step that still carries normal text on the LIGHT canvas (4.76:1).',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-teal-700': {
+    intent: 'The brand anchor. The primary of the light theme; carries text on the light canvas at 6.87:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-teal-800': {
+    intent: 'Darker teal. Primary hover in the light theme.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-teal-900': {
+    intent: 'Darkest teal. The pressed state in the light theme, and the deepest text-safe step.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
   '--ui-color-primary': {
     intent: 'Primary call-to-action colour and link text. Brand anchor on light backgrounds.',
     constraints: [
