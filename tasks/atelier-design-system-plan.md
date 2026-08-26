@@ -112,10 +112,46 @@ libs/*/src/styles/tokens.css   (Atelier's own values — the source of truth)
   untouched and the 29 records stay valid. It becomes blocking the moment
   component CSS migrates onto role tokens (late Phase 1 or Phase 4).
 
+### Phase 1 reconnaissance — done 2026-08-26
+
+Read the Atelier DS's `_adherence.oxlintrc.json` and checked every claim against
+the repo. Four results, all verified:
+
+1. **Atelier already has brand-area colours.** `--ui-color-brand-{agile, ai,
+   architecture, corporate, development, light-blue, light-green, petrol}` — all
+   eight exist in `libs/react/src/styles/tokens.css`. So port item 5 is half
+   done: the *values* are there, the *scope mechanism* is not. That is a much
+   smaller job than the plan assumed, and it gives Phase 4 a natural pairing
+   (Atelier's areas beside Conciso's).
+2. **The `/design-sync` manifest is NOT a trustworthy source.** Verified defects
+   in the synced metadata: it lists `--ui-font-size-3xl`, `-4xl` and `-5xl`,
+   which exist **nowhere** in the repo; it types `--ui-transition-fast|normal|
+   slow` as `"color"`; it mixes 20 `--docs-*` private docs-theme tokens into
+   what reads as the library's public token API; and `react/forbid-elements`
+   ships with an empty forbid list, i.e. a no-op rule. **Phase 1 derives from
+   `tokens.css` only.** The manifest is reference, never input. (This is also
+   the honest lesson for the `/design-sync` kata: the tool's output needs
+   review, and here is a concrete list of what it got wrong.)
+3. **The adherence file's three `no-restricted-syntax` rules are reusable
+   nearly verbatim** — raw hex literal → "use a token via `var()`"; raw
+   `\d+px` → "use a spacing token"; `font-family` outside the DS list. That is
+   ADR-0032's reopened alternative 4, already written. Lift these rather than
+   inventing our own.
+4. **The body font is Inter** (`--ui-font-family: 'Inter', …`), and Instrument
+   Serif is docs-only (`--docs-font-accent`), consistent with ADR-0020. Worth
+   putting on the table rather than keeping silently: Claude Design's own system
+   prompt lists Inter among the "AI slop tropes … overused fonts (Inter, Roboto,
+   Arial, Fraunces)". Since ADR-0020 makes typography the shared brand DNA, the
+   most-used font in the ecosystem is a weak carrier of identity. A decision, not
+   a defect — but one to make deliberately.
+
 ### Phase 1 — harden the token layer (repo only, additive)
 
-- [ ] Read both `_adherence.oxlintrc.json` files first — they encode rules
-      someone already thought through, and item 6 depends on them.
+- [x] ~~Read both `_adherence.oxlintrc.json` files first~~ — done, see
+      reconnaissance above. Conciso's remains unread; Atelier's already answered
+      the question.
+- [ ] Decide the Inter question (finding 4) before touching the type scale — the
+      role scale and the font choice are one decision, not two.
 - [ ] Introduce ramps for Atelier's own palette: 50–900 per colour, anchor
       marked, text-safe shade marked with its measured ratio. Existing semantics
       re-point at ramp steps **without changing their resolved values**.
@@ -124,6 +160,9 @@ libs/*/src/styles/tokens.css   (Atelier's own values — the source of truth)
       the role idea, but a shorthand cannot be decomposed later). **Needs an
       ADR** either way — it is an API addition.
 - [ ] Add tonal overlay tokens alongside the existing shadows.
+- [ ] Add the `[data-area]`-style scope mechanism over the eight existing
+      `--ui-color-brand-*` values (finding 1). Values exist; only the scope is
+      missing. This is the carrier for Phase 4.
 - [ ] Wire `wcag-contrast.mjs` into a real gate; every pair below AA is a
       finding to fix, not a warning.
 - [ ] `check:tokens`, `check:css-tokens`, `check:all` green; token manifest

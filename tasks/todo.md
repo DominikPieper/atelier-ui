@@ -150,6 +150,22 @@ Decision-bearing quick wins (deferred — not this session's scope):
       (`7a6a2f19-9a3c-4dd9-9828-65c7cc67766c`); both DS projects are read-only. The plan
       is additive, so the 29 parity records stay valid until component CSS migrates onto
       role tokens — at which point the ADR-0024 change (Phase 0) becomes blocking.
+- [ ] **`/design-sync`'s manifest is unreliable — verified** (2026-08-26). The synced
+      Atelier design system's `_adherence.oxlintrc.json` lists `--ui-font-size-3xl`,
+      `-4xl`, `-5xl` which exist nowhere in the repo; types `--ui-transition-*` as
+      `"color"`; mixes 20 `--docs-*` private docs-theme tokens into what reads as the
+      library's public token API; and ships `react/forbid-elements` with an empty forbid
+      list. Two consequences: never treat the manifest as an input (derive from
+      `tokens.css`), and use this list in the `/design-sync` kata — "the tool's output
+      needs review" lands far better with concrete errors than as advice.
+- [ ] **Reuse the adherence regexes for ADR-0032 alternative 4.** The synced file already
+      carries the three rules an artboard/token gate wants: raw hex → use a token via
+      `var()`, raw `\d+px` → use a spacing token, `font-family` outside the DS list. Lift
+      them rather than authoring new ones.
+- [ ] **Decide the Inter question.** `--ui-font-family` is Inter; ADR-0020 makes typography
+      the shared brand DNA; Claude Design's own prompt lists Inter among overused
+      "AI slop" fonts. The most-used font in the ecosystem is a weak carrier of identity.
+      Couple this decision with the role-based type scale — they are one decision.
 - [ ] `coverage.thresholds` in 3 vite configs (measure current coverage first — may fail CI)
 - [ ] `docs-old/` (42 tracked files, not in nx graph): remove or justify
 - [x] Wire `check:figma` into CI — done: it runs inside `check:all`, so the `checks` job
