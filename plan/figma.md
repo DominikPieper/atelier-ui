@@ -37,7 +37,15 @@ Category Sections are stacked top-to-bottom in the same order as `storySort.orde
 
 ## Variable Collections
 
-The file uses 5 local collections — a three-tier token architecture (primitives → semantic → component) plus motion and effects.
+The file uses a three-tier token architecture (primitives → semantic → component) plus motion and effects.
+
+> **Stale as of ADR-0030 (2026-08-26 note).** The table below was captured before the Library Tokens
+> decision: the semantic tier components bind to is now **`Library Tokens`** (code-generated from
+> `styles/tokens.css`), and the collection listed here as `UI Tokens` was renamed **`Docs Brand Tokens`**.
+> The IDs, mode IDs and counts below are therefore unverified — they need a refresh against the live file
+> (Figma Desktop + the figma-console Desktop Bridge), which the committed snapshot cannot supply because
+> `tools/figma/snapshot.json` records no collection data. Treat `check-figma.js` and
+> `figma-snapshot.mjs` as authoritative on which collections count as semantic until then.
 
 | Collection | ID | Modes | Variables | Purpose |
 |---|---|---|---|---|
