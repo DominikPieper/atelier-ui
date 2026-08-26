@@ -58,8 +58,14 @@
   display: flex;
   align-items: center;
   gap: var(--ui-spacing-3);
-  min-height: 2.25rem;
-  padding: var(--ui-spacing-2) var(--ui-spacing-4);
+  /* Row recipe (ADR-0052): the height is stated, the block padding is zero and the
+   * content is centred. A row centres, a control pads — ADR-0041's derived-padding
+   * formula produces the wrong box here. The line-height is stated so the box does
+   * not follow the installed font (ADR-0048).
+   */
+  min-height: var(--ui-row-height-sm);
+  padding-block: 0;
+  padding-inline: var(--ui-spacing-4);
   cursor: pointer;
   color: var(--ui-color-text);
   transition: background var(--ui-transition-fast);
@@ -67,6 +73,10 @@
   border: none;
   background: none;
   font: inherit;
+  /* After `font: inherit`, which is a shorthand and resets line-height along with
+   * everything else. Declared above it, the row's stated line-height was silently
+   * erased and the box grew with the text metrics again (ADR-0052). */
+  line-height: var(--ui-line-height-tight);
   width: 100%;
   text-align: start;
 }

@@ -141,6 +141,30 @@ const CONTROLS = [
     },
     measure: { default: '.atl-menu-item', angular: '.atl-menu-item' },
   },
+  // Rows, not controls: the height is stated and the content centred (ADR-0052).
+  {
+    dir: 'menu',
+    label: 'AtlMenuRow',
+    ladder: 'row',
+    steps: ['sm'],
+    markup: {
+      default: () => `<div class="atl-menu"><div class="atl-menu-item">Duplicate</div></div>`,
+      angular: () => `<atl-menu class="atl-menu"><div class="atl-menu-item">Duplicate</div></atl-menu>`,
+    },
+    measure: { default: '.atl-menu-item', angular: '.atl-menu-item' },
+  },
+  {
+    dir: 'combobox',
+    label: 'AtlComboboxOption',
+    ladder: 'row',
+    steps: ['sm'],
+    markup: {
+      default: () =>
+        `<div class="atl-combobox"><div class="atl-combobox-panel" style="position:static"><div class="atl-combobox-option">Angular</div></div></div>`,
+      angular: () => `<atl-combobox><div class="panel"><div class="option">Angular</div></div></atl-combobox>`,
+    },
+    measure: { default: '.atl-combobox-option', angular: '.option' },
+  },
   {
     dir: 'code-block',
     label: 'AtlCodeBlock',
@@ -191,11 +215,18 @@ const tokensCss = readFileSync(
   resolve(ROOT, 'libs/create-workspace/src/generators/preset/files/styles/tokens.css'),
   'utf8'
 );
-const claimed = {};
+const claimed = { control: {}, row: {} };
 for (const m of tokensCss.matchAll(/--ui-control-height-([a-z]+)\s*:\s*([\d.]+)rem\s*;/g)) {
-  claimed[m[1]] = parseFloat(m[2]) * 16; // the token file is rem-based; 1rem = 16px at the default root
+  claimed.control[m[1]] = parseFloat(m[2]) * 16; // the token file is rem-based; 1rem = 16px at the default root
 }
-if (Object.keys(claimed).length === 0) {
+// Row heights are a calc over the control scale plus twice the inset (ADR-0052), so
+// resolve them here rather than parsing a calc: --ui-row-height-X = control X + 2 × inset.
+const insetMatch = tokensCss.match(/--ui-row-inset\s*:\s*([\d.]+)rem\s*;/);
+if (insetMatch) {
+  const inset = parseFloat(insetMatch[1]) * 16;
+  for (const [step, px] of Object.entries(claimed.control)) claimed.row[step] = px + 2 * inset;
+}
+if (Object.keys(claimed.control).length === 0) {
   console.error('✗ the token source declares no --ui-control-height-* tokens; nothing to check.');
   process.exit(1);
 }
@@ -208,7 +239,7 @@ for (const fw of FRAMEWORKS) {
     const dirPath = join(base, dir);
     if (!isComponentDir(dirPath)) continue;
     for (const f of readdirSync(dirPath).filter((f) => f.endsWith('.css'))) {
-      if (/var\(\s*--ui-control-height-/.test(readFileSync(join(dirPath, f), 'utf8'))) {
+      if (/var\(\s*--ui-(control|row)-height-/.test(readFileSync(join(dirPath, f), 'utf8'))) {
         referencing.add(dir);
       }
     }
@@ -318,7 +349,8 @@ for (const fw of FRAMEWORKS) {
         );
       }
 
-      const want = claimed[step];
+      const ladder = control.ladder || 'control';
+      const want = claimed[ladder][step];
       if (measured === null) {
         errors.push(
           `[MARKUP] ${fw}/${control.label} ${step}: the fixture markup in CONTROLS produces no element matching \`${selector}\`. Fix the entry.`
@@ -326,7 +358,7 @@ for (const fw of FRAMEWORKS) {
         continue;
       }
       if (want === undefined) {
-        errors.push(`[TOKEN] ${control.label} ${step}: the token source declares no --ui-control-height-${step}.`);
+        errors.push(`[TOKEN] ${control.label} ${step}: the token source declares no --ui-${ladder}-height-${step}.`);
         continue;
       }
       const off = Math.abs(measured - want);
@@ -334,7 +366,9 @@ for (const fw of FRAMEWORKS) {
       if (off > TOL) {
         errors.push(
           `[HEIGHT] ${fw}/${control.label} size=${step} renders ${measured}px but --ui-control-height-${step} claims ${want}px ` +
-            `(off by ${off.toFixed(2)}px). Derive the block padding from the height instead of authoring it (ADR-0041), and ` +
+            `(off by ${off.toFixed(2)}px). A control derives its block padding from the height (ADR-0041); a row states the ` +
+            `height, zeroes the block padding and centres its content (ADR-0052). Also check that no later ` +
+            `shorthand — \`all: unset\`, \`font:\` — resets what an earlier declaration stated. And ` +
             `check the component declares its geometry contract (ADR-0043).`
         );
       }

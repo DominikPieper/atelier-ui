@@ -527,3 +527,54 @@ And one correction to the census itself, which it flagged: its **Angular numbers
 fixture artifacts** (`:host` matches nothing in a plain document) and must be
 re-measured with the `hostify` technique from `tools/scripts/check-geometry.mjs`.
 
+---
+
+## Decision K — the first two rows, and three things they exposed (2026-08-26, Option B adoption)
+
+The row recipe was proved on two boxes before rolling it out: `.atl-menu-item` and the
+combobox option. Both are 40px in all three frameworks now, and both hold at 40 under
+`* { line-height: 3 }` — deterministic by construction, not by luck. `check:geometry`
+covers them (42 measurements, 12 components × 3 frameworks) and knows both ladders;
+two negative tests confirm it catches a row put on the control ladder and a stated
+line-height that a later shorthand erases.
+
+Proving it on two boxes rather than thirty was worth it, because all three of the
+following came out of those two:
+
+**K1 — `font:` is a reset, and it ate the row's line-height.** `.atl-menu-item` ends
+with `font: inherit`, which is a shorthand that resets `line-height` along with
+everything else. The row's stated line-height sat above it and was silently erased, so
+the box still grew 40 → 48 under the probe. This is the **third** instance today of a
+later shorthand eating an earlier longhand: `font-family` after `all: unset`
+(ADR-0049), `box-sizing` after `all: unset` (ADR-0051), and now `line-height` after
+`font:`. Only three rules library-wide are affected and all three were mine, created
+minutes earlier — but the class is now named in the geometry gate's failure message.
+
+**K2 — AtlSelect is two different components.** React and Vue render a native
+`<select>`; **Angular renders a custom `role="listbox"` popover** with a `.trigger`
+button and styled `.option` rows. So the OS draws the dropdown in two frameworks and
+the library draws it in the third — options can be styled in Angular and cannot
+anywhere else. No gate sees this: `check:sync` compares directory and story presence,
+`check:variants` compares axis classes, and both are satisfied.
+
+*Consequence for my own work:* **AtlSelect.dc.html is wrong.** It draws a panel with
+option rows and an anatomy row "option height 36px", which is Angular's implementation
+presented as the component's. For React and Vue those rows do not exist. The sheet
+needs the divergence drawn, not one framework's version of it.
+
+**K3 — AtlCombobox.dc.html states a token binding that does not exist.** Its anatomy
+says "option height 40px — `--ui-control-height-md` — an option is a control-sized
+target". What I bound to the control height today was the combobox *input*; the option
+was `min-height: 2.25rem` (36px) until the row recipe made it 40 on the *row* ladder.
+Right number now, for a different reason, and the sheet says the wrong one.
+
+Also corrected in passing: I reported that Angular's combobox option had no height
+rule at all. It does — as `.option`, not `.atl-combobox-option`. A class-name
+divergence, like AtlTooltip's positions, and my measuring fixture had the wrong
+selector.
+
+**Deliberately not adopted tonight:** the pagination button (36px) and the stepper
+circle (36px). Both are controls or graphics rather than rows — they hold no content
+that needs to nest with an inset — and both already hold their height under the probe.
+Which ladder they take is a separate decision.
+

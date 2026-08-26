@@ -154,7 +154,7 @@ All four variants drawn with real code. Records that there is no AtlCodeBlockSpe
 - Kind: **component** · subject: AtlCombobox
 - Covers: AtlCombobox
 
-Eight specimens: the six Figma variant states (open/filtered/selected each drawn with their panel), the no-results state that has no Figma variant, and the invalid and readonly cases. Records that readonly exists in the code but not on the master, so the transfer has to add the Boolean.
+STALE 2026-08-26 (Decision K3): the anatomy says 'option height 40px — --ui-control-height-md'. The option was 36px until the row recipe; it is 40px now but on the ROW ladder (--ui-row-height-sm), and what was bound to the control height today was the input. Eight specimens: the six Figma variant states (open/filtered/selected each drawn with their panel), the no-results state that has no Figma variant, and the invalid and readonly cases. Records that readonly exists in the code but not on the master, so the transfer has to add the Boolean.
 
 ### AtlDialog.dc.html
 
@@ -234,7 +234,7 @@ Group-level states with the children drawn in place, plus the horizontal layout 
 - Kind: **component** · subject: AtlSelect
 - Covers: AtlSelect
 
-Seven specimens: the five Figma variant states (default | filled | hover | focus | open, the open one drawn with its panel and option states) plus the invalid and disabled Booleans. Measured anatomy. Findings include two open cross-component questions this sheet surfaced: invalid is carried by border colour alone here and in AtlCombobox while AtlInput and AtlTextarea draw an indicator, and an option row is 36px here against AtlCombobox's 40.
+STALE 2026-08-26 (Decision K2): this sheet draws a panel with option rows and an anatomy row 'option height 36px'. That is Angular's implementation — React and Vue render a native <select>, where the OS draws the dropdown and no option rows exist. The sheet needs the divergence drawn rather than one framework's version of it. Seven specimens: the five Figma variant states (default | filled | hover | focus | open, the open one drawn with its panel and option states) plus the invalid and disabled Booleans. Measured anatomy. Findings include two open cross-component questions this sheet surfaced: invalid is carried by border colour alone here and in AtlCombobox while AtlInput and AtlTextarea draw an indicator, and an option row is 36px here against AtlCombobox's 40.
 
 ### AtlSkeleton.dc.html
 
