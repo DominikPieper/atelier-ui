@@ -14,7 +14,8 @@
       "adr": "0043",
       "note": "The library is being redesigned in Claude Design and transferred to Figma afterwards (tasks/atelier-design-system-plan.md, Phase 3). While this is true, Figma is the TARGET of the transfer, not the reference for it: the masters are stale by definition until they are rebuilt. So check:parity reports an inputsHash drift as a WARNING rather than a BLOCKER — re-verifying against a design we have deliberately left behind proves nothing. Every drifted record still has to be re-verified once the transfer lands. Set active:false then, and the gate blocks again.",
       "clearedBy": "Phase 3: rebuild the Figma masters from the redesign, then re-verify + parity:record every component."
-    }
+    },
+    "sharedStylesheet": "_sheet.css — the sheet chrome and the specimen primitives every form field shares (field recipe, panel, option row, adornment, state modifiers). Each AtlXxx.dc.html links it and keeps only what is specific to that component, so a change to the chrome is one edit rather than one per sheet. Its palette is a deliberate copy of the light-mode tokens: an artboard renders standalone in Claude Design, where the library's tokens.css is not loaded."
   },
   "artboards": [
     {
@@ -42,13 +43,43 @@
     },
     {
       "project": "atelier",
+      "file": "AtlCombobox.dc.html",
+      "kind": "component",
+      "subject": "AtlCombobox",
+      "covers": [
+        "AtlCombobox"
+      ],
+      "note": "Eight specimens: the six Figma variant states (open/filtered/selected each drawn with their panel), the no-results state that has no Figma variant, and the invalid and readonly cases. Records that readonly exists in the code but not on the master, so the transfer has to add the Boolean."
+    },
+    {
+      "project": "atelier",
       "file": "AtlInput.dc.html",
       "kind": "component",
       "subject": "AtlInput",
       "covers": [
         "AtlInput"
       ],
-      "note": "Eight states (the five Figma variant states plus the disabled/readonly Booleans and invalid+focus), an anatomy table naming the token behind every value, and findings: two fixed (the 46-vs-40 height, now exactly 40 and matching AtlButton md per ADR-0041; the hand-restated invalid focus ring, now --ui-focus-ring-danger) and three open (readonly indistinguishable from default, the literal cross glyph instead of an icon, three values with no token to bind)."
+      "note": "Eight states (the five Figma variant states plus the disabled/readonly Booleans and invalid+focus), a measured anatomy table, and findings. Rewritten 2026-08-26 after ADRs 0043-0049 turned three of its open findings into fixed ones: readonly now has a visual treatment, the invalid indicator is an AtlIcon instance rather than a literal glyph, and the border width has a token. Now links the shared _sheet.css."
+    },
+    {
+      "project": "atelier",
+      "file": "AtlSelect.dc.html",
+      "kind": "component",
+      "subject": "AtlSelect",
+      "covers": [
+        "AtlSelect"
+      ],
+      "note": "Seven specimens: the five Figma variant states (default | filled | hover | focus | open, the open one drawn with its panel and option states) plus the invalid and disabled Booleans. Measured anatomy. Findings include two open cross-component questions this sheet surfaced: invalid is carried by border colour alone here and in AtlCombobox while AtlInput and AtlTextarea draw an indicator, and an option row is 36px here against AtlCombobox's 40."
+    },
+    {
+      "project": "atelier",
+      "file": "AtlTextarea.dc.html",
+      "kind": "component",
+      "subject": "AtlTextarea",
+      "covers": [
+        "AtlTextarea"
+      ],
+      "note": "Eight specimens: the five Figma variant states plus the readonly, disabled and autoResize Booleans. States explicitly that this is the one control that keeps the prose line-height (1.5) and whose height is content-driven by design, so the difference from every other control reads as a decision rather than as drift."
     }
   ]
 }

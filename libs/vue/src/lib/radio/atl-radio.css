@@ -72,7 +72,7 @@
 
 .atl-radio.is-invalid input[type='radio']:focus-visible {
   border-color: var(--ui-color-input-border-invalid);
-  box-shadow: 0 0 0 2px var(--ui-color-surface), 0 0 0 4px var(--ui-color-danger);
+  box-shadow: var(--ui-focus-ring-danger);
 }
 
 /* Disabled state */

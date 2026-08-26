@@ -4,7 +4,7 @@
      Every column but "Artboard" is derived from the repo; that one comes from
      tools/design/artboards.json, because Claude Design is not in the repo. -->
 
-**29 components.** Claude Design coverage: **2 designed**, 1 appearing only as a fragment inside a study, 26 untouched.
+**29 components.** Claude Design coverage: **5 designed**, 1 appearing only as a fragment inside a study, 23 untouched.
 
 > **Redesign phase, active since 2026-08-26.** Figma is the *target* of
 > the transfer, not the reference for it, so the masters are stale by definition until they are
@@ -29,7 +29,7 @@ a typography study says nothing about how the component should look.
 | `chat` | — | variant | 3 | 2026-07-23 (`2715827`) | all 3 | — | yes |
 | `checkbox` | — | selection · state | 5 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
 | `code-block` | — | — *(no master)* | — | — *(never)* | all 3 | — | yes |
-| `combobox` | — | state | 6 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
+| `combobox` | **AtlCombobox.dc.html** | state | 6 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
 | `dialog` | — | size | 5 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
 | `drawer` | — | position · size | 7 | 2026-07-23 (`2715827`) | all 3 | — | yes |
 | `icon` | — | — *(no master)* | — | — *(never)* | all 3 | — | yes |
@@ -39,12 +39,12 @@ a typography study says nothing about how the component should look.
 | `progress` | — | variant · size | 12 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
 | `radio` | — | selection · state | 4 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
 | `radio-group` | — | — *(no master)* | — | — *(never)* | all 3 | — | yes |
-| `select` | — | state | 5 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
+| `select` | **AtlSelect.dc.html** | state | 5 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
 | `skeleton` | — | variant | 3 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `stepper` | — | orientation · state | 8 | 2026-08-26 (`f4c20b6`) | all 3 | — | yes |
 | `table` | — | variant · size · state | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `tabs` | — | variant · selected · state | 3 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
-| `textarea` | — | state | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
+| `textarea` | **AtlTextarea.dc.html** | state | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `toast` | — | — *(no master)* | — | — *(never)* | all 3 | — | yes |
 | `toggle` | — | selection · state | 4 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
 | `tooltip` | — | position | 4 | 2026-07-23 (`2715827`) | all 3 | — | yes |
@@ -76,11 +76,35 @@ Turn 1 compares three type directions, turn 2 three readings of "bolder" on the 
 
 Variant x size matrix (the default-state slice, 12 of the master's 24), all states at size=md with the four variant states separated from the disabled/loading Booleans, an anatomy table naming the token behind every value, and findings. Corrected 2026-08-26: disabled/loading are Figma Booleans not code-only props, the 24 variants are a deliberate two-slice cross rather than half a 4x3x4 matrix, and the anatomy reflects ADR-0041 (heights exact at 32/40/48, block padding derived).
 
+### AtlCombobox.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlCombobox
+- Covers: AtlCombobox
+
+Eight specimens: the six Figma variant states (open/filtered/selected each drawn with their panel), the no-results state that has no Figma variant, and the invalid and readonly cases. Records that readonly exists in the code but not on the master, so the transfer has to add the Boolean.
+
 ### AtlInput.dc.html
 
 - Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
 - Kind: **component** · subject: AtlInput
 - Covers: AtlInput
 
-Eight states (the five Figma variant states plus the disabled/readonly Booleans and invalid+focus), an anatomy table naming the token behind every value, and findings: two fixed (the 46-vs-40 height, now exactly 40 and matching AtlButton md per ADR-0041; the hand-restated invalid focus ring, now --ui-focus-ring-danger) and three open (readonly indistinguishable from default, the literal cross glyph instead of an icon, three values with no token to bind).
+Eight states (the five Figma variant states plus the disabled/readonly Booleans and invalid+focus), a measured anatomy table, and findings. Rewritten 2026-08-26 after ADRs 0043-0049 turned three of its open findings into fixed ones: readonly now has a visual treatment, the invalid indicator is an AtlIcon instance rather than a literal glyph, and the border width has a token. Now links the shared _sheet.css.
+
+### AtlSelect.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlSelect
+- Covers: AtlSelect
+
+Seven specimens: the five Figma variant states (default | filled | hover | focus | open, the open one drawn with its panel and option states) plus the invalid and disabled Booleans. Measured anatomy. Findings include two open cross-component questions this sheet surfaced: invalid is carried by border colour alone here and in AtlCombobox while AtlInput and AtlTextarea draw an indicator, and an option row is 36px here against AtlCombobox's 40.
+
+### AtlTextarea.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlTextarea
+- Covers: AtlTextarea
+
+Eight specimens: the five Figma variant states plus the readonly, disabled and autoResize Booleans. States explicitly that this is the one control that keeps the prose line-height (1.5) and whose height is content-driven by design, so the difference from every other control reads as a decision rather than as drift.
 
