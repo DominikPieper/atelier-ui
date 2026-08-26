@@ -15,11 +15,14 @@
   cursor: pointer;
   user-select: none;
   color: var(--ui-color-text);
-  line-height: var(--ui-line-height-normal);
+  line-height: var(--ui-line-height-tight);
   font-family: var(--ui-font-family);
   font-size: var(--ui-font-size-md);
-  padding: var(--ui-spacing-1) 0;
-  min-height: 1.5rem;
+  /* Row recipe (ADR-0052): the clickable line is a row — it states its height
+     and centres the control + text, rather than being sized by whichever of
+     the two happens to be taller. */
+  padding-block: 0;
+  min-height: var(--ui-row-height-sm);
   transition: color var(--ui-transition-fast);
 }
 

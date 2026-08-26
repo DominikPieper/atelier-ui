@@ -78,8 +78,14 @@
   justify-content: space-between;
   gap: var(--ui-spacing-3);
   width: 100%;
-  min-height: 3.25rem;
-  padding: var(--ui-spacing-4) var(--ui-spacing-5);
+  /* Row recipe (ADR-0052): 3.25rem was a literal that happened to clear the
+     prose leading. On the row ladder the trigger is a lg row, and it states
+     its own line-height because `all: unset` above reset that to inherit —
+     without it the box grows with whatever leading the page sets. */
+  min-height: var(--ui-row-height-lg);
+  padding-block: 0;
+  padding-inline: var(--ui-spacing-5);
+  line-height: var(--ui-line-height-tight);
   font-size: var(--ui-font-size-md);
   font-weight: var(--ui-font-weight-semibold);
   color: var(--ui-color-text);

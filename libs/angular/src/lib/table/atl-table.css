@@ -9,7 +9,7 @@
 }
 
 /* ============================================================
-   atl-table.css — Styles for the React table component
+   atl-table.css — Styles for the Angular table component
    ============================================================ */
 
 /* ---------------------------------------------------------------------------
@@ -42,7 +42,13 @@
   text-transform: uppercase;
   border-bottom: var(--ui-border-width-thick) solid var(--ui-color-border);
   background-color: var(--ui-color-surface);
-  padding: var(--ui-spacing-3) var(--ui-spacing-4);
+  /* Row recipe (ADR-0052): a row centres its content on a stated height, it
+     does not let the content push the box. padding-block stays 0 so the size
+     variants below only vary the inline inset. */
+  height: var(--ui-row-height-md);
+  padding-block: 0;
+  padding-inline: var(--ui-spacing-4);
+  line-height: var(--ui-line-height-tight);
   text-align: start;
   white-space: nowrap;
 }
@@ -52,7 +58,10 @@
    --------------------------------------------------------------------------- */
 .atl-table tbody td {
   border-bottom: var(--ui-border-width) solid var(--ui-color-border);
-  padding: var(--ui-spacing-3) var(--ui-spacing-4);
+  height: var(--ui-row-height-md);
+  padding-block: 0;
+  padding-inline: var(--ui-spacing-4);
+  line-height: var(--ui-line-height-tight);
   vertical-align: middle;
   background-color: var(--ui-color-surface);
   transition: background-color var(--ui-transition-fast);
@@ -63,19 +72,22 @@
    --------------------------------------------------------------------------- */
 .atl-table.size-sm thead th,
 .atl-table.size-sm tbody td {
-  padding: var(--ui-spacing-2) var(--ui-spacing-3);
+  height: var(--ui-row-height-sm);
+  padding-inline: var(--ui-spacing-3);
   font-size: var(--ui-font-size-xs);
 }
 
 .atl-table.size-md thead th,
 .atl-table.size-md tbody td {
-  padding: var(--ui-spacing-3) var(--ui-spacing-4);
+  height: var(--ui-row-height-md);
+  padding-inline: var(--ui-spacing-4);
   font-size: var(--ui-font-size-sm);
 }
 
 .atl-table.size-lg thead th,
 .atl-table.size-lg tbody td {
-  padding: var(--ui-spacing-4) var(--ui-spacing-6);
+  height: var(--ui-row-height-lg);
+  padding-inline: var(--ui-spacing-6);
   font-size: var(--ui-font-size-md);
 }
 

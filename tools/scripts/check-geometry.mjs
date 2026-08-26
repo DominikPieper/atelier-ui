@@ -66,7 +66,25 @@ const TOL = 0.5; // px — sub-pixel rounding is not a defect; 6px is.
  * tolerance, and therefore undetectable that way. Perturbing the metric directly
  * is what makes the dependency visible.
  */
-const INHERITED_METRIC_PROBE = '* { line-height: 3; }';
+const INHERITED_METRIC_PROBE = {
+  /* A control owns every element inside it, so it must survive the strict form:
+     a declaration landing directly on each descendant. */
+  control: '* { line-height: 3; }',
+  /* A row may host content the consuming app supplies — AtlCheckbox and
+     AtlToggle render their children with no wrapper of their own. Overriding
+     that content's metrics would be worse than the defect, so a row is held to
+     the hazard that is actually real: leading arriving by inheritance. A row
+     that states its own line-height shrugs this off; one that does not grows,
+     which is the regression this catches. Content that is genuinely taller — a
+     label wrapping to two lines — still grows the row, and should.
+
+     The perturbation is an absolute leading, not a multiplier: a row states a
+     height in the 32–56px band while its text is 12–16px, so a factor of 3
+     stays inside that headroom and would pass a row that never declared a
+     line-height at all (verified — it let a stripped table cell through).
+     A leading taller than every rung on the ladder has no such blind spot. */
+  row: 'body { line-height: 100px; }',
+};
 
 /**
  * Markup per control. This is knowledge, not something to derive: only the
@@ -205,6 +223,86 @@ const CONTROLS = [
     },
     measure: { default: '.close-btn', angular: '.close-btn' },
   },
+  // The row ladder (ADR-0052). These state a height and centre their content;
+  // the table cell uses `height` rather than `min-height` because min-height is
+  // not honoured on display:table-cell, while height acts as a minimum there.
+  {
+    dir: 'table',
+    label: 'AtlTableCell',
+    ladder: 'row',
+    steps: ['sm', 'md', 'lg'],
+    markup: {
+      default: (step) =>
+        `<table class="atl-table variant-default size-${step}"><thead><tr><th>Name</th></tr></thead><tbody><tr><td>Row</td></tr></tbody></table>`,
+      angular: (step) =>
+        `<atl-table class="atl-table"><table class="atl-table variant-default size-${step}"><thead><tr><th>Name</th></tr></thead><tbody><tr><td>Row</td></tr></tbody></table></atl-table>`,
+    },
+    measure: { default: '.atl-table tbody td', angular: '.atl-table tbody td' },
+  },
+  {
+    dir: 'table',
+    label: 'AtlTableHead',
+    ladder: 'row',
+    steps: ['sm', 'md', 'lg'],
+    markup: {
+      default: (step) =>
+        `<table class="atl-table variant-default size-${step}"><thead><tr><th>Name</th></tr></thead><tbody><tr><td>Row</td></tr></tbody></table>`,
+      angular: (step) =>
+        `<atl-table class="atl-table"><table class="atl-table variant-default size-${step}"><thead><tr><th>Name</th></tr></thead><tbody><tr><td>Row</td></tr></tbody></table></atl-table>`,
+    },
+    measure: { default: '.atl-table thead th', angular: '.atl-table thead th' },
+  },
+  {
+    dir: 'checkbox',
+    label: 'AtlCheckboxRow',
+    ladder: 'row',
+    steps: ['sm'],
+    markup: {
+      default: () =>
+        `<div class="atl-checkbox"><label><input type="checkbox"><span>Ship it</span></label></div>`,
+      angular: () =>
+        `<atl-checkbox><label><input type="checkbox"><span>Ship it</span></label></atl-checkbox>`,
+    },
+    measure: { default: '.atl-checkbox', angular: 'atl-checkbox' },
+  },
+  {
+    dir: 'radio',
+    label: 'AtlRadioRow',
+    ladder: 'row',
+    steps: ['sm'],
+    markup: {
+      default: () =>
+        `<label class="atl-radio"><input type="radio"><span class="radio-text">Small</span></label>`,
+      angular: () => `<atl-radio><input type="radio"><span class="radio-text">Small</span></atl-radio>`,
+    },
+    measure: { default: '.atl-radio', angular: 'atl-radio' },
+  },
+  {
+    dir: 'toggle',
+    label: 'AtlToggleRow',
+    ladder: 'row',
+    steps: ['sm'],
+    markup: {
+      default: () =>
+        `<div class="atl-toggle"><label><input type="checkbox" role="switch"><span class="track"><span class="thumb"></span></span><span>Notifications</span></label></div>`,
+      angular: () =>
+        `<atl-toggle><label><input type="checkbox" role="switch"><span class="track"><span class="thumb"></span></span><span>Notifications</span></label></atl-toggle>`,
+    },
+    measure: { default: '.atl-toggle', angular: 'atl-toggle' },
+  },
+  {
+    dir: 'accordion',
+    label: 'AtlAccordionTrigger',
+    ladder: 'row',
+    steps: ['lg'],
+    markup: {
+      default: () =>
+        `<div class="atl-accordion-group"><div class="atl-accordion-item"><h3 class="accordion-heading"><button class="accordion-trigger">Section</button></h3></div></div>`,
+      angular: () =>
+        `<atl-accordion-group class="atl-accordion-group"><atl-accordion-item class="atl-accordion-item"><h3 class="accordion-heading"><button class="accordion-trigger">Section</button></h3></atl-accordion-item></atl-accordion-group>`,
+    },
+    measure: { default: '.accordion-trigger', angular: '.accordion-trigger' },
+  },
 ];
 
 const errors = [];
@@ -333,7 +431,7 @@ for (const fw of FRAMEWORKS) {
 
       // Same box, with inherited line-heights perturbed. Unchanged means the height
       // is stated; changed means it follows whatever text metrics it inherits.
-      await tab.addStyleTag({ content: INHERITED_METRIC_PROBE });
+      await tab.addStyleTag({ content: INHERITED_METRIC_PROBE[control.ladder || 'control'] });
       const perturbed = await tab.evaluate((sel) => {
         const el = document.querySelector(sel);
         return el ? el.getBoundingClientRect().height : null;

@@ -12,6 +12,10 @@
   display: block;
   font-family: var(--ui-font-family);
   font-size: var(--ui-font-size-md);
+  /* The root is a block wrapping an inline-flex row, so it opens a line box and
+     its strut is sized by whatever leading it inherits. Without this the row is
+     40px here and 48px inside an app with roomy prose leading. */
+  line-height: var(--ui-line-height-tight);
 }
 
 label {
@@ -21,14 +25,21 @@ label {
   cursor: pointer;
   user-select: none;
   color: var(--ui-color-text);
-  line-height: var(--ui-line-height-normal);
-  min-height: 1.5rem;
+  /* Row recipe (ADR-0052): the clickable line is a row — it states its height
+     and centres the control + text, rather than being sized by whichever of
+     the two happens to be taller. */
+  min-height: var(--ui-row-height-sm);
+  padding-block: 0;
+  line-height: var(--ui-line-height-tight);
 }
 
 input[type='checkbox'] {
   appearance: none;
   -webkit-appearance: none;
   flex-shrink: 0;
+  /* The UA ships margin: 3px 3px 3px 4px on a native checkbox. Left in, it
+     adds 6px to the row and offsets the box from the label text. */
+  margin: 0;
   width: 1.25rem;
   height: 1.25rem;
   border: var(--ui-border-width-thick) solid var(--ui-color-border-strong);
