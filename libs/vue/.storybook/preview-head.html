@@ -13,3 +13,17 @@
   rel="stylesheet"
   href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400..600&display=swap"
 />
+
+<!--
+  The shell rule the manifest asks for: "--ui-font-family — apply on :root or
+  the app shell, do not respecify per component". Storybook IS the app shell
+  here. Without this, the components that correctly rely on inheritance (card,
+  and three others) render in the browser default serif, which is what they did
+  for as long as nobody looked.
+-->
+<style>
+  html,
+  body {
+    font-family: var(--ui-font-family);
+  }
+</style>

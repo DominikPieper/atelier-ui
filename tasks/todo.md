@@ -185,6 +185,15 @@ Decision-bearing quick wins (deferred — not this session's scope):
 - [ ] **Role-based type scale** (`body-md` instead of `font-size-sm`) — deliberately left
       out of ADR-0035 so the font swap stayed readable. API addition, migration across every
       component's CSS, needs its own ADR.
+- [ ] **25 of 29 components respecify `font-family`, against their own manifest
+      constraint.** `--ui-font-family`'s annotation says *"Apply on :root or the app shell —
+      do not respecify per component"*, yet 25 component stylesheets set it themselves;
+      card, dialog, drawer and skeleton correctly inherit. Found 2026-08-26 while looking at
+      Storybook: because nothing applied the shell rule, those four rendered in the browser
+      default serif — and had done so for as long as nobody looked. The shell rule is now in
+      each `.storybook/preview-head.html`. Removing the 25 redundant declarations is the
+      real fix, but it touches component CSS, so it makes 25 parity records stale — do it
+      deliberately, not as a drive-by.
 - [ ] `coverage.thresholds` in 3 vite configs (measure current coverage first — may fail CI)
 - [ ] `docs-old/` (42 tracked files, not in nx graph): remove or justify
 - [x] Wire `check:figma` into CI — done: it runs inside `check:all`, so the `checks` job
