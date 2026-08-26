@@ -21,6 +21,10 @@
 /* ── Native <dialog> reset + base ──────────────────────────────────────────── */
 .atl-dialog {
   all: unset;
+  /* Restated after `all: unset`, which resets the box model too — the component's
+   * geometry contract has the same specificity and loses on source order, so this
+   * element was content-box and 2px taller than its own CSS said (ADR-0051). */
+  box-sizing: border-box;
   /* After `all: unset`, which would otherwise reset it. The library states its own
    * typeface (ADR-0035); without this the dialog renders in the consuming app's
    * font while its neighbours render Instrument Sans (ADR-0049). */

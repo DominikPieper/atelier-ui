@@ -56,6 +56,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0048](0048-a-stated-height-cannot-be-content-driven.md) | A stated height cannot be content-driven | Accepted | Recorded |
 | [0049](0049-every-component-states-its-typeface.md) | Every component states its typeface (`check:typeface`) | Accepted | Recorded |
 | [0050](0050-a-glyph-in-a-string-map-is-still-an-icon.md) | A glyph in a string map is still an icon | Accepted | Recorded |
+| [0051](0051-a-reset-undoes-the-contract.md) | A reset undoes the contract (`[RESET-WIPED]`) | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

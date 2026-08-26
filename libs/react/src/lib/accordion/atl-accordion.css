@@ -62,6 +62,10 @@
 /* ── Heading reset ─────────────────────────────────────────────────────────── */
 .accordion-heading {
   all: unset;
+  /* Restated after `all: unset`, which resets the box model too — the component's
+   * geometry contract has the same specificity and loses on source order, so this
+   * element was content-box and 2px taller than its own CSS said (ADR-0051). */
+  box-sizing: border-box;
   display: block;
 }
 

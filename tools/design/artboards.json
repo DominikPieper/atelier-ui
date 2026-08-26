@@ -53,6 +53,16 @@
     },
     {
       "project": "atelier",
+      "file": "AtlBreadcrumbs.dc.html",
+      "kind": "component",
+      "subject": "AtlBreadcrumbs",
+      "covers": [
+        "AtlBreadcrumbs"
+      ],
+      "note": "Three trail lengths plus a chevron-separator proposal marked as not-the-code: separator is typed string, so it cannot hold an icon — the same glyph-as-icon shape ADR-0046 and ADR-0050 removed elsewhere. Records that nothing handles a long trail."
+    },
+    {
+      "project": "atelier",
       "file": "AtlButton.dc.html",
       "kind": "component",
       "subject": "AtlButton",
@@ -123,6 +133,16 @@
     },
     {
       "project": "atelier",
+      "file": "AtlPagination.dc.html",
+      "kind": "component",
+      "subject": "AtlPagination",
+      "covers": [
+        "AtlPagination"
+      ],
+      "note": "The three current-page positions with disabled edges and ellipsis slots, plus a ruler on the button: 36px now, 38px until ADR-0051. Records that every real prop is code-only and the master's one axis is an illustration of their outcome."
+    },
+    {
+      "project": "atelier",
       "file": "AtlProgress.dc.html",
       "kind": "component",
       "subject": "AtlProgress",
@@ -160,6 +180,26 @@
         "AtlSelect"
       ],
       "note": "Seven specimens: the five Figma variant states (default | filled | hover | focus | open, the open one drawn with its panel and option states) plus the invalid and disabled Booleans. Measured anatomy. Findings include two open cross-component questions this sheet surfaced: invalid is carried by border colour alone here and in AtlCombobox while AtlInput and AtlTextarea draw an indicator, and an option row is 36px here against AtlCombobox's 40."
+    },
+    {
+      "project": "atelier",
+      "file": "AtlStepper.dc.html",
+      "kind": "component",
+      "subject": "AtlStepper",
+      "covers": [
+        "AtlStepper"
+      ],
+      "note": "Both orientations with every step state drawn in place — complete, active, errored, optional. Deliberately asserts no ARIA role: the metadata says progressbar, all three adapters render tablist/tab/tabpanel, and the master claims an ol with aria-current=step. Three sources, three answers, and the gate warns every run."
+    },
+    {
+      "project": "atelier",
+      "file": "AtlTabGroup.dc.html",
+      "kind": "component",
+      "subject": "AtlTabGroup",
+      "covers": [
+        "AtlTabGroup"
+      ],
+      "note": "Both variants with a disabled tab in each, measured anatomy. Records that two of the master's three axes are illustrations (selected = 0|1, state = default with one value) and that its description lists disabled and loading Booleans the group does not have."
     },
     {
       "project": "atelier",

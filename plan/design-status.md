@@ -4,7 +4,7 @@
      Every column but "Artboard" is derived from the repo; that one comes from
      tools/design/artboards.json, because Claude Design is not in the repo. -->
 
-**29 components.** Claude Design coverage: **17 designed**, 1 appearing only as a fragment inside a study, 11 untouched.
+**29 components.** Claude Design coverage: **21 designed**, 1 appearing only as a fragment inside a study, 7 untouched.
 
 > **Redesign phase, active since 2026-08-26.** Figma is the *target* of
 > the transfer, not the reference for it, so the masters are stale by definition until they are
@@ -23,7 +23,7 @@ a typography study says nothing about how the component should look.
 | `alert` | **AtlAlert.dc.html** | variant | 4 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
 | `avatar` | — | size | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `badge` | **AtlBadge.dc.html** | variant · size | 10 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
-| `breadcrumbs` | — | items | 3 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
+| `breadcrumbs` | **AtlBreadcrumbs.dc.html** | items | 3 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
 | `button` | **AtlButton.dc.html** | variant · size · state | 24 | 2026-08-26 (`0bdaddd`) | all 3 | — | yes |
 | `card` | fragment only | variant · padding | 12 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `chat` | — | variant | 3 | 2026-07-23 (`2715827`) | all 3 | — | yes |
@@ -35,15 +35,15 @@ a typography study says nothing about how the component should look.
 | `icon` | — | — *(no master)* | — | — *(never)* | all 3 | — | yes |
 | `input` | **AtlInput.dc.html** | state | 5 | 2026-08-26 (`0bdaddd`) | all 3 | — | yes |
 | `menu` | **AtlMenu.dc.html** | variant | 2 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
-| `pagination` | — | position | 3 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
+| `pagination` | **AtlPagination.dc.html** | position | 3 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `progress` | **AtlProgress.dc.html** | variant · size | 12 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
 | `radio` | **AtlRadio.dc.html** | selection · state | 4 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
 | `radio-group` | **AtlRadioGroup.dc.html** | — *(no master)* | — | — *(never)* | all 3 | — | yes |
 | `select` | **AtlSelect.dc.html** | state | 5 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
 | `skeleton` | — | variant | 3 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
-| `stepper` | — | orientation · state | 8 | 2026-08-26 (`f4c20b6`) | all 3 | — | yes |
+| `stepper` | **AtlStepper.dc.html** | orientation · state | 8 | 2026-08-26 (`f4c20b6`) | all 3 | — | yes |
 | `table` | — | variant · size · state | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
-| `tabs` | — | variant · selected · state | 3 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
+| `tabs` | **AtlTabGroup.dc.html** | variant · selected · state | 3 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
 | `textarea` | **AtlTextarea.dc.html** | state | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `toast` | **AtlToast.dc.html** | — *(no master)* | — | — *(never)* | all 3 | — | yes |
 | `toggle` | **AtlToggle.dc.html** | selection · state | 4 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
@@ -83,6 +83,14 @@ Four variants with the dismissible Boolean on two of them, measured anatomy, and
 - Covers: AtlBadge
 
 The complete 5 x 2 variant/size matrix plus a ruler specimen showing the real boxes: md is 29.5px tall, a half pixel, because nothing states the height. Records the letter-spacing bypass fixed by ADR-0047.
+
+### AtlBreadcrumbs.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlBreadcrumbs
+- Covers: AtlBreadcrumbs
+
+Three trail lengths plus a chevron-separator proposal marked as not-the-code: separator is typed string, so it cannot hold an icon — the same glyph-as-icon shape ADR-0046 and ADR-0050 removed elsewhere. Records that nothing handles a long trail.
 
 ### AtlButton.dc.html
 
@@ -140,6 +148,14 @@ Eight states (the five Figma variant states plus the disabled/readonly Booleans 
 
 Both variants with the item states the master does not model (active, disabled, shortcut, separator), plus a ruler specimen for the two row heights. Records that a menu item is 36px, an AtlSelect option 36px and an AtlCombobox option 40px — three dropdown rows, three heights, two of them literals.
 
+### AtlPagination.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlPagination
+- Covers: AtlPagination
+
+The three current-page positions with disabled edges and ellipsis slots, plus a ruler on the button: 36px now, 38px until ADR-0051. Records that every real prop is code-only and the master's one axis is an illustration of their outcome.
+
 ### AtlProgress.dc.html
 
 - Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
@@ -171,6 +187,22 @@ Group-level states with the children drawn in place, plus the horizontal layout 
 - Covers: AtlSelect
 
 Seven specimens: the five Figma variant states (default | filled | hover | focus | open, the open one drawn with its panel and option states) plus the invalid and disabled Booleans. Measured anatomy. Findings include two open cross-component questions this sheet surfaced: invalid is carried by border colour alone here and in AtlCombobox while AtlInput and AtlTextarea draw an indicator, and an option row is 36px here against AtlCombobox's 40.
+
+### AtlStepper.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlStepper
+- Covers: AtlStepper
+
+Both orientations with every step state drawn in place — complete, active, errored, optional. Deliberately asserts no ARIA role: the metadata says progressbar, all three adapters render tablist/tab/tabpanel, and the master claims an ol with aria-current=step. Three sources, three answers, and the gate warns every run.
+
+### AtlTabGroup.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlTabGroup
+- Covers: AtlTabGroup
+
+Both variants with a disabled tab in each, measured anatomy. Records that two of the master's three axes are illustrations (selected = 0|1, state = default with one value) and that its description lists disabled and loading Booleans the group does not have.
 
 ### AtlTextarea.dc.html
 

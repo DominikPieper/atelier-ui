@@ -349,3 +349,39 @@ variant-axis exception allowlist.
 shortcut, the separator — lives on `AtlMenuItem`, which has no master. A designer
 opening it sees two panels and none of the behaviour.
 
+---
+
+## Decision H — the navigation family (2026-08-26, batch E)
+
+**H1 — 36px is a size the control scale does not have.** `2.25rem` is written out
+four times, in four stylesheets: the AtlStepper circle, an AtlMenu item, an
+AtlSelect option and an AtlPagination button. It sits between
+`--ui-control-height-sm` (32) and `-md` (40). Four independent uses is not an
+accident; it is the missing step.
+
+**H2 — four masters carry axes that are illustrations, not props.**
+AtlBreadcrumbs' `items` = 3|4|5, AtlPagination's `position` = first|middle|last,
+AtlTabGroup's `selected` = 0|1 and `state` = default (one value), AtlRadioGroup's
+group-level `selection`. None of them is a prop; each pictures an outcome of content
+or of a code-only value. A designer reading the variant list sees API where there is
+none. One decision for all four: drop them, or mark them gallery-only on the master.
+
+**H3 — container masters keep claiming their children's states.** AtlStepper's
+`state` axis maps to `AtlStepSpec`'s flags, AtlMenu's master has no item states at
+all, AtlTabGroup's description lists a `disabled` that lives on `AtlTabSpec`, and
+AtlRadioGroup's axes put selection on the group. Four components, one shape of
+problem: the master varies the container to show a child.
+
+**H4 — AtlBreadcrumbs' separator is typed `string`.** So the default `/` is a text
+glyph and an icon is impossible — the same glyph-as-icon shape ADR-0046 removed from
+the CSS and ADR-0050 from the TypeScript, surviving here because it is a *public
+prop* rather than an internal detail.
+
+**H5 — AtlStepper's ARIA is still unresolved**, and it is the one open item that
+warns on every gate run: metadata says `progressbar`, all three adapters render
+`tablist`/`tab`/`tabpanel`, the master claims `<ol>` + `aria-current="step"`. Its
+sheet deliberately draws the visuals without asserting a role.
+
+Resolved in this batch: `all: unset` silently resetting the box model, which had
+AtlPagination's button rendering 38px against its own `height: 2.25rem` (ADR-0051).
+
