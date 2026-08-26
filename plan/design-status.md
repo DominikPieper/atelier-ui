@@ -4,7 +4,7 @@
      Every column but "Artboard" is derived from the repo; that one comes from
      tools/design/artboards.json, because Claude Design is not in the repo. -->
 
-**29 components.** Claude Design coverage: **1 designed**, 2 appearing only as a fragment inside a study, 26 untouched.
+**29 components.** Claude Design coverage: **2 designed**, 1 appearing only as a fragment inside a study, 26 untouched.
 
 Read the columns as a pipeline: a component is ready to transfer into Figma when
 it has an artboard, a current parity verification, and an a11y baseline in all
@@ -27,7 +27,7 @@ a typography study says nothing about how the component should look.
 | `dialog` | — | size | 5 | 2026-07-22 (`26a8a7e`) | all 3 | — | — |
 | `drawer` | — | position · size | 7 | 2026-07-23 (`2715827`) | all 3 | — | — |
 | `icon` | — | — *(no master)* | — | — *(never)* | all 3 | — | yes |
-| `input` | fragment only | state | 5 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
+| `input` | **AtlInput.dc.html** | state | 5 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
 | `menu` | — | variant | 2 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
 | `pagination` | — | position | 3 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `progress` | — | variant · size | 12 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
@@ -69,4 +69,12 @@ Turn 1 compares three type directions, turn 2 three readings of "bolder" on the 
 - Covers: AtlButton
 
 Variant x size matrix (12 of the 24 Figma variants), all six states at size=md with the four that are Figma axes marked apart from the two code-only props, an anatomy table naming the token behind every value, and a findings section. Built on ADR-0035/0036/0038 values. Its point is transferability: whoever builds the Figma master reads --ui-radius-md, not 10px.
+
+### AtlInput.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlInput
+- Covers: AtlInput
+
+Eight states (the five Figma ones plus disabled, readonly and invalid+focus, each marked as Figma axis or code-only), an anatomy table naming the token behind every value, and six findings of which three are defects: the 46-vs-40px height mismatch with AtlButton md, the missing box-sizing reset, and readonly rendering identically to default.
 
