@@ -1,3 +1,15 @@
+## 0.2.8 (2026-08-26)
+
+### 🩹 Fixes
+
+- **react:** keyless list children in AtlStepper ([e3cb2a9](https://github.com/DominikPieper/atelier-ui/commit/e3cb2a9))
+- **react:** showcase story passed a prop that does not exist ([0bce5d4](https://github.com/DominikPieper/atelier-ui/commit/0bce5d4))
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Dominik Pieper @DominikPieper
+
 ## 0.2.7 (2026-07-23)
 
 ### 🚀 Features
