@@ -82,8 +82,18 @@ Decision-bearing quick wins (deferred — not this session's scope):
 
 Larger workstreams (ranked, see plan file A–D):
 - [ ] A1 generation eval (thesis unmeasured) · A2 persist+gate parity result · A3 cross-fw a11y-tree conformance
-- [ ] ~~B4 storybook-test+axe in CI~~ (done 2026-08-26: own CI job, 216 React + 242 Vue in
-      headless Chromium) · B5 contrast gate · B6 meta-test for the gates — *partial*: ADR-0034
+- [ ] B4 storybook-test+axe in CI — **blocked 2026-08-26, with a repro**: the suite passes
+      locally (216 React + 242 Vue, ~11s/lib) but fails identically whenever `CI` is set —
+      `Failed to connect to the browser session … within the timeout` → "Tests no tests".
+      Repro without Nx or GitHub: `cd libs/vue && CI=1 npx vitest run --config
+      vitest.storybook.config.ts` (passes with CI unset). Playwright launches the headless
+      shell and exits 0, so the browser is fine — the page never connects back to the Vitest
+      server. Ruled out: missing browser binary, `--no-sandbox`,
+      `--disable-dev-shm-usage`, `--no-file-parallelism`,
+      `--browser.connectTimeout=180000`, and any `CI` branch in this repo's `.storybook`
+      config or in vitest's connect path. Next: bisect `@storybook/addon-vitest` /
+      `@vitest/browser` versions, or capture the served page's console.
+      · B5 contrast gate · B6 meta-test for the gates — *partial*: ADR-0034
       derives the a11y-parity roster from the component dirs with recorded exemptions; the
       cross-gate roster reconciliation is still open
 - [ ] C7 capture bound-token name/value in snapshot · C8 check:figma+freshness · C9 full 27-master snapshot

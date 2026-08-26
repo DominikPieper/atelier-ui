@@ -115,42 +115,26 @@ jobs:
         run: npx nx run-many -t test --parallel=2
 
   # ---------------------------------------------------------------------------
-  # Storybook tests — the story-level interaction suite plus the addon-a11y axe
-  # scan, run in real Chromium through Vitest browser mode. 216 React + 242 Vue
-  # tests that previously only ever ran by hand.
+  # Storybook tests — NOT WIRED. The story-level interaction suite plus the
+  # addon-a11y axe scan (216 React + 242 Vue) passes locally in ~11s per lib,
+  # but every run with `CI` set fails identically:
   #
-  # React and Vue only: Angular has no `storybook-test` target (see
-  # tasks/angular-storybook-vitest-triage-2026-04-28.md), and Storybook 10.4's
-  # preview/test tooling is experimental outside React anyway.
+  #   Error: Failed to connect to the browser session "<id>" [storybook:<fw>
+  #   (chromium)] within the timeout.   ->  "Test Files (32) / Tests no tests"
   #
-  # Separate job rather than a step on `test`: this is the only job that needs a
-  # browser, and `playwright install` is slow enough that it should not sit in
-  # front of the unit tests.
+  # Reproducible locally, without Nx and without this workflow:
+  #   cd libs/vue && CI=1 npx vitest run --config vitest.storybook.config.ts
+  # while the same command with CI unset passes. Playwright launches the
+  # headless shell and exits 0 (`DEBUG=pw:browser`), so the browser is fine —
+  # the served page never connects back to the Vitest server. Ruled out:
+  # missing browser binary (both chromium and chromium-headless-shell install
+  # on the runner), --no-sandbox / --disable-dev-shm-usage, --no-file-
+  # parallelism, --browser.connectTimeout=180000, and any CI branch in this
+  # repo's .storybook config or in vitest's own connect path.
+  #
+  # Left out rather than made non-blocking: a permanently red or yellow job
+  # asserts nothing. Tracked as B4 in tasks/todo.md with this repro.
   # ---------------------------------------------------------------------------
-  storybook-test:
-    name: Storybook tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-      - uses: nrwl/nx-set-shas@v4
-      - uses: actions/setup-node@v5
-        with:
-          node-version-file: '.node-version'
-          cache: 'npm'
-      - run: corepack enable
-      - run: npm ci
-      - name: Install Chromium for Vitest browser mode
-        run: npx playwright install --with-deps chromium
-      # --parallel=1: both projects drive a headless browser, and serialising
-      # them costs ~11s each rather than risking contention on the runner.
-      - name: Storybook tests affected (PR)
-        if: github.event_name == 'pull_request'
-        run: npx nx affected -t storybook-test --parallel=1
-      - name: Storybook tests all (push to main)
-        if: github.event_name != 'pull_request'
-        run: npx nx run-many -t storybook-test -p react,vue --parallel=1
 
   # ---------------------------------------------------------------------------
   # Build — library packaging + docs site. Validates that every project still
