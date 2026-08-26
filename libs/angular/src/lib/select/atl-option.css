@@ -1,0 +1,68 @@
+/* Geometry contract: every size this component states is a border-box size.
+ * Declared with the component rather than as a global reset, so it ships in the
+ * same file as the sizes it governs and no consuming app has to supply one.
+ * Gated by check:box-sizing; the resulting boxes are measured by check:geometry.
+ * See ADR-0043. */
+:host,
+:host * {
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   atl-option.css — the option row inside <atl-select>
+   ============================================================
+
+   This file exists because the rows had no styles at all. `atl-select.css` is
+   scoped to `atl-select` under emulated encapsulation, so it cannot reach the
+   template of `atl-option`, a separate component — and `atl-option` declared
+   none of its own. The component computed `is-selected`, `is-active` and
+   `is-disabled` and rendered all three identically.
+
+   Note the divergence this file makes visible rather than hides: React and Vue
+   render a native `<select>`, where the OS draws the list and no option row
+   exists to style. Only Angular has these rows. */
+
+:host {
+  display: block;
+  font-family: var(--ui-font-family);
+  /* The leading every descendant inherits, stated so the component keeps its own
+     rhythm rather than the consuming app's prose leading (ADR-0052).
+     A list of single-line rows, so tight. */
+  line-height: var(--ui-line-height-tight);
+}
+
+[role='option'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* Row recipe (ADR-0052): the height is stated, the block padding is zero and the
+   * content is centred. A row centres, a control pads — ADR-0041's derived-padding
+   * formula produces the wrong box here. Matches AtlCombobox's option row, which
+   * is the same row at the same step. */
+  min-height: var(--ui-row-height-sm);
+  padding-block: 0;
+  padding-inline: var(--ui-spacing-4);
+  line-height: var(--ui-line-height-tight);
+  cursor: pointer;
+  color: var(--ui-color-text);
+  font-size: var(--ui-font-size-md);
+  transition: background-color var(--ui-transition-fast);
+}
+
+[role='option']:hover:not(.is-disabled) {
+  background-color: var(--ui-color-surface-sunken);
+}
+
+[role='option'].is-active {
+  background-color: var(--ui-color-primary-light);
+  color: var(--ui-color-primary);
+}
+
+[role='option'].is-selected {
+  font-weight: var(--ui-font-weight-semibold);
+}
+
+[role='option'].is-disabled {
+  opacity: var(--ui-opacity-disabled);
+  cursor: not-allowed;
+}

@@ -24,6 +24,7 @@ let nextOptionId = 0;
   selector: 'atl-option',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './atl-option.css',
   template: `
     <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
     <div

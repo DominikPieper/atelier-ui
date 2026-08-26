@@ -303,6 +303,19 @@ const CONTROLS = [
     },
     measure: { default: '.accordion-trigger', angular: '.accordion-trigger' },
   },
+  {
+    dir: 'select',
+    label: 'AtlSelectOption',
+    ladder: 'row',
+    only: ['angular'],
+    steps: ['sm'],
+    markup: {
+      default: () => '',
+      angular: () =>
+        `<atl-select><div class="panel is-open"><atl-option><div role="option">United States</div></atl-option></div></atl-select>`,
+    },
+    measure: { default: '', angular: "[role='option']" },
+  },
 ];
 
 const errors = [];
@@ -405,13 +418,25 @@ const tab = await browser.newPage({ viewport: { width: 900, height: 600 } });
 for (const fw of FRAMEWORKS) {
   const tokens = readFileSync(join(ROOT, 'libs', fw, 'src/styles/tokens.css'), 'utf8');
   for (const control of CONTROLS) {
+    // A box that genuinely exists in only some frameworks. AtlSelect is the case:
+    // React and Vue render a native <select>, where the OS draws the list and no
+    // option row exists to measure, while Angular renders a custom panel. Without
+    // this the entry would report [MARKUP] against the two that are correct.
+    if (control.only && !control.only.includes(fw)) continue;
     const dirPath = join(ROOT, 'libs', fw, 'src/lib', control.dir);
-    let componentCss = readdirSync(dirPath)
-      .filter((f) => f.endsWith('.css'))
-      .map((f) => readFileSync(join(dirPath, f), 'utf8'))
-      .join('\n');
     const isNg = fw === 'angular';
-    if (isNg) componentCss = hostify(componentCss, `atl-${control.dir}`);
+    // Hostified per FILE, not per directory. A directory can hold more than one
+    // component — select/ ships atl-select.css and atl-option.css — and rewriting
+    // atl-option.css's `:host` to `atl-select` would drop one component's rules
+    // onto the other. The tag comes from the stylesheet name, which is the
+    // convention every component in this repo follows.
+    const componentCss = readdirSync(dirPath)
+      .filter((f) => f.endsWith('.css'))
+      .map((f) => {
+        const css = readFileSync(join(dirPath, f), 'utf8');
+        return isNg ? hostify(css, f.replace(/\.css$/, '')) : css;
+      })
+      .join('\n');
     const markup = isNg ? control.markup.angular : control.markup.default;
     const selector = isNg ? control.measure.angular : control.measure.default;
 
@@ -484,7 +509,9 @@ if (!QUIET) {
   }
 }
 const summary =
-  `${rows.length} measurement(s): ${CONTROLS.length} component(s) × ${FRAMEWORKS.length} framework(s), ` +
+  // Not CONTROLS.length × FRAMEWORKS.length: an entry with `only` is measured in
+  // fewer frameworks, so report what was actually measured.
+  `${rows.length} measurement(s) over ${CONTROLS.length} box(es) in ${FRAMEWORKS.length} framework(s), ` +
   `each measured against a perturbed inherited line-height, and no reset supplied`;
 if (errors.length > 0) {
   for (const e of errors) console.error(`✗ ${e}`);
