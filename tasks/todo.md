@@ -214,7 +214,7 @@ Decision-bearing quick wins (deferred — not this session's scope):
       component stylesheets against three primitive patterns. Ramp steps and
       `--ui-font-display` are enforced with zero violations; code-block's
       `--ui-font-mono` is a recorded `gap` until it moves to `--ui-type-code`.
-- [ ] **AtlButton hardcodes `-0.01em` where `--ui-letter-spacing-tight` holds the same
+- [x] ~~AtlButton hardcodes `-0.01em`~~ (fixed 2026-08-26) — was: `--ui-letter-spacing-tight` holds the same
       value.** Surfaced by drawing the anatomy (2026-08-26). One-line fix in all three
       `atl-button.css`, but it touches component CSS so it re-stales the parity record —
       bundle it with the next button change rather than alone.
@@ -231,29 +231,25 @@ Decision-bearing quick wins (deferred — not this session's scope):
       state combinations are unpopulated. Confirm against the master before the transfer
       decides what to add — `check:figma`'s variant-matrix completeness passes today, which
       suggests the metadata `variantMatrix` does not claim the full cross-product either.
-- [ ] **AtlInput renders 46px against a stated 40px min-height, while AtlButton md is 40px.**
-      Arithmetic, not measurement: 10+10 padding + a 24px line box (1.5 × 16px) + 2px border =
-      46, and `min-height: 2.5rem` cannot shrink it because `box-sizing: border-box` is
-      explicit. An input and a button in the same form row sit 6px apart in all three
-      frameworks. This is the same root cause as the AtlButton `size=lg` 49-vs-48 note: the
-      size system states target heights that the content box overrides. Decide once, for the
-      whole size system, rather than per component.
-- [ ] **The library ships no `box-sizing` reset** and only 10 of 29 component stylesheets set
-      one. AtlInput pins `border-box`; AtlButton does not, so its geometry depends on the
-      consuming app's reset — an undeclared dependency for a library that deliberately ships
-      its CSS (ADR-0026). Storybook and the Claude Design runtime both happen to provide one,
-      which is why measurements there look tidy. Either ship a reset in `styles/tokens.css`
-      (a decision: it makes the stylesheet opinionated beyond tokens) or set `box-sizing` in
-      every component root and gate it.
-- [ ] **AtlInput `readonly` renders identically to `default`.** `--ui-color-input-bg` already
-      *is* `var(--ui-color-surface-sunken)`, and `.is-readonly input` sets the same value. Only
-      the cursor differs, in light and dark alike. A state a user cannot see is not a state.
-- [ ] **AtlInput's invalid focus ring duplicates the `--ui-focus-ring` formula by hand**
-      (`0 0 0 2px surface, 0 0 0 4px danger`). No `--ui-focus-ring-danger` token exists, so the
-      shape now has to be changed in two places and cannot be bound in Figma.
-- [ ] **AtlInput's invalid indicator is a literal `✕` pseudo-element**, not an icon, while the
-      icon union already contains `close` and `danger`. The Figma master cannot use an icon
-      instance there, and the glyph will not follow the icon set.
+- [ ] **All design findings from the first two artboards live in
+      `tasks/design-findings-2026-08-26.md`** — grouped by decision rather than listed,
+      because most are one choice each. Four decisions (the size system's stated-vs-rendered
+      heights, the missing `box-sizing` reset, states that exist in only one place, literals
+      that cannot be bound in Figma) plus one finding that overrides them:
+- [ ] **After the Figma transfer: record the font per master in the snapshot** so an
+      offline gate can compare it to `--ui-font-family`. `check:figma` compares names, axes,
+      token bindings and auto-layout — never typography — so a type change can invalidate the
+      whole design library with every gate green. Not urgent now: the masters are stale by
+      design during the redesign (all 29 still on Inter), and Phase 3 rebuilds them. It
+      becomes urgent the moment the library is transferred and treated as current again.
+- [ ] **`tools/figma/snapshot.json` records `variantAxes` but not Boolean component
+      properties.** `disabled`, `loading`, `readonly`, `required`, `hasIcon` exist on the
+      masters and are invisible to anything reading the snapshot — they survive only as prose
+      in the `description`. A Boolean could be dropped in Figma and no gate would notice.
+      This is what made me assert twice that Figma had no such properties.
+- [ ] **Both component artboards need a correction pass** for the two claims above (the
+      "code-only props" labels and AtlButton's "half a matrix" note). Listed at the end of
+      `tasks/design-findings-2026-08-26.md`.
 - [ ] `coverage.thresholds` in 3 vite configs (measure current coverage first — may fail CI)
 - [ ] `docs-old/` (42 tracked files, not in nx graph): remove or justify
 - [x] Wire `check:figma` into CI — done: it runs inside `check:all`, so the `checks` job

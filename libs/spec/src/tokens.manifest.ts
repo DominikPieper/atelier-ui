@@ -813,6 +813,14 @@ export const tokens: Record<string, TokenAnnotation> = {
       'Do not override per component; consistency is the entire point of a global focus ring.',
     ],
   },
+  '--ui-focus-ring-danger': {
+    intent:
+      'The focus ring for a control that is currently invalid. Same double-ring geometry as --ui-focus-ring, with the accent replaced by the danger colour.',
+    constraints: [
+      'Only on a control in an invalid state — a danger ring on a valid field reads as an error that is not there.',
+      'Do not restate the geometry in component CSS; that is what this token exists to prevent.',
+    ],
+  },
 
   // === Form controls ===
   '--ui-color-input-bg': {

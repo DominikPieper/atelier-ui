@@ -9,7 +9,7 @@
   font-size: var(--ui-font-size-md);
   font-weight: var(--ui-font-weight-semibold);
   line-height: var(--ui-line-height-tight);
-  letter-spacing: -0.01em;
+  letter-spacing: var(--ui-letter-spacing-tight);
   cursor: pointer;
   transition: background-color var(--ui-transition-fast),
     border-color var(--ui-transition-fast),

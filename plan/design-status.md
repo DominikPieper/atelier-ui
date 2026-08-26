@@ -18,7 +18,7 @@ a typography study says nothing about how the component should look.
 | `avatar` | — | size | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `badge` | — | variant · size | 10 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `breadcrumbs` | — | items | 3 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
-| `button` | **AtlButton.dc.html** | variant · size · state | 24 | 2026-07-21 (`2ac9047`) | all 3 | — | yes |
+| `button` | **AtlButton.dc.html** | variant · size · state | 24 | 2026-08-26 (`1ce48db`) | all 3 | — | yes |
 | `card` | fragment only | variant · padding | 12 | 2026-07-22 (`6282b4f`) | all 3 | — | — |
 | `chat` | — | variant | 3 | 2026-07-23 (`2715827`) | all 3 | — | yes |
 | `checkbox` | — | selection · state | 5 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
@@ -27,7 +27,7 @@ a typography study says nothing about how the component should look.
 | `dialog` | — | size | 5 | 2026-07-22 (`26a8a7e`) | all 3 | — | — |
 | `drawer` | — | position · size | 7 | 2026-07-23 (`2715827`) | all 3 | — | — |
 | `icon` | — | — *(no master)* | — | — *(never)* | all 3 | — | yes |
-| `input` | **AtlInput.dc.html** | state | 5 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
+| `input` | **AtlInput.dc.html** | state | 5 | 2026-08-26 (`1ce48db`) | all 3 | — | yes |
 | `menu` | — | variant | 2 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
 | `pagination` | — | position | 3 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `progress` | — | variant · size | 12 | 2026-07-22 (`d05f789`) | all 3 | — | yes |

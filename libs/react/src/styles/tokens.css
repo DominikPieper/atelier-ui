@@ -203,9 +203,15 @@
   --ui-transition-normal: var(--ui-duration-normal) var(--ui-ease-out);
   --ui-transition-slow: var(--ui-duration-slow) var(--ui-ease-out);
 
-  /* Focus ring — double-ring for light & dark background compatibility */
+  /* Focus ring — double-ring for light & dark background compatibility.
+   * Declared once: the inner ring tracks the surface and the outer the accent,
+   * both of which are mode-dependent, so the ring follows the mode for free.
+   * The danger variant exists so an invalid control does not have to restate
+   * the formula (it did, in atl-input.css, until 2026-08-26). */
   --ui-focus-ring: 0 0 0 2px var(--ui-color-surface),
     0 0 0 4px var(--ui-color-primary);
+  --ui-focus-ring-danger: 0 0 0 2px var(--ui-color-surface),
+    0 0 0 4px var(--ui-color-danger);
 
   /* Form controls */
   --ui-color-input-bg: var(--ui-color-surface-sunken);

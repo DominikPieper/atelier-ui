@@ -1,8 +1,8 @@
 {
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
-    "note": "Per-component design-parity records. Written by `npm run parity:record` after a human/agent runs figma_check_design_parity; read by `npm run check:parity`. Each record's inputsHash covers libs/{angular,react,vue}/src/lib/<module>/ so a spec/story/impl/css change since the last verify makes the gate ask for a re-verify. The parity SCORE is deliberately not stored: it is not comparable across runs (it tracks how much of codeSpec was declared and which node was sampled, not the component) \u2014 three runs on one commit for AtlStepper returned 70, 52 and 83. See plan/adr/0024 and its 2026-08-26 amendment.",
-    "generatedAt": "2026-08-26T09:04:31.670Z"
+    "note": "Per-component design-parity records. Written by `npm run parity:record` after a human/agent runs figma_check_design_parity; read by `npm run check:parity`. Each record's inputsHash covers libs/{angular,react,vue}/src/lib/<module>/ so a spec/story/impl/css change since the last verify makes the gate ask for a re-verify. The parity SCORE is deliberately not stored: it is not comparable across runs (it tracks how much of codeSpec was declared and which node was sampled, not the component) — three runs on one commit for AtlStepper returned 70, 52 and 83. See plan/adr/0024 and its 2026-08-26 amendment.",
+    "generatedAt": "2026-08-26T11:45:46.202Z"
   },
   "components": {
     "AtlAccordionGroup": {
@@ -151,9 +151,9 @@
     },
     "AtlButton": {
       "figmaNodeId": "129:20",
-      "verifiedAt": "2026-07-21T20:29:42.246Z",
-      "verifiedSha": "2ac9047",
-      "inputsHash": "sha256:b2c35e6fecb55e637038897704fd6d2ce1c89d5df01fee7be7ac917218e38452",
+      "verifiedAt": "2026-08-26T11:45:44.750Z",
+      "verifiedSha": "1ce48db",
+      "inputsHash": "sha256:2baa0680214327f4a8a20d60889e4ced00fdf103d479912c7392ff4adf58e65a",
       "inputs": [
         "libs/angular/src/lib/button/atl-button.a11y.spec.ts",
         "libs/angular/src/lib/button/atl-button.css",
@@ -327,9 +327,9 @@
     },
     "AtlInput": {
       "figmaNodeId": "129:33",
-      "verifiedAt": "2026-07-22T19:41:41.379Z",
-      "verifiedSha": "d05f789",
-      "inputsHash": "sha256:7bd9f0d962e316f261a6178de7254aaea1f12149cd33be5d8ebd94530edf0062",
+      "verifiedAt": "2026-08-26T11:45:46.150Z",
+      "verifiedSha": "1ce48db",
+      "inputsHash": "sha256:c3979c85831906bfa4edfdd8c1e573fb31649df00dab94a7ec4b6a85935be9e3",
       "inputs": [
         "libs/angular/src/lib/input/atl-input.a11y.spec.ts",
         "libs/angular/src/lib/input/atl-input.css",

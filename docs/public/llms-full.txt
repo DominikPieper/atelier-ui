@@ -1682,6 +1682,10 @@ Each `--ui-*` token carries an intent and a list of constraints. Reach for the t
     intent: Double-ring box-shadow for :focus-visible — surface-coloured inner + primary outer for light/dark compatibility.
     constraints: Apply via box-shadow on :focus-visible — never on :focus alone (mouse focus would flash the ring).; Do not override per component; consistency is the entire point of a global focus ring.
 
+  --ui-focus-ring-danger
+    intent: The focus ring for a control that is currently invalid. Same double-ring geometry as --ui-focus-ring, with the accent replaced by the danger colour.
+    constraints: Only on a control in an invalid state — a danger ring on a valid field reads as an error that is not there.; Do not restate the geometry in component CSS; that is what this token exists to prevent.
+
   --ui-font-display
     intent: Display typeface stack (Instrument Serif). For the single largest line on a surface — a wordmark, a hero, a section opener.
     constraints: One display line per surface at most; it stops reading as emphasis when repeated.; Instrument Serif ships a single weight (400) — express emphasis through size and case, never font-weight.; Never for interactive labels, form fields, or dense UI text.
