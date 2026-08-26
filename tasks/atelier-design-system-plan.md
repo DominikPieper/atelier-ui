@@ -102,12 +102,14 @@ libs/*/src/styles/tokens.css   (Atelier's own values — the source of truth)
 
 ## Phases
 
-### Phase 0 — ADR-0024 amendment (recommended first, no longer blocking)
+### Phase 0 — ADR-0024 amendment — DONE 2026-08-26 (`57a24b1`)
 
-- [ ] `parityScore` stops being a stored trend; keep `verifiedAt` /
-      `verifiedSha` / `inputsHash` / `figmaNodeId`. Reason: three runs on one
-      commit returned 70, 52 and 83 — the number tracks how much `codeSpec` was
-      declared and which node was sampled, not the component.
+- [x] `parityScore` no longer stored; `verifiedAt` / `verifiedSha` /
+      `inputsHash` / `figmaNodeId` kept. `ATELIER_PARITY_MIN` and the SCORE
+      critical removed, 27 records migrated, `--score` still accepted and echoed.
+      Reason: three runs on one commit returned 70, 52 and 83 — the number tracks
+      how much `codeSpec` was declared and which node was sampled, not the
+      component. Amendment appended to ADR-0024.
 - Why it is no longer *blocking*: this plan is additive, so component CSS stays
   untouched and the 29 records stay valid. It becomes blocking the moment
   component CSS migrates onto role tokens (late Phase 1 or Phase 4).
