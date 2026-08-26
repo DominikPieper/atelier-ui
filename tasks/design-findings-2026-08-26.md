@@ -385,3 +385,40 @@ sheet deliberately draws the visuals without asserting a role.
 Resolved in this batch: `all: unset` silently resetting the box model, which had
 AtlPagination's button rendering 38px against its own `height: 2.25rem` (ADR-0051).
 
+---
+
+## Decision I — containers and data (2026-08-26, batch F)
+
+**I1 — prose leading on single-line text, a fourth time.** AtlAccordionGroup's
+trigger is 52px because 16px text at 1.5 gives a 24px line box; at the tight
+line-height it would be 44. AtlCheckbox, AtlRadio and AtlToggle rows have the same
+cause (E1/E3), and so do AtlTable's rows. ADR-0041 fixed exactly this for every
+control; the boxes whose height nobody states never got it.
+
+**I2 — three type sizes reach off the scale.** AtlTable's `sm` uses 13px,
+AtlAvatar's `xs` initials 10px, AtlCodeBlock's label 0.72rem (≈11.5px). The scale
+has 12 and 14 and nothing below 12. Three independent components is a pattern:
+either the scale gains steps or these round onto it.
+
+**I3 — one header treatment is expressible and one is not.** AtlCard's header is
+18/600 — exactly `--ui-type-title`. AtlDialog's and AtlDrawer's are 20/600, which is
+no role. So the library has two header sizes, and the role layer covers one of them.
+
+**I4 — AtlTable's row heights are all content-driven.** 32 / 42 / 51px for sm / md /
+lg. A table row is the most repeated box in an application, and a 42px row cannot
+align with the 40px control beside it.
+
+**I5 — AtlAvatar's square axis keeps one radius across a 24→64px range**, so the two
+ends do not read as the same shape. And `status` — four visible states — is code-only
+with `''` as a union member standing in for "none", where every other optional prop
+simply omits.
+
+**I6 — two masters keep a one-value `state` axis** (AtlTable, AtlTabGroup) whose own
+descriptions say the mash-up was removed. The variant list therefore claims one axis
+more than the API has.
+
+Resolved in this batch: AtlCard and AtlAvatarGroup rendering in the consuming app's
+font (ADR-0049), the accordion heading's box model reset away (ADR-0051), and the
+avatar's person silhouette plus the table's sort arrows becoming AtlIcon instances
+(ADR-0046).
+

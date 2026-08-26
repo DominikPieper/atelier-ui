@@ -33,6 +33,16 @@
     },
     {
       "project": "atelier",
+      "file": "AtlAccordionGroup.dc.html",
+      "kind": "component",
+      "subject": "AtlAccordionGroup",
+      "covers": [
+        "AtlAccordionGroup"
+      ],
+      "note": "Three variants with an open, a shut and a disabled item in each. Records that the 52px trigger is prose leading on a single line — the fourth instance of the pattern ADR-0041 fixed for controls — and that multi, the accordion's most visible behavioural choice, is code-only."
+    },
+    {
+      "project": "atelier",
       "file": "AtlAlert.dc.html",
       "kind": "component",
       "subject": "AtlAlert",
@@ -40,6 +50,16 @@
         "AtlAlert"
       ],
       "note": "Four variants with the dismissible Boolean on two of them, measured anatomy, and the cross-component finding this batch surfaced: four status components offer the same semantic colours in four different variant sets. Records that the variant colours are literals — the missing status ramps from ADR-0038."
+    },
+    {
+      "project": "atelier",
+      "file": "AtlAvatar.dc.html",
+      "kind": "component",
+      "subject": "AtlAvatar",
+      "covers": [
+        "AtlAvatar"
+      ],
+      "note": "Size x shape (5 x 2), the image/initials/icon fallback chain, four status dots and the group with its overflow badge. Records three open items: 10px initials off the type scale, one radius across a 24-to-64px square axis, and status being code-only with the empty string as a union member."
     },
     {
       "project": "atelier",
@@ -70,6 +90,16 @@
         "AtlButton"
       ],
       "note": "Variant x size matrix (the default-state slice, 12 of the master's 24), all states at size=md with the four variant states separated from the disabled/loading Booleans, an anatomy table naming the token behind every value, and findings. Corrected 2026-08-26: disabled/loading are Figma Booleans not code-only props, the 24 variants are a deliberate two-slice cross rather than half a 4x3x4 matrix, and the anatomy reflects ADR-0041 (heights exact at 32/40/48, block padding derived)."
+    },
+    {
+      "project": "atelier",
+      "file": "AtlCard.dc.html",
+      "kind": "component",
+      "subject": "AtlCard",
+      "covers": [
+        "AtlCard"
+      ],
+      "note": "Three variants and four padding steps. Records that the card header (18/600) is the only header in the library that lands exactly on a type role, while AtlDialog's and AtlDrawer's 20/600 land on none. Replaces the typography study's fragment, which was never coverage."
     },
     {
       "project": "atelier",
@@ -200,6 +230,16 @@
         "AtlTabGroup"
       ],
       "note": "Both variants with a disabled tab in each, measured anatomy. Records that two of the master's three axes are illustrations (selected = 0|1, state = default with one value) and that its description lists disabled and loading Booleans the group does not have."
+    },
+    {
+      "project": "atelier",
+      "file": "AtlTable.dc.html",
+      "kind": "component",
+      "subject": "AtlTable",
+      "covers": [
+        "AtlTable"
+      ],
+      "note": "Three variants with a sortable column, three sizes measured at 32/42/51px rows. Records that none of the three row heights is stated, that sm uses an off-scale 13px font, and that the master keeps a one-value state axis its own description says was removed."
     },
     {
       "project": "atelier",

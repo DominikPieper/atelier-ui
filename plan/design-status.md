@@ -4,7 +4,7 @@
      Every column but "Artboard" is derived from the repo; that one comes from
      tools/design/artboards.json, because Claude Design is not in the repo. -->
 
-**29 components.** Claude Design coverage: **21 designed**, 1 appearing only as a fragment inside a study, 7 untouched.
+**29 components.** Claude Design coverage: **25 designed**, 0 appearing only as a fragment inside a study, 4 untouched.
 
 > **Redesign phase, active since 2026-08-26.** Figma is the *target* of
 > the transfer, not the reference for it, so the masters are stale by definition until they are
@@ -19,13 +19,13 @@ a typography study says nothing about how the component should look.
 
 | Component | Artboard | Figma axes | Variants | Parity verified | a11y baseline | Type roles | Respecifies font |
 |---|---|---|---|---|---|---|---|
-| `accordion` | — | variant | 3 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
+| `accordion` | **AtlAccordionGroup.dc.html** | variant | 3 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
 | `alert` | **AtlAlert.dc.html** | variant | 4 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
-| `avatar` | — | size | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
+| `avatar` | **AtlAvatar.dc.html** | size | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `badge` | **AtlBadge.dc.html** | variant · size | 10 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `breadcrumbs` | **AtlBreadcrumbs.dc.html** | items | 3 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
 | `button` | **AtlButton.dc.html** | variant · size · state | 24 | 2026-08-26 (`0bdaddd`) | all 3 | — | yes |
-| `card` | fragment only | variant · padding | 12 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
+| `card` | **AtlCard.dc.html** | variant · padding | 12 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `chat` | — | variant | 3 | 2026-07-23 (`2715827`) | all 3 | — | yes |
 | `checkbox` | **AtlCheckbox.dc.html** | selection · state | 5 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
 | `code-block` | — | — *(no master)* | — | — *(never)* | all 3 | — | yes |
@@ -42,7 +42,7 @@ a typography study says nothing about how the component should look.
 | `select` | **AtlSelect.dc.html** | state | 5 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
 | `skeleton` | — | variant | 3 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `stepper` | **AtlStepper.dc.html** | orientation · state | 8 | 2026-08-26 (`f4c20b6`) | all 3 | — | yes |
-| `table` | — | variant · size · state | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
+| `table` | **AtlTable.dc.html** | variant · size · state | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `tabs` | **AtlTabGroup.dc.html** | variant · selected · state | 3 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
 | `textarea` | **AtlTextarea.dc.html** | state | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `toast` | **AtlToast.dc.html** | — *(no master)* | — | — *(never)* | all 3 | — | yes |
@@ -68,6 +68,14 @@ the first.
 
 Turn 1 compares three type directions, turn 2 three readings of "bolder" on the chosen pair. Decided ADR-0035 / ADR-0036. The button row, input field and mini card inside each option card are specimens sized to show type — not component designs, and deliberately not counted as coverage.
 
+### AtlAccordionGroup.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlAccordionGroup
+- Covers: AtlAccordionGroup
+
+Three variants with an open, a shut and a disabled item in each. Records that the 52px trigger is prose leading on a single line — the fourth instance of the pattern ADR-0041 fixed for controls — and that multi, the accordion's most visible behavioural choice, is code-only.
+
 ### AtlAlert.dc.html
 
 - Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
@@ -75,6 +83,14 @@ Turn 1 compares three type directions, turn 2 three readings of "bolder" on the 
 - Covers: AtlAlert
 
 Four variants with the dismissible Boolean on two of them, measured anatomy, and the cross-component finding this batch surfaced: four status components offer the same semantic colours in four different variant sets. Records that the variant colours are literals — the missing status ramps from ADR-0038.
+
+### AtlAvatar.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlAvatar
+- Covers: AtlAvatar
+
+Size x shape (5 x 2), the image/initials/icon fallback chain, four status dots and the group with its overflow badge. Records three open items: 10px initials off the type scale, one radius across a 24-to-64px square axis, and status being code-only with the empty string as a union member.
 
 ### AtlBadge.dc.html
 
@@ -99,6 +115,14 @@ Three trail lengths plus a chevron-separator proposal marked as not-the-code: se
 - Covers: AtlButton
 
 Variant x size matrix (the default-state slice, 12 of the master's 24), all states at size=md with the four variant states separated from the disabled/loading Booleans, an anatomy table naming the token behind every value, and findings. Corrected 2026-08-26: disabled/loading are Figma Booleans not code-only props, the 24 variants are a deliberate two-slice cross rather than half a 4x3x4 matrix, and the anatomy reflects ADR-0041 (heights exact at 32/40/48, block padding derived).
+
+### AtlCard.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlCard
+- Covers: AtlCard
+
+Three variants and four padding steps. Records that the card header (18/600) is the only header in the library that lands exactly on a type role, while AtlDialog's and AtlDrawer's 20/600 land on none. Replaces the typography study's fragment, which was never coverage.
 
 ### AtlCheckbox.dc.html
 
@@ -203,6 +227,14 @@ Both orientations with every step state drawn in place — complete, active, err
 - Covers: AtlTabGroup
 
 Both variants with a disabled tab in each, measured anatomy. Records that two of the master's three axes are illustrations (selected = 0|1, state = default with one value) and that its description lists disabled and loading Booleans the group does not have.
+
+### AtlTable.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlTable
+- Covers: AtlTable
+
+Three variants with a sortable column, three sizes measured at 32/42/51px rows. Records that none of the three row heights is stated, that sm uses an off-scale 13px font, and that the master keeps a one-value state axis its own description says was removed.
 
 ### AtlTextarea.dc.html
 
