@@ -21,6 +21,10 @@
 /* ── Native <dialog> reset + base ──────────────────────────────────────────── */
 .atl-dialog {
   all: unset;
+  /* After `all: unset`, which would otherwise reset it. The library states its own
+   * typeface (ADR-0035); without this the dialog renders in the consuming app's
+   * font while its neighbours render Instrument Sans (ADR-0049). */
+  font-family: var(--ui-font-family);
   position: fixed;
   inset: 0;
   margin: auto;

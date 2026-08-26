@@ -11,6 +11,8 @@
 /* ── Native <dialog> reset + base ──────────────────────────────────────────── */
 .atl-dialog {
   all: unset;
+  /* After `all: unset`, which would otherwise reset it (ADR-0049). */
+  font-family: var(--ui-font-family);
   position: fixed;
   inset: 0;
   margin: auto;

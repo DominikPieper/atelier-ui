@@ -16,6 +16,11 @@
 
 /* ── Toast Container ── */
 .atl-toast-container {
+  /* The library states its own typeface (ADR-0035). Without this the component
+   * renders in the consuming app's font while its neighbours render Instrument
+   * Sans — measured: a card next to a button showed two typefaces. Declared once
+   * per component root, never on a descendant (ADR-0049). */
+  font-family: var(--ui-font-family);
   position: fixed;
   z-index: var(--ui-z-toast, 400);
   display: flex;

@@ -103,7 +103,6 @@ atl-icon.icon {
   color: var(--ui-color-text-muted);
   border: var(--ui-border-width) solid var(--ui-color-border);
   border-radius: var(--ui-radius-full);
-  font-family: var(--ui-font-family);
   font-weight: var(--ui-font-weight-semibold);
   box-shadow: 0 0 0 2px var(--ui-color-surface);
   margin-inline-start: -8px;

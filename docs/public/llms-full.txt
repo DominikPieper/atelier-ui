@@ -1710,7 +1710,7 @@ Each `--ui-*` token carries an intent and a list of constraints. Reach for the t
 
   --ui-font-family
     intent: Default UI typeface stack. Instrument Sans first, with system fallbacks for offline / first-paint (ADR-0035).
-    constraints: Apply on :root or the app shell — do not respecify per component.; Use --ui-font-display for the one display line per surface; everything interactive stays on this stack.
+    constraints: Declare it once on each component root — not per rule, and not left to the app shell: a component that depends on the consumer applying it renders in the app's font while its neighbours render this one (measured; ADR-0049).; Use --ui-font-display for the one display line per surface; everything interactive stays on this stack.
 
   --ui-font-mono
     intent: Monospace stack (JetBrains Mono). For code, tokens, prop names, keyboard chips, and terminal output.

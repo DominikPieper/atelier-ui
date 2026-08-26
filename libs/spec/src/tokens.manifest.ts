@@ -47,7 +47,7 @@ export const tokens: Record<string, TokenAnnotation> = {
     intent:
       'Default UI typeface stack. Instrument Sans first, with system fallbacks for offline / first-paint (ADR-0035).',
     constraints: [
-      'Apply on :root or the app shell — do not respecify per component.',
+      'Declare it once on each component root — not per rule, and not left to the app shell: a component that depends on the consumer applying it renders in the app\'s font while its neighbours render this one (measured; ADR-0049).',
       'Use --ui-font-display for the one display line per surface; everything interactive stays on this stack.',
     ],
   },

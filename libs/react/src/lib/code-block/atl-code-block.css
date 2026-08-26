@@ -44,7 +44,7 @@
 }
 
 .code-block-label {
-  font-family: var(--ui-font-mono, 'Menlo', 'Monaco', 'Courier New', monospace);
+  font-family: var(--ui-font-mono);
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.03em;
@@ -97,7 +97,7 @@
 .code-block-pre {
   margin: 0;
   padding: var(--ui-spacing-4);
-  font-family: var(--ui-font-mono, 'Menlo', 'Monaco', 'Courier New', monospace);
+  font-family: var(--ui-font-mono);
   font-size: var(--ui-font-size-sm);
   line-height: 1.65;
   color: var(--ui-color-text);

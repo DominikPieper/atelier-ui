@@ -8,6 +8,14 @@
   box-sizing: border-box;
 }
 
+/* The library states its own typeface (ADR-0035). Without this the component
+ * renders in the consuming app's font while its neighbours render Instrument
+ * Sans — measured: a card next to a button showed two typefaces. Declared once
+ * per component root, never on a descendant (ADR-0049). */
+:host {
+  font-family: var(--ui-font-family);
+}
+
 /* ── Host ──────────────────────────────────────────────────────────────────── */
 :host(atl-chat) {
   display: contents;
@@ -27,6 +35,8 @@
 /* ═══════════════════════════════════════════════════════════════════════════ */
 :host(.variant-drawer) dialog {
   all: unset;
+  /* After `all: unset`, which would otherwise reset it (ADR-0049). */
+  font-family: var(--ui-font-family);
   position: fixed;
   inset: 0 0 0 auto;
   height: 100dvh;
@@ -93,7 +103,6 @@
   background: var(--ui-color-brand-ai, #b5e61c);
   color: var(--ui-color-text);
   border: none;
-  font-family: var(--ui-font-family);
   font-size: var(--ui-font-size-lg);
   font-weight: var(--ui-font-weight-semibold);
   cursor: pointer;
@@ -322,7 +331,6 @@
   color: var(--ui-color-text);
   border: var(--ui-border-width) solid var(--ui-color-border);
   border-radius: var(--ui-radius-lg);
-  font-family: var(--ui-font-family);
   text-align: left;
   cursor: pointer;
   transition:
@@ -372,7 +380,6 @@
   border-radius: var(--ui-radius-md);
   background: var(--ui-color-surface-sunken);
   color: var(--ui-color-text);
-  font-family: var(--ui-font-family);
   font-size: var(--ui-font-size-sm);
   line-height: var(--ui-line-height-normal);
   resize: none;
@@ -406,7 +413,6 @@
   padding: var(--ui-spacing-2) var(--ui-spacing-4);
   border: var(--ui-border-width) solid transparent;
   border-radius: var(--ui-radius-md);
-  font-family: var(--ui-font-family);
   font-size: var(--ui-font-size-sm);
   font-weight: var(--ui-font-weight-medium);
   cursor: pointer;

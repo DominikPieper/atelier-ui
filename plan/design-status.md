@@ -25,13 +25,13 @@ a typography study says nothing about how the component should look.
 | `badge` | — | variant · size | 10 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `breadcrumbs` | — | items | 3 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
 | `button` | **AtlButton.dc.html** | variant · size · state | 24 | 2026-08-26 (`0bdaddd`) | all 3 | — | yes |
-| `card` | fragment only | variant · padding | 12 | 2026-07-22 (`6282b4f`) | all 3 | — | — |
+| `card` | fragment only | variant · padding | 12 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `chat` | — | variant | 3 | 2026-07-23 (`2715827`) | all 3 | — | yes |
 | `checkbox` | — | selection · state | 5 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
 | `code-block` | — | — *(no master)* | — | — *(never)* | all 3 | — | yes |
 | `combobox` | — | state | 6 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
-| `dialog` | — | size | 5 | 2026-07-22 (`26a8a7e`) | all 3 | — | — |
-| `drawer` | — | position · size | 7 | 2026-07-23 (`2715827`) | all 3 | — | — |
+| `dialog` | — | size | 5 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
+| `drawer` | — | position · size | 7 | 2026-07-23 (`2715827`) | all 3 | — | yes |
 | `icon` | — | — *(no master)* | — | — *(never)* | all 3 | — | yes |
 | `input` | **AtlInput.dc.html** | state | 5 | 2026-08-26 (`0bdaddd`) | all 3 | — | yes |
 | `menu` | — | variant | 2 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
@@ -40,7 +40,7 @@ a typography study says nothing about how the component should look.
 | `radio` | — | selection · state | 4 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
 | `radio-group` | — | — *(no master)* | — | — *(never)* | all 3 | — | yes |
 | `select` | — | state | 5 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
-| `skeleton` | — | variant | 3 | 2026-07-22 (`6282b4f`) | all 3 | — | — |
+| `skeleton` | — | variant | 3 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `stepper` | — | orientation · state | 8 | 2026-08-26 (`f4c20b6`) | all 3 | — | yes |
 | `table` | — | variant · size · state | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `tabs` | — | variant · selected · state | 3 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
