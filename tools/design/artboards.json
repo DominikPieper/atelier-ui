@@ -43,6 +43,16 @@
     },
     {
       "project": "atelier",
+      "file": "AtlCheckbox.dc.html",
+      "kind": "component",
+      "subject": "AtlCheckbox",
+      "covers": [
+        "AtlCheckbox"
+      ],
+      "note": "Selection x state (3 x 3 axes drawn as seven specimens) plus the invalid and disabled Booleans, a measured anatomy table, and a comparison specimen stacking the checkbox, radio and toggle rows with their real boxes outlined: 29 / 32 / 27px, none of them a token. Anchors the family's shared findings."
+    },
+    {
+      "project": "atelier",
       "file": "AtlCombobox.dc.html",
       "kind": "component",
       "subject": "AtlCombobox",
@@ -63,6 +73,26 @@
     },
     {
       "project": "atelier",
+      "file": "AtlRadio.dc.html",
+      "kind": "component",
+      "subject": "AtlRadio",
+      "covers": [
+        "AtlRadio"
+      ],
+      "note": "Selection x state plus disabled, and the invalid Boolean drawn as Figma-only: the master claims it maps to AtlFormFieldSpec.invalid but AtlRadioSpec does not extend that interface. Records that the checked mark is a 6px border rather than an inner element."
+    },
+    {
+      "project": "atelier",
+      "file": "AtlRadioGroup.dc.html",
+      "kind": "component",
+      "subject": "AtlRadioGroup",
+      "covers": [
+        "AtlRadioGroup"
+      ],
+      "note": "Group-level states with the children drawn in place, plus the horizontal layout that has no Figma variant, and readonly/invalid which are in the spec but not on the master. Records that the master's axes describe a gallery rather than the API: selection and interaction belong to a child in code."
+    },
+    {
+      "project": "atelier",
       "file": "AtlSelect.dc.html",
       "kind": "component",
       "subject": "AtlSelect",
@@ -80,6 +110,16 @@
         "AtlTextarea"
       ],
       "note": "Eight specimens: the five Figma variant states plus the readonly, disabled and autoResize Booleans. States explicitly that this is the one control that keeps the prose line-height (1.5) and whose height is content-driven by design, so the difference from every other control reads as a decision rather than as drift."
+    },
+    {
+      "project": "atelier",
+      "file": "AtlToggle.dc.html",
+      "kind": "component",
+      "subject": "AtlToggle",
+      "covers": [
+        "AtlToggle"
+      ],
+      "note": "Selection x state plus disabled, and invalid drawn as code-only. Anatomy names the four literals that make up the switch shape (44x24 track, 18px thumb, 2px inset) and argues a small component-tier token set is defensible here where a hundred single-use tokens were not."
     }
   ]
 }

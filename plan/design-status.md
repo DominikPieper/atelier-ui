@@ -4,7 +4,7 @@
      Every column but "Artboard" is derived from the repo; that one comes from
      tools/design/artboards.json, because Claude Design is not in the repo. -->
 
-**29 components.** Claude Design coverage: **5 designed**, 1 appearing only as a fragment inside a study, 23 untouched.
+**29 components.** Claude Design coverage: **8 designed**, 1 appearing only as a fragment inside a study, 20 untouched.
 
 > **Redesign phase, active since 2026-08-26.** Figma is the *target* of
 > the transfer, not the reference for it, so the masters are stale by definition until they are
@@ -27,7 +27,7 @@ a typography study says nothing about how the component should look.
 | `button` | **AtlButton.dc.html** | variant · size · state | 24 | 2026-08-26 (`0bdaddd`) | all 3 | — | yes |
 | `card` | fragment only | variant · padding | 12 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `chat` | — | variant | 3 | 2026-07-23 (`2715827`) | all 3 | — | yes |
-| `checkbox` | — | selection · state | 5 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
+| `checkbox` | **AtlCheckbox.dc.html** | selection · state | 5 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
 | `code-block` | — | — *(no master)* | — | — *(never)* | all 3 | — | yes |
 | `combobox` | **AtlCombobox.dc.html** | state | 6 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
 | `dialog` | — | size | 5 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
@@ -37,7 +37,7 @@ a typography study says nothing about how the component should look.
 | `menu` | — | variant | 2 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
 | `pagination` | — | position | 3 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `progress` | — | variant · size | 12 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
-| `radio` | — | selection · state | 4 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
+| `radio` | **AtlRadioGroup.dc.html** | selection · state | 4 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
 | `radio-group` | — | — *(no master)* | — | — *(never)* | all 3 | — | yes |
 | `select` | **AtlSelect.dc.html** | state | 5 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
 | `skeleton` | — | variant | 3 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
@@ -46,7 +46,7 @@ a typography study says nothing about how the component should look.
 | `tabs` | — | variant · selected · state | 3 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
 | `textarea` | **AtlTextarea.dc.html** | state | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `toast` | — | — *(no master)* | — | — *(never)* | all 3 | — | yes |
-| `toggle` | — | selection · state | 4 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
+| `toggle` | **AtlToggle.dc.html** | selection · state | 4 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
 | `tooltip` | — | position | 4 | 2026-07-23 (`2715827`) | all 3 | — | yes |
 
 ## How to read the last two columns
@@ -76,6 +76,14 @@ Turn 1 compares three type directions, turn 2 three readings of "bolder" on the 
 
 Variant x size matrix (the default-state slice, 12 of the master's 24), all states at size=md with the four variant states separated from the disabled/loading Booleans, an anatomy table naming the token behind every value, and findings. Corrected 2026-08-26: disabled/loading are Figma Booleans not code-only props, the 24 variants are a deliberate two-slice cross rather than half a 4x3x4 matrix, and the anatomy reflects ADR-0041 (heights exact at 32/40/48, block padding derived).
 
+### AtlCheckbox.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlCheckbox
+- Covers: AtlCheckbox
+
+Selection x state (3 x 3 axes drawn as seven specimens) plus the invalid and disabled Booleans, a measured anatomy table, and a comparison specimen stacking the checkbox, radio and toggle rows with their real boxes outlined: 29 / 32 / 27px, none of them a token. Anchors the family's shared findings.
+
 ### AtlCombobox.dc.html
 
 - Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
@@ -92,6 +100,22 @@ Eight specimens: the six Figma variant states (open/filtered/selected each drawn
 
 Eight states (the five Figma variant states plus the disabled/readonly Booleans and invalid+focus), a measured anatomy table, and findings. Rewritten 2026-08-26 after ADRs 0043-0049 turned three of its open findings into fixed ones: readonly now has a visual treatment, the invalid indicator is an AtlIcon instance rather than a literal glyph, and the border width has a token. Now links the shared _sheet.css.
 
+### AtlRadio.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlRadio
+- Covers: AtlRadio
+
+Selection x state plus disabled, and the invalid Boolean drawn as Figma-only: the master claims it maps to AtlFormFieldSpec.invalid but AtlRadioSpec does not extend that interface. Records that the checked mark is a 6px border rather than an inner element.
+
+### AtlRadioGroup.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlRadioGroup
+- Covers: AtlRadioGroup
+
+Group-level states with the children drawn in place, plus the horizontal layout that has no Figma variant, and readonly/invalid which are in the spec but not on the master. Records that the master's axes describe a gallery rather than the API: selection and interaction belong to a child in code.
+
 ### AtlSelect.dc.html
 
 - Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
@@ -107,4 +131,12 @@ Seven specimens: the five Figma variant states (default | filled | hover | focus
 - Covers: AtlTextarea
 
 Eight specimens: the five Figma variant states plus the readonly, disabled and autoResize Booleans. States explicitly that this is the one control that keeps the prose line-height (1.5) and whose height is content-driven by design, so the difference from every other control reads as a decision rather than as drift.
+
+### AtlToggle.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlToggle
+- Covers: AtlToggle
+
+Selection x state plus disabled, and invalid drawn as code-only. Anatomy names the four literals that make up the switch shape (44x24 track, 18px thumb, 2px inset) and argues a small component-tier token set is defensible here where a hundred single-use tokens were not.
 

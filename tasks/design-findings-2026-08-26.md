@@ -237,3 +237,41 @@ parses. So a Boolean could be dropped in Figma and nothing would notice, and
 `check:figma`'s variant-matrix completeness would still pass.
 
 That is a snapshot gap worth closing regardless of these two components.
+
+---
+
+## Decision E — the choice-control family, found by drawing it (2026-08-26, batch B)
+
+Four sheets (AtlCheckbox, AtlRadio, AtlRadioGroup, AtlToggle) turned up four
+questions that only appear when the family is drawn together. None is a bug in one
+component; each is an inconsistency between components that every gate passes.
+
+**E1 — three sibling rows, three heights.** Measured: checkbox row **29px**, radio
+row **32px**, toggle row **27px**. Every one is content-driven — the label's 24px
+prose line box plus whatever the control overhangs, and the radio adds 4px of block
+padding nothing else has. So the numbers are accidents of three compositions, not
+three decisions, and a form mixing them has vertical rhythm no stylesheet states.
+A single `--ui-control-row-height` would make them agree *and* make the value
+checkable by `check:geometry`. Drawn side by side, with the boxes outlined, on
+AtlCheckbox's sheet.
+
+**E2 — the checkbox is nearly a circle.** `--ui-radius-sm` is 8px and the box is
+20px, so at a glance it reads as the radio's circle. These are the two controls
+whose *shapes* carry the semantics — one-of-many versus any-of-many — and a reader
+scanning a form has only the shape to go on. Either the checkbox gets a tighter
+radius or the difference stops being load-bearing.
+
+**E3 — the label uses prose leading.** `--ui-line-height-normal` (1.5) on a
+one-line label is exactly what made AtlInput 6px too tall in ADR-0041. These rows
+never got the tight line-height because their height is nobody's stated target —
+which is E1 from the other end.
+
+**E4 — three different Figma↔spec mismatches in one family.** AtlRadio's master
+declares an `invalid` Boolean whose stated mapping (`AtlFormFieldSpec.invalid`) does
+not exist, because `AtlRadioSpec` is `{ radioValue, disabled }` and extends nothing.
+AtlToggle and AtlRadioGroup have the opposite: `invalid` (and `required`, and now
+`readonly`) in the spec with no Boolean on the master. And AtlRadioGroup's variant
+axes describe a gallery — group-level `selection` and `state` — where the code puts
+both on a child. The snapshot cannot see any of this: it records `variantAxes` but
+not Boolean properties, which survive only as prose in the master description
+(the same gap that produced two false claims earlier today).
