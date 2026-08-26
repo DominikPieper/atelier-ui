@@ -220,6 +220,56 @@ const METADATA_ROLE_EXCEPTIONS = new Map([
   ],
 ]);
 
+/**
+ * Tokens component CSS must NOT reference directly, and what to use instead
+ * (check-primitives). ADR-0018 tiers tokens primitive -> semantic -> component;
+ * a component reaching past the semantic tier into a primitive re-decides, in
+ * one stylesheet, something the token layer already decided for everyone.
+ *
+ * `match` is tested against the full custom-property name.
+ */
+const PRIMITIVE_TOKENS = [
+  {
+    match: /^--ui-color-teal-\d{2,3}$/,
+    label: 'teal ramp step',
+    useInstead:
+      'the semantic that aliases it (--ui-color-primary / -hover / -active), so the mode picks the step',
+    why: 'ADR-0038: the ramp is the primitive tier; each theme aliases a different step of it.',
+  },
+  {
+    match: /^--ui-font-display$/,
+    label: 'display font stack',
+    useInstead: '--ui-type-display',
+    why:
+      'ADR-0036: the role carries "serif, italic, never bolded" as one token. Naming the family ' +
+      'directly is how a synthesised fake bold gets shipped.',
+  },
+  {
+    match: /^--ui-font-mono$/,
+    label: 'monospace font stack',
+    useInstead: '--ui-type-code',
+    why: 'ADR-0036: the code role pairs the family with the size and line-height that suit it.',
+  },
+];
+
+/**
+ * `<component-dir>:<token>` pairs that may reference a primitive anyway.
+ * Same two kinds as the other allowlists: `design` is a closed question and
+ * stays silent, `gap` is an unresolved migration and warns on every run.
+ */
+const PRIMITIVE_EXEMPTIONS = new Map([
+  [
+    'code-block:--ui-font-mono',
+    {
+      kind: 'gap',
+      reason:
+        'Predates the --ui-type-code role (ADR-0036) and is the reason --ui-font-mono had to be ' +
+        'declared at all. Migrating it means replacing font-family with the role shorthand, which ' +
+        'also brings size and line-height — a visual change to review, not a rename.',
+    },
+  ],
+]);
+
 module.exports = {
   VARIANT_AXIS_EXCEPTIONS,
   DEFAULT_IS_BASE,
@@ -228,4 +278,6 @@ module.exports = {
   FIGMA_CONFORMANCE_EXCEPTIONS,
   A11Y_PARITY_EXEMPT,
   METADATA_ROLE_EXCEPTIONS,
+  PRIMITIVE_TOKENS,
+  PRIMITIVE_EXEMPTIONS,
 };

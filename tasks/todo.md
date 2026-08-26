@@ -209,11 +209,11 @@ Decision-bearing quick wins (deferred — not this session's scope):
       OKLab, mark the `★` anchor and the `T` text-safe steps, let `check:contrast`
       re-measure them. Families left: danger, success, warning, info, and the neutrals
       (surface / border / text already form an implicit ramp worth making explicit).
-- [ ] **One gate for "do not reference a primitive from component CSS".** Two holes of the
-      same shape are now open: nothing stops a component naming `--ui-font-display`
-      directly (ADR-0036) or a `--ui-color-teal-*` step directly (ADR-0038). The manifest
-      says not to in both cases. One gate that knows which tokens are primitives closes
-      both.
+- [x] ~~One gate for "do not reference a primitive from component CSS"~~ — done
+      2026-08-26, ADR-0039: `check:primitives` scans 2654 token references across 88
+      component stylesheets against three primitive patterns. Ramp steps and
+      `--ui-font-display` are enforced with zero violations; code-block's
+      `--ui-font-mono` is a recorded `gap` until it moves to `--ui-type-code`.
 - [ ] `coverage.thresholds` in 3 vite configs (measure current coverage first — may fail CI)
 - [ ] `docs-old/` (42 tracked files, not in nx graph): remove or justify
 - [x] Wire `check:figma` into CI — done: it runs inside `check:all`, so the `checks` job
