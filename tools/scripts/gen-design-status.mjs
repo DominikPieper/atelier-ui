@@ -143,6 +143,18 @@ const lines = [
     `${fragmentOnly} appearing only as a fragment inside a study, ` +
     `${rows.length - designed - fragmentOnly} untouched.`,
   '',
+  // The redesign phase changes how the "Parity verified" column should be read, so
+  // it belongs next to the table rather than only inside check:parity's output.
+  ...(registry.meta?.redesignPhase?.active
+    ? [
+        `> **Redesign phase, active since ${registry.meta.redesignPhase.since}.** Figma is the *target* of`,
+        '> the transfer, not the reference for it, so the masters are stale by definition until they are',
+        '> rebuilt. A "Parity verified" date older than the last component change is therefore expected',
+        '> here, and `check:parity` reports it as a warning instead of a blocker. Every one of them still',
+        `> owes a re-verify: ${registry.meta.redesignPhase.clearedBy || 'rebuild the masters, then re-verify every component.'}`,
+        '',
+      ]
+    : []),
   'Read the columns as a pipeline: a component is ready to transfer into Figma when',
   'it has an artboard, a current parity verification, and an a11y baseline in all',
   'three frameworks. "Fragment only" is not coverage — a control drawn small inside',

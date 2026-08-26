@@ -1,3 +1,35 @@
+/* Geometry contract: every size this component states is a border-box size.
+ * Declared with the component rather than as a global reset, so it ships in the
+ * same file as the sizes it governs and no consuming app has to supply one.
+ * Gated by check:box-sizing; the resulting boxes are measured by check:geometry.
+ * See ADR-0043. */
+:is(
+  .atl-combobox,
+  .atl-combobox-check,
+  .atl-combobox-error-message,
+  .atl-combobox-errors,
+  .atl-combobox-icon,
+  .atl-combobox-input,
+  .atl-combobox-no-results,
+  .atl-combobox-option,
+  .atl-combobox-panel,
+  .atl-combobox-wrapper
+),
+:is(
+  .atl-combobox,
+  .atl-combobox-check,
+  .atl-combobox-error-message,
+  .atl-combobox-errors,
+  .atl-combobox-icon,
+  .atl-combobox-input,
+  .atl-combobox-no-results,
+  .atl-combobox-option,
+  .atl-combobox-panel,
+  .atl-combobox-wrapper
+) * {
+  box-sizing: border-box;
+}
+
 /* ============================================================
    atl-combobox.css
    ============================================================ */

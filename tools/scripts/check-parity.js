@@ -43,10 +43,34 @@ const path = require('path');
 const { ROOT, moduleForSelector, computeInputsHash } = require('./lib/parity-inputs');
 
 const SNAPSHOT_FILE = path.join(ROOT, 'tools/figma/snapshot.json');
+const ARTBOARDS_FILE = path.join(ROOT, 'tools/design/artboards.json');
+
+/**
+ * Redesign phase. While the library is being redesigned in Claude Design and the
+ * Figma masters have not been rebuilt yet, Figma is the TARGET of the transfer,
+ * not the reference for it — so a changed component is expected, and demanding a
+ * re-verify against a design we deliberately left behind proves nothing. DRIFT
+ * therefore reports as a WARNING while the phase is active, and every run says so
+ * loudly with the count still owed. The switch lives in the design registry
+ * (`tools/design/artboards.json`, meta.redesignPhase) because it is a fact about
+ * the design work, not about this gate. Flip `active` to false after the transfer
+ * and drift blocks again. See ADR-0043.
+ */
+function readRedesignPhase() {
+  try {
+    const meta = JSON.parse(fs.readFileSync(ARTBOARDS_FILE, 'utf8')).meta || {};
+    const phase = meta.redesignPhase;
+    return phase && phase.active === true ? phase : null;
+  } catch {
+    return null; // no registry, no phase — drift blocks, which is the safe default
+  }
+}
+const redesignPhase = readRedesignPhase();
 const PARITY_FILE = path.join(ROOT, 'tools/figma/parity.json');
 
 const errors = [];
 const warnings = [];
+const drifted = [];
 function blocker(tag, msg) { errors.push({ sev: 'BLOCKER', tag, msg }); }
 // Kept for future findings: the CRITICAL severity is part of this gate's
 // vocabulary (see report()), even though no current check emits one.
@@ -96,7 +120,16 @@ for (const comp of snapshot.components) {
 
   const { hash } = computeInputsHash(moduleName);
   if (rec.inputsHash !== hash) {
-    blocker('DRIFT', `${selector}: component files changed since the last parity check (verified ${rec.verifiedSha || '?'} on ${rec.verifiedAt || '?'}). Re-run figma_check_design_parity and: npm run parity:record -- --component ${selector}`);
+    const msg =
+      `${selector}: component files changed since the last parity check ` +
+      `(verified ${rec.verifiedSha || '?'} on ${rec.verifiedAt || '?'}). ` +
+      `Re-run figma_check_design_parity and: npm run parity:record -- --component ${selector}`;
+    if (redesignPhase) {
+      drifted.push(selector);
+      warning('DRIFT', `${msg} — owed, not blocking: redesign phase (banner above).`);
+    } else {
+      blocker('DRIFT', msg);
+    }
     continue;
   }
   if (rec.figmaNodeId && comp.nodeId && rec.figmaNodeId !== comp.nodeId) {
@@ -111,10 +144,20 @@ function report() {
   const all = [...errors, ...warnings].sort((a, b) => order[a.sev] - order[b.sev]);
   const head = `${recorded}/${snapshot.components.length} master(s) have a parity record`;
 
+  if (redesignPhase) {
+    console.warn(
+      `● redesign phase active since ${redesignPhase.since} (tools/design/artboards.json, meta.redesignPhase):\n` +
+        `  Figma is the target of the transfer, not the reference, so a drifted record is expected and does not block.\n` +
+        `  ${drifted.length} record(s) owe a re-verify once the transfer lands${drifted.length ? `: ${drifted.join(', ')}` : ''}.\n` +
+        `  Clear it by: ${redesignPhase.clearedBy || 'rebuilding the masters, then re-verifying every component.'}`
+    );
+  }
+
   if (all.length === 0) {
     console.log(`✓ design parity in sync (${head}).`);
     return;
   }
+
   for (const f of all) {
     const line = `${f.sev === 'WARNING' ? '⚠' : '✗'} [${f.sev}] [${f.tag}] ${f.msg}`;
     if (f.sev === 'WARNING') console.warn(line);

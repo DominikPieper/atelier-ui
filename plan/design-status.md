@@ -6,6 +6,12 @@
 
 **29 components.** Claude Design coverage: **2 designed**, 1 appearing only as a fragment inside a study, 26 untouched.
 
+> **Redesign phase, active since 2026-08-26.** Figma is the *target* of
+> the transfer, not the reference for it, so the masters are stale by definition until they are
+> rebuilt. A "Parity verified" date older than the last component change is therefore expected
+> here, and `check:parity` reports it as a warning instead of a blocker. Every one of them still
+> owes a re-verify: Phase 3: rebuild the Figma masters from the redesign, then re-verify + parity:record every component.
+
 Read the columns as a pipeline: a component is ready to transfer into Figma when
 it has an artboard, a current parity verification, and an a11y baseline in all
 three frameworks. "Fragment only" is not coverage — a control drawn small inside

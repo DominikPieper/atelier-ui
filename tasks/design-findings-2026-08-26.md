@@ -86,7 +86,31 @@ and renders another, which is a defect no matter what Figma holds.
 
 </details>
 
-## Decision B — the library ships no `box-sizing` reset
+## Decision B — RESOLVED 2026-08-26 (ADR-0043)
+
+Every component now declares its own geometry contract; `check:box-sizing` writes
+and verifies it, `check:geometry` measures the result in all three frameworks with
+no reset supplied. Chosen over a global reset, an opt-in `base.css`, and
+documenting the requirement, because those three can all be forgotten and the
+component's own stylesheet cannot.
+
+Two things surfaced while measuring, both worse than the original finding:
+
+- **Angular's button was broken, not merely exposed.** `<atl-button>` is a custom
+  element, so it gets `content-box`: 60px at `size=md` against a 40px token, 46.5
+  against 32, 73.5 against 48. React and Vue were accidentally immune because
+  `<button>` is border-box in the UA stylesheet. ADR-0041's "computes exactly
+  32 / 40 / 48" was true in two frameworks out of three.
+- **`check:geometry` claimed coverage it did not have.** It measured React and
+  justified it with "check:sync guarantees the CSS is mirrored". `check:sync`
+  compares directory and story presence and never CSS. My comment, one day old,
+  simply invented the guarantee.
+
+Also corrected here: I wrote that AtlButton "does not set box-sizing, so its
+geometry depends on whatever reset the consuming app provides". For React and Vue
+that was wrong — form controls are border-box by UA default, measured delta 0.
+
+<details><summary>The original finding</summary>
 
 Only **10 of 29** component stylesheets set `box-sizing`. AtlInput pins
 `border-box`; AtlButton does not, so its geometry depends on whatever reset the
@@ -96,9 +120,11 @@ consuming app provides. For a library that deliberately ships its CSS
 Storybook and the Claude Design runtime both happen to provide a reset, which is
 exactly why measurements there look tidy and a consumer's might not.
 
-Options: ship a reset in `styles/tokens.css` (which makes that stylesheet
-opinionated beyond tokens — a real cost), or set `box-sizing` on every component
-root and gate it. Not a free choice; pick deliberately.
+</details>
+
+**One claim in that finding was also wrong:** Storybook has no reset. The docs app
+does (`docs/src/styles/global.css:5`); the three `.storybook` configs do not. So
+Storybook was rendering the drifted geometry — 52px menu items — the whole time.
 
 ## Decision C — states that exist in one place only
 

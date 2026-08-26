@@ -2,31 +2,40 @@
 /**
  * check-geometry.mjs
  *
- * Renders every control that claims a `--ui-control-height-*` token and asserts
- * the box it actually produces is the height it claims.
+ * Renders every control that claims a `--ui-control-height-*` token, in all three
+ * frameworks, and asserts the box it actually produces is the height it claims.
  *
  * This gate exists because that claim was false for months and nothing noticed.
- * AtlInput declared `min-height: 2.5rem` and rendered 46px; AtlButton md
- * declared the same and rendered 40, so an input and a button in the same form
- * row sat 6px apart in all three frameworks. `check:parity` compares against
- * Figma by hand, the a11y baselines do not record geometry, and nothing else
- * measured a rendered box — so the defect was invisible to a green suite. See
- * ADR-0041.
+ * AtlInput declared `min-height: 2.5rem` and rendered 46px; AtlButton md declared
+ * the same and rendered 40, so an input and a button in the same form row sat 6px
+ * apart (ADR-0041). `check:parity` compares against Figma by hand, the a11y
+ * baselines do not record geometry, and nothing else measured a rendered box.
  *
  * A real browser does the measuring. Re-implementing the box model here would be
  * the same mistake the contrast checker made with its hardcoded palette: a second
  * copy of the truth, free to disagree with the first.
  *
+ * TWO THINGS THIS GATE LEARNED THE HARD WAY (ADR-0043):
+ *
+ * 1. It measured React only, on the stated grounds that "check:sync guarantees the
+ *    CSS is mirrored". It does not — check:sync compares directory and story
+ *    presence, never CSS. Angular's styles are structurally different (`:host`,
+ *    no `.atl-*` classes), and an Angular button at size=md rendered 60px against
+ *    a 40px token while this gate reported the library green. Every framework is
+ *    measured now.
+ * 2. Its fixture injected `* { box-sizing: border-box }`. That silently supplied
+ *    the very thing consumers were missing, so it measured a best case nobody
+ *    ships. The fixture now supplies NO reset: what it measures is what an app
+ *    with no reset of its own gets.
+ *
  * The roster is DISCOVERED: any component stylesheet referencing a
  * `--ui-control-height-*` token must appear in CONTROLS below, and every entry in
- * CONTROLS must still reference one. So a control that migrates onto the token
- * and is not added here fails, and an entry left behind after a control moves
- * away fails too.
+ * CONTROLS must still reference one.
  *
  *   node tools/scripts/check-geometry.mjs            measure and report
  *   node tools/scripts/check-geometry.mjs --check    quiet unless something is wrong
  */
-import { readFileSync, readdirSync, existsSync, writeFileSync, mkdtempSync } from 'node:fs';
+import { readFileSync, readdirSync, writeFileSync, mkdtempSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
@@ -41,30 +50,29 @@ const TOL = 0.5; // px — sub-pixel rounding is not a defect; 6px is.
 
 /**
  * Markup per control. This is knowledge, not something to derive: only the
- * component knows which element carries its height. Sizes list the
- * `--ui-control-height-*` step each variation should land on.
+ * component knows which element carries its height. React and Vue share their
+ * class-based markup; Angular's host is a custom element, so it gets its own.
  */
 const CONTROLS = [
   {
     dir: 'button',
     label: 'AtlButton',
-    sizes: [
-      { step: 'sm', html: '<button class="atl-button variant-primary size-sm">Label</button>' },
-      { step: 'md', html: '<button class="atl-button variant-primary size-md">Label</button>' },
-      { step: 'lg', html: '<button class="atl-button variant-primary size-lg">Label</button>' },
-    ],
-    measure: '.atl-button',
+    steps: ['sm', 'md', 'lg'],
+    markup: {
+      default: (s) => `<button class="atl-button variant-primary size-${s}">Label</button>`,
+      angular: (s) => `<atl-button class="variant-primary size-${s}">Label</atl-button>`,
+    },
+    measure: { default: '.atl-button', angular: 'atl-button' },
   },
   {
     dir: 'input',
     label: 'AtlInput',
-    sizes: [
-      {
-        step: 'md',
-        html: '<div class="atl-input" style="width:240px"><div class="input-field"><input value="Value"></div></div>',
-      },
-    ],
-    measure: '.atl-input input',
+    steps: ['md'],
+    markup: {
+      default: () => `<div class="atl-input" style="width:240px"><div class="input-field"><input value="Value"></div></div>`,
+      angular: () => `<atl-input style="display:block;width:240px"><div class="input-field"><input value="Value"></div></atl-input>`,
+    },
+    measure: { default: '.atl-input input', angular: 'atl-input input' },
   },
 ];
 
@@ -126,32 +134,16 @@ try {
   process.exit(1);
 }
 
+/**
+ * Angular compiles `:host` against the component's own element. Rewriting it to
+ * the element's tag reproduces exactly that for geometry purposes: the attribute
+ * selectors emulated encapsulation adds (`[_nghost-x]`) change specificity, never
+ * a box. Bare selectors like `input { … }` are left alone because each component
+ * is measured in a page of its own, so nothing else can match them.
+ */
+const hostify = (css, tag) => css.replace(/:host\(([^)]*)\)/g, `${tag}$1`).replace(/:host\b/g, tag);
+
 const work = mkdtempSync(join(tmpdir(), 'atl-geometry-'));
-const fw = 'react'; // one framework is enough: check:sync guarantees the CSS is mirrored
-const cssFiles = [resolve(ROOT, `libs/${fw}/src/styles/tokens.css`)];
-for (const c of CONTROLS) {
-  const dirPath = join(ROOT, 'libs', fw, 'src/lib', c.dir);
-  for (const f of readdirSync(dirPath).filter((f) => f.endsWith('.css'))) {
-    cssFiles.push(join(dirPath, f));
-  }
-}
-const css = cssFiles.map((f) => readFileSync(f, 'utf8')).join('\n');
-
-// The reset is deliberate and named: the library ships none (a known gap), and a
-// consumer without one gets different geometry. Measuring with border-box states
-// the assumption instead of inheriting it silently.
-const page = `<!doctype html><html><head><style>
-*, *::before, *::after { box-sizing: border-box; }
-body { margin: 0; font-family: sans-serif; }
-${css}
-</style></head><body>
-${CONTROLS.flatMap((c) =>
-  c.sizes.map((s) => `<div data-case="${c.dir}:${s.step}">${s.html}</div>`)
-).join('\n')}
-</body></html>`;
-const fixture = join(work, 'geometry.html');
-writeFileSync(fixture, page);
-
 let browser;
 try {
   browser = await chromium.launch();
@@ -163,37 +155,54 @@ try {
   process.exit(1);
 }
 const tab = await browser.newPage({ viewport: { width: 900, height: 600 } });
-await tab.goto('file://' + fixture);
-await tab.waitForTimeout(150);
 
-for (const c of CONTROLS) {
-  for (const s of c.sizes) {
-    const height = await tab.evaluate(
-      ([caseId, sel]) => {
-        const scope = document.querySelector(`[data-case="${caseId}"]`);
-        const el = scope && scope.querySelector(sel);
+for (const fw of FRAMEWORKS) {
+  const tokens = readFileSync(join(ROOT, 'libs', fw, 'src/styles/tokens.css'), 'utf8');
+  for (const control of CONTROLS) {
+    const dirPath = join(ROOT, 'libs', fw, 'src/lib', control.dir);
+    let componentCss = readdirSync(dirPath)
+      .filter((f) => f.endsWith('.css'))
+      .map((f) => readFileSync(join(dirPath, f), 'utf8'))
+      .join('\n');
+    const isNg = fw === 'angular';
+    if (isNg) componentCss = hostify(componentCss, `atl-${control.dir}`);
+    const markup = isNg ? control.markup.angular : control.markup.default;
+    const selector = isNg ? control.measure.angular : control.measure.default;
+
+    for (const step of control.steps) {
+      // No reset: the fixture must not supply what a consuming app might not.
+      const html =
+        `<!doctype html><html><head><style>\nbody { margin: 0; font-family: sans-serif; }\n` +
+        `${tokens}\n${componentCss}\n</style></head><body>${markup(step)}</body></html>`;
+      const fixture = join(work, `${fw}-${control.dir}-${step}.html`);
+      writeFileSync(fixture, html);
+      await tab.goto('file://' + fixture);
+
+      const measured = await tab.evaluate((sel) => {
+        const el = document.querySelector(sel);
         return el ? el.getBoundingClientRect().height : null;
-      },
-      [`${c.dir}:${s.step}`, c.measure]
-    );
-    const want = claimed[s.step];
-    if (height === null) {
-      errors.push(
-        `[MARKUP] ${c.label} ${s.step}: the fixture markup in CONTROLS does not produce an element matching \`${c.measure}\`. Fix the entry.`
-      );
-      continue;
-    }
-    if (want === undefined) {
-      errors.push(`[TOKEN] ${c.label} ${s.step}: the token source declares no --ui-control-height-${s.step}.`);
-      continue;
-    }
-    const off = Math.abs(height - want);
-    rows.push({ label: c.label, step: s.step, height, want, ok: off <= TOL });
-    if (off > TOL) {
-      errors.push(
-        `[HEIGHT] ${c.label} size=${s.step} renders ${height}px but --ui-control-height-${s.step} claims ${want}px ` +
-          `(off by ${off.toFixed(2)}px). Derive the block padding from the height instead of authoring it — see ADR-0041.`
-      );
+      }, selector);
+
+      const want = claimed[step];
+      if (measured === null) {
+        errors.push(
+          `[MARKUP] ${fw}/${control.label} ${step}: the fixture markup in CONTROLS produces no element matching \`${selector}\`. Fix the entry.`
+        );
+        continue;
+      }
+      if (want === undefined) {
+        errors.push(`[TOKEN] ${control.label} ${step}: the token source declares no --ui-control-height-${step}.`);
+        continue;
+      }
+      const off = Math.abs(measured - want);
+      rows.push({ fw, label: control.label, step, height: measured, want, ok: off <= TOL });
+      if (off > TOL) {
+        errors.push(
+          `[HEIGHT] ${fw}/${control.label} size=${step} renders ${measured}px but --ui-control-height-${step} claims ${want}px ` +
+            `(off by ${off.toFixed(2)}px). Derive the block padding from the height instead of authoring it (ADR-0041), and ` +
+            `check the component declares its geometry contract (ADR-0043).`
+        );
+      }
     }
   }
 }
@@ -203,11 +212,11 @@ await browser.close();
 if (!QUIET) {
   for (const r of rows) {
     console.log(
-      `  ${r.ok ? 'PASS' : 'FAIL'}  ${r.label.padEnd(12)} size=${r.step.padEnd(3)} ${String(r.height).padStart(6)}px  (token ${r.want}px)`
+      `  ${r.ok ? 'PASS' : 'FAIL'}  ${r.fw.padEnd(8)} ${r.label.padEnd(11)} size=${r.step.padEnd(3)} ${String(r.height).padStart(6)}px  (token ${r.want}px)`
     );
   }
 }
-const summary = `${rows.length} control size(s) measured across ${CONTROLS.length} component(s)`;
+const summary = `${rows.length} measurement(s): ${CONTROLS.length} component(s) × ${FRAMEWORKS.length} framework(s), with no reset supplied`;
 if (errors.length > 0) {
   for (const e of errors) console.error(`✗ ${e}`);
   console.error(`\n${errors.length} geometry issue(s). ${summary}.`);
