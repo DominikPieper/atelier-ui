@@ -1,3 +1,14 @@
+## 0.2.10 (2026-08-26)
+
+### 🩹 Fixes
+
+- **storybook:** apply the shell font rule so previews show the real typeface ([510ae61](https://github.com/DominikPieper/atelier-ui/commit/510ae61))
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Dominik Pieper @DominikPieper
+
 ## 0.2.9 (2026-08-26)
 
 ### 🚀 Features
