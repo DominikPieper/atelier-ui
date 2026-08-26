@@ -492,12 +492,22 @@ items deliberately NOT fixed in that pass:
       buttons directly in <nav> without the list/listitem structure
       Angular+React expose (its .page-list CSS was dead until then).
 - [x] **a11y-parity final batch** (2026-07-23) — Tooltip, Drawer, Toast,
-      Chat added: 25/31 components gated, zero divergences on first pass.
-      The gate is COMPLETE for all comparable components — remaining 6 are
-      out by design: Select/Combobox (native vs CDK-overlay adapters,
-      documented above), Radio (covered via radio-group scenarios),
-      AvatarGroup (shares avatar/ module), Menu-/Table-family
-      sub-components (covered via their parents).
+      Chat added: 25 of 29 components gated, zero divergences on first pass
+      *in the scenarios the specs render*. Out by design: Select/Combobox
+      (native vs CDK-overlay adapters, documented above), Radio (covered via
+      radio-group scenarios); AvatarGroup and the Menu-/Table-family
+      sub-components are not separate component dirs and are covered via
+      their parents. The roster is now derived from the component dirs and
+      every exemption is recorded in `A11Y_PARITY_EXEMPT`
+      (2026-08-26) — which corrected this entry's earlier claim of
+      "COMPLETE for all comparable components": **accordion** is comparable,
+      ungated, and was invisible while the gate globbed its roster from the
+      snapshot directory. It now warns on every run.
+- [ ] **Write the accordion a11y specs** — the one `kind: 'gap'` entry in
+      `A11Y_PARITY_EXEMPT`. Comparable across all three adapters and the exact
+      component ADR-0025 cites as its motivating divergence, so it is the most
+      likely place for a real finding. Remove the exemption when the snapshots
+      land (the gate errors if an exempt component gains snapshots).
 - [ ] **Latent Chat divergence (observation, not gated)** — React's
       AtlChatHeader renders its close button unconditionally while
       Angular/Vue gate it behind variant !== 'inline'. Align React when

@@ -17,6 +17,10 @@
  *     asserts the three frameworks are deep-equal. A divergence (e.g. one adapter
  *     omits an aria state, or exposes a different role/name) is a BLOCKER.
  *   - A component missing one framework's snapshot is a WARNING.
+ *   - The ROSTER comes from the component dirs, not from the snapshot directory: a
+ *     component with zero snapshots must be named in A11Y_PARITY_EXEMPT (with a
+ *     reason) or the gate fails. Globbing the snapshots for the roster made an
+ *     uncovered component invisible — no comparison, no warning, exit 0.
  *
  * The per-framework drift guard lives in the `*.a11y.spec.*` themselves (run by
  * `nx test`): they assert the live render still matches the committed snapshot.
@@ -29,7 +33,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const { FRAMEWORKS } = require('./lib/component-discovery');
+const { FRAMEWORKS, isComponentDir, getComponentDirs } = require('./lib/component-discovery');
+const { A11Y_PARITY_EXEMPT } = require('./lib/allowlists');
 
 const ROOT = path.resolve(__dirname, '../..');
 const A11Y_DIR = path.join(ROOT, 'tools/parity/a11y');
@@ -61,6 +66,46 @@ if (byComponent.size === 0) {
   process.exit(1);
 }
 
+// ---------------------------------------------------------------------------
+// Roster. Built from the component dirs (the same discovery the structural
+// gates use), never from A11Y_DIR — the snapshot directory cannot be its own
+// roster, or a component with no snapshots is simply not a question the gate
+// asks. Every uncovered component is either an error or a recorded exemption.
+// ---------------------------------------------------------------------------
+const roster = new Set();
+for (const fw of FRAMEWORKS) {
+  const base = path.join(ROOT, 'libs', fw, 'src/lib');
+  for (const dir of getComponentDirs(base)) {
+    if (isComponentDir(path.join(base, dir))) roster.add(dir);
+  }
+}
+
+for (const dir of [...roster].sort()) {
+  if (byComponent.has(`atl-${dir}`)) continue;
+  const exempt = A11Y_PARITY_EXEMPT.get(dir);
+  if (!exempt) {
+    errors.push(
+      `[ROSTER] ${dir}: no a11y snapshot and no A11Y_PARITY_EXEMPT entry. Either add ` +
+        `${dir}/atl-${dir}.a11y.spec.* in all three libs and run npm run gen:a11y, or record ` +
+        `why it is out of the gate in tools/scripts/lib/allowlists.js.`
+    );
+  } else if (exempt.kind === 'gap') {
+    warnings.push(`[GAP] ${dir}: comparable but not gated \u2014 ${exempt.reason}`);
+  }
+}
+
+// Allowlist hygiene \u2014 this list is load-bearing, so it must not rot.
+for (const [dir, entry] of A11Y_PARITY_EXEMPT) {
+  if (!roster.has(dir)) {
+    errors.push(`[STALE] A11Y_PARITY_EXEMPT names '${dir}', which is not a component dir. Remove it.`);
+  } else if (byComponent.has(`atl-${dir}`)) {
+    errors.push(
+      `[STALE] A11Y_PARITY_EXEMPT exempts '${dir}' (${entry.kind}) but snapshots exist. ` +
+        `Remove the entry so the component is compared.`
+    );
+  }
+}
+
 let compared = 0;
 for (const [component, snaps] of [...byComponent].sort()) {
   const present = FRAMEWORKS.filter((fw) => snaps[fw]);
@@ -86,7 +131,9 @@ for (const [component, snaps] of [...byComponent].sort()) {
 }
 
 // Report (symmetric exit code with the other gates).
-const total = `${compared} component(s) compared across ${FRAMEWORKS.length} frameworks`;
+const total =
+  `${compared} of ${roster.size} component(s) compared across ${FRAMEWORKS.length} frameworks, ` +
+  `${A11Y_PARITY_EXEMPT.size} exempt`;
 if (errors.length === 0 && warnings.length === 0) {
   console.log(`✓ cross-framework a11y parity in sync (${total}).`);
   process.exit(0);

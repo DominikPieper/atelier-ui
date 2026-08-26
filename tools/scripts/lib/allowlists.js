@@ -126,10 +126,67 @@ const FIGMA_CONFORMANCE_EXCEPTIONS = new Set([
   'AtlChat:token:color:footer-divider',
 ]);
 
+/**
+ * Component dirs that ship no cross-framework a11y snapshot, and why
+ * (check-a11y-parity). The gate builds its roster from the component dirs, so
+ * every uncovered component must be named here or the gate fails — without
+ * this, a component with zero snapshots was simply absent from a roster built
+ * by globbing the snapshot directory: no comparison, no warning, exit 0.
+ *
+ * Two kinds, and the difference is the point:
+ *   - `design` — legitimately not comparable. Silent; this is a closed
+ *     question.
+ *   - `gap`    — comparable, just not written yet. Printed as a warning on
+ *     every run so it keeps nagging instead of dissolving into the roster.
+ *
+ * An entry that names a dir which does not exist, or one that *does* have
+ * snapshots, is itself an error: allowlists rot, and this one is load-bearing.
+ */
+const A11Y_PARITY_EXEMPT = new Map([
+  [
+    'select',
+    {
+      kind: 'design',
+      reason:
+        'React/Vue render a native <select>; Angular is a CDK-overlay listbox (ADR-0007). ' +
+        'The trees legitimately differ (native options always in the DOM vs an overlay panel), ' +
+        'so tree equality would force rebuilding an adapter.',
+    },
+  ],
+  [
+    'combobox',
+    {
+      kind: 'design',
+      reason: 'Same native-vs-CDK-overlay split as select (ADR-0007).',
+    },
+  ],
+  [
+    'radio',
+    {
+      kind: 'design',
+      reason:
+        'A radio is only reachable through its group; the accessible tree is asserted by the ' +
+        'atl-radio-group scenarios, which render the children.',
+    },
+  ],
+  [
+    'accordion',
+    {
+      kind: 'gap',
+      reason:
+        'Comparable across all three adapters (no native-vs-CDK split) and the exact component ' +
+        'ADR-0025 cites as its motivating divergence, but no *.a11y.spec.* was ever written. ' +
+        'It was invisible while the roster came from the snapshot directory. ' +
+        'Tracked in tasks/review-state-2026-08-26.md.',
+    },
+  ],
+]);
+
 module.exports = {
   VARIANT_AXIS_EXCEPTIONS,
   DEFAULT_IS_BASE,
   DEFAULT_PROP_EXCEPTIONS,
   STORY_DESCRIPTION_SKIP_DIRS,
   FIGMA_CONFORMANCE_EXCEPTIONS,
+  A11Y_PARITY_EXEMPT,
 };
