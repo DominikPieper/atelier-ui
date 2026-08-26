@@ -1,3 +1,15 @@
+## 0.2.19 (2026-08-26)
+
+### 🚀 Features
+
+- **rows:** prove the row recipe on two boxes, and what that exposed ([14284f9](https://github.com/DominikPieper/atelier-ui/commit/14284f9))
+- **tokens:** the row ladder — --ui-row-inset and --ui-row-height-sm/md/lg ([b2f390a](https://github.com/DominikPieper/atelier-ui/commit/b2f390a))
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Dominik Pieper @DominikPieper
+
 ## 0.2.18 (2026-08-26)
 
 ### 🩹 Fixes

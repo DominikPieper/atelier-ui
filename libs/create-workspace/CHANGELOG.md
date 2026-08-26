@@ -1,3 +1,14 @@
+## 0.2.19 (2026-08-26)
+
+### 🚀 Features
+
+- **tokens:** the row ladder — --ui-row-inset and --ui-row-height-sm/md/lg ([b2f390a](https://github.com/DominikPieper/atelier-ui/commit/b2f390a))
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Dominik Pieper @DominikPieper
+
 ## 0.2.18 (2026-08-26)
 
 This was a version bump only for create-workspace to align it with other projects, there were no code changes.
