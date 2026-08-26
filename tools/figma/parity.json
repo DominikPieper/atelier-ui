@@ -2,7 +2,7 @@
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "note": "Per-component design-parity records. Written by `npm run parity:record` after a human/agent runs figma_check_design_parity; read by `npm run check:parity`. Each record's inputsHash covers libs/{angular,react,vue}/src/lib/<module>/ so a spec/story/impl/css change since the last verify makes the gate ask for a re-verify. See plan/adr/0024.",
-    "generatedAt": "2026-07-23T05:07:48.335Z"
+    "generatedAt": "2026-08-26T09:04:31.670Z"
   },
   "components": {
     "AtlAccordionGroup": {
@@ -529,10 +529,10 @@
     },
     "AtlStepper": {
       "figmaNodeId": "421:505",
-      "parityScore": 0.92,
-      "verifiedAt": "2026-07-22T20:25:58.639Z",
-      "verifiedSha": "6282b4f",
-      "inputsHash": "sha256:9f723a3c7657d23ac8c93532f119c6bb05165b2dd1a99df45fa7092f1a4e343b",
+      "parityScore": 0.83,
+      "verifiedAt": "2026-08-26T09:04:31.617Z",
+      "verifiedSha": "f4c20b6",
+      "inputsHash": "sha256:35e06ad70299ba97576cba258f498f9eba443de27dd98455352f790c2c93bc92",
       "inputs": [
         "libs/angular/src/lib/stepper/atl-stepper.a11y.spec.ts",
         "libs/angular/src/lib/stepper/atl-stepper.css",

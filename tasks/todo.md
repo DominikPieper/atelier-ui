@@ -124,6 +124,30 @@ Decision-bearing quick wins (deferred — not this session's scope):
 - [ ] **Verify Figma *export* from claude.ai/design** — import via Figma links is
       confirmed first-party (`hifi-design` skill); export is still unverified, and
       ADR-0032's "the canvas dead-ends" tradeoff rests partly on it.
+- [ ] **The persisted `parityScore` is not comparable across runs** (ADR-0024 design flaw,
+      found 2026-08-26). Three `figma_check_design_parity` runs on the *same commit* for
+      AtlStepper returned **70, 52 and 83** — the number is a function of which node you
+      point at and how much you declare in `codeSpec`, not of the component's state:
+      · Pointing at the COMPONENT_SET (`421:505`) compares against the set's frame — its
+        padding/gap/size describe how the 8 variants are arranged, not the component.
+        ADR-0019 already says the default variant is what gets sampled; the parity tool
+        does not enforce that, and the recorded node is the set.
+      · Declaring `padding: 0` turned 4 previously-uncompared properties into 4 `major`
+        mismatches. Omitting a field means it is simply not compared — so a sparser
+        `codeSpec` scores higher.
+      So the July 0.92 and today's 0.83 are not the same measurement. Either derive the
+      `codeSpec` mechanically (there is a `figma_scan_code_accessibility`
+      `mapToCodeSpec: true` for the a11y part) and pin the sampled node to the default
+      variant, or stop storing the score as if it were a trend and keep only
+      verified-at + inputsHash. Amend ADR-0024 with whichever is chosen.
+- [ ] **AtlStepper: Figma pads 16, the code root pads 0** — the default variant
+      (`421:407`) declares `padding: 16` and `gap: 16`; `.atl-stepper` has neither. Decide
+      whether that padding is component chrome (code is missing it) or artboard breathing
+      room (Figma should drop it). Not fixed on 2026-08-26 because changing a component's
+      padding is a design decision, not a gate-satisfying edit.
+- [ ] **AtlStepper Figma master has no focus and no disabled variant**, and its description
+      carries no a11y annotations — 5 of the 7 remaining parity findings. Pairs with the
+      role question above (metadata says `progressbar`, code renders `tablist`).
 - [ ] `coverage.thresholds` in 3 vite configs (measure current coverage first — may fail CI)
 - [ ] `docs-old/` (42 tracked files, not in nx graph): remove or justify
 - [x] Wire `check:figma` into CI — done: it runs inside `check:all`, so the `checks` job

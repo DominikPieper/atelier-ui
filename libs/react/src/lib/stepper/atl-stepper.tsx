@@ -1,4 +1,5 @@
 import {
+  Fragment,
   createContext,
   useContext,
   useState,
@@ -150,8 +151,8 @@ export function AtlStepper({
               .join(' ');
 
             return (
-              <>
-                <div key={i} className={itemClass}>
+              <Fragment key={i}>
+                <div className={itemClass}>
                   <button
                     type="button"
                     role="tab"
@@ -189,13 +190,12 @@ export function AtlStepper({
                 </div>
                 {i < steps.length - 1 && (
                   <div
-                    key={`connector-${i}`}
                     className={['step-connector', (activeStep > i || step.completed) && 'is-active']
                       .filter(Boolean)
                       .join(' ')}
                   />
                 )}
-              </>
+              </Fragment>
             );
           })}
         </div>
