@@ -37,64 +37,95 @@ const grade = (r, role) => {
   return { pass, target, mark: pass ? 'PASS' : 'FAIL' };
 };
 
-// Direction A — Conciso anchor only.
-// Deep Conciso teal primary on a clean white canvas (light) /
-// rich slate canvas (dark). Bright teal accent in dark mode.
-// No moss, no warm bone — just Conciso.
-const tokens = {
-  light: {
-    surface: '#ffffff',
-    'surface-raised': '#f8fafc',
-    'surface-sunken': '#f1f5f9',
-    primary: '#006470',
-    'primary-hover': '#004e58',
-    'primary-active': '#003a42',
-    text: '#0f172a',
-    'text-muted': '#475569',
-    border: '#e2e8f0',
-    'border-strong': '#64748b',
-    danger: '#b91c1c',
-    'danger-bg': '#fee2e2',
-    'danger-text': '#991b1b',
-    success: '#15803d',
-    'success-bg': '#dcfce7',
-    'success-text': '#166534',
-    warning: '#b45309',
-    'warning-bg': '#fef3c7',
-    'warning-text': '#854d0e',
-    info: '#0369a1',
-    'info-bg': '#e0f2fe',
-    'info-text': '#0c4a6e',
-    'text-on-primary': '#ffffff',
-    'text-on-danger': '#ffffff',
-  },
-  dark: {
-    surface: '#0a1116',
-    'surface-raised': '#131c24',
-    'surface-sunken': '#060c10',
-    primary: '#34d8d8',
-    'primary-hover': '#5ee5e5',
-    'primary-active': '#87efef',
-    text: '#f1f5f9',
-    'text-muted': '#94a3b8',
-    border: '#1e293b',
-    'border-strong': '#64748b',
-    danger: '#f87171',
-    'danger-bg': '#3a1414',
-    'danger-text': '#fca5a5',
-    success: '#4ade80',
-    'success-bg': '#0f3320',
-    'success-text': '#86efac',
-    warning: '#fbbf24',
-    'warning-bg': '#3a2510',
-    'warning-text': '#fde68a',
-    info: '#38bdf8',
-    'info-bg': '#102338',
-    'info-text': '#bae6fd',
-    'text-on-primary': '#0a1116',
-    'text-on-danger': '#0a1116',
-  },
+// The palette is READ from the token source, never copied here. The previous
+// version of this script kept its own hardcoded duplicate of every hex value,
+// which is why it could only ever be a one-off report: nothing stopped
+// tokens.css and this file from disagreeing silently.
+//
+// Source of truth is the generator preset (tools/scripts/sync-tokens.mjs
+// propagates it into the three framework libs).
+import { readFileSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
+const TOKENS_FILE = resolve(
+  ROOT,
+  'libs/create-workspace/src/generators/preset/files/styles/tokens.css'
+);
+const css = readFileSync(TOKENS_FILE, 'utf-8');
+
+/** Every `--ui-color-*: value;` inside one brace-balanced block, keyed without the prefix. */
+const declarationsIn = (block) => {
+  const out = {};
+  for (const m of block.matchAll(/--ui-color-([a-z0-9-]+)\s*:\s*([^;]+);/g)) {
+    out[m[1]] = m[2].trim();
+  }
+  return out;
 };
+
+/** The block a selector opens, up to its matching close brace. */
+const blockFor = (selector) => {
+  const at = css.indexOf(selector);
+  if (at === -1) throw new Error(`token source has no \`${selector}\` block`);
+  let i = css.indexOf('{', at);
+  if (i === -1) throw new Error(`\`${selector}\` has no opening brace`);
+  let depth = 0;
+  const from = i;
+  for (; i < css.length; i++) {
+    if (css[i] === '{') depth++;
+    else if (css[i] === '}' && --depth === 0) return css.slice(from, i);
+  }
+  throw new Error(`unbalanced braces after \`${selector}\``);
+};
+
+/** Resolve `var(--ui-color-x)` chains within one mode; unresolved aliases are an error. */
+const resolveAliases = (mode, map) => {
+  const seen = new Map();
+  const resolve1 = (key, trail) => {
+    if (seen.has(key)) return seen.get(key);
+    const raw = map[key];
+    if (raw === undefined) return undefined;
+    const alias = /^var\(\s*--ui-color-([a-z0-9-]+)\s*\)$/.exec(raw);
+    let value = raw;
+    if (alias) {
+      if (trail.includes(key)) throw new Error(`circular alias: ${trail.join(' -> ')} -> ${key}`);
+      const target = resolve1(alias[1], [...trail, key]);
+      if (target === undefined) {
+        throw new Error(`${mode}: --ui-color-${key} aliases --ui-color-${alias[1]}, which this mode does not define`);
+      }
+      value = target;
+    }
+    seen.set(key, value);
+    return value;
+  };
+  const out = {};
+  for (const key of Object.keys(map)) out[key] = resolve1(key, []);
+  return out;
+};
+
+// Light lives on :root. Dark: the media-query block is the baseline, and
+// [data-theme="dark"] is the explicit escape hatch — both are checked, because a
+// pair that passes under one and fails under the other is still a real failure.
+const lightRoot = declarationsIn(blockFor(':root'));
+const darkMedia = declarationsIn(blockFor('@media (prefers-color-scheme: dark)'));
+const darkAttr = declarationsIn(blockFor('[data-theme="dark"]'));
+const lightAttr = declarationsIn(blockFor('[data-theme="light"]'));
+
+// A malformed token source is a gate failure, not a crash — so the parse is
+// guarded the same way the comparison is.
+let tokens;
+try {
+  tokens = {
+    light: resolveAliases('light', lightRoot),
+    'light (data-theme)': resolveAliases('light (data-theme)', { ...lightRoot, ...lightAttr }),
+    dark: resolveAliases('dark', { ...lightRoot, ...darkMedia }),
+    'dark (data-theme)': resolveAliases('dark (data-theme)', { ...lightRoot, ...darkAttr }),
+  };
+} catch (err) {
+  console.error(`\u2717 contrast gate cannot read the token source — ${err.message}`);
+  process.exit(1);
+}
 
 // pairs format: [fgKey, bgKey, role: 'normal' | 'large' | 'ui', note]
 const pairs = [
@@ -131,6 +162,9 @@ const pairs = [
   ['border-strong', 'surface-raised', 'ui', 'input border on raised (functional)'],
 ];
 
+// A gate is quiet on success: --check prints only the verdict.
+const QUIET = process.argv.includes('--check');
+
 const colorize = (s, ok) => (ok ? `\x1b[32m${s}\x1b[0m` : `\x1b[31m${s}\x1b[0m`);
 
 const runMode = (mode) => {
@@ -142,6 +176,11 @@ const runMode = (mode) => {
   lines.push('| pair | role | ratio | target | result | note |');
   lines.push('|---|---|---|---|---|---|');
   for (const [fg, bg, role, note] of pairs) {
+    for (const [label, key] of [['foreground', fg], ['background', bg]]) {
+      if (!t[key]) {
+        throw new Error(`${mode}: pair "${fg} on ${bg}" names ${label} --ui-color-${key}, which the token source does not define in this mode`);
+      }
+    }
     const r = ratio(t[fg], t[bg]);
     const g = grade(r, role);
     if (g.pass) pass++;
@@ -151,7 +190,8 @@ const runMode = (mode) => {
     lines.push(
       `| \`${fg}\` on \`${bg}\` | ${role} | **${rounded}** | ${targetCell} | ${g.mark} | ${note} |`
     );
-    console.log(
+    if (!QUIET)
+      console.log(
       colorize(`  ${g.mark}`, g.pass),
       `${rounded.padStart(5)}`,
       `(target ${targetCell})`,
@@ -163,41 +203,58 @@ const runMode = (mode) => {
   return { lines: lines.join('\n'), pass, fail };
 };
 
-console.log('\n=== WCAG 2.2 contrast verification — design rebrief R1 ===');
-const light = runMode('light');
-const dark = runMode('dark');
-const total = light.pass + dark.pass;
-const failures = light.fail + dark.fail;
-console.log(`\nTotal: ${total} pass / ${failures} fail across both modes.`);
+const MODES = Object.keys(tokens);
+const args = process.argv.slice(2);
+const checkOnly = args.includes('--check');
+const reportAt = args.includes('--report') ? args[args.indexOf('--report') + 1] : null;
 
-const out = [
-  '# Design rebrief — contrast verification log (R1)',
-  '',
-  '_Generated 2026-04-26 by `tools/scripts/wcag-contrast.mjs`._',
-  '',
-  'Direction C, Q1–Q5 decisions per `~/.claude/plans/atelier-design-rebrief.md` §15.',
-  'Targets: WCAG 2.2 AA — normal text 4.5:1, large text/UI 3:1.',
-  '',
-  light.lines,
-  dark.lines,
-  '',
-  '## Summary',
-  '',
-  `- light: ${light.pass} pass / ${light.fail} fail`,
-  `- dark:  ${dark.pass} pass / ${dark.fail} fail`,
-  `- total: ${total} pass / ${failures} fail`,
-  '',
-  failures === 0
-    ? 'All proposed token pairs meet WCAG 2.2 AA. Cleared to ship as R1.'
-    : `**${failures} pair(s) fail AA** — adjust hex values before R1 lands.`,
-  '',
-].join('\n');
+let results;
+try {
+  results = MODES.map((mode) => ({ mode, ...runMode(mode) }));
+} catch (err) {
+  // A malformed token source is a gate failure, not a crash: print the reason,
+  // not a stack trace.
+  console.error(`\u2717 contrast gate cannot read the token source — ${err.message}`);
+  process.exit(1);
+}
+const total = results.reduce((n, r) => n + r.pass, 0);
+const failures = results.reduce((n, r) => n + r.fail, 0);
 
-import('node:fs').then((fs) => {
-  fs.writeFileSync('tasks/design-rebrief-contrast-2026-04-26.md', out);
-  console.log(
-    '\nWrote tasks/design-rebrief-contrast-2026-04-26.md',
-    failures === 0 ? '— all pass' : `— ${failures} fail`
+if (!checkOnly) {
+  console.log(`\nTotal: ${total} pass / ${failures} fail across ${MODES.length} modes.`);
+}
+
+if (reportAt) {
+  const out = [
+    '# Contrast verification',
+    '',
+    `_Generated by \`node tools/scripts/wcag-contrast.mjs --report ${reportAt}\`._`,
+    '',
+    'Palette read from the generator preset token source, not copied. Targets:',
+    'WCAG 2.2 AA — normal text 4.5:1, large text and UI components 3:1.',
+    'Decorative borders are exempt per WCAG 1.4.11 (the component is identified',
+    'by its fill, elevation, or label rather than its outline).',
+    '',
+    ...results.map((r) => r.lines),
+    '',
+    '## Summary',
+    '',
+    ...results.map((r) => `- ${r.mode}: ${r.pass} pass / ${r.fail} fail`),
+    `- total: ${total} pass / ${failures} fail`,
+    '',
+  ].join('\n');
+  const { writeFileSync } = await import('node:fs');
+  writeFileSync(reportAt, out);
+  console.log(`\nWrote ${reportAt}`);
+}
+
+if (failures > 0) {
+  console.error(
+    `\n\u2717 ${failures} token pair(s) below their WCAG 2.2 AA target across ${MODES.length} modes. ` +
+      `Adjust the hex values in the token source — this gate reads them, so there is nothing else to update.`
   );
-  process.exit(failures === 0 ? 0 : 1);
-});
+  process.exit(1);
+}
+console.log(
+  `\u2713 contrast in sync (${total} pair(s) at or above WCAG 2.2 AA across ${MODES.length} modes: ${MODES.join(', ')}).`
+);

@@ -56,7 +56,7 @@ have to answer.
 | # | Pattern | Atelier today | Why it is worth porting |
 |---|---|---|---|
 | 1 | **Tonal ramps 50–900 with an explicit ★ anchor and a marked `T` text-safe shade** | flat semantics: `--ui-color-primary` / `-hover` / `-active`, no ramp, no documented text-safe shade | The largest structural gain. Gives every colour a defined text use instead of leaving it to judgement |
-| 2 | **Contrast annotated in the token source** (`"T — text AA 5.5:1"`, `"accent only, 500 never for text"`) | `tools/parity/wcag-contrast.mjs` exists and is wired to nothing (open item B5) | Turns "we picked accessible colours" into a checked claim, and gives the dormant gate its expected values |
+| 2 | **Contrast annotated in the token source** (`"T — text AA 5.5:1"`, `"accent only, 500 never for text"`) | `tools/scripts/wcag-contrast.mjs` exists and is wired to nothing (open item B5) | Turns "we picked accessible colours" into a checked claim, and gives the dormant gate its expected values |
 | 3 | **Role-based type scale** (display / headline / title / body / label × lg / md / sm) | `--ui-font-size-{xs…2xl}` — a size ladder, not roles | Components should reference a role ("this is body-md"), not a size. Sizes are an implementation detail of a role |
 | 4 | **Elevation paired with tonal overlays** | `--ui-shadow-{xs…xl}`, no overlay concept | Surfaces that read as layered without relying on shadow alone — matters in dark mode |
 | 5 | **`[data-area]` scope mechanism** (`[data-area="co"] { --c500: … }`) | `data-theme="dark"` is the only scope | The mechanism that makes Phase 4's theme demo possible with no fork. Structurally identical to what already exists |
@@ -188,8 +188,9 @@ the repo. Four results, all verified:
 - [ ] Add the `[data-area]`-style scope mechanism over the eight existing
       `--ui-color-brand-*` values (finding 1). Values exist; only the scope is
       missing. This is the carrier for Phase 4.
-- [ ] Wire `wcag-contrast.mjs` into a real gate; every pair below AA is a
-      finding to fix, not a warning.
+- [x] ~~Wire `wcag-contrast.mjs` into a real gate~~ — done 2026-08-26 (ADR-0037):
+      `check:contrast` in `check:all`, palette read from the token source instead
+      of a hardcoded copy, 104 pairs across four modes.
 - [ ] `check:tokens`, `check:css-tokens`, `check:all` green; token manifest
       updated. A before/after screenshot diff should show **no change** — if it
       does, a value moved that should not have.
