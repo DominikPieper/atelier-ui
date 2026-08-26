@@ -250,18 +250,31 @@ Decision-bearing quick wins (deferred — not this session's scope):
 - [ ] **Both component artboards need a correction pass** for the two claims above (the
       "code-only props" labels and AtlButton's "half a matrix" note). Listed at the end of
       `tasks/design-findings-2026-08-26.md`.
-- [ ] **Migrate the remaining controls onto `--ui-control-height-*`** (ADR-0041 did button
-      and input). Select, textarea, combobox, checkbox, toggle, radio and anything else with
-      a stated height still author their padding, so a select next to an input may still
-      disagree. Same recipe: state the height token, derive the block padding, use the
-      control line-height. Each is a rendered change and re-stales its parity record.
+- [x] ~~Migrate the remaining controls onto `--ui-control-height-*`~~ — done, and the
+      answer turned out to be two ladders rather than one (ADR-0052, 2026-08-27). Select,
+      textarea, combobox and the code-block header are controls and take ADR-0041's recipe.
+      Checkbox, radio and toggle rows, table cells, menu items, combobox and select options
+      and the accordion trigger are **rows**, which state the height, zero the block padding
+      and centre — deriving padding around a box that holds a control adds it twice
+      (measured: 62.5px against a 48px token). `check:geometry` now measures 73 boxes over
+      19 entries in 3 frameworks, and its perturbation is chosen per ladder.
+- [ ] **The row ladder has no Figma Variables.** `--ui-row-inset` and the three
+      `--ui-row-height-*` are `calc()` over the control scale, which Figma cannot express
+      as a derived Variable — they will land as four resolved numbers and the derivation
+      will live only in ADR-0052 and `tokens.css`. Decide at transfer time whether that is
+      acceptable or whether the row scale should be authored flat.
+- [ ] **Only the typeface half of the shorthand trap is gated.** `[RESET-WIPED]` catches a
+      `font-family` declared above an `all: unset`; nothing catches a `line-height`
+      declared above a `font:` shorthand, which is how the menu row lost its stated leading.
+      Third occurrence of the same class (ADR-0049, ADR-0051, ADR-0052) — the rule is
+      general, the gate is not.
 - [x] ~~No gate measures rendered geometry~~ — done 2026-08-26, ADR-0042:
       `check:geometry` renders every control claiming a `--ui-control-height-*` token and
       asserts the box matches, in `check:all`. Roster discovered in both directions, so the
       remaining control migration is self-gating. Negative-tested against the original
       defect: restoring the authored padding fails with "renders 46px but claims 40px".
-      **The CI leg is unverified until the first push** — it is plain Playwright rather than
-      vitest browser mode, so it should avoid B4's failure, but that is reasoning.
+      **The CI leg is verified** — it has run green on every push since, on plain
+      Playwright rather than vitest browser mode, so it does not share B4's failure.
 - [ ] `coverage.thresholds` in 3 vite configs (measure current coverage first — may fail CI)
 - [ ] `docs-old/` (42 tracked files, not in nx graph): remove or justify
 - [x] Wire `check:figma` into CI — done: it runs inside `check:all`, so the `checks` job
@@ -817,3 +830,59 @@ items deliberately NOT fixed in that pass:
       comparison, orphan REPORTING without deletion (removing bound
       variables is a Breaking op). Verified idempotent: second run reports
       78 unchanged.
+
+## Review — the row ladder, run overnight 2026-08-27
+
+Five planned steps, all landed. `check:all` after each; at the end `run-many -t
+build --skip-nx-cache`, `-t test` and `-t lint` over every project, all green,
+then rebase + one push.
+
+**What shipped.** Table cells 32/42/51 → 40/48/56, the sortable header 43 → 48,
+checkbox 26 → 40, radio 32 → 40, toggle 27 → 40, accordion trigger 52 → 56. Every
+component root states its own leading (20 of 29 did not). `check:geometry` grew
+42 → 73 measurements, 12 → 19 boxes; `check:typeface` gained `[NO-LEADING]`.
+ADR-0052 written, ADR-0041 amended. Four artboards corrected.
+
+**Verified, not assumed.** Every box measured before and after in all three
+frameworks, in headless chromium against the shipped CSS with no reset supplied.
+Both new gate checks negative-tested by breaking what they exist to catch:
+removing a cell's `line-height` and a root's leading each fail the gate, and
+pass again on restore.
+
+**Three things measurement contradicted.**
+
+1. The decision record said `min-height` throughout. It is not honoured on
+   `display: table-cell` — 18.5px against a 48px token — where `height` is
+   defined to act as a minimum instead. Verified the cell still grows to 88.5px
+   when the value wraps, so the semantics are the ones intended.
+2. `* { line-height: 3 }` is the wrong probe for a row. Too strong, because a row
+   may host content the app supplies and overriding its metrics is worse than the
+   defect; and separately too weak, because 3 × 12–16px text fits inside a
+   40–56px row without touching it — it passed a table cell whose line-height I
+   had deliberately deleted. Rows now face an absolute 100px inherited leading.
+3. My own scope census was wrong twice. Counting font-size rules without a
+   line-height gave 148 and was the wrong question; asking the right question by
+   hand then missed five components, because I accepted a leading from any rule
+   mentioning `font-family` — including `.atl-input input { font-family: inherit }`.
+
+**The unplanned find.** Angular's `<atl-option>` had no styles at all.
+`atl-select.css` declares six selectors and none for an option; the rows live in
+a separate component that declared none of its own, and emulated encapsulation
+stops a parent's stylesheet reaching a child's template. `is-selected`,
+`is-active` and `is-disabled` all rendered identically — keyboard navigation moved
+a highlight nobody could see. Fixed, on the row ladder, and gated: `check:geometry`
+entries can now declare `only: ['angular']`, because the native-vs-custom
+divergence is real and not worth designing away.
+
+**The weakest point.** The row/control split is now a judgement each new box has to
+make, and nothing enforces which one applies — the gate checks that a box matches
+the ladder it *claims*, not that it claims the right one. A row entered as a
+control would pass at a wrong-but-consistent height. Breadcrumbs, the four headers,
+the pagination button and the stepper circle sit outside both ladders by decision,
+and that exclusion list lives in prose in ADR-0052, not in code.
+
+**Also worth knowing.** My measuring harness produced wrong Angular numbers twice
+before it produced right ones, and both times they looked plausible. `check:geometry`
+had a latent form of the same bug — hostifying per directory rather than per
+stylesheet — which was harmless only until `select/` held two components. Lessons in
+`tasks/lessons.md`.
