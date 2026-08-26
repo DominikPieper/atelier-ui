@@ -29,11 +29,11 @@
  * outlined or flat. Cards rest on the page; they don't float off it. */
 .atl-card.variant-elevated {
   box-shadow: var(--ui-shadow-sm);
-  border: 1px solid var(--ui-color-border);
+  border: var(--ui-border-width) solid var(--ui-color-border);
 }
 
 .atl-card.variant-outlined {
-  border: 1px solid var(--ui-color-border);
+  border: var(--ui-border-width) solid var(--ui-color-border);
   background-color: var(--ui-color-surface-raised);
 }
 
@@ -72,7 +72,7 @@
   font-size: var(--ui-font-size-lg);
   font-weight: var(--ui-font-weight-semibold);
   color: var(--ui-color-text);
-  border-bottom: 1px solid var(--ui-color-border);
+  border-bottom: var(--ui-border-width) solid var(--ui-color-border);
   letter-spacing: var(--ui-letter-spacing-tight);
 }
 
@@ -86,5 +86,5 @@
   display: flex;
   align-items: center;
   gap: var(--ui-spacing-3);
-  border-top: 1px solid var(--ui-color-border);
+  border-top: var(--ui-border-width) solid var(--ui-color-border);
 }

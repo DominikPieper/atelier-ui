@@ -80,7 +80,7 @@
   height: 35rem;
   border-radius: var(--ui-radius-xl);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
-  z-index: 100;
+  z-index: var(--ui-z-dropdown);
 }
 
 :host(.variant-popup) .fab-bubble {
@@ -121,7 +121,7 @@
   width: 100%;
   height: 100%;
   min-height: 24rem;
-  border: 1px solid var(--ui-color-border);
+  border: var(--ui-border-width) solid var(--ui-color-border);
   border-radius: var(--ui-radius-xl);
 }
 
@@ -138,7 +138,7 @@
   justify-content: space-between;
   gap: var(--ui-spacing-3);
   padding: var(--ui-spacing-3) var(--ui-spacing-4);
-  border-bottom: 1px solid var(--ui-color-border);
+  border-bottom: var(--ui-border-width) solid var(--ui-color-border);
   flex-shrink: 0;
 }
 
@@ -159,11 +159,11 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 2rem;
-  height: 2rem;
+  width: var(--ui-control-height-sm);
+  height: var(--ui-control-height-sm);
   padding: 0;
   background: transparent;
-  border: 1px solid var(--ui-color-border);
+  border: var(--ui-border-width) solid var(--ui-color-border);
   border-radius: var(--ui-radius-sm);
   cursor: pointer;
   color: var(--ui-color-text-muted);
@@ -230,7 +230,7 @@
 
 :host(atl-chat-message.is-failed) {
   background: var(--ui-color-surface-sunken);
-  border: 1px dashed var(--ui-color-danger);
+  border: var(--ui-border-width) dashed var(--ui-color-danger);
   color: var(--ui-color-text);
 }
 
@@ -320,7 +320,7 @@
   padding: var(--ui-spacing-3) var(--ui-spacing-4);
   background: var(--ui-color-surface);
   color: var(--ui-color-text);
-  border: 1px solid var(--ui-color-border);
+  border: var(--ui-border-width) solid var(--ui-color-border);
   border-radius: var(--ui-radius-lg);
   font-family: var(--ui-font-family);
   text-align: left;
@@ -359,7 +359,7 @@
   align-items: flex-end;
   gap: var(--ui-spacing-2);
   padding: var(--ui-spacing-3) var(--ui-spacing-4);
-  border-top: 1px solid var(--ui-color-border);
+  border-top: var(--ui-border-width) solid var(--ui-color-border);
   background: var(--ui-color-surface);
   flex-shrink: 0;
 }
@@ -368,7 +368,7 @@
   flex: 1;
   min-width: 0;
   padding: var(--ui-spacing-2) var(--ui-spacing-3);
-  border: 1px solid var(--ui-color-input-border, var(--ui-color-border));
+  border: var(--ui-border-width) solid var(--ui-color-input-border, var(--ui-color-border));
   border-radius: var(--ui-radius-md);
   background: var(--ui-color-surface-sunken);
   color: var(--ui-color-text);
@@ -404,7 +404,7 @@
   justify-content: center;
   flex-shrink: 0;
   padding: var(--ui-spacing-2) var(--ui-spacing-4);
-  border: 1px solid transparent;
+  border: var(--ui-border-width) solid transparent;
   border-radius: var(--ui-radius-md);
   font-family: var(--ui-font-family);
   font-size: var(--ui-font-size-sm);

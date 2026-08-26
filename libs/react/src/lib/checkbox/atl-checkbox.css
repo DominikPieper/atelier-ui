@@ -31,7 +31,7 @@
   flex-shrink: 0;
   width: 1.25rem;
   height: 1.25rem;
-  border: 1.5px solid var(--ui-color-border-strong);
+  border: var(--ui-border-width-thick) solid var(--ui-color-border-strong);
   border-radius: var(--ui-radius-sm);
   background-color: var(--ui-color-input-bg);
   cursor: pointer;
@@ -65,7 +65,7 @@
   margin: auto;
   width: 0.35rem;
   height: 0.6rem;
-  border: 2px solid var(--ui-color-text-on-primary);
+  border: var(--ui-border-width-thick) solid var(--ui-color-text-on-primary);
   border-top: none;
   border-left: none;
   transform: rotate(45deg) translate(-1px, -1px);

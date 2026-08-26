@@ -14,7 +14,7 @@
 
 .atl-code-block {
   display: block;
-  border: 1px solid var(--ui-color-border);
+  border: var(--ui-border-width) solid var(--ui-color-border);
   border-radius: var(--ui-radius-lg);
   overflow: hidden;
   font-family: var(--ui-font-family);
@@ -28,10 +28,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--ui-spacing-3) var(--ui-spacing-4);
+  /* No block padding: the row is a centred flex line, so `min-height` alone
+   * decides the height. Authoring 12+12 around the 0.72rem mono label rendered
+   * 43px against a 40px token, and deriving the padding from the label's metrics
+   * only moves the guess — the label's line box is not the header's business.
+   * See ADR-0047. */
+  padding: 0 var(--ui-spacing-4);
   background: var(--ui-color-surface-raised);
-  border-bottom: 1px solid var(--ui-color-border);
-  min-height: 2.5rem;
+  border-bottom: var(--ui-border-width) solid var(--ui-color-border);
+  min-height: var(--ui-control-height-md);
 }
 
 .code-block-label {
@@ -53,7 +58,7 @@
   align-items: center;
   gap: 0.3rem;
   padding: 0.2rem 0.55rem;
-  border: 1px solid var(--ui-color-border);
+  border: var(--ui-border-width) solid var(--ui-color-border);
   border-radius: var(--ui-radius-sm);
   background: transparent;
   color: var(--ui-color-text-muted);
@@ -111,7 +116,7 @@
   color: var(--ui-color-text-muted);
   text-align: right;
   user-select: none;
-  border-right: 1px solid var(--ui-color-border);
+  border-right: var(--ui-border-width) solid var(--ui-color-border);
   margin-right: var(--ui-spacing-3);
   flex-shrink: 0;
   opacity: 0.6;

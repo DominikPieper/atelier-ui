@@ -20,14 +20,14 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  min-height: 2.5rem;
+  min-height: var(--ui-control-height-md);
   box-sizing: border-box;
   padding: 0.625rem var(--ui-spacing-4);
   font-family: inherit;
   font-size: inherit;
   color: var(--ui-color-text);
   background-color: var(--ui-color-input-bg);
-  border: 1px solid var(--ui-color-input-border);
+  border: var(--ui-border-width) solid var(--ui-color-input-border);
   border-radius: var(--ui-radius-md);
   outline: none;
   cursor: pointer;
@@ -91,10 +91,10 @@
   margin: 0;
   padding: var(--ui-spacing-2) 0;
   background-color: var(--ui-color-surface-raised);
-  border: 1px solid var(--ui-color-border);
+  border: var(--ui-border-width) solid var(--ui-color-border);
   border-radius: var(--ui-radius-md);
   box-shadow: var(--ui-shadow-lg);
-  z-index: 100;
+  z-index: var(--ui-z-dropdown);
   display: none;
 }
 

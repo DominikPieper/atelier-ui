@@ -659,6 +659,24 @@ export const tokens: Record<string, TokenAnnotation> = {
     ],
   },
 
+  // === Border widths ===
+  '--ui-border-width': {
+    intent:
+      'The hairline that separates one surface from another: card and panel outlines, input borders, table rules, the transparent border a button reserves so its box does not move between variants.',
+    constraints: [
+      'Every border in the library uses this or --ui-border-width-thick; a literal width fails check:token-bypass.',
+      'Keep it a whole pixel — a half-pixel border renders blurry at 1x device-pixel-ratio.',
+    ],
+  },
+  '--ui-border-width-thick': {
+    intent:
+      'The heavier weight that marks a control rather than separating surfaces: the avatar status ring, the stepper circle, the checkbox mark, the rule under a table header.',
+    constraints: [
+      'Reserve it for marks and rings. Using it for surface separation flattens the distinction it exists to make.',
+      'Not for graphic devices drawn with border-width (AtlToast\'s accent bar, AtlRadio\'s dot) — those are dimensions, and are exempted by name in check:token-bypass.',
+    ],
+  },
+
   // === Spacing ===
   '--ui-spacing-1': {
     intent: 'Hairline spacing (0.25rem). Use for icon-to-label gaps and tightest groupings.',

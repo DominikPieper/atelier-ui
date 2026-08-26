@@ -47,7 +47,7 @@
   width: 2.75rem;
   height: 1.5rem;
   border-radius: var(--ui-radius-full);
-  border: 1px solid var(--ui-color-border-strong);
+  border: var(--ui-border-width) solid var(--ui-color-border-strong);
   background-color: var(--ui-color-input-bg);
   transition: background-color var(--ui-transition-fast),
               border-color var(--ui-transition-fast),

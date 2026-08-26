@@ -14,7 +14,7 @@
   gap: var(--ui-spacing-3);
   padding: var(--ui-spacing-4) var(--ui-spacing-5);
   border-radius: var(--ui-radius-lg);
-  border: 1px solid transparent;
+  border: var(--ui-border-width) solid transparent;
   font-family: var(--ui-font-family);
   font-size: var(--ui-font-size-sm);
   line-height: var(--ui-line-height-normal);

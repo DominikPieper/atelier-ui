@@ -136,7 +136,7 @@ dialog > .panel.size-full {
   align-items: center;
   justify-content: space-between;
   padding: var(--ui-spacing-5) var(--ui-spacing-6);
-  border-bottom: 1px solid var(--ui-color-border);
+  border-bottom: var(--ui-border-width) solid var(--ui-color-border);
   font-size: var(--ui-font-size-xl);
   font-weight: 600;
   letter-spacing: var(--ui-letter-spacing-tight);
@@ -158,7 +158,7 @@ dialog > .panel.size-full {
   justify-content: flex-end;
   gap: var(--ui-spacing-3);
   padding: var(--ui-spacing-5) var(--ui-spacing-6);
-  border-top: 1px solid var(--ui-color-border);
+  border-top: var(--ui-border-width) solid var(--ui-color-border);
   flex-shrink: 0;
 }
 
@@ -168,8 +168,8 @@ dialog > .panel.size-full {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 2rem;
-  height: 2rem;
+  width: var(--ui-control-height-sm);
+  height: var(--ui-control-height-sm);
   padding: 0;
   margin-left: var(--ui-spacing-3);
   background: transparent;

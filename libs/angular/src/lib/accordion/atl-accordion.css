@@ -17,22 +17,22 @@
 
 /* ── Default variant — shared borders between items ──────────────────────── */
 :host(.atl-accordion-group.variant-default) {
-  border-top: 1px solid var(--ui-color-border);
+  border-top: var(--ui-border-width) solid var(--ui-color-border);
 }
 
 :host(.atl-accordion-item):host-context(.variant-default) {
-  border-bottom: 1px solid var(--ui-color-border);
+  border-bottom: var(--ui-border-width) solid var(--ui-color-border);
 }
 
 /* ── Bordered variant — outer border + radius ────────────────────────────── */
 :host(.atl-accordion-group.variant-bordered) {
-  border: 1px solid var(--ui-color-border);
+  border: var(--ui-border-width) solid var(--ui-color-border);
   border-radius: var(--ui-radius-lg);
   overflow: hidden;
 }
 
 :host(.atl-accordion-item:not(:last-child)):host-context(.variant-bordered) {
-  border-bottom: 1px solid var(--ui-color-border);
+  border-bottom: var(--ui-border-width) solid var(--ui-color-border);
 }
 
 /* ── Separated variant — card-like items with gap ────────────────────────── */
@@ -43,7 +43,7 @@
 }
 
 :host(.atl-accordion-item):host-context(.variant-separated) {
-  border: 1px solid var(--ui-color-border);
+  border: var(--ui-border-width) solid var(--ui-color-border);
   border-radius: var(--ui-radius-lg);
   overflow: hidden;
 }

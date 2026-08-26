@@ -40,7 +40,7 @@
   color: var(--ui-color-text-muted);
   letter-spacing: var(--ui-letter-spacing-wide);
   text-transform: uppercase;
-  border-bottom: 2px solid var(--ui-color-border);
+  border-bottom: var(--ui-border-width-thick) solid var(--ui-color-border);
   background-color: var(--ui-color-surface);
   padding: var(--ui-spacing-3) var(--ui-spacing-4);
   text-align: start;
@@ -51,7 +51,7 @@
    Body cells
    --------------------------------------------------------------------------- */
 .atl-table tbody td {
-  border-bottom: 1px solid var(--ui-color-border);
+  border-bottom: var(--ui-border-width) solid var(--ui-color-border);
   padding: var(--ui-spacing-3) var(--ui-spacing-4);
   vertical-align: middle;
   background-color: var(--ui-color-surface);
@@ -93,7 +93,7 @@
 /* Bordered: all cell borders */
 .atl-table.variant-bordered thead th,
 .atl-table.variant-bordered tbody td {
-  border: 1px solid var(--ui-color-border);
+  border: var(--ui-border-width) solid var(--ui-color-border);
 }
 
 /* ---------------------------------------------------------------------------

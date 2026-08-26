@@ -74,7 +74,7 @@
   max-width: 14px;
   max-height: 14px;
   border-radius: var(--ui-radius-full);
-  border: 2px solid var(--ui-color-surface);
+  border: var(--ui-border-width-thick) solid var(--ui-color-surface);
   box-sizing: content-box;
 }
 
@@ -107,7 +107,7 @@
   flex-shrink: 0;
   background-color: var(--ui-color-surface-sunken);
   color: var(--ui-color-text-muted);
-  border: 1px solid var(--ui-color-border);
+  border: var(--ui-border-width) solid var(--ui-color-border);
   border-radius: var(--ui-radius-full);
   font-family: var(--ui-font-family);
   font-weight: var(--ui-font-weight-semibold);

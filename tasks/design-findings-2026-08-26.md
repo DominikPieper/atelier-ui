@@ -166,7 +166,29 @@ svgs, literal `content:` glyphs, and any name/geometry mismatch.
 
 </details>
 
-## Decision D — literals that cannot be bound in Figma
+## Decision D — PARTLY RESOLVED 2026-08-26 (ADR-0047)
+
+Measuring first changed the question. **190 of 887 values are literals — 78% were
+already token-bound.** Of the 190: 116 are component dimensions with one user each,
+17 are viewport units no token can hold, and only **13 duplicated a token that
+already exists**. Tokenising all 116 would mean ~100 single-use tokens.
+
+Two of the 13 were live defects: **AtlTab and AtlCodeBlock's header hardcoded
+`2.5rem`, exactly `--ui-control-height-md`** — and `check:geometry` builds its
+roster from token *references*, so a control that hardcodes the value is invisible
+to it. Measured: 41px and 43px against a 40px token. ADR-0041's defect, still live,
+in the blind spot of the gate written to catch it.
+
+Resolved: `--ui-border-width` / `-thick` introduced and 154 sites bound (the nine
+`1.5px` outlines folded into `thick` — a half pixel is blurry at 1x); 12 bypasses
+bound; `check:token-bypass` gates the rule per property family; `check:geometry`
+grew from 12 to 36 measurements as eight components joined its roster.
+
+**Still open, now as a recorded decision rather than an accident:** the 116
+component dimensions stay literal, so a rebuilt Figma master cannot bind a Variable
+to an avatar size or a toggle track. Revisit if the transfer proves it matters.
+
+<details><summary>The original finding</summary>
 
 Six of nine anatomy values on AtlButton and six of eleven on AtlInput are
 literals with no token behind them: `min-height` per size, padding per size, the
@@ -174,11 +196,9 @@ border width, the invalid indicator's reserved space. Of AtlButton's padding
 values only `24px` lands on the spacing scale.
 
 This one survives the reframe: it is not about what Figma currently holds but
-about what the transfer *can* bind. A rebuilt master cannot bind a Variable to a
-value no token holds, so `check:figma`'s token-link coverage will be incomplete
-for these components however carefully the masters are rebuilt. Either the size
-steps get tokens, or the gap is recorded as intended. Right now it is neither,
-which is the worst of the three.
+about what the transfer *can* bind.
+
+</details>
 
 ---
 

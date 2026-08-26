@@ -74,6 +74,93 @@ const CONTROLS = [
     },
     measure: { default: '.atl-input input', angular: 'atl-input input' },
   },
+  // Everything below joined the roster when ADR-0047 bound its literal height to
+  // the token. Two of them were wrong the moment they became measurable: the tab
+  // rendered 41px and the code-block header 43px against a 40px token.
+  {
+    dir: 'select',
+    label: 'AtlSelect',
+    steps: ['md'],
+    markup: {
+      default: () => `<div class="atl-select" style="width:220px"><select><option>Option</option></select></div>`,
+      angular: () => `<atl-select style="display:block;width:220px"><button type="button" class="trigger">Option</button></atl-select>`,
+    },
+    measure: { default: '.atl-select select', angular: 'atl-select .trigger' },
+  },
+  {
+    dir: 'combobox',
+    label: 'AtlCombobox',
+    steps: ['md'],
+    markup: {
+      default: () =>
+        `<div class="atl-combobox" style="width:220px"><div class="atl-combobox-wrapper"><input class="atl-combobox-input" value="Value"></div></div>`,
+      angular: () =>
+        `<atl-combobox style="display:block;width:220px"><div class="combobox-wrapper"><input class="combobox-input" value="Value"></div></atl-combobox>`,
+    },
+    measure: { default: '.atl-combobox-input', angular: '.combobox-input' },
+  },
+  {
+    dir: 'tabs',
+    label: 'AtlTab',
+    steps: ['md'],
+    markup: {
+      default: () =>
+        `<div class="atl-tab-group" style="width:260px"><div class="tablist"><button class="is-active">One</button><button>Two</button></div></div>`,
+      angular: () =>
+        `<atl-tab-group style="display:block;width:260px"><div class="tablist"><button class="is-active">One</button><button>Two</button></div></atl-tab-group>`,
+    },
+    measure: { default: '.tablist button', angular: '.tablist button' },
+  },
+  {
+    dir: 'menu',
+    label: 'AtlMenuItem',
+    steps: ['sm'],
+    markup: {
+      default: () => `<div class="atl-menu variant-compact"><div class="atl-menu-item">Duplicate</div></div>`,
+      angular: () => `<atl-menu class="atl-menu variant-compact"><div class="atl-menu-item">Duplicate</div></atl-menu>`,
+    },
+    measure: { default: '.atl-menu-item', angular: '.atl-menu-item' },
+  },
+  {
+    dir: 'code-block',
+    label: 'AtlCodeBlock',
+    steps: ['md'],
+    markup: {
+      default: () => `<div class="atl-code-block" style="width:260px"><div class="code-block-header">tokens.css</div></div>`,
+      angular: () => `<atl-code-block style="display:block;width:260px"><div class="code-block-header">tokens.css</div></atl-code-block>`,
+    },
+    measure: { default: '.code-block-header', angular: '.code-block-header' },
+  },
+  {
+    dir: 'dialog',
+    label: 'AtlDialogClose',
+    steps: ['sm'],
+    markup: {
+      default: () => `<div class="atl-dialog-header"><button class="close-btn">x</button></div>`,
+      angular: () => `<atl-dialog-header class="atl-dialog-header"><button class="close-btn">x</button></atl-dialog-header>`,
+    },
+    measure: { default: '.close-btn', angular: '.close-btn' },
+  },
+  {
+    dir: 'drawer',
+    label: 'AtlDrawerClose',
+    steps: ['sm'],
+    markup: {
+      default: () => `<div class="atl-drawer-header"><button class="close-btn">x</button></div>`,
+      angular: () => `<atl-drawer-header class="atl-drawer-header"><button class="close-btn">x</button></atl-drawer-header>`,
+    },
+    measure: { default: '.close-btn', angular: '.close-btn' },
+  },
+  {
+    dir: 'chat',
+    label: 'AtlChatClose',
+    steps: ['sm'],
+    markup: {
+      default: () => `<div class="atl-chat-header"><button class="close-btn">x</button></div>`,
+      angular: () => `<atl-chat-header><button class="close-btn">x</button></atl-chat-header>`,
+    },
+    measure: { default: '.close-btn', angular: '.close-btn' },
+  },
 ];
 
 const errors = [];
@@ -141,7 +228,17 @@ try {
  * a box. Bare selectors like `input { … }` are left alone because each component
  * is measured in a page of its own, so nothing else can match them.
  */
-const hostify = (css, tag) => css.replace(/:host\(([^)]*)\)/g, `${tag}$1`).replace(/:host\b/g, tag);
+const hostify = (css, tag) =>
+  css
+    .replace(/:host\(([^)]*)\)/g, (_, inner) => {
+      const sel = inner.trim();
+      // `:host(atl-chat-header)` narrows the host to a *different* element than the
+      // directory's own tag — one stylesheet serves several components. Rewriting it
+      // to `${tag}${sel}` produced the nonsense selector `atl-chatatl-chat-header`
+      // and made the rule match nothing, so the gate measured an unstyled box.
+      return /^[a-z]/i.test(sel) ? sel : tag + sel;
+    })
+    .replace(/:host\b/g, tag);
 
 const work = mkdtempSync(join(tmpdir(), 'atl-geometry-'));
 let browser;

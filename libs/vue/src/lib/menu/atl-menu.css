@@ -24,7 +24,7 @@
   min-width: 12rem;
   padding: var(--ui-spacing-2) 0;
   background: var(--ui-color-surface-raised);
-  border: 1px solid var(--ui-color-border);
+  border: var(--ui-border-width) solid var(--ui-color-border);
   border-radius: var(--ui-radius-lg);
   box-shadow: var(--ui-shadow-lg);
   font-family: var(--ui-font-family);
@@ -43,7 +43,7 @@
 }
 
 .atl-menu.variant-compact .atl-menu-item {
-  min-height: 2rem;
+  min-height: var(--ui-control-height-sm);
   padding: var(--ui-spacing-1) var(--ui-spacing-3);
 }
 

@@ -179,6 +179,18 @@
   --ui-radius-xl: 1.25rem;  /* was 1rem     */
   --ui-radius-full: 9999px;
 
+  /* ── Border widths ──────────────────────────────────────────────────────────
+   * Two steps, because the library only ever needed two: the hairline that
+   * separates surfaces (133 uses) and the heavier weight that marks a control
+   * (12 uses — the avatar status ring, the stepper circle, the checkbox mark,
+   * the table header rule). The 1.5px weight nine control outlines used is
+   * folded into `thick`: a half pixel renders blurry at 1x device-pixel-ratio
+   * and the two weights were never distinguishable side by side.
+   * Not here on purpose: AtlToast's 4px accent bar and AtlRadio's 6px dot are
+   * graphic devices drawn with `border-width`, not border weights. See ADR-0047. */
+  --ui-border-width: 1px;
+  --ui-border-width-thick: 2px;
+
   /* Spacing */
   --ui-spacing-1: 0.25rem;
   --ui-spacing-2: 0.5rem;

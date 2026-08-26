@@ -29,7 +29,7 @@ input {
   line-height: var(--ui-line-height-tight);
   color: var(--ui-color-text);
   background-color: var(--ui-color-input-bg);
-  border: 1px solid var(--ui-color-input-border);
+  border: var(--ui-border-width) solid var(--ui-color-input-border);
   border-radius: var(--ui-radius-md);
   transition: border-color var(--ui-transition-fast),
               box-shadow var(--ui-transition-fast),

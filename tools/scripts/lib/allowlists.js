@@ -9,6 +9,32 @@
  */
 
 /**
+ * Literals that deliberately do NOT bind to the token whose value they equal, or
+ * to the family their property would normally draw from. (check-token-bypass)
+ *
+ * Keyed `component:property:value`. Two kinds, same as the other allowlists here:
+ *   kind 'design' — the value means something other than the token that shares it,
+ *                   so binding would be wrong. Silent.
+ *   kind 'gap'    — it should bind and has not yet. Warns on every run.
+ */
+const TOKEN_BYPASS_EXEMPT = {
+  // 0.5 here is "half-visible because the animation is off", not "disabled". The
+  // shared value is a coincidence; binding it would tie a reduced-motion fallback
+  // to the disabled scale.
+  'progress:opacity:0.5': {
+    kind: 'design',
+    why: 'reduced-motion stand-in for the indeterminate animation, unrelated to --ui-opacity-disabled',
+  },
+  // Graphic devices drawn with border-width, not border weights: the accent bar
+  // down a toast's leading edge, and the radio's inner dot.
+  'toast:border-left:4px': { kind: 'design', why: 'accent bar, not a border weight' },
+  'radio:border-width:6px': { kind: 'design', why: 'draws the inner dot, not a border weight' },
+  // A gutter wide enough for three digits. It equals the sm control height by
+  // coincidence; line numbers are not a control.
+  'code-block:min-width:2rem': { kind: 'design', why: 'line-number gutter, not a control width' },
+};
+
+/**
  * `framework:union:member` triples that intentionally have no CSS class — the
  * axis is realised by a non-class mechanism in that framework. (check-variants)
  */
@@ -280,4 +306,5 @@ module.exports = {
   METADATA_ROLE_EXCEPTIONS,
   PRIMITIVE_TOKENS,
   PRIMITIVE_EXEMPTIONS,
+  TOKEN_BYPASS_EXEMPT,
 };

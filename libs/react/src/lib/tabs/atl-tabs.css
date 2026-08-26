@@ -18,7 +18,7 @@
 .atl-tab-group .tablist {
   display: flex;
   gap: var(--ui-spacing-2);
-  border-bottom: 1px solid var(--ui-color-border);
+  border-bottom: var(--ui-border-width) solid var(--ui-color-border);
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -34,8 +34,11 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  min-height: 2.5rem;
-  padding: var(--ui-spacing-3) var(--ui-spacing-4);
+  min-height: var(--ui-control-height-md);
+  /* Derived from the height, not authored: 12+12 padding on a 20px line box
+   * rendered 41px against a 40px token (ADR-0041's recipe, ADR-0047's finding). */
+  padding: calc((var(--ui-control-height-md) - var(--ui-line-height-tight) * var(--ui-font-size-sm)) / 2)
+    var(--ui-spacing-4);
   font-size: var(--ui-font-size-sm);
   font-weight: var(--ui-font-weight-medium);
   color: var(--ui-color-text-muted);
@@ -109,7 +112,7 @@
 
 .atl-tab-group.variant-pills .tablist button {
   border-radius: var(--ui-radius-md);
-  min-height: 2rem;
+  min-height: var(--ui-control-height-sm);
   padding: var(--ui-spacing-2) var(--ui-spacing-4);
   font-size: var(--ui-font-size-sm);
 }
