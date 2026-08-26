@@ -1,3 +1,14 @@
+## 0.2.9 (2026-08-26)
+
+### 🚀 Features
+
+- **tokens:** Instrument Sans + Instrument Serif + JetBrains Mono (ADR-0035) ([69c76f5](https://github.com/DominikPieper/atelier-ui/commit/69c76f5))
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Dominik Pieper @DominikPieper
+
 ## 0.2.8 (2026-08-26)
 
 ### 🩹 Fixes
