@@ -203,6 +203,13 @@ export const tokens: Record<string, TokenAnnotation> = {
       'This is the implicit baseline — only set explicitly when overriding a parent.',
     ],
   },
+  '--ui-line-height-code': {
+    intent:
+      'Leading for code. Looser than prose because a reader scans columns and indentation rather than following sentences across lines.',
+    constraints: [
+      'Code surfaces only (AtlCodeBlock). Using it for prose makes paragraphs read as loose; using prose leading for code makes indentation hard to follow.',
+    ],
+  },
 
   // === Type roles (ADR-0036) — compose the axes above ===
   '--ui-type-display': {
@@ -656,6 +663,38 @@ export const tokens: Record<string, TokenAnnotation> = {
     intent: 'Fully rounded (pill) shape. Use for avatar masks, status dots, and pill buttons.',
     constraints: [
       'Use on equal-sided elements (circles) or fixed-height pills — applied to rectangles it produces inconsistent corners.',
+    ],
+  },
+
+  // === Row heights ===
+  '--ui-row-inset': {
+    intent:
+      'How much taller a row is than the control it holds, per edge. The one number that expresses the relation between the two vertical ladders — set it to 0 and rows collapse onto control heights in a single edit.',
+    constraints: [
+      'Never referenced directly by a component: read a --ui-row-height-* token, which composes it.',
+      'Measured basis: a table cell at the control height of 40 renders 41.0px holding a 40px control, because two collapsed cell borders fall outside the box; at the row height it renders exactly 48.00px holding text, a badge, an sm button, an md button or an md avatar.',
+    ],
+  },
+  '--ui-row-height-sm': {
+    intent:
+      'The height of a repeating row that holds sm-step content: a menu item, a dropdown option, a checkbox / radio / toggle row, a compact table row.',
+    constraints: [
+      'A row CENTRES its content: `min-height: var(--ui-row-height-sm); padding-block: 0; line-height: var(--ui-line-height-tight)`. ADR-0041\'s derived-padding formula is for controls and produces the wrong box here — a size-md cell with derived padding renders 62.5px holding an md button.',
+      'min-height, not height: a row whose content wraps has to grow rather than clip (ADR-0041\'s own reasoning).',
+      'Not for breadcrumbs or for card / dialog / drawer / chat headers — see ADR-0052.',
+    ],
+  },
+  '--ui-row-height-md': {
+    intent: 'The default repeating row: a table row, a list row that holds md-step controls.',
+    constraints: [
+      'Same recipe as --ui-row-height-sm: state the height, zero the block padding, state the line-height.',
+      'Any control of the md step fits without a convention; that is the whole reason this ladder exists.',
+    ],
+  },
+  '--ui-row-height-lg': {
+    intent: 'A roomy repeating row — a comfortable table, a touch-first list.',
+    constraints: [
+      'Same recipe. Reach for it when the content is a lg-step control or when density is deliberately low, not to create emphasis.',
     ],
   },
 

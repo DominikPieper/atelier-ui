@@ -167,3 +167,39 @@ stylesheets use `:host(...)` selectors that match nothing in a plain document. V
 rendered identically to React on the five boxes checked in both. Angular needs
 re-measuring with the `hostify` technique from `tools/scripts/check-geometry.mjs`
 before any delta is committed.
+
+---
+
+## DECIDED 2026-08-26: Option B
+
+The user chose **B — two ladders**. `--ui-row-inset: 0.25rem` and
+`--ui-row-height-sm/md/lg` as a `calc()` over the control scale (40/48/56) are in the
+token source, annotated in the manifest, and synced. `--ui-line-height-code: 1.65` is
+in too, and the gate caught AtlCodeBlock's literal 1.65 the moment the token existed.
+
+Four of the seven open questions are settled by B's shape or by measurement:
+
+- **Which step per row family** — every row family takes the row token of its step, so
+  a checkbox / radio / toggle row is `row-sm` (40), a table md row is `row-md` (48).
+- **36px dies.** The five box-size uses per framework snap onto the row ladder. The two
+  `padding-right: 2.25rem` uses in input/textarea are icon clearance, not heights, and
+  stay.
+- **`min-height`, not `height`** — measured: `height: 40` on a table cell with two
+  wrapped lines still grows to 53.5px, and a flex menu item at `height: 40` reports
+  40.00px while its child overflows. `min-height` degrades sanely.
+- **`--ui-line-height-none: 1` is not introduced.** The census measured all nine uses
+  per framework as inert (the boxes carry explicit dimensions), and tokenising an
+  inert value buys a manifest entry and a Figma Variable that no layout reads.
+
+Two were mine to decide, and both exclude a box family from the ladder:
+
+- **A breadcrumb is not a row.** It measures 17px of inline text and holds no control,
+  so B's premise — a row is taller than the control inside it — does not apply. On the
+  ladder it would be +23px for nothing.
+- **Headers are not rows.** Card 70, dialog 72.87, drawer 73, chat 57 are one-off bands
+  with their own padding, not one line among many. `row-lg` would move the dialog
+  header −16.87px. They keep their own treatment; the 20/600 type question from
+  Decision G2 is still open and separate.
+
+Both exclusions are one line in the row-recipe scope, if either turns out wrong.
+

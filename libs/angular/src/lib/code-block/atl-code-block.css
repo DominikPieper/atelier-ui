@@ -99,7 +99,7 @@
   padding: var(--ui-spacing-4);
   font-family: var(--ui-font-mono);
   font-size: var(--ui-font-size-sm);
-  line-height: 1.65;
+  line-height: var(--ui-line-height-code);
   color: var(--ui-color-text);
   white-space: pre;
   tab-size: 2;

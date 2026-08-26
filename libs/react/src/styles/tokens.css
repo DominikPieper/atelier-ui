@@ -47,6 +47,32 @@
    * button the same height. Stating the padding and hoping, which is what the
    * library did until 2026-08-26, made them 6px apart.
    */
+  /* ── Row heights ────────────────────────────────────────────────────────────
+   * A row is taller than the control it holds. That relation lives here, in a
+   * calc over the control scale, rather than as a convention thirty stylesheets
+   * have to honour: `--ui-row-inset: 0` collapses the two ladders into one in a
+   * single edit.
+   *
+   * Measured, which is why the inset exists: a table cell at the *control* height
+   * of 40 renders 41.0px when it holds a 40px control (the extra pixel is the two
+   * collapsed cell borders), while the same cell at 48 renders exactly 48.00px
+   * holding text, a badge, an sm button, an md button or an md avatar. So at the
+   * row height any control of the matching step fits, with no convention.
+   *
+   * A row CENTRES its content; a control PADS it. ADR-0041's derived-padding
+   * formula therefore does not apply here — a size-md cell with derived padding
+   * renders 62.5px holding an md button. The row recipe is
+   * `min-height: var(--ui-row-height-*); padding-block: 0; line-height: tight`.
+   *
+   * Not rows, on purpose: breadcrumbs (17px of inline text, holding no control)
+   * and the card/dialog/drawer/chat headers (one-off bands with their own
+   * padding, not one line among many). See ADR-0052.
+   */
+  --ui-row-inset: 0.25rem;
+  --ui-row-height-sm: calc(var(--ui-control-height-sm) + 2 * var(--ui-row-inset));
+  --ui-row-height-md: calc(var(--ui-control-height-md) + 2 * var(--ui-row-inset));
+  --ui-row-height-lg: calc(var(--ui-control-height-lg) + 2 * var(--ui-row-inset));
+
   --ui-control-height-sm: 2rem;
   --ui-control-height-md: 2.5rem;
   --ui-control-height-lg: 3rem;
@@ -56,6 +82,9 @@
   --ui-font-weight-bold: 700;
   --ui-line-height-tight: 1.25;
   --ui-line-height-normal: 1.5;
+  /* Code needs looser leading than prose: a reader scans columns, not sentences.
+   * AtlCodeBlock had 1.65 as a literal in one stylesheet. */
+  --ui-line-height-code: 1.65;
 
   /* ── Type roles ─────────────────────────────────────────────
    * Composed entirely from the axes above, so sizes and weights stay
