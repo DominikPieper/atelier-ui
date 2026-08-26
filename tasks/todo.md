@@ -73,6 +73,10 @@ Decision-bearing quick wins (deferred — not this session's scope):
 - [x] Dark-mode contrast: `--ui-color-text-on-success` in both dark blocks + light-block symmetry → done 2026-07-10 (see top section)
 - [x] Version band: re-pin 0.0.x **or** ADR for the 0.1.x move → resolved by ADR-0023 (accept 0.1.x)
 - [x] Node baseline: engines → >=22.12.0; rest already coherent → done 2026-07-10
+- [ ] Relock on Linux — `package-lock.json` was regenerated on macOS for dep-batch A
+      (2026-08-26) because the Docker daemon was down. `npm ci` works, but ~47 `dev` ↔
+      `devOptional` marker flips may be flavor drift rather than real. Run
+      `tools/scripts/relock.sh` with Docker up and commit the diff.
 - [ ] `coverage.thresholds` in 3 vite configs (measure current coverage first — may fail CI)
 - [ ] `docs-old/` (42 tracked files, not in nx graph): remove or justify
 - [x] Wire `check:figma` into CI — done: it runs inside `check:all`, so the `checks` job
