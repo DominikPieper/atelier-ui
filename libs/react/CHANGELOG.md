@@ -1,3 +1,16 @@
+## 0.2.17 (2026-08-26)
+
+### 🚀 Features
+
+- **design:** batch E artboards; a reset was undoing the geometry contract ([6c3788d](https://github.com/DominikPieper/atelier-ui/commit/6c3788d))
+- **icons:** AtlAlert and AtlBadge stop drawing glyphs; batch C artboards ([c16c5c5](https://github.com/DominikPieper/atelier-ui/commit/c16c5c5))
+- **design:** bind the hand-written danger rings, batch A of the redesign artboards ([ffdf8f7](https://github.com/DominikPieper/atelier-ui/commit/ffdf8f7))
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Dominik Pieper @DominikPieper
+
 ## 0.2.16 (2026-08-26)
 
 ### 🩹 Fixes
