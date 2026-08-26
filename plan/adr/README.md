@@ -37,6 +37,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0029](0029-atl-naming-convention.md) | Rename component naming prefix from `Llm` to `Atl` | Accepted | Recorded |
 | [0030](0030-library-tokens-collection.md) | Library Tokens: a code-generated semantic tier in Figma | Accepted | Recorded |
 | [0031](0031-single-source-component-maps.md) | Single-source component maps in the metadata registry | Accepted | Recorded |
+| [0032](0032-claude-design-as-parallel-track.md) | Claude Design as a parallel track, not a replacement for Figma | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 
