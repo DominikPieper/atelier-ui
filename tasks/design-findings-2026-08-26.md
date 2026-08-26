@@ -422,3 +422,63 @@ font (ADR-0049), the accordion heading's box model reset away (ADR-0051), and th
 avatar's person silhouette plus the table's sort arrows becoming AtlIcon instances
 (ADR-0046).
 
+---
+
+## Decision J — content components, and what the transfer needs first (2026-08-26, batch G)
+
+**J1 — there is no Figma master for AtlIcon.** Twenty-nine masters exist and none of
+them is an icon. That was survivable while every component drew its own symbols; it
+is not now that all of them instance this one (ADR-0046, ADR-0050). Until the master
+exists, no rebuilt master can place an icon instance — which was the original reason
+AtlInput's `✕` was a finding at all. **This is the first thing Phase 3 has to
+create**, before any other master is rebuilt.
+
+**J2 — AtlCodeBlock has a master and no spec interface.** The only component in that
+state. `check:parity` reports it unmappable and `check:metadata` needs it
+allowlisted; whatever props the three adapters accept, nothing states them in one
+place.
+
+**J3 — AtlSkeleton decides its geometry in JavaScript.** `computeHeight(variant,
+width, height)` returns `1em`, the width, or `100px`. The sizes therefore cannot be
+read from the stylesheet, bound to a Figma Variable, or seen by any gate that reads
+CSS. All three cases are expressible in CSS (`aspect-ratio: 1` for the circle).
+
+**J4 — the masters model containers, not the parts people adjust.** AtlChat has
+seven exported components and one master, covering the outer surface; the header,
+message list, message, typing indicator, chips and input exist only in code.
+AtlSkeleton's master shows three shapes where the design work is the assembly. Same
+shape as Decisions G6 and H3.
+
+**J5 — `role="log"` on AtlChat is declared and never rendered** — the second
+unresolved ARIA question beside AtlStepper's, and the other one that warns on every
+gate run. The metadata says the message list is a `log`; the adapters expose
+`dialog`, `listitem` and `status`, with the listitems in no list.
+
+**J6 — two more off-scale values**, joining Decision I2: AtlCodeBlock's label at
+`0.72rem` (≈11.5px) and its code at line-height `1.65`, where the scale has 1.25 and
+1.5. The second is a real requirement — code needs looser leading than prose — and
+belongs in the scale rather than in one stylesheet.
+
+---
+
+## Where the redesign stands
+
+All 29 components have an artboard, each stating what the code measurably does
+rather than what its stylesheet appears to say. Ten decision groups (A–J) are
+recorded above. The ones that recur across the most components, and so are worth
+settling before the Figma transfer:
+
+1. **Nothing states a row height.** Checkbox 29 / radio 32 / toggle 27, table rows
+   32/42/51, accordion trigger 52, badge 29.5. All content-driven, none a token, and
+   several only correct by luck (E1, F3, I1, I4).
+2. **Prose leading on single lines** is the mechanism behind most of those (E3, I1).
+   ADR-0041 fixed it for every control; the boxes whose height nobody states never
+   got it.
+3. **36px is a missing step** in the control scale, written out four times (H1).
+4. **The status colours have no ramps** — ADR-0038 built teal and stopped, so three
+   sheets' worth of variant colours cannot bind (F2).
+5. **Off-scale type**: 10px, 11.5px, 13px, and line-height 1.65 (I2, J6).
+6. **AtlIcon has no master**, and everything now depends on it (J1).
+7. **The masters keep claiming their children's states**, and carrying axes that are
+   illustrations rather than props (E4, G6, H2, H3, J4).
+

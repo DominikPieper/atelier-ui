@@ -4,7 +4,7 @@
      Every column but "Artboard" is derived from the repo; that one comes from
      tools/design/artboards.json, because Claude Design is not in the repo. -->
 
-**29 components.** Claude Design coverage: **25 designed**, 0 appearing only as a fragment inside a study, 4 untouched.
+**29 components.** Claude Design coverage: **29 designed**, 0 appearing only as a fragment inside a study, 0 untouched.
 
 > **Redesign phase, active since 2026-08-26.** Figma is the *target* of
 > the transfer, not the reference for it, so the masters are stale by definition until they are
@@ -26,13 +26,13 @@ a typography study says nothing about how the component should look.
 | `breadcrumbs` | **AtlBreadcrumbs.dc.html** | items | 3 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
 | `button` | **AtlButton.dc.html** | variant · size · state | 24 | 2026-08-26 (`0bdaddd`) | all 3 | — | yes |
 | `card` | **AtlCard.dc.html** | variant · padding | 12 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
-| `chat` | — | variant | 3 | 2026-07-23 (`2715827`) | all 3 | — | yes |
+| `chat` | **AtlChat.dc.html** | variant | 3 | 2026-07-23 (`2715827`) | all 3 | — | yes |
 | `checkbox` | **AtlCheckbox.dc.html** | selection · state | 5 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
-| `code-block` | — | — *(no master)* | — | — *(never)* | all 3 | — | yes |
+| `code-block` | **AtlCodeBlock.dc.html** | — *(no master)* | — | — *(never)* | all 3 | — | yes |
 | `combobox` | **AtlCombobox.dc.html** | state | 6 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
 | `dialog` | **AtlDialog.dc.html** | size | 5 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
 | `drawer` | **AtlDrawer.dc.html** | position · size | 7 | 2026-07-23 (`2715827`) | all 3 | — | yes |
-| `icon` | — | — *(no master)* | — | — *(never)* | all 3 | — | yes |
+| `icon` | **AtlIcon.dc.html** | — *(no master)* | — | — *(never)* | all 3 | — | yes |
 | `input` | **AtlInput.dc.html** | state | 5 | 2026-08-26 (`0bdaddd`) | all 3 | — | yes |
 | `menu` | **AtlMenu.dc.html** | variant | 2 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
 | `pagination` | **AtlPagination.dc.html** | position | 3 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
@@ -40,7 +40,7 @@ a typography study says nothing about how the component should look.
 | `radio` | **AtlRadio.dc.html** | selection · state | 4 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
 | `radio-group` | **AtlRadioGroup.dc.html** | — *(no master)* | — | — *(never)* | all 3 | — | yes |
 | `select` | **AtlSelect.dc.html** | state | 5 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
-| `skeleton` | — | variant | 3 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
+| `skeleton` | **AtlSkeleton.dc.html** | variant | 3 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `stepper` | **AtlStepper.dc.html** | orientation · state | 8 | 2026-08-26 (`f4c20b6`) | all 3 | — | yes |
 | `table` | **AtlTable.dc.html** | variant · size · state | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `tabs` | **AtlTabGroup.dc.html** | variant · selected · state | 3 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
@@ -124,6 +124,14 @@ Variant x size matrix (the default-state slice, 12 of the master's 24), all stat
 
 Three variants and four padding steps. Records that the card header (18/600) is the only header in the library that lands exactly on a type role, while AtlDialog's and AtlDrawer's 20/600 land on none. Replaces the typography study's fragment, which was never coverage.
 
+### AtlChat.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlChat
+- Covers: AtlChat
+
+The inline surface with all seven of its components and every message state, plus the drawer and popup placements. Records that six of the seven have no master, and that role=log is declared in the metadata and rendered nowhere — the second of the two unresolved ARIA questions.
+
 ### AtlCheckbox.dc.html
 
 - Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
@@ -131,6 +139,14 @@ Three variants and four padding steps. Records that the card header (18/600) is 
 - Covers: AtlCheckbox
 
 Selection x state (3 x 3 axes drawn as seven specimens) plus the invalid and disabled Booleans, a measured anatomy table, and a comparison specimen stacking the checkbox, radio and toggle rows with their real boxes outlined: 29 / 32 / 27px, none of them a token. Anchors the family's shared findings.
+
+### AtlCodeBlock.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlCodeBlock
+- Covers: AtlCodeBlock
+
+All four variants drawn with real code. Records that there is no AtlCodeBlockSpec — the one component with a master and no contract, which is why check:parity reports it unmappable — and that the four variants are really three Booleans flattened into an enum, so 'line numbers without a filename' cannot be picked.
 
 ### AtlCombobox.dc.html
 
@@ -155,6 +171,14 @@ Five sizes drawn as panels on a backdrop stage, measured anatomy, and the findin
 - Covers: AtlDrawer
 
 Four positions and four sizes drawn as stages, making visible that size means a width for left/right and a height for top/bottom — one axis, two dimensions. Records that the master draws 7 of 16 combinations without saying it is a deliberate slice.
+
+### AtlIcon.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlIcon
+- Covers: AtlIcon
+
+All 23 icons at 16/24px with their kind, plus the three size steps. Records the finding that matters most for the transfer: there is no Figma master for AtlIcon at all — survivable while every component drew its own symbols, not now that all of them instance this one. Also that `error` is unused and near-identical to `danger`.
 
 ### AtlInput.dc.html
 
@@ -211,6 +235,14 @@ Group-level states with the children drawn in place, plus the horizontal layout 
 - Covers: AtlSelect
 
 Seven specimens: the five Figma variant states (default | filled | hover | focus | open, the open one drawn with its panel and option states) plus the invalid and disabled Booleans. Measured anatomy. Findings include two open cross-component questions this sheet surfaced: invalid is carried by border colour alone here and in AtlCombobox while AtlInput and AtlTextarea draw an indicator, and an option row is 36px here against AtlCombobox's 40.
+
+### AtlSkeleton.dc.html
+
+- Project: [atelier](https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c)
+- Kind: **component** · subject: AtlSkeleton
+- Covers: AtlSkeleton
+
+Three variants plus a composition specimen, which is the actual design work and the thing the master cannot hold. Records that the geometry is decided in JavaScript (computeHeight), so the sizes cannot be read from CSS, bound in Figma, or seen by any gate.
 
 ### AtlStepper.dc.html
 

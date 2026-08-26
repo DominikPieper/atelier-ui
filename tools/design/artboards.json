@@ -103,6 +103,16 @@
     },
     {
       "project": "atelier",
+      "file": "AtlChat.dc.html",
+      "kind": "component",
+      "subject": "AtlChat",
+      "covers": [
+        "AtlChat"
+      ],
+      "note": "The inline surface with all seven of its components and every message state, plus the drawer and popup placements. Records that six of the seven have no master, and that role=log is declared in the metadata and rendered nowhere — the second of the two unresolved ARIA questions."
+    },
+    {
+      "project": "atelier",
       "file": "AtlCheckbox.dc.html",
       "kind": "component",
       "subject": "AtlCheckbox",
@@ -110,6 +120,16 @@
         "AtlCheckbox"
       ],
       "note": "Selection x state (3 x 3 axes drawn as seven specimens) plus the invalid and disabled Booleans, a measured anatomy table, and a comparison specimen stacking the checkbox, radio and toggle rows with their real boxes outlined: 29 / 32 / 27px, none of them a token. Anchors the family's shared findings."
+    },
+    {
+      "project": "atelier",
+      "file": "AtlCodeBlock.dc.html",
+      "kind": "component",
+      "subject": "AtlCodeBlock",
+      "covers": [
+        "AtlCodeBlock"
+      ],
+      "note": "All four variants drawn with real code. Records that there is no AtlCodeBlockSpec — the one component with a master and no contract, which is why check:parity reports it unmappable — and that the four variants are really three Booleans flattened into an enum, so 'line numbers without a filename' cannot be picked."
     },
     {
       "project": "atelier",
@@ -140,6 +160,16 @@
         "AtlDrawer"
       ],
       "note": "Four positions and four sizes drawn as stages, making visible that size means a width for left/right and a height for top/bottom — one axis, two dimensions. Records that the master draws 7 of 16 combinations without saying it is a deliberate slice."
+    },
+    {
+      "project": "atelier",
+      "file": "AtlIcon.dc.html",
+      "kind": "component",
+      "subject": "AtlIcon",
+      "covers": [
+        "AtlIcon"
+      ],
+      "note": "All 23 icons at 16/24px with their kind, plus the three size steps. Records the finding that matters most for the transfer: there is no Figma master for AtlIcon at all — survivable while every component drew its own symbols, not now that all of them instance this one. Also that `error` is unused and near-identical to `danger`."
     },
     {
       "project": "atelier",
@@ -210,6 +240,16 @@
         "AtlSelect"
       ],
       "note": "Seven specimens: the five Figma variant states (default | filled | hover | focus | open, the open one drawn with its panel and option states) plus the invalid and disabled Booleans. Measured anatomy. Findings include two open cross-component questions this sheet surfaced: invalid is carried by border colour alone here and in AtlCombobox while AtlInput and AtlTextarea draw an indicator, and an option row is 36px here against AtlCombobox's 40."
+    },
+    {
+      "project": "atelier",
+      "file": "AtlSkeleton.dc.html",
+      "kind": "component",
+      "subject": "AtlSkeleton",
+      "covers": [
+        "AtlSkeleton"
+      ],
+      "note": "Three variants plus a composition specimen, which is the actual design work and the thing the master cannot hold. Records that the geometry is decided in JavaScript (computeHeight), so the sizes cannot be read from CSS, bound in Figma, or seen by any gate."
     },
     {
       "project": "atelier",
