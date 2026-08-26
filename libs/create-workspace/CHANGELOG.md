@@ -1,3 +1,14 @@
+## 0.2.15 (2026-08-26)
+
+### 🚀 Features
+
+- **tokens:** bind the literals that duplicate a token ([024faef](https://github.com/DominikPieper/atelier-ui/commit/024faef))
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Dominik Pieper @DominikPieper
+
 ## 0.2.14 (2026-08-26)
 
 ### 🩹 Fixes

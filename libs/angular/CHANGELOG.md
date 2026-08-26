@@ -1,3 +1,21 @@
+## 0.2.15 (2026-08-26)
+
+### 🚀 Features
+
+- **tokens:** bind the literals that duplicate a token ([024faef](https://github.com/DominikPieper/atelier-ui/commit/024faef))
+- **icons:** one concept, one drawing ([67784ec](https://github.com/DominikPieper/atelier-ui/commit/67784ec))
+- **gates:** ship the geometry contract with every component ([6b706ce](https://github.com/DominikPieper/atelier-ui/commit/6b706ce))
+
+### 🩹 Fixes
+
+- **geometry:** a stated height cannot be content-driven ([44dc31e](https://github.com/DominikPieper/atelier-ui/commit/44dc31e))
+- **spec:** readonly lives only where it is enforced ([a1f6159](https://github.com/DominikPieper/atelier-ui/commit/a1f6159))
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Dominik Pieper @DominikPieper
+
 ## 0.2.14 (2026-08-26)
 
 ### 🩹 Fixes
