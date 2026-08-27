@@ -62,6 +62,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0054](0054-the-last-values-a-variable-could-not-bind.md) | The last values a Figma Variable could not bind (status ramps + 2xs) | Accepted | Recorded |
 | [0055](0055-invalid-is-not-a-colour.md) | invalid is not a colour, and a glyph in a template is still an icon (`[TEXT-GLYPH]`) | Accepted | Recorded |
 | [0056](0056-a-master-models-one-thing.md) | A master models one thing, and its axes are its API | Accepted | Recorded |
+| [0057](0057-the-icon-set-was-text-in-figma-too.md) | The icon set was text in Figma too | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

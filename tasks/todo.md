@@ -263,6 +263,16 @@ Decision-bearing quick wins (deferred — not this session's scope):
       as a derived Variable — they will land as four resolved numbers and the derivation
       will live only in ADR-0052 and `tokens.css`. Decide at transfer time whether that is
       acceptable or whether the row scale should be authored flat.
+- [x] ~~**AtlIcon has no Figma master** (J1)~~ — done 2026-08-27, ADR-0057, and the premise was
+      wrong. Twenty-one `Icon/*` components existed already, each holding a single Unicode TEXT
+      glyph on a 32x19 frame. The set is now 25 vector components generated from
+      ATL_ICON_GEOMETRY, one per AtlIconName, verified identical in both directions.
+- [ ] **Nothing gates the Figma icon set against `AtlIconName`** (ADR-0057). The comparison was
+      made by hand. `check:figma` reads the snapshot, and the snapshot captures masters from the
+      Components page, not the Icons page — so adding an icon to the spec and forgetting Figma is
+      invisible. Capture the Icons page in `figma-snapshot.mjs` and cross-check the names.
+- [ ] **The superseded glyph documentation frame on the Icons page** is marked, not removed
+      (ADR-0057). Rebuild it from the new set or delete it when the masters are rebuilt.
 - [ ] **Phase 3 work order — the eight master findings `check:figma` now states** (ADR-0056).
       Each is a drawing, not a property call, which is why none was executed:
       `[BOOL-CLAIM]` AtlRadio declares an `invalid` Boolean mapping to an interface
