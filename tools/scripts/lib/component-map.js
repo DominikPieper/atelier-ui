@@ -45,7 +45,24 @@ function maps() {
     if (component) unionToComponent[name] = component;
   });
 
-  cache = { registry, docsPrimary, unionExceptions, subcomponentParents, unionToComponent };
+  // The specs the metadata index deliberately does NOT treat as components —
+  // shared shapes and option types. A gate that asks for a registry entry has to
+  // be able to tell "decided against" from "forgotten" (ADR-0066).
+  const nonComponentSpecs = new Set(
+    [...fs.readFileSync(METADATA_INDEX, 'utf8').matchAll(/'(Atl\w+)',?\s*\/\/[^\n]*/g)]
+      .map((m) => m[1])
+      .filter((name) => {
+        const block = /export const NON_COMPONENT_SPECS[^;]+;/s.exec(fs.readFileSync(METADATA_INDEX, 'utf8'));
+        return block ? block[0].includes(`'${name}'`) : false;
+      })
+  );
+  // Every `Atl*Spec` the spec library actually exports, so a master whose spec does
+  // not exist at all is a different case from one whose spec was left unregistered.
+  const exportedSpecs = new Set(
+    [...fs.readFileSync(SPEC_FILE, 'utf8').matchAll(/export interface (Atl\w*Spec)\b/g)].map((m) => m[1])
+  );
+
+  cache = { registry, docsPrimary, unionExceptions, subcomponentParents, unionToComponent, nonComponentSpecs, exportedSpecs };
   return cache;
 }
 

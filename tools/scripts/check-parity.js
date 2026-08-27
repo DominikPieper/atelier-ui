@@ -41,6 +41,7 @@
 const fs = require('fs');
 const path = require('path');
 const { ROOT, moduleForSelector, computeInputsHash } = require('./lib/parity-inputs');
+const { maps } = require('./lib/component-map');
 
 const SNAPSHOT_FILE = path.join(ROOT, 'tools/figma/snapshot.json');
 const ARTBOARDS_FILE = path.join(ROOT, 'tools/design/artboards.json');
@@ -100,14 +101,31 @@ const parity = loadJson(PARITY_FILE, 'PARITY');
 const records = parity.components || {};
 
 let recorded = 0;
+/** Masters parity does not track on purpose, reported as a count rather than as
+ *  warnings — see the MAP branch below. */
+const untracked = [];
 for (const comp of snapshot.components) {
   const selector = comp.selector;
   const moduleName = moduleForSelector(selector);
   if (!moduleName) {
-    // No spec/registry entry (e.g. AtlCodeBlock, AtlToast) — can't locate its
-    // files, so parity is untrackable here. Advisory, matches check-figma's
-    // treatment of spec-less masters.
-    warning('MAP', `${selector}: no spec/registry mapping, parity inputs cannot be located. Add it to COMPONENT_METADATA_REGISTRY or allowlist it.`);
+    // Three different situations used to share one warning, and only the third is
+    // actionable — so the first two were a warning nobody could ever clear, which
+    // is how a reader learns to skim warnings (ADR-0066).
+    const specName = `${selector}Spec`;
+    const { nonComponentSpecs, exportedSpecs } = maps();
+    if (!exportedSpecs.has(specName)) {
+      // No such spec interface at all, by design: AtlToast and AtlCodeBlock have no
+      // contract (check-figma allowlists them the same way), and AtlMenuSeparator and
+      // AtlChatTyping earn a master by being placeable rather than by having state
+      // (ADR-0062).
+      untracked.push(`${selector} (no ${specName})`);
+    } else if (nonComponentSpecs.has(specName)) {
+      // The spec exists and the metadata index deliberately does not treat it as a
+      // component — a shape its parent renders.
+      untracked.push(`${selector} (${specName} is in NON_COMPONENT_SPECS)`);
+    } else {
+      warning('MAP', `${selector}: ${specName} is exported and is not in NON_COMPONENT_SPECS, but has no COMPONENT_METADATA_REGISTRY entry — so parity inputs cannot be located. Add the entry.`);
+    }
     continue;
   }
 
@@ -142,7 +160,9 @@ report();
 function report() {
   const order = { BLOCKER: 0, CRITICAL: 1, WARNING: 2 };
   const all = [...errors, ...warnings].sort((a, b) => order[a.sev] - order[b.sev]);
-  const head = `${recorded}/${snapshot.components.length} master(s) have a parity record`;
+  const head =
+    `${recorded}/${snapshot.components.length} master(s) have a parity record` +
+    (untracked.length ? `; ${untracked.length} intentionally untracked (${untracked.join(', ')})` : '');
 
   if (redesignPhase) {
     console.warn(

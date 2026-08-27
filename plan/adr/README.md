@@ -71,6 +71,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0063](0063-the-layer-name-is-the-selector.md) | The layer name is the selector (`[LAYER-PAINT]`) | Accepted | Recorded |
 | [0064](0064-what-the-parity-stamp-rests-on.md) | What the parity stamp rests on (redesign phase closed) | Accepted | Recorded |
 | [0065](0065-the-table-gives-its-children-back-their-states.md) | The table gives its children back their states (AtlTh/AtlTd/AtlTr/AtlTbody) | Accepted | Recorded |
+| [0066](0066-a-warning-nobody-can-clear.md) | A warning nobody can clear (`[MAP]` classifies) | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

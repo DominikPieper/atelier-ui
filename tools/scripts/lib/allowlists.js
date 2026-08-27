@@ -116,11 +116,16 @@ const FIGMA_CONFORMANCE_EXCEPTIONS = new Set([
   // AtlTableAlign is a per-cell prop (AtlTh/AtlTd), not a set-level visual
   // variant of the table master. Code-only.
   'AtlTable:name:align',
-  // AtlOptionSpec and AtlSelectSpec share the `select` metadata module, so AtlOption
-  // inherits AtlSelect's variantMatrix — which pictures the TRIGGER's states
-  // (default | filled | hover | focus | open) and even claims role: 'combobox'. The
-  // option row's own axis is default | hover | active | selected. A child spec needs
-  // its own metadata module; tracked in tasks/todo.md.
+  // AtlOptionSpec and AtlSelectSpec share the `select` metadata module BY DESIGN:
+  // `specNames: ['AtlSelectSpec', 'AtlOptionSpec']`, and DOCS_PRIMARY_SPECS records
+  // that one docs entry documents one primary interface. So the module's
+  // `variantMatrix` describes AtlSelect's trigger (default | filled | hover | focus |
+  // open) and AtlOption's own axis is default | hover | active | selected. The
+  // exemption is not a deferred fix — it is the shape of the data: nothing in
+  // `ComponentMetadata` says which spec a variantMatrix is about, so the gate applies
+  // it to every spec sharing the module. Giving the type that field would remove this
+  // entry; it is one entry, and the type change reaches check-metadata and
+  // gen-llms-txt (ADR-0066).
   'AtlOption:variant:state=filled',
   // .step-description and .step-optional are separated by `margin-top: 2px` — a raw
   // literal in the CSS, off the spacing scale, so no variable can bind it. The fix is

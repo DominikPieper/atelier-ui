@@ -170,14 +170,17 @@ Decision-bearing quick wins (deferred — not this session's scope):
       1621 text nodes swept onto the declared families, the 19 styles replaced by 8
       `ty/<role>` styles generated from `--ui-type-*`, and `[FONT-FAMILY]` +
       `[TEXT-STYLE]` added to `check:figma` so it cannot drift back.
-- [ ] **A child spec sharing its parent's metadata module inherits false claims.**
-      `AtlOptionSpec` maps to the `select` module, so AtlOption inherits AtlSelect's
-      `variantMatrix` — default | filled | hover | focus | open, which pictures the
-      TRIGGER — and its `accessibility.role: 'combobox'`. The option row's own axis is
-      default | hover | active | selected and its role is `option`. Give the child specs
-      their own metadata modules (`AtlOptionSpec`, `AtlTabSpec`, `AtlStepSpec`,
-      `AtlChatMessageSpec`, …) and remove the `AtlOption:variant:state=filled`
-      allowlist entry (ADR-0062).
+- [ ] **`ComponentMetadata` has no field saying which spec a `variantMatrix` describes.**
+      Reframed 2026-08-27 (ADR-0066) — the premise of the original note was wrong. Sharing
+      a module between a parent and its children is DELIBERATE: `select.metadata.ts`
+      declares `specNames: ['AtlSelectSpec', 'AtlOptionSpec']`, and `DOCS_PRIMARY_SPECS`
+      records that one docs entry documents one primary interface. Nine modules cover
+      several specs that way, and `radio` even lists the item before the group, so
+      "specNames[0] is the primary" is not a rule the data supports either. The residue is
+      one allowlist entry (`AtlOption:variant:state=filled`) plus a latent risk that a
+      future child inherits a matrix that is not about it. The fix is a field on the type
+      (`variantMatrixFor`, or per-spec sections), which reaches `check-metadata` and
+      `gen-llms-txt` — worth doing when a second collision appears, not for one entry.
 - [ ] **Generate the Inventory cards from the snapshot.** Their meta and property text is
       hand-written and drifts: AtlBreadcrumbs' card still read `COMPONENT_SET · 209×17px`
       with an `items` VARIANT row months after ADR-0056 removed that axis and collapsed
