@@ -283,14 +283,23 @@ Decision-bearing quick wins (deferred — not this session's scope):
       both collapsed to the plain COMPONENT they always were, with the other drawings kept as
       content-sample frames on the Components page. `check:figma` reports **zero**
       `[BOOL-CLAIM]`, `[AXIS-NAME]` and `[AXIS-NOT-A-PROP]` now.
-- [ ] **Bind nineteen declared Booleans that toggle nothing** (`[BOOL-INERT]`, ADR-0058).
-      A Figma Boolean binds only to a layer's `visible`, and these reference nothing, so
-      switching them changes nothing: AtlTable `sortable` `selectable` `stickyHeader` `empty`
-      `error`; AtlInput and AtlTextarea `readonly` `required` (+ `autoResize`); AtlButton
-      `hasIcon`; AtlAlert and AtlToast `dismissible`; AtlProgress `indeterminate`; AtlStepper
-      `linear`; AtlSelect, AtlCheckbox and AtlCombobox `required`; AtlChat `open`. Each needs the
-      layer its state adds, with the property bound to that layer's visibility — or the property
-      dropped. AtlStepper `linear` has nothing to draw and should take the stated opt-out instead.
+- [ ] **Bind the seven declared Booleans that have a state to draw** (`[BOOL-INERT]`, ADR-0058).
+      It was nineteen; twelve turned out to have nothing to bind and now say so in their own
+      master. What is owed: AtlInput and AtlTextarea `readonly` (`.is-readonly input` makes the
+      border transparent — an overlay, the way `_invalid-border` works), AtlAlert and AtlToast
+      `dismissible` (a `.dismiss` button), AtlProgress `indeterminate`
+      (`.is-indeterminate .fill`), AtlTable `stickyHeader` (`.is-sticky-header thead th` adds
+      `box-shadow: 0 1px 0 0 border`), AtlChat `open`.
+- [x] ~~Twelve of the nineteen unbound Booleans have nothing to bind~~ — each states why, in its
+      own master, 2026-08-27. **`required` on all five form fields renders nothing**: it is passed
+      to the DOM as the HTML attribute and that is all — no class, no CSS, no asterisk. The
+      asterisk comes from the label text a consumer writes. AtlTextarea `autoResize` only removes
+      the browser's resize grabber, which Figma does not draw. AtlStepper `linear` is behaviour.
+      AtlButton `hasIcon` maps to nothing — `AtlButtonSpec` has no such prop; it is a Figma-side
+      slot toggle. And **four of AtlTable's five belong to child specs**: `sortable` is
+      `AtlThSpec`, `selectable` is `AtlTrSpec`, `empty` is `AtlTbodySpec`, and `error` is in no
+      spec at all — the container was carrying its children's states, which is exactly why nothing
+      could reference them (ADR-0056).
 - [x] ~~**Replace the pictograms drawn as TEXT characters**~~ — done 2026-08-27, ADR-0058.
       `[MASTER-GLYPH]` is zero. It was 120 nodes across 15 masters, not the 42 first reported —
       42 was the deduplicated count and every variant carried its own. 83 became instances of the

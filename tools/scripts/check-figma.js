@@ -244,9 +244,19 @@ for (const comp of snapshot.components) {
   // (ADR-0058).
   {
     const referenced = new Set(comp.referencedProperties || []);
+    // A master may state, per property, why a declared Boolean is unbound — the state
+    // has no visual the component renders (`required` is a DOM attribute and nothing
+    // else), or the property belongs to a child spec whose master does not exist yet
+    // (AtlTable's `sortable` is AtlThSpec's). The reason goes in the description, where
+    // a designer opening the master reads it (ADR-0058).
+    //   - Boolean `required`: declared but unbound — <reason>
+    const statedUnbound = new Set(
+      [...(comp.description || '').matchAll(/^- Boolean `([^`]+)`:\s*declared but unbound\s*[\u2014-]\s*\S/gm)].map((m) => m[1])
+    );
     const dead = Object.entries(comp.properties || {})
       .filter(([k, t]) => t === 'BOOLEAN' && !referenced.has(k))
-      .map(([k]) => k.split('#')[0]);
+      .map(([k]) => k.split('#')[0])
+      .filter((k) => !statedUnbound.has(k));
     if (dead.length > 0) {
       warning('BOOL-INERT', `${comp.name}: Boolean ${dead.length > 1 ? 'properties' : 'property'} ${dead.map((d) => `\`${d}\``).join(', ')} ${dead.length > 1 ? 'are' : 'is'} declared and nothing references ${dead.length > 1 ? 'them' : 'it'} — the ${dead.length > 1 ? 'properties toggle' : 'property toggles'} no layer, so switching ${dead.length > 1 ? 'them' : 'it'} changes nothing. Bind it to the visibility of the layer that state adds. A colour-only state works too: add an overlay that paints the new colour and bind that, the way AtlSelect's \`_invalid-border\` does.`);
     }
