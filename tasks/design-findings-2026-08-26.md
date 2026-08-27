@@ -493,9 +493,14 @@ settling before the Figma transfer:
    ADR-0041 fixed it for every control; the boxes whose height nobody states never
    got it.
 3. **36px is a missing step** in the control scale, written out four times (H1).
-4. **The status colours have no ramps** — ADR-0038 built teal and stopped, so three
-   sheets' worth of variant colours cannot bind (F2).
-5. **Off-scale type**: 10px, 11.5px, 13px, and line-height 1.65 (I2, J6).
+4. ~~**The status colours have no ramps**~~ — **done 2026-08-27, ADR-0054.** Four ramps,
+   100–950, built the way teal's was. The shipping values turned out to already sit on the
+   step numbers when ordered by OKLab lightness, so only the gaps were generated, and the
+   28 semantic tokens resolve to byte-identical colours before and after (F2).
+5. ~~**Off-scale type**~~ — **done.** `--ui-line-height-code: 1.65` landed with the row
+   work; 9px and 10px became `--ui-font-size-2xs` and 11.52px snapped to `--ui-font-size-xs`
+   (ADR-0054). The 13px the census listed does not appear in component CSS. The library now
+   has no off-scale font size (I2, J6).
 6. **AtlIcon has no master**, and everything now depends on it (J1).
 7. **The masters keep claiming their children's states**, and carrying axes that are
    illustrations rather than props (E4, G6, H2, H3, J4).
