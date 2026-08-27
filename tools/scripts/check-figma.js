@@ -258,7 +258,15 @@ for (const comp of snapshot.components) {
   // nineteen masters the whole time. A character cannot be an icon instance, cannot
   // follow the set, and depends on whichever font has it (ADR-0058).
   {
-    const glyphs = comp.glyphTextNodes || [];
+    // A master may state, per layer, why a character is not an icon instance. The
+    // reason lives in the description where a designer reading the master sees it —
+    // the same rule as the Boolean opt-outs, and for the same reason: an exemption
+    // inside this script is one nobody can read from the artefact.
+    //   - Glyph `–` on `min-icon`: <reason>
+    const statedGlyphs = new Set(
+      [...(comp.description || '').matchAll(/^- Glyph `([^`]+)` on `([^`]+)`:\s*\S/gm)].map((m) => `${m[1]}|${m[2]}`)
+    );
+    const glyphs = (comp.glyphTextNodes || []).filter((g) => !statedGlyphs.has(`${g.chars}|${g.layer}`));
     if (glyphs.length > 0) {
       const shown = glyphs.slice(0, 6).map((g) => `${JSON.stringify(g.chars)} on \`${g.layer}\``);
       warning('MASTER-GLYPH', `${comp.name}: ${glyphs.length} pictogram${glyphs.length > 1 ? 's' : ''} drawn as TEXT characters — ${shown.join(', ')}${glyphs.length > 6 ? `, and ${glyphs.length - 6} more` : ''}. Replace with an instance of the Icon library, which is generated from ATL_ICON_GEOMETRY (ADR-0057).`);

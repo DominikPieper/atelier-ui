@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-27T09:45:38.333Z",
-    "gitSha": "fbf309c",
+    "generatedAt": "2026-08-27T10:10:46.096Z",
+    "gitSha": "8d12080",
     "serverVersion": null,
     "coverage": "All 29 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -221,12 +221,7 @@
         "loading#507:217"
       ],
       "iconInstanceNames": [],
-      "glyphTextNodes": [
-        {
-          "layer": "_loading-spinner",
-          "chars": "⟳"
-        }
-      ],
+      "glyphTextNodes": [],
       "sampledVariant": "129:2",
       "nodes": [
         {
@@ -499,41 +494,13 @@
       "referencedProperties": [
         "Label#55:74"
       ],
-      "iconInstanceNames": [],
-      "glyphTextNodes": [
-        {
-          "layer": "glyph-13",
-          "chars": "✓"
-        },
-        {
-          "layer": "glyph-14",
-          "chars": "⚠"
-        },
-        {
-          "layer": "glyph-15",
-          "chars": "✕"
-        },
-        {
-          "layer": "glyph-16",
-          "chars": "ℹ"
-        },
-        {
-          "layer": "glyph-18",
-          "chars": "✓"
-        },
-        {
-          "layer": "glyph-19",
-          "chars": "⚠"
-        },
-        {
-          "layer": "glyph-20",
-          "chars": "✕"
-        },
-        {
-          "layer": "glyph-21",
-          "chars": "ℹ"
-        }
+      "iconInstanceNames": [
+        "check",
+        "warning",
+        "danger",
+        "info"
       ],
+      "glyphTextNodes": [],
       "sampledVariant": "55:12",
       "nodes": [
         {
@@ -663,13 +630,10 @@
         "CancelLabel#55:174",
         "ConfirmLabel#55:172"
       ],
-      "iconInstanceNames": [],
-      "glyphTextNodes": [
-        {
-          "layer": "✕",
-          "chars": "✕"
-        }
+      "iconInstanceNames": [
+        "close"
       ],
+      "glyphTextNodes": [],
       "sampledVariant": "55:93",
       "nodes": [
         {
@@ -687,6 +651,16 @@
           "type": "FRAME",
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "close",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
           "unboundSpacing": [],
@@ -774,12 +748,7 @@
         "loading#507:304"
       ],
       "iconInstanceNames": [],
-      "glyphTextNodes": [
-        {
-          "layer": "_loading-spinner",
-          "chars": "⟳"
-        }
-      ],
+      "glyphTextNodes": [],
       "sampledVariant": "55:120",
       "nodes": [
         {
@@ -871,17 +840,11 @@
         "variant": "VARIANT"
       },
       "referencedProperties": [],
-      "iconInstanceNames": [],
-      "glyphTextNodes": [
-        {
-          "layer": "▲",
-          "chars": "▲"
-        },
-        {
-          "layer": "▼",
-          "chars": "▼"
-        }
+      "iconInstanceNames": [
+        "chevron-up",
+        "chevron-down"
       ],
+      "glyphTextNodes": [],
       "sampledVariant": "55:124",
       "nodes": [
         {
@@ -915,6 +878,16 @@
           "nonSemanticTokens": []
         },
         {
+          "name": "chevron-up",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
@@ -945,6 +918,16 @@
           "nonSemanticTokens": []
         },
         {
+          "name": "chevron-down",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
@@ -959,6 +942,16 @@
           "type": "FRAME",
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "chevron-down",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
           "unboundSpacing": [],
@@ -989,37 +982,16 @@
         "variant": "VARIANT"
       },
       "referencedProperties": [],
-      "iconInstanceNames": [],
-      "glyphTextNodes": [
-        {
-          "layer": "⎘",
-          "chars": "⎘"
-        },
-        {
-          "layer": "⎗",
-          "chars": "⎗"
-        },
-        {
-          "layer": "⊕",
-          "chars": "⊕"
-        },
-        {
-          "layer": "✏",
-          "chars": "✏"
-        },
-        {
-          "layer": "→",
-          "chars": "→"
-        },
-        {
-          "layer": "›",
-          "chars": "›"
-        },
-        {
-          "layer": "🗑",
-          "chars": "🗑"
-        }
+      "iconInstanceNames": [
+        "copy",
+        "paste",
+        "add",
+        "edit",
+        "arrow-right",
+        "chevron-right",
+        "delete"
       ],
+      "glyphTextNodes": [],
       "sampledVariant": "55:128",
       "nodes": [
         {
@@ -1053,10 +1025,10 @@
           "nonSemanticTokens": []
         },
         {
-          "name": "Frame",
-          "type": "FRAME",
+          "name": "copy",
+          "type": "INSTANCE",
           "hasChildren": true,
-          "layoutMode": "HORIZONTAL",
+          "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
           "unboundSpacing": [],
@@ -1083,10 +1055,10 @@
           "nonSemanticTokens": []
         },
         {
-          "name": "Frame",
-          "type": "FRAME",
+          "name": "paste",
+          "type": "INSTANCE",
           "hasChildren": true,
-          "layoutMode": "HORIZONTAL",
+          "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
           "unboundSpacing": [],
@@ -1113,10 +1085,10 @@
           "nonSemanticTokens": []
         },
         {
-          "name": "Frame",
-          "type": "FRAME",
+          "name": "add",
+          "type": "INSTANCE",
           "hasChildren": true,
-          "layoutMode": "HORIZONTAL",
+          "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
           "unboundSpacing": [],
@@ -1143,10 +1115,80 @@
           "nonSemanticTokens": []
         },
         {
+          "name": "edit",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "arrow-right",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "chevron-right",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "Frame",
+          "type": "FRAME",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "delete",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
           "unboundSpacing": [],
@@ -1239,25 +1281,13 @@
       "referencedProperties": [
         "Message#55:85"
       ],
-      "iconInstanceNames": [],
-      "glyphTextNodes": [
-        {
-          "layer": "ℹ",
-          "chars": "ℹ"
-        },
-        {
-          "layer": "✓",
-          "chars": "✓"
-        },
-        {
-          "layer": "⚠",
-          "chars": "⚠"
-        },
-        {
-          "layer": "✕",
-          "chars": "✕"
-        }
+      "iconInstanceNames": [
+        "info",
+        "check",
+        "warning",
+        "danger"
       ],
+      "glyphTextNodes": [],
       "sampledVariant": "55:23",
       "nodes": [
         {
@@ -1265,6 +1295,16 @@
           "type": "COMPONENT",
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "info",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
           "unboundSpacing": [],
@@ -1325,12 +1365,7 @@
         "invalid#507:160"
       ],
       "iconInstanceNames": [],
-      "glyphTextNodes": [
-        {
-          "layer": "✓",
-          "chars": "✓"
-        }
-      ],
+      "glyphTextNodes": [],
       "sampledVariant": "55:32",
       "nodes": [
         {
@@ -1871,29 +1906,14 @@
       "referencedProperties": [
         "Message#55:104"
       ],
-      "iconInstanceNames": [],
-      "glyphTextNodes": [
-        {
-          "layer": "💬",
-          "chars": "💬"
-        },
-        {
-          "layer": "✕",
-          "chars": "✕"
-        },
-        {
-          "layer": "✓",
-          "chars": "✓"
-        },
-        {
-          "layer": "⚠",
-          "chars": "⚠"
-        },
-        {
-          "layer": "ℹ",
-          "chars": "ℹ"
-        }
+      "iconInstanceNames": [
+        "default-toast",
+        "danger",
+        "check",
+        "warning",
+        "info"
       ],
+      "glyphTextNodes": [],
       "sampledVariant": "55:42",
       "nodes": [
         {
@@ -1911,6 +1931,26 @@
           "type": "FRAME",
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "default-toast",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "danger",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
           "unboundSpacing": [],
@@ -2011,13 +2051,10 @@
         "size": "VARIANT"
       },
       "referencedProperties": [],
-      "iconInstanceNames": [],
-      "glyphTextNodes": [
-        {
-          "layer": "×",
-          "chars": "×"
-        }
+      "iconInstanceNames": [
+        "close"
       ],
+      "glyphTextNodes": [],
       "sampledVariant": "421:342",
       "nodes": [
         {
@@ -2055,6 +2092,16 @@
           "type": "FRAME",
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "close",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
           "unboundSpacing": [],
@@ -2166,12 +2213,7 @@
         "loading#507:282"
       ],
       "iconInstanceNames": [],
-      "glyphTextNodes": [
-        {
-          "layer": "_loading-spinner",
-          "chars": "⟳"
-        }
-      ],
+      "glyphTextNodes": [],
       "sampledVariant": "421:884",
       "nodes": [
         {
@@ -2618,21 +2660,12 @@
         "disabled#507:133",
         "invalid#507:140"
       ],
-      "iconInstanceNames": [],
-      "glyphTextNodes": [
-        {
-          "layer": "▼",
-          "chars": "▼"
-        },
-        {
-          "layer": "▲",
-          "chars": "▲"
-        },
-        {
-          "layer": "✓",
-          "chars": "✓"
-        }
+      "iconInstanceNames": [
+        "chevron-down",
+        "chevron-up",
+        "check"
       ],
+      "glyphTextNodes": [],
       "sampledVariant": "421:291",
       "nodes": [
         {
@@ -2650,6 +2683,16 @@
           "type": "FRAME",
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "chevron-down",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
           "unboundSpacing": [],
@@ -2714,13 +2757,10 @@
         "state": "VARIANT"
       },
       "referencedProperties": [],
-      "iconInstanceNames": [],
-      "glyphTextNodes": [
-        {
-          "layer": "✓",
-          "chars": "✓"
-        }
+      "iconInstanceNames": [
+        "check"
       ],
+      "glyphTextNodes": [],
       "sampledVariant": "421:407",
       "nodes": [
         {
@@ -2951,7 +2991,7 @@
       "name": "AI/AtlChat",
       "selector": "AtlChat",
       "nodeId": "507:2953",
-      "description": "Conversational AI surface. Maps to AtlChatSpec in libs/spec.\n\nUse when: a model-driven interaction needs a UI surface. Pick the variant by attention demand: `drawer` for a side panel that coexists with the page, `popup` for a transient floating bubble, `inline` for embedded chat that lives in the page flow.\n\nDon't use when: the user is filling a structured form (use Form/* components) or initiating a single action (use Action/AtlButton).\n\nAPI surface (Figma → spec):\n- Variant `variant`: drawer | popup | inline → AtlChatSpec.variant\n- Boolean `open` → AtlChatSpec.open\n- (code-only: `status: idle | streaming | error`, message handling)\n\nA11y: ARIA dialog (drawer/popup) or region (inline). aria-live=\"polite\" on the message log so streamed assistant tokens announce as they arrive. Status changes (streaming → idle/error) announced via aria-live region.\n\nStatus: 2026-04-27 — merged from three separate Sections (AtlChat / drawer, AtlChat / popup, AtlChat / inline) into one Component Set with `variant` Variant Property matching AtlChatSpec. Old `status` (idle/streaming/error) and `empty` mockup frames remain illustrated as sibling frames in the AI section pending follow-up Variant axis.",
+      "description": "Conversational AI surface. Maps to AtlChatSpec in libs/spec.\n\nUse when: a model-driven interaction needs a UI surface. Pick the variant by attention demand: `drawer` for a side panel that coexists with the page, `popup` for a transient floating bubble, `inline` for embedded chat that lives in the page flow.\n\nDon't use when: the user is filling a structured form (use Form/* components) or initiating a single action (use Action/AtlButton).\n\nAPI surface (Figma → spec):\n- Variant `variant`: drawer | popup | inline → AtlChatSpec.variant\n- Boolean `open` → AtlChatSpec.open\n- (code-only: `status: idle | streaming | error`, message handling)\n\nA11y: ARIA dialog (drawer/popup) or region (inline). aria-live=\"polite\" on the message log so streamed assistant tokens announce as they arrive. Status changes (streaming → idle/error) announced via aria-live region.\n\nStatus: 2026-04-27 — merged from three separate Sections (AtlChat / drawer, AtlChat / popup, AtlChat / inline) into one Component Set with `variant` Variant Property matching AtlChatSpec. Old `status` (idle/streaming/error) and `empty` mockup frames remain illustrated as sibling frames in the AI section pending follow-up Variant axis.\n\nGlyph kept deliberately (2026-08-27, ADR-0058). check:figma reads this line:\n- Glyph `–` on `min-icon`: this is not an icon standing in for a drawing — it is a minimise control the COMPONENT DOES NOT HAVE. AtlChatSpec exposes `open` and `onOpenChange` and nothing else; there is no minimise prop, no `is-minimised` class and no CSS for one. The master is drawing an affordance the code has never implemented. Replacing the character with an icon would make a phantom control look official; removing it would silently drop a design intent nobody has decided on. It stays, marked, until someone decides whether AtlChat gains a minimise state or the master loses the button.",
       "variantAxes": {
         "variant": [
           "drawer",
@@ -2982,27 +3022,14 @@
         "loading#507:217",
         "Initials#55:184"
       ],
-      "iconInstanceNames": [],
+      "iconInstanceNames": [
+        "close",
+        "check"
+      ],
       "glyphTextNodes": [
-        {
-          "layer": "close-x",
-          "chars": "✕"
-        },
-        {
-          "layer": "glyph-18",
-          "chars": "✓"
-        },
-        {
-          "layer": "_loading-spinner",
-          "chars": "⟳"
-        },
         {
           "layer": "min-icon",
           "chars": "–"
-        },
-        {
-          "layer": "close-icon",
-          "chars": "✕"
         }
       ],
       "sampledVariant": "507:2950",
@@ -3140,6 +3167,16 @@
           "nonSemanticTokens": []
         },
         {
+          "name": "close",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
           "name": "msg-asst-1",
           "type": "RECTANGLE",
           "hasChildren": false,
@@ -3204,6 +3241,16 @@
           "type": "INSTANCE",
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "check",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
           "unboundSpacing": [],

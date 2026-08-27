@@ -291,12 +291,26 @@ Decision-bearing quick wins (deferred — not this session's scope):
       `linear`; AtlSelect, AtlCheckbox and AtlCombobox `required`; AtlChat `open`. Each needs the
       layer its state adds, with the property bound to that layer's visibility — or the property
       dropped. AtlStepper `linear` has nothing to draw and should take the stated opt-out instead.
-- [ ] **Replace forty-two pictograms drawn as TEXT characters** (`[MASTER-GLYPH]`, ADR-0058),
-      across fifteen masters: AtlBadge 8, AtlMenu 7, AtlToast 5, AtlChat 5, AtlAlert 4,
-      AtlCombobox 3, AtlAccordionGroup 2, and one each on AtlButton, AtlSelect, AtlCheckbox,
-      AtlDialog, AtlDrawer, AtlTable, AtlTabGroup, AtlStepper. Every one has a named replacement:
-      the 25 vector components of the Icon library, generated from ATL_ICON_GEOMETRY (ADR-0057).
-      Four of them are `⟳` loading spinners.
+- [x] ~~**Replace the pictograms drawn as TEXT characters**~~ — done 2026-08-27, ADR-0058.
+      `[MASTER-GLYPH]` is zero. It was 120 nodes across 15 masters, not the 42 first reported —
+      42 was the deduplicated count and every variant carried its own. 83 became instances of the
+      Icon library, each keeping the colour Variable its glyph was bound to
+      (`color/success-text`, `color/text-muted`, …), so the token discipline survived the swap.
+      Three groups were deliberately NOT made instances, because the code does not draw them with
+      an icon: the 32 `⟳` loading spinners are a CSS ring (`border: 2px solid currentColor` with
+      a transparent top edge) and are now ellipses with a 270° arc taking the label's colour, as
+      `currentColor` does; AtlCheckbox's tick is `::after` with two borders rotated 45° and is
+      now that vector path; and AtlChat's `–` stays, marked in the master.
+- [ ] **AtlChat's master draws a minimise control the component does not have.** `AtlChatSpec`
+      exposes `open` and `onOpenChange` and nothing else — no minimise prop, no
+      `is-minimised` class, no CSS. Decide whether AtlChat gains the state or the master loses
+      the button; until then the master states the reason itself and `[MASTER-GLYPH]` reads it
+      (ADR-0058).
+- [ ] **The checkbox tick is drawn twice in the library.** The code draws it with a rotated
+      pseudo-element while `ATL_ICON_GEOMETRY` already has a `check`. ADR-0046 says one concept,
+      one drawing — so either AtlCheckbox renders `<AtlIcon name="check">` (and keeps the
+      `atl-check-pop` animation on it), or the duplication is accepted and recorded. Figma now
+      draws the CSS shape faithfully, so the two agree; the duplication is in the code.
 - [ ] **Add the five properties that are genuinely absent** (`[BOOL-MISSING]`, ADR-0058):
       AtlToggle `invalid` + `required`, AtlRadioGroup `invalid` + `required` + `readonly`,
       AtlSkeleton `animated`, AtlPagination `showFirstLast`, AtlCombobox `readonly`. Note that
