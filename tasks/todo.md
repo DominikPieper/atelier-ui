@@ -114,13 +114,22 @@ Decision-bearing quick wins (deferred — not this session's scope):
       · **AtlSkeleton** — metadata says `status`; the component renders `aria-hidden="true"`
         and both baseline scenarios are empty. Either the claim is wrong (→ `none`) or a
         loading skeleton should actually be announced. Decide which.
-- [ ] **Reopened: a token-discipline gate for Claude Design artboards** (ADR-0032
-      alternative 4). Rejected on 2026-08-26 for a reason that turned out to be false —
-      the Claude Design prompt prefers `<helmet><style>` utility classes and restricts
-      inline `style="…"` to one-offs, so gating participant `.dc.html` on raw hex would
-      not contradict the tool. Decide whether a `check:artboards` (or a `--ui-*`
-      `:root` starter block generated from `styles/tokens.css`) is worth it, and amend
-      or supersede ADR-0032 accordingly. Prerequisite for Katas 2 and 5 either way.
+- [x] **Reopened: a token-discipline gate for Claude Design artboards** (answered
+      2026-08-27, ADR-0072) — answered by measurement rather than by a second opinion. The
+      proposal was to gate raw hex in participant `.dc.html`; measuring `_sheet.css` showed
+      the premise was upside down. An artboard renders standalone, so it MUST carry
+      literals — the file's own header says so — and the defect was never that literals
+      exist but that the copy was maintained by hand and had drifted in 7 of 40 values. So
+      the remedy is `check:tokens`' remedy for the three framework copies: generate the
+      copy. `check:artboard-palette` is that gate. What ADR-0032 alternative 4 asked for —
+      a `--ui-*` `:root` starter block generated from tokens.css — is now exactly what
+      exists, so the alternative is satisfied rather than rejected.
+- [ ] **Participant artboards are still ungated.** `check:artboard-palette` covers the
+      SHARED sheet. A participant's own `.dc.html` can still hardcode a colour beside the
+      palette it links, and nothing reads those 31 files. The three adherence regexes the
+      synced file already carries (raw hex → token, raw px → spacing token, `font-family`
+      outside the DS list) are the rule set; the blocker is reach, not rules — a gate needs
+      the artboards in the repo or an authenticated client. Katas 2 and 5 want this.
 - [ ] **Verify Figma *export* from claude.ai/design** — import via Figma links is
       confirmed first-party (`hifi-design` skill); export is still unverified, and
       ADR-0032's "the canvas dead-ends" tradeoff rests partly on it.
@@ -315,19 +324,13 @@ Decision-bearing quick wins (deferred — not this session's scope):
       step (which invites 2px everywhere) or these become 4px (which changes the design).
       The Figma master draws 2 and carries an allowlist entry for it (ADR-0062), so the
       two sides agree — on a value neither can name.
-- [ ] **`_sheet.css` in Claude Design has drifted from tokens.css: 7 of 40 values.**
-      Measured 2026-08-27. `--success` #0a5c38 vs #15803d, `--warning` #a1660a vs #b45309,
-      `--info` #1d4ed8 vs #0369a1 — **the three status colours the ramps changed**
-      (ADR-0054), so all 31 artboards still paint the pre-ramp palette. Plus
-      `--border-hover` #475569 vs #cbd5e1 (dark slate against light grey, a semantic
-      difference older than today), `--primary-light` alpha 0.1 vs 0.08, and the second
-      layer of `--shadow-md` (0.06 vs 0.05) and `--shadow-lg` (0.05 vs 0.04).
-      The fix is NOT the gate the reopened ADR-0032 item proposes: an artboard renders
-      standalone, so it MUST carry literals, and gating raw hex fights the medium. The fix
-      is `check:tokens`' own answer for the three framework copies — **generate the
-      palette from tokens.css and push it**, exactly as `gen-foundations-sheet.mjs`
-      already generates the Foundations artboard. Then supersede ADR-0032 alternative 4
-      with what the measurement showed.
+- [x] **`_sheet.css`'s palette is generated now** (closed 2026-08-27, ADR-0072) — it had
+      drifted in 7 of 40 values, including `--success`, `--warning` and `--info`, the three
+      status colours the ramps changed, so all 31 artboards were painting the pre-ramp
+      palette. `gen-artboard-palette.mjs` derives the block from tokens.css,
+      `check:artboard-palette` fails if the committed copy drifts, and the corrected block
+      is pushed into Claude Design. The last hop is still manual, because the Claude Design
+      MCP is interactively authenticated and a spawned script cannot reach it.
 - [ ] **The parity gate cannot see the shared token layer.** A component's `inputsHash`
       covers `libs/{angular,react,vue}/src/lib/<module>/` only, so `styles/tokens.css` is
       outside it — ADR-0035 changed the UI typeface for all 29 components and triggered no

@@ -1,5 +1,6 @@
 ---
 status: accepted
+superseded-by: plan/adr/0072-the-third-surface.md (alternative 4 only; the rest stands)
 date: 2026-08-26
 sources:
   - tasks/review-state-2026-08-26.md (state review — Claude Design section)
