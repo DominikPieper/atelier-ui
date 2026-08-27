@@ -36,7 +36,7 @@
 }
 
 /* Sizes */
-.atl-avatar.size-xs { width: 24px; height: 24px; font-size: 0.625rem; }
+.atl-avatar.size-xs { width: 24px; height: 24px; font-size: var(--ui-font-size-2xs); }
 .atl-avatar.size-sm { width: 32px; height: 32px; font-size: var(--ui-font-size-xs); }
 .atl-avatar.size-md { width: 40px; height: 40px; font-size: var(--ui-font-size-sm); }
 .atl-avatar.size-lg { width: 48px; height: 48px; font-size: var(--ui-font-size-md); }
@@ -124,7 +124,7 @@
   margin-inline-start: -8px;
 }
 
-.overflow-badge.size-xs { width: 24px; height: 24px; font-size: 0.5625rem; }
+.overflow-badge.size-xs { width: 24px; height: 24px; font-size: var(--ui-font-size-2xs); }
 .overflow-badge.size-sm { width: 32px; height: 32px; font-size: var(--ui-font-size-xs); }
 .overflow-badge.size-md { width: 40px; height: 40px; font-size: var(--ui-font-size-sm); }
 .overflow-badge.size-lg { width: 48px; height: 48px; font-size: var(--ui-font-size-sm); }

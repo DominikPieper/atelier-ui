@@ -325,6 +325,271 @@ export const tokens: Record<string, TokenAnnotation> = {
       'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
     ],
   },
+  '--ui-color-red-100': {
+    intent: 'Step 100 of the red ramp; the light theme’s --ui-color-danger-bg. Carries normal text on the dark canvas at 15.56:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-red-200': {
+    intent: 'Step 200 of the red ramp; the dark theme’s --ui-color-danger-active. Carries normal text on the dark canvas at 13.14:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-red-300': {
+    intent: 'Step 300 of the red ramp; the dark theme’s --ui-color-danger-hover and --ui-color-danger-text. Carries normal text on the dark canvas at 10.02:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-red-400': {
+    intent: 'Step 400 of the red ramp; the dark theme’s --ui-color-danger. Carries normal text on the dark canvas at 6.87:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-red-500': {
+    intent: 'Step 500 of the red ramp, generated to complete the scale — no token aliases it today. Carries normal text on the dark canvas at 5.25:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+      'Unused by any semantic token. Alias it before use so the danger family keeps one vocabulary.',
+    ],
+  },
+  '--ui-color-red-600': {
+    intent: 'Step 600 of the red ramp, generated to complete the scale — no token aliases it today. Carries normal text on the light canvas at 4.82:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+      'Unused by any semantic token. Alias it before use so the danger family keeps one vocabulary.',
+    ],
+  },
+  '--ui-color-red-700': {
+    intent: 'The anchor of the red ramp and the light theme’s --ui-color-danger. Carries normal text on the light canvas at 6.47:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-red-800': {
+    intent: 'Step 800 of the red ramp; the light theme’s --ui-color-danger-hover and --ui-color-danger-text. Carries normal text on the light canvas at 8.31:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-red-900': {
+    intent: 'Step 900 of the red ramp; the light theme’s --ui-color-danger-active. Carries normal text on the light canvas at 10.02:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-red-950': {
+    intent: 'Step 950 of the red ramp; the dark theme’s --ui-color-danger-bg. Carries normal text on the light canvas at 16.28:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+      'A surface tint, not a text colour — its chroma is deliberately below the 900.',
+    ],
+  },
+  '--ui-color-green-100': {
+    intent: 'Step 100 of the green ramp; the light theme’s --ui-color-success-bg. Carries normal text on the dark canvas at 17.31:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-green-200': {
+    intent: 'Step 200 of the green ramp, generated to complete the scale — no token aliases it today. Carries normal text on the dark canvas at 15.37:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+      'Unused by any semantic token. Alias it before use so the success family keeps one vocabulary.',
+    ],
+  },
+  '--ui-color-green-300': {
+    intent: 'Step 300 of the green ramp; the dark theme’s --ui-color-success-text. Carries normal text on the dark canvas at 13.54:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-green-400': {
+    intent: 'Step 400 of the green ramp; the dark theme’s --ui-color-success. Carries normal text on the dark canvas at 10.91:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-green-500': {
+    intent: 'Step 500 of the green ramp, generated to complete the scale — no token aliases it today. Carries normal text on the dark canvas at 7.91:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+      'Unused by any semantic token. Alias it before use so the success family keeps one vocabulary.',
+    ],
+  },
+  '--ui-color-green-600': {
+    intent: 'Step 600 of the green ramp, generated to complete the scale — no token aliases it today. Carries normal text on the dark canvas at 5.52:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+      'Unused by any semantic token. Alias it before use so the success family keeps one vocabulary.',
+    ],
+  },
+  '--ui-color-green-700': {
+    intent: 'The anchor of the green ramp and the light theme’s --ui-color-success. Carries normal text on the light canvas at 5.02:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-green-800': {
+    intent: 'Step 800 of the green ramp; the light theme’s --ui-color-success-text. Carries normal text on the light canvas at 7.13:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-green-900': {
+    intent: 'Step 900 of the green ramp, generated to complete the scale — no token aliases it today. Carries normal text on the light canvas at 8.51:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+      'Unused by any semantic token. Alias it before use so the success family keeps one vocabulary.',
+    ],
+  },
+  '--ui-color-green-950': {
+    intent: 'Step 950 of the green ramp; the dark theme’s --ui-color-success-bg. Carries normal text on the light canvas at 13.86:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+      'A surface tint, not a text colour — its chroma is deliberately below the 900.',
+    ],
+  },
+  '--ui-color-amber-100': {
+    intent: 'Step 100 of the amber ramp; the light theme’s --ui-color-warning-bg. Carries normal text on the dark canvas at 17.07:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-amber-200': {
+    intent: 'Step 200 of the amber ramp; the dark theme’s --ui-color-warning-text. Carries normal text on the dark canvas at 15.26:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-amber-300': {
+    intent: 'Step 300 of the amber ramp, generated to complete the scale — no token aliases it today. Carries normal text on the dark canvas at 13.24:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+      'Unused by any semantic token. Alias it before use so the warning family keeps one vocabulary.',
+    ],
+  },
+  '--ui-color-amber-400': {
+    intent: 'Step 400 of the amber ramp; the dark theme’s --ui-color-warning. Carries normal text on the dark canvas at 11.39:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-amber-500': {
+    intent: 'Step 500 of the amber ramp, generated to complete the scale — no token aliases it today. Carries normal text on the dark canvas at 8.15:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+      'Unused by any semantic token. Alias it before use so the warning family keeps one vocabulary.',
+    ],
+  },
+  '--ui-color-amber-600': {
+    intent: 'Step 600 of the amber ramp, generated to complete the scale — no token aliases it today. Carries normal text on the dark canvas at 5.63:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+      'Unused by any semantic token. Alias it before use so the warning family keeps one vocabulary.',
+    ],
+  },
+  '--ui-color-amber-700': {
+    intent: 'The anchor of the amber ramp and the light theme’s --ui-color-warning. Carries normal text on the light canvas at 5.02:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-amber-800': {
+    intent: 'Step 800 of the amber ramp; the light theme’s --ui-color-warning-text. Carries normal text on the light canvas at 6.85:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-amber-900': {
+    intent: 'Step 900 of the amber ramp, generated to complete the scale — no token aliases it today. Carries normal text on the light canvas at 8.36:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+      'Unused by any semantic token. Alias it before use so the warning family keeps one vocabulary.',
+    ],
+  },
+  '--ui-color-amber-950': {
+    intent: 'Step 950 of the amber ramp; the dark theme’s --ui-color-warning-bg. Carries normal text on the light canvas at 14.46:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+      'A surface tint, not a text colour — its chroma is deliberately below the 900.',
+    ],
+  },
+  '--ui-color-sky-100': {
+    intent: 'Step 100 of the sky ramp; the light theme’s --ui-color-info-bg. Carries normal text on the dark canvas at 16.57:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-sky-200': {
+    intent: 'Step 200 of the sky ramp; the dark theme’s --ui-color-info-text. Carries normal text on the dark canvas at 14.33:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-sky-300': {
+    intent: 'Step 300 of the sky ramp, generated to complete the scale — no token aliases it today. Carries normal text on the dark canvas at 11.37:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+      'Unused by any semantic token. Alias it before use so the info family keeps one vocabulary.',
+    ],
+  },
+  '--ui-color-sky-400': {
+    intent: 'Step 400 of the sky ramp; the dark theme’s --ui-color-info. Carries normal text on the dark canvas at 8.87:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-sky-500': {
+    intent: 'Step 500 of the sky ramp, generated to complete the scale — no token aliases it today. Carries normal text on the dark canvas at 6.46:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+      'Unused by any semantic token. Alias it before use so the info family keeps one vocabulary.',
+    ],
+  },
+  '--ui-color-sky-600': {
+    intent: 'Step 600 of the sky ramp, generated to complete the scale — no token aliases it today. Carries normal text on the dark canvas at 4.59:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+      'Unused by any semantic token. Alias it before use so the info family keeps one vocabulary.',
+    ],
+  },
+  '--ui-color-sky-700': {
+    intent: 'The anchor of the sky ramp and the light theme’s --ui-color-info. Carries normal text on the light canvas at 5.93:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-sky-800': {
+    intent: 'Step 800 of the sky ramp, generated to complete the scale — no token aliases it today. Carries normal text on the light canvas at 7.75:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+      'Unused by any semantic token. Alias it before use so the info family keeps one vocabulary.',
+    ],
+  },
+  '--ui-color-sky-900': {
+    intent: 'Step 900 of the sky ramp; the light theme’s --ui-color-info-text. Carries normal text on the light canvas at 9.46:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+    ],
+  },
+  '--ui-color-sky-950': {
+    intent: 'Step 950 of the sky ramp; the dark theme’s --ui-color-info-bg. Carries normal text on the light canvas at 15.91:1.',
+    constraints: [
+      'Primitive: do not reference from component CSS, use the semantic token that aliases this step.',
+      'A surface tint, not a text colour — its chroma is deliberately below the 900.',
+    ],
+  },
+  '--ui-font-size-2xs': {
+    intent: 'Smaller than the smallest readable size (0.625rem). For text inside a box too small to hold --ui-font-size-xs: the initials in a 24px avatar and the count in its overflow badge.',
+    constraints: [
+      'Only for text a user identifies rather than reads. Never for a label, a caption or body copy.',
+      'Do not introduce further steps below this one; the two literals it replaced were the library\'s entire off-scale type population.',
+    ],
+  },
   '--ui-color-primary': {
     intent: 'Primary call-to-action colour and link text. Brand anchor on light backgrounds.',
     constraints: [

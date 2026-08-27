@@ -59,6 +59,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0051](0051-a-reset-undoes-the-contract.md) | A reset undoes the contract (`[RESET-WIPED]`) | Accepted | Recorded |
 | [0052](0052-the-row-is-the-second-ladder.md) | The row is the second ladder, and it centres rather than pads | Accepted | Recorded |
 | [0053](0053-a-peer-npm-installs-for-you.md) | A required peer is a version npm picks for you | Accepted | Recorded |
+| [0054](0054-the-last-values-a-variable-could-not-bind.md) | The last values a Figma Variable could not bind (status ramps + 2xs) | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 
