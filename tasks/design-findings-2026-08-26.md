@@ -484,15 +484,24 @@ belongs in the scale rather than in one stylesheet.
 All 29 components have an artboard, each stating what the code measurably does
 rather than what its stylesheet appears to say. Ten decision groups (A–J) are
 recorded above. The ones that recur across the most components, and so are worth
-settling before the Figma transfer:
+settling before the Figma transfer.
 
-1. **Nothing states a row height.** Checkbox 29 / radio 32 / toggle 27, table rows
-   32/42/51, accordion trigger 52, badge 29.5. All content-driven, none a token, and
-   several only correct by luck (E1, F3, I1, I4).
-2. **Prose leading on single lines** is the mechanism behind most of those (E3, I1).
-   ADR-0041 fixed it for every control; the boxes whose height nobody states never
-   got it.
-3. **36px is a missing step** in the control scale, written out four times (H1).
+**All seven are addressed as of 2026-08-27.** Six are done in the code and the token
+source; the seventh is a convention plus a gate, with the Figma-side execution
+recorded as the Phase 3 work order. Nothing on this list blocks the transfer any more.
+
+1. ~~**Nothing states a row height**~~ — **done 2026-08-27, ADR-0052.** A second ladder,
+   derived from the control ladder: `--ui-row-height-sm/md/lg` = 40/48/56, and a recipe that
+   centres rather than pads. Table cells 32/42/51 → 40/48/56, checkbox 26 → 40, toggle 27 → 40,
+   radio 32 → 40, accordion trigger 52 → 56, measured before and after in all three frameworks.
+   `check:geometry` grew 42 → 73 measurements (E1, F3, I1, I4).
+2. ~~**Prose leading on single lines**~~ — **done, ADR-0052.** Twenty of the twenty-nine
+   component roots stated a typeface and no line-height, so each took its leading from the
+   consuming app. Each root now states the leading its content wants, and `check:typeface`
+   gained `[NO-LEADING]` (E3, I1).
+3. ~~**36px is a missing step**~~ — **done, ADR-0052.** It died rather than being named: the
+   five box-size uses snapped onto the row ladder, and naming it would have broken the sm/md/lg
+   scale that 26 declarations per framework already reference (H1).
 4. ~~**The status colours have no ramps**~~ — **done 2026-08-27, ADR-0054.** Four ramps,
    100–950, built the way teal's was. The shipping values turned out to already sit on the
    step numbers when ordered by OKLab lightness, so only the gaps were generated, and the
@@ -501,9 +510,18 @@ settling before the Figma transfer:
    work; 9px and 10px became `--ui-font-size-2xs` and 11.52px snapped to `--ui-font-size-xs`
    (ADR-0054). The 13px the census listed does not appear in component CSS. The library now
    has no off-scale font size (I2, J6).
-6. **AtlIcon has no master**, and everything now depends on it (J1).
-7. **The masters keep claiming their children's states**, and carrying axes that are
-   illustrations rather than props (E4, G6, H2, H3, J4).
+6. ~~**AtlIcon has no master**~~ — **done 2026-08-27, ADR-0057, and the premise was wrong.**
+   Twenty-one `Icon/*` components existed already, each holding a single Unicode TEXT glyph on a
+   32×19 frame — the glyph-as-icon defect in a fourth home, in the file everything is transferred
+   *to*. The set is now 25 vector components generated from `ATL_ICON_GEOMETRY`, verified
+   identical to `AtlIconName` in both directions (J1).
+7. ~~**The masters keep claiming their children's states**~~ — **convention set and gated
+   2026-08-27, ADR-0056; execution is Phase 3.** Counting made it concrete: 61 exported
+   components, 29 masters, 33 parts of the public API with no drawing. A part gets its own master
+   when it has a visual state a designer sets — 11 of the 33. `check:figma` gained
+   `[BOOL-CLAIM]`, `[BOOL-MISSING]`, `[AXIS-NAME]` and `[AXIS-NOT-A-PROP]`, which turned
+   this from prose into ten findings; two were repaired the same day and eight are the Phase 3
+   work order (E4, G6, H2, H3, J4).
 
 ---
 
