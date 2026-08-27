@@ -517,6 +517,7 @@ checkTypography();
 checkRootPaint();
 checkOverlays();
 checkLayerPaint();
+checkPageGlyphs();
 checkStaleExemptions();
 
 // ---------------------------------------------------------------------------
@@ -1527,6 +1528,35 @@ function cssFileFor(selector) {
   }
   cssFileFor.cache.set(selector, out);
   return out;
+}
+
+/** 10. Pictograms drawn as characters OUTSIDE a master.
+ *
+ *  `[MASTER-GLYPH]` walks COMPONENT and COMPONENT_SET nodes, so the illustration
+ *  frames that sit beside a master — an open-dropdown sketch next to AtlSelect, three
+ *  status marks next to AtlToast, a trigger button next to AtlMenu — were invisible to
+ *  it. Six lived there, and one of them ("Actions \u25be") was a label with an embedded
+ *  pictogram, the exact shape that hid `\u2039 Prev` for months (ADR-0069).
+ *
+ *  A page glyph is a WARNING rather than a blocker: an illustration is not the transfer
+ *  target. It is still reported, because an illustration is what a designer copies.
+ *  There is no description to write an exemption into, so the reason lives in the
+ *  allowlist under `page:glyph:<chars>`.
+ */
+function checkPageGlyphs() {
+  const glyphs = snapshot.pageGlyphs;
+  if (!Array.isArray(glyphs)) {
+    warning('PAGE-GLYPH', 'snapshot carries no page-level glyph facts. Re-run npm run figma:snapshot.');
+    return;
+  }
+  const unexcused = glyphs.filter((g) => !allowed('page', 'glyph', g.chars));
+  if (!unexcused.length) return;
+  for (const g of unexcused) {
+    warning(
+      'PAGE-GLYPH',
+      `"${g.chars}" is drawn as a character at ${g.where} — outside any master, so [MASTER-GLYPH] cannot see it. Replace it with an instance from the Icon library, or allowlist \`page:glyph:${g.chars}\` with the reason it is not standing in for a drawing.`
+    );
+  }
 }
 
 // ===========================================================================

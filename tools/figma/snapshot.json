@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-27T16:50:52.541Z",
-    "gitSha": "e61486d",
+    "generatedAt": "2026-08-27T16:54:40.646Z",
+    "gitSha": "51d8343",
     "serverVersion": null,
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -63,7 +63,7 @@
   ],
   "typography": {
     "fontFamilies": {
-      "Instrument Sans": 1710,
+      "Instrument Sans": 1706,
       "Instrument Serif": 1,
       "JetBrains Mono": 81
     },
@@ -139,6 +139,13 @@
       }
     ]
   },
+  "pageGlyphs": [
+    {
+      "chars": "→",
+      "layer": "sizes: xs|sm|md|lg|xl · shapes: circle|square · fallback: image→initials→icon · status dot",
+      "where": "Display › AtlAvatar + AtlAvatarGroup › sizes: xs|sm|md|lg|xl · shapes: circle|square · fallback: image→initials→icon · status dot"
+    }
+  ],
   "components": [
     {
       "name": "Action/AtlButton",

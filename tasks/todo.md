@@ -221,16 +221,17 @@ Decision-bearing quick wins (deferred — not this session's scope):
       150%, AtlBadge/AtlAvatar 125% — which is ADR-0048's rule unapplied on the Figma side.
       43 text nodes now state their percentage. Still outside it: a root whose text is
       inherited rather than its own single child.
-- [ ] **`[MASTER-GLYPH]` has two blind spots, both by construction.** (a) Five pictograms
-      sit in illustration frames BESIDE a master — `✓` next to AtlSelect (an open-dropdown
-      illustration) and `✓ ℹ ✕` next to AtlToast — and the probe walks COMPONENT and
-      COMPONENT_SET nodes, so a plain frame on the Components page is invisible to it: the
-      same hole that let the four content samples keep `‹ Prev` for months (ADR-0060).
-      (b) Since ADR-0068 the probe also skips text INSIDE an instance, because a glyph
-      there belongs to the child master which states its own exemption — which means a
-      glyph typed as an instance OVERRIDE is now unseen. Widening the probe to every frame
-      on the page fixes (a); (b) needs the override compared against the main component's
-      text rather than skipped wholesale.
+- [x] **The glyphs outside the masters** (closed 2026-08-27, ADR-0069) — `[PAGE-GLYPH]`
+      now reads every text node on the Components page that no COMPONENT, COMPONENT_SET or
+      INSTANCE owns. Five became icon instances (`✓ ℹ ✕ ▾`), including `"Actions ▾"` —
+      a label with an EMBEDDED pictogram, the same shape that hid `‹ Prev`. The one
+      remaining is punctuation in prose (`image→initials→icon` in a caption), allowlisted
+      as `page:glyph:→`.
+- [ ] **A glyph typed as an instance OVERRIDE is unseen.** ADR-0068 made the probe skip
+      text inside instances, because a glyph there belongs to the child master which states
+      its own exemption — and that is right for the master's own drawing, but an override
+      is not the master's drawing. Compare an instance's text against its main component's
+      instead of skipping wholesale.
 - [ ] **536 text nodes below 12px, and the split decides the answer.** 378 on Inventory
       (card meta at 11px), 156 on Colors (swatch labels 11px, hex 9px), 2 in Components —
       and those 2 were the AtlAvatar bug above. So this is catalogue scaffolding, not

@@ -357,6 +357,27 @@ async function main() {
           if (!fontSamples[key]) fontSamples[key] = pg.name + ' \u203a ' + String(t.name).slice(0, 40);
         }
       }
+      // Pictograms drawn as characters ANYWHERE on the Components page, including the
+      // illustration frames that sit beside a master. [MASTER-GLYPH] walks COMPONENT and
+      // COMPONENT_SET nodes, so five of these were invisible to it — the same hole that
+      // let the content samples keep '\u2039 Prev' for months (ADR-0069).
+      const pageGlyphs = [];
+      const compPage = figma.root.children.find((pg) => pg.name.indexOf('Components') >= 0);
+      if (compPage) {
+        for (const t of compPage.findAll((n) => n.type === 'TEXT')) {
+          let owner = null, q = t;
+          while (q) { if (q.type === 'COMPONENT' || q.type === 'COMPONENT_SET' || q.type === 'INSTANCE') { owner = q.type; break; } q = q.parent; }
+          if (owner) continue; // a master's own glyph, or an instance's — checked there
+          const c = (t.characters || '').trim();
+          const hit = c && c.length <= 3 && /[^\x00-\x7F]/.test(c)
+            ? c
+            : (c.match(/[\u2190-\u21FF\u2300-\u27BF\u2B00-\u2BFF\u25A0-\u25FF\u2039\u203A\u00AB\u00BB]/) || [])[0];
+          if (!hit) continue;
+          let chain = [], p2 = t;
+          while (p2 && p2.type !== 'PAGE') { chain.unshift(p2.name); p2 = p2.parent; }
+          pageGlyphs.push({ chars: hit, layer: t.name, where: chain.slice(0, 3).join(' \u203a ') });
+        }
+      }
       const textStyles = (await figma.getLocalTextStylesAsync()).map((s) => ({
         name: s.name,
         family: s.fontName.family,
@@ -365,7 +386,7 @@ async function main() {
         lineHeightUnit: s.lineHeight.unit,
         lineHeightValue: s.lineHeight.unit === 'AUTO' ? null : s.lineHeight.value,
       }));
-      return { masters: out, typography: { fontFamilies: fontTally, fontSamples, textStyles } };
+      return { masters: out, typography: { fontFamilies: fontTally, fontSamples, textStyles }, pageGlyphs };
     `;
     const probe = (await call(client, 'figma_execute', { code: probeCode, timeout: 25000 }))?.result ?? {};
 
@@ -427,6 +448,7 @@ async function main() {
       },
       uiTokens,
       typography: probe.typography ?? null,
+      pageGlyphs: probe.pageGlyphs ?? [],
       components,
     };
     writeFileSync(OUT, JSON.stringify(snapshot, null, 2) + '\n');

@@ -105,6 +105,11 @@ const FIGMA_CONFORMANCE_EXCEPTIONS = new Set([
   // every card pollutes the page outline). The AtlCard Figma description marks it
   // "code-only: role". So the missing "role" variant axis is expected, not drift.
   'AtlCard:name:role',
+  // The only page-level glyph that is not standing in for a drawing: the arrow in the
+  // AtlAvatar caption "fallback: image\u2192initials\u2192icon" is punctuation inside
+  // prose, not a pictogram a component renders (ADR-0069). Keyed on the character,
+  // because a caption has no master description to write an exemption into.
+  'page:glyph:\u2192',
   // Seven entries were deleted here on 2026-08-27 because [STALE-EXEMPTION] showed
   // they suppressed nothing (ADR-0068): AtlInput:name:type, AtlAvatar:name:status,
   // AtlChat:name:status, AtlChat:name:messageRole, AtlToast:name:spec-interface,
