@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-27T14:08:09.581Z",
-    "gitSha": "51d2d9d",
+    "generatedAt": "2026-08-27T14:33:02.670Z",
+    "gitSha": "4c8cfa1",
     "serverVersion": null,
     "coverage": "All 39 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -1750,7 +1750,7 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "state=filled": {
           "fill": "color/surface-sunken",
@@ -1766,7 +1766,7 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "state=focus": {
           "fill": "color/surface",
@@ -1782,7 +1782,7 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "state=invalid": {
           "fill": "color/surface-sunken",
@@ -1798,7 +1798,7 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "state=hover": {
           "fill": "color/surface-sunken",
@@ -1814,7 +1814,7 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 125
         }
       },
       "overlays": [
@@ -4213,7 +4213,7 @@
           "radiusPx": 9999,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "variant=success, size=md": {
           "fill": "color/success-bg",
@@ -4229,7 +4229,7 @@
           "radiusPx": 9999,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "variant=warning, size=md": {
           "fill": "color/warning-bg",
@@ -4245,7 +4245,7 @@
           "radiusPx": 9999,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "variant=danger, size=md": {
           "fill": "color/danger-bg",
@@ -4261,7 +4261,7 @@
           "radiusPx": 9999,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "variant=info, size=md": {
           "fill": "color/info-bg",
@@ -4277,7 +4277,7 @@
           "radiusPx": 9999,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "variant=default, size=sm": {
           "fill": "color/surface-sunken",
@@ -4293,7 +4293,7 @@
           "radiusPx": 9999,
           "effects": [],
           "fontSize": 12,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "variant=success, size=sm": {
           "fill": "color/success-bg",
@@ -4309,7 +4309,7 @@
           "radiusPx": 9999,
           "effects": [],
           "fontSize": 12,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "variant=warning, size=sm": {
           "fill": "color/warning-bg",
@@ -4325,7 +4325,7 @@
           "radiusPx": 9999,
           "effects": [],
           "fontSize": 12,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "variant=danger, size=sm": {
           "fill": "color/danger-bg",
@@ -4341,7 +4341,7 @@
           "radiusPx": 9999,
           "effects": [],
           "fontSize": 12,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "variant=info, size=sm": {
           "fill": "color/info-bg",
@@ -4357,7 +4357,7 @@
           "radiusPx": 9999,
           "effects": [],
           "fontSize": 12,
-          "lineHeight": null
+          "lineHeight": 125
         }
       },
       "overlays": [],
@@ -4439,7 +4439,7 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "state=filled": {
           "fill": "color/surface-sunken",
@@ -4455,7 +4455,7 @@
           "radiusPx": 8,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "state=open": {
           "fill": "color/surface",
@@ -4471,7 +4471,7 @@
           "radiusPx": 8,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "state=hover": {
           "fill": "color/surface-sunken",
@@ -4487,7 +4487,7 @@
           "radiusPx": 8,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "state=focus": {
           "fill": "color/surface-sunken",
@@ -4506,7 +4506,7 @@
             "DROP_SHADOW"
           ],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 125
         }
       },
       "overlays": [
@@ -6602,7 +6602,7 @@
             "DROP_SHADOW"
           ],
           "fontSize": 12,
-          "lineHeight": null
+          "lineHeight": 150
         },
         "position=below": {
           "fill": "color/text",
@@ -6621,7 +6621,7 @@
             "DROP_SHADOW"
           ],
           "fontSize": 12,
-          "lineHeight": null
+          "lineHeight": 150
         },
         "position=left": {
           "fill": "color/text",
@@ -6640,7 +6640,7 @@
             "DROP_SHADOW"
           ],
           "fontSize": 12,
-          "lineHeight": null
+          "lineHeight": 150
         },
         "position=right": {
           "fill": "color/text",
@@ -6659,7 +6659,7 @@
             "DROP_SHADOW"
           ],
           "fontSize": 12,
-          "lineHeight": null
+          "lineHeight": 150
         }
       },
       "overlays": [],
@@ -6738,7 +6738,7 @@
           "radiusPx": 14,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 150
         },
         "variant=success": {
           "fill": "color/success-bg",
@@ -6754,7 +6754,7 @@
           "radiusPx": 14,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 150
         },
         "variant=warning": {
           "fill": "color/warning-bg",
@@ -6770,7 +6770,7 @@
           "radiusPx": 14,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 150
         },
         "variant=danger": {
           "fill": "color/danger-bg",
@@ -6786,7 +6786,7 @@
           "radiusPx": 14,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 150
         }
       },
       "overlays": [
@@ -7894,7 +7894,7 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 150
         },
         "state=filled": {
           "fill": "color/surface-sunken",
@@ -7910,7 +7910,7 @@
           "radiusPx": 8,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 150
         },
         "state=focus": {
           "fill": "color/surface",
@@ -7926,7 +7926,7 @@
           "radiusPx": 8,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 150
         },
         "state=invalid": {
           "fill": "color/surface",
@@ -7942,7 +7942,7 @@
           "radiusPx": 8,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 150
         },
         "state=hover": {
           "fill": "color/surface-sunken",
@@ -7958,7 +7958,7 @@
           "radiusPx": 8,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 150
         }
       },
       "overlays": [
@@ -10097,7 +10097,7 @@
           "radiusPx": 9999,
           "effects": [],
           "fontSize": 10,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "shape=circle, size=sm": {
           "fill": "color/success-bg",
@@ -10113,7 +10113,7 @@
           "radiusPx": 9999,
           "effects": [],
           "fontSize": 12,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "shape=circle, size=md": {
           "fill": "color/warning-bg",
@@ -10129,7 +10129,7 @@
           "radiusPx": 9999,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "shape=circle, size=lg": {
           "fill": "RAW",
@@ -10145,7 +10145,7 @@
           "radiusPx": 9999,
           "effects": [],
           "fontSize": 16,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "shape=circle, size=xl": {
           "fill": "RAW",
@@ -10161,7 +10161,7 @@
           "radiusPx": 9999,
           "effects": [],
           "fontSize": 18,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "shape=square, size=xs": {
           "fill": "color/info-bg",
@@ -10177,7 +10177,7 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 10,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "shape=square, size=sm": {
           "fill": "color/success-bg",
@@ -10193,7 +10193,7 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 12,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "shape=square, size=md": {
           "fill": "color/warning-bg",
@@ -10209,7 +10209,7 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "shape=square, size=lg": {
           "fill": "RAW",
@@ -10225,7 +10225,7 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 16,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "shape=square, size=xl": {
           "fill": "RAW",
@@ -10241,7 +10241,7 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 18,
-          "lineHeight": null
+          "lineHeight": 125
         }
       },
       "overlays": [],

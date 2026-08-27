@@ -202,17 +202,15 @@ Decision-bearing quick wins (deferred — not this session's scope):
       the layer name is the selector. Found and fixed 33 divergences over AtlMenu,
       AtlTabGroup, AtlAccordionGroup, AtlPagination and AtlChat, plus six bugs in the
       gates themselves.
-- [ ] **Root typography is ungated, and the leading is on AUTO almost everywhere.** 100
-      master-variant roots carry their own single text child. `[LAYER-PAINT]` compares
-      `font-size` and `line-height` for NAMED layers; the root belongs to `[ROOT-PAINT]`,
-      which has no typography at all — so two real errors hid there, found by hand:
-      AtlAvatar's `xs` initials at 9px against `--ui-font-size-2xs` (10px) and its `xl` at
-      16px against `--ui-font-size-lg` (18px). Both fixed 2026-08-27. Still open: most of
-      those roots leave the leading on **AUTO** while every component's CSS states a
-      `line-height` — ADR-0048's rule, unapplied on the Figma side. The snapshot already
-      records `rootPaint[variant].fontSize` and `.lineHeight`; what the check needs is the
-      `ROOT_PAINT` cascades extended with the `size` and `shape` axes, because that is
-      where `font-size` is declared (`.atl-avatar.size-xs`, `.atl-button.size-lg`).
+- [x] **Root typography is gated** (closed 2026-08-27, ADR-0064 amendment) — three
+      `ROOT_PAINT` cascades gained a `size` entry, because `.atl-button.size-*`,
+      `.atl-avatar.size-*` and `.atl-badge.size-*` are the only axis-scoped root rules that
+      declare `font-size`. The resolver now reads `font-size` and `line-height` from the
+      concatenated cascade. It found seven masters leaving the root's leading on **AUTO**
+      while their CSS states one — AtlInput/AtlSelect 125%, AtlTextarea/AtlTooltip/AtlAlert
+      150%, AtlBadge/AtlAvatar 125% — which is ADR-0048's rule unapplied on the Figma side.
+      43 text nodes now state their percentage. Still outside it: a root whose text is
+      inherited rather than its own single child.
 - [ ] **Five pictograms sit in illustration frames BESIDE a master.** `✓` next to
       AtlSelect (an open-dropdown illustration) and `✓ ℹ ✕` next to AtlToast.
       `[MASTER-GLYPH]`'s probe walks COMPONENT and COMPONENT_SET nodes, so a plain frame on

@@ -383,12 +383,12 @@ for (const comp of snapshot.components) {
 // tasks/todo.md rather than guessed at here.
 // ---------------------------------------------------------------------------
 const ROOT_PAINT = [
-  { label: 'AtlButton', file: 'button/atl-button.css', cascade: ['.atl-button', '.atl-button.variant-{variant}'] },
+  { label: 'AtlButton', file: 'button/atl-button.css', cascade: ['.atl-button', '.atl-button.variant-{variant}', '.atl-button.size-{size}'] },
   { label: 'AtlInput', file: 'input/atl-input.css', cascade: ['.atl-input input'] },
   { label: 'AtlTextarea', file: 'textarea/atl-textarea.css', cascade: ['.atl-textarea textarea'] },
   { label: 'AtlSelect', file: 'select/atl-select.css', cascade: ['.atl-select select'] },
-  { label: 'AtlBadge', file: 'badge/atl-badge.css', cascade: ['.atl-badge', '.atl-badge.variant-{variant}'] },
-  { label: 'AtlAvatar', file: 'avatar/atl-avatar.css', cascade: ['.atl-avatar', '.atl-avatar.shape-{shape}'] },
+  { label: 'AtlBadge', file: 'badge/atl-badge.css', cascade: ['.atl-badge', '.atl-badge.variant-{variant}', '.atl-badge.size-{size}'] },
+  { label: 'AtlAvatar', file: 'avatar/atl-avatar.css', cascade: ['.atl-avatar', '.atl-avatar.shape-{shape}', '.atl-avatar.size-{size}'] },
   { label: 'AtlCard', file: 'card/atl-card.css', cascade: ['.atl-card', '.atl-card.variant-{variant}'] },
   { label: 'AtlSkeleton', file: 'skeleton/atl-skeleton.css', cascade: ['.atl-skeleton', '.atl-skeleton.variant-{variant}'] },
   { label: 'AtlCodeBlock', file: 'code-block/atl-code-block.css', cascade: ['.atl-code-block'] },
@@ -803,6 +803,18 @@ function checkRootPaint() {
       } else if (want.strokeWeight != null && got.stroke != null && got.strokeWeight !== want.strokeWeight) {
         note('strokeWeight', `root stroke is ${got.strokeWeight}px, but ${want.from.stroke} says ${want.strokeWeight}px.`, variant);
       }
+      if (want.fontSize !== null && got.fontSize != null && Math.abs(got.fontSize - want.fontSize) > 0.5) {
+        note('fontSize', `root text is ${got.fontSize}px, but the CSS says ${Math.round(want.fontSize * 100) / 100}px.`, variant);
+      }
+      if (want.lineHeight !== null) {
+        if (got.fontSize != null && got.lineHeight == null) {
+          // ADR-0048: a box whose leading is inherited grows with the consuming page's
+          // prose. The CSS states it; the master has to state it too.
+          note('lineHeight', `root text leaves the leading on AUTO; the CSS states ${Math.round(want.lineHeight * 100)}%. An inherited leading makes the box grow with the text metrics.`, variant);
+        } else if (got.lineHeight != null && Math.abs(got.lineHeight - want.lineHeight * 100) > 0.5) {
+          note('lineHeight', `root text leading is ${Math.round(got.lineHeight * 100) / 100}%, but the CSS says ${Math.round(want.lineHeight * 100)}%.`, variant);
+        }
+      }
       if (want.shadow !== undefined) {
         const hasFx = (got.effects || []).length > 0;
         if (want.shadow && !hasFx) {
@@ -866,11 +878,13 @@ function resolveRootPaint(entry, axes) {
   }
   const rules = cssRules(file);
   const want = { from: {} };
+  let joined = '';
   for (const template of entry.cascade) {
     const selector = template.replace(/\{(\w+)\}/g, (_, axis) => axes[axis] ?? '\u0000');
     if (selector.includes('\u0000')) continue; // the sampled variant has no such axis
     const body = rules.get(selector);
     if (body === undefined) continue;
+    joined += ';' + body;
     const decl = (prop) => {
       const m = new RegExp('(?:^|;)\\s*' + prop + '\\s*:\\s*([^;]+)').exec(body);
       return m ? m[1].replace(/\s+/g, ' ').trim() : null;
@@ -926,6 +940,12 @@ function resolveRootPaint(entry, axes) {
   for (const prop of ['fill', 'stroke', 'radius']) if (!(prop in want)) want[prop] = null;
   if (want.shadow === undefined) { want.shadow = false; want.from.shadow = entry.cascade[0]; }
   for (const prop of ['fill', 'stroke', 'radius']) if (!want.from[prop]) want.from[prop] = entry.cascade[0];
+  // The root's own typography. It was the one thing no gate compared, and two real
+  // errors sat there: AtlAvatar's xs initials at 9px against --ui-font-size-2xs and
+  // its xl at 16px against --ui-font-size-lg (ADR-0064).
+  const box = boxFromDeclarations(joined);
+  want.fontSize = box.fontSize;
+  want.lineHeight = box.lineHeight;
   return want;
 }
 

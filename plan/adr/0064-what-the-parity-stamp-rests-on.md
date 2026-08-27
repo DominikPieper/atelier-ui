@@ -133,3 +133,32 @@ reported thirteen ADRs as citing "ADR 2026". A reference has to be a whole path 
 - **The decision log now checks its own integrity.** Six dead links had accumulated in the
   one place this project keeps its reasoning, and each was invisible until someone
   followed it — by which time the reason it was written is what they were looking for.
+
+## Amendment, 2026-08-27 (same day): root typography is gated
+
+The gap this ADR named as "the next verification gap" is closed, and it was smaller than
+it looked. Only three components declare `font-size` on an axis-scoped ROOT rule —
+`.atl-button.size-*`, `.atl-avatar.size-*`, `.atl-badge.size-*` — so three `ROOT_PAINT`
+cascades gained a `size` entry (AtlMenu's `variant-compact` was already there). The
+resolver now keeps the concatenated cascade body and reads `font-size` and `line-height`
+from it with the same function `[LAYER-PAINT]` uses.
+
+Two comparisons, and the second is the one that mattered:
+
+- `font-size` against the resolved token. Zero findings — the AtlAvatar errors this ADR
+  reported had already been fixed by hand.
+- `line-height`. **Seven masters left the root's leading on `AUTO`** while their CSS states
+  one: AtlInput and AtlSelect (125%), AtlTextarea, AtlTooltip and AtlAlert (150%), AtlBadge
+  and AtlAvatar (125%). That is ADR-0048's rule — a stated leading, not an inherited one —
+  unapplied on the Figma side, which is exactly the defect that made three controls measure
+  right on one machine and wrong on another. 43 text nodes now state their percentage.
+
+Both shapes verified by injection: the 9px avatar initials and a leading put back to AUTO
+each produced their finding, and restoring gave green. `check:all` exits 0 with the same 18
+advisory warnings.
+
+What this does NOT reach, and is therefore still outside the stamp: a root whose text is
+inherited rather than its own single child (the count of roots carrying their own text is
+100 of ~120 variants), and `font-size` declared on a descendant rule the root happens to
+show through.
+
