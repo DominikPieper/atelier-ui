@@ -116,10 +116,18 @@ async function main() {
         const kids = set.type === 'COMPONENT_SET' ? set.children : [set];
         const referenced = new Set();
         const glyphs = [];
+        const iconInstances = new Set();
         for (const v of kids) {
           for (const n of [v, ...v.findAll(() => true)]) {
             const r = n.componentPropertyReferences;
             if (r) for (const val of Object.values(r)) referenced.add(val);
+            if (n.type === 'INSTANCE') {
+              // documentAccess: dynamic-page — the synchronous mainComponent getter
+              // returns nothing here, so the async form is the only one that resolves.
+              let main = null;
+              try { main = await n.getMainComponentAsync(); } catch (e) { main = null; }
+              if (main && main.name.indexOf('Icon/') === 0) iconInstances.add(n.name);
+            }
             if (n.type === 'TEXT') {
               const c = (n.characters || '').trim();
               if (c && c.length <= 3 && /[^\\x00-\\x7F]/.test(c)) glyphs.push({ layer: n.name, chars: c });
@@ -132,6 +140,7 @@ async function main() {
         out[set.id] = {
           properties: props,
           referencedProperties: [...referenced],
+          iconInstanceNames: [...iconInstances],
           glyphTextNodes: glyphs.filter((g) => { const k = g.layer + '|' + g.chars; if (seen.has(k)) return false; seen.add(k); return true; }),
         };
       }
@@ -172,6 +181,7 @@ async function main() {
         // references, and the pictograms drawn as TEXT characters.
         properties: probe[nodeId]?.properties ?? {},
         referencedProperties: probe[nodeId]?.referencedProperties ?? [],
+        iconInstanceNames: probe[nodeId]?.iconInstanceNames ?? [],
         glyphTextNodes: probe[nodeId]?.glyphTextNodes ?? [],
         sampledVariant: defaultVariantId,
         nodes: deep ? collectNodeFacts(deep) : [],

@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-27T09:31:32.977Z",
-    "gitSha": "ba385f9",
+    "generatedAt": "2026-08-27T09:45:38.333Z",
+    "gitSha": "fbf309c",
     "serverVersion": null,
     "coverage": "All 29 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -220,6 +220,7 @@
         "disabled#507:192",
         "loading#507:217"
       ],
+      "iconInstanceNames": [],
       "glyphTextNodes": [
         {
           "layer": "_loading-spinner",
@@ -280,6 +281,7 @@
       "referencedProperties": [
         "disabled#507:73"
       ],
+      "iconInstanceNames": [],
       "glyphTextNodes": [],
       "sampledVariant": "129:23",
       "nodes": [
@@ -373,6 +375,7 @@
         "Title#55:115",
         "Body#55:128"
       ],
+      "iconInstanceNames": [],
       "glyphTextNodes": [],
       "sampledVariant": "55:53",
       "nodes": [
@@ -496,6 +499,7 @@
       "referencedProperties": [
         "Label#55:74"
       ],
+      "iconInstanceNames": [],
       "glyphTextNodes": [
         {
           "layer": "glyph-13",
@@ -587,12 +591,10 @@
         "disabled#507:115",
         "invalid#507:121"
       ],
-      "glyphTextNodes": [
-        {
-          "layer": "⌄",
-          "chars": "⌄"
-        }
+      "iconInstanceNames": [
+        "chevron-down"
       ],
+      "glyphTextNodes": [],
       "sampledVariant": "55:88",
       "nodes": [
         {
@@ -600,6 +602,16 @@
           "type": "COMPONENT",
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "chevron-down",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
           "unboundSpacing": [],
@@ -651,6 +663,7 @@
         "CancelLabel#55:174",
         "ConfirmLabel#55:172"
       ],
+      "iconInstanceNames": [],
       "glyphTextNodes": [
         {
           "layer": "✕",
@@ -760,6 +773,7 @@
         "disabled#507:300",
         "loading#507:304"
       ],
+      "iconInstanceNames": [],
       "glyphTextNodes": [
         {
           "layer": "_loading-spinner",
@@ -857,6 +871,7 @@
         "variant": "VARIANT"
       },
       "referencedProperties": [],
+      "iconInstanceNames": [],
       "glyphTextNodes": [
         {
           "layer": "▲",
@@ -974,6 +989,7 @@
         "variant": "VARIANT"
       },
       "referencedProperties": [],
+      "iconInstanceNames": [],
       "glyphTextNodes": [
         {
           "layer": "⎘",
@@ -1172,6 +1188,7 @@
       "referencedProperties": [
         "Content#55:110"
       ],
+      "iconInstanceNames": [],
       "glyphTextNodes": [],
       "sampledVariant": "55:48",
       "nodes": [
@@ -1222,6 +1239,7 @@
       "referencedProperties": [
         "Message#55:85"
       ],
+      "iconInstanceNames": [],
       "glyphTextNodes": [
         {
           "layer": "ℹ",
@@ -1306,6 +1324,7 @@
         "disabled#507:154",
         "invalid#507:160"
       ],
+      "iconInstanceNames": [],
       "glyphTextNodes": [
         {
           "layer": "✓",
@@ -1370,6 +1389,7 @@
         "Label#55:99",
         "disabled#507:187"
       ],
+      "iconInstanceNames": [],
       "glyphTextNodes": [],
       "sampledVariant": "55:37",
       "nodes": [
@@ -1438,6 +1458,7 @@
         "Placeholder#55:157",
         "disabled#507:91"
       ],
+      "iconInstanceNames": [],
       "glyphTextNodes": [],
       "sampledVariant": "55:82",
       "nodes": [
@@ -1495,6 +1516,7 @@
       "referencedProperties": [
         "disabled#507:182"
       ],
+      "iconInstanceNames": [],
       "glyphTextNodes": [],
       "sampledVariant": "55:131",
       "nodes": [
@@ -1514,7 +1536,7 @@
       "name": "Form/AtlRadio",
       "selector": "AtlRadio",
       "nodeId": "420:185",
-      "description": "Individual radio button. Maps to AtlRadioSpec in libs/spec.\n\nUse when: a single option among a mutually-exclusive set. Always wrap in Form/AtlRadioGroup — the group manages keyboard navigation, focus, and value binding.\n\nDon't use when: option is independent (use Form/AtlCheckbox), the choice is binary (use Form/AtlToggle), or the option set is long enough to need search (use Form/AtlCombobox).\n\nAPI surface (Figma → spec):\n- Variant `selection`: unchecked | checked\n- Variant `state`: default | hover | focus\n- Boolean `disabled`: maps to AtlRadioSpec.disabled\n- (code-only: `radioValue: string`)\n\nValidity lives on the group, not here. `AtlRadioSpec` is `{ radioValue, disabled }` and extends nothing, so this component has no `invalid` — a single radio cannot be invalid on its own, the set can. The Boolean that claimed `AtlFormFieldSpec.invalid` was removed on 2026-08-27: it named an interface this component does not implement, and check:figma reported it as [BOOL-CLAIM]. Draw an invalid radio set on Form/AtlRadioGroup, whose spec does carry `invalid`.\n\nA11y: native HTML <input type=\"radio\"> participating in a roving-tabindex group via the parent AtlRadioGroup.\n\nStatus: structural restructure 2026-04-27 — single `state` enum split into orthogonal `selection` (unchecked/checked) + `state` (default/hover/focus); disabled/invalid moved to Booleans. 2026-08-27 — the `invalid` Boolean removed, property and prose both, per ADR-0056.",
+      "description": "Individual radio button. Maps to AtlRadioSpec in libs/spec.\n\nUse when: a single option among a mutually-exclusive set. Always wrap in Form/AtlRadioGroup — the group manages keyboard navigation, focus, and value binding.\n\nDon't use when: option is independent (use Form/AtlCheckbox), the choice is binary (use Form/AtlToggle), or the option set is long enough to need search (use Form/AtlCombobox).\n\nAPI surface (Figma → spec):\n- Variant `selection`: unchecked | checked\n- Variant `state`: default | hover | focus\n- Boolean `disabled`: maps to AtlRadioSpec.disabled\n- Boolean `invalid`: inherited from AtlRadioGroupSpec.invalid — not a prop on this component\n- (code-only: `radioValue: string`)\n\nA11y: native HTML <input type=\"radio\"> participating in a roving-tabindex group via the parent AtlRadioGroup.\n\nStatus: structural restructure 2026-04-27 — single `state` enum split into orthogonal `selection` (unchecked/checked) + `state` (default/hover/focus); disabled/invalid moved to Booleans. 2026-08-27 — the `invalid` Boolean removed, property and prose both, per ADR-0056.\n\nWhy `invalid` is here although AtlRadioSpec does not declare it: the radio reads it from the group. `atl-radio.tsx` computes its class list with `ctx.invalid && 'is-invalid'`, and `atl-radio.css` has three `.atl-radio.is-invalid` rules, so an invalid radio is a real rendered state — it is just owned by AtlRadioGroup rather than by this component. The Boolean drives the `_invalid-border` overlay.\n\nThis property was deleted on 2026-08-27 and restored the same day: check:figma reported the old mapping to `AtlFormFieldSpec.invalid` as [BOOL-CLAIM], correctly — AtlRadioSpec extends nothing — and deleting the property was the wrong repair, because it orphaned the overlay layer that draws the state. The mapping was wrong; the property was not (ADR-0058).",
       "variantAxes": {
         "selection": [
           "unchecked",
@@ -1546,12 +1568,15 @@
       ],
       "properties": {
         "disabled#507:172": "BOOLEAN",
+        "invalid#909:0": "BOOLEAN",
         "selection": "VARIANT",
         "state": "VARIANT"
       },
       "referencedProperties": [
-        "disabled#507:172"
+        "disabled#507:172",
+        "invalid#909:0"
       ],
+      "iconInstanceNames": [],
       "glyphTextNodes": [],
       "sampledVariant": "420:165",
       "nodes": [
@@ -1604,6 +1629,7 @@
         "variant": "VARIANT"
       },
       "referencedProperties": [],
+      "iconInstanceNames": [],
       "glyphTextNodes": [],
       "sampledVariant": "55:99",
       "nodes": []
@@ -1682,6 +1708,7 @@
         "size": "VARIANT"
       },
       "referencedProperties": [],
+      "iconInstanceNames": [],
       "glyphTextNodes": [],
       "sampledVariant": "420:81",
       "nodes": [
@@ -1765,6 +1792,7 @@
       "referencedProperties": [
         "Initials#55:184"
       ],
+      "iconInstanceNames": [],
       "glyphTextNodes": [],
       "sampledVariant": "55:146",
       "nodes": [
@@ -1843,6 +1871,7 @@
       "referencedProperties": [
         "Message#55:104"
       ],
+      "iconInstanceNames": [],
       "glyphTextNodes": [
         {
           "layer": "💬",
@@ -1898,6 +1927,7 @@
       "variants": [],
       "properties": {},
       "referencedProperties": [],
+      "iconInstanceNames": [],
       "glyphTextNodes": [],
       "sampledVariant": "3:1031",
       "nodes": []
@@ -1911,6 +1941,7 @@
       "variants": [],
       "properties": {},
       "referencedProperties": [],
+      "iconInstanceNames": [],
       "glyphTextNodes": [],
       "sampledVariant": "3:1073",
       "nodes": [
@@ -1980,6 +2011,7 @@
         "size": "VARIANT"
       },
       "referencedProperties": [],
+      "iconInstanceNames": [],
       "glyphTextNodes": [
         {
           "layer": "×",
@@ -2133,6 +2165,7 @@
         "disabled#507:276",
         "loading#507:282"
       ],
+      "iconInstanceNames": [],
       "glyphTextNodes": [
         {
           "layer": "_loading-spinner",
@@ -2404,6 +2437,7 @@
         "variant": "VARIANT"
       },
       "referencedProperties": [],
+      "iconInstanceNames": [],
       "glyphTextNodes": [],
       "sampledVariant": "420:186",
       "nodes": [
@@ -2584,6 +2618,7 @@
         "disabled#507:133",
         "invalid#507:140"
       ],
+      "iconInstanceNames": [],
       "glyphTextNodes": [
         {
           "layer": "▼",
@@ -2679,6 +2714,7 @@
         "state": "VARIANT"
       },
       "referencedProperties": [],
+      "iconInstanceNames": [],
       "glyphTextNodes": [
         {
           "layer": "✓",
@@ -2855,6 +2891,7 @@
         "size": "VARIANT"
       },
       "referencedProperties": [],
+      "iconInstanceNames": [],
       "glyphTextNodes": [],
       "sampledVariant": "507:6305",
       "nodes": [
@@ -2945,6 +2982,7 @@
         "loading#507:217",
         "Initials#55:184"
       ],
+      "iconInstanceNames": [],
       "glyphTextNodes": [
         {
           "layer": "close-x",

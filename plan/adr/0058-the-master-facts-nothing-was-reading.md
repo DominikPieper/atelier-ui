@@ -27,8 +27,14 @@ two findings that matter more than the nine.
 
 A Boolean binds to exactly one thing: a layer's `visible`. AtlButton shows the idiom
 — `disabled` drives a `_disabled-overlay` rectangle, `loading` drives a
-`_loading-spinner`. So **a state that differs only by colour cannot be a Boolean at
-all**, and a state that adds an element can.
+`_loading-spinner`.
+
+I first concluded from that that **a state differing only by colour cannot be a
+Boolean**, and wrote it into this ADR. It is wrong, and the file had already solved
+it: AtlSelect, AtlCombobox and AtlCheckbox each carry an `_invalid-border` rectangle
+whose `visible` is bound to their `invalid` Boolean. An overlay layer that paints the
+new colour turns any colour state into a visibility state. The constraint is narrower
+than it looked — a Boolean needs *a layer to toggle*, and one can always be added.
 
 Then: AtlInput declares three Booleans and only `disabled` is bound. `readonly` and
 `required` reference nothing. Extending the read across the file:
@@ -80,10 +86,20 @@ And two corrections to what ADR-0056 shipped:
 - **The icon rebuild has somewhere to land.** ADR-0057's 25 vector components exist
   and are generated from the spec, so each of the forty-two glyphs has a named
   replacement waiting.
-- **Three of the five genuinely-absent flags are colour states** — `invalid` and
-  `readonly` — so they belong on a variant axis, the way AtlInput carries `invalid` as
-  a value of `state`. The gate says so now rather than asking for a Boolean that
-  could not work.
+- **A colour state can be a Boolean after all**, via an overlay layer — the
+  `_invalid-border` idiom three masters already use. My first reading of the binding
+  rule said otherwise and this ADR said so for an hour. Both the ADR and the gate
+  message are corrected: a Boolean needs a layer to toggle, not a particular kind of
+  difference.
+- **Deleting AtlRadio's `invalid` Boolean was the wrong repair, and it orphaned the
+  layer that draws the state.** `[BOOL-CLAIM]` was right that the mapping to
+  `AtlFormFieldSpec.invalid` was false — `AtlRadioSpec` extends nothing — but the
+  property was driving `_invalid-border`, and an invalid radio is a real rendered
+  state: `atl-radio.tsx` computes `ctx.invalid && 'is-invalid'` from the group's
+  context and `atl-radio.css` has three rules for it. The property is restored, the
+  four overlays rebound, and the description now states the honest mapping —
+  *inherited from* `AtlRadioGroupSpec.invalid`, not owned here. A false claim about a
+  property is a reason to correct the claim, not to remove the property.
 - **A gate built on prose reported the wrong half of a problem.** ADR-0056 chose the
   description because that was the only place the data existed; the fix was to make
   the data exist. Worth remembering the next time a check has to read prose: it is a

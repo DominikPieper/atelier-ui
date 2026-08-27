@@ -167,6 +167,21 @@ for (const comp of snapshot.components) {
     const declared = new Set(realBooleans);
     for (const m of (comp.description || '').matchAll(/^- Boolean `([^`]+)`:([^\n]*)$/gm)) {
       declared.add(m[1]);
+      // `inherited from X.field` is the honest form for a state a component reads from
+      // its parent rather than declaring: AtlRadio draws `invalid` because
+      // `atl-radio.tsx` computes `ctx.invalid && 'is-invalid'` from the group. Checked
+      // the same way as a direct mapping, minus the requirement that this component's
+      // own spec resolve to that interface.
+      const inherited = /inherited from `?(\w+)\.(\w+)`?/.exec(m[2]);
+      if (inherited) {
+        const [, iface, field] = inherited;
+        if (!specShapes.has(iface)) {
+          warning('BOOL-CLAIM', `${comp.name}: Boolean \`${m[1]}\` says it is inherited from ${iface}.${field}, and no such interface is exported from libs/spec.`);
+        } else if (!specFields(iface).has(field)) {
+          warning('BOOL-CLAIM', `${comp.name}: Boolean \`${m[1]}\` says it is inherited from ${iface}.${field}, and ${iface} has no field \`${field}\`.`);
+        }
+        continue;
+      }
       const mapping = /maps to `?(\w+)\.(\w+)`?/.exec(m[2]);
       if (!mapping) continue; // free prose: a Figma-only toggle, not a spec claim
       const [, iface, field] = mapping;
@@ -233,7 +248,7 @@ for (const comp of snapshot.components) {
       .filter(([k, t]) => t === 'BOOLEAN' && !referenced.has(k))
       .map(([k]) => k.split('#')[0]);
     if (dead.length > 0) {
-      warning('BOOL-INERT', `${comp.name}: Boolean ${dead.length > 1 ? 'properties' : 'property'} ${dead.map((d) => `\`${d}\``).join(', ')} ${dead.length > 1 ? 'are' : 'is'} declared and nothing references ${dead.length > 1 ? 'them' : 'it'} — the ${dead.length > 1 ? 'properties toggle' : 'property toggles'} no layer, so switching ${dead.length > 1 ? 'them' : 'it'} changes nothing. Bind it to the visibility of the layer that state adds, or drop it. A state that differs only by colour cannot be a Boolean: put it on a variant axis.`);
+      warning('BOOL-INERT', `${comp.name}: Boolean ${dead.length > 1 ? 'properties' : 'property'} ${dead.map((d) => `\`${d}\``).join(', ')} ${dead.length > 1 ? 'are' : 'is'} declared and nothing references ${dead.length > 1 ? 'them' : 'it'} — the ${dead.length > 1 ? 'properties toggle' : 'property toggles'} no layer, so switching ${dead.length > 1 ? 'them' : 'it'} changes nothing. Bind it to the visibility of the layer that state adds. A colour-only state works too: add an overlay that paints the new colour and bind that, the way AtlSelect's \`_invalid-border\` does.`);
     }
   }
 
@@ -417,6 +432,11 @@ function checkAutoLayout(comp, selector) {
     if (!n.hasChildren) continue;
     if (!FRAME_LIKE.has(n.type)) continue;
     if (n.layoutMode && n.layoutMode !== 'NONE') continue;
+    // An icon instance is a fixed-ratio drawing, not a layout: it has no responsive
+    // intent for a generator to infer, and every icon in the library would otherwise
+    // be reported the moment a glyph is replaced by the instance that should have been
+    // there all along (ADR-0058).
+    if ((comp.iconInstanceNames || []).includes(n.name)) continue;
     if (allowed(selector, 'autolayout', n.name)) continue;
     offenders.push(n.name);
   }
