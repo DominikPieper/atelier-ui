@@ -95,6 +95,35 @@ if (!snapshot || !Array.isArray(snapshot.components) || snapshot.components.leng
 const specInterfaces = new Set(findExportedInterfaces(SPEC_FILE, 'Spec'));
 const unionMembers = parseSpecUnions(SPEC_FILE); // { AtlButtonVariant: ['primary', ...], ... }
 
+// Interface name -> { parents, fields, omitted }, so a master's prose claim
+// ("Boolean `disabled`: maps to AtlFormFieldSpec.disabled") can be checked rather
+// than believed. Two of those claims were false, and both were drift our own change
+// caused: ADR-0045 moved `readonly` out of AtlFormFieldSpec into AtlReadonlySpec and
+// the descriptions kept pointing at the old home (ADR-0056).
+const specShapes = parseSpecShapes(SPEC_FILE);
+
+/** The interfaces `<name>` resolves to, itself included, following `extends`. */
+function specChain(name) {
+  const chain = new Set();
+  (function walk(n) {
+    if (!n || chain.has(n) || !specShapes.has(n)) return;
+    chain.add(n);
+    for (const parent of specShapes.get(n).parents) walk(parent);
+  })(name);
+  return chain;
+}
+
+/** The fields `<name>` exposes, inherited ones included and Omit'd ones removed. */
+function specFields(name, seen = new Set()) {
+  if (seen.has(name) || !specShapes.has(name)) return new Set();
+  seen.add(name);
+  const entry = specShapes.get(name);
+  const out = new Set(entry.fields);
+  for (const parent of entry.parents) for (const f of specFields(parent, seen)) out.add(f);
+  for (const o of entry.omitted) out.delete(o);
+  return out;
+}
+
 const registry = parseExportedVars(METADATA_INDEX).COMPONENT_METADATA_REGISTRY || {};
 const metadataCache = new Map();
 function metadataForSpec(specName) {
@@ -111,6 +140,82 @@ function metadataForSpec(specName) {
 // Run the five checks per component.
 // ---------------------------------------------------------------------------
 for (const comp of snapshot.components) {
+  // ── Boolean properties, which live only in the master's prose ──────────────
+  // The snapshot records variantAxes as data and Booleans as description text, so
+  // this reads the text. Until the snapshot carries them structurally that is the
+  // only place the claim exists — and an unchecked claim is how AtlRadio came to
+  // declare a mapping to an interface its own spec does not extend (ADR-0056).
+  {
+    const ownSpec = `${comp.selector}Spec`;
+    const declared = new Set();
+    for (const m of (comp.description || '').matchAll(/^- Boolean `([^`]+)`:([^\n]*)$/gm)) {
+      declared.add(m[1]);
+      const mapping = /maps to `?(\w+)\.(\w+)`?/.exec(m[2]);
+      if (!mapping) continue; // free prose: a Figma-only toggle, not a spec claim
+      const [, iface, field] = mapping;
+      if (!specShapes.has(iface)) {
+        warning('BOOL-CLAIM', `${comp.name}: Boolean \`${m[1]}\` claims ${iface}.${field}, and no such interface is exported from libs/spec.`);
+        continue;
+      }
+      const chain = specChain(ownSpec);
+      if (!chain.has(iface)) {
+        warning('BOOL-CLAIM', `${comp.name}: Boolean \`${m[1]}\` claims ${iface}.${field}, but ${ownSpec} does not resolve to ${iface} — it resolves to ${[...chain].join(', ') || 'nothing'}. The mapping names an interface this component does not implement.`);
+        continue;
+      }
+      if (!specFields(iface).has(field)) {
+        warning('BOOL-CLAIM', `${comp.name}: Boolean \`${m[1]}\` claims ${iface}.${field}, and ${iface} has no field \`${field}\`. Point it at the interface that owns the field today.`);
+      }
+    }
+    // …and the other direction: a spec flag the master offers no way to set.
+    if (specShapes.has(ownSpec)) {
+      const fields = specFields(ownSpec);
+      // A flag can be expressed as a Boolean OR as a value of a variant axis —
+      // AtlInput carries `invalid` as a value of `state`, not as a Boolean, and
+      // reporting that as missing sent the reader to add a property that would then
+      // contradict the axis. Checked against the axis values too.
+      const axisValues = new Set(
+        Object.values(comp.variantAxes || {}).flat().map((v) => String(v).toLowerCase())
+      );
+      const gaps = ['disabled', 'invalid', 'required', 'readonly', 'loading'].filter(
+        (f) => fields.has(f) && !declared.has(f) && !axisValues.has(f)
+      );
+      if (gaps.length > 0) {
+        warning('BOOL-MISSING', `${comp.name}: ${ownSpec} has ${gaps.join(', ')} and the master declares no Boolean property for ${gaps.length > 1 ? 'them' : 'it'}. A state a component supports and a master cannot express is a state nobody can draw.`);
+      }
+    }
+  }
+
+  // ── A variant axis is the master's API surface ─────────────────────────────
+  // Four masters carried axes that picture an outcome rather than name a prop —
+  // AtlBreadcrumbs items=3|4|5, AtlPagination position=first|middle|last,
+  // AtlTabGroup selected=0|1. A designer reading the list sees API where there is
+  // none, so those belong on an example page as instances (ADR-0056).
+  {
+    const INTERACTION_AXES = new Set(['state', 'selection']);
+    const ownSpec = `${comp.selector}Spec`;
+    // With no spec interface there is nothing to compare an axis against, and the
+    // component already gets a [MAP]/[DESC] warning for that. Judging its axes here
+    // would report AtlToast's `variant` as fictional when the missing half is the spec.
+    const fields = specShapes.has(ownSpec) ? specFields(ownSpec) : null;
+    if (fields === null) continue;
+    for (const axis of Object.keys(comp.variantAxes || {})) {
+      if (INTERACTION_AXES.has(axis)) continue;
+      if (fields.has(axis)) continue;
+      if (unionMembers[`Atl${axis[0].toUpperCase()}${axis.slice(1)}`]) continue;
+      const values = (comp.variantAxes[axis] || []).join(' | ');
+      // An axis whose name is buried inside a real prop's name is a naming mismatch,
+      // not a fiction: AtlTooltip's axis is `position` and the prop is
+      // `atlTooltipPosition`. Saying "not a property" there sends the reader looking
+      // for the wrong repair.
+      const near = [...fields].find((f) => f.toLowerCase().includes(axis.toLowerCase()));
+      if (near) {
+        warning('AXIS-NAME', `${comp.name}: variant axis \`${axis}\` = ${values} names ${ownSpec}.${near} under a different name. Rename the axis to \`${near}\` so the master and the contract read the same${/index$/i.test(near) ? ` — and note that ${near} is a number, so an axis can only ever picture a sample of it` : ''}.`);
+        continue;
+      }
+      warning('AXIS-NOT-A-PROP', `${comp.name}: variant axis \`${axis}\` = ${values} is not a property of ${ownSpec}. An axis is the master's API surface; picture this with instances on an example page instead.`);
+    }
+  }
+
   const selector = comp.selector; // e.g. 'AtlButton'
   const specName = `${selector}Spec`;
 
@@ -307,6 +412,30 @@ function q(s) {
 
 /** Parse libs/spec/src/index.ts for `type Atl... = 'a' | 'b'` string-literal
  *  unions. Syntactic parse (createSourceFile) — fast, no type resolution. */
+function parseSpecShapes(file) {
+  const src = fs.readFileSync(file, 'utf8');
+  const out = new Map();
+  for (const m of src.matchAll(/export interface (\w+)(?:\s+extends\s+([^{]+))?\s*\{([\s\S]*?)\n\}/g)) {
+    const [, name, ext, body] = m;
+    const fields = new Set(
+      [...body.matchAll(/^\s{2}(?:readonly\s+)?([A-Za-z_$][\w$]*)\??\s*:/gm)].map((f) => f[1])
+    );
+    const parents = (ext || '')
+      .split(',')
+      .map((x) => x.trim())
+      .filter(Boolean)
+      .map((x) => {
+        const omit = x.match(/^Omit<\s*(\w+)/);
+        return omit ? omit[1] : x.replace(/<.*$/, '');
+      });
+    const omitted = [...(ext || '').matchAll(/Omit<\s*\w+\s*,\s*([^>]+)>/g)].flatMap((o) =>
+      [...o[1].matchAll(/'([^']+)'/g)].map((x) => x[1])
+    );
+    out.set(name, { parents, fields, omitted });
+  }
+  return out;
+}
+
 function parseSpecUnions(file) {
   const src = fs.readFileSync(file, 'utf8');
   const sf = ts.createSourceFile(file, src, ts.ScriptTarget.Latest, true);

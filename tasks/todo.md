@@ -263,6 +263,24 @@ Decision-bearing quick wins (deferred — not this session's scope):
       as a derived Variable — they will land as four resolved numbers and the derivation
       will live only in ADR-0052 and `tokens.css`. Decide at transfer time whether that is
       acceptable or whether the row scale should be authored flat.
+- [ ] **Phase 3 work order — the eight master findings `check:figma` now states** (ADR-0056).
+      Each is a drawing, not a property call, which is why none was executed:
+      `[BOOL-CLAIM]` AtlRadio declares an `invalid` Boolean mapping to an interface
+      `AtlRadioSpec` does not extend — remove the property (destructive, live file).
+      `[BOOL-MISSING]` AtlToggle (invalid, required), AtlRadioGroup (invalid, required,
+      readonly), AtlCombobox (readonly) — each needs the state drawn before the property
+      means anything. `[AXIS-NAME]` AtlTabGroup `selected` → `selectedIndex` (a number,
+      so an axis can only sample it), AtlTooltip `position` → `atlTooltipPosition`.
+      `[AXIS-NOT-A-PROP]` AtlBreadcrumbs `items`=3|4|5 and AtlPagination
+      `position`=first|middle|last — remove the axis, picture it with instances.
+- [ ] **Eleven child masters to draw** (ADR-0056): AtlMenuItem, AtlMenuSeparator, AtlTab,
+      AtlStep, AtlOption, AtlChatMessage, AtlChatSuggestion, AtlChatTyping,
+      AtlAccordionItem, AtlBreadcrumbItem — plus AtlIcon, which everything else already
+      depends on. The container axes that vary to show a child come off as these land.
+- [ ] **Capture Boolean properties in the snapshot as data** (ADR-0056). `check:figma`
+      parses them out of the prose description because that is where they live;
+      `componentPropertyDefinitions` via the bridge would make the check exact instead of
+      format-dependent.
 - [ ] **Angular's `touched` is public API the spec never declared** (ADR-0055). Seven
       components expose it as a `model(false)`; React and Vue have no equivalent, and it no
       longer gates the error message. Remove it with the breaking batch, or add it to the
