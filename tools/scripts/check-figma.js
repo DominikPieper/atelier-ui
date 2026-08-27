@@ -48,6 +48,10 @@ const SNAPSHOT_FILE = path.join(ROOT, 'tools/figma/snapshot.json');
 const SPEC_FILE = path.join(ROOT, 'libs/spec/src/index.ts');
 const METADATA_INDEX = path.join(ROOT, 'libs/spec/src/metadata/index.ts');
 const METADATA_DIR = path.join(ROOT, 'libs/spec/src/metadata');
+const TOKENS_FILE = path.join(
+  ROOT,
+  'libs/create-workspace/src/generators/preset/files/styles/tokens.css'
+);
 
 // Severity → bucket. BLOCKER + CRITICAL fail the build; WARNING is advisory.
 const errors = []; // { sev, tag, msg }
@@ -332,6 +336,15 @@ for (const comp of snapshot.components) {
 }
 
 // ---------------------------------------------------------------------------
+// File-level typography. Not per-component: a typeface is a property of the
+// whole file, and the two defects it hides are file-shaped. The masters were
+// drawn in Inter while --ui-font-family had said Instrument Sans since ADR-0035,
+// and the 19 ty/* text styles documented a Montserrat scale the library never
+// had — each style used exactly once, by its own specimen row (ADR-0059).
+// ---------------------------------------------------------------------------
+checkTypography();
+
+// ---------------------------------------------------------------------------
 // Report — prioritized (Blocker → Critical → Warning), styled like the other
 // gates. Each finding is one actionable line.
 // ---------------------------------------------------------------------------
@@ -477,6 +490,136 @@ function checkDescription(comp, selector, specName) {
   if (!desc.includes(specName) && !allowed(selector, 'desc', 'spec-ref')) {
     warning('DESC', `${selector}: description does not reference its spec interface ${specName}. State the spec mapping so the description stays congruent with the contract.`);
   }
+}
+
+/** 6. Typography — the file's typefaces and text styles against tokens.css.
+ *
+ *  Two rules, both file-wide:
+ *   - [FONT-FAMILY] every TEXT node sits in one of the three families tokens.css
+ *     declares (--ui-font-family / --ui-font-display / --ui-font-mono). A fourth
+ *     family is a master drawn in a typeface the library does not ship.
+ *   - [TEXT-STYLE] the local text styles are exactly one per --ui-type-* role,
+ *     named ty/<role>, with that role's family, weight, size and leading. A style
+ *     that documents a scale the library does not have is worse than no style:
+ *     designers reach for it.
+ */
+function checkTypography() {
+  const t = snapshot.typography;
+  if (!t) {
+    warning(
+      'TYPEFACE',
+      'snapshot carries no typography facts. Re-run npm run figma:snapshot to capture them.'
+    );
+    return;
+  }
+  const { families, roles } = parseTypeTokens();
+
+  // ── Families ──────────────────────────────────────────────────────────────
+  const declared = new Set(Object.values(families));
+  for (const [family, count] of Object.entries(t.fontFamilies || {})) {
+    if (family === 'MIXED') {
+      warning(
+        'FONT-FAMILY',
+        `${count} text node(s) mix fonts within one string, so their family cannot be verified. Split them or set one family.`
+      );
+      continue;
+    }
+    if (declared.has(family)) continue;
+    const where = (t.fontSamples || {})[family];
+    blocker(
+      'FONT-FAMILY',
+      `${count} text node(s) are set in ${family}, which tokens.css does not declare` +
+        `${where ? ` (e.g. ${where})` : ''}. The file ships ${[...declared].join(', ')} — ` +
+        `re-set them, or add the family to tokens.css if it is genuinely part of the library.`
+    );
+  }
+
+  // ── Text styles ───────────────────────────────────────────────────────────
+  const byName = new Map((t.textStyles || []).map((s) => [s.name, s]));
+  for (const [role, want] of Object.entries(roles)) {
+    const name = `ty/${role}`;
+    const got = byName.get(name);
+    if (!got) {
+      blocker(
+        'TEXT-STYLE',
+        `${name} is missing. --ui-type-${role} exists in tokens.css, so the file needs the matching style ` +
+          `(${want.family} ${want.style} ${want.size}px / ${want.lineHeightPct}%).`
+      );
+      continue;
+    }
+    const diffs = [];
+    if (got.family !== want.family) diffs.push(`family ${got.family} ≠ ${want.family}`);
+    if (got.style !== want.style) diffs.push(`weight ${got.style} ≠ ${want.style}`);
+    if (Math.abs(got.size - want.size) > 0.01) diffs.push(`size ${got.size} ≠ ${want.size}`);
+    if (got.lineHeightUnit !== 'PERCENT') {
+      diffs.push(`leading is ${got.lineHeightUnit.toLowerCase()}, not a stated percentage`);
+    } else if (Math.abs(got.lineHeightValue - want.lineHeightPct) > 0.5) {
+      // 0.5 not 0.01: Figma stores 165% as 164.9999976158142.
+      diffs.push(`leading ${Math.round(got.lineHeightValue * 100) / 100}% ≠ ${want.lineHeightPct}%`);
+    }
+    if (diffs.length) {
+      blocker('TEXT-STYLE', `${name} diverges from --ui-type-${role}: ${diffs.join('; ')}.`);
+    }
+  }
+  for (const s of t.textStyles || []) {
+    if (!s.name.startsWith('ty/')) continue;
+    const role = s.name.slice(3);
+    if (roles[role]) continue;
+    blocker(
+      'TEXT-STYLE',
+      `${s.name} has no --ui-type-${role} in tokens.css. Delete it or add the role — a text style ` +
+        `for a scale the library does not have is one a designer will reach for.`
+    );
+  }
+}
+
+/** tokens.css → { families, roles }. The role shorthand is
+ *  `[italic ]var(--ui-font-weight-W) var(--ui-font-size-S) / var(--ui-line-height-L) var(--ui-font-F)`,
+ *  resolved through the primitive tokens in the same file. */
+function parseTypeTokens() {
+  const css = fs.readFileSync(TOKENS_FILE, 'utf8');
+  const decl = (name) => {
+    const m = new RegExp(`--ui-${name}\\s*:\\s*([^;]+);`).exec(css);
+    return m ? m[1].replace(/\s+/g, ' ').trim() : null;
+  };
+  const firstFamily = (v) => {
+    if (!v) return null;
+    const first = v.split(',')[0].trim();
+    return first.replace(/^['"]|['"]$/g, '');
+  };
+  const families = {
+    'font-family': firstFamily(decl('font-family')),
+    'font-display': firstFamily(decl('font-display')),
+    'font-mono': firstFamily(decl('font-mono')),
+  };
+  // CSS numeric weight → the Figma style name for the families this file ships.
+  const WEIGHT_STYLE = { normal: 'Regular', medium: 'Medium', semibold: 'SemiBold', bold: 'Bold' };
+  const roles = {};
+  for (const m of css.matchAll(/--ui-type-([a-z-]+)\s*:\s*([^;]+);/g)) {
+    const role = m[1];
+    let body = m[2].replace(/\s+/g, ' ').trim();
+    const italic = body.startsWith('italic ');
+    if (italic) body = body.slice('italic '.length);
+    const weight = /font-weight-(\w+)\)/.exec(body);
+    const size = /font-size-([\w]+)\)/.exec(body);
+    const lh = /line-height-(\w+)\)/.exec(body);
+    const fam = /--ui-(font-family|font-display|font-mono)\)/.exec(body);
+    if (!weight || !size || !lh || !fam) {
+      warning('TEXT-STYLE', `--ui-type-${role} is not the expected font shorthand; skipped.`);
+      continue;
+    }
+    const sizeRem = parseFloat(String(decl(`font-size-${size[1]}`)).replace('rem', ''));
+    const lhNum = parseFloat(decl(`line-height-${lh[1]}`));
+    let style = WEIGHT_STYLE[weight[1]] || weight[1];
+    if (italic) style = style === 'Regular' ? 'Italic' : `${style} Italic`;
+    roles[role] = {
+      family: families[fam[1]],
+      style,
+      size: Math.round(sizeRem * 16 * 100) / 100,
+      lineHeightPct: Math.round(lhNum * 100 * 100) / 100,
+    };
+  }
+  return { families, roles };
 }
 
 // ===========================================================================

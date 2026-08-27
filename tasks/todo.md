@@ -162,10 +162,34 @@ Decision-bearing quick wins (deferred — not this session's scope):
       carries the three rules an artboard/token gate wants: raw hex → use a token via
       `var()`, raw `\d+px` → use a spacing token, `font-family` outside the DS list. Lift
       them rather than authoring new ones.
-- [ ] **Decide the Inter question.** `--ui-font-family` is Inter; ADR-0020 makes typography
-      the shared brand DNA; Claude Design's own prompt lists Inter among overused
-      "AI slop" fonts. The most-used font in the ecosystem is a weak carrier of identity.
-      Couple this decision with the role-based type scale — they are one decision.
+- [x] **Decide the Inter question** (closed 2026-08-27, ADR-0059) — stale as written:
+      `--ui-font-family` has been Instrument Sans since ADR-0035, and the role-based
+      scale it wanted coupled is `--ui-type-*`. What was still open was the *other*
+      side: the Figma file was still drawn in Inter (Components/Inventory/Icons) and
+      Montserrat + Libre Baskerville (foundations pages + all 19 `ty/*` styles). All
+      1621 text nodes swept onto the declared families, the 19 styles replaced by 8
+      `ty/<role>` styles generated from `--ui-type-*`, and `[FONT-FAMILY]` +
+      `[TEXT-STYLE]` added to `check:figma` so it cannot drift back.
+- [ ] **Nothing detects an orphaned main component.** Figma keeps a removed
+      `COMPONENT` alive while an instance still references it, and `findAll` cannot
+      reach it — so it is invisible to every tree walk, including the snapshot probe.
+      Two Inventory tiles (AtlPagination, AtlBreadcrumbs) had drawn *pre-fix* geometry
+      for months that way (ADR-0059); a text sweep found them only by failing on nine
+      nodes it could not change. The check must run from the instance side: walk
+      instances, resolve `getMainComponentAsync()`, assert the result is reachable from
+      the document. Capture it in the snapshot probe and gate it.
+- [ ] **Two variable collections carry the same ten spacing values.** `Primitive
+      Tokens` has `spacing/s1…s16`, `Library Tokens` has `spacing/1…16` — identical
+      values (4, 8, 12, 16, 20, 24, 32, 40, 48, 64), and only the latter is generated
+      from `tokens.css`. A designer picking from the wrong family binds to a collection
+      the CSS does not feed. Decide whether `Primitive Tokens` (76 variables — radii and
+      sizes too) is still needed; check what binds to it before removing anything.
+- [ ] **The off-scale pass covered type, not weight or spacing.** `atl-code-block.css`
+      still holds raw literals the sweep did not look for: `font-weight: 500` and `600`
+      (should be `--ui-font-weight-medium` / `-semibold`), and `gap: 0.3rem`,
+      `padding: 0.2rem 0.55rem`, `min-width: 2rem` off the spacing scale. Sweep both
+      classes library-wide the way the type values were swept, then gate them —
+      `check:token-bypass` sees colours and radii, not weights.
 - [ ] **The parity gate cannot see the shared token layer.** A component's `inputsHash`
       covers `libs/{angular,react,vue}/src/lib/<module>/` only, so `styles/tokens.css` is
       outside it — ADR-0035 changed the UI typeface for all 29 components and triggered no

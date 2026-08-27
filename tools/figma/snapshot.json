@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-27T11:55:12.149Z",
-    "gitSha": "3a97060",
+    "generatedAt": "2026-08-27T12:18:58.894Z",
+    "gitSha": "1914337",
     "serverVersion": null,
     "coverage": "All 29 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -61,6 +61,84 @@
     "line-height/normal",
     "line-height/tight"
   ],
+  "typography": {
+    "fontFamilies": {
+      "Instrument Sans": 1506,
+      "Instrument Serif": 1,
+      "JetBrains Mono": 81
+    },
+    "fontSamples": {
+      "Instrument Sans": "📕 Cover › Atelier UI",
+      "Instrument Serif": "🔤 Typography › The quick brown fox jumps over the lazy ",
+      "JetBrains Mono": "🔤 Typography › const atelier = { ok: true };"
+    },
+    "textStyles": [
+      {
+        "name": "ty/display",
+        "family": "Instrument Serif",
+        "style": "Italic",
+        "size": 36,
+        "lineHeightUnit": "PERCENT",
+        "lineHeightValue": 125
+      },
+      {
+        "name": "ty/headline",
+        "family": "Instrument Sans",
+        "style": "Bold",
+        "size": 24,
+        "lineHeightUnit": "PERCENT",
+        "lineHeightValue": 125
+      },
+      {
+        "name": "ty/title",
+        "family": "Instrument Sans",
+        "style": "SemiBold",
+        "size": 18,
+        "lineHeightUnit": "PERCENT",
+        "lineHeightValue": 125
+      },
+      {
+        "name": "ty/body-lg",
+        "family": "Instrument Sans",
+        "style": "Regular",
+        "size": 18,
+        "lineHeightUnit": "PERCENT",
+        "lineHeightValue": 150
+      },
+      {
+        "name": "ty/body-md",
+        "family": "Instrument Sans",
+        "style": "Regular",
+        "size": 16,
+        "lineHeightUnit": "PERCENT",
+        "lineHeightValue": 150
+      },
+      {
+        "name": "ty/body-sm",
+        "family": "Instrument Sans",
+        "style": "Regular",
+        "size": 14,
+        "lineHeightUnit": "PERCENT",
+        "lineHeightValue": 150
+      },
+      {
+        "name": "ty/label",
+        "family": "Instrument Sans",
+        "style": "Medium",
+        "size": 12,
+        "lineHeightUnit": "PERCENT",
+        "lineHeightValue": 125
+      },
+      {
+        "name": "ty/code",
+        "family": "JetBrains Mono",
+        "style": "Regular",
+        "size": 14,
+        "lineHeightUnit": "PERCENT",
+        "lineHeightValue": 164.9999976158142
+      }
+    ]
+  },
   "components": [
     {
       "name": "Action/AtlButton",

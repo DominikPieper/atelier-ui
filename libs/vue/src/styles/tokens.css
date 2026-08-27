@@ -119,7 +119,7 @@
   --ui-type-label: var(--ui-font-weight-medium) var(--ui-font-size-xs) /
     var(--ui-line-height-tight) var(--ui-font-family);
   --ui-type-code: var(--ui-font-weight-normal) var(--ui-font-size-sm) /
-    var(--ui-line-height-normal) var(--ui-font-mono);
+    var(--ui-line-height-code) var(--ui-font-mono);
 
   /* ── Colours · light mode (default) ────────────────────────── */
 

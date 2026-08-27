@@ -152,7 +152,29 @@ async function main() {
           glyphTextNodes: glyphs.filter((g) => { const k = g.layer + '|' + g.chars; if (seen.has(k)) return false; seen.add(k); return true; }),
         };
       }
-      return out;
+      // File-wide typography. The masters were drawn in Inter while
+      // --ui-font-family said Instrument Sans, and the 19 ty/* text styles
+      // documented a Montserrat scale the library never had (ADR-0059). Neither
+      // was visible to any gate, so both are captured as facts here.
+      const fontTally = {};
+      const fontSamples = {};
+      for (const pg of figma.root.children) {
+        for (const t of pg.findAll((n) => n.type === 'TEXT')) {
+          const fn = t.fontName;
+          const key = fn === figma.mixed ? 'MIXED' : fn.family;
+          fontTally[key] = (fontTally[key] || 0) + 1;
+          if (!fontSamples[key]) fontSamples[key] = pg.name + ' \u203a ' + String(t.name).slice(0, 40);
+        }
+      }
+      const textStyles = (await figma.getLocalTextStylesAsync()).map((s) => ({
+        name: s.name,
+        family: s.fontName.family,
+        style: s.fontName.style,
+        size: s.fontSize,
+        lineHeightUnit: s.lineHeight.unit,
+        lineHeightValue: s.lineHeight.unit === 'AUTO' ? null : s.lineHeight.value,
+      }));
+      return { masters: out, typography: { fontFamilies: fontTally, fontSamples, textStyles } };
     `;
     const probe = (await call(client, 'figma_execute', { code: probeCode, timeout: 25000 }))?.result ?? {};
 
@@ -187,10 +209,10 @@ async function main() {
         variants,
         // From the 2b probe: the declared property types, which of them anything
         // references, and the pictograms drawn as TEXT characters.
-        properties: probe[nodeId]?.properties ?? {},
-        referencedProperties: probe[nodeId]?.referencedProperties ?? [],
-        iconInstanceNames: probe[nodeId]?.iconInstanceNames ?? [],
-        glyphTextNodes: probe[nodeId]?.glyphTextNodes ?? [],
+        properties: probe.masters?.[nodeId]?.properties ?? {},
+        referencedProperties: probe.masters?.[nodeId]?.referencedProperties ?? [],
+        iconInstanceNames: probe.masters?.[nodeId]?.iconInstanceNames ?? [],
+        glyphTextNodes: probe.masters?.[nodeId]?.glyphTextNodes ?? [],
         sampledVariant: defaultVariantId,
         nodes: deep ? collectNodeFacts(deep) : [],
       });
@@ -210,6 +232,7 @@ async function main() {
         note: 'Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js.',
       },
       uiTokens,
+      typography: probe.typography ?? null,
       components,
     };
     writeFileSync(OUT, JSON.stringify(snapshot, null, 2) + '\n');
