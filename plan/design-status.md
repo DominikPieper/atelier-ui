@@ -154,7 +154,7 @@ All four variants drawn with real code. Records that there is no AtlCodeBlockSpe
 - Kind: **component** · subject: AtlCombobox
 - Covers: AtlCombobox
 
-Eight specimens: the six Figma variant states (open/filtered/selected each drawn with their panel), the no-results state that has no Figma variant, and the invalid and readonly cases. Draws both ladders in one component — the input is a control (40px, padding derived) and each option is a row (40px on --ui-row-height-sm, padding zero, centred), the same 40 reached two different ways. Records that readonly exists in the code but not on the master, so the transfer has to add the Boolean.
+Eight specimens: the six Figma variant states (open/filtered/selected each drawn with their panel), the no-results state that has no Figma variant, and the invalid and readonly cases. Draws both ladders in one component — the input is a control (40px, padding derived) and each option is a row (40px on --ui-row-height-sm, padding zero, centred), the same 40 reached two different ways. Anatomy re-measured 2026-08-27: the chevron row said 12×12 and measures 16×16. Six findings fixed, including invalid-by-colour-alone and the errors-gated-on-invalid that silently showed nothing in React and Vue. One open: readonly exists in the code and not on the master — check:figma now says so itself as a [BOOL-MISSING] warning (ADR-0056).
 
 ### AtlDialog.dc.html
 
@@ -234,7 +234,7 @@ Group-level states with the children drawn in place, plus the horizontal layout 
 - Kind: **component** · subject: AtlSelect
 - Covers: AtlSelect
 
-Draws the native-vs-custom divergence rather than one framework's version of it: React and Vue render a native <select> whose list the OS draws (marked, not mocked), Angular renders a custom listbox whose option rows are 40px on --ui-row-height-sm. Six trigger specimens shared by all three frameworks, plus the open state twice. Measured anatomy. Findings: the Angular option rows had no styles at all until 2026-08-27 — is-selected, is-active and is-disabled all rendered identically; the 36-vs-40 disagreement with AtlCombobox is resolved on the row ladder; readonly is deliberately absent (HTMLSelectElement has no readOnly). Two open questions: one master cannot describe two implementations, and invalid is carried by border colour alone here and in AtlCombobox while AtlInput and AtlTextarea draw an indicator.
+Draws the native-vs-custom divergence rather than one framework's version of it: React and Vue render a native <select> whose list the OS draws (marked, not mocked), Angular renders a custom listbox whose option rows are 40px on --ui-row-height-sm. Six trigger specimens shared by all three frameworks, plus the open state twice. Measured anatomy, re-measured against the code 2026-08-27: the invalid indicator sits 36px from the field's inline end and the chevron 16px, and the sheet's own specimens now render at those numbers. Findings: six fixed (invalid was colour-only, ADR-0055; the chevron was the text character '▾'; the Angular option rows had no styles at all; the 36-vs-40 disagreement with AtlCombobox; the CI-vs-local 41px; readonly deliberately absent). One open: one master cannot describe two implementations.
 
 ### AtlSkeleton.dc.html
 
