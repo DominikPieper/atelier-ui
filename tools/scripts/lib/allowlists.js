@@ -116,16 +116,6 @@ const FIGMA_CONFORMANCE_EXCEPTIONS = new Set([
   // AtlTableAlign is a per-cell prop (AtlTh/AtlTd), not a set-level visual
   // variant of the table master. Code-only.
   'AtlTable:name:align',
-  // AtlTable declares three Booleans whose fields live on its CHILDREN's specs —
-  // `sortable` on AtlThSpec, `selectable` on AtlTrSpec, `empty` on AtlTbodySpec —
-  // so [BOOL-UNSPECED] is right that AtlTableSpec has none of them, and a `maps to`
-  // claim would fail [BOOL-CLAIM] because AtlTableSpec does not resolve to those
-  // interfaces (which is ADR-0056's point: a container must not claim its children's
-  // states). They stay declared only until the AtlTh / AtlTr / AtlTbody child masters
-  // exist to carry them — tracked in tasks/todo.md.
-  'AtlTable:bool:unspeced:sortable',
-  'AtlTable:bool:unspeced:selectable',
-  'AtlTable:bool:unspeced:empty',
   // AtlOptionSpec and AtlSelectSpec share the `select` metadata module, so AtlOption
   // inherits AtlSelect's variantMatrix — which pictures the TRIGGER's states
   // (default | filled | hover | focus | open) and even claims role: 'combobox'. The

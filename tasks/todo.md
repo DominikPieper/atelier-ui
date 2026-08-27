@@ -190,11 +190,18 @@ Decision-bearing quick wins (deferred — not this session's scope):
       `chevron-right` AtlIcon in all three templates (a spec-touching change) or stating
       the pseudo-element as the one place a glyph is allowed. The master matches the code
       today, with the exemption written in its description.
-- [ ] **Three table child masters carry AtlTable's borrowed Booleans.** `sortable` is
-      `AtlThSpec`, `selectable` is `AtlTrSpec`, `empty` is `AtlTbodySpec`. They are
-      allowlisted on AtlTable with that reason (ADR-0061) and stay declared only until
-      AtlTh / AtlTr / AtlTbody exist as masters. Building them removes the allowlist
-      entries, not just the warning.
+- [x] **The table's child masters** (closed 2026-08-27, ADR-0065) — four, not three:
+      `AtlTdSpec` exists too. AtlTable gave up `sortable`, `selectable` and `empty`, and the
+      three allowlist entries are deleted rather than merely satisfied. Each child is
+      complete on one axis instead of a 3x3 matrix, and the parts are COMPOSED: AtlTr's
+      cells are AtlTd instances, AtlTbody's rows are AtlTr instances — possible here
+      because a cell carries only text, so no content slot is needed.
+- [ ] **`.atl-tr-select-cell` is 44px wide with 32px of inherited padding.** It declares
+      `width: 2.75rem` and `text-align: center` and inherits `padding-inline:
+      var(--ui-spacing-4)` as a `<td>`, leaving a 12px content box for an 18px checkbox.
+      The master draws what the CSS computes, so the squeeze is now visible in Figma
+      (ADR-0065). Either the cell resets its padding or it gets wider — a code change in
+      three frameworks, so it wants its own step.
 - [x] **AtlTabGroup's `disabled` belongs on AtlTab** (closed 2026-08-27, ADR-0062) —
       AtlTab now exists as a master and carries it.
 - [x] **`[LAYER-PAINT]`: the inner layers** (closed 2026-08-27, ADR-0063) — built as a

@@ -70,6 +70,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0062](0062-a-part-promoted-to-a-master-becomes-checkable.md) | A part promoted to a master becomes checkable (ten child masters) | Accepted | Recorded |
 | [0063](0063-the-layer-name-is-the-selector.md) | The layer name is the selector (`[LAYER-PAINT]`) | Accepted | Recorded |
 | [0064](0064-what-the-parity-stamp-rests-on.md) | What the parity stamp rests on (redesign phase closed) | Accepted | Recorded |
+| [0065](0065-the-table-gives-its-children-back-their-states.md) | The table gives its children back their states (AtlTh/AtlTd/AtlTr/AtlTbody) | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

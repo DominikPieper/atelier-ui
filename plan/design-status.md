@@ -36,7 +36,7 @@ a typography study says nothing about how the component should look.
 | `select` | **AtlSelect.dc.html** | state | 4 | 2026-08-27 (`51d2d9d`) | — | — | yes |
 | `skeleton` | **AtlSkeleton.dc.html** | variant | 3 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
 | `stepper` | **AtlStepper.dc.html** | state | 4 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
-| `table` | **AtlTable.dc.html** | variant · size · state | 5 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
+| `table` | **AtlTable.dc.html** | none | 0 | 2026-08-27 (`560bd9e`) | all 3 | — | yes |
 | `tabs` | **AtlTabGroup.dc.html** | state | 2 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
 | `textarea` | **AtlTextarea.dc.html** | state | 5 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
 | `toast` | **AtlToast.dc.html** | — *(no master)* | — | — *(never)* | all 3 | — | yes |

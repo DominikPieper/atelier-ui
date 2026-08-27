@@ -2,7 +2,7 @@
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "note": "Per-component design-parity records. Written by `npm run parity:record` after a human/agent runs figma_check_design_parity; read by `npm run check:parity`. Each record's inputsHash covers libs/{angular,react,vue}/src/lib/<module>/ so a spec/story/impl/css change since the last verify makes the gate ask for a re-verify. The parity SCORE is deliberately not stored: it is not comparable across runs (it tracks how much of codeSpec was declared and which node was sampled, not the component) — three runs on one commit for AtlStepper returned 70, 52 and 83. See plan/adr/0024 and its 2026-08-26 amendment.",
-    "generatedAt": "2026-08-27T14:02:29.297Z"
+    "generatedAt": "2026-08-27T14:43:31.882Z"
   },
   "components": {
     "AtlAccordionGroup": {
@@ -733,6 +733,62 @@
         "libs/vue/src/lib/table/atl-tr.vue"
       ]
     },
+    "AtlTbody": {
+      "figmaNodeId": "911:1546",
+      "verifiedAt": "2026-08-27T14:43:31.834Z",
+      "verifiedSha": "560bd9e",
+      "inputsHash": "sha256:c36a57503df17ab4ec48a13a866357bf645a5e1e2c5e1e98be293e32c55393f3",
+      "inputs": [
+        "libs/angular/src/lib/table/atl-table.a11y.spec.ts",
+        "libs/angular/src/lib/table/atl-table.css",
+        "libs/angular/src/lib/table/atl-table.spec.ts",
+        "libs/angular/src/lib/table/atl-table.stories.ts",
+        "libs/angular/src/lib/table/atl-table.ts",
+        "libs/react/src/lib/table/atl-table.a11y.spec.tsx",
+        "libs/react/src/lib/table/atl-table.css",
+        "libs/react/src/lib/table/atl-table.spec.tsx",
+        "libs/react/src/lib/table/atl-table.stories.tsx",
+        "libs/react/src/lib/table/atl-table.tsx",
+        "libs/vue/src/lib/table/atl-table.a11y.spec.ts",
+        "libs/vue/src/lib/table/atl-table.css",
+        "libs/vue/src/lib/table/atl-table.spec.ts",
+        "libs/vue/src/lib/table/atl-table.stories.ts",
+        "libs/vue/src/lib/table/atl-table.vue",
+        "libs/vue/src/lib/table/atl-tbody.vue",
+        "libs/vue/src/lib/table/atl-td.vue",
+        "libs/vue/src/lib/table/atl-th.vue",
+        "libs/vue/src/lib/table/atl-thead.vue",
+        "libs/vue/src/lib/table/atl-tr.vue"
+      ]
+    },
+    "AtlTd": {
+      "figmaNodeId": "911:1496",
+      "verifiedAt": "2026-08-27T14:43:30.113Z",
+      "verifiedSha": "560bd9e",
+      "inputsHash": "sha256:c36a57503df17ab4ec48a13a866357bf645a5e1e2c5e1e98be293e32c55393f3",
+      "inputs": [
+        "libs/angular/src/lib/table/atl-table.a11y.spec.ts",
+        "libs/angular/src/lib/table/atl-table.css",
+        "libs/angular/src/lib/table/atl-table.spec.ts",
+        "libs/angular/src/lib/table/atl-table.stories.ts",
+        "libs/angular/src/lib/table/atl-table.ts",
+        "libs/react/src/lib/table/atl-table.a11y.spec.tsx",
+        "libs/react/src/lib/table/atl-table.css",
+        "libs/react/src/lib/table/atl-table.spec.tsx",
+        "libs/react/src/lib/table/atl-table.stories.tsx",
+        "libs/react/src/lib/table/atl-table.tsx",
+        "libs/vue/src/lib/table/atl-table.a11y.spec.ts",
+        "libs/vue/src/lib/table/atl-table.css",
+        "libs/vue/src/lib/table/atl-table.spec.ts",
+        "libs/vue/src/lib/table/atl-table.stories.ts",
+        "libs/vue/src/lib/table/atl-table.vue",
+        "libs/vue/src/lib/table/atl-tbody.vue",
+        "libs/vue/src/lib/table/atl-td.vue",
+        "libs/vue/src/lib/table/atl-th.vue",
+        "libs/vue/src/lib/table/atl-thead.vue",
+        "libs/vue/src/lib/table/atl-tr.vue"
+      ]
+    },
     "AtlTextarea": {
       "figmaNodeId": "55:87",
       "verifiedAt": "2026-08-27T14:02:09.969Z",
@@ -754,6 +810,34 @@
         "libs/vue/src/lib/textarea/atl-textarea.spec.ts",
         "libs/vue/src/lib/textarea/atl-textarea.stories.ts",
         "libs/vue/src/lib/textarea/atl-textarea.vue"
+      ]
+    },
+    "AtlTh": {
+      "figmaNodeId": "911:1503",
+      "verifiedAt": "2026-08-27T14:43:29.268Z",
+      "verifiedSha": "560bd9e",
+      "inputsHash": "sha256:c36a57503df17ab4ec48a13a866357bf645a5e1e2c5e1e98be293e32c55393f3",
+      "inputs": [
+        "libs/angular/src/lib/table/atl-table.a11y.spec.ts",
+        "libs/angular/src/lib/table/atl-table.css",
+        "libs/angular/src/lib/table/atl-table.spec.ts",
+        "libs/angular/src/lib/table/atl-table.stories.ts",
+        "libs/angular/src/lib/table/atl-table.ts",
+        "libs/react/src/lib/table/atl-table.a11y.spec.tsx",
+        "libs/react/src/lib/table/atl-table.css",
+        "libs/react/src/lib/table/atl-table.spec.tsx",
+        "libs/react/src/lib/table/atl-table.stories.tsx",
+        "libs/react/src/lib/table/atl-table.tsx",
+        "libs/vue/src/lib/table/atl-table.a11y.spec.ts",
+        "libs/vue/src/lib/table/atl-table.css",
+        "libs/vue/src/lib/table/atl-table.spec.ts",
+        "libs/vue/src/lib/table/atl-table.stories.ts",
+        "libs/vue/src/lib/table/atl-table.vue",
+        "libs/vue/src/lib/table/atl-tbody.vue",
+        "libs/vue/src/lib/table/atl-td.vue",
+        "libs/vue/src/lib/table/atl-th.vue",
+        "libs/vue/src/lib/table/atl-thead.vue",
+        "libs/vue/src/lib/table/atl-tr.vue"
       ]
     },
     "AtlToggle": {
@@ -800,6 +884,34 @@
         "libs/vue/src/lib/tooltip/atl-tooltip.spec.ts",
         "libs/vue/src/lib/tooltip/atl-tooltip.stories.ts",
         "libs/vue/src/lib/tooltip/atl-tooltip.vue"
+      ]
+    },
+    "AtlTr": {
+      "figmaNodeId": "911:1533",
+      "verifiedAt": "2026-08-27T14:43:30.962Z",
+      "verifiedSha": "560bd9e",
+      "inputsHash": "sha256:c36a57503df17ab4ec48a13a866357bf645a5e1e2c5e1e98be293e32c55393f3",
+      "inputs": [
+        "libs/angular/src/lib/table/atl-table.a11y.spec.ts",
+        "libs/angular/src/lib/table/atl-table.css",
+        "libs/angular/src/lib/table/atl-table.spec.ts",
+        "libs/angular/src/lib/table/atl-table.stories.ts",
+        "libs/angular/src/lib/table/atl-table.ts",
+        "libs/react/src/lib/table/atl-table.a11y.spec.tsx",
+        "libs/react/src/lib/table/atl-table.css",
+        "libs/react/src/lib/table/atl-table.spec.tsx",
+        "libs/react/src/lib/table/atl-table.stories.tsx",
+        "libs/react/src/lib/table/atl-table.tsx",
+        "libs/vue/src/lib/table/atl-table.a11y.spec.ts",
+        "libs/vue/src/lib/table/atl-table.css",
+        "libs/vue/src/lib/table/atl-table.spec.ts",
+        "libs/vue/src/lib/table/atl-table.stories.ts",
+        "libs/vue/src/lib/table/atl-table.vue",
+        "libs/vue/src/lib/table/atl-tbody.vue",
+        "libs/vue/src/lib/table/atl-td.vue",
+        "libs/vue/src/lib/table/atl-th.vue",
+        "libs/vue/src/lib/table/atl-thead.vue",
+        "libs/vue/src/lib/table/atl-tr.vue"
       ]
     }
   }

@@ -412,17 +412,31 @@ const ROOT_PAINT = [
   { label: 'AtlChatMessage', file: 'chat/atl-chat.css', cascade: ['.atl-chat-message', '.atl-chat-message.role-{role}'] },
   { label: 'AtlChatSuggestion', file: 'chat/atl-chat.css', cascade: ['.atl-chat-suggestion .chip'] },
   { label: 'AtlChatTyping', file: 'chat/atl-chat.css', cascade: ['.atl-chat-typing'] },
+  // The table's parts. Each child master draws the md step, because `size` belongs to
+  // AtlTable and not to a cell — so the size-scoped rule is pinned rather than
+  // substituted from an axis this master does not have.
+  { label: 'AtlTh', file: 'table/atl-table.css', cascade: ['.atl-table thead th', '.atl-table.size-md thead th'] },
+  { label: 'AtlTd', file: 'table/atl-table.css', cascade: ['.atl-table tbody td', '.atl-table.size-md tbody td'] },
+  { label: 'AtlTr', file: 'table/atl-table.css', cascade: ['.atl-table tbody tr'] },
+  { label: 'AtlTbody', file: 'table/atl-table.css', cascade: ['.atl-table tbody'] },
   // AtlMenuSeparator is deliberately absent: the CSS root IS the 1px rule, while the
   // master's root is the margin box that carries var(--ui-spacing-2) above and below
   // so it stacks correctly. The rule is a child layer, which this table cannot address.
 ];
 
+// A value may be one selector or a CASCADE of them, base first. The second form is
+// for a layer that is subject to more than one rule: `.atl-tr-select-cell` declares
+// only `width` and `text-align`, and inherits its background and bottom rule as a
+// `<td>` through `.atl-table tbody td`. Reading the class alone reported the cell's
+// legitimate fill as invented.
 const LAYER_ALIASES = {
   AtlTabGroup: { tab: '.atl-tab-group .tablist button', tabpanel: '.atl-tab-group [role="tabpanel"]' },
   AtlTable: { th: '.atl-table thead th', td: '.atl-table tbody td', thead: '.atl-table thead', tbody: '.atl-table tbody' },
   AtlInput: { field: '.atl-input input' },
   AtlTextarea: { field: '.atl-textarea textarea' },
   AtlSelect: { field: '.atl-select select' },
+  AtlTr: { 'atl-tr-select-cell': ['.atl-table tbody td', '.atl-tr-select-cell'], td: '.atl-table tbody td' },
+  AtlTbody: { tr: '.atl-table tbody tr' },
 };
 
 // ---------------------------------------------------------------------------
@@ -1049,13 +1063,15 @@ function checkLayerPaint() {
     for (const L of layers) {
       const st = parseAxisName(L.variant).state;
       if (st !== undefined && st !== 'default') continue; // pseudo-class paint, as in [ROOT-PAINT]
-      const base = aliases[L.layer] || '.' + L.layer;
+      const aliased = aliases[L.layer];
+      const bases = Array.isArray(aliased) ? aliased : [aliased || '.' + L.layer];
+      const base = bases[bases.length - 1]; // the layer's OWN rule, for the messages
       // A variant can override a layer's rule: `.atl-progress.variant-success .fill`
       // repaints the bar. Resolve base first, then the variant-scoped form, the way
       // the cascade does.
       const axes = parseAxisName(L.variant);
       const rootSel = rootSelectorFor(comp.selector);
-      const cascade = [base];
+      const cascade = [...bases];
       if (axes.variant && rootSel) {
         cascade.push(
           base.startsWith(rootSel + ' ')
@@ -1080,8 +1096,9 @@ function checkLayerPaint() {
         const m = /\.variant-([a-z0-9-]+)/.exec(sel);
         return m ? m[1] !== axes.variant : false;
       };
+      const mentionsPart = (sel) => bases.some((b) => selectorMentions(sel, b));
       for (const [sel, b] of rules) {
-        if (!selectorMentions(sel, base)) continue;
+        if (!mentionsPart(sel)) continue;
         if (/::?(before|after)\b/.test(sel)) continue; // a pseudo-element is a different box
         if (foreignVariant(sel)) continue; // another variant's rule says nothing about this one
         for (const prop of ['background', 'background-color']) {
@@ -1170,7 +1187,7 @@ function checkLayerPaint() {
       if (!sidesDeclared && L.stroke !== null) {
         const anyBorder = [...rules].some(
           ([sel, b]) =>
-            selectorMentions(sel, base) &&
+            mentionsPart(sel) &&
             !/::?(before|after)\b/.test(sel) &&
             !foreignVariant(sel) &&
             /(?:^|;)\s*border(?!-radius)(-[a-z]+)*\s*:/.test(b)
@@ -1183,7 +1200,7 @@ function checkLayerPaint() {
         // handled above
       } else if (L.radius !== null) {
         const anyRadius = [...rules].some(
-          ([sel, b]) => selectorMentions(sel, base) && !/::?(before|after)\b/.test(sel) && !foreignVariant(sel) && /(?:^|;)\s*border-radius\s*:/.test(b)
+          ([sel, b]) => mentionsPart(sel) && !/::?(before|after)\b/.test(sel) && !foreignVariant(sel) && /(?:^|;)\s*border-radius\s*:/.test(b)
         );
         if (!anyRadius) {
           note('invented-radius:' + L.layer, `${L.layer} has radius ${L.radius}, and no rule for ${selector} declares one at all.`, where);

@@ -3,10 +3,10 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-27T14:33:02.670Z",
-    "gitSha": "4c8cfa1",
+    "generatedAt": "2026-08-27T14:43:25.439Z",
+    "gitSha": "560bd9e",
     "serverVersion": null,
-    "coverage": "All 39 masters. Token/auto-layout checks sample each master's default variant.",
+    "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
   },
   "uiTokens": [
@@ -63,7 +63,7 @@
   ],
   "typography": {
     "fontFamilies": {
-      "Instrument Sans": 1638,
+      "Instrument Sans": 1710,
       "Instrument Serif": 1,
       "JetBrains Mono": 81
     },
@@ -6302,30 +6302,6 @@
           "lineHeight": 125
         },
         {
-          "variant": "variant=default",
-          "count": 2,
-          "layer": "rule",
-          "type": "RECTANGLE",
-          "fill": "color/border",
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "NONE",
-          "padding": null,
-          "gap": null,
-          "minHeight": null,
-          "height": 1,
-          "width": 200,
-          "fontSize": null,
-          "lineHeight": null
-        },
-        {
           "variant": "variant=compact",
           "count": 6,
           "layer": "atl-menu-item",
@@ -6353,30 +6329,6 @@
           "width": 200,
           "fontSize": 14,
           "lineHeight": 125
-        },
-        {
-          "variant": "variant=compact",
-          "count": 2,
-          "layer": "rule",
-          "type": "RECTANGLE",
-          "fill": "color/border",
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "NONE",
-          "padding": null,
-          "gap": null,
-          "minHeight": null,
-          "height": 1,
-          "width": 200,
-          "fontSize": null,
-          "lineHeight": null
         }
       ],
       "glyphTextNodes": [],
@@ -12457,10 +12409,7 @@
         }
       ],
       "properties": {
-        "sortable#437:27": "BOOLEAN",
-        "selectable#437:38": "BOOLEAN",
         "stickyHeader#437:49": "BOOLEAN",
-        "empty#507:288": "BOOLEAN",
         "error#507:294": "BOOLEAN",
         "variant": "VARIANT",
         "size": "VARIANT",
@@ -20182,325 +20131,6 @@
           "lineHeight": null
         },
         {
-          "variant": "variant=drawer",
-          "count": 1,
-          "layer": "header",
-          "type": "FRAME",
-          "fill": "color/surface-raised",
-          "stroke": "color/border",
-          "strokeSides": [
-            0,
-            0,
-            1,
-            0
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            0,
-            16,
-            0,
-            16
-          ],
-          "gap": 8,
-          "minHeight": 40,
-          "height": 40,
-          "width": 292,
-          "fontSize": 12,
-          "lineHeight": null
-        },
-        {
-          "variant": "variant=drawer",
-          "count": 1,
-          "layer": "copy-btn",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": "color/border",
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": "radius/sm",
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            4,
-            8,
-            4,
-            8
-          ],
-          "gap": 4,
-          "minHeight": null,
-          "height": 23,
-          "width": 60,
-          "fontSize": 12,
-          "lineHeight": null
-        },
-        {
-          "variant": "variant=drawer",
-          "count": 1,
-          "layer": "body",
-          "type": "FRAME",
-          "fill": "color/surface",
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "VERTICAL",
-          "padding": [
-            16,
-            16,
-            16,
-            16
-          ],
-          "gap": 0,
-          "minHeight": null,
-          "height": 216,
-          "width": 292,
-          "fontSize": null,
-          "lineHeight": null
-        },
-        {
-          "variant": "variant=drawer",
-          "count": 1,
-          "layer": "line-1",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            0,
-            0,
-            0,
-            0
-          ],
-          "gap": 12,
-          "minHeight": null,
-          "height": 23,
-          "width": 403,
-          "fontSize": 14,
-          "lineHeight": 164.9999976158142
-        },
-        {
-          "variant": "variant=drawer",
-          "count": 1,
-          "layer": "line-2",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            0,
-            0,
-            0,
-            0
-          ],
-          "gap": 12,
-          "minHeight": null,
-          "height": 23,
-          "width": 0,
-          "fontSize": 14,
-          "lineHeight": 164.9999976158142
-        },
-        {
-          "variant": "variant=drawer",
-          "count": 1,
-          "layer": "line-3",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            0,
-            0,
-            0,
-            0
-          ],
-          "gap": 12,
-          "minHeight": null,
-          "height": 23,
-          "width": 101,
-          "fontSize": 14,
-          "lineHeight": 164.9999976158142
-        },
-        {
-          "variant": "variant=drawer",
-          "count": 1,
-          "layer": "line-4",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            0,
-            0,
-            0,
-            0
-          ],
-          "gap": 12,
-          "minHeight": null,
-          "height": 23,
-          "width": 521,
-          "fontSize": 14,
-          "lineHeight": 164.9999976158142
-        },
-        {
-          "variant": "variant=drawer",
-          "count": 1,
-          "layer": "line-5",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            0,
-            0,
-            0,
-            0
-          ],
-          "gap": 12,
-          "minHeight": null,
-          "height": 23,
-          "width": 17,
-          "fontSize": 14,
-          "lineHeight": 164.9999976158142
-        },
-        {
-          "variant": "variant=drawer",
-          "count": 1,
-          "layer": "line-6",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            0,
-            0,
-            0,
-            0
-          ],
-          "gap": 12,
-          "minHeight": null,
-          "height": 23,
-          "width": 219,
-          "fontSize": 14,
-          "lineHeight": 164.9999976158142
-        },
-        {
-          "variant": "variant=drawer",
-          "count": 1,
-          "layer": "line-7",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            0,
-            0,
-            0,
-            0
-          ],
-          "gap": 12,
-          "minHeight": null,
-          "height": 23,
-          "width": 143,
-          "fontSize": 14,
-          "lineHeight": 164.9999976158142
-        },
-        {
-          "variant": "variant=drawer",
-          "count": 1,
-          "layer": "line-8",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            0,
-            0,
-            0,
-            0
-          ],
-          "gap": 12,
-          "minHeight": null,
-          "height": 23,
-          "width": 9,
-          "fontSize": 14,
-          "lineHeight": 164.9999976158142
-        },
-        {
           "variant": "variant=popup",
           "count": 1,
           "layer": "app-header",
@@ -21122,325 +20752,6 @@
           "width": 272,
           "fontSize": null,
           "lineHeight": null
-        },
-        {
-          "variant": "variant=inline",
-          "count": 1,
-          "layer": "header",
-          "type": "FRAME",
-          "fill": "color/surface-raised",
-          "stroke": "color/border",
-          "strokeSides": [
-            0,
-            0,
-            1,
-            0
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            0,
-            16,
-            0,
-            16
-          ],
-          "gap": 8,
-          "minHeight": 40,
-          "height": 40,
-          "width": 508,
-          "fontSize": 12,
-          "lineHeight": null
-        },
-        {
-          "variant": "variant=inline",
-          "count": 1,
-          "layer": "copy-btn",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": "color/border",
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": "radius/sm",
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            4,
-            8,
-            4,
-            8
-          ],
-          "gap": 4,
-          "minHeight": null,
-          "height": 23,
-          "width": 60,
-          "fontSize": 12,
-          "lineHeight": null
-        },
-        {
-          "variant": "variant=inline",
-          "count": 1,
-          "layer": "body",
-          "type": "FRAME",
-          "fill": "color/surface",
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "VERTICAL",
-          "padding": [
-            16,
-            16,
-            16,
-            16
-          ],
-          "gap": 0,
-          "minHeight": null,
-          "height": 216,
-          "width": 508,
-          "fontSize": null,
-          "lineHeight": null
-        },
-        {
-          "variant": "variant=inline",
-          "count": 1,
-          "layer": "line-1",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            0,
-            0,
-            0,
-            0
-          ],
-          "gap": 12,
-          "minHeight": null,
-          "height": 23,
-          "width": 403,
-          "fontSize": 14,
-          "lineHeight": 164.9999976158142
-        },
-        {
-          "variant": "variant=inline",
-          "count": 1,
-          "layer": "line-2",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            0,
-            0,
-            0,
-            0
-          ],
-          "gap": 12,
-          "minHeight": null,
-          "height": 23,
-          "width": 0,
-          "fontSize": 14,
-          "lineHeight": 164.9999976158142
-        },
-        {
-          "variant": "variant=inline",
-          "count": 1,
-          "layer": "line-3",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            0,
-            0,
-            0,
-            0
-          ],
-          "gap": 12,
-          "minHeight": null,
-          "height": 23,
-          "width": 101,
-          "fontSize": 14,
-          "lineHeight": 164.9999976158142
-        },
-        {
-          "variant": "variant=inline",
-          "count": 1,
-          "layer": "line-4",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            0,
-            0,
-            0,
-            0
-          ],
-          "gap": 12,
-          "minHeight": null,
-          "height": 23,
-          "width": 521,
-          "fontSize": 14,
-          "lineHeight": 164.9999976158142
-        },
-        {
-          "variant": "variant=inline",
-          "count": 1,
-          "layer": "line-5",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            0,
-            0,
-            0,
-            0
-          ],
-          "gap": 12,
-          "minHeight": null,
-          "height": 23,
-          "width": 17,
-          "fontSize": 14,
-          "lineHeight": 164.9999976158142
-        },
-        {
-          "variant": "variant=inline",
-          "count": 1,
-          "layer": "line-6",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            0,
-            0,
-            0,
-            0
-          ],
-          "gap": 12,
-          "minHeight": null,
-          "height": 23,
-          "width": 219,
-          "fontSize": 14,
-          "lineHeight": 164.9999976158142
-        },
-        {
-          "variant": "variant=inline",
-          "count": 1,
-          "layer": "line-7",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            0,
-            0,
-            0,
-            0
-          ],
-          "gap": 12,
-          "minHeight": null,
-          "height": 23,
-          "width": 143,
-          "fontSize": 14,
-          "lineHeight": 164.9999976158142
-        },
-        {
-          "variant": "variant=inline",
-          "count": 1,
-          "layer": "line-8",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            0,
-            0,
-            0,
-            0
-          ],
-          "gap": 12,
-          "minHeight": null,
-          "height": 23,
-          "width": 9,
-          "fontSize": 14,
-          "lineHeight": 164.9999976158142
         }
       ],
       "glyphTextNodes": [
@@ -23548,6 +22859,745 @@
       "glyphTextNodes": [],
       "sampledVariant": "911:1120",
       "nodes": []
+    },
+    {
+      "name": "Display/AtlTh",
+      "selector": "AtlTh",
+      "nodeId": "911:1503",
+      "description": "A header cell inside AtlTable. Maps to AtlThSpec.\n\nAxis `sortDirection`: none | asc | desc, from `AtlSortDirection = 'asc' | 'desc' | null`. `none` is the union's `null` — a variant value cannot be null, and \"unsorted\" is what null means. `th.is-sorted` recolours the arrow group to `--ui-color-primary`; the inactive arrow sits at `opacity: 0.25`.\n\n- Boolean `sortable`: maps to AtlThSpec.sortable — it ADDS the sort affordance (`.atl-th-sort-btn` wrapping `.atl-th-sort-icon`, two 10×8 arrows).\n- `align`: not modelled — `AtlTableAlign` changes only `text-align`, and an axis for it would multiply this master's matrix by three for one property. It is modelled on AtlTd, where it is the cell's only state.\n- `width` is content, not state.\n\nGeometry: this draws the **md** step, which is AtlTable's default — `size` belongs to the table, not the cell. `height: var(--ui-row-height-md)` (48, a row that CENTRES), `padding-block: 0`, `padding-inline: var(--ui-spacing-4)`, leading stated tight, 14px semibold uppercase at `--ui-letter-spacing-wide` in `--ui-color-text-muted`, and a **2px** bottom rule (`--ui-border-width-thick`) where AtlTd has 1px.",
+      "variantAxes": {
+        "sortDirection": [
+          "none",
+          "asc",
+          "desc"
+        ]
+      },
+      "variants": [
+        {
+          "sortDirection": "none"
+        },
+        {
+          "sortDirection": "asc"
+        },
+        {
+          "sortDirection": "desc"
+        }
+      ],
+      "properties": {
+        "sortable#911:61": "BOOLEAN",
+        "sortDirection": "VARIANT"
+      },
+      "referencedProperties": [
+        "sortable#911:61"
+      ],
+      "iconInstanceNames": [
+        "atl-th-sort-asc-arrow",
+        "atl-th-sort-desc-arrow"
+      ],
+      "rootPaint": {
+        "sortDirection=none": {
+          "fill": "color/surface",
+          "stroke": "color/border",
+          "strokeWeight": "mixed",
+          "strokeSides": [
+            0,
+            0,
+            2,
+            0
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": 125
+        },
+        "sortDirection=asc": {
+          "fill": "color/surface",
+          "stroke": "color/border",
+          "strokeWeight": "mixed",
+          "strokeSides": [
+            0,
+            0,
+            2,
+            0
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": 125
+        },
+        "sortDirection=desc": {
+          "fill": "color/surface",
+          "stroke": "color/border",
+          "strokeWeight": "mixed",
+          "strokeSides": [
+            0,
+            0,
+            2,
+            0
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": 125
+        }
+      },
+      "overlays": [],
+      "layers": [
+        {
+          "variant": "sortDirection=none",
+          "count": 1,
+          "layer": "atl-th-sort-icon",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "VERTICAL",
+          "padding": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 16,
+          "width": 10,
+          "fontSize": null,
+          "lineHeight": null
+        },
+        {
+          "variant": "sortDirection=asc",
+          "count": 1,
+          "layer": "atl-th-sort-icon",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "VERTICAL",
+          "padding": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 16,
+          "width": 10,
+          "fontSize": null,
+          "lineHeight": null
+        },
+        {
+          "variant": "sortDirection=desc",
+          "count": 1,
+          "layer": "atl-th-sort-icon",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "VERTICAL",
+          "padding": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 16,
+          "width": 10,
+          "fontSize": null,
+          "lineHeight": null
+        }
+      ],
+      "glyphTextNodes": [],
+      "sampledVariant": "911:1497",
+      "nodes": [
+        {
+          "name": "sortDirection=none",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Display/AtlTd",
+      "selector": "AtlTd",
+      "nodeId": "911:1496",
+      "description": "A body cell inside AtlTable. Maps to AtlTdSpec.\n\nAxis `align`: start | center | end, from `AtlTableAlign`. It is this master's only state, which is why the axis lives here rather than on AtlTh.\n\nGeometry: the **md** step (AtlTable's default; `size` belongs to the table).\n`height: var(--ui-row-height-md)` (48), `padding-block: 0`,\n`padding-inline: var(--ui-spacing-4)`, leading stated tight, 14px, 1px bottom rule.",
+      "variantAxes": {
+        "align": [
+          "start",
+          "center",
+          "end"
+        ]
+      },
+      "variants": [
+        {
+          "align": "start"
+        },
+        {
+          "align": "center"
+        },
+        {
+          "align": "end"
+        }
+      ],
+      "properties": {
+        "align": "VARIANT"
+      },
+      "referencedProperties": [],
+      "iconInstanceNames": [],
+      "rootPaint": {
+        "align=start": {
+          "fill": "color/surface",
+          "stroke": "color/border",
+          "strokeWeight": "mixed",
+          "strokeSides": [
+            0,
+            0,
+            1,
+            0
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": 125
+        },
+        "align=center": {
+          "fill": "color/surface",
+          "stroke": "color/border",
+          "strokeWeight": "mixed",
+          "strokeSides": [
+            0,
+            0,
+            1,
+            0
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": 125
+        },
+        "align=end": {
+          "fill": "color/surface",
+          "stroke": "color/border",
+          "strokeWeight": "mixed",
+          "strokeSides": [
+            0,
+            0,
+            1,
+            0
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": 125
+        }
+      },
+      "overlays": [],
+      "layers": [],
+      "glyphTextNodes": [],
+      "sampledVariant": "911:1490",
+      "nodes": [
+        {
+          "name": "align=start",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Display/AtlTr",
+      "selector": "AtlTr",
+      "nodeId": "911:1533",
+      "description": "A body row inside AtlTable. Maps to AtlTrSpec.\n\nAxis `selected`: false | true. `.is-selected` recolours the **cells**\n(`--ui-color-primary-light`), not the row — the row itself paints nothing — so a\nvisibility Boolean cannot express it.\n\n- Boolean `selectable`: maps to AtlTrSpec.selectable — it ADDS `.atl-tr-select-cell` (2.75rem wide, centred, holding an AtlCheckbox).\n- `rowId` is data, not state.\n\nCOMPOSED: the cells are **instances of AtlTd**, so their height, padding and rule follow\nthat master and cannot drift from it. This is the pattern the other parents want and\nmostly cannot have yet — a cell carries only text, so no content slot is needed.",
+      "variantAxes": {
+        "selected": [
+          "false",
+          "true"
+        ]
+      },
+      "variants": [
+        {
+          "selected": "false"
+        },
+        {
+          "selected": "true"
+        }
+      ],
+      "properties": {
+        "selectable#911:65": "BOOLEAN",
+        "selected": "VARIANT"
+      },
+      "referencedProperties": [
+        "selectable#911:65",
+        "Label#55:94",
+        "disabled#507:154",
+        "invalid#507:160"
+      ],
+      "iconInstanceNames": [],
+      "rootPaint": {
+        "selected=false": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
+        },
+        "selected=true": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
+        }
+      },
+      "overlays": [
+        {
+          "variant": "selected=false",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            113,
+            24
+          ],
+          "parentBox": [
+            18,
+            24
+          ],
+          "parentName": "AtlCheckbox",
+          "visible": false,
+          "boundTo": "disabled#507:154"
+        },
+        {
+          "variant": "selected=false",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            3,
+            18,
+            18
+          ],
+          "parentBox": [
+            18,
+            24
+          ],
+          "parentName": "AtlCheckbox",
+          "visible": false,
+          "boundTo": "invalid#507:160"
+        },
+        {
+          "variant": "selected=true",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            113,
+            24
+          ],
+          "parentBox": [
+            18,
+            24
+          ],
+          "parentName": "AtlCheckbox",
+          "visible": false,
+          "boundTo": "disabled#507:154"
+        },
+        {
+          "variant": "selected=true",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            3,
+            18,
+            18
+          ],
+          "parentBox": [
+            18,
+            24
+          ],
+          "parentName": "AtlCheckbox",
+          "visible": false,
+          "boundTo": "invalid#507:160"
+        }
+      ],
+      "layers": [
+        {
+          "variant": "selected=false",
+          "count": 1,
+          "layer": "atl-tr-select-cell",
+          "type": "FRAME",
+          "fill": "color/surface",
+          "stroke": "color/border",
+          "strokeSides": [
+            0,
+            0,
+            1,
+            0
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 48,
+          "width": 44,
+          "fontSize": null,
+          "lineHeight": null
+        },
+        {
+          "variant": "selected=true",
+          "count": 1,
+          "layer": "atl-tr-select-cell",
+          "type": "FRAME",
+          "fill": "color/surface",
+          "stroke": "color/border",
+          "strokeSides": [
+            0,
+            0,
+            1,
+            0
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 48,
+          "width": 44,
+          "fontSize": null,
+          "lineHeight": null
+        }
+      ],
+      "glyphTextNodes": [],
+      "sampledVariant": "911:1519",
+      "nodes": [
+        {
+          "name": "selected=false",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "td",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "td",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "td",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Display/AtlTbody",
+      "selector": "AtlTbody",
+      "nodeId": "911:1546",
+      "description": "The body of an AtlTable. Maps to AtlTbodySpec.\n\nNo axes: a tbody has no visual state of its own.\n\n- Boolean `empty`: maps to AtlTbodySpec.empty — it ADDS `.atl-tbody-empty-cell`\n  (`padding: var(--ui-spacing-12) var(--ui-spacing-4)`, centred, 16px in\n  `--ui-color-text-muted`). The sample rows stay visible behind it in Figma, where the\n  code replaces them; a Boolean cannot hide siblings it does not own.\n- `colSpan` is data, not state.\n\nCOMPOSED: the rows are **instances of AtlTr**, which are themselves composed of AtlTd.",
+      "variantAxes": {},
+      "variants": [],
+      "properties": {
+        "empty#911:68": "BOOLEAN"
+      },
+      "referencedProperties": [
+        "selectable#911:65",
+        "Label#55:94",
+        "disabled#507:154",
+        "invalid#507:160",
+        "empty#911:68"
+      ],
+      "iconInstanceNames": [],
+      "rootPaint": {
+        "Display/AtlTbody": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
+        }
+      },
+      "overlays": [
+        {
+          "variant": "Display/AtlTbody",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            113,
+            24
+          ],
+          "parentBox": [
+            18,
+            24
+          ],
+          "parentName": "AtlCheckbox",
+          "visible": false,
+          "boundTo": "disabled#507:154"
+        },
+        {
+          "variant": "Display/AtlTbody",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            3,
+            18,
+            18
+          ],
+          "parentBox": [
+            18,
+            24
+          ],
+          "parentName": "AtlCheckbox",
+          "visible": false,
+          "boundTo": "invalid#507:160"
+        },
+        {
+          "variant": "Display/AtlTbody",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            113,
+            24
+          ],
+          "parentBox": [
+            18,
+            24
+          ],
+          "parentName": "AtlCheckbox",
+          "visible": false,
+          "boundTo": "disabled#507:154"
+        },
+        {
+          "variant": "Display/AtlTbody",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            3,
+            18,
+            18
+          ],
+          "parentBox": [
+            18,
+            24
+          ],
+          "parentName": "AtlCheckbox",
+          "visible": false,
+          "boundTo": "invalid#507:160"
+        }
+      ],
+      "layers": [
+        {
+          "variant": "Display/AtlTbody",
+          "count": 1,
+          "layer": "atl-tbody-empty-cell",
+          "type": "FRAME",
+          "fill": "color/surface",
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            48,
+            16,
+            48,
+            16
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 116,
+          "width": 600,
+          "fontSize": 16,
+          "lineHeight": 125
+        }
+      ],
+      "glyphTextNodes": [],
+      "sampledVariant": "911:1547",
+      "nodes": [
+        {
+          "name": "tr",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "td",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "td",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "td",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
     }
   ]
 }

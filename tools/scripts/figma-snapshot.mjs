@@ -69,6 +69,13 @@ const MASTERS = [
   { nodeId: '911:1112' }, // AI/AtlChatMessage
   { nodeId: '911:1116' }, // AI/AtlChatSuggestion
   { nodeId: '911:1119' }, // AI/AtlChatTyping
+  // The table's parts (ADR-0065). These carry the three Booleans AtlTable had been
+  // declaring on their behalf, which ADR-0056 forbids and ADR-0061 allowlisted only
+  // until these existed.
+  { nodeId: '911:1503' }, // Data/AtlTh
+  { nodeId: '911:1496' }, // Data/AtlTd
+  { nodeId: '911:1533' }, // Data/AtlTr
+  { nodeId: '911:1546' }, // Data/AtlTbody
 ];
 
 main().catch((err) => {
@@ -125,7 +132,7 @@ async function main() {
     const probeCode = `
       await figma.loadAllPagesAsync();
       const out = {};
-      for (const set of figma.root.findAll((n) => n.type === 'COMPONENT_SET' || (n.type === 'COMPONENT' && /^(Action|Form|Display|Navigation|Overlay|Feedback|AI)\\//.test(n.name)))) {
+      for (const set of figma.root.findAll((n) => n.type === 'COMPONENT_SET' || (n.type === 'COMPONENT' && /^(Action|Form|Display|Navigation|Overlay|Feedback|AI|Data)\\//.test(n.name)))) {
         const kids = set.type === 'COMPONENT_SET' ? set.children : [set];
         const referenced = new Set();
         const glyphs = [];
@@ -266,7 +273,13 @@ async function main() {
           for (const n of v.findAll((x) => x.type === 'FRAME' || x.type === 'RECTANGLE' || x.type === 'ELLIPSE' || x.type === 'INSTANCE')) {
             const nm = String(n.name);
             if (nm.charAt(0) === '_' || GENERIC.indexOf(nm) >= 0) continue;
-            if (n.type === 'INSTANCE') continue; // icon instances are their own masters
+            if (n.type === 'INSTANCE') continue; // an instance is its own master
+            // Nor anything INSIDE an instance. That is the point of composing a parent
+            // from child masters: the layer belongs to the master that defines it and is
+            // checked there. Without this, AtlTbody re-reported AtlTr's select cell.
+            let anc = n.parent, nested = false;
+            while (anc && anc.id !== v.id) { if (anc.type === 'INSTANCE') { nested = true; break; } anc = anc.parent; }
+            if (nested) continue;
             const paintVar = async (list) => {
               const p0 = (list || [])[0];
               if (!p0 || p0.visible === false) return null;
