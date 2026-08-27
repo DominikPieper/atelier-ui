@@ -14,7 +14,7 @@ a typography study says nothing about how the component should look.
 | Component | Artboard | Figma axes | Variants | Parity verified | a11y baseline | Type roles | Respecifies font |
 |---|---|---|---|---|---|---|---|
 | `accordion` | **AtlAccordionGroup.dc.html** | expanded | 2 | 2026-08-27 (`51d2d9d`) | — | — | yes |
-| `alert` | **AtlAlert.dc.html** | variant | 4 | 2026-08-27 (`3c15080`) | all 3 | — | yes |
+| `alert` | **AtlAlert.dc.html** | variant | 4 | 2026-08-27 (`4c57b74`) | all 3 | yes | — |
 | `avatar` | **AtlAvatar.dc.html** | size | 5 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
 | `badge` | **AtlBadge.dc.html** | variant · size | 10 | 2026-08-27 (`3c15080`) | all 3 | — | yes |
 | `breadcrumbs` | **AtlBreadcrumbs.dc.html** | current | 2 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
@@ -22,7 +22,7 @@ a typography study says nothing about how the component should look.
 | `card` | **AtlCard.dc.html** | variant · padding | 12 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
 | `chat` | **AtlChat.dc.html** | variant | 3 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
 | `checkbox` | **AtlCheckbox.dc.html** | selection · state | 5 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
-| `code-block` | **AtlCodeBlock.dc.html** | — *(no master)* | — | — *(never)* | all 3 | — | yes |
+| `code-block` | **AtlCodeBlock.dc.html** | — *(no master)* | — | — *(never)* | all 3 | yes | yes |
 | `combobox` | **AtlCombobox.dc.html** | state | 6 | 2026-08-27 (`51d2d9d`) | — | — | yes |
 | `dialog` | **AtlDialog.dc.html** | size | 5 | 2026-08-27 (`3c15080`) | all 3 | — | yes |
 | `drawer` | **AtlDrawer.dc.html** | position · size | 7 | 2026-08-27 (`3c15080`) | all 3 | — | yes |
@@ -38,8 +38,8 @@ a typography study says nothing about how the component should look.
 | `stepper` | **AtlStepper.dc.html** | state | 4 | 2026-08-27 (`3c15080`) | all 3 | — | yes |
 | `table` | **AtlTable.dc.html** | none | 0 | 2026-08-27 (`560bd9e`) | all 3 | — | yes |
 | `tabs` | **AtlTabGroup.dc.html** | state | 2 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
-| `textarea` | **AtlTextarea.dc.html** | state | 5 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
-| `toast` | **AtlToast.dc.html** | — *(no master)* | — | — *(never)* | all 3 | — | yes |
+| `textarea` | **AtlTextarea.dc.html** | state | 5 | 2026-08-27 (`4c57b74`) | all 3 | yes | — |
+| `toast` | **AtlToast.dc.html** | — *(no master)* | — | — *(never)* | all 3 | yes | yes |
 | `toggle` | **AtlToggle.dc.html** | selection · state | 4 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
 | `tooltip` | **AtlTooltip.dc.html** | position | 4 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
 

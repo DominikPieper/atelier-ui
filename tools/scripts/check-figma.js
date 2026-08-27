@@ -41,6 +41,7 @@ const fs = require('fs');
 const path = require('path');
 const ts = require('typescript');
 const { parseExportedVars, findExportedInterfaces } = require('./lib/ts-eval');
+const { typeRoles, roleOfFontShorthand } = require('./lib/type-roles');
 const { FIGMA_CONFORMANCE_EXCEPTIONS } = require('./lib/allowlists');
 
 const ROOT = path.resolve(__dirname, '../..');
@@ -449,6 +450,8 @@ for (const comp of snapshot.components) {
 // container. Checking those needs a per-LAYER map, which is recorded as open in
 // tasks/todo.md rather than guessed at here.
 // ---------------------------------------------------------------------------
+const TYPE_ROLES = typeRoles();
+
 const ROOT_PAINT = [
   { label: 'AtlButton', file: 'button/atl-button.css', cascade: ['.atl-button', '.atl-button.variant-{variant}', '.atl-button.size-{size}'] },
   { label: 'AtlInput', file: 'input/atl-input.css', cascade: ['.atl-input input'] },
@@ -1377,6 +1380,19 @@ function boxFromDeclarations(body) {
       case 'height': out.height = lengthOf(value); break;
       case 'gap': out.gap = lengthOf(value); break;
       case 'font-size': out.fontSize = lengthOf(value); break;
+      // The role shorthand carries the size AND the leading, so a rule using one
+      // must still be measurable. It was not: migrating .atl-alert and .atl-toast
+      // to `font: var(--ui-type-body-sm)` silently deleted the [ROOT-PAINT]
+      // typography comparison, which a perturbation test caught (ADR-0073).
+      // `font:` also RESETS line-height, which is why both are assigned here.
+      case 'font': {
+        const role = roleOfFontShorthand(value, TYPE_ROLES);
+        if (!role) break; // a hand-assembled shorthand; not a role, not measured
+        const r = TYPE_ROLES.get(role);
+        out.fontSize = lengthOf(`var(${r.size})`);
+        out.lineHeight = resolveUnitless(`var(${r.lineHeight})`);
+        break;
+      }
       case 'line-height':
         out.lineHeight = /^[\d.]+$/.test(value) ? parseFloat(value) : resolveUnitless(value);
         break;

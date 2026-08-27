@@ -101,9 +101,7 @@
 .code-block-pre {
   margin: 0;
   padding: var(--ui-spacing-4);
-  font-family: var(--ui-font-mono);
-  font-size: var(--ui-font-size-sm);
-  line-height: var(--ui-line-height-code);
+  font: var(--ui-type-code);
   color: var(--ui-color-text);
   white-space: pre;
   tab-size: 2;

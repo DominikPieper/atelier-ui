@@ -2,7 +2,7 @@
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "note": "Per-component design-parity records. Written by `npm run parity:record` after a human/agent runs figma_check_design_parity; read by `npm run check:parity`. Each record's inputsHash covers libs/{angular,react,vue}/src/lib/<module>/ so a spec/story/impl/css change since the last verify makes the gate ask for a re-verify. The parity SCORE is deliberately not stored: it is not comparable across runs (it tracks how much of codeSpec was declared and which node was sampled, not the component) — three runs on one commit for AtlStepper returned 70, 52 and 83. See plan/adr/0024 and its 2026-08-26 amendment.",
-    "generatedAt": "2026-08-27T18:02:06.928Z"
+    "generatedAt": "2026-08-27T18:58:42.396Z"
   },
   "components": {
     "AtlAccordionGroup": {
@@ -53,9 +53,9 @@
     },
     "AtlAlert": {
       "figmaNodeId": "55:31",
-      "verifiedAt": "2026-08-27T18:02:03.623Z",
-      "verifiedSha": "3c15080",
-      "inputsHash": "sha256:ddc74c5c45cd8a4fa649169f3a644fb97c423df44f2da48180bbb63a3c4d6170",
+      "verifiedAt": "2026-08-27T18:58:40.924Z",
+      "verifiedSha": "4c57b74",
+      "inputsHash": "sha256:89b424eb28922f55b7dbb452221ae3de06f9977b87215f9374b1f29661ec93c1",
       "inputs": [
         "libs/angular/src/lib/alert/atl-alert.a11y.spec.ts",
         "libs/angular/src/lib/alert/atl-alert.css",
@@ -791,9 +791,9 @@
     },
     "AtlTextarea": {
       "figmaNodeId": "55:87",
-      "verifiedAt": "2026-08-27T14:02:09.969Z",
-      "verifiedSha": "51d2d9d",
-      "inputsHash": "sha256:751a5d6c9a35b6ca95531cb247d7350784efdfd950772d84b34fca5a858192c6",
+      "verifiedAt": "2026-08-27T18:58:42.252Z",
+      "verifiedSha": "4c57b74",
+      "inputsHash": "sha256:3102fa097ea2dc7110270146fd2ff17c2ed5050841ef86f8d1d4e37fae982984",
       "inputs": [
         "libs/angular/src/lib/textarea/atl-textarea.a11y.spec.ts",
         "libs/angular/src/lib/textarea/atl-textarea.css",

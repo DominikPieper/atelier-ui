@@ -10,12 +10,12 @@
 
 :host {
   display: block;
-  font-family: var(--ui-font-family);
-  /* The leading every descendant inherits, stated so the component keeps its
-     own rhythm rather than the consuming app's prose leading (ADR-0052).
-     The field carries prose, so normal. */
-  line-height: var(--ui-line-height-normal);
-  font-size: var(--ui-font-size-md);
+  /* One role, not three axes (ADR-0036): body-md carries the sans, the md size
+     and the normal leading — normal because the field holds prose, and stated here
+     rather than inherited so the component keeps its own rhythm instead of the
+     consuming app's (ADR-0052). `font:` supplies the leading the longhand used to,
+     which is why check:typeface now recognises the shorthand (ADR-0073). */
+  font: var(--ui-type-body-md);
 }
 
 textarea {

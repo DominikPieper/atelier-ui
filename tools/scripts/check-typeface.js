@@ -28,6 +28,14 @@
  *                  cell 42px in one page and 51px in another (ADR-0052). Stating
  *                  it on the root gives every descendant a leading the library
  *                  controls, without reaching into content the app supplies.
+ *   [FONT-RAW]     a `font:` shorthand is one --ui-type-* role or `inherit`, never a
+ *                  hand-assembled value — that would hide a size from
+ *                  check:token-bypass and a comparison from check:figma, both of
+ *                  which ask about the `font-size` longhand.
+ *   [FONT-AFTER]   the `font:` shorthand resets font-style, font-variant,
+ *                  font-stretch and line-height, so a longhand ABOVE it in the
+ *                  same rule is wiped. Same shape as [RESET-WIPED], different
+ *                  reset — and one atl-menu.css had already been bitten by.
  *   [RESET-AFTER]  `all: unset` resets font-family, so a declaration before it in
  *                  the same rule does nothing. This one is measured-from-experience:
  *                  the dialog's declaration was silently wiped exactly this way.
@@ -42,9 +50,11 @@
 const fs = require('fs');
 const path = require('path');
 const { FRAMEWORKS } = require('./lib/component-discovery');
+const { typeRoles, roleOfFontShorthand } = require('./lib/type-roles');
 
 const ROOT = path.resolve(__dirname, '../..');
 const FAMILY_TOKENS = /var\(--ui-font-(family|display|mono)\)/;
+const ROLES = typeRoles();
 
 const errors = [];
 let checked = 0;
@@ -89,9 +99,51 @@ for (const fw of FRAMEWORKS) {
         const parts = rule[1].split(/,(?![^(]*\))/);
         const selector = parts[parts.length - 1].trim().replace(/\s+/g, ' ');
         const body = rule[2];
+
+        // ── The `font:` shorthand ────────────────────────────────────────────
+        // ADR-0036 asks component CSS to reference a ROLE, and `font:` is how a
+        // role is applied. It carries the family AND the leading, so a rule using
+        // one satisfies both [NO-TYPEFACE] and [NO-LEADING] — which this gate did
+        // not know, so it blocked the very change ADR-0036 prescribes (ADR-0073).
+        const short = /(^|;)\s*font\s*:\s*([^;]+)/.exec(body);
+        const shortRole = short ? roleOfFontShorthand(short[2], ROLES) : null;
+
+        // The shorthand RESETS font-style, font-variant, font-stretch and
+        // line-height, so a longhand before it in the same rule is wiped. This is
+        // measured, not theoretical: atl-menu.css carries the scar in a comment —
+        // "Declared above it, the row's stated line-height was silently [wiped]".
+        // `font:` is either a ROLE or `inherit` — nothing else. Both other shapes
+        // are holes: a hand-assembled `font: 600 15px/1.25 Inter` hides a font-size
+        // literal from check:token-bypass (which asks about the `font-size` property,
+        // not the shorthand) and leaves [ROOT-PAINT]'s typography comparison null.
+        // True of all 18 shorthands in the library when this was written: 12 roles
+        // and 6 `inherit` (the native-element reset).
+        if (short && !shortRole && short[2].trim().replace(/;$/, '') !== 'inherit') {
+          errors.push(
+            `[FONT-RAW] ${rel} sets \`font: ${short[2].trim()}\` on \`${selector}\`. A \`font:\` ` +
+              `shorthand must be one --ui-type-* role or \`inherit\`: any other value hides a size ` +
+              `from check:token-bypass and a comparison from check:figma, both of which read the ` +
+              `\`font-size\` longhand.`
+          );
+        }
+
+        if (short) {
+          const before = body.slice(0, short.index + short[1].length);
+          const wiped = [...before.matchAll(/(^|;)\s*(font-(?:style|variant|stretch|size|weight|family)|line-height)\s*:/g)]
+            .map((m) => m[2]);
+          if (wiped.length) {
+            errors.push(
+              `[FONT-AFTER] ${rel} declares \`${[...new Set(wiped)].join('\`, \`')}\` above \`font:\` on ` +
+                `\`${selector}\`. The shorthand resets font-style, font-variant, font-stretch and ` +
+                `line-height, so those declarations do nothing. Put \`font:\` first, then the overrides.`
+            );
+          }
+        }
+
         const decl = /(^|;)\s*font-family\s*:\s*([^;]+)/.exec(body);
-        if (!decl) continue;
-        const value = decl[2].trim();
+        if (!decl && !shortRole) continue;
+        // A role reference stands in for the longhand it contains.
+        const value = decl ? decl[2].trim() : `var(${ROLES.get(shortRole).family})`;
         if (value === 'inherit') continue; // a control refusing the UA font
         if (!FAMILY_TOKENS.test(value)) continue; // a literal stack is check:css-tokens' business
 
@@ -107,7 +159,8 @@ for (const fw of FRAMEWORKS) {
 
         if (isRootSelector(selector) && !isContentFace) {
           rootFamilyRules++;
-          if (/(^|;)\s*line-height\s*:/.test(body)) rootFamilyRulesWithLeading++;
+          // The role supplies the leading; so does the longhand.
+          if (shortRole || /(^|;)\s*line-height\s*:/.test(body)) rootFamilyRulesWithLeading++;
         }
 
         if (!isRootSelector(selector) && !isContentFace && !resetsItself) {
@@ -120,7 +173,7 @@ for (const fw of FRAMEWORKS) {
         // A reset AFTER the declaration wipes it. (The dialog's declaration was
         // silently wiped exactly this way — and the first version of this check had
         // the comparison the wrong way round, flagging the correct order instead.)
-        const afterDecl = body.slice(decl.index + decl[0].length);
+        const afterDecl = body.slice(decl ? decl.index + decl[0].length : short.index + short[0].length);
         if (/(^|;)\s*all\s*:\s*(unset|initial|revert)/.test(afterDecl)) {
           errors.push(
             `[RESET-WIPED] ${rel} declares the typeface on \`${selector}\` and then resets it with \`all: unset\` ` +

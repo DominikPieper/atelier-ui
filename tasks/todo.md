@@ -337,6 +337,31 @@ Decision-bearing quick wins (deferred — not this session's scope):
       DRIFT blocker. Convenient there, wrong in general. Either fold the token source into
       every component's inputs (every token edit then re-verifies all 29) or add a separate
       token-layer verification record. Needs a decision, not a quick patch.
+- [ ] **509 text nodes in 37 of 43 masters use none of the eight `ty/*` text styles.**
+      Measured 2026-08-27 (ADR-0073): the styles exist, `[TEXT-STYLE]` gates them against
+      tokens.css to three decimals — and **zero** text nodes reference one. `[TEXT-STYLE]`
+      checks that the styles are correct, never that anything uses them. **332 of the 509
+      have `AUTO` leading**, the defect ADR-0059 fixed for seven root nodes, and five sizes
+      are off the type scale entirely (10, 13, 15, 20, 26px; the scale is 12/14/16/18/…).
+      Biggest single remaining gap in the transfer. Needs: bind the nodes, then a
+      `[TEXT-UNSTYLED]` code so it cannot come back.
+
+- [ ] **AtlAlert's padding is bound to the wrong spacing variables.** Figma draws 12/16 on
+      all four variants — bound, but to `spacing/3`/`spacing/4` — while the CSS says
+      `--ui-spacing-4`/`--ui-spacing-5` = 16/20. Found by `figma_check_design_parity`, not
+      by `check:figma`, because **no gate compares a master's root padding**: the snapshot's
+      `rootPaint` carries fill, stroke, radius, effects, fontSize and lineHeight, and no
+      padding. `boxFromDeclarations` already extracts the CSS side and nobody reads it.
+      Needs: extend the snapshot probe, add `[ROOT-BOX]`, then re-run `figma:snapshot`.
+
+- [ ] **AtlTextarea's text is 14px where the CSS says 16px, and `[ROOT-PAINT]` cannot see
+      it.** That cascade is `.atl-textarea textarea`, whose `font-size: inherit` resolves to
+      null, so the comparison never happens — the value the field actually renders comes from
+      the root, which the cascade does not include. Fix the gate by walking up to the
+      component root when a cascade leaf says `inherit`; fix the data as part of the 509.
+      Do the data first: making the gate see it turns `check:figma` red until Figma is
+      corrected and the snapshot re-run.
+
 - [ ] **`check:css-tokens` misses consumed-but-undeclared tokens.** It verifies that
       *declared* tokens are annotated; it did not notice that all three code-block
       stylesheets consumed `var(--ui-font-mono, …)` while nothing ever declared it, so every
@@ -351,13 +376,21 @@ Decision-bearing quick wins (deferred — not this session's scope):
       `font:` shorthands composed from the existing axes, plus `--ui-font-size-3xl`,
       `--ui-font-weight-bold` and `--ui-letter-spacing-uppercase`. Manifest 114/114. All
       eight verified in a browser against the shipped `tokens.css`, not a fixture.
-- [ ] **Migrate component CSS onto the type roles.** The roles are declared and verified but
-      nothing consumes them yet; 25 of 29 stylesheets still hand-assemble `font-family` +
-      `font-size` + `font-weight`. Do it per component group, one commit each — every group
-      makes its components' parity records stale. Ordering suggestion: the four that already
-      inherit (card, dialog, drawer, skeleton) are the cheapest start, then the form
-      controls, then the rest.
-- [ ] **Consider a gate forbidding `--ui-font-display` outside the role definition.** The
+- [x] ~~**Migrate component CSS onto the type roles**~~ — resolved 2026-08-27, ADR-0073, and
+      the census inverted the item. Of 118 rules that touch type, 92 carry one or two of the
+      four properties (a local override, where a role would say three things), 25 carry three
+      or more, and **4** of those migrate. The other 21: six name a line-height token inside a
+      `calc()` (ADR-0041's derived padding), where the leading is an OPERAND and a shorthand
+      would hide the number the arithmetic must name; nine control roots fail the same way one
+      level up; two (`.atl-avatar`, `.atl-badge`) declare no `font-size` at all because the
+      variant owns it, so a role would force `lg` onto every avatar. **A role is for prose,
+      not for a box derived from the leading.** The blocker was the gate itself:
+      `check:typeface` knew only the longhands, so `font: var(--ui-type-body-sm)` — the role
+      applied exactly as ADR-0036 asks — tripped `[NO-LEADING]`.
+- [ ] **Consider a gate forbidding `--ui-font-display` outside the role definition.** Now
+      cheap to write: `lib/type-roles.js` (ADR-0073) already reads which family each role
+      names, and `check:typeface` already resolves a role shorthand, so the gate is one more
+      rule in a loop that exists. The
       point of ADR-0036 is that "serif, italic, never bolded" is one token rather than three
       declarations to get right; a component naming the family directly can still break it.
 - [x] ~~**25 of 29 components respecify `font-family`, against their own manifest

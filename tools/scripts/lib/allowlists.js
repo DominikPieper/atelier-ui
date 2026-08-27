@@ -298,9 +298,10 @@ const PRIMITIVE_EXEMPTIONS = new Map([
     {
       kind: 'gap',
       reason:
-        'Predates the --ui-type-code role (ADR-0036) and is the reason --ui-font-mono had to be ' +
-        'declared at all. Migrating it means replacing font-family with the role shorthand, which ' +
-        'also brings size and line-height — a visual change to review, not a rename.',
+        'The one remaining consumer is .code-block-label — the language tag — at mono/xs/semibold. ' +
+        'No --ui-type-* role says that: code is mono/sm/normal. One occurrence is not a role ' +
+        '(rule of three), so the longhands stay and the axis token is named directly here. ' +
+        '.code-block-pre, the other consumer, migrated to font: var(--ui-type-code) in ADR-0073.',
     },
   ],
 ]);
