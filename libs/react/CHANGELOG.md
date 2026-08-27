@@ -1,3 +1,14 @@
+## 0.2.22 (2026-08-27)
+
+### 🚀 Features
+
+- **tokens:** ramps for the four status families, and one type step below the scale ([f0a6beb](https://github.com/DominikPieper/atelier-ui/commit/f0a6beb))
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Dominik Pieper @DominikPieper
+
 ## 0.2.21 (2026-08-27)
 
 This was a version bump only for react to align it with other projects, there were no code changes.
