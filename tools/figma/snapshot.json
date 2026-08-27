@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-27T14:43:25.439Z",
-    "gitSha": "560bd9e",
+    "generatedAt": "2026-08-27T16:43:01.165Z",
+    "gitSha": "c4affae",
     "serverVersion": null,
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -2105,15 +2105,10 @@
         }
       ],
       "properties": {
-        "Title#55:115": "TEXT",
-        "Body#55:128": "TEXT",
         "variant": "VARIANT",
         "padding": "VARIANT"
       },
-      "referencedProperties": [
-        "Title#55:115",
-        "Body#55:128"
-      ],
+      "referencedProperties": [],
       "iconInstanceNames": [],
       "rootPaint": {
         "variant=elevated, padding=none": {
@@ -4128,7 +4123,7 @@
       "name": "Display/AtlBadge",
       "selector": "AtlBadge",
       "nodeId": "55:22",
-      "description": "Inline status pill. Maps to AtlBadgeSpec in libs/spec.\n\nUse when: a small label needs to convey status, count, or category alongside other content. For larger callouts use Feedback/AtlAlert.\n\nDon't use when: the content is a control (use Action/AtlButton) or it's the primary content of the screen.\n\nAPI surface:\n- Variant `variant`: default | success | warning | danger | info → AtlBadgeSpec.variant\n- Variant `size`: sm | md → AtlBadgeSpec.size\n- Text `Label`: visible label\n\nA11y: badges are decorative by default. If they convey state changes important to assistive tech, wrap in role=\"status\".",
+      "description": "Inline status pill. Maps to AtlBadgeSpec in libs/spec.\n\nUse when: a small label needs to convey status, count, or category alongside other content. For larger callouts use Feedback/AtlAlert.\n\nDon't use when: the content is a control (use Action/AtlButton) or it's the primary content of the screen.\n\nAPI surface:\n- Variant `variant`: default | success | warning | danger | info → AtlBadgeSpec.variant\n- Variant `size`: sm | md → AtlBadgeSpec.size\n- Text `Label`: REMOVED 2026-08-27 (ADR-0067). AtlBadgeSpec has no label field — the text is children, and text inside a Figma instance is editable without a property, so the property added nothing but the implication of a prop that does not exist.\n\nA11y: badges are decorative by default. If they convey state changes important to assistive tech, wrap in role=\"status\".",
       "variantAxes": {
         "variant": [
           "default",
@@ -4185,13 +4180,10 @@
         }
       ],
       "properties": {
-        "Label#55:74": "TEXT",
         "variant": "VARIANT",
         "size": "VARIANT"
       },
-      "referencedProperties": [
-        "Label#55:74"
-      ],
+      "referencedProperties": [],
       "iconInstanceNames": [
         "check",
         "warning",
@@ -4382,7 +4374,7 @@
       "name": "Form/AtlSelect",
       "selector": "AtlSelect",
       "nodeId": "55:92",
-      "description": "Dropdown selector. Maps to AtlSelectSpec in libs/spec.\n\nUse when: user picks one value from a fixed list of <50 options. For searchable lists use Form/AtlCombobox. For 2–7 visible options use Form/AtlRadioGroup. For multi-select use a Combobox or stacked Form/AtlCheckbox.\n\nDon't use when: options are dynamic / fetched (use Form/AtlCombobox), the choice is binary (use Form/AtlToggle), or users benefit from seeing all options simultaneously (use Form/AtlRadioGroup).\n\nAPI surface (Figma → spec):\n- Variant `state`: default | hover | focus | open | filled\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Boolean `invalid`: maps to AtlFormFieldSpec.invalid\n- Boolean `required`: maps to AtlFormFieldSpec.required\n- Text `Placeholder`: maps to placeholder\n\nA11y: native popover via the HTML Popover API. Keyboard: ArrowUp/Down navigate, Enter selects, Escape closes. Disabled state uses aria-disabled (not HTML disabled).\n\nStatus: structural restructure 2026-04-27 — `state` enum slimmed to interaction + open + filled; disabled/invalid/required moved to Booleans matching spec.\n\nDeclared Boolean properties that reference no layer (2026-08-27, ADR-0058). check:figma reads these lines, so the reason is stated where a designer opening the master sees it:\n- Boolean `required`: declared but unbound — `required` renders nothing in any of the five form fields. It is passed to the DOM as the HTML attribute and that is all: no class, no CSS rule, no asterisk. The asterisk a designer expects comes from the label text the consumer writes, so there is no component-owned layer for this property to toggle. If the library should render one, that is a code change first.",
+      "description": "Dropdown selector. Maps to AtlSelectSpec in libs/spec.\n\nUse when: user picks one value from a fixed list of <50 options. For searchable lists use Form/AtlCombobox. For 2–7 visible options use Form/AtlRadioGroup. For multi-select use a Combobox or stacked Form/AtlCheckbox.\n\nDon't use when: options are dynamic / fetched (use Form/AtlCombobox), the choice is binary (use Form/AtlToggle), or users benefit from seeing all options simultaneously (use Form/AtlRadioGroup).\n\nAPI surface (Figma → spec):\n- Variant `state`: default | hover | focus | open | filled\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Boolean `invalid`: maps to AtlFormFieldSpec.invalid\n- Boolean `required`: maps to AtlFormFieldSpec.required\n- Text `placeholder`: maps to AtlSelectSpec.placeholder\n\nA11y: native popover via the HTML Popover API. Keyboard: ArrowUp/Down navigate, Enter selects, Escape closes. Disabled state uses aria-disabled (not HTML disabled).\n\nStatus: structural restructure 2026-04-27 — `state` enum slimmed to interaction + open + filled; disabled/invalid/required moved to Booleans matching spec.\n\nDeclared Boolean properties that reference no layer (2026-08-27, ADR-0058). check:figma reads these lines, so the reason is stated where a designer opening the master sees it:\n- Boolean `required`: declared but unbound — `required` renders nothing in any of the five form fields. It is passed to the DOM as the HTML attribute and that is all: no class, no CSS rule, no asterisk. The asterisk a designer expects comes from the label text the consumer writes, so there is no component-owned layer for this property to toggle. If the library should render one, that is a code change first.",
       "variantAxes": {
         "state": [
           "default",
@@ -4410,14 +4402,14 @@
         }
       ],
       "properties": {
-        "Placeholder#55:163": "TEXT",
+        "placeholder#55:163": "TEXT",
         "disabled#507:115": "BOOLEAN",
         "invalid#507:121": "BOOLEAN",
         "required#507:127": "BOOLEAN",
         "state": "VARIANT"
       },
       "referencedProperties": [
-        "Placeholder#55:163",
+        "placeholder#55:163",
         "disabled#507:115",
         "invalid#507:121"
       ],
@@ -4771,18 +4763,9 @@
         }
       ],
       "properties": {
-        "Title#55:168": "TEXT",
-        "Message#55:170": "TEXT",
-        "ConfirmLabel#55:172": "TEXT",
-        "CancelLabel#55:174": "TEXT",
         "size": "VARIANT"
       },
-      "referencedProperties": [
-        "Title#55:168",
-        "Message#55:170",
-        "CancelLabel#55:174",
-        "ConfirmLabel#55:172"
-      ],
+      "referencedProperties": [],
       "iconInstanceNames": [
         "close"
       ],
@@ -6505,7 +6488,7 @@
       "name": "Overlay/AtlTooltip",
       "selector": "AtlTooltip",
       "nodeId": "55:52",
-      "description": "Floating context label. Maps to AtlTooltipSpec in libs/spec.\n\nUse when: brief non-essential clarification on hover/focus (e.g. icon-only buttons, abbreviations).\n\nDon't use when: information is essential (put it in the visible label) or content is a paragraph (use Overlay/AtlDialog or a popover).\n\nAPI surface:\n- Variant `position`: above | below | left | right → AtlTooltipSpec.atlTooltipPosition\n- Text `Content`: tooltip text → AtlTooltipSpec.atlTooltip\n- (code-only: `disabled`, `showDelay`, `hideDelay`)\n\nA11y: tooltip role, anchored via aria-describedby on the trigger. Mobile users have no hover, so don't put critical info here.\n\nAxis note (2026-08-27): the axis is `position`, derived from the spec union `AtlTooltipPosition` the way every other master derives its axis name from its union — `AtlButtonVariant` gives `variant`. It was briefly renamed to `atlTooltipPosition`, the Angular directive-input field name, on a check that compared against the field instead of the union. check:figma's [NAME] rule caught the rename as a blocker; the check was corrected rather than the master (ADR-0056).\n\nSpec flags deliberately not modelled as Boolean properties (2026-08-27, ADR-0056). check:figma reads these lines, so the reason is stated here rather than hidden in a list inside the gate:\n- Boolean `atlTooltipDisabled`: not modelled — renders nothing. `atl-tooltip.tsx` early-returns on it, so there is no disabled tooltip to draw — only the absence of one.",
+      "description": "Floating context label. Maps to AtlTooltipSpec in libs/spec.\n\nUse when: brief non-essential clarification on hover/focus (e.g. icon-only buttons, abbreviations).\n\nDon't use when: information is essential (put it in the visible label) or content is a paragraph (use Overlay/AtlDialog or a popover).\n\nAPI surface:\n- Variant `position`: above | below | left | right → AtlTooltipSpec.atlTooltipPosition\n- Text `atlTooltip`: maps to AtlTooltipSpec.atlTooltip — the property carries the spec's own name, odd as it reads, because that is the field a consumer sets\n- (code-only: `disabled`, `showDelay`, `hideDelay`)\n\nA11y: tooltip role, anchored via aria-describedby on the trigger. Mobile users have no hover, so don't put critical info here.\n\nAxis note (2026-08-27): the axis is `position`, derived from the spec union `AtlTooltipPosition` the way every other master derives its axis name from its union — `AtlButtonVariant` gives `variant`. It was briefly renamed to `atlTooltipPosition`, the Angular directive-input field name, on a check that compared against the field instead of the union. check:figma's [NAME] rule caught the rename as a blocker; the check was corrected rather than the master (ADR-0056).\n\nSpec flags deliberately not modelled as Boolean properties (2026-08-27, ADR-0056). check:figma reads these lines, so the reason is stated here rather than hidden in a list inside the gate:\n- Boolean `atlTooltipDisabled`: not modelled — renders nothing. `atl-tooltip.tsx` early-returns on it, so there is no disabled tooltip to draw — only the absence of one.",
       "variantAxes": {
         "position": [
           "above",
@@ -6529,11 +6512,11 @@
         }
       ],
       "properties": {
-        "Content#55:110": "TEXT",
+        "atlTooltip#55:110": "TEXT",
         "position": "VARIANT"
       },
       "referencedProperties": [
-        "Content#55:110"
+        "atlTooltip#55:110"
       ],
       "iconInstanceNames": [],
       "rootPaint": {
@@ -6636,7 +6619,7 @@
       "name": "Feedback/AtlAlert",
       "selector": "AtlAlert",
       "nodeId": "55:31",
-      "description": "Inline notification with intent. Maps to AtlAlertSpec in libs/spec.\n\nUse when: a persistent message conveys status that the user should see while continuing on the page (form errors, banner notices). For transient feedback use Overlay/AtlToast.\n\nAPI surface:\n- Variant `variant`: info | success | warning | danger → AtlAlertSpec.variant\n- Boolean `dismissible` → AtlAlertSpec.dismissible\n- Text `Message`: alert content\n\nA11y: role=\"alert\" for danger/warning (interrupts assistive tech); role=\"status\" otherwise.\n\nStatus: 2026-04-27 — `dismissible` moved from Variant axis (false/true) to Boolean Property matching spec.",
+      "description": "Inline notification with intent. Maps to AtlAlertSpec in libs/spec.\n\nUse when: a persistent message conveys status that the user should see while continuing on the page (form errors, banner notices). For transient feedback use Overlay/AtlToast.\n\nAPI surface:\n- Variant `variant`: info | success | warning | danger → AtlAlertSpec.variant\n- Boolean `dismissible` → AtlAlertSpec.dismissible\n- Text `Message`: REMOVED 2026-08-27 (ADR-0067). The alert body is children; AtlAlertSpec has only `variant` and `dismissible`.\n\nA11y: role=\"alert\" for danger/warning (interrupts assistive tech); role=\"status\" otherwise.\n\nStatus: 2026-04-27 — `dismissible` moved from Variant axis (false/true) to Boolean Property matching spec.",
       "variantAxes": {
         "variant": [
           "info",
@@ -6660,12 +6643,10 @@
         }
       ],
       "properties": {
-        "Message#55:85": "TEXT",
         "dismissible#507:267": "BOOLEAN",
         "variant": "VARIANT"
       },
       "referencedProperties": [
-        "Message#55:85",
         "dismissible#507:267"
       ],
       "iconInstanceNames": [
@@ -6866,7 +6847,7 @@
       "name": "Form/AtlCheckbox",
       "selector": "AtlCheckbox",
       "nodeId": "55:36",
-      "description": "Boolean form control for opt-in selections. Maps to AtlCheckboxSpec in libs/spec.\n\nUse when: user opts in to one or more independent options (Accept terms, Subscribe to newsletter, parent rows in a tree). Indeterminate state represents a partially-selected parent of mixed children.\n\nDon't use when: choice is mutually exclusive (use Form/AtlRadio + Form/AtlRadioGroup) or binary settings toggle (use Form/AtlToggle — feels more like a switch than a form input).\n\nAPI surface (Figma → spec):\n- Variant `selection`: unchecked | checked | indeterminate — maps to `checked` + `indeterminate` Booleans\n- Variant `state`: default | hover | focus — interaction state\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Boolean `invalid`: maps to AtlFormFieldSpec.invalid\n- Boolean `required`: maps to AtlFormFieldSpec.required\n- Text `Label`: visible label\n\nA11y: native HTML <input type=\"checkbox\">. Indeterminate set via JS property (not HTML attribute). Disabled state uses aria-disabled.\n\nStatus: structural restructure 2026-04-27 — single `state` enum split into orthogonal `selection` (unchecked/checked/indeterminate) + `state` (default/hover/focus) Variant Properties; disabled moved to Boolean.\n\nDeclared Boolean properties that reference no layer (2026-08-27, ADR-0058). check:figma reads these lines, so the reason is stated where a designer opening the master sees it:\n- Boolean `required`: declared but unbound — `required` renders nothing in any of the five form fields. It is passed to the DOM as the HTML attribute and that is all: no class, no CSS rule, no asterisk. The asterisk a designer expects comes from the label text the consumer writes, so there is no component-owned layer for this property to toggle. If the library should render one, that is a code change first.",
+      "description": "Boolean form control for opt-in selections. Maps to AtlCheckboxSpec in libs/spec.\n\nUse when: user opts in to one or more independent options (Accept terms, Subscribe to newsletter, parent rows in a tree). Indeterminate state represents a partially-selected parent of mixed children.\n\nDon't use when: choice is mutually exclusive (use Form/AtlRadio + Form/AtlRadioGroup) or binary settings toggle (use Form/AtlToggle — feels more like a switch than a form input).\n\nAPI surface (Figma → spec):\n- Variant `selection`: unchecked | checked | indeterminate — maps to `checked` + `indeterminate` Booleans\n- Variant `state`: default | hover | focus — interaction state\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Boolean `invalid`: maps to AtlFormFieldSpec.invalid\n- Boolean `required`: maps to AtlFormFieldSpec.required\n- Text `Label`: REMOVED 2026-08-27 (ADR-0067). The label is content projection, not a prop; AtlCheckboxSpec has no such field.\n\nA11y: native HTML <input type=\"checkbox\">. Indeterminate set via JS property (not HTML attribute). Disabled state uses aria-disabled.\n\nStatus: structural restructure 2026-04-27 — single `state` enum split into orthogonal `selection` (unchecked/checked/indeterminate) + `state` (default/hover/focus) Variant Properties; disabled moved to Boolean.\n\nDeclared Boolean properties that reference no layer (2026-08-27, ADR-0058). check:figma reads these lines, so the reason is stated where a designer opening the master sees it:\n- Boolean `required`: declared but unbound — `required` renders nothing in any of the five form fields. It is passed to the DOM as the HTML attribute and that is all: no class, no CSS rule, no asterisk. The asterisk a designer expects comes from the label text the consumer writes, so there is no component-owned layer for this property to toggle. If the library should render one, that is a code change first.",
       "variantAxes": {
         "selection": [
           "unchecked",
@@ -6902,7 +6883,6 @@
         }
       ],
       "properties": {
-        "Label#55:94": "TEXT",
         "disabled#507:154": "BOOLEAN",
         "invalid#507:160": "BOOLEAN",
         "required#507:166": "BOOLEAN",
@@ -6910,7 +6890,6 @@
         "state": "VARIANT"
       },
       "referencedProperties": [
-        "Label#55:94",
         "disabled#507:154",
         "invalid#507:160"
       ],
@@ -7243,7 +7222,7 @@
       "name": "Form/AtlToggle",
       "selector": "AtlToggle",
       "nodeId": "55:41",
-      "description": "On/off switch control. Maps to AtlToggleSpec in libs/spec.\n\nUse when: a binary setting takes effect immediately (notifications on/off, dark mode, sync). Visually distinct from Checkbox — the switch metaphor implies \"this changes a setting now\", not \"this opts into a form value on submit\".\n\nDon't use when: the binary is part of a form submission (use Form/AtlCheckbox), the setting requires a confirmation step (use Form/AtlCheckbox plus Action/AtlButton), or the choice is one-of-three (use Form/AtlRadioGroup).\n\nAPI surface (Figma → spec):\n- Variant `selection`: off | on — maps to AtlToggleSpec.checked (false/true)\n- Variant `state`: default | hover | focus — interaction state\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Text `Label`: visible label\n\nA11y: native HTML <input type=\"checkbox\"> with role=\"switch\" wrapper. The label should describe the setting being toggled, not \"Off/On\". Disabled state uses aria-disabled.\n\nStatus: structural restructure 2026-04-27 — collapsed Cartesian (`disabled-off`/`disabled-on`) into orthogonal `selection` Variant + `disabled` Boolean. Old `state` enum (off/on/disabled-off/disabled-on/focus/hover/active/loading) replaced.\n\nSpec flags deliberately not modelled (2026-08-27, ADR-0058):\n- Boolean `required`: not modelled — `required` renders nothing in any Atelier form field. It is passed to the DOM as the HTML attribute and stops there.",
+      "description": "On/off switch control. Maps to AtlToggleSpec in libs/spec.\n\nUse when: a binary setting takes effect immediately (notifications on/off, dark mode, sync). Visually distinct from Checkbox — the switch metaphor implies \"this changes a setting now\", not \"this opts into a form value on submit\".\n\nDon't use when: the binary is part of a form submission (use Form/AtlCheckbox), the setting requires a confirmation step (use Form/AtlCheckbox plus Action/AtlButton), or the choice is one-of-three (use Form/AtlRadioGroup).\n\nAPI surface (Figma → spec):\n- Variant `selection`: off | on — maps to AtlToggleSpec.checked (false/true)\n- Variant `state`: default | hover | focus — interaction state\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Text `Label`: REMOVED 2026-08-27 (ADR-0067). The label is content projection, not a prop; AtlToggleSpec has no such field.\n\nA11y: native HTML <input type=\"checkbox\"> with role=\"switch\" wrapper. The label should describe the setting being toggled, not \"Off/On\". Disabled state uses aria-disabled.\n\nStatus: structural restructure 2026-04-27 — collapsed Cartesian (`disabled-off`/`disabled-on`) into orthogonal `selection` Variant + `disabled` Boolean. Old `state` enum (off/on/disabled-off/disabled-on/focus/hover/active/loading) replaced.\n\nSpec flags deliberately not modelled (2026-08-27, ADR-0058):\n- Boolean `required`: not modelled — `required` renders nothing in any Atelier form field. It is passed to the DOM as the HTML attribute and stops there.",
       "variantAxes": {
         "selection": [
           "off",
@@ -7274,14 +7253,12 @@
         }
       ],
       "properties": {
-        "Label#55:99": "TEXT",
         "disabled#507:187": "BOOLEAN",
         "invalid#911:5": "BOOLEAN",
         "selection": "VARIANT",
         "state": "VARIANT"
       },
       "referencedProperties": [
-        "Label#55:99",
         "disabled#507:187",
         "invalid#911:5"
       ],
@@ -7790,7 +7767,7 @@
       "name": "Form/AtlTextarea",
       "selector": "AtlTextarea",
       "nodeId": "55:87",
-      "description": "Multi-line text input. Maps to AtlTextareaSpec in libs/spec.\n\nUse when: user enters a paragraph or block of text (comment, description, message body). For single-line use Form/AtlInput.\n\nDon't use when: input is a small fixed-shape value (use Form/AtlInput) or a one-of-many choice (use Form/AtlSelect).\n\nAPI surface (Figma → spec):\n- Variant `state`: default | hover | focus | invalid | filled\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Boolean `readonly`: maps to AtlReadonlySpec.readonly\n- Boolean `required`: maps to AtlFormFieldSpec.required\n- Boolean `autoResize`: maps to AtlTextareaSpec.autoResize — grow to fit content\n- Text `Placeholder`: maps to placeholder\n\nA11y: native HTML <textarea>. Disabled state uses aria-disabled (not HTML disabled) so the element remains focusable and is announced by screen readers — pair with helper text or aria-describedby explaining why. The invalid state is carried by an AtlIcon `danger` inside the field as well as by the border colour, so it does not depend on colour perception (WCAG 1.4.1); the error message is a polite live region the field points at with aria-describedby.\n\nStatus: structural restructure 2026-04-27 — old `state` enum collapsed; orthogonal Booleans now match AtlFormFieldSpec. 2026-08-27 — `readonly` re-pointed from AtlFormFieldSpec to AtlReadonlySpec, where ADR-0045 moved it; the old mapping was caught by check:figma's [BOOL-CLAIM].\n\nDeclared Boolean properties that reference no layer (2026-08-27, ADR-0058). check:figma reads these lines, so the reason is stated where a designer opening the master sees it:\n- Boolean `required`: declared but unbound — `required` renders nothing in any of the five form fields. It is passed to the DOM as the HTML attribute and that is all: no class, no CSS rule, no asterisk. The asterisk a designer expects comes from the label text the consumer writes, so there is no component-owned layer for this property to toggle. If the library should render one, that is a code change first.\n- Boolean `autoResize`: declared but unbound — `.is-auto-resize textarea` sets `resize: none; overflow: hidden`, which removes the browser's resize grabber. That grabber is chrome Figma does not draw in the first place, so there is no difference here to toggle.",
+      "description": "Multi-line text input. Maps to AtlTextareaSpec in libs/spec.\n\nUse when: user enters a paragraph or block of text (comment, description, message body). For single-line use Form/AtlInput.\n\nDon't use when: input is a small fixed-shape value (use Form/AtlInput) or a one-of-many choice (use Form/AtlSelect).\n\nAPI surface (Figma → spec):\n- Variant `state`: default | hover | focus | invalid | filled\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Boolean `readonly`: maps to AtlReadonlySpec.readonly\n- Boolean `required`: maps to AtlFormFieldSpec.required\n- Boolean `autoResize`: maps to AtlTextareaSpec.autoResize — grow to fit content\n- Text `placeholder`: maps to AtlTextareaSpec.placeholder\n\nA11y: native HTML <textarea>. Disabled state uses aria-disabled (not HTML disabled) so the element remains focusable and is announced by screen readers — pair with helper text or aria-describedby explaining why. The invalid state is carried by an AtlIcon `danger` inside the field as well as by the border colour, so it does not depend on colour perception (WCAG 1.4.1); the error message is a polite live region the field points at with aria-describedby.\n\nStatus: structural restructure 2026-04-27 — old `state` enum collapsed; orthogonal Booleans now match AtlFormFieldSpec. 2026-08-27 — `readonly` re-pointed from AtlFormFieldSpec to AtlReadonlySpec, where ADR-0045 moved it; the old mapping was caught by check:figma's [BOOL-CLAIM].\n\nDeclared Boolean properties that reference no layer (2026-08-27, ADR-0058). check:figma reads these lines, so the reason is stated where a designer opening the master sees it:\n- Boolean `required`: declared but unbound — `required` renders nothing in any of the five form fields. It is passed to the DOM as the HTML attribute and that is all: no class, no CSS rule, no asterisk. The asterisk a designer expects comes from the label text the consumer writes, so there is no component-owned layer for this property to toggle. If the library should render one, that is a code change first.\n- Boolean `autoResize`: declared but unbound — `.is-auto-resize textarea` sets `resize: none; overflow: hidden`, which removes the browser's resize grabber. That grabber is chrome Figma does not draw in the first place, so there is no difference here to toggle.",
       "variantAxes": {
         "state": [
           "default",
@@ -7818,7 +7795,7 @@
         }
       ],
       "properties": {
-        "Placeholder#55:157": "TEXT",
+        "placeholder#55:157": "TEXT",
         "disabled#507:91": "BOOLEAN",
         "readonly#507:97": "BOOLEAN",
         "required#507:103": "BOOLEAN",
@@ -7827,7 +7804,7 @@
       },
       "referencedProperties": [
         "readonly#507:97",
-        "Placeholder#55:157",
+        "placeholder#55:157",
         "disabled#507:91"
       ],
       "iconInstanceNames": [],
@@ -9969,7 +9946,7 @@
       "name": "Display/AtlAvatar",
       "selector": "AtlAvatar",
       "nodeId": "55:151",
-      "description": "Avatar with graceful image → initials → icon fallback. Maps to AtlAvatarSpec in libs/spec.\n\nUse when: representing a user or entity. For multiple stacked avatars, use AtlAvatarGroup (deferred — currently illustrated by sibling frames in this section).\n\nAPI surface:\n- Variant `shape`: circle | square → AtlAvatarSpec.shape\n- Variant `size`: xs | sm | md | lg | xl → AtlAvatarSpec.size\n- Text `Initials`: fallback text shown when no image available\n- (code-only: `src`, `alt`, `name`, `status`)\n\nStatus: spec field `status` (online/offline/away/busy) is illustrated alongside but not yet a Variant axis — follow-up.",
+      "description": "Avatar with graceful image → initials → icon fallback. Maps to AtlAvatarSpec in libs/spec.\n\nUse when: representing a user or entity. For multiple stacked avatars, use AtlAvatarGroup (deferred — currently illustrated by sibling frames in this section).\n\nAPI surface:\n- Variant `shape`: circle | square → AtlAvatarSpec.shape\n- Variant `size`: xs | sm | md | lg | xl → AtlAvatarSpec.size\n- Text `Initials`: REMOVED 2026-08-27 (ADR-0067). The initials are DERIVED, not set: `atl-avatar.tsx` computes `getInitials(name)` from AtlAvatarSpec.name. A property offering to set them would let a designer type something the component can never render.\n- (code-only: `src`, `alt`, `name`, `status`)\n\nStatus: spec field `status` (online/offline/away/busy) is illustrated alongside but not yet a Variant axis — follow-up.",
       "variantAxes": {
         "shape": [
           "circle",
@@ -10026,13 +10003,10 @@
         }
       ],
       "properties": {
-        "Initials#55:184": "TEXT",
         "shape": "VARIANT",
         "size": "VARIANT"
       },
-      "referencedProperties": [
-        "Initials#55:184"
-      ],
+      "referencedProperties": [],
       "iconInstanceNames": [],
       "rootPaint": {
         "shape=circle, size=xs": {
@@ -10218,7 +10192,7 @@
       "name": "Overlay/AtlToast",
       "selector": "AtlToast",
       "nodeId": "55:47",
-      "description": "Transient notification. Maps to AtlToastVariant + AtlToastOptions + AtlToastContainerPosition in libs/spec.\n\nUse when: non-blocking feedback for an async action (saved, copied, error). For critical interruptions use Overlay/AtlDialog.\n\nAPI surface (Figma → spec):\n- Variant `variant`: default | success | warning | danger | info → AtlToastVariant\n- Variant `position`: top-right | top-center | bottom-right | bottom-center → AtlToastContainerPosition (where the toast container anchors on the page)\n- Boolean `dismissible` → AtlToastOptions.dismissible\n- Text `Message`: notification content\n- (code-only: `duration: number` → AtlToastOptions.duration)\n\nA11y: aria-live=\"polite\" for default/success/info; aria-live=\"assertive\" for warning/danger.\n\nStatus: 2026-04-27 — `position` Variant axis added per AtlToastContainerPosition. Asymmetric matrix: 5 variants × top-right + 3 illustrative (default × top-center, bottom-right, bottom-center). Cross-product (5×4) can be filled later. `dismissible` Boolean added.",
+      "description": "Transient notification. Maps to AtlToastVariant + AtlToastOptions + AtlToastContainerPosition in libs/spec.\n\nUse when: non-blocking feedback for an async action (saved, copied, error). For critical interruptions use Overlay/AtlDialog.\n\nAPI surface (Figma → spec):\n- Variant `variant`: default | success | warning | danger | info → AtlToastVariant\n- Variant `position`: top-right | top-center | bottom-right | bottom-center → AtlToastContainerPosition (where the toast container anchors on the page)\n- Boolean `dismissible` → AtlToastOptions.dismissible\n- Text `message`: not a property — the message is the FIRST ARGUMENT of the toast service call, and AtlToastOptions covers only the options object. AtlToast has no spec interface at all (allowlisted in check-figma).\n- (code-only: `duration: number` → AtlToastOptions.duration)\n\nA11y: aria-live=\"polite\" for default/success/info; aria-live=\"assertive\" for warning/danger.\n\nStatus: 2026-04-27 — `position` Variant axis added per AtlToastContainerPosition. Asymmetric matrix: 5 variants × top-right + 3 illustrative (default × top-center, bottom-right, bottom-center). Cross-product (5×4) can be filled later. `dismissible` Boolean added.",
       "variantAxes": {
         "variant": [
           "default",
@@ -10269,13 +10243,13 @@
         }
       ],
       "properties": {
-        "Message#55:104": "TEXT",
+        "message#55:104": "TEXT",
         "dismissible#508:318": "BOOLEAN",
         "variant": "VARIANT",
         "position": "VARIANT"
       },
       "referencedProperties": [
-        "Message#55:104",
+        "message#55:104",
         "dismissible#508:318"
       ],
       "iconInstanceNames": [
@@ -19428,13 +19402,11 @@
         "variant": "VARIANT"
       },
       "referencedProperties": [
-        "Label#55:74",
         "readonly#507:97",
-        "Placeholder#55:157",
+        "placeholder#55:157",
         "disabled#507:91",
         "disabled#507:192",
-        "loading#507:217",
-        "Initials#55:184"
+        "loading#507:217"
       ],
       "iconInstanceNames": [
         "close",
@@ -21536,7 +21508,7 @@
       "name": "Navigation/AtlTab",
       "selector": "AtlTab",
       "nodeId": "911:1075",
-      "description": "One tab inside AtlTabGroup. Maps to AtlTabSpec.\n\nAxis `state`: default | active. `.is-active` recolours the label to `--ui-color-primary` and paints the 3px bottom indicator, inset `var(--ui-spacing-2)` on each side.\n\n- Boolean `disabled`: maps to AtlTabSpec.disabled — this is the flag AtlTabGroup used to declare at group level, where AtlTabGroupSpec has no such field (ADR-0061).\n\nGeometry: `.atl-tab-group .tablist button` DERIVES its block padding from `--ui-control-height-md` (ADR-0041). A 40px min-height box that centres its line is the same measurement without a raw 11.25px, which no token could bind. Top corners `--ui-radius-md`, bottom square.",
+      "description": "One tab inside AtlTabGroup. Maps to AtlTabSpec.\n\nAxis `state`: default | active. `.is-active` recolours the label to `--ui-color-primary` and paints the 3px bottom indicator, inset `var(--ui-spacing-2)` on each side.\n\n- Boolean `disabled`: maps to AtlTabSpec.disabled — this is the flag AtlTabGroup used to declare at group level, where AtlTabGroupSpec has no such field (ADR-0061).\n- Text `label`: maps to AtlTabSpec.label\n\nGeometry: `.atl-tab-group .tablist button` DERIVES its block padding from `--ui-control-height-md` (ADR-0041). A 40px min-height box that centres its line is the same measurement without a raw 11.25px, which no token could bind. Top corners `--ui-radius-md`, bottom square.",
       "variantAxes": {
         "state": [
           "default",
@@ -21553,9 +21525,11 @@
       ],
       "properties": {
         "disabled#911:30": "BOOLEAN",
+        "label#912:74": "TEXT",
         "state": "VARIANT"
       },
       "referencedProperties": [
+        "label#912:74",
         "disabled#911:30"
       ],
       "iconInstanceNames": [],
@@ -21681,7 +21655,7 @@
       "name": "Navigation/AtlStep",
       "selector": "AtlStep",
       "nodeId": "911:1151",
-      "description": "One step inside AtlStepper. Maps to AtlStepSpec.\n\nAxis `state`: default | active | completed | error. Each recolours the circle's border, fill and number and the label, so none of them can be a Boolean.\n\n- Boolean `description`: maps to AtlStepSpec.description — the second line appears when the string is passed.\n- Boolean `optional`: maps to AtlStepSpec.optional — adds the italic line.\n- Boolean `disabled`: maps to AtlStepSpec.disabled — `.is-disabled` dims circle and label with `--ui-opacity-disabled`.\n- `label` is content, not state.\n\nGeometry: `.step-circle` is 36x36 with a 2px border and a full radius; `.step-text` sits `var(--ui-spacing-2)` below. The 2px gap between label, description and optional is a raw literal in the CSS — see tasks/todo.md.",
+      "description": "One step inside AtlStepper. Maps to AtlStepSpec.\n\nAxis `state`: default | active | completed | error. Each recolours the circle's border, fill and number and the label, so none of them can be a Boolean.\n\n- Boolean `description`: maps to AtlStepSpec.description — the second line appears when the string is passed.\n- Boolean `optional`: maps to AtlStepSpec.optional — adds the italic line.\n- Boolean `disabled`: maps to AtlStepSpec.disabled — `.is-disabled` dims circle and label with `--ui-opacity-disabled`.\n- Text `label`: maps to AtlStepSpec.label. `description` stays a BOOLEAN: Figma allows one property per NAME, so presence and content cannot both be called `description` — it appends a digit instead of refusing (ADR-0067), and presence is the state worth switching.\n- `label` is content, not state.\n\nGeometry: `.step-circle` is 36x36 with a 2px border and a full radius; `.step-text` sits `var(--ui-spacing-2)` below. The 2px gap between label, description and optional is a raw literal in the CSS — see tasks/todo.md.",
       "variantAxes": {
         "state": [
           "default",
@@ -21708,9 +21682,11 @@
         "description#911:46": "BOOLEAN",
         "optional#911:51": "BOOLEAN",
         "disabled#911:56": "BOOLEAN",
+        "label#912:77": "TEXT",
         "state": "VARIANT"
       },
       "referencedProperties": [
+        "label#912:77",
         "description#911:46",
         "optional#911:51",
         "disabled#911:56"
@@ -22574,7 +22550,7 @@
       "name": "AI/AtlChatMessage",
       "selector": "AtlChatMessage",
       "nodeId": "911:1112",
-      "description": "One bubble inside AtlChat. Maps to AtlChatMessageSpec.\n\nAxis `role`: assistant | user | system, from AtlChatMessageRole. Each recolours the bubble: assistant and system take `--ui-color-surface-sunken`, user takes `--ui-color-primary` with `--ui-color-text-on-primary`, system adds italic and `--ui-color-text-muted`.\n\n- Boolean `failed`: maps to AtlChatMessageSpec.failed — `.is-failed` ADDS a 1px dashed `--ui-color-danger` border, drawn as `_failed-border`.\n- `id` and `content` are data, not state.\n\nGeometry: `padding: var(--ui-spacing-3) var(--ui-spacing-4)`, `--ui-radius-lg`, `--ui-font-size-sm` at normal leading, `max-width: 85%` of the message list.",
+      "description": "One bubble inside AtlChat. Maps to AtlChatMessageSpec.\n\nAxis `role`: assistant | user | system, from AtlChatMessageRole. Each recolours the bubble: assistant and system take `--ui-color-surface-sunken`, user takes `--ui-color-primary` with `--ui-color-text-on-primary`, system adds italic and `--ui-color-text-muted`.\n\n- Boolean `failed`: maps to AtlChatMessageSpec.failed — `.is-failed` ADDS a 1px dashed `--ui-color-danger` border, drawn as `_failed-border`.\n- Text `content`: maps to AtlChatMessageSpec.content\n- `id` and `content` are data, not state.\n\nGeometry: `padding: var(--ui-spacing-3) var(--ui-spacing-4)`, `--ui-radius-lg`, `--ui-font-size-sm` at normal leading, `max-width: 85%` of the message list.",
       "variantAxes": {
         "role": [
           "assistant",
@@ -22595,9 +22571,11 @@
       ],
       "properties": {
         "failed#911:41": "BOOLEAN",
+        "content#912:82": "TEXT",
         "role": "VARIANT"
       },
       "referencedProperties": [
+        "content#912:82",
         "failed#911:41"
       ],
       "iconInstanceNames": [],
@@ -22734,13 +22712,15 @@
       "name": "AI/AtlChatSuggestion",
       "selector": "AtlChatSuggestion",
       "nodeId": "911:1116",
-      "description": "One suggestion chip inside AtlChat. Maps to AtlChatSuggestionSpec.\n\nNo axes: the chip has one appearance. `:hover` only shifts background and border colour.\n\n- Boolean `hint`: maps to AtlChatSuggestionSpec.hint — the second line appears when the string is passed.\n- `id` and `label` are data, not state.\n\nGeometry: a column with `gap: var(--ui-spacing-1)`, `padding: var(--ui-spacing-3) var(--ui-spacing-4)`, `--ui-color-surface` behind a 1px `--ui-color-border`, `--ui-radius-lg`.",
+      "description": "One suggestion chip inside AtlChat. Maps to AtlChatSuggestionSpec.\n\nNo axes: the chip has one appearance. `:hover` only shifts background and border colour.\n\n- Boolean `hint`: maps to AtlChatSuggestionSpec.hint — the second line appears when the string is passed.\n- Text `label`: maps to AtlChatSuggestionSpec.label. `hint` stays a BOOLEAN for the same reason as AtlStep's `description`.\n- `id` and `label` are data, not state.\n\nGeometry: a column with `gap: var(--ui-spacing-1)`, `padding: var(--ui-spacing-3) var(--ui-spacing-4)`, `--ui-color-surface` behind a 1px `--ui-color-border`, `--ui-radius-lg`.",
       "variantAxes": {},
       "variants": [],
       "properties": {
-        "hint#911:45": "BOOLEAN"
+        "hint#911:45": "BOOLEAN",
+        "label#912:86": "TEXT"
       },
       "referencedProperties": [
+        "label#912:86",
         "hint#911:45"
       ],
       "iconInstanceNames": [],
@@ -23171,7 +23151,6 @@
       },
       "referencedProperties": [
         "selectable#911:65",
-        "Label#55:94",
         "disabled#507:154",
         "invalid#507:160"
       ],
@@ -23413,7 +23392,6 @@
       },
       "referencedProperties": [
         "selectable#911:65",
-        "Label#55:94",
         "disabled#507:154",
         "invalid#507:160",
         "empty#911:68"

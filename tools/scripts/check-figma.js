@@ -128,6 +128,17 @@ function specBooleans(name, seen = new Set()) {
   return out;
 }
 
+/** The string-typed fields `<name>` exposes, inherited ones included. */
+function specStrings(name, seen = new Set()) {
+  if (seen.has(name) || !specShapes.has(name)) return new Set();
+  seen.add(name);
+  const entry = specShapes.get(name);
+  const out = new Set(entry.strings);
+  for (const parent of entry.parents) for (const f of specStrings(parent, seen)) out.add(f);
+  for (const o of entry.omitted) out.delete(o);
+  return out;
+}
+
 /** The fields `<name>` exposes, inherited ones included and Omit'd ones removed. */
 function specFields(name, seen = new Set()) {
   if (seen.has(name) || !specShapes.has(name)) return new Set();
@@ -242,6 +253,43 @@ for (const comp of snapshot.components) {
       if (gaps.length > 0) {
         warning('BOOL-MISSING', `${comp.name}: ${ownSpec} has ${gaps.join(', ')} and the master offers no way to set ${gaps.length > 1 ? 'them' : 'it'} — no Boolean property, no variant-axis value, and no stated opt-out. A state a component supports and a master cannot express is a state nobody can draw. A Boolean binds only to a layer's visibility, so use one where the state ADDS an element and a variant axis where it changes a colour; if the state has nothing to draw, say so in the description as \`- Boolean \\\`x\\\`: not modelled — <reason>\`.`);
       }
+    }
+  }
+
+  // ── A TEXT property the spec has no field for ─────────────────────────────
+  // Figma does not refuse a duplicate property name — it appends a digit. Adding a
+  // TEXT `description` beside the Boolean of the same name produced `description2`
+  // silently, which is invented API with a name no reader could trace (ADR-0067).
+  //
+  // The rule is [BOOL-CLAIM]'s, one type over: a text property is API, so it names a
+  // field of the component's own spec, or it states a mapping this check RESOLVES.
+  // A bare sentence is not enough — every one of the ten properties that predated this
+  // check carried a `- Text` line, and three of those named nothing that exists.
+  {
+    const ownSpec = `${comp.selector}Spec`;
+    const fields = specFields(ownSpec);
+    const textProps = Object.entries(comp.properties || {})
+      .filter(([, t]) => t === 'TEXT' || t === 'INSTANCE_SWAP')
+      .map(([k]) => k.split('#')[0]);
+    const invented = [];
+    for (const t of textProps) {
+      if (fields.has(t) || allowed(comp.selector, 'text', `unspeced:${t}`)) continue;
+      const line = [...(comp.description || '').matchAll(/^- Text `([^`]+)`:([^\n]*)$/gm)].find((m) => m[1] === t);
+      if (!line) { invented.push(`\`${t}\` (undocumented)`); continue; }
+      const rest = line[2];
+      // A derived or service-argument value: stated, and deliberately not a field.
+      if (/not a property\s*[\u2014-]\s*\S/.test(rest)) continue;
+      const map = /(?:maps to|\u2192)\s*`?(\w+)\.(\w+)`?/.exec(rest);
+      if (!map) { invented.push(`\`${t}\` (its line states no mapping)`); continue; }
+      const [, iface, field] = map;
+      if (!specInterfaces.has(iface)) { invented.push(`\`${t}\` (claims ${iface}, which libs/spec does not export)`); continue; }
+      if (!specFields(iface).has(field)) { invented.push(`\`${t}\` (claims ${iface}.${field}, which does not exist)`); continue; }
+    }
+    if (invented.length && specInterfaces.has(ownSpec)) {
+      blocker(
+        'TEXT-UNSPECED',
+        `${comp.name}: text ${invented.length > 1 ? 'properties' : 'property'} ${invented.join(', ')}. A text property is API — it lets a designer set a value the component must accept. Name a field of ${ownSpec}, state \`maps to <Interface>.<field>\` for one that lives elsewhere, or \`not a property — <reason>\` where the value is derived. Figma appends a digit to a duplicate name rather than refusing, so an invented one arrives quietly.`
+      );
     }
   }
 
@@ -1511,6 +1559,7 @@ function parseSpecShapes(file) {
     const [, name, ext, body] = m;
     const fields = new Set();
     const booleans = new Set();
+    const strings = new Set();
     for (const f of body.matchAll(/^\s{2}(?:readonly\s+)?([A-Za-z_$][\w$]*)\??\s*:\s*([^;\n]+)/gm)) {
       fields.add(f[1]);
       // A flag is a flag because of its type, not its name. The first version of this
@@ -1518,6 +1567,7 @@ function parseSpecShapes(file) {
       // and so never asked about AtlPaginationSpec.showFirstLast, a Boolean the master
       // has no way to set (ADR-0056).
       if (/^boolean\s*$/.test(f[2].trim())) booleans.add(f[1]);
+      if (/^string\s*$/.test(f[2].trim())) strings.add(f[1]);
     }
     const parents = (ext || '')
       .split(',')
@@ -1530,7 +1580,7 @@ function parseSpecShapes(file) {
     const omitted = [...(ext || '').matchAll(/Omit<\s*\w+\s*,\s*([^>]+)>/g)].flatMap((o) =>
       [...o[1].matchAll(/'([^']+)'/g)].map((x) => x[1])
     );
-    out.set(name, { parents, fields, booleans, omitted });
+    out.set(name, { parents, fields, booleans, strings, omitted });
   }
   return out;
 }
