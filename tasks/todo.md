@@ -275,16 +275,25 @@ Decision-bearing quick wins (deferred — not this session's scope):
       invisible. Capture the Icons page in `figma-snapshot.mjs` and cross-check the names.
 - [ ] **The superseded glyph documentation frame on the Icons page** is marked, not removed
       (ADR-0057). Rebuild it from the new set or delete it when the masters are rebuilt.
-- [ ] **Phase 3 work order — the eight master findings `check:figma` now states** (ADR-0056).
-      Each is a drawing, not a property call, which is why none was executed:
-      `[BOOL-CLAIM]` AtlRadio declares an `invalid` Boolean mapping to an interface
-      `AtlRadioSpec` does not extend — remove the property (destructive, live file).
-      `[BOOL-MISSING]` AtlToggle (invalid, required), AtlRadioGroup (invalid, required,
-      readonly), AtlCombobox (readonly) — each needs the state drawn before the property
-      means anything. `[AXIS-NAME]` AtlTabGroup `selected` → `selectedIndex` (a number,
-      so an axis can only sample it), AtlTooltip `position` → `atlTooltipPosition`.
-      `[AXIS-NOT-A-PROP]` AtlBreadcrumbs `items`=3|4|5 and AtlPagination
-      `position`=first|middle|last — remove the axis, picture it with instances.
+- [x] ~~**Phase 3 work order — the eight master findings**~~ — the axis and claim half is done
+      2026-08-27 (ADR-0056). AtlTabGroup lost its single-value `state` axis and its `selected`
+      axis is `selectedIndex`, the actual prop. AtlRadio's `invalid` Boolean is gone, property
+      and prose both — `AtlRadioSpec` extends nothing, so validity lives on the group.
+      AtlBreadcrumbs and AtlPagination were COMPONENT_SETs whose only axis pictured content;
+      both collapsed to the plain COMPONENT they always were, with the other drawings kept as
+      content-sample frames on the Components page. `check:figma` reports **zero**
+      `[BOOL-CLAIM]`, `[AXIS-NAME]` and `[AXIS-NOT-A-PROP]` now.
+- [ ] **Nineteen Booleans across fourteen masters the spec supports and no master can set.**
+      `[BOOL-MISSING]` used to name three, on a hardcoded list of flag names — so it never asked
+      about `AtlPaginationSpec.showFirstLast`. It derives flags from the spec **types** now and
+      names fourteen: AtlDialog and AtlDrawer (`open`, `closeOnBackdrop`), AtlChat (`open`),
+      AtlAlert (`dismissible`), AtlSkeleton (`animated`), AtlProgress (`indeterminate`),
+      AtlAccordionGroup (`multi`), AtlTable (`stickyHeader`), AtlStepper (`linear`),
+      AtlTooltip (`atlTooltipDisabled`), AtlPagination (`showFirstLast`), AtlToggle and
+      AtlRadioGroup (`invalid`, `required`, and `readonly` on the group), AtlCombobox
+      (`readonly`). Each needs the state **drawn** before the property means anything. Where the
+      false value renders nothing — `open` on a dialog — state the opt-out in the master's
+      description as `- Boolean \`open\`: not modelled — <reason>`; the gate reads it.
 - [ ] **Eleven child masters to draw** (ADR-0056): AtlMenuItem, AtlMenuSeparator, AtlTab,
       AtlStep, AtlOption, AtlChatMessage, AtlChatSuggestion, AtlChatTyping,
       AtlAccordionItem, AtlBreadcrumbItem — plus AtlIcon, which everything else already

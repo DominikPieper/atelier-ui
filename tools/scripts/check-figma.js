@@ -113,6 +113,17 @@ function specChain(name) {
   return chain;
 }
 
+/** The boolean-typed fields `<name>` exposes, inherited ones included. */
+function specBooleans(name, seen = new Set()) {
+  if (seen.has(name) || !specShapes.has(name)) return new Set();
+  seen.add(name);
+  const entry = specShapes.get(name);
+  const out = new Set(entry.booleans);
+  for (const parent of entry.parents) for (const f of specBooleans(parent, seen)) out.add(f);
+  for (const o of entry.omitted) out.delete(o);
+  return out;
+}
+
 /** The fields `<name>` exposes, inherited ones included and Omit'd ones removed. */
 function specFields(name, seen = new Set()) {
   if (seen.has(name) || !specShapes.has(name)) return new Set();
@@ -169,15 +180,34 @@ for (const comp of snapshot.components) {
     // …and the other direction: a spec flag the master offers no way to set.
     if (specShapes.has(ownSpec)) {
       const fields = specFields(ownSpec);
-      // A flag can be expressed as a Boolean OR as a value of a variant axis —
-      // AtlInput carries `invalid` as a value of `state`, not as a Boolean, and
-      // reporting that as missing sent the reader to add a property that would then
-      // contradict the axis. Checked against the axis values too.
+      // A flag can be expressed three ways, and the gate has to accept all three or
+      // it sends the reader to add a property that contradicts what is already there.
+      //
+      //   1. a Boolean property                    — the obvious one
+      //   2. a value of a variant axis             — AtlInput carries `invalid` as a
+      //                                              value of `state`
+      //   3. a variant axis mapped to it in prose  — AtlToggle's `selection` = off|on
+      //                                              maps to AtlToggleSpec.checked, and
+      //                                              neither the axis name nor its values
+      //                                              are the word "checked"
       const axisValues = new Set(
         Object.values(comp.variantAxes || {}).flat().map((v) => String(v).toLowerCase())
       );
-      const gaps = ['disabled', 'invalid', 'required', 'readonly', 'loading'].filter(
-        (f) => fields.has(f) && !declared.has(f) && !axisValues.has(f)
+      const mappedByAxis = new Set();
+      for (const m of (comp.description || '').matchAll(/^- Variant `([^`]+)`:([^\n]*)$/gm)) {
+        const map = /maps to `?(\w+)\.(\w+)`?/.exec(m[2]);
+        if (map) mappedByAxis.add(map[2]);
+      }
+      // A stated, reasoned opt-out. `open` on a dialog is the case: its false value
+      // renders nothing, so it is not a variant of anything. The reason lives in the
+      // master's description rather than in a list inside this gate — an exemption
+      // nobody can read is where a rule goes to die.
+      //   - Boolean `open`: not modelled — false renders nothing
+      const optedOut = new Set(
+        [...(comp.description || '').matchAll(/^- Boolean `([^`]+)`:\s*not modelled\s*[\u2014-]\s*\S/gm)].map((m) => m[1])
+      );
+      const gaps = [...specBooleans(ownSpec)].filter(
+        (f) => !declared.has(f) && !axisValues.has(f) && !mappedByAxis.has(f) && !optedOut.has(f)
       );
       if (gaps.length > 0) {
         warning('BOOL-MISSING', `${comp.name}: ${ownSpec} has ${gaps.join(', ')} and the master declares no Boolean property for ${gaps.length > 1 ? 'them' : 'it'}. A state a component supports and a master cannot express is a state nobody can draw.`);
@@ -201,7 +231,14 @@ for (const comp of snapshot.components) {
     for (const axis of Object.keys(comp.variantAxes || {})) {
       if (INTERACTION_AXES.has(axis)) continue;
       if (fields.has(axis)) continue;
-      if (unionMembers[`Atl${axis[0].toUpperCase()}${axis.slice(1)}`]) continue;
+      // The file's convention derives an axis name from the spec UNION, not from the
+      // field: `AtlButtonVariant` gives `variant`, `AtlTooltipPosition` gives
+      // `position`. Checking only `Atl<Axis>` missed the second shape and reported a
+      // correct axis as a naming mismatch — and renaming it to the field name
+      // (`atlTooltipPosition`) then tripped this gate's own [NAME] blocker. Any union
+      // whose name ends in the capitalised axis counts.
+      const axisCap = axis[0].toUpperCase() + axis.slice(1);
+      if (Object.keys(unionMembers).some((u) => u.endsWith(axisCap))) continue;
       const values = (comp.variantAxes[axis] || []).join(' | ');
       // An axis whose name is buried inside a real prop's name is a naming mismatch,
       // not a fiction: AtlTooltip's axis is `position` and the prop is
@@ -417,9 +454,16 @@ function parseSpecShapes(file) {
   const out = new Map();
   for (const m of src.matchAll(/export interface (\w+)(?:\s+extends\s+([^{]+))?\s*\{([\s\S]*?)\n\}/g)) {
     const [, name, ext, body] = m;
-    const fields = new Set(
-      [...body.matchAll(/^\s{2}(?:readonly\s+)?([A-Za-z_$][\w$]*)\??\s*:/gm)].map((f) => f[1])
-    );
+    const fields = new Set();
+    const booleans = new Set();
+    for (const f of body.matchAll(/^\s{2}(?:readonly\s+)?([A-Za-z_$][\w$]*)\??\s*:\s*([^;\n]+)/gm)) {
+      fields.add(f[1]);
+      // A flag is a flag because of its type, not its name. The first version of this
+      // gate checked a hardcoded list — disabled, invalid, required, readonly, loading —
+      // and so never asked about AtlPaginationSpec.showFirstLast, a Boolean the master
+      // has no way to set (ADR-0056).
+      if (/^boolean\s*$/.test(f[2].trim())) booleans.add(f[1]);
+    }
     const parents = (ext || '')
       .split(',')
       .map((x) => x.trim())
@@ -431,7 +475,7 @@ function parseSpecShapes(file) {
     const omitted = [...(ext || '').matchAll(/Omit<\s*\w+\s*,\s*([^>]+)>/g)].flatMap((o) =>
       [...o[1].matchAll(/'([^']+)'/g)].map((x) => x[1])
     );
-    out.set(name, { parents, fields, omitted });
+    out.set(name, { parents, fields, booleans, omitted });
   }
   return out;
 }

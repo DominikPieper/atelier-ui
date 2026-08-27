@@ -48,7 +48,12 @@ const MASTERS = [
   { nodeId: '55:130' }, { nodeId: '55:52' }, { nodeId: '55:31' }, { nodeId: '55:36' },
   { nodeId: '55:41' }, { nodeId: '55:87' }, { nodeId: '55:137' }, { nodeId: '420:185' },
   { nodeId: '55:102' }, { nodeId: '420:153' }, { nodeId: '55:151' }, { nodeId: '55:47' },
-  { nodeId: '55:141' }, { nodeId: '55:145' }, { nodeId: '421:398' }, { nodeId: '421:1183' },
+  // 55:141 and 55:145 were COMPONENT_SETs whose only axis pictured an outcome of
+  // content rather than a property — AtlBreadcrumbs `items` = 3|4|5 and AtlPagination
+  // `position` = first|middle|last. ADR-0056 removed the axes, which collapsed each set
+  // to the plain COMPONENT it always was; the other drawings live as content samples on
+  // the Components page. The new ids are the surviving components.
+  { nodeId: '55:139' }, { nodeId: '55:143' }, { nodeId: '421:398' }, { nodeId: '421:1183' },
   { nodeId: '420:286' }, { nodeId: '421:339' }, { nodeId: '421:505' }, { nodeId: '508:7221' },
   { nodeId: '507:2953' },
 ];
@@ -107,8 +112,15 @@ async function main() {
         console.warn(`⚠ skipped ${nodeId}: figma_get_component returned no component`);
         continue;
       }
-      const variantAxes = variantAxesOf(comp.componentPropertyDefinitions);
-      const variants = (comp.children ?? []).map((c) => parseVariantName(c.name)).filter(Boolean);
+      // A master can be a plain COMPONENT rather than a COMPONENT_SET: ADR-0056 removed
+      // the illustration axes from AtlBreadcrumbs and AtlPagination, and a component with
+      // no axis has none. Its children are its parts, not its variants, so do not read
+      // them as variant names — `Home`, `/`, `Settings` would otherwise be parsed as one.
+      const isSet = comp.type === 'COMPONENT_SET';
+      const variantAxes = isSet ? variantAxesOf(comp.componentPropertyDefinitions) : {};
+      const variants = isSet
+        ? (comp.children ?? []).map((c) => parseVariantName(c.name)).filter(Boolean)
+        : [];
       const defaultVariantId = pickDefaultVariant(comp, variantAxes);
       const deep = defaultVariantId
         ? (await call(client, 'figma_get_component_for_development_deep', { nodeId: defaultVariantId, depth: 8 }))?.component

@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-27T07:29:49.698Z",
-    "gitSha": "260dd6e",
+    "generatedAt": "2026-08-27T08:29:12.973Z",
+    "gitSha": "9687641",
     "serverVersion": null,
     "coverage": "All 29 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -607,41 +607,35 @@
       "name": "Navigation/AtlTabGroup",
       "selector": "AtlTabGroup",
       "nodeId": "55:123",
-      "description": "Tabbed content switcher. Maps to AtlTabGroupSpec in libs/spec.\n\nUse when: peer content panels share a context and user picks one to view. For sequential steps use Navigation/AtlStepper.\n\nAPI surface (Figma → spec):\n- Variant `variant`: default | pills → AtlTabGroupSpec.variant\n- Variant `selected`: 0 | 1 — illustrative selection state\n- Variant `state`: default — interaction state (legacy mash-up removed)\n- Boolean `disabled`: disables every contained Tab\n- Boolean `loading`: shows tab-bar skeleton / panel spinner\n\nA11y: ARIA tabs pattern. Arrow keys move selection inside the tablist; Tab moves out. aria-controls links each tab to its panel.\n\nStatus: 2026-04-27 — `state` Variant slimmed from {default,focus,hover,active,loading,disabled,error} to default-only; disabled/loading moved to Booleans matching the Form/* pattern.",
+      "description": "Tabbed content switcher. Maps to AtlTabGroupSpec in libs/spec.\n\nUse when: peer content panels share a context and user picks one to view. For sequential steps use Navigation/AtlStepper.\n\nAPI surface (Figma → spec):\n- Variant `variant`: default | pills → AtlTabGroupSpec.variant\n- Variant `selected`: 0 | 1 — illustrative selection state\n- Variant `state`: default — interaction state (legacy mash-up removed)\n- Boolean `disabled`: disables every contained Tab\n- Boolean `loading`: shows tab-bar skeleton / panel spinner\n\nA11y: ARIA tabs pattern. Arrow keys move selection inside the tablist; Tab moves out. aria-controls links each tab to its panel.\n\nStatus: 2026-04-27 — `state` Variant slimmed from {default,focus,hover,active,loading,disabled,error} to default-only; disabled/loading moved to Booleans matching the Form/* pattern.\n\nAxis notes (2026-08-27, ADR-0056): `selected` was renamed to `selectedIndex`, which is the actual prop on AtlTabGroupSpec — check:figma reported the old name as [AXIS-NAME]. `selectedIndex` is a number, so an axis can only ever picture a sample of it; the two options here are two of its values, not its range. The single-value axis `state` was removed: an axis with one option carries no information and reads as API that does not vary.",
       "variantAxes": {
         "variant": [
           "default",
           "pills"
         ],
-        "selected": [
+        "selectedIndex": [
           "0",
           "1"
-        ],
-        "state": [
-          "default"
         ]
       },
       "variants": [
         {
           "variant": "default",
-          "selected": "0",
-          "state": "default"
+          "selectedIndex": "0"
         },
         {
           "variant": "default",
-          "selected": "1",
-          "state": "default"
+          "selectedIndex": "1"
         },
         {
           "variant": "pills",
-          "selected": "0",
-          "state": "default"
+          "selectedIndex": "0"
         }
       ],
       "sampledVariant": "55:120",
       "nodes": [
         {
-          "name": "variant=default, selected=0, state=default",
+          "name": "variant=default, selectedIndex=0",
           "type": "COMPONENT",
           "hasChildren": true,
           "layoutMode": "VERTICAL",
@@ -966,7 +960,7 @@
       "name": "Overlay/AtlTooltip",
       "selector": "AtlTooltip",
       "nodeId": "55:52",
-      "description": "Floating context label. Maps to AtlTooltipSpec in libs/spec.\n\nUse when: brief non-essential clarification on hover/focus (e.g. icon-only buttons, abbreviations).\n\nDon't use when: information is essential (put it in the visible label) or content is a paragraph (use Overlay/AtlDialog or a popover).\n\nAPI surface:\n- Variant `position`: above | below | left | right → AtlTooltipSpec.atlTooltipPosition\n- Text `Content`: tooltip text → AtlTooltipSpec.atlTooltip\n- (code-only: `disabled`, `showDelay`, `hideDelay`)\n\nA11y: tooltip role, anchored via aria-describedby on the trigger. Mobile users have no hover, so don't put critical info here.",
+      "description": "Floating context label. Maps to AtlTooltipSpec in libs/spec.\n\nUse when: brief non-essential clarification on hover/focus (e.g. icon-only buttons, abbreviations).\n\nDon't use when: information is essential (put it in the visible label) or content is a paragraph (use Overlay/AtlDialog or a popover).\n\nAPI surface:\n- Variant `position`: above | below | left | right → AtlTooltipSpec.atlTooltipPosition\n- Text `Content`: tooltip text → AtlTooltipSpec.atlTooltip\n- (code-only: `disabled`, `showDelay`, `hideDelay`)\n\nA11y: tooltip role, anchored via aria-describedby on the trigger. Mobile users have no hover, so don't put critical info here.\n\nAxis note (2026-08-27): the axis is `position`, derived from the spec union `AtlTooltipPosition` the way every other master derives its axis name from its union — `AtlButtonVariant` gives `variant`. It was briefly renamed to `atlTooltipPosition`, the Angular directive-input field name, on a check that compared against the field instead of the union. check:figma's [NAME] rule caught the rename as a blocker; the check was corrected rather than the master (ADR-0056).",
       "variantAxes": {
         "position": [
           "above",
@@ -1252,7 +1246,7 @@
       "name": "Form/AtlRadio",
       "selector": "AtlRadio",
       "nodeId": "420:185",
-      "description": "Individual radio button. Maps to AtlRadioSpec in libs/spec.\n\nUse when: a single option among a mutually-exclusive set. Always wrap in Form/AtlRadioGroup — the group manages keyboard navigation, focus, and value binding.\n\nDon't use when: option is independent (use Form/AtlCheckbox), the choice is binary (use Form/AtlToggle), or the option set is long enough to need search (use Form/AtlCombobox).\n\nAPI surface (Figma → spec):\n- Variant `selection`: unchecked | checked\n- Variant `state`: default | hover | focus\n- Boolean `disabled`: maps to AtlRadioSpec.disabled\n- Boolean `invalid`: maps to AtlFormFieldSpec.invalid\n- (code-only: `radioValue: string`)\n\nA11y: native HTML <input type=\"radio\"> participating in a roving-tabindex group via the parent AtlRadioGroup.\n\nStatus: structural restructure 2026-04-27 — single `state` enum split into orthogonal `selection` (unchecked/checked) + `state` (default/hover/focus); disabled/invalid moved to Booleans.",
+      "description": "Individual radio button. Maps to AtlRadioSpec in libs/spec.\n\nUse when: a single option among a mutually-exclusive set. Always wrap in Form/AtlRadioGroup — the group manages keyboard navigation, focus, and value binding.\n\nDon't use when: option is independent (use Form/AtlCheckbox), the choice is binary (use Form/AtlToggle), or the option set is long enough to need search (use Form/AtlCombobox).\n\nAPI surface (Figma → spec):\n- Variant `selection`: unchecked | checked\n- Variant `state`: default | hover | focus\n- Boolean `disabled`: maps to AtlRadioSpec.disabled\n- (code-only: `radioValue: string`)\n\nValidity lives on the group, not here. `AtlRadioSpec` is `{ radioValue, disabled }` and extends nothing, so this component has no `invalid` — a single radio cannot be invalid on its own, the set can. The Boolean that claimed `AtlFormFieldSpec.invalid` was removed on 2026-08-27: it named an interface this component does not implement, and check:figma reported it as [BOOL-CLAIM]. Draw an invalid radio set on Form/AtlRadioGroup, whose spec does carry `invalid`.\n\nA11y: native HTML <input type=\"radio\"> participating in a roving-tabindex group via the parent AtlRadioGroup.\n\nStatus: structural restructure 2026-04-27 — single `state` enum split into orthogonal `selection` (unchecked/checked) + `state` (default/hover/focus); disabled/invalid moved to Booleans. 2026-08-27 — the `invalid` Boolean removed, property and prose both, per ADR-0056.",
       "variantAxes": {
         "selection": [
           "unchecked",
@@ -1569,155 +1563,22 @@
     {
       "name": "Navigation/AtlBreadcrumbs",
       "selector": "AtlBreadcrumbs",
-      "nodeId": "55:141",
-      "description": "Hierarchical navigation trail. Maps to AtlBreadcrumbsSpec in libs/spec.\n\nUse when: pages live in a hierarchy and the user benefits from seeing where they are. For top-level navigation use Navigation/AtlTabGroup or a sidebar.\n\nAPI surface:\n- Variant `items`: 3 | 4 | 5 — illustrative item-count Variants\n- (code-only: `separator` string)\n\nA11y: aria-label=\"Breadcrumb\" on the nav element; current page marked aria-current=\"page\".",
-      "variantAxes": {
-        "items": [
-          "3",
-          "4",
-          "5"
-        ]
-      },
-      "variants": [
-        {
-          "items": "3"
-        },
-        {
-          "items": "4"
-        },
-        {
-          "items": "5"
-        }
-      ],
-      "sampledVariant": "55:138",
-      "nodes": [
-        {
-          "name": "items=3",
-          "type": "COMPONENT",
-          "hasChildren": true,
-          "layoutMode": "HORIZONTAL",
-          "rawColors": [],
-          "unboundRadius": 0,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        }
-      ]
+      "nodeId": "55:139",
+      "description": "Hierarchical navigation trail. Maps to AtlBreadcrumbsSpec in libs/spec.\n\nUse when: pages live in a hierarchy and the user benefits from seeing where they are. For top-level navigation use Navigation/AtlTabGroup or a sidebar.\n\nAPI surface:\n- Variant `items`: 3 | 4 | 5 — illustrative item-count Variants\n- (code-only: `separator` string)\n\nA11y: aria-label=\"Breadcrumb\" on the nav element; current page marked aria-current=\"page\".\n\nAxis notes (2026-08-27, ADR-0056): this was a COMPONENT_SET whose only axis pictured an outcome of content rather than a property — `items` = 3 | 4 | 5, and AtlBreadcrumbsSpec is `{ separator?: string }`. An axis is the master's API surface, so a reader saw API where there was none. The other two drawings are kept as content samples in the \"Content samples — not variant axes\" section on this page. check:figma reported the axis as [AXIS-NOT-A-PROP].",
+      "variantAxes": {},
+      "variants": [],
+      "sampledVariant": "3:1031",
+      "nodes": []
     },
     {
       "name": "Navigation/AtlPagination",
       "selector": "AtlPagination",
-      "nodeId": "55:145",
-      "description": "Page navigator for paged data. Maps to AtlPaginationSpec in libs/spec.\n\nUse when: data spans many pages and user navigates incrementally. For infinite scroll surfaces, omit pagination entirely.\n\nAPI surface:\n- Variant `page`: first | middle | last — illustrative position\n- (code-only: `page`, `pageCount`, `siblingCount`, `showFirstLast`)\n\nA11y: nav with aria-label=\"Pagination\"; current page marked aria-current=\"page\".",
-      "variantAxes": {
-        "position": [
-          "first",
-          "middle",
-          "last"
-        ]
-      },
-      "variants": [
-        {
-          "position": "first"
-        },
-        {
-          "position": "middle"
-        },
-        {
-          "position": "last"
-        }
-      ],
-      "sampledVariant": "55:142",
+      "nodeId": "55:143",
+      "description": "Page navigator for paged data. Maps to AtlPaginationSpec in libs/spec.\n\nUse when: data spans many pages and user navigates incrementally. For infinite scroll surfaces, omit pagination entirely.\n\nAPI surface:\n- Variant `page`: first | middle | last — illustrative position\n- (code-only: `page`, `pageCount`, `siblingCount`, `showFirstLast`)\n\nA11y: nav with aria-label=\"Pagination\"; current page marked aria-current=\"page\".\n\nAxis notes (2026-08-27, ADR-0056): this was a COMPONENT_SET whose only axis pictured an outcome of content rather than a property — `position` = first | middle | last, and AtlPaginationSpec is `{ page, pageCount, siblingCount, showFirstLast }`. An axis is the master's API surface, so a reader saw API where there was none. The other two drawings are kept as content samples in the \"Content samples — not variant axes\" section on this page. check:figma reported the axis as [AXIS-NOT-A-PROP].",
+      "variantAxes": {},
+      "variants": [],
+      "sampledVariant": "3:1073",
       "nodes": [
-        {
-          "name": "position=first",
-          "type": "COMPONENT",
-          "hasChildren": true,
-          "layoutMode": "HORIZONTAL",
-          "rawColors": [],
-          "unboundRadius": 0,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "Frame",
-          "type": "FRAME",
-          "hasChildren": true,
-          "layoutMode": "HORIZONTAL",
-          "rawColors": [],
-          "unboundRadius": 0,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "Frame",
-          "type": "FRAME",
-          "hasChildren": true,
-          "layoutMode": "HORIZONTAL",
-          "rawColors": [],
-          "unboundRadius": 0,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "Frame",
-          "type": "FRAME",
-          "hasChildren": true,
-          "layoutMode": "HORIZONTAL",
-          "rawColors": [],
-          "unboundRadius": 0,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "Frame",
-          "type": "FRAME",
-          "hasChildren": true,
-          "layoutMode": "HORIZONTAL",
-          "rawColors": [],
-          "unboundRadius": 0,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "Frame",
-          "type": "FRAME",
-          "hasChildren": true,
-          "layoutMode": "HORIZONTAL",
-          "rawColors": [],
-          "unboundRadius": 0,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "Frame",
-          "type": "FRAME",
-          "hasChildren": true,
-          "layoutMode": "HORIZONTAL",
-          "rawColors": [],
-          "unboundRadius": 0,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "Frame",
-          "type": "FRAME",
-          "hasChildren": true,
-          "layoutMode": "HORIZONTAL",
-          "rawColors": [],
-          "unboundRadius": 0,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "Frame",
-          "type": "FRAME",
-          "hasChildren": true,
-          "layoutMode": "HORIZONTAL",
-          "rawColors": [],
-          "unboundRadius": 0,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        },
         {
           "name": "Frame",
           "type": "FRAME",
