@@ -195,20 +195,21 @@ Decision-bearing quick wins (deferred — not this session's scope):
 - [ ] **Consider a gate forbidding `--ui-font-display` outside the role definition.** The
       point of ADR-0036 is that "serif, italic, never bolded" is one token rather than three
       declarations to get right; a component naming the family directly can still break it.
-- [ ] **25 of 29 components respecify `font-family`, against their own manifest
-      constraint.** `--ui-font-family`'s annotation says *"Apply on :root or the app shell —
-      do not respecify per component"*, yet 25 component stylesheets set it themselves;
-      card, dialog, drawer and skeleton correctly inherit. Found 2026-08-26 while looking at
-      Storybook: because nothing applied the shell rule, those four rendered in the browser
-      default serif — and had done so for as long as nobody looked. The shell rule is now in
-      each `.storybook/preview-head.html`. Removing the 25 redundant declarations is the
-      real fix, but it touches component CSS, so it makes 25 parity records stale — do it
-      deliberately, not as a drive-by.
-- [ ] **Ramps for the remaining colour families** (ADR-0038 did teal only). Same recipe,
-      each additive: place the shipping values at their steps, interpolate the gaps in
-      OKLab, mark the `★` anchor and the `T` text-safe steps, let `check:contrast`
-      re-measure them. Families left: danger, success, warning, info, and the neutrals
-      (surface / border / text already form an implicit ramp worth making explicit).
+- [x] ~~**25 of 29 components respecify `font-family`, against their own manifest
+      constraint**~~ — resolved 2026-08-26, ADR-0049, and the constraint was the thing that was
+      wrong. Rendering the two states side by side inside an app whose own font was Georgia
+      inverted the finding: the components that *did* respecify were correct and the four that
+      inherited rendered Georgia beside them. "Apply it on the app shell" is a constraint a
+      component cannot keep. `check:typeface` now requires the declaration on every root, and
+      `[NO-LEADING]` (ADR-0052) requires the leading beside it.
+- [x] ~~**Ramps for the remaining colour families**~~ — done 2026-08-27, ADR-0054. Four
+      ramps, 100–950, red / green / amber / sky. The shipping values already sat on the step
+      numbers when ordered by OKLab lightness, so only the gaps were generated; the 950 is the
+      dark theme's tinted background; a missing tail step is placed where red — the only family
+      shipping an 800, a 900 *and* a 950 — puts it, 24.8% from 800 to 950 rather than the
+      midpoint. `check:contrast` re-measures 47 annotated steps now, up from 7. **The neutrals
+      are still not an explicit ramp** — surface / border / text form an implicit one and that
+      half of this item stands.
 - [x] ~~One gate for "do not reference a primitive from component CSS"~~ — done
       2026-08-26, ADR-0039: `check:primitives` scans 2654 token references across 88
       component stylesheets against three primitive patterns. Ramp steps and
@@ -223,10 +224,11 @@ Decision-bearing quick wins (deferred — not this session's scope):
       the spacing scale. `check:figma`'s token-link coverage can therefore never be complete
       for this component. Either the size steps get tokens or the gap gets recorded as
       intended; right now it is neither.
-- [ ] **AtlButton `size=lg` measures 49px against a stated 48px min-height.** A 22.5px line
-      box + 24px padding + 2px border is 48.5, which min-height cannot shrink. Measured on
-      the artboard, so re-measure in Storybook before calling it a bug — if it holds, the lg
-      target height is aspirational.
+- [x] ~~**AtlButton `size=lg` measures 49px against a stated 48px min-height**~~ — the item
+      said to re-measure before calling it a bug, and re-measuring closed it: `check:geometry`
+      reads **48px in all three frameworks**, against the 48px token, with no reset supplied.
+      The 49 was the artboard's own arithmetic, not the shipped box — ADR-0041 had already made
+      the padding derived, which is what removed the half-pixel the estimate carried.
 - [ ] **The AtlButton Figma master has 24 variants for a 4x3x4 matrix (48).** Half the
       state combinations are unpopulated. Confirm against the master before the transfer
       decides what to add — `check:figma`'s variant-matrix completeness passes today, which
