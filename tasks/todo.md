@@ -202,6 +202,29 @@ Decision-bearing quick wins (deferred — not this session's scope):
       the layer name is the selector. Found and fixed 33 divergences over AtlMenu,
       AtlTabGroup, AtlAccordionGroup, AtlPagination and AtlChat, plus six bugs in the
       gates themselves.
+- [ ] **Root typography is ungated, and the leading is on AUTO almost everywhere.** 100
+      master-variant roots carry their own single text child. `[LAYER-PAINT]` compares
+      `font-size` and `line-height` for NAMED layers; the root belongs to `[ROOT-PAINT]`,
+      which has no typography at all — so two real errors hid there, found by hand:
+      AtlAvatar's `xs` initials at 9px against `--ui-font-size-2xs` (10px) and its `xl` at
+      16px against `--ui-font-size-lg` (18px). Both fixed 2026-08-27. Still open: most of
+      those roots leave the leading on **AUTO** while every component's CSS states a
+      `line-height` — ADR-0048's rule, unapplied on the Figma side. The snapshot already
+      records `rootPaint[variant].fontSize` and `.lineHeight`; what the check needs is the
+      `ROOT_PAINT` cascades extended with the `size` and `shape` axes, because that is
+      where `font-size` is declared (`.atl-avatar.size-xs`, `.atl-button.size-lg`).
+- [ ] **Five pictograms sit in illustration frames BESIDE a master.** `✓` next to
+      AtlSelect (an open-dropdown illustration) and `✓ ℹ ✕` next to AtlToast.
+      `[MASTER-GLYPH]`'s probe walks COMPONENT and COMPONENT_SET nodes, so a plain frame on
+      the Components page is invisible to it — the same hole that let the four content
+      samples keep `‹ Prev` for months (ADR-0060). Widen the probe to every frame on the
+      page, then decide per glyph: an icon instance, or a stated exemption.
+- [ ] **536 text nodes below 12px, and the split decides the answer.** 378 on Inventory
+      (card meta at 11px), 156 on Colors (swatch labels 11px, hex 9px), 2 in Components —
+      and those 2 were the AtlAvatar bug above. So this is catalogue scaffolding, not
+      component text. `--ui-font-size-2xs` (10px) exists since ADR-0054: decide whether the
+      documentation pages adopt the scale or stay off it by intent, and write the decision
+      down either way.
 - [ ] **Compose parents from their child masters.** AtlMenu's separators are instances of
       AtlMenuSeparator now; its items, the tabs, the steps, the accordion items and the
       chat bubbles could be instances too. Where a parent instantiates its child, the
@@ -324,17 +347,19 @@ Decision-bearing quick wins (deferred — not this session's scope):
       because most are one choice each. Four decisions (the size system's stated-vs-rendered
       heights, the missing `box-sizing` reset, states that exist in only one place, literals
       that cannot be bound in Figma) plus one finding that overrides them:
-- [ ] **After the Figma transfer: record the font per master in the snapshot** so an
-      offline gate can compare it to `--ui-font-family`. `check:figma` compares names, axes,
-      token bindings and auto-layout — never typography — so a type change can invalidate the
-      whole design library with every gate green. Not urgent now: the masters are stale by
-      design during the redesign (all 29 still on Inter), and Phase 3 rebuilds them. It
-      becomes urgent the moment the library is transferred and treated as current again.
-- [ ] **`tools/figma/snapshot.json` records `variantAxes` but not Boolean component
-      properties.** `disabled`, `loading`, `readonly`, `required`, `hasIcon` exist on the
-      masters and are invisible to anything reading the snapshot — they survive only as prose
-      in the `description`. A Boolean could be dropped in Figma and no gate would notice.
-      This is what made me assert twice that Figma had no such properties.
+- [x] **Record the font in the snapshot** (closed 2026-08-27, ADR-0059) — it turned out to be
+      urgent immediately rather than after the transfer: the census found all 1621 text nodes on
+      Inter, Montserrat or Libre Baskerville while `--ui-font-family` had said Instrument Sans
+      since ADR-0035. The snapshot now carries a file-wide family tally with one sample location
+      per family, plus every local text style, and `[FONT-FAMILY]` / `[TEXT-STYLE]` compare both
+      to `tokens.css`. Recorded per FILE rather than per master, which is the shape the defect
+      had; a per-master reading would only matter for a master deliberately off-family.
+- [x] **Record Boolean component properties as data** (closed 2026-08-27, ADR-0058) — the
+      probe now captures `componentPropertyDefinitions` per master, so the declared set is fact
+      rather than prose. Three checks read it: `[BOOL-MISSING]` (spec → master),
+      `[BOOL-INERT]` (does it toggle any layer) and `[BOOL-UNSPECED]` (ADR-0061 — is it a field
+      of the component's own spec at all), which is the direction that caught AtlTable and
+      AtlTabGroup declaring a `loading` no framework renders.
 - [ ] **Both component artboards need a correction pass** for the two claims above (the
       "code-only props" labels and AtlButton's "half a matrix" note). Listed at the end of
       `tasks/design-findings-2026-08-26.md`.
@@ -426,14 +451,16 @@ Decision-bearing quick wins (deferred — not this session's scope):
 - [ ] **AtlRadioGroup's master draws one radio, not a group.** Its variants are a single
       18px circle plus a label, so the group-level states have nothing to sit on. Related to the
       child-master work below (ADR-0056).
-- [ ] **Eleven child masters to draw** (ADR-0056): AtlMenuItem, AtlMenuSeparator, AtlTab,
-      AtlStep, AtlOption, AtlChatMessage, AtlChatSuggestion, AtlChatTyping,
-      AtlAccordionItem, AtlBreadcrumbItem — plus AtlIcon, which everything else already
-      depends on. The container axes that vary to show a child come off as these land.
-- [ ] **Capture Boolean properties in the snapshot as data** (ADR-0056). `check:figma`
-      parses them out of the prose description because that is where they live;
-      `componentPropertyDefinitions` via the bridge would make the check exact instead of
-      format-dependent.
+- [x] **Eleven child masters** (closed 2026-08-27, ADR-0062) — AtlIcon landed with ADR-0057;
+      the other ten were built from their own CSS rules, with descriptions stating the spec
+      mapping, why each axis is an axis, and every exemption. The reason they mattered turned out
+      to be structural, not cosmetic: `[ROOT-PAINT]` compares a master's ROOT, so a part drawn as
+      a layer had nothing to compare — promoting it makes it checkable. Widened ADR-0056's
+      criterion in the process: a part earns a master by being independently PLACEABLE or by
+      having its own state (AtlMenuSeparator and AtlChatTyping have no spec interface at all).
+- [x] **Capture Boolean properties as data** (closed 2026-08-27, ADR-0058) — done with the
+      item above; the description is still read, but only for the *mappings*, which exist
+      nowhere else.
 - [ ] **Angular's `touched` is public API the spec never declared** (ADR-0055). Seven
       components expose it as a `model(false)`; React and Vue have no equivalent, and it no
       longer gates the error message. Remove it with the breaking batch, or add it to the

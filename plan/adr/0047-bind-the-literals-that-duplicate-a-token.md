@@ -5,7 +5,7 @@ sources:
   - tasks/design-findings-2026-08-26.md (Decision D)
   - plan/adr/0041-control-height-is-the-primitive.md (the defect this found two more of)
   - plan/adr/0042-a-gate-that-measures-rendered-geometry.md (the roster blind spot)
-  - plan/adr/0018-token-tiering.md
+  - plan/adr/0018-figma-token-tiering-and-css-projection.md
 ---
 
 # ADR-0047: Bind the literals that duplicate a token

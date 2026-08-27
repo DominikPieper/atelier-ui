@@ -4,7 +4,7 @@ date: 2026-08-26
 sources:
   - tasks/design-findings-2026-08-26.md (Decision C, the `✕` glyph)
   - libs/spec/src/icons.ts (the geometry this ADR introduces)
-  - plan/adr/0009-generate-project-check.md (the gate idiom)
+  - plan/adr/0009-drift-gate-system.md (the gate idiom)
 ---
 
 # ADR-0046: One concept, one drawing

@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-27T13:51:16.072Z",
-    "gitSha": "c188e00",
+    "generatedAt": "2026-08-27T14:08:09.581Z",
+    "gitSha": "51d2d9d",
     "serverVersion": null,
     "coverage": "All 39 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -312,7 +312,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": 125
         },
         "variant=primary, size=md, state=default": {
           "fill": "color/primary",
@@ -326,7 +328,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "variant=primary, size=lg, state=default": {
           "fill": "color/primary",
@@ -340,7 +344,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 18,
+          "lineHeight": 125
         },
         "variant=secondary, size=sm, state=default": {
           "fill": "color/secondary",
@@ -354,7 +360,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": 125
         },
         "variant=secondary, size=md, state=default": {
           "fill": "color/secondary",
@@ -368,7 +376,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "variant=secondary, size=lg, state=default": {
           "fill": "color/secondary",
@@ -382,7 +392,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 18,
+          "lineHeight": 125
         },
         "variant=outline, size=sm, state=default": {
           "fill": "color/surface-raised",
@@ -396,7 +408,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": 125
         },
         "variant=outline, size=md, state=default": {
           "fill": "color/surface-raised",
@@ -410,7 +424,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "variant=outline, size=lg, state=default": {
           "fill": "color/surface-raised",
@@ -424,7 +440,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 18,
+          "lineHeight": 125
         },
         "variant=primary, size=md, state=focus": {
           "fill": "color/primary",
@@ -441,7 +459,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "variant=primary, size=md, state=hover": {
           "fill": "color/primary-hover",
@@ -455,7 +475,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "variant=primary, size=md, state=active": {
           "fill": "color/primary-active",
@@ -471,7 +493,9 @@
           "radiusPx": 10,
           "effects": [
             "INNER_SHADOW"
-          ]
+          ],
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "variant=danger, size=sm, state=default": {
           "fill": "color/danger",
@@ -487,7 +511,9 @@
           "radiusPx": 10,
           "effects": [
             "INNER_SHADOW"
-          ]
+          ],
+          "fontSize": 14,
+          "lineHeight": 125
         },
         "variant=danger, size=md, state=default": {
           "fill": "color/danger",
@@ -503,7 +529,9 @@
           "radiusPx": 10,
           "effects": [
             "INNER_SHADOW"
-          ]
+          ],
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "variant=danger, size=lg, state=default": {
           "fill": "color/danger",
@@ -519,7 +547,9 @@
           "radiusPx": 10,
           "effects": [
             "INNER_SHADOW"
-          ]
+          ],
+          "fontSize": 18,
+          "lineHeight": 125
         },
         "variant=danger, size=md, state=hover": {
           "fill": "color/danger-hover",
@@ -535,7 +565,9 @@
           "radiusPx": 10,
           "effects": [
             "INNER_SHADOW"
-          ]
+          ],
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "variant=danger, size=md, state=active": {
           "fill": "color/danger-active",
@@ -551,7 +583,9 @@
           "radiusPx": 10,
           "effects": [
             "INNER_SHADOW"
-          ]
+          ],
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "variant=danger, size=md, state=focus": {
           "fill": "color/danger",
@@ -569,7 +603,9 @@
             "INNER_SHADOW",
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "variant=secondary, size=md, state=hover": {
           "fill": "color/secondary-hover",
@@ -583,7 +619,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "variant=secondary, size=md, state=active": {
           "fill": "color/secondary-active",
@@ -599,7 +637,9 @@
           "radiusPx": 10,
           "effects": [
             "INNER_SHADOW"
-          ]
+          ],
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "variant=secondary, size=md, state=focus": {
           "fill": "color/secondary",
@@ -616,7 +656,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "variant=outline, size=md, state=hover": {
           "fill": "color/surface-sunken",
@@ -630,7 +672,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "variant=outline, size=md, state=active": {
           "fill": "color/surface-sunken",
@@ -646,7 +690,9 @@
           "radiusPx": 10,
           "effects": [
             "INNER_SHADOW"
-          ]
+          ],
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "variant=outline, size=md, state=focus": {
           "fill": null,
@@ -663,7 +709,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": 16,
+          "lineHeight": 125
         }
       },
       "overlays": [
@@ -1700,7 +1748,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "state=filled": {
           "fill": "color/surface-sunken",
@@ -1714,7 +1764,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "state=focus": {
           "fill": "color/surface",
@@ -1728,7 +1780,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "state=invalid": {
           "fill": "color/surface-sunken",
@@ -1742,7 +1796,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "state=hover": {
           "fill": "color/surface-sunken",
@@ -1756,7 +1812,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         }
       },
       "overlays": [
@@ -2073,7 +2131,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=outlined, padding=none": {
           "fill": "color/surface-raised",
@@ -2087,7 +2147,9 @@
           ],
           "radius": "radius/xl",
           "radiusPx": 20,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=flat, padding=none": {
           "fill": "color/surface-sunken",
@@ -2101,7 +2163,9 @@
           ],
           "radius": "radius/xl",
           "radiusPx": 20,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=elevated, padding=sm": {
           "fill": "color/surface-raised",
@@ -2118,7 +2182,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=outlined, padding=sm": {
           "fill": "color/surface-raised",
@@ -2132,7 +2198,9 @@
           ],
           "radius": "radius/xl",
           "radiusPx": 20,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=flat, padding=sm": {
           "fill": "color/surface-sunken",
@@ -2146,7 +2214,9 @@
           ],
           "radius": "radius/xl",
           "radiusPx": 20,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=elevated, padding=md": {
           "fill": "color/surface-raised",
@@ -2163,7 +2233,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=outlined, padding=md": {
           "fill": "color/surface-raised",
@@ -2177,7 +2249,9 @@
           ],
           "radius": "radius/xl",
           "radiusPx": 20,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=flat, padding=md": {
           "fill": "color/surface-sunken",
@@ -2191,7 +2265,9 @@
           ],
           "radius": "radius/xl",
           "radiusPx": 20,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=elevated, padding=lg": {
           "fill": "color/surface-raised",
@@ -2208,7 +2284,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=outlined, padding=lg": {
           "fill": "color/surface-raised",
@@ -2222,7 +2300,9 @@
           ],
           "radius": "radius/xl",
           "radiusPx": 20,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=flat, padding=lg": {
           "fill": "color/surface-sunken",
@@ -2236,7 +2316,9 @@
           ],
           "radius": "radius/xl",
           "radiusPx": 20,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         }
       },
       "overlays": [],
@@ -4129,7 +4211,9 @@
           ],
           "radius": "radius/full",
           "radiusPx": 9999,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "variant=success, size=md": {
           "fill": "color/success-bg",
@@ -4143,7 +4227,9 @@
           ],
           "radius": "radius/full",
           "radiusPx": 9999,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "variant=warning, size=md": {
           "fill": "color/warning-bg",
@@ -4157,7 +4243,9 @@
           ],
           "radius": "radius/full",
           "radiusPx": 9999,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "variant=danger, size=md": {
           "fill": "color/danger-bg",
@@ -4171,7 +4259,9 @@
           ],
           "radius": "radius/full",
           "radiusPx": 9999,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "variant=info, size=md": {
           "fill": "color/info-bg",
@@ -4185,7 +4275,9 @@
           ],
           "radius": "radius/full",
           "radiusPx": 9999,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "variant=default, size=sm": {
           "fill": "color/surface-sunken",
@@ -4199,7 +4291,9 @@
           ],
           "radius": "radius/full",
           "radiusPx": 9999,
-          "effects": []
+          "effects": [],
+          "fontSize": 12,
+          "lineHeight": null
         },
         "variant=success, size=sm": {
           "fill": "color/success-bg",
@@ -4213,7 +4307,9 @@
           ],
           "radius": "radius/full",
           "radiusPx": 9999,
-          "effects": []
+          "effects": [],
+          "fontSize": 12,
+          "lineHeight": null
         },
         "variant=warning, size=sm": {
           "fill": "color/warning-bg",
@@ -4227,7 +4323,9 @@
           ],
           "radius": "radius/full",
           "radiusPx": 9999,
-          "effects": []
+          "effects": [],
+          "fontSize": 12,
+          "lineHeight": null
         },
         "variant=danger, size=sm": {
           "fill": "color/danger-bg",
@@ -4241,7 +4339,9 @@
           ],
           "radius": "radius/full",
           "radiusPx": 9999,
-          "effects": []
+          "effects": [],
+          "fontSize": 12,
+          "lineHeight": null
         },
         "variant=info, size=sm": {
           "fill": "color/info-bg",
@@ -4255,7 +4355,9 @@
           ],
           "radius": "radius/full",
           "radiusPx": 9999,
-          "effects": []
+          "effects": [],
+          "fontSize": 12,
+          "lineHeight": null
         }
       },
       "overlays": [],
@@ -4335,7 +4437,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "state=filled": {
           "fill": "color/surface-sunken",
@@ -4349,7 +4453,9 @@
           ],
           "radius": "radius/sm",
           "radiusPx": 8,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "state=open": {
           "fill": "color/surface",
@@ -4363,7 +4469,9 @@
           ],
           "radius": "radius/sm",
           "radiusPx": 8,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "state=hover": {
           "fill": "color/surface-sunken",
@@ -4377,7 +4485,9 @@
           ],
           "radius": "radius/sm",
           "radiusPx": 8,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "state=focus": {
           "fill": "color/surface-sunken",
@@ -4394,7 +4504,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": 14,
+          "lineHeight": null
         }
       },
       "overlays": [
@@ -4690,7 +4802,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         },
         "size=sm": {
           "fill": "color/surface",
@@ -4707,7 +4821,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         },
         "size=lg": {
           "fill": "color/surface",
@@ -4724,7 +4840,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         },
         "size=xl": {
           "fill": "color/surface",
@@ -4741,7 +4859,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         },
         "size=full": {
           "fill": "color/surface",
@@ -4758,7 +4878,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         }
       },
       "overlays": [],
@@ -4893,7 +5015,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=default, selectedIndex=1": {
           "fill": null,
@@ -4907,7 +5031,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=pills, selectedIndex=0": {
           "fill": null,
@@ -4921,7 +5047,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         }
       },
       "overlays": [],
@@ -5528,7 +5656,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=bordered": {
           "fill": null,
@@ -5542,7 +5672,9 @@
           ],
           "radius": "radius/lg",
           "radiusPx": 14,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=separated": {
           "fill": null,
@@ -5556,7 +5688,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         }
       },
       "overlays": [],
@@ -6112,7 +6246,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=compact": {
           "fill": "color/surface-raised",
@@ -6129,7 +6265,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         }
       },
       "overlays": [],
@@ -6462,7 +6600,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": 12,
+          "lineHeight": null
         },
         "position=below": {
           "fill": "color/text",
@@ -6479,7 +6619,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": 12,
+          "lineHeight": null
         },
         "position=left": {
           "fill": "color/text",
@@ -6496,7 +6638,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": 12,
+          "lineHeight": null
         },
         "position=right": {
           "fill": "color/text",
@@ -6513,7 +6657,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": 12,
+          "lineHeight": null
         }
       },
       "overlays": [],
@@ -6590,7 +6736,9 @@
           ],
           "radius": "radius/lg",
           "radiusPx": 14,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "variant=success": {
           "fill": "color/success-bg",
@@ -6604,7 +6752,9 @@
           ],
           "radius": "radius/lg",
           "radiusPx": 14,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "variant=warning": {
           "fill": "color/warning-bg",
@@ -6618,7 +6768,9 @@
           ],
           "radius": "radius/lg",
           "radiusPx": 14,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "variant=danger": {
           "fill": "color/danger-bg",
@@ -6632,7 +6784,9 @@
           ],
           "radius": "radius/lg",
           "radiusPx": 14,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         }
       },
       "overlays": [
@@ -6822,7 +6976,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "selection=checked, state=default": {
           "fill": null,
@@ -6836,7 +6992,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "selection=indeterminate, state=default": {
           "fill": null,
@@ -6850,7 +7008,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "selection=unchecked, state=focus": {
           "fill": null,
@@ -6867,7 +7027,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "selection=unchecked, state=hover": {
           "fill": null,
@@ -6881,7 +7043,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         }
       },
       "overlays": [
@@ -7183,7 +7347,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "selection=on, state=default": {
           "fill": null,
@@ -7197,7 +7363,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "selection=off, state=focus": {
           "fill": null,
@@ -7214,7 +7382,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "selection=off, state=hover": {
           "fill": null,
@@ -7228,7 +7398,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         }
       },
       "overlays": [
@@ -7720,7 +7892,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "state=filled": {
           "fill": "color/surface-sunken",
@@ -7734,7 +7908,9 @@
           ],
           "radius": "radius/sm",
           "radiusPx": 8,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "state=focus": {
           "fill": "color/surface",
@@ -7748,7 +7924,9 @@
           ],
           "radius": "radius/sm",
           "radiusPx": 8,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "state=invalid": {
           "fill": "color/surface",
@@ -7762,7 +7940,9 @@
           ],
           "radius": "radius/sm",
           "radiusPx": 8,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "state=hover": {
           "fill": "color/surface-sunken",
@@ -7776,7 +7956,9 @@
           ],
           "radius": "radius/sm",
           "radiusPx": 8,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         }
       },
       "overlays": [
@@ -8056,7 +8238,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "selection=selected, state=default": {
           "fill": null,
@@ -8070,7 +8254,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "selection=unselected, state=focus": {
           "fill": null,
@@ -8087,7 +8273,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "selection=unselected, state=hover": {
           "fill": null,
@@ -8101,7 +8289,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         }
       },
       "overlays": [
@@ -8341,7 +8531,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 16,
+          "lineHeight": null
         },
         "selection=checked, state=default": {
           "fill": null,
@@ -8355,7 +8547,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 16,
+          "lineHeight": null
         },
         "selection=unchecked, state=focus": {
           "fill": null,
@@ -8372,7 +8566,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": 16,
+          "lineHeight": null
         },
         "selection=unchecked, state=hover": {
           "fill": null,
@@ -8386,7 +8582,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 16,
+          "lineHeight": null
         }
       },
       "overlays": [
@@ -8835,7 +9033,9 @@
           ],
           "radius": "radius/sm",
           "radiusPx": 8,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=circular": {
           "fill": "color/border",
@@ -8849,7 +9049,9 @@
           ],
           "radius": "radius/full",
           "radiusPx": 9999,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=rectangular": {
           "fill": "color/border",
@@ -8863,7 +9065,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         }
       },
       "overlays": [
@@ -9033,7 +9237,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=default, size=md": {
           "fill": null,
@@ -9047,7 +9253,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=default, size=lg": {
           "fill": null,
@@ -9061,7 +9269,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=success, size=sm": {
           "fill": null,
@@ -9075,7 +9285,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=success, size=md": {
           "fill": null,
@@ -9089,7 +9301,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=success, size=lg": {
           "fill": null,
@@ -9103,7 +9317,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=warning, size=sm": {
           "fill": null,
@@ -9117,7 +9333,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=warning, size=md": {
           "fill": null,
@@ -9131,7 +9349,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=warning, size=lg": {
           "fill": null,
@@ -9145,7 +9365,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=danger, size=sm": {
           "fill": null,
@@ -9159,7 +9381,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=danger, size=md": {
           "fill": null,
@@ -9173,7 +9397,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=danger, size=lg": {
           "fill": null,
@@ -9187,7 +9413,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         }
       },
       "overlays": [],
@@ -9867,7 +10095,9 @@
           ],
           "radius": "radius/full",
           "radiusPx": 9999,
-          "effects": []
+          "effects": [],
+          "fontSize": 10,
+          "lineHeight": null
         },
         "shape=circle, size=sm": {
           "fill": "color/success-bg",
@@ -9881,7 +10111,9 @@
           ],
           "radius": "radius/full",
           "radiusPx": 9999,
-          "effects": []
+          "effects": [],
+          "fontSize": 12,
+          "lineHeight": null
         },
         "shape=circle, size=md": {
           "fill": "color/warning-bg",
@@ -9895,7 +10127,9 @@
           ],
           "radius": "radius/full",
           "radiusPx": 9999,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "shape=circle, size=lg": {
           "fill": "RAW",
@@ -9909,7 +10143,9 @@
           ],
           "radius": "radius/full",
           "radiusPx": 9999,
-          "effects": []
+          "effects": [],
+          "fontSize": 16,
+          "lineHeight": null
         },
         "shape=circle, size=xl": {
           "fill": "RAW",
@@ -9923,7 +10159,9 @@
           ],
           "radius": "radius/full",
           "radiusPx": 9999,
-          "effects": []
+          "effects": [],
+          "fontSize": 18,
+          "lineHeight": null
         },
         "shape=square, size=xs": {
           "fill": "color/info-bg",
@@ -9937,7 +10175,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 10,
+          "lineHeight": null
         },
         "shape=square, size=sm": {
           "fill": "color/success-bg",
@@ -9951,7 +10191,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 12,
+          "lineHeight": null
         },
         "shape=square, size=md": {
           "fill": "color/warning-bg",
@@ -9965,7 +10207,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": null
         },
         "shape=square, size=lg": {
           "fill": "RAW",
@@ -9979,7 +10223,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 16,
+          "lineHeight": null
         },
         "shape=square, size=xl": {
           "fill": "RAW",
@@ -9993,7 +10239,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": 18,
+          "lineHeight": null
         }
       },
       "overlays": [],
@@ -10102,7 +10350,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=success, position=top-right": {
           "fill": "RAW",
@@ -10119,7 +10369,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=warning, position=top-right": {
           "fill": "RAW",
@@ -10136,7 +10388,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=danger, position=top-right": {
           "fill": "RAW",
@@ -10153,7 +10407,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=info, position=top-right": {
           "fill": "color/info-bg",
@@ -10170,7 +10426,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=default, position=top-center": {
           "fill": "color/surface-raised",
@@ -10187,7 +10445,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=default, position=bottom-right": {
           "fill": "color/surface-raised",
@@ -10204,7 +10464,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=default, position=bottom-center": {
           "fill": "color/surface-raised",
@@ -10221,7 +10483,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         }
       },
       "overlays": [
@@ -10459,7 +10723,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         }
       },
       "overlays": [],
@@ -10496,7 +10762,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         }
       },
       "overlays": [],
@@ -10718,7 +10986,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         },
         "position=left, size=md": {
           "fill": "color/surface",
@@ -10735,7 +11005,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         },
         "position=top, size=md": {
           "fill": "color/surface",
@@ -10752,7 +11024,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         },
         "position=bottom, size=md": {
           "fill": "color/surface",
@@ -10769,7 +11043,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         },
         "position=right, size=sm": {
           "fill": "color/surface",
@@ -10786,7 +11062,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         },
         "position=right, size=lg": {
           "fill": "color/surface",
@@ -10803,7 +11081,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         },
         "position=right, size=full": {
           "fill": "color/surface",
@@ -10820,7 +11100,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         }
       },
       "overlays": [],
@@ -12201,7 +12483,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 12,
+          "lineHeight": null
         },
         "variant=striped, size=md, state=default": {
           "fill": null,
@@ -12215,7 +12499,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 12,
+          "lineHeight": null
         },
         "variant=bordered, size=md, state=default": {
           "fill": null,
@@ -12229,7 +12515,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 12,
+          "lineHeight": null
         },
         "variant=default, size=sm, state=default": {
           "fill": null,
@@ -12243,7 +12531,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 12,
+          "lineHeight": null
         },
         "variant=default, size=lg, state=default": {
           "fill": null,
@@ -12257,7 +12547,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 12,
+          "lineHeight": null
         }
       },
       "overlays": [
@@ -13682,7 +13974,9 @@
           ],
           "radius": "radius/lg",
           "radiusPx": 14,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=with-filename": {
           "fill": null,
@@ -13696,7 +13990,9 @@
           ],
           "radius": "radius/lg",
           "radiusPx": 14,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=with-line-numbers": {
           "fill": null,
@@ -13710,7 +14006,9 @@
           ],
           "radius": "radius/lg",
           "radiusPx": 14,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=no-copy": {
           "fill": null,
@@ -13724,7 +14022,9 @@
           ],
           "radius": "radius/lg",
           "radiusPx": 14,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         }
       },
       "overlays": [
@@ -15351,7 +15651,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "state=open": {
           "fill": null,
@@ -15365,7 +15667,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "state=filtered": {
           "fill": null,
@@ -15379,7 +15683,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "state=selected": {
           "fill": null,
@@ -15393,7 +15699,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "state=hover": {
           "fill": null,
@@ -15407,7 +15715,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "state=focus": {
           "fill": null,
@@ -15424,7 +15734,9 @@
           "effects": [
             "DROP_SHADOW",
             "DROP_SHADOW"
-          ]
+          ],
+          "fontSize": null,
+          "lineHeight": null
         }
       },
       "overlays": [
@@ -16312,7 +16624,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "orientation=horizontal, state=completed": {
           "fill": null,
@@ -16326,7 +16640,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "orientation=horizontal, state=error": {
           "fill": null,
@@ -16340,7 +16656,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "orientation=horizontal, state=optional": {
           "fill": null,
@@ -16354,7 +16672,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "orientation=vertical, state=default": {
           "fill": null,
@@ -16368,7 +16688,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "orientation=vertical, state=completed": {
           "fill": null,
@@ -16382,7 +16704,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "orientation=vertical, state=error": {
           "fill": null,
@@ -16396,7 +16720,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "orientation=vertical, state=optional": {
           "fill": null,
@@ -16410,7 +16736,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         }
       },
       "overlays": [],
@@ -18992,7 +19320,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "size=xs": {
           "fill": null,
@@ -19006,7 +19336,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "size=sm": {
           "fill": null,
@@ -19020,7 +19352,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "size=lg": {
           "fill": null,
@@ -19034,7 +19368,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "size=xl": {
           "fill": null,
@@ -19048,7 +19384,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         }
       },
       "overlays": [],
@@ -19166,7 +19504,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=popup": {
           "fill": "RAW",
@@ -19180,7 +19520,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "variant=inline": {
           "fill": "RAW",
@@ -19194,7 +19536,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": 10,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         }
       },
       "overlays": [
@@ -21555,7 +21899,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "state=hover": {
           "fill": "color/surface-sunken",
@@ -21569,7 +21915,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 16,
+          "lineHeight": 125
         }
       },
       "overlays": [
@@ -21654,7 +22002,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         }
       },
       "overlays": [],
@@ -21725,7 +22075,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "current=true": {
           "fill": null,
@@ -21739,7 +22091,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         }
       },
       "overlays": [
@@ -21907,7 +22261,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": "mixed",
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": 125
         },
         "state=active": {
           "fill": null,
@@ -21921,7 +22277,9 @@
           ],
           "radius": "radius/md",
           "radiusPx": "mixed",
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": 125
         }
       },
       "overlays": [
@@ -22060,7 +22418,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "state=active": {
           "fill": null,
@@ -22074,7 +22434,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "state=completed": {
           "fill": null,
@@ -22088,7 +22450,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "state=error": {
           "fill": null,
@@ -22102,7 +22466,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         }
       },
       "overlays": [
@@ -22509,7 +22875,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "state=hover": {
           "fill": "color/surface-sunken",
@@ -22523,7 +22891,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "state=active": {
           "fill": "color/primary-light",
@@ -22537,7 +22907,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "state=selected": {
           "fill": null,
@@ -22551,7 +22923,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": 16,
+          "lineHeight": 125
         }
       },
       "overlays": [
@@ -22695,7 +23069,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         },
         "expanded=true": {
           "fill": null,
@@ -22709,7 +23085,9 @@
           ],
           "radius": null,
           "radiusPx": 0,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         }
       },
       "overlays": [
@@ -22925,7 +23303,9 @@
           ],
           "radius": "radius/lg",
           "radiusPx": 14,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": 150
         },
         "role=user": {
           "fill": "color/primary",
@@ -22939,7 +23319,9 @@
           ],
           "radius": "radius/lg",
           "radiusPx": 14,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": 150
         },
         "role=system": {
           "fill": "color/surface-sunken",
@@ -22953,7 +23335,9 @@
           ],
           "radius": "radius/lg",
           "radiusPx": 14,
-          "effects": []
+          "effects": [],
+          "fontSize": 14,
+          "lineHeight": 150
         }
       },
       "overlays": [
@@ -23062,7 +23446,9 @@
           ],
           "radius": "radius/lg",
           "radiusPx": 14,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         }
       },
       "overlays": [],
@@ -23094,7 +23480,9 @@
           ],
           "radius": "radius/lg",
           "radiusPx": 14,
-          "effects": []
+          "effects": [],
+          "fontSize": null,
+          "lineHeight": null
         }
       },
       "overlays": [],

@@ -4,7 +4,7 @@ date: 2026-08-26
 sources:
   - plan/adr/0041-control-height-is-the-primitive.md (the claim this makes true in all three frameworks)
   - plan/adr/0042-a-gate-that-measures-rendered-geometry.md (the gate this corrects)
-  - plan/adr/0026-the-library-ships-its-css.md
+  - plan/adr/0026-ship-css-and-tokens-in-packages.md
   - tasks/design-findings-2026-08-26.md (Decision B)
 ---
 

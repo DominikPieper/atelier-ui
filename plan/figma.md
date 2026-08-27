@@ -238,12 +238,56 @@ font: var(--ui-font-weight-medium) var(--ui-font-size-sm) / 1 'Inter', sans-seri
 
 ## Known Issues / Backlog
 
-Captured from `figma_audit_design_system` + `figma_lint_design` runs; not yet addressed.
+Re-measured 2026-08-27 against the file, after the Phase 3 transfer (ADR-0059..0064).
+Everything below is a count taken from the file, not an estimate.
 
-- **WCAG 1.4.1 lint false-positive** on `LlmBadge` / `LlmAlert` / `LlmToast`: the page-level `wcag-color-only` rule compares raw variant background fills and does not walk child nodes, so it keeps flagging variants that already have visible glyph text layers. The per-component `figma_audit_component_accessibility` scores 93–100 on colorDifferentiation for all three — real accessibility is in place. Accept the lint noise or raise upstream.
-- **Decorative icon glyphs left unstyled**: ~50 pictogram text nodes (`▲ ▼ ✓ ✕ ⎘ ⎗ ⊕ ✏ →`) are intentionally not bound to a text style. Lint flags them under `no-text-style`; they should either be converted to vector icons or given a dedicated `text/icon-sm` style.
-- **Sub-12px text in icon roles**: 18 remaining `wcag-text-size` findings are chevrons/arrows at 10–11 px and 9 px avatar initials. Visually intentional; consider nudging to 12 px or converting chevrons to vector glyphs.
-- **Section-level caption text** (e.g. "variant: primary | …", "size: md") is documentation scaffolding not part of any component — convert to small captions or move into the component description.
-- **Card empty slots**: 12 empty `card-section-2` frames. Rename to `card-slot-content` or remove.
-- **Auto-layout**: 8 top-level display wrappers lack auto-layout (WCAG 1.4.10 reflow).
-- **No Cover / Icons page**: add when the file grows.
+### Closed since the last pass
+
+- ~~**Decorative icon glyphs left unstyled** (~50 pictogram text nodes)~~ — ADR-0057
+  replaced them with instances of the generated `Icon/*` masters, and `[MASTER-GLYPH]`
+  reads zero across all 39 masters. 20 pictograms remain, all inside the
+  `Icons (superseded — glyph era)` frame kept for reference; deleting that frame is a
+  separate item in `tasks/todo.md`.
+- ~~**Auto-layout**: 8 top-level display wrappers lack auto-layout~~ — zero masters now
+  have a multi-child variant root without auto-layout.
+- ~~**No Cover / Icons page**~~ — both pages exist. So do Cookbook and
+  Workshop-Templates.
+
+### Open, with today's numbers
+
+- **Five pictograms sit in illustration frames BESIDE a master, where
+  `[MASTER-GLYPH]` cannot see them**: `✓` next to AtlSelect (an open-dropdown
+  illustration) and `✓ ℹ ✕` next to AtlToast. The probe walks COMPONENT and
+  COMPONENT_SET nodes, so a plain frame on the Components page is invisible to it —
+  the same hole that let the four content samples keep `‹ Prev` for months. Widen the
+  probe to every frame on the page.
+- **AtlChat's `–` minimise control** is drawn inside `variant=popup` and marked with a
+  stated exemption, because the decision is genuinely open: `AtlChatSpec` exposes
+  `open` and `onOpenChange` and nothing else, there is no minimise prop, no
+  `is-minimised` class and no CSS for one. Either AtlChat gains the state or the master
+  loses the button.
+- **Root typography is ungated, and it hid two real errors.** 100 master-variant roots
+  carry their own single text child; `[LAYER-PAINT]` compares `font-size` and
+  `line-height` for NAMED layers only, and the root belongs to `[ROOT-PAINT]`, which has
+  no typography. Found by hand: AtlAvatar's `xs` initials were 9px against
+  `--ui-font-size-2xs` (10px) and its `xl` were 16px against `--ui-font-size-lg` (18px) —
+  both fixed. Still open: most of those 100 roots leave the leading on **AUTO** while
+  every component's CSS states a `line-height`, which is ADR-0048's rule unapplied on
+  the Figma side. Gating it needs the `ROOT_PAINT` cascades extended with the `size` and
+  `shape` axes, since that is where `font-size` is declared.
+- **536 text nodes below 12px**, and the split matters: 378 on Inventory (card meta at
+  11px), 156 on Colors (swatch labels 11px, hex values 9px), 2 in Components — and those
+  2 were the AtlAvatar bug above. So this is documentation scaffolding, not component
+  text. `--ui-font-size-2xs` (10px) exists since ADR-0054; decide whether the catalogue
+  pages adopt it or stay off-scale by intent.
+- **13 empty `card-section-2` frames** (the earlier note said 12). Rename to
+  `card-slot-content` or remove.
+- **Section-level caption text** (e.g. "variant: primary | secondary | outline · size:
+  sm | md | lg") is documentation scaffolding that lives inside the Components sections.
+  Convert to a caption style or move into the master description.
+- **WCAG 1.4.1 lint false-positive** on AtlBadge / AtlAlert / AtlToast: the page-level
+  `wcag-color-only` rule compares raw variant background fills and does not walk child
+  nodes, so it flags variants that already have visible glyph text layers. The
+  per-component `figma_audit_component_accessibility` scored 93–100 on
+  colorDifferentiation for all three. Accept the noise or raise upstream. (Not
+  re-measured today — the lint has not been re-run since the rebuild.)

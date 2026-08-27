@@ -9,11 +9,12 @@
       }
     },
     "redesignPhase": {
-      "active": true,
+      "active": false,
       "since": "2026-08-26",
       "adr": "0043",
-      "note": "The library is being redesigned in Claude Design and transferred to Figma afterwards (tasks/atelier-design-system-plan.md, Phase 3). While this is true, Figma is the TARGET of the transfer, not the reference for it: the masters are stale by definition until they are rebuilt. So check:parity reports an inputsHash drift as a WARNING rather than a BLOCKER — re-verifying against a design we have deliberately left behind proves nothing. Every drifted record still has to be re-verified once the transfer lands. Set active:false then, and the gate blocks again.",
-      "clearedBy": "Phase 3: rebuild the Figma masters from the redesign, then re-verify + parity:record every component."
+      "note": "CLOSED. While it was open (2026-08-26 to 2026-08-27) the library was being redesigned in Claude Design and transferred to Figma afterwards, so Figma was the TARGET of the transfer and not the reference for it: the masters were stale by definition until rebuilt, and check:parity reported an inputsHash drift as a WARNING rather than a BLOCKER — re-verifying against a design we had deliberately left behind proved nothing. The transfer has landed and every drifted record was re-verified, so the gate blocks on drift again. Kept rather than deleted because check-parity reads `active` and the history explains why 39 records carry the same date.",
+      "clearedBy": "Phase 3 landed: the Figma masters were rebuilt from the redesign and are now gated on typeface, text styles, root paint, inner-layer paint and box geometry, overlays, axes, Booleans in three directions, glyphs, auto-layout and tokens — 39 masters, zero errors (ADR-0059..0064). parity:record was re-run for all 33 masters the registry can locate; the other six have no metadata module yet and stay advisory. check:parity blocks on drift again.",
+      "clearedAt": "2026-08-27"
     },
     "sharedStylesheet": "_sheet.css — the sheet chrome and the specimen primitives every form field shares (field recipe, panel, option row, adornment, state modifiers). Each AtlXxx.dc.html links it and keeps only what is specific to that component, so a change to the chrome is one edit rather than one per sheet. Its palette is a deliberate copy of the light-mode tokens: an artboard renders standalone in Claude Design, where the library's tokens.css is not loaded."
   },

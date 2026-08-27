@@ -2,8 +2,8 @@
 status: accepted
 date: 2026-08-26
 sources:
-  - plan/adr/0035-instrument-sans-and-serif.md (the typeface this makes true)
-  - plan/adr/0036-type-roles.md (the layer this ADR does *not* adopt, and why)
+  - plan/adr/0035-typography-instrument-pair.md (the typeface this makes true)
+  - plan/adr/0036-type-roles-not-axes.md (the layer this ADR does *not* adopt, and why)
   - plan/adr/0043-the-geometry-contract-ships-with-the-component.md (the same argument, for box-sizing)
   - libs/spec/src/tokens.manifest.ts (the constraint this reinterprets)
 ---

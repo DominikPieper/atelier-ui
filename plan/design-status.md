@@ -6,12 +6,6 @@
 
 **29 components.** Claude Design coverage: **29 designed**, 0 appearing only as a fragment inside a study, 0 untouched.
 
-> **Redesign phase, active since 2026-08-26.** Figma is the *target* of
-> the transfer, not the reference for it, so the masters are stale by definition until they are
-> rebuilt. A "Parity verified" date older than the last component change is therefore expected
-> here, and `check:parity` reports it as a warning instead of a blocker. Every one of them still
-> owes a re-verify: Phase 3: rebuild the Figma masters from the redesign, then re-verify + parity:record every component.
-
 Read the columns as a pipeline: a component is ready to transfer into Figma when
 it has an artboard, a current parity verification, and an a11y baseline in all
 three frameworks. "Fragment only" is not coverage — a control drawn small inside
@@ -19,35 +13,35 @@ a typography study says nothing about how the component should look.
 
 | Component | Artboard | Figma axes | Variants | Parity verified | a11y baseline | Type roles | Respecifies font |
 |---|---|---|---|---|---|---|---|
-| `accordion` | **AtlAccordionGroup.dc.html** | expanded | 2 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
-| `alert` | **AtlAlert.dc.html** | variant | 4 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
-| `avatar` | **AtlAvatar.dc.html** | size | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
-| `badge` | **AtlBadge.dc.html** | variant · size | 10 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
-| `breadcrumbs` | **AtlBreadcrumbs.dc.html** | current | 2 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
-| `button` | **AtlButton.dc.html** | variant · size · state | 24 | 2026-08-26 (`0bdaddd`) | all 3 | — | yes |
-| `card` | **AtlCard.dc.html** | variant · padding | 12 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
-| `chat` | **AtlChat.dc.html** | variant | 3 | 2026-07-23 (`2715827`) | all 3 | — | yes |
-| `checkbox` | **AtlCheckbox.dc.html** | selection · state | 5 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
+| `accordion` | **AtlAccordionGroup.dc.html** | expanded | 2 | 2026-08-27 (`51d2d9d`) | — | — | yes |
+| `alert` | **AtlAlert.dc.html** | variant | 4 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
+| `avatar` | **AtlAvatar.dc.html** | size | 5 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
+| `badge` | **AtlBadge.dc.html** | variant · size | 10 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
+| `breadcrumbs` | **AtlBreadcrumbs.dc.html** | current | 2 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
+| `button` | **AtlButton.dc.html** | variant · size · state | 24 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
+| `card` | **AtlCard.dc.html** | variant · padding | 12 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
+| `chat` | **AtlChat.dc.html** | variant | 3 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
+| `checkbox` | **AtlCheckbox.dc.html** | selection · state | 5 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
 | `code-block` | **AtlCodeBlock.dc.html** | — *(no master)* | — | — *(never)* | all 3 | — | yes |
-| `combobox` | **AtlCombobox.dc.html** | state | 6 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
-| `dialog` | **AtlDialog.dc.html** | size | 5 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
-| `drawer` | **AtlDrawer.dc.html** | position · size | 7 | 2026-07-23 (`2715827`) | all 3 | — | yes |
+| `combobox` | **AtlCombobox.dc.html** | state | 6 | 2026-08-27 (`51d2d9d`) | — | — | yes |
+| `dialog` | **AtlDialog.dc.html** | size | 5 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
+| `drawer` | **AtlDrawer.dc.html** | position · size | 7 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
 | `icon` | **AtlIcon.dc.html** | — *(no master)* | — | — *(never)* | all 3 | — | yes |
-| `input` | **AtlInput.dc.html** | state | 5 | 2026-08-26 (`0bdaddd`) | all 3 | — | yes |
-| `menu` | **AtlMenu.dc.html** | state | 2 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
-| `pagination` | **AtlPagination.dc.html** | none | 0 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
-| `progress` | **AtlProgress.dc.html** | variant · size | 12 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
-| `radio` | **AtlRadio.dc.html** | selection · state | 4 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
+| `input` | **AtlInput.dc.html** | state | 5 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
+| `menu` | **AtlMenu.dc.html** | state | 2 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
+| `pagination` | **AtlPagination.dc.html** | none | 0 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
+| `progress` | **AtlProgress.dc.html** | variant · size | 12 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
+| `radio` | **AtlRadio.dc.html** | selection · state | 4 | 2026-08-27 (`51d2d9d`) | — | — | yes |
 | `radio-group` | **AtlRadioGroup.dc.html** | — *(no master)* | — | — *(never)* | all 3 | — | yes |
-| `select` | **AtlSelect.dc.html** | state | 4 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
-| `skeleton` | **AtlSkeleton.dc.html** | variant | 3 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
-| `stepper` | **AtlStepper.dc.html** | state | 4 | 2026-08-26 (`f4c20b6`) | all 3 | — | yes |
-| `table` | **AtlTable.dc.html** | variant · size · state | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
-| `tabs` | **AtlTabGroup.dc.html** | state | 2 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
-| `textarea` | **AtlTextarea.dc.html** | state | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
+| `select` | **AtlSelect.dc.html** | state | 4 | 2026-08-27 (`51d2d9d`) | — | — | yes |
+| `skeleton` | **AtlSkeleton.dc.html** | variant | 3 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
+| `stepper` | **AtlStepper.dc.html** | state | 4 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
+| `table` | **AtlTable.dc.html** | variant · size · state | 5 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
+| `tabs` | **AtlTabGroup.dc.html** | state | 2 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
+| `textarea` | **AtlTextarea.dc.html** | state | 5 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
 | `toast` | **AtlToast.dc.html** | — *(no master)* | — | — *(never)* | all 3 | — | yes |
-| `toggle` | **AtlToggle.dc.html** | selection · state | 4 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
-| `tooltip` | **AtlTooltip.dc.html** | position | 4 | 2026-07-23 (`2715827`) | all 3 | — | yes |
+| `toggle` | **AtlToggle.dc.html** | selection · state | 4 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
+| `tooltip` | **AtlTooltip.dc.html** | position | 4 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
 
 ## How to read the last two columns
 

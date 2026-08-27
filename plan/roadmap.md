@@ -2,7 +2,29 @@
 
 This document outlines the development phases, existing status, and future backlog for the component library.
 
-## Current Status (2026-03-15)
+> ## Status of this document — read first (2026-08-27)
+>
+> This is the **component-building** roadmap, and its phases are complete. It was written
+> while the library was Angular-only and named `Llm*`; the names below are kept as
+> history rather than corrected, because they are what the code was called at the time.
+> Four things have changed since:
+>
+> - **`Llm*` is now `Atl*`**, and the library is three framework adapters behind one
+>   framework-agnostic spec: `libs/spec` plus `libs/{angular,react,vue}`. The token file
+>   moved from `libs/llm-components/src/styles/tokens.css` to
+>   `libs/create-workspace/src/generators/preset/files/styles/tokens.css`, which is
+>   canonical, and is synced into `libs/{angular,react,vue}/src/styles/tokens.css`.
+> - **"Inter font" in the Visual Design Refresh below is superseded.** ADR-0035 chose
+>   Instrument Sans / Instrument Serif; ADR-0059 found the Figma file still on Inter and
+>   swept 1621 text nodes onto the declared families.
+> - **Its phase numbers are NOT the design-system plan's phase numbers.** "Phase 3" here
+>   is Dark Mode + Select; "Phase 3" in `tasks/atelier-design-system-plan.md` is the
+>   transfer of the redesign into Figma, which landed 2026-08-27 (ADR-0059..0064). When
+>   someone says "Phase 3", ask which document.
+> - **Current work is not tracked here.** Open items live in `tasks/todo.md`; decisions
+>   in `plan/adr/`; the Figma file's own state in `plan/figma.md`.
+
+## Current Status (as of 2026-03-15 — see the status block above)
 
 ### Foundation
 - [x] Nx Workspace structure
@@ -86,13 +108,19 @@ This document outlines the development phases, existing status, and future backl
 4. **`LlmMenu`**: ✅ Done. Thin wrapper over `@angular/cdk/menu` (`CdkMenu`, `CdkMenuItem`, `CdkMenuTrigger`). Full keyboard nav, nested submenus, focus management, and ARIA — all handled by CDK. Library provides styling via design tokens.
 5. **`LlmTooltip`**: ✅ Done. Attribute directive using `@angular/cdk/overlay` (`createOverlayRef`, `createFlexibleConnectedPositionStrategy`) for viewport-aware positioning. Show on hover/focus, `aria-describedby` linking, configurable delays.
 
-## Phase 5: Publishing & Tooling — IN PROGRESS
+## Phase 5: Publishing & Tooling — COMPLETE (verified 2026-08-27)
 *Focus: Make the library consumable and self-documenting.*
 
-1. **Composition cookbook**: 6 pre-composed patterns (login form, settings page, confirmation dialog, data list, notification center, and management dashboard) as documentation examples and Storybook stories.
-2. **Auto-generated API reference**: Script/generator that produces the CLAUDE.md Component API Reference section from source type signatures + JSDoc.
-3. **npm packaging**: Versioning strategy, changelog generation, publish pipeline.
-4. **Demo app**: Standalone Angular app showcasing all components and composition patterns.
+1. **Composition cookbook**: ✅ Done. The patterns ship as docs pages and stories, and
+   `check:cookbook` + `check:cookbook-manifest` gate them against the code.
+2. **Auto-generated API reference**: ✅ Done, and it moved: the generated surface is
+   `llms.txt` (`npm run gen:llms`, gated by `check:llms`), not a CLAUDE.md section —
+   CLAUDE.md explicitly forbids component API docs now and points at the spec, the docs
+   app and the Storybook MCP instead.
+3. **npm packaging**: ✅ Done. Release runs on push to main (`chore(release): publish`
+   commits), with the publish gated on the `verify` job (ADR-0033).
+4. **Demo app**: ✅ Done as the Astro `docs` app (`nx serve docs`), which covers all
+   three frameworks rather than only Angular.
 
 ---
 
@@ -120,7 +148,7 @@ This document outlines the development phases, existing status, and future backl
 
 | Component | CDK Module | Current Manual Code | CDK Replacement | Est. Reduction |
 |-----------|-----------|-------------------|-----------------|----------------|
-| `LlmTextarea` | `@angular/cdk/text-field` | Manual autoResize with ResizeObserver | `cdkTextareaAutosize` directive | ~10 lines |
+| `LlmTextarea` | `@angular/cdk/text-field` | Manual autoResize with ResizeObserver | `cdkTextareaAutosize` directive | ~10 lines | ✅ Done — `atl-textarea.ts` imports `TextFieldModule` |
 
 ### Verification Approach
 - After each refactor: run existing tests (`nx test llm-components`) to ensure no regressions
@@ -132,5 +160,7 @@ This document outlines the development phases, existing status, and future backl
 ## Open Architectural Questions
 
 - ~~**CVA + Signals**: Resolved — use Angular 21 Signal Forms (`FormValueControl` / `FormCheckboxControl`). No CVA needed.~~
-- **Dark mode token structure**: Single set of tokens with CSS media query overrides, or separate token files per theme?
+- ~~**Dark mode token structure**~~: Resolved by the code — a single token set with both
+  `prefers-color-scheme: dark` and an explicit `[data-theme='dark']` override in one
+  `tokens.css`, so a consumer can follow the OS or force a theme. No per-theme files.
 - **Overlay positioning**: CSS Popover API used for `LlmSelect`. For `LlmMenu` and `LlmTooltip`, use `@angular/cdk/overlay` + `@angular/cdk/menu` instead — they provide positioning, scroll handling, and viewport boundary detection that the Popover API doesn't cover well for complex cases.

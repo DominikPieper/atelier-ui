@@ -190,6 +190,20 @@ async function main() {
             radius,
             radiusPx: v.cornerRadius === figma.mixed ? 'mixed' : v.cornerRadius,
             effects: (v.effects || []).filter((e) => e.visible !== false).map((e) => e.type),
+            // The root's OWN text. AtlAvatar's xs initials were 9px against
+            // --ui-font-size-2xs (10px) and nothing compared them: [LAYER-PAINT]
+            // reads named layers, and the root is [ROOT-PAINT]'s, which had no
+            // typography.
+            fontSize: (function () {
+              const t = (v.children || []).filter((c) => c.type === 'TEXT');
+              return t.length === 1 && t[0].fontSize !== figma.mixed ? t[0].fontSize : null;
+            })(),
+            lineHeight: (function () {
+              const t = (v.children || []).filter((c) => c.type === 'TEXT');
+              if (t.length !== 1) return null;
+              const lh = t[0].lineHeight;
+              return lh !== figma.mixed && lh.unit === 'PERCENT' ? lh.value : null;
+            })(),
           };
         }
         // Overlay layers (_disabled-overlay, _invalid-border, _readonly-surface, ...).

@@ -2,14 +2,37 @@
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "note": "Per-component design-parity records. Written by `npm run parity:record` after a human/agent runs figma_check_design_parity; read by `npm run check:parity`. Each record's inputsHash covers libs/{angular,react,vue}/src/lib/<module>/ so a spec/story/impl/css change since the last verify makes the gate ask for a re-verify. The parity SCORE is deliberately not stored: it is not comparable across runs (it tracks how much of codeSpec was declared and which node was sampled, not the component) — three runs on one commit for AtlStepper returned 70, 52 and 83. See plan/adr/0024 and its 2026-08-26 amendment.",
-    "generatedAt": "2026-08-26T11:56:22.436Z"
+    "generatedAt": "2026-08-27T14:02:29.297Z"
   },
   "components": {
     "AtlAccordionGroup": {
       "figmaNodeId": "55:127",
-      "verifiedAt": "2026-07-22T13:29:13.694Z",
-      "verifiedSha": "fe4d5f4",
-      "inputsHash": "sha256:9358b1bb0365e3153d5814e45f27e3956dd6a27bd252a0cc11825117a2b420f2",
+      "verifiedAt": "2026-08-27T14:02:03.876Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:c1ba08e277307ceb68433dad35276919b65d15141869df316143ca4a1ff22fec",
+      "inputs": [
+        "libs/angular/src/lib/accordion/atl-accordion.css",
+        "libs/angular/src/lib/accordion/atl-accordion.spec.ts",
+        "libs/angular/src/lib/accordion/atl-accordion.stories.ts",
+        "libs/angular/src/lib/accordion/atl-accordion.token.ts",
+        "libs/angular/src/lib/accordion/atl-accordion.ts",
+        "libs/react/src/lib/accordion/atl-accordion.css",
+        "libs/react/src/lib/accordion/atl-accordion.spec.tsx",
+        "libs/react/src/lib/accordion/atl-accordion.stories.tsx",
+        "libs/react/src/lib/accordion/atl-accordion.tsx",
+        "libs/vue/src/lib/accordion/atl-accordion-group.vue",
+        "libs/vue/src/lib/accordion/atl-accordion-header.vue",
+        "libs/vue/src/lib/accordion/atl-accordion-item.vue",
+        "libs/vue/src/lib/accordion/atl-accordion.css",
+        "libs/vue/src/lib/accordion/atl-accordion.spec.ts",
+        "libs/vue/src/lib/accordion/atl-accordion.stories.ts"
+      ]
+    },
+    "AtlAccordionItem": {
+      "figmaNodeId": "911:1103",
+      "verifiedAt": "2026-08-27T14:02:29.244Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:c1ba08e277307ceb68433dad35276919b65d15141869df316143ca4a1ff22fec",
       "inputs": [
         "libs/angular/src/lib/accordion/atl-accordion.css",
         "libs/angular/src/lib/accordion/atl-accordion.spec.ts",
@@ -30,9 +53,9 @@
     },
     "AtlAlert": {
       "figmaNodeId": "55:31",
-      "verifiedAt": "2026-07-22T14:10:58.427Z",
-      "verifiedSha": "26a8a7e",
-      "inputsHash": "sha256:881ca45b3f76e29166ad3d10d7beb72a928feb403b2cfd62618f08473f35b5c0",
+      "verifiedAt": "2026-08-27T14:02:07.002Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:9d9035688948919fe1957db25f2ffabcaab6d19f5ff2f8f6b6c90cd6b82bb638",
       "inputs": [
         "libs/angular/src/lib/alert/atl-alert.a11y.spec.ts",
         "libs/angular/src/lib/alert/atl-alert.css",
@@ -53,9 +76,9 @@
     },
     "AtlAvatar": {
       "figmaNodeId": "55:151",
-      "verifiedAt": "2026-07-22T20:25:48.131Z",
-      "verifiedSha": "6282b4f",
-      "inputsHash": "sha256:03705f7dae9e4cb74ae1276489ec6d4bd224e4b65527b71f6311c43fa586bed1",
+      "verifiedAt": "2026-08-27T14:02:15.158Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:7a0f9bede583fd6dbc9fa86bf8c74353d88771cea31de4c2d7c7f6c8a7a17ed3",
       "inputs": [
         "libs/angular/src/lib/avatar/atl-avatar.a11y.spec.ts",
         "libs/angular/src/lib/avatar/atl-avatar.css",
@@ -78,9 +101,9 @@
     },
     "AtlAvatarGroup": {
       "figmaNodeId": "508:7221",
-      "verifiedAt": "2026-07-22T20:25:49.558Z",
-      "verifiedSha": "6282b4f",
-      "inputsHash": "sha256:03705f7dae9e4cb74ae1276489ec6d4bd224e4b65527b71f6311c43fa586bed1",
+      "verifiedAt": "2026-08-27T14:02:22.590Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:7a0f9bede583fd6dbc9fa86bf8c74353d88771cea31de4c2d7c7f6c8a7a17ed3",
       "inputs": [
         "libs/angular/src/lib/avatar/atl-avatar.a11y.spec.ts",
         "libs/angular/src/lib/avatar/atl-avatar.css",
@@ -103,9 +126,9 @@
     },
     "AtlBadge": {
       "figmaNodeId": "55:22",
-      "verifiedAt": "2026-07-22T20:25:46.711Z",
-      "verifiedSha": "6282b4f",
-      "inputsHash": "sha256:84f1f7a401d7c60b550507bacb6dc36aab1103579376e13cb731d8f924dc0b3d",
+      "verifiedAt": "2026-08-27T14:01:59.599Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:d194215439a598def1222c817e7eda78723eaa7f4d2800727f422fb081c5fc49",
       "inputs": [
         "libs/angular/src/lib/badge/atl-badge.a11y.spec.ts",
         "libs/angular/src/lib/badge/atl-badge.css",
@@ -124,11 +147,36 @@
         "libs/vue/src/lib/badge/atl-badge.vue"
       ]
     },
+    "AtlBreadcrumbItem": {
+      "figmaNodeId": "911:1069",
+      "verifiedAt": "2026-08-27T14:02:25.859Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:15bb22c405db7985be73c2f7a3bab8a187c64aefaa1db906b7fbecf3719dbc4f",
+      "inputs": [
+        "libs/angular/src/lib/breadcrumbs/atl-breadcrumbs.a11y.spec.ts",
+        "libs/angular/src/lib/breadcrumbs/atl-breadcrumbs.css",
+        "libs/angular/src/lib/breadcrumbs/atl-breadcrumbs.spec.ts",
+        "libs/angular/src/lib/breadcrumbs/atl-breadcrumbs.stories.ts",
+        "libs/angular/src/lib/breadcrumbs/atl-breadcrumbs.token.ts",
+        "libs/angular/src/lib/breadcrumbs/atl-breadcrumbs.ts",
+        "libs/react/src/lib/breadcrumbs/atl-breadcrumbs.a11y.spec.tsx",
+        "libs/react/src/lib/breadcrumbs/atl-breadcrumbs.css",
+        "libs/react/src/lib/breadcrumbs/atl-breadcrumbs.spec.tsx",
+        "libs/react/src/lib/breadcrumbs/atl-breadcrumbs.stories.tsx",
+        "libs/react/src/lib/breadcrumbs/atl-breadcrumbs.tsx",
+        "libs/vue/src/lib/breadcrumbs/atl-breadcrumb-item.vue",
+        "libs/vue/src/lib/breadcrumbs/atl-breadcrumbs.a11y.spec.ts",
+        "libs/vue/src/lib/breadcrumbs/atl-breadcrumbs.css",
+        "libs/vue/src/lib/breadcrumbs/atl-breadcrumbs.spec.ts",
+        "libs/vue/src/lib/breadcrumbs/atl-breadcrumbs.stories.ts",
+        "libs/vue/src/lib/breadcrumbs/atl-breadcrumbs.vue"
+      ]
+    },
     "AtlBreadcrumbs": {
-      "figmaNodeId": "55:141",
-      "verifiedAt": "2026-07-22T19:41:47.154Z",
-      "verifiedSha": "d05f789",
-      "inputsHash": "sha256:3e4ae185b6c559e61824e5399bef6499b42dcafc31ba330ac649c1a38c2c8f99",
+      "figmaNodeId": "55:139",
+      "verifiedAt": "2026-08-27T14:02:16.248Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:15bb22c405db7985be73c2f7a3bab8a187c64aefaa1db906b7fbecf3719dbc4f",
       "inputs": [
         "libs/angular/src/lib/breadcrumbs/atl-breadcrumbs.a11y.spec.ts",
         "libs/angular/src/lib/breadcrumbs/atl-breadcrumbs.css",
@@ -151,9 +199,9 @@
     },
     "AtlButton": {
       "figmaNodeId": "129:20",
-      "verifiedAt": "2026-08-26T11:56:20.941Z",
-      "verifiedSha": "0bdaddd",
-      "inputsHash": "sha256:2a7fc976d2b5fd3adc8993df9c7760809202f4cea8d234b3f1839cbcaef3efbb",
+      "verifiedAt": "2026-08-27T14:01:56.401Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:c171252b7441e00c994cc09888492f05a0060e1bc6ba84e0f5836a1d307eacc9",
       "inputs": [
         "libs/angular/src/lib/button/atl-button.a11y.spec.ts",
         "libs/angular/src/lib/button/atl-button.css",
@@ -174,9 +222,9 @@
     },
     "AtlCard": {
       "figmaNodeId": "55:65",
-      "verifiedAt": "2026-07-22T20:25:54.069Z",
-      "verifiedSha": "6282b4f",
-      "inputsHash": "sha256:a1286ba8ea64f715a60068b74de2c291457fa797ce8da72bc8fc0bcc4d492306",
+      "verifiedAt": "2026-08-27T14:01:58.530Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:0120f40e4a798827a8b2b69459234991591cf5eb5d854e2a94b39636d8a62180",
       "inputs": [
         "libs/angular/src/lib/card/atl-card.a11y.spec.ts",
         "libs/angular/src/lib/card/atl-card.css",
@@ -200,9 +248,9 @@
     },
     "AtlChat": {
       "figmaNodeId": "507:2953",
-      "verifiedAt": "2026-07-23T05:07:48.288Z",
-      "verifiedSha": "2715827",
-      "inputsHash": "sha256:c262a7144195f98803f17d40f6ce41fdadaa2ff520144937e383af38e46ecb80",
+      "verifiedAt": "2026-08-27T14:02:23.648Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:47b1313a3529a3ae00f95f907cf7ad7e2086c3fb14d05e9b2a67929edb9938c7",
       "inputs": [
         "libs/angular/src/lib/chat/atl-chat.a11y.spec.ts",
         "libs/angular/src/lib/chat/atl-chat.css",
@@ -230,9 +278,9 @@
     },
     "AtlCheckbox": {
       "figmaNodeId": "55:36",
-      "verifiedAt": "2026-07-22T19:41:42.829Z",
-      "verifiedSha": "d05f789",
-      "inputsHash": "sha256:0b0e3dfcbc7edc9cd444a46b17d10f359f5b73a6368c04d561f24391f770148c",
+      "verifiedAt": "2026-08-27T14:02:08.081Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:b4a9ccdefd9e61bc4e00452ffcccbd2c6548b314c94e8077a27e1e7630513fdb",
       "inputs": [
         "libs/angular/src/lib/checkbox/atl-checkbox.a11y.spec.ts",
         "libs/angular/src/lib/checkbox/atl-checkbox.css",
@@ -253,9 +301,9 @@
     },
     "AtlCombobox": {
       "figmaNodeId": "421:339",
-      "verifiedAt": "2026-07-22T13:35:18.661Z",
-      "verifiedSha": "fe4d5f4",
-      "inputsHash": "sha256:3c64a69143ba0219fca7ebebc0f628d87e3f1bd6477e036eae34383a011d81b6",
+      "verifiedAt": "2026-08-27T14:02:20.448Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:770eb925bbb115ec7c13f938000eef8b2efba743fae15c04892d4ba80a5e109e",
       "inputs": [
         "libs/angular/src/lib/combobox/atl-combobox.css",
         "libs/angular/src/lib/combobox/atl-combobox.spec.ts",
@@ -273,9 +321,9 @@
     },
     "AtlDialog": {
       "figmaNodeId": "55:94",
-      "verifiedAt": "2026-07-22T14:10:54.016Z",
-      "verifiedSha": "26a8a7e",
-      "inputsHash": "sha256:40dcd7d888b9366e4f26cf59934426497a046fa9a257421d98900bb8f0e3ded7",
+      "verifiedAt": "2026-08-27T14:02:01.732Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:a9bc923217ff6f3945b90e91c85212cbbf8c710dfd382220c86dde26f6552c55",
       "inputs": [
         "libs/angular/src/lib/dialog/atl-dialog.a11y.spec.ts",
         "libs/angular/src/lib/dialog/atl-dialog.css",
@@ -300,9 +348,9 @@
     },
     "AtlDrawer": {
       "figmaNodeId": "421:398",
-      "verifiedAt": "2026-07-23T05:07:46.868Z",
-      "verifiedSha": "2715827",
-      "inputsHash": "sha256:d6ed455ef0aaaba7771b685017cce9a9c8de331500d06966e4544bf74718b17c",
+      "verifiedAt": "2026-08-27T14:02:18.352Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:6c40f0ee4cb445d3e4ad61379ccab4d4ebe32bc3e3452f5f8e6281e397b11a7b",
       "inputs": [
         "libs/angular/src/lib/drawer/atl-drawer.a11y.spec.ts",
         "libs/angular/src/lib/drawer/atl-drawer.css",
@@ -327,9 +375,9 @@
     },
     "AtlInput": {
       "figmaNodeId": "129:33",
-      "verifiedAt": "2026-08-26T11:56:22.384Z",
-      "verifiedSha": "0bdaddd",
-      "inputsHash": "sha256:ad28c56d9392b8a6c5798ddb9360bc3a4594e86e007cd83e92233e118b12c744",
+      "verifiedAt": "2026-08-27T14:01:57.496Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:69c77860042a19780766552d2f8ff12e6a58e67d9831d986a591fc27320a7343",
       "inputs": [
         "libs/angular/src/lib/input/atl-input.a11y.spec.ts",
         "libs/angular/src/lib/input/atl-input.css",
@@ -350,9 +398,9 @@
     },
     "AtlMenu": {
       "figmaNodeId": "55:130",
-      "verifiedAt": "2026-07-22T14:10:56.956Z",
-      "verifiedSha": "26a8a7e",
-      "inputsHash": "sha256:fc2472a2177f837da78ea676662418c5822d9d4af9c9e669b98f71f26df7d047",
+      "verifiedAt": "2026-08-27T14:02:04.911Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:49edfebc7915af61e5cdffceef3727180ab1eb27044a0eb369267753d9f99a8f",
       "inputs": [
         "libs/angular/src/lib/menu/atl-menu.a11y.spec.ts",
         "libs/angular/src/lib/menu/atl-menu.css",
@@ -374,11 +422,61 @@
         "libs/vue/src/lib/menu/atl-menu.vue"
       ]
     },
+    "AtlMenuItem": {
+      "figmaNodeId": "911:1056",
+      "verifiedAt": "2026-08-27T14:02:24.804Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:49edfebc7915af61e5cdffceef3727180ab1eb27044a0eb369267753d9f99a8f",
+      "inputs": [
+        "libs/angular/src/lib/menu/atl-menu.a11y.spec.ts",
+        "libs/angular/src/lib/menu/atl-menu.css",
+        "libs/angular/src/lib/menu/atl-menu.spec.ts",
+        "libs/angular/src/lib/menu/atl-menu.stories.ts",
+        "libs/angular/src/lib/menu/atl-menu.ts",
+        "libs/react/src/lib/menu/atl-menu.a11y.spec.tsx",
+        "libs/react/src/lib/menu/atl-menu.css",
+        "libs/react/src/lib/menu/atl-menu.spec.tsx",
+        "libs/react/src/lib/menu/atl-menu.stories.tsx",
+        "libs/react/src/lib/menu/atl-menu.tsx",
+        "libs/vue/src/lib/menu/atl-menu-item.vue",
+        "libs/vue/src/lib/menu/atl-menu-separator.vue",
+        "libs/vue/src/lib/menu/atl-menu-trigger.vue",
+        "libs/vue/src/lib/menu/atl-menu.a11y.spec.ts",
+        "libs/vue/src/lib/menu/atl-menu.css",
+        "libs/vue/src/lib/menu/atl-menu.spec.ts",
+        "libs/vue/src/lib/menu/atl-menu.stories.ts",
+        "libs/vue/src/lib/menu/atl-menu.vue"
+      ]
+    },
+    "AtlOption": {
+      "figmaNodeId": "911:1086",
+      "verifiedAt": "2026-08-27T14:02:28.408Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:3ac1dbdb03797e4d1f11f8ae81009ea16e4dd0c3eca904204a74977ba03c2d9e",
+      "inputs": [
+        "libs/angular/src/lib/select/atl-option.css",
+        "libs/angular/src/lib/select/atl-option.ts",
+        "libs/angular/src/lib/select/atl-select.css",
+        "libs/angular/src/lib/select/atl-select.spec.ts",
+        "libs/angular/src/lib/select/atl-select.stories.ts",
+        "libs/angular/src/lib/select/atl-select.token.ts",
+        "libs/angular/src/lib/select/atl-select.ts",
+        "libs/react/src/lib/select/atl-select.css",
+        "libs/react/src/lib/select/atl-select.spec.tsx",
+        "libs/react/src/lib/select/atl-select.stories.tsx",
+        "libs/react/src/lib/select/atl-select.tsx",
+        "libs/vue/src/lib/select/atl-option.vue",
+        "libs/vue/src/lib/select/atl-select.css",
+        "libs/vue/src/lib/select/atl-select.spec.ts",
+        "libs/vue/src/lib/select/atl-select.stories.ts",
+        "libs/vue/src/lib/select/atl-select.vue"
+      ]
+    },
     "AtlPagination": {
-      "figmaNodeId": "55:145",
-      "verifiedAt": "2026-07-22T20:25:55.585Z",
-      "verifiedSha": "6282b4f",
-      "inputsHash": "sha256:7e15ed13255b76b6d40bf8a5a8e27ca8a49ec24da40f90766ab686702584f9a4",
+      "figmaNodeId": "55:143",
+      "verifiedAt": "2026-08-27T14:02:17.263Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:e18f82a047a9d5f05a1ff240538ac9ecb11becfba839cac8bb3794fa0de2649c",
       "inputs": [
         "libs/angular/src/lib/pagination/atl-pagination.a11y.spec.ts",
         "libs/angular/src/lib/pagination/atl-pagination.css",
@@ -399,9 +497,9 @@
     },
     "AtlProgress": {
       "figmaNodeId": "420:153",
-      "verifiedAt": "2026-07-22T19:41:45.727Z",
-      "verifiedSha": "d05f789",
-      "inputsHash": "sha256:267adab7086ad66aec97f204a045e65e2cf1f7802574de4cd9036cbf3408d9ea",
+      "verifiedAt": "2026-08-27T14:02:14.129Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:f24d6e50ba0e6f6eb6c7283100f4f2ca1b322a559928ca14bd85c9cc0538638f",
       "inputs": [
         "libs/angular/src/lib/progress/atl-progress.a11y.spec.ts",
         "libs/angular/src/lib/progress/atl-progress.css",
@@ -422,9 +520,9 @@
     },
     "AtlRadio": {
       "figmaNodeId": "420:185",
-      "verifiedAt": "2026-07-22T13:31:32.342Z",
-      "verifiedSha": "fe4d5f4",
-      "inputsHash": "sha256:1cf08f9eff88c2a84991c52c05e65a85bb1669cddb10e9668cfd55a35e1a2f1d",
+      "verifiedAt": "2026-08-27T14:02:12.027Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:6185d75bd99e24626868ef9366980bb47c3026d7162c26569372f703f25cf0c6",
       "inputs": [
         "libs/angular/src/lib/radio/atl-radio.css",
         "libs/angular/src/lib/radio/atl-radio.spec.ts",
@@ -442,9 +540,9 @@
     },
     "AtlRadioGroup": {
       "figmaNodeId": "55:137",
-      "verifiedAt": "2026-07-22T13:31:14.553Z",
-      "verifiedSha": "fe4d5f4",
-      "inputsHash": "sha256:1cf08f9eff88c2a84991c52c05e65a85bb1669cddb10e9668cfd55a35e1a2f1d",
+      "verifiedAt": "2026-08-27T14:02:10.956Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:6185d75bd99e24626868ef9366980bb47c3026d7162c26569372f703f25cf0c6",
       "inputs": [
         "libs/angular/src/lib/radio/atl-radio.css",
         "libs/angular/src/lib/radio/atl-radio.spec.ts",
@@ -462,10 +560,11 @@
     },
     "AtlSelect": {
       "figmaNodeId": "55:92",
-      "verifiedAt": "2026-07-22T13:28:20.567Z",
-      "verifiedSha": "fe4d5f4",
-      "inputsHash": "sha256:587f26fb3404b31501a2dccecfabc7b341210458d1afff08004f90fef1542cab",
+      "verifiedAt": "2026-08-27T14:02:00.653Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:3ac1dbdb03797e4d1f11f8ae81009ea16e4dd0c3eca904204a74977ba03c2d9e",
       "inputs": [
+        "libs/angular/src/lib/select/atl-option.css",
         "libs/angular/src/lib/select/atl-option.ts",
         "libs/angular/src/lib/select/atl-select.css",
         "libs/angular/src/lib/select/atl-select.spec.ts",
@@ -485,9 +584,9 @@
     },
     "AtlSkeleton": {
       "figmaNodeId": "55:102",
-      "verifiedAt": "2026-07-22T20:25:51.061Z",
-      "verifiedSha": "6282b4f",
-      "inputsHash": "sha256:9cb9f37368f74aca34b7fb8a32e190399c11c7da9d889cd8c2be24136ce39aeb",
+      "verifiedAt": "2026-08-27T14:02:13.046Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:5b5c9532b9b558a7ce2ac5225d5dc71bee6c5e206a39af8c66bf84a478be8b7d",
       "inputs": [
         "libs/angular/src/lib/skeleton/atl-skeleton.a11y.spec.ts",
         "libs/angular/src/lib/skeleton/atl-skeleton.css",
@@ -506,11 +605,11 @@
         "libs/vue/src/lib/skeleton/atl-skeleton.vue"
       ]
     },
-    "AtlStepper": {
-      "figmaNodeId": "421:505",
-      "verifiedAt": "2026-08-26T09:04:31.617Z",
-      "verifiedSha": "f4c20b6",
-      "inputsHash": "sha256:35e06ad70299ba97576cba258f498f9eba443de27dd98455352f790c2c93bc92",
+    "AtlStep": {
+      "figmaNodeId": "911:1151",
+      "verifiedAt": "2026-08-27T14:02:27.573Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:423ab338a7b3d0143b465ff7954111eb69e17d637b0b0184e3ba62f1598eb58b",
       "inputs": [
         "libs/angular/src/lib/stepper/atl-stepper.a11y.spec.ts",
         "libs/angular/src/lib/stepper/atl-stepper.css",
@@ -531,11 +630,61 @@
         "libs/vue/src/lib/stepper/atl-stepper.vue"
       ]
     },
+    "AtlStepper": {
+      "figmaNodeId": "421:505",
+      "verifiedAt": "2026-08-27T14:02:21.480Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:423ab338a7b3d0143b465ff7954111eb69e17d637b0b0184e3ba62f1598eb58b",
+      "inputs": [
+        "libs/angular/src/lib/stepper/atl-stepper.a11y.spec.ts",
+        "libs/angular/src/lib/stepper/atl-stepper.css",
+        "libs/angular/src/lib/stepper/atl-stepper.spec.ts",
+        "libs/angular/src/lib/stepper/atl-stepper.stories.ts",
+        "libs/angular/src/lib/stepper/atl-stepper.token.ts",
+        "libs/angular/src/lib/stepper/atl-stepper.ts",
+        "libs/react/src/lib/stepper/atl-stepper.a11y.spec.tsx",
+        "libs/react/src/lib/stepper/atl-stepper.css",
+        "libs/react/src/lib/stepper/atl-stepper.spec.tsx",
+        "libs/react/src/lib/stepper/atl-stepper.stories.tsx",
+        "libs/react/src/lib/stepper/atl-stepper.tsx",
+        "libs/vue/src/lib/stepper/atl-step.vue",
+        "libs/vue/src/lib/stepper/atl-stepper.a11y.spec.ts",
+        "libs/vue/src/lib/stepper/atl-stepper.css",
+        "libs/vue/src/lib/stepper/atl-stepper.spec.ts",
+        "libs/vue/src/lib/stepper/atl-stepper.stories.ts",
+        "libs/vue/src/lib/stepper/atl-stepper.vue"
+      ]
+    },
+    "AtlTab": {
+      "figmaNodeId": "911:1075",
+      "verifiedAt": "2026-08-27T14:02:26.719Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:ac3856383d34865dc086c9965fdb162b66a337fd619d89214e3025c0bcd190b7",
+      "inputs": [
+        "libs/angular/src/lib/tabs/atl-tabs.a11y.spec.ts",
+        "libs/angular/src/lib/tabs/atl-tabs.css",
+        "libs/angular/src/lib/tabs/atl-tabs.spec.ts",
+        "libs/angular/src/lib/tabs/atl-tabs.stories.ts",
+        "libs/angular/src/lib/tabs/atl-tabs.token.ts",
+        "libs/angular/src/lib/tabs/atl-tabs.ts",
+        "libs/react/src/lib/tabs/atl-tabs.a11y.spec.tsx",
+        "libs/react/src/lib/tabs/atl-tabs.css",
+        "libs/react/src/lib/tabs/atl-tabs.spec.tsx",
+        "libs/react/src/lib/tabs/atl-tabs.stories.tsx",
+        "libs/react/src/lib/tabs/atl-tabs.tsx",
+        "libs/vue/src/lib/tabs/atl-tab-group.vue",
+        "libs/vue/src/lib/tabs/atl-tab.vue",
+        "libs/vue/src/lib/tabs/atl-tabs.a11y.spec.ts",
+        "libs/vue/src/lib/tabs/atl-tabs.css",
+        "libs/vue/src/lib/tabs/atl-tabs.spec.ts",
+        "libs/vue/src/lib/tabs/atl-tabs.stories.ts"
+      ]
+    },
     "AtlTabGroup": {
       "figmaNodeId": "55:123",
-      "verifiedAt": "2026-07-22T14:10:55.476Z",
-      "verifiedSha": "26a8a7e",
-      "inputsHash": "sha256:3a9004bd4bacd9badc7f3f9ddcf9e7110d83f3b3b21155c1dbda17f76232c6cb",
+      "verifiedAt": "2026-08-27T14:02:02.796Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:ac3856383d34865dc086c9965fdb162b66a337fd619d89214e3025c0bcd190b7",
       "inputs": [
         "libs/angular/src/lib/tabs/atl-tabs.a11y.spec.ts",
         "libs/angular/src/lib/tabs/atl-tabs.css",
@@ -558,9 +707,9 @@
     },
     "AtlTable": {
       "figmaNodeId": "421:1183",
-      "verifiedAt": "2026-07-22T20:25:57.111Z",
-      "verifiedSha": "6282b4f",
-      "inputsHash": "sha256:50dc21c5f14d7711484404b8491b6729935d872cd34941396f5098fe45c9ccc8",
+      "verifiedAt": "2026-08-27T14:02:19.387Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:c36a57503df17ab4ec48a13a866357bf645a5e1e2c5e1e98be293e32c55393f3",
       "inputs": [
         "libs/angular/src/lib/table/atl-table.a11y.spec.ts",
         "libs/angular/src/lib/table/atl-table.css",
@@ -586,9 +735,9 @@
     },
     "AtlTextarea": {
       "figmaNodeId": "55:87",
-      "verifiedAt": "2026-07-22T20:25:52.559Z",
-      "verifiedSha": "6282b4f",
-      "inputsHash": "sha256:fe09c5046b17fc24914bd27d3efa45f8a7d6e89e131e6a6dbc0fdc2615f7e24e",
+      "verifiedAt": "2026-08-27T14:02:09.969Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:751a5d6c9a35b6ca95531cb247d7350784efdfd950772d84b34fca5a858192c6",
       "inputs": [
         "libs/angular/src/lib/textarea/atl-textarea.a11y.spec.ts",
         "libs/angular/src/lib/textarea/atl-textarea.css",
@@ -609,9 +758,9 @@
     },
     "AtlToggle": {
       "figmaNodeId": "55:41",
-      "verifiedAt": "2026-07-22T19:41:44.254Z",
-      "verifiedSha": "d05f789",
-      "inputsHash": "sha256:51a3f6d4574016daafcadad5a7a4d6948a681c5360c781a2901beb94d88fb2f9",
+      "verifiedAt": "2026-08-27T14:02:09.093Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:9a7eaef17d93eec36ae39ebeded9153d39377d69154f1b77d000f6fee877e859",
       "inputs": [
         "libs/angular/src/lib/toggle/atl-toggle.a11y.spec.ts",
         "libs/angular/src/lib/toggle/atl-toggle.css",
@@ -632,9 +781,9 @@
     },
     "AtlTooltip": {
       "figmaNodeId": "55:52",
-      "verifiedAt": "2026-07-23T05:07:45.434Z",
-      "verifiedSha": "2715827",
-      "inputsHash": "sha256:3af80a67cacb11338e43d8f4675266e7d432e3b14a8a3458fbf4d70421afc106",
+      "verifiedAt": "2026-08-27T14:02:05.995Z",
+      "verifiedSha": "51d2d9d",
+      "inputsHash": "sha256:5ad0869f44d8105f12ba077cd977701bda15289ba60fe2a94b9d1427c5c858cb",
       "inputs": [
         "libs/angular/src/lib/tooltip/atl-tooltip.a11y.spec.ts",
         "libs/angular/src/lib/tooltip/atl-tooltip.css",
