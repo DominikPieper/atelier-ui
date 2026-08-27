@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-27T11:38:03.386Z",
-    "gitSha": "b5ca9d7",
+    "generatedAt": "2026-08-27T11:47:53.582Z",
+    "gitSha": "0d68345",
     "serverVersion": null,
     "coverage": "All 29 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -274,6 +274,7 @@
         "state": "VARIANT"
       },
       "referencedProperties": [
+        "readonly#507:79",
         "disabled#507:73"
       ],
       "iconInstanceNames": [],
@@ -1279,10 +1280,12 @@
         "variant": "VARIANT"
       },
       "referencedProperties": [
-        "Message#55:85"
+        "Message#55:85",
+        "dismissible#507:267"
       ],
       "iconInstanceNames": [
         "info",
+        "_dismiss",
         "check",
         "warning",
         "danger"
@@ -1302,6 +1305,16 @@
         },
         {
           "name": "info",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "_dismiss",
           "type": "INSTANCE",
           "hasChildren": true,
           "layoutMode": "NONE",
@@ -1490,6 +1503,7 @@
         "state": "VARIANT"
       },
       "referencedProperties": [
+        "readonly#507:97",
         "Placeholder#55:157",
         "disabled#507:91"
       ],
@@ -1673,7 +1687,7 @@
       "name": "Display/AtlProgress",
       "selector": "AtlProgress",
       "nodeId": "420:153",
-      "description": "Linear progress indicator. Maps to AtlProgressSpec in libs/spec.\n\nUse when: an ongoing operation has known or unknown duration. Determinate (with value) shows progress; indeterminate just signals activity.\n\nDon't use when: state isn't quantifiable nor ongoing — use Display/AtlSkeleton or a transient Overlay/AtlToast.\n\nAPI surface:\n- Variant `variant`: default | success | warning | danger → AtlProgressSpec.variant\n- Variant `size`: sm | md | lg → AtlProgressSpec.size\n- Boolean `indeterminate` → AtlProgressSpec.indeterminate\n- (code-only: `value`, `max`, `label` — required aria-label for screen readers)\n\nA11y: `label` prop is required by ARIA when no visible label is nearby; otherwise screen readers announce only \"progress bar 47%\".",
+      "description": "Linear progress indicator. Maps to AtlProgressSpec in libs/spec.\n\nUse when: an ongoing operation has known or unknown duration. Determinate (with value) shows progress; indeterminate just signals activity.\n\nDon't use when: state isn't quantifiable nor ongoing — use Display/AtlSkeleton or a transient Overlay/AtlToast.\n\nAPI surface:\n- Variant `variant`: default | success | warning | danger → AtlProgressSpec.variant\n- Variant `size`: sm | md | lg → AtlProgressSpec.size\n- Boolean `indeterminate` → AtlProgressSpec.indeterminate\n- (code-only: `value`, `max`, `label` — required aria-label for screen readers)\n\nA11y: `label` prop is required by ARIA when no visible label is nearby; otherwise screen readers announce only \"progress bar 47%\".\n\nDeclared Boolean properties that reference no layer (2026-08-27, ADR-0058):\n- Boolean `indeterminate`: declared but unbound — the state REPLACES the fill rather than adding a layer. `.atl-progress.is-indeterminate .fill` sets `width: 40% !important` and animates it, so the determinate fill must go away at the same moment the indeterminate one appears. A Figma Boolean toggles one layer on; it cannot toggle another off, so a second fill bound to this property would show both bars at once. This belongs on a variant axis — the shape ADR-0058 records for a replacing state, as against an adding one (a Boolean) or a colour-changing one (an overlay, like `_invalid-border`).",
       "variantAxes": {
         "variant": [
           "default",
@@ -1904,13 +1918,15 @@
         "position": "VARIANT"
       },
       "referencedProperties": [
-        "Message#55:104"
+        "Message#55:104",
+        "dismissible#508:318"
       ],
       "iconInstanceNames": [
         "default-toast",
-        "danger",
+        "_dismiss",
         "check",
         "warning",
+        "danger",
         "info"
       ],
       "glyphTextNodes": [],
@@ -1947,7 +1963,7 @@
           "nonSemanticTokens": []
         },
         {
-          "name": "danger",
+          "name": "_dismiss",
           "type": "INSTANCE",
           "hasChildren": true,
           "layoutMode": "NONE",
@@ -2209,6 +2225,7 @@
         "state": "VARIANT"
       },
       "referencedProperties": [
+        "stickyHeader#437:49",
         "disabled#507:276",
         "loading#507:282"
       ],
@@ -2991,7 +3008,7 @@
       "name": "AI/AtlChat",
       "selector": "AtlChat",
       "nodeId": "507:2953",
-      "description": "Conversational AI surface. Maps to AtlChatSpec in libs/spec.\n\nUse when: a model-driven interaction needs a UI surface. Pick the variant by attention demand: `drawer` for a side panel that coexists with the page, `popup` for a transient floating bubble, `inline` for embedded chat that lives in the page flow.\n\nDon't use when: the user is filling a structured form (use Form/* components) or initiating a single action (use Action/AtlButton).\n\nAPI surface (Figma → spec):\n- Variant `variant`: drawer | popup | inline → AtlChatSpec.variant\n- Boolean `open` → AtlChatSpec.open\n- (code-only: `status: idle | streaming | error`, message handling)\n\nA11y: ARIA dialog (drawer/popup) or region (inline). aria-live=\"polite\" on the message log so streamed assistant tokens announce as they arrive. Status changes (streaming → idle/error) announced via aria-live region.\n\nStatus: 2026-04-27 — merged from three separate Sections (AtlChat / drawer, AtlChat / popup, AtlChat / inline) into one Component Set with `variant` Variant Property matching AtlChatSpec. Old `status` (idle/streaming/error) and `empty` mockup frames remain illustrated as sibling frames in the AI section pending follow-up Variant axis.\n\nGlyph kept deliberately (2026-08-27, ADR-0058). check:figma reads this line:\n- Glyph `–` on `min-icon`: this is not an icon standing in for a drawing — it is a minimise control the COMPONENT DOES NOT HAVE. AtlChatSpec exposes `open` and `onOpenChange` and nothing else; there is no minimise prop, no `is-minimised` class and no CSS for one. The master is drawing an affordance the code has never implemented. Replacing the character with an icon would make a phantom control look official; removing it would silently drop a design intent nobody has decided on. It stays, marked, until someone decides whether AtlChat gains a minimise state or the master loses the button.",
+      "description": "Conversational AI surface. Maps to AtlChatSpec in libs/spec.\n\nUse when: a model-driven interaction needs a UI surface. Pick the variant by attention demand: `drawer` for a side panel that coexists with the page, `popup` for a transient floating bubble, `inline` for embedded chat that lives in the page flow.\n\nDon't use when: the user is filling a structured form (use Form/* components) or initiating a single action (use Action/AtlButton).\n\nAPI surface (Figma → spec):\n- Variant `variant`: drawer | popup | inline → AtlChatSpec.variant\n- Boolean `open` → AtlChatSpec.open\n- (code-only: `status: idle | streaming | error`, message handling)\n\nA11y: ARIA dialog (drawer/popup) or region (inline). aria-live=\"polite\" on the message log so streamed assistant tokens announce as they arrive. Status changes (streaming → idle/error) announced via aria-live region.\n\nStatus: 2026-04-27 — merged from three separate Sections (AtlChat / drawer, AtlChat / popup, AtlChat / inline) into one Component Set with `variant` Variant Property matching AtlChatSpec. Old `status` (idle/streaming/error) and `empty` mockup frames remain illustrated as sibling frames in the AI section pending follow-up Variant axis.\n\nGlyph kept deliberately (2026-08-27, ADR-0058). check:figma reads this line:\n- Glyph `–` on `min-icon`: this is not an icon standing in for a drawing — it is a minimise control the COMPONENT DOES NOT HAVE. AtlChatSpec exposes `open` and `onOpenChange` and nothing else; there is no minimise prop, no `is-minimised` class and no CSS for one. The master is drawing an affordance the code has never implemented. Replacing the character with an icon would make a phantom control look official; removing it would silently drop a design intent nobody has decided on. It stays, marked, until someone decides whether AtlChat gains a minimise state or the master loses the button.\n\nDeclared Boolean properties that reference no layer (2026-08-27, ADR-0058):\n- Boolean `open`: declared but unbound — and it cannot be bound as the master stands. `open` reveals the whole panel: `atl-chat.tsx` renders the header, the message list and the input inside `{open && (…)}`. In Figma a Boolean toggles ONE layer's visibility, and here the panel is a background rectangle with its title, close button and messages as siblings — binding the rectangle alone would hide the panel and leave its contents floating. Group the panel and its contents into one frame, then bind that frame. Tried and reverted rather than left half-bound. Note that the popup variant keeps its bubble when closed, so the group must exclude it.",
       "variantAxes": {
         "variant": [
           "drawer",
@@ -3016,6 +3033,7 @@
       },
       "referencedProperties": [
         "Label#55:74",
+        "readonly#507:97",
         "Placeholder#55:157",
         "disabled#507:91",
         "disabled#507:192",
