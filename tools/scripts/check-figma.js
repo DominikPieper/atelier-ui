@@ -417,6 +417,14 @@ const ROOT_PAINT = [
   // so it stacks correctly. The rule is a child layer, which this table cannot address.
 ];
 
+const LAYER_ALIASES = {
+  AtlTabGroup: { tab: '.atl-tab-group .tablist button', tabpanel: '.atl-tab-group [role="tabpanel"]' },
+  AtlTable: { th: '.atl-table thead th', td: '.atl-table tbody td', thead: '.atl-table thead', tbody: '.atl-table tbody' },
+  AtlInput: { field: '.atl-input input' },
+  AtlTextarea: { field: '.atl-textarea textarea' },
+  AtlSelect: { field: '.atl-select select' },
+};
+
 // ---------------------------------------------------------------------------
 // File-level typography. Not per-component: a typeface is a property of the
 // whole file, and the two defects it hides are file-shaped. The masters were
@@ -427,6 +435,7 @@ const ROOT_PAINT = [
 checkTypography();
 checkRootPaint();
 checkOverlays();
+checkLayerPaint();
 
 // ---------------------------------------------------------------------------
 // Report — prioritized (Blocker → Critical → Warning), styled like the other
@@ -666,7 +675,7 @@ function checkTypography() {
  *  `[italic ]var(--ui-font-weight-W) var(--ui-font-size-S) / var(--ui-line-height-L) var(--ui-font-F)`,
  *  resolved through the primitive tokens in the same file. */
 function parseTypeTokens() {
-  const css = fs.readFileSync(TOKENS_FILE, 'utf8');
+  const css = fs.readFileSync(TOKENS_FILE, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
   const decl = (name) => {
     const m = new RegExp(`--ui-${name}\\s*:\\s*([^;]+);`).exec(css);
     return m ? m[1].replace(/\s+/g, ' ').trim() : null;
@@ -987,6 +996,432 @@ function checkOverlays() {
       critical('OVERLAY', `${comp.selector} [${scope}]: ${msg}`);
     }
   }
+}
+
+/** 9. Inner layers — the level [ROOT-PAINT] cannot reach.
+ *
+ *  The convention is that a layer NAMED for a CSS class draws that rule, so the
+ *  layer name IS the selector and there is no table to maintain. A layer with a
+ *  generic name (Frame, Group, Rectangle) or a leading underscore is a wrapper or an
+ *  overlay — checked elsewhere, or not a CSS part at all.
+ *
+ *  Where the CSS addresses a part by element or attribute rather than by class —
+ *  `.tablist button`, `[role='option']`, `thead th` — the layer carries a short name
+ *  and LAYER_ALIASES maps it. That list is small by construction: every other part is
+ *  a class.
+ */
+
+function checkLayerPaint() {
+  for (const comp of snapshot.components) {
+    const layers = comp.layers || [];
+    if (!layers.length) continue;
+    const file = cssFileFor(comp.selector);
+    if (!file) continue;
+    const rules = cssRules(file);
+    const aliases = LAYER_ALIASES[comp.selector] || {};
+    const grouped = new Map();
+    const note = (kind, msg, where) => {
+      if (allowed(comp.selector, 'layer', kind)) return;
+      const key = kind + '\u0000' + msg;
+      if (!grouped.has(key)) grouped.set(key, new Set());
+      grouped.get(key).add(where);
+    };
+    for (const L of layers) {
+      const st = parseAxisName(L.variant).state;
+      if (st !== undefined && st !== 'default') continue; // pseudo-class paint, as in [ROOT-PAINT]
+      const base = aliases[L.layer] || '.' + L.layer;
+      // A variant can override a layer's rule: `.atl-progress.variant-success .fill`
+      // repaints the bar. Resolve base first, then the variant-scoped form, the way
+      // the cascade does.
+      const axes = parseAxisName(L.variant);
+      const rootSel = rootSelectorFor(comp.selector);
+      const cascade = [base];
+      if (axes.variant && rootSel) {
+        cascade.push(
+          base.startsWith(rootSel + ' ')
+            ? `${rootSel}.variant-${axes.variant} ${base.slice(rootSel.length + 1)}`
+            : `${rootSel}.variant-${axes.variant} ${base}`
+        );
+      }
+      let body;
+      for (const sel of cascade) {
+        const b = rules.get(sel);
+        if (b !== undefined) body = (body === undefined ? '' : body) + ';' + b;
+      }
+      if (body === undefined) continue; // not a CSS part — a wrapper, and that is fine
+      const selector = base;
+      // Every colour this component's CSS gives this layer, in ANY state. A layer
+      // inside a parent master is often drawn in a state — the current page button,
+      // one hovered menu item — and that state lives in a `:hover` or `.is-current`
+      // rule the variant name cannot reach. So a fill is wrong only when the CSS
+      // never gives the layer that colour.
+      const statefulFills = new Set();
+      const foreignVariant = (sel) => {
+        const m = /\.variant-([a-z0-9-]+)/.exec(sel);
+        return m ? m[1] !== axes.variant : false;
+      };
+      for (const [sel, b] of rules) {
+        if (!selectorMentions(sel, base)) continue;
+        if (/::?(before|after)\b/.test(sel)) continue; // a pseudo-element is a different box
+        if (foreignVariant(sel)) continue; // another variant's rule says nothing about this one
+        for (const prop of ['background', 'background-color']) {
+          const m = new RegExp('(?:^|;)\\s*' + prop + '\\s*:\\s*([^;]+)').exec(b);
+          if (!m) continue;
+          const v = cssToVariable(m[1].trim(), 'color');
+          if (v) statefulFills.add(v);
+        }
+      }
+      const decl = (prop) => {
+        // Last wins: the bodies are concatenated in cascade order.
+        const all = [...body.matchAll(new RegExp('(?:^|;)\\s*' + prop + '\\s*:\\s*([^;]+)', 'g'))];
+        return all.length ? all[all.length - 1][1].replace(/\s+/g, ' ').trim() : null;
+      };
+      const where = L.variant + (L.count > 1 ? ' x' + L.count : '');
+
+      // ── Paint ────────────────────────────────────────────────────────────
+      const bg = decl('background') || decl('background-color');
+      if (bg !== null) {
+        const wantFill = /transparent|none/.test(bg) ? null : cssToVariable(bg, 'color');
+        if (wantFill !== undefined) {
+          if (L.fill !== null && L.fill !== 'RAW' && statefulFills.has(L.fill)) {
+            // A colour the CSS gives this layer in some state.
+          } else if (wantFill === null && L.fill !== null) {
+            note('fill:' + L.layer, `${L.layer} paints ${L.fill}, but ${selector} sets background ${bg} and no rule gives it that colour.`, where);
+          } else if (wantFill !== null && L.fill === null) {
+            note('fill:' + L.layer, `${L.layer} has no fill; ${selector} says ${wantFill}.`, where);
+          } else if (wantFill !== null && L.fill !== null && L.fill !== wantFill) {
+            note('fill:' + L.layer, `${L.layer} fill is ${L.fill}, but ${selector} says ${wantFill}.`, where);
+          }
+        }
+      }
+      if (bg === null && L.fill !== null && !statefulFills.has(L.fill)) {
+        note('invented-fill:' + L.layer, `${L.layer} paints ${L.fill}, and no rule for ${selector} sets a background at all.`, where);
+      }
+      const radius = decl('border-radius');
+      if (radius !== null && splitValues(radius).length === 1) {
+        const wantRadius = cssToVariable(radius, 'radius');
+        if (wantRadius !== undefined && L.radius !== wantRadius) {
+          note('radius:' + L.layer, `${L.layer} radius is ${L.radius ?? 'unset'}, but ${selector} says ${wantRadius}.`, where);
+        }
+      }
+      const shadow = decl('box-shadow');
+      if (shadow !== null && /var\(--ui-shadow-/.test(shadow) && (L.effects || []).length === 0) {
+        note('shadow:' + L.layer, `${L.layer} has no effect; ${selector} sets box-shadow ${shadow}.`, where);
+      }
+
+      // Borders, four-side and per-side.
+      const SIDES = ['top', 'right', 'bottom', 'left'];
+      const wantSides = { top: 0, right: 0, bottom: 0, left: 0 };
+      let sidesDeclared = false;
+      let wantStroke;
+      const border = decl('border');
+      if (border !== null) {
+        sidesDeclared = true;
+        const w = /^(0|none)$/.test(border) ? 0 : lengthOf(splitValues(border)[0]);
+        for (const sd of SIDES) wantSides[sd] = w ?? 0;
+        if (!/transparent|none/.test(border)) wantStroke = cssToVariable(splitValues(border).pop(), 'color');
+      }
+      for (const sd of SIDES) {
+        const d = decl('border-' + sd);
+        if (d === null) continue;
+        sidesDeclared = true;
+        wantSides[sd] = /^(0|none)$/.test(d) ? 0 : (lengthOf(splitValues(d)[0]) ?? 0);
+        if (!/transparent|none/.test(d)) {
+          const c = cssToVariable(splitValues(d).pop(), 'color');
+          if (c !== undefined) wantStroke = c;
+        }
+      }
+      const bc = decl('border-color');
+      if (bc !== null) wantStroke = cssToVariable(bc, 'color');
+      if (sidesDeclared && L.strokeSides && (L.stroke !== null || wantStroke !== undefined)) {
+        const got = { top: L.strokeSides[0], right: L.strokeSides[1], bottom: L.strokeSides[2], left: L.strokeSides[3] };
+        const off = SIDES.filter((sd) => Math.abs((got[sd] || 0) - (wantSides[sd] || 0)) > 0.5);
+        if (off.length) {
+          note(
+            'border:' + L.layer,
+            `${L.layer} border is ${off.map((sd) => `${sd} ${got[sd] || 0}px`).join(', ')}, but ${selector} says ${off.map((sd) => `${sd} ${wantSides[sd] || 0}px`).join(', ')}.`,
+            where
+          );
+        }
+      }
+      if (wantStroke !== undefined && wantStroke !== null && L.stroke !== wantStroke) {
+        note('stroke:' + L.layer, `${L.layer} border colour is ${L.stroke ?? 'unset'}, but ${selector} says ${wantStroke}.`, where);
+      }
+      if (!sidesDeclared && L.stroke !== null) {
+        const anyBorder = [...rules].some(
+          ([sel, b]) =>
+            selectorMentions(sel, base) &&
+            !/::?(before|after)\b/.test(sel) &&
+            !foreignVariant(sel) &&
+            /(?:^|;)\s*border(?!-radius)(-[a-z]+)*\s*:/.test(b)
+        );
+        if (!anyBorder) {
+          note('invented-border:' + L.layer, `${L.layer} paints a ${L.stroke} border, and no rule for ${selector} declares one at all.`, where);
+        }
+      }
+      if (radius !== null || L.radius === null) {
+        // handled above
+      } else if (L.radius !== null) {
+        const anyRadius = [...rules].some(
+          ([sel, b]) => selectorMentions(sel, base) && !/::?(before|after)\b/.test(sel) && !foreignVariant(sel) && /(?:^|;)\s*border-radius\s*:/.test(b)
+        );
+        if (!anyRadius) {
+          note('invented-radius:' + L.layer, `${L.layer} has radius ${L.radius}, and no rule for ${selector} declares one at all.`, where);
+        }
+      }
+
+      // ── Box ──────────────────────────────────────────────────────────────
+      const box = boxFromDeclarations(body);
+      const cmp = (label, got, want) => {
+        if (want === null || want === undefined || got === null || got === undefined) return;
+        if (Math.abs(got - want) > 0.5) {
+          note(
+            label + ':' + L.layer,
+            `${L.layer} ${label} is ${Math.round(got * 100) / 100}px, but ${selector} says ${Math.round(want * 100) / 100}px.`,
+            where
+          );
+        }
+      };
+      if (box.minHeight !== null) {
+        // A stated min-height Figma does not carry is the row-ladder defect: the box
+        // then grows with its content instead of holding the token (ADR-0048).
+        if (L.minHeight === null) {
+          note('min-height:' + L.layer, `${L.layer} has no min-height; ${selector} states ${box.minHeight}px. Without it the box grows with its content.`, where);
+        } else {
+          cmp('min-height', L.minHeight, box.minHeight);
+        }
+      }
+      if (box.height !== null) cmp('height', L.height, box.height);
+      // ADR-0041 derives block padding from the control height; ADR-0048 states the
+      // height instead. A min-height box that centres its line is the same
+      // measurement without a raw 11.25px, which no token can bind — accept either.
+      const derivedBlock = /calc\(/.test(String(decl('padding') || '')) && box.minHeight !== null;
+      const centred = L.padding && L.padding[0] === 0 && L.padding[2] === 0 && L.minHeight !== null && Math.abs(L.minHeight - box.minHeight) <= 0.5;
+      if (derivedBlock && centred) { box.padding.top = null; box.padding.bottom = null; }
+      if (L.padding) {
+        cmp('padding-top', L.padding[0], box.padding.top);
+        cmp('padding-right', L.padding[1], box.padding.right);
+        cmp('padding-bottom', L.padding[2], box.padding.bottom);
+        cmp('padding-left', L.padding[3], box.padding.left);
+      }
+      if (box.gap !== null && L.gap !== null) cmp('gap', L.gap, box.gap);
+      if (box.fontSize !== null && L.fontSize !== null) cmp('font-size', L.fontSize, box.fontSize);
+      if (box.lineHeight !== null && L.lineHeight !== null) cmp('line-height %', L.lineHeight, box.lineHeight * 100);
+    }
+    for (const [key, whereSet] of grouped) {
+      const msg = key.split('\u0000')[1];
+      const where = [...whereSet];
+      const scope = where.length > 2 ? where.length + ' variants' : where.join('; ');
+      critical('LAYER-PAINT', `${comp.selector} [${scope}]: ${msg}`);
+    }
+  }
+}
+
+/** Does `candidate` address the same part as `base`?
+ *  `.atl-tab-group .tablist button` is mentioned by
+ *  `.atl-tab-group.variant-pills .tablist button.is-active`, which a substring test
+ *  misses because the variant class sits between the two parts. Compare the simple
+ *  selectors instead: every part of `base` must appear, in order. */
+function selectorMentions(candidate, base) {
+  const parts = base.split(/\s+/).filter(Boolean);
+  let rest = candidate;
+  for (const part of parts) {
+    const i = rest.indexOf(part);
+    if (i < 0) return false;
+    rest = rest.slice(i + part.length);
+  }
+  return true;
+}
+
+/** The component's own root selector, used to build variant-scoped layer rules. */
+function rootSelectorFor(selector) {
+  const entry = ROOT_PAINT.find((e) => e.label === selector);
+  if (entry) {
+    const first = entry.cascade[0];
+    // `.atl-input input` -> `.atl-input`; `[role='option']` has no root form.
+    const m = /^(\.[a-z0-9-]+)/.exec(first);
+    if (m) return m[1];
+  }
+  return '.' + selector.replace(/^Atl/, 'atl').replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+}
+
+/** The box properties a body states, resolved to px.
+ *
+ *  Declarations are applied in the order they appear, because that is what the
+ *  cascade does: a later `padding` shorthand resets the sides an earlier
+ *  `padding-inline` set. Applying them in a fixed property order instead had
+ *  `.atl-menu-item`'s inline padding beating `.variant-compact`'s shorthand.
+ */
+function boxFromDeclarations(body) {
+  const out = {
+    minHeight: null,
+    height: null,
+    gap: null,
+    fontSize: null,
+    lineHeight: null,
+    padding: { top: null, right: null, bottom: null, left: null },
+  };
+  for (const raw of String(body).split(';')) {
+    const m = /^\s*([a-z-]+)\s*:\s*(.+)$/.exec(raw.replace(/\s+/g, ' '));
+    if (!m) continue;
+    const prop = m[1];
+    const value = m[2].trim();
+    switch (prop) {
+      case 'min-height': out.minHeight = lengthOf(value); break;
+      case 'height': out.height = lengthOf(value); break;
+      case 'gap': out.gap = lengthOf(value); break;
+      case 'font-size': out.fontSize = lengthOf(value); break;
+      case 'line-height':
+        out.lineHeight = /^[\d.]+$/.test(value) ? parseFloat(value) : resolveUnitless(value);
+        break;
+      case 'padding': {
+        const p = splitValues(value).map(lengthOf);
+        if (p.length === 1) out.padding = { top: p[0], right: p[0], bottom: p[0], left: p[0] };
+        else if (p.length === 2) out.padding = { top: p[0], bottom: p[0], right: p[1], left: p[1] };
+        else if (p.length === 3) out.padding = { top: p[0], right: p[1], left: p[1], bottom: p[2] };
+        else if (p.length >= 4) out.padding = { top: p[0], right: p[1], bottom: p[2], left: p[3] };
+        break;
+      }
+      case 'padding-block': {
+        const v = splitValues(value).map(lengthOf);
+        out.padding.top = v[0];
+        out.padding.bottom = v.length > 1 ? v[1] : v[0];
+        break;
+      }
+      case 'padding-inline': {
+        const v = splitValues(value).map(lengthOf);
+        out.padding.left = v[0];
+        out.padding.right = v.length > 1 ? v[1] : v[0];
+        break;
+      }
+      case 'padding-top': out.padding.top = lengthOf(value); break;
+      case 'padding-right': out.padding.right = lengthOf(value); break;
+      case 'padding-bottom': out.padding.bottom = lengthOf(value); break;
+      case 'padding-left': out.padding.left = lengthOf(value); break;
+      default: break;
+    }
+  }
+  return out;
+}
+
+/** Split a CSS value list on whitespace that is not inside parentheses. */
+function splitValues(value) {
+  const parts = [];
+  let depth = 0;
+  let cur = '';
+  for (const ch of String(value)) {
+    if (ch === '(') depth++;
+    if (ch === ')') depth--;
+    if (/\s/.test(ch) && depth === 0) {
+      if (cur) {
+        parts.push(cur);
+        cur = '';
+      }
+      continue;
+    }
+    cur += ch;
+  }
+  if (cur) parts.push(cur);
+  return parts;
+}
+
+/** A single CSS length -> px, or null when it is not a length this can resolve. */
+function lengthOf(expr) {
+  if (expr === null || expr === undefined) return null;
+  const e = String(expr).trim();
+  if (!e) return null;
+  if (e === 'none' || e === '0') return 0;
+  if (/^(auto|inherit|initial|unset)$/.test(e)) return null;
+  if (/%\s*$/.test(e)) return null;
+  return resolveLength(e);
+}
+
+/** tokens.css declaration for a custom property, unresolved. */
+function tokenDeclaration(name) {
+  if (!tokenDeclaration.cache) {
+    tokenDeclaration.cache = new Map();
+    // Comments first: a comment in tokens.css mentions `--ui-row-inset: 0` in prose,
+    // and "first definition wins" then handed the resolver a paragraph instead of a
+    // length. It silently returned null, so every min-height behind a calc() went
+    // unchecked.
+    const css = fs.readFileSync(TOKENS_FILE, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+    for (const m of css.matchAll(/(--ui-[a-z0-9-]+)\s*:\s*([^;]+);/g)) {
+      // First definition wins: the later ones are the dark-mode overrides.
+      if (!tokenDeclaration.cache.has(m[1])) tokenDeclaration.cache.set(m[1], m[2].replace(/\s+/g, ' ').trim());
+    }
+  }
+  return tokenDeclaration.cache.get(name) ?? null;
+}
+
+/** Substitute every var() with its tokens.css declaration. */
+function substituteVars(expr) {
+  let e = String(expr).trim();
+  for (let pass = 0; pass < 10 && /var\(/.test(e); pass++) {
+    e = e.replace(/var\(\s*(--ui-[a-z0-9-]+)\s*(?:,[^()]*)?\)/g, (_, name) => {
+      const d = tokenDeclaration(name);
+      return d === null ? 'NaN' : '(' + d + ')';
+    });
+  }
+  return e;
+}
+
+/** Evaluate an arithmetic CSS expression, only digits and operators surviving. */
+function evalArithmetic(e) {
+  if (!/^[\d\s().+*/-]+$/.test(e)) return null;
+  try {
+    // eslint-disable-next-line no-new-func
+    const n = Function('"use strict";return (' + e + ');')();
+    return typeof n === 'number' && isFinite(n) ? n : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Resolve `calc(var(--ui-control-height-lg) + 2 * var(--ui-row-inset))` to px. */
+function resolveLength(expr) {
+  let e = substituteVars(expr);
+  if (/var\(|NaN/.test(e)) return null;
+  e = e.replace(/calc\(/g, '(');
+  e = e.replace(/([\d.]+)rem\b/g, (_, n) => String(parseFloat(n) * 16));
+  e = e.replace(/([\d.]+)px\b/g, '$1');
+  return evalArithmetic(e);
+}
+
+/** A unitless number behind var()/calc() — line-height's shape. */
+function resolveUnitless(expr) {
+  let e = substituteVars(expr);
+  if (/var\(|NaN/.test(e)) return null;
+  e = e.replace(/calc\(/g, '(');
+  return evalArithmetic(e);
+}
+
+/** The CSS file a component's rules live in. */
+function cssFileFor(selector) {
+  if (!cssFileFor.cache) cssFileFor.cache = new Map();
+  if (cssFileFor.cache.has(selector)) return cssFileFor.cache.get(selector);
+  let out = null;
+  const entry = ROOT_PAINT.find((e) => e.label === selector);
+  if (entry) {
+    const f = path.join(ROOT, 'libs', entry.lib || 'react', 'src/lib', entry.file);
+    if (fs.existsSync(f)) out = f;
+  }
+  if (!out) {
+    const moduleName = registry[`${selector}Spec`];
+    if (moduleName) {
+      const dir = path.join(ROOT, 'libs/react/src/lib', moduleName);
+      if (fs.existsSync(dir)) {
+        const kebab = selector.replace(/^Atl/, 'atl').replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+        const exact = path.join(dir, `${kebab}.css`);
+        if (fs.existsSync(exact)) out = exact;
+        else {
+          const any = fs.readdirSync(dir).filter((f) => f.endsWith('.css'));
+          if (any.length === 1) out = path.join(dir, any[0]);
+        }
+      }
+    }
+  }
+  cssFileFor.cache.set(selector, out);
+  return out;
 }
 
 // ===========================================================================

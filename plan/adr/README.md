@@ -68,6 +68,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0060](0060-bound-is-not-the-same-as-bound-correctly.md) | Bound is not the same as bound correctly (`[ROOT-PAINT]`) | Accepted | Recorded |
 | [0061](0061-what-a-property-turns-on-must-be-checked-while-it-is-off.md) | What a property turns on has to be checked while it is off (`[OVERLAY]`, `[BOOL-UNSPECED]`) | Accepted | Recorded |
 | [0062](0062-a-part-promoted-to-a-master-becomes-checkable.md) | A part promoted to a master becomes checkable (ten child masters) | Accepted | Recorded |
+| [0063](0063-the-layer-name-is-the-selector.md) | The layer name is the selector (`[LAYER-PAINT]`) | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

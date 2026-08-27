@@ -241,6 +241,61 @@ async function main() {
             });
           }
         }
+        // Inner layers, addressed by NAME. The convention is that a layer named for a
+        // CSS class draws that rule, so the name is the selector and no table has to
+        // be maintained. Identical clones (twelve menu items) collapse to one entry
+        // with a count.
+        const layers = [];
+        const seenLayer = new Set();
+        const GENERIC = ['Frame', 'Group', 'Rectangle', 'Ellipse', 'Vector', 'Line', 'Text', 'Union', 'Slice'];
+        for (const v of kids) {
+          for (const n of v.findAll((x) => x.type === 'FRAME' || x.type === 'RECTANGLE' || x.type === 'ELLIPSE' || x.type === 'INSTANCE')) {
+            const nm = String(n.name);
+            if (nm.charAt(0) === '_' || GENERIC.indexOf(nm) >= 0) continue;
+            if (n.type === 'INSTANCE') continue; // icon instances are their own masters
+            const paintVar = async (list) => {
+              const p0 = (list || [])[0];
+              if (!p0 || p0.visible === false) return null;
+              const id = p0.boundVariables && p0.boundVariables.color && p0.boundVariables.color.id;
+              if (!id) return 'RAW';
+              const vr = await figma.variables.getVariableByIdAsync(id);
+              return vr ? vr.name : 'RAW';
+            };
+            const bv = n.boundVariables || {};
+            let radius = null;
+            if (bv.topLeftRadius) {
+              const vr = await figma.variables.getVariableByIdAsync(bv.topLeftRadius.id);
+              radius = vr ? vr.name : 'RAW';
+            } else if (n.cornerRadius !== figma.mixed && n.cornerRadius > 0) radius = 'RAW';
+            const ownText = ('children' in n ? n.children : []).filter((c) => c.type === 'TEXT');
+            const fact = {
+              layer: nm,
+              type: n.type,
+              fill: await paintVar(n.fills),
+              stroke: await paintVar(n.strokes),
+              strokeSides: 'strokeTopWeight' in n ? [n.strokeTopWeight, n.strokeRightWeight, n.strokeBottomWeight, n.strokeLeftWeight] : null,
+              radius,
+              effects: (n.effects || []).filter((e) => e.visible !== false).map((e) => e.type),
+              layoutMode: n.layoutMode || 'NONE',
+              padding: 'paddingTop' in n ? [n.paddingTop, n.paddingRight, n.paddingBottom, n.paddingLeft] : null,
+              gap: 'itemSpacing' in n ? n.itemSpacing : null,
+              minHeight: 'minHeight' in n ? n.minHeight : null,
+              height: Math.round(n.height * 100) / 100,
+              width: Math.round(n.width * 100) / 100,
+              fontSize: ownText.length === 1 && ownText[0].fontSize !== figma.mixed ? ownText[0].fontSize : null,
+              lineHeight: ownText.length === 1 && ownText[0].lineHeight !== figma.mixed && ownText[0].lineHeight.unit === 'PERCENT' ? ownText[0].lineHeight.value : null,
+            };
+            const key = v.name + '|' + JSON.stringify(fact);
+            if (seenLayer.has(key)) {
+              const prev = layers.find((L) => L.variant === v.name && L.key === key);
+              if (prev) prev.count++;
+              continue;
+            }
+            seenLayer.add(key);
+            layers.push(Object.assign({ variant: v.name, key, count: 1 }, fact));
+          }
+        }
+        for (const L of layers) delete L.key;
         const props = {};
         for (const [k, v] of Object.entries(set.componentPropertyDefinitions || {})) props[k] = v.type;
         const seen = new Set();
@@ -250,6 +305,7 @@ async function main() {
           iconInstanceNames: [...iconInstances],
           rootPaint,
           overlays,
+          layers,
           glyphTextNodes: glyphs.filter((g) => { const k = g.layer + '|' + g.chars; if (seen.has(k)) return false; seen.add(k); return true; }),
         };
       }
@@ -315,6 +371,7 @@ async function main() {
         iconInstanceNames: probe.masters?.[nodeId]?.iconInstanceNames ?? [],
         rootPaint: probe.masters?.[nodeId]?.rootPaint ?? {},
         overlays: probe.masters?.[nodeId]?.overlays ?? [],
+        layers: probe.masters?.[nodeId]?.layers ?? [],
         glyphTextNodes: probe.masters?.[nodeId]?.glyphTextNodes ?? [],
         sampledVariant: defaultVariantId,
         nodes: deep ? collectNodeFacts(deep) : [],

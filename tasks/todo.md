@@ -197,18 +197,22 @@ Decision-bearing quick wins (deferred — not this session's scope):
       entries, not just the warning.
 - [x] **AtlTabGroup's `disabled` belongs on AtlTab** (closed 2026-08-27, ADR-0062) —
       AtlTab now exists as a master and carries it.
-- [ ] **`[LAYER-PAINT]`: the inner layers are unchecked and diverge at the same rate.**
-      `[ROOT-PAINT]` (ADR-0060) covers each master's ROOT. Every master it fixed
-      exposed a defect one level down, all measured: AtlMenu's items are 41px tall
-      (12/12 block padding) with 12px inline padding, an 8px inner gap and a
-      `color/info-bg` hover, against `.atl-menu-item`'s 40px row-height, `padding-block: 0`,
-      16px inline, `gap: 12` and `surface-sunken`; the item font is 14px where
-      `.atl-menu` inherits `--ui-font-size-md` (16); the separator has no margins where
-      the CSS has `var(--ui-spacing-2)` above and below; the menu's own block padding is
-      4 not 8; AtlPagination's buttons paint a fill and a border where `.page-btn` sets
-      both `transparent`; the tab list has no bottom rule; the accordion items have no
-      dividers. This needs a per-LAYER table the way `[ROOT-PAINT]` needed a per-master
-      one — the Figma layer name paired with the CSS rule it draws.
+- [x] **`[LAYER-PAINT]`: the inner layers** (closed 2026-08-27, ADR-0063) — built as a
+      CONVENTION rather than a table: a layer named for a CSS class draws that rule, so
+      the layer name is the selector. Found and fixed 33 divergences over AtlMenu,
+      AtlTabGroup, AtlAccordionGroup, AtlPagination and AtlChat, plus six bugs in the
+      gates themselves.
+- [ ] **Compose parents from their child masters.** AtlMenu's separators are instances of
+      AtlMenuSeparator now; its items, the tabs, the steps, the accordion items and the
+      chat bubbles could be instances too. Where a parent instantiates its child, the
+      geometry cannot drift at all — `[LAYER-PAINT]` makes drift detectable, composition
+      makes it impossible. The blocker: an instance cannot gain children, so a part that
+      takes free content (a menu item's icon plus label) needs the master to expose a
+      slot first. Decide slot-per-part, then convert.
+- [ ] **AtlProgress had the convention right before there was one.** Its layers were
+      already named `track` and `fill` while AtlMenu had fourteen called `Frame`. Worth a
+      look at who drew it and whether other conventions in this file were arrived at once
+      and never generalised.
 - [ ] **`color-mix()` cannot be a Figma Variable.** Four components paint with it —
       AtlAvatar's root, AtlBadge's variant borders, AtlToast's variant fills,
       AtlAlert's variant borders — so those paints are unverifiable by construction and
