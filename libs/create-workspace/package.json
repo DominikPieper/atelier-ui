@@ -27,5 +27,10 @@
   },
   "peerDependencies": {
     "@nx/angular": ">=22.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@nx/angular": {
+      "optional": true
+    }
   }
 }

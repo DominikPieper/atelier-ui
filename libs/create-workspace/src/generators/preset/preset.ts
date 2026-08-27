@@ -33,6 +33,20 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
 
     if (framework === 'angular') {
       console.log(`\n◇ Generating Angular workshop app…`);
+      // NX_VERSION is the version of the nx running this generator, which is the
+      // one create-nx-workspace installed into the workspace. Pinning to it is not
+      // tidiness: nx ships core and plugins as one release and they reach across
+      // the package boundary, so a plugin one patch ahead of core throws at load.
+      // `@nx/eslint@23.1.2` calls `combineGlobPatterns` from `@nx/devkit/internal`,
+      // which `@nx/devkit@23.1.1` does not export — measured, and it broke CI the
+      // day 23.1.2 was published.
+      //
+      // This is also why `@nx/angular` is an OPTIONAL peer of this package. npm
+      // auto-installs a required peer, and `>=22.0.0` resolves to whatever is
+      // latest — measured: it installed @nx/angular 23.1.2 into a workspace whose
+      // nx was 23.1.1, dragging @nx/eslint 23.1.2 with it, before this generator
+      // ever ran. Optional peers are not auto-installed, so the first thing that
+      // installs it is the line below, at the version that matches.
       await ensurePackage('@nx/angular', NX_VERSION);
       const { applicationGenerator: angularAppGenerator } = require('@nx/angular/generators');
       await angularAppGenerator(tree, {

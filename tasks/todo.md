@@ -263,6 +263,13 @@ Decision-bearing quick wins (deferred — not this session's scope):
       as a derived Variable — they will land as four resolved numbers and the derivation
       will live only in ADR-0052 and `tokens.css`. Decide at transfer time whether that is
       acceptable or whether the row scale should be authored flat.
+- [ ] **`@nx/devkit` is still a hard dependency of the preset, pinned to the monorepo's
+      nx.** ADR-0053 closed the peer-dependency route by which a plugin outran nx core, but
+      `NX_VERSION` is read from whichever devkit the preset itself carries. If
+      `create-nx-workspace` ever scaffolds on a newer nx than this pin, the skew returns
+      inverted — the generator would install plugins one version *behind* the workspace.
+      It has not bitten because the pin moves with the monorepo, but that is discipline, not
+      a mechanism.
 - [ ] **Only the typeface half of the shorthand trap is gated.** `[RESET-WIPED]` catches a
       `font-family` declared above an `all: unset`; nothing catches a `line-height`
       declared above a `font:` shorthand, which is how the menu row lost its stated leading.

@@ -58,6 +58,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0050](0050-a-glyph-in-a-string-map-is-still-an-icon.md) | A glyph in a string map is still an icon | Accepted | Recorded |
 | [0051](0051-a-reset-undoes-the-contract.md) | A reset undoes the contract (`[RESET-WIPED]`) | Accepted | Recorded |
 | [0052](0052-the-row-is-the-second-ladder.md) | The row is the second ladder, and it centres rather than pads | Accepted | Recorded |
+| [0053](0053-a-peer-npm-installs-for-you.md) | A required peer is a version npm picks for you | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 
