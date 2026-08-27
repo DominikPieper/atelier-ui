@@ -1,3 +1,14 @@
+## 0.2.23 (2026-08-27)
+
+### 🚀 Features
+
+- **fields:** invalid states itself in shape as well as hue, in all four fields ([64277c3](https://github.com/DominikPieper/atelier-ui/commit/64277c3))
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Dominik Pieper @DominikPieper
+
 ## 0.2.22 (2026-08-27)
 
 ### 🚀 Features
