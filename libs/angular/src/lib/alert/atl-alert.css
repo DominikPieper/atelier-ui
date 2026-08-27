@@ -84,7 +84,7 @@
 /* Semantic indicator glyph — non-color differentiation (WCAG 1.4.1). */
 .content .variant-icon {
   display: inline-block;
-  font-weight: 700;
+  font-weight: var(--ui-font-weight-bold);
   margin-right: 0.4em;
   line-height: 1;
 }

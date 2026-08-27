@@ -50,7 +50,7 @@
 .code-block-label {
   font-family: var(--ui-font-mono);
   font-size: var(--ui-font-size-xs);
-  font-weight: 600;
+  font-weight: var(--ui-font-weight-semibold);
   letter-spacing: 0.03em;
   color: var(--ui-color-text-muted);
   text-transform: lowercase;
@@ -64,15 +64,15 @@
 .code-block-copy {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  padding: 0.2rem 0.55rem;
+  gap: var(--ui-spacing-1);
+  padding: var(--ui-spacing-1) var(--ui-spacing-2);
   border: var(--ui-border-width) solid var(--ui-color-border);
   border-radius: var(--ui-radius-sm);
   background: transparent;
   color: var(--ui-color-text-muted);
   font-family: inherit;
   font-size: var(--ui-font-size-xs);
-  font-weight: 500;
+  font-weight: var(--ui-font-weight-medium);
   cursor: pointer;
   transition: color var(--ui-transition-fast), background var(--ui-transition-fast), border-color var(--ui-transition-fast);
   white-space: nowrap;

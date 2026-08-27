@@ -76,6 +76,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0068](0068-a-parent-can-only-instantiate-what-the-child-can-express.md) | A parent can only instantiate what the child can express (`[STALE-EXEMPTION]`) | Accepted | Recorded |
 | [0069](0069-the-illustration-beside-the-master.md) | The illustration beside the master (`[PAGE-GLYPH]`) | Accepted | Recorded |
 | [0070](0070-the-catalogue-is-generated.md) | The catalogue is generated (`figma:sync-inventory`) | Accepted | Recorded |
+| [0071](0071-the-literals-the-scale-already-named.md) | The literals the scale already named (`font-weight` in the bypass gate) | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

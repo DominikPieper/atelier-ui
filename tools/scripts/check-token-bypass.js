@@ -21,6 +21,7 @@
  * Family per property, so the gate never suggests a spacing token for a width:
  *   z-index → --ui-z-*      opacity → --ui-opacity-*     font-size → --ui-font-size-*
  *   line-height → --ui-line-height-*                     letter-spacing → --ui-letter-spacing-*
+ *   font-weight → --ui-font-weight-*
  *   border-radius → --ui-radius-*                        box-shadow → --ui-shadow-*
  *   padding/margin/gap → --ui-spacing-*                  min-height/height → --ui-control-height-*
  *   border widths → --ui-border-width*
@@ -49,6 +50,13 @@ const FAMILY = {
   'z-index': /^--ui-z-/,
   opacity: /^--ui-opacity-/,
   'letter-spacing': /^--ui-letter-spacing-/,
+  // font-weight was missing, and six literals were sitting in it: `600` in
+  // AtlDrawer, AtlCodeBlock and AtlDialog, `500` in AtlCodeBlock, `700` in AtlAlert
+  // and AtlBadge — each duplicating --ui-font-weight-semibold / -medium / -bold
+  // exactly. A weight is the clearest case this gate exists for: there are four of
+  // them, every one is named, and a bare number carries none of the naming
+  // (ADR-0071).
+  'font-weight': /^--ui-font-weight-/,
   'font-size': /^--ui-font-size-/,
   'line-height': /^--ui-line-height-/,
   'border-radius': /^--ui-radius-/,

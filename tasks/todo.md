@@ -295,12 +295,39 @@ Decision-bearing quick wins (deferred — not this session's scope):
       from `tokens.css`. A designer picking from the wrong family binds to a collection
       the CSS does not feed. Decide whether `Primitive Tokens` (76 variables — radii and
       sizes too) is still needed; check what binds to it before removing anything.
-- [ ] **The off-scale pass covered type, not weight or spacing.** `atl-code-block.css`
-      still holds raw literals the sweep did not look for: `font-weight: 500` and `600`
-      (should be `--ui-font-weight-medium` / `-semibold`), and `gap: 0.3rem`,
-      `padding: 0.2rem 0.55rem`, `min-width: 2rem` off the spacing scale. Sweep both
-      classes library-wide the way the type values were swept, then gate them —
-      `check:token-bypass` sees colours and radii, not weights.
+- [x] **The off-scale pass covered type, not weight or spacing** (closed 2026-08-27,
+      ADR-0071) — `font-weight` was simply missing from `check:token-bypass`'s family map,
+      and adding it found 6 literals × 3 frameworks, all bound now. The spacing census
+      found 9 distinct off-scale values, and reading each one settled what it was rather
+      than assuming: two are the canonical `sr-only` recipe's paired `-1px`, three are a
+      composed dimension (`2.25rem`), two were genuinely off-scale on a control and are
+      now bound, one was a magic number hiding a derivation, and two remain recorded
+      below.
+- [ ] **`2.25rem` appears three times for two different reasons.** It is the invalid
+      field's `padding-right` in AtlInput and AtlTextarea (room for the icon) and the page
+      button's `min-width`/`height` in AtlPagination. Neither is on the spacing scale, and
+      `check:token-bypass` permits a one-off dimension by design — but three uses is the
+      rule-of-three signal, and the two reasons want different names. Decide: a token for
+      the field's icon gutter, a token for the compact control size, or leave both as
+      dimensions and say so.
+- [ ] **`margin-top: 2px` on `.step-description` and `.step-optional`.** Off-scale
+      micro-spacing, two uses, half of `--ui-spacing-1`. Either the scale gains a `0.5`
+      step (which invites 2px everywhere) or these become 4px (which changes the design).
+      The Figma master draws 2 and carries an allowlist entry for it (ADR-0062), so the
+      two sides agree — on a value neither can name.
+- [ ] **`_sheet.css` in Claude Design has drifted from tokens.css: 7 of 40 values.**
+      Measured 2026-08-27. `--success` #0a5c38 vs #15803d, `--warning` #a1660a vs #b45309,
+      `--info` #1d4ed8 vs #0369a1 — **the three status colours the ramps changed**
+      (ADR-0054), so all 31 artboards still paint the pre-ramp palette. Plus
+      `--border-hover` #475569 vs #cbd5e1 (dark slate against light grey, a semantic
+      difference older than today), `--primary-light` alpha 0.1 vs 0.08, and the second
+      layer of `--shadow-md` (0.06 vs 0.05) and `--shadow-lg` (0.05 vs 0.04).
+      The fix is NOT the gate the reopened ADR-0032 item proposes: an artboard renders
+      standalone, so it MUST carry literals, and gating raw hex fights the medium. The fix
+      is `check:tokens`' own answer for the three framework copies — **generate the
+      palette from tokens.css and push it**, exactly as `gen-foundations-sheet.mjs`
+      already generates the Foundations artboard. Then supersede ADR-0032 alternative 4
+      with what the measurement showed.
 - [ ] **The parity gate cannot see the shared token layer.** A component's `inputsHash`
       covers `libs/{angular,react,vue}/src/lib/<module>/` only, so `styles/tokens.css` is
       outside it — ADR-0035 changed the UI typeface for all 29 components and triggered no

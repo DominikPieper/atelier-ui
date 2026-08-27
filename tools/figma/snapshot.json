@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-27T17:03:45.968Z",
-    "gitSha": "cf28173",
+    "generatedAt": "2026-08-27T18:01:37.161Z",
+    "gitSha": "3c15080",
     "serverVersion": null,
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -14247,7 +14247,7 @@
         {
           "variant": "variant=default",
           "count": 1,
-          "layer": "copy-btn",
+          "layer": "code-block-copy",
           "type": "FRAME",
           "fill": null,
           "stroke": "color/border",
@@ -14566,7 +14566,7 @@
         {
           "variant": "variant=with-filename",
           "count": 1,
-          "layer": "copy-btn",
+          "layer": "code-block-copy",
           "type": "FRAME",
           "fill": null,
           "stroke": "color/border",
@@ -14885,7 +14885,7 @@
         {
           "variant": "variant=with-line-numbers",
           "count": 1,
-          "layer": "copy-btn",
+          "layer": "code-block-copy",
           "type": "FRAME",
           "fill": null,
           "stroke": "color/border",
@@ -15489,7 +15489,7 @@
           "nonSemanticTokens": []
         },
         {
-          "name": "copy-btn",
+          "name": "code-block-copy",
           "type": "FRAME",
           "hasChildren": true,
           "hidden": false,
@@ -21119,7 +21119,7 @@
           "nonSemanticTokens": []
         },
         {
-          "name": "copy-btn",
+          "name": "code-block-copy",
           "type": "FRAME",
           "hasChildren": true,
           "hidden": false,

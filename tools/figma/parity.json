@@ -2,7 +2,7 @@
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "note": "Per-component design-parity records. Written by `npm run parity:record` after a human/agent runs figma_check_design_parity; read by `npm run check:parity`. Each record's inputsHash covers libs/{angular,react,vue}/src/lib/<module>/ so a spec/story/impl/css change since the last verify makes the gate ask for a re-verify. The parity SCORE is deliberately not stored: it is not comparable across runs (it tracks how much of codeSpec was declared and which node was sampled, not the component) — three runs on one commit for AtlStepper returned 70, 52 and 83. See plan/adr/0024 and its 2026-08-26 amendment.",
-    "generatedAt": "2026-08-27T14:43:31.882Z"
+    "generatedAt": "2026-08-27T18:02:06.928Z"
   },
   "components": {
     "AtlAccordionGroup": {
@@ -53,9 +53,9 @@
     },
     "AtlAlert": {
       "figmaNodeId": "55:31",
-      "verifiedAt": "2026-08-27T14:02:07.002Z",
-      "verifiedSha": "51d2d9d",
-      "inputsHash": "sha256:9d9035688948919fe1957db25f2ffabcaab6d19f5ff2f8f6b6c90cd6b82bb638",
+      "verifiedAt": "2026-08-27T18:02:03.623Z",
+      "verifiedSha": "3c15080",
+      "inputsHash": "sha256:ddc74c5c45cd8a4fa649169f3a644fb97c423df44f2da48180bbb63a3c4d6170",
       "inputs": [
         "libs/angular/src/lib/alert/atl-alert.a11y.spec.ts",
         "libs/angular/src/lib/alert/atl-alert.css",
@@ -126,9 +126,9 @@
     },
     "AtlBadge": {
       "figmaNodeId": "55:22",
-      "verifiedAt": "2026-08-27T14:01:59.599Z",
-      "verifiedSha": "51d2d9d",
-      "inputsHash": "sha256:d194215439a598def1222c817e7eda78723eaa7f4d2800727f422fb081c5fc49",
+      "verifiedAt": "2026-08-27T18:02:01.488Z",
+      "verifiedSha": "3c15080",
+      "inputsHash": "sha256:1a02cedfec48ed5d7a07c7ab0fe084d68ab60178ebc7807f74cdbb336e3a92d7",
       "inputs": [
         "libs/angular/src/lib/badge/atl-badge.a11y.spec.ts",
         "libs/angular/src/lib/badge/atl-badge.css",
@@ -321,9 +321,9 @@
     },
     "AtlDialog": {
       "figmaNodeId": "55:94",
-      "verifiedAt": "2026-08-27T14:02:01.732Z",
-      "verifiedSha": "51d2d9d",
-      "inputsHash": "sha256:a9bc923217ff6f3945b90e91c85212cbbf8c710dfd382220c86dde26f6552c55",
+      "verifiedAt": "2026-08-27T18:02:02.574Z",
+      "verifiedSha": "3c15080",
+      "inputsHash": "sha256:81927ec83fd999945362061aa4068dcc6bc83cb4cee79f00e0695562613c9981",
       "inputs": [
         "libs/angular/src/lib/dialog/atl-dialog.a11y.spec.ts",
         "libs/angular/src/lib/dialog/atl-dialog.css",
@@ -348,9 +348,9 @@
     },
     "AtlDrawer": {
       "figmaNodeId": "421:398",
-      "verifiedAt": "2026-08-27T14:02:18.352Z",
-      "verifiedSha": "51d2d9d",
-      "inputsHash": "sha256:6c40f0ee4cb445d3e4ad61379ccab4d4ebe32bc3e3452f5f8e6281e397b11a7b",
+      "verifiedAt": "2026-08-27T18:02:04.736Z",
+      "verifiedSha": "3c15080",
+      "inputsHash": "sha256:211b9269b22c04f0d6e03509832dbf3c7825394f4a057d6f56953e4b8b029832",
       "inputs": [
         "libs/angular/src/lib/drawer/atl-drawer.a11y.spec.ts",
         "libs/angular/src/lib/drawer/atl-drawer.css",
@@ -607,9 +607,9 @@
     },
     "AtlStep": {
       "figmaNodeId": "911:1151",
-      "verifiedAt": "2026-08-27T14:02:27.573Z",
-      "verifiedSha": "51d2d9d",
-      "inputsHash": "sha256:423ab338a7b3d0143b465ff7954111eb69e17d637b0b0184e3ba62f1598eb58b",
+      "verifiedAt": "2026-08-27T18:02:06.876Z",
+      "verifiedSha": "3c15080",
+      "inputsHash": "sha256:12b6479db6bf3c93ef52d705ae989d4069373af29603a9135a365cccd50097b6",
       "inputs": [
         "libs/angular/src/lib/stepper/atl-stepper.a11y.spec.ts",
         "libs/angular/src/lib/stepper/atl-stepper.css",
@@ -632,9 +632,9 @@
     },
     "AtlStepper": {
       "figmaNodeId": "421:505",
-      "verifiedAt": "2026-08-27T14:02:21.480Z",
-      "verifiedSha": "51d2d9d",
-      "inputsHash": "sha256:423ab338a7b3d0143b465ff7954111eb69e17d637b0b0184e3ba62f1598eb58b",
+      "verifiedAt": "2026-08-27T18:02:05.785Z",
+      "verifiedSha": "3c15080",
+      "inputsHash": "sha256:12b6479db6bf3c93ef52d705ae989d4069373af29603a9135a365cccd50097b6",
       "inputs": [
         "libs/angular/src/lib/stepper/atl-stepper.a11y.spec.ts",
         "libs/angular/src/lib/stepper/atl-stepper.css",

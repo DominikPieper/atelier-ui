@@ -208,7 +208,7 @@
   padding: var(--ui-spacing-5) var(--ui-spacing-6);
   border-bottom: var(--ui-border-width) solid var(--ui-color-border);
   font-size: var(--ui-font-size-xl);
-  font-weight: 600;
+  font-weight: var(--ui-font-weight-semibold);
   letter-spacing: var(--ui-letter-spacing-tight);
   color: var(--ui-color-text);
   flex-shrink: 0;
