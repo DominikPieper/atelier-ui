@@ -46,7 +46,8 @@
     "gen:behaviors": "node tools/scripts/gen-behaviors.mjs",
     "sync:generated": "node tools/scripts/sync-spec.mjs && node tools/scripts/gen-behaviors.mjs && node tools/scripts/gen-llms-txt.mjs && node tools/scripts/sync-skill-discovery.mjs figma-workspace-architect",
     "preflight": "node tools/scripts/preflight.mjs",
-    "check:adr-refs": "node tools/scripts/check-adr-refs.js"
+    "check:adr-refs": "node tools/scripts/check-adr-refs.js",
+    "figma:sync-inventory": "node tools/scripts/figma-sync-inventory.mjs"
   },
   "private": true,
   "workspaces": [

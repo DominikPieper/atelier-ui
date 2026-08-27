@@ -181,11 +181,14 @@ Decision-bearing quick wins (deferred — not this session's scope):
       future child inherits a matrix that is not about it. The fix is a field on the type
       (`variantMatrixFor`, or per-spec sections), which reaches `check-metadata` and
       `gen-llms-txt` — worth doing when a second collision appears, not for one entry.
-- [ ] **Generate the Inventory cards from the snapshot.** Their meta and property text is
-      hand-written and drifts: AtlBreadcrumbs' card still read `COMPONENT_SET · 209×17px`
-      with an `items` VARIANT row months after ADR-0056 removed that axis and collapsed
-      the set to a plain COMPONENT. The ten cards added in ADR-0062 were generated from
-      the master; the other 29 need the same, and then a gate can compare card to master.
+- [x] **Generate the Inventory cards** (closed 2026-08-27, ADR-0070) —
+      `npm run figma:sync-inventory` rewrites every card's name, preview instance, meta
+      line and property rows from the master. First run: 37 of 43 updated, including
+      AtlBreadcrumbs' `COMPONENT_SET · 209×17px` → `COMPONENT · 323×26px`. The blurb and
+      the status chip stay hand-written on purpose. Idempotency verified by recomputing
+      all 43 cards' expected facts: 0 would change. Not a gate — comparing card to master
+      in `check:all` would need the card facts in the snapshot, and a card is
+      documentation rather than the transfer target.
 - [ ] **The breadcrumb separator is a glyph in CSS `content`.**
       `.atl-breadcrumb-item::after { content: var(--atl-separator, '›') }` — a pictogram
       as a character, which ADR-0050's rule sends to the icon set, but a CSS
