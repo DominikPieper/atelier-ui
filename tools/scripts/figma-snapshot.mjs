@@ -142,6 +142,43 @@ async function main() {
             }
           }
         }
+        // Which VARIABLE a paint is bound to, not merely whether it is bound. The
+        // token gate could only see bound-or-raw, so three of AtlMenu's root facts
+        // pointed at the wrong variable (radius/sm for --ui-radius-lg,
+        // color/surface for surface-raised, info-bg for surface-sunken) and passed
+        // (ADR-0060). Keyed by variant name so the check can resolve the CSS
+        // cascade for the exact variant it samples.
+        const rootPaint = {};
+        for (const v of kids) {
+          const bv = v.boundVariables || {};
+          const paintVar = async (list) => {
+            const p0 = (list || [])[0];
+            if (!p0) return null;
+            const id = p0.boundVariables && p0.boundVariables.color && p0.boundVariables.color.id;
+            if (!id) return 'RAW';
+            const vr = await figma.variables.getVariableByIdAsync(id);
+            return vr ? vr.name : 'RAW';
+          };
+          let radius = null;
+          if (bv.topLeftRadius) {
+            const vr = await figma.variables.getVariableByIdAsync(bv.topLeftRadius.id);
+            radius = vr ? vr.name : 'RAW';
+          } else if (v.cornerRadius !== figma.mixed && v.cornerRadius > 0) {
+            radius = 'RAW';
+          }
+          rootPaint[v.name] = {
+            fill: await paintVar(v.fills),
+            stroke: await paintVar(v.strokes),
+            strokeWeight: v.strokeWeight === figma.mixed ? 'mixed' : v.strokeWeight,
+            // Per side, because three components paint one edge rather than a box:
+            // AtlToast's 4px left accent, the tab list's bottom rule, the accordion
+            // group's top rule. A four-side reading called the accent "no stroke".
+            strokeSides: [v.strokeTopWeight, v.strokeRightWeight, v.strokeBottomWeight, v.strokeLeftWeight],
+            radius,
+            radiusPx: v.cornerRadius === figma.mixed ? 'mixed' : v.cornerRadius,
+            effects: (v.effects || []).filter((e) => e.visible !== false).map((e) => e.type),
+          };
+        }
         const props = {};
         for (const [k, v] of Object.entries(set.componentPropertyDefinitions || {})) props[k] = v.type;
         const seen = new Set();
@@ -149,6 +186,7 @@ async function main() {
           properties: props,
           referencedProperties: [...referenced],
           iconInstanceNames: [...iconInstances],
+          rootPaint,
           glyphTextNodes: glyphs.filter((g) => { const k = g.layer + '|' + g.chars; if (seen.has(k)) return false; seen.add(k); return true; }),
         };
       }
@@ -212,6 +250,7 @@ async function main() {
         properties: probe.masters?.[nodeId]?.properties ?? {},
         referencedProperties: probe.masters?.[nodeId]?.referencedProperties ?? [],
         iconInstanceNames: probe.masters?.[nodeId]?.iconInstanceNames ?? [],
+        rootPaint: probe.masters?.[nodeId]?.rootPaint ?? {},
         glyphTextNodes: probe.masters?.[nodeId]?.glyphTextNodes ?? [],
         sampledVariant: defaultVariantId,
         nodes: deep ? collectNodeFacts(deep) : [],

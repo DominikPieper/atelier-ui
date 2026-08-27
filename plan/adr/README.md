@@ -65,6 +65,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0057](0057-the-icon-set-was-text-in-figma-too.md) | The icon set was text in Figma too | Accepted | Recorded |
 | [0058](0058-the-master-facts-nothing-was-reading.md) | The master facts nothing was reading (`[BOOL-INERT]`, `[MASTER-GLYPH]`) | Accepted | Recorded |
 | [0059](0059-the-file-was-in-the-wrong-typeface.md) | The file was in the wrong typeface (`[FONT-FAMILY]`, `[TEXT-STYLE]`) | Accepted | Recorded |
+| [0060](0060-bound-is-not-the-same-as-bound-correctly.md) | Bound is not the same as bound correctly (`[ROOT-PAINT]`) | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

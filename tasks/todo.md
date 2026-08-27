@@ -170,6 +170,37 @@ Decision-bearing quick wins (deferred — not this session's scope):
       1621 text nodes swept onto the declared families, the 19 styles replaced by 8
       `ty/<role>` styles generated from `--ui-type-*`, and `[FONT-FAMILY]` +
       `[TEXT-STYLE]` added to `check:figma` so it cannot drift back.
+- [ ] **`[LAYER-PAINT]`: the inner layers are unchecked and diverge at the same rate.**
+      `[ROOT-PAINT]` (ADR-0060) covers each master's ROOT. Every master it fixed
+      exposed a defect one level down, all measured: AtlMenu's items are 41px tall
+      (12/12 block padding) with 12px inline padding, an 8px inner gap and a
+      `color/info-bg` hover, against `.atl-menu-item`'s 40px row-height, `padding-block: 0`,
+      16px inline, `gap: 12` and `surface-sunken`; the item font is 14px where
+      `.atl-menu` inherits `--ui-font-size-md` (16); the separator has no margins where
+      the CSS has `var(--ui-spacing-2)` above and below; the menu's own block padding is
+      4 not 8; AtlPagination's buttons paint a fill and a border where `.page-btn` sets
+      both `transparent`; the tab list has no bottom rule; the accordion items have no
+      dividers. This needs a per-LAYER table the way `[ROOT-PAINT]` needed a per-master
+      one — the Figma layer name paired with the CSS rule it draws.
+- [ ] **`color-mix()` cannot be a Figma Variable.** Four components paint with it —
+      AtlAvatar's root, AtlBadge's variant borders, AtlToast's variant fills,
+      AtlAlert's variant borders — so those paints are unverifiable by construction and
+      `[ROOT-PAINT]` skips them. Decide: add resolved semantic tokens for the mixes
+      (then Figma can bind them and the gate can check them), or accept them as
+      code-only and record the exemption per node.
+- [ ] **"Effects Tokens" holds eleven STRING variables that cannot paint.** `e/0…e/5`
+      and `tonal/1…5` are CSS shadow strings from an older docs pass. Now that
+      `shadow/xs…xl` exist as generated effect styles (ADR-0060) they are also
+      duplicates. Check what references them, then remove the collection.
+- [ ] **Nothing gates a COMPONENT_SET against its own variants.** 14 of 27 sets were
+      smaller than their children and clipped them — AtlDialog was 360×170 around
+      800×1111, so most of its size variants were invisible on the Components page
+      (ADR-0060). Fixed by hand; the check is two lines against the snapshot (set size
+      versus the children's extent) and would have caught it the day it happened.
+- [ ] **`[MASTER-GLYPH]` walks masters, so a content sample is invisible to it.** The
+      four ADR-0056 content samples still carried `‹ Prev` / `Next ›` as text months
+      after the same glyphs left the master. Widen the probe to every frame on the
+      Components page, not only COMPONENT/COMPONENT_SET nodes.
 - [ ] **Nothing detects an orphaned main component.** Figma keeps a removed
       `COMPONENT` alive while an instance still references it, and `findAll` cannot
       reach it — so it is invisible to every tree walk, including the snapshot probe.

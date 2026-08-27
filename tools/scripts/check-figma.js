@@ -336,6 +336,40 @@ for (const comp of snapshot.components) {
 }
 
 // ---------------------------------------------------------------------------
+// Which CSS rule's paint each master's ROOT carries, and the cascade that
+// resolves it for the variant the snapshot samples. `{axis}` is substituted from
+// the sampled variant name, so AtlButton's fill resolves through
+// `.atl-button.variant-primary` when `variant=primary` is what was measured.
+//
+// Only masters whose Figma ROOT and CSS root paint the same box are listed. For
+// AtlCombobox, AtlCheckbox, AtlRadio(Group), AtlToggle, AtlProgress, AtlTable,
+// AtlBreadcrumbs, AtlPagination, AtlStepper, AtlAvatarGroup and AtlChat the paint
+// sits on an inner box (the field, the track, a cell, a link, a page button, or —
+// for Chat — an illustrative app mockup) while the Figma root is a transparent
+// container. Checking those needs a per-LAYER map, which is recorded as open in
+// tasks/todo.md rather than guessed at here.
+// ---------------------------------------------------------------------------
+const ROOT_PAINT = [
+  { label: 'AtlButton', file: 'button/atl-button.css', cascade: ['.atl-button', '.atl-button.variant-{variant}'] },
+  { label: 'AtlInput', file: 'input/atl-input.css', cascade: ['.atl-input input'] },
+  { label: 'AtlTextarea', file: 'textarea/atl-textarea.css', cascade: ['.atl-textarea textarea'] },
+  { label: 'AtlSelect', file: 'select/atl-select.css', cascade: ['.atl-select select'] },
+  { label: 'AtlBadge', file: 'badge/atl-badge.css', cascade: ['.atl-badge', '.atl-badge.variant-{variant}'] },
+  { label: 'AtlAvatar', file: 'avatar/atl-avatar.css', cascade: ['.atl-avatar', '.atl-avatar.shape-{shape}'] },
+  { label: 'AtlCard', file: 'card/atl-card.css', cascade: ['.atl-card', '.atl-card.variant-{variant}'] },
+  { label: 'AtlSkeleton', file: 'skeleton/atl-skeleton.css', cascade: ['.atl-skeleton', '.atl-skeleton.variant-{variant}'] },
+  { label: 'AtlCodeBlock', file: 'code-block/atl-code-block.css', cascade: ['.atl-code-block'] },
+  { label: 'AtlMenu', file: 'menu/atl-menu.css', cascade: ['.atl-menu'] },
+  { label: 'AtlTabGroup', file: 'tabs/atl-tabs.css', cascade: ['.atl-tab-group', '.atl-tab-group.variant-{variant}'] },
+  { label: 'AtlTooltip', file: 'tooltip/atl-tooltip.css', cascade: ['.atl-tooltip'] },
+  { label: 'AtlDialog', file: 'dialog/atl-dialog.css', cascade: ['.atl-dialog'] },
+  { label: 'AtlDrawer', file: 'drawer/atl-drawer.css', cascade: ['.atl-drawer-host dialog'] },
+  { label: 'AtlToast', file: 'toast/atl-toast.css', cascade: ['.atl-toast', '.atl-toast.variant-{variant}'] },
+  { label: 'AtlAlert', file: 'alert/atl-alert.css', cascade: ['.atl-alert', '.atl-alert.variant-{variant}'] },
+  { label: 'AtlAccordionGroup', file: 'accordion/atl-accordion.css', cascade: ['.atl-accordion-group', '.atl-accordion-group.variant-{variant}'] },
+];
+
+// ---------------------------------------------------------------------------
 // File-level typography. Not per-component: a typeface is a property of the
 // whole file, and the two defects it hides are file-shaped. The masters were
 // drawn in Inter while --ui-font-family had said Instrument Sans since ADR-0035,
@@ -343,6 +377,7 @@ for (const comp of snapshot.components) {
 // had — each style used exactly once, by its own specimen row (ADR-0059).
 // ---------------------------------------------------------------------------
 checkTypography();
+checkRootPaint();
 
 // ---------------------------------------------------------------------------
 // Report — prioritized (Blocker → Critical → Warning), styled like the other
@@ -620,6 +655,206 @@ function parseTypeTokens() {
     };
   }
   return { families, roles };
+}
+
+/** 7. Root paint identity — WHICH variable a master's root binds, not merely
+ *  whether it binds one.
+ *
+ *  `[TOKEN]` answers "is this bound?". Three of AtlMenu's root facts were bound
+ *  and wrong — `radius/sm` for `--ui-radius-lg`, `color/surface` for
+ *  `surface-raised`, `color/info-bg` for `surface-sunken` — and it passed. This
+ *  check compares the bound variable's NAME to the token the CSS names, in both
+ *  directions: a master must not paint what the CSS does not, either. Not one
+ *  master carried an effect while eight CSS roots ask for a shadow, so shadow
+ *  presence is checked too.
+ */
+function checkRootPaint() {
+  const bySelector = new Map(snapshot.components.map((c) => [c.selector, c]));
+  for (const entry of ROOT_PAINT) {
+    const comp = bySelector.get(entry.label);
+    if (!comp) {
+      warning('ROOT-PAINT', `${entry.label}: listed in ROOT_PAINT but absent from the snapshot.`);
+      continue;
+    }
+    const variants = Object.keys(comp.rootPaint || {});
+    if (!variants.length) {
+      warning(
+        'ROOT-PAINT',
+        `${entry.label}: snapshot carries no root paint facts. Re-run npm run figma:snapshot.`
+      );
+      continue;
+    }
+    // Every variant, not only the sampled one. AtlCard's fill comes from the base
+    // rule but `.variant-flat` overrides it, so a per-master verdict would be
+    // wrong for one variant in three.
+    const grouped = new Map(); // message -> variants
+    const note = (prop, msg, variant) => {
+      if (allowed(entry.label, 'root-paint', prop)) return;
+      const key = `${prop}\u0000${msg}`;
+      if (!grouped.has(key)) grouped.set(key, []);
+      grouped.get(key).push(variant);
+    };
+    // A `state` axis other than `default` is painted by rules a static selector
+    // table cannot resolve — `:hover`, `:focus-visible`, `:active`, `.is-invalid`,
+    // `.is-open` — and comparing those variants against the base rule reported the
+    // master as wrong where it was right (AtlButton's hover fill IS
+    // `color/primary-hover`). Those variants are skipped, loudly.
+    const skipped = variants.filter((v) => {
+      const st = parseAxisName(v).state;
+      return st !== undefined && st !== 'default';
+    });
+    const checkable = variants.filter((v) => !skipped.includes(v));
+    if (skipped.length) {
+      warning(
+        'ROOT-PAINT',
+        `${entry.label}: ${skipped.length} of ${variants.length} variant(s) not checked — their paint comes from a pseudo-class or state class (${[...new Set(skipped.map((v) => parseAxisName(v).state))].join(', ')}), which this table cannot resolve.`
+      );
+    }
+    for (const variant of checkable) {
+      const got = comp.rootPaint[variant];
+      const want = resolveRootPaint(entry, parseAxisName(variant));
+      if (!want) break; // resolveRootPaint has already reported why.
+      for (const prop of ['fill', 'stroke', 'radius']) {
+        const w = want[prop];
+        const g = got[prop];
+        if (w === undefined) continue; // not expressible as one token — skipped
+        if (w === null && g === null) continue;
+        if (prop === 'stroke' && w === null && want.strokeSides && Object.values(want.strokeSides).some((x) => x > 0)) continue;
+        if (w === null) {
+          note(prop, `root ${prop} is ${g}, but ${want.from[prop] || 'the CSS root'} paints no ${prop}. Remove it, or state why the master needs it.`, variant);
+        } else if (g === null) {
+          note(prop, `root ${prop} is unset; ${want.from[prop]} says ${w}. Bind it.`, variant);
+        } else if (g === 'RAW') {
+          note(prop, `root ${prop} is a raw value; ${want.from[prop]} says ${w}. Bind the variable, not the resolved number.`, variant);
+        } else if (g !== w) {
+          note(prop, `root ${prop} is bound to ${g}, but ${want.from[prop]} says ${w}. Bound is not the same as bound correctly.`, variant);
+        }
+      }
+      if (want.strokeSides && got.strokeSides) {
+        const g = { top: got.strokeSides[0], right: got.strokeSides[1], bottom: got.strokeSides[2], left: got.strokeSides[3] };
+        const off = ['top', 'right', 'bottom', 'left'].filter((sd) => (want.strokeSides[sd] || 0) !== (g[sd] || 0));
+        if (off.length) {
+          note('strokeWeight', `root stroke is ${off.map((sd) => `${sd} ${g[sd] || 0}px`).join(', ')}, but ${want.from.stroke} says ${off.map((sd) => `${sd} ${want.strokeSides[sd] || 0}px`).join(', ')}.`, variant);
+        }
+      } else if (want.strokeWeight != null && got.stroke != null && got.strokeWeight !== want.strokeWeight) {
+        note('strokeWeight', `root stroke is ${got.strokeWeight}px, but ${want.from.stroke} says ${want.strokeWeight}px.`, variant);
+      }
+      if (want.shadow !== undefined) {
+        const hasFx = (got.effects || []).length > 0;
+        if (want.shadow && !hasFx) {
+          note('shadow', `root has no effect; ${want.from.shadow} sets box-shadow ${want.shadow}. Bind the shadow/${want.shadow} effect style.`, variant);
+        } else if (!want.shadow && hasFx) {
+          note('shadow', `root carries ${got.effects.join(', ')}, but ${want.from.shadow} sets no box-shadow.`, variant);
+        }
+      }
+    }
+    for (const [key, vs] of grouped) {
+      const msg = key.split('\u0000')[1];
+      const scope = vs.length === checkable.length ? 'every checked variant' : vs.length > 3 ? `${vs.length} variants (${vs.slice(0, 2).join('; ')}; …)` : vs.join('; ');
+      critical('ROOT-PAINT', `${entry.label} [${scope}]: ${msg}`);
+    }
+  }
+}
+
+/** "variant=primary, size=sm, state=default" -> { variant:'primary', size:'sm', ... } */
+function parseAxisName(name) {
+  const out = {};
+  for (const part of String(name).split(',')) {
+    const [k, v] = part.split('=').map((x) => (x || '').trim());
+    if (k && v) out[k] = v;
+  }
+  return out;
+}
+
+/** Resolve a ROOT_PAINT entry's cascade against the CSS, for one variant. */
+function resolveRootPaint(entry, axes) {
+  const file = path.join(ROOT, 'libs/react/src/lib', entry.file);
+  if (!fs.existsSync(file)) {
+    warning('ROOT-PAINT', `${entry.label}: ${entry.file} not found; cannot resolve the expected paint.`);
+    return null;
+  }
+  const css = fs.readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+  const want = { from: {} };
+  for (const template of entry.cascade) {
+    const selector = template.replace(/\{(\w+)\}/g, (_, axis) => axes[axis] ?? '\u0000');
+    if (selector.includes('\u0000')) continue; // the sampled variant has no such axis
+    const rule = new RegExp(
+      '(?:^|\\})\\s*' + selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*\\{([^{}]*)\\}'
+    ).exec(css);
+    if (!rule) continue;
+    const body = rule[1];
+    const decl = (prop) => {
+      const m = new RegExp('(?:^|;)\\s*' + prop + '\\s*:\\s*([^;]+)').exec(body);
+      return m ? m[1].replace(/\s+/g, ' ').trim() : null;
+    };
+    const set = (prop, raw, expr) => {
+      if (raw === null) return;
+      want[prop] = expr;
+      want.from[prop] = selector;
+    };
+    const bg = decl('background') || decl('background-color');
+    if (bg !== null) set('fill', bg, cssToVariable(bg, 'color'));
+    // Borders, four-side and per-side. `border-left: 4px solid transparent` plus a
+    // per-variant `border-left-color` is one edge, not a box — reading only the
+    // shorthand reported AtlToast's accent as an invented stroke.
+    const SIDES = ['top', 'right', 'bottom', 'left'];
+    const weightOf = (v) => (/border-width-thick/.test(v) ? 2 : /border-width\)/.test(v) ? 1 : parseFloat(v) || null);
+    const border = decl('border');
+    if (border !== null) {
+      const parts = border.split(' ');
+      set('stroke', border, /transparent|none/.test(border) ? undefined : cssToVariable(parts[parts.length - 1], 'color'));
+      const w = /^(0|none)$/.test(border) ? 0 : weightOf(border);
+      want.strokeWeight = w;
+      want.strokeSides = { top: w, right: w, bottom: w, left: w };
+    }
+    for (const side of SIDES) {
+      const d = decl('border-' + side);
+      if (d === null) continue;
+      const parts = d.split(' ');
+      want.strokeSides = want.strokeSides || { top: 0, right: 0, bottom: 0, left: 0 };
+      want.strokeSides[side] = /^(0|none)$/.test(d) ? 0 : weightOf(d);
+      const c = /transparent|none/.test(d) ? undefined : cssToVariable(parts[parts.length - 1], 'color');
+      if (c !== undefined) set('stroke', d, c);
+      else if (!('stroke' in want)) { want.stroke = undefined; want.from.stroke = selector; }
+    }
+    const borderColor = decl('border-color');
+    if (borderColor !== null) set('stroke', borderColor, cssToVariable(borderColor, 'color'));
+    for (const side of SIDES) {
+      const d = decl('border-' + side + '-color');
+      if (d !== null) set('stroke', d, cssToVariable(d, 'color'));
+    }
+    const radius = decl('border-radius');
+    if (radius !== null) {
+      // A four-value radius is not one token; only single-value roots are checked.
+      set('radius', radius, radius.split(' ').length > 1 ? undefined : cssToVariable(radius, 'radius'));
+    }
+    const shadow = decl('box-shadow');
+    if (shadow !== null) {
+      want.shadow = /var\(--ui-shadow-([a-z0-9-]+)/.exec(shadow)?.[1] ?? 'raw';
+      want.from.shadow = selector;
+    }
+  }
+  // Nothing in the cascade paints -> the root must paint nothing.
+  for (const prop of ['fill', 'stroke', 'radius']) if (!(prop in want)) want[prop] = null;
+  if (want.shadow === undefined) { want.shadow = false; want.from.shadow = entry.cascade[0]; }
+  for (const prop of ['fill', 'stroke', 'radius']) if (!want.from[prop]) want.from[prop] = entry.cascade[0];
+  return want;
+}
+
+/** `var(--ui-color-surface-raised)` -> `color/surface-raised`. `undefined` when the
+ *  value is not a single token — `color-mix()`, a literal, a keyword — which no
+ *  Figma Variable can express; those are skipped rather than reported. */
+function cssToVariable(value, group) {
+  const v = value || '';
+  // A color-mix() names a token INSIDE a computation. Pulling that token out and
+  // demanding Figma bind it is wrong twice over: the rendered colour is not the
+  // token's value, and no Figma Variable can express the mix at all. Four
+  // components paint this way (Avatar, Badge, Toast and Alert variants) — recorded
+  // as a Figma-side gap rather than reported as drift.
+  if (/color-mix\s*\(|linear-gradient\s*\(/.test(v)) return undefined;
+  const m = new RegExp('var\\(--ui-' + group + '-([a-z0-9-]+)').exec(v);
+  if (m) return `${group}/${m[1]}`;
+  return undefined;
 }
 
 // ===========================================================================

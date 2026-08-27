@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-27T12:18:58.894Z",
-    "gitSha": "1914337",
+    "generatedAt": "2026-08-27T12:46:28.723Z",
+    "gitSha": "3110cbd",
     "serverVersion": null,
     "coverage": "All 29 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -63,7 +63,7 @@
   ],
   "typography": {
     "fontFamilies": {
-      "Instrument Sans": 1506,
+      "Instrument Sans": 1502,
       "Instrument Serif": 1,
       "JetBrains Mono": 81
     },
@@ -299,6 +299,373 @@
         "loading#507:217"
       ],
       "iconInstanceNames": [],
+      "rootPaint": {
+        "variant=primary, size=sm, state=default": {
+          "fill": "color/primary",
+          "stroke": "color/primary",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "variant=primary, size=md, state=default": {
+          "fill": "color/primary",
+          "stroke": "color/primary",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "variant=primary, size=lg, state=default": {
+          "fill": "color/primary",
+          "stroke": "color/primary",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "variant=secondary, size=sm, state=default": {
+          "fill": "color/secondary",
+          "stroke": "color/secondary",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "variant=secondary, size=md, state=default": {
+          "fill": "color/secondary",
+          "stroke": "color/secondary",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "variant=secondary, size=lg, state=default": {
+          "fill": "color/secondary",
+          "stroke": "color/secondary",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "variant=outline, size=sm, state=default": {
+          "fill": "color/surface-raised",
+          "stroke": "color/border-strong",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "variant=outline, size=md, state=default": {
+          "fill": "color/surface-raised",
+          "stroke": "color/border-strong",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "variant=outline, size=lg, state=default": {
+          "fill": "color/surface-raised",
+          "stroke": "color/border-strong",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "variant=primary, size=md, state=focus": {
+          "fill": "color/primary",
+          "stroke": null,
+          "strokeWeight": 0,
+          "strokeSides": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "variant=primary, size=md, state=hover": {
+          "fill": "color/primary-hover",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "variant=primary, size=md, state=active": {
+          "fill": "color/primary-active",
+          "stroke": "RAW",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": [
+            "INNER_SHADOW"
+          ]
+        },
+        "variant=danger, size=sm, state=default": {
+          "fill": "color/danger",
+          "stroke": "color/danger",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": [
+            "INNER_SHADOW"
+          ]
+        },
+        "variant=danger, size=md, state=default": {
+          "fill": "color/danger",
+          "stroke": "color/danger",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": [
+            "INNER_SHADOW"
+          ]
+        },
+        "variant=danger, size=lg, state=default": {
+          "fill": "color/danger",
+          "stroke": "color/danger",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": [
+            "INNER_SHADOW"
+          ]
+        },
+        "variant=danger, size=md, state=hover": {
+          "fill": "color/danger-hover",
+          "stroke": "color/input-border-invalid",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": [
+            "INNER_SHADOW"
+          ]
+        },
+        "variant=danger, size=md, state=active": {
+          "fill": "color/danger-active",
+          "stroke": "color/input-border-invalid",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": [
+            "INNER_SHADOW"
+          ]
+        },
+        "variant=danger, size=md, state=focus": {
+          "fill": "color/danger",
+          "stroke": "color/input-border-invalid",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": [
+            "INNER_SHADOW",
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "variant=secondary, size=md, state=hover": {
+          "fill": "color/secondary-hover",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "variant=secondary, size=md, state=active": {
+          "fill": "color/secondary-active",
+          "stroke": "RAW",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": [
+            "INNER_SHADOW"
+          ]
+        },
+        "variant=secondary, size=md, state=focus": {
+          "fill": "color/secondary",
+          "stroke": null,
+          "strokeWeight": 0,
+          "strokeSides": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "variant=outline, size=md, state=hover": {
+          "fill": "color/surface-sunken",
+          "stroke": "color/primary",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "variant=outline, size=md, state=active": {
+          "fill": "color/surface-sunken",
+          "stroke": "RAW",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": [
+            "INNER_SHADOW"
+          ]
+        },
+        "variant=outline, size=md, state=focus": {
+          "fill": null,
+          "stroke": "color/primary",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "129:2",
       "nodes": [
@@ -356,6 +723,78 @@
         "disabled#507:73"
       ],
       "iconInstanceNames": [],
+      "rootPaint": {
+        "state=default": {
+          "fill": "color/input-bg",
+          "stroke": "color/input-border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "state=filled": {
+          "fill": "color/surface-sunken",
+          "stroke": "color/input-border",
+          "strokeWeight": 1.5,
+          "strokeSides": [
+            1.5,
+            1.5,
+            1.5,
+            1.5
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "state=focus": {
+          "fill": "color/surface",
+          "stroke": "color/primary",
+          "strokeWeight": 2,
+          "strokeSides": [
+            2,
+            2,
+            2,
+            2
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "state=invalid": {
+          "fill": "color/surface-sunken",
+          "stroke": "color/input-border-invalid",
+          "strokeWeight": 1.5,
+          "strokeSides": [
+            1.5,
+            1.5,
+            1.5,
+            1.5
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "state=hover": {
+          "fill": "color/surface-sunken",
+          "stroke": "color/input-border-hover",
+          "strokeWeight": 1.5,
+          "strokeSides": [
+            1.5,
+            1.5,
+            1.5,
+            1.5
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "129:23",
       "nodes": [
@@ -450,6 +889,188 @@
         "Body#55:128"
       ],
       "iconInstanceNames": [],
+      "rootPaint": {
+        "variant=elevated, padding=none": {
+          "fill": "color/surface-raised",
+          "stroke": "color/border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/xl",
+          "radiusPx": 20,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "variant=outlined, padding=none": {
+          "fill": "color/surface-raised",
+          "stroke": "color/border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/xl",
+          "radiusPx": 20,
+          "effects": []
+        },
+        "variant=flat, padding=none": {
+          "fill": "color/surface-sunken",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/xl",
+          "radiusPx": 20,
+          "effects": []
+        },
+        "variant=elevated, padding=sm": {
+          "fill": "color/surface-raised",
+          "stroke": "color/border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/xl",
+          "radiusPx": 20,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "variant=outlined, padding=sm": {
+          "fill": "color/surface-raised",
+          "stroke": "color/border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/xl",
+          "radiusPx": 20,
+          "effects": []
+        },
+        "variant=flat, padding=sm": {
+          "fill": "color/surface-sunken",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/xl",
+          "radiusPx": 20,
+          "effects": []
+        },
+        "variant=elevated, padding=md": {
+          "fill": "color/surface-raised",
+          "stroke": "color/border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/xl",
+          "radiusPx": 20,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "variant=outlined, padding=md": {
+          "fill": "color/surface-raised",
+          "stroke": "color/border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/xl",
+          "radiusPx": 20,
+          "effects": []
+        },
+        "variant=flat, padding=md": {
+          "fill": "color/surface-sunken",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/xl",
+          "radiusPx": 20,
+          "effects": []
+        },
+        "variant=elevated, padding=lg": {
+          "fill": "color/surface-raised",
+          "stroke": "color/border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/xl",
+          "radiusPx": 20,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "variant=outlined, padding=lg": {
+          "fill": "color/surface-raised",
+          "stroke": "color/border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/xl",
+          "radiusPx": 20,
+          "effects": []
+        },
+        "variant=flat, padding=lg": {
+          "fill": "color/surface-sunken",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/xl",
+          "radiusPx": 20,
+          "effects": []
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:53",
       "nodes": [
@@ -579,6 +1200,148 @@
         "danger",
         "info"
       ],
+      "rootPaint": {
+        "variant=default, size=md": {
+          "fill": "color/surface-sunken",
+          "stroke": "color/border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/full",
+          "radiusPx": 9999,
+          "effects": []
+        },
+        "variant=success, size=md": {
+          "fill": "color/success-bg",
+          "stroke": "color/success-bg",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/full",
+          "radiusPx": 9999,
+          "effects": []
+        },
+        "variant=warning, size=md": {
+          "fill": "color/warning-bg",
+          "stroke": "color/warning-bg",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/full",
+          "radiusPx": 9999,
+          "effects": []
+        },
+        "variant=danger, size=md": {
+          "fill": "color/danger-bg",
+          "stroke": "color/danger-bg",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/full",
+          "radiusPx": 9999,
+          "effects": []
+        },
+        "variant=info, size=md": {
+          "fill": "color/info-bg",
+          "stroke": "color/info-bg",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/full",
+          "radiusPx": 9999,
+          "effects": []
+        },
+        "variant=default, size=sm": {
+          "fill": "color/surface-sunken",
+          "stroke": "color/border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/full",
+          "radiusPx": 9999,
+          "effects": []
+        },
+        "variant=success, size=sm": {
+          "fill": "color/success-bg",
+          "stroke": "color/success-bg",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/full",
+          "radiusPx": 9999,
+          "effects": []
+        },
+        "variant=warning, size=sm": {
+          "fill": "color/warning-bg",
+          "stroke": "color/warning-bg",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/full",
+          "radiusPx": 9999,
+          "effects": []
+        },
+        "variant=danger, size=sm": {
+          "fill": "color/danger-bg",
+          "stroke": "color/danger-bg",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/full",
+          "radiusPx": 9999,
+          "effects": []
+        },
+        "variant=info, size=sm": {
+          "fill": "color/info-bg",
+          "stroke": "color/info-bg",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/full",
+          "radiusPx": 9999,
+          "effects": []
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:12",
       "nodes": [
@@ -640,6 +1403,81 @@
       "iconInstanceNames": [
         "chevron-down"
       ],
+      "rootPaint": {
+        "state=default": {
+          "fill": "color/input-bg",
+          "stroke": "color/input-border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "state=filled": {
+          "fill": "color/surface-sunken",
+          "stroke": "color/border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/sm",
+          "radiusPx": 8,
+          "effects": []
+        },
+        "state=open": {
+          "fill": "color/surface",
+          "stroke": "color/primary",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/sm",
+          "radiusPx": 8,
+          "effects": []
+        },
+        "state=hover": {
+          "fill": "color/surface-sunken",
+          "stroke": "color/input-border-hover",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/sm",
+          "radiusPx": 8,
+          "effects": []
+        },
+        "state=focus": {
+          "fill": "color/surface-sunken",
+          "stroke": "color/border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/sm",
+          "radiusPx": 8,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:88",
       "nodes": [
@@ -712,6 +1550,93 @@
       "iconInstanceNames": [
         "close"
       ],
+      "rootPaint": {
+        "size=md": {
+          "fill": "color/surface",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "size=sm": {
+          "fill": "color/surface",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "size=lg": {
+          "fill": "color/surface",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "size=xl": {
+          "fill": "color/surface",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "size=full": {
+          "fill": "color/surface",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:93",
       "nodes": [
@@ -827,6 +1752,50 @@
         "loading#507:304"
       ],
       "iconInstanceNames": [],
+      "rootPaint": {
+        "variant=default, selectedIndex=0": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "variant=default, selectedIndex=1": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "variant=pills, selectedIndex=0": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:120",
       "nodes": [
@@ -923,6 +1892,50 @@
         "chevron-up",
         "chevron-down"
       ],
+      "rootPaint": {
+        "variant=default": {
+          "fill": null,
+          "stroke": "color/border",
+          "strokeWeight": "mixed",
+          "strokeSides": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "variant=bordered": {
+          "fill": null,
+          "stroke": "color/border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": []
+        },
+        "variant=separated": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 0,
+          "strokeSides": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:124",
       "nodes": [
@@ -1070,6 +2083,42 @@
         "chevron-right",
         "delete"
       ],
+      "rootPaint": {
+        "variant=default": {
+          "fill": "color/surface-raised",
+          "stroke": "color/border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "variant=compact": {
+          "fill": "color/surface-raised",
+          "stroke": "color/border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:128",
       "nodes": [
@@ -1310,6 +2359,76 @@
         "Content#55:110"
       ],
       "iconInstanceNames": [],
+      "rootPaint": {
+        "position=above": {
+          "fill": "color/text",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/sm",
+          "radiusPx": 8,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "position=below": {
+          "fill": "color/text",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/sm",
+          "radiusPx": 8,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "position=left": {
+          "fill": "color/text",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/sm",
+          "radiusPx": 8,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "position=right": {
+          "fill": "color/text",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/sm",
+          "radiusPx": 8,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:48",
       "nodes": [
@@ -1368,6 +2487,64 @@
         "warning",
         "danger"
       ],
+      "rootPaint": {
+        "variant=info": {
+          "fill": "color/info-bg",
+          "stroke": "color/info-bg",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": []
+        },
+        "variant=success": {
+          "fill": "color/success-bg",
+          "stroke": "color/success-bg",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": []
+        },
+        "variant=warning": {
+          "fill": "color/warning-bg",
+          "stroke": "color/warning-bg",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": []
+        },
+        "variant=danger": {
+          "fill": "color/danger-bg",
+          "stroke": "color/danger-bg",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": []
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:23",
       "nodes": [
@@ -1456,6 +2633,81 @@
         "invalid#507:160"
       ],
       "iconInstanceNames": [],
+      "rootPaint": {
+        "selection=unchecked, state=default": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "selection=checked, state=default": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "selection=indeterminate, state=default": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "selection=unchecked, state=focus": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "selection=unchecked, state=hover": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:32",
       "nodes": [
@@ -1518,6 +2770,67 @@
         "invalid#911:5"
       ],
       "iconInstanceNames": [],
+      "rootPaint": {
+        "selection=off, state=default": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "selection=on, state=default": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "selection=off, state=focus": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "selection=off, state=hover": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:37",
       "nodes": [
@@ -1588,6 +2901,78 @@
         "disabled#507:91"
       ],
       "iconInstanceNames": [],
+      "rootPaint": {
+        "state=default": {
+          "fill": "color/input-bg",
+          "stroke": "color/input-border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "state=filled": {
+          "fill": "color/surface-sunken",
+          "stroke": "color/border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/sm",
+          "radiusPx": 8,
+          "effects": []
+        },
+        "state=focus": {
+          "fill": "color/surface",
+          "stroke": "color/primary",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/sm",
+          "radiusPx": 8,
+          "effects": []
+        },
+        "state=invalid": {
+          "fill": "color/surface",
+          "stroke": "color/danger",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/sm",
+          "radiusPx": 8,
+          "effects": []
+        },
+        "state=hover": {
+          "fill": "color/surface-sunken",
+          "stroke": "RAW",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/sm",
+          "radiusPx": 8,
+          "effects": []
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:82",
       "nodes": [
@@ -1648,6 +3033,67 @@
         "invalid#911:21"
       ],
       "iconInstanceNames": [],
+      "rootPaint": {
+        "selection=unselected, state=default": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "selection=selected, state=default": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "selection=unselected, state=focus": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "selection=unselected, state=hover": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:131",
       "nodes": [
@@ -1708,6 +3154,67 @@
         "invalid#909:0"
       ],
       "iconInstanceNames": [],
+      "rootPaint": {
+        "selection=unchecked, state=default": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "selection=checked, state=default": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "selection=unchecked, state=focus": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "selection=unchecked, state=hover": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "420:165",
       "nodes": [
@@ -1764,6 +3271,50 @@
         "animated#911:17"
       ],
       "iconInstanceNames": [],
+      "rootPaint": {
+        "variant=text": {
+          "fill": "color/border",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/sm",
+          "radiusPx": 8,
+          "effects": []
+        },
+        "variant=circular": {
+          "fill": "color/border",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/full",
+          "radiusPx": 9999,
+          "effects": []
+        },
+        "variant=rectangular": {
+          "fill": "color/border",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:99",
       "nodes": [
@@ -1854,6 +3405,176 @@
       },
       "referencedProperties": [],
       "iconInstanceNames": [],
+      "rootPaint": {
+        "variant=default, size=sm": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "variant=default, size=md": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "variant=default, size=lg": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "variant=success, size=sm": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "variant=success, size=md": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "variant=success, size=lg": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "variant=warning, size=sm": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "variant=warning, size=md": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "variant=warning, size=lg": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "variant=danger, size=sm": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "variant=danger, size=md": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "variant=danger, size=lg": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "420:81",
       "nodes": [
@@ -1938,6 +3659,148 @@
         "Initials#55:184"
       ],
       "iconInstanceNames": [],
+      "rootPaint": {
+        "shape=circle, size=xs": {
+          "fill": "color/info-bg",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/full",
+          "radiusPx": 9999,
+          "effects": []
+        },
+        "shape=circle, size=sm": {
+          "fill": "color/success-bg",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/full",
+          "radiusPx": 9999,
+          "effects": []
+        },
+        "shape=circle, size=md": {
+          "fill": "color/warning-bg",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/full",
+          "radiusPx": 9999,
+          "effects": []
+        },
+        "shape=circle, size=lg": {
+          "fill": "RAW",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/full",
+          "radiusPx": 9999,
+          "effects": []
+        },
+        "shape=circle, size=xl": {
+          "fill": "RAW",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/full",
+          "radiusPx": 9999,
+          "effects": []
+        },
+        "shape=square, size=xs": {
+          "fill": "color/info-bg",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "shape=square, size=sm": {
+          "fill": "color/success-bg",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "shape=square, size=md": {
+          "fill": "color/warning-bg",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "shape=square, size=lg": {
+          "fill": "RAW",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "shape=square, size=xl": {
+          "fill": "RAW",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:146",
       "nodes": [
@@ -2025,6 +3888,144 @@
         "danger",
         "info"
       ],
+      "rootPaint": {
+        "variant=default, position=top-right": {
+          "fill": "color/surface-raised",
+          "stroke": "color/border",
+          "strokeWeight": "mixed",
+          "strokeSides": [
+            0,
+            0,
+            0,
+            4
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "variant=success, position=top-right": {
+          "fill": "RAW",
+          "stroke": "color/success",
+          "strokeWeight": "mixed",
+          "strokeSides": [
+            0,
+            0,
+            0,
+            4
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "variant=warning, position=top-right": {
+          "fill": "RAW",
+          "stroke": "color/warning",
+          "strokeWeight": "mixed",
+          "strokeSides": [
+            0,
+            0,
+            0,
+            4
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "variant=danger, position=top-right": {
+          "fill": "RAW",
+          "stroke": "color/danger",
+          "strokeWeight": "mixed",
+          "strokeSides": [
+            0,
+            0,
+            0,
+            4
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "variant=info, position=top-right": {
+          "fill": "color/info-bg",
+          "stroke": "color/info",
+          "strokeWeight": "mixed",
+          "strokeSides": [
+            0,
+            0,
+            0,
+            4
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "variant=default, position=top-center": {
+          "fill": "color/surface-raised",
+          "stroke": "color/border",
+          "strokeWeight": "mixed",
+          "strokeSides": [
+            0,
+            0,
+            0,
+            4
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "variant=default, position=bottom-right": {
+          "fill": "color/surface-raised",
+          "stroke": "color/border",
+          "strokeWeight": "mixed",
+          "strokeSides": [
+            0,
+            0,
+            0,
+            4
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "variant=default, position=bottom-center": {
+          "fill": "color/surface-raised",
+          "stroke": "color/border",
+          "strokeWeight": "mixed",
+          "strokeSides": [
+            0,
+            0,
+            0,
+            4
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:42",
       "nodes": [
@@ -2080,6 +4081,22 @@
       "properties": {},
       "referencedProperties": [],
       "iconInstanceNames": [],
+      "rootPaint": {
+        "Navigation/AtlBreadcrumbs": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "3:1031",
       "nodes": []
@@ -2099,6 +4116,22 @@
         "chevron-left",
         "chevron-right"
       ],
+      "rootPaint": {
+        "Navigation/AtlPagination": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "3:1073",
       "nodes": [
@@ -2181,6 +4214,127 @@
       "iconInstanceNames": [
         "close"
       ],
+      "rootPaint": {
+        "position=right, size=md": {
+          "fill": "color/surface",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "position=left, size=md": {
+          "fill": "color/surface",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "position=top, size=md": {
+          "fill": "color/surface",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "position=bottom, size=md": {
+          "fill": "color/surface",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "position=right, size=sm": {
+          "fill": "color/surface",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "position=right, size=lg": {
+          "fill": "color/surface",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        },
+        "position=right, size=full": {
+          "fill": "color/surface",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "421:342",
       "nodes": [
@@ -2341,6 +4495,78 @@
         "loading#507:282"
       ],
       "iconInstanceNames": [],
+      "rootPaint": {
+        "variant=default, size=md, state=default": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "variant=striped, size=md, state=default": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "variant=bordered, size=md, state=default": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "variant=default, size=sm, state=default": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "variant=default, size=lg, state=default": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "421:884",
       "nodes": [
@@ -2608,6 +4834,64 @@
       },
       "referencedProperties": [],
       "iconInstanceNames": [],
+      "rootPaint": {
+        "variant=default": {
+          "fill": null,
+          "stroke": "color/border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": []
+        },
+        "variant=with-filename": {
+          "fill": null,
+          "stroke": "color/border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": []
+        },
+        "variant=with-line-numbers": {
+          "fill": null,
+          "stroke": "color/border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": []
+        },
+        "variant=no-copy": {
+          "fill": null,
+          "stroke": "color/border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": []
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "420:186",
       "nodes": [
@@ -2795,6 +5079,95 @@
         "chevron-up",
         "check"
       ],
+      "rootPaint": {
+        "state=default": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "state=open": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "state=filtered": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "state=selected": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "state=hover": {
+          "fill": null,
+          "stroke": "color/input-border-hover",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "state=focus": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": [
+            "DROP_SHADOW",
+            "DROP_SHADOW"
+          ]
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "421:291",
       "nodes": [
@@ -2890,6 +5263,120 @@
       "iconInstanceNames": [
         "check"
       ],
+      "rootPaint": {
+        "orientation=horizontal, state=default": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "orientation=horizontal, state=completed": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "orientation=horizontal, state=error": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "orientation=horizontal, state=optional": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "orientation=vertical, state=default": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "orientation=vertical, state=completed": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "orientation=vertical, state=error": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "orientation=vertical, state=optional": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "421:407",
       "nodes": [
@@ -3062,6 +5549,78 @@
       },
       "referencedProperties": [],
       "iconInstanceNames": [],
+      "rootPaint": {
+        "size=md": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "size=xs": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "size=sm": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "size=lg": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "size=xl": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        }
+      },
       "glyphTextNodes": [],
       "sampledVariant": "507:6305",
       "nodes": [
@@ -3157,6 +5716,50 @@
         "close",
         "check"
       ],
+      "rootPaint": {
+        "variant=drawer": {
+          "fill": "RAW",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "variant=popup": {
+          "fill": "RAW",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        },
+        "variant=inline": {
+          "fill": "RAW",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": 10,
+          "effects": []
+        }
+      },
       "glyphTextNodes": [
         {
           "layer": "min-icon",
