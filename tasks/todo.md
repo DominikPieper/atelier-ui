@@ -762,9 +762,13 @@ items deliberately NOT fixed in that pass:
       OGImageRoute at docs/src/pages/og/[...slug].ts already exists and
       BaseLayout wires per-page og:image URLs; removed the outdated
       config comment.
-- [ ] **AtlOption still unstyled** (documented in ADR-0028) — the option row
-      inside `<atl-select>` never had a stylesheet; needs design work, not a
-      scoping fix.
+- [x] ~~**AtlOption still unstyled** (documented in ADR-0028)~~ — closed 2026-08-27.
+      `atl-option.css` now carries the row recipe (`--ui-row-height-sm`, 40px) plus the
+      hover / active / selected / disabled states the component had been computing and not
+      rendering, and `check:geometry` measures it via an `only: ['angular']` entry.
+      **Note for the record:** this was rediscovered while correcting the AtlSelect artboard
+      and initially reported as a new find — it had been tracked here and in ADR-0028 since
+      the rename. Reading the open list first would have saved the rediscovery.
 - [x] **`check:parity` activated & populated** — added to `check:all`;
       27/29 masters now carry a parity record (scores 0.67–1.0, recorded
       2026-07-22 via figma_check_design_parity). AtlToast/AtlCodeBlock are
