@@ -1,3 +1,14 @@
+## 0.2.21 (2026-08-27)
+
+### 🩹 Fixes
+
+- **preset:** make the @nx/angular peer optional so npm stops picking a version ([7b8ff58](https://github.com/DominikPieper/atelier-ui/commit/7b8ff58))
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Dominik Pieper @DominikPieper
+
 ## 0.2.20 (2026-08-26)
 
 This was a version bump only for create-workspace to align it with other projects, there were no code changes.
