@@ -337,14 +337,54 @@ Decision-bearing quick wins (deferred — not this session's scope):
       DRIFT blocker. Convenient there, wrong in general. Either fold the token source into
       every component's inputs (every token edit then re-verifies all 29) or add a separate
       token-layer verification record. Needs a decision, not a quick patch.
-- [ ] **509 text nodes in 37 of 43 masters use none of the eight `ty/*` text styles.**
-      Measured 2026-08-27 (ADR-0073): the styles exist, `[TEXT-STYLE]` gates them against
-      tokens.css to three decimals — and **zero** text nodes reference one. `[TEXT-STYLE]`
-      checks that the styles are correct, never that anything uses them. **332 of the 509
-      have `AUTO` leading**, the defect ADR-0059 fixed for seven root nodes, and five sizes
-      are off the type scale entirely (10, 13, 15, 20, 26px; the scale is 12/14/16/18/…).
-      Biggest single remaining gap in the transfer. Needs: bind the nodes, then a
-      `[TEXT-UNSTYLED]` code so it cannot come back.
+- [x] ~~**509 text nodes use none of the eight `ty/*` text styles**~~ — 231 bound
+      2026-08-27, ADR-0074, and the classification split the rest into two different
+      problems (below). Two roles were missing and are now added: `--ui-type-control`
+      (medium/sm/tight — 6 CSS rules, 75 nodes) and `--ui-type-action` (semibold/md/tight
+      — 3 CSS rules, 15 nodes). 40 of 43 masters unchanged in size, 3 grew 1–2px.
+
+- [ ] **201 Figma text nodes want a body role at 150% where the CSS gives them `tight` by
+      inheritance.** Measured 2026-08-27 (ADR-0074). Figma has no inheritance for
+      `line-height` — every text node states its own — so binding these to `ty/body-sm` /
+      `ty/body-md` would *create* a divergence. Whether each node is prose (AtlToast's
+      message, which the CSS really does set to body-sm/normal) or control text (a table
+      cell, a menu row, a checkbox label) is answered **per node by the CSS**, not by how
+      the node looks today. Needs a per-master layer→selector pass, the same shape as the
+      `[LAYER-PAINT]` map. Masters involved: Input, Select, Combobox, Checkbox, Radio,
+      RadioGroup, Toggle, Card, Table, Menu, TabGroup, Stepper, Pagination, Dialog, Drawer,
+      Toast, AccordionGroup, Chat, MenuItem, BreadcrumbItem, Option, Td, Tbody.
+
+- [ ] **77 Figma text nodes are in combinations no role expresses.** Medium 16 (18),
+      Regular 12 (18), SemiBold 14 (13), Medium 18 (6), JetBrains Mono Bold 12 (4), Italic
+      12 (4), Regular 13 (4), Bold 10 (2), SemiBold 15 (2), SemiBold 12 (2), and one each
+      of SemiBold 13/20/26 and Italic 14. Five sizes (10, 13, 15, 20, 26px) are off the
+      type scale entirely. Each needs a decision: snap to a role, or earn a role by
+      appearing three times on both sides — `SemiBold 20` and `Regular 12` were both
+      checked and both failed that test (ADR-0074).
+
+- [ ] **The dialog and drawer headers are SemiBold 20px, off the type scale.** Two CSS
+      rules, 2px from `--ui-type-title` (semibold `lg` = 18). The Figma masters draw 18
+      and are now bound to `ty/title`, so the CSS is the side that diverges. Decide: move
+      both to the role, or justify 20.
+
+- [ ] **AtlCard and AtlDialog draw their buttons by hand at Medium 14 instead of
+      instantiating AtlButton.** `.atl-button` is semibold `md`; the masters' "Save",
+      "Cancel" and "Confirm" are medium `sm`. Same class as ADR-0068 — a parent can only
+      instantiate what the child can express — and now visible because those nodes bound to
+      `ty/control` rather than `ty/action`.
+
+- [ ] **A component root may state a family and a leading but no font-size.**
+      `.atl-accordion-group` does, so its panel text takes whatever size the consuming app
+      sets — the same class of defect as `[NO-TYPEFACE]` and `[NO-LEADING]`, which
+      `check:typeface` does require. Add `[NO-SIZE]`, or state why a root may omit it.
+
+- [ ] **Add `[TEXT-UNSTYLED]` so unbound text cannot come back.** `[TEXT-STYLE]` checks
+      that the eight — now ten — `ty/*` styles match tokens.css; it never checks that any
+      node uses one, which is how 509 nodes came to use none (ADR-0074). 231 are bound now,
+      and nothing stops the next master from drawing raw text. The snapshot already carries
+      per-node facts, so the gate is a count plus an allowlist for the nodes that
+      legitimately have no role (AtlTooltip's four, and whatever the remaining 77 resolve
+      to). Warning first, blocker once the 201 and the 77 are settled.
 
 - [ ] **AtlAlert's padding is bound to the wrong spacing variables.** Figma draws 12/16 on
       all four variants — bound, but to `spacing/3`/`spacing/4` — while the CSS says
@@ -354,8 +394,11 @@ Decision-bearing quick wins (deferred — not this session's scope):
       padding. `boxFromDeclarations` already extracts the CSS side and nobody reads it.
       Needs: extend the snapshot probe, add `[ROOT-BOX]`, then re-run `figma:snapshot`.
 
-- [ ] **AtlTextarea's text is 14px where the CSS says 16px, and `[ROOT-PAINT]` cannot see
-      it.** That cascade is `.atl-textarea textarea`, whose `font-size: inherit` resolves to
+- [x] ~~**AtlTextarea's text is 14px where the CSS says 16px**~~ — fixed 2026-08-27,
+      ADR-0074: the five nodes are bound to `ty/body-md` (16px/150%). Found again from the
+      other side, because binding by appearance had first cemented 14px as `ty/body-sm`.
+      The gate blindness behind it is still open:
+- [ ] **`[ROOT-PAINT]` cannot see a cascade that ends at `inherit`.** That cascade is `.atl-textarea textarea`, whose `font-size: inherit` resolves to
       null, so the comparison never happens — the value the field actually renders comes from
       the root, which the cascade does not include. Fix the gate by walking up to the
       component root when a cascade leaf says `inherit`; fix the data as part of the 509.

@@ -252,6 +252,24 @@ export const tokens: Record<string, TokenAnnotation> = {
       'Not a substitute for body-sm in running text — labels are named, not read.',
     ],
   },
+  '--ui-type-control': {
+    intent:
+      'Control role: medium 0.875rem, tight. The label ON a control — a tab, a page button, a step, a chip, a select label, a chat action.',
+    constraints: [
+      'Named for the --ui-control-height-* ladder these sit on. It is text on a control, not prose.',
+      "Not a control's own VALUE text — an input's content keeps the longhands, because its padding formula names the leading as an operand (ADR-0073).",
+      'Added because 6 CSS rules and 75 Figma text nodes had written medium/sm/tight by hand with no role to reference (ADR-0074).',
+    ],
+  },
+  '--ui-type-action': {
+    intent:
+      'Action role: semibold 1rem, tight. The text of a control that acts — a button, an accordion trigger, a panel header that opens something.',
+    constraints: [
+      'Heavier and larger than --ui-type-control on purpose: this is the primary affordance, that is a secondary label.',
+      'Not for static headings — use --ui-type-title, which is the same weight one size up and carries no affordance.',
+      'Added because 3 CSS rules and 15 Figma text nodes had written semibold/md/tight by hand (ADR-0074).',
+    ],
+  },
   '--ui-type-code': {
     intent: 'Code role: JetBrains Mono at 0.875rem. Inline code, tokens, prop names, keyboard chips, terminal output.',
     constraints: [

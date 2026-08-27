@@ -121,6 +121,28 @@
   --ui-type-code: var(--ui-font-weight-normal) var(--ui-font-size-sm) /
     var(--ui-line-height-code) var(--ui-font-mono);
 
+  /* The two roles the eight did not span. Both were measured on BOTH sides
+   * before being added (ADR-0074), which is the only sound basis for a role:
+   *
+   *   control  Medium 14 — 6 CSS rules (tab button, page button, step label,
+   *            chip label, select label, chat action) and 75 Figma text nodes.
+   *   action   SemiBold 16 — 3 CSS rules (button, accordion trigger, chat
+   *            header title) and 15 Figma text nodes.
+   *
+   * Both are TIGHT, and that was unanimous rather than chosen: every one of the
+   * 30 Figma nodes in these two combinations that states a leading at all states
+   * 125%, and .atl-button and .accordion-trigger state --ui-line-height-tight.
+   *
+   * They are named for the --ui-control-height-* ladder they live on: text on a
+   * control, not prose. A control's own VALUE text (an input's content) is not
+   * one of these — that stays a longhand, because its padding formula names the
+   * leading as an operand (ADR-0073).
+   */
+  --ui-type-control: var(--ui-font-weight-medium) var(--ui-font-size-sm) /
+    var(--ui-line-height-tight) var(--ui-font-family);
+  --ui-type-action: var(--ui-font-weight-semibold) var(--ui-font-size-md) /
+    var(--ui-line-height-tight) var(--ui-font-family);
+
   /* ── Colours · light mode (default) ────────────────────────── */
 
   /* Primary — Conciso deep teal */

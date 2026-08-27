@@ -88,8 +88,18 @@ for (const m of masters) {
     const existing = preview.children.filter((c) => c.type === 'INSTANCE')[0];
     let main = null;
     if (existing) { try { main = await existing.getMainComponentAsync(); } catch (e) { main = null; } }
+    // A preview wider than its frame is deliberately set to FILL below, which
+    // changes its width for good — so comparing width to the master's would be
+    // permanently true and the card would be "updated" on every single run. That
+    // is exactly what happened: the second run reported 15 cards updated, and
+    // ADR-0070's idempotency claim rested on a re-derivation rather than on an
+    // actual second run, which had stalled. main.id already catches the case the
+    // size check was for (a recomposed or swapped master).
+    const filled = existing && existing.layoutSizingHorizontal === 'FILL';
     const stale = !existing || !main || main.id !== comp.id ||
-      Math.round(existing.width) !== Math.round(comp.width) || Math.round(existing.height) !== Math.round(comp.height);
+      (!filled &&
+        (Math.round(existing.width) !== Math.round(comp.width) ||
+          Math.round(existing.height) !== Math.round(comp.height)));
     if (stale) {
       const kids = preview.children.slice();
       for (const k of kids) k.remove();
