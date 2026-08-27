@@ -104,6 +104,41 @@ async function main() {
     });
     const uiTokens = (vars?.data?.variables ?? []).map((v) => v.name).sort();
 
+    // 2b. Property facts the per-component read does not expose: which declared
+    //     properties something actually references, and every pictogram drawn as a
+    //     TEXT character. Both were invisible until 2026-08-27 — twenty declared
+    //     Booleans toggled nothing and forty-two icons were characters, in a file the
+    //     library is transferred to (ADR-0058). One round trip for all masters.
+    const probeCode = `
+      await figma.loadAllPagesAsync();
+      const out = {};
+      for (const set of figma.root.findAll((n) => n.type === 'COMPONENT_SET' || (n.type === 'COMPONENT' && /^(Action|Form|Display|Navigation|Overlay|Feedback|AI)\\//.test(n.name)))) {
+        const kids = set.type === 'COMPONENT_SET' ? set.children : [set];
+        const referenced = new Set();
+        const glyphs = [];
+        for (const v of kids) {
+          for (const n of [v, ...v.findAll(() => true)]) {
+            const r = n.componentPropertyReferences;
+            if (r) for (const val of Object.values(r)) referenced.add(val);
+            if (n.type === 'TEXT') {
+              const c = (n.characters || '').trim();
+              if (c && c.length <= 3 && /[^\\x00-\\x7F]/.test(c)) glyphs.push({ layer: n.name, chars: c });
+            }
+          }
+        }
+        const props = {};
+        for (const [k, v] of Object.entries(set.componentPropertyDefinitions || {})) props[k] = v.type;
+        const seen = new Set();
+        out[set.id] = {
+          properties: props,
+          referencedProperties: [...referenced],
+          glyphTextNodes: glyphs.filter((g) => { const k = g.layer + '|' + g.chars; if (seen.has(k)) return false; seen.add(k); return true; }),
+        };
+      }
+      return out;
+    `;
+    const probe = (await call(client, 'figma_execute', { code: probeCode, timeout: 25000 }))?.result ?? {};
+
     // 3. Each master: set-level metadata + a deep read of its default variant.
     const components = [];
     for (const { nodeId } of MASTERS) {
@@ -133,6 +168,11 @@ async function main() {
         description: comp.description ?? '',
         variantAxes,
         variants,
+        // From the 2b probe: the declared property types, which of them anything
+        // references, and the pictograms drawn as TEXT characters.
+        properties: probe[nodeId]?.properties ?? {},
+        referencedProperties: probe[nodeId]?.referencedProperties ?? [],
+        glyphTextNodes: probe[nodeId]?.glyphTextNodes ?? [],
         sampledVariant: defaultVariantId,
         nodes: deep ? collectNodeFacts(deep) : [],
       });

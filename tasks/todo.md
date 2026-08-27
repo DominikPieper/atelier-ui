@@ -283,18 +283,25 @@ Decision-bearing quick wins (deferred — not this session's scope):
       both collapsed to the plain COMPONENT they always were, with the other drawings kept as
       content-sample frames on the Components page. `check:figma` reports **zero**
       `[BOOL-CLAIM]`, `[AXIS-NAME]` and `[AXIS-NOT-A-PROP]` now.
-- [ ] **Twelve Booleans across nine masters need the state drawn** (ADR-0056). Each was checked
-      against the CSS or a render condition rather than argued from the flag's name, so every one
-      of these has a visible difference to draw:
-      AtlAlert `dismissible` (gates a close button), AtlPagination `showFirstLast` (gates the
-      « » buttons), AtlChat `open` (adds `is-open` and gates content — its popup variant keeps a
-      visible bubble when closed, unlike a dialog), AtlTable `stickyHeader`
-      (`.is-sticky-header thead th` adds a box-shadow), AtlProgress `indeterminate`
-      (`.is-indeterminate .fill`), AtlSkeleton `animated` (`.is-animated::after` shimmer —
-      Figma cannot animate, so draw the overlay's presence), AtlToggle `invalid` + `required`,
-      AtlRadioGroup `invalid` + `required` + `readonly`, AtlCombobox `readonly`. The last three
-      groups are the states implemented in code on 2026-08-27 (ADR-0055), so their appearance is
-      already measured.
+- [ ] **Bind nineteen declared Booleans that toggle nothing** (`[BOOL-INERT]`, ADR-0058).
+      A Figma Boolean binds only to a layer's `visible`, and these reference nothing, so
+      switching them changes nothing: AtlTable `sortable` `selectable` `stickyHeader` `empty`
+      `error`; AtlInput and AtlTextarea `readonly` `required` (+ `autoResize`); AtlButton
+      `hasIcon`; AtlAlert and AtlToast `dismissible`; AtlProgress `indeterminate`; AtlStepper
+      `linear`; AtlSelect, AtlCheckbox and AtlCombobox `required`; AtlChat `open`. Each needs the
+      layer its state adds, with the property bound to that layer's visibility — or the property
+      dropped. AtlStepper `linear` has nothing to draw and should take the stated opt-out instead.
+- [ ] **Replace forty-two pictograms drawn as TEXT characters** (`[MASTER-GLYPH]`, ADR-0058),
+      across fifteen masters: AtlBadge 8, AtlMenu 7, AtlToast 5, AtlChat 5, AtlAlert 4,
+      AtlCombobox 3, AtlAccordionGroup 2, and one each on AtlButton, AtlSelect, AtlCheckbox,
+      AtlDialog, AtlDrawer, AtlTable, AtlTabGroup, AtlStepper. Every one has a named replacement:
+      the 25 vector components of the Icon library, generated from ATL_ICON_GEOMETRY (ADR-0057).
+      Four of them are `⟳` loading spinners.
+- [ ] **Add the five properties that are genuinely absent** (`[BOOL-MISSING]`, ADR-0058):
+      AtlToggle `invalid` + `required`, AtlRadioGroup `invalid` + `required` + `readonly`,
+      AtlSkeleton `animated`, AtlPagination `showFirstLast`, AtlCombobox `readonly`. Note that
+      `invalid` and `readonly` are colour states, so they belong on a variant axis rather than a
+      Boolean — the way AtlInput carries `invalid` as a value of `state`.
 - [x] ~~Six spec flags reported as missing that have no state to draw~~ — reasoned out in the
       masters themselves 2026-08-27: AtlAccordionGroup `multi` and AtlStepper `linear` are
       behaviour (`if (linear && i > activeStep) return` is the whole of it), AtlTooltip

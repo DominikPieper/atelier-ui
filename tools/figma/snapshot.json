@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-27T08:40:13.919Z",
-    "gitSha": "fa8a413",
+    "generatedAt": "2026-08-27T09:31:32.977Z",
+    "gitSha": "ba385f9",
     "serverVersion": null,
     "coverage": "All 29 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -208,6 +208,24 @@
           "state": "focus"
         }
       ],
+      "properties": {
+        "disabled#507:192": "BOOLEAN",
+        "loading#507:217": "BOOLEAN",
+        "hasIcon#507:242": "BOOLEAN",
+        "variant": "VARIANT",
+        "size": "VARIANT",
+        "state": "VARIANT"
+      },
+      "referencedProperties": [
+        "disabled#507:192",
+        "loading#507:217"
+      ],
+      "glyphTextNodes": [
+        {
+          "layer": "_loading-spinner",
+          "chars": "⟳"
+        }
+      ],
       "sampledVariant": "129:2",
       "nodes": [
         {
@@ -253,6 +271,16 @@
           "state": "hover"
         }
       ],
+      "properties": {
+        "disabled#507:73": "BOOLEAN",
+        "readonly#507:79": "BOOLEAN",
+        "required#507:85": "BOOLEAN",
+        "state": "VARIANT"
+      },
+      "referencedProperties": [
+        "disabled#507:73"
+      ],
+      "glyphTextNodes": [],
       "sampledVariant": "129:23",
       "nodes": [
         {
@@ -335,6 +363,17 @@
           "padding": "lg"
         }
       ],
+      "properties": {
+        "Title#55:115": "TEXT",
+        "Body#55:128": "TEXT",
+        "variant": "VARIANT",
+        "padding": "VARIANT"
+      },
+      "referencedProperties": [
+        "Title#55:115",
+        "Body#55:128"
+      ],
+      "glyphTextNodes": [],
       "sampledVariant": "55:53",
       "nodes": [
         {
@@ -449,6 +488,48 @@
           "size": "sm"
         }
       ],
+      "properties": {
+        "Label#55:74": "TEXT",
+        "variant": "VARIANT",
+        "size": "VARIANT"
+      },
+      "referencedProperties": [
+        "Label#55:74"
+      ],
+      "glyphTextNodes": [
+        {
+          "layer": "glyph-13",
+          "chars": "✓"
+        },
+        {
+          "layer": "glyph-14",
+          "chars": "⚠"
+        },
+        {
+          "layer": "glyph-15",
+          "chars": "✕"
+        },
+        {
+          "layer": "glyph-16",
+          "chars": "ℹ"
+        },
+        {
+          "layer": "glyph-18",
+          "chars": "✓"
+        },
+        {
+          "layer": "glyph-19",
+          "chars": "⚠"
+        },
+        {
+          "layer": "glyph-20",
+          "chars": "✕"
+        },
+        {
+          "layer": "glyph-21",
+          "chars": "ℹ"
+        }
+      ],
       "sampledVariant": "55:12",
       "nodes": [
         {
@@ -494,6 +575,24 @@
           "state": "focus"
         }
       ],
+      "properties": {
+        "Placeholder#55:163": "TEXT",
+        "disabled#507:115": "BOOLEAN",
+        "invalid#507:121": "BOOLEAN",
+        "required#507:127": "BOOLEAN",
+        "state": "VARIANT"
+      },
+      "referencedProperties": [
+        "Placeholder#55:163",
+        "disabled#507:115",
+        "invalid#507:121"
+      ],
+      "glyphTextNodes": [
+        {
+          "layer": "⌄",
+          "chars": "⌄"
+        }
+      ],
       "sampledVariant": "55:88",
       "nodes": [
         {
@@ -537,6 +636,25 @@
         },
         {
           "size": "full"
+        }
+      ],
+      "properties": {
+        "Title#55:168": "TEXT",
+        "Message#55:170": "TEXT",
+        "ConfirmLabel#55:172": "TEXT",
+        "CancelLabel#55:174": "TEXT",
+        "size": "VARIANT"
+      },
+      "referencedProperties": [
+        "Title#55:168",
+        "Message#55:170",
+        "CancelLabel#55:174",
+        "ConfirmLabel#55:172"
+      ],
+      "glyphTextNodes": [
+        {
+          "layer": "✕",
+          "chars": "✕"
         }
       ],
       "sampledVariant": "55:93",
@@ -632,6 +750,22 @@
           "selectedIndex": "0"
         }
       ],
+      "properties": {
+        "disabled#507:300": "BOOLEAN",
+        "loading#507:304": "BOOLEAN",
+        "variant": "VARIANT",
+        "selectedIndex": "VARIANT"
+      },
+      "referencedProperties": [
+        "disabled#507:300",
+        "loading#507:304"
+      ],
+      "glyphTextNodes": [
+        {
+          "layer": "_loading-spinner",
+          "chars": "⟳"
+        }
+      ],
       "sampledVariant": "55:120",
       "nodes": [
         {
@@ -717,6 +851,20 @@
         },
         {
           "variant": "separated"
+        }
+      ],
+      "properties": {
+        "variant": "VARIANT"
+      },
+      "referencedProperties": [],
+      "glyphTextNodes": [
+        {
+          "layer": "▲",
+          "chars": "▲"
+        },
+        {
+          "layer": "▼",
+          "chars": "▼"
         }
       ],
       "sampledVariant": "55:124",
@@ -820,6 +968,40 @@
         },
         {
           "variant": "compact"
+        }
+      ],
+      "properties": {
+        "variant": "VARIANT"
+      },
+      "referencedProperties": [],
+      "glyphTextNodes": [
+        {
+          "layer": "⎘",
+          "chars": "⎘"
+        },
+        {
+          "layer": "⎗",
+          "chars": "⎗"
+        },
+        {
+          "layer": "⊕",
+          "chars": "⊕"
+        },
+        {
+          "layer": "✏",
+          "chars": "✏"
+        },
+        {
+          "layer": "→",
+          "chars": "→"
+        },
+        {
+          "layer": "›",
+          "chars": "›"
+        },
+        {
+          "layer": "🗑",
+          "chars": "🗑"
         }
       ],
       "sampledVariant": "55:128",
@@ -983,6 +1165,14 @@
           "position": "right"
         }
       ],
+      "properties": {
+        "Content#55:110": "TEXT",
+        "position": "VARIANT"
+      },
+      "referencedProperties": [
+        "Content#55:110"
+      ],
+      "glyphTextNodes": [],
       "sampledVariant": "55:48",
       "nodes": [
         {
@@ -1022,6 +1212,32 @@
         },
         {
           "variant": "danger"
+        }
+      ],
+      "properties": {
+        "Message#55:85": "TEXT",
+        "dismissible#507:267": "BOOLEAN",
+        "variant": "VARIANT"
+      },
+      "referencedProperties": [
+        "Message#55:85"
+      ],
+      "glyphTextNodes": [
+        {
+          "layer": "ℹ",
+          "chars": "ℹ"
+        },
+        {
+          "layer": "✓",
+          "chars": "✓"
+        },
+        {
+          "layer": "⚠",
+          "chars": "⚠"
+        },
+        {
+          "layer": "✕",
+          "chars": "✕"
         }
       ],
       "sampledVariant": "55:23",
@@ -1077,6 +1293,25 @@
           "state": "hover"
         }
       ],
+      "properties": {
+        "Label#55:94": "TEXT",
+        "disabled#507:154": "BOOLEAN",
+        "invalid#507:160": "BOOLEAN",
+        "required#507:166": "BOOLEAN",
+        "selection": "VARIANT",
+        "state": "VARIANT"
+      },
+      "referencedProperties": [
+        "Label#55:94",
+        "disabled#507:154",
+        "invalid#507:160"
+      ],
+      "glyphTextNodes": [
+        {
+          "layer": "✓",
+          "chars": "✓"
+        }
+      ],
       "sampledVariant": "55:32",
       "nodes": [
         {
@@ -1125,6 +1360,17 @@
           "state": "hover"
         }
       ],
+      "properties": {
+        "Label#55:99": "TEXT",
+        "disabled#507:187": "BOOLEAN",
+        "selection": "VARIANT",
+        "state": "VARIANT"
+      },
+      "referencedProperties": [
+        "Label#55:99",
+        "disabled#507:187"
+      ],
+      "glyphTextNodes": [],
       "sampledVariant": "55:37",
       "nodes": [
         {
@@ -1180,6 +1426,19 @@
           "state": "hover"
         }
       ],
+      "properties": {
+        "Placeholder#55:157": "TEXT",
+        "disabled#507:91": "BOOLEAN",
+        "readonly#507:97": "BOOLEAN",
+        "required#507:103": "BOOLEAN",
+        "autoResize#507:109": "BOOLEAN",
+        "state": "VARIANT"
+      },
+      "referencedProperties": [
+        "Placeholder#55:157",
+        "disabled#507:91"
+      ],
+      "glyphTextNodes": [],
       "sampledVariant": "55:82",
       "nodes": [
         {
@@ -1228,6 +1487,15 @@
           "state": "hover"
         }
       ],
+      "properties": {
+        "disabled#507:182": "BOOLEAN",
+        "selection": "VARIANT",
+        "state": "VARIANT"
+      },
+      "referencedProperties": [
+        "disabled#507:182"
+      ],
+      "glyphTextNodes": [],
       "sampledVariant": "55:131",
       "nodes": [
         {
@@ -1276,6 +1544,15 @@
           "state": "hover"
         }
       ],
+      "properties": {
+        "disabled#507:172": "BOOLEAN",
+        "selection": "VARIANT",
+        "state": "VARIANT"
+      },
+      "referencedProperties": [
+        "disabled#507:172"
+      ],
+      "glyphTextNodes": [],
       "sampledVariant": "420:165",
       "nodes": [
         {
@@ -1323,6 +1600,11 @@
           "variant": "rectangular"
         }
       ],
+      "properties": {
+        "variant": "VARIANT"
+      },
+      "referencedProperties": [],
+      "glyphTextNodes": [],
       "sampledVariant": "55:99",
       "nodes": []
     },
@@ -1394,6 +1676,13 @@
           "size": "lg"
         }
       ],
+      "properties": {
+        "indeterminate#437:2": "BOOLEAN",
+        "variant": "VARIANT",
+        "size": "VARIANT"
+      },
+      "referencedProperties": [],
+      "glyphTextNodes": [],
       "sampledVariant": "420:81",
       "nodes": [
         {
@@ -1468,6 +1757,15 @@
           "size": "xl"
         }
       ],
+      "properties": {
+        "Initials#55:184": "TEXT",
+        "shape": "VARIANT",
+        "size": "VARIANT"
+      },
+      "referencedProperties": [
+        "Initials#55:184"
+      ],
+      "glyphTextNodes": [],
       "sampledVariant": "55:146",
       "nodes": [
         {
@@ -1536,6 +1834,37 @@
           "position": "bottom-center"
         }
       ],
+      "properties": {
+        "Message#55:104": "TEXT",
+        "dismissible#508:318": "BOOLEAN",
+        "variant": "VARIANT",
+        "position": "VARIANT"
+      },
+      "referencedProperties": [
+        "Message#55:104"
+      ],
+      "glyphTextNodes": [
+        {
+          "layer": "💬",
+          "chars": "💬"
+        },
+        {
+          "layer": "✕",
+          "chars": "✕"
+        },
+        {
+          "layer": "✓",
+          "chars": "✓"
+        },
+        {
+          "layer": "⚠",
+          "chars": "⚠"
+        },
+        {
+          "layer": "ℹ",
+          "chars": "ℹ"
+        }
+      ],
       "sampledVariant": "55:42",
       "nodes": [
         {
@@ -1567,6 +1896,9 @@
       "description": "Hierarchical navigation trail. Maps to AtlBreadcrumbsSpec in libs/spec.\n\nUse when: pages live in a hierarchy and the user benefits from seeing where they are. For top-level navigation use Navigation/AtlTabGroup or a sidebar.\n\nAPI surface:\n- Variant `items`: 3 | 4 | 5 — illustrative item-count Variants\n- (code-only: `separator` string)\n\nA11y: aria-label=\"Breadcrumb\" on the nav element; current page marked aria-current=\"page\".\n\nAxis notes (2026-08-27, ADR-0056): this was a COMPONENT_SET whose only axis pictured an outcome of content rather than a property — `items` = 3 | 4 | 5, and AtlBreadcrumbsSpec is `{ separator?: string }`. An axis is the master's API surface, so a reader saw API where there was none. The other two drawings are kept as content samples in the \"Content samples — not variant axes\" section on this page. check:figma reported the axis as [AXIS-NOT-A-PROP].",
       "variantAxes": {},
       "variants": [],
+      "properties": {},
+      "referencedProperties": [],
+      "glyphTextNodes": [],
       "sampledVariant": "3:1031",
       "nodes": []
     },
@@ -1577,6 +1909,9 @@
       "description": "Page navigator for paged data. Maps to AtlPaginationSpec in libs/spec.\n\nUse when: data spans many pages and user navigates incrementally. For infinite scroll surfaces, omit pagination entirely.\n\nAPI surface:\n- Variant `page`: first | middle | last — illustrative position\n- (code-only: `page`, `pageCount`, `siblingCount`, `showFirstLast`)\n\nA11y: nav with aria-label=\"Pagination\"; current page marked aria-current=\"page\".\n\nAxis notes (2026-08-27, ADR-0056): this was a COMPONENT_SET whose only axis pictured an outcome of content rather than a property — `position` = first | middle | last, and AtlPaginationSpec is `{ page, pageCount, siblingCount, showFirstLast }`. An axis is the master's API surface, so a reader saw API where there was none. The other two drawings are kept as content samples in the \"Content samples — not variant axes\" section on this page. check:figma reported the axis as [AXIS-NOT-A-PROP].",
       "variantAxes": {},
       "variants": [],
+      "properties": {},
+      "referencedProperties": [],
+      "glyphTextNodes": [],
       "sampledVariant": "3:1073",
       "nodes": [
         {
@@ -1638,6 +1973,17 @@
         {
           "position": "right",
           "size": "full"
+        }
+      ],
+      "properties": {
+        "position": "VARIANT",
+        "size": "VARIANT"
+      },
+      "referencedProperties": [],
+      "glyphTextNodes": [
+        {
+          "layer": "×",
+          "chars": "×"
         }
       ],
       "sampledVariant": "421:342",
@@ -1769,6 +2115,28 @@
           "variant": "default",
           "size": "lg",
           "state": "default"
+        }
+      ],
+      "properties": {
+        "sortable#437:27": "BOOLEAN",
+        "selectable#437:38": "BOOLEAN",
+        "stickyHeader#437:49": "BOOLEAN",
+        "disabled#507:276": "BOOLEAN",
+        "loading#507:282": "BOOLEAN",
+        "empty#507:288": "BOOLEAN",
+        "error#507:294": "BOOLEAN",
+        "variant": "VARIANT",
+        "size": "VARIANT",
+        "state": "VARIANT"
+      },
+      "referencedProperties": [
+        "disabled#507:276",
+        "loading#507:282"
+      ],
+      "glyphTextNodes": [
+        {
+          "layer": "_loading-spinner",
+          "chars": "⟳"
         }
       ],
       "sampledVariant": "421:884",
@@ -2032,6 +2400,11 @@
           "variant": "no-copy"
         }
       ],
+      "properties": {
+        "variant": "VARIANT"
+      },
+      "referencedProperties": [],
+      "glyphTextNodes": [],
       "sampledVariant": "420:186",
       "nodes": [
         {
@@ -2201,6 +2574,30 @@
           "state": "focus"
         }
       ],
+      "properties": {
+        "disabled#507:133": "BOOLEAN",
+        "invalid#507:140": "BOOLEAN",
+        "required#507:147": "BOOLEAN",
+        "state": "VARIANT"
+      },
+      "referencedProperties": [
+        "disabled#507:133",
+        "invalid#507:140"
+      ],
+      "glyphTextNodes": [
+        {
+          "layer": "▼",
+          "chars": "▼"
+        },
+        {
+          "layer": "▲",
+          "chars": "▲"
+        },
+        {
+          "layer": "✓",
+          "chars": "✓"
+        }
+      ],
       "sampledVariant": "421:291",
       "nodes": [
         {
@@ -2274,6 +2671,18 @@
         {
           "orientation": "vertical",
           "state": "optional"
+        }
+      ],
+      "properties": {
+        "linear#507:308": "BOOLEAN",
+        "orientation": "VARIANT",
+        "state": "VARIANT"
+      },
+      "referencedProperties": [],
+      "glyphTextNodes": [
+        {
+          "layer": "✓",
+          "chars": "✓"
         }
       ],
       "sampledVariant": "421:407",
@@ -2441,6 +2850,12 @@
           "size": "xl"
         }
       ],
+      "properties": {
+        "max#508:327": "TEXT",
+        "size": "VARIANT"
+      },
+      "referencedProperties": [],
+      "glyphTextNodes": [],
       "sampledVariant": "507:6305",
       "nodes": [
         {
@@ -2516,6 +2931,40 @@
         },
         {
           "variant": "inline"
+        }
+      ],
+      "properties": {
+        "open#507:272": "BOOLEAN",
+        "variant": "VARIANT"
+      },
+      "referencedProperties": [
+        "Label#55:74",
+        "Placeholder#55:157",
+        "disabled#507:91",
+        "disabled#507:192",
+        "loading#507:217",
+        "Initials#55:184"
+      ],
+      "glyphTextNodes": [
+        {
+          "layer": "close-x",
+          "chars": "✕"
+        },
+        {
+          "layer": "glyph-18",
+          "chars": "✓"
+        },
+        {
+          "layer": "_loading-spinner",
+          "chars": "⟳"
+        },
+        {
+          "layer": "min-icon",
+          "chars": "–"
+        },
+        {
+          "layer": "close-icon",
+          "chars": "✕"
         }
       ],
       "sampledVariant": "507:2950",

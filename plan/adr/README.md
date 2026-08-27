@@ -63,6 +63,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0055](0055-invalid-is-not-a-colour.md) | invalid is not a colour, and a glyph in a template is still an icon (`[TEXT-GLYPH]`) | Accepted | Recorded |
 | [0056](0056-a-master-models-one-thing.md) | A master models one thing, and its axes are its API | Accepted | Recorded |
 | [0057](0057-the-icon-set-was-text-in-figma-too.md) | The icon set was text in Figma too | Accepted | Recorded |
+| [0058](0058-the-master-facts-nothing-was-reading.md) | The master facts nothing was reading (`[BOOL-INERT]`, `[MASTER-GLYPH]`) | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

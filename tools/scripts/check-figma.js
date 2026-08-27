@@ -158,7 +158,13 @@ for (const comp of snapshot.components) {
   // declare a mapping to an interface its own spec does not extend (ADR-0056).
   {
     const ownSpec = `${comp.selector}Spec`;
-    const declared = new Set();
+    // The snapshot captures the real property definitions now, so the declared set is
+    // fact rather than prose. The description is still read for the *mappings*, which
+    // exist nowhere else.
+    const realBooleans = Object.entries(comp.properties || {})
+      .filter(([, t]) => t === 'BOOLEAN')
+      .map(([k]) => k.split('#')[0]);
+    const declared = new Set(realBooleans);
     for (const m of (comp.description || '').matchAll(/^- Boolean `([^`]+)`:([^\n]*)$/gm)) {
       declared.add(m[1]);
       const mapping = /maps to `?(\w+)\.(\w+)`?/.exec(m[2]);
@@ -210,8 +216,37 @@ for (const comp of snapshot.components) {
         (f) => !declared.has(f) && !axisValues.has(f) && !mappedByAxis.has(f) && !optedOut.has(f)
       );
       if (gaps.length > 0) {
-        warning('BOOL-MISSING', `${comp.name}: ${ownSpec} has ${gaps.join(', ')} and the master declares no Boolean property for ${gaps.length > 1 ? 'them' : 'it'}. A state a component supports and a master cannot express is a state nobody can draw.`);
+        warning('BOOL-MISSING', `${comp.name}: ${ownSpec} has ${gaps.join(', ')} and the master offers no way to set ${gaps.length > 1 ? 'them' : 'it'} — no Boolean property, no variant-axis value, and no stated opt-out. A state a component supports and a master cannot express is a state nobody can draw. A Boolean binds only to a layer's visibility, so use one where the state ADDS an element and a variant axis where it changes a colour; if the state has nothing to draw, say so in the description as \`- Boolean \\\`x\\\`: not modelled — <reason>\`.`);
       }
+    }
+  }
+
+  // ── A declared property that toggles nothing ──────────────────────────────
+  // A Figma Boolean can only bind to a layer's `visible`. So a state that differs by
+  // colour cannot be a Boolean at all, and declaring one anyway produces API that
+  // does nothing — measured: twenty such properties were shipping, including all five
+  // on AtlTable. This is the mirror of [BOOL-MISSING] and the more common defect
+  // (ADR-0058).
+  {
+    const referenced = new Set(comp.referencedProperties || []);
+    const dead = Object.entries(comp.properties || {})
+      .filter(([k, t]) => t === 'BOOLEAN' && !referenced.has(k))
+      .map(([k]) => k.split('#')[0]);
+    if (dead.length > 0) {
+      warning('BOOL-INERT', `${comp.name}: Boolean ${dead.length > 1 ? 'properties' : 'property'} ${dead.map((d) => `\`${d}\``).join(', ')} ${dead.length > 1 ? 'are' : 'is'} declared and nothing references ${dead.length > 1 ? 'them' : 'it'} — the ${dead.length > 1 ? 'properties toggle' : 'property toggles'} no layer, so switching ${dead.length > 1 ? 'them' : 'it'} changes nothing. Bind it to the visibility of the layer that state adds, or drop it. A state that differs only by colour cannot be a Boolean: put it on a variant axis.`);
+    }
+  }
+
+  // ── A pictogram drawn as a text character ─────────────────────────────────
+  // The same defect ADR-0046 removed from the CSS, ADR-0050 from the TypeScript,
+  // ADR-0055 from the templates and ADR-0057 from the Icons page — and it was inside
+  // nineteen masters the whole time. A character cannot be an icon instance, cannot
+  // follow the set, and depends on whichever font has it (ADR-0058).
+  {
+    const glyphs = comp.glyphTextNodes || [];
+    if (glyphs.length > 0) {
+      const shown = glyphs.slice(0, 6).map((g) => `${JSON.stringify(g.chars)} on \`${g.layer}\``);
+      warning('MASTER-GLYPH', `${comp.name}: ${glyphs.length} pictogram${glyphs.length > 1 ? 's' : ''} drawn as TEXT characters — ${shown.join(', ')}${glyphs.length > 6 ? `, and ${glyphs.length - 6} more` : ''}. Replace with an instance of the Icon library, which is generated from ATL_ICON_GEOMETRY (ADR-0057).`);
     }
   }
 
