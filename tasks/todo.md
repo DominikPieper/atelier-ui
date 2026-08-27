@@ -283,17 +283,26 @@ Decision-bearing quick wins (deferred — not this session's scope):
       both collapsed to the plain COMPONENT they always were, with the other drawings kept as
       content-sample frames on the Components page. `check:figma` reports **zero**
       `[BOOL-CLAIM]`, `[AXIS-NAME]` and `[AXIS-NOT-A-PROP]` now.
-- [ ] **Nineteen Booleans across fourteen masters the spec supports and no master can set.**
-      `[BOOL-MISSING]` used to name three, on a hardcoded list of flag names — so it never asked
-      about `AtlPaginationSpec.showFirstLast`. It derives flags from the spec **types** now and
-      names fourteen: AtlDialog and AtlDrawer (`open`, `closeOnBackdrop`), AtlChat (`open`),
-      AtlAlert (`dismissible`), AtlSkeleton (`animated`), AtlProgress (`indeterminate`),
-      AtlAccordionGroup (`multi`), AtlTable (`stickyHeader`), AtlStepper (`linear`),
-      AtlTooltip (`atlTooltipDisabled`), AtlPagination (`showFirstLast`), AtlToggle and
-      AtlRadioGroup (`invalid`, `required`, and `readonly` on the group), AtlCombobox
-      (`readonly`). Each needs the state **drawn** before the property means anything. Where the
-      false value renders nothing — `open` on a dialog — state the opt-out in the master's
-      description as `- Boolean \`open\`: not modelled — <reason>`; the gate reads it.
+- [ ] **Twelve Booleans across nine masters need the state drawn** (ADR-0056). Each was checked
+      against the CSS or a render condition rather than argued from the flag's name, so every one
+      of these has a visible difference to draw:
+      AtlAlert `dismissible` (gates a close button), AtlPagination `showFirstLast` (gates the
+      « » buttons), AtlChat `open` (adds `is-open` and gates content — its popup variant keeps a
+      visible bubble when closed, unlike a dialog), AtlTable `stickyHeader`
+      (`.is-sticky-header thead th` adds a box-shadow), AtlProgress `indeterminate`
+      (`.is-indeterminate .fill`), AtlSkeleton `animated` (`.is-animated::after` shimmer —
+      Figma cannot animate, so draw the overlay's presence), AtlToggle `invalid` + `required`,
+      AtlRadioGroup `invalid` + `required` + `readonly`, AtlCombobox `readonly`. The last three
+      groups are the states implemented in code on 2026-08-27 (ADR-0055), so their appearance is
+      already measured.
+- [x] ~~Six spec flags reported as missing that have no state to draw~~ — reasoned out in the
+      masters themselves 2026-08-27: AtlAccordionGroup `multi` and AtlStepper `linear` are
+      behaviour (`if (linear && i > activeStep) return` is the whole of it), AtlTooltip
+      `atlTooltipDisabled` early-returns and renders nothing, AtlDialog and AtlDrawer `open`
+      render nothing when false (native `<dialog>` + `showModal()`) and their
+      `closeOnBackdrop` is behaviour. Each states its reason as
+      `- Boolean \`x\`: not modelled — <reason>` in the master's own description, which the gate
+      reads — an exemption inside the script would be one nobody opening the master can see.
 - [ ] **Eleven child masters to draw** (ADR-0056): AtlMenuItem, AtlMenuSeparator, AtlTab,
       AtlStep, AtlOption, AtlChatMessage, AtlChatSuggestion, AtlChatTyping,
       AtlAccordionItem, AtlBreadcrumbItem — plus AtlIcon, which everything else already
