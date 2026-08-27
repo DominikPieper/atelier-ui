@@ -56,6 +56,19 @@ const MASTERS = [
   { nodeId: '55:139' }, { nodeId: '55:143' }, { nodeId: '421:398' }, { nodeId: '421:1183' },
   { nodeId: '420:286' }, { nodeId: '421:339' }, { nodeId: '421:505' }, { nodeId: '508:7221' },
   { nodeId: '507:2953' },
+  // Child masters (ADR-0062). Ten parts that had no master of their own, which is
+  // why their geometry was the one layer [ROOT-PAINT] could not reach: a part
+  // promoted to a master has a ROOT, and a root is what the gate compares.
+  { nodeId: '911:1056' }, // Navigation/AtlMenuItem
+  { nodeId: '911:1059' }, // Navigation/AtlMenuSeparator
+  { nodeId: '911:1069' }, // Navigation/AtlBreadcrumbItem
+  { nodeId: '911:1075' }, // Navigation/AtlTab
+  { nodeId: '911:1151' }, // Navigation/AtlStep
+  { nodeId: '911:1086' }, // Form/AtlOption
+  { nodeId: '911:1103' }, // Feedback/AtlAccordionItem
+  { nodeId: '911:1112' }, // AI/AtlChatMessage
+  { nodeId: '911:1116' }, // AI/AtlChatSuggestion
+  { nodeId: '911:1119' }, // AI/AtlChatTyping
 ];
 
 main().catch((err) => {

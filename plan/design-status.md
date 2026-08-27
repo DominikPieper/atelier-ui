@@ -19,11 +19,11 @@ a typography study says nothing about how the component should look.
 
 | Component | Artboard | Figma axes | Variants | Parity verified | a11y baseline | Type roles | Respecifies font |
 |---|---|---|---|---|---|---|---|
-| `accordion` | **AtlAccordionGroup.dc.html** | variant | 3 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
+| `accordion` | **AtlAccordionGroup.dc.html** | expanded | 2 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
 | `alert` | **AtlAlert.dc.html** | variant | 4 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
 | `avatar` | **AtlAvatar.dc.html** | size | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `badge` | **AtlBadge.dc.html** | variant · size | 10 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
-| `breadcrumbs` | **AtlBreadcrumbs.dc.html** | none | 0 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
+| `breadcrumbs` | **AtlBreadcrumbs.dc.html** | current | 2 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
 | `button` | **AtlButton.dc.html** | variant · size · state | 24 | 2026-08-26 (`0bdaddd`) | all 3 | — | yes |
 | `card` | **AtlCard.dc.html** | variant · padding | 12 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `chat` | **AtlChat.dc.html** | variant | 3 | 2026-07-23 (`2715827`) | all 3 | — | yes |
@@ -34,16 +34,16 @@ a typography study says nothing about how the component should look.
 | `drawer` | **AtlDrawer.dc.html** | position · size | 7 | 2026-07-23 (`2715827`) | all 3 | — | yes |
 | `icon` | **AtlIcon.dc.html** | — *(no master)* | — | — *(never)* | all 3 | — | yes |
 | `input` | **AtlInput.dc.html** | state | 5 | 2026-08-26 (`0bdaddd`) | all 3 | — | yes |
-| `menu` | **AtlMenu.dc.html** | variant | 2 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
+| `menu` | **AtlMenu.dc.html** | state | 2 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
 | `pagination` | **AtlPagination.dc.html** | none | 0 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `progress` | **AtlProgress.dc.html** | variant · size | 12 | 2026-07-22 (`d05f789`) | all 3 | — | yes |
 | `radio` | **AtlRadio.dc.html** | selection · state | 4 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
 | `radio-group` | **AtlRadioGroup.dc.html** | — *(no master)* | — | — *(never)* | all 3 | — | yes |
-| `select` | **AtlSelect.dc.html** | state | 5 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
+| `select` | **AtlSelect.dc.html** | state | 4 | 2026-07-22 (`fe4d5f4`) | — | — | yes |
 | `skeleton` | **AtlSkeleton.dc.html** | variant | 3 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
-| `stepper` | **AtlStepper.dc.html** | orientation · state | 8 | 2026-08-26 (`f4c20b6`) | all 3 | — | yes |
+| `stepper` | **AtlStepper.dc.html** | state | 4 | 2026-08-26 (`f4c20b6`) | all 3 | — | yes |
 | `table` | **AtlTable.dc.html** | variant · size · state | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
-| `tabs` | **AtlTabGroup.dc.html** | variant · selectedIndex | 3 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
+| `tabs` | **AtlTabGroup.dc.html** | state | 2 | 2026-07-22 (`26a8a7e`) | all 3 | — | yes |
 | `textarea` | **AtlTextarea.dc.html** | state | 5 | 2026-07-22 (`6282b4f`) | all 3 | — | yes |
 | `toast` | **AtlToast.dc.html** | — *(no master)* | — | — *(never)* | all 3 | — | yes |
 | `toggle` | **AtlToggle.dc.html** | selection · state | 4 | 2026-07-22 (`d05f789`) | all 3 | — | yes |

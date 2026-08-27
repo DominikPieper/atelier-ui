@@ -231,8 +231,13 @@ for (const comp of snapshot.components) {
       const optedOut = new Set(
         [...(comp.description || '').matchAll(/^- Boolean `([^`]+)`:\s*not modelled\s*[\u2014-]\s*\S/gm)].map((m) => m[1])
       );
+      // An axis NAMED for the boolean field expresses it as surely as an axis value
+      // does: AtlBreadcrumbItem's `current` = false|true and AtlAccordionItem's
+      // `expanded` = false|true are the property, drawn. Both are states that
+      // recolour AND add/remove an element, which a visibility Boolean cannot do.
+      const axisNames = new Set(Object.keys(comp.variantAxes || {}));
       const gaps = [...specBooleans(ownSpec)].filter(
-        (f) => !declared.has(f) && !axisValues.has(f) && !mappedByAxis.has(f) && !optedOut.has(f)
+        (f) => !declared.has(f) && !axisValues.has(f) && !axisNames.has(f) && !mappedByAxis.has(f) && !optedOut.has(f)
       );
       if (gaps.length > 0) {
         warning('BOOL-MISSING', `${comp.name}: ${ownSpec} has ${gaps.join(', ')} and the master offers no way to set ${gaps.length > 1 ? 'them' : 'it'} — no Boolean property, no variant-axis value, and no stated opt-out. A state a component supports and a master cannot express is a state nobody can draw. A Boolean binds only to a layer's visibility, so use one where the state ADDS an element and a variant axis where it changes a colour; if the state has nothing to draw, say so in the description as \`- Boolean \\\`x\\\`: not modelled — <reason>\`.`);
@@ -395,6 +400,21 @@ const ROOT_PAINT = [
   { label: 'AtlToast', file: 'toast/atl-toast.css', cascade: ['.atl-toast', '.atl-toast.variant-{variant}'] },
   { label: 'AtlAlert', file: 'alert/atl-alert.css', cascade: ['.atl-alert', '.atl-alert.variant-{variant}'] },
   { label: 'AtlAccordionGroup', file: 'accordion/atl-accordion.css', cascade: ['.atl-accordion-group', '.atl-accordion-group.variant-{variant}'] },
+  // Child masters (ADR-0062). Each one turns a layer nobody could check into a root.
+  { label: 'AtlMenuItem', file: 'menu/atl-menu.css', cascade: ['.atl-menu-item'] },
+  { label: 'AtlBreadcrumbItem', file: 'breadcrumbs/atl-breadcrumbs.css', cascade: ['.atl-breadcrumb-item'] },
+  { label: 'AtlTab', file: 'tabs/atl-tabs.css', cascade: ['.atl-tab-group .tablist button'] },
+  { label: 'AtlStep', file: 'stepper/atl-stepper.css', cascade: ['.step-item'] },
+  // Only Angular renders an option row at all: React and Vue emit a native
+  // <select> the operating system draws (ADR-0028).
+  { label: 'AtlOption', file: 'select/atl-option.css', lib: 'angular', cascade: ["[role='option']"] },
+  { label: 'AtlAccordionItem', file: 'accordion/atl-accordion.css', cascade: ['.atl-accordion-item'] },
+  { label: 'AtlChatMessage', file: 'chat/atl-chat.css', cascade: ['.atl-chat-message', '.atl-chat-message.role-{role}'] },
+  { label: 'AtlChatSuggestion', file: 'chat/atl-chat.css', cascade: ['.atl-chat-suggestion .chip'] },
+  { label: 'AtlChatTyping', file: 'chat/atl-chat.css', cascade: ['.atl-chat-typing'] },
+  // AtlMenuSeparator is deliberately absent: the CSS root IS the 1px rule, while the
+  // master's root is the margin box that carries var(--ui-spacing-2) above and below
+  // so it stacks correctly. The rule is a child layer, which this table cannot address.
 ];
 
 // ---------------------------------------------------------------------------
@@ -435,7 +455,12 @@ function checkNameAlignment(comp, selector, specName) {
   // exist and its values must match the literals exactly.
   for (const [unionName, members] of Object.entries(unionMembers)) {
     if (!unionName.startsWith(selector)) continue;
-    const axisProp = lowerFirst(unionName.slice(selector.length)); // AtlButtonVariant -> 'variant'
+    const remainder = unionName.slice(selector.length);
+    // The remainder has to be an axis word, not merely whatever is left over.
+    // `AtlTab` is a prefix of BOTH `AtlTabGroupVariant` and `AtlTableVariant`, which
+    // a plain prefix test turned into axes named `groupVariant` and `leVariant`.
+    if (!/^(Variant|Size|Shape|Position|Orientation|Align|Role)$/.test(remainder)) continue;
+    const axisProp = lowerFirst(remainder); // AtlButtonVariant -> 'variant'
     if (!axisProp) continue;
     const figmaValues = axes[axisProp];
     if (!figmaValues) {
@@ -759,7 +784,8 @@ function checkRootPaint() {
           note(prop, `root ${prop} is bound to ${g}, but ${want.from[prop]} says ${w}. Bound is not the same as bound correctly.`, variant);
         }
       }
-      if (want.strokeSides && got.strokeSides) {
+      const paintsStroke = got.stroke !== null || (want.stroke !== null && want.stroke !== undefined);
+      if (want.strokeSides && got.strokeSides && paintsStroke) {
         const g = { top: got.strokeSides[0], right: got.strokeSides[1], bottom: got.strokeSides[2], left: got.strokeSides[3] };
         const off = ['top', 'right', 'bottom', 'left'].filter((sd) => (want.strokeSides[sd] || 0) !== (g[sd] || 0));
         if (off.length) {
@@ -795,23 +821,47 @@ function parseAxisName(name) {
   return out;
 }
 
-/** Resolve a ROOT_PAINT entry's cascade against the CSS, for one variant. */
+/** Resolve a ROOT_PAINT entry's cascade against the CSS, for one variant.
+ *
+ *  Rules are indexed by INDIVIDUAL selector, so a comma-separated list
+ *  (`.atl-chat-message.role-assistant, .atl-chat-message.role-system`) is found
+ *  under either of its members — a regex on the whole selector text was not. */
+function cssRules(file) {
+  // Cached on the function: the checks run before a module-level `const` below
+  // them is initialised.
+  if (!cssRules.cache) cssRules.cache = new Map();
+  const cssRuleCache = cssRules.cache;
+  if (cssRuleCache.has(file)) return cssRuleCache.get(file);
+  const index = new Map();
+  if (fs.existsSync(file)) {
+    const css = fs.readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+    for (const m of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+      const body = m[2];
+      for (const sel of m[1].split(',')) {
+        const key = sel.replace(/\s+/g, ' ').trim();
+        if (!key || key.startsWith('@')) continue;
+        // Later rules win, the way the cascade does at equal specificity.
+        index.set(key, (index.get(key) || '') + ';' + body);
+      }
+    }
+  }
+  cssRuleCache.set(file, index);
+  return index;
+}
+
 function resolveRootPaint(entry, axes) {
-  const file = path.join(ROOT, 'libs/react/src/lib', entry.file);
+  const file = path.join(ROOT, 'libs', entry.lib || 'react', 'src/lib', entry.file);
   if (!fs.existsSync(file)) {
-    warning('ROOT-PAINT', `${entry.label}: ${entry.file} not found; cannot resolve the expected paint.`);
+    warning('ROOT-PAINT', `${entry.label}: ${entry.file} not found under libs/${entry.lib || 'react'}; cannot resolve the expected paint.`);
     return null;
   }
-  const css = fs.readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+  const rules = cssRules(file);
   const want = { from: {} };
   for (const template of entry.cascade) {
     const selector = template.replace(/\{(\w+)\}/g, (_, axis) => axes[axis] ?? '\u0000');
     if (selector.includes('\u0000')) continue; // the sampled variant has no such axis
-    const rule = new RegExp(
-      '(?:^|\\})\\s*' + selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*\\{([^{}]*)\\}'
-    ).exec(css);
-    if (!rule) continue;
-    const body = rule[1];
+    const body = rules.get(selector);
+    if (body === undefined) continue;
     const decl = (prop) => {
       const m = new RegExp('(?:^|;)\\s*' + prop + '\\s*:\\s*([^;]+)').exec(body);
       return m ? m[1].replace(/\s+/g, ' ').trim() : null;
@@ -822,7 +872,7 @@ function resolveRootPaint(entry, axes) {
       want.from[prop] = selector;
     };
     const bg = decl('background') || decl('background-color');
-    if (bg !== null) set('fill', bg, cssToVariable(bg, 'color'));
+    if (bg !== null) set('fill', bg, /transparent|none/.test(bg) ? null : cssToVariable(bg, 'color'));
     // Borders, four-side and per-side. `border-left: 4px solid transparent` plus a
     // per-variant `border-left-color` is one edge, not a box — reading only the
     // shorthand reported AtlToast's accent as an invented stroke.

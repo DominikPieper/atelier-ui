@@ -126,6 +126,17 @@ const FIGMA_CONFORMANCE_EXCEPTIONS = new Set([
   'AtlTable:bool:unspeced:sortable',
   'AtlTable:bool:unspeced:selectable',
   'AtlTable:bool:unspeced:empty',
+  // AtlOptionSpec and AtlSelectSpec share the `select` metadata module, so AtlOption
+  // inherits AtlSelect's variantMatrix — which pictures the TRIGGER's states
+  // (default | filled | hover | focus | open) and even claims role: 'combobox'. The
+  // option row's own axis is default | hover | active | selected. A child spec needs
+  // its own metadata module; tracked in tasks/todo.md.
+  'AtlOption:variant:state=filled',
+  // .step-description and .step-optional are separated by `margin-top: 2px` — a raw
+  // literal in the CSS, off the spacing scale, so no variable can bind it. The fix is
+  // in the CSS (the off-scale spacing sweep in tasks/todo.md), not in Figma: drawing
+  // 4px here to satisfy the gate would make the master diverge from the component.
+  'AtlStep:token:spacing:step-text',
   // AtlChatStatus (idle | streaming | error) is illustrated as sibling
   // mockup frames pending a follow-up variant axis (documented in the
   // AtlChat Figma description); AtlChatMessageRole shapes the message

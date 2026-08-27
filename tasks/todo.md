@@ -170,14 +170,33 @@ Decision-bearing quick wins (deferred — not this session's scope):
       1621 text nodes swept onto the declared families, the 19 styles replaced by 8
       `ty/<role>` styles generated from `--ui-type-*`, and `[FONT-FAMILY]` +
       `[TEXT-STYLE]` added to `check:figma` so it cannot drift back.
+- [ ] **A child spec sharing its parent's metadata module inherits false claims.**
+      `AtlOptionSpec` maps to the `select` module, so AtlOption inherits AtlSelect's
+      `variantMatrix` — default | filled | hover | focus | open, which pictures the
+      TRIGGER — and its `accessibility.role: 'combobox'`. The option row's own axis is
+      default | hover | active | selected and its role is `option`. Give the child specs
+      their own metadata modules (`AtlOptionSpec`, `AtlTabSpec`, `AtlStepSpec`,
+      `AtlChatMessageSpec`, …) and remove the `AtlOption:variant:state=filled`
+      allowlist entry (ADR-0062).
+- [ ] **Generate the Inventory cards from the snapshot.** Their meta and property text is
+      hand-written and drifts: AtlBreadcrumbs' card still read `COMPONENT_SET · 209×17px`
+      with an `items` VARIANT row months after ADR-0056 removed that axis and collapsed
+      the set to a plain COMPONENT. The ten cards added in ADR-0062 were generated from
+      the master; the other 29 need the same, and then a gate can compare card to master.
+- [ ] **The breadcrumb separator is a glyph in CSS `content`.**
+      `.atl-breadcrumb-item::after { content: var(--atl-separator, '›') }` — a pictogram
+      as a character, which ADR-0050's rule sends to the icon set, but a CSS
+      pseudo-element cannot hold an icon component. Deciding it means either rendering a
+      `chevron-right` AtlIcon in all three templates (a spec-touching change) or stating
+      the pseudo-element as the one place a glyph is allowed. The master matches the code
+      today, with the exemption written in its description.
 - [ ] **Three table child masters carry AtlTable's borrowed Booleans.** `sortable` is
       `AtlThSpec`, `selectable` is `AtlTrSpec`, `empty` is `AtlTbodySpec`. They are
       allowlisted on AtlTable with that reason (ADR-0061) and stay declared only until
       AtlTh / AtlTr / AtlTbody exist as masters. Building them removes the allowlist
       entries, not just the warning.
-- [ ] **AtlTabGroup's `disabled` belongs on AtlTab.** Removed from the group master
-      (ADR-0061) because `AtlTabGroupSpec` has no such field — `AtlTabSpec.disabled`
-      does. It has nowhere to live until the AtlTab child master exists.
+- [x] **AtlTabGroup's `disabled` belongs on AtlTab** (closed 2026-08-27, ADR-0062) —
+      AtlTab now exists as a master and carries it.
 - [ ] **`[LAYER-PAINT]`: the inner layers are unchecked and diverge at the same rate.**
       `[ROOT-PAINT]` (ADR-0060) covers each master's ROOT. Every master it fixed
       exposed a defect one level down, all measured: AtlMenu's items are 41px tall

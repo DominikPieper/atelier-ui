@@ -3,10 +3,10 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-27T12:59:22.142Z",
-    "gitSha": "923e40b",
+    "generatedAt": "2026-08-27T13:12:54.400Z",
+    "gitSha": "4f23db2",
     "serverVersion": null,
-    "coverage": "All 29 masters. Token/auto-layout checks sample each master's default variant.",
+    "coverage": "All 39 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
   },
   "uiTokens": [
@@ -63,7 +63,7 @@
   ],
   "typography": {
     "fontFamilies": {
-      "Instrument Sans": 1502,
+      "Instrument Sans": 1537,
       "Instrument Serif": 1,
       "JetBrains Mono": 81
     },
@@ -9810,6 +9810,1154 @@
           "nonSemanticTokens": []
         }
       ]
+    },
+    {
+      "name": "Navigation/AtlMenuItem",
+      "selector": "AtlMenuItem",
+      "nodeId": "911:1056",
+      "description": "The row inside AtlMenu. Maps to AtlMenuItemSpec.\n\nAxis `state`: default | hover. `:hover` and `:focus-visible` paint the SAME background (`--ui-color-surface-sunken`), so focus is not a third drawing (ADR-0046).\n\n- Boolean `disabled`: maps to AtlMenuItemSpec.disabled — `.is-disabled` sets `opacity: var(--ui-opacity-disabled)`, drawn as a surface overlay at the complement.\n\nGeometry: `.atl-menu-item` is a row-sm (40px) that CENTRES — `padding-block: 0`, `padding-inline: var(--ui-spacing-4)`, `gap: var(--ui-spacing-3)`, leading stated tight (ADR-0052). The font size comes from `.atl-menu` (`--ui-font-size-md`); `.variant-compact` belongs to AtlMenu, not to the item.",
+      "variantAxes": {
+        "state": [
+          "default",
+          "hover"
+        ]
+      },
+      "variants": [
+        {
+          "state": "default"
+        },
+        {
+          "state": "hover"
+        }
+      ],
+      "properties": {
+        "disabled#911:27": "BOOLEAN",
+        "state": "VARIANT"
+      },
+      "referencedProperties": [
+        "disabled#911:27"
+      ],
+      "iconInstanceNames": [],
+      "rootPaint": {
+        "state=default": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "state=hover": {
+          "fill": "color/surface-sunken",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        }
+      },
+      "overlays": [
+        {
+          "variant": "state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            200,
+            40
+          ],
+          "parentBox": [
+            200,
+            40
+          ],
+          "parentName": "state=default",
+          "visible": false,
+          "boundTo": "disabled#911:27"
+        },
+        {
+          "variant": "state=hover",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            200,
+            40
+          ],
+          "parentBox": [
+            200,
+            40
+          ],
+          "parentName": "state=hover",
+          "visible": false,
+          "boundTo": "disabled#911:27"
+        }
+      ],
+      "glyphTextNodes": [],
+      "sampledVariant": "911:1052",
+      "nodes": [
+        {
+          "name": "state=default",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Navigation/AtlMenuSeparator",
+      "selector": "AtlMenuSeparator",
+      "nodeId": "911:1059",
+      "description": "The 1px rule between groups inside AtlMenu. It has NO spec interface, by design: `AtlMenuSeparator()` takes no props and renders `<hr class=\"atl-menu-separator\">`.\n\nA part earns a master by being independently PLACEABLE, not only by having state — the refinement ADR-0056's criterion needed.\n\nGeometry: 1px in `--ui-color-border` with `var(--ui-spacing-2)` above and below, so the master is 17px tall and stacks correctly between items.",
+      "variantAxes": {},
+      "variants": [],
+      "properties": {},
+      "referencedProperties": [],
+      "iconInstanceNames": [],
+      "rootPaint": {
+        "Navigation/AtlMenuSeparator": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        }
+      },
+      "overlays": [],
+      "glyphTextNodes": [],
+      "sampledVariant": "911:1060",
+      "nodes": []
+    },
+    {
+      "name": "Navigation/AtlBreadcrumbItem",
+      "selector": "AtlBreadcrumbItem",
+      "nodeId": "911:1069",
+      "description": "One crumb inside AtlBreadcrumbs. Maps to AtlBreadcrumbItemSpec.\n\nAxis `current`: false | true. `current` recolours the label (`--ui-color-text`, semibold) AND removes the separator (`.is-current::after { display: none }`), so it cannot be a Boolean — a Boolean binds only to visibility.\n\n- Glyph `›` on `separator-glyph`: the component draws the separator as CSS `content: var(--atl-separator, '›')` on `.atl-breadcrumb-item::after`. A CSS pseudo-element cannot hold an icon instance, so the master matches what the code renders today; moving it to an AtlIcon is a code change tracked in tasks/todo.md.\n- `href` is not visual: it swaps the element from `<span>` to `<a>` and changes nothing drawn.\n\nGeometry: the link carries `padding: var(--ui-spacing-1) var(--ui-spacing-2)` and `--ui-radius-sm`; the separator sits at `margin: 0 var(--ui-spacing-2)`; the list gap is 0.",
+      "variantAxes": {
+        "current": [
+          "false",
+          "true"
+        ]
+      },
+      "variants": [
+        {
+          "current": "false"
+        },
+        {
+          "current": "true"
+        }
+      ],
+      "properties": {
+        "current": "VARIANT"
+      },
+      "referencedProperties": [],
+      "iconInstanceNames": [],
+      "rootPaint": {
+        "current=false": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "current=true": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        }
+      },
+      "overlays": [
+        {
+          "variant": "current=false",
+          "layer": "_separator",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "box": [
+            75,
+            5,
+            22,
+            16
+          ],
+          "parentBox": [
+            97,
+            26
+          ],
+          "parentName": "current=false",
+          "visible": true,
+          "boundTo": null
+        }
+      ],
+      "glyphTextNodes": [
+        {
+          "layer": "separator-glyph",
+          "chars": "›"
+        }
+      ],
+      "sampledVariant": "911:1061",
+      "nodes": [
+        {
+          "name": "current=false",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "breadcrumb-link",
+          "type": "FRAME",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "_separator",
+          "type": "FRAME",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Navigation/AtlTab",
+      "selector": "AtlTab",
+      "nodeId": "911:1075",
+      "description": "One tab inside AtlTabGroup. Maps to AtlTabSpec.\n\nAxis `state`: default | active. `.is-active` recolours the label to `--ui-color-primary` and paints the 3px bottom indicator, inset `var(--ui-spacing-2)` on each side.\n\n- Boolean `disabled`: maps to AtlTabSpec.disabled — this is the flag AtlTabGroup used to declare at group level, where AtlTabGroupSpec has no such field (ADR-0061).\n\nGeometry: `.atl-tab-group .tablist button` DERIVES its block padding from `--ui-control-height-md` (ADR-0041). A 40px min-height box that centres its line is the same measurement without a raw 11.25px, which no token could bind. Top corners `--ui-radius-md`, bottom square.",
+      "variantAxes": {
+        "state": [
+          "default",
+          "active"
+        ]
+      },
+      "variants": [
+        {
+          "state": "default"
+        },
+        {
+          "state": "active"
+        }
+      ],
+      "properties": {
+        "disabled#911:30": "BOOLEAN",
+        "state": "VARIANT"
+      },
+      "referencedProperties": [
+        "disabled#911:30"
+      ],
+      "iconInstanceNames": [],
+      "rootPaint": {
+        "state=default": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": "mixed",
+          "effects": []
+        },
+        "state=active": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/md",
+          "radiusPx": "mixed",
+          "effects": []
+        }
+      },
+      "overlays": [
+        {
+          "variant": "state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            90,
+            40
+          ],
+          "parentBox": [
+            90,
+            40
+          ],
+          "parentName": "state=default",
+          "visible": false,
+          "boundTo": "disabled#911:30"
+        },
+        {
+          "variant": "state=active",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            90,
+            40
+          ],
+          "parentBox": [
+            90,
+            40
+          ],
+          "parentName": "state=active",
+          "visible": false,
+          "boundTo": "disabled#911:30"
+        }
+      ],
+      "glyphTextNodes": [],
+      "sampledVariant": "911:1070",
+      "nodes": [
+        {
+          "name": "state=default",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Navigation/AtlStep",
+      "selector": "AtlStep",
+      "nodeId": "911:1151",
+      "description": "One step inside AtlStepper. Maps to AtlStepSpec.\n\nAxis `state`: default | active | completed | error. Each recolours the circle's border, fill and number and the label, so none of them can be a Boolean.\n\n- Boolean `description`: maps to AtlStepSpec.description — the second line appears when the string is passed.\n- Boolean `optional`: maps to AtlStepSpec.optional — adds the italic line.\n- Boolean `disabled`: maps to AtlStepSpec.disabled — `.is-disabled` dims circle and label with `--ui-opacity-disabled`.\n- `label` is content, not state.\n\nGeometry: `.step-circle` is 36x36 with a 2px border and a full radius; `.step-text` sits `var(--ui-spacing-2)` below. The 2px gap between label, description and optional is a raw literal in the CSS — see tasks/todo.md.",
+      "variantAxes": {
+        "state": [
+          "default",
+          "active",
+          "completed",
+          "error"
+        ]
+      },
+      "variants": [
+        {
+          "state": "default"
+        },
+        {
+          "state": "active"
+        },
+        {
+          "state": "completed"
+        },
+        {
+          "state": "error"
+        }
+      ],
+      "properties": {
+        "description#911:46": "BOOLEAN",
+        "optional#911:51": "BOOLEAN",
+        "disabled#911:56": "BOOLEAN",
+        "state": "VARIANT"
+      },
+      "referencedProperties": [
+        "description#911:46",
+        "optional#911:51",
+        "disabled#911:56"
+      ],
+      "iconInstanceNames": [],
+      "rootPaint": {
+        "state=default": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "state=active": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "state=completed": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "state=error": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        }
+      },
+      "overlays": [
+        {
+          "variant": "state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            96,
+            79
+          ],
+          "parentBox": [
+            96,
+            79
+          ],
+          "parentName": "state=default",
+          "visible": false,
+          "boundTo": "disabled#911:56"
+        },
+        {
+          "variant": "state=active",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            96,
+            79
+          ],
+          "parentBox": [
+            96,
+            79
+          ],
+          "parentName": "state=active",
+          "visible": false,
+          "boundTo": "disabled#911:56"
+        },
+        {
+          "variant": "state=completed",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            96,
+            79
+          ],
+          "parentBox": [
+            96,
+            79
+          ],
+          "parentName": "state=completed",
+          "visible": false,
+          "boundTo": "disabled#911:56"
+        },
+        {
+          "variant": "state=error",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            96,
+            79
+          ],
+          "parentBox": [
+            96,
+            79
+          ],
+          "parentName": "state=error",
+          "visible": false,
+          "boundTo": "disabled#911:56"
+        }
+      ],
+      "glyphTextNodes": [],
+      "sampledVariant": "911:1123",
+      "nodes": [
+        {
+          "name": "state=default",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "step-circle",
+          "type": "FRAME",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "step-text",
+          "type": "FRAME",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [
+            "itemSpacing"
+          ],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Form/AtlOption",
+      "selector": "AtlOption",
+      "nodeId": "911:1086",
+      "description": "One row inside AtlSelect's list. Maps to AtlOptionSpec.\n\nDIVERGENCE, stated rather than hidden: only Angular renders this row. React and Vue emit a native `<select>`, where the operating system draws the list and no option element exists to style (ADR-0028).\n\nAxis `state`: default | hover | active | selected. hover paints `--ui-color-surface-sunken`; active paints `--ui-color-primary-light` and recolours the text; selected only changes the weight to semibold.\n\n- Boolean `disabled`: maps to AtlOptionSpec.disabled.\n- `optionValue` is data, not state.\n\nGeometry: a row-sm (40px) that centres — `padding-block: 0`, `padding-inline: var(--ui-spacing-4)`, `justify-content: space-between`, `--ui-font-size-md`.",
+      "variantAxes": {
+        "state": [
+          "default",
+          "hover",
+          "active",
+          "selected"
+        ]
+      },
+      "variants": [
+        {
+          "state": "default"
+        },
+        {
+          "state": "hover"
+        },
+        {
+          "state": "active"
+        },
+        {
+          "state": "selected"
+        }
+      ],
+      "properties": {
+        "disabled#911:33": "BOOLEAN",
+        "state": "VARIANT"
+      },
+      "referencedProperties": [
+        "disabled#911:33"
+      ],
+      "iconInstanceNames": [],
+      "rootPaint": {
+        "state=default": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "state=hover": {
+          "fill": "color/surface-sunken",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "state=active": {
+          "fill": "color/primary-light",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "state=selected": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        }
+      },
+      "overlays": [
+        {
+          "variant": "state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            220,
+            40
+          ],
+          "parentBox": [
+            220,
+            40
+          ],
+          "parentName": "state=default",
+          "visible": false,
+          "boundTo": "disabled#911:33"
+        },
+        {
+          "variant": "state=hover",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            220,
+            40
+          ],
+          "parentBox": [
+            220,
+            40
+          ],
+          "parentName": "state=hover",
+          "visible": false,
+          "boundTo": "disabled#911:33"
+        },
+        {
+          "variant": "state=active",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            220,
+            40
+          ],
+          "parentBox": [
+            220,
+            40
+          ],
+          "parentName": "state=active",
+          "visible": false,
+          "boundTo": "disabled#911:33"
+        },
+        {
+          "variant": "state=selected",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            220,
+            40
+          ],
+          "parentBox": [
+            220,
+            40
+          ],
+          "parentName": "state=selected",
+          "visible": false,
+          "boundTo": "disabled#911:33"
+        }
+      ],
+      "glyphTextNodes": [],
+      "sampledVariant": "911:1078",
+      "nodes": [
+        {
+          "name": "state=default",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "Feedback/AtlAccordionItem",
+      "selector": "AtlAccordionItem",
+      "nodeId": "911:1103",
+      "description": "One item inside AtlAccordionGroup. Maps to AtlAccordionItemSpec.\n\nAxis `expanded`: false | true. `expanded` reveals the panel AND rotates the chevron 180 degrees, so a Boolean (visibility only) cannot express it.\n\n- Boolean `disabled`: maps to AtlAccordionItemSpec.disabled — `.accordion-trigger.is-disabled` dims with `--ui-opacity-disabled`.\n- `headingLevel` is not visual: it chooses h2..h6 for the trigger's wrapper and changes nothing drawn.\n\nGeometry: `.accordion-trigger` is a row-LG (56px) that centres — `padding-block: 0`, `padding-inline: var(--ui-spacing-5)`, `gap: var(--ui-spacing-3)`, 16px semibold. The panel pads `0 var(--ui-spacing-5) var(--ui-spacing-5)`. The item's own border comes from the GROUP's variant, not from here.",
+      "variantAxes": {
+        "expanded": [
+          "false",
+          "true"
+        ]
+      },
+      "variants": [
+        {
+          "expanded": "false"
+        },
+        {
+          "expanded": "true"
+        }
+      ],
+      "properties": {
+        "disabled#911:38": "BOOLEAN",
+        "expanded": "VARIANT"
+      },
+      "referencedProperties": [
+        "disabled#911:38"
+      ],
+      "iconInstanceNames": [
+        "chevron"
+      ],
+      "rootPaint": {
+        "expanded=false": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        },
+        "expanded=true": {
+          "fill": null,
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "radiusPx": 0,
+          "effects": []
+        }
+      },
+      "overlays": [
+        {
+          "variant": "expanded=false",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            420,
+            56
+          ],
+          "parentBox": [
+            420,
+            56
+          ],
+          "parentName": "expanded=false",
+          "visible": false,
+          "boundTo": "disabled#911:38"
+        },
+        {
+          "variant": "expanded=true",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            420,
+            100
+          ],
+          "parentBox": [
+            420,
+            100
+          ],
+          "parentName": "expanded=true",
+          "visible": false,
+          "boundTo": "disabled#911:38"
+        }
+      ],
+      "glyphTextNodes": [],
+      "sampledVariant": "911:1091",
+      "nodes": [
+        {
+          "name": "expanded=false",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "accordion-trigger",
+          "type": "FRAME",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "chevron",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "NONE",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "AI/AtlChatMessage",
+      "selector": "AtlChatMessage",
+      "nodeId": "911:1112",
+      "description": "One bubble inside AtlChat. Maps to AtlChatMessageSpec.\n\nAxis `role`: assistant | user | system, from AtlChatMessageRole. Each recolours the bubble: assistant and system take `--ui-color-surface-sunken`, user takes `--ui-color-primary` with `--ui-color-text-on-primary`, system adds italic and `--ui-color-text-muted`.\n\n- Boolean `failed`: maps to AtlChatMessageSpec.failed — `.is-failed` ADDS a 1px dashed `--ui-color-danger` border, drawn as `_failed-border`.\n- `id` and `content` are data, not state.\n\nGeometry: `padding: var(--ui-spacing-3) var(--ui-spacing-4)`, `--ui-radius-lg`, `--ui-font-size-sm` at normal leading, `max-width: 85%` of the message list.",
+      "variantAxes": {
+        "role": [
+          "assistant",
+          "user",
+          "system"
+        ]
+      },
+      "variants": [
+        {
+          "role": "assistant"
+        },
+        {
+          "role": "user"
+        },
+        {
+          "role": "system"
+        }
+      ],
+      "properties": {
+        "failed#911:41": "BOOLEAN",
+        "role": "VARIANT"
+      },
+      "referencedProperties": [
+        "failed#911:41"
+      ],
+      "iconInstanceNames": [],
+      "rootPaint": {
+        "role=assistant": {
+          "fill": "color/surface-sunken",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": []
+        },
+        "role=user": {
+          "fill": "color/primary",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": []
+        },
+        "role=system": {
+          "fill": "color/surface-sunken",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": []
+        }
+      },
+      "overlays": [
+        {
+          "variant": "role=assistant",
+          "layer": "_failed-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/danger",
+          "box": [
+            0,
+            0,
+            300,
+            45
+          ],
+          "parentBox": [
+            300,
+            45
+          ],
+          "parentName": "role=assistant",
+          "visible": false,
+          "boundTo": "failed#911:41"
+        },
+        {
+          "variant": "role=user",
+          "layer": "_failed-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/danger",
+          "box": [
+            0,
+            0,
+            300,
+            45
+          ],
+          "parentBox": [
+            300,
+            45
+          ],
+          "parentName": "role=user",
+          "visible": false,
+          "boundTo": "failed#911:41"
+        },
+        {
+          "variant": "role=system",
+          "layer": "_failed-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/danger",
+          "box": [
+            0,
+            0,
+            300,
+            45
+          ],
+          "parentBox": [
+            300,
+            45
+          ],
+          "parentName": "role=system",
+          "visible": false,
+          "boundTo": "failed#911:41"
+        }
+      ],
+      "glyphTextNodes": [],
+      "sampledVariant": "911:1106",
+      "nodes": [
+        {
+          "name": "role=assistant",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
+    },
+    {
+      "name": "AI/AtlChatSuggestion",
+      "selector": "AtlChatSuggestion",
+      "nodeId": "911:1116",
+      "description": "One suggestion chip inside AtlChat. Maps to AtlChatSuggestionSpec.\n\nNo axes: the chip has one appearance. `:hover` only shifts background and border colour.\n\n- Boolean `hint`: maps to AtlChatSuggestionSpec.hint — the second line appears when the string is passed.\n- `id` and `label` are data, not state.\n\nGeometry: a column with `gap: var(--ui-spacing-1)`, `padding: var(--ui-spacing-3) var(--ui-spacing-4)`, `--ui-color-surface` behind a 1px `--ui-color-border`, `--ui-radius-lg`.",
+      "variantAxes": {},
+      "variants": [],
+      "properties": {
+        "hint#911:45": "BOOLEAN"
+      },
+      "referencedProperties": [
+        "hint#911:45"
+      ],
+      "iconInstanceNames": [],
+      "rootPaint": {
+        "AI/AtlChatSuggestion": {
+          "fill": "color/surface",
+          "stroke": "color/border",
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": []
+        }
+      },
+      "overlays": [],
+      "glyphTextNodes": [],
+      "sampledVariant": "911:1117",
+      "nodes": []
+    },
+    {
+      "name": "AI/AtlChatTyping",
+      "selector": "AtlChatTyping",
+      "nodeId": "911:1119",
+      "description": "The typing indicator inside AtlChat. It has NO spec interface, by design: the component takes no props and renders three animated dots plus a screen-reader label.\n\nPlaceable, not switchable — the same criterion as AtlMenuSeparator.\n\n- `.is-inline` is a code-level variation (no padding, no background, 4px dots) that no spec field selects, so it is not an axis here.\n\nGeometry: `gap: var(--ui-spacing-1)`, `padding: var(--ui-spacing-2) var(--ui-spacing-3)`, `--ui-color-surface-sunken`, `--ui-radius-lg`; dots are 0.375rem at 0.6 opacity. The animation does not transfer — Figma has no equivalent for `@keyframes`.",
+      "variantAxes": {},
+      "variants": [],
+      "properties": {},
+      "referencedProperties": [],
+      "iconInstanceNames": [],
+      "rootPaint": {
+        "AI/AtlChatTyping": {
+          "fill": "color/surface-sunken",
+          "stroke": null,
+          "strokeWeight": 1,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/lg",
+          "radiusPx": 14,
+          "effects": []
+        }
+      },
+      "overlays": [],
+      "glyphTextNodes": [],
+      "sampledVariant": "911:1120",
+      "nodes": []
     }
   ]
 }
