@@ -179,6 +179,55 @@ async function main() {
             effects: (v.effects || []).filter((e) => e.visible !== false).map((e) => e.type),
           };
         }
+        // Overlay layers (_disabled-overlay, _invalid-border, _readonly-surface, ...).
+        // Read HERE rather than from the per-component deep read, which filters
+        // invisible nodes — and a Figma Boolean's only mechanism is toggling
+        // visibility, so every node a Boolean switches on is invisible by default.
+        // That is why 34 raw stroke colours and 78 misplaced rectangles sat
+        // unreported for months (ADR-0061).
+        const overlays = [];
+        for (const v of kids) {
+          for (const n of v.findAll((x) => x.name.charAt(0) === '_')) {
+            const par = n.parent;
+            const varOf = async (list) => {
+              const p0 = (list || [])[0];
+              if (!p0 || p0.visible === false) return null;
+              // A gradient carries its bindings on the STOPS, not on the paint, so a
+              // paint-level read called the shimmer raw while its middle stop was
+              // bound. Transparent stops need no variable — they are absence, not
+              // colour.
+              if (String(p0.type).indexOf('GRADIENT') === 0) {
+                const stops = p0.gradientStops || [];
+                const opaque = stops.filter((st) => (st.color ? st.color.a : 0) > 0.001);
+                if (!opaque.length) return null;
+                const names = [];
+                for (const st of opaque) {
+                  const sid = st.boundVariables && st.boundVariables.color && st.boundVariables.color.id;
+                  if (!sid) return 'RAW';
+                  const sv = await figma.variables.getVariableByIdAsync(sid);
+                  names.push(sv ? sv.name : 'RAW');
+                }
+                return names.join('+');
+              }
+              const id = p0.boundVariables && p0.boundVariables.color && p0.boundVariables.color.id;
+              if (!id) return 'RAW';
+              const vr = await figma.variables.getVariableByIdAsync(id);
+              return vr ? vr.name : 'RAW';
+            };
+            overlays.push({
+              variant: v.name,
+              layer: n.name,
+              type: n.type,
+              fill: await varOf(n.fills),
+              stroke: await varOf(n.strokes),
+              box: [Math.round(n.x), Math.round(n.y), Math.round(n.width), Math.round(n.height)],
+              parentBox: [Math.round(par.width), Math.round(par.height)],
+              parentName: par.name,
+              visible: n.visible !== false,
+              boundTo: (n.componentPropertyReferences || {}).visible || null,
+            });
+          }
+        }
         const props = {};
         for (const [k, v] of Object.entries(set.componentPropertyDefinitions || {})) props[k] = v.type;
         const seen = new Set();
@@ -187,6 +236,7 @@ async function main() {
           referencedProperties: [...referenced],
           iconInstanceNames: [...iconInstances],
           rootPaint,
+          overlays,
           glyphTextNodes: glyphs.filter((g) => { const k = g.layer + '|' + g.chars; if (seen.has(k)) return false; seen.add(k); return true; }),
         };
       }
@@ -251,6 +301,7 @@ async function main() {
         referencedProperties: probe.masters?.[nodeId]?.referencedProperties ?? [],
         iconInstanceNames: probe.masters?.[nodeId]?.iconInstanceNames ?? [],
         rootPaint: probe.masters?.[nodeId]?.rootPaint ?? {},
+        overlays: probe.masters?.[nodeId]?.overlays ?? [],
         glyphTextNodes: probe.masters?.[nodeId]?.glyphTextNodes ?? [],
         sampledVariant: defaultVariantId,
         nodes: deep ? collectNodeFacts(deep) : [],
@@ -365,7 +416,14 @@ function collectNodeFacts(root) {
 }
 
 function walk(node, out) {
-  if (!node || node.visible === false || node._hidden) return;
+  if (!node) return;
+  // Hidden nodes are walked, not skipped. A Figma Boolean's ONLY mechanism is
+  // toggling `visible`, so every node a Boolean switches on is hidden by default —
+  // which made the overlays the single blind spot of the token gate: 34
+  // `_invalid-border` rectangles carried a raw stroke colour and none of them was
+  // ever reported (ADR-0061). What a property turns on has to be checked while it
+  // is off.
+  const hidden = node.visible === false || node._hidden === true;
   const children = Array.isArray(node.children) ? node.children : [];
   const bound = node.boundVariables || {};
 
@@ -413,6 +471,7 @@ function walk(node, out) {
       name: node.name,
       type: node.type,
       hasChildren,
+      hidden,
       layoutMode: node.layoutMode || 'NONE',
       rawColors,
       unboundRadius,

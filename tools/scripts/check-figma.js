@@ -240,6 +240,34 @@ for (const comp of snapshot.components) {
     }
   }
 
+  // ── A declared property the spec does not have ────────────────────────────
+  // The third direction, and the one nothing asked. [BOOL-MISSING] goes spec →
+  // master; [BOOL-INERT] asks whether a declared Boolean toggles any layer. Both
+  // pass a Boolean that toggles a real layer drawing a state the component does not
+  // have: AtlTable and AtlTabGroup each declared `loading` bound to a
+  // `_loading-spinner`, and neither spec has the field — only AtlButton renders a
+  // spinner at all, in any framework (ADR-0061).
+  {
+    const ownSpec = `${comp.selector}Spec`;
+    const fields = specFields(ownSpec);
+    const declared = Object.entries(comp.properties || {})
+      .filter(([, t]) => t === 'BOOLEAN')
+      .map(([k]) => k.split('#')[0]);
+    // A mapping stated in prose is checked by [BOOL-CLAIM]; accept it here.
+    const claimed = new Set(
+      [...(comp.description || '').matchAll(/^- Boolean `([^`]+)`:[^\n]*(?:maps to|inherited from)/gm)].map((m) => m[1])
+    );
+    const invented = declared.filter(
+      (b) => !fields.has(b) && !claimed.has(b) && !allowed(comp.selector, 'bool', `unspeced:${b}`)
+    );
+    if (invented.length && specInterfaces.has(ownSpec)) {
+      blocker(
+        'BOOL-UNSPECED',
+        `${comp.name}: Boolean ${invented.map((b) => `\`${b}\``).join(', ')} ${invented.length > 1 ? 'are' : 'is'} declared, and ${ownSpec} has no such field. A master can invent API as easily as it can omit it, and an invented property is a state a designer can draw that no component renders. Remove it, or state the mapping as \`- Boolean \\\`x\\\`: maps to <Interface>.<field>\` if the state lives on another interface.`
+      );
+    }
+  }
+
   // ── A declared property that toggles nothing ──────────────────────────────
   // A Figma Boolean can only bind to a layer's `visible`. So a state that differs by
   // colour cannot be a Boolean at all, and declaring one anyway produces API that
@@ -378,6 +406,7 @@ const ROOT_PAINT = [
 // ---------------------------------------------------------------------------
 checkTypography();
 checkRootPaint();
+checkOverlays();
 
 // ---------------------------------------------------------------------------
 // Report — prioritized (Blocker → Critical → Warning), styled like the other
@@ -462,7 +491,7 @@ function checkTokenLinks(comp, selector) {
   const nonSemantic = [];
   for (const n of comp.nodes || []) {
     if ((n.rawColors || []).length && !allowed(selector, 'token', `color:${n.name}`)) {
-      rawColorNodes.push(`${n.name} (${n.rawColors.join(', ')})`);
+      rawColorNodes.push(`${n.name}${n.hidden ? ' [hidden]' : ''} (${n.rawColors.join(', ')})`);
     }
     if (n.unboundRadius && !allowed(selector, 'token', `radius:${n.name}`)) {
       rawRadiusNodes.push(`${n.name} (${n.unboundRadius})`);
@@ -855,6 +884,59 @@ function cssToVariable(value, group) {
   const m = new RegExp('var\\(--ui-' + group + '-([a-z0-9-]+)').exec(v);
   if (m) return `${group}/${m[1]}`;
   return undefined;
+}
+
+/** 8. Overlay layers — the nodes a Boolean switches on.
+ *
+ *  A Figma Boolean can bind to exactly one thing: a layer's visibility. So every
+ *  state a master expresses through a Boolean is drawn by a layer that is HIDDEN by
+ *  default — and hidden is precisely what the per-component deep read filters out.
+ *  Those layers were therefore the one place no check could reach: 34 carried a raw
+ *  stroke colour, 78 sat outside the box they were meant to cover, and 90 dimmed a
+ *  control by painting an OPAQUE rectangle over it. None of it was ever reported,
+ *  because the default state is off and nobody had switched one on.
+ *
+ *  What a property turns on has to be checked while it is off.
+ */
+function checkOverlays() {
+  for (const comp of snapshot.components) {
+    const overlays = comp.overlays || [];
+    if (!overlays.length) continue;
+    const grouped = new Map();
+    const note = (kind, msg, where) => {
+      if (allowed(comp.selector, 'overlay', kind)) return;
+      const key = kind + '\u0000' + msg;
+      if (!grouped.has(key)) grouped.set(key, []);
+      grouped.get(key).push(where);
+    };
+    for (const o of overlays) {
+      const [x, y, w, h] = o.box;
+      const [pw, ph] = o.parentBox;
+      for (const [paint, value] of [['fill', o.fill], ['stroke', o.stroke]]) {
+        if (value === 'RAW') {
+          note(`raw:${o.layer}:${paint}`, `${o.layer} paints a raw ${paint}. Bind it to a colour variable — an overlay is chrome like any other.`, o.variant);
+        }
+      }
+      // An overlay sized to the box it covers has to sit ON it.
+      const covers = Math.abs(w - pw) < 1 && Math.abs(h - ph) < 1;
+      if (covers && (Math.abs(x) > 1 || Math.abs(y) > 1)) {
+        note(`offset:${o.layer}`, `${o.layer} is the size of ${o.parentName} but sits at ${x},${y}. A cover overlay belongs at 0,0.`, o.variant);
+      }
+      // Entirely outside its parent is never right, whatever the size.
+      const outside = x >= pw - 0.5 || y >= ph - 0.5 || x + w <= 0.5 || y + h <= 0.5;
+      if (outside) {
+        note(`outside:${o.layer}`, `${o.layer} (${w}x${h} at ${x},${y}) lies outside ${o.parentName} (${pw}x${ph}) entirely. It draws nothing where it is.`, o.variant);
+      }
+      if (!o.boundTo && o.visible === false) {
+        note(`orphan:${o.layer}`, `${o.layer} is hidden and bound to no property, so nothing can ever show it.`, o.variant);
+      }
+    }
+    for (const [key, where] of grouped) {
+      const msg = key.split('\u0000')[1];
+      const scope = where.length > 2 ? `${where.length} variants` : where.join('; ');
+      critical('OVERLAY', `${comp.selector} [${scope}]: ${msg}`);
+    }
+  }
 }
 
 // ===========================================================================

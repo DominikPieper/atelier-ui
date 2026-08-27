@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-27T12:46:28.723Z",
-    "gitSha": "3110cbd",
+    "generatedAt": "2026-08-27T12:59:22.142Z",
+    "gitSha": "923e40b",
     "serverVersion": null,
     "coverage": "All 29 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -666,6 +666,968 @@
           ]
         }
       },
+      "overlays": [
+        {
+          "variant": "variant=primary, size=sm, state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            32
+          ],
+          "parentBox": [
+            120,
+            32
+          ],
+          "parentName": "variant=primary, size=sm, state=default",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=primary, size=sm, state=default",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/text-on-primary",
+          "stroke": null,
+          "box": [
+            72,
+            7,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            32
+          ],
+          "parentName": "variant=primary, size=sm, state=default",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=primary, size=md, state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            40
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=primary, size=md, state=default",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=primary, size=md, state=default",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/text-on-primary",
+          "stroke": null,
+          "box": [
+            75,
+            11,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=primary, size=md, state=default",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=primary, size=lg, state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            48
+          ],
+          "parentBox": [
+            120,
+            48
+          ],
+          "parentName": "variant=primary, size=lg, state=default",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=primary, size=lg, state=default",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/text-on-primary",
+          "stroke": null,
+          "box": [
+            79,
+            15,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            48
+          ],
+          "parentName": "variant=primary, size=lg, state=default",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=secondary, size=sm, state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            32
+          ],
+          "parentBox": [
+            120,
+            32
+          ],
+          "parentName": "variant=secondary, size=sm, state=default",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=secondary, size=sm, state=default",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/text-on-secondary",
+          "stroke": null,
+          "box": [
+            72,
+            7,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            32
+          ],
+          "parentName": "variant=secondary, size=sm, state=default",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=secondary, size=md, state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            40
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=secondary, size=md, state=default",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=secondary, size=md, state=default",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/text-on-secondary",
+          "stroke": null,
+          "box": [
+            75,
+            11,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=secondary, size=md, state=default",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=secondary, size=lg, state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            48
+          ],
+          "parentBox": [
+            120,
+            48
+          ],
+          "parentName": "variant=secondary, size=lg, state=default",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=secondary, size=lg, state=default",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/text-on-secondary",
+          "stroke": null,
+          "box": [
+            79,
+            15,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            48
+          ],
+          "parentName": "variant=secondary, size=lg, state=default",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=outline, size=sm, state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            32
+          ],
+          "parentBox": [
+            120,
+            32
+          ],
+          "parentName": "variant=outline, size=sm, state=default",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=outline, size=sm, state=default",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/primary",
+          "stroke": null,
+          "box": [
+            72,
+            7,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            32
+          ],
+          "parentName": "variant=outline, size=sm, state=default",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=outline, size=md, state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            40
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=outline, size=md, state=default",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=outline, size=md, state=default",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/primary",
+          "stroke": null,
+          "box": [
+            75,
+            11,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=outline, size=md, state=default",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=outline, size=lg, state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            48
+          ],
+          "parentBox": [
+            120,
+            48
+          ],
+          "parentName": "variant=outline, size=lg, state=default",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=outline, size=lg, state=default",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/primary",
+          "stroke": null,
+          "box": [
+            79,
+            15,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            48
+          ],
+          "parentName": "variant=outline, size=lg, state=default",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=primary, size=md, state=focus",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            40
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=primary, size=md, state=focus",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=primary, size=md, state=focus",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/text-on-primary",
+          "stroke": null,
+          "box": [
+            75,
+            11,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=primary, size=md, state=focus",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=primary, size=md, state=hover",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            40
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=primary, size=md, state=hover",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=primary, size=md, state=hover",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/text-on-primary",
+          "stroke": null,
+          "box": [
+            75,
+            11,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=primary, size=md, state=hover",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=primary, size=md, state=active",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            40
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=primary, size=md, state=active",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=primary, size=md, state=active",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/text-on-primary",
+          "stroke": null,
+          "box": [
+            75,
+            11,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=primary, size=md, state=active",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=danger, size=sm, state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            32
+          ],
+          "parentBox": [
+            120,
+            32
+          ],
+          "parentName": "variant=danger, size=sm, state=default",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=danger, size=sm, state=default",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/text-on-danger",
+          "stroke": null,
+          "box": [
+            72,
+            7,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            32
+          ],
+          "parentName": "variant=danger, size=sm, state=default",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=danger, size=md, state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            40
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=danger, size=md, state=default",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=danger, size=md, state=default",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/text-on-danger",
+          "stroke": null,
+          "box": [
+            75,
+            11,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=danger, size=md, state=default",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=danger, size=lg, state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            48
+          ],
+          "parentBox": [
+            120,
+            48
+          ],
+          "parentName": "variant=danger, size=lg, state=default",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=danger, size=lg, state=default",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/text-on-danger",
+          "stroke": null,
+          "box": [
+            79,
+            15,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            48
+          ],
+          "parentName": "variant=danger, size=lg, state=default",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=danger, size=md, state=hover",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            40
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=danger, size=md, state=hover",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=danger, size=md, state=hover",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/text-on-danger",
+          "stroke": null,
+          "box": [
+            75,
+            11,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=danger, size=md, state=hover",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=danger, size=md, state=active",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            40
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=danger, size=md, state=active",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=danger, size=md, state=active",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/text-on-danger",
+          "stroke": null,
+          "box": [
+            75,
+            11,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=danger, size=md, state=active",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=danger, size=md, state=focus",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            40
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=danger, size=md, state=focus",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=danger, size=md, state=focus",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/text-on-danger",
+          "stroke": null,
+          "box": [
+            75,
+            11,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=danger, size=md, state=focus",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=secondary, size=md, state=hover",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            40
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=secondary, size=md, state=hover",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=secondary, size=md, state=hover",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/text-on-secondary",
+          "stroke": null,
+          "box": [
+            75,
+            11,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=secondary, size=md, state=hover",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=secondary, size=md, state=active",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            40
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=secondary, size=md, state=active",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=secondary, size=md, state=active",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/text-on-secondary",
+          "stroke": null,
+          "box": [
+            75,
+            11,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=secondary, size=md, state=active",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=secondary, size=md, state=focus",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            40
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=secondary, size=md, state=focus",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=secondary, size=md, state=focus",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/text-on-secondary",
+          "stroke": null,
+          "box": [
+            75,
+            11,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=secondary, size=md, state=focus",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=outline, size=md, state=hover",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            40
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=outline, size=md, state=hover",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=outline, size=md, state=hover",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/primary",
+          "stroke": null,
+          "box": [
+            75,
+            11,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=outline, size=md, state=hover",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=outline, size=md, state=active",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            40
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=outline, size=md, state=active",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=outline, size=md, state=active",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/primary",
+          "stroke": null,
+          "box": [
+            75,
+            11,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=outline, size=md, state=active",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=outline, size=md, state=focus",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            40
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=outline, size=md, state=focus",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=outline, size=md, state=focus",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/primary",
+          "stroke": null,
+          "box": [
+            75,
+            11,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "variant=outline, size=md, state=focus",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        }
+      ],
       "glyphTextNodes": [],
       "sampledVariant": "129:2",
       "nodes": [
@@ -673,6 +1635,7 @@
           "name": "variant=primary, size=sm, state=default",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -795,6 +1758,208 @@
           "effects": []
         }
       },
+      "overlays": [
+        {
+          "variant": "state=default",
+          "layer": "_readonly-surface",
+          "type": "RECTANGLE",
+          "fill": "color/surface-sunken",
+          "stroke": "color/surface-sunken",
+          "box": [
+            0,
+            0,
+            280,
+            44
+          ],
+          "parentBox": [
+            280,
+            44
+          ],
+          "parentName": "state=default",
+          "visible": false,
+          "boundTo": "readonly#507:79"
+        },
+        {
+          "variant": "state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            280,
+            44
+          ],
+          "parentBox": [
+            280,
+            44
+          ],
+          "parentName": "state=default",
+          "visible": false,
+          "boundTo": "disabled#507:73"
+        },
+        {
+          "variant": "state=filled",
+          "layer": "_readonly-surface",
+          "type": "RECTANGLE",
+          "fill": "color/surface-sunken",
+          "stroke": "color/surface-sunken",
+          "box": [
+            0,
+            0,
+            280,
+            44
+          ],
+          "parentBox": [
+            280,
+            44
+          ],
+          "parentName": "state=filled",
+          "visible": false,
+          "boundTo": "readonly#507:79"
+        },
+        {
+          "variant": "state=filled",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            280,
+            44
+          ],
+          "parentBox": [
+            280,
+            44
+          ],
+          "parentName": "state=filled",
+          "visible": false,
+          "boundTo": "disabled#507:73"
+        },
+        {
+          "variant": "state=focus",
+          "layer": "_readonly-surface",
+          "type": "RECTANGLE",
+          "fill": "color/surface-sunken",
+          "stroke": "color/surface-sunken",
+          "box": [
+            0,
+            0,
+            280,
+            44
+          ],
+          "parentBox": [
+            280,
+            44
+          ],
+          "parentName": "state=focus",
+          "visible": false,
+          "boundTo": "readonly#507:79"
+        },
+        {
+          "variant": "state=focus",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            280,
+            44
+          ],
+          "parentBox": [
+            280,
+            44
+          ],
+          "parentName": "state=focus",
+          "visible": false,
+          "boundTo": "disabled#507:73"
+        },
+        {
+          "variant": "state=invalid",
+          "layer": "_readonly-surface",
+          "type": "RECTANGLE",
+          "fill": "color/surface-sunken",
+          "stroke": "color/surface-sunken",
+          "box": [
+            0,
+            0,
+            280,
+            44
+          ],
+          "parentBox": [
+            280,
+            44
+          ],
+          "parentName": "state=invalid",
+          "visible": false,
+          "boundTo": "readonly#507:79"
+        },
+        {
+          "variant": "state=invalid",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            280,
+            44
+          ],
+          "parentBox": [
+            280,
+            44
+          ],
+          "parentName": "state=invalid",
+          "visible": false,
+          "boundTo": "disabled#507:73"
+        },
+        {
+          "variant": "state=hover",
+          "layer": "_readonly-surface",
+          "type": "RECTANGLE",
+          "fill": "color/surface-sunken",
+          "stroke": "color/surface-sunken",
+          "box": [
+            0,
+            0,
+            280,
+            44
+          ],
+          "parentBox": [
+            280,
+            44
+          ],
+          "parentName": "state=hover",
+          "visible": false,
+          "boundTo": "readonly#507:79"
+        },
+        {
+          "variant": "state=hover",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            280,
+            44
+          ],
+          "parentBox": [
+            280,
+            44
+          ],
+          "parentName": "state=hover",
+          "visible": false,
+          "boundTo": "disabled#507:73"
+        }
+      ],
       "glyphTextNodes": [],
       "sampledVariant": "129:23",
       "nodes": [
@@ -802,6 +1967,7 @@
           "name": "state=default",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1071,6 +2237,7 @@
           "effects": []
         }
       },
+      "overlays": [],
       "glyphTextNodes": [],
       "sampledVariant": "55:53",
       "nodes": [
@@ -1078,6 +2245,7 @@
           "name": "variant=elevated, padding=none",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1088,6 +2256,7 @@
           "name": "card-header",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1098,6 +2267,7 @@
           "name": "card-content",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1108,6 +2278,7 @@
           "name": "card-section-4",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1118,6 +2289,7 @@
           "name": "card-inner-group",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1342,6 +2514,7 @@
           "effects": []
         }
       },
+      "overlays": [],
       "glyphTextNodes": [],
       "sampledVariant": "55:12",
       "nodes": [
@@ -1349,6 +2522,7 @@
           "name": "variant=default, size=md",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1478,6 +2652,208 @@
           ]
         }
       },
+      "overlays": [
+        {
+          "variant": "state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            240,
+            40
+          ],
+          "parentBox": [
+            240,
+            40
+          ],
+          "parentName": "state=default",
+          "visible": false,
+          "boundTo": "disabled#507:115"
+        },
+        {
+          "variant": "state=default",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            0,
+            240,
+            40
+          ],
+          "parentBox": [
+            240,
+            40
+          ],
+          "parentName": "state=default",
+          "visible": false,
+          "boundTo": "invalid#507:121"
+        },
+        {
+          "variant": "state=filled",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            240,
+            40
+          ],
+          "parentBox": [
+            240,
+            40
+          ],
+          "parentName": "state=filled",
+          "visible": false,
+          "boundTo": "disabled#507:115"
+        },
+        {
+          "variant": "state=filled",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            0,
+            240,
+            40
+          ],
+          "parentBox": [
+            240,
+            40
+          ],
+          "parentName": "state=filled",
+          "visible": false,
+          "boundTo": "invalid#507:121"
+        },
+        {
+          "variant": "state=open",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            240,
+            40
+          ],
+          "parentBox": [
+            240,
+            40
+          ],
+          "parentName": "state=open",
+          "visible": false,
+          "boundTo": "disabled#507:115"
+        },
+        {
+          "variant": "state=open",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            0,
+            240,
+            40
+          ],
+          "parentBox": [
+            240,
+            40
+          ],
+          "parentName": "state=open",
+          "visible": false,
+          "boundTo": "invalid#507:121"
+        },
+        {
+          "variant": "state=hover",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            240,
+            40
+          ],
+          "parentBox": [
+            240,
+            40
+          ],
+          "parentName": "state=hover",
+          "visible": false,
+          "boundTo": "disabled#507:115"
+        },
+        {
+          "variant": "state=hover",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            0,
+            240,
+            40
+          ],
+          "parentBox": [
+            240,
+            40
+          ],
+          "parentName": "state=hover",
+          "visible": false,
+          "boundTo": "invalid#507:121"
+        },
+        {
+          "variant": "state=focus",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            240,
+            40
+          ],
+          "parentBox": [
+            240,
+            40
+          ],
+          "parentName": "state=focus",
+          "visible": false,
+          "boundTo": "disabled#507:115"
+        },
+        {
+          "variant": "state=focus",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            0,
+            240,
+            40
+          ],
+          "parentBox": [
+            240,
+            40
+          ],
+          "parentName": "state=focus",
+          "visible": false,
+          "boundTo": "invalid#507:121"
+        }
+      ],
       "glyphTextNodes": [],
       "sampledVariant": "55:88",
       "nodes": [
@@ -1485,6 +2861,7 @@
           "name": "state=default",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1495,6 +2872,7 @@
           "name": "chevron-down",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1637,6 +3015,7 @@
           ]
         }
       },
+      "overlays": [],
       "glyphTextNodes": [],
       "sampledVariant": "55:93",
       "nodes": [
@@ -1644,6 +3023,7 @@
           "name": "size=md",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1654,6 +3034,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1664,6 +3045,7 @@
           "name": "close",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1674,6 +3056,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1684,6 +3067,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1694,6 +3078,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1704,6 +3089,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1742,15 +3128,10 @@
         }
       ],
       "properties": {
-        "disabled#507:300": "BOOLEAN",
-        "loading#507:304": "BOOLEAN",
         "variant": "VARIANT",
         "selectedIndex": "VARIANT"
       },
-      "referencedProperties": [
-        "disabled#507:300",
-        "loading#507:304"
-      ],
+      "referencedProperties": [],
       "iconInstanceNames": [],
       "rootPaint": {
         "variant=default, selectedIndex=0": {
@@ -1796,6 +3177,7 @@
           "effects": []
         }
       },
+      "overlays": [],
       "glyphTextNodes": [],
       "sampledVariant": "55:120",
       "nodes": [
@@ -1803,6 +3185,7 @@
           "name": "variant=default, selectedIndex=0",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1813,6 +3196,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1823,6 +3207,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1833,6 +3218,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1843,6 +3229,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1853,6 +3240,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1936,6 +3324,7 @@
           "effects": []
         }
       },
+      "overlays": [],
       "glyphTextNodes": [],
       "sampledVariant": "55:124",
       "nodes": [
@@ -1943,6 +3332,7 @@
           "name": "variant=default",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1953,6 +3343,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1963,6 +3354,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1973,6 +3365,7 @@
           "name": "chevron-up",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1983,6 +3376,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -1993,6 +3387,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2003,6 +3398,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2013,6 +3409,7 @@
           "name": "chevron-down",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2023,6 +3420,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2033,6 +3431,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2043,6 +3442,7 @@
           "name": "chevron-down",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2119,6 +3519,7 @@
           ]
         }
       },
+      "overlays": [],
       "glyphTextNodes": [],
       "sampledVariant": "55:128",
       "nodes": [
@@ -2126,6 +3527,7 @@
           "name": "variant=default",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2136,6 +3538,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2146,6 +3549,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2156,6 +3560,7 @@
           "name": "copy",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2166,6 +3571,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2176,6 +3582,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2186,6 +3593,7 @@
           "name": "paste",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2196,6 +3604,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2206,6 +3615,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2216,6 +3626,7 @@
           "name": "add",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2226,6 +3637,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2236,6 +3648,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2246,6 +3659,7 @@
           "name": "edit",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2256,6 +3670,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2266,6 +3681,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2276,6 +3692,7 @@
           "name": "arrow-right",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2286,6 +3703,7 @@
           "name": "chevron-right",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2296,6 +3714,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2306,6 +3725,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2316,6 +3736,7 @@
           "name": "delete",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2429,6 +3850,7 @@
           ]
         }
       },
+      "overlays": [],
       "glyphTextNodes": [],
       "sampledVariant": "55:48",
       "nodes": [
@@ -2436,6 +3858,7 @@
           "name": "position=above",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2545,6 +3968,88 @@
           "effects": []
         }
       },
+      "overlays": [
+        {
+          "variant": "variant=info",
+          "layer": "_dismiss",
+          "type": "INSTANCE",
+          "fill": null,
+          "stroke": null,
+          "box": [
+            328,
+            11,
+            16,
+            16
+          ],
+          "parentBox": [
+            360,
+            38
+          ],
+          "parentName": "variant=info",
+          "visible": true,
+          "boundTo": "dismissible#507:267"
+        },
+        {
+          "variant": "variant=success",
+          "layer": "_dismiss",
+          "type": "INSTANCE",
+          "fill": null,
+          "stroke": null,
+          "box": [
+            328,
+            13,
+            16,
+            16
+          ],
+          "parentBox": [
+            360,
+            41
+          ],
+          "parentName": "variant=success",
+          "visible": true,
+          "boundTo": "dismissible#507:267"
+        },
+        {
+          "variant": "variant=warning",
+          "layer": "_dismiss",
+          "type": "INSTANCE",
+          "fill": null,
+          "stroke": null,
+          "box": [
+            328,
+            13,
+            16,
+            16
+          ],
+          "parentBox": [
+            360,
+            41
+          ],
+          "parentName": "variant=warning",
+          "visible": true,
+          "boundTo": "dismissible#507:267"
+        },
+        {
+          "variant": "variant=danger",
+          "layer": "_dismiss",
+          "type": "INSTANCE",
+          "fill": null,
+          "stroke": null,
+          "box": [
+            328,
+            13,
+            16,
+            16
+          ],
+          "parentBox": [
+            360,
+            41
+          ],
+          "parentName": "variant=danger",
+          "visible": true,
+          "boundTo": "dismissible#507:267"
+        }
+      ],
       "glyphTextNodes": [],
       "sampledVariant": "55:23",
       "nodes": [
@@ -2552,6 +4057,7 @@
           "name": "variant=info",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2562,6 +4068,7 @@
           "name": "info",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2572,6 +4079,7 @@
           "name": "_dismiss",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2708,6 +4216,228 @@
           "effects": []
         }
       },
+      "overlays": [
+        {
+          "variant": "selection=unchecked, state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            113,
+            24
+          ],
+          "parentBox": [
+            113,
+            24
+          ],
+          "parentName": "selection=unchecked, state=default",
+          "visible": false,
+          "boundTo": "disabled#507:154"
+        },
+        {
+          "variant": "selection=unchecked, state=default",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            3,
+            18,
+            18
+          ],
+          "parentBox": [
+            113,
+            24
+          ],
+          "parentName": "selection=unchecked, state=default",
+          "visible": false,
+          "boundTo": "invalid#507:160"
+        },
+        {
+          "variant": "selection=checked, state=default",
+          "layer": "_tick",
+          "type": "VECTOR",
+          "fill": null,
+          "stroke": "color/text-on-primary",
+          "box": [
+            0,
+            0,
+            6,
+            10
+          ],
+          "parentBox": [
+            18,
+            18
+          ],
+          "parentName": "Frame",
+          "visible": true,
+          "boundTo": null
+        },
+        {
+          "variant": "selection=checked, state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            113,
+            24
+          ],
+          "parentBox": [
+            113,
+            24
+          ],
+          "parentName": "selection=checked, state=default",
+          "visible": false,
+          "boundTo": "disabled#507:154"
+        },
+        {
+          "variant": "selection=checked, state=default",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            3,
+            18,
+            18
+          ],
+          "parentBox": [
+            113,
+            24
+          ],
+          "parentName": "selection=checked, state=default",
+          "visible": false,
+          "boundTo": "invalid#507:160"
+        },
+        {
+          "variant": "selection=indeterminate, state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            113,
+            24
+          ],
+          "parentBox": [
+            113,
+            24
+          ],
+          "parentName": "selection=indeterminate, state=default",
+          "visible": false,
+          "boundTo": "disabled#507:154"
+        },
+        {
+          "variant": "selection=indeterminate, state=default",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            3,
+            18,
+            18
+          ],
+          "parentBox": [
+            113,
+            24
+          ],
+          "parentName": "selection=indeterminate, state=default",
+          "visible": false,
+          "boundTo": "invalid#507:160"
+        },
+        {
+          "variant": "selection=unchecked, state=focus",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            113,
+            24
+          ],
+          "parentBox": [
+            113,
+            24
+          ],
+          "parentName": "selection=unchecked, state=focus",
+          "visible": false,
+          "boundTo": "disabled#507:154"
+        },
+        {
+          "variant": "selection=unchecked, state=focus",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            3,
+            18,
+            18
+          ],
+          "parentBox": [
+            113,
+            24
+          ],
+          "parentName": "selection=unchecked, state=focus",
+          "visible": false,
+          "boundTo": "invalid#507:160"
+        },
+        {
+          "variant": "selection=unchecked, state=hover",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            113,
+            24
+          ],
+          "parentBox": [
+            113,
+            24
+          ],
+          "parentName": "selection=unchecked, state=hover",
+          "visible": false,
+          "boundTo": "disabled#507:154"
+        },
+        {
+          "variant": "selection=unchecked, state=hover",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            3,
+            18,
+            18
+          ],
+          "parentBox": [
+            113,
+            24
+          ],
+          "parentName": "selection=unchecked, state=hover",
+          "visible": false,
+          "boundTo": "invalid#507:160"
+        }
+      ],
       "glyphTextNodes": [],
       "sampledVariant": "55:32",
       "nodes": [
@@ -2715,6 +4445,7 @@
           "name": "selection=unchecked, state=default",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2831,6 +4562,168 @@
           "effects": []
         }
       },
+      "overlays": [
+        {
+          "variant": "selection=off, state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            134,
+            24
+          ],
+          "parentBox": [
+            134,
+            24
+          ],
+          "parentName": "selection=off, state=default",
+          "visible": false,
+          "boundTo": "disabled#507:187"
+        },
+        {
+          "variant": "selection=off, state=default",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            0,
+            44,
+            24
+          ],
+          "parentBox": [
+            134,
+            24
+          ],
+          "parentName": "selection=off, state=default",
+          "visible": false,
+          "boundTo": "invalid#911:5"
+        },
+        {
+          "variant": "selection=on, state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            134,
+            24
+          ],
+          "parentBox": [
+            134,
+            24
+          ],
+          "parentName": "selection=on, state=default",
+          "visible": false,
+          "boundTo": "disabled#507:187"
+        },
+        {
+          "variant": "selection=on, state=default",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            0,
+            44,
+            24
+          ],
+          "parentBox": [
+            134,
+            24
+          ],
+          "parentName": "selection=on, state=default",
+          "visible": false,
+          "boundTo": "invalid#911:5"
+        },
+        {
+          "variant": "selection=off, state=focus",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            134,
+            24
+          ],
+          "parentBox": [
+            134,
+            24
+          ],
+          "parentName": "selection=off, state=focus",
+          "visible": false,
+          "boundTo": "disabled#507:187"
+        },
+        {
+          "variant": "selection=off, state=focus",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            0,
+            44,
+            24
+          ],
+          "parentBox": [
+            134,
+            24
+          ],
+          "parentName": "selection=off, state=focus",
+          "visible": false,
+          "boundTo": "invalid#911:5"
+        },
+        {
+          "variant": "selection=off, state=hover",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            134,
+            24
+          ],
+          "parentBox": [
+            134,
+            24
+          ],
+          "parentName": "selection=off, state=hover",
+          "visible": false,
+          "boundTo": "disabled#507:187"
+        },
+        {
+          "variant": "selection=off, state=hover",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            0,
+            44,
+            24
+          ],
+          "parentBox": [
+            134,
+            24
+          ],
+          "parentName": "selection=off, state=hover",
+          "visible": false,
+          "boundTo": "invalid#911:5"
+        }
+      ],
       "glyphTextNodes": [],
       "sampledVariant": "55:37",
       "nodes": [
@@ -2838,6 +4731,7 @@
           "name": "selection=off, state=default",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2848,6 +4742,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -2973,6 +4868,208 @@
           "effects": []
         }
       },
+      "overlays": [
+        {
+          "variant": "state=default",
+          "layer": "_readonly-surface",
+          "type": "RECTANGLE",
+          "fill": "color/surface-sunken",
+          "stroke": "color/surface-sunken",
+          "box": [
+            0,
+            0,
+            200,
+            90
+          ],
+          "parentBox": [
+            200,
+            90
+          ],
+          "parentName": "state=default",
+          "visible": false,
+          "boundTo": "readonly#507:97"
+        },
+        {
+          "variant": "state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            200,
+            90
+          ],
+          "parentBox": [
+            200,
+            90
+          ],
+          "parentName": "state=default",
+          "visible": false,
+          "boundTo": "disabled#507:91"
+        },
+        {
+          "variant": "state=filled",
+          "layer": "_readonly-surface",
+          "type": "RECTANGLE",
+          "fill": "color/surface-sunken",
+          "stroke": "color/surface-sunken",
+          "box": [
+            0,
+            0,
+            200,
+            90
+          ],
+          "parentBox": [
+            200,
+            90
+          ],
+          "parentName": "state=filled",
+          "visible": false,
+          "boundTo": "readonly#507:97"
+        },
+        {
+          "variant": "state=filled",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            200,
+            90
+          ],
+          "parentBox": [
+            200,
+            90
+          ],
+          "parentName": "state=filled",
+          "visible": false,
+          "boundTo": "disabled#507:91"
+        },
+        {
+          "variant": "state=focus",
+          "layer": "_readonly-surface",
+          "type": "RECTANGLE",
+          "fill": "color/surface-sunken",
+          "stroke": "color/surface-sunken",
+          "box": [
+            0,
+            0,
+            200,
+            90
+          ],
+          "parentBox": [
+            200,
+            90
+          ],
+          "parentName": "state=focus",
+          "visible": false,
+          "boundTo": "readonly#507:97"
+        },
+        {
+          "variant": "state=focus",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            200,
+            90
+          ],
+          "parentBox": [
+            200,
+            90
+          ],
+          "parentName": "state=focus",
+          "visible": false,
+          "boundTo": "disabled#507:91"
+        },
+        {
+          "variant": "state=invalid",
+          "layer": "_readonly-surface",
+          "type": "RECTANGLE",
+          "fill": "color/surface-sunken",
+          "stroke": "color/surface-sunken",
+          "box": [
+            0,
+            0,
+            200,
+            90
+          ],
+          "parentBox": [
+            200,
+            90
+          ],
+          "parentName": "state=invalid",
+          "visible": false,
+          "boundTo": "readonly#507:97"
+        },
+        {
+          "variant": "state=invalid",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            200,
+            90
+          ],
+          "parentBox": [
+            200,
+            90
+          ],
+          "parentName": "state=invalid",
+          "visible": false,
+          "boundTo": "disabled#507:91"
+        },
+        {
+          "variant": "state=hover",
+          "layer": "_readonly-surface",
+          "type": "RECTANGLE",
+          "fill": "color/surface-sunken",
+          "stroke": "color/surface-sunken",
+          "box": [
+            0,
+            0,
+            200,
+            90
+          ],
+          "parentBox": [
+            200,
+            90
+          ],
+          "parentName": "state=hover",
+          "visible": false,
+          "boundTo": "readonly#507:97"
+        },
+        {
+          "variant": "state=hover",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            200,
+            90
+          ],
+          "parentBox": [
+            200,
+            90
+          ],
+          "parentName": "state=hover",
+          "visible": false,
+          "boundTo": "disabled#507:91"
+        }
+      ],
       "glyphTextNodes": [],
       "sampledVariant": "55:82",
       "nodes": [
@@ -2980,6 +5077,7 @@
           "name": "state=default",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -3094,6 +5192,168 @@
           "effects": []
         }
       },
+      "overlays": [
+        {
+          "variant": "selection=unselected, state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            56,
+            24
+          ],
+          "parentBox": [
+            56,
+            24
+          ],
+          "parentName": "selection=unselected, state=default",
+          "visible": false,
+          "boundTo": "disabled#507:182"
+        },
+        {
+          "variant": "selection=unselected, state=default",
+          "layer": "_invalid-border",
+          "type": "ELLIPSE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            3,
+            18,
+            18
+          ],
+          "parentBox": [
+            56,
+            24
+          ],
+          "parentName": "selection=unselected, state=default",
+          "visible": false,
+          "boundTo": "invalid#911:21"
+        },
+        {
+          "variant": "selection=selected, state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            49,
+            24
+          ],
+          "parentBox": [
+            49,
+            24
+          ],
+          "parentName": "selection=selected, state=default",
+          "visible": false,
+          "boundTo": "disabled#507:182"
+        },
+        {
+          "variant": "selection=selected, state=default",
+          "layer": "_invalid-border",
+          "type": "ELLIPSE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            3,
+            18,
+            18
+          ],
+          "parentBox": [
+            49,
+            24
+          ],
+          "parentName": "selection=selected, state=default",
+          "visible": false,
+          "boundTo": "invalid#911:21"
+        },
+        {
+          "variant": "selection=unselected, state=focus",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            56,
+            24
+          ],
+          "parentBox": [
+            56,
+            24
+          ],
+          "parentName": "selection=unselected, state=focus",
+          "visible": false,
+          "boundTo": "disabled#507:182"
+        },
+        {
+          "variant": "selection=unselected, state=focus",
+          "layer": "_invalid-border",
+          "type": "ELLIPSE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            3,
+            18,
+            18
+          ],
+          "parentBox": [
+            56,
+            24
+          ],
+          "parentName": "selection=unselected, state=focus",
+          "visible": false,
+          "boundTo": "invalid#911:21"
+        },
+        {
+          "variant": "selection=unselected, state=hover",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            56,
+            24
+          ],
+          "parentBox": [
+            56,
+            24
+          ],
+          "parentName": "selection=unselected, state=hover",
+          "visible": false,
+          "boundTo": "disabled#507:182"
+        },
+        {
+          "variant": "selection=unselected, state=hover",
+          "layer": "_invalid-border",
+          "type": "ELLIPSE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            3,
+            18,
+            18
+          ],
+          "parentBox": [
+            56,
+            24
+          ],
+          "parentName": "selection=unselected, state=hover",
+          "visible": false,
+          "boundTo": "invalid#911:21"
+        }
+      ],
       "glyphTextNodes": [],
       "sampledVariant": "55:131",
       "nodes": [
@@ -3101,6 +5361,7 @@
           "name": "selection=unselected, state=default",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -3215,6 +5476,168 @@
           "effects": []
         }
       },
+      "overlays": [
+        {
+          "variant": "selection=unchecked, state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            118,
+            28
+          ],
+          "parentBox": [
+            118,
+            28
+          ],
+          "parentName": "selection=unchecked, state=default",
+          "visible": false,
+          "boundTo": "disabled#507:172"
+        },
+        {
+          "variant": "selection=unchecked, state=default",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            4,
+            20,
+            20
+          ],
+          "parentBox": [
+            118,
+            28
+          ],
+          "parentName": "selection=unchecked, state=default",
+          "visible": false,
+          "boundTo": "invalid#909:0"
+        },
+        {
+          "variant": "selection=checked, state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            144,
+            28
+          ],
+          "parentBox": [
+            144,
+            28
+          ],
+          "parentName": "selection=checked, state=default",
+          "visible": false,
+          "boundTo": "disabled#507:172"
+        },
+        {
+          "variant": "selection=checked, state=default",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            4,
+            20,
+            20
+          ],
+          "parentBox": [
+            144,
+            28
+          ],
+          "parentName": "selection=checked, state=default",
+          "visible": false,
+          "boundTo": "invalid#909:0"
+        },
+        {
+          "variant": "selection=unchecked, state=focus",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            118,
+            28
+          ],
+          "parentBox": [
+            118,
+            28
+          ],
+          "parentName": "selection=unchecked, state=focus",
+          "visible": false,
+          "boundTo": "disabled#507:172"
+        },
+        {
+          "variant": "selection=unchecked, state=focus",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            4,
+            20,
+            20
+          ],
+          "parentBox": [
+            118,
+            28
+          ],
+          "parentName": "selection=unchecked, state=focus",
+          "visible": false,
+          "boundTo": "invalid#909:0"
+        },
+        {
+          "variant": "selection=unchecked, state=hover",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            118,
+            28
+          ],
+          "parentBox": [
+            118,
+            28
+          ],
+          "parentName": "selection=unchecked, state=hover",
+          "visible": false,
+          "boundTo": "disabled#507:172"
+        },
+        {
+          "variant": "selection=unchecked, state=hover",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            4,
+            20,
+            20
+          ],
+          "parentBox": [
+            118,
+            28
+          ],
+          "parentName": "selection=unchecked, state=hover",
+          "visible": false,
+          "boundTo": "invalid#909:0"
+        }
+      ],
       "glyphTextNodes": [],
       "sampledVariant": "420:165",
       "nodes": [
@@ -3222,6 +5645,7 @@
           "name": "selection=unchecked, state=default",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -3232,6 +5656,7 @@
           "name": "indicator",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -3315,6 +5740,68 @@
           "effects": []
         }
       },
+      "overlays": [
+        {
+          "variant": "variant=text",
+          "layer": "_shimmer",
+          "type": "RECTANGLE",
+          "fill": "color/surface-raised",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            280,
+            14
+          ],
+          "parentBox": [
+            280,
+            14
+          ],
+          "parentName": "variant=text",
+          "visible": true,
+          "boundTo": "animated#911:17"
+        },
+        {
+          "variant": "variant=circular",
+          "layer": "_shimmer",
+          "type": "RECTANGLE",
+          "fill": "color/surface-raised",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            48,
+            48
+          ],
+          "parentBox": [
+            48,
+            48
+          ],
+          "parentName": "variant=circular",
+          "visible": true,
+          "boundTo": "animated#911:17"
+        },
+        {
+          "variant": "variant=rectangular",
+          "layer": "_shimmer",
+          "type": "RECTANGLE",
+          "fill": "color/surface-raised",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            200,
+            120
+          ],
+          "parentBox": [
+            200,
+            120
+          ],
+          "parentName": "variant=rectangular",
+          "visible": true,
+          "boundTo": "animated#911:17"
+        }
+      ],
       "glyphTextNodes": [],
       "sampledVariant": "55:99",
       "nodes": [
@@ -3322,6 +5809,7 @@
           "name": "variant=text",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -3575,6 +6063,7 @@
           "effects": []
         }
       },
+      "overlays": [],
       "glyphTextNodes": [],
       "sampledVariant": "420:81",
       "nodes": [
@@ -3582,6 +6071,7 @@
           "name": "variant=default, size=sm",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -3801,6 +6291,7 @@
           "effects": []
         }
       },
+      "overlays": [],
       "glyphTextNodes": [],
       "sampledVariant": "55:146",
       "nodes": [
@@ -3808,6 +6299,7 @@
           "name": "shape=circle, size=xs",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4026,6 +6518,168 @@
           ]
         }
       },
+      "overlays": [
+        {
+          "variant": "variant=default, position=top-right",
+          "layer": "_dismiss",
+          "type": "INSTANCE",
+          "fill": null,
+          "stroke": null,
+          "box": [
+            163,
+            12,
+            16,
+            16
+          ],
+          "parentBox": [
+            195,
+            40
+          ],
+          "parentName": "variant=default, position=top-right",
+          "visible": true,
+          "boundTo": "dismissible#508:318"
+        },
+        {
+          "variant": "variant=success, position=top-right",
+          "layer": "_dismiss",
+          "type": "INSTANCE",
+          "fill": null,
+          "stroke": null,
+          "box": [
+            163,
+            13,
+            16,
+            16
+          ],
+          "parentBox": [
+            195,
+            41
+          ],
+          "parentName": "variant=success, position=top-right",
+          "visible": true,
+          "boundTo": "dismissible#508:318"
+        },
+        {
+          "variant": "variant=warning, position=top-right",
+          "layer": "_dismiss",
+          "type": "INSTANCE",
+          "fill": null,
+          "stroke": null,
+          "box": [
+            163,
+            13,
+            16,
+            16
+          ],
+          "parentBox": [
+            195,
+            41
+          ],
+          "parentName": "variant=warning, position=top-right",
+          "visible": true,
+          "boundTo": "dismissible#508:318"
+        },
+        {
+          "variant": "variant=danger, position=top-right",
+          "layer": "_dismiss",
+          "type": "INSTANCE",
+          "fill": null,
+          "stroke": null,
+          "box": [
+            163,
+            13,
+            16,
+            16
+          ],
+          "parentBox": [
+            195,
+            41
+          ],
+          "parentName": "variant=danger, position=top-right",
+          "visible": true,
+          "boundTo": "dismissible#508:318"
+        },
+        {
+          "variant": "variant=info, position=top-right",
+          "layer": "_dismiss",
+          "type": "INSTANCE",
+          "fill": null,
+          "stroke": null,
+          "box": [
+            163,
+            12,
+            16,
+            16
+          ],
+          "parentBox": [
+            195,
+            40
+          ],
+          "parentName": "variant=info, position=top-right",
+          "visible": true,
+          "boundTo": "dismissible#508:318"
+        },
+        {
+          "variant": "variant=default, position=top-center",
+          "layer": "_dismiss",
+          "type": "INSTANCE",
+          "fill": null,
+          "stroke": null,
+          "box": [
+            163,
+            12,
+            16,
+            16
+          ],
+          "parentBox": [
+            195,
+            40
+          ],
+          "parentName": "variant=default, position=top-center",
+          "visible": true,
+          "boundTo": "dismissible#508:318"
+        },
+        {
+          "variant": "variant=default, position=bottom-right",
+          "layer": "_dismiss",
+          "type": "INSTANCE",
+          "fill": null,
+          "stroke": null,
+          "box": [
+            163,
+            12,
+            16,
+            16
+          ],
+          "parentBox": [
+            195,
+            40
+          ],
+          "parentName": "variant=default, position=bottom-right",
+          "visible": true,
+          "boundTo": "dismissible#508:318"
+        },
+        {
+          "variant": "variant=default, position=bottom-center",
+          "layer": "_dismiss",
+          "type": "INSTANCE",
+          "fill": null,
+          "stroke": null,
+          "box": [
+            163,
+            12,
+            16,
+            16
+          ],
+          "parentBox": [
+            195,
+            40
+          ],
+          "parentName": "variant=default, position=bottom-center",
+          "visible": true,
+          "boundTo": "dismissible#508:318"
+        }
+      ],
       "glyphTextNodes": [],
       "sampledVariant": "55:42",
       "nodes": [
@@ -4033,6 +6687,7 @@
           "name": "variant=default, position=top-right",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4043,6 +6698,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4053,6 +6709,7 @@
           "name": "default-toast",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4063,6 +6720,7 @@
           "name": "_dismiss",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4097,6 +6755,7 @@
           "effects": []
         }
       },
+      "overlays": [],
       "glyphTextNodes": [],
       "sampledVariant": "3:1031",
       "nodes": []
@@ -4132,6 +6791,7 @@
           "effects": []
         }
       },
+      "overlays": [],
       "glyphTextNodes": [],
       "sampledVariant": "3:1073",
       "nodes": [
@@ -4139,6 +6799,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4149,6 +6810,7 @@
           "name": "chevron-left",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4335,6 +6997,7 @@
           ]
         }
       },
+      "overlays": [],
       "glyphTextNodes": [],
       "sampledVariant": "421:342",
       "nodes": [
@@ -4342,6 +7005,7 @@
           "name": "position=right, size=md",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4352,6 +7016,7 @@
           "name": "panel",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4362,6 +7027,7 @@
           "name": "header",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4372,6 +7038,7 @@
           "name": "close",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4382,6 +7049,7 @@
           "name": "close",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4392,6 +7060,7 @@
           "name": "content",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4402,6 +7071,7 @@
           "name": "footer",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4412,6 +7082,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4422,6 +7093,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4481,8 +7153,6 @@
         "sortable#437:27": "BOOLEAN",
         "selectable#437:38": "BOOLEAN",
         "stickyHeader#437:49": "BOOLEAN",
-        "disabled#507:276": "BOOLEAN",
-        "loading#507:282": "BOOLEAN",
         "empty#507:288": "BOOLEAN",
         "error#507:294": "BOOLEAN",
         "variant": "VARIANT",
@@ -4490,9 +7160,7 @@
         "state": "VARIANT"
       },
       "referencedProperties": [
-        "stickyHeader#437:49",
-        "disabled#507:276",
-        "loading#507:282"
+        "stickyHeader#437:49"
       ],
       "iconInstanceNames": [],
       "rootPaint": {
@@ -4567,6 +7235,108 @@
           "effects": []
         }
       },
+      "overlays": [
+        {
+          "variant": "variant=default, size=md, state=default",
+          "layer": "_sticky-shadow",
+          "type": "RECTANGLE",
+          "fill": "color/border",
+          "stroke": null,
+          "box": [
+            0,
+            40,
+            560,
+            1
+          ],
+          "parentBox": [
+            560,
+            232
+          ],
+          "parentName": "AtlTable / default-md",
+          "visible": false,
+          "boundTo": "stickyHeader#437:49"
+        },
+        {
+          "variant": "variant=striped, size=md, state=default",
+          "layer": "_sticky-shadow",
+          "type": "RECTANGLE",
+          "fill": "color/border",
+          "stroke": null,
+          "box": [
+            0,
+            40,
+            560,
+            1
+          ],
+          "parentBox": [
+            560,
+            232
+          ],
+          "parentName": "AtlTable / striped-md",
+          "visible": false,
+          "boundTo": "stickyHeader#437:49"
+        },
+        {
+          "variant": "variant=bordered, size=md, state=default",
+          "layer": "_sticky-shadow",
+          "type": "RECTANGLE",
+          "fill": "color/border",
+          "stroke": null,
+          "box": [
+            0,
+            40,
+            560,
+            1
+          ],
+          "parentBox": [
+            560,
+            232
+          ],
+          "parentName": "AtlTable / bordered-md",
+          "visible": false,
+          "boundTo": "stickyHeader#437:49"
+        },
+        {
+          "variant": "variant=default, size=sm, state=default",
+          "layer": "_sticky-shadow",
+          "type": "RECTANGLE",
+          "fill": "color/border",
+          "stroke": null,
+          "box": [
+            0,
+            32,
+            560,
+            1
+          ],
+          "parentBox": [
+            560,
+            176
+          ],
+          "parentName": "AtlTable / default-sm",
+          "visible": false,
+          "boundTo": "stickyHeader#437:49"
+        },
+        {
+          "variant": "variant=default, size=lg, state=default",
+          "layer": "_sticky-shadow",
+          "type": "RECTANGLE",
+          "fill": "color/border",
+          "stroke": null,
+          "box": [
+            0,
+            48,
+            560,
+            1
+          ],
+          "parentBox": [
+            560,
+            272
+          ],
+          "parentName": "AtlTable / default-lg",
+          "visible": false,
+          "boundTo": "stickyHeader#437:49"
+        }
+      ],
       "glyphTextNodes": [],
       "sampledVariant": "421:884",
       "nodes": [
@@ -4574,6 +7344,7 @@
           "name": "variant=default, size=md, state=default",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4584,6 +7355,7 @@
           "name": "AtlTable / default-md",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4594,6 +7366,7 @@
           "name": "thead",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4604,6 +7377,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4614,6 +7388,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4624,6 +7399,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4634,6 +7410,7 @@
           "name": "tbody",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4644,6 +7421,7 @@
           "name": "tr-1",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4654,6 +7432,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4664,6 +7443,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4674,6 +7454,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4684,6 +7465,7 @@
           "name": "tr-2",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4694,6 +7476,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4704,6 +7487,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4714,6 +7498,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4724,6 +7509,7 @@
           "name": "tr-3",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4734,6 +7520,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4744,6 +7531,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4754,6 +7542,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4764,6 +7553,7 @@
           "name": "tr-4",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4774,6 +7564,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4784,6 +7575,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4794,6 +7586,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4892,6 +7685,168 @@
           "effects": []
         }
       },
+      "overlays": [
+        {
+          "variant": "variant=with-line-numbers",
+          "layer": "_gutter-rule",
+          "type": "RECTANGLE",
+          "fill": "color/border",
+          "stroke": null,
+          "box": [
+            32,
+            0,
+            1,
+            23
+          ],
+          "parentBox": [
+            448,
+            23
+          ],
+          "parentName": "line-1",
+          "visible": true,
+          "boundTo": null
+        },
+        {
+          "variant": "variant=with-line-numbers",
+          "layer": "_gutter-rule",
+          "type": "RECTANGLE",
+          "fill": "color/border",
+          "stroke": null,
+          "box": [
+            32,
+            0,
+            1,
+            23
+          ],
+          "parentBox": [
+            45,
+            23
+          ],
+          "parentName": "line-2",
+          "visible": true,
+          "boundTo": null
+        },
+        {
+          "variant": "variant=with-line-numbers",
+          "layer": "_gutter-rule",
+          "type": "RECTANGLE",
+          "fill": "color/border",
+          "stroke": null,
+          "box": [
+            32,
+            0,
+            1,
+            23
+          ],
+          "parentBox": [
+            146,
+            23
+          ],
+          "parentName": "line-3",
+          "visible": true,
+          "boundTo": null
+        },
+        {
+          "variant": "variant=with-line-numbers",
+          "layer": "_gutter-rule",
+          "type": "RECTANGLE",
+          "fill": "color/border",
+          "stroke": null,
+          "box": [
+            32,
+            0,
+            1,
+            23
+          ],
+          "parentBox": [
+            566,
+            23
+          ],
+          "parentName": "line-4",
+          "visible": true,
+          "boundTo": null
+        },
+        {
+          "variant": "variant=with-line-numbers",
+          "layer": "_gutter-rule",
+          "type": "RECTANGLE",
+          "fill": "color/border",
+          "stroke": null,
+          "box": [
+            32,
+            0,
+            1,
+            23
+          ],
+          "parentBox": [
+            62,
+            23
+          ],
+          "parentName": "line-5",
+          "visible": true,
+          "boundTo": null
+        },
+        {
+          "variant": "variant=with-line-numbers",
+          "layer": "_gutter-rule",
+          "type": "RECTANGLE",
+          "fill": "color/border",
+          "stroke": null,
+          "box": [
+            32,
+            0,
+            1,
+            23
+          ],
+          "parentBox": [
+            264,
+            23
+          ],
+          "parentName": "line-6",
+          "visible": true,
+          "boundTo": null
+        },
+        {
+          "variant": "variant=with-line-numbers",
+          "layer": "_gutter-rule",
+          "type": "RECTANGLE",
+          "fill": "color/border",
+          "stroke": null,
+          "box": [
+            32,
+            0,
+            1,
+            23
+          ],
+          "parentBox": [
+            188,
+            23
+          ],
+          "parentName": "line-7",
+          "visible": true,
+          "boundTo": null
+        },
+        {
+          "variant": "variant=with-line-numbers",
+          "layer": "_gutter-rule",
+          "type": "RECTANGLE",
+          "fill": "color/border",
+          "stroke": null,
+          "box": [
+            32,
+            0,
+            1,
+            23
+          ],
+          "parentBox": [
+            54,
+            23
+          ],
+          "parentName": "line-8",
+          "visible": true,
+          "boundTo": null
+        }
+      ],
       "glyphTextNodes": [],
       "sampledVariant": "420:186",
       "nodes": [
@@ -4899,6 +7854,7 @@
           "name": "variant=default",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4909,6 +7865,7 @@
           "name": "header",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4919,6 +7876,7 @@
           "name": "copy-btn",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4929,6 +7887,7 @@
           "name": "Rectangle",
           "type": "RECTANGLE",
           "hasChildren": false,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 2,
@@ -4939,6 +7898,7 @@
           "name": "body",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4949,6 +7909,7 @@
           "name": "line-1",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4959,6 +7920,7 @@
           "name": "line-2",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4969,6 +7931,7 @@
           "name": "line-3",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4979,6 +7942,7 @@
           "name": "line-4",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4989,6 +7953,7 @@
           "name": "line-5",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -4999,6 +7964,7 @@
           "name": "line-6",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5009,6 +7975,7 @@
           "name": "line-7",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5019,6 +7986,7 @@
           "name": "line-8",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5168,6 +8136,368 @@
           ]
         }
       },
+      "overlays": [
+        {
+          "variant": "state=default",
+          "layer": "_readonly-surface",
+          "type": "RECTANGLE",
+          "fill": "color/surface-sunken",
+          "stroke": "color/surface-sunken",
+          "box": [
+            0,
+            0,
+            320,
+            40
+          ],
+          "parentBox": [
+            320,
+            40
+          ],
+          "parentName": "state=default",
+          "visible": false,
+          "boundTo": "readonly#911:10"
+        },
+        {
+          "variant": "state=default",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            320,
+            40
+          ],
+          "parentBox": [
+            320,
+            40
+          ],
+          "parentName": "state=default",
+          "visible": false,
+          "boundTo": "disabled#507:133"
+        },
+        {
+          "variant": "state=default",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            0,
+            320,
+            40
+          ],
+          "parentBox": [
+            320,
+            40
+          ],
+          "parentName": "state=default",
+          "visible": false,
+          "boundTo": "invalid#507:140"
+        },
+        {
+          "variant": "state=open",
+          "layer": "_readonly-surface",
+          "type": "RECTANGLE",
+          "fill": "color/surface-sunken",
+          "stroke": "color/surface-sunken",
+          "box": [
+            0,
+            0,
+            320,
+            40
+          ],
+          "parentBox": [
+            320,
+            264
+          ],
+          "parentName": "state=open",
+          "visible": false,
+          "boundTo": "readonly#911:10"
+        },
+        {
+          "variant": "state=open",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            320,
+            264
+          ],
+          "parentBox": [
+            320,
+            264
+          ],
+          "parentName": "state=open",
+          "visible": false,
+          "boundTo": "disabled#507:133"
+        },
+        {
+          "variant": "state=open",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            0,
+            320,
+            40
+          ],
+          "parentBox": [
+            320,
+            264
+          ],
+          "parentName": "state=open",
+          "visible": false,
+          "boundTo": "invalid#507:140"
+        },
+        {
+          "variant": "state=filtered",
+          "layer": "_readonly-surface",
+          "type": "RECTANGLE",
+          "fill": "color/surface-sunken",
+          "stroke": "color/surface-sunken",
+          "box": [
+            0,
+            0,
+            320,
+            40
+          ],
+          "parentBox": [
+            320,
+            156
+          ],
+          "parentName": "state=filtered",
+          "visible": false,
+          "boundTo": "readonly#911:10"
+        },
+        {
+          "variant": "state=filtered",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            320,
+            156
+          ],
+          "parentBox": [
+            320,
+            156
+          ],
+          "parentName": "state=filtered",
+          "visible": false,
+          "boundTo": "disabled#507:133"
+        },
+        {
+          "variant": "state=filtered",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            0,
+            320,
+            40
+          ],
+          "parentBox": [
+            320,
+            156
+          ],
+          "parentName": "state=filtered",
+          "visible": false,
+          "boundTo": "invalid#507:140"
+        },
+        {
+          "variant": "state=selected",
+          "layer": "_readonly-surface",
+          "type": "RECTANGLE",
+          "fill": "color/surface-sunken",
+          "stroke": "color/surface-sunken",
+          "box": [
+            0,
+            0,
+            320,
+            40
+          ],
+          "parentBox": [
+            320,
+            40
+          ],
+          "parentName": "state=selected",
+          "visible": false,
+          "boundTo": "readonly#911:10"
+        },
+        {
+          "variant": "state=selected",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            320,
+            40
+          ],
+          "parentBox": [
+            320,
+            40
+          ],
+          "parentName": "state=selected",
+          "visible": false,
+          "boundTo": "disabled#507:133"
+        },
+        {
+          "variant": "state=selected",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            0,
+            320,
+            40
+          ],
+          "parentBox": [
+            320,
+            40
+          ],
+          "parentName": "state=selected",
+          "visible": false,
+          "boundTo": "invalid#507:140"
+        },
+        {
+          "variant": "state=hover",
+          "layer": "_readonly-surface",
+          "type": "RECTANGLE",
+          "fill": "color/surface-sunken",
+          "stroke": "color/surface-sunken",
+          "box": [
+            0,
+            0,
+            320,
+            40
+          ],
+          "parentBox": [
+            320,
+            40
+          ],
+          "parentName": "state=hover",
+          "visible": false,
+          "boundTo": "readonly#911:10"
+        },
+        {
+          "variant": "state=hover",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            320,
+            40
+          ],
+          "parentBox": [
+            320,
+            40
+          ],
+          "parentName": "state=hover",
+          "visible": false,
+          "boundTo": "disabled#507:133"
+        },
+        {
+          "variant": "state=hover",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            0,
+            320,
+            40
+          ],
+          "parentBox": [
+            320,
+            40
+          ],
+          "parentName": "state=hover",
+          "visible": false,
+          "boundTo": "invalid#507:140"
+        },
+        {
+          "variant": "state=focus",
+          "layer": "_readonly-surface",
+          "type": "RECTANGLE",
+          "fill": "color/surface-sunken",
+          "stroke": "color/surface-sunken",
+          "box": [
+            0,
+            0,
+            320,
+            40
+          ],
+          "parentBox": [
+            320,
+            40
+          ],
+          "parentName": "state=focus",
+          "visible": false,
+          "boundTo": "readonly#911:10"
+        },
+        {
+          "variant": "state=focus",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            320,
+            40
+          ],
+          "parentBox": [
+            320,
+            40
+          ],
+          "parentName": "state=focus",
+          "visible": false,
+          "boundTo": "disabled#507:133"
+        },
+        {
+          "variant": "state=focus",
+          "layer": "_invalid-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/input-border-invalid",
+          "box": [
+            0,
+            0,
+            320,
+            40
+          ],
+          "parentBox": [
+            320,
+            40
+          ],
+          "parentName": "state=focus",
+          "visible": false,
+          "boundTo": "invalid#507:140"
+        }
+      ],
       "glyphTextNodes": [],
       "sampledVariant": "421:291",
       "nodes": [
@@ -5175,6 +8505,7 @@
           "name": "state=default",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5185,6 +8516,7 @@
           "name": "input",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5195,6 +8527,7 @@
           "name": "chevron-down",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5377,6 +8710,7 @@
           "effects": []
         }
       },
+      "overlays": [],
       "glyphTextNodes": [],
       "sampledVariant": "421:407",
       "nodes": [
@@ -5384,6 +8718,7 @@
           "name": "orientation=horizontal, state=default",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5394,6 +8729,7 @@
           "name": "header",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5404,6 +8740,7 @@
           "name": "step-1",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5414,6 +8751,7 @@
           "name": "circle-active",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5424,6 +8762,7 @@
           "name": "text",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5434,6 +8773,7 @@
           "name": "connector-wrap",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5444,6 +8784,7 @@
           "name": "step-2",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5454,6 +8795,7 @@
           "name": "circle-default",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5464,6 +8806,7 @@
           "name": "text",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5474,6 +8817,7 @@
           "name": "connector-wrap",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5484,6 +8828,7 @@
           "name": "step-3",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5494,6 +8839,7 @@
           "name": "circle-default",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5504,6 +8850,7 @@
           "name": "text",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5621,6 +8968,7 @@
           "effects": []
         }
       },
+      "overlays": [],
       "glyphTextNodes": [],
       "sampledVariant": "507:6305",
       "nodes": [
@@ -5628,6 +8976,7 @@
           "name": "size=md",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5638,6 +8987,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5648,6 +8998,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5658,6 +9009,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5668,6 +9020,7 @@
           "name": "Frame",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5760,6 +9113,288 @@
           "effects": []
         }
       },
+      "overlays": [
+        {
+          "variant": "variant=drawer",
+          "layer": "_readonly-surface",
+          "type": "RECTANGLE",
+          "fill": "color/surface-sunken",
+          "stroke": "color/surface-sunken",
+          "box": [
+            0,
+            0,
+            260,
+            64
+          ],
+          "parentBox": [
+            260,
+            64
+          ],
+          "parentName": "input-textarea",
+          "visible": false,
+          "boundTo": "readonly#507:97"
+        },
+        {
+          "variant": "variant=drawer",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            200,
+            90
+          ],
+          "parentBox": [
+            260,
+            64
+          ],
+          "parentName": "input-textarea",
+          "visible": false,
+          "boundTo": "disabled#507:91"
+        },
+        {
+          "variant": "variant=drawer",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            40
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "send-button",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=drawer",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/text-on-primary",
+          "stroke": null,
+          "box": [
+            75,
+            11,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "send-button",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=popup",
+          "layer": "_readonly-surface",
+          "type": "RECTANGLE",
+          "fill": "color/surface-sunken",
+          "stroke": "color/surface-sunken",
+          "box": [
+            0,
+            0,
+            228,
+            40
+          ],
+          "parentBox": [
+            228,
+            40
+          ],
+          "parentName": "input-textarea",
+          "visible": false,
+          "boundTo": "readonly#507:97"
+        },
+        {
+          "variant": "variant=popup",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            200,
+            90
+          ],
+          "parentBox": [
+            228,
+            40
+          ],
+          "parentName": "input-textarea",
+          "visible": false,
+          "boundTo": "disabled#507:91"
+        },
+        {
+          "variant": "variant=popup",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            32
+          ],
+          "parentBox": [
+            120,
+            32
+          ],
+          "parentName": "send-button",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=popup",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/text-on-primary",
+          "stroke": null,
+          "box": [
+            72,
+            7,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            32
+          ],
+          "parentName": "send-button",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=inline",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            32
+          ],
+          "parentBox": [
+            120,
+            32
+          ],
+          "parentName": "new-chat-button",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=inline",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/primary",
+          "stroke": null,
+          "box": [
+            72,
+            7,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            32
+          ],
+          "parentName": "new-chat-button",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        },
+        {
+          "variant": "variant=inline",
+          "layer": "_readonly-surface",
+          "type": "RECTANGLE",
+          "fill": "color/surface-sunken",
+          "stroke": "color/surface-sunken",
+          "box": [
+            0,
+            0,
+            544,
+            48
+          ],
+          "parentBox": [
+            544,
+            48
+          ],
+          "parentName": "input-textarea",
+          "visible": false,
+          "boundTo": "readonly#507:97"
+        },
+        {
+          "variant": "variant=inline",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            200,
+            90
+          ],
+          "parentBox": [
+            544,
+            48
+          ],
+          "parentName": "input-textarea",
+          "visible": false,
+          "boundTo": "disabled#507:91"
+        },
+        {
+          "variant": "variant=inline",
+          "layer": "_disabled-overlay",
+          "type": "RECTANGLE",
+          "fill": "color/surface",
+          "stroke": null,
+          "box": [
+            0,
+            0,
+            120,
+            40
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "send-button",
+          "visible": false,
+          "boundTo": "disabled#507:192"
+        },
+        {
+          "variant": "variant=inline",
+          "layer": "_loading-spinner",
+          "type": "ELLIPSE",
+          "fill": "color/text-on-primary",
+          "stroke": null,
+          "box": [
+            75,
+            11,
+            16,
+            16
+          ],
+          "parentBox": [
+            120,
+            40
+          ],
+          "parentName": "send-button",
+          "visible": false,
+          "boundTo": "loading#507:217"
+        }
+      ],
       "glyphTextNodes": [
         {
           "layer": "min-icon",
@@ -5772,6 +9407,7 @@
           "name": "variant=drawer",
           "type": "COMPONENT",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [
             "#f1f3f6"
@@ -5784,6 +9420,7 @@
           "name": "app-header",
           "type": "RECTANGLE",
           "hasChildren": false,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [
             "#e5e7eb"
@@ -5796,6 +9433,7 @@
           "name": "app-title",
           "type": "TEXT",
           "hasChildren": false,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [
             "#0f172a"
@@ -5808,6 +9446,7 @@
           "name": "content-block-1",
           "type": "RECTANGLE",
           "hasChildren": false,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [
             "#e5e7eb"
@@ -5820,6 +9459,7 @@
           "name": "content-block-2",
           "type": "RECTANGLE",
           "hasChildren": false,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [
             "#e5e7eb"
@@ -5832,6 +9472,7 @@
           "name": "content-block-3",
           "type": "RECTANGLE",
           "hasChildren": false,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [
             "#e5e7eb"
@@ -5844,6 +9485,7 @@
           "name": "content-block-4",
           "type": "RECTANGLE",
           "hasChildren": false,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [
             "#e5e7eb"
@@ -5856,6 +9498,7 @@
           "name": "header-divider",
           "type": "RECTANGLE",
           "hasChildren": false,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [
             "#e5e7eb"
@@ -5868,6 +9511,7 @@
           "name": "avatar-glyph",
           "type": "TEXT",
           "hasChildren": false,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [
             "#0f172a"
@@ -5880,6 +9524,7 @@
           "name": "drawer-title",
           "type": "TEXT",
           "hasChildren": false,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [
             "#0f172a"
@@ -5892,6 +9537,7 @@
           "name": "close-bg",
           "type": "RECTANGLE",
           "hasChildren": false,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [
             "#e5e7eb"
@@ -5904,6 +9550,7 @@
           "name": "close",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5914,6 +9561,7 @@
           "name": "msg-asst-1",
           "type": "RECTANGLE",
           "hasChildren": false,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [
             "#f5f5f5"
@@ -5926,6 +9574,7 @@
           "name": "msg-asst-1-text",
           "type": "TEXT",
           "hasChildren": false,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [
             "#0f172a"
@@ -5938,6 +9587,7 @@
           "name": "msg-asst-2",
           "type": "RECTANGLE",
           "hasChildren": false,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [
             "#f5f5f5"
@@ -5950,6 +9600,7 @@
           "name": "msg-asst-2-text",
           "type": "TEXT",
           "hasChildren": false,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [
             "#0f172a"
@@ -5962,6 +9613,7 @@
           "name": "footer-divider",
           "type": "RECTANGLE",
           "hasChildren": false,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [
             "#e5e7eb"
@@ -5974,6 +9626,7 @@
           "name": "status-badge",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5984,6 +9637,7 @@
           "name": "check",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
@@ -5994,6 +9648,7 @@
           "name": "input-textarea",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -6004,6 +9659,7 @@
           "name": "send-button",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -6014,6 +9670,7 @@
           "name": "code-block-instance",
           "type": "INSTANCE",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -6024,6 +9681,7 @@
           "name": "header",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -6034,6 +9692,7 @@
           "name": "copy-btn",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -6044,6 +9703,7 @@
           "name": "Rectangle",
           "type": "RECTANGLE",
           "hasChildren": false,
+          "hidden": false,
           "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 2,
@@ -6054,6 +9714,7 @@
           "name": "body",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "VERTICAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -6064,6 +9725,7 @@
           "name": "line-1",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -6074,6 +9736,7 @@
           "name": "line-2",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -6084,6 +9747,7 @@
           "name": "line-3",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -6094,6 +9758,7 @@
           "name": "line-4",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -6104,6 +9769,7 @@
           "name": "line-5",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -6114,6 +9780,7 @@
           "name": "line-6",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -6124,6 +9791,7 @@
           "name": "line-7",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
@@ -6134,6 +9802,7 @@
           "name": "line-8",
           "type": "FRAME",
           "hasChildren": true,
+          "hidden": false,
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,

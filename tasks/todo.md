@@ -170,6 +170,14 @@ Decision-bearing quick wins (deferred — not this session's scope):
       1621 text nodes swept onto the declared families, the 19 styles replaced by 8
       `ty/<role>` styles generated from `--ui-type-*`, and `[FONT-FAMILY]` +
       `[TEXT-STYLE]` added to `check:figma` so it cannot drift back.
+- [ ] **Three table child masters carry AtlTable's borrowed Booleans.** `sortable` is
+      `AtlThSpec`, `selectable` is `AtlTrSpec`, `empty` is `AtlTbodySpec`. They are
+      allowlisted on AtlTable with that reason (ADR-0061) and stay declared only until
+      AtlTh / AtlTr / AtlTbody exist as masters. Building them removes the allowlist
+      entries, not just the warning.
+- [ ] **AtlTabGroup's `disabled` belongs on AtlTab.** Removed from the group master
+      (ADR-0061) because `AtlTabGroupSpec` has no such field — `AtlTabSpec.disabled`
+      does. It has nowhere to live until the AtlTab child master exists.
 - [ ] **`[LAYER-PAINT]`: the inner layers are unchecked and diverge at the same rate.**
       `[ROOT-PAINT]` (ADR-0060) covers each master's ROOT. Every master it fixed
       exposed a defect one level down, all measured: AtlMenu's items are 41px tall

@@ -66,6 +66,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0058](0058-the-master-facts-nothing-was-reading.md) | The master facts nothing was reading (`[BOOL-INERT]`, `[MASTER-GLYPH]`) | Accepted | Recorded |
 | [0059](0059-the-file-was-in-the-wrong-typeface.md) | The file was in the wrong typeface (`[FONT-FAMILY]`, `[TEXT-STYLE]`) | Accepted | Recorded |
 | [0060](0060-bound-is-not-the-same-as-bound-correctly.md) | Bound is not the same as bound correctly (`[ROOT-PAINT]`) | Accepted | Recorded |
+| [0061](0061-what-a-property-turns-on-must-be-checked-while-it-is-off.md) | What a property turns on has to be checked while it is off (`[OVERLAY]`, `[BOOL-UNSPECED]`) | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 
