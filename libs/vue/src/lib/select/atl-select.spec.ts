@@ -24,7 +24,11 @@ describe('AtlSelect', () => {
   covers('select', 'error-messages')('renders error messages', () => {
     render(AtlSelect, { props: { errors: ['This field is required'], invalid: true } });
     expect(screen.getByText('This field is required')).toBeInTheDocument();
-    expect(screen.getByRole('alert')).toBeInTheDocument();
+    // A polite live region tied to the field, not an assertive alert (ADR-0055).
+    const field = screen.getByRole('combobox');
+    const describedBy = field.getAttribute('aria-describedby');
+    expect(describedBy).toBeTruthy();
+    expect(document.getElementById(describedBy as string)).toHaveAttribute('aria-live', 'polite');
   });
 
   covers('select', 'invalid')('sets aria-invalid when invalid', () => {

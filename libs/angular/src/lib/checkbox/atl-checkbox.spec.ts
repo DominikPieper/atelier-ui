@@ -146,7 +146,10 @@ describe('AtlCheckbox', () => {
   });
 
   describe('error display', () => {
-    it('does not show errors when not touched', async () => {
+    // Was 'does not show errors when not touched'. Gating on touched was an
+    // Angular-only rule the spec never declared, so the same four fields showed
+    // their errors at three different moments across the frameworks (ADR-0055).
+    it('shows errors as soon as they are passed, without waiting to be touched', async () => {
       const { container } = await render(
         '<atl-checkbox [invalid]="true" [errors]="errors">Label</atl-checkbox>',
         {
@@ -156,7 +159,7 @@ describe('AtlCheckbox', () => {
           },
         }
       );
-      expect(container.querySelector('.errors')).not.toBeInTheDocument();
+      expect(container.querySelector('.errors')).toBeInTheDocument();
     });
 
     covers('checkbox', 'errors')('shows errors when touched and invalid', async () => {
@@ -196,7 +199,7 @@ describe('AtlCheckbox', () => {
       expect(container.querySelector(`#${describedBy}`)).toBeInTheDocument();
     });
 
-    it('does not set aria-describedby before errors are visible', async () => {
+    it('sets aria-describedby as soon as errors are passed', async () => {
       const { container } = await render(
         '<atl-checkbox [invalid]="true" [errors]="errors">Label</atl-checkbox>',
         {
@@ -206,9 +209,7 @@ describe('AtlCheckbox', () => {
           },
         }
       );
-      expect(
-        container.querySelector('input[type="checkbox"]')
-      ).not.toHaveAttribute('aria-describedby');
+      expect(container.querySelector('input[type="checkbox"]')).toHaveAttribute('aria-describedby');
     });
   });
 

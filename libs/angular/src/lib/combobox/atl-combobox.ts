@@ -52,6 +52,7 @@ let nextId = 0;
         aria-autocomplete="list"
         [attr.aria-activedescendant]="activeOptionId()"
         [attr.aria-invalid]="invalid() || null"
+[attr.aria-describedby]="showErrors() ? errorId : null"
         [attr.disabled]="disabled() || null"
         [attr.required]="required() || null"
         [attr.name]="name() || null"
@@ -186,8 +187,15 @@ export class AtlCombobox implements FormValueControl<string> {
   });
 
   /** @internal */
+  /**
+   * The message renders when there is a message. Gating it on `touched` as well was
+   * an Angular-only rule: `touched` is not in the spec contract and React and Vue have
+   * no equivalent, so the same four fields showed their errors at three different
+   * moments depending on the framework. Deciding *when* to pass errors belongs to the
+   * form layer, which is where `touched` lives (ADR-0055).
+   */
   protected readonly showErrors = computed(
-    () => this.touched() && this.invalid() && this.errors().length > 0,
+    () => this.errors().length > 0,
   );
 
   /** @internal */

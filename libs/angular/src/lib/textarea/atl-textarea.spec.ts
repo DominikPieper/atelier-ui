@@ -115,7 +115,10 @@ describe('AtlTextarea', () => {
       );
     });
 
-    it('does not show errors when not touched', async () => {
+    // Was 'does not show errors when not touched'. Gating on touched was an
+    // Angular-only rule the spec never declared, so the same four fields showed
+    // their errors at three different moments across the frameworks (ADR-0055).
+    it('shows errors as soon as they are passed, without waiting to be touched', async () => {
       const { container } = await render(
         `<atl-textarea [invalid]="true" [errors]="errors" />`,
         {
@@ -125,7 +128,7 @@ describe('AtlTextarea', () => {
           },
         }
       );
-      expect(container.querySelector('.errors')).not.toBeInTheDocument();
+      expect(container.querySelector('.errors')).toBeInTheDocument();
     });
 
     covers('textarea', 'errors')('shows error messages when touched and invalid', async () => {

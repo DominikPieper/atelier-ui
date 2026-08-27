@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, useId } from 'vue';
 import './atl-select.css';
+import AtlIcon from '../icon/atl-icon.vue';
 
 defineOptions({ name: 'AtlSelect' });
 
@@ -63,9 +64,10 @@ function onChange(event: Event) {
         <option v-if="placeholder" value="" disabled hidden>{{ placeholder }}</option>
         <slot />
       </select>
-      <span class="select-arrow" aria-hidden="true">▾</span>
+      <AtlIcon v-if="invalid" name="danger" size="sm" class="invalid-icon" />
+      <span class="select-arrow" aria-hidden="true"><AtlIcon name="chevron-down" size="sm" /></span>
     </div>
-    <div v-if="errors.length > 0" :id="errorsId" class="errors" role="alert">
+    <div v-if="errors.length > 0" :id="errorsId" class="errors" aria-live="polite">
       <p v-for="(error, index) in errors" :key="index" class="error-message">{{ error }}</p>
     </div>
   </div>

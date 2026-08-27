@@ -56,6 +56,11 @@ export const ATL_ICON_GEOMETRY: Record<string, AtlIconGeometry> = {
   'chevron-down': { kind: 'stroke', paths: ['M6 9L12 15L18 9'] },
   'chevron-left': { kind: 'stroke', paths: ['M15 6L9 12L15 18'] },
   'chevron-right': { kind: 'stroke', paths: ['M9 6L15 12L9 18'] },
+  // Two chevrons, for "jump to the first / last page" as against "one step".
+  // AtlPagination drew these as the guillemets « and », which are quotation marks
+  // in typography and were arrows only by resemblance (ADR-0055).
+  'chevron-double-left': { kind: 'stroke', paths: ['M18 6L12 12L18 18', 'M11 6L5 12L11 18'] },
+  'chevron-double-right': { kind: 'stroke', paths: ['M6 6L12 12L6 18', 'M13 6L19 12L13 18'] },
   'arrow-left': { kind: 'stroke', paths: ['M19 12H5', 'M11 6L5 12L11 18'] },
   'arrow-right': { kind: 'stroke', paths: ['M5 12H19', 'M13 6L19 12L13 18'] },
 

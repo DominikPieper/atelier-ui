@@ -88,8 +88,15 @@ export class AtlToggle implements FormCheckboxControl {
   protected readonly errorId = `atl-toggle-errors-${nextId++}`;
 
   /** @internal */
+  /**
+   * The message renders when there is a message. Gating it on `touched` as well was
+   * an Angular-only rule: `touched` is not in the spec contract and React and Vue have
+   * no equivalent, so the same four fields showed their errors at three different
+   * moments depending on the framework. Deciding *when* to pass errors belongs to the
+   * form layer, which is where `touched` lives (ADR-0055).
+   */
   protected readonly showErrors = computed(
-    () => this.touched() && this.invalid() && this.errors().length > 0
+    () => this.errors().length > 0
   );
 
   /** @internal */

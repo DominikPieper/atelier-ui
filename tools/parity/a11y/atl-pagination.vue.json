@@ -6,11 +6,11 @@
     },
     {
       "role": "list",
-      "name": "« ‹ 1 2 3 5 › »"
+      "name": "1 2 3 5"
     },
     {
       "role": "listitem",
-      "name": "«"
+      "name": ""
     },
     {
       "role": "button",
@@ -18,7 +18,7 @@
     },
     {
       "role": "listitem",
-      "name": "‹"
+      "name": ""
     },
     {
       "role": "button",
@@ -65,7 +65,7 @@
     },
     {
       "role": "listitem",
-      "name": "›"
+      "name": ""
     },
     {
       "role": "button",
@@ -73,7 +73,7 @@
     },
     {
       "role": "listitem",
-      "name": "»"
+      "name": ""
     },
     {
       "role": "button",

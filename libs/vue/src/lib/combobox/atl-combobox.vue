@@ -44,6 +44,7 @@ const activeIndex = ref(-1);
 let idBase = Math.random().toString(36).slice(2);
 const inputId = `atl-combobox-input-${idBase}`;
 const panelId = `atl-combobox-panel-${idBase}`;
+const errorsId = `atl-combobox-errors-${idBase}`;
 
 const selectedLabel = computed(
   () => props.options.find((o) => o.value === props.value)?.label ?? '',
@@ -179,6 +180,7 @@ function onKeydown(event: KeyboardEvent) {
         aria-autocomplete="list"
         :aria-activedescendant="activeOptionId"
         :aria-invalid="invalid || undefined"
+        :aria-describedby="errors.length > 0 ? errorsId : undefined"
         :disabled="disabled"
         :readonly="readonly"
         :required="required"
@@ -190,6 +192,7 @@ function onKeydown(event: KeyboardEvent) {
         @blur="onBlur"
         @keydown="onKeydown"
       />
+      <AtlIcon v-if="invalid" name="danger" size="sm" class="invalid-icon" />
       <span class="atl-combobox-icon" aria-hidden="true">
         <AtlIcon name="chevron-down" size="sm" />
       </span>
@@ -229,9 +232,9 @@ function onKeydown(event: KeyboardEvent) {
     </ul>
 
     <div
-      v-if="invalid && errors.length > 0"
+      v-if="errors.length > 0"
+      :id="errorsId"
       class="atl-combobox-errors"
-      role="alert"
       aria-live="polite"
     >
       <p v-for="(error, i) in errors" :key="i" class="atl-combobox-error-message">{{ error }}</p>

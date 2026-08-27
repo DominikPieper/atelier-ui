@@ -47,6 +47,7 @@ export function AtlCombobox({
 
   const inputId = useId();
   const panelId = useId();
+  const errorsId = `${useId()}-errors`;
 
   const selectedLabel = useMemo(
     () => options.find((o) => o.value === value)?.label ?? '',
@@ -172,6 +173,7 @@ export function AtlCombobox({
           aria-autocomplete="list"
           aria-activedescendant={activeOptionId}
           aria-invalid={invalid || undefined}
+          aria-describedby={errors.length > 0 ? errorsId : undefined}
           disabled={disabled}
           readOnly={readonly}
           required={required}
@@ -183,6 +185,7 @@ export function AtlCombobox({
           onBlur={handleBlur}
           onKeyDown={handleKeydown}
         />
+        {invalid && <AtlIcon name="danger" size="sm" className="invalid-icon" />}
         <span className="atl-combobox-icon" aria-hidden="true">
           <AtlIcon name="chevron-down" size="sm" />
         </span>
@@ -228,8 +231,8 @@ export function AtlCombobox({
         </ul>
       )}
 
-      {invalid && errors.length > 0 && (
-        <div className="atl-combobox-errors" role="alert" aria-live="polite">
+      {errors.length > 0 && (
+        <div className="atl-combobox-errors" id={errorsId} aria-live="polite">
           {errors.map((e, i) => (
             <p key={i} className="atl-combobox-error-message">{e}</p>
           ))}

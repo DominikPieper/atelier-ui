@@ -81,7 +81,7 @@
 
 .trigger-icon {
   flex-shrink: 0;
-  margin-left: var(--ui-spacing-2);
+  margin-left: var(--ui-spacing-1);
   color: var(--ui-color-text-muted);
   transition: transform var(--ui-transition-fast);
 }
@@ -122,4 +122,27 @@
   margin: 0;
   font-size: var(--ui-font-size-sm);
   color: var(--ui-color-error-text);
+}
+
+/* The invalid indicator sits inline-end, left of the chevron, and the field reserves
+ * the space for it unconditionally so nothing shifts when the state flips.
+ * AtlInput and AtlTextarea already showed this indicator; carrying invalid on border
+ * colour alone left AtlSelect and AtlCombobox failing WCAG 1.4.1 whenever a consumer
+ * set invalid without passing errors (ADR-0055). */
+/* Angular’s AtlSelect is a button, not a native <select>, so the indicator is a flex
+ * sibling rather than an absolute overlay. The slot is always in the row — empty when
+ * the field is valid — so the label’s truncation point does not move when the state
+ * flips, which is what the absolute layouts get from reserving inline-end padding.
+ * Measured consequence of the structural difference: the icons sit one pixel further
+ * inboard here, because this padding is inside a bordered button. */
+.invalid-slot {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  margin-left: var(--ui-spacing-2);
+}
+
+:host(.is-invalid) .invalid-icon {
+  color: var(--ui-color-danger);
+  pointer-events: none;
 }

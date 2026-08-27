@@ -144,7 +144,13 @@ describe('AtlCombobox', () => {
       <AtlCombobox options={OPTIONS} invalid errors={['Please select a fruit']} />,
     );
     expect(screen.getByText('Please select a fruit')).toBeInTheDocument();
-    expect(screen.getByRole('alert')).toBeInTheDocument();
+    // A polite live region tied to the field, not an assertive alert (ADR-0055).
+    const field = screen.getByRole('combobox');
+    const describedBy = field.getAttribute('aria-describedby');
+    expect(describedBy).toBeTruthy();
+    const region = document.getElementById(describedBy as string);
+    expect(region).toHaveAttribute('aria-live', 'polite');
+    expect(region).toContainElement(screen.getByText('Please select a fruit'));
   });
 
   it('does not select a disabled option', async () => {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, computed, nextTick } from 'vue';
+import { ref, watch, onMounted, computed, nextTick, useId } from 'vue';
 import './atl-textarea.css';
 import AtlIcon from '../icon/atl-icon.vue';
 
@@ -34,6 +34,8 @@ const props = withDefaults(defineProps<AtlTextareaProps>(), {
   name: '',
   id: '',
 });
+
+const errorsId = useId();
 
 const emit = defineEmits<{
   'update:value': [value: string];
@@ -78,11 +80,12 @@ function onInput(event: Event) {
         :required="required"
         :name="name"
         :aria-invalid="invalid || undefined"
+        :aria-describedby="errors.length > 0 ? errorsId : undefined"
         @input="onInput"
       />
       <AtlIcon v-if="invalid" name="danger" size="sm" class="invalid-icon" />
     </div>
-    <ul v-if="errors.length" class="errors" aria-live="polite">
+    <ul v-if="errors.length" :id="errorsId" class="errors" aria-live="polite">
       <li v-for="(error, i) in errors" :key="i" class="error">{{ error }}</li>
     </ul>
   </div>

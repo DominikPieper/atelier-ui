@@ -49,7 +49,7 @@
       (var(--ui-control-height-md) - var(--ui-line-height-tight) * var(--ui-font-size-md)) / 2 -
         var(--ui-border-width)
     ) var(--ui-spacing-4);
-  padding-inline-end: calc(var(--ui-spacing-4) + 1.25rem);
+  padding-inline-end: calc(var(--ui-spacing-4) + 1.25rem + var(--ui-spacing-5));
   background: var(--ui-color-input-bg);
   border: var(--ui-border-width) solid var(--ui-color-input-border);
   border-radius: var(--ui-radius-md);
@@ -102,4 +102,19 @@
   margin: 0;
   font-size: var(--ui-font-size-sm);
   color: var(--ui-color-error-text);
+}
+
+/* The invalid indicator sits inline-end, left of the chevron, and the field reserves
+ * the space for it unconditionally so nothing shifts when the state flips. Slot:
+ * 16px inset + 16px chevron + 4px gap + 16px indicator + 4px = 56px.
+ * AtlInput and AtlTextarea already showed this indicator; carrying invalid on border
+ * colour alone left AtlSelect and AtlCombobox failing WCAG 1.4.1 whenever a consumer
+ * set invalid without passing errors (ADR-0055). */
+.atl-select.is-invalid .invalid-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  inset-inline-end: calc(var(--ui-spacing-4) + var(--ui-spacing-5));
+  color: var(--ui-color-danger);
+  pointer-events: none;
 }

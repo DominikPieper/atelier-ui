@@ -4,6 +4,7 @@ import type {
   AtlOptionSpec,
 } from '../spec';
 import './atl-select.css';
+import { AtlIcon } from '../icon/atl-icon';
 
 /**
  * Properties for the AtlSelect component.
@@ -56,6 +57,9 @@ export function AtlSelect({
 }: AtlSelectProps) {
   const selectId =
     id || (label ? `select-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined);
+  // Derived from the field id, the same way AtlInput derives its own, so the error
+  // text can be pointed at with aria-describedby.
+  const errorsId = selectId ? `${selectId}-errors` : undefined;
   const classes = [
     'atl-select',
     invalid && 'is-invalid',
@@ -76,6 +80,7 @@ export function AtlSelect({
           disabled={disabled}
           required={required}
           aria-invalid={invalid || undefined}
+          aria-describedby={errors.length > 0 ? errorsId : undefined}
           {...rest}
         >
           {placeholder && (
@@ -85,12 +90,13 @@ export function AtlSelect({
           )}
           {children}
         </select>
+        {invalid && <AtlIcon name="danger" size="sm" className="invalid-icon" />}
         <span className="select-arrow" aria-hidden="true">
-          ▾
+          <AtlIcon name="chevron-down" size="sm" />
         </span>
       </div>
       {errors.length > 0 && (
-        <div className="errors" role="alert" aria-live="polite">
+        <div className="errors" id={errorsId} aria-live="polite">
           {errors.map((err, i) => (
             <p key={i} className="error-message">
               {err}

@@ -1,6 +1,7 @@
 import { HTMLAttributes, useMemo } from 'react';
 import type { AtlPaginationSpec } from '../spec';
 import './atl-pagination.css';
+import { AtlIcon } from '../icon/atl-icon';
 
 type PageItem =
   | { type: 'page'; page: number }
@@ -103,7 +104,7 @@ export function AtlPagination({
               aria-label="First page"
               onClick={() => goTo(1)}
             >
-              «
+              <AtlIcon name="chevron-double-left" size="sm" />
             </button>
           </li>
         )}
@@ -114,7 +115,7 @@ export function AtlPagination({
             aria-label="Previous page"
             onClick={() => goTo(page - 1)}
           >
-            ‹
+            <AtlIcon name="chevron-left" size="sm" />
           </button>
         </li>
 
@@ -153,7 +154,7 @@ export function AtlPagination({
             aria-label="Next page"
             onClick={() => goTo(page + 1)}
           >
-            ›
+            <AtlIcon name="chevron-right" size="sm" />
           </button>
         </li>
         {showFirstLast && (
@@ -169,7 +170,7 @@ export function AtlPagination({
               aria-label="Last page"
               onClick={() => goTo(pageCount)}
             >
-              »
+              <AtlIcon name="chevron-double-right" size="sm" />
             </button>
           </li>
         )}

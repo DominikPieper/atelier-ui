@@ -15,6 +15,9 @@
  * Five checks, each closing one of those doors:
  *   [INLINE-SVG]  a component source draws its own svg instead of using AtlIcon
  *   [CSS-GLYPH]   a stylesheet puts a literal glyph in `content:`
+ *   [TEXT-GLYPH]  a template renders a glyph as bare element text — the sixth way
+ *                 round, and the one that shipped nine live instances while this
+ *                 gate reported the set single-sourced (ADR-0055)
  *   [GLYPH-MAP]   a component source quotes a non-ASCII glyph — the fifth mechanism,
  *                 added after AtlAlert and AtlBadge were found still mapping their
  *                 variants to 'ℹ' / '✓' / '⚠' / '✕' in a local const, months after
@@ -38,6 +41,19 @@ const { FRAMEWORKS } = require('./lib/component-discovery');
 const ROOT = path.resolve(__dirname, '../..');
 const SPEC_INDEX = path.join(ROOT, 'libs/spec/src/index.ts');
 const SPEC_ICONS = path.join(ROOT, 'libs/spec/src/icons.ts');
+
+/**
+ * Characters that are punctuation rather than a shape, and so are legitimately
+ * element text: AtlPagination's ellipsis for a skipped page range, em/en dashes,
+ * typographic quotes, the middle dot. Everything else non-ASCII in text content is
+ * an icon in disguise.
+ */
+// « and » are deliberately NOT here. They are quotation marks in French and German
+// typography, and the first draft of this list exempted them on that ground — which let
+// AtlPagination's first/last-page arrows through, six live instances, in the same commit
+// that closed the rule. A character is exempt because of the job it does on the page,
+// not because of the job it can do somewhere else.
+const TEXT_PUNCTUATION = /^[\u2026\u2014\u2013\u00b7\u2019\u2018\u201c\u201d\u201e\u00a0]+$/;
 
 const errors = [];
 
@@ -78,6 +94,33 @@ for (const fw of FRAMEWORKS) {
             `[GLYPH-MAP] ${rel} quotes ${glyphs.map((g) => JSON.stringify(g)).join(', ')} as an icon. ` +
               `Render an AtlIcon by name instead — a glyph cannot follow the icon set, cannot be an icon ` +
               `instance in Figma, and depends on whichever font happens to have the character.`
+          );
+        }
+      }
+
+      // The sixth way round the same rule. [GLYPH-MAP] only sees a glyph inside
+      // quotes, and a template writes one as bare text content instead:
+      //   <span class="select-arrow" aria-hidden="true">▾</span>
+      // Nine of those were shipping — AtlSelect’s chevron and AtlPagination’s two
+      // arrows, in all three frameworks — while this gate reported the icon set
+      // single-sourced. Measured: the select’s glyph rendered 5.7×15px next to a
+      // 16×16 AtlIcon in the combobox beside it.
+      //
+      // Typographic characters that are genuinely text are exempt: an ellipsis in a
+      // pagination gap, a dash, a quotation mark. The test is whether the character
+      // stands for a shape (an arrow, a check, a cross) or for punctuation.
+      if (isSource && !isStory(file) && !isIconComponent(dir)) {
+        const code = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+        const found = new Set();
+        for (const m of code.matchAll(/>\s*([^\x00-\x7F][^<]{0,3}?)\s*</g)) {
+          const g = m[1].trim();
+          if (!g || /[a-zA-Z0-9]/.test(g)) continue;
+          if (TEXT_PUNCTUATION.test(g)) continue;
+          found.add(g);
+        }
+        if (found.size > 0) {
+          errors.push(
+            `[TEXT-GLYPH] ${rel} renders ${[...found].map((g) => JSON.stringify(g)).join(', ')} as element text. That is an icon drawn as a character: render an AtlIcon by name so the shape has one definition, can be an icon instance in Figma, and does not depend on whichever font has the character.`
           );
         }
       }

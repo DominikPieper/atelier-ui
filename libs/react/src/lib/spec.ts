@@ -432,6 +432,8 @@ export type AtlIconName =
   | 'chevron-down'
   | 'chevron-left'
   | 'chevron-right'
+  | 'chevron-double-left'
+  | 'chevron-double-right'
   | 'sort-asc'
   | 'sort-desc'
   | 'arrow-right'

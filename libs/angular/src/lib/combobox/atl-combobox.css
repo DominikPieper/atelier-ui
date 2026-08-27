@@ -44,7 +44,7 @@
   padding: calc(
       (var(--ui-control-height-md) - var(--ui-line-height-tight) * var(--ui-font-size-md)) / 2 -
         var(--ui-border-width)
-    ) var(--ui-spacing-8) calc(
+    ) calc(var(--ui-spacing-4) + 1.25rem + var(--ui-spacing-5)) calc(
       (var(--ui-control-height-md) - var(--ui-line-height-tight) * var(--ui-font-size-md)) / 2 -
         var(--ui-border-width)
     ) var(--ui-spacing-4);
@@ -99,7 +99,7 @@
    --------------------------------------------------------------------------- */
 .combobox-icon {
   position: absolute;
-  right: var(--ui-spacing-4);
+  inset-inline-end: var(--ui-spacing-4);
   pointer-events: none;
   color: var(--ui-color-text-muted);
   transition: transform var(--ui-transition-fast);
@@ -206,4 +206,18 @@
 :host(.is-readonly) .atl-combobox-input {
   border-color: transparent;
   cursor: default;
+}
+
+/* The invalid indicator sits inline-end, left of the chevron, and the field reserves
+ * the space for it unconditionally so nothing shifts when the state flips.
+ * AtlInput and AtlTextarea already showed this indicator; carrying invalid on border
+ * colour alone left AtlSelect and AtlCombobox failing WCAG 1.4.1 whenever a consumer
+ * set invalid without passing errors (ADR-0055). */
+:host(.is-invalid) .invalid-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  inset-inline-end: calc(var(--ui-spacing-4) + var(--ui-spacing-5));
+  color: var(--ui-color-danger);
+  pointer-events: none;
 }

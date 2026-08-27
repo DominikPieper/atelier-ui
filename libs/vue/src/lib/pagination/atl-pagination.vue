@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import './atl-pagination.css';
+import AtlIcon from '../icon/atl-icon.vue';
 
 defineOptions({ name: 'AtlPagination' });
 
@@ -57,7 +58,7 @@ function goTo(p: number) {
           aria-label="First page"
           @click="goTo(1)"
         >
-          «
+          <AtlIcon name="chevron-double-left" size="sm" />
         </button>
       </li>
       <li>
@@ -67,7 +68,7 @@ function goTo(p: number) {
           aria-label="Previous page"
           @click="goTo(page - 1)"
         >
-          ‹
+          <AtlIcon name="chevron-left" size="sm" />
         </button>
       </li>
 
@@ -95,7 +96,7 @@ function goTo(p: number) {
           aria-label="Next page"
           @click="goTo(page + 1)"
         >
-          ›
+          <AtlIcon name="chevron-right" size="sm" />
         </button>
       </li>
       <li v-if="showFirstLast">
@@ -105,7 +106,7 @@ function goTo(p: number) {
           aria-label="Last page"
           @click="goTo(pageCount)"
         >
-          »
+          <AtlIcon name="chevron-double-right" size="sm" />
         </button>
       </li>
     </ul>

@@ -22,6 +22,7 @@ import { DomPortal } from '@angular/cdk/portal';
 import type { FormValueControl } from '@angular/forms/signals';
 import { type ValidationError, type WithOptionalFieldTree } from '@angular/forms/signals';
 import { ATL_SELECT, type AtlSelectContext } from './atl-select.token';
+import { AtlIcon } from '../icon/atl-icon';
 
 /** @internal — Wrapper item for ActiveDescendantKeyManager integration. */
 class SelectOptionItem implements Highlightable {
@@ -72,6 +73,7 @@ let nextId = 0;
 @Component({
   selector: 'atl-select',
   standalone: true,
+  imports: [AtlIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <button
@@ -83,12 +85,20 @@ let nextId = 0;
       [attr.aria-controls]="panelId"
       [attr.aria-activedescendant]="activeOptionId()"
       [attr.aria-invalid]="invalid() || null"
+      [attr.aria-describedby]="showErrors() ? errorId : null"
       [attr.disabled]="disabled() || null"
       (click)="onTriggerClick()"
       (blur)="onTriggerBlur()"
     >
       <span class="trigger-text">{{ selectedLabel() || placeholder() }}</span>
-      <span class="trigger-icon" aria-hidden="true">▾</span>
+      <!-- The slot is always in the flex row so the label's truncation point does not
+           move when the state flips; only its content is conditional. -->
+      <span class="invalid-slot" aria-hidden="true">
+        @if (invalid()) {
+          <atl-icon name="danger" size="sm" class="invalid-icon" />
+        }
+      </span>
+      <span class="trigger-icon" aria-hidden="true"><atl-icon name="chevron-down" size="sm" /></span>
     </button>
 
     <div
@@ -171,8 +181,15 @@ export class AtlSelect implements FormValueControl<string>, AtlSelectContext, On
   );
 
   /** @internal */
+  /**
+   * The message renders when there is a message. Gating it on `touched` as well was
+   * an Angular-only rule: `touched` is not in the spec contract and React and Vue have
+   * no equivalent, so the same four fields showed their errors at three different
+   * moments depending on the framework. Deciding *when* to pass errors belongs to the
+   * form layer, which is where `touched` lives (ADR-0055).
+   */
   protected readonly showErrors = computed(
-    () => this.touched() && this.invalid() && this.errors().length > 0
+    () => this.errors().length > 0
   );
 
   /** @internal */

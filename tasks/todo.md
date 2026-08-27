@@ -263,6 +263,10 @@ Decision-bearing quick wins (deferred — not this session's scope):
       as a derived Variable — they will land as four resolved numbers and the derivation
       will live only in ADR-0052 and `tokens.css`. Decide at transfer time whether that is
       acceptable or whether the row scale should be authored flat.
+- [ ] **Angular's `touched` is public API the spec never declared** (ADR-0055). Seven
+      components expose it as a `model(false)`; React and Vue have no equivalent, and it no
+      longer gates the error message. Remove it with the breaking batch, or add it to the
+      spec and to the other two — but not neither.
 - [ ] **`@nx/devkit` is still a hard dependency of the preset, pinned to the monorepo's
       nx.** ADR-0053 closed the peer-dependency route by which a plugin outran nx core, but
       `NX_VERSION` is read from whichever devkit the preset itself carries. If

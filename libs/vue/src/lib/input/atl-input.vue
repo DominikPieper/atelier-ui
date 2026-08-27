@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, useId } from 'vue';
 import './atl-input.css';
 import AtlIcon from '../icon/atl-icon.vue';
 
@@ -33,6 +33,8 @@ const props = withDefaults(defineProps<AtlInputProps>(), {
   id: '',
 });
 
+const errorsId = useId();
+
 const emit = defineEmits<{
   'update:value': [value: string];
 }>();
@@ -58,12 +60,13 @@ function onInput(event: Event) {
         :required="required"
         :name="name"
         :aria-invalid="invalid || undefined"
+        :aria-describedby="errors.length > 0 ? errorsId : undefined"
         :aria-required="required || undefined"
         @input="onInput"
       />
       <AtlIcon v-if="invalid" name="danger" size="sm" class="invalid-icon" />
     </div>
-    <ul v-if="errors.length" class="errors" aria-live="polite">
+    <ul v-if="errors.length" :id="errorsId" class="errors" aria-live="polite">
       <li v-for="(error, i) in errors" :key="i" class="error">{{ error }}</li>
     </ul>
   </div>

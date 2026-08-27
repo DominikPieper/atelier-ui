@@ -136,7 +136,10 @@ describe('AtlRadioGroup', () => {
   });
 
   describe('error display', () => {
-    it('does not show errors when not touched', async () => {
+    // Was 'does not show errors when not touched'. Gating on touched was an
+    // Angular-only rule the spec never declared, so the same four fields showed
+    // their errors at three different moments across the frameworks (ADR-0055).
+    it('shows errors as soon as they are passed, without waiting to be touched', async () => {
       const { container } = await render(
         `<atl-radio-group [invalid]="true" [errors]="errors" name="size">
           <atl-radio radioValue="sm">Small</atl-radio>
@@ -148,7 +151,7 @@ describe('AtlRadioGroup', () => {
           },
         }
       );
-      expect(container.querySelector('.errors')).not.toBeInTheDocument();
+      expect(container.querySelector('.errors')).toBeInTheDocument();
     });
 
     covers('radio-group', 'errors')('shows errors when touched and invalid', async () => {

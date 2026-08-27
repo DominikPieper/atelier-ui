@@ -5,6 +5,7 @@ import {
   input,
   model,
 } from '@angular/core';
+import { AtlIcon } from '../icon/atl-icon';
 
 export type PageItem =
   | { type: 'page'; page: number }
@@ -21,6 +22,7 @@ export type PageItem =
 @Component({
   selector: 'atl-pagination',
   standalone: true,
+  imports: [AtlIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <nav aria-label="Pagination">
@@ -33,7 +35,7 @@ export type PageItem =
               [disabled]="page() <= 1"
               aria-label="First page"
               (click)="goFirst()"
-            >«</button>
+            ><atl-icon name="chevron-double-left" size="sm" /></button>
           </li>
         }
         <li>
@@ -43,7 +45,7 @@ export type PageItem =
             [disabled]="page() <= 1"
             aria-label="Previous page"
             (click)="goPrev()"
-          >‹</button>
+          ><atl-icon name="chevron-left" size="sm" /></button>
         </li>
 
         @for (item of pageItems(); track $index) {
@@ -71,7 +73,7 @@ export type PageItem =
             [disabled]="page() >= pageCount()"
             aria-label="Next page"
             (click)="goNext()"
-          >›</button>
+          ><atl-icon name="chevron-right" size="sm" /></button>
         </li>
         @if (showFirstLast()) {
           <li>
@@ -81,7 +83,7 @@ export type PageItem =
               [disabled]="page() >= pageCount()"
               aria-label="Last page"
               (click)="goLast()"
-            >»</button>
+            ><atl-icon name="chevron-double-right" size="sm" /></button>
           </li>
         }
       </ul>
