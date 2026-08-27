@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-27T11:47:53.582Z",
-    "gitSha": "0d68345",
+    "generatedAt": "2026-08-27T11:55:12.149Z",
+    "gitSha": "3a97060",
     "serverVersion": null,
     "coverage": "All 29 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -1397,7 +1397,7 @@
       "name": "Form/AtlToggle",
       "selector": "AtlToggle",
       "nodeId": "55:41",
-      "description": "On/off switch control. Maps to AtlToggleSpec in libs/spec.\n\nUse when: a binary setting takes effect immediately (notifications on/off, dark mode, sync). Visually distinct from Checkbox — the switch metaphor implies \"this changes a setting now\", not \"this opts into a form value on submit\".\n\nDon't use when: the binary is part of a form submission (use Form/AtlCheckbox), the setting requires a confirmation step (use Form/AtlCheckbox plus Action/AtlButton), or the choice is one-of-three (use Form/AtlRadioGroup).\n\nAPI surface (Figma → spec):\n- Variant `selection`: off | on — maps to AtlToggleSpec.checked (false/true)\n- Variant `state`: default | hover | focus — interaction state\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Text `Label`: visible label\n\nA11y: native HTML <input type=\"checkbox\"> with role=\"switch\" wrapper. The label should describe the setting being toggled, not \"Off/On\". Disabled state uses aria-disabled.\n\nStatus: structural restructure 2026-04-27 — collapsed Cartesian (`disabled-off`/`disabled-on`) into orthogonal `selection` Variant + `disabled` Boolean. Old `state` enum (off/on/disabled-off/disabled-on/focus/hover/active/loading) replaced.",
+      "description": "On/off switch control. Maps to AtlToggleSpec in libs/spec.\n\nUse when: a binary setting takes effect immediately (notifications on/off, dark mode, sync). Visually distinct from Checkbox — the switch metaphor implies \"this changes a setting now\", not \"this opts into a form value on submit\".\n\nDon't use when: the binary is part of a form submission (use Form/AtlCheckbox), the setting requires a confirmation step (use Form/AtlCheckbox plus Action/AtlButton), or the choice is one-of-three (use Form/AtlRadioGroup).\n\nAPI surface (Figma → spec):\n- Variant `selection`: off | on — maps to AtlToggleSpec.checked (false/true)\n- Variant `state`: default | hover | focus — interaction state\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Text `Label`: visible label\n\nA11y: native HTML <input type=\"checkbox\"> with role=\"switch\" wrapper. The label should describe the setting being toggled, not \"Off/On\". Disabled state uses aria-disabled.\n\nStatus: structural restructure 2026-04-27 — collapsed Cartesian (`disabled-off`/`disabled-on`) into orthogonal `selection` Variant + `disabled` Boolean. Old `state` enum (off/on/disabled-off/disabled-on/focus/hover/active/loading) replaced.\n\nSpec flags deliberately not modelled (2026-08-27, ADR-0058):\n- Boolean `required`: not modelled — `required` renders nothing in any Atelier form field. It is passed to the DOM as the HTML attribute and stops there.",
       "variantAxes": {
         "selection": [
           "off",
@@ -1430,12 +1430,14 @@
       "properties": {
         "Label#55:99": "TEXT",
         "disabled#507:187": "BOOLEAN",
+        "invalid#911:5": "BOOLEAN",
         "selection": "VARIANT",
         "state": "VARIANT"
       },
       "referencedProperties": [
         "Label#55:99",
-        "disabled#507:187"
+        "disabled#507:187",
+        "invalid#911:5"
       ],
       "iconInstanceNames": [],
       "glyphTextNodes": [],
@@ -1527,7 +1529,7 @@
       "name": "Form/AtlRadioGroup",
       "selector": "AtlRadioGroup",
       "nodeId": "55:137",
-      "description": "Mutually exclusive option selector. Maps to AtlRadioGroupSpec in libs/spec.\n\nUse when: user picks exactly one of 2–7 visible options where seeing every option is valuable. Wrap Form/AtlRadio children inside the group — the group manages keyboard navigation (arrow keys move selection) and value binding.\n\nDon't use when: option count exceeds ~7 (use Form/AtlSelect or Form/AtlCombobox), choices are independent (use Form/AtlCheckbox), or the choice is binary (use Form/AtlToggle).\n\nAPI surface (Figma → spec):\n- Variant `selection`: unselected | selected — group-level selection state for the gallery\n- Variant `state`: default | hover | focus — interaction state\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled — disables every contained Radio\n- (code-only: `value: string` — the selected radio's `radioValue`)\n\nA11y: ARIA radiogroup pattern with roving tabindex. Arrow keys move selection inside the group. Wrap in a fieldset + legend if the group has a visible label.\n\nStatus: structural restructure 2026-04-27 — single `state` enum split into orthogonal `selection` (unselected/selected) + `state` (default/hover/focus); disabled moved to Boolean.",
+      "description": "Mutually exclusive option selector. Maps to AtlRadioGroupSpec in libs/spec.\n\nUse when: user picks exactly one of 2–7 visible options where seeing every option is valuable. Wrap Form/AtlRadio children inside the group — the group manages keyboard navigation (arrow keys move selection) and value binding.\n\nDon't use when: option count exceeds ~7 (use Form/AtlSelect or Form/AtlCombobox), choices are independent (use Form/AtlCheckbox), or the choice is binary (use Form/AtlToggle).\n\nAPI surface (Figma → spec):\n- Variant `selection`: unselected | selected — group-level selection state for the gallery\n- Variant `state`: default | hover | focus — interaction state\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled — disables every contained Radio\n- (code-only: `value: string` — the selected radio's `radioValue`)\n\nA11y: ARIA radiogroup pattern with roving tabindex. Arrow keys move selection inside the group. Wrap in a fieldset + legend if the group has a visible label.\n\nStatus: structural restructure 2026-04-27 — single `state` enum split into orthogonal `selection` (unselected/selected) + `state` (default/hover/focus); disabled moved to Boolean.\n\nSpec flags deliberately not modelled (2026-08-27, ADR-0058):\n- Boolean `required`: not modelled — `required` renders nothing in any Atelier form field. It is passed to the DOM as the HTML attribute and stops there: no class, no CSS rule, no mark.\n- Boolean `readonly`: not modelled — the component emits an `is-readonly` class and NO stylesheet in any of the three frameworks has a rule for it, so nothing renders differently. That dead class is the same shape ADR-0045 removed from AtlSelect and is recorded as a code finding.",
       "variantAxes": {
         "selection": [
           "unselected",
@@ -1559,11 +1561,13 @@
       ],
       "properties": {
         "disabled#507:182": "BOOLEAN",
+        "invalid#911:21": "BOOLEAN",
         "selection": "VARIANT",
         "state": "VARIANT"
       },
       "referencedProperties": [
-        "disabled#507:182"
+        "disabled#507:182",
+        "invalid#911:21"
       ],
       "iconInstanceNames": [],
       "glyphTextNodes": [],
@@ -1675,13 +1679,27 @@
         }
       ],
       "properties": {
+        "animated#911:17": "BOOLEAN",
         "variant": "VARIANT"
       },
-      "referencedProperties": [],
+      "referencedProperties": [
+        "animated#911:17"
+      ],
       "iconInstanceNames": [],
       "glyphTextNodes": [],
       "sampledVariant": "55:99",
-      "nodes": []
+      "nodes": [
+        {
+          "name": "variant=text",
+          "type": "COMPONENT",
+          "hasChildren": true,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
     },
     {
       "name": "Display/AtlProgress",
@@ -1992,12 +2010,17 @@
       "name": "Navigation/AtlPagination",
       "selector": "AtlPagination",
       "nodeId": "55:143",
-      "description": "Page navigator for paged data. Maps to AtlPaginationSpec in libs/spec.\n\nUse when: data spans many pages and user navigates incrementally. For infinite scroll surfaces, omit pagination entirely.\n\nAPI surface:\n- Variant `page`: first | middle | last — illustrative position\n- (code-only: `page`, `pageCount`, `siblingCount`, `showFirstLast`)\n\nA11y: nav with aria-label=\"Pagination\"; current page marked aria-current=\"page\".\n\nAxis notes (2026-08-27, ADR-0056): this was a COMPONENT_SET whose only axis pictured an outcome of content rather than a property — `position` = first | middle | last, and AtlPaginationSpec is `{ page, pageCount, siblingCount, showFirstLast }`. An axis is the master's API surface, so a reader saw API where there was none. The other two drawings are kept as content samples in the \"Content samples — not variant axes\" section on this page. check:figma reported the axis as [AXIS-NOT-A-PROP].",
+      "description": "Page navigator for paged data. Maps to AtlPaginationSpec in libs/spec.\n\nUse when: data spans many pages and user navigates incrementally. For infinite scroll surfaces, omit pagination entirely.\n\nAPI surface:\n- Variant `page`: first | middle | last — illustrative position\n- (code-only: `page`, `pageCount`, `siblingCount`, `showFirstLast`)\n\nA11y: nav with aria-label=\"Pagination\"; current page marked aria-current=\"page\".\n\nAxis notes (2026-08-27, ADR-0056): this was a COMPONENT_SET whose only axis pictured an outcome of content rather than a property — `position` = first | middle | last, and AtlPaginationSpec is `{ page, pageCount, siblingCount, showFirstLast }`. An axis is the master's API surface, so a reader saw API where there was none. The other two drawings are kept as content samples in the \"Content samples — not variant axes\" section on this page. check:figma reported the axis as [AXIS-NOT-A-PROP].\n\nDeclared Boolean properties that reference no layer (2026-08-27, ADR-0058):\n- Boolean `showFirstLast`: declared but unbound — because THE MASTER HAS NO FIRST/LAST CONTROL to bind it to. It draws `‹ Prev`, the page numbers with two ellipses, and `Next ›`. `AtlPaginationSpec.showFirstLast` gates a separate pair of buttons that render `«` and `»` in the code (now the chevron-double-left / -right icons), and those buttons are simply not drawn here. I bound the first and last PAGE NUMBER buttons by mistake and reverted it: hiding page 1 and page 10 is not what the prop does. Draw the two controls, then bind.\n\nGlyphs replaced 2026-08-27 (ADR-0058): the prev and next controls drew `‹ Prev` and `Next ›` — a pictogram as a character AND a visible word. Both buttons are icon-only in the code, named for assistive tech by `aria-label=\"Previous page\"` / `\"Next page\"`, so the word was the master's invention. They are chevron-left and chevron-right instances now.",
       "variantAxes": {},
       "variants": [],
-      "properties": {},
+      "properties": {
+        "showFirstLast#911:26": "BOOLEAN"
+      },
       "referencedProperties": [],
-      "iconInstanceNames": [],
+      "iconInstanceNames": [
+        "chevron-left",
+        "chevron-right"
+      ],
       "glyphTextNodes": [],
       "sampledVariant": "3:1073",
       "nodes": [
@@ -2006,6 +2029,16 @@
           "type": "FRAME",
           "hasChildren": true,
           "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "chevron-left",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "layoutMode": "NONE",
           "rawColors": [],
           "unboundRadius": 0,
           "unboundSpacing": [],
@@ -2671,9 +2704,11 @@
         "disabled#507:133": "BOOLEAN",
         "invalid#507:140": "BOOLEAN",
         "required#507:147": "BOOLEAN",
+        "readonly#911:10": "BOOLEAN",
         "state": "VARIANT"
       },
       "referencedProperties": [
+        "readonly#911:10",
         "disabled#507:133",
         "invalid#507:140"
       ],

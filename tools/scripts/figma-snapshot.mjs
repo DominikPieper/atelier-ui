@@ -130,7 +130,15 @@ async function main() {
             }
             if (n.type === 'TEXT') {
               const c = (n.characters || '').trim();
-              if (c && c.length <= 3 && /[^\\x00-\\x7F]/.test(c)) glyphs.push({ layer: n.name, chars: c });
+              // Two shapes, and the second was a hole: a whole string that is a pictogram
+              // ("✓"), and a pictogram EMBEDDED in prose ("‹ Prev"), which a length test
+              // never reaches. AtlPagination hid two of them that way.
+              if (c && c.length <= 3 && /[^\\x00-\\x7F]/.test(c)) {
+                glyphs.push({ layer: n.name, chars: c });
+              } else if (c) {
+                const inner = c.match(/[\\u2190-\\u21FF\\u2300-\\u27BF\\u2B00-\\u2BFF\\u25A0-\\u25FF\\u2039\\u203A\\u00AB\\u00BB]/g);
+                if (inner) for (const g of [...new Set(inner)]) glyphs.push({ layer: n.name, chars: g, inString: c.slice(0, 24) });
+              }
             }
           }
         }

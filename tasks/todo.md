@@ -283,13 +283,6 @@ Decision-bearing quick wins (deferred — not this session's scope):
       both collapsed to the plain COMPONENT they always were, with the other drawings kept as
       content-sample frames on the Components page. `check:figma` reports **zero**
       `[BOOL-CLAIM]`, `[AXIS-NAME]` and `[AXIS-NOT-A-PROP]` now.
-- [ ] **Bind the seven declared Booleans that have a state to draw** (`[BOOL-INERT]`, ADR-0058).
-      It was nineteen; twelve turned out to have nothing to bind and now say so in their own
-      master. What is owed: AtlInput and AtlTextarea `readonly` (`.is-readonly input` makes the
-      border transparent — an overlay, the way `_invalid-border` works), AtlAlert and AtlToast
-      `dismissible` (a `.dismiss` button), AtlProgress `indeterminate`
-      (`.is-indeterminate .fill`), AtlTable `stickyHeader` (`.is-sticky-header thead th` adds
-      `box-shadow: 0 1px 0 0 border`), AtlChat `open`.
 - [x] ~~Twelve of the nineteen unbound Booleans have nothing to bind~~ — each states why, in its
       own master, 2026-08-27. **`required` on all five form fields renders nothing**: it is passed
       to the DOM as the HTML attribute and that is all — no class, no CSS, no asterisk. The
@@ -320,11 +313,6 @@ Decision-bearing quick wins (deferred — not this session's scope):
       one drawing — so either AtlCheckbox renders `<AtlIcon name="check">` (and keeps the
       `atl-check-pop` animation on it), or the duplication is accepted and recorded. Figma now
       draws the CSS shape faithfully, so the two agree; the duplication is in the code.
-- [ ] **Add the five properties that are genuinely absent** (`[BOOL-MISSING]`, ADR-0058):
-      AtlToggle `invalid` + `required`, AtlRadioGroup `invalid` + `required` + `readonly`,
-      AtlSkeleton `animated`, AtlPagination `showFirstLast`, AtlCombobox `readonly`. Note that
-      `invalid` and `readonly` are colour states, so they belong on a variant axis rather than a
-      Boolean — the way AtlInput carries `invalid` as a value of `state`.
 - [x] ~~Six spec flags reported as missing that have no state to draw~~ — reasoned out in the
       masters themselves 2026-08-27: AtlAccordionGroup `multi` and AtlStepper `linear` are
       behaviour (`if (linear && i > activeStep) return` is the whole of it), AtlTooltip
@@ -333,6 +321,25 @@ Decision-bearing quick wins (deferred — not this session's scope):
       `closeOnBackdrop` is behaviour. Each states its reason as
       `- Boolean \`x\`: not modelled — <reason>` in the master's own description, which the gate
       reads — an exemption inside the script would be one nobody opening the master can see.
+- [x] ~~Bind the owed Booleans and add the absent ones~~ — done 2026-08-27, ADR-0058. All six
+      Figma conformance codes read **zero**: `[MASTER-GLYPH]`, `[BOOL-INERT]`, `[BOOL-MISSING]`,
+      `[BOOL-CLAIM]`, `[AXIS-NAME]`, `[AXIS-NOT-A-PROP]`. Bound: AtlInput and AtlTextarea
+      `readonly` (a `_readonly-surface` rect reproducing `background: surface-sunken` +
+      `border-color: transparent`), AtlAlert `dismissible` (the button it never had), AtlToast
+      `dismissible` (the slot existed and my glyph pass had mislabelled it `danger`), AtlTable
+      `stickyHeader` (the 1px line `box-shadow: 0 1px 0 0` draws), AtlToggle and AtlRadioGroup
+      `invalid` (the `_invalid-border` overlay idiom), AtlCombobox `readonly`, AtlSkeleton
+      `animated` (the shimmer gradient). Explained instead of bound, each in its own master:
+      AtlChat `open` (needs the panel and its contents grouped first), AtlProgress
+      `indeterminate` (a REPLACING state — belongs on a variant axis), AtlPagination
+      `showFirstLast` (the master draws no first/last control at all), `required` everywhere
+      (renders nothing), AtlRadioGroup `readonly` (emits a class no stylesheet uses).
+- [ ] **AtlRadioGroup emits a dead `is-readonly` class.** `atl-radio-group.tsx` adds it and no
+      stylesheet in any of the three frameworks has a rule for it — the same shape ADR-0045
+      removed from AtlSelect, still present here. Either style it or drop the class.
+- [ ] **AtlRadioGroup's master draws one radio, not a group.** Its variants are a single
+      18px circle plus a label, so the group-level states have nothing to sit on. Related to the
+      child-master work below (ADR-0056).
 - [ ] **Eleven child masters to draw** (ADR-0056): AtlMenuItem, AtlMenuSeparator, AtlTab,
       AtlStep, AtlOption, AtlChatMessage, AtlChatSuggestion, AtlChatTyping,
       AtlAccordionItem, AtlBreadcrumbItem — plus AtlIcon, which everything else already
