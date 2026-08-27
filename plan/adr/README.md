@@ -73,6 +73,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0065](0065-the-table-gives-its-children-back-their-states.md) | The table gives its children back their states (AtlTh/AtlTd/AtlTr/AtlTbody) | Accepted | Recorded |
 | [0066](0066-a-warning-nobody-can-clear.md) | A warning nobody can clear (`[MAP]` classifies) | Accepted | Recorded |
 | [0067](0067-a-text-property-is-api.md) | A text property is API (`[TEXT-UNSPECED]`) | Accepted | Recorded |
+| [0068](0068-a-parent-can-only-instantiate-what-the-child-can-express.md) | A parent can only instantiate what the child can express (`[STALE-EXEMPTION]`) | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

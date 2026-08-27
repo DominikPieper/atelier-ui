@@ -105,14 +105,14 @@ const FIGMA_CONFORMANCE_EXCEPTIONS = new Set([
   // every card pollutes the page outline). The AtlCard Figma description marks it
   // "code-only: role". So the missing "role" variant axis is expected, not drift.
   'AtlCard:name:role',
-  // AtlInputSpec.type (text | email | password | …) changes input behaviour,
-  // not chrome — every type renders identically, so there is no visual axis
-  // to mirror in Figma. Code-only.
-  'AtlInput:name:type',
-  // AtlAvatarStatus is illustrated as sibling frames on the Components page
-  // but not yet a variant axis — the AtlAvatar Figma description documents
-  // this as a design follow-up. Allowlisted until the axis lands.
-  'AtlAvatar:name:status',
+  // Seven entries were deleted here on 2026-08-27 because [STALE-EXEMPTION] showed
+  // they suppressed nothing (ADR-0068): AtlInput:name:type, AtlAvatar:name:status,
+  // AtlChat:name:status, AtlChat:name:messageRole, AtlToast:name:spec-interface,
+  // AtlCodeBlock:name:spec-interface and AtlCodeBlock:token:radius:Rectangle.
+  // Removing all seven produced no finding. The two that carried an open DESIGN
+  // question — an axis owed for AtlAvatarStatus and AtlChatStatus — moved to
+  // tasks/todo.md, because an allowlist is a poor place to keep a follow-up: it is
+  // read only when something fails.
   // AtlTableAlign is a per-cell prop (AtlTh/AtlTd), not a set-level visual
   // variant of the table master. Code-only.
   'AtlTable:name:align',
@@ -132,20 +132,6 @@ const FIGMA_CONFORMANCE_EXCEPTIONS = new Set([
   // in the CSS (the off-scale spacing sweep in tasks/todo.md), not in Figma: drawing
   // 4px here to satisfy the gate would make the master diverge from the component.
   'AtlStep:token:spacing:step-text',
-  // AtlChatStatus (idle | streaming | error) is illustrated as sibling
-  // mockup frames pending a follow-up variant axis (documented in the
-  // AtlChat Figma description); AtlChatMessageRole shapes the message
-  // sub-component, not the chat master's own variant surface.
-  'AtlChat:name:status',
-  'AtlChat:name:messageRole',
-  // Toast is options-based (AtlToastVariant/AtlToastOptions, ADR-0008) and
-  // CodeBlock has no spec contract — neither has an Atl*Spec interface, by
-  // design, so the masters are exempt from the interface-existence check.
-  'AtlToast:name:spec-interface',
-  'AtlCodeBlock:name:spec-interface',
-  // Decorative "code line" rectangles inside the CodeBlock/Chat mockups —
-  // 2px illustration bars, not component chrome.
-  'AtlCodeBlock:token:radius:Rectangle',
   'AtlChat:token:radius:Rectangle',
   // The Chat drawer variant embeds a miniature APP MOCKUP (page header,
   // content blocks, dividers, message bubbles) as illustrative context.
@@ -161,8 +147,10 @@ const FIGMA_CONFORMANCE_EXCEPTIONS = new Set([
   'AtlChat:token:color:avatar-glyph',
   'AtlChat:token:color:drawer-title',
   'AtlChat:token:color:close-bg',
-  'AtlChat:token:color:msg-asst-1',
-  'AtlChat:token:color:msg-asst-1-text',
+  // msg-asst-2 is the one bubble still DRAWN rather than instanced: it wraps the
+  // AtlCodeBlock instance, and an instance cannot host free content, so composing it
+  // from AtlChatMessage would drop the code block (ADR-0068). The three simple bubbles
+  // became instances and their exemptions are gone.
   'AtlChat:token:color:msg-asst-2',
   'AtlChat:token:color:msg-asst-2-text',
   'AtlChat:token:color:footer-divider',

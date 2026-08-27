@@ -149,6 +149,13 @@ async function main() {
               if (main && main.name.indexOf('Icon/') === 0) iconInstances.add(n.name);
             }
             if (n.type === 'TEXT') {
+              // A glyph inside an INSTANCE belongs to the child master, which states its
+              // own exemption there. Composing AtlBreadcrumbs from AtlBreadcrumbItem
+              // instances otherwise made the parent inherit the finding without the
+              // reason (ADR-0068) — the same rule the layer walk already follows.
+              let gAnc = n.parent, inInstance = false;
+              while (gAnc && gAnc.id !== v.id) { if (gAnc.type === 'INSTANCE') { inInstance = true; break; } gAnc = gAnc.parent; }
+              if (inInstance) continue;
               const c = (n.characters || '').trim();
               // Two shapes, and the second was a hole: a whole string that is a pictogram
               // ("✓"), and a pictogram EMBEDDED in prose ("‹ Prev"), which a length test

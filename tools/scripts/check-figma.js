@@ -62,8 +62,27 @@ function warning(tag, msg) { warnings.push({ sev: 'WARNING', tag, msg }); }
 
 /** Allowlisted? Key is `selector:check:detail` — same exact-string idiom as the
  *  other gates' Sets (see tools/scripts/lib/allowlists.js). */
+const exemptionsUsed = new Set();
 function allowed(selector, check, detail) {
-  return FIGMA_CONFORMANCE_EXCEPTIONS.has(`${selector}:${check}:${detail}`);
+  const key = `${selector}:${check}:${detail}`;
+  if (FIGMA_CONFORMANCE_EXCEPTIONS.has(key)) {
+    exemptionsUsed.add(key);
+    return true;
+  }
+  return false;
+}
+
+/** An exemption that suppressed nothing this run. Composing AtlChat's three simple
+ *  bubbles from AtlChatMessage instances left two raw-colour exemptions with no
+ *  subject, and nothing would have said so — an excuse for a defect that no longer
+ *  exists reads, to the next person, as a defect still being excused (ADR-0068). */
+function checkStaleExemptions() {
+  const stale = [...FIGMA_CONFORMANCE_EXCEPTIONS].filter((k) => !exemptionsUsed.has(k));
+  if (!stale.length) return;
+  warning(
+    'STALE-EXEMPTION',
+    `${stale.length} allowlist entr${stale.length > 1 ? 'ies' : 'y'} suppressed nothing this run: ${stale.join(', ')}. Either the defect was fixed — delete the entry — or the check that consulted it no longer runs, which is the more interesting case.`
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -498,6 +517,7 @@ checkTypography();
 checkRootPaint();
 checkOverlays();
 checkLayerPaint();
+checkStaleExemptions();
 
 // ---------------------------------------------------------------------------
 // Report — prioritized (Blocker → Critical → Warning), styled like the other

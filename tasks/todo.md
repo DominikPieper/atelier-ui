@@ -221,18 +221,32 @@ Decision-bearing quick wins (deferred — not this session's scope):
       150%, AtlBadge/AtlAvatar 125% — which is ADR-0048's rule unapplied on the Figma side.
       43 text nodes now state their percentage. Still outside it: a root whose text is
       inherited rather than its own single child.
-- [ ] **Five pictograms sit in illustration frames BESIDE a master.** `✓` next to
-      AtlSelect (an open-dropdown illustration) and `✓ ℹ ✕` next to AtlToast.
-      `[MASTER-GLYPH]`'s probe walks COMPONENT and COMPONENT_SET nodes, so a plain frame on
-      the Components page is invisible to it — the same hole that let the four content
-      samples keep `‹ Prev` for months (ADR-0060). Widen the probe to every frame on the
-      page, then decide per glyph: an icon instance, or a stated exemption.
+- [ ] **`[MASTER-GLYPH]` has two blind spots, both by construction.** (a) Five pictograms
+      sit in illustration frames BESIDE a master — `✓` next to AtlSelect (an open-dropdown
+      illustration) and `✓ ℹ ✕` next to AtlToast — and the probe walks COMPONENT and
+      COMPONENT_SET nodes, so a plain frame on the Components page is invisible to it: the
+      same hole that let the four content samples keep `‹ Prev` for months (ADR-0060).
+      (b) Since ADR-0068 the probe also skips text INSIDE an instance, because a glyph
+      there belongs to the child master which states its own exemption — which means a
+      glyph typed as an instance OVERRIDE is now unseen. Widening the probe to every frame
+      on the page fixes (a); (b) needs the override compared against the main component's
+      text rather than skipped wholesale.
 - [ ] **536 text nodes below 12px, and the split decides the answer.** 378 on Inventory
       (card meta at 11px), 156 on Colors (swatch labels 11px, hex 9px), 2 in Components —
       and those 2 were the AtlAvatar bug above. So this is catalogue scaffolding, not
       component text. `--ui-font-size-2xs` (10px) exists since ADR-0054: decide whether the
       documentation pages adopt the scale or stay off it by intent, and write the decision
       down either way.
+- [ ] **An axis is owed for `AtlAvatarStatus` and `AtlChatStatus`.** Both unions are
+      illustrated as sibling frames on the Components page rather than as a variant axis.
+      The note lived only in an allowlist entry, which `[STALE-EXEMPTION]` then showed was
+      suppressing nothing — because `[NAME]` derives an axis only from a union ending in
+      Variant | Size | Shape | Position | Orientation | Align | Role (ADR-0062 narrowed
+      it), so a union ending in `Status` is never asked about at all. Two consequences
+      worth separating: the design follow-up (draw the axes), and the gate question
+      (should the axis-word list include `Status`, or is a status a value union rather
+      than an axis?). `AtlChatMessageRole` is settled — AtlChatMessage carries a `role`
+      axis since ADR-0062.
 - [ ] **Compose parents from their child masters.** AtlMenu's separators are instances of
       AtlMenuSeparator now; its items, the tabs, the steps, the accordion items and the
       chat bubbles could be instances too. Where a parent instantiates its child, the

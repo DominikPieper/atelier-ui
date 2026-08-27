@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-27T16:43:01.165Z",
-    "gitSha": "c4affae",
+    "generatedAt": "2026-08-27T16:50:52.541Z",
+    "gitSha": "e61486d",
     "serverVersion": null,
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -10654,11 +10654,106 @@
           "lineHeight": null
         }
       },
-      "overlays": [],
+      "overlays": [
+        {
+          "variant": "Navigation/AtlBreadcrumbs",
+          "layer": "_separator",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "box": [
+            56,
+            5,
+            22,
+            16
+          ],
+          "parentBox": [
+            78,
+            26
+          ],
+          "parentName": "atl-breadcrumb-item",
+          "visible": true,
+          "boundTo": null
+        },
+        {
+          "variant": "Navigation/AtlBreadcrumbs",
+          "layer": "_separator",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "box": [
+            70,
+            5,
+            22,
+            16
+          ],
+          "parentBox": [
+            92,
+            26
+          ],
+          "parentName": "atl-breadcrumb-item",
+          "visible": true,
+          "boundTo": null
+        },
+        {
+          "variant": "Navigation/AtlBreadcrumbs",
+          "layer": "_separator",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "box": [
+            71,
+            5,
+            22,
+            16
+          ],
+          "parentBox": [
+            93,
+            26
+          ],
+          "parentName": "atl-breadcrumb-item",
+          "visible": true,
+          "boundTo": null
+        }
+      ],
       "layers": [],
       "glyphTextNodes": [],
-      "sampledVariant": "3:1031",
-      "nodes": []
+      "sampledVariant": "912:1722",
+      "nodes": [
+        {
+          "name": "atl-breadcrumb-item",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "breadcrumb-link",
+          "type": "FRAME",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "_separator",
+          "type": "FRAME",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "HORIZONTAL",
+          "rawColors": [],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        }
+      ]
     },
     {
       "name": "Navigation/AtlPagination",
@@ -19402,6 +19497,8 @@
         "variant": "VARIANT"
       },
       "referencedProperties": [
+        "content#912:82",
+        "failed#911:41",
         "readonly#507:97",
         "placeholder#55:157",
         "disabled#507:91",
@@ -19463,6 +19560,66 @@
         }
       },
       "overlays": [
+        {
+          "variant": "variant=drawer",
+          "layer": "_failed-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/danger",
+          "box": [
+            0,
+            0,
+            280,
+            66
+          ],
+          "parentBox": [
+            280,
+            66
+          ],
+          "parentName": "msg-asst-1",
+          "visible": false,
+          "boundTo": "failed#911:41"
+        },
+        {
+          "variant": "variant=drawer",
+          "layer": "_failed-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/danger",
+          "box": [
+            0,
+            0,
+            240,
+            66
+          ],
+          "parentBox": [
+            240,
+            66
+          ],
+          "parentName": "msg-user-1",
+          "visible": false,
+          "boundTo": "failed#911:41"
+        },
+        {
+          "variant": "variant=drawer",
+          "layer": "_failed-border",
+          "type": "RECTANGLE",
+          "fill": null,
+          "stroke": "color/danger",
+          "box": [
+            0,
+            0,
+            80,
+            45
+          ],
+          "parentBox": [
+            80,
+            45
+          ],
+          "parentName": "msg-user-2",
+          "visible": false,
+          "boundTo": "failed#911:41"
+        },
         {
           "variant": "variant=drawer",
           "layer": "_readonly-surface",
@@ -19961,54 +20118,6 @@
         {
           "variant": "variant=drawer",
           "count": 1,
-          "layer": "msg-asst-1",
-          "type": "RECTANGLE",
-          "fill": "RAW",
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": "radius/md",
-          "effects": [],
-          "layoutMode": "NONE",
-          "padding": null,
-          "gap": null,
-          "minHeight": null,
-          "height": 52,
-          "width": 280,
-          "fontSize": null,
-          "lineHeight": null
-        },
-        {
-          "variant": "variant=drawer",
-          "count": 1,
-          "layer": "msg-user-1",
-          "type": "RECTANGLE",
-          "fill": "color/primary",
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": "radius/md",
-          "effects": [],
-          "layoutMode": "NONE",
-          "padding": null,
-          "gap": null,
-          "minHeight": null,
-          "height": 52,
-          "width": 240,
-          "fontSize": null,
-          "lineHeight": null
-        },
-        {
-          "variant": "variant=drawer",
-          "count": 1,
           "layer": "msg-asst-2",
           "type": "RECTANGLE",
           "fill": "RAW",
@@ -20027,30 +20136,6 @@
           "minHeight": null,
           "height": 278,
           "width": 320,
-          "fontSize": null,
-          "lineHeight": null
-        },
-        {
-          "variant": "variant=drawer",
-          "count": 1,
-          "layer": "msg-user-2",
-          "type": "RECTANGLE",
-          "fill": "color/primary",
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": "radius/md",
-          "effects": [],
-          "layoutMode": "NONE",
-          "padding": null,
-          "gap": null,
-          "minHeight": null,
-          "height": 36,
-          "width": 80,
           "fontSize": null,
           "lineHeight": null
         },
@@ -20890,26 +20975,22 @@
         },
         {
           "name": "msg-asst-1",
-          "type": "RECTANGLE",
-          "hasChildren": false,
+          "type": "INSTANCE",
+          "hasChildren": true,
           "hidden": false,
-          "layoutMode": "NONE",
-          "rawColors": [
-            "#f5f5f5"
-          ],
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
           "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
         },
         {
-          "name": "msg-asst-1-text",
-          "type": "TEXT",
-          "hasChildren": false,
+          "name": "msg-user-1",
+          "type": "INSTANCE",
+          "hasChildren": true,
           "hidden": false,
-          "layoutMode": "NONE",
-          "rawColors": [
-            "#0f172a"
-          ],
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
           "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
@@ -20936,6 +21017,17 @@
           "rawColors": [
             "#0f172a"
           ],
+          "unboundRadius": 0,
+          "unboundSpacing": [],
+          "nonSemanticTokens": []
+        },
+        {
+          "name": "msg-user-2",
+          "type": "INSTANCE",
+          "hasChildren": true,
+          "hidden": false,
+          "layoutMode": "VERTICAL",
+          "rawColors": [],
           "unboundRadius": 0,
           "unboundSpacing": [],
           "nonSemanticTokens": []
