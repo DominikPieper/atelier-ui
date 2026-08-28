@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-28T05:54:02.878Z",
-    "gitSha": "e4f61ca",
+    "generatedAt": "2026-08-28T06:45:17.186Z",
+    "gitSha": "e6602d4",
     "serverVersion": null,
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -324,6 +324,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "variant=primary, size=sm, state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            8,
+            16,
+            8,
+            16
+          ],
+          "padBound": [
+            "spacing/2",
+            "spacing/4",
+            "spacing/2",
+            "spacing/4"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/primary",
           "stroke": "color/primary",
           "strokeWeight": 1,
@@ -340,6 +355,21 @@
           "lineHeight": 125
         },
         "variant=primary, size=md, state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            8,
+            20,
+            8,
+            20
+          ],
+          "padBound": [
+            "spacing/2",
+            "spacing/5",
+            "spacing/2",
+            "spacing/5"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/primary",
           "stroke": "color/primary",
           "strokeWeight": 1,
@@ -356,6 +386,21 @@
           "lineHeight": 125
         },
         "variant=primary, size=lg, state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            12,
+            24,
+            12,
+            24
+          ],
+          "padBound": [
+            "spacing/3",
+            "spacing/6",
+            "spacing/3",
+            "spacing/6"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/primary",
           "stroke": "color/primary",
           "strokeWeight": 1,
@@ -372,6 +417,21 @@
           "lineHeight": 125
         },
         "variant=secondary, size=sm, state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            8,
+            16,
+            8,
+            16
+          ],
+          "padBound": [
+            "spacing/2",
+            "spacing/4",
+            "spacing/2",
+            "spacing/4"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/secondary",
           "stroke": "color/secondary",
           "strokeWeight": 1,
@@ -388,6 +448,21 @@
           "lineHeight": 125
         },
         "variant=secondary, size=md, state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            8,
+            20,
+            8,
+            20
+          ],
+          "padBound": [
+            "spacing/2",
+            "spacing/5",
+            "spacing/2",
+            "spacing/5"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/secondary",
           "stroke": "color/secondary",
           "strokeWeight": 1,
@@ -404,6 +479,21 @@
           "lineHeight": 125
         },
         "variant=secondary, size=lg, state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            12,
+            24,
+            12,
+            24
+          ],
+          "padBound": [
+            "spacing/3",
+            "spacing/6",
+            "spacing/3",
+            "spacing/6"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/secondary",
           "stroke": "color/secondary",
           "strokeWeight": 1,
@@ -420,6 +510,21 @@
           "lineHeight": 125
         },
         "variant=outline, size=sm, state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            8,
+            16,
+            8,
+            16
+          ],
+          "padBound": [
+            "spacing/2",
+            "spacing/4",
+            "spacing/2",
+            "spacing/4"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/surface-raised",
           "stroke": "color/border-strong",
           "strokeWeight": 1,
@@ -436,6 +541,21 @@
           "lineHeight": 125
         },
         "variant=outline, size=md, state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            8,
+            20,
+            8,
+            20
+          ],
+          "padBound": [
+            "spacing/2",
+            "spacing/5",
+            "spacing/2",
+            "spacing/5"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/surface-raised",
           "stroke": "color/border-strong",
           "strokeWeight": 1,
@@ -452,6 +572,21 @@
           "lineHeight": 125
         },
         "variant=outline, size=lg, state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            12,
+            24,
+            12,
+            24
+          ],
+          "padBound": [
+            "spacing/3",
+            "spacing/6",
+            "spacing/3",
+            "spacing/6"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/surface-raised",
           "stroke": "color/border-strong",
           "strokeWeight": 1,
@@ -468,6 +603,21 @@
           "lineHeight": 125
         },
         "variant=primary, size=md, state=focus": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            8,
+            20,
+            8,
+            20
+          ],
+          "padBound": [
+            "spacing/2",
+            "spacing/5",
+            "spacing/2",
+            "spacing/5"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/primary",
           "stroke": null,
           "strokeWeight": 0,
@@ -487,6 +637,21 @@
           "lineHeight": 125
         },
         "variant=primary, size=md, state=hover": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            8,
+            20,
+            8,
+            20
+          ],
+          "padBound": [
+            "spacing/2",
+            "spacing/5",
+            "spacing/2",
+            "spacing/5"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/primary-hover",
           "stroke": null,
           "strokeWeight": 1,
@@ -503,6 +668,21 @@
           "lineHeight": 125
         },
         "variant=primary, size=md, state=active": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            8,
+            20,
+            8,
+            20
+          ],
+          "padBound": [
+            "spacing/2",
+            "spacing/5",
+            "spacing/2",
+            "spacing/5"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/primary-active",
           "stroke": "RAW",
           "strokeWeight": 1,
@@ -521,6 +701,21 @@
           "lineHeight": 125
         },
         "variant=danger, size=sm, state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            8,
+            16,
+            8,
+            16
+          ],
+          "padBound": [
+            "spacing/2",
+            "spacing/4",
+            "spacing/2",
+            "spacing/4"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/danger",
           "stroke": "color/danger",
           "strokeWeight": 1,
@@ -539,6 +734,21 @@
           "lineHeight": 125
         },
         "variant=danger, size=md, state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            8,
+            20,
+            8,
+            20
+          ],
+          "padBound": [
+            "spacing/2",
+            "spacing/5",
+            "spacing/2",
+            "spacing/5"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/danger",
           "stroke": "color/danger",
           "strokeWeight": 1,
@@ -557,6 +767,21 @@
           "lineHeight": 125
         },
         "variant=danger, size=lg, state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            12,
+            24,
+            12,
+            24
+          ],
+          "padBound": [
+            "spacing/3",
+            "spacing/6",
+            "spacing/3",
+            "spacing/6"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/danger",
           "stroke": "color/danger",
           "strokeWeight": 1,
@@ -575,6 +800,21 @@
           "lineHeight": 125
         },
         "variant=danger, size=md, state=hover": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            8,
+            20,
+            8,
+            20
+          ],
+          "padBound": [
+            "spacing/2",
+            "spacing/5",
+            "spacing/2",
+            "spacing/5"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/danger-hover",
           "stroke": "color/input-border-invalid",
           "strokeWeight": 1,
@@ -593,6 +833,21 @@
           "lineHeight": 125
         },
         "variant=danger, size=md, state=active": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            8,
+            20,
+            8,
+            20
+          ],
+          "padBound": [
+            "spacing/2",
+            "spacing/5",
+            "spacing/2",
+            "spacing/5"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/danger-active",
           "stroke": "color/input-border-invalid",
           "strokeWeight": 1,
@@ -611,6 +866,21 @@
           "lineHeight": 125
         },
         "variant=danger, size=md, state=focus": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            8,
+            20,
+            8,
+            20
+          ],
+          "padBound": [
+            "spacing/2",
+            "spacing/5",
+            "spacing/2",
+            "spacing/5"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/danger",
           "stroke": "color/input-border-invalid",
           "strokeWeight": 1,
@@ -631,6 +901,21 @@
           "lineHeight": 125
         },
         "variant=secondary, size=md, state=hover": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            8,
+            20,
+            8,
+            20
+          ],
+          "padBound": [
+            "spacing/2",
+            "spacing/5",
+            "spacing/2",
+            "spacing/5"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/secondary-hover",
           "stroke": null,
           "strokeWeight": 1,
@@ -647,6 +932,21 @@
           "lineHeight": 125
         },
         "variant=secondary, size=md, state=active": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            8,
+            20,
+            8,
+            20
+          ],
+          "padBound": [
+            "spacing/2",
+            "spacing/5",
+            "spacing/2",
+            "spacing/5"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/secondary-active",
           "stroke": "RAW",
           "strokeWeight": 1,
@@ -665,6 +965,21 @@
           "lineHeight": 125
         },
         "variant=secondary, size=md, state=focus": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            8,
+            20,
+            8,
+            20
+          ],
+          "padBound": [
+            "spacing/2",
+            "spacing/5",
+            "spacing/2",
+            "spacing/5"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/secondary",
           "stroke": null,
           "strokeWeight": 0,
@@ -684,6 +999,21 @@
           "lineHeight": 125
         },
         "variant=outline, size=md, state=hover": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            8,
+            20,
+            8,
+            20
+          ],
+          "padBound": [
+            "spacing/2",
+            "spacing/5",
+            "spacing/2",
+            "spacing/5"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/surface-sunken",
           "stroke": "color/primary",
           "strokeWeight": 1,
@@ -700,6 +1030,21 @@
           "lineHeight": 125
         },
         "variant=outline, size=md, state=active": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            8,
+            20,
+            8,
+            20
+          ],
+          "padBound": [
+            "spacing/2",
+            "spacing/5",
+            "spacing/2",
+            "spacing/5"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/surface-sunken",
           "stroke": "RAW",
           "strokeWeight": 1,
@@ -718,6 +1063,21 @@
           "lineHeight": 125
         },
         "variant=outline, size=md, state=focus": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            8,
+            20,
+            8,
+            20
+          ],
+          "padBound": [
+            "spacing/2",
+            "spacing/5",
+            "spacing/2",
+            "spacing/5"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": "color/primary",
           "strokeWeight": 1,
@@ -1770,6 +2130,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            12,
+            16,
+            12,
+            16
+          ],
+          "padBound": [
+            "spacing/3",
+            "spacing/4",
+            "spacing/3",
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/input-bg",
           "stroke": "color/input-border",
           "strokeWeight": 1,
@@ -1786,6 +2161,21 @@
           "lineHeight": 125
         },
         "state=filled": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            12,
+            16,
+            12,
+            16
+          ],
+          "padBound": [
+            "spacing/3",
+            "spacing/4",
+            "spacing/3",
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-sunken",
           "stroke": "color/input-border",
           "strokeWeight": 1.5,
@@ -1802,6 +2192,21 @@
           "lineHeight": 125
         },
         "state=focus": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            12,
+            16,
+            12,
+            16
+          ],
+          "padBound": [
+            "spacing/3",
+            "spacing/4",
+            "spacing/3",
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface",
           "stroke": "color/primary",
           "strokeWeight": 2,
@@ -1818,6 +2223,21 @@
           "lineHeight": 125
         },
         "state=invalid": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            12,
+            16,
+            12,
+            16
+          ],
+          "padBound": [
+            "spacing/3",
+            "spacing/4",
+            "spacing/3",
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-sunken",
           "stroke": "color/input-border-invalid",
           "strokeWeight": 1.5,
@@ -1834,6 +2254,21 @@
           "lineHeight": 125
         },
         "state=hover": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            12,
+            16,
+            12,
+            16
+          ],
+          "padBound": [
+            "spacing/3",
+            "spacing/4",
+            "spacing/3",
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-sunken",
           "stroke": "color/input-border-hover",
           "strokeWeight": 1.5,
@@ -2155,6 +2590,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "variant=elevated, padding=none": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-raised",
           "stroke": "color/border",
           "strokeWeight": 1,
@@ -2174,6 +2624,21 @@
           "lineHeight": null
         },
         "variant=outlined, padding=none": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-raised",
           "stroke": "color/border",
           "strokeWeight": 1,
@@ -2190,6 +2655,21 @@
           "lineHeight": null
         },
         "variant=flat, padding=none": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-sunken",
           "stroke": null,
           "strokeWeight": 1,
@@ -2206,6 +2686,21 @@
           "lineHeight": null
         },
         "variant=elevated, padding=sm": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-raised",
           "stroke": "color/border",
           "strokeWeight": 1,
@@ -2225,6 +2720,21 @@
           "lineHeight": null
         },
         "variant=outlined, padding=sm": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-raised",
           "stroke": "color/border",
           "strokeWeight": 1,
@@ -2241,6 +2751,21 @@
           "lineHeight": null
         },
         "variant=flat, padding=sm": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-sunken",
           "stroke": null,
           "strokeWeight": 1,
@@ -2257,6 +2782,21 @@
           "lineHeight": null
         },
         "variant=elevated, padding=md": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-raised",
           "stroke": "color/border",
           "strokeWeight": 1,
@@ -2276,6 +2816,21 @@
           "lineHeight": null
         },
         "variant=outlined, padding=md": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-raised",
           "stroke": "color/border",
           "strokeWeight": 1,
@@ -2292,6 +2847,21 @@
           "lineHeight": null
         },
         "variant=flat, padding=md": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-sunken",
           "stroke": null,
           "strokeWeight": 1,
@@ -2308,6 +2878,21 @@
           "lineHeight": null
         },
         "variant=elevated, padding=lg": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-raised",
           "stroke": "color/border",
           "strokeWeight": 1,
@@ -2327,6 +2912,21 @@
           "lineHeight": null
         },
         "variant=outlined, padding=lg": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-raised",
           "stroke": "color/border",
           "strokeWeight": 1,
@@ -2343,6 +2943,21 @@
           "lineHeight": null
         },
         "variant=flat, padding=lg": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-sunken",
           "stroke": null,
           "strokeWeight": 1,
@@ -4245,6 +4860,21 @@
       ],
       "rootPaint": {
         "variant=default, size=md": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            4,
+            12,
+            4,
+            12
+          ],
+          "padBound": [
+            "spacing/1",
+            "spacing/3",
+            "spacing/1",
+            "spacing/3"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-sunken",
           "stroke": "color/border",
           "strokeWeight": 1,
@@ -4261,6 +4891,21 @@
           "lineHeight": 125
         },
         "variant=success, size=md": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            4,
+            12,
+            4,
+            12
+          ],
+          "padBound": [
+            "spacing/1",
+            "spacing/3",
+            "spacing/1",
+            "spacing/3"
+          ],
+          "gap": 4,
+          "gapBound": "spacing/1",
           "fill": "color/success-bg",
           "stroke": "color/success-bg",
           "strokeWeight": 1,
@@ -4277,6 +4922,21 @@
           "lineHeight": 125
         },
         "variant=warning, size=md": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            4,
+            12,
+            4,
+            12
+          ],
+          "padBound": [
+            "spacing/1",
+            "spacing/3",
+            "spacing/1",
+            "spacing/3"
+          ],
+          "gap": 4,
+          "gapBound": "spacing/1",
           "fill": "color/warning-bg",
           "stroke": "color/warning-bg",
           "strokeWeight": 1,
@@ -4293,6 +4953,21 @@
           "lineHeight": 125
         },
         "variant=danger, size=md": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            4,
+            12,
+            4,
+            12
+          ],
+          "padBound": [
+            "spacing/1",
+            "spacing/3",
+            "spacing/1",
+            "spacing/3"
+          ],
+          "gap": 4,
+          "gapBound": "spacing/1",
           "fill": "color/danger-bg",
           "stroke": "color/danger-bg",
           "strokeWeight": 1,
@@ -4309,6 +4984,21 @@
           "lineHeight": 125
         },
         "variant=info, size=md": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            4,
+            12,
+            4,
+            12
+          ],
+          "padBound": [
+            "spacing/1",
+            "spacing/3",
+            "spacing/1",
+            "spacing/3"
+          ],
+          "gap": 4,
+          "gapBound": "spacing/1",
           "fill": "color/info-bg",
           "stroke": "color/info-bg",
           "strokeWeight": 1,
@@ -4325,6 +5015,21 @@
           "lineHeight": 125
         },
         "variant=default, size=sm": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            4,
+            8,
+            4,
+            8
+          ],
+          "padBound": [
+            "spacing/1",
+            "spacing/2",
+            "spacing/1",
+            "spacing/2"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-sunken",
           "stroke": "color/border",
           "strokeWeight": 1,
@@ -4341,6 +5046,21 @@
           "lineHeight": 125
         },
         "variant=success, size=sm": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            4,
+            8,
+            4,
+            8
+          ],
+          "padBound": [
+            "spacing/1",
+            "spacing/2",
+            "spacing/1",
+            "spacing/2"
+          ],
+          "gap": 4,
+          "gapBound": "spacing/1",
           "fill": "color/success-bg",
           "stroke": "color/success-bg",
           "strokeWeight": 1,
@@ -4357,6 +5077,21 @@
           "lineHeight": 125
         },
         "variant=warning, size=sm": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            4,
+            8,
+            4,
+            8
+          ],
+          "padBound": [
+            "spacing/1",
+            "spacing/2",
+            "spacing/1",
+            "spacing/2"
+          ],
+          "gap": 4,
+          "gapBound": "spacing/1",
           "fill": "color/warning-bg",
           "stroke": "color/warning-bg",
           "strokeWeight": 1,
@@ -4373,6 +5108,21 @@
           "lineHeight": 125
         },
         "variant=danger, size=sm": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            4,
+            8,
+            4,
+            8
+          ],
+          "padBound": [
+            "spacing/1",
+            "spacing/2",
+            "spacing/1",
+            "spacing/2"
+          ],
+          "gap": 4,
+          "gapBound": "spacing/1",
           "fill": "color/danger-bg",
           "stroke": "color/danger-bg",
           "strokeWeight": 1,
@@ -4389,6 +5139,21 @@
           "lineHeight": 125
         },
         "variant=info, size=sm": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            4,
+            8,
+            4,
+            8
+          ],
+          "padBound": [
+            "spacing/1",
+            "spacing/2",
+            "spacing/1",
+            "spacing/2"
+          ],
+          "gap": 4,
+          "gapBound": "spacing/1",
           "fill": "color/info-bg",
           "stroke": "color/info-bg",
           "strokeWeight": 1,
@@ -4481,6 +5246,21 @@
       ],
       "rootPaint": {
         "state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/input-bg",
           "stroke": "color/input-border",
           "strokeWeight": 1,
@@ -4497,6 +5277,21 @@
           "lineHeight": 125
         },
         "state=filled": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-sunken",
           "stroke": "color/border",
           "strokeWeight": 1,
@@ -4513,6 +5308,21 @@
           "lineHeight": 125
         },
         "state=open": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface",
           "stroke": "color/primary",
           "strokeWeight": 1,
@@ -4529,6 +5339,21 @@
           "lineHeight": 125
         },
         "state=hover": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-sunken",
           "stroke": "color/input-border-hover",
           "strokeWeight": 1,
@@ -4545,6 +5370,21 @@
           "lineHeight": 125
         },
         "state=focus": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-sunken",
           "stroke": "color/border",
           "strokeWeight": 1,
@@ -4844,6 +5684,21 @@
       ],
       "rootPaint": {
         "size=md": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface",
           "stroke": null,
           "strokeWeight": 1,
@@ -4863,6 +5718,21 @@
           "lineHeight": null
         },
         "size=sm": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface",
           "stroke": null,
           "strokeWeight": 1,
@@ -4882,6 +5752,21 @@
           "lineHeight": null
         },
         "size=lg": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface",
           "stroke": null,
           "strokeWeight": 1,
@@ -4901,6 +5786,21 @@
           "lineHeight": null
         },
         "size=xl": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface",
           "stroke": null,
           "strokeWeight": 1,
@@ -4920,6 +5820,21 @@
           "lineHeight": null
         },
         "size=full": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface",
           "stroke": null,
           "strokeWeight": 1,
@@ -5070,6 +5985,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "variant=default, selectedIndex=0": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -5086,6 +6016,21 @@
           "lineHeight": null
         },
         "variant=default, selectedIndex=1": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -5102,6 +6047,21 @@
           "lineHeight": null
         },
         "variant=pills, selectedIndex=0": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -5721,6 +6681,21 @@
       ],
       "rootPaint": {
         "variant=default": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": "color/border",
           "strokeWeight": "mixed",
@@ -5737,6 +6712,21 @@
           "lineHeight": null
         },
         "variant=bordered": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": "color/border",
           "strokeWeight": 1,
@@ -5753,6 +6743,21 @@
           "lineHeight": null
         },
         "variant=separated": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 0,
@@ -6318,6 +7323,21 @@
       ],
       "rootPaint": {
         "variant=default": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            8,
+            0,
+            8,
+            0
+          ],
+          "padBound": [
+            "spacing/2",
+            null,
+            "spacing/2",
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-raised",
           "stroke": "color/border",
           "strokeWeight": 1,
@@ -6337,6 +7357,21 @@
           "lineHeight": null
         },
         "variant=compact": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            8,
+            0,
+            8,
+            0
+          ],
+          "padBound": [
+            "spacing/2",
+            null,
+            "spacing/2",
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-raised",
           "stroke": "color/border",
           "strokeWeight": 1,
@@ -6634,6 +7669,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "position=above": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            4,
+            8,
+            4,
+            8
+          ],
+          "padBound": [
+            "spacing/1",
+            "spacing/2",
+            "spacing/1",
+            "spacing/2"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/text",
           "stroke": null,
           "strokeWeight": 1,
@@ -6653,6 +7703,21 @@
           "lineHeight": 150
         },
         "position=below": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            4,
+            8,
+            4,
+            8
+          ],
+          "padBound": [
+            "spacing/1",
+            "spacing/2",
+            "spacing/1",
+            "spacing/2"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/text",
           "stroke": null,
           "strokeWeight": 1,
@@ -6672,6 +7737,21 @@
           "lineHeight": 150
         },
         "position=left": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            4,
+            8,
+            4,
+            8
+          ],
+          "padBound": [
+            "spacing/1",
+            "spacing/2",
+            "spacing/1",
+            "spacing/2"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/text",
           "stroke": null,
           "strokeWeight": 1,
@@ -6691,6 +7771,21 @@
           "lineHeight": 150
         },
         "position=right": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            4,
+            8,
+            4,
+            8
+          ],
+          "padBound": [
+            "spacing/1",
+            "spacing/2",
+            "spacing/1",
+            "spacing/2"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/text",
           "stroke": null,
           "strokeWeight": 1,
@@ -6717,7 +7812,7 @@
         "width": 524,
         "height": 27,
         "childrenExtent": {
-          "right": 523,
+          "right": 515,
           "bottom": 27
         },
         "clipsContent": true
@@ -6781,6 +7876,21 @@
       ],
       "rootPaint": {
         "variant=info": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            16,
+            20,
+            16,
+            20
+          ],
+          "padBound": [
+            "spacing/4",
+            "spacing/5",
+            "spacing/4",
+            "spacing/5"
+          ],
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": "color/info-bg",
           "stroke": "color/info-bg",
           "strokeWeight": 1,
@@ -6797,6 +7907,21 @@
           "lineHeight": 150
         },
         "variant=success": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            16,
+            20,
+            16,
+            20
+          ],
+          "padBound": [
+            "spacing/4",
+            "spacing/5",
+            "spacing/4",
+            "spacing/5"
+          ],
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": "color/success-bg",
           "stroke": "color/success-bg",
           "strokeWeight": 1,
@@ -6813,6 +7938,21 @@
           "lineHeight": 150
         },
         "variant=warning": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            16,
+            20,
+            16,
+            20
+          ],
+          "padBound": [
+            "spacing/4",
+            "spacing/5",
+            "spacing/4",
+            "spacing/5"
+          ],
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": "color/warning-bg",
           "stroke": "color/warning-bg",
           "strokeWeight": 1,
@@ -6829,6 +7969,21 @@
           "lineHeight": 150
         },
         "variant=danger": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            16,
+            20,
+            16,
+            20
+          ],
+          "padBound": [
+            "spacing/4",
+            "spacing/5",
+            "spacing/4",
+            "spacing/5"
+          ],
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": "color/danger-bg",
           "stroke": "color/danger-bg",
           "strokeWeight": 1,
@@ -6853,13 +8008,13 @@
           "fill": null,
           "stroke": null,
           "box": [
-            328,
+            336,
             11,
             16,
             16
           ],
           "parentBox": [
-            360,
+            368,
             38
           ],
           "parentName": "variant=info",
@@ -6873,13 +8028,13 @@
           "fill": null,
           "stroke": null,
           "box": [
-            328,
+            336,
             13,
             16,
             16
           ],
           "parentBox": [
-            360,
+            368,
             41
           ],
           "parentName": "variant=success",
@@ -6893,13 +8048,13 @@
           "fill": null,
           "stroke": null,
           "box": [
-            328,
+            336,
             13,
             16,
             16
           ],
           "parentBox": [
-            360,
+            368,
             41
           ],
           "parentName": "variant=warning",
@@ -6913,13 +8068,13 @@
           "fill": null,
           "stroke": null,
           "box": [
-            328,
+            336,
             13,
             16,
             16
           ],
           "parentBox": [
-            360,
+            368,
             41
           ],
           "parentName": "variant=danger",
@@ -6930,10 +8085,10 @@
       "layers": [],
       "box": {
         "type": "COMPONENT_SET",
-        "width": 1536,
+        "width": 1544,
         "height": 41,
         "childrenExtent": {
-          "right": 1536,
+          "right": 1544,
           "bottom": 41
         },
         "clipsContent": true
@@ -7029,6 +8184,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "selection=unchecked, state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -7045,6 +8215,21 @@
           "lineHeight": null
         },
         "selection=checked, state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -7061,6 +8246,21 @@
           "lineHeight": null
         },
         "selection=indeterminate, state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -7077,6 +8277,21 @@
           "lineHeight": null
         },
         "selection=unchecked, state=focus": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -7096,6 +8311,21 @@
           "lineHeight": null
         },
         "selection=unchecked, state=hover": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -7408,6 +8638,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "selection=off, state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -7424,6 +8669,21 @@
           "lineHeight": null
         },
         "selection=on, state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -7440,6 +8700,21 @@
           "lineHeight": null
         },
         "selection=off, state=focus": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -7459,6 +8734,21 @@
           "lineHeight": null
         },
         "selection=off, state=hover": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -7963,6 +9253,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/input-bg",
           "stroke": "color/input-border",
           "strokeWeight": 1,
@@ -7979,6 +9284,21 @@
           "lineHeight": 150
         },
         "state=filled": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-sunken",
           "stroke": "color/border",
           "strokeWeight": 1,
@@ -7995,6 +9315,21 @@
           "lineHeight": 150
         },
         "state=focus": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface",
           "stroke": "color/primary",
           "strokeWeight": 1,
@@ -8011,6 +9346,21 @@
           "lineHeight": 150
         },
         "state=invalid": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface",
           "stroke": "color/danger",
           "strokeWeight": 1,
@@ -8027,6 +9377,21 @@
           "lineHeight": 150
         },
         "state=hover": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-sunken",
           "stroke": "RAW",
           "strokeWeight": 1,
@@ -8319,6 +9684,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "selection=unselected, state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -8335,6 +9715,21 @@
           "lineHeight": null
         },
         "selection=selected, state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -8351,6 +9746,21 @@
           "lineHeight": null
         },
         "selection=unselected, state=focus": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -8370,6 +9780,21 @@
           "lineHeight": null
         },
         "selection=unselected, state=hover": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -8622,6 +10047,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "selection=unchecked, state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            4,
+            0,
+            4,
+            0
+          ],
+          "padBound": [
+            "spacing/1",
+            null,
+            "spacing/1",
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -8638,6 +10078,21 @@
           "lineHeight": null
         },
         "selection=checked, state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            4,
+            0,
+            4,
+            0
+          ],
+          "padBound": [
+            "spacing/1",
+            null,
+            "spacing/1",
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -8654,6 +10109,21 @@
           "lineHeight": null
         },
         "selection=unchecked, state=focus": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            4,
+            0,
+            4,
+            0
+          ],
+          "padBound": [
+            "spacing/1",
+            null,
+            "spacing/1",
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -8673,6 +10143,21 @@
           "lineHeight": null
         },
         "selection=unchecked, state=hover": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            4,
+            0,
+            4,
+            0
+          ],
+          "padBound": [
+            "spacing/1",
+            null,
+            "spacing/1",
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -9134,6 +10619,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "variant=text": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/border",
           "stroke": null,
           "strokeWeight": 1,
@@ -9150,6 +10650,21 @@
           "lineHeight": null
         },
         "variant=circular": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/border",
           "stroke": null,
           "strokeWeight": 1,
@@ -9166,6 +10681,21 @@
           "lineHeight": null
         },
         "variant=rectangular": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/border",
           "stroke": null,
           "strokeWeight": 1,
@@ -9348,6 +10878,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "variant=default, size=sm": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -9364,6 +10909,21 @@
           "lineHeight": null
         },
         "variant=default, size=md": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -9380,6 +10940,21 @@
           "lineHeight": null
         },
         "variant=default, size=lg": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -9396,6 +10971,21 @@
           "lineHeight": null
         },
         "variant=success, size=sm": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -9412,6 +11002,21 @@
           "lineHeight": null
         },
         "variant=success, size=md": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -9428,6 +11033,21 @@
           "lineHeight": null
         },
         "variant=success, size=lg": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -9444,6 +11064,21 @@
           "lineHeight": null
         },
         "variant=warning, size=sm": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -9460,6 +11095,21 @@
           "lineHeight": null
         },
         "variant=warning, size=md": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -9476,6 +11126,21 @@
           "lineHeight": null
         },
         "variant=warning, size=lg": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -9492,6 +11157,21 @@
           "lineHeight": null
         },
         "variant=danger, size=sm": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -9508,6 +11188,21 @@
           "lineHeight": null
         },
         "variant=danger, size=md": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -9524,6 +11219,21 @@
           "lineHeight": null
         },
         "variant=danger, size=lg": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -10213,6 +11923,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "shape=circle, size=xs": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/info-bg",
           "stroke": null,
           "strokeWeight": 1,
@@ -10229,6 +11954,21 @@
           "lineHeight": 125
         },
         "shape=circle, size=sm": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/success-bg",
           "stroke": null,
           "strokeWeight": 1,
@@ -10245,6 +11985,21 @@
           "lineHeight": 125
         },
         "shape=circle, size=md": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/warning-bg",
           "stroke": null,
           "strokeWeight": 1,
@@ -10261,6 +12016,21 @@
           "lineHeight": 125
         },
         "shape=circle, size=lg": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "RAW",
           "stroke": null,
           "strokeWeight": 1,
@@ -10277,6 +12047,21 @@
           "lineHeight": 125
         },
         "shape=circle, size=xl": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "RAW",
           "stroke": null,
           "strokeWeight": 1,
@@ -10293,6 +12078,21 @@
           "lineHeight": 125
         },
         "shape=square, size=xs": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/info-bg",
           "stroke": null,
           "strokeWeight": 1,
@@ -10309,6 +12109,21 @@
           "lineHeight": 125
         },
         "shape=square, size=sm": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/success-bg",
           "stroke": null,
           "strokeWeight": 1,
@@ -10325,6 +12140,21 @@
           "lineHeight": 125
         },
         "shape=square, size=md": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/warning-bg",
           "stroke": null,
           "strokeWeight": 1,
@@ -10341,6 +12171,21 @@
           "lineHeight": 125
         },
         "shape=square, size=lg": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "RAW",
           "stroke": null,
           "strokeWeight": 1,
@@ -10357,6 +12202,21 @@
           "lineHeight": 125
         },
         "shape=square, size=xl": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "RAW",
           "stroke": null,
           "strokeWeight": 1,
@@ -10475,6 +12335,21 @@
       ],
       "rootPaint": {
         "variant=default, position=top-right": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            16,
+            20,
+            16,
+            20
+          ],
+          "padBound": [
+            "spacing/4",
+            "spacing/5",
+            "spacing/4",
+            "spacing/5"
+          ],
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": "color/surface-raised",
           "stroke": "color/border",
           "strokeWeight": "mixed",
@@ -10494,6 +12369,21 @@
           "lineHeight": null
         },
         "variant=success, position=top-right": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            16,
+            20,
+            16,
+            20
+          ],
+          "padBound": [
+            "spacing/4",
+            "spacing/5",
+            "spacing/4",
+            "spacing/5"
+          ],
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": "RAW",
           "stroke": "color/success",
           "strokeWeight": "mixed",
@@ -10513,6 +12403,21 @@
           "lineHeight": null
         },
         "variant=warning, position=top-right": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            16,
+            20,
+            16,
+            20
+          ],
+          "padBound": [
+            "spacing/4",
+            "spacing/5",
+            "spacing/4",
+            "spacing/5"
+          ],
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": "RAW",
           "stroke": "color/warning",
           "strokeWeight": "mixed",
@@ -10532,6 +12437,21 @@
           "lineHeight": null
         },
         "variant=danger, position=top-right": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            16,
+            20,
+            16,
+            20
+          ],
+          "padBound": [
+            "spacing/4",
+            "spacing/5",
+            "spacing/4",
+            "spacing/5"
+          ],
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": "RAW",
           "stroke": "color/danger",
           "strokeWeight": "mixed",
@@ -10551,6 +12471,21 @@
           "lineHeight": null
         },
         "variant=info, position=top-right": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            16,
+            20,
+            16,
+            20
+          ],
+          "padBound": [
+            "spacing/4",
+            "spacing/5",
+            "spacing/4",
+            "spacing/5"
+          ],
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": "color/info-bg",
           "stroke": "color/info",
           "strokeWeight": "mixed",
@@ -10570,6 +12505,21 @@
           "lineHeight": null
         },
         "variant=default, position=top-center": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            16,
+            20,
+            16,
+            20
+          ],
+          "padBound": [
+            "spacing/4",
+            "spacing/5",
+            "spacing/4",
+            "spacing/5"
+          ],
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": "color/surface-raised",
           "stroke": "color/border",
           "strokeWeight": "mixed",
@@ -10589,6 +12539,21 @@
           "lineHeight": null
         },
         "variant=default, position=bottom-right": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            16,
+            20,
+            16,
+            20
+          ],
+          "padBound": [
+            "spacing/4",
+            "spacing/5",
+            "spacing/4",
+            "spacing/5"
+          ],
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": "color/surface-raised",
           "stroke": "color/border",
           "strokeWeight": "mixed",
@@ -10608,6 +12573,21 @@
           "lineHeight": null
         },
         "variant=default, position=bottom-center": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            16,
+            20,
+            16,
+            20
+          ],
+          "padBound": [
+            "spacing/4",
+            "spacing/5",
+            "spacing/4",
+            "spacing/5"
+          ],
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": "color/surface-raised",
           "stroke": "color/border",
           "strokeWeight": "mixed",
@@ -10635,13 +12615,13 @@
           "fill": null,
           "stroke": null,
           "box": [
-            163,
+            167,
             12,
             16,
             16
           ],
           "parentBox": [
-            195,
+            203,
             40
           ],
           "parentName": "variant=default, position=top-right",
@@ -10655,13 +12635,13 @@
           "fill": null,
           "stroke": null,
           "box": [
-            163,
+            167,
             13,
             16,
             16
           ],
           "parentBox": [
-            195,
+            203,
             41
           ],
           "parentName": "variant=success, position=top-right",
@@ -10675,13 +12655,13 @@
           "fill": null,
           "stroke": null,
           "box": [
-            163,
+            167,
             13,
             16,
             16
           ],
           "parentBox": [
-            195,
+            203,
             41
           ],
           "parentName": "variant=warning, position=top-right",
@@ -10695,13 +12675,13 @@
           "fill": null,
           "stroke": null,
           "box": [
-            163,
+            167,
             13,
             16,
             16
           ],
           "parentBox": [
-            195,
+            203,
             41
           ],
           "parentName": "variant=danger, position=top-right",
@@ -10715,13 +12695,13 @@
           "fill": null,
           "stroke": null,
           "box": [
-            163,
+            167,
             12,
             16,
             16
           ],
           "parentBox": [
-            195,
+            203,
             40
           ],
           "parentName": "variant=info, position=top-right",
@@ -10735,13 +12715,13 @@
           "fill": null,
           "stroke": null,
           "box": [
-            163,
+            167,
             12,
             16,
             16
           ],
           "parentBox": [
-            195,
+            203,
             40
           ],
           "parentName": "variant=default, position=top-center",
@@ -10755,13 +12735,13 @@
           "fill": null,
           "stroke": null,
           "box": [
-            163,
+            167,
             12,
             16,
             16
           ],
           "parentBox": [
-            195,
+            203,
             40
           ],
           "parentName": "variant=default, position=bottom-right",
@@ -10775,13 +12755,13 @@
           "fill": null,
           "stroke": null,
           "box": [
-            163,
+            167,
             12,
             16,
             16
           ],
           "parentBox": [
-            195,
+            203,
             40
           ],
           "parentName": "variant=default, position=bottom-center",
@@ -10792,10 +12772,10 @@
       "layers": [],
       "box": {
         "type": "COMPONENT_SET",
-        "width": 876,
+        "width": 884,
         "height": 331,
         "childrenExtent": {
-          "right": 876,
+          "right": 884,
           "bottom": 331
         },
         "clipsContent": true
@@ -10861,6 +12841,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "Navigation/AtlBreadcrumbs": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -11002,6 +12997,21 @@
       ],
       "rootPaint": {
         "Navigation/AtlPagination": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -11230,6 +13240,21 @@
       ],
       "rootPaint": {
         "position=right, size=md": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface",
           "stroke": null,
           "strokeWeight": 1,
@@ -11249,6 +13274,21 @@
           "lineHeight": null
         },
         "position=left, size=md": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface",
           "stroke": null,
           "strokeWeight": 1,
@@ -11268,6 +13308,21 @@
           "lineHeight": null
         },
         "position=top, size=md": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface",
           "stroke": null,
           "strokeWeight": 1,
@@ -11287,6 +13342,21 @@
           "lineHeight": null
         },
         "position=bottom, size=md": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface",
           "stroke": null,
           "strokeWeight": 1,
@@ -11306,6 +13376,21 @@
           "lineHeight": null
         },
         "position=right, size=sm": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface",
           "stroke": null,
           "strokeWeight": 1,
@@ -11325,6 +13410,21 @@
           "lineHeight": null
         },
         "position=right, size=lg": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface",
           "stroke": null,
           "strokeWeight": 1,
@@ -11344,6 +13444,21 @@
           "lineHeight": null
         },
         "position=right, size=full": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface",
           "stroke": null,
           "strokeWeight": 1,
@@ -12737,6 +14852,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "variant=default, size=md, state=default": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -12753,6 +14883,21 @@
           "lineHeight": 125
         },
         "variant=striped, size=md, state=default": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -12769,6 +14914,21 @@
           "lineHeight": 125
         },
         "variant=bordered, size=md, state=default": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -12785,6 +14945,21 @@
           "lineHeight": 125
         },
         "variant=default, size=sm, state=default": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -12801,6 +14976,21 @@
           "lineHeight": 125
         },
         "variant=default, size=lg, state=default": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -14238,6 +16428,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "variant=default": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": "color/border",
           "strokeWeight": 1,
@@ -14254,6 +16459,21 @@
           "lineHeight": null
         },
         "variant=with-filename": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": "color/border",
           "strokeWeight": 1,
@@ -14270,6 +16490,21 @@
           "lineHeight": null
         },
         "variant=with-line-numbers": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": "color/border",
           "strokeWeight": 1,
@@ -14286,6 +16521,21 @@
           "lineHeight": null
         },
         "variant=no-copy": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": "color/border",
           "strokeWeight": 1,
@@ -15925,6 +18175,21 @@
       ],
       "rootPaint": {
         "state=default": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 4,
+          "gapBound": "spacing/1",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -15941,6 +18206,21 @@
           "lineHeight": null
         },
         "state=open": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 4,
+          "gapBound": "spacing/1",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -15957,6 +18237,21 @@
           "lineHeight": null
         },
         "state=filtered": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 4,
+          "gapBound": "spacing/1",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -15973,6 +18268,21 @@
           "lineHeight": null
         },
         "state=selected": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 4,
+          "gapBound": "spacing/1",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -15989,6 +18299,21 @@
           "lineHeight": null
         },
         "state=hover": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 4,
+          "gapBound": "spacing/1",
           "fill": null,
           "stroke": "color/input-border-hover",
           "strokeWeight": 1,
@@ -16005,6 +18330,21 @@
           "lineHeight": null
         },
         "state=focus": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 4,
+          "gapBound": "spacing/1",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -16908,6 +19248,21 @@
       ],
       "rootPaint": {
         "orientation=horizontal, state=default": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            16,
+            16,
+            16,
+            16
+          ],
+          "padBound": [
+            "spacing/4",
+            "spacing/4",
+            "spacing/4",
+            "spacing/4"
+          ],
+          "gap": 16,
+          "gapBound": "spacing/4",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -16924,6 +19279,21 @@
           "lineHeight": null
         },
         "orientation=horizontal, state=completed": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            16,
+            16,
+            16,
+            16
+          ],
+          "padBound": [
+            "spacing/4",
+            "spacing/4",
+            "spacing/4",
+            "spacing/4"
+          ],
+          "gap": 16,
+          "gapBound": "spacing/4",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -16940,6 +19310,21 @@
           "lineHeight": null
         },
         "orientation=horizontal, state=error": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            16,
+            16,
+            16,
+            16
+          ],
+          "padBound": [
+            "spacing/4",
+            "spacing/4",
+            "spacing/4",
+            "spacing/4"
+          ],
+          "gap": 16,
+          "gapBound": "spacing/4",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -16956,6 +19341,21 @@
           "lineHeight": null
         },
         "orientation=horizontal, state=optional": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            16,
+            16,
+            16,
+            16
+          ],
+          "padBound": [
+            "spacing/4",
+            "spacing/4",
+            "spacing/4",
+            "spacing/4"
+          ],
+          "gap": 16,
+          "gapBound": "spacing/4",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -16972,6 +19372,21 @@
           "lineHeight": null
         },
         "orientation=vertical, state=default": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            16,
+            16,
+            16,
+            16
+          ],
+          "padBound": [
+            "spacing/4",
+            "spacing/4",
+            "spacing/4",
+            "spacing/4"
+          ],
+          "gap": 16,
+          "gapBound": "spacing/4",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -16988,6 +19403,21 @@
           "lineHeight": null
         },
         "orientation=vertical, state=completed": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            16,
+            16,
+            16,
+            16
+          ],
+          "padBound": [
+            "spacing/4",
+            "spacing/4",
+            "spacing/4",
+            "spacing/4"
+          ],
+          "gap": 16,
+          "gapBound": "spacing/4",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -17004,6 +19434,21 @@
           "lineHeight": null
         },
         "orientation=vertical, state=error": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            16,
+            16,
+            16,
+            16
+          ],
+          "padBound": [
+            "spacing/4",
+            "spacing/4",
+            "spacing/4",
+            "spacing/4"
+          ],
+          "gap": 16,
+          "gapBound": "spacing/4",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -17020,6 +19465,21 @@
           "lineHeight": null
         },
         "orientation=vertical, state=optional": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            16,
+            16,
+            16,
+            16
+          ],
+          "padBound": [
+            "spacing/4",
+            "spacing/4",
+            "spacing/4",
+            "spacing/4"
+          ],
+          "gap": 16,
+          "gapBound": "spacing/4",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -19614,6 +22074,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "size=md": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": -8,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -19630,6 +22105,21 @@
           "lineHeight": null
         },
         "size=xs": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": -6,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -19646,6 +22136,21 @@
           "lineHeight": null
         },
         "size=sm": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": -8,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -19662,6 +22167,21 @@
           "lineHeight": null
         },
         "size=lg": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": -10,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -19678,6 +22198,21 @@
           "lineHeight": null
         },
         "size=xl": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": -12,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -19808,6 +22343,21 @@
       ],
       "rootPaint": {
         "variant=drawer": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "RAW",
           "stroke": null,
           "strokeWeight": 1,
@@ -19824,6 +22374,21 @@
           "lineHeight": null
         },
         "variant=popup": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "RAW",
           "stroke": null,
           "strokeWeight": 1,
@@ -19840,6 +22405,21 @@
           "lineHeight": null
         },
         "variant=inline": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "RAW",
           "stroke": null,
           "strokeWeight": 1,
@@ -21570,6 +24150,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -21586,6 +24181,21 @@
           "lineHeight": 125
         },
         "state=hover": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": "color/surface-sunken",
           "stroke": null,
           "strokeWeight": 1,
@@ -21683,6 +24293,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "Navigation/AtlMenuSeparator": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            8,
+            0,
+            8,
+            0
+          ],
+          "padBound": [
+            "spacing/2",
+            null,
+            "spacing/2",
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -21763,6 +24388,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "current=false": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -21779,6 +24419,21 @@
           "lineHeight": null
         },
         "current=true": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -21961,6 +24616,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -21977,6 +24647,21 @@
           "lineHeight": 125
         },
         "state=active": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -22130,6 +24815,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "state=default": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -22146,6 +24846,21 @@
           "lineHeight": null
         },
         "state=active": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -22162,6 +24877,21 @@
           "lineHeight": null
         },
         "state=completed": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -22178,6 +24908,21 @@
           "lineHeight": null
         },
         "state=error": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -22597,6 +25342,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "state=default": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -22613,6 +25373,21 @@
           "lineHeight": 125
         },
         "state=hover": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-sunken",
           "stroke": null,
           "strokeWeight": 1,
@@ -22629,6 +25404,21 @@
           "lineHeight": 125
         },
         "state=active": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/primary-light",
           "stroke": null,
           "strokeWeight": 1,
@@ -22645,6 +25435,21 @@
           "lineHeight": 125
         },
         "state=selected": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -22801,6 +25606,21 @@
       ],
       "rootPaint": {
         "expanded=false": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -22817,6 +25637,21 @@
           "lineHeight": null
         },
         "expanded=true": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -23047,6 +25882,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "role=assistant": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            12,
+            16,
+            12,
+            16
+          ],
+          "padBound": [
+            "spacing/3",
+            "spacing/4",
+            "spacing/3",
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-sunken",
           "stroke": null,
           "strokeWeight": 1,
@@ -23063,6 +25913,21 @@
           "lineHeight": 150
         },
         "role=user": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            12,
+            16,
+            12,
+            16
+          ],
+          "padBound": [
+            "spacing/3",
+            "spacing/4",
+            "spacing/3",
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/primary",
           "stroke": null,
           "strokeWeight": 1,
@@ -23079,6 +25944,21 @@
           "lineHeight": 150
         },
         "role=system": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            12,
+            16,
+            12,
+            16
+          ],
+          "padBound": [
+            "spacing/3",
+            "spacing/4",
+            "spacing/3",
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface-sunken",
           "stroke": null,
           "strokeWeight": 1,
@@ -23202,6 +26082,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "AI/AtlChatSuggestion": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            12,
+            16,
+            12,
+            16
+          ],
+          "padBound": [
+            "spacing/3",
+            "spacing/4",
+            "spacing/3",
+            "spacing/4"
+          ],
+          "gap": 4,
+          "gapBound": "spacing/1",
           "fill": "color/surface",
           "stroke": "color/border",
           "strokeWeight": 1,
@@ -23243,6 +26138,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "AI/AtlChatTyping": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            8,
+            12,
+            8,
+            12
+          ],
+          "padBound": [
+            "spacing/2",
+            "spacing/3",
+            "spacing/2",
+            "spacing/3"
+          ],
+          "gap": 4,
+          "gapBound": "spacing/1",
           "fill": "color/surface-sunken",
           "stroke": null,
           "strokeWeight": 1,
@@ -23366,6 +26276,21 @@
       ],
       "rootPaint": {
         "sortDirection=none": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/surface",
           "stroke": "color/border",
           "strokeWeight": "mixed",
@@ -23382,6 +26307,21 @@
           "lineHeight": 125
         },
         "sortDirection=asc": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/surface",
           "stroke": "color/border",
           "strokeWeight": "mixed",
@@ -23398,6 +26338,21 @@
           "lineHeight": 125
         },
         "sortDirection=desc": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 8,
+          "gapBound": "spacing/2",
           "fill": "color/surface",
           "stroke": "color/border",
           "strokeWeight": "mixed",
@@ -23560,6 +26515,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "align=start": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface",
           "stroke": "color/border",
           "strokeWeight": "mixed",
@@ -23576,6 +26546,21 @@
           "lineHeight": 125
         },
         "align=center": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface",
           "stroke": "color/border",
           "strokeWeight": "mixed",
@@ -23592,6 +26577,21 @@
           "lineHeight": 125
         },
         "align=end": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            16,
+            0,
+            16
+          ],
+          "padBound": [
+            null,
+            "spacing/4",
+            null,
+            "spacing/4"
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": "color/surface",
           "stroke": "color/border",
           "strokeWeight": "mixed",
@@ -23667,6 +26667,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "selected=false": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -23683,6 +26698,21 @@
           "lineHeight": null
         },
         "selected=true": {
+          "layoutMode": "HORIZONTAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -23919,6 +26949,21 @@
       "iconInstanceNames": [],
       "rootPaint": {
         "Display/AtlTbody": {
+          "layoutMode": "VERTICAL",
+          "pad": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "padBound": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "gap": 0,
+          "gapBound": null,
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,

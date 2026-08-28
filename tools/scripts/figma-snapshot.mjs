@@ -193,7 +193,29 @@ async function main() {
           } else if (v.cornerRadius !== figma.mixed && v.cornerRadius > 0) {
             radius = 'RAW';
           }
+          // The root's own BOX. [ROOT-PAINT] compared fill, stroke, radius, shadow
+          // and typography and never the padding — so AtlAlert drew 12/16 against a
+          // CSS that says 16/20, and AtlTooltip 8/12 against 4/8, both invisible to
+          // every gate until figma_check_design_parity was run by hand (ADR-0076).
+          // The bound variable name per side matters as much as the number: AtlAlert's
+          // padding IS bound, just to spacing/3 and spacing/4 instead of /4 and /5.
+          const padVar = async (key) => {
+            const b = bv[key];
+            if (!b) return null;
+            const vr = await figma.variables.getVariableByIdAsync(b.id);
+            return vr ? vr.name : 'RAW';
+          };
           rootPaint[v.name] = {
+            layoutMode: v.layoutMode,
+            pad: v.layoutMode === 'NONE'
+              ? null
+              : [v.paddingTop, v.paddingRight, v.paddingBottom, v.paddingLeft],
+            padBound: v.layoutMode === 'NONE'
+              ? null
+              : [await padVar('paddingTop'), await padVar('paddingRight'),
+                 await padVar('paddingBottom'), await padVar('paddingLeft')],
+            gap: v.layoutMode === 'NONE' ? null : (v.itemSpacing ?? null),
+            gapBound: v.layoutMode === 'NONE' ? null : await padVar('itemSpacing'),
             fill: await paintVar(v.fills),
             stroke: await paintVar(v.strokes),
             strokeWeight: v.strokeWeight === figma.mixed ? 'mixed' : v.strokeWeight,

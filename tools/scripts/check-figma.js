@@ -64,6 +64,36 @@ function warning(tag, msg) { warnings.push({ sev: 'WARNING', tag, msg }); }
 /** Allowlisted? Key is `selector:check:detail` — same exact-string idiom as the
  *  other gates' Sets (see tools/scripts/lib/allowlists.js). */
 const exemptionsUsed = new Set();
+
+/** Masters that pad where the CSS states nothing — one line each, not per variant.
+ *  Declared up here, not beside checkRootPaint: function declarations hoist and `const`
+ *  does not, and checkRootPaint() is called long before its own body appears. Third
+ *  time this exact slip has cost a run in this file. */
+const padWarnings = new Map();
+
+/** px -> spacing token name, read from the token source.
+ *
+ *  [ROOT-BOX] needs to know whether a padding the CSS states is something Figma
+ *  CAN bind. Two different situations came out of the first run and treating them
+ *  alike would have produced thirteen blockers, most of them unfixable:
+ *
+ *    - AtlToast pads 16/20 via --ui-spacing-4 / -5, and the master pads 12/16 via
+ *      spacing/3 and spacing/4. Bound, one step off, and Figma can hold the right
+ *      one. That is a blocker.
+ *    - AtlButton's padding is DERIVED (ADR-0041): 6.25px is
+ *      `(control-height - line-height x font-size) / 2`. No spacing token holds it
+ *      and no Figma Variable can express the arithmetic, so the master can only
+ *      carry a resolved number that drifts by construction. That is a warning about
+ *      a structural limit, not a value to correct.
+ */
+const SPACING_PX = (() => {
+  const css = fs.readFileSync(TOKENS_FILE, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+  const out = new Map();
+  for (const m of css.matchAll(/--ui-(spacing-[0-9]+)\s*:\s*([0-9.]+)rem\s*;/g)) {
+    out.set(Math.round(parseFloat(m[2]) * 16 * 100) / 100, m[1].replace('spacing-', 'spacing/'));
+  }
+  return out;
+})();
 function allowed(selector, check, detail) {
   const key = `${selector}:${check}:${detail}`;
   if (FIGMA_CONFORMANCE_EXCEPTIONS.has(key)) {
@@ -902,6 +932,56 @@ function checkRootPaint() {
           note('lineHeight', `root text leading is ${Math.round(got.lineHeight * 100) / 100}%, but the CSS says ${Math.round(want.lineHeight * 100)}%.`, variant);
         }
       }
+      // ── [ROOT-BOX]: the root's padding and gap ─────────────────────────────
+      // Only compared where the CSS states a value: a side the CSS leaves alone is
+      // a side the component does not control, and demanding Figma pad it to zero
+      // would be inventing a rule. Where the CSS says nothing at all and Figma pads
+      // anyway, that is the AtlStepper conversation (component chrome or artboard
+      // breathing room?) — a warning, because the gate cannot decide it.
+      if (got.pad) {
+        const SIDES = ['top', 'right', 'bottom', 'left'];
+        const stated = SIDES.filter((sd) => want.padding[sd] !== null && want.padding[sd] !== undefined);
+        if (stated.length === 0) {
+          const nonZero = got.pad.some((p) => p > 0.5);
+          if (nonZero) {
+            padWarnings.set(
+              entry.label,
+              `${entry.label}: the master pads ${got.pad.join('/')} but ${entry.cascade[0]} states no padding. ` +
+                `Decide whether that is component chrome the code is missing, or artboard breathing room the master should drop.`
+            );
+          }
+        } else {
+          const off = stated.filter((sd) => Math.abs(got.pad[SIDES.indexOf(sd)] - want.padding[sd]) > 0.5);
+          // Split by whether a spacing token holds the value the CSS states.
+          const bindable = off.filter((sd) => SPACING_PX.has(Math.round(want.padding[sd] * 100) / 100));
+          const derived = off.filter((sd) => !SPACING_PX.has(Math.round(want.padding[sd] * 100) / 100));
+          const fmt = (sd) =>
+            `${sd} ${got.pad[SIDES.indexOf(sd)]}px ≠ ${Math.round(want.padding[sd] * 100) / 100}px`;
+          if (bindable.length) {
+            const tokens = [...new Set(bindable.map((sd) => SPACING_PX.get(Math.round(want.padding[sd] * 100) / 100)))];
+            const bound = got.padBound
+              ? bindable.map((sd) => got.padBound[SIDES.indexOf(sd)]).filter((b) => b && b !== 'RAW')
+              : [];
+            const how = bound.length
+              ? ` The master is bound to ${[...new Set(bound)].join(', ')} — bound, but to the wrong step; use ${tokens.join(', ')}.`
+              : ` Bind ${tokens.join(', ')}.`;
+            note('padding', `root padding is ${bindable.map(fmt).join(', ')} (the CSS root).${how}`, variant);
+          }
+          if (derived.length) {
+            padWarnings.set(
+              `${entry.label}:derived`,
+              `${entry.label}: root padding is ${derived.map(fmt).join(', ')}. The CSS DERIVES those ` +
+                `values from the control recipe (ADR-0041), so no spacing token holds them and no Figma ` +
+                `Variable can express the arithmetic — the master can only carry a resolved number. Keep ` +
+                `the number in step, or decide the master should not pad at all and let the stated height ` +
+                `do the work.`
+            );
+          }
+        }
+        if (want.gap !== null && want.gap !== undefined && got.gap !== null && Math.abs(got.gap - want.gap) > 0.5) {
+          note('gap', `root gap is ${got.gap}px, but the CSS says ${Math.round(want.gap * 100) / 100}px.`, variant);
+        }
+      }
       if (want.shadow !== undefined) {
         const hasFx = (got.effects || []).length > 0;
         if (want.shadow && !hasFx) {
@@ -910,6 +990,10 @@ function checkRootPaint() {
           note('shadow', `root carries ${got.effects.join(', ')}, but ${want.from.shadow} sets no box-shadow.`, variant);
         }
       }
+    }
+    for (const key of [entry.label, `${entry.label}:derived`]) {
+      const pw = padWarnings.get(key);
+      if (pw) warning('ROOT-BOX', pw);
     }
     for (const [key, vs] of grouped) {
       const msg = key.split('\u0000')[1];
@@ -1033,6 +1117,11 @@ function resolveRootPaint(entry, axes) {
   const box = boxFromDeclarations(joined);
   want.fontSize = box.fontSize;
   want.lineHeight = box.lineHeight;
+  // The root's BOX. Computed here since the first version of this function and never
+  // read — so AtlAlert drew 12/16 against a CSS that says 16/20 and AtlTooltip 8/12
+  // against 4/8, both invisible to every gate (ADR-0076).
+  want.padding = box.padding;
+  want.gap = box.gap;
   return want;
 }
 

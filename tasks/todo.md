@@ -139,7 +139,11 @@ Decision-bearing quick wins (deferred — not this session's scope):
       migrated. The gate now asserts only "verified after the files last changed". If a
       mechanically derived `codeSpec` ever lands, revisit — that is the version that would
       have worked.
-- [ ] **AtlStepper: Figma pads 16, the code root pads 0** — the default variant
+- [ ] **AtlStepper: Figma pads 16, the code root pads 0** — still not gated after ADR-0076:
+      `[ROOT-BOX]` has the "master pads where the CSS states nothing" warning this needs, but
+      AtlStepper is one of the eleven masters deliberately outside the `ROOT_PAINT` table
+      (its paint sits on an inner box, not the root), so the table never reaches it. The
+      per-layer map those eleven want is the same open item as `[LAYER-PAINT]`'s. The default variant
       (`421:407`) declares `padding: 16` and `gap: 16`; `.atl-stepper` has neither. Decide
       whether that padding is component chrome (code is missing it) or artboard breathing
       room (Figma should drop it). Not fixed on 2026-08-26 because changing a component's
@@ -400,6 +404,35 @@ Decision-bearing quick wins (deferred — not this session's scope):
       legitimately have no role (AtlTooltip's four, and whatever the remaining 77 resolve
       to). Warning first, blocker once the 201 and the 77 are settled.
 
+- [x] ~~**Root padding diverges on at least two masters, and no gate compares it**~~ —
+      closed 2026-08-28, ADR-0076. `[ROOT-BOX]` compares the root's padding and gap, and it
+      was **thirteen** masters, not two. Seven were bindable and are corrected in Figma by
+      binding the variable (56 variants): AtlInput, AtlTextarea, AtlSelect, AtlMenu
+      compact, AtlTooltip, AtlToast, AtlAlert, plus AtlButton's item spacing. Six are
+      **derived** values ADR-0041 computes, which no spacing token holds and no Figma
+      Variable can express — they warn rather than block, and the question they ask is
+      below. `[SET-CLIPS]` then caught the fix's own fallout: the wider padding pushed
+      AtlAlert and AtlToast 8px past their sets, both clipping.
+
+- [ ] **Six masters pad on an axis the CSS derives, and it is one question, not six.**
+      AtlButton, AtlInput, AtlTextarea, AtlSelect, AtlBadge and AtlTab. ADR-0041's recipe
+      gives 6.25 / 9 / 11.25px — no spacing token holds those and no Figma Variable can
+      express the arithmetic, so a master can only carry a resolved number that drifts by
+      construction. Three of them (Textarea, Select, Tab) pad **zero** and let a positioned
+      text node do the work, which is a different construction rather than a wrong number.
+      Decide once: keep the resolved numbers in step by hand, or have the masters state
+      only their height and stop padding. Same shape as the row ladder's missing Figma
+      Variables (ADR-0052), and `[ROOT-BOX]` warns until it is settled.
+
+- [ ] **A parity record is blind to a change on the Figma side.** It stores `figmaNodeId`,
+      `verifiedSha` and an `inputsHash` over the component's files — nothing about the
+      state of the master. Eight masters changed on 2026-08-28 and no stamp noticed. By
+      ADR-0064's definition ("verified after the files last changed") the stamps stay
+      valid, and those changes moved Figma toward the code, so this is not urgent. It is
+      the exact mirror of the `inputsHash`-cannot-see-the-token-layer item below, and the
+      two want deciding together: either a stamp covers both sides or it says which one it
+      covers.
+
 - [ ] **Root padding diverges on at least two masters, and no gate compares it.**
       **AtlTooltip** joined AtlAlert on 2026-08-28: Figma draws 8/12, the CSS says
       `--ui-spacing-1`/`--ui-spacing-2` = 4/8. Both sides are on the scale, both times, so
@@ -481,7 +514,9 @@ Decision-bearing quick wins (deferred — not this session's scope):
       value.** Surfaced by drawing the anatomy (2026-08-26). One-line fix in all three
       `atl-button.css`, but it touches component CSS so it re-stales the parity record —
       bundle it with the next button change rather than alone.
-- [ ] **AtlButton: six of nine anatomy values are literals**, not tokens — min-height
+- [ ] **AtlButton: six of nine anatomy values are literals**, not tokens — and `[ROOT-BOX]`
+      now names it in every run (ADR-0076), so "right now it is neither" is no longer true:
+      it is recorded, as a warning, with the numbers. min-height
       (32/40/48) and padding (6/9/12 block, 14/18/24 inline), of which only `24px` lands on
       the spacing scale. `check:figma`'s token-link coverage can therefore never be complete
       for this component. Either the size steps get tokens or the gap gets recorded as
