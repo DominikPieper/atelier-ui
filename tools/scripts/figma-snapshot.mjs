@@ -333,7 +333,29 @@ async function main() {
         const props = {};
         for (const [k, v] of Object.entries(set.componentPropertyDefinitions || {})) props[k] = v.type;
         const seen = new Set();
+        // The set's own frame against the extent of its variants. 14 of 27 sets
+        // were once smaller than their children and clipped them — AtlDialog was
+        // 360x170 around 800x1111, so most of its size variants were invisible on
+        // the Components page. Nothing measured it, so it was fixed by hand and came
+        // back: binding text styles grew AtlCard and AtlDialog by 2px each and both
+        // clipped again the same day (ADR-0075).
+        let extentR = 0, extentB = 0;
+        if (set.type === 'COMPONENT_SET') {
+          for (const ch of set.children) {
+            extentR = Math.max(extentR, ch.x + ch.width);
+            extentB = Math.max(extentB, ch.y + ch.height);
+          }
+        }
         out[set.id] = {
+          box: {
+            type: set.type,
+            width: Math.round(set.width * 100) / 100,
+            height: Math.round(set.height * 100) / 100,
+            childrenExtent: set.type === 'COMPONENT_SET'
+              ? { right: Math.round(extentR * 100) / 100, bottom: Math.round(extentB * 100) / 100 }
+              : null,
+            clipsContent: set.clipsContent === true,
+          },
           properties: props,
           referencedProperties: [...referenced],
           iconInstanceNames: [...iconInstances],
@@ -427,6 +449,7 @@ async function main() {
         rootPaint: probe.masters?.[nodeId]?.rootPaint ?? {},
         overlays: probe.masters?.[nodeId]?.overlays ?? [],
         layers: probe.masters?.[nodeId]?.layers ?? [],
+        box: probe.masters?.[nodeId]?.box ?? null,
         glyphTextNodes: probe.masters?.[nodeId]?.glyphTextNodes ?? [],
         sampledVariant: defaultVariantId,
         nodes: deep ? collectNodeFacts(deep) : [],

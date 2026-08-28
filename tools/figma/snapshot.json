@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-27T19:33:01.979Z",
-    "gitSha": "5d58f0d",
+    "generatedAt": "2026-08-28T05:54:02.878Z",
+    "gitSha": "e4f61ca",
     "serverVersion": null,
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -1700,6 +1700,16 @@
         }
       ],
       "layers": [],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 576,
+        "height": 832,
+        "childrenExtent": {
+          "right": 576,
+          "bottom": 832
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "129:2",
       "nodes": [
@@ -2043,6 +2053,16 @@
         }
       ],
       "layers": [],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 1528,
+        "height": 44,
+        "childrenExtent": {
+          "right": 1528,
+          "bottom": 44
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "129:23",
       "nodes": [
@@ -4082,6 +4102,16 @@
           "lineHeight": 125
         }
       ],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 1056,
+        "height": 774,
+        "childrenExtent": {
+          "right": 1056,
+          "bottom": 774
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:53",
       "nodes": [
@@ -4377,6 +4407,16 @@
       },
       "overlays": [],
       "layers": [],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 202,
+        "height": 238,
+        "childrenExtent": {
+          "right": 202,
+          "bottom": 238
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:12",
       "nodes": [
@@ -4727,6 +4767,16 @@
         }
       ],
       "layers": [],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 1328,
+        "height": 40,
+        "childrenExtent": {
+          "right": 1328,
+          "bottom": 40
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:88",
       "nodes": [
@@ -4891,6 +4941,16 @@
       },
       "overlays": [],
       "layers": [],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 2648,
+        "height": 205,
+        "childrenExtent": {
+          "right": 2648,
+          "bottom": 205
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:93",
       "nodes": [
@@ -5547,6 +5607,16 @@
           "lineHeight": null
         }
       ],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 792,
+        "height": 234,
+        "childrenExtent": {
+          "right": 792,
+          "bottom": 234
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:120",
       "nodes": [
@@ -6079,6 +6149,16 @@
           "lineHeight": null
         }
       ],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 1084,
+        "height": 238,
+        "childrenExtent": {
+          "right": 1084,
+          "bottom": 238
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:124",
       "nodes": [
@@ -6337,6 +6417,16 @@
           "lineHeight": 125
         }
       ],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 432,
+        "height": 290,
+        "childrenExtent": {
+          "right": 432,
+          "bottom": 290
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:128",
       "nodes": [
@@ -6622,6 +6712,16 @@
       },
       "overlays": [],
       "layers": [],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 524,
+        "height": 27,
+        "childrenExtent": {
+          "right": 523,
+          "bottom": 27
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:48",
       "nodes": [
@@ -6828,6 +6928,16 @@
         }
       ],
       "layers": [],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 1536,
+        "height": 41,
+        "childrenExtent": {
+          "right": 1536,
+          "bottom": 41
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:23",
       "nodes": [
@@ -7225,6 +7335,16 @@
         }
       ],
       "layers": [],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 403,
+        "height": 136,
+        "childrenExtent": {
+          "right": 403,
+          "bottom": 136
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:32",
       "nodes": [
@@ -7759,6 +7879,16 @@
           "lineHeight": null
         }
       ],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 466,
+        "height": 80,
+        "childrenExtent": {
+          "right": 466,
+          "bottom": 80
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:37",
       "nodes": [
@@ -8116,6 +8246,16 @@
         }
       ],
       "layers": [],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 1128,
+        "height": 90,
+        "childrenExtent": {
+          "right": 1128,
+          "bottom": 90
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:82",
       "nodes": [
@@ -8409,6 +8549,16 @@
         }
       ],
       "layers": [],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 232,
+        "height": 80,
+        "childrenExtent": {
+          "right": 232,
+          "bottom": 80
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:131",
       "nodes": [
@@ -8914,6 +9064,16 @@
           "lineHeight": null
         }
       ],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 444,
+        "height": 88,
+        "childrenExtent": {
+          "right": 444,
+          "bottom": 88
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "420:165",
       "nodes": [
@@ -9085,6 +9245,16 @@
         }
       ],
       "layers": [],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 592,
+        "height": 120,
+        "childrenExtent": {
+          "right": 592,
+          "bottom": 120
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:99",
       "nodes": [
@@ -9949,6 +10119,16 @@
           "lineHeight": null
         }
       ],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 574,
+        "height": 168,
+        "childrenExtent": {
+          "right": 574,
+          "bottom": 168
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "420:81",
       "nodes": [
@@ -10195,6 +10375,16 @@
       },
       "overlays": [],
       "layers": [],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 328,
+        "height": 144,
+        "childrenExtent": {
+          "right": 328,
+          "bottom": 144
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:146",
       "nodes": [
@@ -10600,6 +10790,16 @@
         }
       ],
       "layers": [],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 876,
+        "height": 331,
+        "childrenExtent": {
+          "right": 876,
+          "bottom": 331
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "55:42",
       "nodes": [
@@ -10740,6 +10940,13 @@
         }
       ],
       "layers": [],
+      "box": {
+        "type": "COMPONENT",
+        "width": 323,
+        "height": 26,
+        "childrenExtent": null,
+        "clipsContent": false
+      },
       "glyphTextNodes": [],
       "sampledVariant": "912:1722",
       "nodes": [
@@ -10930,6 +11137,13 @@
           "lineHeight": 125
         }
       ],
+      "box": {
+        "type": "COMPONENT",
+        "width": 388,
+        "height": 36,
+        "childrenExtent": null,
+        "clipsContent": false
+      },
       "glyphTextNodes": [],
       "sampledVariant": "3:1073",
       "nodes": [
@@ -12349,6 +12563,16 @@
           "lineHeight": null
         }
       ],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 2856,
+        "height": 1376,
+        "childrenExtent": {
+          "right": 2856,
+          "bottom": 1376
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "421:342",
       "nodes": [
@@ -13712,6 +13936,16 @@
           "lineHeight": null
         }
       ],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 560,
+        "height": 1387,
+        "childrenExtent": {
+          "right": 560,
+          "bottom": 1387
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "421:884",
       "nodes": [
@@ -15479,6 +15713,16 @@
           "lineHeight": 164.9999976158142
         }
       ],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 2256,
+        "height": 256,
+        "childrenExtent": {
+          "right": 2256,
+          "bottom": 256
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "420:186",
       "nodes": [
@@ -16554,6 +16798,16 @@
           "lineHeight": null
         }
       ],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 2080,
+        "height": 264,
+        "childrenExtent": {
+          "right": 2080,
+          "bottom": 264
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "421:291",
       "nodes": [
@@ -19163,6 +19417,16 @@
           "lineHeight": 125
         }
       ],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 1262,
+        "height": 356,
+        "childrenExtent": {
+          "right": 1262,
+          "bottom": 357
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "421:407",
       "nodes": [
@@ -19432,6 +19696,16 @@
       },
       "overlays": [],
       "layers": [],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 796,
+        "height": 100,
+        "childrenExtent": {
+          "right": 772,
+          "bottom": 76
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "507:6305",
       "nodes": [
@@ -20834,6 +21108,16 @@
           "lineHeight": null
         }
       ],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 3352,
+        "height": 768,
+        "childrenExtent": {
+          "right": 3328,
+          "bottom": 744
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [
         {
           "layer": "min-icon",
@@ -21361,6 +21645,16 @@
         }
       ],
       "layers": [],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 432,
+        "height": 40,
+        "childrenExtent": {
+          "right": 432,
+          "bottom": 40
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "911:1052",
       "nodes": [
@@ -21432,6 +21726,13 @@
           "lineHeight": null
         }
       ],
+      "box": {
+        "type": "COMPONENT",
+        "width": 200,
+        "height": 17,
+        "childrenExtent": null,
+        "clipsContent": false
+      },
       "glyphTextNodes": [],
       "sampledVariant": "911:1060",
       "nodes": []
@@ -21576,6 +21877,16 @@
           "lineHeight": 125
         }
       ],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 197,
+        "height": 26,
+        "childrenExtent": {
+          "right": 197,
+          "bottom": 26
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [
         {
           "layer": "separator-glyph",
@@ -21750,6 +22061,16 @@
           "lineHeight": null
         }
       ],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 212,
+        "height": 40,
+        "childrenExtent": {
+          "right": 212,
+          "bottom": 40
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "911:1070",
       "nodes": [
@@ -22189,6 +22510,16 @@
           "lineHeight": null
         }
       ],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 480,
+        "height": 79,
+        "childrenExtent": {
+          "right": 480,
+          "bottom": 79
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "911:1123",
       "nodes": [
@@ -22413,6 +22744,16 @@
         }
       ],
       "layers": [],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 976,
+        "height": 40,
+        "childrenExtent": {
+          "right": 976,
+          "bottom": 40
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "911:1078",
       "nodes": [
@@ -22623,6 +22964,16 @@
           "lineHeight": 150
         }
       ],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 872,
+        "height": 100,
+        "childrenExtent": {
+          "right": 872,
+          "bottom": 100
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "911:1091",
       "nodes": [
@@ -22807,6 +23158,16 @@
         }
       ],
       "layers": [],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 964,
+        "height": 45,
+        "childrenExtent": {
+          "right": 964,
+          "bottom": 45
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "911:1106",
       "nodes": [
@@ -22859,6 +23220,13 @@
       },
       "overlays": [],
       "layers": [],
+      "box": {
+        "type": "COMPONENT",
+        "width": 300,
+        "height": 63,
+        "childrenExtent": null,
+        "clipsContent": false
+      },
       "glyphTextNodes": [],
       "sampledVariant": "911:1117",
       "nodes": []
@@ -22951,6 +23319,13 @@
           "lineHeight": null
         }
       ],
+      "box": {
+        "type": "COMPONENT",
+        "width": 50,
+        "height": 22,
+        "childrenExtent": null,
+        "clipsContent": false
+      },
       "glyphTextNodes": [],
       "sampledVariant": "911:1120",
       "nodes": []
@@ -23129,6 +23504,16 @@
           "lineHeight": null
         }
       ],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 664,
+        "height": 48,
+        "childrenExtent": {
+          "right": 664,
+          "bottom": 48
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "911:1497",
       "nodes": [
@@ -23225,6 +23610,16 @@
       },
       "overlays": [],
       "layers": [],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 664,
+        "height": 48,
+        "childrenExtent": {
+          "right": 664,
+          "bottom": 48
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "911:1490",
       "nodes": [
@@ -23446,6 +23841,16 @@
           "lineHeight": null
         }
       ],
+      "box": {
+        "type": "COMPONENT_SET",
+        "width": 1232,
+        "height": 48,
+        "childrenExtent": {
+          "right": 1232,
+          "bottom": 48
+        },
+        "clipsContent": true
+      },
       "glyphTextNodes": [],
       "sampledVariant": "911:1519",
       "nodes": [
@@ -23643,6 +24048,13 @@
           "lineHeight": 125
         }
       ],
+      "box": {
+        "type": "COMPONENT",
+        "width": 600,
+        "height": 96,
+        "childrenExtent": null,
+        "clipsContent": false
+      },
       "glyphTextNodes": [],
       "sampledVariant": "911:1547",
       "nodes": [

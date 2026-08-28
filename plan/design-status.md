@@ -41,7 +41,7 @@ a typography study says nothing about how the component should look.
 | `textarea` | **AtlTextarea.dc.html** | state | 5 | 2026-08-27 (`4c57b74`) | all 3 | yes | — |
 | `toast` | **AtlToast.dc.html** | — *(no master)* | — | — *(never)* | all 3 | yes | yes |
 | `toggle` | **AtlToggle.dc.html** | selection · state | 4 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
-| `tooltip` | **AtlTooltip.dc.html** | position | 4 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
+| `tooltip` | **AtlTooltip.dc.html** | position | 4 | 2026-08-28 (`e4f61ca`) | all 3 | — | yes |
 
 ## How to read the last two columns
 

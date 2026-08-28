@@ -197,7 +197,13 @@ Decision-bearing quick wins (deferred — not this session's scope):
       the status chip stay hand-written on purpose. Idempotency verified by recomputing
       all 43 cards' expected facts: 0 would change. Not a gate — comparing card to master
       in `check:all` would need the card facts in the snapshot, and a card is
-      documentation rather than the transfer target.
+      documentation rather than the transfer target. **Correction (2026-08-28, ADR-0074):
+      the idempotency claim above was wrong.** It rested on re-deriving the card data
+      because the actual second run had stalled — and re-derivation checked the *data*,
+      which was right, while the bug was in the *test*: a preview set to
+      `layoutSizingHorizontal = 'FILL'` can never again match its master's width, so the
+      staleness check was permanently true and every run rewrote the same 15 cards. Fixed;
+      two consecutive runs now report 0 updated.
 - [ ] **The breadcrumb separator is a glyph in CSS `content`.**
       `.atl-breadcrumb-item::after { content: var(--atl-separator, '›') }` — a pictogram
       as a character, which ADR-0050's rule sends to the icon set, but a CSS
@@ -244,7 +250,9 @@ Decision-bearing quick wins (deferred — not this session's scope):
       its own exemption — and that is right for the master's own drawing, but an override
       is not the master's drawing. Compare an instance's text against its main component's
       instead of skipping wholesale.
-- [ ] **536 text nodes below 12px, and the split decides the answer.** 378 on Inventory
+- [ ] **464 text nodes below 12px, and the split decides the answer.** Re-counted
+      2026-08-28 (was 536; Inventory dropped 378 → 306 when the cards were regenerated).
+      306 on Inventory
       (card meta at 11px), 156 on Colors (swatch labels 11px, hex 9px), 2 in Components —
       and those 2 were the AtlAvatar bug above. So this is catalogue scaffolding, not
       component text. `--ui-font-size-2xs` (10px) exists since ADR-0054: decide whether the
@@ -281,16 +289,20 @@ Decision-bearing quick wins (deferred — not this session's scope):
       and `tonal/1…5` are CSS shadow strings from an older docs pass. Now that
       `shadow/xs…xl` exist as generated effect styles (ADR-0060) they are also
       duplicates. Check what references them, then remove the collection.
-- [ ] **Nothing gates a COMPONENT_SET against its own variants.** 14 of 27 sets were
-      smaller than their children and clipped them — AtlDialog was 360×170 around
-      800×1111, so most of its size variants were invisible on the Components page
-      (ADR-0060). Fixed by hand; the check is two lines against the snapshot (set size
-      versus the children's extent) and would have caught it the day it happened.
+- [x] ~~**Nothing gates a COMPONENT_SET against its own variants**~~ — closed 2026-08-28,
+      ADR-0075. `[SET-CLIPS]` blocks when a set's frame is smaller than its variants' extent
+      (1px tolerance for Figma's fractional sizes). "Two lines against the snapshot" was
+      wrong: the snapshot carried no dimensions at all, so the probe had to capture a `box`
+      per master first. It caught a live regression immediately — binding text styles
+      (ADR-0074) had grown AtlCard and AtlDialog by 2px and both sets clipped again, with
+      `clipsContent: true`, the same day. 37 sets checked, 0 clipped.
 - [ ] **`[MASTER-GLYPH]` walks masters, so a content sample is invisible to it.** The
       four ADR-0056 content samples still carried `‹ Prev` / `Next ›` as text months
       after the same glyphs left the master. Widen the probe to every frame on the
       Components page, not only COMPONENT/COMPONENT_SET nodes.
-- [ ] **Nothing detects an orphaned main component.** Figma keeps a removed
+- [ ] **Nothing detects an orphaned main component.** No live defect as of 2026-08-28 —
+      68 main components resolved from the instance side, all reachable from the document —
+      so this is gate work against a class, not a repair. Figma keeps a removed
       `COMPONENT` alive while an instance still references it, and `findAll` cannot
       reach it — so it is invisible to every tree walk, including the snapshot probe.
       Two Inventory tiles (AtlPagination, AtlBreadcrumbs) had drawn *pre-fix* geometry
@@ -312,7 +324,9 @@ Decision-bearing quick wins (deferred — not this session's scope):
       composed dimension (`2.25rem`), two were genuinely off-scale on a control and are
       now bound, one was a magic number hiding a derivation, and two remain recorded
       below.
-- [ ] **`2.25rem` appears three times for two different reasons.** It is the invalid
+- [ ] **`2.25rem` appears six times for two different reasons.** Re-counted 2026-08-28
+      (the item said three; AtlPagination writes it four times — `min-width` and `height`
+      on two selectors). It is the invalid
       field's `padding-right` in AtlInput and AtlTextarea (room for the icon) and the page
       button's `min-width`/`height` in AtlPagination. Neither is on the spacing scale, and
       `check:token-bypass` permits a one-off dimension by design — but three uses is the
@@ -386,7 +400,13 @@ Decision-bearing quick wins (deferred — not this session's scope):
       legitimately have no role (AtlTooltip's four, and whatever the remaining 77 resolve
       to). Warning first, blocker once the 201 and the 77 are settled.
 
-- [ ] **AtlAlert's padding is bound to the wrong spacing variables.** Figma draws 12/16 on
+- [ ] **Root padding diverges on at least two masters, and no gate compares it.**
+      **AtlTooltip** joined AtlAlert on 2026-08-28: Figma draws 8/12, the CSS says
+      `--ui-spacing-1`/`--ui-spacing-2` = 4/8. Both sides are on the scale, both times, so
+      this is a value disagreement rather than drift off the system. The gate is cheaper
+      than it was — the snapshot now carries a `box` per master (ADR-0075), so a
+      `[ROOT-BOX]` code needs the probe to add padding to that record, not a new capture.
+      **AtlAlert's padding is bound to the wrong spacing variables.** Figma draws 12/16 on
       all four variants — bound, but to `spacing/3`/`spacing/4` — while the CSS says
       `--ui-spacing-4`/`--ui-spacing-5` = 16/20. Found by `figma_check_design_parity`, not
       by `check:figma`, because **no gate compares a master's root padding**: the snapshot's
@@ -405,12 +425,13 @@ Decision-bearing quick wins (deferred — not this session's scope):
       Do the data first: making the gate see it turns `check:figma` red until Figma is
       corrected and the snapshot re-run.
 
-- [ ] **`check:css-tokens` misses consumed-but-undeclared tokens.** It verifies that
-      *declared* tokens are annotated; it did not notice that all three code-block
-      stylesheets consumed `var(--ui-font-mono, …)` while nothing ever declared it, so every
-      code block silently used the Menlo fallback. Fixed in ADR-0035 by declaring the token;
-      the gate gap remains. Scan component CSS for `var(--ui-*)` references with no
-      declaration in the token source.
+- [x] ~~**`check:css-tokens` misses consumed-but-undeclared tokens**~~ — closed
+      2026-08-28, ADR-0075. Pass C reports `[UNDECLARED]` for every `--ui-*` a component
+      stylesheet reads that no token source declares. It found a live second instance the
+      day it was written: AtlTooltip read `var(--ui-z-tooltip, 200)` in React and Vue, a
+      token that has never existed, so the tooltip's stacking level was the literal 200
+      while every other floating layer used `--ui-z-dropdown`. Now 99 referenced tokens,
+      all declared; fail-tested in both directions.
 - [ ] **Re-sync the Atelier design system in Claude Design.** Its `_ds_manifest.json` and
       guide still say Inter and Fira Code, plus the four phantom tokens
       (`--ui-font-size-3xl/4xl/5xl`, `--ui-font-mono` — the last of which the repo now
@@ -512,12 +533,19 @@ Decision-bearing quick wins (deferred — not this session's scope):
       wrong. Twenty-one `Icon/*` components existed already, each holding a single Unicode TEXT
       glyph on a 32x19 frame. The set is now 25 vector components generated from
       ATL_ICON_GEOMETRY, one per AtlIconName, verified identical in both directions.
-- [ ] **Nothing gates the Figma icon set against `AtlIconName`** (ADR-0057). The comparison was
-      made by hand. `check:figma` reads the snapshot, and the snapshot captures masters from the
+- [ ] **Nothing gates the Figma icon set against `AtlIconName`** (ADR-0057). No live
+      divergence as of 2026-08-28 — the Icons page holds 25 `Icon/*` components and
+      `check:iconography` counts 25 names, identical sets — so this is gate work against a
+      class, not a repair. The comparison was made by hand. `check:figma` reads the snapshot, and the snapshot captures masters from the
       Components page, not the Icons page — so adding an icon to the spec and forgetting Figma is
       invisible. Capture the Icons page in `figma-snapshot.mjs` and cross-check the names.
 - [ ] **The superseded glyph documentation frame on the Icons page** is marked, not removed
       (ADR-0057). Rebuild it from the new set or delete it when the masters are rebuilt.
+      **Ready to delete as of 2026-08-28**: the condition its own note names ("when the
+      Figma masters are rebuilt (Phase 3)") passed when the redesign phase closed, and the
+      frame is verified inert — 1200×1328, 107 nodes, **0 components, 0 instances, 0
+      external references to anything inside it**. Left standing only because deleting from
+      a shared design file is outward-facing and was not part of the approved batch.
 - [x] ~~**Phase 3 work order — the eight master findings**~~ — the axis and claim half is done
       2026-08-27 (ADR-0056). AtlTabGroup lost its single-value `state` axis and its `selected`
       axis is `selectedIndex`, the actual prop. AtlRadio's `invalid` Boolean is gone, property
@@ -604,11 +632,12 @@ Decision-bearing quick wins (deferred — not this session's scope):
       inverted — the generator would install plugins one version *behind* the workspace.
       It has not bitten because the pin moves with the monorepo, but that is discipline, not
       a mechanism.
-- [ ] **Only the typeface half of the shorthand trap is gated.** `[RESET-WIPED]` catches a
-      `font-family` declared above an `all: unset`; nothing catches a `line-height`
-      declared above a `font:` shorthand, which is how the menu row lost its stated leading.
-      Third occurrence of the same class (ADR-0049, ADR-0051, ADR-0052) — the rule is
-      general, the gate is not.
+- [x] ~~**Only the typeface half of the shorthand trap is gated**~~ — closed 2026-08-28,
+      done by ADR-0073: `[FONT-AFTER]` reports any `font-*` or `line-height` longhand
+      declared ABOVE a `font:` shorthand in the same rule, which is literally what this
+      asked for. `[FONT-RAW]` came with it and closes the neighbouring hole — a `font:`
+      shorthand must be one `--ui-type-*` role or `inherit`, so a hand-assembled
+      `font: 600 15px/1.25 Inter` cannot hide a size from `check:token-bypass`.
 - [x] ~~No gate measures rendered geometry~~ — done 2026-08-26, ADR-0042:
       `check:geometry` renders every control claiming a `--ui-control-height-*` token and
       asserts the box matches, in `check:all`. Roster discovered in both directions, so the
@@ -617,10 +646,14 @@ Decision-bearing quick wins (deferred — not this session's scope):
       **The CI leg is verified** — it has run green on every push since, on plain
       Playwright rather than vitest browser mode, so it does not share B4's failure.
 - [ ] `coverage.thresholds` in 3 vite configs (measure current coverage first — may fail CI)
-- [ ] `docs-old/` (42 tracked files, not in nx graph): remove or justify
+- [x] ~~`docs-old/` (42 tracked files, not in nx graph)~~ — closed 2026-08-28, stale as
+      written: `git ls-files docs-old` returns **0** and commit `bc714df` ("chore: delete
+      orphaned docs-old app") removed it. An untracked directory of the same name may still
+      sit in a working copy; that is local cruft, not a repo item.
 - [x] Wire `check:figma` into CI — done: it runs inside `check:all`, so the `checks` job
       covers it (recorded in ADR-0034, which revises ADR-0019 §5). It exits 0 with 2
-      non-blocking `[DESC]` warnings and a 29/29 snapshot. **Freshness is still open** —
+      non-blocking `[DESC]` warnings and a 29/29 snapshot (43 masters and 8 warnings as of
+      2026-08-28). **Freshness is still open** —
       the gate never checks snapshot age and `figmaLastModified` is `null` (see C8).
 
 Larger workstreams (ranked, see plan file A–D):
@@ -654,7 +687,7 @@ Blind spots (decisions): SSR stance (Vue Math.random IDs) · reduced-motion gate
 - [x] Dropped phantom value/[(value)] rows from checkbox+toggle docs prop tables
 - [x] sync-spec + gen-behaviors + gen-llms; check:all green; build 58 pages
 - [x] ADR-0022 + README row; commit
-- [ ] push
+- [x] ~~push~~ — done long since; the batch shipped 2026-06-13.
 - Remaining open: .panel/.close-btn dialog scoping (component-trinity); McpExplorer tool rename (lossy, disclaimer'd); ideas 11-29
 
 ## Quick-win ideas batch — 2026-06-13
@@ -1125,11 +1158,12 @@ items deliberately NOT fixed in that pass:
       Radio/Combobox/AvatarGroup/Toggle frames, and 28 broken
       lineHeight-as-pixels text nodes (1.25px!) repaired. Gate green:
       0 blocker / 0 critical / 3 non-blocking warnings.
-- [ ] **Figma Toast is designed DARK, code renders LIGHT** — the Figma
-      master draws a #1e293b notification card while atl-toast.css uses
-      --ui-color-surface(-raised). Real open design decision (align Figma
-      to code, or redesign the code toast); fills are allowlisted in
-      lib/allowlists.js until resolved.
+- [x] ~~**Figma Toast is designed DARK, code renders LIGHT**~~ — closed 2026-08-28, and
+      the answer was already in this file: the 2026-07-22 token-sync entry below records
+      *"Toast resolved: the dark drawing WAS the dark rendering — now bound to
+      surface-raised/text and correct in both modes."* Verified: `allowlists.js` carries no
+      Toast fill exemption, only `toast:variant` (about the imperative default). Two entries
+      in the same file disagreed for five weeks because nobody re-read the older one.
 - [x] **Figma↔Code token sync landed** (2026-07-22) — new "Library
       Tokens" collection (78 variables, Light+Dark, scoped, 6 in-collection
       aliases) generated 1:1 from tokens.css via

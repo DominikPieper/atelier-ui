@@ -521,6 +521,7 @@ checkRootPaint();
 checkOverlays();
 checkLayerPaint();
 checkPageGlyphs();
+checkSetClips();
 checkStaleExemptions();
 
 // ---------------------------------------------------------------------------
@@ -1559,6 +1560,49 @@ function cssFileFor(selector) {
  *  There is no description to write an exemption into, so the reason lives in the
  *  allowlist under `page:glyph:<chars>`.
  */
+/** 11. [SET-CLIPS] — a COMPONENT_SET must be at least as large as its variants.
+ *
+ *  Figma lets a set's frame be smaller than the children inside it, and sets clip.
+ *  14 of 27 were in that state once: AtlDialog was 360x170 around 800x1111, so most
+ *  of its size variants were simply not visible on the Components page (ADR-0060).
+ *  It was fixed by hand and nothing measured it, so it came back the same day this
+ *  check was written — binding text styles grew AtlCard and AtlDialog by 2px each
+ *  and both clipped again (ADR-0075).
+ *
+ *  Tolerance is 1px: Figma stores fractional sizes and a variant that ends exactly
+ *  on the frame edge can round either way.
+ */
+function checkSetClips() {
+  let checked = 0;
+  let noFacts = 0;
+  for (const comp of snapshot.components) {
+    const box = comp.box;
+    if (!box) { noFacts++; continue; }
+    if (box.type !== 'COMPONENT_SET' || !box.childrenExtent) continue;
+    checked++;
+    const overR = box.childrenExtent.right - box.width;
+    const overB = box.childrenExtent.bottom - box.height;
+    if (overR <= 1 && overB <= 1) continue;
+    const parts = [];
+    if (overR > 1) parts.push(`${Math.round(overR * 100) / 100}px past the right edge`);
+    if (overB > 1) parts.push(`${Math.round(overB * 100) / 100}px past the bottom edge`);
+    const clipped = box.clipsContent ? 'and the set clips, so that much of them is invisible' : 'though the set does not clip';
+    blocker(
+      'SET-CLIPS',
+      `${comp.selector}: the COMPONENT_SET is ${box.width}×${box.height} but its variants reach ` +
+        `${box.childrenExtent.right}×${box.childrenExtent.bottom} — ${parts.join(' and ')}, ${clipped}. ` +
+        `Resize the set to its variants' extent.`
+    );
+  }
+  if (noFacts > 0) {
+    warning(
+      'SET-CLIPS',
+      `${noFacts} master(s) carry no box facts. Re-run npm run figma:snapshot to capture them.`
+    );
+  }
+  return checked;
+}
+
 function checkPageGlyphs() {
   const glyphs = snapshot.pageGlyphs;
   if (!Array.isArray(glyphs)) {

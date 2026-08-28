@@ -80,6 +80,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0072](0072-the-third-surface.md) | The third surface (`check:artboard-palette`) | Accepted | Recorded |
 | [0073](0073-a-role-is-for-prose-not-for-a-derived-box.md) | A role is for prose, not for a derived box (`[FONT-AFTER]`, `lib/type-roles.js`) | Accepted | Recorded |
 | [0074](0074-two-roles-the-eight-did-not-span.md) | Two roles the eight did not span (`--ui-type-control`, `--ui-type-action`; 231 nodes bound) | Accepted | Recorded |
+| [0075](0075-the-direction-nothing-checked.md) | The direction nothing checked (`[UNDECLARED]`, `[SET-CLIPS]`) | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

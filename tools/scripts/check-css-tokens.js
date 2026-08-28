@@ -11,6 +11,13 @@
  *     design system the single source of colour and prevents palette
  *     drift (a one-off `#006470` that does not track the token).
  *
+ *   Pass C (declaration pass):
+ *     Every `--ui-*` token a component stylesheet READS must be declared in the
+ *     token source. A `var(--ui-x, fallback)` that names an undeclared token
+ *     renders plausibly at a value the design system does not control — which is
+ *     how every code block ran on the Menlo fallback, and how AtlTooltip's
+ *     stacking level was a literal 200 (ADR-0075).
+ *
  *   Pass B (manifest-coverage pass):
  *     Every `--ui-*` token declared in `libs/angular/src/styles/tokens.css`
  *     (the canonical copy — `check:tokens` enforces the three frameworks
@@ -94,11 +101,20 @@ function stripVarCalls(value) {
 
 const errors = [];
 
+/** Pass C's evidence: every `var(--ui-…)` a component stylesheet READS, and where.
+ *  Collected here because Pass A already walks every file; compared after Pass B
+ *  has read the token source. */
+const consumedTokens = new Map();
+
 for (const dir of LIB_DIRS) {
   for (const file of cssFiles(dir)) {
     const src = fs.readFileSync(file, 'utf-8').replace(/\/\*[\s\S]*?\*\//g, '');
     const rel = file.replace(ROOT + '/', '');
     // Match `prop: value` declarations regardless of surrounding selectors.
+    for (const ref of src.matchAll(/var\(\s*(--ui-[a-z0-9-]+)/g)) {
+      if (!consumedTokens.has(ref[1])) consumedTokens.set(ref[1], new Set());
+      consumedTokens.get(ref[1]).add(rel);
+    }
     const decl = /([\w-]+)\s*:\s*([^;{}]+)/g;
     let m;
     while ((m = decl.exec(src)) !== null) {
@@ -191,6 +207,35 @@ if (COVERAGE_REQUIRED) {
 }
 
 // ---------------------------------------------------------------------------
+// Pass C — every --ui-* token a component READS must be DECLARED.
+//
+// Pass B checks that declared tokens are annotated. Nothing checked the other
+// direction, and the gap was not hypothetical twice over:
+//
+//   - all three code-block stylesheets read `var(--ui-font-mono, …)` while nothing
+//     declared it, so every code block silently rendered in the Menlo fallback
+//     until ADR-0035 declared the token.
+//   - AtlTooltip read `var(--ui-z-tooltip, 200)`, which no token source has ever
+//     declared, so the tooltip's stacking level was the literal 200 while every
+//     other floating layer in the library used --ui-z-dropdown (ADR-0075).
+//
+// A fallback is what makes this silent: the component renders, plausibly, at a
+// value the design system does not control. So a fallback does not excuse the
+// reference — it is the reason to report it.
+// ---------------------------------------------------------------------------
+
+for (const [name, files] of [...consumedTokens].sort()) {
+  if (declaredTokens.has(name)) continue;
+  const where = [...files].sort();
+  const shown = where.slice(0, 3).join(', ') + (where.length > 3 ? `, +${where.length - 3} more` : '');
+  errors.push(
+    `[UNDECLARED] '${name}' is read by ${where.length} component stylesheet(s) (${shown}) but is ` +
+      `declared in no token source. The component silently renders at its var() fallback, which the ` +
+      `design system does not control. Declare the token, or reference one that exists.`
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Report.
 // ---------------------------------------------------------------------------
 
@@ -205,5 +250,5 @@ if (errors.length > 0) {
 
 warnings.forEach((w) => console.warn(`⚠ ${w}`));
 console.log(
-  `✓ component CSS uses tokens for colour (no raw literals outside var() fallbacks / shadows); ${annotatedTokens.size}/${declaredTokens.size} tokens annotated.`
+  `✓ component CSS uses tokens for colour (no raw literals outside var() fallbacks / shadows); ${annotatedTokens.size}/${declaredTokens.size} tokens annotated; ${consumedTokens.size} token(s) referenced, all declared.`
 );
