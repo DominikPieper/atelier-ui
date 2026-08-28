@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-28T06:45:17.186Z",
-    "gitSha": "e6602d4",
+    "generatedAt": "2026-08-28T07:57:33.458Z",
+    "gitSha": "4d6dc39",
     "serverVersion": null,
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -8598,8 +8598,8 @@
       "description": "On/off switch control. Maps to AtlToggleSpec in libs/spec.\n\nUse when: a binary setting takes effect immediately (notifications on/off, dark mode, sync). Visually distinct from Checkbox — the switch metaphor implies \"this changes a setting now\", not \"this opts into a form value on submit\".\n\nDon't use when: the binary is part of a form submission (use Form/AtlCheckbox), the setting requires a confirmation step (use Form/AtlCheckbox plus Action/AtlButton), or the choice is one-of-three (use Form/AtlRadioGroup).\n\nAPI surface (Figma → spec):\n- Variant `selection`: off | on — maps to AtlToggleSpec.checked (false/true)\n- Variant `state`: default | hover | focus — interaction state\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Text `Label`: REMOVED 2026-08-27 (ADR-0067). The label is content projection, not a prop; AtlToggleSpec has no such field.\n\nA11y: native HTML <input type=\"checkbox\"> with role=\"switch\" wrapper. The label should describe the setting being toggled, not \"Off/On\". Disabled state uses aria-disabled.\n\nStatus: structural restructure 2026-04-27 — collapsed Cartesian (`disabled-off`/`disabled-on`) into orthogonal `selection` Variant + `disabled` Boolean. Old `state` enum (off/on/disabled-off/disabled-on/focus/hover/active/loading) replaced.\n\nSpec flags deliberately not modelled (2026-08-27, ADR-0058):\n- Boolean `required`: not modelled — `required` renders nothing in any Atelier form field. It is passed to the DOM as the HTML attribute and stops there.",
       "variantAxes": {
         "selection": [
-          "off",
-          "on"
+          "checked",
+          "unchecked"
         ],
         "state": [
           "default",
@@ -8609,19 +8609,19 @@
       },
       "variants": [
         {
-          "selection": "off",
+          "selection": "unchecked",
           "state": "default"
         },
         {
-          "selection": "on",
+          "selection": "checked",
           "state": "default"
         },
         {
-          "selection": "off",
+          "selection": "unchecked",
           "state": "focus"
         },
         {
-          "selection": "off",
+          "selection": "unchecked",
           "state": "hover"
         }
       ],
@@ -8637,7 +8637,7 @@
       ],
       "iconInstanceNames": [],
       "rootPaint": {
-        "selection=off, state=default": {
+        "selection=unchecked, state=default": {
           "layoutMode": "HORIZONTAL",
           "pad": [
             0,
@@ -8668,7 +8668,7 @@
           "fontSize": 14,
           "lineHeight": null
         },
-        "selection=on, state=default": {
+        "selection=checked, state=default": {
           "layoutMode": "HORIZONTAL",
           "pad": [
             0,
@@ -8699,7 +8699,7 @@
           "fontSize": 14,
           "lineHeight": null
         },
-        "selection=off, state=focus": {
+        "selection=unchecked, state=focus": {
           "layoutMode": "HORIZONTAL",
           "pad": [
             0,
@@ -8733,7 +8733,7 @@
           "fontSize": 14,
           "lineHeight": null
         },
-        "selection=off, state=hover": {
+        "selection=unchecked, state=hover": {
           "layoutMode": "HORIZONTAL",
           "pad": [
             0,
@@ -8767,7 +8767,7 @@
       },
       "overlays": [
         {
-          "variant": "selection=off, state=default",
+          "variant": "selection=unchecked, state=default",
           "layer": "_disabled-overlay",
           "type": "RECTANGLE",
           "fill": "color/surface",
@@ -8782,12 +8782,12 @@
             134,
             24
           ],
-          "parentName": "selection=off, state=default",
+          "parentName": "selection=unchecked, state=default",
           "visible": false,
           "boundTo": "disabled#507:187"
         },
         {
-          "variant": "selection=off, state=default",
+          "variant": "selection=unchecked, state=default",
           "layer": "_invalid-border",
           "type": "RECTANGLE",
           "fill": null,
@@ -8802,12 +8802,12 @@
             134,
             24
           ],
-          "parentName": "selection=off, state=default",
+          "parentName": "selection=unchecked, state=default",
           "visible": false,
           "boundTo": "invalid#911:5"
         },
         {
-          "variant": "selection=on, state=default",
+          "variant": "selection=checked, state=default",
           "layer": "_disabled-overlay",
           "type": "RECTANGLE",
           "fill": "color/surface",
@@ -8822,12 +8822,12 @@
             134,
             24
           ],
-          "parentName": "selection=on, state=default",
+          "parentName": "selection=checked, state=default",
           "visible": false,
           "boundTo": "disabled#507:187"
         },
         {
-          "variant": "selection=on, state=default",
+          "variant": "selection=checked, state=default",
           "layer": "_invalid-border",
           "type": "RECTANGLE",
           "fill": null,
@@ -8842,12 +8842,12 @@
             134,
             24
           ],
-          "parentName": "selection=on, state=default",
+          "parentName": "selection=checked, state=default",
           "visible": false,
           "boundTo": "invalid#911:5"
         },
         {
-          "variant": "selection=off, state=focus",
+          "variant": "selection=unchecked, state=focus",
           "layer": "_disabled-overlay",
           "type": "RECTANGLE",
           "fill": "color/surface",
@@ -8862,12 +8862,12 @@
             134,
             24
           ],
-          "parentName": "selection=off, state=focus",
+          "parentName": "selection=unchecked, state=focus",
           "visible": false,
           "boundTo": "disabled#507:187"
         },
         {
-          "variant": "selection=off, state=focus",
+          "variant": "selection=unchecked, state=focus",
           "layer": "_invalid-border",
           "type": "RECTANGLE",
           "fill": null,
@@ -8882,12 +8882,12 @@
             134,
             24
           ],
-          "parentName": "selection=off, state=focus",
+          "parentName": "selection=unchecked, state=focus",
           "visible": false,
           "boundTo": "invalid#911:5"
         },
         {
-          "variant": "selection=off, state=hover",
+          "variant": "selection=unchecked, state=hover",
           "layer": "_disabled-overlay",
           "type": "RECTANGLE",
           "fill": "color/surface",
@@ -8902,12 +8902,12 @@
             134,
             24
           ],
-          "parentName": "selection=off, state=hover",
+          "parentName": "selection=unchecked, state=hover",
           "visible": false,
           "boundTo": "disabled#507:187"
         },
         {
-          "variant": "selection=off, state=hover",
+          "variant": "selection=unchecked, state=hover",
           "layer": "_invalid-border",
           "type": "RECTANGLE",
           "fill": null,
@@ -8922,19 +8922,19 @@
             134,
             24
           ],
-          "parentName": "selection=off, state=hover",
+          "parentName": "selection=unchecked, state=hover",
           "visible": false,
           "boundTo": "invalid#911:5"
         }
       ],
       "layers": [
         {
-          "variant": "selection=off, state=default",
+          "variant": "selection=unchecked, state=default",
           "count": 1,
           "layer": "track",
           "type": "FRAME",
-          "fill": "color/border",
-          "stroke": null,
+          "fill": "color/input-bg",
+          "stroke": "color/border-strong",
           "strokeSides": [
             1,
             1,
@@ -8958,11 +8958,11 @@
           "lineHeight": null
         },
         {
-          "variant": "selection=off, state=default",
+          "variant": "selection=unchecked, state=default",
           "count": 1,
           "layer": "thumb",
           "type": "FRAME",
-          "fill": "color/surface",
+          "fill": "color/border-strong",
           "stroke": null,
           "strokeSides": [
             1,
@@ -8983,18 +8983,18 @@
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 20,
-          "width": 20,
+          "height": 18,
+          "width": 18,
           "fontSize": null,
           "lineHeight": null
         },
         {
-          "variant": "selection=on, state=default",
+          "variant": "selection=checked, state=default",
           "count": 1,
           "layer": "track",
           "type": "FRAME",
           "fill": "color/primary",
-          "stroke": null,
+          "stroke": "color/primary",
           "strokeSides": [
             1,
             1,
@@ -9018,11 +9018,11 @@
           "lineHeight": null
         },
         {
-          "variant": "selection=on, state=default",
+          "variant": "selection=checked, state=default",
           "count": 1,
           "layer": "thumb",
           "type": "FRAME",
-          "fill": "color/surface",
+          "fill": "color/text-on-primary",
           "stroke": null,
           "strokeSides": [
             1,
@@ -9043,18 +9043,18 @@
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 20,
-          "width": 20,
+          "height": 18,
+          "width": 18,
           "fontSize": null,
           "lineHeight": null
         },
         {
-          "variant": "selection=off, state=focus",
+          "variant": "selection=unchecked, state=focus",
           "count": 1,
           "layer": "track",
           "type": "FRAME",
-          "fill": "color/border",
-          "stroke": null,
+          "fill": "color/input-bg",
+          "stroke": "color/primary",
           "strokeSides": [
             1,
             1,
@@ -9078,11 +9078,11 @@
           "lineHeight": null
         },
         {
-          "variant": "selection=off, state=focus",
+          "variant": "selection=unchecked, state=focus",
           "count": 1,
           "layer": "thumb",
           "type": "FRAME",
-          "fill": "color/surface",
+          "fill": "color/border-strong",
           "stroke": null,
           "strokeSides": [
             1,
@@ -9103,18 +9103,18 @@
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 20,
-          "width": 20,
+          "height": 18,
+          "width": 18,
           "fontSize": null,
           "lineHeight": null
         },
         {
-          "variant": "selection=off, state=hover",
+          "variant": "selection=unchecked, state=hover",
           "count": 1,
           "layer": "track",
           "type": "FRAME",
-          "fill": "color/border-hover",
-          "stroke": null,
+          "fill": "color/input-bg",
+          "stroke": "color/primary",
           "strokeSides": [
             1,
             1,
@@ -9138,11 +9138,11 @@
           "lineHeight": null
         },
         {
-          "variant": "selection=off, state=hover",
+          "variant": "selection=unchecked, state=hover",
           "count": 1,
           "layer": "thumb",
           "type": "FRAME",
-          "fill": "color/surface",
+          "fill": "color/border-strong",
           "stroke": null,
           "strokeSides": [
             1,
@@ -9163,8 +9163,8 @@
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 20,
-          "width": 20,
+          "height": 18,
+          "width": 18,
           "fontSize": null,
           "lineHeight": null
         }
@@ -9183,7 +9183,7 @@
       "sampledVariant": "55:37",
       "nodes": [
         {
-          "name": "selection=off, state=default",
+          "name": "selection=unchecked, state=default",
           "type": "COMPONENT",
           "hasChildren": true,
           "hidden": false,
@@ -13507,7 +13507,7 @@
         {
           "variant": "position=right, size=md",
           "count": 1,
-          "layer": "panel",
+          "layer": "dialog",
           "type": "FRAME",
           "fill": "color/surface",
           "stroke": null,
@@ -13678,7 +13678,7 @@
         {
           "variant": "position=left, size=md",
           "count": 1,
-          "layer": "panel",
+          "layer": "dialog",
           "type": "FRAME",
           "fill": "color/surface",
           "stroke": null,
@@ -13849,7 +13849,7 @@
         {
           "variant": "position=top, size=md",
           "count": 1,
-          "layer": "panel",
+          "layer": "dialog",
           "type": "FRAME",
           "fill": "color/surface",
           "stroke": null,
@@ -14020,7 +14020,7 @@
         {
           "variant": "position=bottom, size=md",
           "count": 1,
-          "layer": "panel",
+          "layer": "dialog",
           "type": "FRAME",
           "fill": "color/surface",
           "stroke": null,
@@ -14191,7 +14191,7 @@
         {
           "variant": "position=right, size=sm",
           "count": 1,
-          "layer": "panel",
+          "layer": "dialog",
           "type": "FRAME",
           "fill": "color/surface",
           "stroke": null,
@@ -14362,7 +14362,7 @@
         {
           "variant": "position=right, size=lg",
           "count": 1,
-          "layer": "panel",
+          "layer": "dialog",
           "type": "FRAME",
           "fill": "color/surface",
           "stroke": null,
@@ -14533,7 +14533,7 @@
         {
           "variant": "position=right, size=full",
           "count": 1,
-          "layer": "panel",
+          "layer": "dialog",
           "type": "FRAME",
           "fill": "color/surface",
           "stroke": null,
@@ -14703,7 +14703,7 @@
           "nonSemanticTokens": []
         },
         {
-          "name": "panel",
+          "name": "dialog",
           "type": "FRAME",
           "hasChildren": true,
           "hidden": false,
@@ -18732,25 +18732,25 @@
           "count": 1,
           "layer": "input",
           "type": "FRAME",
-          "fill": "color/surface-sunken",
-          "stroke": "color/border",
+          "fill": "color/input-bg",
+          "stroke": "color/input-border",
           "strokeSides": [
-            1.5,
-            1.5,
-            1.5,
-            1.5
+            1,
+            1,
+            1,
+            1
           ],
-          "radius": "radius/sm",
+          "radius": "radius/md",
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            0,
-            12,
-            0,
-            12
+            9,
+            56,
+            9,
+            16
           ],
           "gap": 0,
-          "minHeight": null,
+          "minHeight": 40,
           "height": 40,
           "width": 320,
           "fontSize": 14,
@@ -19170,7 +19170,12 @@
           "layoutMode": "HORIZONTAL",
           "rawColors": [],
           "unboundRadius": 0,
-          "unboundSpacing": [],
+          "unboundSpacing": [
+            "paddingLeft",
+            "paddingRight",
+            "paddingTop",
+            "paddingBottom"
+          ],
           "nonSemanticTokens": []
         },
         {

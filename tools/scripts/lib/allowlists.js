@@ -105,6 +105,14 @@ const FIGMA_CONFORMANCE_EXCEPTIONS = new Set([
   // every card pollutes the page outline). The AtlCard Figma description marks it
   // "code-only: role". So the missing "role" variant axis is expected, not drift.
   'AtlCard:name:role',
+  // AtlCombobox's field padding is 9px 56px 9px 16px and only ONE side can be bound:
+  // 16px is --ui-spacing-4, 9px is ADR-0041's derived block padding
+  // ((40 - 1.25 x 16) / 2 - 1), and 56px is a composed dimension — the inline padding
+  // plus room for the chevron and clear buttons. Two of four sides have no token to
+  // bind, so [TOKEN] would demand a binding that cannot exist. The values themselves
+  // are checked by [LAYER-PAINT]'s box comparison against .atl-combobox-input, which
+  // is the reading that matters (ADR-0077).
+  'AtlCombobox:token:spacing:input',
   // The only page-level glyph that is not standing in for a drawing: the arrow in the
   // AtlAvatar caption "fallback: image\u2192initials\u2192icon" is punctuation inside
   // prose, not a pictogram a component renders (ADR-0069). Keyed on the character,

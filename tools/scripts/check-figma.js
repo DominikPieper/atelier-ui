@@ -537,6 +537,11 @@ const LAYER_ALIASES = {
   AtlSelect: { field: '.atl-select select' },
   AtlTr: { 'atl-tr-select-cell': ['.atl-table tbody td', '.atl-tr-select-cell'], td: '.atl-table tbody td' },
   AtlTbody: { tr: '.atl-table tbody tr' },
+  // The drawer's surface is an element selector, which no mechanical shape reaches.
+  // The layer was called `panel` and the CSS really does have a `.panel` — the inner
+  // flex wrapper, which paints nothing — so the resolution matched a rule that exists
+  // and is the wrong element. Renamed the layer to `dialog` (ADR-0077) and mapped it.
+  AtlDrawer: { dialog: '.atl-drawer-host dialog' },
 };
 
 // ---------------------------------------------------------------------------
@@ -1225,7 +1230,26 @@ function checkLayerPaint() {
     for (const L of layers) {
       const st = parseAxisName(L.variant).state;
       if (st !== undefined && st !== 'default') continue; // pseudo-class paint, as in [ROOT-PAINT]
-      const aliased = aliases[L.layer];
+      // ADR-0063's convention is "the layer name IS the selector", and it holds —
+      // but only for a layer whose class is written unscoped. `.track` is really
+      // `.atl-toggle .track`, and the combobox writes `.atl-combobox-input` for a
+      // layer named `input`. Both are MECHANICAL, so they are resolved rather than
+      // hand-listed: an alias table would need an entry per layer per master, and a
+      // hand-maintained table about a generated thing rots (ADR-0070, ADR-0072).
+      //
+      // This matters more than a padding comparison: an unresolved layer makes
+      // [LAYER-PAINT] `continue`, so its fill, radius and stroke were never checked
+      // either — the whole reason eleven masters sat outside the gate (ADR-0077).
+      const rootForLayer = rootSelectorFor(comp.selector);
+      const candidates = (name) => {
+        const c = ['.' + name];
+        if (rootForLayer) {
+          c.push(`${rootForLayer} .${name}`);   // .atl-toggle .track
+          c.push(`${rootForLayer}-${name}`);    // .atl-combobox-input
+        }
+        return c;
+      };
+      const aliased = aliases[L.layer] ?? candidates(L.layer).find((sel) => cssRules(file).has(sel));
       const bases = Array.isArray(aliased) ? aliased : [aliased || '.' + L.layer];
       const base = bases[bases.length - 1]; // the layer's OWN rule, for the messages
       // A variant can override a layer's rule: `.atl-progress.variant-success .fill`
@@ -1234,12 +1258,30 @@ function checkLayerPaint() {
       const axes = parseAxisName(L.variant);
       const rootSel = rootSelectorFor(comp.selector);
       const cascade = [...bases];
-      if (axes.variant && rootSel) {
-        cascade.push(
-          base.startsWith(rootSel + ' ')
-            ? `${rootSel}.variant-${axes.variant} ${base.slice(rootSel.length + 1)}`
-            : `${rootSel}.variant-${axes.variant} ${base}`
-        );
+      const scoped = (cls) =>
+        base.startsWith(rootSel + ' ')
+          ? `${rootSel}${cls} ${base.slice(rootSel.length + 1)}`
+          : `${rootSel}${cls} ${base}`;
+      if (axes.variant && rootSel) cascade.push(scoped(`.variant-${axes.variant}`));
+      // Ten masters carry a STATE-LIKE axis that is not called `state`: selection,
+      // expanded, current, selected, sortDirection. Their CSS lives in an `.is-*`
+      // class, and this builder only knew `.variant-*` — so every one of those
+      // variants was compared against the component's BASE rule. AtlToggle's checked
+      // track was reported as wrong for exactly that reason while Figma was right
+      // (ADR-0077).
+      //
+      // The mapping is mechanical, which is why it is derived and not tabled:
+      //   expanded=true    -> .is-expanded   (a boolean axis names the state)
+      //   selection=checked -> .is-checked   (an enum axis's VALUE names it)
+      // A candidate that no rule matches is simply not added, so a value with no
+      // state class falls through to the base rule, which is correct.
+      if (rootSel) {
+        for (const [axis, value] of Object.entries(axes)) {
+          if (axis === 'variant' || axis === 'state' || axis === 'size') continue;
+          const cls = value === 'true' ? `.is-${axis}` : `.is-${value}`;
+          const sel = scoped(cls);
+          if (rules.has(sel)) cascade.push(sel);
+        }
       }
       let body;
       for (const sel of cascade) {
@@ -1248,6 +1290,7 @@ function checkLayerPaint() {
       }
       if (body === undefined) continue; // not a CSS part — a wrapper, and that is fine
       const selector = base;
+
       // Every colour this component's CSS gives this layer, in ANY state. A layer
       // inside a parent master is often drawn in a state — the current page button,
       // one hovered menu item — and that state lives in a `:hover` or `.is-current`

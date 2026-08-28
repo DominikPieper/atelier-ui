@@ -139,7 +139,12 @@ Decision-bearing quick wins (deferred — not this session's scope):
       migrated. The gate now asserts only "verified after the files last changed". If a
       mechanically derived `codeSpec` ever lands, revisit — that is the version that would
       have worked.
-- [ ] **AtlStepper: Figma pads 16, the code root pads 0** — still not gated after ADR-0076:
+- [ ] **AtlStepper: Figma pads 16, the code root pads 0** — still a decision, and now the
+      only thing standing in the way is the decision itself: ADR-0077 removed the
+      "eleven masters cannot be reached" category, so `.stepper-header`, `.step-circle`,
+      `.step-text` and `.step-connector` all resolve and are compared. What no gate covers
+      is the master's own ROOT padding, because AtlStepper is outside `ROOT_PAINT` — the
+      remaining part of the old note:
       `[ROOT-BOX]` has the "master pads where the CSS states nothing" warning this needs, but
       AtlStepper is one of the eleven masters deliberately outside the `ROOT_PAINT` table
       (its paint sits on an inner box, not the root), so the table never reaches it. The
@@ -413,6 +418,24 @@ Decision-bearing quick wins (deferred — not this session's scope):
       Variable can express — they warn rather than block, and the question they ask is
       below. `[SET-CLIPS]` then caught the fix's own fallout: the wider padding pushed
       AtlAlert and AtlToast 8px past their sets, both clipping.
+
+- [ ] **`[LAYER-PAINT]` skips every variant whose `state` axis is not `default`, and those
+      are the states most likely to diverge.** Found the hard way on 2026-08-28 (ADR-0077):
+      setting AtlToggle's hover and focus tracks to `color/border-strong` was wrong — both
+      CSS state rules say `border-color: primary` — and nothing would have reported it,
+      because the gate treats a non-default `state` as pseudo-class paint it cannot
+      resolve. It can now: the state-class cascade added for `selection`/`expanded`/etc.
+      generalises to `state=hover` → `:hover`-scoped rules, which is a different shape
+      (pseudo-class, not class) but the same resolution problem. Worth doing: 12 of
+      AtlButton's 24 variants and 4 of 5 for each form field are in this blind spot, which
+      the `[ROOT-PAINT]` warnings already count every run.
+
+- [ ] **AtlDrawer's master paints the dialog twice.** The variant root carries
+      `color/surface` + a drop shadow *and* so does the `dialog` layer inside it (ADR-0077,
+      where the layer was renamed from `panel`). `ROOT_PAINT` maps the root to
+      `.atl-drawer-host dialog`, so both pass against the same rule — but the root is the
+      overlay area holding the backdrop rectangle, and painting it surface is wrong for what
+      it represents. Decide whether the root should paint the backdrop, nothing, or stay.
 
 - [ ] **Six masters pad on an axis the CSS derives, and it is one question, not six.**
       AtlButton, AtlInput, AtlTextarea, AtlSelect, AtlBadge and AtlTab. ADR-0041's recipe

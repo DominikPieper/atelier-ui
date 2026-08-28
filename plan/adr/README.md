@@ -82,6 +82,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0074](0074-two-roles-the-eight-did-not-span.md) | Two roles the eight did not span (`--ui-type-control`, `--ui-type-action`; 231 nodes bound) | Accepted | Recorded |
 | [0075](0075-the-direction-nothing-checked.md) | The direction nothing checked (`[UNDECLARED]`, `[SET-CLIPS]`) | Accepted | Recorded |
 | [0076](0076-the-padding-nobody-compared.md) | The padding nobody compared (`[ROOT-BOX]`; bindable vs derived) | Accepted | Recorded |
+| [0077](0077-an-unresolved-layer-is-an-unchecked-layer.md) | An unresolved layer is an unchecked layer (mechanical selector shapes + state-class cascade) | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 
