@@ -33,7 +33,29 @@
  * Exit-code (symmetric with the other gates): BLOCKER + CRITICAL go to `errors`
  * → process.exit(1). WARNING is printed but does not block.
  *
- * Run via:  node tools/scripts/check-figma.js   (or  npm run check:figma)
+ * RATCHETED checks (ADR-0079). Five findings are real defects that cannot be fixed
+ * today, so they are counted against tools/figma/type-baseline.json rather than
+ * reported: silent at the recorded number, BLOCKER when a count rises, BLOCKER when it
+ * drops without being re-recorded. On a green run each prints one line — a count with
+ * the reason inline, which is what ADR-0066 prescribed instead of a warning nobody can
+ * clear. The per-TEXT-node three read a second committed artifact,
+ * tools/figma/text-nodes.json, written by the same refresh as snapshot.json.
+ *
+ *   [ROOT-TYPE]                  a master's root text size/leading against its CSS
+ *                                cascade — split from [ROOT-PAINT] because type does
+ *                                not need the root box to be the painted box
+ *   [FIGMA-AUTO-LEADING]         a TEXT node on Figma AUTO leading while the CSS states
+ *                                a ratio (ADR-0052)
+ *   [FIGMA-VARIABLE-COLLECTION]  a fontSize bound outside the library's own semantic
+ *                                tiers (ADR-0030)
+ *   [TEXT-UNSTYLED]              a TEXT node carrying no ty/* text style
+ *   [TEXT-OVERRIDE]              an instance whose override detaches the text style its
+ *                                master does state — reads as unbound, counted apart
+ *
+ * Run via:
+ *   node tools/scripts/check-figma.js                     check against the baseline
+ *   node tools/scripts/check-figma.js --update-baseline   record the current counts
+ * (or  npm run check:figma)
  */
 'use strict';
 
@@ -46,6 +68,33 @@ const { FIGMA_CONFORMANCE_EXCEPTIONS } = require('./lib/allowlists');
 
 const ROOT = path.resolve(__dirname, '../..');
 const SNAPSHOT_FILE = path.join(ROOT, 'tools/figma/snapshot.json');
+const TEXT_NODES_REL = 'tools/figma/text-nodes.json';
+const TEXT_NODES_FILE = path.join(ROOT, TEXT_NODES_REL);
+const BASELINE_REL = 'tools/figma/type-baseline.json';
+const BASELINE_FILE = path.join(ROOT, BASELINE_REL);
+const UPDATE_BASELINE = process.argv.includes('--update-baseline');
+
+/** The baseline file's own header. JSON has no comments, so `meta.note` IS the comment,
+ *  and it has to state the promotion condition or the ratchet becomes a resting place
+ *  rather than a path (ADR-0066's actual complaint was permanence). Written once, on the
+ *  first --update-baseline; never overwritten afterwards, so an edited note survives. */
+const BASELINE_NOTE =
+  'Per-check RATCHET findings for check:figma. The gate PASSES while a master\'s findings are exactly the ' +
+  'ones recorded here, FAILS when one APPEARS that is not recorded (naming it), and FAILS when a recorded ' +
+  'one DISAPPEARS without this file being updated — an improvement nobody records can silently reverse, ' +
+  'which is the rule [STALE-EXEMPTION] already applies to allowlist entries. FINDINGS AND NOT COUNTS: a ' +
+  'count is blind to substitution, so fixing one node on a master while breaking another kept the number ' +
+  'flat and the gate green. Each entry carries its own node multiplicity (×N) where a deduplicated record ' +
+  'stands for several nodes. It is a ratchet rather than a plain blocker ' +
+  'because the debt cannot be paid today: ADR-0066 rejected a warning nobody can clear, and a blocker ' +
+  'would leave check:all red until the wrong-variable-collection problem is decided ' +
+  '(tasks/type-role-resolution-2026-08-28.md). This is NOT an allowlist. tools/scripts/lib/allowlists.js ' +
+  'answers "this one is exempt forever"; this file answers "this many are owed". Never record the same ' +
+  'defect in both. WHEN A MASTER IS CLEAR: its key disappears on the next update. WHEN A ' +
+  'CHECK\'S ENTRY IS GONE: delete the ratchet and make that check a plain blocker. Update with ' +
+  '`node tools/scripts/check-figma.js --update-baseline` — never by hand, except the `why` and `kind` ' +
+  'fields, which the writer preserves. See plan/adr/0079-type-does-not-need-the-painted-box.md and ' +
+  'plan/adr/0080-a-guard-that-skips-is-not-a-check.md.';
 const SPEC_FILE = path.join(ROOT, 'libs/spec/src/index.ts');
 const METADATA_INDEX = path.join(ROOT, 'libs/spec/src/metadata/index.ts');
 const METADATA_DIR = path.join(ROOT, 'libs/spec/src/metadata');
@@ -60,6 +109,25 @@ const warnings = [];
 function blocker(tag, msg) { errors.push({ sev: 'BLOCKER', tag, msg }); }
 function critical(tag, msg) { errors.push({ sev: 'CRITICAL', tag, msg }); }
 function warning(tag, msg) { warnings.push({ sev: 'WARNING', tag, msg }); }
+
+/** RATCHETED findings: tag -> master -> { count, details }. Not a fourth severity —
+ *  a finding routed here is a real defect that nobody can fix today, so it is judged
+ *  against a recorded count in tools/figma/type-baseline.json instead of being emitted
+ *  every run. Silent at the recorded number, a BLOCKER when it rises and a BLOCKER when
+ *  it drops without being re-recorded. See settleRatchets() and ADR-0079.
+ *
+ *  `count` is the unit the reader sees: grouped messages for [ROOT-TYPE], TEXT NODES
+ *  for the three text checks (records in text-nodes.json are deduplicated across a
+ *  set's variants, so a record's `count` is summed and never counted as one). */
+const ratcheted = new Map();
+const ratchetLines = [];
+function ratchet(tag, label, count, details) {
+  if (count <= 0) return;
+  if (!ratcheted.has(tag)) ratcheted.set(tag, new Map());
+  const per = ratcheted.get(tag);
+  const prev = per.get(label) || { count: 0, details: [] };
+  per.set(label, { count: prev.count + count, details: [...prev.details, ...details] });
+}
 
 /** Allowlisted? Key is `selector:check:detail` — same exact-string idiom as the
  *  other gates' Sets (see tools/scripts/lib/allowlists.js). */
@@ -139,6 +207,41 @@ try {
 if (!snapshot || !Array.isArray(snapshot.components) || snapshot.components.length === 0) {
   console.error(
     `✗ [SNAPSHOT] ${path.relative(ROOT, SNAPSHOT_FILE)} has no components. Re-run npm run figma:snapshot.`
+  );
+  process.exit(1);
+}
+
+// ---------------------------------------------------------------------------
+// Per-TEXT-node type facts, the companion snapshot. Same fail-loud rule: the three
+// text checks are counted against a baseline, so an unreadable file that fell through
+// to "no findings" would read as a clean run and quietly ratchet every count to zero.
+// ---------------------------------------------------------------------------
+if (!fs.existsSync(TEXT_NODES_FILE)) {
+  console.error(
+    `✗ [TEXT-SNAPSHOT] ${TEXT_NODES_REL} not found.\n` +
+      `\nIt is written by the same connected refresh as snapshot.json:  npm run figma:snapshot`
+  );
+  process.exit(1);
+}
+let textNodes;
+try {
+  textNodes = JSON.parse(fs.readFileSync(TEXT_NODES_FILE, 'utf8'));
+} catch (err) {
+  console.error(`✗ [TEXT-SNAPSHOT] ${TEXT_NODES_REL} is not valid JSON: ${err.message}`);
+  process.exit(1);
+}
+if (!textNodes || !Array.isArray(textNodes.masters) || textNodes.masters.length === 0) {
+  console.error(`✗ [TEXT-SNAPSHOT] ${TEXT_NODES_REL} has no masters. Re-run npm run figma:snapshot.`);
+  process.exit(1);
+}
+// The two files are written by ONE run. A gate that reads one against the other's
+// timestamps is comparing two different documents, and every count it produces is
+// against a Figma file that no longer exists in that shape.
+if ((textNodes.meta || {}).generatedAt !== (snapshot.meta || {}).generatedAt) {
+  console.error(
+    `✗ [TEXT-SNAPSHOT] ${TEXT_NODES_REL} was generated at ${(textNodes.meta || {}).generatedAt} but ` +
+      `snapshot.json at ${(snapshot.meta || {}).generatedAt}. The two are written by one run — ` +
+      `re-run npm run figma:snapshot so both describe the same document.`
   );
   process.exit(1);
 }
@@ -524,6 +627,65 @@ const ROOT_PAINT = [
   // so it stacks correctly. The rule is a child layer, which this table cannot address.
 ];
 
+// ---------------------------------------------------------------------------
+// Which CSS rule states each master's ROOT TYPE, and the cascade that resolves it.
+//
+// Separate from ROOT_PAINT, for the reason ROOT_PAINT's own comment gives: that table
+// lists only masters whose Figma root and CSS root paint the SAME box, and thirteen
+// masters are absent because the paint sits on an inner box while the Figma root is a
+// transparent container. Type does not need the root box to be the painted box — a
+// transparent container still states the size and leading its text inherits — so type
+// resolves from its own table and those masters come back into the gate.
+//
+// A cascade here is ANCESTOR-FIRST and includes the rule the leaf inherits FROM.
+// `.atl-input input` says `font-size: inherit`, and `inherit` only resolves when the
+// value it inherits is in the same joined body. Putting the root into ROOT_PAINT's
+// cascade instead would feed its background, border and padding into comparisons about
+// none of those — measured: it produces byte-identical output on its own, because the
+// leaf's `inherit` then clobbers the root's size back to null.
+//
+// A label with no entry here falls back to its ROOT_PAINT cascade, so the thirty are
+// not restated. Six of those fallbacks resolve to no type at all (AtlStep,
+// AtlBreadcrumbItem, AtlAccordionItem, AtlChatSuggestion, AtlChatTyping, AtlAvatarGroup)
+// and stay silently unchecked: they legitimately inherit their type from the parent
+// master that places them. AtlDrawer is a seventh and is NOT legitimate —
+// `.atl-drawer-host dialog` states nothing typographic through `all: unset`. That is a
+// CSS fix recorded in tasks/todo.md, not a gate exemption; warning about all seven would
+// be six-sevenths unclearable, which is exactly what ADR-0066 threw out.
+//
+// The comparison itself is why this exists at all: AtlAvatar's xs initials sat at 9px
+// against --ui-font-size-2xs and its xl at 16px against --ui-font-size-lg (ADR-0064),
+// and nothing else in any gate looks at a master's root typography.
+// ---------------------------------------------------------------------------
+const ROOT_TYPE = [
+  // The three form fields say `font-size: inherit` and inherit from their own root.
+  { label: 'AtlInput', file: 'input/atl-input.css', cascade: ['.atl-input', '.atl-input input'] },
+  { label: 'AtlTextarea', file: 'textarea/atl-textarea.css', cascade: ['.atl-textarea', '.atl-textarea textarea'] },
+  { label: 'AtlSelect', file: 'select/atl-select.css', cascade: ['.atl-select', '.atl-select select'] },
+  // `.atl-menu-item` says `font: inherit`, and the size it inherits lives on `.atl-menu`.
+  { label: 'AtlMenuItem', file: 'menu/atl-menu.css', cascade: ['.atl-menu', '.atl-menu-item'] },
+  // The masters ROOT_PAINT omits for a paint reason. Their roots do state the type.
+  { label: 'AtlCheckbox', file: 'checkbox/atl-checkbox.css', cascade: ['.atl-checkbox', '.atl-checkbox label'] },
+  { label: 'AtlToggle', file: 'toggle/atl-toggle.css', cascade: ['.atl-toggle', '.atl-toggle label'] },
+  { label: 'AtlRadio', file: 'radio/atl-radio.css', cascade: ['.atl-radio'] },
+  { label: 'AtlRadioGroup', file: 'radio-group/atl-radio-group.css', cascade: ['.atl-radio-group'] },
+  { label: 'AtlCombobox', file: 'combobox/atl-combobox.css', cascade: ['.atl-combobox'] },
+  { label: 'AtlProgress', file: 'progress/atl-progress.css', cascade: ['.atl-progress'] },
+  { label: 'AtlTable', file: 'table/atl-table.css', cascade: ['.atl-table'] },
+  { label: 'AtlBreadcrumbs', file: 'breadcrumbs/atl-breadcrumbs.css', cascade: ['.atl-breadcrumbs'] },
+  { label: 'AtlPagination', file: 'pagination/atl-pagination.css', cascade: ['.atl-pagination'] },
+  { label: 'AtlStepper', file: 'stepper/atl-stepper.css', cascade: ['.atl-stepper'] },
+  { label: 'AtlAvatarGroup', file: 'avatar/atl-avatar.css', cascade: ['.atl-avatar-group'] },
+  { label: 'AtlChat', file: 'chat/atl-chat.css', cascade: ['.atl-chat'] },
+];
+
+/** The type cascade for a master: its own ROOT_TYPE entry, else the ROOT_PAINT entry
+ *  that already names its root. Writing the loop over ROOT_TYPE alone would silently
+ *  drop type checking for the twenty-six masters only ROOT_PAINT names. */
+function typeEntryFor(label) {
+  return ROOT_TYPE.find((e) => e.label === label) || ROOT_PAINT.find((e) => e.label === label) || null;
+}
+
 // A value may be one selector or a CASCADE of them, base first. The second form is
 // for a layer that is subject to more than one rule: `.atl-tr-select-cell` declares
 // only `width` and `text-align`, and inherits its background and bottom rule as a
@@ -544,6 +706,92 @@ const LAYER_ALIASES = {
   AtlDrawer: { dialog: '.atl-drawer-host dialog' },
 };
 
+/** The reason each ratcheted tag's count is not zero, used ONLY to seed a tag the
+ *  baseline does not yet carry. Once the tag is in the file, the file's `why` is
+ *  authoritative and --update-baseline preserves it — otherwise a human's correction
+ *  would be overwritten by whatever this constant last said. */
+const RATCHET_SEED = {
+  'ROOT-TYPE': {
+    kind: 'gap',
+    why: 'Six masters draw their root text at a size or leading the CSS does not state — AtlInput and AtlSelect at 14px against a 16px CSS, four more on AUTO leading against 125%. Correcting the Figma side means retyping nodes whose sizes bind to the docs-site collection, which is the FIGMA-VARIABLE-COLLECTION debt below; doing it first would only move the problem. Promote to a plain blocker once that entry is gone.',
+  },
+  'FIGMA-AUTO-LEADING': {
+    kind: 'gap',
+    why: 'TEXT nodes left on Figma AUTO leading, which is the font metric rather than a ratio anyone chose, while every component root states a leading in CSS (ADR-0052, enforced by check:typeface [NO-LEADING]). The fix is per node in Figma and is worth doing in the same pass that binds the ty/* roles, because a node bound to a role takes the role leading and clears itself.',
+  },
+  'FIGMA-VARIABLE-COLLECTION': {
+    kind: 'gap',
+    why: 'Font sizes bound to "Docs Brand Tokens", the docs-site collection, instead of the library tiers ADR-0030 made semantic. The two scales agree today, so nothing renders wrong and nothing will until they diverge. This is the root debt: it blocks ROOT-TYPE and TEXT-UNSTYLED, because rebinding a size is the same edit as fixing either of those. tasks/type-role-resolution-2026-08-28.md carries the analysis.',
+  },
+  'TEXT-UNSTYLED': {
+    kind: 'gap',
+    why: 'TEXT nodes on a master carrying no ty/* text style, after the structural exemptions (inside an INSTANCE, invisible) and the short pending-removal list. Blocked on the same variable-collection problem, and on the role inventory: tasks/type-role-resolution-2026-08-28.md shows seven of the ten ty/* roles are referenced by zero component stylesheets, so some of these nodes have no correct role to bind to yet.',
+  },
+  'TEXT-OVERRIDE': {
+    kind: 'gap',
+    why: 'Instances whose local override detaches the text style their master does state. They read as unbound and would otherwise inflate TEXT-UNSTYLED, so they are counted apart. All four are AtlChat button labels; the fix is to reset the override in Figma, and it is unblocked — this entry should reach zero before the others.',
+  },
+};
+
+// ---------------------------------------------------------------------------
+// The collections a master may bind a variable to. Exactly the pair ADR-0030 made
+// semantic: `Library Tokens` is the code-generated tier mirroring tokens.css, and
+// `Component Tokens` holds per-component aliases over it. Everything else is either a
+// primitive tier or — the case that matters here — `Docs Brand Tokens`, the docs-site
+// collection that was called `UI Tokens` before ADR-0030 and that components must not
+// bind to at all.
+//
+// Stated as "the library's own tiers are the only legal source", not as a list of
+// villains: a fourth collection added tomorrow is illegal for a master's type by the
+// same rule, without anyone editing this line. The identical pair is applied to fills,
+// radii and spacing inside figma-snapshot.mjs (which resolves `nonSemanticTokens`
+// before this gate ever sees it); the two are not shared because the snapshot runs in
+// the Figma sandbox and imports nothing from here. Reconciling them is worth doing the
+// next time a third caller appears.
+// ---------------------------------------------------------------------------
+const SEMANTIC_COLLECTIONS = new Set(['Library Tokens', 'Component Tokens']);
+
+/** TEXT nodes excluded from [TEXT-UNSTYLED] by name rather than by shape.
+ *
+ *  PENDING REMOVAL, NOT PERMANENTLY EXEMPT — every entry names something that should
+ *  stop existing, not something the rule got wrong. They are here and not in
+ *  lib/allowlists.js on purpose: that file answers "this one is exempt forever", and
+ *  none of these is. When the scenery is deleted or the glyph becomes an icon, delete
+ *  the entry; the count in the baseline drops and the ratchet makes you record it.
+ *
+ *  Keyed by master selector -> the record `path`s it excuses. An entry is either a
+ *  bare `path`, or `path|chars` where the path alone is ambiguous — AtlStep draws its
+ *  error badge and its numerals at the same path, and excusing the badge by path would
+ *  quietly excuse the numerals the rule below says are text and are NOT excused.
+ */
+const TEXT_UNSTYLED_PENDING = {
+  // Illustrative app chrome drawn INSIDE the master so the three chat surfaces read as
+  // screenshots — a nav rail, a breadcrumb, a page heading, two sidebar lists. None of
+  // it is part of AtlChat's contract, so binding it to a ty/* role would document
+  // scenery as library type. The master should stop shipping the mockup (tasks/todo.md).
+  AtlChat: [
+    'nav-link-1', 'nav-link-2', 'nav-link-3', 'nav-link-4',
+    'breadcrumb', 'page-h1',
+    'side-1-title', 'side-1-i1', 'side-1-i2', 'side-1-i3', 'side-1-i4',
+    'side-2-title', 'side-2-l1', 'side-2-l2', 'side-2-l3',
+    // The minimise affordance, drawn as an en dash. A pictogram, not text.
+    'min-icon',
+  ],
+  // The error step's badge renders `!` as a glyph inside the circle. It reads as an
+  // icon; the numerals beside it (1, 2, 3) are text and are NOT excused. AtlStep draws
+  // the same badge, at the same path as its own numerals — hence the `|chars` form:
+  // one glyph excused, three numerals still counted. Excusing one and counting the
+  // other was the same character judged two ways in two masters.
+  AtlStepper: ['header/step-2/circle-error/!'],
+  AtlStep: ['step-circle/step-number|!'],
+  // `›` between crumbs. The code draws it with a CSS ::after, so there is no DOM node
+  // for a ty/* role to describe — the master carries it only to look right.
+  AtlBreadcrumbItem: ['_separator/separator-glyph'],
+  // role=system is set in italic, and the library has no italic sans role to bind to.
+  // Unblocks when the role inventory grows one (tasks/type-role-resolution-2026-08-28.md).
+  AtlChatMessage: ['Conversation cleared.'],
+};
+
 // ---------------------------------------------------------------------------
 // File-level typography. Not per-component: a typeface is a property of the
 // whole file, and the two defects it hides are file-shaped. The masters were
@@ -553,11 +801,16 @@ const LAYER_ALIASES = {
 // ---------------------------------------------------------------------------
 checkTypography();
 checkRootPaint();
+checkRootType();
+checkTextNodes();
 checkOverlays();
 checkLayerPaint();
 checkPageGlyphs();
 checkSetClips();
 checkStaleExemptions();
+// Counted, not reported: the ratcheted checks judge themselves against the recorded
+// baseline here, after every check has contributed its findings.
+settleRatchets();
 
 // ---------------------------------------------------------------------------
 // Report — prioritized (Blocker → Critical → Warning), styled like the other
@@ -925,18 +1178,9 @@ function checkRootPaint() {
       } else if (want.strokeWeight != null && got.stroke != null && got.strokeWeight !== want.strokeWeight) {
         note('strokeWeight', `root stroke is ${got.strokeWeight}px, but ${want.from.stroke} says ${want.strokeWeight}px.`, variant);
       }
-      if (want.fontSize !== null && got.fontSize != null && Math.abs(got.fontSize - want.fontSize) > 0.5) {
-        note('fontSize', `root text is ${got.fontSize}px, but the CSS says ${Math.round(want.fontSize * 100) / 100}px.`, variant);
-      }
-      if (want.lineHeight !== null) {
-        if (got.fontSize != null && got.lineHeight == null) {
-          // ADR-0048: a box whose leading is inherited grows with the consuming page's
-          // prose. The CSS states it; the master has to state it too.
-          note('lineHeight', `root text leaves the leading on AUTO; the CSS states ${Math.round(want.lineHeight * 100)}%. An inherited leading makes the box grow with the text metrics.`, variant);
-        } else if (got.lineHeight != null && Math.abs(got.lineHeight - want.lineHeight * 100) > 0.5) {
-          note('lineHeight', `root text leading is ${Math.round(got.lineHeight * 100) / 100}%, but the CSS says ${Math.round(want.lineHeight * 100)}%.`, variant);
-        }
-      }
+      // The root's TYPE used to be compared here and now lives in [ROOT-TYPE]: it does
+      // not need the root box to be the painted box, and thirteen masters are absent
+      // from this table for a paint reason that says nothing about their text.
       // ── [ROOT-BOX]: the root's padding and gap ─────────────────────────────
       // Only compared where the CSS states a value: a side the CSS leaves alone is
       // a side the component does not control, and demanding Figma pad it to zero
@@ -1005,6 +1249,73 @@ function checkRootPaint() {
       const scope = vs.length === checkable.length ? 'every checked variant' : vs.length > 3 ? `${vs.length} variants (${vs.slice(0, 2).join('; ')}; …)` : vs.join('; ');
       critical('ROOT-PAINT', `${entry.label} [${scope}]: ${msg}`);
     }
+  }
+}
+
+/** 7b. Root TYPE — the size and leading a master's root text carries.
+ *
+ *  Split out of [ROOT-PAINT] because type does not need the root box to be the painted
+ *  box. ROOT_PAINT excludes thirteen masters whose paint sits on an inner box while the
+ *  Figma root is a transparent container; a transparent container still states the size
+ *  and leading its text inherits, so those masters are type-checked here from their own
+ *  cascade. Six of them turn out to have no single direct TEXT child, so the snapshot
+ *  records no root type for them and nothing is compared — their type is a per-LAYER
+ *  problem, not a root problem, and saying this "brings them into the gate" would
+ *  overclaim.
+ *
+ *  Ratcheted, not reported: the divergences it finds are real, and correcting them means
+ *  redrawing masters whose font sizes bind to the wrong variable collection — the debt
+ *  [FIGMA-VARIABLE-COLLECTION] counts. ADR-0066 refuses a warning nobody can clear and a
+ *  plain blocker would leave check:all red until that unblocks. */
+function checkRootType() {
+  const bySelector = new Map(snapshot.components.map((c) => [c.selector, c]));
+  const labels = [...new Set([...ROOT_PAINT.map((e) => e.label), ...ROOT_TYPE.map((e) => e.label)])];
+  for (const label of labels) {
+    const comp = bySelector.get(label);
+    const entry = typeEntryFor(label);
+    // A missing master and a snapshot with no root facts are both already reported by
+    // [ROOT-PAINT] for its own labels; repeating them here would double every line.
+    if (!comp || !entry) continue;
+    const variants = Object.keys(comp.rootPaint || {});
+    if (!variants.length) continue;
+    const grouped = new Map(); // prop+message -> variants
+    const note = (prop, msg, variant) => {
+      if (allowed(label, 'root-type', prop)) return;
+      const key = `${prop}\u0000${msg}`;
+      if (!grouped.has(key)) grouped.set(key, []);
+      grouped.get(key).push(variant);
+    };
+    // Same skip as [ROOT-PAINT]: a `state` axis other than `default` is sized by rules a
+    // static selector table cannot resolve. Silent here — [ROOT-PAINT] already prints the
+    // "N of M variant(s) not checked" line for the thirty labels the two tables share.
+    const checkable = variants.filter((v) => {
+      const st = parseAxisName(v).state;
+      return st === undefined || st === 'default';
+    });
+    for (const variant of checkable) {
+      const got = comp.rootPaint[variant];
+      const want = resolveRootType(entry, parseAxisName(variant));
+      if (!want) break; // resolveRootType has already reported anything worth reporting
+      if (want.fontSize !== null && got.fontSize != null && Math.abs(got.fontSize - want.fontSize) > 0.5) {
+        note('fontSize', `root text is ${got.fontSize}px, but the CSS says ${Math.round(want.fontSize * 100) / 100}px.`, variant);
+      }
+      if (want.lineHeight !== null) {
+        if (got.fontSize != null && got.lineHeight == null) {
+          // ADR-0048: a box whose leading is inherited grows with the consuming page's
+          // prose. The CSS states it; the master has to state it too.
+          note('lineHeight', `root text leaves the leading on AUTO; the CSS states ${Math.round(want.lineHeight * 100)}%. An inherited leading makes the box grow with the text metrics.`, variant);
+        } else if (got.lineHeight != null && Math.abs(got.lineHeight - want.lineHeight * 100) > 0.5) {
+          note('lineHeight', `root text leading is ${Math.round(got.lineHeight * 100) / 100}%, but the CSS says ${Math.round(want.lineHeight * 100)}%.`, variant);
+        }
+      }
+    }
+    const details = [];
+    for (const [key, vs] of grouped) {
+      const msg = key.split('\u0000')[1];
+      const scope = vs.length === checkable.length ? 'every checked variant' : vs.length > 3 ? `${vs.length} variants (${vs.slice(0, 2).join('; ')}; …)` : vs.join('; ');
+      details.push(`${label} [${scope}]: ${msg}`);
+    }
+    ratchet('ROOT-TYPE', label, details.length, details);
   }
 }
 
@@ -1116,18 +1427,347 @@ function resolveRootPaint(entry, axes) {
   for (const prop of ['fill', 'stroke', 'radius']) if (!(prop in want)) want[prop] = null;
   if (want.shadow === undefined) { want.shadow = false; want.from.shadow = entry.cascade[0]; }
   for (const prop of ['fill', 'stroke', 'radius']) if (!want.from[prop]) want.from[prop] = entry.cascade[0];
-  // The root's own typography. It was the one thing no gate compared, and two real
-  // errors sat there: AtlAvatar's xs initials at 9px against --ui-font-size-2xs and
-  // its xl at 16px against --ui-font-size-lg (ADR-0064).
   const box = boxFromDeclarations(joined);
-  want.fontSize = box.fontSize;
-  want.lineHeight = box.lineHeight;
   // The root's BOX. Computed here since the first version of this function and never
   // read — so AtlAlert drew 12/16 against a CSS that says 16/20 and AtlTooltip 8/12
   // against 4/8, both invisible to every gate (ADR-0076).
   want.padding = box.padding;
   want.gap = box.gap;
   return want;
+}
+
+/** Settle every ratcheted finding against tools/figma/type-baseline.json.
+ *
+ *  Not a fourth severity and not an allowlist. lib/allowlists.js answers "this one is
+ *  exempt forever"; this file answers "these are owed", and the same defect must never
+ *  be recorded in both. The gate is silent while the findings observed are exactly the
+ *  findings recorded, a BLOCKER when one APPEARS that is not recorded (naming it) and a
+ *  BLOCKER when a recorded one DISAPPEARS without being re-recorded — the rule
+ *  [STALE-EXEMPTION] already applies to an allowlist entry, one abstraction up: an
+ *  improvement nobody records can silently reverse.
+ *
+ *  FINDINGS AND NOT COUNTS, and that is the whole point of this version. A count is
+ *  blind to substitution: fixing one AUTO-leading node on AtlTable while breaking
+ *  another kept the number flat and the gate exited 0 with no output at all — proven
+ *  for all four text checks and for [ROOT-TYPE]'s value changes. A number also cannot
+ *  "name exactly what is new", which is the one thing a rising ratchet has to do. Each
+ *  entry is the finding's own text, which carries the node multiplicity (`×12`) where a
+ *  record stands for several nodes, so the arithmetic stays exact and a variant added to
+ *  a set moves the entry instead of hiding inside it.
+ *
+ *  On a green run it still prints ONE line per tag, a count with the reason inline, and
+ *  no per-finding detail. That is deliberate and load-bearing: 258 lines in a channel
+ *  that carries 14 today is exactly the noise ADR-0066 threw out. Detail is printed only
+ *  for the delta, where it is actionable — and the summary line is derived from what was
+ *  OBSERVED, so it can never claim "at the recorded baseline" two lines under a blocker
+ *  saying it is not. */
+function settleRatchets() {
+  const observed = {};      // tag -> { label: [finding, …] }
+  const observedNodes = {}; // tag -> { label: node count }, for the summary line only
+  for (const [tag, per] of ratcheted) {
+    observed[tag] = {};
+    observedNodes[tag] = {};
+    for (const [label, v] of per) {
+      observed[tag][label] = [...v.details].sort();
+      observedNodes[tag][label] = v.count;
+    }
+  }
+  const sum = (counts) => Object.values(counts || {}).reduce((a, b) => a + b, 0);
+  const sorted = (o) => Object.fromEntries(Object.keys(o).sort().map((k) => [k, o[k]]));
+  const list = (v) => (Array.isArray(v) ? v : []);
+
+  if (!fs.existsSync(BASELINE_FILE) && !UPDATE_BASELINE) {
+    console.error(
+      `✗ [RATCHET] ${BASELINE_REL} is missing, so a regression against the recorded findings would pass ` +
+        `unnoticed. Restore it from git, or record today's findings with ` +
+        `\`node tools/scripts/check-figma.js --update-baseline\` and write each entry's \`why\`.`
+    );
+    process.exit(1);
+  }
+
+  // Read the way the two artifacts a few hundred lines up are read. A malformed
+  // baseline is a thing somebody has to fix, not a raw Node stack trace.
+  let baseline = { meta: {}, checks: {} };
+  if (fs.existsSync(BASELINE_FILE)) {
+    try {
+      baseline = JSON.parse(fs.readFileSync(BASELINE_FILE, 'utf8'));
+    } catch (e) {
+      console.error(
+        `✗ [RATCHET] ${BASELINE_REL} is not valid JSON: ${e.message}. Restore it from git, or re-record ` +
+          `it with \`node tools/scripts/check-figma.js --update-baseline\`.`
+      );
+      process.exit(1);
+    }
+  }
+  if (!baseline.checks) baseline.checks = {};
+  const tags = [...new Set([...Object.keys(baseline.checks), ...Object.keys(observed)])].sort();
+  for (const tag of tags) {
+    if (!baseline.checks[tag]) baseline.checks[tag] = { ...(RATCHET_SEED[tag] || { kind: 'gap', why: '' }), perMaster: {} };
+  }
+
+  if (UPDATE_BASELINE) {
+    // A baseline recorded from a broken tree records the breakage. Every ratchet
+    // message sends the reader here, so the documented remedy must not also be the
+    // command that swallows an unrelated [SET-CLIPS] blocker and prints a green line
+    // over it. Only the ratchets are re-recordable; everything else has to be fixed.
+    if (errors.length > 0) {
+      report();
+      return; // report() exits non-zero; the baseline is left alone
+    }
+    const before = tags.map((t) => Object.values(baseline.checks[t].perMaster || {}).reduce((a, b) => a + list(b).length, 0));
+    const next = {};
+    for (const tag of tags) {
+      const findings = sorted(observed[tag] || {});
+      // A master back at zero loses its key, so the file shrinks as the debt is paid
+      // and the last key removed is the signal to delete the ratchet altogether.
+      if (Object.keys(findings).length === 0) continue;
+      next[tag] = { ...baseline.checks[tag], perMaster: findings };
+    }
+    // Diff-stable: a no-op update must not rewrite `generatedAt` and leave a one-line
+    // diff for someone to review — the rule check-typeface.js already applies.
+    if (JSON.stringify(next) === JSON.stringify(baseline.checks)) {
+      console.log(`✓ baseline unchanged: ${BASELINE_REL} — the recorded findings are the observed ones; not rewritten.`);
+      process.exit(0);
+    }
+    baseline.checks = next;
+    baseline.meta = {
+      ...baseline.meta,
+      note: baseline.meta.note || BASELINE_NOTE,
+      generatedAt: new Date().toISOString(),
+      updatedBy: 'node tools/scripts/check-figma.js --update-baseline',
+    };
+    fs.writeFileSync(BASELINE_FILE, `${JSON.stringify(baseline, null, 2)}\n`);
+    const moves = tags
+      .map((t, i) => {
+        const after = Object.values(observed[t] || {}).reduce((a, b) => a + b.length, 0);
+        const d = after - before[i];
+        return `${t} ${before[i]} → ${after}${d === 0 ? '' : ` (${d > 0 ? '+' : '−'}${Math.abs(d)})`}`;
+      })
+      .join(', ');
+    console.log(`✓ baseline updated: ${BASELINE_REL} — ${moves} finding(s).`);
+    process.exit(0);
+  }
+
+  for (const tag of tags) {
+    const entry = baseline.checks[tag];
+    const recorded = entry.perMaster || {};
+    // A number with no reason is the unclearable exemption ADR-0066 threw out, one
+    // abstraction up: nobody can retire a count when nobody wrote down why it is not 0.
+    // `kind` is checked in the same condition, because the message that asks for it is
+    // the same one — and an unset `kind` printed the literal string `undefined` in the
+    // green summary line rather than failing.
+    if (!entry.why || !['design', 'gap'].includes(entry.kind)) {
+      blocker(
+        tag,
+        `the \`${tag}\` entry in ${BASELINE_REL} records findings with no \`why\` or no valid \`kind\`, so a later reader cannot tell "decided against" from "forgotten" (ADR-0066). State why the debt stands, and set \`kind\` to \`design\` (a closed question) or \`gap\` (an unresolved defect).`
+      );
+    }
+    let moved = false;
+    for (const label of [...new Set([...Object.keys(recorded), ...Object.keys(observed[tag] || {})])].sort()) {
+      if (!Array.isArray(recorded[label] || [])) {
+        blocker(
+          tag,
+          `${label} in ${BASELINE_REL} records a count rather than the findings it stands for, so a new defect hidden by a fixed one would pass. Re-record with \`node tools/scripts/check-figma.js --update-baseline\`.`
+        );
+        moved = true;
+        continue;
+      }
+      const want = list(recorded[label]);
+      const have = list((observed[tag] || {})[label]);
+      const added = have.filter((f) => !want.includes(f));
+      const gone = want.filter((f) => !have.includes(f));
+      if (!added.length && !gone.length) continue;
+      moved = true;
+      // Reported as two independent findings, never as a net delta: a substitution —
+      // one node fixed, another broken — is an appearance AND a disappearance, and the
+      // count this replaced reported it as neither.
+      if (added.length) {
+        const shown = added.slice(0, 6);
+        blocker(
+          tag,
+          `${label}: ${added.length} finding(s) ${BASELINE_REL} does not record. Now found: ${shown.join(' · ')}${added.length > shown.length ? ' · …' : ''}. Fix it in Figma (file ${(snapshot.meta || {}).fileKey || ''}) and re-run npm run figma:snapshot, or — if the new findings are legitimate — record them with \`node tools/scripts/check-figma.js --update-baseline\` and say why in the entry's \`why\`.`
+        );
+      }
+      if (gone.length) {
+        const shown = gone.slice(0, 6);
+        blocker(
+          tag,
+          `${label}: ${gone.length} recorded finding(s) no longer occur — ${shown.join(' · ')}${gone.length > shown.length ? ' · …' : ''}. An improvement that is not recorded can silently reverse. Run \`node tools/scripts/check-figma.js --update-baseline\` to lock it in.`
+        );
+      }
+    }
+    // Derived from what was OBSERVED, not from the file: a line saying "at the recorded
+    // baseline" printed two lines under a blocker saying it is not is worse than no line.
+    const nodes = sum(observedNodes[tag] || {});
+    const perLabel = observedNodes[tag] || {};
+    const labels = Object.keys(perLabel);
+    if (nodes === 0) continue;
+    const top = labels
+      .sort((a, b) => perLabel[b] - perLabel[a])
+      .slice(0, 3)
+      .map((l) => `${l} ${perLabel[l]}`)
+      .join(', ');
+    ratchetLines.push(
+      `  [${tag}] ${nodes} across ${labels.length} master(s), ${moved ? 'AGAINST' : 'at'} the recorded baseline ` +
+        `(${entry.kind}: ${top}${labels.length > 3 ? ', …' : ''} — ${BASELINE_REL}).`
+    );
+  }
+}
+
+/** 7c. Per-TEXT-node type facts — three counts, one pass over text-nodes.json.
+ *
+ *  All three are ratcheted rather than reported. Every one of them is a real defect and
+ *  none is fixable today: the sizes bind to the wrong collection, and correcting that is
+ *  the [FIGMA-VARIABLE-COLLECTION] debt itself, so binding a ty/* role or an explicit
+ *  leading first would only relabel the problem. ADR-0066 refuses a warning nobody can
+ *  clear; a blocker would leave check:all red until the collection is sorted out.
+ *
+ *  Records are DEDUPLICATED across the variants of a set, so a record stands for
+ *  `count` text nodes. Every total here sums `count` — counting records instead
+ *  under-reports by half and goes green on a regression that lands inside a record
+ *  that already exists. */
+function checkTextNodes() {
+  const auto = new Map();       // selector -> Map<finding, node count>
+  const collection = new Map();
+  const unstyled = new Map();
+  const override = new Map();
+  // Every finding is kept, not the first six: the baseline records them and a truncated
+  // list would silently drop the seventh node on a master from the ratchet. Two records
+  // that resolve to the same finding text merge and their node counts add, so the
+  // arithmetic stays exact whichever way the file is deduplicated.
+  const bump = (map, sel, n, detail) => {
+    if (!map.has(sel)) map.set(sel, new Map());
+    const per = map.get(sel);
+    per.set(detail, (per.get(detail) || 0) + n);
+  };
+  const nodesIn = (per) => [...per.values()].reduce((a, b) => a + b, 0);
+  // The node multiplicity travels WITH the finding, so a variant added to a set moves
+  // the entry rather than hiding inside it.
+  const findingsIn = (per) => [...per.entries()].map(([d, n]) => (n > 1 ? `${d} ×${n}` : d)).sort();
+
+  for (const master of textNodes.masters) {
+    const sel = master.selector;
+    if (!sel) continue; // a master that vanished from the file; snapshot checks report it
+    const pending = new Set(TEXT_UNSTYLED_PENDING[sel] || []);
+    const pendingHit = new Set();
+    for (const rec of master.text || []) {
+      // path + chars is NOT an address: AtlButton has three `Button “Button”` records —
+      // 14px bound and clean, 16px ×16 and 18px ×4 both on the wrong collection — and a
+      // finding naming only the first two fields sends the reader to any of the three.
+      // Size and weight are what separate them, and the four fields together are unique
+      // across all 277 records today.
+      const where = `${rec.path} “${rec.chars}” (${rec.size == null ? 'MIXED' : `${rec.size}px`} ${rec.weight})`;
+
+      // ── [FIGMA-AUTO-LEADING] ────────────────────────────────────────────────
+      // Figma's AUTO leading is the font's own metric, which is not a number anyone
+      // chose. Every component in the library states a leading on its root — that is
+      // check:typeface's [NO-LEADING] blocker, ADR-0052 — so a master's TEXT node left
+      // on AUTO contradicts the CSS by construction, and the box grows or shrinks with
+      // the text metrics rather than with the stated ratio (ADR-0048).
+      if (rec.lineHeight === 'AUTO') bump(auto, sel, rec.count, where);
+
+      // ── [FIGMA-VARIABLE-COLLECTION] ─────────────────────────────────────────
+      // A size bound to the docs-site collection tracks the DOCS brand, not the
+      // library's scale: the two happen to agree today, so nothing looks wrong, and
+      // the master silently follows the wrong source the moment they diverge. The name
+      // is no help — `font-size/sm` exists in both collections — so only the
+      // collection distinguishes a correct binding from a wrong one.
+      const coll = rec.fontSizeVariableCollection;
+      if (coll !== null && coll !== 'MIXED-RANGE' && !SEMANTIC_COLLECTIONS.has(coll)) {
+        bump(collection, sel, rec.count, `${where} → ${rec.fontSizeVariable} in “${coll}”`);
+      }
+
+      // ── [TEXT-UNSTYLED] ─────────────────────────────────────────────────────
+      // The snapshot writes `UNRESOLVED` when a node HAS a textStyleId that
+      // getStyleByIdAsync could not resolve — a remote or unloaded library style. It
+      // is not an unbound node and must not be counted as one, but it is not fine
+      // either: nobody can tell what type that node carries. Zero today, and a
+      // warning rather than a ratchet because it IS clearable (ADR-0066).
+      if (rec.textStyleName === 'UNRESOLVED') {
+        warning(
+          'TEXT-UNSTYLED',
+          `${sel}: ${where} carries a text style this file cannot resolve — a remote or unloaded library style. Re-link it to one of the ty/* styles in ${(snapshot.meta || {}).fileKey || 'the library file'}, or clear it so the node reads as unstyled and is counted.`
+        );
+        continue;
+      }
+      if (rec.textStyleName === null) {
+        // (i) An INSTANCE between the node and the variant root means the MASTER owns
+        //     the type; binding it here would override the component it came from.
+        if (rec.insideInstance) {
+          // …unless the instance overrides textStyleId, which is the opposite defect:
+          // the node reads as unbound because a local override DETACHED it from a style
+          // its master does state. Counted separately so it is not lost in (i).
+          if (rec.hasTextStyleOverride) bump(override, sel, rec.count, where);
+          continue;
+        }
+        // (ii) A hidden node, or one inside a hidden frame, is not on any surface.
+        if (rec.visible === false) continue;
+        // (iii) The short named list — scenery and glyphs, pending removal.
+        const qualified = `${rec.path}|${rec.chars}`;
+        if (pending.has(qualified)) { pendingHit.add(qualified); continue; }
+        if (pending.has(rec.path)) { pendingHit.add(rec.path); continue; }
+        bump(unstyled, sel, rec.count, where);
+      }
+    }
+    // An entry that excused nothing is the [STALE-EXEMPTION] rule one level down: the
+    // node was renamed or deleted, and the excuse now protects nothing while reading
+    // like it still does.
+    const stale = [...pending].filter((p) => !pendingHit.has(p));
+    if (stale.length) {
+      warning(
+        'TEXT-UNSTYLED',
+        `${sel}: ${stale.length} pending-removal entr${stale.length > 1 ? 'ies' : 'y'} in TEXT_UNSTYLED_PENDING matched no TEXT node this run (${stale.join(', ')}). Either the node is gone — delete the entry — or it was renamed and is now being counted.`
+      );
+    }
+  }
+
+  // The same rule for a whole master: a pending entry keyed on a selector that no longer
+  // appears is never visited by the loop above, so its paths can never be reported stale.
+  const seen = new Set(textNodes.masters.map((m) => m.selector));
+  for (const sel of Object.keys(TEXT_UNSTYLED_PENDING)) {
+    if (seen.has(sel)) continue;
+    warning(
+      'TEXT-UNSTYLED',
+      `${sel}: TEXT_UNSTYLED_PENDING excuses ${TEXT_UNSTYLED_PENDING[sel].length} node(s) on a master that is not in ${TEXT_NODES_REL} at all. Either the master was renamed — retitle the key — or it is gone and the entry should be deleted.`
+    );
+  }
+
+  for (const [sel, per] of auto) ratchet('FIGMA-AUTO-LEADING', sel, nodesIn(per), findingsIn(per));
+  for (const [sel, per] of collection) ratchet('FIGMA-VARIABLE-COLLECTION', sel, nodesIn(per), findingsIn(per));
+  for (const [sel, per] of unstyled) ratchet('TEXT-UNSTYLED', sel, nodesIn(per), findingsIn(per));
+  for (const [sel, per] of override) ratchet('TEXT-OVERRIDE', sel, nodesIn(per), findingsIn(per));
+}
+
+/** The size and leading a master's root cascade resolves to, both in the units the
+ *  comparison uses: `fontSize` in px, `lineHeight` as a UNITLESS ratio (the snapshot
+ *  records Figma's as a percentage, so the caller multiplies by 100).
+ *
+ *  Returns null when the file is missing (warned once) or when no selector in the
+ *  cascade matched. A non-matching cascade is silent on purpose: a label with no
+ *  ROOT_TYPE entry falls back to its ROOT_PAINT cascade, and several of those state no
+ *  type at all because they legitimately inherit it from the parent master. */
+function resolveRootType(entry, axes) {
+  const file = path.join(ROOT, 'libs', entry.lib || 'react', 'src/lib', entry.file);
+  if (!fs.existsSync(file)) {
+    warning('ROOT-TYPE', `${entry.label}: ${entry.file} not found under libs/${entry.lib || 'react'}; cannot resolve the expected type.`);
+    return null;
+  }
+  const rules = cssRules(file);
+  let joined = '';
+  let matched = 0;
+  // Ancestor-first, and every matched body goes into ONE string: `font-size: inherit` on
+  // the leaf resolves only when the ancestor that states the size is in the same body.
+  for (const template of entry.cascade) {
+    const selector = template.replace(/\{(\w+)\}/g, (_, axis) => axes[axis] ?? '\u0000');
+    if (selector.includes('\u0000')) continue; // the sampled variant has no such axis
+    const body = rules.get(selector);
+    if (body === undefined) continue;
+    joined += ';' + body;
+    matched++;
+  }
+  if (!matched) return null;
+  const box = boxFromDeclarations(joined);
+  return { fontSize: box.fontSize, lineHeight: box.lineHeight };
 }
 
 /** `var(--ui-color-surface-raised)` -> `color/surface-raised`. `undefined` when the
@@ -1512,7 +2152,16 @@ function boxFromDeclarations(body) {
       case 'min-height': out.minHeight = lengthOf(value); break;
       case 'height': out.height = lengthOf(value); break;
       case 'gap': out.gap = lengthOf(value); break;
-      case 'font-size': out.fontSize = lengthOf(value); break;
+      // `inherit` is not a length — it is "keep whatever the ancestor computed".
+      // The cascade is joined ancestor-first, so the value already in `out` IS the
+      // ancestor's; running it through lengthOf() returned null and DELETED it, and
+      // with it the whole comparison. `.atl-input input`, `.atl-textarea textarea`
+      // and `.atl-select select` all say `font-size: inherit`, so none of the three
+      // has ever had its type measured — the same class of hole ADR-0073's
+      // perturbation test caught for the `font:` shorthand. Not fixed in lengthOf():
+      // `inherit` really is not a length, and lengthOf() also answers for min-height,
+      // height, gap and the four padding sides, where "keep the earlier value" is wrong.
+      case 'font-size': if (value === 'inherit') break; out.fontSize = lengthOf(value); break;
       // The role shorthand carries the size AND the leading, so a rule using one
       // must still be measurable. It was not: migrating .atl-alert and .atl-toast
       // to `font: var(--ui-type-body-sm)` silently deleted the [ROOT-PAINT]
@@ -1527,6 +2176,7 @@ function boxFromDeclarations(body) {
         break;
       }
       case 'line-height':
+        if (value === 'inherit') break; // same reason as font-size above
         out.lineHeight = /^[\d.]+$/.test(value) ? parseFloat(value) : resolveUnitless(value);
         break;
       case 'padding': {
@@ -1764,6 +2414,7 @@ function report() {
 
   if (all.length === 0) {
     console.log(`✓ figma conformance in sync (${snapshot.components.length} masters checked). ${head}`);
+    for (const line of ratchetLines) console.log(line);
     return;
   }
 
@@ -1772,6 +2423,7 @@ function report() {
     if (f.sev === 'WARNING') console.warn(line);
     else console.error(line);
   }
+  for (const line of ratchetLines) console.log(line);
 
   const blockers = errors.filter((e) => e.sev === 'BLOCKER').length;
   const criticals = errors.filter((e) => e.sev === 'CRITICAL').length;

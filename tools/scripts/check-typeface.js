@@ -28,6 +28,18 @@
  *                  cell 42px in one page and 51px in another (ADR-0052). Stating
  *                  it on the root gives every descendant a leading the library
  *                  controls, without reaching into content the app supplies.
+ *   [NO-SIZE]      a root that states --ui-line-height-normal has declared itself
+ *                  a prose surface, and must state a font-size too — otherwise the
+ *                  prose it leads is sized by the consuming page. Same defect as
+ *                  [NO-LEADING], one axis over. A root led --ui-line-height-tight
+ *                  is single-line chrome and is exempt by design: .atl-radio-group
+ *                  delegates its size to .atl-radio, and .atl-tab-group leading
+ *                  prose tight is a wrong-LEADING defect, not a missing-size one.
+ *                  `font-size: inherit` is not a size — it is the defect spelled
+ *                  out. Ratcheted against tools/parity/typeface-baseline.json,
+ *                  which records the ROOTS and not a count, because the fix
+ *                  redraws five masters and is blocked on the Figma side
+ *                  (ADR-0078, ADR-0080).
  *   [FONT-RAW]     a `font:` shorthand is one --ui-type-* role or `inherit`, never a
  *                  hand-assembled value — that would hide a size from
  *                  check:token-bypass and a comparison from check:figma, both of
@@ -43,33 +55,78 @@
  * `font-family: inherit` is not a declaration of the typeface — it is a form
  * control refusing the UA font — and is ignored here.
  *
- * Run via:  node tools/scripts/check-typeface.js  (or  npm run check:typeface)
+ * Run via:
+ *   node tools/scripts/check-typeface.js                    check (baseline included)
+ *   node tools/scripts/check-typeface.js --update-baseline  re-record the [NO-SIZE] counts
+ * or  npm run check:typeface
  */
 'use strict';
 
 const fs = require('fs');
 const path = require('path');
 const { FRAMEWORKS } = require('./lib/component-discovery');
+const { rootsFor } = require('./lib/component-roots');
 const { typeRoles, roleOfFontShorthand } = require('./lib/type-roles');
 
 const ROOT = path.resolve(__dirname, '../..');
 const FAMILY_TOKENS = /var\(--ui-font-(family|display|mono)\)/;
 const ROLES = typeRoles();
+const BASELINE_REL = 'tools/parity/typeface-baseline.json';
+const BASELINE_FILE = path.join(ROOT, BASELINE_REL);
+const UPDATE_BASELINE = process.argv.includes('--update-baseline');
 
 const errors = [];
+/** @type {{dir: string, rel: string, selector: string}[]} — the [NO-SIZE] population. */
+const noSize = [];
+/** `font-size: inherit` is a root DEFERRING its size, which is the defect itself — the
+ *  prose still renders at the consuming page's size. Same reading the family branch
+ *  below already applies to `font-family: inherit` (a control refusing the UA font). */
+const SIZE_DEFERS = /^(inherit|unset|revert|revert-layer)\b/;
 let checked = 0;
 
 /**
- * Is this selector a root rather than something inside one? Decided structurally:
- * a root is one compound selector with no descendant or child combinator. Deriving
- * the class from the directory name does not work — `tabs/` renders
- * `.atl-tab-group`, `drawer/` renders `.atl-drawer-host`.
+ * Is this selector a root rather than something inside one? Decided by NAME, from
+ * the list in lib/component-roots.js. It used to be decided structurally — "one
+ * compound selector with no combinator" — which reads as a root test but is really
+ * a depth test: `.atl-dialog-content`, `.atl-card-header` and `.atl-combobox-input`
+ * have no combinator either, so a declaration on a slot wrapper counted as a root
+ * declaration and two comboboxes went past [DESCENDANT].
+ *
+ * Angular's `:host` keeps the structural rule — a host IS a root by construction —
+ * but a host NARROWED by another `.atl-*` class answers to the same name list React
+ * and Vue do. Without that the two branches measure different populations: the card's
+ * `:host(.atl-card-content)` rule and the byte-identical `.atl-card-content` rule in
+ * the other two frameworks were counted in Angular and invisible in the other two, in
+ * a repo whose premise is that the three adapters are comparable.
  */
-function isRootSelector(selector) {
+function isRootSelector(selector, dir) {
   const sel = selector.trim();
-  if (/^:host\b/.test(sel)) return !/[ >+~]/.test(sel.replace(/:host\([^)]*\)/, ':host'));
-  if (!sel.startsWith('.atl-')) return false;
-  return !/[ >+~]/.test(sel);
+  if (/^:host\b/.test(sel)) {
+    if (/[ >+~]/.test(sel.replace(/:host\([^)]*\)/, ':host'))) return false;
+    const sibling = /^:host\(\s*(\.atl-[a-z0-9-]+)/.exec(sel);
+    return sibling && sibling[1] !== `.atl-${dir}` ? rootsFor(dir).has(sibling[1]) : true;
+  }
+  if (/[ >+~]/.test(sel)) return false;
+  const leading = /^(\.[a-z0-9-]+)/.exec(sel);
+  return leading ? rootsFor(dir).has(leading[1]) : false;
+}
+
+/**
+ * The key that groups every rule addressing ONE root, so a size stated in one rule
+ * answers for a leading stated in another. Angular ships several components from a
+ * single stylesheet, so `:host(.atl-card-content)` and `:host(atl-chat-message)`
+ * are OTHER components' hosts and get their own key, while `:host(.size-md)`,
+ * `:host(.variant-drawer)` and `:host(.atl-drawer)` — the directory's own root
+ * class, used to narrow rather than to name a sibling — are all this same host.
+ */
+function rootKey(selector, dir) {
+  const sel = selector.trim();
+  if (/^:host\b/.test(sel)) {
+    const sibling = /^:host\(\s*(\.atl-[a-z0-9-]+|[a-z][a-z0-9-]*)/.exec(sel);
+    return sibling && sibling[1] !== `.atl-${dir}` ? sibling[1] : ':host';
+  }
+  const leading = /^(\.[a-z0-9-]+)/.exec(sel);
+  return leading ? leading[1] : sel;
 }
 
 for (const fw of FRAMEWORKS) {
@@ -83,14 +140,18 @@ for (const fw of FRAMEWORKS) {
     checked++;
 
     let declaresSomewhere = false;
-    // Tied to the rule that carries the typeface rather than to any root-shaped
-    // selector: `.atl-combobox-input` has no combinator either, so a structural
-    // test accepted a descendant and let two comboboxes through.
+    // Tied to the rule that carries the typeface, and counted across the whole
+    // directory: a directory declares its family and its leading, or it does not.
     let rootFamilyRules = 0;
     let rootFamilyRulesWithLeading = 0;
     for (const file of files) {
       const rel = `libs/${fw}/src/lib/${dir}/${file}`;
       const css = fs.readFileSync(path.join(dirPath, file), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+      // [NO-SIZE] asks about a root, not a rule, so a root's rules are gathered
+      // before they are judged. Per FILE and not per directory, because Angular's
+      // shared stylesheets hold several roots and each answers for itself.
+      /** @type {Map<string, {selector: string, prose: boolean, size: boolean}>} */
+      const rootsInFile = new Map();
 
       for (const rule of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
         // The crude rule splitter can run a preceding `:is( … )` list into this
@@ -107,6 +168,22 @@ for (const fw of FRAMEWORKS) {
         // not know, so it blocked the very change ADR-0036 prescribes (ADR-0073).
         const short = /(^|;)\s*font\s*:\s*([^;]+)/.exec(body);
         const shortRole = short ? roleOfFontShorthand(short[2], ROLES) : null;
+
+        // ── What this root has said about prose and size, so far ─────────────
+        // A role reference carries both, so it answers for either longhand. Only
+        // a root is asked: a font-size on `.atl-card-header` or `.accordion-trigger`
+        // sizes that element, never the prose the root leads.
+        if (isRootSelector(selector, dir)) {
+          const key = rootKey(selector, dir);
+          const seen = rootsInFile.get(key) || { selector, prose: false, size: false };
+          const role = shortRole ? ROLES.get(shortRole) : null;
+          const leadsProse = /(^|;)\s*line-height\s*:\s*var\(\s*--ui-line-height-normal\s*\)/.test(body);
+          seen.prose = seen.prose || leadsProse || (role ? role.lineHeight === '--ui-line-height-normal' : false);
+          const sizeDecl = /(^|;)\s*font-size\s*:\s*([^;]+)/.exec(body);
+          const statesSize = sizeDecl ? !SIZE_DEFERS.test(sizeDecl[2].trim()) : false;
+          seen.size = seen.size || statesSize || Boolean(role);
+          rootsInFile.set(key, seen);
+        }
 
         // The shorthand RESETS font-style, font-variant, font-stretch and
         // line-height, so a longhand before it in the same rule is wiped. This is
@@ -157,16 +234,18 @@ for (const fw of FRAMEWORKS) {
         // typeface itself — inheritance cannot reach it.
         const resetsItself = /(^|;)\s*all\s*:\s*(unset|initial|revert)/.test(body);
 
-        if (isRootSelector(selector) && !isContentFace) {
+        if (isRootSelector(selector, dir) && !isContentFace) {
           rootFamilyRules++;
           // The role supplies the leading; so does the longhand.
           if (shortRole || /(^|;)\s*line-height\s*:/.test(body)) rootFamilyRulesWithLeading++;
         }
 
-        if (!isRootSelector(selector) && !isContentFace && !resetsItself) {
+        if (!isRootSelector(selector, dir) && !isContentFace && !resetsItself) {
           errors.push(
             `[DESCENDANT] ${rel} declares the typeface on \`${selector}\`, which is not the component root. ` +
-              `Declare it once on the root so the component is right wherever it renders.`
+              `Declare it once on the root so the component is right wherever it renders. If \`${selector}\` ` +
+              `really is a second root inside this directory, name it in EXTRA_ROOTS in ` +
+              `tools/scripts/lib/component-roots.js — that list is where a shared directory's other roots live.`
           );
         }
 
@@ -180,6 +259,10 @@ for (const fw of FRAMEWORKS) {
               `further down the same rule, so the declaration does nothing. Move it below the reset.`
           );
         }
+      }
+
+      for (const root of rootsInFile.values()) {
+        if (root.prose && !root.size) noSize.push({ dir, rel, selector: root.selector });
       }
     }
 
@@ -199,9 +282,148 @@ for (const fw of FRAMEWORKS) {
   }
 }
 
+// ── [NO-SIZE]: judged against a recorded count, not blocked outright ──────────
+// The population is real and the fix is known — a font-size next to the leading on
+// five roots — but paying it redraws five Figma masters and is blocked on the
+// variable-collection problem the roles analysis records, so it cannot be paid
+// today. ADR-0066 rejected "a warning nobody can clear", and a plain blocker would
+// leave check:all red until that unblocks. So the gate passes at the recorded
+// count, fails when it RISES (naming what is now found), and fails when it DROPS
+// without being re-recorded — the same rule [STALE-EXEMPTION] applies to an
+// allowlist entry, one abstraction up: an improvement nobody records can silently
+// reverse. When a component's count reaches zero, delete its key; when the whole
+// entry is gone, delete the ratchet and make [NO-SIZE] a plain blocker (ADR-0078).
+//
+// The baseline records IDENTITIES, not counts. A count is blind to substitution: fix
+// one root and break another in the same directory and the number never moves, so the
+// two properties the ratchet exists to guarantee — a rise blocks, a drop blocks — are
+// both defeated at once, silently. Measured, not theorised: sizing `.atl-accordion-group`
+// while leading `.atl-accordion-item` prose passed green under the counting version.
+// A root's identity is its file plus its selector, with no line numbers, so it survives
+// the churn the per-directory count was chosen to survive.
+const observed = {};
+for (const hit of noSize) (observed[hit.dir] = observed[hit.dir] || []).push(`${hit.rel} \`${hit.selector}\``);
+for (const dir of Object.keys(observed)) observed[dir].sort();
+// Both tolerate a value that is not a list, so a hand-edited or pre-identity file is
+// reported by the shape guard below rather than crashing the run before it gets there.
+const len = (v) => (Array.isArray(v) ? v.length : Number(v) || 0);
+const sum = (roots) => Object.values(roots).reduce((a, b) => a + len(b), 0);
+const sorted = (roots) =>
+  Object.fromEntries(Object.keys(roots).sort().map((k) => [k, Array.isArray(roots[k]) ? [...roots[k]].sort() : roots[k]]));
+
+if (!fs.existsSync(BASELINE_FILE) && !UPDATE_BASELINE) {
+  console.error(
+    `✗ [NO-SIZE] ${BASELINE_REL} is missing, so a regression against the recorded count would pass ` +
+      `unnoticed. Restore it from git, or record today's counts with ` +
+      `\`node tools/scripts/check-typeface.js --update-baseline\` and write the entry's \`why\`.`
+  );
+  process.exit(1);
+}
+
+const baseline = fs.existsSync(BASELINE_FILE)
+  ? JSON.parse(fs.readFileSync(BASELINE_FILE, 'utf8'))
+  : { meta: {}, checks: {} };
+if (!baseline.checks) baseline.checks = {};
+if (!baseline.checks['NO-SIZE']) baseline.checks['NO-SIZE'] = { kind: 'gap', why: '', perComponent: {} };
+const entry = baseline.checks['NO-SIZE'];
+const recorded = entry.perComponent || {};
+
+if (UPDATE_BASELINE) {
+  // A baseline recorded from a broken tree records the breakage. Every OTHER typeface
+  // error is a plain blocker with a fix available today, and the [NO-SIZE] messages
+  // send the reader here — so the documented remedy must not also be the command that
+  // swallows a [DESCENDANT] or a [FONT-RAW] and prints a green line over it.
+  if (errors.length > 0) {
+    for (const e of errors) console.error(`✗ ${e}`);
+    console.error(
+      `\n${errors.length} typeface issue(s) stand, so ${BASELINE_REL} was NOT written — a baseline ` +
+        `recorded from a broken tree records the breakage. Fix these first, then re-run with ` +
+        `--update-baseline.`
+    );
+    process.exit(1);
+  }
+  const next = sorted(observed);
+  // Diff-stable: a no-op update must not rewrite `generatedAt` and leave a one-line
+  // diff for someone to review.
+  if (JSON.stringify(next) === JSON.stringify(sorted(recorded))) {
+    console.log(`✓ baseline unchanged: ${BASELINE_REL} (NO-SIZE ${sum(recorded)} root(s)); not rewritten.`);
+    process.exit(0);
+  }
+  const delta = sum(observed) - sum(recorded);
+  entry.perComponent = next;
+  baseline.meta = {
+    ...baseline.meta,
+    generatedAt: new Date().toISOString(),
+    updatedBy: 'node tools/scripts/check-typeface.js --update-baseline',
+  };
+  fs.writeFileSync(BASELINE_FILE, `${JSON.stringify(baseline, null, 2)}\n`);
+  console.log(
+    `✓ baseline updated: ${BASELINE_REL} (NO-SIZE ${sum(recorded)} → ${sum(observed)}, ` +
+      `${delta === 0 ? 'same total, different roots' : `${delta > 0 ? '+' : '−'}${Math.abs(delta)}`}).`
+  );
+  process.exit(0);
+}
+
+// A recorded root with no reason is the unclearable exemption ADR-0066 threw out, one
+// abstraction up: nobody can retire a debt when nobody wrote down why it is not 0. And
+// `kind` is required by the message that asks for it, so it is checked in the same
+// condition — an unset one printed the literal string `undefined` in the green line.
+if (!entry.why || !['design', 'gap'].includes(entry.kind)) {
+  errors.push(
+    `[NO-SIZE] the \`NO-SIZE\` entry in ${BASELINE_REL} records roots with no \`why\` or no valid \`kind\`, ` +
+      `so a later reader cannot tell "decided against" from "forgotten" (ADR-0066). State why the debt ` +
+      `stands, and set \`kind\` to \`design\` (a closed question) or \`gap\` (an unresolved defect).`
+  );
+}
+
+for (const dir of [...new Set([...Object.keys(recorded), ...Object.keys(observed)])].sort()) {
+  const want = recorded[dir] || [];
+  const have = observed[dir] || [];
+  if (!Array.isArray(want)) {
+    errors.push(
+      `[NO-SIZE] ${dir} in ${BASELINE_REL} records a count rather than the list of roots it stands for, so a ` +
+        `new root hidden by a fixed one would pass. Re-record with ` +
+        `\`node tools/scripts/check-typeface.js --update-baseline\`.`
+    );
+    continue;
+  }
+  const added = have.filter((root) => !want.includes(root));
+  const gone = want.filter((root) => !have.includes(root));
+  // Reported as two independent findings, not as a net delta: a substitution — one root
+  // fixed, another broken — is a rise AND a drop, and a count reports it as neither.
+  if (added.length) {
+    errors.push(
+      `[NO-SIZE] ${dir}: ${added.length} root(s) state --ui-line-height-normal and never a font-size that ` +
+        `${BASELINE_REL} does not record — ${added.join(', ')}. A root that declares itself a prose surface ` +
+        `and never states a size renders every line it does not size itself at the consuming page's size ` +
+        `(16px in a default browser, whatever the app sets elsewhere). State the size on the same root, next ` +
+        `to the leading: --ui-font-size-md for prose. \`font-size: inherit\` is not a size — it is this same ` +
+        `defect spelled out. If the root must not size itself, record it with ` +
+        `\`node tools/scripts/check-typeface.js --update-baseline\` and say why in the entry's \`why\`.`
+    );
+  }
+  if (gone.length) {
+    errors.push(
+      `[NO-SIZE] ${dir}: ${gone.length} recorded root(s) no longer state --ui-line-height-normal without a ` +
+        `font-size — ${gone.join(', ')}. An improvement that is not recorded can silently reverse. Run ` +
+        `\`node tools/scripts/check-typeface.js --update-baseline\` to lock it in.`
+    );
+  }
+}
+
 if (errors.length > 0) {
   for (const e of errors) console.error(`✗ ${e}`);
   console.error(`\n${errors.length} typeface issue(s) across ${checked} component stylesheet set(s).`);
   process.exit(1);
 }
 console.log(`✓ every component states its own typeface and leading on its root (${checked} component(s) × framework).`);
+// A count with the reason inline, not one warning per occurrence — the shape
+// ADR-0066 prescribed for a population nobody can act on today.
+const debt = Object.keys(recorded)
+  .sort()
+  .map((dir) => `${dir} ${len(recorded[dir])}`)
+  .join(', ');
+console.log(
+  `  [NO-SIZE] ${sum(observed)} prose root(s) state --ui-line-height-normal and no font-size, at the recorded ` +
+    `baseline (${entry.kind}: ${debt || 'none'} — ${BASELINE_REL}).`
+);

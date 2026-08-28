@@ -8,6 +8,10 @@
  * snapshot `tools/figma/snapshot.json` that the offline `check:figma` runs
  * against. (See tools/scripts/check-figma.js and plan/adr/0019.)
  *
+ * It writes TWO artifacts in one run, both stamped with the same `generatedAt`:
+ * `tools/figma/snapshot.json` (paint, box, tokens, axes) and
+ * `tools/figma/text-nodes.json` (one record per TEXT node under a master).
+ *
  *   npm run figma:snapshot
  *
  * Requirements: Figma Desktop running with the file open and the figma-console
@@ -33,6 +37,13 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '../..');
 const OUT = resolve(ROOT, 'tools/figma/snapshot.json');
+// Per-TEXT-node type facts, written by the same run as snapshot.json. A sibling
+// rather than another key in snapshot.json because the records key on `chars`, so
+// every copy edit in Figma would churn the file the paint gates are reviewed in —
+// and because none of snapshot.json's four consumers needs the text array. The one
+// cost of two files is that they can drift, which the shared `generatedAt` stamp
+// and the gate's staleness check close.
+const TEXT_OUT = resolve(ROOT, 'tools/figma/text-nodes.json');
 const FILE_KEY = 'QMnDD8uZQPldPrlCwZZ58T';
 
 /**
@@ -434,6 +445,143 @@ async function main() {
     `;
     const probe = (await call(client, 'figma_execute', { code: probeCode, timeout: 25000 }))?.result ?? {};
 
+    // 2c. Every TEXT node under every master, one record each. Until now the
+    //     snapshot carried typography only as an aggregate: rootPaint and layers
+    //     read size and leading from a box's single direct TEXT child and record
+    //     nothing when there are two — 106 rootPaint entries and 160 layer records
+    //     covering 189 nodes, which check-figma did compare. What was captured
+    //     NOWHERE, for any node, is the family, the weight, the text-style binding
+    //     and the collection the size's variable comes from — which is why the 311
+    //     unbound nodes had to be counted by hand.
+    //     A SECOND round trip rather than an extension of 2b: that probe's return
+    //     value already measures ~255KB, the only payload size this transport is
+    //     known to carry, and this adds ~100KB more.
+    const textProbeCode = `
+      await figma.loadAllPagesAsync();
+      // Both lookups are per-id and repeat across hundreds of nodes; the two
+      // collection names in play resolve once each.
+      const styleCache = new Map(), varCache = new Map(), colCache = new Map();
+      // A node that HAS a textStyleId the lookup cannot resolve — a remote or
+      // unloaded library style, or a throw — is not an unbound node, and returning
+      // null for both would have the gate count it as one. Zero occurrences today
+      // (all 255 bound nodes resolve), so the sentinel is a guard, not a repair.
+      const styleName = async (id) => {
+        if (styleCache.has(id)) return styleCache.get(id);
+        let n = 'UNRESOLVED';
+        try { const s = await figma.getStyleByIdAsync(id); if (s) n = s.name; } catch (e) { n = 'UNRESOLVED'; }
+        styleCache.set(id, n);
+        return n;
+      };
+      // The COLLECTION is the finding, not the variable: 212 of the unbound nodes
+      // size themselves from "Docs Brand Tokens", the docs site's own scale, rather
+      // than from "Library Tokens", the tier that mirrors tokens.css. A variable
+      // name alone reads as bound and hides that.
+      const collOf = async (id) => {
+        if (varCache.has(id)) return varCache.get(id);
+        let r = null;
+        try {
+          const v = await figma.variables.getVariableByIdAsync(id);
+          if (v) {
+            let cn = colCache.get(v.variableCollectionId);
+            if (cn === undefined) {
+              const c = await figma.variables.getVariableCollectionByIdAsync(v.variableCollectionId);
+              cn = c ? c.name : null;
+              colCache.set(v.variableCollectionId, cn);
+            }
+            r = { variable: v.name, collection: cn };
+          }
+        } catch (e) { r = null; }
+        varCache.set(id, r);
+        return r;
+      };
+      const out = {};
+      for (const set of figma.root.findAll((n) => n.type === 'COMPONENT_SET' || (n.type === 'COMPONENT' && /^(Action|Form|Display|Navigation|Overlay|Feedback|AI|Data)\\//.test(n.name)))) {
+        const kids = set.type === 'COMPONENT_SET' ? set.children : [set];
+        const byKey = new Map();
+        for (const v of kids) {
+          for (const t of v.findAll((x) => x.type === 'TEXT')) {
+            // The layer path inside the variant, so a finding can name what to fix.
+            const chain = []; let q = t;
+            while (q && q.id !== v.id) { chain.unshift(q.name); q = q.parent; }
+            // One upward pass answers three questions. An invisible ancestor makes
+            // the node invisible (a Figma Boolean's only mechanism is toggling
+            // visibility, so these are checked while switched off — ADR-0061). An
+            // INSTANCE ancestor means a child master owns the type and states its
+            // own exemption there (ADR-0068). And an INSTANCE that lists
+            // textStyleId among its overrides has DETACHED this node from a master
+            // that IS bound, which reads as unbound but is a different defect.
+            let anc = t.parent, insideInstance = false, hidden = t.visible === false, ovr = false;
+            while (anc && anc.id !== v.id) {
+              if (anc.visible === false) hidden = true;
+              if (anc.type === 'INSTANCE') {
+                insideInstance = true;
+                try {
+                  for (const o of (anc.overrides || [])) {
+                    if (o.id === t.id && (o.overriddenFields || []).indexOf('textStyleId') >= 0) ovr = true;
+                  }
+                } catch (e) {}
+              }
+              anc = anc.parent;
+            }
+            const fn = t.fontName === figma.mixed ? null : t.fontName;
+            const lh = t.lineHeight === figma.mixed ? null : t.lineHeight;
+            const tsid = t.textStyleId === figma.mixed ? 'MIXED' : t.textStyleId;
+            // boundVariables.fontSize is an ARRAY — one alias per style range. Every
+            // node in the file carries 0 or 1 today, so reading [0] is lossless, but a
+            // multi-range binding has to announce itself rather than be silently
+            // halved into a number the gate then compares as if it were measured.
+            const bvfs = (t.boundVariables && t.boundVariables.fontSize) || [];
+            const fsv = bvfs.length === 1 ? await collOf(bvfs[0].id) : null;
+            const rec = {
+              path: chain.join('/'),
+              // 40 characters, not the whole string: the longest TEXT in the file is
+              // 98 characters, so the slice costs nothing today and caps the payload
+              // if a paragraph is ever drawn. Two nodes whose first 40 characters
+              // agree merge into ONE record — count still sums every node, so the
+              // arithmetic stays exact; what is lost is granularity, not a node.
+              chars: (t.characters || '').replace(/\\s+/g, ' ').trim().slice(0, 40),
+              textStyleName: tsid === 'MIXED' ? 'MIXED' : (tsid ? await styleName(tsid) : null),
+              family: fn ? fn.family : 'MIXED',
+              weight: fn ? fn.style : 'MIXED',
+              size: t.fontSize === figma.mixed ? null : t.fontSize,
+              // Rounded to two decimals the way every geometry comparison in
+              // check-figma.js already rounds: Figma's raw float writes 56 nodes as
+              // "164.9999976158142%", which is one ULP away from churning the
+              // committed diff and one string comparison away from failing to equal
+              // the 165% a CSS ratio of 1.65 resolves to.
+              lineHeight: lh
+                ? (lh.unit === 'AUTO'
+                    ? 'AUTO'
+                    : Math.round(lh.value * 100) / 100 + (lh.unit === 'PERCENT' ? '%' : 'px'))
+                : 'MIXED',
+              visible: !hidden,
+              insideInstance,
+              hasTextStyleOverride: ovr,
+              fontSizeVariable: bvfs.length > 1 ? 'MIXED-RANGE' : (fsv ? fsv.variable : null),
+              fontSizeVariableCollection: bvfs.length > 1 ? 'MIXED-RANGE' : (fsv ? fsv.collection : null),
+            };
+            // The dedup key is the record itself MINUS the variant name — the
+            // opposite of the layer dedup above, which keys WITH it. A layer's box
+            // legitimately differs per variant; its type almost never does, so
+            // keying with the variant would emit AtlButton's one label 24 times.
+            // \`count\` keeps the node arithmetic exact: a ratchet sums it, and
+            // counting records instead under-reports the population by half.
+            const key = JSON.stringify(rec);
+            if (!byKey.has(key)) byKey.set(key, Object.assign({}, rec, { variantScope: [], count: 0 }));
+            const e = byKey.get(key);
+            e.count++;
+            if (e.variantScope.indexOf(v.name) < 0) e.variantScope.push(v.name);
+          }
+        }
+        const text = [...byKey.values()];
+        // A record present in every variant says so once, rather than listing all 24.
+        for (const e of text) if (kids.length === 1 || e.variantScope.length === kids.length) e.variantScope = ['*'];
+        out[set.id] = { name: set.name, variantCount: kids.length, text };
+      }
+      return out;
+    `;
+    const textProbe = (await call(client, 'figma_execute', { code: textProbeCode, timeout: 30000 }))?.result ?? {};
+
     // 3. Each master: set-level metadata + a deep read of its default variant.
     const components = [];
     for (const { nodeId } of MASTERS) {
@@ -479,14 +627,24 @@ async function main() {
     }
 
     if (components.length === 0) throw new Error('no components captured');
+    // A text probe that fails or times out yields `{}`, which would write a
+    // structurally valid text-nodes.json saying every master has no text — the
+    // silent empty write the bridge check exists to prevent, one round trip later.
+    if (Object.keys(textProbe).length === 0) throw new Error('no text nodes captured');
+
+    // One stamp for both files. text-nodes.json is only trustworthy as a companion
+    // to snapshot.json, so the gate blocks when the two disagree — which requires
+    // them to be byte-identical when the run is whole, not merely close.
+    const generatedAt = new Date().toISOString();
+    const sha = gitSha();
 
     const snapshot = {
       meta: {
         fileKey: FILE_KEY,
         fileName: status?.details?.fileName ?? 'Atelier UI',
         figmaLastModified,
-        generatedAt: new Date().toISOString(),
-        gitSha: gitSha(),
+        generatedAt,
+        gitSha: sha,
         serverVersion,
         coverage: `All ${components.length} masters. Token/auto-layout checks sample each master's default variant.`,
         note: 'Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js.',
@@ -498,6 +656,43 @@ async function main() {
     };
     writeFileSync(OUT, JSON.stringify(snapshot, null, 2) + '\n');
     console.log(`✓ wrote ${components.length} master(s) to ${OUT}`);
+
+    // Iterating MASTERS rather than the probe's own keys keeps this array in the
+    // same hand-maintained order as snapshot.components[] and emits `text: []` for
+    // the four masters that legitimately carry no TEXT — so a per-master baseline
+    // can treat a MISSING key as a regression rather than absorb it as a zero.
+    const textMasters = MASTERS.map(({ nodeId }) => ({
+      nodeId,
+      name: textProbe[nodeId]?.name ?? null,
+      selector: textProbe[nodeId]?.name ? leafName(textProbe[nodeId].name) : null,
+      variantCount: textProbe[nodeId]?.variantCount ?? 0,
+      text: textProbe[nodeId]?.text ?? [],
+    }));
+    const textNodes = {
+      meta: {
+        fileKey: FILE_KEY,
+        generatedAt,
+        gitSha: sha,
+        totalTextNodes: textMasters.reduce((n, m) => n + m.text.reduce((k, r) => k + r.count, 0), 0),
+        records: textMasters.reduce((n, m) => n + m.text.length, 0),
+        note:
+          'Per-TEXT-node type facts for every master, companion to snapshot.json and written by the ' +
+          'same run — `generatedAt` must match it, and a gate that reads one without checking the other ' +
+          'is reading two different documents. Records are deduplicated across the variants of a set, so ' +
+          'a count of text NODES sums `count` and never `records.length`. ADDRESSING A RECORD: neither ' +
+          '`path` nor master + path + chars is unique — `path` collides inside a variant, and 13 ' +
+          'master + path + chars keys stand for 2-3 records each (AtlButton draws three different ' +
+          '`Button “Button”`). Use master + path + chars + size + weight, which is unique across all ' +
+          'records today; check-figma.js builds exactly that address. Only the fontSize variable\'s ' +
+          'collection is captured — a lineHeight binding is invisible here (zero nodes carry one today). ' +
+          'Facts only; rules live in check-figma.js and check-typeface.js.',
+      },
+      masters: textMasters,
+    };
+    writeFileSync(TEXT_OUT, JSON.stringify(textNodes, null, 2) + '\n');
+    console.log(
+      `✓ wrote ${textNodes.meta.totalTextNodes} text node(s) in ${textNodes.meta.records} record(s) to ${TEXT_OUT}`
+    );
   } finally {
     await client.close();
   }

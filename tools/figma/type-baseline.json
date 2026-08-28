@@ -1,0 +1,571 @@
+{
+  "meta": {
+    "note": "Per-check RATCHET findings for check:figma. The gate PASSES while a master's findings are exactly the ones recorded here, FAILS when one APPEARS that is not recorded (naming it), and FAILS when a recorded one DISAPPEARS without this file being updated — an improvement nobody records can silently reverse, which is the rule [STALE-EXEMPTION] already applies to allowlist entries. FINDINGS AND NOT COUNTS: a count is blind to substitution, so fixing one node on a master while breaking another kept the number flat and the gate green. Each entry carries its own node multiplicity (×N) where a deduplicated record stands for several nodes. It is a ratchet rather than a plain blocker because the debt cannot be paid today: ADR-0066 rejected a warning nobody can clear, and a blocker would leave check:all red until the wrong-variable-collection problem is decided (tasks/type-role-resolution-2026-08-28.md). This is NOT an allowlist. tools/scripts/lib/allowlists.js answers \"this one is exempt forever\"; this file answers \"this many are owed\". Never record the same defect in both. WHEN A MASTER IS CLEAR: its key disappears on the next update. WHEN A CHECK'S ENTRY IS GONE: delete the ratchet and make that check a plain blocker. Update with `node tools/scripts/check-figma.js --update-baseline` — never by hand, except the `why` and `kind` fields, which the writer preserves. See plan/adr/0079-type-does-not-need-the-painted-box.md and plan/adr/0080-a-guard-that-skips-is-not-a-check.md.",
+    "generatedAt": "2026-08-28T11:27:53.749Z",
+    "updatedBy": "node tools/scripts/check-figma.js --update-baseline"
+  },
+  "checks": {
+    "FIGMA-AUTO-LEADING": {
+      "kind": "gap",
+      "why": "TEXT nodes left on Figma AUTO leading, which is the font metric rather than a ratio anyone chose, while every component root states a leading in CSS (ADR-0052, enforced by check:typeface [NO-LEADING]). The fix is per node in Figma and is worth doing in the same pass that binds the ty/* roles, because a node bound to a role takes the role leading and clears itself.",
+      "perMaster": {
+        "AtlAccordionGroup": [
+          "atl-accordion-item/accordion-panel/You can request a refund within 30 days of purchase. Contact support to initiate. “You can request a refund within 30 days ” (14px Regular) ×3"
+        ],
+        "AtlCard": [
+          "card-content/Card body text. Main content area for information. “Card body text. Main content area for in” (16px Regular) ×12"
+        ],
+        "AtlChat": [
+          "av-glyph “AI” (14px SemiBold)",
+          "avatar-glyph “AI” (14px SemiBold)",
+          "breadcrumb “Projects · Atelier UI · AI Assistant” (12px Regular)",
+          "chat-title “Atelier Assistant” (15px SemiBold)",
+          "code-block-instance/header/my-component.ts “my-component.ts” (12px Bold) ×2",
+          "drawer-title “AI Assistant” (15px SemiBold)",
+          "fab-glyph “AI” (20px SemiBold)",
+          "m1t “Hi! How can I help you today?” (12px Regular)",
+          "m1t “Welcome back, Dominik. I see you're work” (14px Regular)",
+          "m2t “Can you summarize this dashboard?” (12px Regular)",
+          "m2t “Help me write a Storybook story for the ” (14px Regular)",
+          "m3t “Sure — here's a starting point:” (14px Regular)",
+          "m3t “You're tracking 12 KPIs. Three are below” (12px Regular)",
+          "m4t “Show me CTR.” (12px Regular)",
+          "min-icon “–” (12px SemiBold)",
+          "msg-asst-2-text “Here you go:” (13px Regular)",
+          "nav-link-1 “Dashboard” (13px Regular)",
+          "nav-link-2 “Projects” (13px Regular)",
+          "nav-link-3 “Reports” (13px Regular)",
+          "nav-link-4 “AI Assistant” (13px SemiBold)",
+          "page-h1 “AI Assistant” (26px SemiBold)",
+          "pop-avatar-glyph “AI” (12px SemiBold)",
+          "pop-title “AI Assistant” (14px SemiBold)",
+          "side-1-i1 “Storybook story for AtlChat” (12px Regular)",
+          "side-1-i2 “Refactor AtlCard variants” (12px Regular)",
+          "side-1-i3 “Migration to Signal Forms” (12px Regular)",
+          "side-1-i4 “Theme tokens audit” (12px Regular)",
+          "side-1-title “Recent” (14px SemiBold)",
+          "side-2-l1 “📁 libs/spec/src/index.ts” (12px Regular)",
+          "side-2-l2 “📁 libs/angular/src/lib/” (12px Regular)",
+          "side-2-l3 “📄 plan/big-picture.md” (12px Regular)",
+          "side-2-title “Pinned context” (14px SemiBold)"
+        ],
+        "AtlCheckbox": [
+          "Accept terms “Accept terms” (14px Regular) ×5"
+        ],
+        "AtlCodeBlock": [
+          "header/my-component.ts “my-component.ts” (12px Bold) ×2",
+          "header/typescript “typescript” (12px Bold) ×2"
+        ],
+        "AtlCombobox": [
+          "input/Cherry “Cherry” (14px Regular)",
+          "input/Search fruit… “Search fruit…” (14px Regular) ×4",
+          "input/ap “ap” (14px Regular)",
+          "panel/active option/Apple “Apple” (14px Regular) ×2",
+          "panel/disabled option/Honeydew “Honeydew” (14px Regular)",
+          "panel/option/Apricot “Apricot” (14px Regular)",
+          "panel/option/Banana “Banana” (14px Regular)",
+          "panel/option/Date “Date” (14px Regular)",
+          "panel/option/Elderberry “Elderberry” (14px Regular)",
+          "panel/option/Grape “Grape” (14px Regular)",
+          "panel/selected option/Cherry “Cherry” (14px Regular)"
+        ],
+        "AtlDialog": [
+          "Frame/Are you sure you want to proceed? This action cannot be undone. “Are you sure you want to proceed? This a” (14px Regular) ×5"
+        ],
+        "AtlDrawer": [
+          "dialog/content/Drawer content. Place any form controls or text inside. “Drawer content. Place any form controls ” (14px Regular) ×7",
+          "dialog/footer/Frame/Save “Save” (14px Regular) ×7",
+          "dialog/header/Action Sheet “Action Sheet” (16px Regular)",
+          "dialog/header/Filters “Filters” (16px Regular)",
+          "dialog/header/Navigation “Navigation” (16px Regular)",
+          "dialog/header/Settings “Settings” (16px Regular) ×4"
+        ],
+        "AtlPagination": [
+          "ellipsis/... “...” (14px Regular) ×2",
+          "page-btn/1 “1” (14px Regular)",
+          "page-btn/10 “10” (14px Regular)",
+          "page-btn/4 “4” (14px Regular)",
+          "page-btn/6 “6” (14px Regular)"
+        ],
+        "AtlRadio": [
+          "Option label “Option label” (16px Regular) ×3",
+          "Selected option “Selected option” (16px Regular)"
+        ],
+        "AtlRadioGroup": [
+          "Free “Free” (14px Regular) ×3",
+          "Pro “Pro” (14px Regular)"
+        ],
+        "AtlStepper": [
+          "header/step-1/circle-active/1 “1” (14px Regular) ×6",
+          "header/step-2/circle-active/2 “2” (14px Regular)",
+          "header/step-2/circle-default/2 “2” (14px Regular) ×6",
+          "header/step-3/circle-default/3 “3” (14px Regular) ×8"
+        ],
+        "AtlTabGroup": [
+          "tablist/tab/Account “Account” (14px Regular)",
+          "tablist/tab/Billing “Billing” (14px Regular) ×3",
+          "tablist/tab/Notifications “Notifications” (14px Regular) ×2",
+          "tabpanel/Content for the \"Account\" tab goes here. “Content for the \"Account\" tab goes here.” (14px Regular) ×2",
+          "tabpanel/Content for the \"Notifications\" tab goes here. “Content for the \"Notifications\" tab goes” (14px Regular)"
+        ],
+        "AtlTable": [
+          "AtlTable / bordered-md/tbody/tr-1/Frame/Alice Müller “Alice Müller” (14px Regular)",
+          "AtlTable / bordered-md/tbody/tr-1/Frame/Engineer “Engineer” (14px Regular)",
+          "AtlTable / bordered-md/tbody/tr-1/Frame/alice@example.com “alice@example.com” (14px Regular)",
+          "AtlTable / bordered-md/tbody/tr-2/Frame/Bob Schmidt “Bob Schmidt” (14px Regular)",
+          "AtlTable / bordered-md/tbody/tr-2/Frame/Designer “Designer” (14px Regular)",
+          "AtlTable / bordered-md/tbody/tr-2/Frame/bob@example.com “bob@example.com” (14px Regular)",
+          "AtlTable / bordered-md/tbody/tr-3/Frame/Carol Wagner “Carol Wagner” (14px Regular)",
+          "AtlTable / bordered-md/tbody/tr-3/Frame/Manager “Manager” (14px Regular)",
+          "AtlTable / bordered-md/tbody/tr-3/Frame/carol@example.com “carol@example.com” (14px Regular)",
+          "AtlTable / bordered-md/tbody/tr-4/Frame/David Bauer “David Bauer” (14px Regular)",
+          "AtlTable / bordered-md/tbody/tr-4/Frame/Engineer “Engineer” (14px Regular)",
+          "AtlTable / bordered-md/tbody/tr-4/Frame/david@example.com “david@example.com” (14px Regular)",
+          "AtlTable / default-lg/tbody/tr-1/Frame/Alice Müller “Alice Müller” (16px Regular)",
+          "AtlTable / default-lg/tbody/tr-1/Frame/Engineer “Engineer” (16px Regular)",
+          "AtlTable / default-lg/tbody/tr-1/Frame/alice@example.com “alice@example.com” (16px Regular)",
+          "AtlTable / default-lg/tbody/tr-2/Frame/Bob Schmidt “Bob Schmidt” (16px Regular)",
+          "AtlTable / default-lg/tbody/tr-2/Frame/Designer “Designer” (16px Regular)",
+          "AtlTable / default-lg/tbody/tr-2/Frame/bob@example.com “bob@example.com” (16px Regular)",
+          "AtlTable / default-lg/tbody/tr-3/Frame/Carol Wagner “Carol Wagner” (16px Regular)",
+          "AtlTable / default-lg/tbody/tr-3/Frame/Manager “Manager” (16px Regular)",
+          "AtlTable / default-lg/tbody/tr-3/Frame/carol@example.com “carol@example.com” (16px Regular)",
+          "AtlTable / default-lg/tbody/tr-4/Frame/David Bauer “David Bauer” (16px Regular)",
+          "AtlTable / default-lg/tbody/tr-4/Frame/Engineer “Engineer” (16px Regular)",
+          "AtlTable / default-lg/tbody/tr-4/Frame/david@example.com “david@example.com” (16px Regular)",
+          "AtlTable / default-md/tbody/tr-1/Frame/Alice Müller “Alice Müller” (14px Regular)",
+          "AtlTable / default-md/tbody/tr-1/Frame/Engineer “Engineer” (14px Regular)",
+          "AtlTable / default-md/tbody/tr-1/Frame/alice@example.com “alice@example.com” (14px Regular)",
+          "AtlTable / default-md/tbody/tr-2/Frame/Bob Schmidt “Bob Schmidt” (14px Regular)",
+          "AtlTable / default-md/tbody/tr-2/Frame/Designer “Designer” (14px Regular)",
+          "AtlTable / default-md/tbody/tr-2/Frame/bob@example.com “bob@example.com” (14px Regular)",
+          "AtlTable / default-md/tbody/tr-3/Frame/Carol Wagner “Carol Wagner” (14px Regular)",
+          "AtlTable / default-md/tbody/tr-3/Frame/Manager “Manager” (14px Regular)",
+          "AtlTable / default-md/tbody/tr-3/Frame/carol@example.com “carol@example.com” (14px Regular)",
+          "AtlTable / default-md/tbody/tr-4/Frame/David Bauer “David Bauer” (14px Regular)",
+          "AtlTable / default-md/tbody/tr-4/Frame/Engineer “Engineer” (14px Regular)",
+          "AtlTable / default-md/tbody/tr-4/Frame/david@example.com “david@example.com” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-1/Frame/Alice Müller “Alice Müller” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-1/Frame/Engineer “Engineer” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-1/Frame/alice@example.com “alice@example.com” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-2/Frame/Bob Schmidt “Bob Schmidt” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-2/Frame/Designer “Designer” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-2/Frame/bob@example.com “bob@example.com” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-3/Frame/Carol Wagner “Carol Wagner” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-3/Frame/Manager “Manager” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-3/Frame/carol@example.com “carol@example.com” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-4/Frame/David Bauer “David Bauer” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-4/Frame/Engineer “Engineer” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-4/Frame/david@example.com “david@example.com” (14px Regular)"
+        ],
+        "AtlTbody": [
+          "tr/atl-tr-select-cell/AtlCheckbox/Accept terms “Accept terms” (14px Regular) ×2"
+        ],
+        "AtlToast": [
+          "Frame/Action completed. “Action completed.” (14px Regular) ×8"
+        ],
+        "AtlToggle": [
+          "Notifications “Notifications” (14px Regular) ×4"
+        ],
+        "AtlTr": [
+          "atl-tr-select-cell/AtlCheckbox/Accept terms “Accept terms” (14px Regular) ×2"
+        ]
+      }
+    },
+    "FIGMA-VARIABLE-COLLECTION": {
+      "kind": "gap",
+      "why": "Font sizes bound to \"Docs Brand Tokens\", the docs-site collection, instead of the library tiers ADR-0030 made semantic. The two scales agree today, so nothing renders wrong and nothing will until they diverge. This is the root debt: it blocks ROOT-TYPE and TEXT-UNSTYLED, because rebinding a size is the same edit as fixing either of those. tasks/type-role-resolution-2026-08-28.md carries the analysis.",
+      "perMaster": {
+        "AtlAccordionGroup": [
+          "atl-accordion-item/accordion-panel/You can request a refund within 30 days of purchase. Contact support to initiate. “You can request a refund within 30 days ” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×3"
+        ],
+        "AtlAvatar": [
+          "JS “JS” (16px Medium) → font-size/md in “Docs Brand Tokens” ×2"
+        ],
+        "AtlButton": [
+          "Button “Button” (16px Medium) → font-size/md in “Docs Brand Tokens” ×16",
+          "Button “Button” (18px Medium) → font-size/lg in “Docs Brand Tokens” ×4"
+        ],
+        "AtlCard": [
+          "card-content/Card body text. Main content area for information. “Card body text. Main content area for in” (16px Regular) → font-size/md in “Docs Brand Tokens” ×12"
+        ],
+        "AtlChat": [
+          "code-block-instance/header/my-component.ts “my-component.ts” (12px Bold) → font-size/xs in “Docs Brand Tokens” ×2",
+          "new-chat-button/Button “＋ New chat” (14px Medium) → font-size/sm in “Docs Brand Tokens”",
+          "send-button/Button “Send” (14px Medium) → font-size/sm in “Docs Brand Tokens”",
+          "send-button/Button “Send” (16px Medium) → font-size/md in “Docs Brand Tokens” ×2"
+        ],
+        "AtlCheckbox": [
+          "Accept terms “Accept terms” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×5"
+        ],
+        "AtlCodeBlock": [
+          "header/my-component.ts “my-component.ts” (12px Bold) → font-size/xs in “Docs Brand Tokens” ×2",
+          "header/typescript “typescript” (12px Bold) → font-size/xs in “Docs Brand Tokens” ×2"
+        ],
+        "AtlCombobox": [
+          "input/Cherry “Cherry” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "input/Search fruit… “Search fruit…” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×4",
+          "input/ap “ap” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "panel/active option/Apple “Apple” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×2",
+          "panel/disabled option/Honeydew “Honeydew” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "panel/option/Apricot “Apricot” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "panel/option/Banana “Banana” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "panel/option/Date “Date” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "panel/option/Elderberry “Elderberry” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "panel/option/Grape “Grape” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "panel/selected option/Cherry “Cherry” (14px Regular) → font-size/sm in “Docs Brand Tokens”"
+        ],
+        "AtlDialog": [
+          "Frame/Are you sure you want to proceed? This action cannot be undone. “Are you sure you want to proceed? This a” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×5"
+        ],
+        "AtlDrawer": [
+          "dialog/content/Drawer content. Place any form controls or text inside. “Drawer content. Place any form controls ” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×7",
+          "dialog/footer/Frame/Save “Save” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×7",
+          "dialog/header/Action Sheet “Action Sheet” (16px Regular) → font-size/md in “Docs Brand Tokens”",
+          "dialog/header/Filters “Filters” (16px Regular) → font-size/md in “Docs Brand Tokens”",
+          "dialog/header/Navigation “Navigation” (16px Regular) → font-size/md in “Docs Brand Tokens”",
+          "dialog/header/Settings “Settings” (16px Regular) → font-size/md in “Docs Brand Tokens” ×4"
+        ],
+        "AtlInput": [
+          "Placeholder text “Placeholder text” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×2",
+          "invalid-email “invalid-email” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "user@example.com “user@example.com” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×2"
+        ],
+        "AtlPagination": [
+          "ellipsis/... “...” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×2",
+          "page-btn/1 “1” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "page-btn/10 “10” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "page-btn/4 “4” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "page-btn/6 “6” (14px Regular) → font-size/sm in “Docs Brand Tokens”"
+        ],
+        "AtlRadio": [
+          "Option label “Option label” (16px Regular) → font-size/md in “Docs Brand Tokens” ×3",
+          "Selected option “Selected option” (16px Regular) → font-size/md in “Docs Brand Tokens”"
+        ],
+        "AtlRadioGroup": [
+          "Free “Free” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×3",
+          "Pro “Pro” (14px Regular) → font-size/sm in “Docs Brand Tokens”"
+        ],
+        "AtlSelect": [
+          "Select a country... “Select a country...” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×3",
+          "United States “United States” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×2"
+        ],
+        "AtlStepper": [
+          "header/step-1/circle-active/1 “1” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×6",
+          "header/step-2/circle-active/2 “2” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "header/step-2/circle-default/2 “2” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×6",
+          "header/step-2/circle-error/! “!” (12px Regular) → font-size/xs in “Docs Brand Tokens”",
+          "header/step-3/circle-default/3 “3” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×8"
+        ],
+        "AtlTabGroup": [
+          "tablist/tab/Account “Account” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "tablist/tab/Billing “Billing” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×3",
+          "tablist/tab/Notifications “Notifications” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×2",
+          "tabpanel/Content for the \"Account\" tab goes here. “Content for the \"Account\" tab goes here.” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×2",
+          "tabpanel/Content for the \"Notifications\" tab goes here. “Content for the \"Notifications\" tab goes” (14px Regular) → font-size/sm in “Docs Brand Tokens”"
+        ],
+        "AtlTable": [
+          "AtlTable / bordered-md/tbody/tr-1/Frame/Alice Müller “Alice Müller” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / bordered-md/tbody/tr-1/Frame/Engineer “Engineer” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / bordered-md/tbody/tr-1/Frame/alice@example.com “alice@example.com” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / bordered-md/tbody/tr-2/Frame/Bob Schmidt “Bob Schmidt” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / bordered-md/tbody/tr-2/Frame/Designer “Designer” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / bordered-md/tbody/tr-2/Frame/bob@example.com “bob@example.com” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / bordered-md/tbody/tr-3/Frame/Carol Wagner “Carol Wagner” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / bordered-md/tbody/tr-3/Frame/Manager “Manager” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / bordered-md/tbody/tr-3/Frame/carol@example.com “carol@example.com” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / bordered-md/tbody/tr-4/Frame/David Bauer “David Bauer” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / bordered-md/tbody/tr-4/Frame/Engineer “Engineer” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / bordered-md/tbody/tr-4/Frame/david@example.com “david@example.com” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / default-lg/tbody/tr-1/Frame/Alice Müller “Alice Müller” (16px Regular) → font-size/md in “Docs Brand Tokens”",
+          "AtlTable / default-lg/tbody/tr-1/Frame/Engineer “Engineer” (16px Regular) → font-size/md in “Docs Brand Tokens”",
+          "AtlTable / default-lg/tbody/tr-1/Frame/alice@example.com “alice@example.com” (16px Regular) → font-size/md in “Docs Brand Tokens”",
+          "AtlTable / default-lg/tbody/tr-2/Frame/Bob Schmidt “Bob Schmidt” (16px Regular) → font-size/md in “Docs Brand Tokens”",
+          "AtlTable / default-lg/tbody/tr-2/Frame/Designer “Designer” (16px Regular) → font-size/md in “Docs Brand Tokens”",
+          "AtlTable / default-lg/tbody/tr-2/Frame/bob@example.com “bob@example.com” (16px Regular) → font-size/md in “Docs Brand Tokens”",
+          "AtlTable / default-lg/tbody/tr-3/Frame/Carol Wagner “Carol Wagner” (16px Regular) → font-size/md in “Docs Brand Tokens”",
+          "AtlTable / default-lg/tbody/tr-3/Frame/Manager “Manager” (16px Regular) → font-size/md in “Docs Brand Tokens”",
+          "AtlTable / default-lg/tbody/tr-3/Frame/carol@example.com “carol@example.com” (16px Regular) → font-size/md in “Docs Brand Tokens”",
+          "AtlTable / default-lg/tbody/tr-4/Frame/David Bauer “David Bauer” (16px Regular) → font-size/md in “Docs Brand Tokens”",
+          "AtlTable / default-lg/tbody/tr-4/Frame/Engineer “Engineer” (16px Regular) → font-size/md in “Docs Brand Tokens”",
+          "AtlTable / default-lg/tbody/tr-4/Frame/david@example.com “david@example.com” (16px Regular) → font-size/md in “Docs Brand Tokens”",
+          "AtlTable / default-md/tbody/tr-1/Frame/Alice Müller “Alice Müller” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / default-md/tbody/tr-1/Frame/Engineer “Engineer” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / default-md/tbody/tr-1/Frame/alice@example.com “alice@example.com” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / default-md/tbody/tr-2/Frame/Bob Schmidt “Bob Schmidt” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / default-md/tbody/tr-2/Frame/Designer “Designer” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / default-md/tbody/tr-2/Frame/bob@example.com “bob@example.com” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / default-md/tbody/tr-3/Frame/Carol Wagner “Carol Wagner” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / default-md/tbody/tr-3/Frame/Manager “Manager” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / default-md/tbody/tr-3/Frame/carol@example.com “carol@example.com” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / default-md/tbody/tr-4/Frame/David Bauer “David Bauer” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / default-md/tbody/tr-4/Frame/Engineer “Engineer” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / default-md/tbody/tr-4/Frame/david@example.com “david@example.com” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / striped-md/tbody/tr-1/Frame/Alice Müller “Alice Müller” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / striped-md/tbody/tr-1/Frame/Engineer “Engineer” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / striped-md/tbody/tr-1/Frame/alice@example.com “alice@example.com” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / striped-md/tbody/tr-2/Frame/Bob Schmidt “Bob Schmidt” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / striped-md/tbody/tr-2/Frame/Designer “Designer” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / striped-md/tbody/tr-2/Frame/bob@example.com “bob@example.com” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / striped-md/tbody/tr-3/Frame/Carol Wagner “Carol Wagner” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / striped-md/tbody/tr-3/Frame/Manager “Manager” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / striped-md/tbody/tr-3/Frame/carol@example.com “carol@example.com” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / striped-md/tbody/tr-4/Frame/David Bauer “David Bauer” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / striped-md/tbody/tr-4/Frame/Engineer “Engineer” (14px Regular) → font-size/sm in “Docs Brand Tokens”",
+          "AtlTable / striped-md/tbody/tr-4/Frame/david@example.com “david@example.com” (14px Regular) → font-size/sm in “Docs Brand Tokens”"
+        ],
+        "AtlTbody": [
+          "tr/atl-tr-select-cell/AtlCheckbox/Accept terms “Accept terms” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×2"
+        ],
+        "AtlToast": [
+          "Frame/Action completed. “Action completed.” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×8"
+        ],
+        "AtlToggle": [
+          "Notifications “Notifications” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×4"
+        ],
+        "AtlTr": [
+          "atl-tr-select-cell/AtlCheckbox/Accept terms “Accept terms” (14px Regular) → font-size/sm in “Docs Brand Tokens” ×2"
+        ]
+      }
+    },
+    "ROOT-TYPE": {
+      "kind": "gap",
+      "why": "Six masters draw their root text at a size or leading the CSS does not state — AtlInput and AtlSelect at 14px against a 16px CSS, four more on AUTO leading against 125%. Correcting the Figma side means retyping nodes whose sizes bind to the docs-site collection, which is the FIGMA-VARIABLE-COLLECTION debt below; doing it first would only move the problem. Promote to a plain blocker once that entry is gone.",
+      "perMaster": {
+        "AtlCheckbox": [
+          "AtlCheckbox [every checked variant]: root text is 14px, but the CSS says 16px.",
+          "AtlCheckbox [every checked variant]: root text leaves the leading on AUTO; the CSS states 125%. An inherited leading makes the box grow with the text metrics."
+        ],
+        "AtlInput": [
+          "AtlInput [every checked variant]: root text is 14px, but the CSS says 16px."
+        ],
+        "AtlRadio": [
+          "AtlRadio [every checked variant]: root text leaves the leading on AUTO; the CSS states 125%. An inherited leading makes the box grow with the text metrics."
+        ],
+        "AtlRadioGroup": [
+          "AtlRadioGroup [every checked variant]: root text leaves the leading on AUTO; the CSS states 125%. An inherited leading makes the box grow with the text metrics."
+        ],
+        "AtlSelect": [
+          "AtlSelect [every checked variant]: root text is 14px, but the CSS says 16px."
+        ],
+        "AtlToggle": [
+          "AtlToggle [every checked variant]: root text is 14px, but the CSS says 16px.",
+          "AtlToggle [every checked variant]: root text leaves the leading on AUTO; the CSS states 125%. An inherited leading makes the box grow with the text metrics."
+        ]
+      }
+    },
+    "TEXT-OVERRIDE": {
+      "kind": "gap",
+      "why": "Instances whose local override detaches the text style their master does state. They read as unbound and would otherwise inflate TEXT-UNSTYLED, so they are counted apart. All four are AtlChat button labels; the fix is to reset the override in Figma, and it is unblocked — this entry should reach zero before the others.",
+      "perMaster": {
+        "AtlChat": [
+          "new-chat-button/Button “＋ New chat” (14px Medium)",
+          "send-button/Button “Send” (14px Medium)",
+          "send-button/Button “Send” (16px Medium) ×2"
+        ]
+      }
+    },
+    "TEXT-UNSTYLED": {
+      "kind": "gap",
+      "why": "TEXT nodes on a master carrying no ty/* text style, after the structural exemptions (inside an INSTANCE, invisible) and the short pending-removal list. Blocked on the same variable-collection problem, and on the role inventory: tasks/type-role-resolution-2026-08-28.md shows seven of the ten ty/* roles are referenced by zero component stylesheets, so some of these nodes have no correct role to bind to yet.",
+      "perMaster": {
+        "AtlAccordionGroup": [
+          "atl-accordion-item/accordion-panel/You can request a refund within 30 days of purchase. Contact support to initiate. “You can request a refund within 30 days ” (14px Regular) ×3"
+        ],
+        "AtlAvatar": [
+          "JS “JS” (10px Bold) ×2",
+          "JS “JS” (16px Medium) ×2",
+          "JS “JS” (18px Medium) ×2"
+        ],
+        "AtlBreadcrumbItem": [
+          "breadcrumb-current/Current “Current” (14px SemiBold)",
+          "breadcrumb-link/Products “Products” (14px Regular)"
+        ],
+        "AtlButton": [
+          "Button “Button” (16px Medium) ×16",
+          "Button “Button” (18px Medium) ×4"
+        ],
+        "AtlCard": [
+          "card-content/Card body text. Main content area for information. “Card body text. Main content area for in” (16px Regular) ×12"
+        ],
+        "AtlChat": [
+          "av-glyph “AI” (14px SemiBold)",
+          "avatar-glyph “AI” (14px SemiBold)",
+          "chat-title “Atelier Assistant” (15px SemiBold)",
+          "drawer-title “AI Assistant” (15px SemiBold)",
+          "fab-glyph “AI” (20px SemiBold)",
+          "m1t “Hi! How can I help you today?” (12px Regular)",
+          "m1t “Welcome back, Dominik. I see you're work” (14px Regular)",
+          "m2t “Can you summarize this dashboard?” (12px Regular)",
+          "m2t “Help me write a Storybook story for the ” (14px Regular)",
+          "m3t “Sure — here's a starting point:” (14px Regular)",
+          "m3t “You're tracking 12 KPIs. Three are below” (12px Regular)",
+          "m4t “Show me CTR.” (12px Regular)",
+          "msg-asst-2-text “Here you go:” (13px Regular)",
+          "pop-avatar-glyph “AI” (12px SemiBold)",
+          "pop-title “AI Assistant” (14px SemiBold)"
+        ],
+        "AtlChatSuggestion": [
+          "chip-hint “Uses AtlInput and AtlButton” (12px Regular)"
+        ],
+        "AtlCheckbox": [
+          "Accept terms “Accept terms” (14px Regular) ×5"
+        ],
+        "AtlCodeBlock": [
+          "header/my-component.ts “my-component.ts” (12px Bold) ×2",
+          "header/typescript “typescript” (12px Bold) ×2"
+        ],
+        "AtlCombobox": [
+          "input/Cherry “Cherry” (14px Regular)",
+          "input/Search fruit… “Search fruit…” (14px Regular) ×4",
+          "input/ap “ap” (14px Regular)",
+          "panel/active option/Apple “Apple” (14px Regular) ×2",
+          "panel/disabled option/Honeydew “Honeydew” (14px Regular)",
+          "panel/option/Apricot “Apricot” (14px Regular)",
+          "panel/option/Banana “Banana” (14px Regular)",
+          "panel/option/Date “Date” (14px Regular)",
+          "panel/option/Elderberry “Elderberry” (14px Regular)",
+          "panel/option/Grape “Grape” (14px Regular)",
+          "panel/selected option/Cherry “Cherry” (14px Regular)"
+        ],
+        "AtlDialog": [
+          "Frame/Are you sure you want to proceed? This action cannot be undone. “Are you sure you want to proceed? This a” (14px Regular) ×5"
+        ],
+        "AtlDrawer": [
+          "dialog/content/Drawer content. Place any form controls or text inside. “Drawer content. Place any form controls ” (14px Regular) ×7",
+          "dialog/footer/Frame/Save “Save” (14px Regular) ×7",
+          "dialog/header/Action Sheet “Action Sheet” (16px Regular)",
+          "dialog/header/Filters “Filters” (16px Regular)",
+          "dialog/header/Navigation “Navigation” (16px Regular)",
+          "dialog/header/Settings “Settings” (16px Regular) ×4"
+        ],
+        "AtlInput": [
+          "Placeholder text “Placeholder text” (14px Regular) ×2",
+          "invalid-email “invalid-email” (14px Regular)",
+          "user@example.com “user@example.com” (14px Regular) ×2"
+        ],
+        "AtlMenu": [
+          "atl-menu-item/Copy “Copy” (14px Regular)",
+          "atl-menu-item/Copy “Copy” (16px Regular)",
+          "atl-menu-item/Delete “Delete” (14px Regular)",
+          "atl-menu-item/Delete “Delete” (16px Regular)",
+          "atl-menu-item/Duplicate “Duplicate” (14px Regular)",
+          "atl-menu-item/Duplicate “Duplicate” (16px Regular)",
+          "atl-menu-item/Move to… “Move to…” (14px Regular)",
+          "atl-menu-item/Move to… “Move to…” (16px Regular)",
+          "atl-menu-item/Paste “Paste” (14px Regular)",
+          "atl-menu-item/Paste “Paste” (16px Regular)",
+          "atl-menu-item/Rename “Rename” (14px Regular)",
+          "atl-menu-item/Rename “Rename” (16px Regular)"
+        ],
+        "AtlMenuItem": [
+          "Menu item “Menu item” (16px Regular) ×2"
+        ],
+        "AtlOption": [
+          "Option label “Option label” (16px Regular) ×3"
+        ],
+        "AtlPagination": [
+          "ellipsis/... “...” (14px Regular) ×2",
+          "page-btn/1 “1” (14px Regular)",
+          "page-btn/10 “10” (14px Regular)",
+          "page-btn/4 “4” (14px Regular)",
+          "page-btn/6 “6” (14px Regular)"
+        ],
+        "AtlRadio": [
+          "Option label “Option label” (16px Regular) ×3",
+          "Selected option “Selected option” (16px Regular)"
+        ],
+        "AtlRadioGroup": [
+          "Free “Free” (14px Regular) ×3",
+          "Pro “Pro” (14px Regular)"
+        ],
+        "AtlSelect": [
+          "Select a country... “Select a country...” (14px Regular) ×3",
+          "United States “United States” (14px Regular) ×2"
+        ],
+        "AtlStep": [
+          "step-circle/step-number “2” (14px SemiBold) ×3",
+          "step-text/step-description “Short description” (12px Regular) ×4"
+        ],
+        "AtlStepper": [
+          "header/step-1/circle-active/1 “1” (14px Regular) ×6",
+          "header/step-2/circle-active/2 “2” (14px Regular)",
+          "header/step-2/circle-default/2 “2” (14px Regular) ×6",
+          "header/step-3/circle-default/3 “3” (14px Regular) ×8"
+        ],
+        "AtlTabGroup": [
+          "tablist/tab/Account “Account” (14px Regular)",
+          "tablist/tab/Billing “Billing” (14px Regular) ×3",
+          "tablist/tab/Notifications “Notifications” (14px Regular) ×2",
+          "tabpanel/Content for the \"Account\" tab goes here. “Content for the \"Account\" tab goes here.” (14px Regular) ×2",
+          "tabpanel/Content for the \"Notifications\" tab goes here. “Content for the \"Notifications\" tab goes” (14px Regular)"
+        ],
+        "AtlTable": [
+          "AtlTable / bordered-md/tbody/tr-1/Frame/Alice Müller “Alice Müller” (14px Regular)",
+          "AtlTable / bordered-md/tbody/tr-1/Frame/Engineer “Engineer” (14px Regular)",
+          "AtlTable / bordered-md/tbody/tr-1/Frame/alice@example.com “alice@example.com” (14px Regular)",
+          "AtlTable / bordered-md/tbody/tr-2/Frame/Bob Schmidt “Bob Schmidt” (14px Regular)",
+          "AtlTable / bordered-md/tbody/tr-2/Frame/Designer “Designer” (14px Regular)",
+          "AtlTable / bordered-md/tbody/tr-2/Frame/bob@example.com “bob@example.com” (14px Regular)",
+          "AtlTable / bordered-md/tbody/tr-3/Frame/Carol Wagner “Carol Wagner” (14px Regular)",
+          "AtlTable / bordered-md/tbody/tr-3/Frame/Manager “Manager” (14px Regular)",
+          "AtlTable / bordered-md/tbody/tr-3/Frame/carol@example.com “carol@example.com” (14px Regular)",
+          "AtlTable / bordered-md/tbody/tr-4/Frame/David Bauer “David Bauer” (14px Regular)",
+          "AtlTable / bordered-md/tbody/tr-4/Frame/Engineer “Engineer” (14px Regular)",
+          "AtlTable / bordered-md/tbody/tr-4/Frame/david@example.com “david@example.com” (14px Regular)",
+          "AtlTable / default-lg/tbody/tr-1/Frame/Alice Müller “Alice Müller” (16px Regular)",
+          "AtlTable / default-lg/tbody/tr-1/Frame/Engineer “Engineer” (16px Regular)",
+          "AtlTable / default-lg/tbody/tr-1/Frame/alice@example.com “alice@example.com” (16px Regular)",
+          "AtlTable / default-lg/tbody/tr-2/Frame/Bob Schmidt “Bob Schmidt” (16px Regular)",
+          "AtlTable / default-lg/tbody/tr-2/Frame/Designer “Designer” (16px Regular)",
+          "AtlTable / default-lg/tbody/tr-2/Frame/bob@example.com “bob@example.com” (16px Regular)",
+          "AtlTable / default-lg/tbody/tr-3/Frame/Carol Wagner “Carol Wagner” (16px Regular)",
+          "AtlTable / default-lg/tbody/tr-3/Frame/Manager “Manager” (16px Regular)",
+          "AtlTable / default-lg/tbody/tr-3/Frame/carol@example.com “carol@example.com” (16px Regular)",
+          "AtlTable / default-lg/tbody/tr-4/Frame/David Bauer “David Bauer” (16px Regular)",
+          "AtlTable / default-lg/tbody/tr-4/Frame/Engineer “Engineer” (16px Regular)",
+          "AtlTable / default-lg/tbody/tr-4/Frame/david@example.com “david@example.com” (16px Regular)",
+          "AtlTable / default-md/tbody/tr-1/Frame/Alice Müller “Alice Müller” (14px Regular)",
+          "AtlTable / default-md/tbody/tr-1/Frame/Engineer “Engineer” (14px Regular)",
+          "AtlTable / default-md/tbody/tr-1/Frame/alice@example.com “alice@example.com” (14px Regular)",
+          "AtlTable / default-md/tbody/tr-2/Frame/Bob Schmidt “Bob Schmidt” (14px Regular)",
+          "AtlTable / default-md/tbody/tr-2/Frame/Designer “Designer” (14px Regular)",
+          "AtlTable / default-md/tbody/tr-2/Frame/bob@example.com “bob@example.com” (14px Regular)",
+          "AtlTable / default-md/tbody/tr-3/Frame/Carol Wagner “Carol Wagner” (14px Regular)",
+          "AtlTable / default-md/tbody/tr-3/Frame/Manager “Manager” (14px Regular)",
+          "AtlTable / default-md/tbody/tr-3/Frame/carol@example.com “carol@example.com” (14px Regular)",
+          "AtlTable / default-md/tbody/tr-4/Frame/David Bauer “David Bauer” (14px Regular)",
+          "AtlTable / default-md/tbody/tr-4/Frame/Engineer “Engineer” (14px Regular)",
+          "AtlTable / default-md/tbody/tr-4/Frame/david@example.com “david@example.com” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-1/Frame/Alice Müller “Alice Müller” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-1/Frame/Engineer “Engineer” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-1/Frame/alice@example.com “alice@example.com” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-2/Frame/Bob Schmidt “Bob Schmidt” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-2/Frame/Designer “Designer” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-2/Frame/bob@example.com “bob@example.com” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-3/Frame/Carol Wagner “Carol Wagner” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-3/Frame/Manager “Manager” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-3/Frame/carol@example.com “carol@example.com” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-4/Frame/David Bauer “David Bauer” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-4/Frame/Engineer “Engineer” (14px Regular)",
+          "AtlTable / striped-md/tbody/tr-4/Frame/david@example.com “david@example.com” (14px Regular)"
+        ],
+        "AtlTd": [
+          "Cell value “Cell value” (14px Regular) ×3"
+        ],
+        "AtlTh": [
+          "Column “Column” (14px SemiBold) ×3"
+        ],
+        "AtlToast": [
+          "Frame/Action completed. “Action completed.” (14px Regular) ×8"
+        ],
+        "AtlToggle": [
+          "Notifications “Notifications” (14px Regular) ×4"
+        ],
+        "AtlTooltip": [
+          "Helpful tip text “Helpful tip text” (12px Regular) ×4"
+        ]
+      }
+    }
+  }
+}

@@ -83,6 +83,9 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0075](0075-the-direction-nothing-checked.md) | The direction nothing checked (`[UNDECLARED]`, `[SET-CLIPS]`) | Accepted | Recorded |
 | [0076](0076-the-padding-nobody-compared.md) | The padding nobody compared (`[ROOT-BOX]`; bindable vs derived) | Accepted | Recorded |
 | [0077](0077-an-unresolved-layer-is-an-unchecked-layer.md) | An unresolved layer is an unchecked layer (mechanical selector shapes + state-class cascade) | Accepted | Recorded |
+| [0078](0078-a-count-you-can-only-ratchet-down.md) | A count you can only ratchet down (`[NO-SIZE]`, `lib/component-roots.js`, `--update-baseline`) | Accepted | Recorded |
+| [0079](0079-type-does-not-need-the-painted-box.md) | Type does not need the painted box (`ROOT_TYPE`, `[TEXT-UNSTYLED]`, `tools/figma/type-baseline.json`) | Accepted | Recorded |
+| [0080](0080-a-guard-that-skips-is-not-a-check.md) | A guard that skips is not a check (ratchets record findings, not counts; amends 0078/0079) | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

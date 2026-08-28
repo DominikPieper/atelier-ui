@@ -366,16 +366,51 @@ Decision-bearing quick wins (deferred — not this session's scope):
       (medium/sm/tight — 6 CSS rules, 75 nodes) and `--ui-type-action` (semibold/md/tight
       — 3 CSS rules, 15 nodes). 40 of 43 masters unchanged in size, 3 grew 1–2px.
 
-- [ ] **201 Figma text nodes want a body role at 150% where the CSS gives them `tight` by
-      inheritance.** Measured 2026-08-27 (ADR-0074). Figma has no inheritance for
-      `line-height` — every text node states its own — so binding these to `ty/body-sm` /
-      `ty/body-md` would *create* a divergence. Whether each node is prose (AtlToast's
-      message, which the CSS really does set to body-sm/normal) or control text (a table
-      cell, a menu row, a checkbox label) is answered **per node by the CSS**, not by how
-      the node looks today. Needs a per-master layer→selector pass, the same shape as the
-      `[LAYER-PAINT]` map. Masters involved: Input, Select, Combobox, Checkbox, Radio,
-      RadioGroup, Toggle, Card, Table, Menu, TabGroup, Stepper, Pagination, Dialog, Drawer,
-      Toast, AccordionGroup, Chat, MenuItem, BreadcrumbItem, Option, Td, Tbody.
+- [ ] **311 Figma TEXT nodes across 33 masters carry no `ty/*` role, and not one of them
+      is bindable today without a rendered change.** The "201" recorded here on 2026-08-27
+      was wrong on both the number and the framing. A read-only census of all 43 masters
+      (2026-08-28, `tools/figma/text-nodes.json`, and `tasks/type-role-resolution-2026-08-28.md`)
+      counts **566** TEXT nodes, **311** unbound, over **33** masters — not 201 over 23. And
+      the framing was inverted: the blocker is not that a body role would *create* a leading
+      divergence, it is that **206 of the 311 sit on `lineHeight: AUTO`**, the font's own
+      metric, which is not 125% or 150% and matches no role at all. Zero nodes match a
+      `ty/*` style exactly today, so *every* binding moves at least the leading. Worse,
+      **212 of them source `fontSize` from the wrong variable collection** (below), so the
+      size corrections most of them need are not plain edits. What is now true and was not:
+      all three counts are gated. `[TEXT-UNSTYLED]` records 257 (after the structural
+      exemptions), `[FIGMA-AUTO-LEADING]` 206 and `[FIGMA-VARIABLE-COLLECTION]` 212, each
+      per master, each blocking in both directions (ADR-0079, ADR-0080). The per-master
+      layer→selector pass this item asks for is still the work; the ratchet is what stops it
+      growing meanwhile.
+
+- [ ] **Two roles the ten do not span: `ty/row` and `ty/row-sm`.** Instrument Sans Regular
+      16 / 1.25 has **10 CSS sites** (7 excluding the ADR-0073 value-text carve-out) and 27
+      Figma nodes already faithful to it; Regular 14 / 1.25 has 5 CSS sites and 16 faithful
+      nodes. Both clear the rule of three on both sides several times over, and together
+      they account for ~119 of the off-scale population — including the whole
+      `.atl-table.size-{sm,md,lg} tbody td` ladder, which currently has one rung bound to
+      `ty/label` at the wrong weight, one rung undecided and one left raw. Mint
+      `--ui-type-row` / `--ui-type-row-sm` and the matching Figma styles, then bind. Blocked
+      behind the collection decision for the 37 nodes that also need 14 → 16.
+      §5A/§5B of `tasks/type-role-resolution-2026-08-28.md` carries the tally.
+
+- [ ] **ADR needed: 212 TEXT nodes bind `fontSize` to `Docs Brand Tokens`.** The docs-site
+      collection, not the library tiers ADR-0030 made semantic. The two scales agree today,
+      so nothing renders wrong and nothing will until they diverge — but it is the root
+      debt: **every** "correct this master 14 → 16" recommendation in the analysis is
+      unexecutable as a plain edit, because the value is not the master's to set. It also
+      blocks the promotion of `[ROOT-TYPE]`, `[TEXT-UNSTYLED]` and `[FIGMA-AUTO-LEADING]`
+      from ratchets to plain blockers. Unresolved and undeterminable without mutating the
+      document: whether applying a text style clears an existing `fontSize` binding or the
+      binding wins.
+
+- [ ] **Seven masters the six mapping groups never covered — 54 unbound nodes.**
+      `Action/AtlButton` (20; its `size=md` and `size=lg` labels are Medium where
+      `.atl-button` is SemiBold at every size, which is what blocks the hand-drawn-button
+      fix below), `AtlStep` (12), `AtlTr` (8), `AtlBreadcrumbs` (7), `AtlAvatar` (6),
+      `AtlCodeBlock` (4), `AtlTh` (3), `AtlChatSuggestion` (1). The analysis covered 26 of
+      43 masters and says so; these are the remainder, and AtlButton is the one that
+      matters, because C9's instance swap targets a master nobody audited.
 
 - [ ] **77 Figma text nodes are in combinations no role expresses.** Medium 16 (18),
       Regular 12 (18), SemiBold 14 (13), Medium 18 (6), JetBrains Mono Bold 12 (4), Italic
@@ -396,18 +431,24 @@ Decision-bearing quick wins (deferred — not this session's scope):
       instantiate what the child can express — and now visible because those nodes bound to
       `ty/control` rather than `ty/action`.
 
-- [ ] **A component root may state a family and a leading but no font-size.**
-      `.atl-accordion-group` does, so its panel text takes whatever size the consuming app
-      sets — the same class of defect as `[NO-TYPEFACE]` and `[NO-LEADING]`, which
-      `check:typeface` does require. Add `[NO-SIZE]`, or state why a root may omit it.
+- [x] ~~**A component root may state a family and a leading but no font-size**~~ — gated
+      2026-08-28, ADR-0078 + ADR-0080. `[NO-SIZE]` is in `check:typeface`, keyed off the
+      prose leading (`--ui-line-height-normal` means *this one carries prose*), and it was
+      not one root but **15** — accordion, card, chat, dialog and drawer, three each, one
+      per framework. `font-size: inherit` does not satisfy it. Recorded as roots and not as
+      a count in `tools/parity/typeface-baseline.json`, so a new one hidden by a fixed one
+      still blocks. **The defect itself is not fixed:** stating the size means deciding what
+      it is, which redraws five masters and waits on the collection decision above.
 
-- [ ] **Add `[TEXT-UNSTYLED]` so unbound text cannot come back.** `[TEXT-STYLE]` checks
-      that the eight — now ten — `ty/*` styles match tokens.css; it never checks that any
-      node uses one, which is how 509 nodes came to use none (ADR-0074). 231 are bound now,
-      and nothing stops the next master from drawing raw text. The snapshot already carries
-      per-node facts, so the gate is a count plus an allowlist for the nodes that
-      legitimately have no role (AtlTooltip's four, and whatever the remaining 77 resolve
-      to). Warning first, blocker once the 201 and the 77 are settled.
+- [x] ~~**Add `[TEXT-UNSTYLED]` so unbound text cannot come back**~~ — landed 2026-08-28,
+      ADR-0079 + ADR-0080, as a ratchet rather than the warning this item imagined (ADR-0066
+      forbids a warning nobody can clear). 257 nodes over 29 masters, after two *structural*
+      exemptions — a node under an INSTANCE, whose master owns the type, and an invisible
+      node — plus a short pending-removal list of scenery and glyphs. The snapshot did not
+      in fact "already carry per-node facts": family, weight, the text-style binding and the
+      size variable's collection were captured nowhere and had to be added
+      (`tools/figma/text-nodes.json`). Promote to a plain blocker when the entry reaches
+      zero; that waits on the collection decision and on `ty/row`.
 
 - [x] ~~**Root padding diverges on at least two masters, and no gate compares it**~~ —
       closed 2026-08-28, ADR-0076. `[ROOT-BOX]` compares the root's padding and gap, and it
@@ -436,6 +477,56 @@ Decision-bearing quick wins (deferred — not this session's scope):
       `.atl-drawer-host dialog`, so both pass against the same rule — but the root is the
       overlay area holding the backdrop rectangle, and painting it surface is wrong for what
       it represents. Decide whether the root should paint the backdrop, nothing, or stay.
+
+- [ ] **`.atl-drawer-host dialog` states nothing typographic.** `all: unset` wipes the
+      inherited size and leading and the rule puts neither back, so AtlDrawer is the one
+      master whose root type `[ROOT-TYPE]` resolves to nothing for a reason that is a
+      defect rather than delegation (ADR-0079). The other six unresolved fallbacks —
+      AtlStep, AtlBreadcrumbItem, AtlAccordionItem, AtlChatSuggestion, AtlChatTyping,
+      AtlAvatarGroup — legitimately inherit from the parent master that places them, which
+      is why the gate stays silent about all seven rather than warning six-sevenths
+      unclearably (ADR-0066). Fix is one declaration in `drawer/atl-drawer.css`; deciding
+      *which* size waits on the same question everything else in this cluster waits on.
+
+- [ ] **AtlCombobox's fifteen unstyled TEXT nodes are a layer problem, not a root one.**
+      `[ROOT-TYPE]` cannot reach them: the master has no single direct TEXT child, so the
+      snapshot records no root type at all. `[LAYER-PAINT]` cannot either — every captured
+      layer sits in a `state != default` variant and is skipped wholesale, the one
+      default-state layer (`input`) dies on `.atl-combobox-input`'s `font-size: inherit`
+      at layer level, and three option layers resolve to no rule because their names
+      contain spaces. Fixing it needs the layer cascade to carry the component root for
+      type only, plus a decision about the state skip — both with a blast radius across
+      all 43 masters, so a separate change (ADR-0079).
+
+- [ ] **Five CSS defects found in passing while resolving the type roles** (2026-08-28,
+      `tasks/type-role-resolution-2026-08-28.md` §4). Each is independent of typography and
+      none is gated:
+      - `.atl-tbody-empty-cell`'s `font-size` is **dead**. Specificity (0,1,0) against
+        `.atl-table.size-md tbody td` at (0,2,2), so the empty message renders 14px and
+        never the 16px written. The same rule's `padding` and `background-color` already
+        carry `!important` for exactly this reason; `font-size` was missed. Identical in
+        Angular and Vue — a shared defect, not drift.
+      - **Angular's combobox readonly rule is dead.** `atl-combobox.css:206` targets
+        `.atl-combobox-input`; the template emits `class="combobox-input"` and every other
+        rule was renamed. A readonly Angular combobox keeps its interactive border and text
+        cursor (ADR-0045 violation in one framework).
+      - **`.atl-tooltip` contradicts itself.** `max-width: 20rem` + `word-wrap: break-word`
+        **and** `white-space: nowrap`. React and Vue have the nowrap, Angular does not — so
+        the same tooltip wraps in one framework and cannot in the other two. Fix the
+        divergence before deciding the tooltip's type.
+      - **Five chat controls render in the UA font.** `.action-btn`, `.fab-bubble`,
+        `.close-btn`, `.chip` and `.field` are `<button>`/`<textarea>` elements stating no
+        `font-family`, so the UA shorthand wins. Every other component in the repo that
+        puts text in a form control writes `font: inherit` explicitly; `atl-chat.css` omits
+        it, and the chat root's own comment says it exists to prevent this (ADR-0035/0049).
+      - **`.radio-text` is styled nowhere**, and Angular does not emit it at all — no effect
+        today, but any future rule on it silently skips one framework.
+
+- [ ] **AtlChat ships an illustrative app mockup inside the master.** Sixteen TEXT nodes —
+      a nav rail, a breadcrumb, a page heading, two sidebar lists, a minimise glyph — are
+      scenery, not contract, and are excused from `[TEXT-UNSTYLED]` by name in
+      `check-figma.js`'s `TEXT_UNSTYLED_PENDING` rather than by any structural rule. The
+      entries are marked pending-removal, not exempt: when the mockup goes, so do they.
 
 - [ ] **Six masters pad on an axis the CSS derives, and it is one question, not six.**
       AtlButton, AtlInput, AtlTextarea, AtlSelect, AtlBadge and AtlTab. ADR-0041's recipe
@@ -1309,3 +1400,77 @@ before it produced right ones, and both times they looked plausible. `check:geom
 had a latent form of the same bug — hostifying per directory rather than per
 stylesheet — which was harmless only until `select/` held two components. Lessons in
 `tasks/lessons.md`.
+
+## Review — the type nobody was measuring, 2026-08-28
+
+Three agents built in parallel (the snapshot capture, `check:typeface`, `check:figma`),
+three skeptics re-derived each independently, and this pass fixed what they found. Nothing
+in Figma was mutated at any point: every figure comes from read-only queries and from
+`npm run figma:snapshot`. ADR-0080 written; ADR-0078 and ADR-0079 amended in place, because
+both were accepted the same morning and both carried a claim the review disproved.
+
+**What shipped.** `check:figma` measures the root type of three form fields for the first
+time — `font-size: inherit` produced a `null` that fed a `!== null` guard, so the comparison
+had never run once since it was written — and type gets its own cascade table instead of
+borrowing the paint table's exclusion list. Four per-TEXT-node checks and `[NO-SIZE]` in
+`check:typeface`, all five ratcheted: 206 AUTO leadings, 212 wrong-collection sizes, 257
+unstyled nodes, 4 detached overrides, 8 root-type divergences, 15 prose roots with no size.
+`tools/figma/text-nodes.json` is new — 566 nodes, 277 records, the family, weight, style
+binding and size-variable collection that were captured nowhere before.
+
+**Verified, not assumed.** Every check was proven by breaking what it exists to catch, with
+real edits to real files, and restored: a wrong `--ui-font-size` token on `.atl-input` (dead
+before the repair at exit 0, blocking after), a substitution inside one master for each of
+the four text checks, a `[ROOT-TYPE]` value drifting 16 → 18, `--update-baseline` run with
+an unrelated `[SET-CLIPS]` blocker in the tree, a malformed baseline, a deleted `kind`,
+`font-size: inherit` on a prose root. `check:all` green, exit 0, 14 pre-existing warnings —
+byte-identical to the ones HEAD prints.
+
+**Four things measurement contradicted.**
+
+1. **A count is not a ratchet.** Both baselines first recorded a number per directory or per
+   master, and both went **green on a substitution** — fix one root, break another, the
+   number never moves and nothing is printed. ADR-0079 had asserted the text checks were
+   immune ("presence tests, so a count is faithful"); they were the easiest to break. The
+   baselines now record the findings themselves. The file went from ~100 lines to 571, which
+   is the price.
+2. **The Angular branch was measuring a different population.** `check:typeface` decided a
+   root by name in React and Vue and by shape in Angular, so `:host(.atl-card-content)`
+   counted where the byte-identical `.atl-card-content` was invisible. `card: 4` was
+   `2 + 1 + 1`. Corrected, the count is 15 — three per component, one per framework. The
+   symmetry is the evidence; a cross-framework number that is not comparable is worse than
+   none.
+3. **`font-size: inherit` was accepted as a stated size.** The check's own message defines
+   the defect as "renders every line it does not size itself at the consuming page's size",
+   which is precisely what `inherit` does — and the gate called it an improvement and invited
+   you to lock the deferral into the baseline forever. The same file already knew better one
+   axis over (`if (value === 'inherit') continue`), and the headline finding of the analysis
+   is the identical `inherit` blindness in the sibling gate.
+4. **The address in the generated artifact was not an address.** `text-nodes.json` told
+   consumers to key on master + path + chars; 13 keys stand for two or three records, and
+   `AtlButton`'s one string `Button “Button”` covers three — one clean, two carrying the
+   collection debt. Now master + path + chars + size + weight, which is unique.
+
+**The unplanned find.** `--update-baseline` — the command every ratchet message tells you to
+run — called `process.exit(0)` before the report in *both* scripts, so it printed
+`✓ baseline updated` over an unrelated blocker and recorded the baseline from the broken
+tree. Neither builder noticed; it took a skeptic putting a real `[SET-CLIPS]` defect in the
+tree and running the documented remedy.
+
+**Found on the verification pass, after the agents were done.** The two ratchets did not
+behave the same. `check:typeface` had been given a no-op guard — an update that changes
+nothing prints `baseline unchanged` and does not write — and `check:figma` had not, so every
+run of the documented remedy rewrote `generatedAt` and produced a diff over an unchanged
+file. Fixed by comparing the would-be `checks` object against the recorded one before
+writing. Verified both directions: a no-op leaves the file byte-identical, a real move
+(one AUTO leading removed on AtlToast) still writes and reports `125 → 124 (−1)`.
+
+**The weakest point.** The ratchets are only as good as the snapshot, and the snapshot is
+only as good as its probe. **Twenty-one of the 43 masters run no `[ROOT-TYPE]` comparison at
+all** — for fourteen the CSS resolves an expectation and the comparison is skipped only
+because the Figma root has no single direct TEXT child. That is the same defect this whole
+pass is named after, one level down, and it is accepted rather than fixed because warning
+about all of them would be the unclearable warning ADR-0066 refuses. Two of the fourteen
+(AtlMenu at 16px, AtlToast at 14px) state a size in CSS that nothing checks. Secondarily:
+571 lines of baseline is a large `--update-baseline` diff to approve without reading, and
+nothing forces anybody to read it.

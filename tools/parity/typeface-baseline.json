@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "note": "Per-check RATCHET for check:typeface. The gate PASSES while the roots observed are exactly the roots recorded here, FAILS when one appears that is not recorded (naming it), and FAILS when a recorded one disappears without this file being updated — an improvement nobody records can silently reverse, which is the rule [STALE-EXEMPTION] already applies to allowlist entries. Roots and not a count: a count is blind to substitution, so fixing one root while breaking another in the same directory kept the number flat and the gate green. It is a ratchet rather than a plain blocker because the debt cannot be paid today: ADR-0066 rejected a warning nobody can clear, and a blocker would leave check:all red until the Figma-side fix unblocks. This is NOT an allowlist. tools/scripts/lib/allowlists.js answers 'this one is exempt forever'; this file answers 'these are owed'. Never record the same defect in both. WHEN A DIRECTORY IS CLEAR: its key disappears on the next update. When the whole entry is gone, delete the ratchet and make the check a plain blocker. Update with `node tools/scripts/check-typeface.js --update-baseline` — never by hand, except `why` and `kind`, which the writer preserves. See plan/adr/0078-a-count-you-can-only-ratchet-down.md and plan/adr/0080-a-guard-that-skips-is-not-a-check.md.",
+    "generatedAt": "2026-08-28T11:02:53.811Z",
+    "updatedBy": "node tools/scripts/check-typeface.js --update-baseline"
+  },
+  "checks": {
+    "NO-SIZE": {
+      "kind": "gap",
+      "why": "Component roots state --ui-line-height-normal — declaring themselves prose surfaces — and never state a font-size, so the prose they lead is sized by the consuming page. The fix is one declaration per root, but the size it should state is a redraw of five Figma masters (AtlAccordionGroup, AtlCard, AtlChat, AtlDialog, AtlDrawer) and is blocked on the wrong-variable-collection problem recorded in tasks/type-role-resolution-2026-08-28.md. Recorded as file + selector, with no line numbers, so an entry survives churn. The population is per-framework comparable: a host narrowed by another component's class answers to the same root-name list React and Vue do, so the identical rule counts identically in all three (ADR-0080).",
+      "perComponent": {
+        "accordion": [
+          "libs/angular/src/lib/accordion/atl-accordion.css `:host`",
+          "libs/react/src/lib/accordion/atl-accordion.css `.atl-accordion-group`",
+          "libs/vue/src/lib/accordion/atl-accordion.css `.atl-accordion-group`"
+        ],
+        "card": [
+          "libs/angular/src/lib/card/atl-card.css `:host`",
+          "libs/react/src/lib/card/atl-card.css `.atl-card`",
+          "libs/vue/src/lib/card/atl-card.css `.atl-card`"
+        ],
+        "chat": [
+          "libs/angular/src/lib/chat/atl-chat.css `:host`",
+          "libs/react/src/lib/chat/atl-chat.css `.atl-chat`",
+          "libs/vue/src/lib/chat/atl-chat.css `.atl-chat`"
+        ],
+        "dialog": [
+          "libs/angular/src/lib/dialog/atl-dialog.css `.atl-dialog`",
+          "libs/react/src/lib/dialog/atl-dialog.css `.atl-dialog`",
+          "libs/vue/src/lib/dialog/atl-dialog.css `.atl-dialog`"
+        ],
+        "drawer": [
+          "libs/angular/src/lib/drawer/atl-drawer.css `:host`",
+          "libs/react/src/lib/drawer/atl-drawer.css `.atl-drawer-host`",
+          "libs/vue/src/lib/drawer/atl-drawer.css `.atl-drawer-host`"
+        ]
+      }
+    }
+  }
+}

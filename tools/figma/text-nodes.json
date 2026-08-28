@@ -1,0 +1,5429 @@
+{
+  "meta": {
+    "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
+    "generatedAt": "2026-08-28T11:08:52.815Z",
+    "gitSha": "216b228",
+    "totalTextNodes": 566,
+    "records": 277,
+    "note": "Per-TEXT-node type facts for every master, companion to snapshot.json and written by the same run — `generatedAt` must match it, and a gate that reads one without checking the other is reading two different documents. Records are deduplicated across the variants of a set, so a count of text NODES sums `count` and never `records.length`. ADDRESSING A RECORD: neither `path` nor master + path + chars is unique — `path` collides inside a variant, and 13 master + path + chars keys stand for 2-3 records each (AtlButton draws three different `Button “Button”`). Use master + path + chars + size + weight, which is unique across all records today; check-figma.js builds exactly that address. Only the fontSize variable's collection is captured — a lineHeight binding is invisible here (zero nodes carry one today). Facts only; rules live in check-figma.js and check-typeface.js."
+  },
+  "masters": [
+    {
+      "nodeId": "129:20",
+      "name": "Action/AtlButton",
+      "selector": "AtlButton",
+      "variantCount": 24,
+      "text": [
+        {
+          "path": "Button",
+          "chars": "Button",
+          "textStyleName": "ty/control",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=primary, size=sm, state=default",
+            "variant=secondary, size=sm, state=default",
+            "variant=outline, size=sm, state=default",
+            "variant=danger, size=sm, state=default"
+          ],
+          "count": 4
+        },
+        {
+          "path": "Button",
+          "chars": "Button",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 16,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=primary, size=md, state=default",
+            "variant=secondary, size=md, state=default",
+            "variant=outline, size=md, state=default",
+            "variant=primary, size=md, state=focus",
+            "variant=primary, size=md, state=hover",
+            "variant=primary, size=md, state=active",
+            "variant=danger, size=md, state=default",
+            "variant=danger, size=md, state=hover",
+            "variant=danger, size=md, state=active",
+            "variant=danger, size=md, state=focus",
+            "variant=secondary, size=md, state=hover",
+            "variant=secondary, size=md, state=active",
+            "variant=secondary, size=md, state=focus",
+            "variant=outline, size=md, state=hover",
+            "variant=outline, size=md, state=active",
+            "variant=outline, size=md, state=focus"
+          ],
+          "count": 16
+        },
+        {
+          "path": "Button",
+          "chars": "Button",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 18,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/lg",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=primary, size=lg, state=default",
+            "variant=secondary, size=lg, state=default",
+            "variant=outline, size=lg, state=default",
+            "variant=danger, size=lg, state=default"
+          ],
+          "count": 4
+        }
+      ]
+    },
+    {
+      "nodeId": "129:33",
+      "name": "Form/AtlInput",
+      "selector": "AtlInput",
+      "variantCount": 5,
+      "text": [
+        {
+          "path": "Placeholder text",
+          "chars": "Placeholder text",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "state=default",
+            "state=hover"
+          ],
+          "count": 2
+        },
+        {
+          "path": "user@example.com",
+          "chars": "user@example.com",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "state=filled",
+            "state=focus"
+          ],
+          "count": 2
+        },
+        {
+          "path": "invalid-email",
+          "chars": "invalid-email",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "state=invalid"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    {
+      "nodeId": "55:65",
+      "name": "Display/AtlCard",
+      "selector": "AtlCard",
+      "variantCount": 12,
+      "text": [
+        {
+          "path": "card-header/Card Title",
+          "chars": "Card Title",
+          "textStyleName": "ty/title",
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 18,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 12
+        },
+        {
+          "path": "card-content/Card body text. Main content area for information.",
+          "chars": "Card body text. Main content area for in",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "*"
+          ],
+          "count": 12
+        },
+        {
+          "path": "card-section-4/card-inner-group/Save",
+          "chars": "Save",
+          "textStyleName": "ty/control",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 12
+        }
+      ]
+    },
+    {
+      "nodeId": "55:22",
+      "name": "Display/AtlBadge",
+      "selector": "AtlBadge",
+      "variantCount": 10,
+      "text": [
+        {
+          "path": "Default",
+          "chars": "Default",
+          "textStyleName": "ty/control",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=md",
+            "variant=success, size=md",
+            "variant=warning, size=md",
+            "variant=danger, size=md",
+            "variant=info, size=md"
+          ],
+          "count": 5
+        },
+        {
+          "path": "Default",
+          "chars": "Default",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=sm",
+            "variant=success, size=sm",
+            "variant=warning, size=sm",
+            "variant=danger, size=sm",
+            "variant=info, size=sm"
+          ],
+          "count": 5
+        }
+      ]
+    },
+    {
+      "nodeId": "55:92",
+      "name": "Form/AtlSelect",
+      "selector": "AtlSelect",
+      "variantCount": 5,
+      "text": [
+        {
+          "path": "Select a country...",
+          "chars": "Select a country...",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "state=default",
+            "state=hover",
+            "state=focus"
+          ],
+          "count": 3
+        },
+        {
+          "path": "United States",
+          "chars": "United States",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "state=filled",
+            "state=open"
+          ],
+          "count": 2
+        }
+      ]
+    },
+    {
+      "nodeId": "55:94",
+      "name": "Overlay/AtlDialog",
+      "selector": "AtlDialog",
+      "variantCount": 5,
+      "text": [
+        {
+          "path": "Frame/Confirm Action",
+          "chars": "Confirm Action",
+          "textStyleName": "ty/title",
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 18,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 5
+        },
+        {
+          "path": "Frame/Are you sure you want to proceed? This action cannot be undone.",
+          "chars": "Are you sure you want to proceed? This a",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "*"
+          ],
+          "count": 5
+        },
+        {
+          "path": "Frame/Frame/Cancel",
+          "chars": "Cancel",
+          "textStyleName": "ty/control",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 5
+        },
+        {
+          "path": "Frame/Frame/Confirm",
+          "chars": "Confirm",
+          "textStyleName": "ty/control",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 5
+        }
+      ]
+    },
+    {
+      "nodeId": "55:123",
+      "name": "Navigation/AtlTabGroup",
+      "selector": "AtlTabGroup",
+      "variantCount": 3,
+      "text": [
+        {
+          "path": "tablist/tab/Account",
+          "chars": "Account",
+          "textStyleName": "ty/control",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, selectedIndex=0",
+            "variant=pills, selectedIndex=0"
+          ],
+          "count": 2
+        },
+        {
+          "path": "tablist/tab/Notifications",
+          "chars": "Notifications",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, selectedIndex=0",
+            "variant=pills, selectedIndex=0"
+          ],
+          "count": 2
+        },
+        {
+          "path": "tablist/tab/Billing",
+          "chars": "Billing",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "*"
+          ],
+          "count": 3
+        },
+        {
+          "path": "tabpanel/Content for the \"Account\" tab goes here.",
+          "chars": "Content for the \"Account\" tab goes here.",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, selectedIndex=0",
+            "variant=pills, selectedIndex=0"
+          ],
+          "count": 2
+        },
+        {
+          "path": "tablist/tab/Account",
+          "chars": "Account",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, selectedIndex=1"
+          ],
+          "count": 1
+        },
+        {
+          "path": "tablist/tab/Notifications",
+          "chars": "Notifications",
+          "textStyleName": "ty/control",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, selectedIndex=1"
+          ],
+          "count": 1
+        },
+        {
+          "path": "tabpanel/Content for the \"Notifications\" tab goes here.",
+          "chars": "Content for the \"Notifications\" tab goes",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, selectedIndex=1"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    {
+      "nodeId": "55:127",
+      "name": "Feedback/AtlAccordionGroup",
+      "selector": "AtlAccordionGroup",
+      "variantCount": 3,
+      "text": [
+        {
+          "path": "atl-accordion-item/accordion-trigger/What is the refund policy?",
+          "chars": "What is the refund policy?",
+          "textStyleName": "ty/action",
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 16,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 3
+        },
+        {
+          "path": "atl-accordion-item/accordion-panel/You can request a refund within 30 days of purchase. Contact support to initiate.",
+          "chars": "You can request a refund within 30 days ",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "*"
+          ],
+          "count": 3
+        },
+        {
+          "path": "atl-accordion-item/accordion-trigger/How do I reset my password?",
+          "chars": "How do I reset my password?",
+          "textStyleName": "ty/action",
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 16,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 3
+        },
+        {
+          "path": "atl-accordion-item/accordion-trigger/Is there a free tier available?",
+          "chars": "Is there a free tier available?",
+          "textStyleName": "ty/action",
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 16,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 3
+        }
+      ]
+    },
+    {
+      "nodeId": "55:130",
+      "name": "Navigation/AtlMenu",
+      "selector": "AtlMenu",
+      "variantCount": 2,
+      "text": [
+        {
+          "path": "atl-menu-item/Copy",
+          "chars": "Copy",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "atl-menu-item/Paste",
+          "chars": "Paste",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "atl-menu-item/Duplicate",
+          "chars": "Duplicate",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "atl-menu-item/Rename",
+          "chars": "Rename",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "atl-menu-item/Move to…",
+          "chars": "Move to…",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "atl-menu-item/Delete",
+          "chars": "Delete",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "atl-menu-item/Copy",
+          "chars": "Copy",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=compact"
+          ],
+          "count": 1
+        },
+        {
+          "path": "atl-menu-item/Paste",
+          "chars": "Paste",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=compact"
+          ],
+          "count": 1
+        },
+        {
+          "path": "atl-menu-item/Duplicate",
+          "chars": "Duplicate",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=compact"
+          ],
+          "count": 1
+        },
+        {
+          "path": "atl-menu-item/Rename",
+          "chars": "Rename",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=compact"
+          ],
+          "count": 1
+        },
+        {
+          "path": "atl-menu-item/Move to…",
+          "chars": "Move to…",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=compact"
+          ],
+          "count": 1
+        },
+        {
+          "path": "atl-menu-item/Delete",
+          "chars": "Delete",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=compact"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    {
+      "nodeId": "55:52",
+      "name": "Overlay/AtlTooltip",
+      "selector": "AtlTooltip",
+      "variantCount": 4,
+      "text": [
+        {
+          "path": "Helpful tip text",
+          "chars": "Helpful tip text",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 12,
+          "lineHeight": "150%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 4
+        }
+      ]
+    },
+    {
+      "nodeId": "55:31",
+      "name": "Feedback/AtlAlert",
+      "selector": "AtlAlert",
+      "variantCount": 4,
+      "text": [
+        {
+          "path": "Your session will expire soon.",
+          "chars": "Your session will expire soon.",
+          "textStyleName": "ty/body-sm",
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "150%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 4
+        }
+      ]
+    },
+    {
+      "nodeId": "55:36",
+      "name": "Form/AtlCheckbox",
+      "selector": "AtlCheckbox",
+      "variantCount": 5,
+      "text": [
+        {
+          "path": "Accept terms",
+          "chars": "Accept terms",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "*"
+          ],
+          "count": 5
+        }
+      ]
+    },
+    {
+      "nodeId": "55:41",
+      "name": "Form/AtlToggle",
+      "selector": "AtlToggle",
+      "variantCount": 4,
+      "text": [
+        {
+          "path": "Notifications",
+          "chars": "Notifications",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "*"
+          ],
+          "count": 4
+        }
+      ]
+    },
+    {
+      "nodeId": "55:87",
+      "name": "Form/AtlTextarea",
+      "selector": "AtlTextarea",
+      "variantCount": 5,
+      "text": [
+        {
+          "path": "Tell us about yourself...",
+          "chars": "Tell us about yourself...",
+          "textStyleName": "ty/body-md",
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "150%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "state=default",
+            "state=hover"
+          ],
+          "count": 2
+        },
+        {
+          "path": "I'm a software engineer who loves building user interfaces.",
+          "chars": "I'm a software engineer who loves buildi",
+          "textStyleName": "ty/body-md",
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "150%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "state=filled",
+            "state=focus",
+            "state=invalid"
+          ],
+          "count": 3
+        }
+      ]
+    },
+    {
+      "nodeId": "55:137",
+      "name": "Form/AtlRadioGroup",
+      "selector": "AtlRadioGroup",
+      "variantCount": 4,
+      "text": [
+        {
+          "path": "Free",
+          "chars": "Free",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "selection=unselected, state=default",
+            "selection=unselected, state=focus",
+            "selection=unselected, state=hover"
+          ],
+          "count": 3
+        },
+        {
+          "path": "Pro",
+          "chars": "Pro",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "selection=selected, state=default"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    {
+      "nodeId": "420:185",
+      "name": "Form/AtlRadio",
+      "selector": "AtlRadio",
+      "variantCount": 4,
+      "text": [
+        {
+          "path": "Option label",
+          "chars": "Option label",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "selection=unchecked, state=default",
+            "selection=unchecked, state=focus",
+            "selection=unchecked, state=hover"
+          ],
+          "count": 3
+        },
+        {
+          "path": "Selected option",
+          "chars": "Selected option",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "selection=checked, state=default"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    {
+      "nodeId": "55:102",
+      "name": "Display/AtlSkeleton",
+      "selector": "AtlSkeleton",
+      "variantCount": 3,
+      "text": []
+    },
+    {
+      "nodeId": "420:153",
+      "name": "Display/AtlProgress",
+      "selector": "AtlProgress",
+      "variantCount": 12,
+      "text": []
+    },
+    {
+      "nodeId": "55:151",
+      "name": "Display/AtlAvatar",
+      "selector": "AtlAvatar",
+      "variantCount": 10,
+      "text": [
+        {
+          "path": "JS",
+          "chars": "JS",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Bold",
+          "size": 10,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "shape=circle, size=xs",
+            "shape=square, size=xs"
+          ],
+          "count": 2
+        },
+        {
+          "path": "JS",
+          "chars": "JS",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "shape=circle, size=sm",
+            "shape=square, size=sm"
+          ],
+          "count": 2
+        },
+        {
+          "path": "JS",
+          "chars": "JS",
+          "textStyleName": "ty/control",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "shape=circle, size=md",
+            "shape=square, size=md"
+          ],
+          "count": 2
+        },
+        {
+          "path": "JS",
+          "chars": "JS",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 16,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "shape=circle, size=lg",
+            "shape=square, size=lg"
+          ],
+          "count": 2
+        },
+        {
+          "path": "JS",
+          "chars": "JS",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 18,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "shape=circle, size=xl",
+            "shape=square, size=xl"
+          ],
+          "count": 2
+        }
+      ]
+    },
+    {
+      "nodeId": "55:47",
+      "name": "Overlay/AtlToast",
+      "selector": "AtlToast",
+      "variantCount": 8,
+      "text": [
+        {
+          "path": "Frame/Action completed.",
+          "chars": "Action completed.",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "*"
+          ],
+          "count": 8
+        }
+      ]
+    },
+    {
+      "nodeId": "55:139",
+      "name": "Navigation/AtlBreadcrumbs",
+      "selector": "AtlBreadcrumbs",
+      "variantCount": 1,
+      "text": [
+        {
+          "path": "atl-breadcrumb-item/breadcrumb-link/Products",
+          "chars": "Home",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 1
+        },
+        {
+          "path": "atl-breadcrumb-item/_separator/separator-glyph",
+          "chars": "›",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "100%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 3
+        },
+        {
+          "path": "atl-breadcrumb-item/breadcrumb-link/Products",
+          "chars": "Settings",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 1
+        },
+        {
+          "path": "atl-breadcrumb-item/breadcrumb-link/Products",
+          "chars": "Account",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 1
+        },
+        {
+          "path": "atl-breadcrumb-item/breadcrumb-current/Current",
+          "chars": "Profile",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    {
+      "nodeId": "55:143",
+      "name": "Navigation/AtlPagination",
+      "selector": "AtlPagination",
+      "variantCount": 1,
+      "text": [
+        {
+          "path": "page-btn/1",
+          "chars": "1",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "*"
+          ],
+          "count": 1
+        },
+        {
+          "path": "ellipsis/...",
+          "chars": "...",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "*"
+          ],
+          "count": 2
+        },
+        {
+          "path": "page-btn/4",
+          "chars": "4",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "*"
+          ],
+          "count": 1
+        },
+        {
+          "path": "page-btn/5",
+          "chars": "5",
+          "textStyleName": "ty/control",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 1
+        },
+        {
+          "path": "page-btn/6",
+          "chars": "6",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "*"
+          ],
+          "count": 1
+        },
+        {
+          "path": "page-btn/10",
+          "chars": "10",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "*"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    {
+      "nodeId": "421:398",
+      "name": "Overlay/AtlDrawer",
+      "selector": "AtlDrawer",
+      "variantCount": 7,
+      "text": [
+        {
+          "path": "dialog/header/Settings",
+          "chars": "Settings",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "position=right, size=md",
+            "position=right, size=sm",
+            "position=right, size=lg",
+            "position=right, size=full"
+          ],
+          "count": 4
+        },
+        {
+          "path": "dialog/content/Drawer content. Place any form controls or text inside.",
+          "chars": "Drawer content. Place any form controls ",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "*"
+          ],
+          "count": 7
+        },
+        {
+          "path": "dialog/footer/Frame/Cancel",
+          "chars": "Cancel",
+          "textStyleName": "ty/control",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 7
+        },
+        {
+          "path": "dialog/footer/Frame/Save",
+          "chars": "Save",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "*"
+          ],
+          "count": 7
+        },
+        {
+          "path": "dialog/header/Navigation",
+          "chars": "Navigation",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "position=left, size=md"
+          ],
+          "count": 1
+        },
+        {
+          "path": "dialog/header/Filters",
+          "chars": "Filters",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "position=top, size=md"
+          ],
+          "count": 1
+        },
+        {
+          "path": "dialog/header/Action Sheet",
+          "chars": "Action Sheet",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "position=bottom, size=md"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    {
+      "nodeId": "421:1183",
+      "name": "Display/AtlTable",
+      "selector": "AtlTable",
+      "variantCount": 5,
+      "text": [
+        {
+          "path": "variant=\"default\"",
+          "chars": "variant=\"default\"",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-md/thead/Frame/NAME",
+          "chars": "NAME",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-md/thead/Frame/ROLE",
+          "chars": "ROLE",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-md/thead/Frame/EMAIL",
+          "chars": "EMAIL",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-md/tbody/tr-1/Frame/Alice Müller",
+          "chars": "Alice Müller",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-md/tbody/tr-1/Frame/Engineer",
+          "chars": "Engineer",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-md/tbody/tr-1/Frame/alice@example.com",
+          "chars": "alice@example.com",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-md/tbody/tr-2/Frame/Bob Schmidt",
+          "chars": "Bob Schmidt",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-md/tbody/tr-2/Frame/Designer",
+          "chars": "Designer",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-md/tbody/tr-2/Frame/bob@example.com",
+          "chars": "bob@example.com",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-md/tbody/tr-3/Frame/Carol Wagner",
+          "chars": "Carol Wagner",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-md/tbody/tr-3/Frame/Manager",
+          "chars": "Manager",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-md/tbody/tr-3/Frame/carol@example.com",
+          "chars": "carol@example.com",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-md/tbody/tr-4/Frame/David Bauer",
+          "chars": "David Bauer",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-md/tbody/tr-4/Frame/Engineer",
+          "chars": "Engineer",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-md/tbody/tr-4/Frame/david@example.com",
+          "chars": "david@example.com",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "variant=\"striped\"",
+          "chars": "variant=\"striped\"",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=striped, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / striped-md/thead/Frame/NAME",
+          "chars": "NAME",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=striped, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / striped-md/thead/Frame/ROLE",
+          "chars": "ROLE",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=striped, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / striped-md/thead/Frame/EMAIL",
+          "chars": "EMAIL",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=striped, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / striped-md/tbody/tr-1/Frame/Alice Müller",
+          "chars": "Alice Müller",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=striped, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / striped-md/tbody/tr-1/Frame/Engineer",
+          "chars": "Engineer",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=striped, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / striped-md/tbody/tr-1/Frame/alice@example.com",
+          "chars": "alice@example.com",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=striped, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / striped-md/tbody/tr-2/Frame/Bob Schmidt",
+          "chars": "Bob Schmidt",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=striped, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / striped-md/tbody/tr-2/Frame/Designer",
+          "chars": "Designer",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=striped, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / striped-md/tbody/tr-2/Frame/bob@example.com",
+          "chars": "bob@example.com",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=striped, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / striped-md/tbody/tr-3/Frame/Carol Wagner",
+          "chars": "Carol Wagner",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=striped, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / striped-md/tbody/tr-3/Frame/Manager",
+          "chars": "Manager",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=striped, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / striped-md/tbody/tr-3/Frame/carol@example.com",
+          "chars": "carol@example.com",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=striped, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / striped-md/tbody/tr-4/Frame/David Bauer",
+          "chars": "David Bauer",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=striped, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / striped-md/tbody/tr-4/Frame/Engineer",
+          "chars": "Engineer",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=striped, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / striped-md/tbody/tr-4/Frame/david@example.com",
+          "chars": "david@example.com",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=striped, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "variant=\"bordered\"",
+          "chars": "variant=\"bordered\"",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=bordered, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / bordered-md/thead/Frame/NAME",
+          "chars": "NAME",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=bordered, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / bordered-md/thead/Frame/ROLE",
+          "chars": "ROLE",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=bordered, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / bordered-md/thead/Frame/EMAIL",
+          "chars": "EMAIL",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=bordered, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / bordered-md/tbody/tr-1/Frame/Alice Müller",
+          "chars": "Alice Müller",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=bordered, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / bordered-md/tbody/tr-1/Frame/Engineer",
+          "chars": "Engineer",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=bordered, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / bordered-md/tbody/tr-1/Frame/alice@example.com",
+          "chars": "alice@example.com",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=bordered, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / bordered-md/tbody/tr-2/Frame/Bob Schmidt",
+          "chars": "Bob Schmidt",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=bordered, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / bordered-md/tbody/tr-2/Frame/Designer",
+          "chars": "Designer",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=bordered, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / bordered-md/tbody/tr-2/Frame/bob@example.com",
+          "chars": "bob@example.com",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=bordered, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / bordered-md/tbody/tr-3/Frame/Carol Wagner",
+          "chars": "Carol Wagner",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=bordered, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / bordered-md/tbody/tr-3/Frame/Manager",
+          "chars": "Manager",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=bordered, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / bordered-md/tbody/tr-3/Frame/carol@example.com",
+          "chars": "carol@example.com",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=bordered, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / bordered-md/tbody/tr-4/Frame/David Bauer",
+          "chars": "David Bauer",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=bordered, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / bordered-md/tbody/tr-4/Frame/Engineer",
+          "chars": "Engineer",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=bordered, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / bordered-md/tbody/tr-4/Frame/david@example.com",
+          "chars": "david@example.com",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=bordered, size=md, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "size=\"sm\"",
+          "chars": "size=\"sm\"",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=sm, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-sm/thead/Frame/NAME",
+          "chars": "NAME",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=sm, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-sm/thead/Frame/ROLE",
+          "chars": "ROLE",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=sm, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-sm/thead/Frame/EMAIL",
+          "chars": "EMAIL",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=sm, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-sm/tbody/tr-1/Frame/Alice Müller",
+          "chars": "Alice Müller",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=sm, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-sm/tbody/tr-1/Frame/Engineer",
+          "chars": "Engineer",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=sm, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-sm/tbody/tr-1/Frame/alice@example.com",
+          "chars": "alice@example.com",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=sm, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-sm/tbody/tr-2/Frame/Bob Schmidt",
+          "chars": "Bob Schmidt",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=sm, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-sm/tbody/tr-2/Frame/Designer",
+          "chars": "Designer",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=sm, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-sm/tbody/tr-2/Frame/bob@example.com",
+          "chars": "bob@example.com",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=sm, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-sm/tbody/tr-3/Frame/Carol Wagner",
+          "chars": "Carol Wagner",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=sm, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-sm/tbody/tr-3/Frame/Manager",
+          "chars": "Manager",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=sm, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-sm/tbody/tr-3/Frame/carol@example.com",
+          "chars": "carol@example.com",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=sm, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-sm/tbody/tr-4/Frame/David Bauer",
+          "chars": "David Bauer",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=sm, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-sm/tbody/tr-4/Frame/Engineer",
+          "chars": "Engineer",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=sm, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-sm/tbody/tr-4/Frame/david@example.com",
+          "chars": "david@example.com",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=sm, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "size=\"lg\"",
+          "chars": "size=\"lg\"",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=lg, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-lg/thead/Frame/NAME",
+          "chars": "NAME",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=lg, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-lg/thead/Frame/ROLE",
+          "chars": "ROLE",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=lg, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-lg/thead/Frame/EMAIL",
+          "chars": "EMAIL",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default, size=lg, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-lg/tbody/tr-1/Frame/Alice Müller",
+          "chars": "Alice Müller",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=lg, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-lg/tbody/tr-1/Frame/Engineer",
+          "chars": "Engineer",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=lg, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-lg/tbody/tr-1/Frame/alice@example.com",
+          "chars": "alice@example.com",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=lg, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-lg/tbody/tr-2/Frame/Bob Schmidt",
+          "chars": "Bob Schmidt",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=lg, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-lg/tbody/tr-2/Frame/Designer",
+          "chars": "Designer",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=lg, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-lg/tbody/tr-2/Frame/bob@example.com",
+          "chars": "bob@example.com",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=lg, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-lg/tbody/tr-3/Frame/Carol Wagner",
+          "chars": "Carol Wagner",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=lg, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-lg/tbody/tr-3/Frame/Manager",
+          "chars": "Manager",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=lg, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-lg/tbody/tr-3/Frame/carol@example.com",
+          "chars": "carol@example.com",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=lg, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-lg/tbody/tr-4/Frame/David Bauer",
+          "chars": "David Bauer",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=lg, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-lg/tbody/tr-4/Frame/Engineer",
+          "chars": "Engineer",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=lg, state=default"
+          ],
+          "count": 1
+        },
+        {
+          "path": "AtlTable / default-lg/tbody/tr-4/Frame/david@example.com",
+          "chars": "david@example.com",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default, size=lg, state=default"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    {
+      "nodeId": "420:286",
+      "name": "Display/AtlCodeBlock",
+      "selector": "AtlCodeBlock",
+      "variantCount": 4,
+      "text": [
+        {
+          "path": "header/typescript",
+          "chars": "typescript",
+          "textStyleName": null,
+          "family": "JetBrains Mono",
+          "weight": "Bold",
+          "size": 12,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/xs",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=default",
+            "variant=no-copy"
+          ],
+          "count": 2
+        },
+        {
+          "path": "header/code-block-copy/Copy",
+          "chars": "Copy",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=default",
+            "variant=with-filename",
+            "variant=with-line-numbers"
+          ],
+          "count": 3
+        },
+        {
+          "path": "body/line-1/import { AtlButton } from '@atelier-ui/angular';",
+          "chars": "import { AtlButton } from '@atelier-ui/a",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 4
+        },
+        {
+          "path": "body/line-2/Text",
+          "chars": "",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 4
+        },
+        {
+          "path": "body/line-3/@Component({",
+          "chars": "@Component({",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 4
+        },
+        {
+          "path": "body/line-4/template: `<atl-button variant=\"primary\">Save</atl-button>`,",
+          "chars": "template: `<atl-button variant=\"primary\"",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 4
+        },
+        {
+          "path": "body/line-5/})",
+          "chars": "})",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 4
+        },
+        {
+          "path": "body/line-6/export class MyComponent {",
+          "chars": "export class MyComponent {",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 4
+        },
+        {
+          "path": "body/line-7/saving = false;",
+          "chars": "saving = false;",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 4
+        },
+        {
+          "path": "body/line-8/}",
+          "chars": "}",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 4
+        },
+        {
+          "path": "header/my-component.ts",
+          "chars": "my-component.ts",
+          "textStyleName": null,
+          "family": "JetBrains Mono",
+          "weight": "Bold",
+          "size": 12,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/xs",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=with-filename",
+            "variant=with-line-numbers"
+          ],
+          "count": 2
+        },
+        {
+          "path": "body/line-1/1",
+          "chars": "1",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=with-line-numbers"
+          ],
+          "count": 1
+        },
+        {
+          "path": "body/line-2/2",
+          "chars": "2",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=with-line-numbers"
+          ],
+          "count": 1
+        },
+        {
+          "path": "body/line-3/3",
+          "chars": "3",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=with-line-numbers"
+          ],
+          "count": 1
+        },
+        {
+          "path": "body/line-4/4",
+          "chars": "4",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=with-line-numbers"
+          ],
+          "count": 1
+        },
+        {
+          "path": "body/line-5/5",
+          "chars": "5",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=with-line-numbers"
+          ],
+          "count": 1
+        },
+        {
+          "path": "body/line-6/6",
+          "chars": "6",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=with-line-numbers"
+          ],
+          "count": 1
+        },
+        {
+          "path": "body/line-7/7",
+          "chars": "7",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=with-line-numbers"
+          ],
+          "count": 1
+        },
+        {
+          "path": "body/line-8/8",
+          "chars": "8",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=with-line-numbers"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    {
+      "nodeId": "421:339",
+      "name": "Form/AtlCombobox",
+      "selector": "AtlCombobox",
+      "variantCount": 6,
+      "text": [
+        {
+          "path": "input/Search fruit…",
+          "chars": "Search fruit…",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "state=default",
+            "state=open",
+            "state=hover",
+            "state=focus"
+          ],
+          "count": 4
+        },
+        {
+          "path": "panel/active option/Apple",
+          "chars": "Apple",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "state=open",
+            "state=filtered"
+          ],
+          "count": 2
+        },
+        {
+          "path": "panel/option/Banana",
+          "chars": "Banana",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "state=open"
+          ],
+          "count": 1
+        },
+        {
+          "path": "panel/selected option/Cherry",
+          "chars": "Cherry",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "state=open"
+          ],
+          "count": 1
+        },
+        {
+          "path": "panel/option/Date",
+          "chars": "Date",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "state=open"
+          ],
+          "count": 1
+        },
+        {
+          "path": "panel/option/Elderberry",
+          "chars": "Elderberry",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "state=open"
+          ],
+          "count": 1
+        },
+        {
+          "path": "panel/disabled option/Honeydew",
+          "chars": "Honeydew",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "state=open"
+          ],
+          "count": 1
+        },
+        {
+          "path": "input/ap",
+          "chars": "ap",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "state=filtered"
+          ],
+          "count": 1
+        },
+        {
+          "path": "panel/option/Apricot",
+          "chars": "Apricot",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "state=filtered"
+          ],
+          "count": 1
+        },
+        {
+          "path": "panel/option/Grape",
+          "chars": "Grape",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "state=filtered"
+          ],
+          "count": 1
+        },
+        {
+          "path": "input/Cherry",
+          "chars": "Cherry",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "state=selected"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    {
+      "nodeId": "421:505",
+      "name": "Navigation/AtlStepper",
+      "selector": "AtlStepper",
+      "variantCount": 8,
+      "text": [
+        {
+          "path": "header/step-1/circle-active/1",
+          "chars": "1",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "orientation=horizontal, state=default",
+            "orientation=horizontal, state=optional",
+            "orientation=vertical, state=default",
+            "orientation=vertical, state=completed",
+            "orientation=vertical, state=error",
+            "orientation=vertical, state=optional"
+          ],
+          "count": 6
+        },
+        {
+          "path": "header/step-1/text/Account",
+          "chars": "Account",
+          "textStyleName": "ty/control",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 8
+        },
+        {
+          "path": "header/step-1/text/Basic info",
+          "chars": "Basic info",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "orientation=horizontal, state=default",
+            "orientation=vertical, state=default",
+            "orientation=vertical, state=completed",
+            "orientation=vertical, state=error",
+            "orientation=vertical, state=optional"
+          ],
+          "count": 5
+        },
+        {
+          "path": "header/step-2/circle-default/2",
+          "chars": "2",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "orientation=horizontal, state=default",
+            "orientation=horizontal, state=optional",
+            "orientation=vertical, state=default",
+            "orientation=vertical, state=completed",
+            "orientation=vertical, state=error",
+            "orientation=vertical, state=optional"
+          ],
+          "count": 6
+        },
+        {
+          "path": "header/step-2/text/Profile",
+          "chars": "Profile",
+          "textStyleName": "ty/control",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 8
+        },
+        {
+          "path": "header/step-3/circle-default/3",
+          "chars": "3",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "*"
+          ],
+          "count": 8
+        },
+        {
+          "path": "header/step-3/text/Review",
+          "chars": "Review",
+          "textStyleName": "ty/control",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 8
+        },
+        {
+          "path": "header/step-2/circle-active/2",
+          "chars": "2",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "orientation=horizontal, state=completed"
+          ],
+          "count": 1
+        },
+        {
+          "path": "header/step-2/circle-error/!",
+          "chars": "!",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 12,
+          "lineHeight": "12px",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/xs",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "orientation=horizontal, state=error"
+          ],
+          "count": 1
+        },
+        {
+          "path": "header/step-2/text/Optional",
+          "chars": "Optional",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "orientation=horizontal, state=optional"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    {
+      "nodeId": "508:7221",
+      "name": "Display/AtlAvatarGroup",
+      "selector": "AtlAvatarGroup",
+      "variantCount": 5,
+      "text": [
+        {
+          "path": "Frame/+2",
+          "chars": "+2",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 5
+        },
+        {
+          "path": "Frame/MK",
+          "chars": "MK",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 5
+        },
+        {
+          "path": "Frame/AL",
+          "chars": "AL",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 5
+        },
+        {
+          "path": "Frame/JS",
+          "chars": "JS",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 5
+        }
+      ]
+    },
+    {
+      "nodeId": "507:2953",
+      "name": "AI/AtlChat",
+      "selector": "AtlChat",
+      "variantCount": 3,
+      "text": [
+        {
+          "path": "app-title",
+          "chars": "My App",
+          "textStyleName": "ty/action",
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 16,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=drawer",
+            "variant=popup"
+          ],
+          "count": 2
+        },
+        {
+          "path": "avatar-glyph",
+          "chars": "AI",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=drawer"
+          ],
+          "count": 1
+        },
+        {
+          "path": "drawer-title",
+          "chars": "AI Assistant",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 15,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=drawer"
+          ],
+          "count": 1
+        },
+        {
+          "path": "msg-asst-1/How do I theme AtlButton?",
+          "chars": "Hi! I'm your AI assistant. How can I hel",
+          "textStyleName": "ty/body-sm",
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "150%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=drawer"
+          ],
+          "count": 1
+        },
+        {
+          "path": "msg-user-1/How do I theme AtlButton?",
+          "chars": "Show me a minimal Angular form using Atl",
+          "textStyleName": "ty/body-sm",
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "150%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=drawer"
+          ],
+          "count": 1
+        },
+        {
+          "path": "msg-asst-2-text",
+          "chars": "Here you go:",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 13,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=drawer"
+          ],
+          "count": 1
+        },
+        {
+          "path": "msg-user-2/How do I theme AtlButton?",
+          "chars": "Thanks!",
+          "textStyleName": "ty/body-sm",
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "150%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=drawer"
+          ],
+          "count": 1
+        },
+        {
+          "path": "status-badge/Default",
+          "chars": "Default",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 3
+        },
+        {
+          "path": "input-textarea/Tell us about yourself...",
+          "chars": "Message your AI assistant…",
+          "textStyleName": "ty/body-md",
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "150%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=drawer"
+          ],
+          "count": 1
+        },
+        {
+          "path": "send-button/Button",
+          "chars": "Send",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 16,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": true,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=drawer",
+            "variant=inline"
+          ],
+          "count": 2
+        },
+        {
+          "path": "code-block-instance/header/my-component.ts",
+          "chars": "my-component.ts",
+          "textStyleName": null,
+          "family": "JetBrains Mono",
+          "weight": "Bold",
+          "size": 12,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/xs",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=drawer",
+            "variant=inline"
+          ],
+          "count": 2
+        },
+        {
+          "path": "code-block-instance/header/code-block-copy/Copy",
+          "chars": "Copy",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=drawer",
+            "variant=inline"
+          ],
+          "count": 2
+        },
+        {
+          "path": "code-block-instance/body/line-1/import { AtlButton } from '@atelier-ui/angular';",
+          "chars": "import { AtlButton } from '@atelier-ui/a",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=drawer",
+            "variant=inline"
+          ],
+          "count": 2
+        },
+        {
+          "path": "code-block-instance/body/line-2/Text",
+          "chars": "",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=drawer",
+            "variant=inline"
+          ],
+          "count": 2
+        },
+        {
+          "path": "code-block-instance/body/line-3/@Component({",
+          "chars": "@Component({",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=drawer",
+            "variant=inline"
+          ],
+          "count": 2
+        },
+        {
+          "path": "code-block-instance/body/line-4/template: `<atl-button variant=\"primary\">Save</atl-button>`,",
+          "chars": "template: `<atl-button variant=\"primary\"",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=drawer",
+            "variant=inline"
+          ],
+          "count": 2
+        },
+        {
+          "path": "code-block-instance/body/line-5/})",
+          "chars": "})",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=drawer",
+            "variant=inline"
+          ],
+          "count": 2
+        },
+        {
+          "path": "code-block-instance/body/line-6/export class MyComponent {",
+          "chars": "export class MyComponent {",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=drawer",
+            "variant=inline"
+          ],
+          "count": 2
+        },
+        {
+          "path": "code-block-instance/body/line-7/saving = false;",
+          "chars": "saving = false;",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=drawer",
+            "variant=inline"
+          ],
+          "count": 2
+        },
+        {
+          "path": "code-block-instance/body/line-8/}",
+          "chars": "}",
+          "textStyleName": "ty/code",
+          "family": "JetBrains Mono",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "165%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=drawer",
+            "variant=inline"
+          ],
+          "count": 2
+        },
+        {
+          "path": "pop-avatar-glyph",
+          "chars": "AI",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 12,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/xs",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=popup"
+          ],
+          "count": 1
+        },
+        {
+          "path": "pop-title",
+          "chars": "AI Assistant",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=popup"
+          ],
+          "count": 1
+        },
+        {
+          "path": "min-icon",
+          "chars": "–",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 12,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/xs",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=popup"
+          ],
+          "count": 1
+        },
+        {
+          "path": "m1t",
+          "chars": "Hi! How can I help you today?",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 12,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/xs",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=popup"
+          ],
+          "count": 1
+        },
+        {
+          "path": "m2t",
+          "chars": "Can you summarize this dashboard?",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 12,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/xs",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=popup"
+          ],
+          "count": 1
+        },
+        {
+          "path": "m3t",
+          "chars": "You're tracking 12 KPIs. Three are below",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 12,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/xs",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=popup"
+          ],
+          "count": 1
+        },
+        {
+          "path": "m4t",
+          "chars": "Show me CTR.",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 12,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/xs",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=popup"
+          ],
+          "count": 1
+        },
+        {
+          "path": "fab-glyph",
+          "chars": "AI",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 20,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/xl",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=popup"
+          ],
+          "count": 1
+        },
+        {
+          "path": "input-textarea/Tell us about yourself...",
+          "chars": "Ask anything…",
+          "textStyleName": "ty/body-md",
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "150%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=popup"
+          ],
+          "count": 1
+        },
+        {
+          "path": "send-button/Button",
+          "chars": "Send",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": true,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=popup"
+          ],
+          "count": 1
+        },
+        {
+          "path": "nav-brand",
+          "chars": "My App",
+          "textStyleName": "ty/action",
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 16,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "nav-link-1",
+          "chars": "Dashboard",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 13,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "nav-link-2",
+          "chars": "Projects",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 13,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "nav-link-3",
+          "chars": "Reports",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 13,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "nav-link-4",
+          "chars": "AI Assistant",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 13,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "breadcrumb",
+          "chars": "Projects · Atelier UI · AI Assistant",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 12,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/xs",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "page-h1",
+          "chars": "AI Assistant",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 26,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "av-glyph",
+          "chars": "AI",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "chat-title",
+          "chars": "Atelier Assistant",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 15,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "m1t",
+          "chars": "Welcome back, Dominik. I see you're work",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "m2t",
+          "chars": "Help me write a Storybook story for the ",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "m3t",
+          "chars": "Sure — here's a starting point:",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "side-1-title",
+          "chars": "Recent",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "side-1-i1",
+          "chars": "Storybook story for AtlChat",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 12,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/xs",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "side-1-i2",
+          "chars": "Refactor AtlCard variants",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 12,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/xs",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "side-1-i3",
+          "chars": "Migration to Signal Forms",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 12,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/xs",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "side-1-i4",
+          "chars": "Theme tokens audit",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 12,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/xs",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "side-2-title",
+          "chars": "Pinned context",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "side-2-l1",
+          "chars": "📁 libs/spec/src/index.ts",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 12,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/xs",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "side-2-l2",
+          "chars": "📁 libs/angular/src/lib/",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 12,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/xs",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "side-2-l3",
+          "chars": "📄 plan/big-picture.md",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 12,
+          "lineHeight": "AUTO",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/xs",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "user-avatar/JS",
+          "chars": "JS",
+          "textStyleName": "ty/label",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "new-chat-button/Button",
+          "chars": "＋ New chat",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": true,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "input-textarea/Tell us about yourself...",
+          "chars": "Ask me anything about the Atelier codeba",
+          "textStyleName": "ty/body-md",
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "150%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    {
+      "nodeId": "911:1056",
+      "name": "Navigation/AtlMenuItem",
+      "selector": "AtlMenuItem",
+      "variantCount": 2,
+      "text": [
+        {
+          "path": "Menu item",
+          "chars": "Menu item",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 2
+        }
+      ]
+    },
+    {
+      "nodeId": "911:1059",
+      "name": "Navigation/AtlMenuSeparator",
+      "selector": "AtlMenuSeparator",
+      "variantCount": 1,
+      "text": []
+    },
+    {
+      "nodeId": "911:1069",
+      "name": "Navigation/AtlBreadcrumbItem",
+      "selector": "AtlBreadcrumbItem",
+      "variantCount": 2,
+      "text": [
+        {
+          "path": "breadcrumb-link/Products",
+          "chars": "Products",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "current=false"
+          ],
+          "count": 1
+        },
+        {
+          "path": "_separator/separator-glyph",
+          "chars": "›",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "100%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "current=false"
+          ],
+          "count": 1
+        },
+        {
+          "path": "breadcrumb-current/Current",
+          "chars": "Current",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "current=true"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    {
+      "nodeId": "911:1075",
+      "name": "Navigation/AtlTab",
+      "selector": "AtlTab",
+      "variantCount": 2,
+      "text": [
+        {
+          "path": "Tab label",
+          "chars": "Tab label",
+          "textStyleName": "ty/control",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 2
+        }
+      ]
+    },
+    {
+      "nodeId": "911:1151",
+      "name": "Navigation/AtlStep",
+      "selector": "AtlStep",
+      "variantCount": 4,
+      "text": [
+        {
+          "path": "step-circle/step-number",
+          "chars": "2",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "state=default",
+            "state=active",
+            "state=completed"
+          ],
+          "count": 3
+        },
+        {
+          "path": "step-text/step-label",
+          "chars": "Step label",
+          "textStyleName": "ty/control",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 4
+        },
+        {
+          "path": "step-text/step-description",
+          "chars": "Short description",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 4
+        },
+        {
+          "path": "step-text/step-optional",
+          "chars": "Optional",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Italic",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": false,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 4
+        },
+        {
+          "path": "step-circle/step-number",
+          "chars": "!",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "state=error"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    {
+      "nodeId": "911:1086",
+      "name": "Form/AtlOption",
+      "selector": "AtlOption",
+      "variantCount": 4,
+      "text": [
+        {
+          "path": "Option label",
+          "chars": "Option label",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "state=default",
+            "state=hover",
+            "state=active"
+          ],
+          "count": 3
+        },
+        {
+          "path": "Option label",
+          "chars": "Option label",
+          "textStyleName": "ty/action",
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 16,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "state=selected"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    {
+      "nodeId": "911:1103",
+      "name": "Feedback/AtlAccordionItem",
+      "selector": "AtlAccordionItem",
+      "variantCount": 2,
+      "text": [
+        {
+          "path": "accordion-trigger/Section heading",
+          "chars": "Section heading",
+          "textStyleName": "ty/action",
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 16,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 2
+        },
+        {
+          "path": "accordion-panel/Panel content, revealed when expanded.",
+          "chars": "Panel content, revealed when expanded.",
+          "textStyleName": "ty/body-md",
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "150%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "expanded=true"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    {
+      "nodeId": "911:1112",
+      "name": "AI/AtlChatMessage",
+      "selector": "AtlChatMessage",
+      "variantCount": 3,
+      "text": [
+        {
+          "path": "How do I theme AtlButton?",
+          "chars": "How do I theme AtlButton?",
+          "textStyleName": "ty/body-sm",
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "150%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "role=assistant",
+            "role=user"
+          ],
+          "count": 2
+        },
+        {
+          "path": "Conversation cleared.",
+          "chars": "How do I theme AtlButton?",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Italic",
+          "size": 14,
+          "lineHeight": "150%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "role=system"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    {
+      "nodeId": "911:1116",
+      "name": "AI/AtlChatSuggestion",
+      "selector": "AtlChatSuggestion",
+      "variantCount": 1,
+      "text": [
+        {
+          "path": "chip-label",
+          "chars": "Show me a minimal Angular form",
+          "textStyleName": "ty/control",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 1
+        },
+        {
+          "path": "chip-hint",
+          "chars": "Uses AtlInput and AtlButton",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 12,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 1
+        }
+      ]
+    },
+    {
+      "nodeId": "911:1119",
+      "name": "AI/AtlChatTyping",
+      "selector": "AtlChatTyping",
+      "variantCount": 1,
+      "text": []
+    },
+    {
+      "nodeId": "911:1503",
+      "name": "Display/AtlTh",
+      "selector": "AtlTh",
+      "variantCount": 3,
+      "text": [
+        {
+          "path": "Column",
+          "chars": "Column",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "SemiBold",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 3
+        }
+      ]
+    },
+    {
+      "nodeId": "911:1496",
+      "name": "Display/AtlTd",
+      "selector": "AtlTd",
+      "variantCount": 3,
+      "text": [
+        {
+          "path": "Cell value",
+          "chars": "Cell value",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 3
+        }
+      ]
+    },
+    {
+      "nodeId": "911:1533",
+      "name": "Display/AtlTr",
+      "selector": "AtlTr",
+      "variantCount": 2,
+      "text": [
+        {
+          "path": "atl-tr-select-cell/AtlCheckbox/Accept terms",
+          "chars": "Accept terms",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": false,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "*"
+          ],
+          "count": 2
+        },
+        {
+          "path": "td/Cell value",
+          "chars": "Cell value",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 6
+        }
+      ]
+    },
+    {
+      "nodeId": "911:1546",
+      "name": "Display/AtlTbody",
+      "selector": "AtlTbody",
+      "variantCount": 1,
+      "text": [
+        {
+          "path": "tr/atl-tr-select-cell/AtlCheckbox/Accept terms",
+          "chars": "Accept terms",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "AUTO",
+          "visible": false,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/sm",
+          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "variantScope": [
+            "*"
+          ],
+          "count": 2
+        },
+        {
+          "path": "tr/td/Cell value",
+          "chars": "Cell value",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": true,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 6
+        },
+        {
+          "path": "atl-tbody-empty-cell/empty-message",
+          "chars": "No rows to show",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Regular",
+          "size": 16,
+          "lineHeight": "125%",
+          "visible": false,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "*"
+          ],
+          "count": 1
+        }
+      ]
+    }
+  ]
+}
