@@ -175,6 +175,25 @@ describe('AtlCombobox', () => {
     expect(container.querySelector('atl-combobox')).toHaveClass('is-invalid');
   });
 
+  // Carrying invalid on border colour alone fails WCAG 1.4.1 (ADR-0055). The
+  // stylesheet has always positioned `:host(.is-invalid) .invalid-icon`; the
+  // Angular template was the only one of the three that never rendered it.
+  it('renders the invalid indicator when invalid', async () => {
+    const { container } = await render(
+      `<atl-combobox [options]="options" [invalid]="true" />`,
+      { imports: [AtlCombobox], componentProperties: { options: OPTIONS } },
+    );
+    expect(container.querySelector('.invalid-icon')).toBeInTheDocument();
+  });
+
+  it('does not render the invalid indicator by default', async () => {
+    const { container } = await render(TEMPLATE, {
+      imports: [AtlCombobox],
+      componentProperties: { value: '', options: OPTIONS },
+    });
+    expect(container.querySelector('.invalid-icon')).not.toBeInTheDocument();
+  });
+
   it('does not select a disabled option', async () => {
     const user = userEvent.setup();
     const { container } = await render(TEMPLATE, {

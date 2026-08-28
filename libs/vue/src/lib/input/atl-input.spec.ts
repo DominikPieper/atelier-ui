@@ -37,4 +37,23 @@ describe('AtlInput', () => {
     render(AtlInput, { props: { invalid: true, placeholder: 'Invalid field' } });
     expect(screen.getByPlaceholderText('Invalid field')).toHaveAttribute('aria-invalid', 'true');
   });
+
+  // `.atl-input.is-readonly input` drops the interactive border and the text cursor
+  // (ADR-0045). The class is what selects it.
+  it('applies is-readonly class to the root when readonly', () => {
+    const { container } = render(AtlInput, { props: { readonly: true } });
+    expect(container.firstElementChild).toHaveClass('is-readonly');
+  });
+
+  it('does not apply is-readonly class by default', () => {
+    const { container } = render(AtlInput, {});
+    expect(container.firstElementChild).not.toHaveClass('is-readonly');
+  });
+
+  it('renders error messages as .error-message paragraphs', () => {
+    const { container } = render(AtlInput, {
+      props: { errors: ['Email is invalid', 'Too short'] },
+    });
+    expect(container.querySelectorAll('.errors .error-message')).toHaveLength(2);
+  });
 });

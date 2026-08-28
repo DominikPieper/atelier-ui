@@ -37,4 +37,34 @@ describe('AtlTextarea', () => {
     render(AtlTextarea, { props: { rows: 6 } });
     expect(screen.getByRole('textbox')).toHaveAttribute('rows', '6');
   });
+
+  // `.atl-textarea.is-readonly textarea` drops the interactive border and the text
+  // cursor (ADR-0045); `.atl-textarea.is-auto-resize textarea` hides the resize grip
+  // and the scrollbar the script-driven growth makes redundant.
+  it('applies is-readonly class to the root when readonly', () => {
+    const { container } = render(AtlTextarea, { props: { readonly: true } });
+    expect(container.firstElementChild).toHaveClass('is-readonly');
+  });
+
+  it('does not apply is-readonly class by default', () => {
+    const { container } = render(AtlTextarea, {});
+    expect(container.firstElementChild).not.toHaveClass('is-readonly');
+  });
+
+  it('applies is-auto-resize class to the root when autoResize', () => {
+    const { container } = render(AtlTextarea, { props: { autoResize: true } });
+    expect(container.firstElementChild).toHaveClass('is-auto-resize');
+  });
+
+  it('does not apply is-auto-resize class by default', () => {
+    const { container } = render(AtlTextarea, {});
+    expect(container.firstElementChild).not.toHaveClass('is-auto-resize');
+  });
+
+  it('renders error messages as .error-message paragraphs', () => {
+    const { container } = render(AtlTextarea, {
+      props: { errors: ['Message is too short', 'Required'] },
+    });
+    expect(container.querySelectorAll('.errors .error-message')).toHaveLength(2);
+  });
 });

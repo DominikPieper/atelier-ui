@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, computed } from 'vue';
+import { ref, watch, onMounted, computed, useId } from 'vue';
 import './atl-checkbox.css';
 
 defineOptions({ name: 'AtlCheckbox' });
@@ -33,6 +33,7 @@ const emit = defineEmits<{
 const inputRef = ref<HTMLInputElement | null>(null);
 
 const inputId = computed(() => props.id || `checkbox-${Math.random().toString(36).slice(2)}`);
+const errorsId = useId();
 
 watch(
   () => props.indeterminate,
@@ -63,12 +64,13 @@ function onChange(event: Event) {
         :required="required"
         :name="name"
         :aria-invalid="invalid || undefined"
+        :aria-describedby="errors.length > 0 ? errorsId : undefined"
         @change="onChange"
       />
       <slot />
     </label>
-    <ul v-if="errors.length" class="errors" aria-live="polite">
-      <li v-for="(error, i) in errors" :key="i" class="error">{{ error }}</li>
-    </ul>
+    <div v-if="errors.length" :id="errorsId" class="errors" aria-live="polite">
+      <p v-for="(error, i) in errors" :key="i" class="error-message">{{ error }}</p>
+    </div>
   </div>
 </template>

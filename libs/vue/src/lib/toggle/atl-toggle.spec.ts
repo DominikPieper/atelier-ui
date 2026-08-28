@@ -35,4 +35,49 @@ describe('AtlToggle', () => {
     render(AtlToggle, { props: { checked: true }, slots: { default: 'Notify' } });
     expect(screen.getByRole('switch', { name: 'Notify' })).toHaveAttribute('aria-checked', 'true');
   });
+
+  // `.atl-toggle.is-checked .track` and `… .thumb` are the only rules that fill the
+  // track and slide the thumb. Without the class the switch is painted off in every
+  // state, and `reflects checked state` above still passes: it asserts the native
+  // input's property, which was bound correctly all along.
+  it('applies is-checked class to the root when checked', () => {
+    const { container } = render(AtlToggle, {
+      props: { checked: true },
+      slots: { default: 'Enabled' },
+    });
+    expect(container.firstElementChild).toHaveClass('is-checked');
+  });
+
+  it('does not apply is-checked class when unchecked', () => {
+    const { container } = render(AtlToggle, {
+      props: { checked: false },
+      slots: { default: 'Disabled' },
+    });
+    expect(container.firstElementChild).not.toHaveClass('is-checked');
+  });
+
+  it('renders error messages as .error-message paragraphs', () => {
+    const { container } = render(AtlToggle, {
+      props: { errors: ['This is required', 'Pick one'] },
+      slots: { default: 'Toggle' },
+    });
+    expect(container.querySelectorAll('.errors .error-message')).toHaveLength(2);
+  });
+
+  // Angular and React point the input at the error container; a screen reader
+  // reads nothing unless the two are associated.
+  it('points aria-describedby at the errors container', () => {
+    const { container } = render(AtlToggle, {
+      props: { errors: ['This is required'] },
+      slots: { default: 'Toggle' },
+    });
+    const errors = container.querySelector('.errors') as HTMLElement;
+    expect(errors.id).toBeTruthy();
+    expect(screen.getByRole('switch')).toHaveAttribute('aria-describedby', errors.id);
+  });
+
+  it('sets no aria-describedby when there are no errors', () => {
+    render(AtlToggle, { slots: { default: 'Toggle' } });
+    expect(screen.getByRole('switch')).not.toHaveAttribute('aria-describedby');
+  });
 });

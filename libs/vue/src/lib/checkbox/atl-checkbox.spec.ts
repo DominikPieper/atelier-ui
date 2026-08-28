@@ -43,4 +43,29 @@ describe('AtlCheckbox', () => {
     });
     expect((container.querySelector('input') as HTMLInputElement).indeterminate).toBe(true);
   });
+
+  it('renders error messages as .error-message paragraphs', () => {
+    const { container } = render(AtlCheckbox, {
+      props: { errors: ['Field is required', 'Pick one'] },
+      slots: { default: 'Required' },
+    });
+    expect(container.querySelectorAll('.errors .error-message')).toHaveLength(2);
+  });
+
+  // Angular and React point the input at the error container; a screen reader
+  // reads nothing unless the two are associated.
+  it('points aria-describedby at the errors container', () => {
+    const { container } = render(AtlCheckbox, {
+      props: { errors: ['Field is required'] },
+      slots: { default: 'Required' },
+    });
+    const errors = container.querySelector('.errors') as HTMLElement;
+    expect(errors.id).toBeTruthy();
+    expect(screen.getByRole('checkbox')).toHaveAttribute('aria-describedby', errors.id);
+  });
+
+  it('sets no aria-describedby when there are no errors', () => {
+    render(AtlCheckbox, { slots: { default: 'Required' } });
+    expect(screen.getByRole('checkbox')).not.toHaveAttribute('aria-describedby');
+  });
 });

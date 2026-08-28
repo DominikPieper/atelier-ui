@@ -14,6 +14,7 @@ export interface AtlRadioGroupContext {
   readonly name: Signal<string>;
   readonly disabled: Signal<boolean>;
   readonly readonly: Signal<boolean>;
+  readonly invalid: Signal<boolean>;
   select(v: string): void;
   markTouched(): void;
   registerItem(item: RadioItem): void;

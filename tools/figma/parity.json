@@ -2,7 +2,7 @@
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "note": "Per-component design-parity records. Written by `npm run parity:record` after a human/agent runs figma_check_design_parity; read by `npm run check:parity`. Each record's inputsHash covers libs/{angular,react,vue}/src/lib/<module>/ so a spec/story/impl/css change since the last verify makes the gate ask for a re-verify. The parity SCORE is deliberately not stored: it is not comparable across runs (it tracks how much of codeSpec was declared and which node was sampled, not the component) — three runs on one commit for AtlStepper returned 70, 52 and 83. See plan/adr/0024 and its 2026-08-26 amendment.",
-    "generatedAt": "2026-08-28T05:55:45.415Z"
+    "generatedAt": "2026-08-28T15:06:56.811Z"
   },
   "components": {
     "AtlAccordionGroup": {
@@ -278,9 +278,9 @@
     },
     "AtlCheckbox": {
       "figmaNodeId": "55:36",
-      "verifiedAt": "2026-08-27T14:02:08.081Z",
-      "verifiedSha": "51d2d9d",
-      "inputsHash": "sha256:b4a9ccdefd9e61bc4e00452ffcccbd2c6548b314c94e8077a27e1e7630513fdb",
+      "verifiedAt": "2026-08-28T15:06:44.987Z",
+      "verifiedSha": "25ac006",
+      "inputsHash": "sha256:74aad9a78663836edecccded17a7dc8e99ea8fc2f25ef47ef9a35904c4346398",
       "inputs": [
         "libs/angular/src/lib/checkbox/atl-checkbox.a11y.spec.ts",
         "libs/angular/src/lib/checkbox/atl-checkbox.css",
@@ -301,9 +301,9 @@
     },
     "AtlCombobox": {
       "figmaNodeId": "421:339",
-      "verifiedAt": "2026-08-27T14:02:20.448Z",
-      "verifiedSha": "51d2d9d",
-      "inputsHash": "sha256:770eb925bbb115ec7c13f938000eef8b2efba743fae15c04892d4ba80a5e109e",
+      "verifiedAt": "2026-08-28T15:06:52.291Z",
+      "verifiedSha": "25ac006",
+      "inputsHash": "sha256:b9d510d88fb75fa37a2999cf5ab68fe88b9eed32558a7789f39bf210cb56166a",
       "inputs": [
         "libs/angular/src/lib/combobox/atl-combobox.css",
         "libs/angular/src/lib/combobox/atl-combobox.spec.ts",
@@ -375,9 +375,9 @@
     },
     "AtlInput": {
       "figmaNodeId": "129:33",
-      "verifiedAt": "2026-08-27T14:01:57.496Z",
-      "verifiedSha": "51d2d9d",
-      "inputsHash": "sha256:69c77860042a19780766552d2f8ff12e6a58e67d9831d986a591fc27320a7343",
+      "verifiedAt": "2026-08-28T15:06:49.326Z",
+      "verifiedSha": "25ac006",
+      "inputsHash": "sha256:0d9d21cdd4d59922902eff38c4b855048de9b5222f09d9ddbd4c99df538d921f",
       "inputs": [
         "libs/angular/src/lib/input/atl-input.a11y.spec.ts",
         "libs/angular/src/lib/input/atl-input.css",
@@ -398,9 +398,9 @@
     },
     "AtlMenu": {
       "figmaNodeId": "55:130",
-      "verifiedAt": "2026-08-27T14:02:04.911Z",
-      "verifiedSha": "51d2d9d",
-      "inputsHash": "sha256:49edfebc7915af61e5cdffceef3727180ab1eb27044a0eb369267753d9f99a8f",
+      "verifiedAt": "2026-08-28T15:06:55.277Z",
+      "verifiedSha": "25ac006",
+      "inputsHash": "sha256:fb22d836bc9ee429258585c727b254a0789ce83767083cb73ddb0ec7f041059e",
       "inputs": [
         "libs/angular/src/lib/menu/atl-menu.a11y.spec.ts",
         "libs/angular/src/lib/menu/atl-menu.css",
@@ -424,9 +424,9 @@
     },
     "AtlMenuItem": {
       "figmaNodeId": "911:1056",
-      "verifiedAt": "2026-08-27T14:02:24.804Z",
-      "verifiedSha": "51d2d9d",
-      "inputsHash": "sha256:49edfebc7915af61e5cdffceef3727180ab1eb27044a0eb369267753d9f99a8f",
+      "verifiedAt": "2026-08-28T15:06:56.754Z",
+      "verifiedSha": "25ac006",
+      "inputsHash": "sha256:fb22d836bc9ee429258585c727b254a0789ce83767083cb73ddb0ec7f041059e",
       "inputs": [
         "libs/angular/src/lib/menu/atl-menu.a11y.spec.ts",
         "libs/angular/src/lib/menu/atl-menu.css",
@@ -474,9 +474,9 @@
     },
     "AtlPagination": {
       "figmaNodeId": "55:143",
-      "verifiedAt": "2026-08-27T14:02:17.263Z",
-      "verifiedSha": "51d2d9d",
-      "inputsHash": "sha256:e18f82a047a9d5f05a1ff240538ac9ecb11becfba839cac8bb3794fa0de2649c",
+      "verifiedAt": "2026-08-28T15:06:53.788Z",
+      "verifiedSha": "25ac006",
+      "inputsHash": "sha256:4d87fd94e09904467e0985e1f40fb582e1d8645e5a5cd7ccb2b672c0047eb57d",
       "inputs": [
         "libs/angular/src/lib/pagination/atl-pagination.a11y.spec.ts",
         "libs/angular/src/lib/pagination/atl-pagination.css",
@@ -520,9 +520,9 @@
     },
     "AtlRadio": {
       "figmaNodeId": "420:185",
-      "verifiedAt": "2026-08-27T14:02:12.027Z",
-      "verifiedSha": "51d2d9d",
-      "inputsHash": "sha256:6185d75bd99e24626868ef9366980bb47c3026d7162c26569372f703f25cf0c6",
+      "verifiedAt": "2026-08-28T15:06:46.436Z",
+      "verifiedSha": "25ac006",
+      "inputsHash": "sha256:9d625d0c569fca218f2c4a0af06b606ee6a7b95f72505eecb40a5ed592a90eb8",
       "inputs": [
         "libs/angular/src/lib/radio/atl-radio.css",
         "libs/angular/src/lib/radio/atl-radio.spec.ts",
@@ -540,9 +540,9 @@
     },
     "AtlRadioGroup": {
       "figmaNodeId": "55:137",
-      "verifiedAt": "2026-08-27T14:02:10.956Z",
-      "verifiedSha": "51d2d9d",
-      "inputsHash": "sha256:6185d75bd99e24626868ef9366980bb47c3026d7162c26569372f703f25cf0c6",
+      "verifiedAt": "2026-08-28T15:06:47.848Z",
+      "verifiedSha": "25ac006",
+      "inputsHash": "sha256:9d625d0c569fca218f2c4a0af06b606ee6a7b95f72505eecb40a5ed592a90eb8",
       "inputs": [
         "libs/angular/src/lib/radio/atl-radio.css",
         "libs/angular/src/lib/radio/atl-radio.spec.ts",
@@ -791,9 +791,9 @@
     },
     "AtlTextarea": {
       "figmaNodeId": "55:87",
-      "verifiedAt": "2026-08-27T18:58:42.252Z",
-      "verifiedSha": "4c57b74",
-      "inputsHash": "sha256:3102fa097ea2dc7110270146fd2ff17c2ed5050841ef86f8d1d4e37fae982984",
+      "verifiedAt": "2026-08-28T15:06:50.820Z",
+      "verifiedSha": "25ac006",
+      "inputsHash": "sha256:ae187019d5391b44fa4b2da59103647ada9ec620ce54a8a0b67e655bf749c1fb",
       "inputs": [
         "libs/angular/src/lib/textarea/atl-textarea.a11y.spec.ts",
         "libs/angular/src/lib/textarea/atl-textarea.css",
@@ -842,9 +842,9 @@
     },
     "AtlToggle": {
       "figmaNodeId": "55:41",
-      "verifiedAt": "2026-08-27T14:02:09.093Z",
-      "verifiedSha": "51d2d9d",
-      "inputsHash": "sha256:9a7eaef17d93eec36ae39ebeded9153d39377d69154f1b77d000f6fee877e859",
+      "verifiedAt": "2026-08-28T15:06:43.666Z",
+      "verifiedSha": "25ac006",
+      "inputsHash": "sha256:919d5a5026b1a3188b3914b4db252c1a530439b879f79d3c8b84d8b256f2a4ec",
       "inputs": [
         "libs/angular/src/lib/toggle/atl-toggle.a11y.spec.ts",
         "libs/angular/src/lib/toggle/atl-toggle.css",

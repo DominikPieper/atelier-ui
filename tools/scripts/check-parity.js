@@ -29,12 +29,19 @@
  * WARNING prints and exits 0. Fully offline and deterministic — the only step
  * that needs Figma is the interactive verify + `parity:record` refresh.
  *
- * Not in `check:all`/CI/pre-push for the same reason as check:figma: clearing a
- * drift BLOCKER means re-running figma_check_design_parity, which needs the Figma
- * Desktop Bridge. Run it before a Figma-touching release / in the verify workflow.
- * Promotion path is in plan/adr/0024.
+ * Two modes, because clearing a DRIFT blocker needs the Figma Desktop Bridge and
+ * `check:all` runs where the bridge is not (CI, and any session doing code-only
+ * work). ADR-0024 §4 promoted this gate into the chain and ADR-0082 splits it:
+ *
+ *   default      DRIFT blocks. This is what a human runs with the bridge open,
+ *                and what the PR checklist asks for after touching a component.
+ *   `--report`   DRIFT reports as a WARNING, naming every component owed and the
+ *                command that clears it, and exits 0. This is what `check:all`
+ *                runs — the same standing check:figma already has in that chain,
+ *                for the same reason. It reports; it does not skip.
  *
  * Run via:  node tools/scripts/check-parity.js   (or  npm run check:parity)
+ *           node tools/scripts/check-parity.js --report  (npm run check:parity:report)
  */
 'use strict';
 
@@ -67,6 +74,16 @@ function readRedesignPhase() {
   }
 }
 const redesignPhase = readRedesignPhase();
+
+/**
+ * Report mode (ADR-0082). DRIFT is a real finding wherever it fires, but its only
+ * remedy is a bridge-backed re-verify, so blocking on it in `check:all` makes the
+ * offline chain unclearable the moment anyone edits a component directory — a test
+ * file is enough, since the hash covers the whole directory. In report mode the
+ * finding is printed in full, with the count owed and the exact command, and the
+ * exit code is 0.
+ */
+const REPORT_ONLY = process.argv.includes('--report');
 const PARITY_FILE = path.join(ROOT, 'tools/figma/parity.json');
 
 const errors = [];
@@ -145,6 +162,9 @@ for (const comp of snapshot.components) {
     if (redesignPhase) {
       drifted.push(selector);
       warning('DRIFT', `${msg} — owed, not blocking: redesign phase (banner above).`);
+    } else if (REPORT_ONLY) {
+      drifted.push(selector);
+      warning('DRIFT', `${msg} — owed, not blocking here: report mode (banner above).`);
     } else {
       blocker('DRIFT', msg);
     }
@@ -170,6 +190,14 @@ function report() {
         `  Figma is the target of the transfer, not the reference, so a drifted record is expected and does not block.\n` +
         `  ${drifted.length} record(s) owe a re-verify once the transfer lands${drifted.length ? `: ${drifted.join(', ')}` : ''}.\n` +
         `  Clear it by: ${redesignPhase.clearedBy || 'rebuilding the masters, then re-verifying every component.'}`
+    );
+  } else if (REPORT_ONLY && drifted.length) {
+    console.warn(
+      `● parity report mode (--report, ADR-0082):\n` +
+        `  ${drifted.length} component(s) have changed since their last design-parity verify: ${drifted.join(', ')}.\n` +
+        `  Not blocking here because the remedy needs the Figma Desktop Bridge, which this chain does not have.\n` +
+        `  Clear it with the bridge open: figma_check_design_parity, then npm run parity:record -- --component <Name>,\n` +
+        `  and confirm with npm run check:parity (no --report), which blocks.`
     );
   }
 

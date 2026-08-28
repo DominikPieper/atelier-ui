@@ -54,6 +54,7 @@ function goTo(p: number) {
       <li v-if="showFirstLast">
         <button
           class="page-btn nav-btn"
+          :class="{ 'is-disabled': page <= 1 }"
           :disabled="page <= 1"
           aria-label="First page"
           @click="goTo(1)"
@@ -64,6 +65,7 @@ function goTo(p: number) {
       <li>
         <button
           class="page-btn nav-btn"
+          :class="{ 'is-disabled': page <= 1 }"
           :disabled="page <= 1"
           aria-label="Previous page"
           @click="goTo(page - 1)"
@@ -79,7 +81,7 @@ function goTo(p: number) {
         <li v-else>
           <button
             class="page-btn"
-            :class="{ active: item.page === page }"
+            :class="{ 'is-active': item.page === page }"
             :aria-label="`Page ${item.page}`"
             :aria-current="item.page === page ? 'page' : undefined"
             @click="goTo(item.page)"
@@ -92,6 +94,7 @@ function goTo(p: number) {
       <li>
         <button
           class="page-btn nav-btn"
+          :class="{ 'is-disabled': page >= pageCount }"
           :disabled="page >= pageCount"
           aria-label="Next page"
           @click="goTo(page + 1)"
@@ -102,6 +105,7 @@ function goTo(p: number) {
       <li v-if="showFirstLast">
         <button
           class="page-btn nav-btn"
+          :class="{ 'is-disabled': page >= pageCount }"
           :disabled="page >= pageCount"
           aria-label="Last page"
           @click="goTo(pageCount)"

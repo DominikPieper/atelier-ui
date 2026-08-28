@@ -33,3 +33,4 @@ PRs.
 <!-- Confirm the local pre-push hook ran clean (or note which gates you knowingly bypassed and why). -->
 
 - [ ] `npm run check:all` passes locally.
+- [ ] Touched a component directory? `npm run check:parity` passes with the Figma bridge open — `check:all` only *reports* drift (ADR-0082), so this is the one place the re-verify is enforced.

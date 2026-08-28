@@ -64,6 +64,9 @@ let nextId = 0;
         (blur)="onBlur()"
         (keydown)="onKeydown($event)"
       />
+      @if (invalid()) {
+        <atl-icon name="danger" size="sm" class="invalid-icon" />
+      }
       <span class="combobox-icon" aria-hidden="true">
         <atl-icon name="chevron-down" size="sm" />
       </span>

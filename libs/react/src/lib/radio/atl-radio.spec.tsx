@@ -50,6 +50,15 @@ describe('AtlRadio (within AtlRadioGroup)', () => {
     expect(screen.getByDisplayValue('b')).toBeChecked();
   });
 
+  it('applies is-invalid class when the group is invalid', () => {
+    const { container } = render(
+      <AtlRadioGroup value="a" invalid name="g">
+        <AtlRadio radioValue="a">A</AtlRadio>
+      </AtlRadioGroup>
+    );
+    expect(container.querySelector('.atl-radio')).toHaveClass('is-invalid');
+  });
+
   covers('radio', 'select-on-click')('calls group onValueChange on change', async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();

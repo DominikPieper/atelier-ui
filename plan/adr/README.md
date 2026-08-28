@@ -86,6 +86,8 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0078](0078-a-count-you-can-only-ratchet-down.md) | A count you can only ratchet down (`[NO-SIZE]`, `lib/component-roots.js`, `--update-baseline`) | Accepted | Recorded |
 | [0079](0079-type-does-not-need-the-painted-box.md) | Type does not need the painted box (`ROOT_TYPE`, `[TEXT-UNSTYLED]`, `tools/figma/type-baseline.json`) | Accepted | Recorded |
 | [0080](0080-a-guard-that-skips-is-not-a-check.md) | A guard that skips is not a check (ratchets record findings, not counts; amends 0078/0079) | Accepted | Recorded |
+| [0081](0081-a-class-the-css-paints-and-no-template-emits.md) | A class the CSS paints and no template emits (`check:dead-selectors`, `DEAD_SELECTOR_EXEMPT`) | Accepted | Recorded |
+| [0082](0082-a-blocker-the-chain-cannot-clear.md) | A blocker the chain that runs it cannot clear (`check:parity --report`; amends 0024) | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

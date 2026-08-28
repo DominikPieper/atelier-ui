@@ -314,7 +314,56 @@ const PRIMITIVE_EXEMPTIONS = new Map([
   ],
 ]);
 
+/**
+ * `framework:dir:class` triples a stylesheet selects on that its own directory's
+ * templates cannot emit, and that are not payable by an edit. (check-dead-selectors)
+ *
+ * Three parts, not four, because the gate compares per DIRECTORY — pairing a class
+ * to one stylesheet would be precision the check does not have (four Angular
+ * components ship no styleUrl at all).
+ *
+ * Same two kinds as the other allowlists here, and every entry below is `gap` on
+ * purpose: each one is a real cross-framework divergence that warns on every run
+ * until somebody decides it, rather than a closed question. An entry whose class IS
+ * emitted now is an error — see [STALE-EXEMPTION].
+ */
+const DEAD_SELECTOR_EXEMPT = new Map([
+  // React declares `orientation` in its OWN props interface (atl-radio-group.tsx:73)
+  // and emits `.orientation-${orientation}`; libs/spec has no orientation on
+  // AtlRadioGroupSpec at all (line 183 is AtlStepperSpec's). So all three stylesheets
+  // carry the two rules and only one adapter can reach them. The remedy is a spec
+  // decision — promote the axis to AtlRadioGroupSpec and implement it twice, or drop
+  // it from React and delete six rules — not an edit either way.
+  ...['angular', 'vue'].flatMap((fw) =>
+    ['vertical', 'horizontal'].map((member) => [
+      `${fw}:radio-group:orientation-${member}`,
+      {
+        kind: 'gap',
+        reason:
+          'the orientation axis exists only in React, which declares it in its own props ' +
+          'interface rather than in libs/spec — promote it to AtlRadioGroupSpec and implement ' +
+          'it in all three, or drop it from React and delete the rules from all three sheets. ' +
+          'Unresolved: see tasks/todo.md',
+      },
+    ])
+  ),
+  [
+    'angular:table:atl-checkbox',
+    {
+      kind: 'gap',
+      reason:
+        'atl-table.css:157 centres the select cell via `.atl-tr-select-cell .atl-checkbox label`, ' +
+        'but Angular renders the child as the ELEMENT <atl-checkbox> and its host binding emits ' +
+        'only is-checked/is-disabled/is-invalid/is-touched — React and Vue emit `atl-checkbox` as ' +
+        'a class. Either give the Angular host the class hook the other two expose, or select the ' +
+        'element here; both are cross-framework decisions about what the class contract is. ' +
+        'Unresolved: see tasks/todo.md',
+    },
+  ],
+]);
+
 module.exports = {
+  DEAD_SELECTOR_EXEMPT,
   VARIANT_AXIS_EXCEPTIONS,
   DEFAULT_IS_BASE,
   DEFAULT_PROP_EXCEPTIONS,

@@ -18,6 +18,12 @@ Accepted. Recorded at decision time. **Complements ADR-0019** (the Figma
 the *visual* verify step ADR-0019 explicitly left out of scope, and follows the
 same committed-artifact + offline-`--check` pattern (ADR-0009).
 
+§4's promotion path was taken in `b8935c8` (2026-07-22) and **amended by ADR-0082**
+(2026-08-28): the gate stays in `check:all`, but there it runs `--report` and DRIFT is a
+WARNING. Blocking on it in a chain that runs in CI made `check:all` unclearable — the
+remedy needs the Figma Desktop Bridge, and a GitHub runner does not have one. The
+BLOCKER is unchanged in the direct `npm run check:parity` invocation.
+
 ## Context
 
 The design-to-code loop's fourth step is `figma_check_design_parity` — "Verify",

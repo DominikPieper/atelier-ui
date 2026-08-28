@@ -79,6 +79,7 @@ export class AtlRadio implements RadioItem, OnInit, OnDestroy {
     const classes: string[] = [];
     if (this.isChecked()) classes.push('is-checked');
     if (this.isDisabled()) classes.push('is-disabled');
+    if (this.group?.invalid()) classes.push('is-invalid');
     return classes.join(' ');
   });
 

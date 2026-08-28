@@ -104,12 +104,3 @@
   background: var(--ui-color-border);
   border: none;
 }
-
-/* Trigger panel — positioned absolutely below trigger */
-.atl-menu-panel {
-  position: absolute;
-  z-index: var(--ui-z-dropdown, 100);
-  top: calc(100% + var(--ui-spacing-2));
-  left: 0;
-  min-width: 100%;
-}

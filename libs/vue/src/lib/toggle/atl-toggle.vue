@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, useId } from 'vue';
 import './atl-toggle.css';
 
 defineOptions({ name: 'AtlToggle' });
@@ -29,6 +29,7 @@ const emit = defineEmits<{
 }>();
 
 const inputId = computed(() => props.id || `toggle-${Math.random().toString(36).slice(2)}`);
+const errorsId = useId();
 
 function onChange(event: Event) {
   emit('update:checked', (event.target as HTMLInputElement).checked);
@@ -36,7 +37,7 @@ function onChange(event: Event) {
 </script>
 
 <template>
-  <div class="atl-toggle" :class="{ 'is-invalid': invalid, 'is-disabled': disabled }">
+  <div class="atl-toggle" :class="{ 'is-checked': checked, 'is-invalid': invalid, 'is-disabled': disabled }">
     <label :for="inputId" class="toggle-label">
       <input
         :id="inputId"
@@ -48,6 +49,7 @@ function onChange(event: Event) {
         :name="name"
         :aria-invalid="invalid || undefined"
         :aria-checked="checked"
+        :aria-describedby="errors.length > 0 ? errorsId : undefined"
         @change="onChange"
       />
       <span class="track">
@@ -55,8 +57,8 @@ function onChange(event: Event) {
       </span>
       <slot />
     </label>
-    <ul v-if="errors.length" class="errors" aria-live="polite">
-      <li v-for="(error, i) in errors" :key="i" class="error">{{ error }}</li>
-    </ul>
+    <div v-if="errors.length" :id="errorsId" class="errors" aria-live="polite">
+      <p v-for="(error, i) in errors" :key="i" class="error-message">{{ error }}</p>
+    </div>
   </div>
 </template>

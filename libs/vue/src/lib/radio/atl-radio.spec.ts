@@ -6,12 +6,13 @@ import { covers } from '../../testing/behavior';
 
 const RadioWithGroup = {
   components: { AtlRadioGroup, AtlRadio },
-  props: ['modelValue', 'groupDisabled', 'radioDisabled'],
+  props: ['modelValue', 'groupDisabled', 'radioDisabled', 'groupInvalid'],
   emits: ['update:modelValue'],
   template: `
     <AtlRadioGroup
       :value="modelValue"
       :disabled="groupDisabled"
+      :invalid="groupInvalid"
       name="test"
       @update:value="$emit('update:modelValue', $event)"
     >
@@ -59,6 +60,15 @@ describe('AtlRadio', () => {
     render(RadioWithGroup, { props: { modelValue: '', groupDisabled: true } });
     for (const radio of screen.getAllByRole('radio')) {
       expect(radio).toBeDisabled();
+    }
+  });
+
+  it('applies is-invalid class when the group is invalid', () => {
+    const { container } = render(RadioWithGroup, {
+      props: { modelValue: '', groupInvalid: true },
+    });
+    for (const radio of container.querySelectorAll('.atl-radio')) {
+      expect(radio).toHaveClass('is-invalid');
     }
   });
 });

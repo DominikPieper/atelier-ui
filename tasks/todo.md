@@ -499,17 +499,24 @@ Decision-bearing quick wins (deferred — not this session's scope):
       all 43 masters, so a separate change (ADR-0079).
 
 - [ ] **Five CSS defects found in passing while resolving the type roles** (2026-08-28,
-      `tasks/type-role-resolution-2026-08-28.md` §4). Each is independent of typography and
-      none is gated:
+      `tasks/type-role-resolution-2026-08-28.md` §4). Each is independent of typography.
+      **Two are now closed and gated** by `check:dead-selectors` (ADR-0081); the other three
+      are declaration-level defects that gate reads nothing about, and stay open:
       - `.atl-tbody-empty-cell`'s `font-size` is **dead**. Specificity (0,1,0) against
         `.atl-table.size-md tbody td` at (0,2,2), so the empty message renders 14px and
         never the 16px written. The same rule's `padding` and `background-color` already
         carry `!important` for exactly this reason; `font-size` was missed. Identical in
         Angular and Vue — a shared defect, not drift.
-      - **Angular's combobox readonly rule is dead.** `atl-combobox.css:206` targets
-        `.atl-combobox-input`; the template emits `class="combobox-input"` and every other
-        rule was renamed. A readonly Angular combobox keeps its interactive border and text
-        cursor (ADR-0045 violation in one framework).
+      - ~~**Angular's combobox readonly rule is dead.**~~ **Closed 2026-08-28** (ADR-0081).
+        `atl-combobox.css:206` targeted `.atl-combobox-input` while the template emits
+        `class="combobox-input"` — one selector missed in a rename. The selector is
+        corrected and `check:dead-selectors` reports it by name if the rename ever
+        half-lands again. The ADR-0045 readonly contract now holds in all three frameworks.
+        **Correction, 2026-08-28:** an earlier version of this entry said
+        `atl-combobox.spec.ts` pins the corrected selector. It does not — the string
+        `combobox-input` appears nowhere in that file. The spec asserts `is-readonly` on the
+        host, `input.readOnly`, and that the listbox stays closed, which is exactly the
+        shape of test that stayed green while the rule was dead. The gate is what pins it.
       - **`.atl-tooltip` contradicts itself.** `max-width: 20rem` + `word-wrap: break-word`
         **and** `white-space: nowrap`. React and Vue have the nowrap, Angular does not — so
         the same tooltip wraps in one framework and cannot in the other two. Fix the
@@ -519,8 +526,13 @@ Decision-bearing quick wins (deferred — not this session's scope):
         `font-family`, so the UA shorthand wins. Every other component in the repo that
         puts text in a form control writes `font: inherit` explicitly; `atl-chat.css` omits
         it, and the chat root's own comment says it exists to prevent this (ADR-0035/0049).
-      - **`.radio-text` is styled nowhere**, and Angular does not emit it at all — no effect
-        today, but any future rule on it silently skips one framework.
+      - **`.radio-text` is styled nowhere**, and Angular does not emit it at all.
+        **Examined 2026-08-28 and deliberately not changed** (ADR-0081 §4): it is the
+        *reverse* direction, which the new gate does not check. Making Angular emit it means
+        wrapping `<ng-content/>` in a span — new markup in a published package, and a
+        re-verify against Figma — for a class no stylesheet selects. It belongs to the
+        "is a class with no rule a public hook or a leftover" decision below, not to a sweep;
+        the risk it names (a future rule silently skipping Angular) is real and unchanged.
 
 - [ ] **AtlChat ships an illustrative app mockup inside the master.** Sixteen TEXT nodes —
       a nav rail, a breadcrumb, a page heading, two sidebar lists, a minimise glyph — are
@@ -743,6 +755,8 @@ Decision-bearing quick wins (deferred — not this session's scope):
 - [ ] **AtlRadioGroup emits a dead `is-readonly` class.** `atl-radio-group.tsx` adds it and no
       stylesheet in any of the three frameworks has a rule for it — the same shape ADR-0045
       removed from AtlSelect, still present here. Either style it or drop the class.
+      Still ungated after 2026-08-28: `check:dead-selectors` walks CSS → template, and this is
+      template → CSS, the direction ADR-0081 §4 measured at 49 rows and did not ship.
 - [ ] **AtlRadioGroup's master draws one radio, not a group.** Its variants are a single
       18px circle plus a label, so the group-level states have nothing to sit on. Related to the
       child-master work below (ADR-0056).
@@ -1474,3 +1488,289 @@ about all of them would be the unclearable warning ADR-0066 refuses. Two of the 
 (AtlMenu at 16px, AtlToast at 14px) state a size in CSS that nothing checks. Secondarily:
 571 lines of baseline is a large `--update-baseline` diff to approve without reading, and
 nothing forces anybody to read it.
+
+## Open — the reverse direction of `check:dead-selectors` (2026-08-28)
+
+ADR-0081 ships `[DEAD-SELECTOR]` (a class the CSS selects and no template can emit) and
+deliberately **does not** ship its mirror, `[UNSTYLED-CLASS]` (a class a template emits and
+no stylesheet selects). It was built and measured with the same extractor: **49 rows**, and
+they are not one population, which is why no single rule fits them.
+
+- **Deliberate unstyled markup hooks** — `radio-text` (react `atl-radio.tsx:56`, vue
+  `atl-radio.vue:64`; Angular projects `<ng-content/>` and emits no such span, so any future
+  rule on it silently skips Angular), `radio-input` / `radio-indicator`, `checkbox-label` /
+  `input-label` / `textarea-label` / `toggle-label` / `select-label`, `tab-button` /
+  `tab-panel` / `tab-panels`, `atl-menu-trigger-wrapper`, `accordion-header-content`.
+- **Vestigial** — `is-touched` on seven Angular components, after ADR-0055 dropped `touched`
+  from the contract; `is-selectable` on the Angular table; `atl-menu-item-chevron`.
+  Whether these are supported consumer hooks or dead weight is undecided, and nothing in the
+  ADRs says.
+- **Extractor artifacts, not findings** — `status-` (because `AtlAvatarStatus` includes
+  `''`), and `asc` / `desc`.
+
+Blocking on that set would demand deleting markup ADR-0007 entitles the adapters to differ
+on; warning on it is the unclearable warning ADR-0066 refuses. What would make it gateable is
+deciding the middle bucket first — is a class with no rule a public hook or a leftover? —
+which is an ADR, not a sweep.
+
+Two findings the gate surfaced and left as `gap` exemptions in `DEAD_SELECTOR_EXEMPT`, both
+needing a decision rather than an edit:
+
+- `orientation-vertical` / `orientation-horizontal` are styled in all three radio-group
+  stylesheets and emitted only by React, which declares `orientation` in its own props
+  interface — `AtlRadioGroupSpec` has no such field. Promote the axis to the spec and
+  implement it three times, or drop it from React and delete six rules.
+- `angular:table:atl-checkbox` — `atl-table.css:157` centres the select cell via
+  `.atl-tr-select-cell .atl-checkbox label`, but Angular renders the child as the element
+  `<atl-checkbox>` while React and Vue emit `atl-checkbox` as a class. Give the Angular host
+  the class hook, or select the element.
+
+**The state classes are not one population, and one slice is a contract question.** Filing
+all 49 as "unstyled markup hooks" undersells it. A cross-framework comparison of `is-*`
+emission found `is-checked` emitted by Angular's and React's checkbox and not Vue's,
+`is-open` by Angular's and React's dialog and not Vue's, and `is-active` / `is-open` /
+`is-selected` by Angular's select alone. Nothing selects any of them, so the gate is right
+to be green — but a consumer writing `.atl-checkbox.is-checked` gets three different answers
+from three adapters. That is the Vue toggle's defect pointed the other way, with the CSS not
+yet written. The decision to take first: **are the `is-*` state classes public contract or
+private implementation?** If public, they belong in `libs/spec` and all three adapters emit
+them unconditionally; if private, the gate is complete as it stands and the divergence is
+free. Nothing in the ADRs says, and `[UNSTYLED-CLASS]` cannot be designed until it does.
+
+## Open — parity drift, after ADR-0082 (2026-08-28)
+
+- [x] ~~**Ten parity records are owed a bridge-backed re-verify**~~ — done 2026-08-28, in the
+      session that made the ADR-0081 repair, with the bridge open. AtlInput, AtlMenu,
+      AtlCheckbox, AtlToggle, AtlTextarea, AtlRadioGroup, AtlRadio, AtlPagination,
+      AtlCombobox, AtlMenuItem: `figma_check_design_parity` per master against a `codeSpec`
+      read from the source, then `parity:record`. All ten re-recorded; `npm run check:parity`
+      green again. **The verify was not a formality** — it returned twenty divergences, and
+      what they are is the section below. A parity stamp says "verified after the files last
+      changed" (ADR-0064), not "the two sides agree" — but recording without writing the
+      divergences down would have buried fifteen findings.
+- [ ] **`inputsHash` cannot tell a rendered file from a test file.**
+      `lib/parity-inputs.js` `inputFiles()` walks *every* file under
+      `libs/{angular,react,vue}/src/lib/<module>/`, so appending a comment to
+      `atl-button.spec.tsx` turns AtlButton into a DRIFT finding — proven, then reverted.
+      ADR-0024 §2 describes the set as "implementation, CSS, story, and the component-local
+      spec", and a `*.spec.tsx` is none of those. Narrowing it needs a migration, which is
+      why it is a task and not a patch: changing the hash function invalidates all 37 records
+      at once, so each record's hash has to be recomputed **at its own `verifiedSha`** (old
+      definition matching there proves the record was valid; the new definition at that sha
+      is then the equivalent) before the current value means anything. Worth doing when
+      somebody is next in this file; it clears none of the ten above.
+
+## Open — what the ten-master parity re-verify found (2026-08-28)
+
+Three agents re-ran `figma_check_design_parity` over the ten masters, each against a
+`codeSpec` read from the source, and a fourth re-ran the three most consequential itself.
+Twenty divergences. The score is deliberately ignored — ADR-0024's amendment records three
+runs on one commit returning 70, 52 and 83 — so what follows is the discrepancy list, judged
+one item at a time. Everything here is **Figma-side or gate-side**; nothing found argues the
+code is wrong, except where said.
+
+**Four gate blind spots, each of which is why one of the groups below went unseen.**
+
+- [ ] **`[ROOT-BOX]`'s gap comparison is unreachable for the four form-row masters.** It sits
+      at `check-figma.js:1230`, *inside* `for (const entry of ROOT_PAINT)`, and AtlCheckbox,
+      AtlToggle, AtlRadio and AtlRadioGroup are all excluded from `ROOT_PAINT` for the paint
+      reason ADR-0079 split type out of. All four bind `spacing/2` (8px) as the root
+      itemSpacing while all three stylesheets state `gap: var(--ui-spacing-3)` = 12px. Same
+      shape as ADR-0079: an exclusion justified on one axis silently taking another with it.
+- [ ] **`[LAYER-PAINT]` never compares a stroke colour when the CSS border is transparent.**
+      The layer border block reads `if (!/transparent|none/.test(border)) wantStroke = …`, so
+      for `.page-btn { border: var(--ui-border-width) solid transparent }` `wantStroke` stays
+      `undefined` and the guard below skips. Six visible `color/border` strokes on
+      AtlPagination's page buttons pass because of it. A transparent border is a *declared*
+      value, not a missing one — the gate should compare it and expect no paint.
+- [ ] **AtlMenu's `ROOT_PAINT` entry has no `{variant}` template** (`check-figma.js:598`,
+      `cascade: ['.atl-menu']`), though the mechanism exists and other entries use it. So
+      `variant=compact` is compared against the *base* rule's 8px block padding and passes,
+      while the rule that actually applies, `.atl-menu.variant-compact`, says 4px.
+- [ ] **`AtlRadioGroup`'s parity record hashes the wrong directory — verified by hand.**
+      `COMPONENT_METADATA_REGISTRY` maps `AtlRadioGroupSpec → 'radio'`
+      (`libs/spec/src/metadata/index.ts:43`), so `computeInputsHash('radio')` backs the
+      record. Its `inputs` list contains **no** `radio-group/` path and its `inputsHash` is
+      **byte-identical** to AtlRadio's (`sha256:9d625d0c…`, checked after today's re-record).
+      Every change under `libs/*/src/lib/radio-group/` is invisible to the gate, including
+      today's. Two masters cannot share one hash and both mean something.
+
+**The form-row masters never moved to the row ladder.**
+
+- [ ] **AtlToggle and AtlCheckbox hug at 24px and AtlRadio at 28px (4 + 20 + 4), against a
+      code row of `--ui-row-height-sm` = 40px.** ADR-0052's review records the *code* side of
+      exactly this — "checkbox 26 → 40, radio 32 → 40, toggle 27 → 40" — and its final
+      consequence records only that the row ladder has no Figma Variables yet. That the
+      masters were never moved is recorded nowhere, and nothing measures it: `check:geometry`
+      is code-only and `[ROOT-BOX]` cannot reach these four (above). AtlRadio also pads 4/4
+      (`spacing/1`) where the CSS states `padding-block: 0` and expresses the inset as a
+      `min-height` — the same fact seen from the other side.
+
+**Three masters state invalid by hue alone, which ADR-0055 forbids.**
+
+- [ ] **AtlInput, AtlTextarea and AtlCombobox have no non-colour invalid indicator in Figma.**
+      `iconInstanceNames` is empty for the first two; AtlCombobox's is
+      `[chevron-down, chevron-up, check]` with no `danger`. AtlInput's `state=invalid`
+      (129:29) holds three children — `_readonly-surface`, the TEXT node, `_disabled-overlay`
+      — and reddens the root stroke. ADR-0055 made the `AtlIcon danger` indicator mandatory
+      in all four fields for WCAG 1.4.1, the code carries it in all three frameworks, and
+      **AtlInput's own master description already claims it** ("carried by an AtlIcon danger
+      inside the field as well as by the border colour"). `[BOOL-INERT]` stays green for
+      AtlCombobox because `invalid` does toggle a layer — it just toggles half the treatment.
+      Placing it became possible with the Icon masters of ADR-0057.
+- [ ] **ADR-0055's "nothing moves when the state flips" does not hold for two of the four.**
+      `.atl-input` and `.atl-textarea` change `padding-right` 1rem → 2.25rem with the invalid
+      state, so the text box narrows by 20px when it flips — identical in all three
+      frameworks. The ADR states the space is reserved unconditionally and says it was
+      measured; that holds for AtlSelect and AtlCombobox, whose 56px inline-end slot is
+      unconditional, and not for these two. Either reserve it here too, or correct the ADR.
+
+**AtlTextarea's master disagrees with itself.**
+
+- [ ] **`radius/md` (10px) on `state=default` and `radius/sm` (8px) on the other four**, while
+      no CSS rule changes the radius. Plus: the hover variant's root stroke is an **unbound
+      RAW colour** — the only raw paint on any of the three field masters, the class ADR-0061
+      repaired for 34 `_invalid-border` rectangles — and the invalid variant binds
+      `color/danger` where AtlInput binds `color/input-border-invalid` and the CSS names the
+      latter. Nothing renders differently for the last one
+      (`--ui-color-input-border-invalid: var(--ui-color-danger)`), so it is naming drift, but
+      "bound is not the same as bound correctly" (ADR-0060) is precisely what `[ROOT-PAINT]`
+      exists to catch and it cannot see any of these: it compares `state=default` only and
+      warns that it skipped the other four.
+
+**AtlCombobox's panel and AtlPagination's buttons.**
+
+- [ ] **The combobox master stacks its panel 4px below the field; the code uses 8px.** Root
+      auto-layout gap 4, bound `spacing/1`, against `top: calc(100% + var(--ui-spacing-2))`
+      and `.errors { margin-top: var(--ui-spacing-2) }` in all three. Same layer, four more:
+      fill `color/surface` (#ffffff) vs `--ui-color-surface-raised` (#f8fafc), radius
+      `radius/sm` (8px) vs `--ui-radius-md` (10px), padding 4px on four sides vs 8px block /
+      0 inline, and a 4px row gap the CSS does not have. The panel exists only in
+      `state=open`, which is the wholesale skip already recorded above for type — these are
+      the paint deltas behind the same skip, recorded nowhere.
+- [ ] **AtlPagination: four divergences on the page buttons.** Six of seven draw a visible 1px
+      `color/border` stroke where `.page-btn` paints a *transparent* border (which exists to
+      reserve the box so `.is-active`'s `border-color` does not shift layout). Number text is
+      `color/text-muted` (#475569) against `--ui-color-text` (#0f172a) — invisible to
+      `[LAYER-PAINT]`, which compares the named FRAME while the colour lives on the TEXT
+      child. Inactive numbers are Regular 400 against `--ui-font-weight-medium` (500); the
+      current page is Medium 500 against `--ui-font-weight-semibold` (600).
+- [ ] **ADR-0063's page-button fix was half-applied, and its record overstates it.** ADR-0063
+      §4 and `tasks/todo.md` both say the 33 divergences were found *and fixed*, naming "the
+      page buttons painted a fill and a border where `.page-btn` sets both `transparent`".
+      The fill was removed from the six inactive buttons; the stroke was not. Nothing has
+      contradicted the record since, because the gate cannot see it (blind spot above).
+
+**Three adapters, three answers — the Vue-toggle defect pointed at other axes.**
+
+- [ ] **Radio groups lay out in a row in Angular and Vue and in a column in React.**
+      `.atl-radio-group` / `:host` is `display: flex` with no `flex-direction`, so the default
+      is `row`; `flex-direction: column` lives only under `.orientation-vertical`, which only
+      React emits (`atl-radio-group.tsx:148`) and whose default in React's own props
+      interface is `'vertical'`. A three-option group therefore renders stacked in React and
+      side-by-side in the other two. This is the rendered consequence of the
+      `orientation-*` `[GAP]` exemption recorded above — that entry frames it as an
+      undecided axis; it is also a live divergence today.
+- [ ] **Vue's checkbox and toggle still lack `aria-required`.** Angular sets
+      `[attr.aria-required]` and no native `required`; React sets both; Vue sets only the
+      native `:required` (`atl-checkbox.vue:64`, `atl-toggle.vue:48`). The same bug was found
+      and fixed for `atl-input.vue` and recorded in this file; the sibling controls were not
+      swept at the time.
+- [ ] **AtlRadioGroup's error region is three shapes in ARIA**, even though the class shape
+      now matches. Angular: `<div class=errors [id] aria-live=polite>` plus
+      `aria-describedby` on the host. React: `role=alert aria-live=polite`, no id, no
+      describedby. Vue: `role=alert`, no `aria-live`, no id, no describedby. The element and
+      class contract holds; the announcement contract does not.
+- [ ] **The three adapters disagree on the menu trigger-to-panel offset, and the ADR-0081
+      deletion removed the last place the intent was written.** React and Vue position the
+      panel at `top: calc(100% + var(--ui-spacing-2))` — 8px below the trigger. Angular's
+      `AtlMenuTrigger` passes no position strategy or offset to `CdkMenuTrigger`, so the CDK
+      default applies. Deleting Angular's inert `.atl-menu-panel` rule was correct on its own
+      terms (no such element is ever rendered), but it also deleted the only statement of
+      what the offset should be. Give the Angular trigger an explicit offset matching the
+      other two, or record that the CDK default is the intended answer.
+
+## Open — one semver-major type change, unreleased (2026-08-28)
+
+- [ ] **`AtlRadioGroupContext.invalid` became required.** `libs/angular/src/lib/radio-group/
+      atl-radio-group.token.ts` gains `invalid: Signal<boolean>` with no `?`, and the
+      interface is exported from the public barrel (`libs/angular/src/index.ts:19`). The only
+      in-repo implementor is `AtlRadioGroup`, which already declared `invalid` and needed no
+      change — but any outside implementor of the interface breaks. It is the right shape
+      (React's and Vue's contexts both require it, and the Angular radio could not read its
+      group's invalid state without it), and it is a **breaking change to a published type**
+      that needs a semver-major note. Nothing in the diff or the ADRs said so until now.
+
+## Review — the join nobody was checking, 2026-08-28 (second pass)
+
+A builder shipped `check:dead-selectors` and repaired fourteen dead rules; two skeptics
+re-derived the whole thing independently; this pass fixed what they found and recorded the
+two decisions the work forced. ADR-0082 written, ADR-0081 amended in place (it was accepted
+the same morning and carried three claims the review disproved), ADR-0024's §4 annotated.
+
+**What shipped.** `check:parity` splits into two modes: the direct invocation still BLOCKS
+on drift, and `check:all` runs `check:parity:report` (`--report`), which prints the banner,
+every drifted component and the exact `parity:record` command, and exits 0. The
+`check-dead-selectors` cross-directory rescue is rebuilt on the **render relation** — a
+class is live from another directory only when one renders the other — which closes a false
+positive and a false negative at once. Vue's checkbox and toggle finally associate their
+error text (`useId()` + `aria-describedby`), matching what all three Angular and all three
+React equivalents already did and what Vue's own input and textarea already did.
+`@vue/compiler-sfc` is recorded in `package-lock.json`. The PR template names the one place
+the parity blocker is now enforced.
+
+**Verified, not assumed.** `npm run check:all` → exit 0 (29 gates; `check:dead-selectors`
+5 GAP warnings over 858 selectors in 89 stylesheets, `check:parity:report` 10 DRIFT
+warnings, `check:figma` 14 warnings — the last two byte-comparable to what HEAD prints).
+`npx nx run-many -t test --projects=angular,react,vue --skip-nx-cache` → exit 0, 1351 tests
+(angular 584, react 439, vue 328). `npx nx run-many -t lint` on the same three → exit 0.
+Both gate changes proven by probe and reverted: `.probe-fp-child` styled in
+`react/icon/atl-icon.css` and emitted from `atl-input.tsx` was a blocker before and passes
+after; `.atl-menu .atl-avatar` appended to `react/menu/atl-menu.css` passed before and is a
+blocker after. Real defects still caught: reverting the Vue toggle's `is-checked` binding
+and re-breaking the combobox rename each named the exact file and line. `// probe` appended
+to `react/button/atl-button.spec.tsx` made AtlButton a DRIFT blocker, then did not.
+
+**Four things measurement contradicted.**
+
+1. **The "only cross-directory rescue" was a tautology.** It asked whether a class is
+   another directory's root *and* whether that directory emits it — but a component always
+   emits its own root, so the second clause is never false, and every `.atl-*` root was live
+   in every directory of its framework. ADR-0081 called it "exactly three cases": that is
+   how many it fires on, not how many it can forgive, which is about forty per framework.
+2. **The false-positive direction was worse than the false-negative one.** A class a parent
+   puts on a child component's element, styled in the child's own sheet, was a **blocker on
+   correct markup**, and its remediation text told the author to delete a live rule. It
+   fires on nothing here only because all 33 such sites happen to style the hook in the
+   emitting component's sheet. Running the gate could never have found it; a constructed
+   probe did. A new blocker needs its false positives probed as hard as its false negatives.
+3. **`check:parity`'s promotion into `check:all` has never been load-bearing.** Its own
+   header still said "Not in `check:all`/CI/pre-push" five weeks after `b8935c8` put it
+   there. Of the last four commits touching a component directory, three re-recorded parity
+   and the fourth (`64277c3`, 31 libs files, no `parity.json`) passed only because
+   `meta.redesignPhase.active` was `true` that day. The switch closed 2026-08-27; this is
+   the first change since that could not open the bridge, and it went straight to ten
+   unclearable blockers.
+4. **The Vue toggle did not regress — it was born broken.** `892ac6f` (2026-03-21, "Add
+   vue") shipped `.llm-toggle.is-checked .track` in the stylesheet and a template binding
+   only `is-invalid` and `is-disabled`. There is no commit where they agreed. 0.0.5 went out
+   two days later and every Vue release through `v0.2.9` shipped a switch that cannot show
+   its on state — 160 days — with the unit tests green the whole time, because they asserted
+   the native input's `checked` property and never the class the paint hangs on.
+
+**The unplanned find.** `inputsHash` binds every file under the component directory,
+`*.spec.*` included, so a unit test can invalidate a design verification for a change the
+design cannot see. That is what turned a CSS repair plus its tests into ten DRIFT blockers,
+and it is the reason ADR-0082 is a decision about the chain rather than a patch to the hash:
+narrowing the hash invalidates all 37 records at once and needs a migration first.
+
+**The weakest point.** ADR-0082 buys a green chain by removing the only automated teeth
+design drift had, and replaces them with a line in a pull-request template. A checklist is
+not a gate — this repo's own history is a list of things that were true until nobody
+checked them — and the compensating control is weaker than what it replaces. The honest
+defence is that the teeth it removes could not bite: no CI runner can clear a DRIFT blocker,
+so what was lost was a red build, not an enforcement. The real fix is a parity check that
+runs without the bridge, and nothing here moves toward one. Secondarily: the render relation
+is read from tag names in source text, so a directory that merely *mentions* `<AtlIcon>` in
+a comment counts as rendering it — the forgiving direction, unmeasured beyond "the finding
+count did not move".

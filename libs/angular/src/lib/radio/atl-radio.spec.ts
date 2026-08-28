@@ -75,6 +75,35 @@ describe('AtlRadio', () => {
     });
   });
 
+  describe('invalid state', () => {
+    // `:host(.is-invalid) input[type='radio']` is what draws the danger ring.
+    // AtlRadio could not see the state at all: AtlRadioGroupContext did not
+    // expose `invalid`, so the class was never pushed. React and Vue both
+    // derive it from their group context.
+    it('applies is-invalid class to each radio when the group is invalid', async () => {
+      const { container } = await render(
+        `<atl-radio-group name="test" [invalid]="true">
+          <atl-radio radioValue="a">Option A</atl-radio>
+          <atl-radio radioValue="b">Option B</atl-radio>
+        </atl-radio-group>`,
+        { imports: GROUP_IMPORTS }
+      );
+      for (const radio of container.querySelectorAll('atl-radio')) {
+        expect(radio).toHaveClass('is-invalid');
+      }
+    });
+
+    it('does not apply is-invalid class when the group is valid', async () => {
+      const { container } = await render(
+        `<atl-radio-group name="test">
+          <atl-radio radioValue="a">Option A</atl-radio>
+        </atl-radio-group>`,
+        { imports: GROUP_IMPORTS }
+      );
+      expect(container.querySelector('atl-radio')).not.toHaveClass('is-invalid');
+    });
+  });
+
   describe('disabled state', () => {
     covers('radio', 'disabled')('is disabled when individually disabled', async () => {
       const { container } = await render(

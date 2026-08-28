@@ -66,7 +66,15 @@ function onInput(event: Event) {
 </script>
 
 <template>
-  <div class="atl-textarea" :class="{ 'is-invalid': invalid, 'is-disabled': disabled }">
+  <div
+    class="atl-textarea"
+    :class="{
+      'is-invalid': invalid,
+      'is-disabled': disabled,
+      'is-readonly': readonly,
+      'is-auto-resize': autoResize,
+    }"
+  >
     <label v-if="label" :for="textareaId" class="textarea-label">{{ label }}</label>
     <div class="textarea-field">
       <textarea
@@ -85,8 +93,8 @@ function onInput(event: Event) {
       />
       <AtlIcon v-if="invalid" name="danger" size="sm" class="invalid-icon" />
     </div>
-    <ul v-if="errors.length" :id="errorsId" class="errors" aria-live="polite">
-      <li v-for="(error, i) in errors" :key="i" class="error">{{ error }}</li>
-    </ul>
+    <div v-if="errors.length" :id="errorsId" class="errors" aria-live="polite">
+      <p v-for="(error, i) in errors" :key="i" class="error-message">{{ error }}</p>
+    </div>
   </div>
 </template>

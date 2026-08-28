@@ -21,26 +21,26 @@ a typography study says nothing about how the component should look.
 | `button` | **AtlButton.dc.html** | variant · size · state | 24 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
 | `card` | **AtlCard.dc.html** | variant · padding | 12 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
 | `chat` | **AtlChat.dc.html** | variant | 3 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
-| `checkbox` | **AtlCheckbox.dc.html** | selection · state | 5 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
+| `checkbox` | **AtlCheckbox.dc.html** | selection · state | 5 | 2026-08-28 (`25ac006`) | all 3 | — | yes |
 | `code-block` | **AtlCodeBlock.dc.html** | — *(no master)* | — | — *(never)* | all 3 | yes | yes |
-| `combobox` | **AtlCombobox.dc.html** | state | 6 | 2026-08-27 (`51d2d9d`) | — | — | yes |
+| `combobox` | **AtlCombobox.dc.html** | state | 6 | 2026-08-28 (`25ac006`) | — | — | yes |
 | `dialog` | **AtlDialog.dc.html** | size | 5 | 2026-08-27 (`3c15080`) | all 3 | — | yes |
 | `drawer` | **AtlDrawer.dc.html** | position · size | 7 | 2026-08-27 (`3c15080`) | all 3 | — | yes |
 | `icon` | **AtlIcon.dc.html** | — *(no master)* | — | — *(never)* | all 3 | — | yes |
-| `input` | **AtlInput.dc.html** | state | 5 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
-| `menu` | **AtlMenu.dc.html** | state | 2 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
-| `pagination` | **AtlPagination.dc.html** | none | 0 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
+| `input` | **AtlInput.dc.html** | state | 5 | 2026-08-28 (`25ac006`) | all 3 | — | yes |
+| `menu` | **AtlMenu.dc.html** | state | 2 | 2026-08-28 (`25ac006`) | all 3 | — | yes |
+| `pagination` | **AtlPagination.dc.html** | none | 0 | 2026-08-28 (`25ac006`) | all 3 | — | yes |
 | `progress` | **AtlProgress.dc.html** | variant · size | 12 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
-| `radio` | **AtlRadio.dc.html** | selection · state | 4 | 2026-08-27 (`51d2d9d`) | — | — | yes |
+| `radio` | **AtlRadio.dc.html** | selection · state | 4 | 2026-08-28 (`25ac006`) | — | — | yes |
 | `radio-group` | **AtlRadioGroup.dc.html** | — *(no master)* | — | — *(never)* | all 3 | — | yes |
 | `select` | **AtlSelect.dc.html** | state | 4 | 2026-08-27 (`51d2d9d`) | — | — | yes |
 | `skeleton` | **AtlSkeleton.dc.html** | variant | 3 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
 | `stepper` | **AtlStepper.dc.html** | state | 4 | 2026-08-27 (`3c15080`) | all 3 | — | yes |
 | `table` | **AtlTable.dc.html** | none | 0 | 2026-08-27 (`560bd9e`) | all 3 | — | yes |
 | `tabs` | **AtlTabGroup.dc.html** | state | 2 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
-| `textarea` | **AtlTextarea.dc.html** | state | 5 | 2026-08-27 (`4c57b74`) | all 3 | yes | — |
+| `textarea` | **AtlTextarea.dc.html** | state | 5 | 2026-08-28 (`25ac006`) | all 3 | yes | — |
 | `toast` | **AtlToast.dc.html** | — *(no master)* | — | — *(never)* | all 3 | yes | yes |
-| `toggle` | **AtlToggle.dc.html** | selection · state | 4 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
+| `toggle` | **AtlToggle.dc.html** | selection · state | 4 | 2026-08-28 (`25ac006`) | all 3 | — | yes |
 | `tooltip` | **AtlTooltip.dc.html** | position | 4 | 2026-08-28 (`e4f61ca`) | all 3 | — | yes |
 
 ## How to read the last two columns
