@@ -1,0 +1,172 @@
+# The Training Material and the Claude Design Question — Decision Document
+
+**Date:** 2026-08-28 · **Inputs:** five audits (track-core, deep-pages, foundation, agenda, claude-design-inventory) + three adversarial challenges (accuracy, learner-path, claude-design-feasibility) · **Status:** read-only analysis; this file is the only write. Where a challenge refuted an audit, the refutation is the finding — no override was needed anywhere.
+
+---
+
+## 1. Verdict
+
+The material is accurate at the token, prompt, and component level — every quoted rem value, prop name, and tool name checks out — and broken at the hands-on spine: the central exercise's Figma node does not exist, the hosted Storybook MCP fails every tool call while preflight reports green, and the kata's save-serve-compare sequence has three stacked faults (path, port, missing mount) so that no single fix makes it work. The biggest risk on workshop morning is a room of green preflights followed by four silent failures in the first fifteen hands-on minutes, none of which has a troubleshooting entry. Claude Design: the integration is already decided (ADR-0032), five katas are already written, and the correct move is a 20-minute trainer-only demo in Tag 1 Block 04 plus the /claude-design docs chapter now — participant exercises wait on one widened per-seat verification, and every proposal that imports an artboard into Figma-as-loop-input is rejected because the repo's own architecture notes forbid that chain.
+
+**Counts: 4 blockers · 15 major · 16 minor · 5 presentation debt.**
+
+---
+
+## 2. Claude Design alongside Figma — the concept
+
+### 2.1 What is already decided
+
+This is not a green-field question. ADR-0032 (accepted 2026-08-26) already placed Claude Design as a parallel track: **step 0 (divergence before Inspect) and step 5 (handoff after Verify), never steps 1–4**, framed as "teach the fence itself as content" — the source of truth is the thing a gate can check, and an artboard has no node id, no variants, no variables, no gate identity. Five complete katas with timeboxes, done-conditions, and agenda slot arithmetic exist in `tasks/review-state-2026-08-26.md:171-266`. The strongest argument for the whole track is evidence, not theory: the 2026-08-26/27 library redesign ran **through** 31 Claude Design artboards (29/29 components, `tools/design/artboards.json`, `plan/design-status.md`) and surfaced defect families no gate had caught (ADRs 0041–0073). Meanwhile the participant-facing material contains **zero** mentions of Claude Design (`grep -riE 'claude design|artboard|design-sync|claude\.ai/design' docs/src/` → 0 hits), and the /claude-design Explanation chapter ADR-0032 decided does not exist. The gap is publication, not design.
+
+### 2.2 The recommended integration
+
+**Role:** ideation before the loop and handoff after it — reinforcing the contract thesis: Claude Design is where divergence is cheap precisely *because* nothing gates it; Figma stays the source of truth because it is the only surface `check:figma` and `check:parity` can address. The four pillars (schulung.astro:29) stay four; Claude Design is taught as the counter-example that makes the gate stack concrete.
+
+**The minimal first step, workable today — "Three Directions" trainer demo:**
+
+- **Where:** schulung.astro, Tag 1 Block 04 "MCP & Claude Code Grundlagen" (14:45–16:00). Replace the thin closing bullet "Skills-Konzept … vorstellen" (:96); move the skills intro to Tag2-00, which has slack (30 min, 3 bullets, :134-143).
+- **What:** ~20 min. The trainer generates three direction artboards for one Day-2 homework component (Toast) live via `/design`, seeded from the **generated** palette `tools/design/artboard-palette.css` — not the atelier-design skill, whose token sheet is stale (prerequisite 2 below). Then the fence, demonstrated in the honest direction: hardcode a colour in one artboard and show that **no gate sees it** (`check:artboard-palette` reads only the shared sheet — `gen-artboard-palette.mjs` header, tasks/todo.md:127-132); optionally edit tokens.css and show the real gate go red on the sheet.
+- **Checkpoint:** three visibly distinct artboards on one canvas; the trainer asks the room "which of the four gate identities does this artboard have?" and gets "none" back.
+- **Failure mode:** the canvas fails to render or the trainer's auth hiccups mid-demo.
+- **Fallback:** the 31 artboards from the 2026-08-26/27 redesign already exist in the trainer's Claude Design project — open one, or show screenshots; the fence sentence works on a static image.
+- **Why this one:** it rests exclusively on verified capabilities (the author's own /design flow, exercised 31 times; the green palette gate, 48 values; the trainer's authenticated account), needs zero participant provisioning, is framework-neutral, and contains no import arrow.
+
+**Second step, equally unblocked:** write the `/claude-design` Explanation chapter (off the workshop track, beside /design-principles — exactly as ADR-0032 decided). Content already exists: the fence prose, the redesign-as-proof story, the /design-sync defect list (tasks/todo.md:171-179) as the "review the tool's output" worked example.
+
+### 2.3 Options considered and rejected
+
+| Option | Rejected because |
+|---|---|
+| "Step 0 — Author" on design-to-code with import-to-Figma arrow (track-core hook 1; deep-pages figma.astro hook) | The chain Claude Design → Figma → code is **expressly forbidden**, not merely unverified: `tasks/atelier-design-system-plan.md:88-91` — export is unverified AND imported artboards arrive as frames, not COMPONENT_SETs, "which would make check:figma and check:parity assert nothing". No export spike unblocks it as framed. The "token-gated" claim was also false — authored artboards are ungated (todo.md:127-132). |
+| Kata Done-box stretch "iterate in Claude Design, re-import, watch parity fail" (track-core hook 2) | Same forbidden chain, plus a mechanism error: parity is keyed to the master's node id (ADR-0024); an imported frame has no parity record — it would not fail, it would compare nothing. **Keep the stretch, Claude-Design-free:** edit the Figma master, re-run `figma_check_design_parity`, watch it flag, fix, re-verify. Safe today. |
+| Agenda option 1 as originally framed ("show check:artboard-palette failing a hardcoded artboard colour") | Technically impossible (the gate never reads artboards) and pedagogically inverted — it would teach "artboards are gated", the exact false promise the fence exists to prevent. Survives only in the inverted form above. |
+| Tag2-01 split: 30 min Claude Design ideation → import → 60 min Figma (agenda option 3) | Rides the forbidden chain AND halves the ~90 min of manual Figma practice for an audience defined as Figma-novice (schulung.astro:248) — the same cost the agenda audit used to reject it. |
+| Kata 3 "Variant Matrix, Twice" as written | Its step 5 cannot execute: `figma-snapshot.mjs:47` hardcodes the Atelier file key, the masters probe scopes to the Components page (:420), and `check-figma.js` compares against the spec roster (:98-100, :250-260) — a participant's draft-file matrix is invisible to all three. Needs redesign (or honest rewrite: "the gate can never read your file — say why") before any agenda slot. |
+| Participant homework "sketch it in Claude Design" (agenda option 2) | Deferred, not dead: highest-risk surface for the recorded mis-learnings ("Claude invents colours", "the artboard is a design", review-state:164-165) with no trainer framing. Ships only after the per-seat verification, WITH the starter palette and one fence sentence in the homework text, reviewed in Tag2-00. |
+| Katas 1, 2, 5 as participant exercises now | Blocked by the repo's own rule: per-seat canvas save has never been tested on a non-author account (review-state:164, :298; repo-work 7 open). The test must be **widened** beyond save: the agenda provisions API keys only (schulung.astro:56), which is the wrong credential class for claude.ai/design — run Kata 1 end-to-end on two non-author, participant-class seats; that one test answers skill availability, publish, and save at once. |
+| /design-sync as participant exercise | Trainer demo only (Kata 4), and only that: React-only, manifest verifiably unreliable (phantom tokens, wrong types, 20 leaked --docs-* tokens — todo.md:171-179, repurposed as the kata's content), and governance — uploads persist under enterprise retention with no data residency, so any employer design system routes to the DSB (datenschutz@conciso.de) / ISB first (ADR-0032). |
+
+### 2.4 Prerequisites before the first workshop runs any participant-facing piece
+
+1. **The widened per-seat test** — Kata 1 end-to-end on two non-author, API-key-class accounts (review-state-2026-08-26.md:164, :298; repo-work item 7, "S, but blocking" — note that file's own Assumed section (~:300) carries a stale "katas 3-5 never delivered" note that its :171-248 contradicts: the katas ARE written, timeboxes and done-conditions included). Gates Katas 1/2/5 and agenda option 2. Nothing else substitutes for it.
+2. **Re-mirror the atelier-design skill token sheet** — `assets/colors_and_type.css:21` still declares Inter, no `--ui-font-mono`; SKILL.md says "Inter (UI) and Fira Code" vs shipped Instrument Sans + JetBrains Mono (tokens.css:25-28). Minutes of work; currently makes any live demo paint the retired brand. Ideally generate it the way `artboard-palette.css` is generated — same drift class ADR-0072 just fixed.
+3. **Fix ~27 → 29** in `tasks/claude-design-prompt.md:13,34` (repo-work item 5, open since 08-26).
+4. **Reconcile the Kata 1 + Kata 3 slot arithmetic** (repo-work item 6) — combined they cut Tag2-01's manual Figma from ~90 to ~45 min. At most one fits; Kata 1 is the better fit (cheaper, framework-neutral, replaces blank-canvas flailing rather than structured practice).
+5. **Redesign Kata 3's gate leg** (see the rejection above) before it gets a slot anywhere.
+6. **Re-sync the Atelier DS inside Claude Design** (todo.md:578-583 — manifest/guide still say Inter + Fira Code) — reference-only either way, never input.
+7. Record Kata 2's hex counts once (self-study 5, no record found).
+
+The trainer demo (2.2) and the docs chapter need none of items 1/4/5 — only item 2 (or bypassing the skill for the generated palette).
+
+---
+
+## 3. The improvement list
+
+### Blockers — would break a participant's session
+
+| # | Finding | Evidence | Fix | Serves |
+|---|---|---|---|---|
+| B1 | The central exercise's Figma node 695-313 ("Settings / Card") does not exist; no Settings frame/component/set exists anywhere in the file (live: `getNodeByIdAsync('695:313')` → null; only 6 unrelated TEXT nodes match /settings/i). Kata Step 1, tutorial showcase prompt, and both parity steps are dead. | first-component.astro:10,27,37,113; tutorial.astro:220,436; glossary.ts:21 | Create the Settings/Card frame (Workshop-Templates or Cookbook page) and update all three node-id citations — then gate it: assert every node-id cited in docs/src exists in tools/figma/snapshot.json | participant |
+| B2 | Hosted Storybook MCP fails every docs tool with worker-side 522/523 on all three frameworks (persistent ≥6h, three observers) while the manifests curl 200 and preflight reports green — preflight passes any HTTP status <500 (template preflight.mjs checkMcpEndpoints). | live: `list-all-documentation` → "Failed to fetch manifest components.json: 522"; worker/mcp.ts:19-24 (public same-zone self-fetch); preflight "16 ok" | Fix the worker's manifest fetch (assets binding, not public self-URL); make preflight issue one real tools/list call; add a troubleshooting entry "MCP connects but every tool errors" | participant |
+| B3 | Kata Step 4→5 has three stacked faults: save paths use an `apps/` prefix the scaffold doesn't have (apps generate at root, preset.ts:52-54), ports 4201/4202 are documented but never configured (@nx/vite default 4200), and **no step ever mounts the component** — the app serves the Nx welcome page under any path fix. Fixing one alone changes nothing visible. | first-component.astro:40-56,161-195; tutorial.astro:99-117; workshop.astro:379 | Drop the apps/ prefix, align ports to 4200 (or pin ports in the preset), add a "wire it in" sub-step (or have the kata prompt ask Claude to render it in the app shell), and give Step 5 a failure branch ("still the welcome page? nothing imports it") | participant |
+| B4 | Five docs locations tell participants MCP servers live in `.claude/settings.json` — the wrong file; servers silently never load. The scaffolder, the repo, index.astro, and troubleshooting all use `.mcp.json`. | storybook.astro:79; claude-md.astro:204; workshop.astro:290,364; schulung.astro:58; vs preset.ts:290 | s/.claude\/settings.json/.mcp.json/ in all five (plus the stale comment at preset.ts:264) | participant |
+
+### Major — visible friction or wrong teaching
+
+| # | Finding | Evidence | Fix | Serves |
+|---|---|---|---|---|
+| M1 | workshop.astro documents the retired multi-framework generator: multi-select transcript (CLI is single-select + a Figma-MCP confirm it never shows), "one app per framework" 3-row table, MCP config listing all three storybook servers, `${FIGMA_ACCESS_TOKEN}` without the `:-` default. | workshop.astro:146,317-331,33-61 vs bin/index.ts:100-122, preset.ts:272-290 | Replace with the real single-select transcript and single-framework output | participant |
+| M2 | "Already cloned the repo → skip to Serve" sends repo-cloners to `nx serve workshop-angular`, which no project satisfies (nx show projects: no workshop-*; apps/ empty). | workshop.astro:105-112 | Point cloners at `nx serve docs` / `nx storybook <fw>` or drop the shortcut | participant |
+| M3 | An Angular/Vue participant's props lookup has zero working path: the kata prompt names the storybook-<fw> server (hosted Angular/Vue have no components.json — 404), and both documented fallbacks are absent from the scaffold (libs/spec is private:true and never copied; storybook-react isn't in their .mcp.json). The real fallback — the generated CLAUDE.md's llms-full.txt link (preset.ts:166) — is unmentioned. | first-component.astro:29-30,143-147; design-to-code.astro:36-46,158; curl storybook-angular/manifests/components.json → 404 | Make the Angular/Vue fallback the hosted llms-full.txt; label the libs/spec path "atelier repo only" | participant |
+| M4 | The tutorial's closing Checkpoint is unsatisfiable in a scaffolded workspace on 2 of 3 checks: "renders in Storybook" (scaffold contains no Storybook project) and "parity in sync" (node dead, B1). | tutorial.astro:577-583; preset.ts (no storybook target) | Rewrite the checkpoint to the workspace's reality (dev-server render + parity once B1 is fixed) | participant |
+| M5 | design-to-code mixes four atelier-repo-only commands into the participant track with no context marker: libs/spec/src/index.ts, `nx storybook <fw>`, `parity:record`, `check:parity`. | design-to-code.astro:158,194,199 | One-line context marker per command, or split Verify into participant vs maintainer paths | participant |
+| M6 | McpExplorer's Angular note claims "full story previews and test tools are available for React and Vue" — false on both surfaces; inverts the page's own aside and storybook.astro's matrix. | docs/src/components/McpExplorer.tsx:419 | Rewrite: hosted = docs only for all three; per-component props = React only; dev/test = local addon-mcp, React preview-supported | participant |
+| M7 | figma.astro token census stale: "54 UI-tier variables: 28 color…" vs live Library Tokens = 78 (50 color / 10 spacing / 5 radius / 12 typography / 1 opacity). | figma.astro:233; live variable collections | Derive the sentence from snapshot.json at build time | self-serve reader |
+| M8 | figma.astro component table describes a retired file: P0/P1/P2 sections (live: Form/Display/Navigation/Overlay/Feedback/AI/Action), "23 more…" implying 27 (snapshot: 43 masters), an AtlInput type axis Figma doesn't have, AtlButton missing hasIcon. | figma.astro:253-278 vs snapshot.json | Regenerate the rows from snapshot.json (variantAxes + properties are all there) | self-serve reader |
+| M9 | Figma-account contradiction: workshop.astro says "Figma account — optional" while the agenda mandates a token in pre-work and Day 2 needs draft/edit rights. (Downgraded from the agenda audit's blocker: schulung's own Format callout does mandate the token; the defect is the cross-page contradiction and the unstated Day-2 edit-rights need.) | workshop.astro:100 vs schulung.astro:56,150-153,267-269 | Agenda lists its own stricter prerequisites (account with draft rights), or /workshop gains a "attending the 2-day training?" variant | participant + instructor |
+| M10 | Clone-vs-scaffold ambiguity: the agenda checks "Repo geklont" while /workshop's primary path scaffolds; Day 2 then references plan/big-picture.md and plan/design-principles.md, which the scaffold does not contain. | schulung.astro:56,167,178; preset files/ = styles + tools only | Declare the canonical participant environment (clone, most likely) in both places, or repoint Day 2 at hosted docs pages | instructor |
+| M11 | The agenda contradicts itself: Day-2 block 01 mandates "niemals im Original-File mutieren" (own drafts) but the Erfolgs-Verifizierung requires the component "im Atelier-Figma-File (auf einer Schulungs-Page)". Unexecutable as written. | schulung.astro:150 vs :318 (also :127) | Pick one: per-cohort Schulungs-Page (soften the prohibition to Components/Inventory) or verify in the draft file | instructor |
+| M12 | The Day-2 "Komponenten-Brief" (Anatomie/Axes/States/A11y for Toast/Tag-Chip/Stat-Card/Badge) exists nowhere — the trainer improvises the central Day-2 input. | schulung.astro:117,140; no brief in docs/ or tasks/ | One brief page per component, ideally generated from uianatomy anatomy data (which also demos the tool the block introduces) | instructor |
+| M13 | Tag2-01: 90 minutes for a complete component set (layout, variants, properties, tokens, dark mode, a11y) by declared Figma novices — the least plausible slot, and the only unmarked one. | schulung.astro:145-155 vs :248 | Mark risk:true, pre-stage half-built sets in a drafts template, scope via the brief to 2 variants × 2 states | instructor |
+| M14 | Claude Design is invisible in all participant material despite an accepted ADR, five written katas, working infra, and the redesign evidence — the /claude-design chapter ADR-0032 decided does not exist. | grep docs/src → 0 hits; ADR-0032:69-74; review-state:171-266 | Ship §2 of this document: trainer demo + chapter now, katas after the widened per-seat test | participant + instructor |
+| M15 | The atelier-design skill — named twice in the agenda — carries the pre-redesign brand (Inter / Fira Code, no --ui-font-mono) in a sheet claiming to mirror tokens.css. | .claude/skills/atelier-design/assets/colors_and_type.css:21; SKILL.md; tokens.css:25-28 | Regenerate or re-mirror (prerequisite 2 in §2.4) | instructor |
+
+### Minor
+
+| # | Finding | Evidence | Fix | Serves |
+|---|---|---|---|---|
+| n1 | "docs and stories only" overclaim on four surfaces — hosted Angular/Vue serve MDX foundation docs only (docs.json; components.json 404), no story data. | first-component.astro:144; mcp.astro:30; claude-md.astro:79,123 | "serves foundation docs (MDX) only" | participant |
+| n2 | "Storybook 10.4" anchoring vs shipped 10.5.10 / @storybook/mcp 0.8.0 (substance still holds in deployed artifacts). | mcp.astro:27; storybook.astro:103,120,123,132; package.json | "10.4+" / "since 10.4", or re-verify against 10.5 | self-serve reader |
+| n3 | Phantom `x-markdown-tokens` header claim — worker never sets it, live response lacks it. | agent-skills.astro:128; worker/markdown-negotiation.ts | Drop the claim (or implement, one line) | self-serve reader |
+| n4 | Manifest-flag mess: repo configs set `experimentalComponentManifest` (singular) which addon-mcp's gate does not read (`preset.js:117` reads only plural/`componentsManifest`); storybook.astro:142 vs :201 disagree on the same page. (schulung:82's `experimentalReactComponentMeta` is a *different, real* flag — the accuracy challenge cleared it.) | storybook.astro:142,201; libs/*/.storybook/main.ts; addon-mcp preset.js:117 | Align repo configs to the plural flag; keep storybook.astro:201 as-is; reconcile :142 | instructor + maintainer |
+| n5 | troubleshooting.astro has zero entries for the failures a participant actually hits: gate failures (new today: [TEXT-STYLE] after a token edit, check:parity strict vs --report), "MCP connects but every tool errors" (live right now), "the Figma node-id doesn't resolve". All 11 existing entries are setup-only. | troubleshooting.astro:16-143 | Add 3-4 entries | participant |
+| n6 | Track order inverts map and territory: deep /tutorial is step 4, overview /design-to-code is step 5 — which then recommends the tutorial a linear reader just finished. | workshop-track.ts:33-41; design-to-code.astro:76,209 | Swap the two entries in TRACK_ORDER (one line; everything re-derives) | participant |
+| n7 | workshop's post-setup aside links /tutorial and /figma, skipping /figma-token — the step the tutorial's figma-console flow needs. | workshop.astro:300-312 | Add /figma-token as the first card | participant |
+| n8 | Kata Steps 3 and 6 have no Checkpoint (the component exists and workshop.astro uses it well) — Step 3 has no observable success criterion, Step 6 no example parity output or failure path. | first-component.astro:132-153,201-214 | Checkpoint after 3 ("file created, imports Atl*, zero hex") and 6 ("0 discrepancies — else paste the report back") | participant |
+| n9 | The agenda's Erfolgs-Verifizierung omits `figma_check_design_parity` — the step the material calls "Required, not optional". ADR-0082's report mode makes it teachable on a fresh master. | schulung.astro:317-324 | Add check 7: parity in report mode | instructor |
+| n10 | Language seam one-directional: German participants are never told all material is English. | schulung.astro:249 ("Sprache: Deutsch"), no "Englisch" anywhere | One Zielgruppe bullet | participant |
+| n11 | atelier-design skill named twice in the agenda, zero coverage on /agent-skills (only figma-workspace-architect has a detail page). | schulung.astro:96,154; grep agent-skills.astro → 0 | Add the card + detail page (after M15's re-mirror) | participant |
+| n12 | Tag1-05 is tight (65 min for the ~30-min tutorial + own change) and the 15-min kata sits unused as the obvious buffer/fast-finisher — no agenda block references it. | schulung.astro:101-108; grep first-component → 0 | Name the kata as fast-finisher in block 05 and catch-up homework in 06 | instructor |
+| n13 | claude-design-prompt.md still says "~27 components" (29 is current); atelier-design-system-plan.md's phase status is a stale snapshot (design-status.md + artboards.json are current: 29/29, phase CLOSED 2026-08-27). | claude-design-prompt.md:13,34; design-status.md:8 | Fix the count; treat the plan file as historical | instructor |
+| n14 | The two preflight.mjs copies (repo vs preset template) have silently drifted (2 cosmetic lines today: "Atelier UI Preflight" vs "Atelier Preflight") with no gate — B2's preflight fix will not reach participants unless the template copy is remembered. | diff tools/scripts/preflight.mjs vs preset files/…/preflight.mjs (lines 6, 274) | Sync the copies and gate them against each other | maintainer |
+| n15 | Tutorial and kata build the identical artifact two track-steps apart with no acknowledgment; the tutorial's "just want the recipe" pointer jumps 4→6, then TrackNav walks the reader back through 5. | tutorial.astro:150-152; first-component.astro:75-76; workshop-track.ts | One sentence on the kata hero for tutorial-completers; differentiate the artifacts when fixing B1 | participant |
+| n16 | agent-skills says "four sub-modes" — SKILL.md has three (code-verify is a Migrate post-flight recipe); install.astro never mentions the scaffold command a workshop-morning visitor needs. | agent-skills.astro:160; install.astro:86-250 | "three sub-modes plus a code-verify recipe"; one pointer line under install's hero | self-serve reader |
+
+### Presentation debt
+
+| # | Finding | Evidence | Fix |
+|---|---|---|---|
+| p1 | Placeholder inline-SVG UI mockups on tutorial (URL bar), figma-token (menu + picker), figma (inspect panel — showing retired #00BEBE vs current #006470/#34d8d8). Recorded in memory as temporary. | tutorial.astro:410-443; figma-token.astro:138-175; figma.astro:314-356,335 | Real captures; fix #00BEBE in the interim |
+| p2 | workshop's preflight mock shows 3 storybook rows / "15 ok" — only possible under the retired multi-framework scaffold. (Header note: the mock matches the *repo* script; the *template* participants run prints differently — reconcile n14 first, then capture.) | workshop.astro:179,196-199 | Capture from a real scaffolded run after n14 |
+| p3 | Stale "of 8" remnants on a 7-step track: comments in three pages, workshop-track.ts:63 "1–8 path", TrackNav.astro:5 "numbered 1–8". Rendered badges are correct (derived). | design-to-code.astro:12; tutorial.astro:17; figma-token.astro:14 | Sweep the comments |
+| p4 | index.astro's MCP card shows all three storybook servers beside the scaffold CTA — reads as what the scaffold emits; the scaffold writes one. | index.astro:8-25,130 | Caption it as the generic reference, or show the single-framework form |
+| p5 | design-to-code's FwSwitcher is React-first while every other surface orders Angular/React/Vue; the server-rendered default panel (Angular) mismatches the first tab until JS runs. | design-to-code.astro:174 vs :17,176 | Pass the default order |
+
+---
+
+## 4. The flows that are not round
+
+Ranked by what a participant actually experiences, merged from the learner-path challenge's hostile Angular walk and the audits. Every one of these is a **silent or green-looking failure** — none has a failure path on its page.
+
+1. **Kata/tutorial Step 1 — the dead node.** The Figma link opens the file and silently focuses nothing (695-313 does not resolve). No error, no troubleshooting entry for "the node-id doesn't resolve". The participant proceeds anyway and every downstream Figma tool call fails. Repair: B1 + a troubleshooting entry.
+2. **Step 3 — green preflight, dead MCP.** Preflight (minutes earlier) said "16 ok"; the first `list-all-documentation` returns a 522. "Connected" and "working" are indistinguishable to the participant. Repair: B2 (worker fix + real-call probe + troubleshooting entry).
+3. **Step 4→5 — the undiagnosable welcome page.** Three stacked faults (apps/ prefix, wrong port, no mount step) produce one symptom: the Nx default page. A participant — or a maintainer applying any single audit fix — sees the same thing after the fix. Repair: B3, all three legs at once.
+4. **The Angular props dead-end.** The kata prompt names a server that structurally cannot answer (no components.json for Angular even when healthy), and both documented fallbacks are absent from the scaffold. Claude improvises props; the page frames the result as success ("no guessing"). Repair: M3 — teach the llms-full.txt fallback the scaffold's own CLAUDE.md already carries.
+5. **Setup — the silent no-load.** A participant wiring MCP into an existing project per storybook.astro puts servers in `.claude/settings.json`; nothing loads, nothing errors, nothing to troubleshoot. Repair: B4.
+6. **The agenda's two forks on workshop morning.** Fork 1: scaffolded workspace (per /workshop) vs cloned repo (per the agenda) — Day 2's plan/ references only work on the clone. Fork 2: "Figma optional" (per /workshop) vs Day 2's draft/edit needs. Repair: M9 + M10 — one canonical environment, stated in both places.
+7. **Day-2 close — the unexecutable check.** After being forbidden from touching the original file, the participant is verified against their component existing in it. Repair: M11.
+
+---
+
+## 5. What is genuinely good
+
+- **The track plumbing.** One source of truth (workshop-track.ts) derives step numbers, TrackNav, hero tags; framework preference syncs across pages (localStorage + ?fw=, case-insensitive); the kata prompt pre-substitutes the participant's storybook-<fw> server name. Fixing the content leaves the machinery untouched.
+- **figma-token.astro** is the most accurate page audited — the preflight description matches the script line-for-line, the troubleshooting anchor exists, the plugin architecture matches live behaviour.
+- **The cookbook** is current, gated, and fully wired: 6 patterns = check:cookbook output, all 36 screenshots on disk, counts derived from the data module so they cannot drift.
+- **agent-skills.astro** is ~100% live-verified truth — all four discovery endpoints, the Link header byte-for-byte, Content-Signal exact.
+- **The parity story** matches the tooling exactly (usage, no score, per ADR-0024's amendment); a11y-workflow's dated audit numbers check out against the tasks files they cite.
+- **The Checkpoint component** on workshop.astro is the model the rest of the track should copy (n8).
+- **Claude Design off-stage** is the strongest asset nobody can see: an accepted ADR with rejected alternatives, five katas with read-only-safe done-conditions, a green gate, and the redesign-as-proof story (31 artboards drove ADRs 0041–0073). The synthesis work is publication, not invention.
+- **The review loop on this material works**: the April p8 closure shows all 17 prior review items actually landed.
+
+---
+
+## 6. Verified vs assumed
+
+| VERIFIED (file read, command output, or live probe this run) | ASSUMED (act on with caution) |
+|---|---|
+| Node 695-313 dead; no Settings frame anywhere (live figma_execute, twice independently) | Whether the 522 is a transient Cloudflare incident vs a worker code defect (persistent ≥6h across three observers; root cause inferred from worker/mcp.ts, not fixed and re-tested) |
+| Hosted MCP 522 on all three frameworks; manifests curl 200; preflight green (16 ok) | Vue serve port default (— @nx/vue not in node_modules; same @nx/vite util as React makes 4200 near-certain, and the finding holds either way) |
+| Scaffold shape: root-level apps, no ports set, .mcp.json single-framework, no spec/plan/storybook (preset.ts + preset.spec.ts + CLI source) | @storybook/mcp's degradation on a 404 components.json (masked by the live 522) |
+| Live token census 78; Components-page sections; snapshot 43 masters; AtlInput axes | Whether Storybook 10.5 changed the React-only manifest gating |
+| All five .claude/settings.json locations; the single-select CLI; libs/spec private:true | claude.ai plan tier required for Design access (recorded nowhere in the repo — verify outside it before any participant-facing piece) |
+| check:artboard-palette green (48 values); claude-design MCP interactively authed (live needs_design_scopes) | /design skill availability + artifact publish on API-key-class logins (the widened per-seat test covers exactly this) |
+| The forbidden import chain (plan:88-91); snapshot file-key hardcoding (figma-snapshot.mjs:47); check-figma spec-roster keying | The trainer demo's "safe today" rests on the author's recorded 2026-08-26/27 runs (31 artboards, the sync defect list), not a fresh /design execution this session |
+| atelier-design skill staleness; ~27 vs 29; artboards.json phase CLOSED; the five katas' text and slot arithmetic | Kata 2's hex counts (never recorded; self-study 5 open) |
+| Gates run green this session: artboard-palette, cookbook, docs, llms; a11y-parity 25/29 + known accordion GAP | Tag2-01's 90-minute duration judgment (no dry-run data exists) |
+
+---
+
+## 7. The weakest point of this document
+
+No one in this run — five audits, three challenges, or this synthesis — actually executed the participant path end-to-end: nobody ran `npx create-atelier-ui-workspace`, served the result, and watched it fail. B3's three-fault stack (and especially the "no mount step" leg, which drives the claim that partial fixes change nothing visible) is derived from generator source, preset tests, and Nx defaults — high-confidence static reading, but the repair list for the workshop's single most user-visible failure has never been validated against a real scaffolded workspace. The second-weakest point is related: the 522 blocker's root cause (worker same-zone self-fetch) is inferred, not fixed-and-retested, so the proposed repair could be aimed at a symptom of an ops incident that self-heals. Before editing any docs page under B2 or B3, run one real scaffold and one worker fix, and let those two executions confirm or re-rank this document's top of the list.
