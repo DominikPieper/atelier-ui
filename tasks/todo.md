@@ -456,20 +456,6 @@ Decision-bearing quick wins (deferred — not this session's scope):
       two want deciding together: either a stamp covers both sides or it says which one it
       covers.
 
-- [ ] **Root padding diverges on at least two masters, and no gate compares it.**
-      **AtlTooltip** joined AtlAlert on 2026-08-28: Figma draws 8/12, the CSS says
-      `--ui-spacing-1`/`--ui-spacing-2` = 4/8. Both sides are on the scale, both times, so
-      this is a value disagreement rather than drift off the system. The gate is cheaper
-      than it was — the snapshot now carries a `box` per master (ADR-0075), so a
-      `[ROOT-BOX]` code needs the probe to add padding to that record, not a new capture.
-      **AtlAlert's padding is bound to the wrong spacing variables.** Figma draws 12/16 on
-      all four variants — bound, but to `spacing/3`/`spacing/4` — while the CSS says
-      `--ui-spacing-4`/`--ui-spacing-5` = 16/20. Found by `figma_check_design_parity`, not
-      by `check:figma`, because **no gate compares a master's root padding**: the snapshot's
-      `rootPaint` carries fill, stroke, radius, effects, fontSize and lineHeight, and no
-      padding. `boxFromDeclarations` already extracts the CSS side and nobody reads it.
-      Needs: extend the snapshot probe, add `[ROOT-BOX]`, then re-run `figma:snapshot`.
-
 - [x] ~~**AtlTextarea's text is 14px where the CSS says 16px**~~ — fixed 2026-08-27,
       ADR-0074: the five nodes are bound to `ty/body-md` (16px/150%). Found again from the
       other side, because binding by appearance had first cemented 14px as `ty/body-sm`.
