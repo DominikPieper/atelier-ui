@@ -1,3 +1,21 @@
+## 0.2.24 (2026-08-28)
+
+### 🚀 Features
+
+- **gates:** check the direction nothing checked, and gate the sets that clip ([e6602d4](https://github.com/DominikPieper/atelier-ui/commit/e6602d4))
+- **figma:** two roles the eight did not span, and 231 text nodes bound to them ([e4f61ca](https://github.com/DominikPieper/atelier-ui/commit/e4f61ca))
+- **tokens:** the type roles get their first consumers, and two gates learn the shorthand ([5d58f0d](https://github.com/DominikPieper/atelier-ui/commit/5d58f0d))
+
+### 🩹 Fixes
+
+- **tokens:** bind the literals the scale already named ([f19029e](https://github.com/DominikPieper/atelier-ui/commit/f19029e))
+- **figma:** the whole file was in the wrong typeface ([3110cbd](https://github.com/DominikPieper/atelier-ui/commit/3110cbd))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.23 (2026-08-27)
 
 ### 🚀 Features
