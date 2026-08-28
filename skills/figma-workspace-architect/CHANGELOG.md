@@ -1,3 +1,7 @@
+## 0.2.46 (2026-08-28)
+
+This was a version bump only for figma-workspace-architect to align it with other projects, there were no code changes.
+
 ## 0.2.45 (2026-06-12)
 
 ### 🚀 Features

@@ -1,3 +1,14 @@
+## 0.2.25 (2026-08-28)
+
+### 🩹 Fixes
+
+- **a11y:** the class the CSS paints and no template emits ([2072116](https://github.com/DominikPieper/atelier-ui/commit/2072116))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.24 (2026-08-28)
 
 ### 🚀 Features
