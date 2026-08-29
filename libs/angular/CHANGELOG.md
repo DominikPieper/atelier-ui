@@ -1,3 +1,14 @@
+## 0.2.27 (2026-08-29)
+
+### 🩹 Fixes
+
+- **storybook:** stub the deprecated animations entry, and run the builds where they break ([97bc3da](https://github.com/DominikPieper/atelier-ui/commit/97bc3da))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.26 (2026-08-29)
 
 This was a version bump only for angular to align it with other projects, there were no code changes.
