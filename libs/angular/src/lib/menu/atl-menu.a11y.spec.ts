@@ -38,14 +38,14 @@ async function capture(): Promise<Record<string, unknown>> {
 
   TestBed.resetTestingModule();
   let r = await render(TEMPLATE, { imports: IMPORTS });
-  scenarios.closed = a11yTree(document.body);
+  scenarios['closed'] = a11yTree(document.body);
   r.fixture.destroy();
 
   TestBed.resetTestingModule();
   r = await render(TEMPLATE, { imports: IMPORTS });
   screen.getByText('Open Menu').click();
   r.fixture.detectChanges();
-  scenarios.open = a11yTree(document.body);
+  scenarios['open'] = a11yTree(document.body);
   r.fixture.destroy();
 
   return scenarios;
@@ -54,7 +54,7 @@ async function capture(): Promise<Record<string, unknown>> {
 describe('AtlMenu — a11y conformance snapshot', () => {
   it('live render matches the committed a11y snapshot', async () => {
     const live = await capture();
-    if (process.env.UPDATE_A11Y) {
+    if (process.env['UPDATE_A11Y']) {
       writeFileSync(SNAP, JSON.stringify(live, null, 2) + '\n');
       return;
     }

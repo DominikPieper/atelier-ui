@@ -37,7 +37,7 @@ async function capture(): Promise<Record<string, unknown>> {
 
   TestBed.resetTestingModule();
   let r = await render(TEMPLATE, { imports: IMPORTS });
-  scenarios.closed = a11yTree(document.body);
+  scenarios['closed'] = a11yTree(document.body);
   r.fixture.destroy();
   document.querySelectorAll('.cdk-overlay-container').forEach((el) => el.remove());
 
@@ -45,7 +45,7 @@ async function capture(): Promise<Record<string, unknown>> {
   r = await render(TEMPLATE, { imports: IMPORTS });
   await user.hover(screen.getByText('Save'));
   vi.advanceTimersByTime(1);
-  scenarios.open = a11yTree(document.body);
+  scenarios['open'] = a11yTree(document.body);
   r.fixture.destroy();
 
   vi.useRealTimers();
@@ -55,7 +55,7 @@ async function capture(): Promise<Record<string, unknown>> {
 describe('AtlTooltip — a11y conformance snapshot', () => {
   it('live render matches the committed a11y snapshot', async () => {
     const live = await capture();
-    if (process.env.UPDATE_A11Y) {
+    if (process.env['UPDATE_A11Y']) {
       writeFileSync(SNAP, JSON.stringify(live, null, 2) + '\n');
       return;
     }

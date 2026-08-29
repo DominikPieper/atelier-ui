@@ -167,15 +167,15 @@ function normalizedStates(el: Element): Record<string, string | boolean> | undef
   // and a role+aria host adapter compare equal.
   const nativeDisabled =
     'disabled' in el
-      ? Boolean((el as unknown as { disabled?: boolean }).disabled)
+      ? Boolean((el as unknown as { disabled?: boolean })['disabled'])
       : el.hasAttribute('disabled');
-  if (nativeDisabled || el.getAttribute('aria-disabled') === 'true') states.disabled = true;
+  if (nativeDisabled || el.getAttribute('aria-disabled') === 'true') states['disabled'] = true;
 
   // Same unification for the other native form states: a native
   // checkbox/radio/switch input and a role+aria host must compare equal.
   const asInput = el as unknown as { checked?: boolean; required?: boolean };
-  if (typeof asInput.checked === 'boolean' && asInput.checked) states.checked = true;
-  if (typeof asInput.required === 'boolean' && asInput.required) states.required = true;
+  if (typeof asInput['checked'] === 'boolean' && asInput['checked']) states['checked'] = true;
+  if (typeof asInput['required'] === 'boolean' && asInput['required']) states['required'] = true;
 
   for (const attr of STATE_ATTRS) {
     const v = el.getAttribute(attr);

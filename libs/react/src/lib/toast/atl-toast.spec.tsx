@@ -1,9 +1,18 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { AtlToastProvider, AtlToastContainer, useAtlToast } from './atl-toast';
+import {
+  AtlToastProvider,
+  AtlToastContainer,
+  useAtlToast,
+  type AtlToastContainerProps,
+} from './atl-toast';
 import { covers } from '../../testing/behavior';
 
-function TestHarness({ position = 'bottom-right' as const }) {
+function TestHarness({
+  position = 'bottom-right',
+}: {
+  position?: AtlToastContainerProps['position'];
+}) {
   const { show } = useAtlToast();
   return (
     <>

@@ -7,8 +7,7 @@
       "vitest/importMeta",
       "vite/client",
       "node",
-      "vitest",
-      "@testing-library/jest-dom"
+      "vitest"
     ]
   },
   "include": [
@@ -29,5 +28,7 @@
     "vitest.storybook.config.ts",
     ".storybook/vitest.setup.ts"
   ],
-  "files": ["src/test-setup.ts"]
+  "files": [
+    "src/test-setup.ts"
+  ]
 }

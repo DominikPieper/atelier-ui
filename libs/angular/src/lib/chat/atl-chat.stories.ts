@@ -67,7 +67,6 @@ export const DrawerDefault: Story = {
   parameters: { design: figmaNode('507-2950') },
   args: { variant: 'drawer', status: 'idle', open: true },
   render: (args) => ({
-    props: args,
     template: `
       <atl-chat [variant]="variant" [status]="status" [(open)]="open">
         <atl-chat-header>
@@ -91,7 +90,6 @@ export const DrawerDefault: Story = {
       </atl-chat>
     `,
     moduleMetadata: { imports: CHAT_IMPORTS },
-    applicationConfig: {},
     userDefinedTemplate: true,
     props: {
       ...args,
@@ -286,7 +284,6 @@ export const InlineDefault: Story = {
   parameters: { design: figmaNode('507-2952') },
   args: { variant: 'inline', status: 'idle', open: true },
   render: (args) => ({
-    props: args,
     template: `
       <div style="height:540px;width:720px;">
         <atl-chat [variant]="variant" [status]="status" [(open)]="open">

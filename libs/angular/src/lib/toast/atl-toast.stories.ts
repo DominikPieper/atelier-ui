@@ -180,7 +180,12 @@ export const Persistent: Story = {
   }),
 };
 
-export const Playground: Story = {
+// The Playground renders ToastStoryWrapper, not AtlToast: position and duration are the
+// wrapper's inputs (the container places the stack, the service carries the duration),
+// so this one story is typed against what it actually renders. The previous `as any` casts
+// silenced the args half and left argTypes failing — the cast hid the mismatch instead of
+// naming it.
+export const Playground: StoryObj<ToastStoryWrapper> = {
   render: (args) => ({
     props: {
       ...args,
@@ -208,9 +213,7 @@ export const Playground: Story = {
     variant: 'default',
     dismissible: true,
     message: 'Playground toast notification.',
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    position: 'bottom-right' as any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    duration: 5000 as any,
+    position: 'bottom-right',
+    duration: 5000,
   },
 };

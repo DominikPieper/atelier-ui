@@ -43,7 +43,7 @@ async function capture(): Promise<Record<string, unknown>> {
 describe('AtlTabGroup — a11y conformance snapshot', () => {
   it('live render matches the committed a11y snapshot', async () => {
     const live = await capture();
-    if (process.env.UPDATE_A11Y) {
+    if (process.env['UPDATE_A11Y']) {
       writeFileSync(SNAP, JSON.stringify(live, null, 2) + '\n');
       return;
     }

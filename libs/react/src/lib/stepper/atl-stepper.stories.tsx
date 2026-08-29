@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { AtlStepper, AtlStep, useAtlStepper } from './atl-stepper';
+import { AtlStepper, AtlStep, useAtlStepper, type AtlStepperProps } from './atl-stepper';
 import { AtlButton } from '../button/atl-button';
 
 import { metadata } from '@atelier-ui/spec/metadata/stepper.metadata';
@@ -20,7 +20,13 @@ const meta: Meta<typeof AtlStepper> = {
 export default meta;
 type Story = StoryObj<typeof AtlStepper>;
 
-function NavigableStepper({ orientation = 'horizontal' as const, linear = false }) {
+function NavigableStepper({
+  orientation = 'horizontal',
+  linear = false,
+}: {
+  orientation?: AtlStepperProps['orientation'];
+  linear?: boolean;
+}) {
   const [step, setStep] = useState(0);
   return (
     <AtlStepper activeStep={step} onActiveStepChange={setStep} orientation={orientation} linear={linear}>
