@@ -25,6 +25,7 @@ const FLAT_PAGES = new Set<string>([
   'a11y-workflow',
   'accessibility',
   'agent-skills',
+  'claude-design',
   'claude-md',
   'design-principles',
   'design-to-code',

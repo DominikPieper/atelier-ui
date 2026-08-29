@@ -1,0 +1,625 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Callout from '../components/Callout.astro';
+import DiagramFigure from '../components/DiagramFigure.astro';
+import BottomNav from '../components/BottomNav.astro';
+
+type Defect = {
+  adr: string;
+  title: string;
+  detail: string;
+  quote: string;
+  remedy: string;
+};
+
+/* The four most teachable defects the 2026-08-26/27 artboard batch surfaced.
+   Each is recorded as an ADR in plan/adr/; the quotes are verbatim from them. */
+const DEFECTS: Defect[] = [
+  {
+    adr: 'ADR-0041',
+    title: 'An input and a button in the same row sat 6px apart',
+    detail:
+      'AtlButton at size md declared min-height 2.5rem and computed exactly 40px. AtlInput declared the same 2.5rem, added a prose line-height of 1.5, and computed 46px. The root cause is which value was treated as authored: padding was stated and height was hoped for. Two controls with different line-heights and different paddings share a height only by coincidence — and here they did not, in all three frameworks.',
+    quote:
+      'no gate could see it: check:parity compares against Figma by hand, the a11y baselines do not record geometry, and nothing else measures a rendered box.',
+    remedy:
+      'The height became the token (--ui-control-height-sm/md/lg) and the block padding is derived from it. It also produced a gate that did not exist before: check:geometry (ADR-0042) measures rendered boxes in a browser.',
+  },
+  {
+    adr: 'ADR-0051',
+    title: 'A button that claimed 36px measured 38px',
+    detail:
+      'Drawing AtlPagination’s anatomy meant stating the row height on a sheet, which meant measuring it. The page button declared height: 2.25rem and rendered 38px, because all: unset had reset box-sizing out from under the component’s own geometry contract — the reset and the contract selector have the same specificity, and the reset came later in the file. Fifteen rules across the three frameworks were in that state.',
+    quote:
+      'Found by drawing, not by scanning. The button had been 2px wrong through every gate run; what surfaced it was measuring the anatomy for a sheet that had to state the row height.',
+    remedy:
+      'Every rule using all: unset now restates box-sizing, and check:box-sizing gained a [RESET-WIPED] code so a later reset cannot silently revoke the contract again.',
+  },
+  {
+    adr: 'ADR-0055',
+    title: 'Two fields signalled invalid with colour alone',
+    detail:
+      'AtlSelect and AtlCombobox carried invalid on border colour only, while AtlInput and AtlTextarea drew a danger icon inside the field — a WCAG 1.4.1 failure whenever a consumer sets invalid without passing errors. Two sheets raised it independently. Auditing the four fields across three frameworks turned one objection into five divergences: the missing icon, aria-describedby present in 5 of 12 field-by-framework combinations, three different rules for when the message renders, a role="alert" / aria-live="polite" split, and the select’s chevron drawn as the text character ▾ rendering 5.7×15px beside the combobox’s 16×16 AtlIcon.',
+    quote:
+      'Two fields side by side in one form, both invalid, one showing a mark and one not.',
+    remedy:
+      'All four fields now state invalid twice, in hue and in shape, and check:iconography gained [TEXT-GLYPH] for the chevron. The instructive part is the gate that did not fire: check:contrast had measured 104 colour pairs and passed all of them — because the defect was not "this colour is too light", it was "colour is the only channel". That is a class of accessibility failure a contrast gate structurally cannot see.',
+  },
+  {
+    adr: 'ADR-0050',
+    title: 'Twenty-four glyphs that the brand-new icon gate passed',
+    detail:
+      'AtlAlert and AtlBadge held their status symbols as quoted Unicode characters in TypeScript string maps — twenty-four of them across six files. The icon gate shipped the same day had four rules, and all four passed: a glyph in a string map is neither an inline svg nor a CSS content declaration. The glyphs also fell back silently to a system face, because Instrument Sans has no such character. The two components whose entire job is signalling status were drawing their signals as text.',
+    quote:
+      'a gate written from the instances found tends to miss the instance not yet found. … This came out of drawing, not of scanning.',
+    remedy:
+      'Both components now render AtlIcon by name, and check:iconography gained [GLYPH-MAP]. ADR-0055 then found a sixth mechanism — the same character as bare element text in a template — which is the point: the escalation is numbered.',
+  },
+];
+
+type SyncDefect = {
+  defect: string;
+  claim: string;
+  caught: string;
+};
+
+/* Verified 2026-08-26 against the synced *Atelier Design System* project.
+   Past tense on purpose: the manifest lives in the external project, not on
+   disk, and cannot be re-checked from this repo. */
+const SYNC_DEFECTS: SyncDefect[] = [
+  {
+    defect: 'Phantom tokens',
+    claim: 'It listed --ui-font-size-3xl, -4xl and -5xl as library tokens.',
+    caught: 'Grep the repo for each token the manifest claims. -4xl and -5xl exist nowhere in it. (-3xl does exist today — ADR-0036 added it for the display role on the same date — which is the reason to grep the tree rather than trust either the manifest or your memory of it.)',
+  },
+  {
+    defect: 'Wrong types',
+    claim: 'It typed --ui-transition-fast, -normal and -slow as "color".',
+    caught: 'Read the type column against the value. A duration is not a colour.',
+  },
+  {
+    defect: 'Leaked private surface',
+    claim: 'It mixed 20 private --docs-* docs-theme tokens into what reads as the library’s public token API.',
+    caught: 'Compare the token list against libs/spec/src/tokens.manifest.ts — the declared public surface.',
+  },
+  {
+    defect: 'A no-op rule',
+    claim: 'It shipped react/forbid-elements with an empty forbid list.',
+    caught: 'Read the rule’s configuration, not its name. A lint rule that forbids nothing lints nothing.',
+  },
+];
+
+type Limit = {
+  limit: string;
+  means: string;
+};
+
+const LIMITS: Limit[] = [
+  {
+    limit: 'Participant artboards are ungated — and that is a reach problem, not a rules problem.',
+    means:
+      'The three adherence regexes already exist (raw hex should be a token via var(), a raw px value should be a spacing token, font-family outside the design-system list). Nothing in the repo can open files that live outside it. Treat token discipline inside an artboard as a review habit, not a checked property.',
+  },
+  {
+    limit: 'Importing Figma links into the canvas is confirmed; exporting out of the canvas is not.',
+    means:
+      'The hifi-design skill points users at Claude Design’s Import menu on claude.ai/design, "where they can link a codebase, provide screenshots or Figma links" — that direction is first-party. Export out of the canvas is recorded here as unverified. Do not plan a workflow around it.',
+  },
+  {
+    limit: 'The chain canvas → Figma → code is forbidden in this repo, not merely untested.',
+    means:
+      'Imported artboards arrive as frames, not COMPONENT_SETs with variant axes and bound Variables — which would make check:figma and check:parity assert nothing. No diagram on this page draws that arrow, deliberately.',
+  },
+  {
+    limit: 'The Claude Design MCP is interactively authenticated.',
+    means:
+      'A spawned script cannot reach it. That is why the second hop of the palette chain is copied by hand rather than generated end to end, and why no CI job can verify the canvas side.',
+  },
+  {
+    limit: 'Per-seat editing in a room is untested.',
+    means:
+      'Editing needs the skill enabled, the artifact-publish capability in that user’s roster, and runtime write access plus viewer consent. Any miss degrades to a view-and-export page. Nothing here promises you will edit an artboard in the canvas; read every interactive step as "where saving is enabled for your account".',
+  },
+  {
+    limit: 'Learn the concepts, not the keystrokes.',
+    means:
+      '/design appears in no Claude Code CHANGELOG and in no commands reference. The .dc.html format spec is first-party and complete, but it ships through the MCP server rather than a public docs page — "not publicly documented" is the accurate claim, not "undocumented". The tool dates to mid-April 2026, and a version bump can move all of it.',
+  },
+];
+---
+
+<BaseLayout
+  title="Claude Design"
+  description="Where Claude Design sits in Atelier's design-to-code loop — step 0 and step 5, never in between — what 31 artboards found that no gate had caught, and why an artboard still cannot be the source of truth."
+  currentPath="/claude-design"
+  tocItems={[
+    { id: 'where-it-sits', label: 'What it is, where it sits' },
+    { id: 'the-fence',     label: 'The fence' },
+    { id: 'the-palette',   label: 'The one gate that reaches it' },
+    { id: 'proof',         label: 'What it found here' },
+    { id: 'review',        label: "Reviewing the tool's output" },
+    { id: 'limits',        label: 'The limits' },
+    { id: 'governance',    label: 'Governance' },
+  ]}
+>
+  <div class="docs-inline-page">
+
+    <PageHero kind="explanation" title="Claude Design, beside Figma" titleAccent="beside" ledeMax="620px">
+      Claude Design turns a prompt into a canvas of artboards. This library’s own 29 components
+      were redesigned through 31 of them over two days, and those artboards surfaced four defect
+      families that every gate in this repo had passed. And an artboard still cannot be the source
+      of truth — not because it is worse, but because <strong>no gate can address it</strong>.
+      That asymmetry is the most useful thing the tool teaches, so this page is built around it.
+    </PageHero>
+
+    <!-- 1 — What it is, where it sits -->
+    <section class="docs-section">
+      <h2 id="where-it-sits" class="docs-section-title">What it is, and where it sits</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 0.75rem">
+        Two different things ship under the name <code>/design</code>, and conflating them is the
+        first mistake to avoid.
+      </p>
+      <ul style="color: var(--ui-color-text-muted); line-height: 1.75; padding-left: 1.25rem; margin: 0 0 1rem">
+        <li>
+          <strong style="color: var(--ui-color-text)">The canvas.</strong>
+          Claude drafts <code>.dc.html</code> artboards, lays them out on one pan-and-zoom canvas,
+          and publishes it as an Artifact. Where saving is enabled for that account, the artboards
+          can then be refined visually; where it is not, the same page is view-and-export only.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)"><code>/design-sync</code>.</strong>
+          The reverse direction — it pushes a repo’s real component library into a
+          claude.ai/design design-system project. <strong style="color: var(--ui-color-text)">React only</strong>:
+          discovery is ts-morph over <code>.tsx</code> and <code>.jsx</code>.
+        </li>
+      </ul>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 1rem">
+        Atelier’s loop is Figma → spec → code → verify. Claude Design occupies
+        <strong style="color: var(--ui-color-text)">step 0</strong> — divergence, before <em>Inspect</em> —
+        and <strong style="color: var(--ui-color-text)">step 5</strong> — handoff, after <em>Verify</em>.
+        It never touches steps 1 to 4.
+      </p>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 1rem">
+        The reason reads the same from either chair. For a designer, the canvas is where four
+        credible directions cost ten minutes and no Figma knowledge — divergence is cheap there
+        precisely because nothing gates it. For a developer, an artboard is a rendering, not a
+        contract: nothing downstream can read it, name it, or diff against it. Steps 1 to 4 are
+        exactly the stretch where something downstream <em>has</em> to read the design. So they are
+        exactly the stretch the canvas cannot occupy — and the ends, where nothing has to read it
+        yet or ever again, are exactly where it is best.
+      </p>
+
+      <DiagramFigure caption="Steps 1 to 4 sit inside check:all. Claude Design sits outside it at both ends. There is deliberately no arrow between the canvas and the loop: no machine-readable handoff exists in either direction, and this repo forbids the canvas → Figma → code chain outright.">
+        <svg viewBox="0 0 940 300" role="img" aria-labelledby="cd-place-title cd-place-desc" preserveAspectRatio="xMidYMid meet">
+          <title id="cd-place-title">Where Claude Design sits relative to the gated loop</title>
+          <desc id="cd-place-desc">A box labelled Step 0, divergence in Claude Design, sits above and outside a dashed container. The dashed container is labelled check:all, 29 gates, and holds four connected steps: Inspect, Spec, Generate, Verify. A second box labelled Step 5, handoff, sits below and outside the container. No line connects either outer box to the container.</desc>
+
+          <defs>
+            <marker id="cd-place-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--accent"/>
+            </marker>
+          </defs>
+
+          <rect x="20" y="16" width="300" height="62" rx="12" ry="12" class="diagram-node diagram-node--accent"/>
+          <text x="40" y="42" font-size="13" font-weight="700" style="fill: var(--ui-color-primary)">Step 0 · Divergence</text>
+          <text x="40" y="62" font-size="10.5" class="diagram-muted">Claude Design — many directions, fast, ungated</text>
+
+          <rect x="20" y="96" width="900" height="116" rx="14" ry="14" fill="none" stroke="var(--ui-color-border-hover)" stroke-width="1.5" stroke-dasharray="6 5"/>
+          <text x="36" y="116" font-size="10" class="diagram-eyebrow">check:all · 29 gates · gates npm publish</text>
+
+          <rect x="44" y="126" width="196" height="66" rx="11" ry="11" class="diagram-node"/>
+          <text x="142" y="152" text-anchor="middle" font-size="12.5" font-weight="700">1 · Inspect</text>
+          <text x="142" y="171" text-anchor="middle" font-size="10" class="diagram-muted">Figma master · node id</text>
+
+          <rect x="264" y="126" width="196" height="66" rx="11" ry="11" class="diagram-node"/>
+          <text x="362" y="152" text-anchor="middle" font-size="12.5" font-weight="700">2 · Spec</text>
+          <text x="362" y="171" text-anchor="middle" font-size="10" class="diagram-mono diagram-muted">libs/spec</text>
+
+          <rect x="484" y="126" width="196" height="66" rx="11" ry="11" class="diagram-node"/>
+          <text x="582" y="152" text-anchor="middle" font-size="12.5" font-weight="700">3 · Generate</text>
+          <text x="582" y="171" text-anchor="middle" font-size="10" class="diagram-muted">Claude + MCP</text>
+
+          <rect x="704" y="126" width="196" height="66" rx="11" ry="11" class="diagram-node"/>
+          <text x="802" y="152" text-anchor="middle" font-size="12.5" font-weight="700">4 · Verify</text>
+          <text x="802" y="171" text-anchor="middle" font-size="10" class="diagram-muted">Storybook + parity</text>
+
+          <line x1="240" y1="159" x2="264" y2="159" class="diagram-connector diagram-connector--accent" marker-end="url(#cd-place-arr)"/>
+          <line x1="460" y1="159" x2="484" y2="159" class="diagram-connector diagram-connector--accent" marker-end="url(#cd-place-arr)"/>
+          <line x1="680" y1="159" x2="704" y2="159" class="diagram-connector diagram-connector--accent" marker-end="url(#cd-place-arr)"/>
+
+          <rect x="620" y="230" width="300" height="62" rx="12" ry="12" class="diagram-node diagram-node--accent"/>
+          <text x="640" y="256" font-size="13" font-weight="700" style="fill: var(--ui-color-primary)">Step 5 · Handoff</text>
+          <text x="640" y="276" font-size="10.5" class="diagram-muted">one shareable link — no Figma account needed</text>
+        </svg>
+      </DiagramFigure>
+
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0">
+        This page is an <strong style="color: var(--ui-color-text)">Explanation</strong> chapter and
+        deliberately not an eighth step in the numbered workshop track. Adding it to the numbered
+        spine would itself assert that it is part of the loop, which is the exact misread the
+        placement exists to prevent. The omission is the argument.
+      </p>
+    </section>
+
+    <!-- 2 — The fence -->
+    <section class="docs-section">
+      <h2 id="the-fence" class="docs-section-title">The fence, and why it is the point</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 0.75rem">
+        Every gate in <code>check:all</code> is keyed on one of exactly four identities:
+      </p>
+      <ul style="color: var(--ui-color-text-muted); line-height: 1.75; padding-left: 1.25rem; margin: 0 0 1rem">
+        <li>a Figma <code>COMPONENT_SET</code> name and its variant axes,</li>
+        <li>a <code>libs/spec</code> string-literal union,</li>
+        <li>a <code>--ui-*</code> token,</li>
+        <li>or a Figma node id.</li>
+      </ul>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 1.25rem">
+        <strong style="color: var(--ui-color-text)">A Claude Design artboard has none of the four.</strong>
+        Not "few", not "weaker ones" — none. That is a statement about addressability, not quality.
+      </p>
+
+      <h3 class="docs-h3">What a gate can address about a Figma master</h3>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 0.75rem">
+        <code>check:figma</code> compares each master against the spec and the component metadata.
+        Five checks, three severities:
+      </p>
+      <table class="docs-props-table">
+        <thead>
+          <tr>
+            <th style="width: 34%">Check</th>
+            <th style="width: 18%">Severity</th>
+            <th>Why that severity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Name alignment</td>
+            <td><strong style="color: var(--ui-color-danger)">Blocker</strong></td>
+            <td>A name mismatch <em>silently breaks</em> the MCP-to-code mapping — generated code references props and values that do not exist.</td>
+          </tr>
+          <tr>
+            <td>Variant-matrix completeness</td>
+            <td><strong style="color: var(--ui-color-danger)">Blocker</strong></td>
+            <td>Same failure mode: the model generates a variant the design never defined, and nothing shouts.</td>
+          </tr>
+          <tr>
+            <td>Token-link coverage</td>
+            <td>Critical</td>
+            <td>Raw hex fills and raw px radii degrade generation — the model loses the token vocabulary — without breaking the mapping.</td>
+          </tr>
+          <tr>
+            <td>Auto-layout</td>
+            <td>Critical</td>
+            <td>Missing auto-layout loses responsive intent, again without breaking the mapping.</td>
+          </tr>
+          <tr>
+            <td>Description congruence</td>
+            <td>Warning</td>
+            <td>Presence and spec-linkage, not byte equality. Prints, exits 0.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0.9rem 0 1.25rem">
+        The code set has since grown to twenty-four tags — <code>[NAME]</code>, <code>[TOKEN]</code>,
+        <code>[ROOT-PAINT]</code>, <code>[LAYER-PAINT]</code>, <code>[BOOL-MISSING]</code>,
+        <code>[FONT-FAMILY]</code>, <code>[TEXT-STYLE]</code> and the rest. The fence got denser, not
+        thinner. Every one of those tags names something about a <em>master</em>: a layer, a bound
+        variable, a variant row.
+      </p>
+
+      <h3 class="docs-h3">What <code>check:parity</code> keys on</h3>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 0.75rem">
+        A parity record stores the component’s Figma node id, the verifying git sha and timestamp,
+        and a hash over the component’s files across all three frameworks. On a later run the gate
+        asks: did those files change since the node was last verified? A Figma node id is the one
+        identity an artboard structurally cannot have.
+      </p>
+      <div class="docs-rule">
+        <span class="docs-rule-label">The sentence</span>
+        An imported frame has no parity record. It would not fail — it would compare nothing.
+      </div>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 1rem 0 1.25rem">
+        That is the difference between a gate that is silent and a gate that is absent, and it is
+        why "iterate in the canvas, then watch parity go red" is a mechanism error rather than a
+        good demo. Both <code>check:figma</code> and <code>check:parity</code> run inside
+        <code>check:all</code>, and <code>check:all</code> is the release gate — the publish
+        workflow’s <code>verify</code> job runs it before anything is published. So
+        "a Claude-Design-first component can never pass <code>check:parity</code>" is a CI fact, not
+        an editorial preference.
+      </p>
+
+      <Callout tone="note" title="The honest nuance: it is not &ldquo;no verification&rdquo;">
+        <p style="margin: 0 0 0.6rem">
+          Claude Design ships its own verify loop — render, gate on console errors, 404s and blank
+          mounts, then fresh eyes via a <code>design-verifier</code> subagent, on the principle that
+          "the screenshot is the ground truth; DOM measurement is for diagnosis". The redesign below
+          used it: the typography study was verified headless (no console errors, no failed requests,
+          no horizontal overflow, all three display faces resolved), and the two component sheets were
+          corrected and re-verified the same way.
+        </p>
+        <p style="margin: 0">
+          So the accurate claim is <strong>a visual verification loop, but no machine-checkable
+          contract</strong>. The distinction that teaches is sharper than gated-versus-ungated:
+          a rendering check tells you the page <em>works</em>; a contract check tells you the page
+          <em>agrees with something</em>. Both are verification. Only one survives the author
+          leaving the room.
+        </p>
+      </Callout>
+    </section>
+
+    <!-- 3 — The one gate that reaches this surface -->
+    <section class="docs-section">
+      <h2 id="the-palette" class="docs-section-title">The one gate that touches this surface — and exactly how far it reaches</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 1rem">
+        An artboard renders <strong style="color: var(--ui-color-text)">standalone</strong> inside
+        Claude Design, where <code>tokens.css</code> is not loaded. It <em>must</em> carry literal
+        values. That is the medium, not a discipline failure — and it means a copy of the palette has
+        to exist outside the repo.
+      </p>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 0.75rem">
+        The copy was maintained by hand, and it rotted. Comparing the shared stylesheet all 31
+        artboards link against <code>tokens.css</code> found <strong style="color: var(--ui-color-text)">7 of 40 values drifted</strong>.
+        The four that change what you see:
+      </p>
+      <table class="docs-props-table">
+        <thead>
+          <tr>
+            <th style="width: 34%">Token</th>
+            <th style="width: 33%">In the artboard sheet</th>
+            <th>In <code>tokens.css</code></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>--success</code></td><td><code>#0a5c38</code></td><td><code>#15803d</code></td></tr>
+          <tr><td><code>--warning</code></td><td><code>#a1660a</code></td><td><code>#b45309</code></td></tr>
+          <tr><td><code>--info</code></td><td><code>#1d4ed8</code></td><td><code>#0369a1</code></td></tr>
+          <tr><td><code>--border-hover</code></td><td><code>#475569</code></td><td><code>#cbd5e1</code></td></tr>
+        </tbody>
+      </table>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0.9rem 0 1rem">
+        The first three are the status colours a ramp change had moved <em>the same morning</em>. So
+        every one of the 31 artboards was painting a retired palette while the repo’s own gates were
+        green — because no gate was looking at that file. The remaining three drifted values are
+        alpha deltas — <code>--primary-light</code> and the second layer of both shadows — which is
+        the more unsettling half: nobody would have noticed those by looking.
+      </p>
+      <div class="docs-rule">
+        <span class="docs-rule-label">Rule</span>
+        A hand-written fact about a generated thing rots. If a value exists in two places because one
+        of them cannot import the other, generate the second one on the day you create it.
+      </div>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 1rem 0 0.75rem">
+        The remedy is the one <code>check:tokens</code> already used to keep the three framework
+        copies of <code>tokens.css</code> identical: generate the copy.
+        <code>gen:artboard-palette</code> projects <code>tokens.css</code> into an artboard palette
+        sheet through an explicit short-name map, resolving one level of alias so the artboard
+        receives a literal, and leaving the row ladder derived so the relationship survives the copy.
+        <code>check:artboard-palette</code> fails if the committed copy drifts:
+      </p>
+      <div class="docs-code-block">
+        <div class="docs-code-block-header"><span class="docs-code-block-lang">bash</span></div>
+        <pre><code>{"$ npm run check:artboard-palette\n✓ artboard palette in sync with tokens.css (48 value(s))."}</code></pre>
+      </div>
+
+      <h3 class="docs-h3 docs-h3--spaced">What it demonstrably does not do</h3>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 1rem">
+        That gate reads exactly two files: the token source and the generated palette sheet. It never
+        opens a <code>.dc.html</code>. <strong style="color: var(--ui-color-text)">No script in this repo opens one</strong> —
+        outside prose, the only file that names one is a hand-maintained registry of filenames, and
+        the two scripts that read that registry take a single flag and a list of names out of it.
+        Neither ever resolves a name to a file. So a hardcoded colour sitting in an artboard, right beside the palette that
+        artboard links, is <strong style="color: var(--ui-color-text)">invisible</strong>. The gate
+        does not warn. It has no way to know the file exists.
+      </p>
+
+      <DiagramFigure caption="One gated hop, one manual hop, stated rather than hidden. The shared palette sheet is generated and checked; each artboard's own file sits outside the repo, where no gate can reach it. The manual hop exists because the Claude Design MCP is interactively authenticated — a spawned script cannot reach it.">
+        <svg viewBox="0 0 940 264" role="img" aria-labelledby="cd-reach-title cd-reach-desc" preserveAspectRatio="xMidYMid meet">
+          <title id="cd-reach-title">How far check:artboard-palette reaches</title>
+          <desc id="cd-reach-desc">Left of a dashed repo boundary: a box for tokens.css with a solid gated arrow into a box for the generated artboard palette sheet. Crossing the boundary: a dashed arrow labelled copied by hand into a box for the shared sheet inside Claude Design. Below that, a box for 31 artboard files, marked no gate reads these.</desc>
+
+          <defs>
+            <marker id="cd-reach-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--accent"/>
+            </marker>
+            <marker id="cd-reach-arr-muted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--muted-accent"/>
+            </marker>
+          </defs>
+
+          <text x="24" y="28" font-size="10" class="diagram-eyebrow">In the repo · gated</text>
+          <text x="916" y="28" text-anchor="end" font-size="10" class="diagram-eyebrow">In Claude Design · out of reach</text>
+          <line x1="600" y1="44" x2="600" y2="252" stroke="var(--ui-color-border-hover)" stroke-width="1.5" stroke-dasharray="6 5"/>
+
+          <rect x="24" y="82" width="200" height="66" rx="11" ry="11" class="diagram-node"/>
+          <text x="124" y="108" text-anchor="middle" font-size="11.5" class="diagram-mono" font-weight="700">tokens.css</text>
+          <text x="124" y="127" text-anchor="middle" font-size="10" class="diagram-muted">the token source of truth</text>
+
+          <line x1="224" y1="115" x2="320" y2="115" class="diagram-connector diagram-connector--accent" marker-end="url(#cd-reach-arr)"/>
+          <text x="272" y="100" text-anchor="middle" font-size="9.5" class="diagram-mono" style="fill: var(--ui-color-primary)">generator</text>
+          <text x="272" y="136" text-anchor="middle" font-size="9.5" class="diagram-muted">gated · 48 values</text>
+
+          <rect x="326" y="82" width="228" height="66" rx="11" ry="11" class="diagram-node diagram-node--accent"/>
+          <text x="440" y="108" text-anchor="middle" font-size="11.5" class="diagram-mono" font-weight="700">artboard-palette.css</text>
+          <text x="440" y="127" text-anchor="middle" font-size="10" class="diagram-muted">generated · committed · checked</text>
+
+          <line x1="554" y1="115" x2="676" y2="115" class="diagram-connector diagram-connector--dashed" marker-end="url(#cd-reach-arr-muted)"/>
+          <text x="615" y="100" text-anchor="middle" font-size="9.5" class="diagram-muted">copied by hand</text>
+
+          <rect x="682" y="82" width="234" height="66" rx="11" ry="11" class="diagram-node"/>
+          <text x="799" y="108" text-anchor="middle" font-size="11.5" class="diagram-mono" font-weight="700">_sheet.css</text>
+          <text x="799" y="127" text-anchor="middle" font-size="10" class="diagram-muted">the shared artboard stylesheet</text>
+
+          <line x1="799" y1="148" x2="799" y2="182" class="diagram-connector"/>
+          <text x="812" y="169" font-size="9.5" class="diagram-muted">linked by all 31</text>
+
+          <rect x="682" y="182" width="234" height="66" rx="11" ry="11" class="diagram-node" stroke-dasharray="5 4"/>
+          <text x="799" y="208" text-anchor="middle" font-size="11.5" class="diagram-mono" font-weight="700">31 × .dc.html</text>
+          <text x="799" y="227" text-anchor="middle" font-size="10" class="diagram-muted">no gate reads these</text>
+        </svg>
+      </DiagramFigure>
+
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0">
+        Say the asymmetry out loud rather than softening it:
+        <strong style="color: var(--ui-color-text)">the shared sheet is generated and gated; each artboard’s own file is invisible.</strong>
+        The blocker is <em>reach</em>, not rules — the rules exist, and a gate would need either the
+        artboards inside the repo or an authenticated client to apply them. "We should gate it" and
+        "we cannot see it" need different work, and conflating them is how a room ends up believing
+        artboards are checked when they are not.
+      </p>
+    </section>
+
+    <!-- 4 — Proof -->
+    <section class="docs-section">
+      <h2 id="proof" class="docs-section-title">What it found here</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 1rem">
+        On 2026-08-26 and 27 this library was redesigned <em>through</em> the canvas.
+        <strong style="color: var(--ui-color-text)">31 artboards</strong> — 29 component sheets plus
+        two studies — covering <strong style="color: var(--ui-color-text)">29 of 29 components</strong>.
+        The two studies were a typography exploration and a foundations sheet, and the foundations
+        sheet was itself generated from <code>tokens.css</code>: even on the ungated surface, the
+        parts that could be generated were.
+      </p>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 1.25rem">
+        Direction matters for reading what follows. This was a deliberate redesign, so the code and
+        the artboards were canonical and the Figma masters were the <em>target</em> of the transfer,
+        stale by definition until rebuilt. What still counted as a defect was anything wrong on its
+        own terms — internally inconsistent, invisible to users, or unbindable regardless of what
+        Figma happened to hold. Seventeen decision records carry the redesign itself as their origin, <strong style="color: var(--ui-color-text)">ADR-0041 through ADR-0057</strong>,
+        thirteen of which name an artboard or its findings document as their source. Four are worth knowing by heart.
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 0.85rem">
+        {DEFECTS.map(d => (
+          <div style="padding: 1rem 1.15rem; background: var(--ui-color-surface-raised); border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md)">
+            <div style="display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.4rem; flex-wrap: wrap">
+              <span style="font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; color: var(--ui-color-primary); background: color-mix(in srgb, var(--ui-color-primary) 10%, transparent); padding: 0.1rem 0.45rem; border-radius: 3px">{d.adr}</span>
+              <span style="font-size: 0.92rem; font-weight: 700; color: var(--ui-color-text)">{d.title}</span>
+            </div>
+            <p style="margin: 0 0 0.6rem; font-size: 0.84rem; color: var(--ui-color-text-muted); line-height: 1.6">{d.detail}</p>
+            <blockquote style="margin: 0 0 0.6rem; padding-left: 0.75rem; border-left: 2px solid var(--ui-color-primary); font-size: 0.84rem; color: var(--ui-color-text); line-height: 1.6">{d.quote}</blockquote>
+            <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6"><strong style="color: var(--ui-color-text)">What it produced:</strong> {d.remedy}</p>
+          </div>
+        ))}
+      </div>
+
+      <h3 class="docs-h3 docs-h3--spaced">The mechanism, not the count</h3>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 0.75rem">
+        Notice what the four have in common. None was found by scanning; each was found by having to
+        <em>state</em> something on a sheet — a row height, an anatomy ruler, what the alert’s icon
+        <em>is</em>. And the richest ones came from drawing a whole family on one canvas rather than
+        one component in isolation. From the redesign’s own findings document, on the four
+        choice-control sheets:
+      </p>
+      <blockquote style="margin: 0 0 1rem; padding-left: 0.9rem; border-left: 2px solid var(--ui-color-primary); color: var(--ui-color-text); line-height: 1.65; font-size: 0.9rem">
+        four questions that only appear when the family is drawn together. None is a bug in one
+        component; each is an inconsistency <em>between</em> components that every gate passes.
+      </blockquote>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 0.75rem">
+        That is the argument for the whole track, and it does not contradict the fence — it completes
+        it. A gate only checks the mechanism its author imagined; ADR-0050 says so in as many words,
+        and ADR-0055 then found the next mechanism the author of ADR-0050 had not imagined. Cheap,
+        divergent, ungated drawing is how you find the mechanism nobody imagined. The gate is how you
+        keep it found.
+      </p>
+      <div class="docs-rule">
+        <span class="docs-rule-label">Both halves</span>
+        Drawing found the defect. The gate keeps it found. Neither one alone would have held.
+      </div>
+    </section>
+
+    <!-- 5 — Reviewing the tool's output -->
+    <section class="docs-section">
+      <h2 id="review" class="docs-section-title">Reviewing what the tool produced</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 1rem">
+        When <code>/design-sync</code> pushed this library into a claude.ai/design design system on
+        <strong style="color: var(--ui-color-text)">2026-08-26</strong>, the manifest it generated was
+        checked line by line against the repo. Four defects were confirmed. Read this as a dated
+        observation of one run, not as a present-tense property of the tool: the manifest lives in
+        that external project, not on disk here, so this page cannot re-check it.
+      </p>
+      <table class="docs-props-table">
+        <thead>
+          <tr>
+            <th style="width: 22%">Defect</th>
+            <th style="width: 38%">What the manifest claimed</th>
+            <th>How you catch it</th>
+          </tr>
+        </thead>
+        <tbody>
+          {SYNC_DEFECTS.map(row => (
+            <tr>
+              <td><strong style="color: var(--ui-color-text)">{row.defect}</strong></td>
+              <td>{row.claim}</td>
+              <td>{row.caught}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 1rem 0 0.75rem">
+        Each row is caught a different way, and that is the actual lesson: there is no single
+        "check the AI output" move. You grep for existence, you read a type against its value, you
+        compare a list against a declared public surface, and you read a rule’s configuration rather
+        than its name.
+      </p>
+      <div class="docs-rule">
+        <span class="docs-rule-label">Standing rule</span>
+        The manifest is reference, never input. Derive from <code>tokens.css</code>.
+      </div>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 1rem 0 0">
+        And the counterweight, from the same run: that same manifest’s three adherence rules — raw
+        hex should become a token via <code>var()</code>, a raw px value should become a spacing
+        token, <code>font-family</code> outside the design-system list is a violation — were judged
+        reusable nearly verbatim. One tool produced both the bad metadata and the good rule set. The
+        lesson is review, not distrust. <code>/design-sync</code> is also React-only, so for an
+        Angular or Vue cohort it is a demo on someone else’s machine or it is cut.
+      </p>
+    </section>
+
+    <!-- 6 — Limits -->
+    <section class="docs-section">
+      <h2 id="limits" class="docs-section-title">The limits</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 1rem">
+        Every item below is a limit this repo recorded, with what it means for you today. None is a
+        hedge.
+      </p>
+      <ul style="color: var(--ui-color-text-muted); line-height: 1.75; padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.7rem; margin: 0">
+        {LIMITS.map(l => (
+          <li>
+            <strong style="color: var(--ui-color-text)">{l.limit}</strong><br />
+            {l.means}
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- 7 — Governance -->
+    <section class="docs-section">
+      <h2 id="governance" class="docs-section-title">Governance</h2>
+      <Callout tone="warning" title="Before you point this at anything that is not yours">
+        <p style="margin: 0 0 0.6rem">
+          <code>/design-sync</code> uploads component source and rendered previews. Three facts from
+          Anthropic’s own admin guide for Team and Enterprise plans, as recorded here on 2026-08-26:
+        </p>
+        <ul style="margin: 0 0 0.6rem; padding-left: 1.15rem; line-height: 1.7">
+          <li>uploaded assets are stored <strong>persistently</strong> under enterprise retention;</li>
+          <li>there is <strong>no data-residency support</strong>;</li>
+          <li>Claude Design is <strong>default-off</strong> on Enterprise.</li>
+        </ul>
+        <p style="margin: 0">
+          Rehearsing on Atelier’s own open-source library is the safe case. Pushing an
+          <strong>employer’s</strong> design system is a data-processing decision, not a tooling
+          choice: route it to your organisation’s data-protection officer first, and organisation-level
+          enablement to your information-security officer, before it reaches an agenda a client sees.
+        </p>
+      </Callout>
+    </section>
+
+    <BottomNav items={[
+      { to: '/design-to-code',    label: 'The loop',  title: 'Design to code',    icon: 'schema' },
+      { to: '/figma',             label: 'Why Figma', title: 'Figma as source',   icon: 'palette' },
+      { to: '/design-principles', label: 'Why',       title: 'Design principles', icon: 'menu_book' },
+    ]} />
+
+  </div>
+</BaseLayout>

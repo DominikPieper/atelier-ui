@@ -90,11 +90,13 @@ const DAYS: Day[] = [
         format: 'Hands-on Demo',
         bullets: [
           'Was ist MCP? Welche Server sind aktiv (storybook-{angular,react,vue}, nx-mcp, figma-console, uianatomy)?',
-          'Storybook 10.4 Toolset-Modell: docs / dev / test — hosted vs. lokale Surface',
-          'Toolset-Gating zeigen — wann test für Read-Only-Agents deaktivieren',
+          'Storybook 10.4 Toolset-Modell: docs / dev / test — hosted vs. lokale Surface, inklusive Toolset-Gating (wann test für Read-Only-Agents deaktiviert wird)',
           'Live-Übung: Claude per Prompt nach Button-Props fragen, Token-Werte ausgeben, Preview im Chat',
           'Negativ-Demo: dieselbe Frage im Browser-Chat ohne MCP → Halluzination. Mit MCP → korrekte Antwort',
-          'Skills-Konzept (figma-workspace-architect, atelier-design) vorstellen',
+          'Trainer-Demo Drei Richtungen (~12 min, nur Trainer-Maschine — claude.ai/design braucht ein anderes Login als der Kohorten-API-Key): drei Direction-Artboards für den Toast-Brief in Claude Design, geseedet aus der generierten Palette tools/design/artboard-palette.css — nicht aus dem atelier-design Skill, weil dieses File die Kurznamen trägt, die die Artboards selbst verwenden (--success, --border-hover), und weil genau dieses File gleich rot gemacht wird',
+          'Vor dem Zaun die vier Gate-Identitäten in einem Satz benennen (Figma-COMPONENT_SET mit Variant-Achsen, Spec-String-Literal-Union, --ui-*-Token, Figma-Node-Id) — Node-Ids kommen erst in Block 05, Literal-Unions erst an Tag 2, hier also benennen statt voraussetzen. Dann der Zaun: eine Farbe im Artboard hart eintragen und npm run check:artboard-palette laufen lassen — grün, das Gate liest nur das gemeinsame Sheet gegen tokens.css und kein Artboard. Dieselbe Farbe im generierten Sheet ändern: derselbe Befehl wird rot',
+          'Checkpoint-Frage an den Raum: welche der vier Gate-Identitäten hat dieses Artboard? Erwartete Antwort: keine. Erst danach die Einordnung — im Repo gilt die Regel „nie Inline-Hex" weiter, sie gilt dort, wo ein Gate sie durchsetzen kann; Claude Design ist kein fünfter Pillar, sondern Schritt 0 (Divergenz) und Schritt 5 (Handoff), nie Schritt 1–4',
+          'Gegenmittel für die Live-Demo: Artboards in der Kaffeepause 14:30–14:45 vorab erzeugen; Fallback sind die 31 Artboards der Redesign-Phase (tools/design/artboards.json); nach der Rot-Demo git checkout tools/design/artboard-palette.css. Hintergrund für den Trainer: /claude-design',
         ],
       },
       {
@@ -139,7 +141,7 @@ const DAYS: Day[] = [
         bullets: [
           'Tag-1-Recap',
           'Komponenten-Brief vorstellen — Anatomie, Axes, States, A11y-Anforderungen. Ein Brief je Komponente liegt im Repo unter workshop/briefs/{toast,tagchip,statcard,avatar}.md',
-          'uianatomy MCP als Hilfsmittel zeigen',
+          'uianatomy MCP als Hilfsmittel zeigen — und daran das Skills-Konzept: ein Skill ist eine Anleitung, die Claude lädt, wenn die Aufgabe passt (uianatomy-mcp triggert hier automatisch)',
         ],
       },
       {
@@ -154,7 +156,7 @@ const DAYS: Day[] = [
           '~45 min manuelles Design im Figma-UI (Layout, Variants, Token-Zuweisung)',
           '~45 min MCP-Strukturierung (Component Properties, A11y-Audits)',
           'Eigenes Component-Set: ≥2 Variants × 2 States, Properties, korrekte Tokens (--ui-*), Dark-Mode-Variante — die genaue Matrix steht im Komponenten-Brief',
-          'Skills als Co-Pilot: figma-workspace-architect (Architektur), atelier-design (Brand-Konsistenz)',
+          'Skills als Co-Pilot, hier zum ersten Mal im Einsatz: figma-workspace-architect für Architekturentscheidungen, atelier-design für Brand-Konsistenz',
         ],
       },
       {

@@ -91,6 +91,11 @@ export const OG_PAGES = {
     description:
       'Machine-readable llms.txt for Atelier UI — structured context AI assistants can load without scraping HTML.',
   },
+  'claude-design': {
+    title: 'Claude Design',
+    description:
+      'Where Claude Design sits beside Figma — step 0 and step 5, never in between — and why an artboard cannot be the source of truth.',
+  },
   'design-principles': {
     title: 'LLM-Optimized APIs',
     description:

@@ -130,9 +130,15 @@ Decision-bearing quick wins (deferred — not this session's scope):
       synced file already carries (raw hex → token, raw px → spacing token, `font-family`
       outside the DS list) are the rule set; the blocker is reach, not rules — a gate needs
       the artboards in the repo or an authenticated client. Katas 2 and 5 want this.
+      **2026-08-29:** still open as engineering, but no longer silent — the asymmetry is now
+      published as content (`/claude-design`, "What it demonstrably does not do") and
+      demonstrated live in Tag 1 Block 04. Teaching the gap is not closing it.
 - [ ] **Verify Figma *export* from claude.ai/design** — import via Figma links is
       confirmed first-party (`hifi-design` skill); export is still unverified, and
-      ADR-0032's "the canvas dead-ends" tradeoff rests partly on it.
+      ADR-0032's "the canvas dead-ends" tradeoff rests partly on it. **2026-08-29:** still
+      unverified; `/claude-design` now names the direction explicitly in its limits list
+      ("importing Figma links into the canvas is confirmed; exporting out of it is not")
+      so the page cannot be misread as endorsing the forbidden canvas → Figma → code chain.
 - [x] ~~The persisted `parityScore` is not comparable across runs~~ (resolved 2026-08-26,
       ADR-0024 amendment): the score is no longer stored. `--score` is still accepted and
       echoed, `ATELIER_PARITY_MIN` and the SCORE critical are gone, and 27 records were
@@ -168,14 +174,23 @@ Decision-bearing quick wins (deferred — not this session's scope):
       (`7a6a2f19-9a3c-4dd9-9828-65c7cc67766c`); both DS projects are read-only. The plan
       is additive, so the 29 parity records stay valid until component CSS migrates onto
       role tokens — at which point the ADR-0024 change (Phase 0) becomes blocking.
-- [ ] **`/design-sync`'s manifest is unreliable — verified** (2026-08-26). The synced
-      Atelier design system's `_adherence.oxlintrc.json` lists `--ui-font-size-3xl`,
-      `-4xl`, `-5xl` which exist nowhere in the repo; types `--ui-transition-*` as
+- [ ] **`/design-sync`'s manifest is unreliable — verified** (2026-08-26, *corrected
+      2026-08-29*). The synced Atelier design system's `_adherence.oxlintrc.json` lists
+      `--ui-font-size-3xl`, `-4xl`, `-5xl` — **`-4xl` and `-5xl` exist nowhere in the repo;
+      `-3xl` does exist**, added by ADR-0036 for the display role on the same date this item
+      was written. The item was stale within hours of being recorded, which is the joke on
+      itself: a hand-typed claim about a generated thing rots, including this one. It is
+      also why the `/claude-design` chapter tells the reader to grep the tree rather than
+      trust the manifest *or* their memory of it. Two phantoms, not three; the rest stands.
+      It types `--ui-transition-*` as
       `"color"`; mixes 20 `--docs-*` private docs-theme tokens into what reads as the
       library's public token API; and ships `react/forbid-elements` with an empty forbid
       list. Two consequences: never treat the manifest as an input (derive from
-      `tokens.css`), and use this list in the `/design-sync` kata — "the tool's output
-      needs review" lands far better with concrete errors than as advice.
+      `tokens.css`), and use this list as the "review the tool's output" worked example —
+      that lands far better with concrete errors than as advice. **2026-08-29:** the list
+      shipped in that role on `/claude-design`, as prose rather than as the blocked
+      `/design-sync` kata. The item stays open because the manifest itself is still wrong
+      and still cannot be re-checked from this repo — it lives in the external project.
 - [ ] **Reuse the adherence regexes for ADR-0032 alternative 4.** The synced file already
       carries the three rules an artboard/token gate wants: raw hex → use a token via
       `var()`, raw `\d+px` → use a spacing token, `font-family` outside the DS list. Lift
@@ -578,9 +593,12 @@ Decision-bearing quick wins (deferred — not this session's scope):
       while every other floating layer used `--ui-z-dropdown`. Now 99 referenced tokens,
       all declared; fail-tested in both directions.
 - [ ] **Re-sync the Atelier design system in Claude Design.** Its `_ds_manifest.json` and
-      guide still say Inter and Fira Code, plus the four phantom tokens
-      (`--ui-font-size-3xl/4xl/5xl`, `--ui-font-mono` — the last of which the repo now
-      really does declare). Reference-only either way, never input.
+      guide still say Inter and Fira Code, plus the phantom tokens. **Corrected 2026-08-29:**
+      only `--ui-font-size-4xl` and `-5xl` are phantoms — `--ui-font-size-3xl` (ADR-0036) and
+      `--ui-font-mono` are both really declared now, so two of the four named here have since
+      become real. Reference-only either way, never input. Still blocked on the same thing as
+      everything else on this surface: the MCP is interactively authenticated, so no script
+      can do it.
 - [x] ~~Role-based type scale~~ — done 2026-08-26, ADR-0036: eight `--ui-type-*` roles as
       `font:` shorthands composed from the existing axes, plus `--ui-font-size-3xl`,
       `--ui-font-weight-bold` and `--ui-letter-spacing-uppercase`. Manifest 114/114. All
@@ -1880,4 +1898,19 @@ explicit branch on the pages that serve both). Nothing enforces it; see its Cons
       did: the preflight mock on /workshop shows a run that the current script cannot
       produce, on a page whose surrounding prose was just rewritten to be exact.
 - [ ] **Claude Design participant katas** stay blocked on the widened per-seat test
-      (§2.4 item 1 of the review). Unchanged and deliberately not shipped.
+      (§2.4 item 1 of the review). Unchanged and deliberately not shipped. **2026-08-29:**
+      the two *unblocked* halves shipped around them and did not weaken the blocker — the
+      trainer demo is trainer-machine-only precisely because the seat question is open, and
+      the agenda says so in the demo's first sentence.
+- [x] ~~**Publish the Claude Design track — chapter + trainer demo**~~ (done 2026-08-29,
+      ADR-0032 executed, no new decision). `docs/src/pages/claude-design.astro` is the
+      Explanation chapter ADR-0032 called for: off the workshop track, beside
+      `/design-principles`, `workshop-track.ts` untouched on purpose. Tag 1 Block 04 gained
+      the ~12-min "Drei Richtungen" trainer demo in both German files, funded inside the
+      block without moving its boundary. The fence runs in the honest direction — hardcode a
+      colour in an artboard, `check:artboard-palette` stays **green**, then redden the
+      generated sheet and `git checkout` it back.
+- [x] ~~**Prerequisites 2 and 3 of review §2.4**~~ (closed 2026-08-29). The
+      `atelier-design` skill's token sheet now declares Instrument Sans / Instrument Serif /
+      JetBrains Mono and is generated by `sync-tokens.mjs`; `tasks/claude-design-prompt.md`
+      reads 29 in both places. Prerequisites 1, 4, 5, 6 and 7 all gate katas and are untouched.

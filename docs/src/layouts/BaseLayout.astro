@@ -106,6 +106,7 @@ const BREADCRUMB_LABELS: Record<string, string> = {
   'claude-md': 'CLAUDE.md',
   prompts: 'Prompt templates',
   'design-principles': 'Design principles',
+  'claude-design': 'Claude Design',
   accessibility: 'Accessibility',
 };
 
@@ -390,6 +391,10 @@ const breadcrumbSchema = {
             <a href="/design-principles" class={`docs-nav-link${isActive('/design-principles') ? ' active' : ''}`}>
               <Icon name="schema" class="docs-nav-link-icon" />
               Design principles
+            </a>
+            <a href="/claude-design" class={`docs-nav-link${isActive('/claude-design') ? ' active' : ''}`}>
+              <Icon name="grid_view" class="docs-nav-link-icon" />
+              Claude Design
             </a>
             <a href="/accessibility" class={`docs-nav-link${isActive('/accessibility') ? ' active' : ''}`}>
               <Icon name="accessibility_new" class="docs-nav-link-icon" />

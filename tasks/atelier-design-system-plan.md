@@ -2,6 +2,8 @@
 
 **Status:** approved in direction 2026-08-26; phases not started.
 
+> **Historical snapshot — the status line above is the 2026-08-26 state and has not been maintained since.** Phase 0 and the Phase 1 reconnaissance landed, and the artboard phase ran to completion (31 artboards covering 29/29 components — `tools/design/artboards.json`, `plan/design-status.md`, ADRs 0041–0073). Read this file for the decision, the guardrails and the architecture — the ban on chaining Claude Design → Figma → code below still stands — not for the phase status.
+
 ## The decision, and why it is not a new one
 
 The starting question was whether to rebuild the library under the official
