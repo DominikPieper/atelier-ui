@@ -1,3 +1,14 @@
+## 0.2.31 (2026-08-29)
+
+### 🚀 Features
+
+- **gates:** typecheck the specs and stories, and pay the 146 errors nobody could see ([6a8ac9f](https://github.com/DominikPieper/atelier-ui/commit/6a8ac9f))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.30 (2026-08-29)
 
 ### 🚀 Features
