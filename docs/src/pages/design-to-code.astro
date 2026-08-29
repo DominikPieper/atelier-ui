@@ -9,7 +9,7 @@ import TrackNav from '../components/TrackNav.astro';
 import FwSwitcher from '../components/FwSwitcher.astro';
 import { getTrackStep, TRACK_LENGTH } from '../data/workshop-track';
 
-// "Step 6 of 8" hero tag, derived from the single source of truth so a
+// "Step N of M" hero tag, derived from the single source of truth so a
 // reordering of the workshop track updates this page automatically.
 const trackStep = getTrackStep('/design-to-code');
 const heroTag = trackStep ? `Step ${trackStep.step} of ${TRACK_LENGTH}` : undefined;
@@ -55,8 +55,8 @@ const GENERATE_PROMPT: Record<string, string> = {
 // Per-framework note for the Generate step: where component docs come from.
 const GENERATE_NOTE: Record<string, string> = {
   React: 'React exposes component metadata over the hosted Storybook MCP — list-all-documentation gives Claude every prop and variant before it writes a line.',
-  Angular: "Storybook 10.4 only emits components.json for React, so the worker serves React's manifest on the Angular endpoint too (ADR-0083) — storybook-angular answers component lookups with real names, variants and defaults. The reply is React-shaped, though: JSX snippets, React story paths, a children prop where Angular projects content, on*Change callbacks where Angular uses a two-way model(). Read it as an API reference, not as code to copy.",
-  Vue: "Storybook 10.4 only emits components.json for React, so the worker serves React's manifest on the Vue endpoint too (ADR-0083) — storybook-vue answers component lookups with real names, variants and defaults. The reply is React-shaped, though: JSX snippets, React story paths, a children prop where Vue takes a slot, on*Change callbacks where Vue emits update:*. Read it as an API reference, not as code to copy.",
+  Angular: "Storybook 10.4 and 10.5 emit components.json for React only, so the worker serves React's manifest on the Angular endpoint too (ADR-0083) — storybook-angular answers component lookups with real names, variants and defaults. The reply is React-shaped, though: JSX snippets, React story paths, a children prop where Angular projects content, on*Change callbacks where Angular uses a two-way model(). Read it as an API reference, not as code to copy.",
+  Vue: "Storybook 10.4 and 10.5 emit components.json for React only, so the worker serves React's manifest on the Vue endpoint too (ADR-0083) — storybook-vue answers component lookups with real names, variants and defaults. The reply is React-shaped, though: JSX snippets, React story paths, a children prop where Vue takes a slot, on*Change callbacks where Vue emits update:*. Read it as an API reference, not as code to copy.",
 };
 
 const PARITY_PROMPT = `Run figma_check_design_parity on the settings card node against
@@ -77,7 +77,7 @@ the component I just generated. Fix every discrepancy it reports.`;
       titleAccent="Code"
       ledeMax="560px"
     >
-      From a Figma component to a verified, framework-native component — the Atelier loop. This is the map; the <a href="/first-component" class="docs-link-primary">kata</a> and the <a href="/tutorial" class="docs-link-primary">tutorial</a> are the territory.
+      From a Figma component to a verified, framework-native component — the Atelier loop. This is the map; the <a href="/tutorial" class="docs-link-primary">tutorial</a> and the <a href="/first-component" class="docs-link-primary">kata</a> are the territory.
     </PageHero>
 
     <!-- Framing: one framework per session -->
@@ -183,7 +183,7 @@ the component I just generated. Fix every discrepancy it reports.`;
             Prompt Claude Code to build or edit the component in your chosen framework, using the Storybook MCP for exact component docs. Pick a framework — the prompt and the source-of-docs note update to match:
           </p>
 
-          <FwSwitcher variant="tabs" frameworks={['react', 'angular', 'vue']} label="Choose a framework for the generate step" />
+          <FwSwitcher variant="tabs" label="Choose a framework for the generate step" />
           {FRAMEWORKS.map((fw, i) => (
             <div data-fw-panel={fw} hidden={i !== 0}>
               <Callout tone="note">
@@ -219,7 +219,7 @@ the component I just generated. Fix every discrepancy it reports.`;
     <div class="docs-section">
       <h2 class="docs-section-title">Where to go next</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; font-size: 0.85rem">
-        Run the loop hands-on in the <a href="/first-component" class="docs-link-primary docs-link-primary--bold">15-min kata</a>, or read the <a href="/tutorial" class="docs-link-primary docs-link-primary--bold">tutorial</a> for the deeper MCP mechanics behind each step.
+        Read the <a href="/tutorial" class="docs-link-primary docs-link-primary--bold">tutorial</a> next for the deeper MCP mechanics behind each step, then run the same loop on the clock in the <a href="/first-component" class="docs-link-primary docs-link-primary--bold">15-min kata</a>. That is the order the pager below walks, too.
       </p>
     </div>
 

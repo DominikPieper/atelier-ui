@@ -14,7 +14,7 @@ import { getTrackStep, TRACK_LENGTH } from '../data/workshop-track';
 
 const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
 
-// "Step N of 8" hero tag — derived from the single source of truth so a
+// "Step N of M" hero tag — derived from the single source of truth so a
 // reorder in workshop-track.ts updates this page automatically.
 const trackStep = getTrackStep('/tutorial')!;
 const stepTag = `Step ${trackStep.step} of ${TRACK_LENGTH}`;
@@ -164,7 +164,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
       Use <strong>figma-console MCP</strong> to read a Figma component spec directly — design tokens included — then <strong>Storybook MCP</strong> to match Atelier UI components, and let Claude Code write token-exact code. The next section explains what an MCP is.
     </PageHero>
     <p style="font-size: 0.78rem; color: var(--ui-color-text-muted); margin: -1.5rem 0 1.5rem; max-width: 520px; line-height: 1.55">
-      Just want the recipe? Try the <a href="/first-component" class="docs-link-primary docs-link-primary--bold">15-min kata</a> instead.
+      Just want the recipe? The <a href="/first-component" class="docs-link-primary docs-link-primary--bold">15-min kata</a> builds the same Settings / Card frame in six copy-paste steps, with the explanation stripped out.
     </p>
 
     <!-- Page-pair: this is the MCP-driven path; /figma is the manual variant. -->
@@ -197,6 +197,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         <h2 class="objective-heading">Before you start</h2>
         <ul class="objective-list objective-list--muted">
           <li>Completed the <a href="/workshop" class="docs-link-primary">Workshop setup</a></li>
+          <li>Read the four-step loop on <a href="/design-to-code" class="docs-link-primary">Design to code</a> — this page walks it in detail</li>
           <li><code>figma-console</code> MCP configured — see <a href="/figma-token" class="docs-link-primary">Figma Setup</a></li>
           <li>Read access to the Atelier UI Figma file (linked below)</li>
           <li>One framework picked — Angular, React or Vue</li>
@@ -475,7 +476,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
             <p class="docs-step-desc">Claude Code queries the Storybook MCP (<code>list-all-documentation</code> → <code>get-documentation</code>) for the matching component. It gets exact prop names and variants — no guessing.</p>
             <Callout tone="note" title="All three endpoints answer — but the reply is React-shaped">
               <p style="margin: 0; font-size: 0.82rem; line-height: 1.6; color: var(--ui-color-text-muted)">
-                Storybook 10.4 emits <code>components.json</code> for React only, so the worker serves React's manifest on the Angular and Vue endpoints too (ADR-0083). Your own <code>storybook-&lt;fw&gt;</code> server returns real names, variants and defaults — but in React syntax: JSX snippets, React story paths, a <code>children</code> prop where Angular projects content and Vue takes a slot, <code>on*Change</code> callbacks where Angular uses a two-way <code>model()</code> and Vue an <code>update:*</code> emit. Read it as an API reference, not as code to copy. Inside the atelier monorepo, <code>libs/spec/src/index.ts</code> settles any binding you are unsure of.
+                Storybook 10.4 and 10.5 emit <code>components.json</code> for React only, so the worker serves React's manifest on the Angular and Vue endpoints too (ADR-0083). Your own <code>storybook-&lt;fw&gt;</code> server returns real names, variants and defaults — but in React syntax: JSX snippets, React story paths, a <code>children</code> prop where Angular projects content and Vue takes a slot, <code>on*Change</code> callbacks where Angular uses a two-way <code>model()</code> and Vue an <code>update:*</code> emit. Read it as an API reference, not as code to copy. Inside the atelier monorepo, <code>libs/spec/src/index.ts</code> settles any binding you are unsure of.
               </p>
             </Callout>
           </div>
@@ -508,7 +509,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         A prompt that drives the full A–D workflow in one shot — already set to your framework,
         including the <code>storybook-&lt;fw&gt;</code> server name your workspace was scaffolded with:
       </p>
-      <FwSwitcher variant="tabs" frameworks={['react', 'angular', 'vue']} label="Choose a framework for the example prompt" />
+      <FwSwitcher variant="tabs" label="Choose a framework for the example prompt" />
       {FRAMEWORKS.map((fw, i) => (
         <div data-fw-panel={fw} hidden={i !== 0}>
           <Code code={examplePrompt(fw)} lang="text" title={`example prompt — ${fw}`} />
@@ -522,7 +523,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
         What Claude Code produces — using <code>AtlCard</code> and <code>AtlInput</code> from Atelier UI with tokens drawn directly from Figma <code>boundVariables</code>:
       </p>
-      <FwSwitcher variant="tabs" frameworks={['react', 'angular', 'vue']} label="Choose a framework for the generated output" />
+      <FwSwitcher variant="tabs" label="Choose a framework for the generated output" />
       {FRAMEWORKS.map((fw, i) => (
         <div data-fw-panel={fw} hidden={i !== 0}>
           <Code code={OUTPUT[fw]} lang={fw === 'Angular' ? 'ts' : 'tsx'} />

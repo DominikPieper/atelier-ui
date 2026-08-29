@@ -35,10 +35,12 @@ const modes = [
     subModes: [
       {
         name: 'Scaffold',
+        kind: 'sub-mode',
         summary: 'One-shot starter: Cover + Tokens + Components pages with placeholder content. For when the user wants a working skeleton in one turn.',
       },
       {
         name: 'Inventory',
+        kind: 'sub-mode',
         summary: 'Visual library catalog on a dedicated Inventory page: one data card per published component (header, status badge, default-variant preview, meta row, property table), grouped by slash namespace. Seven-phase pipeline, runs after Validate or stand-alone against an existing library.',
       },
     ],
@@ -50,6 +52,7 @@ const modes = [
     subModes: [
       {
         name: 'Re-verify',
+        kind: 'sub-mode',
         summary: 'Re-checks an existing audit report by running only the per-category verify queries. Emits still-open / auto-resolved / state-shifted per finding so stale findings drop off the priority list automatically.',
       },
     ],
@@ -67,6 +70,7 @@ const modes = [
     subModes: [
       {
         name: 'Code-verify',
+        kind: 'recipe',
         summary: 'Post-flight Storybook + browser-automation recipe to confirm Figma↔code parity in Light + Dark after a token or variant change. Catches the bug class where Figma and code each look correct but their handoff is broken.',
       },
     ],
@@ -79,7 +83,13 @@ const modes = [
   },
 ];
 
-const subModeCount = modes.reduce((n, mode) => n + mode.subModes.length, 0);
+// Code-verify is deliberately NOT counted as a sub-mode: SKILL.md declares
+// three (Scaffold, Inventory, Re-verify) and reaches code-verify from Migrate's
+// step-4 post-flight instead — its routing-table row reads "Migrate
+// (post-flight)". Splitting the counts here keeps this page and /agent-skills
+// saying what the skill file says.
+const subModeCount = modes.reduce((n, mode) => n + mode.subModes.filter((s) => s.kind === 'sub-mode').length, 0);
+const recipeCount = modes.reduce((n, mode) => n + mode.subModes.filter((s) => s.kind === 'recipe').length, 0);
 
 const references = [
   { file: 'token-architecture.md', summary: 'Three-tier model (Primitive / Semantic / Component), Modes, Variable Scopes, anti-patterns.' },
@@ -148,7 +158,7 @@ const tests = [
       </p>
       <div style="display: inline-flex; gap: 0.65rem; align-items: center; flex-wrap: wrap">
         <span style="font-family: monospace; font-size: 0.75rem; padding: 0.2rem 0.55rem; background: color-mix(in srgb, var(--ui-color-primary) 12%, transparent); border-radius: 999px; color: var(--ui-color-primary); font-weight: 600">v{SKILL_VERSION}</span>
-        <span style="font-size: 0.75rem; color: var(--ui-color-text-muted)">{modes.length} modes · {subModeCount} sub-modes · {referenceCount} references · {tests.length} test scenarios</span>
+        <span style="font-size: 0.75rem; color: var(--ui-color-text-muted)">{modes.length} modes · {subModeCount} sub-modes · {recipeCount} post-flight recipe{recipeCount === 1 ? '' : 's'} · {referenceCount} references · {tests.length} test scenarios</span>
       </div>
     </div>
 
@@ -176,7 +186,7 @@ const tests = [
               <div style="border-left: 2px solid var(--ui-color-primary); padding-left: 0.85rem; margin-left: 0.25rem; display: flex; flex-direction: column; gap: 0.5rem">
                 {mode.subModes.map((sub) => (
                   <div>
-                    <div style="font-size: 0.78rem; font-weight: 700; color: var(--ui-color-primary); margin-bottom: 0.2rem">↳ {sub.name} sub-mode</div>
+                    <div style="font-size: 0.78rem; font-weight: 700; color: var(--ui-color-primary); margin-bottom: 0.2rem">↳ {sub.name} {sub.kind === 'recipe' ? 'post-flight recipe' : 'sub-mode'}</div>
                     <p style="margin: 0; font-size: 0.78rem; color: var(--ui-color-text-muted); line-height: 1.55">{sub.summary}</p>
                   </div>
                 ))}

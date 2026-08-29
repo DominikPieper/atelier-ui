@@ -100,7 +100,7 @@ const STORYBOOK_LINKS = [
           <div class="docs-step-body">
             <h3 class="docs-h3">Two MCP surfaces, three toolsets</h3>
             <p class="docs-step-desc">
-              Storybook 10.4 ships MCP in two layers. The <strong>hosted</strong> endpoint serves docs from a static manifest — works for any framework, no install. The <strong>local dev</strong> surface adds dev &amp; test tools while a local Storybook is running, and is officially React-preview only as of 10.4. Tools are grouped into three <strong>toolsets</strong> (<code>dev</code>, <code>docs</code>, <code>test</code>), each toggleable in the addon options.
+              Storybook ships MCP in two layers — added in 10.4, unchanged in the 10.5 this repo pins. The <strong>hosted</strong> endpoint serves docs from a static manifest — works for any framework, no install. The <strong>local dev</strong> surface adds dev &amp; test tools while a local Storybook is running, and is still officially React-only: the 10.5 docs scope both the MCP server and the manifests to React projects, with Vue, Angular, Web Components and Svelte planned. Tools are grouped into three <strong>toolsets</strong> (<code>dev</code>, <code>docs</code>, <code>test</code>), each toggleable in the addon options.
             </p>
             <table class="docs-props-table">
               <thead>
@@ -110,17 +110,19 @@ const STORYBOOK_LINKS = [
                 <tr><td rowspan="3"><code>docs</code></td><td><code>list-all-documentation</code></td><td>All three: components + docs</td><td>All frameworks</td></tr>
                 <tr><td><code>get-documentation</code></td><td>All three: full (Angular/Vue via React's manifest)</td><td>All frameworks</td></tr>
                 <tr><td><code>get-documentation-for-story</code></td><td>All three: full (Angular/Vue via React's manifest)</td><td>All frameworks</td></tr>
-                <tr><td rowspan="3"><code>dev</code></td><td><code>get-storybook-story-instructions</code></td><td>—</td><td>React (preview); Vue/Angular experimental</td></tr>
+                <tr><td rowspan="5"><code>dev</code></td><td><code>get-storybook-story-instructions</code></td><td>—</td><td>React (preview); Vue/Angular experimental</td></tr>
                 <tr><td><code>preview-stories</code></td><td>—</td><td>React (preview); Vue/Angular experimental</td></tr>
                 <tr><td><code>get-changed-stories</code> <em>(10.4)</em></td><td>—</td><td>Requires <code>features.changeDetection</code></td></tr>
+                <tr><td><code>get-stories-by-component</code></td><td>—</td><td>Requires a builder that exposes the module-graph service</td></tr>
+                <tr><td><code>display-review</code></td><td>—</td><td>Requires <code>features.changeDetection</code> (and <code>experimentalReview</code> not disabled)</td></tr>
                 <tr><td><code>test</code></td><td><code>run-story-tests</code></td><td>—</td><td>Requires <code>@storybook/addon-vitest</code>; a11y via <code>@storybook/addon-a11y</code></td></tr>
               </tbody>
             </table>
             <p class="docs-step-desc" style="margin-top: 0.75rem">
-              The hosted endpoint reads <code>manifests/components.json</code> emitted by <code>@storybook/addon-mcp</code> at build time. As of Storybook 10.4 that file is only generated for <strong>React</strong> (via TypeScript Language Server docgen — the new <code>experimentalReactComponentMeta</code> docgen path). Angular &amp; Vue static builds only emit <code>docs.json</code>, so the worker serves those endpoints their own MDX docs (foundations, tokens) <em>plus</em> React's <code>components.json</code> as the cross-framework API reference — legitimate because the spec contract is identical across the three adapters and the drift gates keep it that way (ADR-0083). An Angular or Vue lookup therefore returns real variants, defaults and state props — but the reply is React-shaped throughout: JSX snippets, React story paths, a <code>children</code> prop where Angular projects content and Vue takes a slot, and <code>on*Change</code> callbacks where Angular uses a two-way <code>model()</code> and Vue an <code>update:*</code> emit. Read it as an API reference, not as code to copy, and open the story in your own framework's Storybook rather than following the served path verbatim.
+              The hosted endpoint reads <code>manifests/components.json</code>, which the Storybook build writes once <code>@storybook/addon-mcp</code> is installed — the addon switches the <code>componentsManifest</code> feature on through its own preset. As of Storybook 10.4/10.5 only <strong>React</strong> fills that file: <code>@storybook/react</code> is the one framework package that contributes a <code>components</code> entry to the manifest preset. Angular &amp; Vue static builds only emit <code>docs.json</code>, so the worker serves those endpoints their own MDX docs (foundations, tokens) <em>plus</em> React's <code>components.json</code> as the cross-framework API reference — legitimate because the spec contract is identical across the three adapters and the drift gates keep it that way (ADR-0083). An Angular or Vue lookup therefore returns real variants, defaults and state props — but the reply is React-shaped throughout: JSX snippets, React story paths, a <code>children</code> prop where Angular projects content and Vue takes a slot, and <code>on*Change</code> callbacks where Angular uses a two-way <code>model()</code> and Vue an <code>update:*</code> emit. Read it as an API reference, not as code to copy, and open the story in your own framework's Storybook rather than following the served path verbatim.
             </p>
             <p class="docs-step-desc" style="margin-top: 0.5rem">
-              The dev / test toolsets require a running Node.js Storybook dev server and are gated by Storybook 10.4 to React for now. <code>docs</code> tools support a <code>storybookId</code> parameter to scope a request to one source in multi-source (composition) setups; <code>list-all-documentation</code> accepts <code>withStoryIds: true</code> when downstream tools need story IDs.
+              The dev / test toolsets require a running Node.js Storybook dev server and fall under that same React-only preview scope. Their per-tool gates, though, are capability checks rather than framework checks — <code>get-stories-by-component</code> wants a builder that exposes the module graph, <code>get-changed-stories</code> and <code>display-review</code> want <code>features.changeDetection</code>, <code>run-story-tests</code> wants <code>@storybook/addon-vitest</code>. <code>docs</code> tools support a <code>storybookId</code> parameter to scope a request to one source in multi-source (composition) setups; <code>list-all-documentation</code> accepts <code>withStoryIds: true</code> when downstream tools need story IDs.
             </p>
           </div>
         </div>
@@ -129,9 +131,9 @@ const STORYBOOK_LINKS = [
         <div class="docs-step-row">
           <span class="docs-step-badge">04</span>
           <div class="docs-step-body">
-            <h3 class="docs-h3">What&apos;s new in Storybook 10.4 MCP</h3>
+            <h3 class="docs-h3">What Storybook 10.4 added to MCP</h3>
             <p class="docs-step-desc">
-              The 10.4 release tightens the agentic loop on four fronts:
+              The 10.4 release — together with the <code>@storybook/mcp</code> versions that shipped alongside it — tightens the agentic loop on six fronts, all still in place at the pinned 10.5.10:
             </p>
             <table class="docs-props-table">
               <thead>
@@ -140,7 +142,7 @@ const STORYBOOK_LINKS = [
               <tbody>
                 <tr>
                   <td><code>experimentalReactComponentMeta</code> (RCM)</td>
-                  <td>Volar + TypeScript Language Server docgen replaces <code>react-docgen</code> / <code>react-docgen-typescript</code> — faster, better detection, faster dev-mode HMR for prop edits. Powers React <code>components.json</code>.</td>
+                  <td>Volar + TypeScript Language Server docgen replaces <code>react-docgen</code> / <code>react-docgen-typescript</code> — faster, better detection, faster dev-mode HMR for prop edits. When enabled it is also the engine behind React&apos;s <code>components.json</code>; Atelier leaves it off, so that manifest is built by <code>react-docgen</code> — the file&apos;s own <code>meta.docgen</code> field names whichever engine ran.</td>
                   <td><code>experimentalReactComponentMeta: true</code> in <code>.storybook/main.ts</code> (React). <code>@storybook/mcp@0.6.2+</code> reads the new <code>reactComponentMeta</code> payload automatically.</td>
                 </tr>
                 <tr>
@@ -198,7 +200,7 @@ const config: StorybookConfig = {
     },
   ],
   features: {
-    experimentalComponentsManifest: true, // gates the docs toolset
+    componentsManifest: true,             // gates the manifest write + docs toolset
     changeDetection: true,                // gates get-changed-stories
   },
 };

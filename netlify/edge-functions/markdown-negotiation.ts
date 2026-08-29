@@ -1,3 +1,10 @@
+// NETLIFY-ONLY — this is not the live path. atelier.pieper.io is served by the
+// Cloudflare Worker in `worker/` (see wrangler.jsonc); its own markdown negotiation
+// streams the prebuilt `.md` artifacts and sets Content-Type + Vary, nothing else.
+// The `x-markdown-tokens` header below therefore never reaches a production response —
+// do not document it as site behaviour (audit finding n3). Whether this Netlify config
+// is still wanted at all is an open question in tasks/todo.md.
+
 import type { Context } from "@netlify/edge-functions";
 
 // Skip static assets and non-doc paths

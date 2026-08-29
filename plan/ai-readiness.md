@@ -110,7 +110,7 @@ For the Component Manifest to carry real context, each component story must:
 
 ### Limitation: Angular and Vue
 
-As of Storybook 10.4, `components.json` (required for `experimentalComponentsManifest`) is only emitted for React. Angular and Vue component manifests are not yet available via the hosted MCP surface. Stories still get descriptions; downstream agents fall back to the React MCP as cross-framework prop reference (the `libs/spec` contract is identical across the three frameworks).
+As of Storybook 10.4 and 10.5, `components.json` (written when the `componentsManifest` feature is on — `experimentalComponentsManifest` is only an alias on addon-mcp's docs-toolset gate, not on the build-time write) is only emitted for React. Angular and Vue component manifests are not yet available via the hosted MCP surface. Stories still get descriptions; downstream agents fall back to the React MCP as cross-framework prop reference (the `libs/spec` contract is identical across the three frameworks).
 
 ---
 

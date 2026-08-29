@@ -99,7 +99,7 @@ const mcpConfig = (fw: string) => `{
           <li>Frontend experience in Angular, React or Vue</li>
           <li>Comfortable with the terminal — Node 22+ available</li>
           <li>Claude Code CLI (we walk you through installing it)</li>
-          <li>Figma account — optional here; the <a href="/schulung" class="docs-link-primary">two-day training</a> requires one with draft rights plus the Desktop Bridge plugin</li>
+          <li>Figma account — optional here; the <a href="/schulung" class="docs-link-primary">two-day training</a> (German) requires one with draft rights plus the Desktop Bridge plugin</li>
         </ul>
       </div>
     </div>
@@ -108,7 +108,7 @@ const mcpConfig = (fw: string) => `{
     <Callout tone="tip" title="Already cloned the repo">
       <p>
         This page's default path is the <strong>scaffold</strong> — the self-serve route.
-        The <a href="/schulung" class="docs-link-primary">two-day training</a> runs on the
+        The <a href="/schulung" class="docs-link-primary">two-day training</a> (German) runs on the
         <strong>cloned monorepo</strong> instead, because its Day 2 works directly with
         <code>plan/</code>, <code>libs/spec</code> and <code>nx storybook &lt;fw&gt;</code>, which
         only exist in the clone. If you are attending, follow this callout, not Step 01.
@@ -313,6 +313,16 @@ const mcpConfig = (fw: string) => `{
 
     <!-- Once set up: hand off to the workflow pages instead of repeating them. -->
     <aside class="docs-pagepair" aria-label="What to do once setup is done" style="margin-top: 2.5rem">
+      <a href="/figma-token" class="docs-pagepair-card docs-pagepair-card--next" style="grid-column: 1 / -1">
+        <span class="docs-pagepair-eyebrow">Do this first</span>
+        <span class="docs-pagepair-title">/figma-token →</span>
+        <span class="docs-pagepair-desc">Desktop Bridge plugin and access token — the <code>figma-console</code> MCP the tutorial runs on reads Figma through them. One-time, ~5 min; the manual <code>/figma</code> path needs neither.</span>
+      </a>
+      <a href="/design-to-code" class="docs-pagepair-card docs-pagepair-card--next" style="grid-column: 1 / -1">
+        <span class="docs-pagepair-eyebrow">Then read the map</span>
+        <span class="docs-pagepair-title">/design-to-code →</span>
+        <span class="docs-pagepair-desc">The four-step loop — Inspect, Spec, Generate, Verify — on one page. The two workflows below are the territory; this is the map they walk.</span>
+      </a>
       <a href="/tutorial" class="docs-pagepair-card docs-pagepair-card--next">
         <span class="docs-pagepair-eyebrow">MCP-driven workflow</span>
         <span class="docs-pagepair-title">/tutorial →</span>

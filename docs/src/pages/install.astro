@@ -95,6 +95,17 @@ const IMPORT_NOTE: Record<string, string> = {
       title="Installation"
       lede="Add Atelier UI to an existing app — package commands for npm, pnpm, and yarn, plus the one-line token import that wires up dark mode and theming."
     />
+    <p style="font-size: 0.78rem; color: var(--ui-color-text-muted); margin: -1.5rem 0 1.5rem; max-width: 560px; line-height: 1.55">
+      No app yet? <a href="/workshop" class="docs-link-primary docs-link-primary--bold">Workshop setup</a> scaffolds one —
+      <code>npx create-atelier-ui-workspace</code> writes an app that already has the package as a
+      dependency, the token stylesheet imported, and a <code>.mcp.json</code> — steps 1 and 2 below are
+      wired for you, and you start at step 3. One difference to expect in step 2: the scaffold
+      vendors its own copy of <code>tokens.css</code> into <code>src/styles/</code> and imports
+      <em>that</em>, so you can edit the values directly — the package path shown below is what you
+      use when adding Atelier UI to an app you already have. Attending the
+      <a href="/schulung" class="docs-link-primary">two-day training</a> (German)? That cohort clones the
+      atelier monorepo instead.
+    </p>
 
     <!-- Framework selector -->
     <div style="margin-bottom: 2rem">

@@ -1,3 +1,8 @@
+# NETLIFY-ONLY — atelier.pieper.io is served by the Cloudflare Worker (wrangler.jsonc,
+# worker/), and no workflow under .github/ references this file. Its edge function and
+# MCP functions differ in behaviour from the worker's — read the header of
+# netlify/edge-functions/markdown-negotiation.ts before citing either as "the site".
+
 [build]
   command = "npx nx run docs:build && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/react/.storybook --output-dir dist/docs/storybook-react && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/angular/.storybook --output-dir dist/docs/storybook-angular && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/vue/.storybook --output-dir dist/docs/storybook-vue"
   publish = "dist/docs"

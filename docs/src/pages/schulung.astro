@@ -80,7 +80,7 @@ const DAYS: Day[] = [
           'Was ist Storybook, was sind Stories, Prop-Tables',
           'Hosted Storybooks öffnen — selbe Komponente (Button) in Angular/React/Vue vergleichen',
           'libs/spec als Quelle der Wahrheit — Parität spürbar machen',
-          'Storybook 10.4: Agentic Setup, experimentalReactComponentMeta, Change Review Sidebar, Subcomponent-Docs',
+          'Was Storybook 10.4 gebracht hat und im gepinnten 10.5.10 weiterhin aktiv ist: Agentic Setup, experimentalReactComponentMeta (Atelier lässt den Docgen aus — Reacts Prop-Tabellen kommen weiter aus react-docgen), Change Review Sidebar, Subcomponent-Docs',
         ],
       },
       {
@@ -90,7 +90,7 @@ const DAYS: Day[] = [
         format: 'Hands-on Demo',
         bullets: [
           'Was ist MCP? Welche Server sind aktiv (storybook-{angular,react,vue}, nx-mcp, figma-console, uianatomy)?',
-          'Storybook 10.4 Toolset-Modell: docs / dev / test — hosted vs. lokale Surface, inklusive Toolset-Gating (wann test für Read-Only-Agents deaktiviert wird)',
+          'Toolset-Modell (seit 10.4, im Repo läuft 10.5.10): docs / dev / test — hosted vs. lokale Surface, inklusive Toolset-Gating (wann test für Read-Only-Agents deaktiviert wird)',
           'Live-Übung: Claude per Prompt nach Button-Props fragen, Token-Werte ausgeben, Preview im Chat',
           'Negativ-Demo: dieselbe Frage im Browser-Chat ohne MCP → Halluzination. Mit MCP → korrekte Antwort',
           'Trainer-Demo Drei Richtungen (~12 min, nur Trainer-Maschine — claude.ai/design braucht ein anderes Login als der Kohorten-API-Key): drei Direction-Artboards für den Toast-Brief in Claude Design, geseedet aus der generierten Palette tools/design/artboard-palette.css — nicht aus dem atelier-design Skill, weil dieses File die Kurznamen trägt, die die Artboards selbst verwenden (--success, --border-hover), und weil genau dieses File gleich rot gemacht wird',
@@ -108,6 +108,7 @@ const DAYS: Day[] = [
           'Das offizielle /tutorial: Figma → MCP → Token-genauer Code in 5 Schritten',
           'Teilnehmer prompten Claude im gewählten Framework, ändern existierende Komponente (z.B. neuer Button-Tone)',
           'Wichtig: nicht selbst tippen, sondern prompten',
+          'Puffer für Schnelle: die 15-min-Kata /first-component — dieselbe Settings / Card-Frame (Node 936-2954) als zweite Runde auf Zeit, sechs Copy-Paste-Schritte mit demselben figma_check_design_parity am Schluss. Im Klon liegt die Komponente unter libs/<fw>/… und wird über nx storybook <fw> angesehen, nicht über nx serve workshop-<fw> — Schritt 4 der Kata-Seite sagt das',
         ],
       },
       {
@@ -118,6 +119,7 @@ const DAYS: Day[] = [
         bullets: [
           'Was war überraschend? Wo hat AI sauber funktioniert, wo nicht?',
           'Vorschau Tag 2 + optionale Hausaufgabe: kleine Komponente skizzieren (Toast / TagChip / StatCard / Avatar — dieselben vier wie die Starter-Frames und die Briefs)',
+          'Nachhol-Hausaufgabe für alle, die Block 05 nicht zu Ende gebracht haben: /first-component allein durchspielen — derselbe Loop im eigenen Tempo, mit Parity-Check am Schluss',
         ],
       },
     ],
@@ -238,6 +240,12 @@ const DAYS: Day[] = [
       KI-gestützter Design-to-Code-Workflow für Entwickler mit solider Frontend-Basis. Jeder Teilnehmer wählt sein eigenes Framework (Angular / React / Vue) — am Ende steht eine <strong>selbst designte und implementierte Komponente</strong> in Figma, Storybook und Code.
     </PageHero>
 
+    <!--
+      Deliberately English on an otherwise German page: this callout exists for a reader who
+      landed here without German and needs to be told where to go instead — a German sentence
+      would be useless to the only audience it has. The shared HelpFooter below is English for
+      the same reason. Everything addressed to the cohort and its trainer stays German.
+    -->
     <Callout tone="note" title="For instructors">
       <p>
         This page is the German two-day training curriculum, aimed at instructors planning a
@@ -252,6 +260,7 @@ const DAYS: Day[] = [
           <li>Entwickler mit Frontend-Basis (Angular, React oder Vue)</li>
           <li>Wenig Erfahrung mit Figma, Storybook, MCP oder AI-Codegen</li>
           <li>Sprache: Deutsch</li>
+          <li>Material (Docs, Storybook, Briefs, Prompts) ist durchgängig Englisch — Leseverständnis vorausgesetzt</li>
           <li>Eigenes Framework wählbar — Code ist zweitrangig</li>
         </ul>
       </div>
@@ -331,6 +340,7 @@ const DAYS: Day[] = [
         <li>Test-Loop grün: React → <code>run-story-tests</code> MCP-Call passes; Angular/Vue → <code>nx test &lt;lib&gt;</code> passes</li>
         <li><code>figma_audit_component_accessibility</code> ohne kritische Findings <strong>und</strong> Storybook A11y-Tab ohne axe-core-Findings</li>
         <li>Dark Mode wird durch Token-Override korrekt umgeschaltet</li>
+        <li><code>figma_check_design_parity</code> auf den eigenen Figma-Node gegen die generierte Komponente: der Report kommt ohne Abweichungen zurück — Findings an Claude zurückgeben und erneut prüfen. Gemeint ist der MCP-Call, nicht <code>npm run check:parity</code>: das Repo-Gate prüft die Atelier-Master aus <code>tools/figma/snapshot.json</code>, in denen die eigene Komponente nicht steht</li>
       </ol>
     </section>
 

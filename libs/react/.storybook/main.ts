@@ -29,8 +29,15 @@ const config: StorybookConfig = {
     },
   },*/
   features: {
-    experimentalComponentManifest: true,
-  } as StorybookConfig['features'],
+    // Read by Storybook's core-server at build time (`writeManifests`) and by
+    // addon-mcp's docs-toolset gate on a dev server. `@storybook/addon-mcp`
+    // forces it on through its own `features` preset anyway — measured: with
+    // this block deleted the manifest is still emitted — but declaring it keeps
+    // the manifest off an addon side effect. The `components` entry comes from
+    // `@storybook/react`'s `experimental_manifests` preset, which is why React
+    // is the only adapter that emits one (ADR-0083).
+    componentsManifest: true,
+  },
   viteFinal: async (config: InlineConfig) => {
     if (process.env['CI'] || process.env['BUILD_STORYBOOK']) {
       config.base = '/storybook-react/';

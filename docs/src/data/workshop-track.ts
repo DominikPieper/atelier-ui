@@ -34,8 +34,8 @@ const TRACK_ORDER: readonly Omit<TrackStep, 'step'>[] = [
   { href: '/', label: 'Overview', icon: 'dashboard' },
   { href: '/workshop', label: 'Setup', icon: 'build_circle', title: 'Workshop setup' },
   { href: '/figma-token', label: 'Figma access', icon: 'cable' },
-  { href: '/tutorial', label: 'Tutorial', icon: 'school' },
   { href: '/design-to-code', label: 'Design to code', icon: 'schema' },
+  { href: '/tutorial', label: 'Tutorial', icon: 'school' },
   { href: '/first-component', label: 'First component', icon: 'check_circle' },
   { href: '/patterns', label: 'Patterns', icon: 'menu_book' },
 ];
@@ -60,7 +60,7 @@ function normalize(pathname: string): string {
 
 /**
  * The track step for a pathname, or `undefined` when the page is not on the
- * 1–8 path. Use this to decide whether to render track-only chrome.
+ * numbered path. Use this to decide whether to render track-only chrome.
  */
 export function getTrackStep(pathname: string): TrackStep | undefined {
   const path = normalize(pathname);
