@@ -76,9 +76,9 @@ Full API reference: ${SITE_URL}/llms-full.txt
 1. Call \`list-all-documentation\` to get valid component IDs
 2. Call \`get-documentation\` with the ID — never invent props
 3. Do not use a component that is not in the docs
-4. This server serves docs and stories only — for prop tables, query the
-   \`storybook-react\` MCP (the spec contract is identical across frameworks)
-   or read \`libs/spec/src/index.ts\` in the Atelier repo
+4. This server answers prop tables directly: it serves its own MDX docs plus
+   the React components manifest, which the spec contract makes valid for every
+   framework (ADR-0083). No second server to query
 
 ## Component Imports
 \`\`\`ts
@@ -120,9 +120,9 @@ Full API reference: ${SITE_URL}/llms-full.txt
 1. Call \`list-all-documentation\` to get valid component IDs
 2. Call \`get-documentation\` with the ID — never invent props
 3. Do not use a component that is not in the docs
-4. This server serves docs and stories only — for prop tables, query the
-   \`storybook-react\` MCP (the spec contract is identical across frameworks)
-   or read \`libs/spec/src/index.ts\` in the Atelier repo
+4. This server answers prop tables directly: it serves its own MDX docs plus
+   the React components manifest, which the spec contract makes valid for every
+   framework (ADR-0083). No second server to query
 
 ## Component Imports
 \`\`\`ts
