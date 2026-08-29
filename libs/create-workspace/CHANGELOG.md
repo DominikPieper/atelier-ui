@@ -1,3 +1,14 @@
+## 0.2.26 (2026-08-29)
+
+### 🩹 Fixes
+
+- **schulung:** the four blockers, and the endpoint that was dead by design ([cf8e2b9](https://github.com/DominikPieper/atelier-ui/commit/cf8e2b9))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.25 (2026-08-28)
 
 This was a version bump only for create-workspace to align it with other projects, there were no code changes.
