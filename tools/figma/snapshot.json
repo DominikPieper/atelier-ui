@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-29T14:18:54.079Z",
-    "gitSha": "996a9cf",
+    "generatedAt": "2026-08-29T15:36:52.583Z",
+    "gitSha": "d2a4222",
     "serverVersion": null,
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -2245,7 +2245,7 @@
           "radius": "radius/md",
           "radiusPx": 10,
           "effects": [],
-          "fontSize": 14,
+          "fontSize": 16,
           "lineHeight": 125
         },
         "state=filled": {
@@ -2276,7 +2276,7 @@
           "radius": "radius/md",
           "radiusPx": 10,
           "effects": [],
-          "fontSize": 14,
+          "fontSize": 16,
           "lineHeight": 125
         },
         "state=focus": {
@@ -2307,7 +2307,7 @@
           "radius": "radius/md",
           "radiusPx": 10,
           "effects": [],
-          "fontSize": 14,
+          "fontSize": 16,
           "lineHeight": 125
         },
         "state=invalid": {
@@ -2338,7 +2338,7 @@
           "radius": "radius/md",
           "radiusPx": 10,
           "effects": [],
-          "fontSize": 14,
+          "fontSize": 16,
           "lineHeight": 125
         },
         "state=hover": {
@@ -2369,7 +2369,7 @@
           "radius": "radius/md",
           "radiusPx": 10,
           "effects": [],
-          "fontSize": 14,
+          "fontSize": 16,
           "lineHeight": 125
         }
       },
@@ -5361,7 +5361,7 @@
           "radius": "radius/md",
           "radiusPx": 10,
           "effects": [],
-          "fontSize": 14,
+          "fontSize": 16,
           "lineHeight": 125
         },
         "state=filled": {
@@ -5392,7 +5392,7 @@
           "radius": "radius/sm",
           "radiusPx": 8,
           "effects": [],
-          "fontSize": 14,
+          "fontSize": 16,
           "lineHeight": 125
         },
         "state=open": {
@@ -5423,7 +5423,7 @@
           "radius": "radius/sm",
           "radiusPx": 8,
           "effects": [],
-          "fontSize": 14,
+          "fontSize": 16,
           "lineHeight": 125
         },
         "state=hover": {
@@ -5454,7 +5454,7 @@
           "radius": "radius/sm",
           "radiusPx": 8,
           "effects": [],
-          "fontSize": 14,
+          "fontSize": 16,
           "lineHeight": 125
         },
         "state=focus": {
@@ -5488,7 +5488,7 @@
             "DROP_SHADOW",
             "DROP_SHADOW"
           ],
-          "fontSize": 14,
+          "fontSize": 16,
           "lineHeight": 125
         }
       },
@@ -8299,8 +8299,8 @@
           "radius": null,
           "radiusPx": 0,
           "effects": [],
-          "fontSize": 14,
-          "lineHeight": null
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "selection=checked, state=default": {
           "layoutMode": "HORIZONTAL",
@@ -8330,8 +8330,8 @@
           "radius": null,
           "radiusPx": 0,
           "effects": [],
-          "fontSize": 14,
-          "lineHeight": null
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "selection=indeterminate, state=default": {
           "layoutMode": "HORIZONTAL",
@@ -8361,8 +8361,8 @@
           "radius": null,
           "radiusPx": 0,
           "effects": [],
-          "fontSize": 14,
-          "lineHeight": null
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "selection=unchecked, state=focus": {
           "layoutMode": "HORIZONTAL",
@@ -8395,8 +8395,8 @@
             "DROP_SHADOW",
             "DROP_SHADOW"
           ],
-          "fontSize": 14,
-          "lineHeight": null
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "selection=unchecked, state=hover": {
           "layoutMode": "HORIZONTAL",
@@ -8426,8 +8426,8 @@
           "radius": null,
           "radiusPx": 0,
           "effects": [],
-          "fontSize": 14,
-          "lineHeight": null
+          "fontSize": 16,
+          "lineHeight": 125
         }
       },
       "overlays": [
@@ -8444,7 +8444,7 @@
             24
           ],
           "parentBox": [
-            113,
+            126,
             24
           ],
           "parentName": "selection=unchecked, state=default",
@@ -8464,7 +8464,7 @@
             18
           ],
           "parentBox": [
-            113,
+            126,
             24
           ],
           "parentName": "selection=unchecked, state=default",
@@ -8504,7 +8504,7 @@
             24
           ],
           "parentBox": [
-            113,
+            126,
             24
           ],
           "parentName": "selection=checked, state=default",
@@ -8524,7 +8524,7 @@
             18
           ],
           "parentBox": [
-            113,
+            126,
             24
           ],
           "parentName": "selection=checked, state=default",
@@ -8544,7 +8544,7 @@
             24
           ],
           "parentBox": [
-            113,
+            126,
             24
           ],
           "parentName": "selection=indeterminate, state=default",
@@ -8564,7 +8564,7 @@
             18
           ],
           "parentBox": [
-            113,
+            126,
             24
           ],
           "parentName": "selection=indeterminate, state=default",
@@ -8584,7 +8584,7 @@
             24
           ],
           "parentBox": [
-            113,
+            126,
             24
           ],
           "parentName": "selection=unchecked, state=focus",
@@ -8604,7 +8604,7 @@
             18
           ],
           "parentBox": [
-            113,
+            126,
             24
           ],
           "parentName": "selection=unchecked, state=focus",
@@ -8624,7 +8624,7 @@
             24
           ],
           "parentBox": [
-            113,
+            126,
             24
           ],
           "parentName": "selection=unchecked, state=hover",
@@ -8644,7 +8644,7 @@
             18
           ],
           "parentBox": [
-            113,
+            126,
             24
           ],
           "parentName": "selection=unchecked, state=hover",
@@ -8655,10 +8655,10 @@
       "layers": [],
       "box": {
         "type": "COMPONENT_SET",
-        "width": 403,
+        "width": 416,
         "height": 136,
         "childrenExtent": {
-          "right": 403,
+          "right": 416,
           "bottom": 136
         },
         "clipsContent": true
@@ -8753,8 +8753,8 @@
           "radius": null,
           "radiusPx": 0,
           "effects": [],
-          "fontSize": 14,
-          "lineHeight": null
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "selection=checked, state=default": {
           "layoutMode": "HORIZONTAL",
@@ -8784,8 +8784,8 @@
           "radius": null,
           "radiusPx": 0,
           "effects": [],
-          "fontSize": 14,
-          "lineHeight": null
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "selection=unchecked, state=focus": {
           "layoutMode": "HORIZONTAL",
@@ -8818,8 +8818,8 @@
             "DROP_SHADOW",
             "DROP_SHADOW"
           ],
-          "fontSize": 14,
-          "lineHeight": null
+          "fontSize": 16,
+          "lineHeight": 125
         },
         "selection=unchecked, state=hover": {
           "layoutMode": "HORIZONTAL",
@@ -8849,8 +8849,8 @@
           "radius": null,
           "radiusPx": 0,
           "effects": [],
-          "fontSize": 14,
-          "lineHeight": null
+          "fontSize": 16,
+          "lineHeight": 125
         }
       },
       "overlays": [
@@ -8867,7 +8867,7 @@
             24
           ],
           "parentBox": [
-            134,
+            146,
             24
           ],
           "parentName": "selection=unchecked, state=default",
@@ -8887,7 +8887,7 @@
             24
           ],
           "parentBox": [
-            134,
+            146,
             24
           ],
           "parentName": "selection=unchecked, state=default",
@@ -8907,7 +8907,7 @@
             24
           ],
           "parentBox": [
-            134,
+            146,
             24
           ],
           "parentName": "selection=checked, state=default",
@@ -8927,7 +8927,7 @@
             24
           ],
           "parentBox": [
-            134,
+            146,
             24
           ],
           "parentName": "selection=checked, state=default",
@@ -8947,7 +8947,7 @@
             24
           ],
           "parentBox": [
-            134,
+            146,
             24
           ],
           "parentName": "selection=unchecked, state=focus",
@@ -8967,7 +8967,7 @@
             24
           ],
           "parentBox": [
-            134,
+            146,
             24
           ],
           "parentName": "selection=unchecked, state=focus",
@@ -8987,7 +8987,7 @@
             24
           ],
           "parentBox": [
-            134,
+            146,
             24
           ],
           "parentName": "selection=unchecked, state=hover",
@@ -9007,7 +9007,7 @@
             24
           ],
           "parentBox": [
-            134,
+            146,
             24
           ],
           "parentName": "selection=unchecked, state=hover",
@@ -9259,10 +9259,10 @@
       ],
       "box": {
         "type": "COMPONENT_SET",
-        "width": 466,
+        "width": 478,
         "height": 80,
         "childrenExtent": {
-          "right": 466,
+          "right": 478,
           "bottom": 80
         },
         "clipsContent": true
@@ -9800,7 +9800,7 @@
           "radiusPx": 0,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "selection=selected, state=default": {
           "layoutMode": "HORIZONTAL",
@@ -9831,7 +9831,7 @@
           "radiusPx": 0,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "selection=unselected, state=focus": {
           "layoutMode": "HORIZONTAL",
@@ -9865,7 +9865,7 @@
             "DROP_SHADOW"
           ],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "selection=unselected, state=hover": {
           "layoutMode": "HORIZONTAL",
@@ -9896,7 +9896,7 @@
           "radiusPx": 0,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": null
+          "lineHeight": 125
         }
       },
       "overlays": [
@@ -10163,7 +10163,7 @@
           "radiusPx": 0,
           "effects": [],
           "fontSize": 16,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "selection=checked, state=default": {
           "layoutMode": "HORIZONTAL",
@@ -10194,7 +10194,7 @@
           "radiusPx": 0,
           "effects": [],
           "fontSize": 16,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "selection=unchecked, state=focus": {
           "layoutMode": "HORIZONTAL",
@@ -10228,7 +10228,7 @@
             "DROP_SHADOW"
           ],
           "fontSize": 16,
-          "lineHeight": null
+          "lineHeight": 125
         },
         "selection=unchecked, state=hover": {
           "layoutMode": "HORIZONTAL",
@@ -10259,7 +10259,7 @@
           "radiusPx": 0,
           "effects": [],
           "fontSize": 16,
-          "lineHeight": null
+          "lineHeight": 125
         }
       },
       "overlays": [

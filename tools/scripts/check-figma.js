@@ -1562,6 +1562,30 @@ function settleRatchets() {
         `the \`${tag}\` entry in ${BASELINE_REL} records findings with no \`why\` or no valid \`kind\`, so a later reader cannot tell "decided against" from "forgotten" (ADR-0066). State why the debt stands, and set \`kind\` to \`design\` (a closed question) or \`gap\` (an unresolved defect).`
       );
     }
+    // [STALE-REASON] — the ratchet gates drift in the FINDINGS and nothing gated
+    // drift in the REASON. ROOT-TYPE's `why` said "promote once that entry is
+    // gone" about FIGMA-VARIABLE-COLLECTION; that entry went the day its debt was
+    // paid, and 265 findings sat behind a satisfied precondition that nobody was
+    // watching. A prose promise is a promise nobody can check, so an entry that
+    // makes one has to name it in a form this loop can resolve: `clearedWhen`.
+    //
+    // This is [STALE-EXEMPTION] one abstraction up. There it is "the excuse
+    // outlived the defect"; here it is "the reason outlived the blocker". Both
+    // are silence where a reader would expect a nudge.
+    if (entry.clearedWhen) {
+      const dep = entry.clearedWhen.checkGone;
+      if (typeof dep !== 'string') {
+        blocker(
+          tag,
+          `the \`${tag}\` entry's \`clearedWhen\` is not a shape this gate can resolve. The only supported form is \`{ "checkGone": "<TAG>" }\` — the debt is payable once that check's entry has left ${BASELINE_REL}. Write the condition that way, or drop the field and keep the reason in prose.`
+        );
+      } else if (!baseline.checks[dep]) {
+        blocker(
+          tag,
+          `the \`${tag}\` entry says its debt is blocked until \`${dep}\` clears, and \`${dep}\` is gone from ${BASELINE_REL} — the condition it named is satisfied. Either pay this debt now (it is what the \`why\` promised), or restate the \`why\` with the reason it still stands and update or drop \`clearedWhen\`. A reason that outlives its blocker reads, to the next person, as a debt still being excused.`
+        );
+      }
+    }
     let moved = false;
     for (const label of [...new Set([...Object.keys(recorded), ...Object.keys(observed[tag] || {})])].sort()) {
       if (!Array.isArray(recorded[label] || [])) {

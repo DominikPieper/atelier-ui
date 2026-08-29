@@ -1,7 +1,7 @@
 {
   "meta": {
-    "note": "Per-check RATCHET findings for check:figma. The gate PASSES while a master's findings are exactly the ones recorded here, FAILS when one APPEARS that is not recorded (naming it), and FAILS when a recorded one DISAPPEARS without this file being updated — an improvement nobody records can silently reverse, which is the rule [STALE-EXEMPTION] already applies to allowlist entries. FINDINGS AND NOT COUNTS: a count is blind to substitution, so fixing one node on a master while breaking another kept the number flat and the gate green. Each entry carries its own node multiplicity (×N) where a deduplicated record stands for several nodes. It is a ratchet rather than a plain blocker because the debt cannot be paid today: ADR-0066 rejected a warning nobody can clear, and a blocker would leave check:all red until the wrong-variable-collection problem is decided (tasks/type-role-resolution-2026-08-28.md). This is NOT an allowlist. tools/scripts/lib/allowlists.js answers \"this one is exempt forever\"; this file answers \"this many are owed\". Never record the same defect in both. WHEN A MASTER IS CLEAR: its key disappears on the next update. WHEN A CHECK'S ENTRY IS GONE: delete the ratchet and make that check a plain blocker. Update with `node tools/scripts/check-figma.js --update-baseline` — never by hand, except the `why` and `kind` fields, which the writer preserves. See plan/adr/0079-type-does-not-need-the-painted-box.md and plan/adr/0080-a-guard-that-skips-is-not-a-check.md.",
-    "generatedAt": "2026-08-29T14:09:54.763Z",
+    "note": "Per-check RATCHET findings for check:figma. The gate PASSES while a master's findings are exactly the ones recorded here, FAILS when one APPEARS that is not recorded (naming it), and FAILS when a recorded one DISAPPEARS without this file being updated — an improvement nobody records can silently reverse, which is the rule [STALE-EXEMPTION] already applies to allowlist entries. FINDINGS AND NOT COUNTS: a count is blind to substitution, so fixing one node on a master while breaking another kept the number flat and the gate green. Each entry carries its own node multiplicity (×N) where a deduplicated record stands for several nodes. It is a ratchet rather than a plain blocker because the debt cannot be paid today: ADR-0066 rejected a warning nobody can clear, and a blocker would leave check:all red until the wrong-variable-collection problem is decided (tasks/type-role-resolution-2026-08-28.md). This is NOT an allowlist. tools/scripts/lib/allowlists.js answers \"this one is exempt forever\"; this file answers \"this many are owed\". Never record the same defect in both. WHEN A MASTER IS CLEAR: its key disappears on the next update. WHEN A CHECK'S ENTRY IS GONE: delete the ratchet and make that check a plain blocker. An entry whose debt is blocked on another check clearing states that as `clearedWhen: { checkGone: \"<TAG>\" }`, and [STALE-REASON] fails once the condition is satisfied — a prose promise is one nobody can check. Update with `node tools/scripts/check-figma.js --update-baseline` — never by hand, except the `why` and `kind` fields, which the writer preserves. See plan/adr/0079-type-does-not-need-the-painted-box.md and plan/adr/0080-a-guard-that-skips-is-not-a-check.md.",
+    "generatedAt": "2026-08-29T15:37:01.279Z",
     "updatedBy": "node tools/scripts/check-figma.js --update-baseline"
   },
   "checks": {
@@ -49,9 +49,6 @@
           "side-2-l3 “📄 plan/big-picture.md” (12px Regular)",
           "side-2-title “Pinned context” (14px SemiBold)"
         ],
-        "AtlCheckbox": [
-          "Accept terms “Accept terms” (14px Regular) ×5"
-        ],
         "AtlCodeBlock": [
           "header/my-component.ts “my-component.ts” (12px Bold) ×2",
           "header/typescript “typescript” (12px Bold) ×2"
@@ -86,14 +83,6 @@
           "page-btn/10 “10” (14px Regular)",
           "page-btn/4 “4” (14px Regular)",
           "page-btn/6 “6” (14px Regular)"
-        ],
-        "AtlRadio": [
-          "Option label “Option label” (16px Regular) ×3",
-          "Selected option “Selected option” (16px Regular)"
-        ],
-        "AtlRadioGroup": [
-          "Free “Free” (14px Regular) ×3",
-          "Pro “Pro” (14px Regular)"
         ],
         "AtlStepper": [
           "header/step-1/circle-active/1 “1” (14px Regular) ×6",
@@ -158,43 +147,8 @@
           "AtlTable / striped-md/tbody/tr-4/Frame/Engineer “Engineer” (14px Regular)",
           "AtlTable / striped-md/tbody/tr-4/Frame/david@example.com “david@example.com” (14px Regular)"
         ],
-        "AtlTbody": [
-          "tr/atl-tr-select-cell/AtlCheckbox/Accept terms “Accept terms” (14px Regular) ×2"
-        ],
         "AtlToast": [
           "Frame/Action completed. “Action completed.” (14px Regular) ×8"
-        ],
-        "AtlToggle": [
-          "Notifications “Notifications” (14px Regular) ×4"
-        ],
-        "AtlTr": [
-          "atl-tr-select-cell/AtlCheckbox/Accept terms “Accept terms” (14px Regular) ×2"
-        ]
-      }
-    },
-    "ROOT-TYPE": {
-      "kind": "gap",
-      "why": "Six masters draw their root text at a size or leading the CSS does not state — AtlInput and AtlSelect at 14px against a 16px CSS, four more on AUTO leading against 125%. Correcting the Figma side means retyping nodes whose sizes bind to the docs-site collection, which is the FIGMA-VARIABLE-COLLECTION debt below; doing it first would only move the problem. Promote to a plain blocker once that entry is gone.",
-      "perMaster": {
-        "AtlCheckbox": [
-          "AtlCheckbox [every checked variant]: root text is 14px, but the CSS says 16px.",
-          "AtlCheckbox [every checked variant]: root text leaves the leading on AUTO; the CSS states 125%. An inherited leading makes the box grow with the text metrics."
-        ],
-        "AtlInput": [
-          "AtlInput [every checked variant]: root text is 14px, but the CSS says 16px."
-        ],
-        "AtlRadio": [
-          "AtlRadio [every checked variant]: root text leaves the leading on AUTO; the CSS states 125%. An inherited leading makes the box grow with the text metrics."
-        ],
-        "AtlRadioGroup": [
-          "AtlRadioGroup [every checked variant]: root text leaves the leading on AUTO; the CSS states 125%. An inherited leading makes the box grow with the text metrics."
-        ],
-        "AtlSelect": [
-          "AtlSelect [every checked variant]: root text is 14px, but the CSS says 16px."
-        ],
-        "AtlToggle": [
-          "AtlToggle [every checked variant]: root text is 14px, but the CSS says 16px.",
-          "AtlToggle [every checked variant]: root text leaves the leading on AUTO; the CSS states 125%. An inherited leading makes the box grow with the text metrics."
         ]
       }
     },
@@ -253,7 +207,7 @@
           "chip-hint “Uses AtlInput and AtlButton” (12px Regular)"
         ],
         "AtlCheckbox": [
-          "Accept terms “Accept terms” (14px Regular) ×5"
+          "Accept terms “Accept terms” (16px Regular) ×5"
         ],
         "AtlCodeBlock": [
           "header/my-component.ts “my-component.ts” (12px Bold) ×2",
@@ -284,9 +238,9 @@
           "dialog/header/Settings “Settings” (16px Regular) ×4"
         ],
         "AtlInput": [
-          "Placeholder text “Placeholder text” (14px Regular) ×2",
-          "invalid-email “invalid-email” (14px Regular)",
-          "user@example.com “user@example.com” (14px Regular) ×2"
+          "Placeholder text “Placeholder text” (16px Regular) ×2",
+          "invalid-email “invalid-email” (16px Regular)",
+          "user@example.com “user@example.com” (16px Regular) ×2"
         ],
         "AtlMenu": [
           "atl-menu-item/Copy “Copy” (14px Regular)",
@@ -324,8 +278,8 @@
           "Pro “Pro” (14px Regular)"
         ],
         "AtlSelect": [
-          "Select a country... “Select a country...” (14px Regular) ×3",
-          "United States “United States” (14px Regular) ×2"
+          "Select a country... “Select a country...” (16px Regular) ×3",
+          "United States “United States” (16px Regular) ×2"
         ],
         "AtlStep": [
           "step-circle/step-number “2” (14px SemiBold) ×3",
@@ -404,7 +358,7 @@
           "Frame/Action completed. “Action completed.” (14px Regular) ×8"
         ],
         "AtlToggle": [
-          "Notifications “Notifications” (14px Regular) ×4"
+          "Notifications “Notifications” (16px Regular) ×4"
         ],
         "AtlTooltip": [
           "Helpful tip text “Helpful tip text” (12px Regular) ×4"
