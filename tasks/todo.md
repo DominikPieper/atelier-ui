@@ -1780,10 +1780,38 @@ count did not move".
 The four blockers from tasks/schulung-review-2026-08-28.md §3 are fixed in the
 tree (struck through there, each with its fix note).
 
-- [ ] **Ship the worker + re-verify against production**: run `npx wrangler deploy`
-      (rebuilds docs + the three static Storybooks into dist/docs), then re-run
-      `npm run preflight` — all three storybook MCP rows must go green (Angular/Vue
-      now answer component lookups from the React manifest, verified in local
-      workerd but never against deployed Cloudflare). Everything else from the
-      review is untouched: 15 major, 16 minor, 5 presentation-debt findings —
-      see tasks/schulung-review-2026-08-28.md §3/§4 (flows 4, 6, 7 still open).
+- [x] ~~**The deploy was dead, and had been since 2026-08-26**~~ — found and fixed
+      2026-08-29. The worker fix could not ship because *every* Cloudflare build had
+      been failing for three days: the Angular Storybook build died with seven
+      `MISSING_EXPORT` errors after `cbef32b` pruned `@angular/animations`
+      ("deprecated upstream, zero source imports, optional peer" — all true of this
+      repo's source, none true of `@storybook/angular`, whose client dynamic-imports
+      `@angular/platform-browser/animations` in a try/catch to warn about
+      `BrowserAnimationsModule`). The try/catch protects the runtime and does nothing
+      for the build: Rollup walks the dynamic import anyway. Stubbed to an empty
+      module in `libs/angular/.storybook/main.ts`; reinstalling the deprecated package
+      was rejected. Filtering the entry out of `optimizeDeps.include` — where
+      `@analogjs/storybook-angular` also hardcodes it — was measured and does nothing,
+      because this is a build-graph import, not pre-bundling.
+- [x] ~~**Nothing in the repo could see it**~~ — fixed in the same pass. `build-storybook`
+      is an nx target on all three libs and CI ran `-t build` only, so the three
+      Storybook builds existed nowhere but the `wrangler.jsonc` build command, whose
+      failure surfaces in a Cloudflare log nobody reads. Three days of green CI over a
+      dead deploy, and the live site served pre-08-26 content the whole time — which is
+      why yesterday's B1–B4 kata fixes never reached a participant. CI now runs
+      `-t build,build-storybook`. **This is the reusable lesson, and it is ADR-0080's
+      one more time: a build the deploy depends on has to run where somebody sees it
+      break.** Worth an ADR if the pattern recurs a third time.
+- [ ] **Re-verify against production once the build lands**: `npm run preflight` — all
+      three storybook MCP rows must go green (Angular/Vue answer component lookups from
+      the React manifest per ADR-0083, verified in local workerd, and as of this writing
+      not yet against deployed Cloudflare). Everything else from the review is untouched:
+      15 major, 16 minor, 5 presentation-debt findings — see
+      tasks/schulung-review-2026-08-28.md §3/§4 (flows 4, 6, 7 still open).
+- [ ] **`@angular/animations` is not the only optional peer a prune could take.** The
+      dep-prune reasoning that failed here — "zero source imports" — is sound about our
+      code and blind to what a dev-dependency reaches for at build time. No gate checks
+      that. Cheap partial answer now that CI builds Storybook: a prune that breaks a
+      builder fails the PR. The general case (a tool's guarded dynamic import) has no
+      check and probably does not need one; recorded so the next prune's author reads
+      this before trusting "zero source imports".
