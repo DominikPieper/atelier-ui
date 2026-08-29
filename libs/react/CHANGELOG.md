@@ -1,3 +1,14 @@
+## 0.2.28 (2026-08-29)
+
+### 🩹 Fixes
+
+- **schulung:** the fifteen majors, and a props claim that was too generous ([9de43bf](https://github.com/DominikPieper/atelier-ui/commit/9de43bf))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.27 (2026-08-29)
 
 This was a version bump only for react to align it with other projects, there were no code changes.
