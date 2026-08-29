@@ -1,3 +1,14 @@
+## 0.2.29 (2026-08-29)
+
+### 🩹 Fixes
+
+- **schulung:** close the minors, and settle whether ADR-0083 was a workaround for a typo ([688347e](https://github.com/DominikPieper/atelier-ui/commit/688347e))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.28 (2026-08-29)
 
 ### 🩹 Fixes
