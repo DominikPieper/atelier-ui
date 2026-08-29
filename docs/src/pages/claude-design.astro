@@ -480,6 +480,15 @@ const LIMITS: Limit[] = [
         sheet was itself generated from <code>tokens.css</code>: even on the ungated surface, the
         parts that could be generated were.
       </p>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 1rem">
+        Read that coverage number the way the fence above tells you to. It comes from the
+        hand-maintained registry, not from a measurement: a person wrote down which artboard
+        covers which component, and <code>gen-design-status.mjs</code> counts the rows. Nothing
+        opened an artboard to check. The <em>defects</em> below are hard — each one is a decision
+        record with a diff behind it — but <strong style="color: var(--ui-color-text)">29 of 29 is
+        a claim, not a check</strong>, and on this surface that is the only kind of coverage
+        number available. That is the fence, seen from the side where it costs you something.
+      </p>
       <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 1.25rem">
         Direction matters for reading what follows. This was a deliberate redesign, so the code and
         the artboards were canonical and the Figma masters were the <em>target</em> of the transfer,
