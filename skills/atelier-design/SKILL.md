@@ -8,14 +8,14 @@ Read `references/brand-guide.md` first — it is the source of truth for voice, 
 
 Key files:
 - `references/brand-guide.md` — brand context, voice, visual foundations, iconography
-- `assets/colors_and_type.css` — full token sheet (`--ui-*` custom properties), light + dark, type scale (mirror of upstream `libs/react/src/styles/tokens.css`)
+- `assets/colors_and_type.css` — full token sheet (`--ui-*` custom properties), light + dark, type scale. Generated, byte-identical to the upstream token sheet by `tools/scripts/sync-tokens.mjs` and gated by `check:tokens` — do not hand-edit it.
 - `assets/logo.png` — Atelier mark (pen + brush + capital A)
 - `preview/` — design-system preview cards covering type, colors, spacing, components, brand (auxiliary; not bundled in the distribution zip)
 - `ui_kits/docs-site/` — high-fidelity Astro docs site landing recreation (React + JSX; auxiliary; not bundled in the distribution zip)
 
 If creating visual artifacts (slides, mocks, throwaway prototypes, marketing pages, etc), copy assets out and create static HTML files for the user to view. Always:
 - Use `--ui-*` tokens — never hardcode hex; theming = token override.
-- Set type in Inter (UI) and Fira Code (everything codey — tokens, code samples, prop names, kbd chips).
+- Set type in Instrument Sans (UI), Instrument Serif (display — italic 400, never bolded), and JetBrains Mono (everything codey — tokens, code samples, prop names, kbd chips). Prefer the composed `--ui-type-*` roles over the individual axes.
 - Keep voice honest and editorial — *"Tokens, not utilities."* / *"Composition over configuration."* / *"teaching artifact, not a production library."* No emoji. No exclamation marks.
 - Anchor color is Conciso deep teal `#006470` (light) / bright teal `#34d8d8` (dark). Use the broader `--ui-color-brand-*` palette only for diagrams, never chrome.
 - Component names are PascalCase with the `Atl` prefix (`AtlButton`, `AtlCard`, `AtlCardHeader`).

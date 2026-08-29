@@ -53,8 +53,29 @@ CLAUDE.md already prescribed exactly this substitution as a *manual* fallback
 ("For Angular/Vue prop tables, fall back to the React MCP as cross-framework
 API reference"). The worker now performs the substitution the instructions
 asked every agent to perform by hand. The consumer is Claude, not a human
-reader, and the payload it needs — props, variants, defaults — is
-framework-invariant; only the story paths are React-flavoured.
+reader, and the payload it needs — names, variants, defaults, state props — is
+framework-invariant.
+
+**Corrected 2026-08-29 — the scope of "React-flavoured".** This paragraph
+originally read "only the story paths are React-flavoured", which understates it
+and made the ADR disagree with the docs pages that cite it. Measured against
+production: an Angular `get-documentation` on `components-inputs-atltoggle`
+returns `checked`, `onCheckedChange`, `errors`, `children?: ReactNode`,
+`invalid`, `disabled`, `required`. Three of those seven do not exist on the
+Angular component (`onCheckedChange` is a two-way `model()`, i.e.
+`[(checked)]`/`(checkedChange)`; `errors` is absent; `children` is content
+projection, not a prop) and two real Angular inputs — `name`, `touched` — are
+never mentioned. Vue diverges the same way (`update:checked`, `<slot />`, plus
+an `id` the manifest omits). Neither `errors` nor `children` appears anywhere in
+`libs/spec/src/index.ts`: they are React bindings, not spec contract. The
+pattern is systematic, not a Toggle one-off — 18 React files declare
+`children?: ReactNode` against 20 Angular `ng-content` and 45 Vue `<slot>`, and
+eight React `on*Change` props map one-for-one onto eight Angular `model()`
+declarations and eight Vue `update:*` emits. The invariant subset the decision
+rests on is real and gated; the reply is React-**shaped** throughout — JSX
+snippets, React story paths, `children`, and `on*Change` — and every
+participant-facing surface now says so. Read it as an API reference, not as code
+to copy.
 
 **Alternatives rejected:**
 

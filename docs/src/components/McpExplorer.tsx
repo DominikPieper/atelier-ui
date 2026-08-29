@@ -19,7 +19,6 @@ interface ToolDef {
   workshopTip: string;
   params: Array<{ name: string; type: string; description: string; suggestions: string[] }>;
   defaultParams: Record<string, string>;
-  supportedFrameworks?: Framework[];
 }
 
 const ALL_COMPONENT_SLUGS = [
@@ -60,7 +59,6 @@ const TOOL_DEFS: ToolDef[] = [
     workshopTip: 'Called when the user wants usage examples. The AI reads the story names and descriptions to show real-world patterns.',
     params: [{ name: 'component', type: 'string', description: 'Component slug', suggestions: ['button', 'dialog', 'alert', 'card', 'select', 'tabs', 'input', 'badge'] }],
     defaultParams: { component: 'button' },
-    supportedFrameworks: ['react', 'vue'],
   },
   {
     name: 'get_theming_guide',
@@ -409,17 +407,23 @@ export default function McpExplorer() {
         </div>
       </div>
 
-      {framework === 'angular' && (
-        <div style={{
-          padding: '0.85rem 1.1rem', background: 'rgba(68,218,218,0.05)',
-          borderRadius: 'var(--ui-radius-md)', border: '1px solid rgba(68,218,218,0.1)',
-          marginBottom: '1.75rem', display: 'flex', gap: '0.75rem', alignItems: 'flex-start',
-        }}>
-          <p style={{ fontSize: '0.82rem', color: 'var(--ui-color-text-muted)', margin: 0, lineHeight: '1.6' }}>
-            <strong style={{ color: 'var(--ui-color-text)' }}>Note:</strong> The Angular MCP server currently supports documentation tools only. Full story previews and test tools are available for React and Vue.
-          </p>
-        </div>
-      )}
+      <div style={{
+        padding: '0.85rem 1.1rem', background: 'rgba(68,218,218,0.05)',
+        borderRadius: 'var(--ui-radius-md)', border: '1px solid rgba(68,218,218,0.1)',
+        marginBottom: '1.75rem', display: 'flex', gap: '0.75rem', alignItems: 'flex-start',
+      }}>
+        <p style={{ fontSize: '0.82rem', color: 'var(--ui-color-text-muted)', margin: 0, lineHeight: '1.6' }}>
+          <strong style={{ color: 'var(--ui-color-text)' }}>Note:</strong> The hosted endpoints
+          expose the docs toolset only — for all three frameworks. Angular and Vue answer
+          component lookups from React's components manifest, which is valid because the spec
+          contract is identical across the adapters. Variants, defaults and state props carry
+          across, but the reply is React-shaped throughout — JSX snippets, React story paths, a
+          children prop where Angular projects content and Vue takes a slot, and on*Change
+          callbacks where Angular uses a two-way model() and Vue an update:* emit. Read it as an
+          API reference, not as code to copy. Story previews and test tools come from the local
+          @storybook/addon-mcp behind a running Storybook — a React-only preview surface today.
+        </p>
+      </div>
 
       {/* Protocol flow */}
       <div className="mcp-protocol-steps" style={{
@@ -450,37 +454,25 @@ export default function McpExplorer() {
           </div>
           {toolList.map(tool => {
             const active = selectedTool === tool.name;
-            const mockDef = TOOL_DEFS.find(t => t.name === tool.name);
-            const supported = !mockDef?.supportedFrameworks || mockDef.supportedFrameworks.includes(framework);
             return (
               <button
                 key={tool.name}
                 type="button"
                 aria-pressed={active}
-                onClick={() => supported && selectTool(tool.name)}
-                disabled={!supported}
-                aria-disabled={!supported || undefined}
-                title={supported ? undefined : `Not supported on ${framework}`}
+                onClick={() => selectTool(tool.name)}
                 style={{
                   display: 'block', width: '100%', textAlign: 'left',
                   padding: '0.55rem 0.85rem 0.55rem 0.75rem', border: 'none',
                   borderLeft: `3px solid ${active ? 'var(--ui-color-primary)' : 'transparent'}`,
                   background: active ? 'rgba(68,218,218,0.07)' : 'transparent',
-                  // disabled buttons are exempt from WCAG contrast requirements
-                  // (per the disabled-controls exception). The opacity is the
-                  // visual "this is unavailable" cue; aria-disabled signals it
-                  // to assistive tech. Keep cursor + textDecoration to make
-                  // the unavailable state obvious for sighted users too.
                   color: active ? 'var(--ui-color-primary)' : 'var(--ui-color-text-muted)',
-                  cursor: supported ? 'pointer' : 'not-allowed',
+                  cursor: 'pointer',
                   fontFamily: 'monospace', fontSize: '0.78rem',
                   // Constant 500 weight — the border + background + color
                   // shifts already mark active state. Flipping 400→700 on
                   // click made the text reflow, reading as a font-size
                   // change on mobile.
                   fontWeight: 500,
-                  opacity: supported ? 1 : 0.55,
-                  textDecoration: supported ? 'none' : 'line-through',
                 }}
               >
                 {tool.name}

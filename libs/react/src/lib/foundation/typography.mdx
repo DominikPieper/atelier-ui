@@ -2,16 +2,32 @@ import { Meta, Typeset } from '@storybook/addon-docs/blocks';
 
 <Meta title="Foundation/Typography" />
 
-export const fontFamily = "'Inter', ui-sans-serif, system-ui, sans-serif";
+export const fontFamily = "'Instrument Sans', ui-sans-serif, system-ui, sans-serif";
+export const fontDisplay = "'Instrument Serif', Georgia, 'Times New Roman', serif";
+export const fontMono = "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace";
 export const fontSizes = [12, 14, 16, 18, 20, 24];
 
 # Typography
 
-The design system uses **Inter** as its primary typeface across all weights and surfaces. Inter is loaded via Google Fonts.
+The design system uses three typefaces, all loaded via Google Fonts: **Instrument Sans** for UI text,
+**Instrument Serif** for display headings, and **JetBrains Mono** for code, tokens, and prop names.
 
 ```css
-font-family: var(--ui-font-family);
+font-family: var(--ui-font-family);  /* Instrument Sans — UI */
+font-family: var(--ui-font-display); /* Instrument Serif — display */
+font-family: var(--ui-font-mono);    /* JetBrains Mono — code */
 ```
+
+## Family Tokens
+
+| Token | Family | Used for |
+|---|---|---|
+| `--ui-font-family` | Instrument Sans | body copy, labels, controls |
+| `--ui-font-display` | Instrument Serif | display headings |
+| `--ui-font-mono` | JetBrains Mono | code samples, token names, kbd chips |
+
+<Typeset fontSizes={[24]} fontWeight={400} sampleText="Instrument Serif — display" fontFamily={fontDisplay} />
+<Typeset fontSizes={[16]} fontWeight={400} sampleText="JetBrains Mono — --ui-color-surface-raised" fontFamily={fontMono} />
 
 ## Type Scale
 

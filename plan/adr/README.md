@@ -89,6 +89,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0081](0081-a-class-the-css-paints-and-no-template-emits.md) | A class the CSS paints and no template emits (`check:dead-selectors`, `DEAD_SELECTOR_EXEMPT`) | Accepted | Recorded |
 | [0082](0082-a-blocker-the-chain-cannot-clear.md) | A blocker the chain that runs it cannot clear (`check:parity --report`; amends 0024) | Accepted | Recorded |
 | [0083](0083-the-manifest-the-framework-cannot-emit.md) | The manifest the framework cannot emit (hosted Angular/Vue MCP serve React's components manifest as the cross-framework reference) | Accepted | Recorded |
+| [0084](0084-two-environments-one-canonical-per-audience.md) | Two environments, one canonical per audience (clone for the two-day cohort, scaffold for the self-serve reader; both documented, branched per page) | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

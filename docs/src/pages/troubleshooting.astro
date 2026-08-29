@@ -117,6 +117,30 @@ const ISSUES: Issue[] = [
     ],
   },
   {
+    id: 'nx-project-not-found',
+    title: "Cannot find project 'workshop-angular'",
+    symptom: '`npx nx serve workshop-angular` (or -react / -vue) fails with "Cannot find project" — the target does not exist.',
+    cause: 'You are in a clone of the atelier monorepo, not in a scaffolded workspace. The `workshop-*` apps are written by `create-atelier-ui-workspace`; the monorepo ships the library, the docs site, and the Storybooks instead.',
+    codeFix: `# in a clone of the atelier monorepo\nnpx nx serve docs                # the docs site you are reading\nnpx nx storybook angular         # or: react | vue\n\n# in a scaffolded workspace\nnpx nx serve workshop-angular`,
+    codeLang: 'shell',
+    fix: [
+      'Check which environment you are in: `npx nx show projects`. A `workshop-*` entry means scaffold; `angular / react / vue / docs` means clone.',
+      'In the monorepo, mount your component under `libs/<fw>/src/lib/…` and view it with `npx nx storybook <fw>` on port 6006 — there is no app to serve it in.',
+      'In a scaffolded workspace, the app is at the workspace root (no `apps/` prefix) and serves on port 4200.',
+    ],
+  },
+  {
+    id: 'figma-node-id-not-found',
+    title: "The Figma node-id doesn't resolve",
+    symptom: 'A `figma_*` call returns null for the node, or the Figma link opens the file and focuses nothing — no error, no selection.',
+    cause: 'The node id is stale (ids are file-specific and change when a frame is recreated), or you are in a duplicate of the file where the copy carries different ids, or the Desktop Bridge is pointed at a different file than the one the id belongs to.',
+    fix: [
+      'Confirm which file is open: `figma_get_status` reports the connected file key. The workshop frames live in `QMnDD8uZQPldPrlCwZZ58T`.',
+      'Re-resolve the node by name instead of by id — `figma_search_components` (masters) or select the frame in Figma and call `figma_get_selection`, which returns the id that is live in your session.',
+      'Duplicated a file into your own drafts for Day 2? The ids in the copy are new. Read them from your own file; the ids printed in this documentation refer to the original.',
+    ],
+  },
+  {
     id: 'port-in-use',
     title: 'Port 4200 / 6006 already in use',
     symptom: '`EADDRINUSE` when running `nx serve` or `storybook`.',

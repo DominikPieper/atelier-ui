@@ -2,7 +2,7 @@
 
 ## Kontext
 
-Aus den vorhandenen Atelier-Inhalten (Docs, `plan/*.md`, hosted Storybooks, MCP-Server, 27 produktive Komponenten in A/R/V, `figma-workspace-architect` Skill) wird eine 2-Tages-Schulung gebaut.
+Aus den vorhandenen Atelier-Inhalten (Docs, `plan/*.md`, hosted Storybooks, MCP-Server, 29 produktive Komponenten in A/R/V, `figma-workspace-architect` Skill) wird eine 2-Tages-Schulung gebaut.
 
 - **Zielgruppe:** Entwickler mit solider Frontend-Basis, aber wenig Erfahrung mit Figma, Storybook, MCP und AI-Codegen
 - **Sprache:** Deutsch
@@ -10,6 +10,7 @@ Aus den vorhandenen Atelier-Inhalten (Docs, `plan/*.md`, hosted Storybooks, MCP-
 - **Hauptlernziel:** KI-gestützter Design-to-Code-Workflow
 - **Endergebnis:** am Ende von Tag 2 hat jeder Teilnehmer eine **selbst designte und implementierte Komponente** in Figma + Storybook + Code im gewählten Framework
 - **Format pro Tag:** ~7–8h netto, 60min Mittag, 2× 15min Kaffeepausen, kleine Mikro-Pausen
+- **Umgebung (kanonisch für die Kohorte):** das **geklonte `atelier`-Repo** — *nicht* der `create-atelier-ui-workspace`-Scaffold. Tag 2 arbeitet direkt mit `plan/big-picture.md`, `plan/design-principles.md`, `libs/spec/src/index.ts` und `nx storybook <fw>`; die gibt es nur im Klon. Der Scaffold-Pfad auf `/workshop` ist der Self-Serve-Weg für Leser ohne Schulung.
 
 ---
 
@@ -20,7 +21,7 @@ Aus den vorhandenen Atelier-Inhalten (Docs, `plan/*.md`, hosted Storybooks, MCP-
 | Block | Zeit | Format | Inhalt | Quellen / MCP / Skill |
 |-------|------|--------|--------|-----------------------|
 | **0. Kickoff** | 09:00–09:30 (30m) | Vortrag + Live-Demo | Warum component-driven? Warum AI? Live-Demo: in 5min eine Atelier-Komponente per Prompt cross-framework abändern. Was lernen Teilnehmer in 2 Tagen, was nicht. | `plan/big-picture.md`, `docs/src/pages/index.astro`, `docs/src/pages/llms.astro` |
-| **1. Setup-Verifikation & Preflight** 🔴 | 09:30–10:45 (75m) | Hands-on | **High-Risk Block — Pre-Workshop-Setup ist Pflicht-Hausaufgabe** (siehe Material-Lücken / Pre-Workshop-Mail). Block prüft nur, installiert nicht von Null: Node 20 oder 22 LTS aktiv (`.node-version` empfohlen), pnpm/npm-Version aus `package.json#packageManager`, Repo geklont, Claude Code CLI eingeloggt mit eigenem API-Key, Figma-Account-Token gesetzt, `npm run preflight` lokal grün. Troubleshooting für Nachzügler. Anschließend MCP-Konfig in `.mcp.json` gemeinsam lesen und verstehen. | `docs/src/pages/workshop.astro`, `docs/src/pages/figma-token.astro`, `docs/src/pages/troubleshooting.astro`, `docs/src/pages/install.astro` |
+| **1. Setup-Verifikation & Preflight** 🔴 | 09:30–10:45 (75m) | Hands-on | **High-Risk Block — Pre-Workshop-Setup ist Pflicht-Hausaufgabe** (siehe Material-Lücken / Pre-Workshop-Mail). Block prüft nur, installiert nicht von Null: Node ≥ 22.12 LTS aktiv (`.node-version` empfohlen), npm-Version aus `package.json#packageManager`, Atelier-Repo geklont (kanonische Schulungsumgebung, nicht der Scaffold), Claude Code CLI eingeloggt mit eigenem API-Key, **Figma-Account mit Draft-Rechten** (`File → Duplicate to your drafts` muss möglich sein) **plus importiertem figma-console Desktop-Bridge-Plugin** in der Figma-Desktop-App (`Figma → Plugins → Development → Import plugin from manifest…`) — die Bridge ist die harte Voraussetzung für Tag 2, der persönliche Access-Token ist technisch optional (nur REST-Reads) und wird als Kohorten-Policy trotzdem gesetzt, `npm run preflight` lokal grün. Troubleshooting für Nachzügler. Anschließend MCP-Konfig in `.mcp.json` gemeinsam lesen und verstehen. | `docs/src/pages/workshop.astro`, `docs/src/pages/figma-token.astro`, `docs/src/pages/troubleshooting.astro`, `docs/src/pages/install.astro` |
 | Kaffeepause | 10:45–11:00 | | | |
 | **2. Figma für Entwickler** | 11:00–12:15 (75m) | Geführte Tour | Wie Designer denken. Atelier-File öffnen (`QMnDD8uZQPldPrlCwZZ58T`). Variables / Tokens (Primitives → Semantic → Component). Component-Sets, Variants, Component Properties, Auto Layout, Modes (light/dark). Inventory- vs Components-Page. | `plan/figma.md`, `docs/src/pages/figma.astro`, `docs/src/pages/tokens.astro`, `docs/src/pages/figma-token.astro`, CLAUDE.md „Figma File"-Abschnitt |
 | Mittag | 12:15–13:15 | | | |
@@ -29,7 +30,7 @@ Aus den vorhandenen Atelier-Inhalten (Docs, `plan/*.md`, hosted Storybooks, MCP-
 | **4. MCP & Claude Code Grundlagen** | 14:45–16:00 (75m) | Hands-on Demo | Was ist MCP? Welche Server sind aktiv (`storybook-{angular,react,vue}`, `nx-mcp`, `figma-console`, `uianatomy`)? **Storybook 10.4 Toolset-Modell** an Tafel: drei Toolsets — `docs` (3 Tools, in beiden Surfaces), `dev` (`get-storybook-story-instructions`, `preview-stories`, `get-changed-stories` — nur lokal), `test` (`run-story-tests` — nur lokal, braucht `@storybook/addon-vitest`; A11y via `@storybook/addon-a11y`). **Hosted vs. lokale Surface** dann konkret: hosted = `atelier.pieper.io/storybook-*/mcp` (nur `docs`-Toolset für alle Frameworks); lokal = `http://localhost:6006/mcp` nach `nx storybook <fw>` (`docs` + `dev` + `test`; preview/test offiziell React, Vue/Angular experimentell). Toolset-Gating in Addon-Optionen (`toolsets: { dev, docs, test }`) zeigen — wann man `test` für Read-Only-Agents deaktiviert. Live-Übung: Claude per Prompt nach Button-Props fragen (hosted), Token-Werte ausgeben lassen, Storybook-Preview im Chat sehen (lokal, React; MCP-Apps-`ui://`-Resource erwähnen). **Negativ-Demo (~5 min):** dieselbe Frage nach Atelier-Button-API im Claude-Browser-Chat **ohne** MCP stellen → Halluzination. Dann mit MCP-Terminal → korrekte Antwort. Skills-Konzept (z.B. `figma-workspace-architect`, `atelier-design`) kurz vorstellen. | `docs/src/pages/mcp.astro`, `docs/src/pages/storybook.astro` (Step 03 Toolset-Tabelle + Step 04 10.4-Highlights + Step 05 Toolset-Config), `docs/src/pages/agent-skills.astro`, `docs/src/pages/claude-md.astro`, `docs/src/pages/skills/figma-workspace-architect.astro` |
 | Mikro-Pause | 16:00–16:10 | | | |
 | **5. Geführter End-to-End-Walkthrough** | 16:10–17:15 (65m) | Hands-on, alle synchron | Das offizielle `/tutorial`: Figma → MCP → Token-genauer Code in 5 Schritten. Teilnehmer prompten Claude in ihrem gewählten Framework, ändern eine vorhandene Komponente (z.B. neuer `Button`-Tone). Wichtig: **nicht selbst tippen, sondern prompten**. | `docs/src/pages/tutorial.astro`, `docs/src/pages/first-component.astro`, `docs/src/pages/prompts.astro` |
-| **6. Wrap-up Tag 1** | 17:15–17:30 (15m) | Diskussion | Was war überraschend? Wo hat AI sauber funktioniert, wo nicht? Vorschau Tag 2 + optionale Hausaufgabe: kleine Komponente skizzieren (Toast / Tag-Chip / Stat-Card / Badge). | |
+| **6. Wrap-up Tag 1** | 17:15–17:30 (15m) | Diskussion | Was war überraschend? Wo hat AI sauber funktioniert, wo nicht? Vorschau Tag 2 + optionale Hausaufgabe: kleine Komponente skizzieren (Toast / TagChip / StatCard / Avatar — dieselben vier wie die Starter-Frames und die Briefs). | |
 
 **Tag-1-Lieferergebnis pro Teilnehmer:**
 
@@ -43,13 +44,13 @@ Aus den vorhandenen Atelier-Inhalten (Docs, `plan/*.md`, hosted Storybooks, MCP-
 
 **Tagesziel:** Jeder Teilnehmer hat **eine selbst gestaltete Komponente** durchgängig produziert: Figma-Spec mit Variants & Tokens, generierte Story, generierter Code im gewählten Framework, A11y-Check bestanden, Dark Mode funktioniert.
 
-**Komponenten-Brief (vom Trainer vorbereitet, klein gehalten):**
-Empfehlung: `Toast`, `StatCard`, `TagChip` oder `Avatar`. Klein genug für einen Tag, groß genug für ≥2 Variants + Properties + States.
+**Komponenten-Brief (liegt im Repo, klein gehalten):**
+Je ein Brief unter `workshop/briefs/` — [`toast.md`](workshop/briefs/toast.md), [`statcard.md`](workshop/briefs/statcard.md), [`tagchip.md`](workshop/briefs/tagchip.md), [`avatar.md`](workshop/briefs/avatar.md), gemeinsame Regeln und Abnahme-Kriterien in [`README.md`](workshop/briefs/README.md). Klein genug für einen Tag, groß genug für ≥2 Variants + Properties + States. Jeder Brief legt den Scope auf 2 Variants × 2 States fest und benennt, was bewusst wegfällt.
 
 | Block | Zeit | Format | Inhalt | Quellen / MCP / Skill |
 |-------|------|--------|--------|-----------------------|
-| **0. Recap & Brief** | 09:00–09:30 (30m) | Vortrag | Tag-1-Recap, Komponenten-Brief vorstellen (Anatomie, Axes, States, A11y-Anforderungen). `uianatomy` MCP als Hilfsmittel zeigen. | `plan/design-principles.md`, `uianatomy` MCP via `uianatomy-mcp` Skill |
-| **1. Design in Figma** | 09:30–11:00 (90m) | Hands-on | **Pflicht-Vorabschritt:** Teilnehmer dupliziert das Atelier-File in eigene Figma-Drafts (`File → Duplicate to your drafts`). Alle Mutationen, Variants und Token-Edits passieren **ausschließlich im Duplikat** — **niemals im Original-File `QMnDD8uZQPldPrlCwZZ58T`** (das ist Read-Only-Referenz, Variables/Tokens sind dort file-scope und würden global kollidieren). Auto-Layout-Schablone wird beim Duplizieren von der `Workshop-Templates`-Page mitkopiert. **Zeitstruktur:** ~45m manuelles Design im Figma-UI (Layout, Variants, Token-Zuweisung im UI), ~45m MCP-Strukturierung (Component Properties, A11y-Audits). **Rolle figma-console MCP schärfen:** MCP für Metadaten-Strukturierung (Properties anlegen, Tokens zuweisen) und Audits — visuelles Design und Auto-Layout passieren manuell im Figma-UI, nicht per MCP-Mutation (fehleranfällig, Rate-Limits). Eigenes Component-Set anlegen: Variants, Component Properties, korrekte Tokens (`--ui-*` Schicht), Dark-Mode-Variante. Skill als Co-Pilot: `figma-workspace-architect` für Architekturentscheidungen, `atelier-design` für Brand-Konsistenz. | `figma-workspace-architect` Skill, `figma-console` MCP (`figma_create_*`, `figma_add_component_property`, `figma_audit_component_accessibility`), `atelier-design` Skill |
+| **0. Recap & Brief** | 09:00–09:30 (30m) | Vortrag | Tag-1-Recap, Komponenten-Brief vorstellen (Anatomie, Axes, States, A11y-Anforderungen) — `workshop/briefs/<komponente>.md`. `uianatomy` MCP als Hilfsmittel zeigen; zwei der vier Briefs sind direkt daraus generiert, zwei sind Kompositionen, weil die Komponente im kanonischen Katalog fehlt. | `workshop/briefs/`, `plan/design-principles.md`, `uianatomy` MCP via `uianatomy-mcp` Skill |
+| **1. Design in Figma** 🔴 | 09:30–11:00 (90m) | Hands-on | **High-Risk Block — 90 min für ein komplettes Component-Set mit Figma-Neulingen.** Gegenmittel: Starter-Frames statt leerer Leinwand, Scope über den Brief. **Pflicht-Vorabschritt:** Teilnehmer dupliziert das Atelier-File in eigene Figma-Drafts (`File → Duplicate to your drafts`). Alle Mutationen, Variants und Token-Edits passieren **ausschließlich im Duplikat** — **niemals im Original-File `QMnDD8uZQPldPrlCwZZ58T`** (das ist Read-Only-Referenz, Variables/Tokens sind dort file-scope und würden global kollidieren). **Startpunkt sind die Starter-Frames**, die beim Duplizieren von der `🛠️ Workshop-Templates`-Page mitkommen: `Toast / Starter`, `StatCard / Starter`, `TagChip / Starter`, `Avatar / Starter` plus `Variant Matrix / Scaffold`. Fills und — wo die Komponente sie hat — Paddings und Radien sind dort bereits an UI-Tokens-Variablen gebunden — erster Schritt ist **kopieren und umbenennen**, nicht leere Leinwand. **Zeitstruktur:** ~45m manuelles Design im Figma-UI (Layout, Variants, Token-Zuweisung im UI), ~45m MCP-Strukturierung (Component Properties, A11y-Audits). **Rolle figma-console MCP schärfen:** MCP für Metadaten-Strukturierung (Properties anlegen, Tokens zuweisen) und Audits — visuelles Design und Auto-Layout passieren manuell im Figma-UI, nicht per MCP-Mutation (fehleranfällig, Rate-Limits). Eigenes Component-Set anlegen: **≥2 Variants × 2 States**, Component Properties, korrekte Tokens (`--ui-*` Schicht), Dark-Mode-Variante — die genaue Matrix gibt der Komponenten-Brief vor. Skill als Co-Pilot: `figma-workspace-architect` für Architekturentscheidungen, `atelier-design` für Brand-Konsistenz. | `figma-workspace-architect` Skill, `figma-console` MCP (`figma_create_*`, `figma_add_component_property`, `figma_audit_component_accessibility`), `atelier-design` Skill |
 | Kaffeepause | 11:00–11:15 | | | |
 | **2. Spec & Story per Prompt** | 11:15–12:30 (75m) | Prompt-Übung | API in Worten beschreiben → von Claude eine Spec (im Stil von `libs/spec/src/index.ts`) und eine Storybook-Story generieren lassen. Schwerpunkt: LLM-optimierte API-Regeln aus `big-picture.md` (predictable naming, literal unions, composition über config, keine versteckten Defaults). Iterieren bis Prop-Table passt. **React-Teilnehmer:** `nx storybook react` parallel laufen lassen, dann `get-storybook-story-instructions` über die lokale MCP abrufen (Pflicht-Tool vor jedem `*.stories.*`-Edit). **Angular/Vue-Teilnehmer:** `plan/big-picture.md` direkt zur Hand nehmen und ggf. eine React-Story als Vorlage holen (`get-documentation-for-story` über die hosted MCP — `storybookId` setzen wenn mehrere Sources konfiguriert sind). | `plan/big-picture.md`, `docs/src/pages/llms.astro`, `docs/src/pages/prompts.astro`, `get-storybook-story-instructions` (React-lokal), `get-documentation-for-story` (hosted) |
 | Mittag | 12:30–13:30 | | | |
@@ -61,7 +62,7 @@ Empfehlung: `Toast`, `StatCard`, `TagChip` oder `Avatar`. Klein genug für einen
 
 **Tag-2-Lieferergebnis pro Teilnehmer:**
 
-- eigene Komponente im Atelier-Figma-File (Component-Set mit Variants + Properties + Dark-Mode)
+- eigene Komponente im **eigenen Figma-Draft** (Component-Set mit Variants + Properties + Dark-Mode)
 - generierte Spec + Story im eigenen Workspace
 - funktionierende Implementierung im gewählten Framework
 - A11y-Audit bestanden
@@ -72,14 +73,14 @@ Empfehlung: `Toast`, `StatCard`, `TagChip` oder `Avatar`. Klein genug für einen
 
 | Vorhanden (direkt nutzbar) | Lücke (Trainer muss vorbereiten) |
 |----------------------------|----------------------------------|
-| `/workshop`, `/tutorial`, `/first-component` als geführte Pfade | **Komponenten-Brief** für Tag 2 (2-seitiges PDF): visuelle Anatomie (Spacing, Radius), API-Definition mit literal-union-Beispiel (z.B. `variant: 'info' \| 'success'`), Keyboard-Interaktions-Matrix (z.B. Toast: `Escape` schließt) |
-| 27 Referenz-Komponenten in A/R/V mit Stories | **Slide-Deck** für die Vortrags-Blöcke (Kickoff, Recap, Show & Tell) — aus Doku-Seiten ableitbar |
-| Hosted Storybook-MCPs + Figma-MCP + Nx-MCP + uianatomy-MCP | **Pre-Workshop-Mail (Pflicht-Hausaufgabe)**: Step-by-Step-PDF mit Screenshots — Node 20/22 LTS-Pin (`.node-version`), pnpm/npm-Version aus `package.json#packageManager`, Repo-Clone, Claude Code CLI install + Login mit eigenem API-Key, Figma-Account-Token, `npm run preflight` lokal grün vor Schulungsbeginn. Hardware-Voraussetzungen. |
+| `/workshop`, `/tutorial`, `/first-component` als geführte Pfade, **Komponenten-Briefs** unter `workshop/briefs/` (Anatomie, Axes, States, A11y, Figma↔Code-Fallen, Abnahme-Kriterien) | **Brief als 2-seitiges PDF rendern** — Inhalt steht, nur das Layout für den Ausdruck fehlt |
+| 29 Referenz-Komponenten in A/R/V mit Stories | **Slide-Deck** für die Vortrags-Blöcke (Kickoff, Recap, Show & Tell) — aus Doku-Seiten ableitbar |
+| Hosted Storybook-MCPs + Figma-MCP + Nx-MCP + uianatomy-MCP | **Pre-Workshop-Mail (Pflicht-Hausaufgabe)**: Step-by-Step-PDF mit Screenshots — Node-Pin ≥ 22.12 LTS (`.node-version`), npm-Version aus `package.json#packageManager`, Clone des `atelier`-Repos (kanonische Schulungsumgebung — der Scaffold reicht nicht, Tag 2 braucht `plan/` und `libs/spec`), Claude Code CLI install + Login mit eigenem API-Key, **Figma-Account mit Draft-Rechten** (`File → Duplicate to your drafts` muss möglich sein) **plus importiertem figma-console Desktop-Bridge-Plugin** in der Figma-Desktop-App (`Figma → Plugins → Development → Import plugin from manifest…`) — ohne die Bridge läuft an Tag 2 kein einziger `figma_*`-Call; ein reiner REST-Token genügt dafür nicht und ist technisch sogar optional (`preflight` wertet ihn nur als Warnung), wird als Kohorten-Policy aber trotzdem gesetzt, `npm run preflight` lokal grün vor Schulungsbeginn. Hardware-Voraussetzungen. |
 | `figma-workspace-architect`, `atelier-design`, `uianatomy-mcp` Skills | **Trainer-Spickzettel mit Golden-Prompts**: typische Fehler / Prompts pro Block (Tag 1 Block 5, Tag 2 Block 3 und 4). Golden-Prompts erzwingen Token-Treue (`--ui-*` Custom Properties), barrierefreies Markup, Slot-Konventionen — abgeleitet aus `docs/src/pages/prompts.astro` |
 | `preflight`-Script mit Fix-Hints | **Backup-Workspace** mit Git-Branches `solved-toast`, `solved-tagchip`, `solved-statcard`, `solved-avatar` — Teilnehmer können per `git checkout solved-<name>` springen, wenn die eigene Komponente komplett kaputt-gepromptet wurde |
-| `plan/big-picture.md` als Quelle der LLM-API-Regeln | **Übungs-Brief-Varianten** (Toast / Chip / StatCard / Avatar) zur Auswahl |
+| `plan/big-picture.md` als Quelle der LLM-API-Regeln, **vier Brief-Varianten zur Auswahl** (Toast / TagChip / StatCard / Avatar) unter `workshop/briefs/` | — |
 | Hosted Storybook-MCP-Endpoints (3 Docs-Tools) per `.mcp.json` | **Lokale MCP-Konfig-Snippets** für Tag 2 Block 3: `http://localhost:6006/mcp`-Eintrag, der die React-Teilnehmer-Maschine an die Test-Tools koppelt; Hinweis für Angular/Vue auf `nx test <lib> --watch`-Loop |
-| `figma_create_*` / `figma_add_component_property` MCP-Tools | **Auto-Layout-Schablone in Figma**: vorgefertigte Frames mit Tokens auf einer dedizierten `Workshop-Templates`-Page im Atelier-File — Teilnehmer kopiert die Schablone beim Duplizieren des Files in die eigenen Drafts mit |
+| `figma_create_*` / `figma_add_component_property` MCP-Tools | ~~**Auto-Layout-Schablone in Figma**~~ **erledigt** — die `🛠️ Workshop-Templates`-Page trägt `Toast / Starter`, `StatCard / Starter`, `TagChip / Starter`, `Avatar / Starter` und `Variant Matrix / Scaffold`, alle token-gebunden; sie kommen beim Duplizieren des Files in die eigenen Drafts mit |
 
 ---
 
@@ -87,10 +88,10 @@ Empfehlung: `Toast`, `StatCard`, `TagChip` oder `Avatar`. Klein genug für einen
 
 End-to-End-Check am Ende von Tag 2 pro Teilnehmer:
 
-1. Komponente liegt als Component-Set im Atelier-Figma-File (auf einer Schulungs-Page)
+1. Komponente liegt als Component-Set im **eigenen Figma-Draft** (Duplikat des Atelier-Files) — mit Variants, Properties und Dark-Mode-Variante
 2. `npm run preflight` weiter grün
-3. `nx serve <workshop-fw>` zeigt Komponente in einer kleinen Demo-Page
-4. Test-Loop grün: React → `run-story-tests` MCP-Call passes; Angular/Vue → `nx test <lib>` passes + Story manuell im laufenden Storybook im Browser sichtbar
+3. `nx storybook <fw>` läuft und zeigt die Komponente als Story (Canvas + Docs-Tab)
+4. Test-Loop grün: React → `run-story-tests` MCP-Call passes; Angular/Vue → `nx test <lib>` passes
 5. `figma_audit_component_accessibility` ohne kritische Findings **und** Storybook A11y-Tab im Browser zeigt keine kritischen axe-core-Findings
 6. Dark Mode wird durch Token-Override korrekt umgeschaltet (`prefers-color-scheme`)
 
@@ -159,8 +160,8 @@ Bullets als Roh-Material für Deck. Jede Folie ~1–3 Bullets, jeder Block ~6–
 - Fragen jederzeit · „verloren?" → laut sagen
 
 **Folie 9 — Pre-Workshop-Check**
-- `node --version` (20 oder 22 LTS) · `npm run preflight` grün
-- Claude Code CLI eingeloggt · Figma-Token gesetzt
+- `node --version` (≥ 22.12 LTS) · `npm run preflight` grün
+- Claude Code CLI eingeloggt · Figma-Account mit Draft-Rechten · figma-console Desktop-Bridge-Plugin in Figma Desktop importiert (Access-Token optional, nur für REST-Reads)
 - Wer rot ist: bleibt nach Folie 9 für Troubleshooting
 
 ### Tag 2 Block 0 — Recap & Brief (09:00–09:30, 30m)
@@ -180,7 +181,7 @@ Bullets als Roh-Material für Deck. Jede Folie ~1–3 Bullets, jeder Block ~6–
 - A11y + Dark Mode bestanden
 
 **Folie 4 — Komponenten-Brief (Auswahl)**
-- Optionen: Toast · StatCard · TagChip · Avatar
+- Optionen: Toast · StatCard · TagChip · Avatar (`workshop/briefs/`)
 - Klein genug für 1 Tag, groß genug für ≥2 Variants + States
 - Auswahl jetzt — danach kein Wechsel
 

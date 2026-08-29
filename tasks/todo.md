@@ -1802,12 +1802,12 @@ tree (struck through there, each with its fix note).
       `-t build,build-storybook`. **This is the reusable lesson, and it is ADR-0080's
       one more time: a build the deploy depends on has to run where somebody sees it
       break.** Worth an ADR if the pattern recurs a third time.
-- [ ] **Re-verify against production once the build lands**: `npm run preflight` — all
-      three storybook MCP rows must go green (Angular/Vue answer component lookups from
-      the React manifest per ADR-0083, verified in local workerd, and as of this writing
-      not yet against deployed Cloudflare). Everything else from the review is untouched:
-      15 major, 16 minor, 5 presentation-debt findings — see
-      tasks/schulung-review-2026-08-28.md §3/§4 (flows 4, 6, 7 still open).
+- [x] ~~**Re-verify against production once the build lands**~~ — done 2026-08-29.
+      `npm run preflight` in this clone: "All hard checks passed · 14 ok, 0 warning(s)",
+      including real JSON-RPC probes of all three hosted storybook endpoints at HTTP 200.
+      Live: `list-all-documentation` on the **Angular** endpoint returns 29 components +
+      4 MDX docs, and `get-documentation('components-inputs-atltoggle')` returns real
+      props. ADR-0083 holds in production.
 - [ ] **`@angular/animations` is not the only optional peer a prune could take.** The
       dep-prune reasoning that failed here — "zero source imports" — is sound about our
       code and blind to what a dev-dependency reaches for at build time. No gate checks
@@ -1815,3 +1815,69 @@ tree (struck through there, each with its fix note).
       builder fails the PR. The general case (a tool's guarded dynamic import) has no
       check and probably does not need one; recorded so the next prune's author reads
       this before trusting "zero source imports".
+
+
+## Open — Schulung: after the M1–M15 pass (2026-08-29)
+
+All 4 blockers and all 15 majors from `tasks/schulung-review-2026-08-28.md` are closed
+(three of them *overtaken* rather than fixed — M3, M4, M7 — and recorded that way there,
+along with eight defects the repair pass itself introduced or uncovered). Flows 1–7 are
+repaired. `npm run check:all` exit 0, `npx nx build docs` 59 pages.
+
+One decision came out of it: **ADR-0084 — two environments, one canonical per audience**
+(clone for the two-day cohort, scaffold for the self-serve reader, both documented, an
+explicit branch on the pages that serve both). Nothing enforces it; see its Consequences.
+
+### Blocked on a Figma write
+
+- [ ] **The Figma-side Instructions text overstates the token binding.** Node `703:333`
+      on 🛠️ Workshop-Templates says "every fill, padding, and radius is bound to a
+      UI-Tokens variable". Measured live: `Avatar / Starter` (`703:355`) binds only
+      `fills` and `strokes` — no padding, no radius. The four other frames do bind all of
+      it. The German docs prose was softened to match reality; the Figma text still
+      carries the original claim, and the two now disagree. Either soften the Figma text
+      or bind Avatar's corner radius and revert the prose. **A Figma write — out of scope
+      for the docs pass that found it.**
+
+### Gate gaps — known, cheap, deliberately not built mid-pass
+
+- [ ] **Nothing cross-checks `snapshot.json.uiTokens`.** Its only guard asserts the prefix
+      counts sum to the total, which a *truncated* list satisfies — the pre-fix snapshot
+      held 50 names summing cleanly to 50, and the /figma census read wrong-but-consistent
+      for as long as nobody looked. `docs/src/lib/figma-snapshot.ts`'s comment ("neither
+      number can rot again once it is derived from the snapshot") claims more than the code
+      enforces. Cheapest close: assert every `color/*`, `spacing/*`, `radius/*` name has a
+      matching `--ui-*` family in `tokens.css`, and ratchet the total the way ADR-0078
+      already does. Then run one real `npm run figma:snapshot` through the new paging loop
+      — it has still never been exercised end-to-end against live Figma.
+- [ ] **The two `preflight.mjs` copies are in sync by hand.** Byte-identical today
+      (re-verified), gated by nothing. n14's second half is still open.
+- [ ] **Nothing stops a new page hardcoding `workshop-<fw>` again** with no monorepo branch
+      beside it — the exact defect ADR-0084 closes by convention. The check is possible and
+      was judged not worth its false-positive rate; recorded as the option, not built.
+
+### Unverified — flagged so it is not mistaken for checked
+
+- [ ] **The Vue mount hint has never been confirmed against a real scaffold.**
+      `first-component.astro` and `tutorial.astro` both tell a Vue participant to edit
+      `workshop-vue/src/views/HomeView.vue` and replace `<NxWelcome />`. `@nx/vue` is not
+      in `node_modules`, so this was never read from generator source — unlike the Angular
+      and React hints, which were. Scaffold one Vue workspace before the first workshop.
+- [ ] **`workshop/` is untracked and unignored.** The whole M12 fix — five files, ~700
+      lines — is not in git, and the agenda links to those files by relative path. Commit
+      it.
+
+### Still open from the review — unchanged by this pass
+
+- [ ] **Minors:** n2 (Storybook "10.4" anchoring vs shipped 10.5.10), n4 (the singular
+      vs plural manifest feature flag, and `storybook.astro:142` vs `:201` disagreeing on
+      one page), n6 (track order inverts map and territory — /tutorial is step 4, the
+      overview /design-to-code is step 5), n7 (workshop's post-setup aside skips
+      /figma-token), n10 (German participants are never told the material is English),
+      n12 (Tag1-05 is tight and the 15-min kata sits unused as the obvious buffer). Plus
+      the gate-failure troubleshooting entry n5 asked for and this pass did not write.
+- [ ] **Presentation debt p1–p5, all five.** p2 in particular now matters more than it
+      did: the preflight mock on /workshop shows a run that the current script cannot
+      produce, on a page whose surrounding prose was just rewritten to be exact.
+- [ ] **Claude Design participant katas** stay blocked on the widened per-seat test
+      (§2.4 item 1 of the review). Unchanged and deliberately not shipped.

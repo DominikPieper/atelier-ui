@@ -128,12 +128,25 @@ async function main() {
       status?.details?.lastModified ?? status?.lastModified ?? null;
 
     // 2. Library Tokens collection — the semantic tier mirroring tokens.css (--ui-*).
-    const vars = await call(client, 'figma_get_variables', {
-      format: 'filtered',
-      collection: 'Library Tokens',
-      verbosity: 'summary',
-    });
-    const uiTokens = (vars?.data?.variables ?? []).map((v) => v.name).sort();
+    //    figma_get_variables paginates at 50 by default and says nothing when it
+    //    truncates, so an unpaged call silently captured the first 50 of 78 — a
+    //    latent lie nothing read (until docs/src/lib/figma-snapshot.ts started
+    //    deriving /figma's token census from it). Page explicitly: pageSize is
+    //    capped at 100, and `pagination.hasNextPage` is absent when one page holds
+    //    the whole collection.
+    const uiTokenNames = [];
+    for (let page = 1; page <= 20; page++) {
+      const vars = await call(client, 'figma_get_variables', {
+        format: 'filtered',
+        collection: 'Library Tokens',
+        verbosity: 'summary',
+        pageSize: 100,
+        page,
+      });
+      uiTokenNames.push(...(vars?.data?.variables ?? []).map((v) => v.name));
+      if (!vars?.pagination?.hasNextPage) break;
+    }
+    const uiTokens = uiTokenNames.sort();
 
     // 2b. Property facts the per-component read does not expose: which declared
     //     properties something actually references, and every pictogram drawn as a

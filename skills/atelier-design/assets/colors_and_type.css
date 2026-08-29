@@ -1,10 +1,5 @@
 /**
- * Atelier Design System — token snapshot
- *
- * Mirror of `libs/react/src/styles/tokens.css` in the upstream repo
- * (github.com/DominikPieper/atelier-ui). Regenerated whenever the
- * canonical token sheet changes — do not hand-edit.
- *
+ * Design tokens for the Atelier component library.
  * Direction A — Conciso anchor only. Deep Conciso teal on a clean white
  * canvas (light) / bright teal on rich slate (dark). Modernised radius
  * scale. No moss, no warm bone — just Conciso.
@@ -12,14 +7,31 @@
  * All foreground/background pairs verified WCAG 2.2 AA via
  * tools/scripts/wcag-contrast.mjs (52/52 pairs passing 2026-04-26).
  *
+ * Typography: Instrument Sans (UI) + Instrument Serif (display) + JetBrains
+ * Mono (code), chosen 2026-08-26 — see ADR-0035, which revises ADR-0020's
+ * Inter choice. The library declares the stacks; loading the faces is the
+ * consumer's job (the docs app does it through Astro's fonts config).
+ * The --ui-type-* roles (ADR-0036) are the layer component CSS should
+ * reference; the individual axes remain for the cases a role does not fit.
+ *
+ * Plan: ~/.claude/plans/atelier-design-rebrief.md (Direction A pivot)
+ *
  * Usage:
  *   @import '@atelier-ui/{angular,react,vue}/styles/tokens.css';
  */
 
 :root {
   /* Typography */
-  --ui-font-family: 'Inter', ui-sans-serif, system-ui, -apple-system,
+  --ui-font-family: 'Instrument Sans', ui-sans-serif, system-ui, -apple-system,
     BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --ui-font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --ui-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco,
+    'Courier New', monospace;
+  /* Below the smallest readable size, for text inside a box too small to hold it:
+     the initials in a 24px avatar and the count in its overflow badge. Named rather
+     than left as the two literals it replaces (0.625rem and 0.5625rem), which is the
+     whole off-scale type population the library had. */
+  --ui-font-size-2xs: 0.625rem;
   --ui-font-size-xs: 0.75rem;
   --ui-font-size-sm: 0.875rem;
   --ui-font-size-md: 1rem;
@@ -29,18 +41,208 @@
   --ui-letter-spacing-tight: -0.01em;
   --ui-letter-spacing-normal: 0;
   --ui-letter-spacing-wide: 0.01em;
+  --ui-letter-spacing-uppercase: 0.08em;
+  --ui-font-size-3xl: 2.25rem;
+
+  /* ── Control heights ────────────────────────────────────────
+   * The height of an interactive control is the primitive; its block padding
+   * is DERIVED from it (ADR-0041):
+   *   padding-block: calc((height - line-height * font-size) / 2 - border)
+   * Stating the height and deriving the padding is what makes an input and a
+   * button the same height. Stating the padding and hoping, which is what the
+   * library did until 2026-08-26, made them 6px apart.
+   */
+  /* ── Row heights ────────────────────────────────────────────────────────────
+   * A row is taller than the control it holds. That relation lives here, in a
+   * calc over the control scale, rather than as a convention thirty stylesheets
+   * have to honour: `--ui-row-inset: 0` collapses the two ladders into one in a
+   * single edit.
+   *
+   * Measured, which is why the inset exists: a table cell at the *control* height
+   * of 40 renders 41.0px when it holds a 40px control (the extra pixel is the two
+   * collapsed cell borders), while the same cell at 48 renders exactly 48.00px
+   * holding text, a badge, an sm button, an md button or an md avatar. So at the
+   * row height any control of the matching step fits, with no convention.
+   *
+   * A row CENTRES its content; a control PADS it. ADR-0041's derived-padding
+   * formula therefore does not apply here — a size-md cell with derived padding
+   * renders 62.5px holding an md button. The row recipe is
+   * `min-height: var(--ui-row-height-*); padding-block: 0; line-height: tight`.
+   *
+   * Not rows, on purpose: breadcrumbs (17px of inline text, holding no control)
+   * and the card/dialog/drawer/chat headers (one-off bands with their own
+   * padding, not one line among many). See ADR-0052.
+   */
+  --ui-row-inset: 0.25rem;
+  --ui-row-height-sm: calc(var(--ui-control-height-sm) + 2 * var(--ui-row-inset));
+  --ui-row-height-md: calc(var(--ui-control-height-md) + 2 * var(--ui-row-inset));
+  --ui-row-height-lg: calc(var(--ui-control-height-lg) + 2 * var(--ui-row-inset));
+
+  --ui-control-height-sm: 2rem;
+  --ui-control-height-md: 2.5rem;
+  --ui-control-height-lg: 3rem;
   --ui-font-weight-normal: 400;
   --ui-font-weight-medium: 500;
   --ui-font-weight-semibold: 600;
+  --ui-font-weight-bold: 700;
   --ui-line-height-tight: 1.25;
   --ui-line-height-normal: 1.5;
+  /* Code needs looser leading than prose: a reader scans columns, not sentences.
+   * AtlCodeBlock had 1.65 as a literal in one stylesheet. */
+  --ui-line-height-code: 1.65;
+
+  /* ── Type roles ─────────────────────────────────────────────
+   * Composed entirely from the axes above, so sizes and weights stay
+   * single-sourced and a role adds meaning rather than new numbers.
+   * Reference a ROLE from component CSS (`font: var(--ui-type-body-md)`),
+   * not an axis — the role is what carries ADR-0035's rule that weight
+   * comes from the sans and the display face is never bolded.
+   *
+   * `font:` is a shorthand: it resets font-style, font-variant,
+   * font-stretch and line-height, so declare it BEFORE any font-* override
+   * on the same rule. It does not touch letter-spacing — pair the display
+   * role with --ui-letter-spacing-tight and an uppercased label role with
+   * --ui-letter-spacing-uppercase yourself.
+   */
+  --ui-type-display: italic var(--ui-font-weight-normal) var(--ui-font-size-3xl) /
+    var(--ui-line-height-tight) var(--ui-font-display);
+  --ui-type-headline: var(--ui-font-weight-bold) var(--ui-font-size-2xl) /
+    var(--ui-line-height-tight) var(--ui-font-family);
+  --ui-type-title: var(--ui-font-weight-semibold) var(--ui-font-size-lg) /
+    var(--ui-line-height-tight) var(--ui-font-family);
+  --ui-type-body-lg: var(--ui-font-weight-normal) var(--ui-font-size-lg) /
+    var(--ui-line-height-normal) var(--ui-font-family);
+  --ui-type-body-md: var(--ui-font-weight-normal) var(--ui-font-size-md) /
+    var(--ui-line-height-normal) var(--ui-font-family);
+  --ui-type-body-sm: var(--ui-font-weight-normal) var(--ui-font-size-sm) /
+    var(--ui-line-height-normal) var(--ui-font-family);
+  --ui-type-label: var(--ui-font-weight-medium) var(--ui-font-size-xs) /
+    var(--ui-line-height-tight) var(--ui-font-family);
+  --ui-type-code: var(--ui-font-weight-normal) var(--ui-font-size-sm) /
+    var(--ui-line-height-code) var(--ui-font-mono);
+
+  /* The two roles the eight did not span. Both were measured on BOTH sides
+   * before being added (ADR-0074), which is the only sound basis for a role:
+   *
+   *   control  Medium 14 — 6 CSS rules (tab button, page button, step label,
+   *            chip label, select label, chat action) and 75 Figma text nodes.
+   *   action   SemiBold 16 — 3 CSS rules (button, accordion trigger, chat
+   *            header title) and 15 Figma text nodes.
+   *
+   * Both are TIGHT, and that was unanimous rather than chosen: every one of the
+   * 30 Figma nodes in these two combinations that states a leading at all states
+   * 125%, and .atl-button and .accordion-trigger state --ui-line-height-tight.
+   *
+   * They are named for the --ui-control-height-* ladder they live on: text on a
+   * control, not prose. A control's own VALUE text (an input's content) is not
+   * one of these — that stays a longhand, because its padding formula names the
+   * leading as an operand (ADR-0073).
+   */
+  --ui-type-control: var(--ui-font-weight-medium) var(--ui-font-size-sm) /
+    var(--ui-line-height-tight) var(--ui-font-family);
+  --ui-type-action: var(--ui-font-weight-semibold) var(--ui-font-size-md) /
+    var(--ui-line-height-tight) var(--ui-font-family);
 
   /* ── Colours · light mode (default) ────────────────────────── */
 
   /* Primary — Conciso deep teal */
-  --ui-color-primary: #006470;
-  --ui-color-primary-hover: #004e58;
-  --ui-color-primary-active: #003a42;
+
+  /* ── Teal ramp · primitive tier (ADR-0038) ──────────────────
+   * The brand hue as a tonal scale. Semantics below alias into it, so a step
+   * is declared once and every mode picks a different step of the same ramp.
+   *
+   * Annotations are CHECKED, not decorative — `check:contrast` re-measures
+   * every one and fails if a stated ratio is wrong or below AA:
+   *   ★  the brand anchor
+   *   T on surface(light|dark) N.NN  this step carries normal text on that
+   *      canvas at the stated WCAG 2.2 ratio
+   * Steps 50–500 are generated by perceptual (OKLab) interpolation between the
+   * shipping values; 100–300 and 700–900 ARE the shipping values, unchanged.
+   */
+  --ui-color-teal-50: #99f4f4;
+  --ui-color-teal-100: #87efef;
+  --ui-color-teal-200: #5ee5e5;
+  --ui-color-teal-300: #34d8d8; /* T on surface(dark) 10.83 */
+  --ui-color-teal-400: #27babd; /* T on surface(dark) 8.01 */
+  --ui-color-teal-500: #1a9ca3; /* T on surface(dark) 5.73 — lightest step that still carries text on dark */
+  --ui-color-teal-600: #0d7f89; /* T on surface(light) 4.76 — lightest step that still carries text on light */
+  --ui-color-teal-700: #006470; /* ★ · T on surface(light) 6.87 */
+  --ui-color-teal-800: #004e58; /* T on surface(light) 9.41 */
+  --ui-color-teal-900: #003a42; /* T on surface(light) 12.47 */
+
+  /* Status ramps — the same construction as the teal ramp above, for the four
+   * status families. Every step the components ship was already sitting where a
+   * 100–950 ramp would put it: ordering the shipping values by OKLab lightness
+   * reproduces the step numbers in all four families, measured. So the shipping
+   * values are unchanged and only the gaps are generated.
+   *
+   * No 50 step. Extrapolating past each family's lightest shipping tint lands on
+   * #ffffff in three of the four — measured — so a 50 would be a name for the
+   * surface, which --ui-color-surface already is. The teal ramp has one because
+   * its light end is a vivid cyan the dark theme reads text against.
+   *
+   * The 950 is the dark theme's tinted background. It continues the ramp's
+   * direction (darker and less chromatic) with a visible chroma step down from
+   * the 900, which is correct for a surface tint rather than a text colour.
+   *
+   * Steps missing a shipping value in one family but present in another are
+   * placed at the fraction the family that HAS both puts them at, rather than at
+   * the midpoint: red ships an 800, a 900 and a 950, and its 900 sits 24.8% of the
+   * way from 800 to 950, not 50%. Interpolating to the midpoint would have made
+   * green's and amber's 900 too dark by a visible step.
+   */
+
+  /* red — the danger family */
+  --ui-color-red-100: #fee2e2; /* T on surface(dark) 15.56 */
+  --ui-color-red-200: #fecaca; /* T on surface(dark) 13.14 */
+  --ui-color-red-300: #fca5a5; /* T on surface(dark) 10.02 */
+  --ui-color-red-400: #f87171; /* T on surface(dark) 6.87 */
+  --ui-color-red-500: #e35856; /* T on surface(dark) 5.25 */
+  --ui-color-red-600: #ce3d3b; /* T on surface(light) 4.82 */
+  --ui-color-red-700: #b91c1c; /* ★ · T on surface(light) 6.47 */
+  --ui-color-red-800: #991b1b; /* T on surface(light) 8.31 */
+  --ui-color-red-900: #7f1d1d; /* T on surface(light) 10.02 */
+  --ui-color-red-950: #3a1414; /* T on surface(light) 16.28 */
+
+  /* green — the success family */
+  --ui-color-green-100: #dcfce7; /* T on surface(dark) 17.31 */
+  --ui-color-green-200: #b4f6ca; /* T on surface(dark) 15.37 */
+  --ui-color-green-300: #86efac; /* T on surface(dark) 13.54 */
+  --ui-color-green-400: #4ade80; /* T on surface(dark) 10.91 */
+  --ui-color-green-500: #39be69; /* T on surface(dark) 7.91 */
+  --ui-color-green-600: #279e53; /* T on surface(dark) 5.52 */
+  --ui-color-green-700: #15803d; /* ★ · T on surface(light) 5.02 */
+  --ui-color-green-800: #166534; /* T on surface(light) 7.13 */
+  --ui-color-green-900: #15582f; /* T on surface(light) 8.51 */
+  --ui-color-green-950: #0f3320; /* T on surface(light) 13.86 */
+
+  /* amber — the warning family */
+  --ui-color-amber-100: #fef3c7; /* T on surface(dark) 17.07 */
+  --ui-color-amber-200: #fde68a; /* T on surface(dark) 15.26 */
+  --ui-color-amber-300: #fcd361; /* T on surface(dark) 13.24 */
+  --ui-color-amber-400: #fbbf24; /* T on surface(dark) 11.39 */
+  --ui-color-amber-500: #e49b1b; /* T on surface(dark) 8.15 */
+  --ui-color-amber-600: #cc7712; /* T on surface(dark) 5.63 */
+  --ui-color-amber-700: #b45309; /* ★ · T on surface(light) 5.02 */
+  --ui-color-amber-800: #854d0e; /* T on surface(light) 6.85 */
+  --ui-color-amber-900: #714311; /* T on surface(light) 8.36 */
+  --ui-color-amber-950: #3a2510; /* T on surface(light) 14.46 */
+
+  /* sky — the info family */
+  --ui-color-sky-100: #e0f2fe; /* T on surface(dark) 16.57 */
+  --ui-color-sky-200: #bae6fd; /* T on surface(dark) 14.33 */
+  --ui-color-sky-300: #82d2fb; /* T on surface(dark) 11.37 */
+  --ui-color-sky-400: #38bdf8; /* T on surface(dark) 8.87 */
+  --ui-color-sky-500: #28a0da; /* T on surface(dark) 6.46 */
+  --ui-color-sky-600: #1784bd; /* T on surface(dark) 4.59 */
+  --ui-color-sky-700: #0369a1; /* ★ · T on surface(light) 5.93 */
+  --ui-color-sky-800: #0a5784; /* T on surface(light) 7.75 */
+  --ui-color-sky-900: #0c4a6e; /* T on surface(light) 9.46 */
+  --ui-color-sky-950: #102338; /* T on surface(light) 15.91 */
+
+  --ui-color-primary: var(--ui-color-teal-700);
+  --ui-color-primary-hover: var(--ui-color-teal-800);
+  --ui-color-primary-active: var(--ui-color-teal-900);
   --ui-color-primary-light: rgba(0, 100, 112, 0.08);
 
   /* Secondary (legacy — kept for components that opt in) */
@@ -49,27 +251,28 @@
   --ui-color-secondary-active: #1e293b;
 
   /* Semantic */
-  --ui-color-danger: #b91c1c;
-  --ui-color-danger-hover: #991b1b;
-  --ui-color-danger-active: #7f1d1d;
-  --ui-color-success: #15803d;
-  --ui-color-warning: #b45309;
-  --ui-color-info: #0369a1;
+  --ui-color-danger: var(--ui-color-red-700);
+  --ui-color-danger-hover: var(--ui-color-red-800);
+  --ui-color-danger-active: var(--ui-color-red-900);
+  --ui-color-success: var(--ui-color-green-700);
+  --ui-color-warning: var(--ui-color-amber-700);
+  --ui-color-info: var(--ui-color-sky-700);
 
   /* Semantic — AA-safe dark-text-on-tinted-bg pairs (Badge / Alert / Toast) */
-  --ui-color-success-bg: #dcfce7;
-  --ui-color-success-text: #166534;
-  --ui-color-warning-bg: #fef3c7;
-  --ui-color-warning-text: #854d0e;
-  --ui-color-danger-bg: #fee2e2;
-  --ui-color-danger-text: #991b1b;
-  --ui-color-info-bg: #e0f2fe;
-  --ui-color-info-text: #0c4a6e;
+  --ui-color-success-bg: var(--ui-color-green-100);
+  --ui-color-success-text: var(--ui-color-green-800);
+  --ui-color-warning-bg: var(--ui-color-amber-100);
+  --ui-color-warning-text: var(--ui-color-amber-800);
+  --ui-color-danger-bg: var(--ui-color-red-100);
+  --ui-color-danger-text: var(--ui-color-red-800);
+  --ui-color-info-bg: var(--ui-color-sky-100);
+  --ui-color-info-text: var(--ui-color-sky-900);
 
   /* Surfaces — clean white + cool slate */
   --ui-color-surface: #ffffff;
   --ui-color-surface-raised: #f8fafc;
   --ui-color-surface-sunken: #f1f5f9;
+  --ui-color-overlay: rgba(0, 0, 0, 0.5);
 
   /* Borders — split decorative from functional per WCAG 1.4.11 */
   --ui-color-border: #e2e8f0;          /* decorative */
@@ -101,6 +304,18 @@
   --ui-radius-lg: 0.875rem; /* was 0.75rem  */
   --ui-radius-xl: 1.25rem;  /* was 1rem     */
   --ui-radius-full: 9999px;
+
+  /* ── Border widths ──────────────────────────────────────────────────────────
+   * Two steps, because the library only ever needed two: the hairline that
+   * separates surfaces (133 uses) and the heavier weight that marks a control
+   * (12 uses — the avatar status ring, the stepper circle, the checkbox mark,
+   * the table header rule). The 1.5px weight nine control outlines used is
+   * folded into `thick`: a half pixel renders blurry at 1x device-pixel-ratio
+   * and the two weights were never distinguishable side by side.
+   * Not here on purpose: AtlToast's 4px accent bar and AtlRadio's 6px dot are
+   * graphic devices drawn with `border-width`, not border weights. See ADR-0047. */
+  --ui-border-width: 1px;
+  --ui-border-width-thick: 2px;
 
   /* Spacing */
   --ui-spacing-1: 0.25rem;
@@ -138,9 +353,15 @@
   --ui-transition-normal: var(--ui-duration-normal) var(--ui-ease-out);
   --ui-transition-slow: var(--ui-duration-slow) var(--ui-ease-out);
 
-  /* Focus ring — double-ring for light & dark background compatibility */
+  /* Focus ring — double-ring for light & dark background compatibility.
+   * Declared once: the inner ring tracks the surface and the outer the accent,
+   * both of which are mode-dependent, so the ring follows the mode for free.
+   * The danger variant exists so an invalid control does not have to restate
+   * the formula (it did, in atl-input.css, until 2026-08-26). */
   --ui-focus-ring: 0 0 0 2px var(--ui-color-surface),
     0 0 0 4px var(--ui-color-primary);
+  --ui-focus-ring-danger: 0 0 0 2px var(--ui-color-surface),
+    0 0 0 4px var(--ui-color-danger);
 
   /* Form controls */
   --ui-color-input-bg: var(--ui-color-surface-sunken);
@@ -164,34 +385,35 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --ui-color-primary: #34d8d8;
-    --ui-color-primary-hover: #5ee5e5;
-    --ui-color-primary-active: #87efef;
+    --ui-color-primary: var(--ui-color-teal-300);
+    --ui-color-primary-hover: var(--ui-color-teal-200);
+    --ui-color-primary-active: var(--ui-color-teal-100);
     --ui-color-primary-light: rgba(52, 216, 216, 0.15);
 
     --ui-color-secondary: #94a3b8;
     --ui-color-secondary-hover: #cbd5e1;
     --ui-color-secondary-active: #e2e8f0;
 
-    --ui-color-danger: #f87171;
-    --ui-color-danger-hover: #fca5a5;
-    --ui-color-danger-active: #fecaca;
-    --ui-color-success: #4ade80;
-    --ui-color-warning: #fbbf24;
-    --ui-color-info: #38bdf8;
+    --ui-color-danger: var(--ui-color-red-400);
+    --ui-color-danger-hover: var(--ui-color-red-300);
+    --ui-color-danger-active: var(--ui-color-red-200);
+    --ui-color-success: var(--ui-color-green-400);
+    --ui-color-warning: var(--ui-color-amber-400);
+    --ui-color-info: var(--ui-color-sky-400);
 
-    --ui-color-success-bg: #0f3320;
-    --ui-color-success-text: #86efac;
-    --ui-color-warning-bg: #3a2510;
-    --ui-color-warning-text: #fde68a;
-    --ui-color-danger-bg: #3a1414;
-    --ui-color-danger-text: #fca5a5;
-    --ui-color-info-bg: #102338;
-    --ui-color-info-text: #bae6fd;
+    --ui-color-success-bg: var(--ui-color-green-950);
+    --ui-color-success-text: var(--ui-color-green-300);
+    --ui-color-warning-bg: var(--ui-color-amber-950);
+    --ui-color-warning-text: var(--ui-color-amber-200);
+    --ui-color-danger-bg: var(--ui-color-red-950);
+    --ui-color-danger-text: var(--ui-color-red-300);
+    --ui-color-info-bg: var(--ui-color-sky-950);
+    --ui-color-info-text: var(--ui-color-sky-200);
 
     --ui-color-surface: #0a1116;
     --ui-color-surface-raised: #131c24;
     --ui-color-surface-sunken: #060c10;
+    --ui-color-overlay: rgba(0, 0, 0, 0.7);
 
     --ui-color-border: #1e293b;
     --ui-color-border-hover: #334155;
@@ -202,6 +424,7 @@
     --ui-color-text-on-primary: #0a1116;
     --ui-color-text-on-secondary: #0f172a;
     --ui-color-text-on-danger: #0a1116;
+    --ui-color-text-on-success: #0a1116;
 
     --ui-opacity-disabled: 0.65;
 
@@ -222,34 +445,35 @@
 }
 
 [data-theme="dark"] {
-  --ui-color-primary: #34d8d8;
-  --ui-color-primary-hover: #5ee5e5;
-  --ui-color-primary-active: #87efef;
+  --ui-color-primary: var(--ui-color-teal-300);
+  --ui-color-primary-hover: var(--ui-color-teal-200);
+  --ui-color-primary-active: var(--ui-color-teal-100);
   --ui-color-primary-light: rgba(52, 216, 216, 0.15);
 
   --ui-color-secondary: #94a3b8;
   --ui-color-secondary-hover: #cbd5e1;
   --ui-color-secondary-active: #e2e8f0;
 
-  --ui-color-danger: #f87171;
-  --ui-color-danger-hover: #fca5a5;
-  --ui-color-danger-active: #fecaca;
-  --ui-color-success: #4ade80;
-  --ui-color-warning: #fbbf24;
-  --ui-color-info: #38bdf8;
+  --ui-color-danger: var(--ui-color-red-400);
+  --ui-color-danger-hover: var(--ui-color-red-300);
+  --ui-color-danger-active: var(--ui-color-red-200);
+  --ui-color-success: var(--ui-color-green-400);
+  --ui-color-warning: var(--ui-color-amber-400);
+  --ui-color-info: var(--ui-color-sky-400);
 
-  --ui-color-success-bg: #0f3320;
-  --ui-color-success-text: #86efac;
-  --ui-color-warning-bg: #3a2510;
-  --ui-color-warning-text: #fde68a;
-  --ui-color-danger-bg: #3a1414;
-  --ui-color-danger-text: #fca5a5;
-  --ui-color-info-bg: #102338;
-  --ui-color-info-text: #bae6fd;
+  --ui-color-success-bg: var(--ui-color-green-950);
+  --ui-color-success-text: var(--ui-color-green-300);
+  --ui-color-warning-bg: var(--ui-color-amber-950);
+  --ui-color-warning-text: var(--ui-color-amber-200);
+  --ui-color-danger-bg: var(--ui-color-red-950);
+  --ui-color-danger-text: var(--ui-color-red-300);
+  --ui-color-info-bg: var(--ui-color-sky-950);
+  --ui-color-info-text: var(--ui-color-sky-200);
 
   --ui-color-surface: #0a1116;
   --ui-color-surface-raised: #131c24;
   --ui-color-surface-sunken: #060c10;
+  --ui-color-overlay: rgba(0, 0, 0, 0.7);
 
   --ui-color-border: #1e293b;
   --ui-color-border-hover: #334155;
@@ -260,6 +484,7 @@
   --ui-color-text-on-primary: #0a1116;
   --ui-color-text-on-secondary: #0f172a;
   --ui-color-text-on-danger: #0a1116;
+  --ui-color-text-on-success: #0a1116;
 
   --ui-opacity-disabled: 0.65;
 
@@ -280,34 +505,35 @@
 
 /* Explicit light theme — declared last so it wins over prefers-color-scheme: dark */
 [data-theme="light"] {
-  --ui-color-primary: #006470;
-  --ui-color-primary-hover: #004e58;
-  --ui-color-primary-active: #003a42;
+  --ui-color-primary: var(--ui-color-teal-700);
+  --ui-color-primary-hover: var(--ui-color-teal-800);
+  --ui-color-primary-active: var(--ui-color-teal-900);
   --ui-color-primary-light: rgba(0, 100, 112, 0.08);
 
   --ui-color-secondary: #475569;
   --ui-color-secondary-hover: #334155;
   --ui-color-secondary-active: #1e293b;
 
-  --ui-color-danger: #b91c1c;
-  --ui-color-danger-hover: #991b1b;
-  --ui-color-danger-active: #7f1d1d;
-  --ui-color-success: #15803d;
-  --ui-color-warning: #b45309;
-  --ui-color-info: #0369a1;
+  --ui-color-danger: var(--ui-color-red-700);
+  --ui-color-danger-hover: var(--ui-color-red-800);
+  --ui-color-danger-active: var(--ui-color-red-900);
+  --ui-color-success: var(--ui-color-green-700);
+  --ui-color-warning: var(--ui-color-amber-700);
+  --ui-color-info: var(--ui-color-sky-700);
 
-  --ui-color-success-bg: #dcfce7;
-  --ui-color-success-text: #166534;
-  --ui-color-warning-bg: #fef3c7;
-  --ui-color-warning-text: #854d0e;
-  --ui-color-danger-bg: #fee2e2;
-  --ui-color-danger-text: #991b1b;
-  --ui-color-info-bg: #e0f2fe;
-  --ui-color-info-text: #0c4a6e;
+  --ui-color-success-bg: var(--ui-color-green-100);
+  --ui-color-success-text: var(--ui-color-green-800);
+  --ui-color-warning-bg: var(--ui-color-amber-100);
+  --ui-color-warning-text: var(--ui-color-amber-800);
+  --ui-color-danger-bg: var(--ui-color-red-100);
+  --ui-color-danger-text: var(--ui-color-red-800);
+  --ui-color-info-bg: var(--ui-color-sky-100);
+  --ui-color-info-text: var(--ui-color-sky-900);
 
   --ui-color-surface: #ffffff;
   --ui-color-surface-raised: #f8fafc;
   --ui-color-surface-sunken: #f1f5f9;
+  --ui-color-overlay: rgba(0, 0, 0, 0.5);
 
   --ui-color-border: #e2e8f0;
   --ui-color-border-hover: #cbd5e1;
@@ -316,6 +542,11 @@
   --ui-color-text: #0f172a;
   --ui-color-text-muted: #475569;
   --ui-color-text-on-primary: #ffffff;
+  --ui-color-text-on-secondary: #ffffff;
+  --ui-color-text-on-danger: #ffffff;
+  --ui-color-text-on-success: #ffffff;
+
+  --ui-opacity-disabled: 0.5;
 
   --ui-color-input-border: var(--ui-color-border-strong);
   --ui-color-input-border-hover: #475569;

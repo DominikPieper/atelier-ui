@@ -1973,7 +1973,10 @@ summary:focus-visible,
   .docs-props-table { display: block; }
   .docs-props-table thead { display: none; }
   .docs-props-table tbody { display: block; }
-  .docs-props-table tr {
+  /* `:not([hidden])` is load-bearing: an author `display` on `tr` overrides the
+     UA `[hidden] { display: none }`, which would un-hide framework-switched rows
+     (workshop.astro's "What gets created") in the 641–768px band. */
+  .docs-props-table tr:not([hidden]) {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.25rem;

@@ -52,8 +52,9 @@ const DAYS: Day[] = [
         risk: true,
         bullets: [
           'Pre-Workshop-Setup ist Pflicht-Hausaufgabe — Block prüft nur, installiert nicht von Null',
-          'Node 22 LTS aktiv, npm-Version aus package.json#packageManager',
-          'Repo geklont, Claude Code CLI eingeloggt mit eigenem API-Key, Figma-Account-Token gesetzt',
+          'Node ≥ 22.12 LTS aktiv (preflight prüft hart auf 22.12), npm-Version aus package.json#packageManager',
+          'Atelier-Repo geklont (kanonische Schulungsumgebung), Claude Code CLI eingeloggt mit eigenem API-Key',
+          'Figma-Account mit Draft-Rechten (File → Duplicate to your drafts muss möglich sein) + figma-console Desktop-Bridge-Plugin in der Figma-Desktop-App importiert (Figma → Plugins → Development → Import plugin from manifest…) — die Bridge gated Tag 2, der Access-Token ist technisch optional (nur REST-Reads) und Kohorten-Policy',
           'npm run preflight lokal grün',
           'MCP-Konfig in .mcp.json gemeinsam lesen und verstehen',
         ],
@@ -114,7 +115,7 @@ const DAYS: Day[] = [
         format: 'Diskussion',
         bullets: [
           'Was war überraschend? Wo hat AI sauber funktioniert, wo nicht?',
-          'Vorschau Tag 2 + optionale Hausaufgabe: kleine Komponente skizzieren (Toast / Tag-Chip / Stat-Card / Badge)',
+          'Vorschau Tag 2 + optionale Hausaufgabe: kleine Komponente skizzieren (Toast / TagChip / StatCard / Avatar — dieselben vier wie die Starter-Frames und die Briefs)',
         ],
       },
     ],
@@ -124,7 +125,7 @@ const DAYS: Day[] = [
     title: 'Eigene Komponente bauen (Figma → Storybook → Code)',
     goal: 'Jeder Teilnehmer hat eine selbst gestaltete Komponente durchgängig produziert: Figma-Spec mit Variants & Tokens, generierte Story, generierter Code im gewählten Framework, A11y-Check bestanden, Dark Mode funktioniert.',
     result: [
-      'Eigene Komponente im Atelier-Figma-File (Component-Set mit Variants + Properties + Dark-Mode)',
+      'Eigene Komponente im eigenen Figma-Draft (Component-Set mit Variants + Properties + Dark-Mode)',
       'Generierte Spec + Story im eigenen Workspace',
       'Funktionierende Implementierung im gewählten Framework',
       'A11y-Audit bestanden',
@@ -137,7 +138,7 @@ const DAYS: Day[] = [
         format: 'Vortrag',
         bullets: [
           'Tag-1-Recap',
-          'Komponenten-Brief vorstellen — Anatomie, Axes, States, A11y-Anforderungen',
+          'Komponenten-Brief vorstellen — Anatomie, Axes, States, A11y-Anforderungen. Ein Brief je Komponente liegt im Repo unter workshop/briefs/{toast,tagchip,statcard,avatar}.md',
           'uianatomy MCP als Hilfsmittel zeigen',
         ],
       },
@@ -145,12 +146,14 @@ const DAYS: Day[] = [
         num: '01',
         time: '09:30–11:00 · 90 min',
         title: 'Design in Figma',
-        format: 'Hands-on',
+        format: 'Hands-on · High-Risk Block',
+        risk: true,
         bullets: [
           'Pflicht-Vorabschritt: Atelier-File in eigene Drafts duplizieren — niemals im Original-File mutieren',
+          'Startpunkt ist ein Starter-Frame von der Workshop-Templates-Page, der beim Duplizieren mitkommt: Toast / Starter, StatCard / Starter, TagChip / Starter oder Avatar / Starter, dazu Variant Matrix / Scaffold. Fills und — wo die Komponente sie hat — Paddings und Radien sind dort bereits an UI-Tokens-Variablen gebunden — erster Schritt ist kopieren und umbenennen, nicht leere Leinwand',
           '~45 min manuelles Design im Figma-UI (Layout, Variants, Token-Zuweisung)',
           '~45 min MCP-Strukturierung (Component Properties, A11y-Audits)',
-          'Eigenes Component-Set: Variants, Properties, korrekte Tokens (--ui-*), Dark-Mode-Variante',
+          'Eigenes Component-Set: ≥2 Variants × 2 States, Properties, korrekte Tokens (--ui-*), Dark-Mode-Variante — die genaue Matrix steht im Komponenten-Brief',
           'Skills als Co-Pilot: figma-workspace-architect (Architektur), atelier-design (Brand-Konsistenz)',
         ],
       },
@@ -265,8 +268,13 @@ const DAYS: Day[] = [
     <Callout tone="tip" title="Format pro Tag">
       <p>
         ~7–8 h netto · 60 min Mittagspause · 2× 15 min Kaffeepausen · kleine Mikro-Pausen. Pre-Workshop-Setup
-        (Node 22 LTS, Claude Code CLI, Figma-Token, <code>npm run preflight</code> grün) ist Pflicht-Hausaufgabe —
-        siehe <a href="/workshop" class="docs-link-primary">Workshop Setup</a>.
+        (Node ≥ 22.12 LTS, Claude Code CLI, Figma-Account mit Draft-Rechten + importiertes Desktop-Bridge-Plugin, <code>npm run preflight</code> grün)
+        ist Pflicht-Hausaufgabe — siehe <a href="/workshop" class="docs-link-primary">Workshop Setup</a>.
+      </p>
+      <p>
+        Kanonische Umgebung für die Kohorte ist das <strong>geklonte atelier-Repo</strong>, nicht der
+        <code>create-atelier-ui-workspace</code>-Scaffold: Tag 2 arbeitet direkt mit <code>plan/</code>,
+        <code>libs/spec</code> und <code>nx storybook &lt;fw&gt;</code>, die es nur im Klon gibt.
       </p>
     </Callout>
     </div>
@@ -315,10 +323,10 @@ const DAYS: Day[] = [
         End-to-End-Check am Ende von Tag 2 pro Teilnehmer:
       </p>
       <ol class="schulung-verify">
-        <li>Komponente liegt als Component-Set im Atelier-Figma-File (auf einer Schulungs-Page)</li>
+        <li>Komponente liegt als Component-Set im eigenen Figma-Draft (Duplikat des Atelier-Files) — mit Variants, Properties und Dark-Mode-Variante</li>
         <li><code>npm run preflight</code> weiter grün</li>
-        <li><code>nx serve &lt;workshop-fw&gt;</code> zeigt Komponente in einer kleinen Demo-Page</li>
-        <li>Test-Loop grün: React → <code>run-story-tests</code> MCP-Call passes; Angular/Vue → <code>nx test &lt;lib&gt;</code> + Story sichtbar im laufenden Storybook</li>
+        <li><code>nx storybook &lt;fw&gt;</code> läuft und zeigt die Komponente als Story (Canvas + Docs-Tab)</li>
+        <li>Test-Loop grün: React → <code>run-story-tests</code> MCP-Call passes; Angular/Vue → <code>nx test &lt;lib&gt;</code> passes</li>
         <li><code>figma_audit_component_accessibility</code> ohne kritische Findings <strong>und</strong> Storybook A11y-Tab ohne axe-core-Findings</li>
         <li>Dark Mode wird durch Token-Override korrekt umgeschaltet</li>
       </ol>

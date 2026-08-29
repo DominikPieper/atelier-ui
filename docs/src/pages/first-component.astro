@@ -167,6 +167,14 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
           <Code code={prompt(fw)} lang="text" title="prompt — paste into Claude Code" />
         </div>
       ))}
+      <p class="kata-step-desc" style="margin-top: 0.6rem">
+        <strong style="color: var(--ui-color-text)">Checkpoint:</strong> the file exists at the
+        path Step 4 names, it imports <code>Atl*</code> components from the Atelier UI package,
+        and it contains <strong style="color: var(--ui-color-text)">zero hex colours and zero
+        pixel paddings</strong> — every value is a <code>--ui-*</code> custom property. If Claude
+        wrote <code>#ffffff</code> or <code>24px</code> anywhere, say so and have it redo that
+        line from <code>boundVariables</code>.
+      </p>
     </section>
 
     <!-- Step 4 -->
@@ -178,6 +186,15 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
       <p class="kata-step-desc">
         The prompt's step 4 has Claude save the component and wire it into the
         app shell. Confirm both happened, then start the dev server:
+      </p>
+      <p class="kata-step-desc" style="margin-top: 0.4rem">
+        <strong style="color: var(--ui-color-text)">Working in a clone of the atelier
+        monorepo?</strong> The paths below belong to a scaffolded workspace — a clone has no
+        <code>workshop-*</code> app to serve. Put the component under
+        <code>libs/&lt;fw&gt;/src/lib/…</code> and view it with <code>npx nx storybook &lt;fw&gt;</code>
+        on port 6006 instead. Everything else in this kata is identical. (See
+        <a href="/troubleshooting#nx-project-not-found" class="docs-link-primary">Cannot find project
+        'workshop-angular'</a>.)
       </p>
       {FRAMEWORKS.map((fw, i) => (
         <div data-fw-panel={fw} hidden={i !== 0}>
@@ -245,6 +262,13 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
         Pass this prompt:
       </p>
       <Code code={PARITY_PROMPT} lang="text" title="parity check prompt" />
+      <p class="kata-step-desc" style="margin-top: 0.6rem">
+        <strong style="color: var(--ui-color-text)">Checkpoint:</strong> the report comes back with
+        <strong style="color: var(--ui-color-text)">0 discrepancies</strong>. Anything else — a
+        padding off by one step, a colour that resolved to a literal — is not something to eyeball
+        away: paste the report straight back to Claude and have it fix each entry the report names,
+        then re-run the check until it is clean.
+      </p>
     </section>
 
     <!-- Done -->

@@ -10,10 +10,15 @@
  *   [DRIFT]      A prop defined in the spec is absent from the component's props array
  *   [TYPE-DRIFT] A string-literal-union prop allows a value in the spec that is
  *                not present in the docs `type` string (docs undersell the API)
- *   [NODE-ID]    A Figma node-id cited anywhere under docs/src does not resolve
- *                against tools/figma/snapshot.json (masters, sampled variants, or
- *                the Workshop-Templates kata frames in `referencedNodes`) — a dead
- *                node-id opens the file and silently focuses nothing
+ *   [NODE-ID]    A Figma node-id cited in participant-facing material does not
+ *                resolve against tools/figma/snapshot.json (masters, sampled
+ *                variants, or the Workshop-Templates kata frames in
+ *                `referencedNodes`) — a dead node-id opens the file and silently
+ *                focuses nothing. Scanned: docs/src plus workshop/ (the Day-2
+ *                component briefs, which cite the four starter frames). The
+ *                briefs sat outside the
+ *                original docs/src scope while citing four node ids — exactly the
+ *                failure this check exists to prevent, in an unguarded location.
  *
  * Note: extra props in docs (e.g. callbacks like onValueChange) are intentionally
  * not checked — they are legitimate additions beyond the spec. Likewise, only
@@ -35,6 +40,18 @@ const SPEC_FILE = path.join(ROOT, 'libs/spec/src/index.ts');
 const DOCS_FILE = path.join(ROOT, 'docs/src/data/components.ts');
 const SNAPSHOT_FILE = path.join(ROOT, 'tools/figma/snapshot.json');
 const DOCS_SRC = path.join(ROOT, 'docs/src');
+/**
+ * Participant-facing material outside docs/src that also cites Figma node ids —
+ * today, the Day-2 component briefs, which name the four starter frames by id.
+ *
+ * schulung-2tage-agenda.md is deliberately NOT scanned. It cites its Figma frames
+ * by NAME (`Toast / Starter`), never by id, so there is nothing here to guard —
+ * and its schedule is full of time ranges (`16:10–17:15`) on the same lines that
+ * mention Figma, which is precisely the shape the bare-colon extractor accepts.
+ * Scanning it produced seven findings, all of them clock times. Cite a frame by id
+ * there and this decision has to be revisited along with the extractor.
+ */
+const NODE_ID_ROOTS = [DOCS_SRC, path.join(ROOT, 'workshop')];
 
 /**
  * Primary spec interface -> docs slug. Single-sourced from
@@ -299,7 +316,7 @@ function docsSourceFiles(dir = DOCS_SRC) {
 }
 
 /**
- * [NODE-ID]: every Figma node-id cited under docs/src must resolve against the
+ * [NODE-ID]: every Figma node-id cited in participant-facing material must resolve against the
  * committed snapshot. A dead id is the worst kind of workshop failure: the
  * Figma URL opens the file, focuses nothing, and every downstream MCP call
  * fails with no error the participant can act on.
@@ -307,7 +324,8 @@ function docsSourceFiles(dir = DOCS_SRC) {
  */
 function checkNodeIdCitations(errors) {
   const known = knownFigmaNodeIds();
-  for (const file of docsSourceFiles()) {
+  const scanned = NODE_ID_ROOTS.filter((d) => fs.existsSync(d)).flatMap((d) => docsSourceFiles(d));
+  for (const file of scanned) {
     const rel = path.relative(ROOT, file);
     const lines = fs.readFileSync(file, 'utf8').split('\n');
     lines.forEach((line, i) => {
@@ -404,5 +422,5 @@ if (errors.length > 0) {
 } else {
   const count = Object.keys(SPEC_TO_DOCS).length;
   console.log(`✓ All ${count} spec interfaces, props, and categories match component-data.ts`);
-  console.log('✓ Every Figma node-id cited under docs/src resolves against tools/figma/snapshot.json');
+  console.log('✓ Every Figma node-id cited under docs/src and workshop/ resolves against tools/figma/snapshot.json');
 }

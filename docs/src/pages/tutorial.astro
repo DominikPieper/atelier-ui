@@ -19,13 +19,18 @@ const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
 const trackStep = getTrackStep('/tutorial')!;
 const stepTag = `Step ${trackStep.step} of ${TRACK_LENGTH}`;
 
-const EXAMPLE_PROMPT = `I've selected the "Settings / Card" frame in Figma.
+// Rendered once per framework so the copied text names the participant's own
+// `storybook-<fw>` server — a scaffolded workspace has exactly one storybook
+// entry in its .mcp.json, so a hardcoded `storybook-react` is unrunnable for
+// two thirds of the room. The panels ride the same [data-fw-panel] switcher as
+// the generated output below.
+const examplePrompt = (fw: string) => `I've selected the "Settings / Card" frame in Figma.
 
 1. Use figma-console MCP (figma_get_component_for_development) to read
    the frame's spec — I need the boundVariables and the visual reference.
-2. Use storybook-react MCP to look up AtlCard, AtlInput, AtlToggle,
+2. Use storybook-${fw.toLowerCase()} MCP to look up AtlCard, AtlInput, AtlToggle,
    and AtlButton props.
-3. Generate the React component using:
+3. Generate the ${fw} component using:
    - The Atelier UI components matched from Storybook
    - The exact token names from boundVariables (they map 1-to-1 to CSS
      custom properties — no conversion needed)`;
@@ -468,9 +473,9 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           <div style="flex: 1">
             <h3 class="docs-h3">AI matches to Atelier UI components</h3>
             <p class="docs-step-desc">Claude Code queries the Storybook MCP (<code>list-all-documentation</code> → <code>get-documentation</code>) for the matching component. It gets exact prop names and variants — no guessing.</p>
-            <Callout tone="note" title="Storybook MCP is React-only for component metadata">
+            <Callout tone="note" title="All three endpoints answer — but the reply is React-shaped">
               <p style="margin: 0; font-size: 0.82rem; line-height: 1.6; color: var(--ui-color-text-muted)">
-                Storybook 10.4 emits component metadata over MCP for React only. On Angular and Vue, read the spec at <code>libs/spec/src/index.ts</code> (or query the React Storybook MCP as cross-framework reference) — the API contract is identical across all three.
+                Storybook 10.4 emits <code>components.json</code> for React only, so the worker serves React's manifest on the Angular and Vue endpoints too (ADR-0083). Your own <code>storybook-&lt;fw&gt;</code> server returns real names, variants and defaults — but in React syntax: JSX snippets, React story paths, a <code>children</code> prop where Angular projects content and Vue takes a slot, <code>on*Change</code> callbacks where Angular uses a two-way <code>model()</code> and Vue an <code>update:*</code> emit. Read it as an API reference, not as code to copy. Inside the atelier monorepo, <code>libs/spec/src/index.ts</code> settles any binding you are unsure of.
               </p>
             </Callout>
           </div>
@@ -500,9 +505,15 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
     <div class="docs-section">
       <h2 class="docs-section-title">Example prompt</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1rem; font-size: 0.85rem">
-        A prompt that drives the full A–D workflow in one shot:
+        A prompt that drives the full A–D workflow in one shot — already set to your framework,
+        including the <code>storybook-&lt;fw&gt;</code> server name your workspace was scaffolded with:
       </p>
-      <Code code={EXAMPLE_PROMPT} lang="text" title="example prompt" />
+      <FwSwitcher variant="tabs" frameworks={['react', 'angular', 'vue']} label="Choose a framework for the example prompt" />
+      {FRAMEWORKS.map((fw, i) => (
+        <div data-fw-panel={fw} hidden={i !== 0}>
+          <Code code={examplePrompt(fw)} lang="text" title={`example prompt — ${fw}`} />
+        </div>
+      ))}
     </div>
 
     <!-- Generated output -->
@@ -527,6 +538,14 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         rendering the Nx welcome page until something imports your component — then start
         the dev server and verify against the Figma frame.
         The framework tabs above stay in sync with this section.
+      </p>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
+        These paths are a <strong style="color: var(--ui-color-text)">scaffolded workspace</strong>'s.
+        In a clone of the atelier monorepo there is no <code>workshop-*</code> app: put the component
+        under <code>libs/&lt;fw&gt;/src/lib/…</code> and view it with
+        <code>npx nx storybook &lt;fw&gt;</code> on port 6006. Same loop, different host — see
+        <a href="/troubleshooting#nx-project-not-found" class="docs-link-primary">Cannot find project
+        'workshop-angular'</a>.
       </p>
       {FRAMEWORKS.map((fw, i) => (
         <div data-fw-panel={fw} hidden={i !== 0}>
@@ -594,7 +613,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
     <Checkpoint variant="done" title="You ran the loop end to end">
       <ul class="checkpoint-checks">
         <li><Icon name="check_circle" /> Claude read the Figma spec and matched the Atelier UI components through the Storybook MCP</li>
-        <li><Icon name="check_circle" /> The generated component renders in Storybook</li>
+        <li><Icon name="check_circle" /> The generated component renders in your app at <code>http://localhost:4200</code> — the scaffold has no Storybook of its own; <code>nx storybook &lt;fw&gt;</code> is the atelier repo's path</li>
         <li><Icon name="check_circle" /> <code>figma_check_design_parity</code> reports the node and code in sync</li>
       </ul>
     </Checkpoint>

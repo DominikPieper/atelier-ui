@@ -33,9 +33,10 @@ const GENERATE_PROMPT: Record<string, string> = {
 
 1. figma-console MCP (figma_get_component_for_development) on the node —
    read boundVariables, the component tree, and the rendered preview.
-2. Read the component API contract from libs/spec/src/index.ts (AtlCardSpec,
-   AtlInputSpec, AtlToggleSpec, AtlButtonSpec) — Angular metadata isn't on
-   the Storybook MCP yet.
+2. storybook-angular MCP (list-all-documentation, then get-documentation)
+   to look up AtlCard, AtlInput, AtlToggle, and AtlButton props. The reply
+   is React-shaped — use it for names, variants and defaults, then write
+   Angular bindings (two-way model(), ng-content instead of children).
 3. Generate the component with the exact Atelier UI props and the exact
    --ui-* token names from boundVariables. No hardcoded colors or paddings.`,
 
@@ -43,9 +44,10 @@ const GENERATE_PROMPT: Record<string, string> = {
 
 1. figma-console MCP (figma_get_component_for_development) on the node —
    read boundVariables, the component tree, and the rendered preview.
-2. Read the component API contract from libs/spec/src/index.ts (AtlCardSpec,
-   AtlInputSpec, AtlToggleSpec, AtlButtonSpec) — Vue metadata isn't on
-   the Storybook MCP yet.
+2. storybook-vue MCP (list-all-documentation, then get-documentation)
+   to look up AtlCard, AtlInput, AtlToggle, and AtlButton props. The reply
+   is React-shaped — use it for names, variants and defaults, then write
+   Vue bindings (update:* emits, <slot /> instead of children).
 3. Generate the component with the exact Atelier UI props and the exact
    --ui-* token names from boundVariables. No hardcoded colors or paddings.`,
 };
@@ -53,8 +55,8 @@ const GENERATE_PROMPT: Record<string, string> = {
 // Per-framework note for the Generate step: where component docs come from.
 const GENERATE_NOTE: Record<string, string> = {
   React: 'React exposes component metadata over the hosted Storybook MCP — list-all-documentation gives Claude every prop and variant before it writes a line.',
-  Angular: 'Storybook 10.4 only emits components.json for React, so Angular falls back to reading the spec at libs/spec/src/index.ts directly. The API contract is identical across all three frameworks.',
-  Vue: 'Storybook 10.4 only emits components.json for React, so Vue falls back to reading the spec at libs/spec/src/index.ts directly. The API contract is identical across all three frameworks.',
+  Angular: "Storybook 10.4 only emits components.json for React, so the worker serves React's manifest on the Angular endpoint too (ADR-0083) — storybook-angular answers component lookups with real names, variants and defaults. The reply is React-shaped, though: JSX snippets, React story paths, a children prop where Angular projects content, on*Change callbacks where Angular uses a two-way model(). Read it as an API reference, not as code to copy.",
+  Vue: "Storybook 10.4 only emits components.json for React, so the worker serves React's manifest on the Vue endpoint too (ADR-0083) — storybook-vue answers component lookups with real names, variants and defaults. The reply is React-shaped, though: JSX snippets, React story paths, a children prop where Vue takes a slot, on*Change callbacks where Vue emits update:*. Read it as an API reference, not as code to copy.",
 };
 
 const PARITY_PROMPT = `Run figma_check_design_parity on the settings card node against
@@ -159,6 +161,14 @@ the component I just generated. Fix every discrepancy it reports.`;
           <p class="docs-step-desc">
             The API contract lives in <code>libs/spec/src/index.ts</code> (plus <code>metadata/</code> and <code>tokens.manifest.ts</code>). It is the <strong style="color: var(--ui-color-text)">same contract across all three frameworks</strong>: identical prop names, identical variant unions, identical token names. Whichever framework you pick, the props you'll write are defined here.
           </p>
+          <p class="docs-step-desc">
+            Those files are in the <strong style="color: var(--ui-color-text)">atelier monorepo</strong>. In a scaffolded
+            workshop workspace you read the same contract without them — through the hosted
+            <code>storybook-*</code> MCP (<code>list-all-documentation</code> → <code>get-documentation</code>),
+            or from <a href="/llms-full.txt" class="docs-link-primary">llms-full.txt</a>. The prop tables the
+            MCP returns are exact; the code snippets alongside them come back in React syntax on
+            all three endpoints (ADR-0083), so read them for the API, not for the bindings.
+          </p>
         </div>
       </div>
     </div>
@@ -193,12 +203,13 @@ the component I just generated. Fix every discrepancy it reports.`;
         <div style="flex: 1">
           <h2 class="docs-h3">Verify — prove design parity</h2>
           <p class="docs-step-desc">
-            Run the story in Storybook (<code>nx storybook &lt;fw&gt;</code>) to see the component in isolation, then run <code>figma_check_design_parity</code> to catch padding, colour, and variant drift against the Figma spec.
+            See the component rendered, then run <code>figma_check_design_parity</code> to catch padding, colour, and variant drift against the Figma spec.
+            In the atelier monorepo that means the story in Storybook (<code>nx storybook &lt;fw&gt;</code>); in a scaffolded workspace it means the app (<code>npx nx serve workshop-&lt;fw&gt;</code>), which has no Storybook of its own.
             <strong style="color: var(--ui-color-text)">This step is required</strong> — it's what turns "looks about right" into a verified component.
           </p>
           <Code code={PARITY_PROMPT} lang="text" title="parity check prompt" />
           <p class="docs-step-desc">
-            When the component maps to a <strong style="color: var(--ui-color-text)">library master</strong>, persist the result so drift is caught later: <code>npm run parity:record -- --component &lt;AtlFoo&gt;</code>. The offline <code>npm run check:parity</code> gate then flags that component if its code changes after this verify (see ADR-0024).
+            When the component maps to a <strong style="color: var(--ui-color-text)">library master</strong> and you are working <strong style="color: var(--ui-color-text)">in the atelier monorepo</strong>, persist the result so drift is caught later: <code>npm run parity:record -- --component &lt;AtlFoo&gt;</code>. The offline <code>npm run check:parity</code> gate then flags that component if its code changes after this verify (see ADR-0024). Both are repo scripts — a scaffolded workspace stops at the parity prompt above.
           </p>
         </div>
       </div>

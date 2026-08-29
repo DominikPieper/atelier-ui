@@ -18,9 +18,15 @@ The core loop — Figma → spec → code → verify, in your chosen framework:
    `tokens.manifest.ts`, `behaviors.json`). The same contract drives all three
    frameworks, so prop/variant names are identical everywhere.
 3. **Generate or edit** the component with Claude, using the Storybook MCP for
-   exact component docs (see the table below). React also exposes component
-   metadata over MCP; **Angular/Vue fall back to reading `libs/spec` directly**
-   (Storybook 10.4 only emits `components.json` for React).
+   exact component docs (see the table below). **All three hosted endpoints answer
+   component lookups** — Storybook 10.4 only emits `components.json` for React, so
+   the worker serves React's manifest on the Angular and Vue endpoints too
+   (ADR-0083). Variants, defaults and state props carry across, but the reply is
+   React-shaped throughout — JSX snippets, React story paths, a `children` prop
+   where Angular projects content and Vue takes a slot, and `on*Change` callbacks
+   where Angular uses a two-way `model()` and Vue an `update:*` emit. Treat it as
+   an API reference, not as code to copy; `libs/spec/src/index.ts` settles any
+   binding you are unsure of.
 4. **Verify** — run the story in Storybook, then close the loop with
    `figma_check_design_parity` to catch padding/colour/variant drift. **Required,
    not optional.**
@@ -48,7 +54,7 @@ Always use the appropriate server for the task:
 
 **Toolset gating** (addon-mcp options, all default `true`): `dev` requires nothing extra. `docs` requires the `experimentalComponentsManifest` feature flag + emitted `components.json` (React only as of 10.4). `test` requires `@storybook/addon-vitest`; a11y in `run-story-tests` activates when `@storybook/addon-a11y` is installed. `get-changed-stories` activates when `features.changeDetection` is on (Storybook 10.4 Change Review sidebar).
 
-The `.mcp.json` at the repo root wires the hosted surface for all three frameworks. Add a local entry when you need preview / test tools or per-component data on Angular/Vue. **For Angular/Vue prop tables, fall back to the React MCP as cross-framework API reference (the spec contract is identical) or read `libs/spec/src/index.ts` directly.**
+The `.mcp.json` at the repo root wires the hosted surface for all three frameworks. Add a local entry when you need the `dev` / `test` toolsets. **Angular/Vue prop tables come back from their own hosted endpoint — the worker performs the React-manifest substitution that used to be a manual fallback (ADR-0083); `libs/spec/src/index.ts` stays the ground truth inside this repo.**
 
 **When reading component docs (any framework, any surface):**
 1. Call `list-all-documentation` once at session start to get valid IDs (set `withStoryIds: true` if you need story IDs for downstream tools; pass `storybookId` to scope multi-source setups)

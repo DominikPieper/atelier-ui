@@ -6,6 +6,7 @@ import PageHero from '../components/PageHero.astro';
 import BottomNav from '../components/BottomNav.astro';
 import Callout from '../components/Callout.astro';
 import { referenceCount } from '../lib/skill-meta';
+import { designTokenCount, designTypefaces } from '../lib/atelier-design-meta';
 
 const SITE_URL = 'https://atelier.pieper.io';
 
@@ -149,7 +150,7 @@ const skills = [
     <div class="docs-section">
       <h2 class="docs-section-title">Workspace skills</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.75rem; font-size: 0.85rem">
-        Multi-file Claude Code skills that ship architectural playbooks — references and assets loaded on demand by the active mode. Distinct from the MCP Skills below: these run in Claude Code itself, not as a remote MCP server.
+        Multi-file Claude Code skills that ship architectural and brand playbooks — references and assets loaded on demand. Distinct from the MCP Skills below: these run in Claude Code itself, not as a remote MCP server.
       </p>
       <div style="display: flex; flex-direction: column; gap: 1.5rem">
         <div class="docs-step-row">
@@ -160,6 +161,17 @@ const skills = [
               Designs, builds, audits, and migrates Figma workspaces via figma-console-mcp. Five modes (Build, Audit, Decide, Migrate, Sync) with four sub-modes (Scaffold, Inventory, Re-verify, Code-verify). {referenceCount} references loaded on demand.
             </p>
             <a href={`${SITE_URL}/.well-known/agent-skills/figma-workspace-architect/SKILL.md`} target="_blank" rel="noopener noreferrer" style="font-size: 0.75rem; font-family: monospace; color: var(--ui-color-text-muted); text-decoration: none">{`${SITE_URL}/.well-known/agent-skills/figma-workspace-architect/SKILL.md`}</a>
+          </div>
+        </div>
+
+        <div class="docs-step-row">
+          <span class="docs-step-badge">β</span>
+          <div style="flex: 1">
+            <h3 class="docs-h3"><a href="/skills/atelier-design" style="color: inherit; text-decoration: none">atelier-design <span style="color: var(--ui-color-text-muted); font-size: 0.78em; font-weight: 500">→</span></a></h3>
+            <p class="docs-step-desc" style="margin-bottom: 0.5rem">
+              Generates well-branded Atelier interfaces, slides, and mocks — voice rules, the {designTokenCount}-token <code>--ui-*</code> sheet ({designTypefaces.ui} / {designTypefaces.display} / {designTypefaces.mono}), the logo, and a docs-site UI kit. The brand-consistency co-pilot to figma-workspace-architect's architecture.
+            </p>
+            <span style="font-size: 0.75rem; font-family: monospace; color: var(--ui-color-text-muted)">repo only — no discovery URL</span>
           </div>
         </div>
       </div>
