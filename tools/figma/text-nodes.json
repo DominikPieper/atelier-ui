@@ -1,8 +1,8 @@
 {
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
-    "generatedAt": "2026-08-28T20:01:01.675Z",
-    "gitSha": "67767a3",
+    "generatedAt": "2026-08-29T14:09:32.628Z",
+    "gitSha": "cbc93b7",
     "totalTextNodes": 566,
     "records": 277,
     "note": "Per-TEXT-node type facts for every master, companion to snapshot.json and written by the same run — `generatedAt` must match it, and a gate that reads one without checking the other is reading two different documents. Records are deduplicated across the variants of a set, so a count of text NODES sums `count` and never `records.length`. ADDRESSING A RECORD: neither `path` nor master + path + chars is unique — `path` collides inside a variant, and 13 master + path + chars keys stand for 2-3 records each (AtlButton draws three different `Button “Button”`). Use master + path + chars + size + weight, which is unique across all records today; check-figma.js builds exactly that address. Only the fontSize variable's collection is captured — a lineHeight binding is invisible here (zero nodes carry one today). Facts only; rules live in check-figma.js and check-typeface.js."
@@ -47,7 +47,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/md",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=primary, size=md, state=default",
             "variant=secondary, size=md, state=default",
@@ -80,7 +80,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/lg",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=primary, size=lg, state=default",
             "variant=secondary, size=lg, state=default",
@@ -109,7 +109,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "state=default",
             "state=hover"
@@ -128,7 +128,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "state=filled",
             "state=focus"
@@ -147,7 +147,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "state=invalid"
           ],
@@ -191,7 +191,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/md",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "*"
           ],
@@ -287,7 +287,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "state=default",
             "state=hover",
@@ -307,7 +307,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "state=filled",
             "state=open"
@@ -352,7 +352,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "*"
           ],
@@ -433,7 +433,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, selectedIndex=0",
             "variant=pills, selectedIndex=0"
@@ -452,7 +452,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "*"
           ],
@@ -470,7 +470,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, selectedIndex=0",
             "variant=pills, selectedIndex=0"
@@ -489,7 +489,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, selectedIndex=1"
           ],
@@ -525,7 +525,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, selectedIndex=1"
           ],
@@ -569,7 +569,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "*"
           ],
@@ -907,7 +907,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "*"
           ],
@@ -933,7 +933,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "*"
           ],
@@ -1006,7 +1006,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "selection=unselected, state=default",
             "selection=unselected, state=focus",
@@ -1026,7 +1026,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "selection=selected, state=default"
           ],
@@ -1052,7 +1052,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/md",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "selection=unchecked, state=default",
             "selection=unchecked, state=focus",
@@ -1072,7 +1072,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/md",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "selection=checked, state=default"
           ],
@@ -1169,7 +1169,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/md",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "shape=circle, size=lg",
             "shape=square, size=lg"
@@ -1215,7 +1215,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "*"
           ],
@@ -1339,7 +1339,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "*"
           ],
@@ -1357,7 +1357,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "*"
           ],
@@ -1375,7 +1375,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "*"
           ],
@@ -1411,7 +1411,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "*"
           ],
@@ -1429,7 +1429,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "*"
           ],
@@ -1455,7 +1455,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/md",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "position=right, size=md",
             "position=right, size=sm",
@@ -1476,7 +1476,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "*"
           ],
@@ -1512,7 +1512,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "*"
           ],
@@ -1530,7 +1530,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/md",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "position=left, size=md"
           ],
@@ -1548,7 +1548,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/md",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "position=top, size=md"
           ],
@@ -1566,7 +1566,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/md",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "position=bottom, size=md"
           ],
@@ -1664,7 +1664,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=md, state=default"
           ],
@@ -1682,7 +1682,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=md, state=default"
           ],
@@ -1700,7 +1700,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=md, state=default"
           ],
@@ -1718,7 +1718,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=md, state=default"
           ],
@@ -1736,7 +1736,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=md, state=default"
           ],
@@ -1754,7 +1754,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=md, state=default"
           ],
@@ -1772,7 +1772,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=md, state=default"
           ],
@@ -1790,7 +1790,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=md, state=default"
           ],
@@ -1808,7 +1808,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=md, state=default"
           ],
@@ -1826,7 +1826,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=md, state=default"
           ],
@@ -1844,7 +1844,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=md, state=default"
           ],
@@ -1862,7 +1862,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=md, state=default"
           ],
@@ -1952,7 +1952,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=striped, size=md, state=default"
           ],
@@ -1970,7 +1970,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=striped, size=md, state=default"
           ],
@@ -1988,7 +1988,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=striped, size=md, state=default"
           ],
@@ -2006,7 +2006,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=striped, size=md, state=default"
           ],
@@ -2024,7 +2024,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=striped, size=md, state=default"
           ],
@@ -2042,7 +2042,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=striped, size=md, state=default"
           ],
@@ -2060,7 +2060,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=striped, size=md, state=default"
           ],
@@ -2078,7 +2078,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=striped, size=md, state=default"
           ],
@@ -2096,7 +2096,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=striped, size=md, state=default"
           ],
@@ -2114,7 +2114,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=striped, size=md, state=default"
           ],
@@ -2132,7 +2132,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=striped, size=md, state=default"
           ],
@@ -2150,7 +2150,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=striped, size=md, state=default"
           ],
@@ -2240,7 +2240,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=bordered, size=md, state=default"
           ],
@@ -2258,7 +2258,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=bordered, size=md, state=default"
           ],
@@ -2276,7 +2276,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=bordered, size=md, state=default"
           ],
@@ -2294,7 +2294,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=bordered, size=md, state=default"
           ],
@@ -2312,7 +2312,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=bordered, size=md, state=default"
           ],
@@ -2330,7 +2330,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=bordered, size=md, state=default"
           ],
@@ -2348,7 +2348,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=bordered, size=md, state=default"
           ],
@@ -2366,7 +2366,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=bordered, size=md, state=default"
           ],
@@ -2384,7 +2384,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=bordered, size=md, state=default"
           ],
@@ -2402,7 +2402,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=bordered, size=md, state=default"
           ],
@@ -2420,7 +2420,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=bordered, size=md, state=default"
           ],
@@ -2438,7 +2438,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=bordered, size=md, state=default"
           ],
@@ -2816,7 +2816,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/md",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=lg, state=default"
           ],
@@ -2834,7 +2834,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/md",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=lg, state=default"
           ],
@@ -2852,7 +2852,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/md",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=lg, state=default"
           ],
@@ -2870,7 +2870,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/md",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=lg, state=default"
           ],
@@ -2888,7 +2888,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/md",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=lg, state=default"
           ],
@@ -2906,7 +2906,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/md",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=lg, state=default"
           ],
@@ -2924,7 +2924,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/md",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=lg, state=default"
           ],
@@ -2942,7 +2942,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/md",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=lg, state=default"
           ],
@@ -2960,7 +2960,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/md",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=lg, state=default"
           ],
@@ -2978,7 +2978,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/md",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=lg, state=default"
           ],
@@ -2996,7 +2996,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/md",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=lg, state=default"
           ],
@@ -3014,7 +3014,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/md",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default, size=lg, state=default"
           ],
@@ -3040,7 +3040,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/xs",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=default",
             "variant=no-copy"
@@ -3223,7 +3223,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/xs",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=with-filename",
             "variant=with-line-numbers"
@@ -3394,7 +3394,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "state=default",
             "state=open",
@@ -3415,7 +3415,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "state=open",
             "state=filtered"
@@ -3434,7 +3434,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "state=open"
           ],
@@ -3452,7 +3452,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "state=open"
           ],
@@ -3470,7 +3470,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "state=open"
           ],
@@ -3488,7 +3488,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "state=open"
           ],
@@ -3506,7 +3506,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "state=open"
           ],
@@ -3524,7 +3524,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "state=filtered"
           ],
@@ -3542,7 +3542,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "state=filtered"
           ],
@@ -3560,7 +3560,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "state=filtered"
           ],
@@ -3578,7 +3578,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "state=selected"
           ],
@@ -3604,7 +3604,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "orientation=horizontal, state=default",
             "orientation=horizontal, state=optional",
@@ -3667,7 +3667,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "orientation=horizontal, state=default",
             "orientation=horizontal, state=optional",
@@ -3708,7 +3708,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "*"
           ],
@@ -3744,7 +3744,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "orientation=horizontal, state=completed"
           ],
@@ -3762,7 +3762,7 @@
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/xs",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "orientation=horizontal, state=error"
           ],
@@ -4049,7 +4049,7 @@
           "insideInstance": true,
           "hasTextStyleOverride": true,
           "fontSizeVariable": "font-size/md",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=drawer",
             "variant=inline"
@@ -4068,7 +4068,7 @@
           "insideInstance": true,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/xs",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=drawer",
             "variant=inline"
@@ -4420,7 +4420,7 @@
           "insideInstance": true,
           "hasTextStyleOverride": true,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=popup"
           ],
@@ -4834,7 +4834,7 @@
           "insideInstance": true,
           "hasTextStyleOverride": true,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "variant=inline"
           ],
@@ -5337,7 +5337,7 @@
           "insideInstance": true,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "*"
           ],
@@ -5381,7 +5381,7 @@
           "insideInstance": true,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/sm",
-          "fontSizeVariableCollection": "Docs Brand Tokens",
+          "fontSizeVariableCollection": "Library Tokens",
           "variantScope": [
             "*"
           ],

@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-28T20:01:01.675Z",
-    "gitSha": "67767a3",
+    "generatedAt": "2026-08-29T14:09:32.628Z",
+    "gitSha": "cbc93b7",
     "serverVersion": null,
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
