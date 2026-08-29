@@ -71,17 +71,113 @@ function isAtLeast(actual, required) {
   return actual.patch >= required.patch;
 }
 
-async function httpReachable(url, timeoutMs = 5000) {
+// ── MCP probing ──────────────────────────────────────────────────────
+// A plain GET only proves a URL answers, not that the MCP behind it works:
+// the hosted Storybook MCP once answered every reachability check with a
+// harmless status while every actual tool call failed (broken manifest fetch
+// inside the worker, surfaced as HTTP 200 + isError). So the probe speaks
+// real JSON-RPC: initialize → tools/list, and — on Atelier Storybook
+// endpoints — one real tool call.
+
+async function mcpPost(url, body, sessionId, timeoutMs = 10000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const res = await fetch(url, { method: 'GET', signal: controller.signal });
-    return { ok: true, status: res.status };
+    const headers = {
+      'content-type': 'application/json',
+      accept: 'application/json, text/event-stream',
+    };
+    if (sessionId) headers['mcp-session-id'] = sessionId;
+    const res = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(body),
+      signal: controller.signal,
+    });
+    return {
+      status: res.status,
+      contentType: res.headers.get('content-type') ?? '',
+      text: await res.text(),
+      sessionId: res.headers.get('mcp-session-id') ?? undefined,
+    };
   } catch (err) {
-    return { ok: false, error: err?.name === 'AbortError' ? 'timeout' : String(err?.message ?? err) };
+    return { error: err?.name === 'AbortError' ? 'timeout' : String(err?.message ?? err) };
   } finally {
     clearTimeout(timer);
   }
+}
+
+/** Extract the JSON-RPC message with the given id from a JSON or SSE body. */
+function parseJsonRpc(contentType, text, id) {
+  const candidates = contentType.includes('text/event-stream')
+    ? text
+        .split('\n')
+        .filter((line) => line.startsWith('data:'))
+        .map((line) => line.slice(5).trim())
+    : [text];
+  for (const candidate of candidates) {
+    try {
+      const msg = JSON.parse(candidate);
+      if (msg?.id === id) return msg;
+    } catch {
+      // keep scanning — an SSE stream may carry unrelated events
+    }
+  }
+  return null;
+}
+
+async function probeMcp(url) {
+  // 1. initialize — stateful servers hand out a session id here.
+  const init = await mcpPost(url, {
+    jsonrpc: '2.0',
+    id: 1,
+    method: 'initialize',
+    params: {
+      protocolVersion: '2025-06-18',
+      capabilities: {},
+      clientInfo: { name: 'atelier-preflight', version: '1.0.0' },
+    },
+  });
+  if (init.error) return { level: 'unreachable', detail: init.error };
+  const session = init.sessionId;
+  if (session) {
+    await mcpPost(url, { jsonrpc: '2.0', method: 'notifications/initialized' }, session, 5000);
+  }
+
+  // 2. tools/list — must be HTTP 200 with a parseable JSON-RPC tools array.
+  const list = await mcpPost(url, { jsonrpc: '2.0', id: 2, method: 'tools/list', params: {} }, session);
+  if (list.error) return { level: 'broken', detail: `tools/list failed (${list.error})` };
+  if (list.status !== 200) return { level: 'broken', detail: `tools/list → HTTP ${list.status}` };
+  const listMsg = parseJsonRpc(list.contentType, list.text, 2);
+  const tools = listMsg?.result?.tools;
+  if (!Array.isArray(tools)) return { level: 'broken', detail: 'tools/list → no parseable result' };
+
+  // 3. On an Atelier Storybook MCP, exercise one real tool call: manifests
+  //    are only fetched inside tool calls, and a broken manifest fetch comes
+  //    back as HTTP 200 + isError — invisible to anything shallower.
+  if (tools.some((t) => t?.name === 'list-all-documentation')) {
+    const call = await mcpPost(
+      url,
+      {
+        jsonrpc: '2.0',
+        id: 3,
+        method: 'tools/call',
+        params: { name: 'list-all-documentation', arguments: {} },
+      },
+      session,
+    );
+    if (call.error) return { level: 'broken', detail: `list-all-documentation failed (${call.error})` };
+    if (call.status !== 200) return { level: 'broken', detail: `list-all-documentation → HTTP ${call.status}` };
+    const callMsg = parseJsonRpc(call.contentType, call.text, 3);
+    if (!callMsg?.result || callMsg.result.isError) {
+      const reason =
+        callMsg?.result?.content?.[0]?.text ?? callMsg?.error?.message ?? 'no parseable result';
+      const oneLine = String(reason).replace(/\s+/g, ' ').trim();
+      return { level: 'broken', detail: `list-all-documentation → ${oneLine.slice(0, 120)}` };
+    }
+  }
+
+  return { level: 'ok', status: list.status };
 }
 
 function portFree(port) {
@@ -239,15 +335,19 @@ async function checkMcpEndpoints() {
     return;
   }
   for (const { name, url } of endpoints) {
-    const res = await httpReachable(url);
-    if (res.ok && res.status < 500) {
+    const res = await probeMcp(url);
+    if (res.level === 'ok') {
       ok(`MCP: ${name}`, `${url} (HTTP ${res.status})`);
-    } else if (res.ok) {
-      warn(`MCP: ${name}`, `${url} (HTTP ${res.status})`, 'Server reachable but returned 5xx — retry later');
+    } else if (res.level === 'broken') {
+      fail(
+        `MCP: ${name}`,
+        `${url} ${res.detail}`,
+        'Server reachable but MCP calls fail — see https://atelier.pieper.io/troubleshooting#mcp-tools-error',
+      );
     } else {
       fail(
         `MCP: ${name}`,
-        `${url} unreachable (${res.error})`,
+        `${url} unreachable (${res.detail})`,
         'Check your network or proxy settings',
       );
     }
@@ -255,7 +355,10 @@ async function checkMcpEndpoints() {
 }
 
 async function checkPorts() {
-  const ports = [4200, 4201, 4202, 6006];
+  // 4200 = the dev server (every framework serves on the @nx/vite default),
+  // 6006 = local Storybook. Nothing in the scaffold uses 4201/4202 — the old
+  // multi-framework rig did, and checking them only confused participants.
+  const ports = [4200, 6006];
   for (const p of ports) {
     const free = await portFree(p);
     if (free) ok(`Port ${p}`, 'free');

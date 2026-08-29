@@ -25,7 +25,7 @@ const GENERATE_PROMPT: Record<string, string> = {
 1. figma-console MCP (figma_get_component_for_development) on the node —
    read boundVariables, the component tree, and the rendered preview.
 2. storybook-react MCP (list-all-documentation, then get-documentation)
-   to look up AtlCard and AtlInput props.
+   to look up AtlCard, AtlInput, AtlToggle, and AtlButton props.
 3. Generate the component with the exact Atelier UI props and the exact
    --ui-* token names from boundVariables. No hardcoded colors or paddings.`,
 
@@ -34,7 +34,8 @@ const GENERATE_PROMPT: Record<string, string> = {
 1. figma-console MCP (figma_get_component_for_development) on the node —
    read boundVariables, the component tree, and the rendered preview.
 2. Read the component API contract from libs/spec/src/index.ts (AtlCardSpec,
-   AtlInputSpec) — Angular metadata isn't on the Storybook MCP yet.
+   AtlInputSpec, AtlToggleSpec, AtlButtonSpec) — Angular metadata isn't on
+   the Storybook MCP yet.
 3. Generate the component with the exact Atelier UI props and the exact
    --ui-* token names from boundVariables. No hardcoded colors or paddings.`,
 
@@ -43,7 +44,8 @@ const GENERATE_PROMPT: Record<string, string> = {
 1. figma-console MCP (figma_get_component_for_development) on the node —
    read boundVariables, the component tree, and the rendered preview.
 2. Read the component API contract from libs/spec/src/index.ts (AtlCardSpec,
-   AtlInputSpec) — Vue metadata isn't on the Storybook MCP yet.
+   AtlInputSpec, AtlToggleSpec, AtlButtonSpec) — Vue metadata isn't on
+   the Storybook MCP yet.
 3. Generate the component with the exact Atelier UI props and the exact
    --ui-* token names from boundVariables. No hardcoded colors or paddings.`,
 };

@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": null,
-    "generatedAt": "2026-08-28T11:08:52.815Z",
-    "gitSha": "216b228",
+    "generatedAt": "2026-08-28T20:01:01.675Z",
+    "gitSha": "67767a3",
     "serverVersion": null,
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -63,7 +63,7 @@
   ],
   "typography": {
     "fontFamilies": {
-      "Instrument Sans": 1670,
+      "Instrument Sans": 1675,
       "Instrument Serif": 1,
       "JetBrains Mono": 81
     },
@@ -160,6 +160,50 @@
       "chars": "→",
       "layer": "sizes: xs|sm|md|lg|xl · shapes: circle|square · fallback: image→initials→icon · status dot",
       "where": "Display › AtlAvatar + AtlAvatarGroup › sizes: xs|sm|md|lg|xl · shapes: circle|square · fallback: image→initials→icon · status dot"
+    }
+  ],
+  "referencedNodes": [
+    {
+      "id": "703:333",
+      "name": "Instructions",
+      "page": "🛠️ Workshop-Templates",
+      "section": "How to use"
+    },
+    {
+      "id": "703:341",
+      "name": "Toast / Starter",
+      "page": "🛠️ Workshop-Templates",
+      "section": "Starter frames — copy one, rename it, build on it"
+    },
+    {
+      "id": "703:348",
+      "name": "StatCard / Starter",
+      "page": "🛠️ Workshop-Templates",
+      "section": "Starter frames — copy one, rename it, build on it"
+    },
+    {
+      "id": "703:352",
+      "name": "TagChip / Starter",
+      "page": "🛠️ Workshop-Templates",
+      "section": "Starter frames — copy one, rename it, build on it"
+    },
+    {
+      "id": "703:355",
+      "name": "Avatar / Starter",
+      "page": "🛠️ Workshop-Templates",
+      "section": "Starter frames — copy one, rename it, build on it"
+    },
+    {
+      "id": "703:358",
+      "name": "Variant Matrix / Scaffold",
+      "page": "🛠️ Workshop-Templates",
+      "section": "Starter frames — copy one, rename it, build on it"
+    },
+    {
+      "id": "936:2954",
+      "name": "Settings / Card",
+      "page": "🛠️ Workshop-Templates",
+      "section": "Kata — Settings / Card"
     }
   ],
   "components": [

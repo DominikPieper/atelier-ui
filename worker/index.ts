@@ -1,8 +1,8 @@
-import { mcpHandler, type Storybook } from "./mcp";
+import { mcpHandler, type AssetsFetcher, type Storybook } from "./mcp";
 import { negotiateMarkdown } from "./markdown-negotiation";
 
 interface Env {
-  ASSETS: { fetch: (request: Request) => Promise<Response> };
+  ASSETS: AssetsFetcher;
 }
 
 const MCP_ROUTE = /^\/storybook-(react|angular|vue)\/mcp$/;
@@ -13,7 +13,7 @@ export default {
 
     const mcpMatch = pathname.match(MCP_ROUTE);
     if (mcpMatch) {
-      const handler = await mcpHandler(mcpMatch[1] as Storybook);
+      const handler = await mcpHandler(mcpMatch[1] as Storybook, env.ASSETS);
       return handler(request);
     }
 

@@ -10,6 +10,10 @@
  *   [DRIFT]      A prop defined in the spec is absent from the component's props array
  *   [TYPE-DRIFT] A string-literal-union prop allows a value in the spec that is
  *                not present in the docs `type` string (docs undersell the API)
+ *   [NODE-ID]    A Figma node-id cited anywhere under docs/src does not resolve
+ *                against tools/figma/snapshot.json (masters, sampled variants, or
+ *                the Workshop-Templates kata frames in `referencedNodes`) — a dead
+ *                node-id opens the file and silently focuses nothing
  *
  * Note: extra props in docs (e.g. callbacks like onValueChange) are intentionally
  * not checked — they are legitimate additions beyond the spec. Likewise, only
@@ -22,12 +26,15 @@
  */
 'use strict';
 
+const fs = require('fs');
 const path = require('path');
 const ts = require('typescript');
 
 const ROOT = path.resolve(__dirname, '../..');
 const SPEC_FILE = path.join(ROOT, 'libs/spec/src/index.ts');
 const DOCS_FILE = path.join(ROOT, 'docs/src/data/components.ts');
+const SNAPSHOT_FILE = path.join(ROOT, 'tools/figma/snapshot.json');
+const DOCS_SRC = path.join(ROOT, 'docs/src');
 
 /**
  * Primary spec interface -> docs slug. Single-sourced from
@@ -234,6 +241,89 @@ function docsLiteralsOf(typeStr) {
 }
 
 // ---------------------------------------------------------------------------
+// Figma node-id citations
+// ---------------------------------------------------------------------------
+
+/**
+ * Every node id the committed snapshot can vouch for: the masters, the variant
+ * each master's deep read sampled, and the Workshop-Templates kata frames
+ * captured as `referencedNodes` (a docs-cited exercise frame lives on that
+ * page, not among the masters).
+ * @returns {Set<string>} ids in canonical `123:456` form
+ */
+function knownFigmaNodeIds() {
+  const snap = JSON.parse(fs.readFileSync(SNAPSHOT_FILE, 'utf8'));
+  const ids = new Set();
+  for (const c of snap.components ?? []) {
+    if (c.nodeId) ids.add(c.nodeId);
+    if (c.sampledVariant) ids.add(c.sampledVariant);
+  }
+  for (const r of snap.referencedNodes ?? []) {
+    if (r.id) ids.add(r.id);
+  }
+  return ids;
+}
+
+/**
+ * Extracts Figma node-id citations from one line of docs source. Two shapes,
+ * built from the citations the docs actually carry:
+ *   - URL/prose dash form: `?node-id=936-2954`, `node-id 936-2954`
+ *   - bare colon form: `936:2954` in prose, `nodeId: "129:20"` in code samples.
+ *     Guarded three ways so times ("11:00–12:15") and contrast ratios ("3:1",
+ *     "4.5:1") never read as node ids: the line must also mention figma or
+ *     node-id, both parts need >= 2 digits, and neither may start with 0.
+ * @param {string} line
+ * @returns {string[]} ids in canonical `123:456` form
+ */
+function nodeIdCitationsOf(line) {
+  const ids = [];
+  const dashRe = /node-id[= ](\d+)-(\d+)/gi;
+  let m;
+  while ((m = dashRe.exec(line)) !== null) ids.push(`${m[1]}:${m[2]}`);
+  if (/figma|node[-_ ]?id/i.test(line)) {
+    const colonRe = /(?<![\d:.])([1-9]\d+):([1-9]\d+)(?![\d:])/g;
+    while ((m = colonRe.exec(line)) !== null) ids.push(`${m[1]}:${m[2]}`);
+  }
+  return ids;
+}
+
+/** @returns {string[]} absolute paths of docs source files worth scanning */
+function docsSourceFiles(dir = DOCS_SRC) {
+  const out = [];
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) out.push(...docsSourceFiles(full));
+    else if (/\.(astro|tsx?|jsx?|mjs|mdx?)$/.test(entry.name)) out.push(full);
+  }
+  return out;
+}
+
+/**
+ * [NODE-ID]: every Figma node-id cited under docs/src must resolve against the
+ * committed snapshot. A dead id is the worst kind of workshop failure: the
+ * Figma URL opens the file, focuses nothing, and every downstream MCP call
+ * fails with no error the participant can act on.
+ * @param {string[]} errors
+ */
+function checkNodeIdCitations(errors) {
+  const known = knownFigmaNodeIds();
+  for (const file of docsSourceFiles()) {
+    const rel = path.relative(ROOT, file);
+    const lines = fs.readFileSync(file, 'utf8').split('\n');
+    lines.forEach((line, i) => {
+      for (const id of new Set(nodeIdCitationsOf(line))) {
+        if (!known.has(id)) {
+          errors.push(
+            `[NODE-ID] ${rel}:${i + 1} cites Figma node ${id}, which tools/figma/snapshot.json does not know — ` +
+              `fix the citation, or refresh the snapshot (npm run figma:snapshot) if the node was just created`
+          );
+        }
+      }
+    });
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
 
@@ -298,13 +388,21 @@ for (const key of Object.keys(docsMap)) {
   }
 }
 
+// 3. Figma node-id citations ↔ committed snapshot
+checkNodeIdCitations(errors);
+
 if (errors.length > 0) {
   errors.forEach((e) => console.error(`✗ ${e}`));
+  const nodeIdIssues = errors.filter((e) => e.startsWith('[NODE-ID]')).length;
+  const docIssues = errors.length - nodeIdIssues;
   console.error(
-    `\n${errors.length} issue(s) found. Update docs/src/data/components.ts to fix.`
+    `\n${errors.length} issue(s) found.` +
+      (docIssues ? ' Update docs/src/data/components.ts to fix the spec/docs drift.' : '') +
+      (nodeIdIssues ? ' Fix the dead node-id citation(s) in the named docs pages.' : '')
   );
   process.exit(1);
 } else {
   const count = Object.keys(SPEC_TO_DOCS).length;
   console.log(`✓ All ${count} spec interfaces, props, and categories match component-data.ts`);
+  console.log('✓ Every Figma node-id cited under docs/src resolves against tools/figma/snapshot.json');
 }

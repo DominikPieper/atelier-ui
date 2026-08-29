@@ -7,7 +7,7 @@ import PageHero from '../components/PageHero.astro';
 import TrackNav from '../components/TrackNav.astro';
 import { getTrackStep, TRACK_LENGTH } from '../data/workshop-track';
 
-const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI?node-id=695-313';
+const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI?node-id=936-2954';
 const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
 type Framework = typeof FRAMEWORKS[number];
 
@@ -15,6 +15,32 @@ type Framework = typeof FRAMEWORKS[number];
 // any reordering in workshop-track.ts rather than being hardcoded here.
 const step = getTrackStep('/first-component');
 const stepTag = step ? `Step ${step.step} of ${TRACK_LENGTH}` : undefined;
+
+// Paths, serve commands, and mount targets match what the scaffold really
+// generates: apps live at the workspace ROOT (preset.ts passes
+// `directory: appName`), every framework serves on the default port 4200,
+// and each app ships rendering the NxWelcome placeholder until something
+// imports the generated component — the mountHint names the exact file.
+const EXPECTED: Record<Framework, { file: string; cmd: string; port: number; mountHint: string }> = {
+  Angular: {
+    file: 'workshop-angular/src/app/components/settings-card.component.ts',
+    cmd:  'npx nx serve workshop-angular',
+    port: 4200,
+    mountHint: 'add SettingsCardComponent to the imports array in workshop-angular/src/app/app.ts and replace <app-nx-welcome> with <app-settings-card> in app.html',
+  },
+  React: {
+    file: 'workshop-react/src/components/SettingsCard.tsx',
+    cmd:  'npx nx serve workshop-react',
+    port: 4200,
+    mountHint: 'import SettingsCard in workshop-react/src/app/app.tsx and replace the <NxWelcome /> placeholder with it',
+  },
+  Vue: {
+    file: 'workshop-vue/src/components/SettingsCard.vue',
+    cmd:  'npx nx serve workshop-vue',
+    port: 4200,
+    mountHint: 'import SettingsCard in workshop-vue/src/views/HomeView.vue and replace the <NxWelcome /> placeholder with it',
+  },
+};
 
 // The prompt is rendered once per framework with the participant's framework
 // already substituted into `storybook-{framework}`, so the copied text contains
@@ -24,36 +50,22 @@ const stepTag = step ? `Step ${step.step} of ${TRACK_LENGTH}` : undefined;
 const prompt = (fw: Framework) => `Build the Settings / Card Figma frame as an Atelier UI component.
 
 1. Use figma-console MCP (figma_get_component_for_development) on
-   node-id 695-313 — read the component spec, boundVariables, and
+   node-id 936-2954 — read the frame's spec, boundVariables, and
    the rendered preview.
 2. Use the storybook-${fw.toLowerCase()} MCP (list-all-documentation, then
-   get-documentation) to look up AtlCard and AtlInput props.
+   get-documentation) to look up AtlCard, AtlInput, AtlToggle, and
+   AtlButton props.
 3. Generate the component using:
    - Atelier UI components matched from Storybook
    - The exact CSS custom property names from the boundVariables
      (no manual conversion — they're identical to the Figma variables)
-   - No hardcoded hex colors, no hardcoded padding values`;
+   - No hardcoded hex colors, no hardcoded padding values
+4. Save it as ${EXPECTED[fw].file}, then mount it so
+   the app renders the card instead of the Nx welcome page:
+   ${EXPECTED[fw].mountHint}.`;
 
-const PARITY_PROMPT = `Run figma_check_design_parity on node-id 695-313 against
+const PARITY_PROMPT = `Run figma_check_design_parity on node-id 936-2954 against
 the SettingsCard component I just generated. Fix any discrepancies.`;
-
-const EXPECTED: Record<Framework, { file: string; cmd: string; port: number }> = {
-  Angular: {
-    file: 'apps/workshop-angular/src/app/components/settings-card.component.ts',
-    cmd:  'npx nx serve workshop-angular',
-    port: 4200,
-  },
-  React: {
-    file: 'apps/workshop-react/src/components/SettingsCard.tsx',
-    cmd:  'npx nx serve workshop-react',
-    port: 4201,
-  },
-  Vue: {
-    file: 'apps/workshop-vue/src/components/SettingsCard.vue',
-    cmd:  'npx nx serve workshop-vue',
-    port: 4202,
-  },
-};
 ---
 
 <BaseLayout
@@ -79,24 +91,29 @@ const EXPECTED: Record<Framework, { file: string; cmd: string; port: number }> =
     <div class="kata-target" aria-label="What you'll have built when you're done">
       <div class="kata-target-eyebrow">What you'll build</div>
       <div class="kata-target-body">
-        <div class="kata-target-mock" role="img" aria-label="Settings Card preview: a card with two text inputs (Name, Email) and a primary Save Changes button.">
+        <div class="kata-target-mock" role="img" aria-label="Settings Card preview: a card titled Settings with two text inputs (Name, Email), a Notifications toggle switched on, and a primary Save button.">
           <div class="kata-mock-card">
-            <div class="kata-mock-title">Account Settings</div>
+            <div class="kata-mock-title">Settings</div>
             <div class="kata-mock-input">
               <span class="kata-mock-label">Name</span>
-              <span class="kata-mock-value">Jane Smith</span>
+              <span class="kata-mock-value">&nbsp;</span>
             </div>
             <div class="kata-mock-input">
               <span class="kata-mock-label">Email</span>
-              <span class="kata-mock-value">jane@example.com</span>
+              <span class="kata-mock-value">&nbsp;</span>
             </div>
-            <div class="kata-mock-btn">Save Changes</div>
+            <div class="kata-mock-toggle">
+              <span class="kata-mock-toggle-label">Notifications</span>
+              <span class="kata-mock-toggle-track" aria-hidden="true"><span class="kata-mock-toggle-knob"></span></span>
+            </div>
+            <div class="kata-mock-btn">Save</div>
           </div>
         </div>
         <ul class="kata-target-checks">
           <li><Icon name="check_circle" /> AtlCard <code>variant="elevated"</code></li>
           <li><Icon name="check_circle" /> Two AtlInputs (Name, Email)</li>
-          <li><Icon name="check_circle" /> AtlButton <code>variant="primary"</code></li>
+          <li><Icon name="check_circle" /> AtlToggle <code>checked</code> (Notifications)</li>
+          <li><Icon name="check_circle" /> AtlButton <code>variant="primary"</code> ("Save")</li>
           <li><Icon name="check_circle" /> Tokens: <code>--ui-spacing-6</code> · <code>--ui-spacing-4</code> · <code>--ui-color-surface-raised</code></li>
         </ul>
       </div>
@@ -110,7 +127,7 @@ const EXPECTED: Record<Framework, { file: string; cmd: string; port: number }> =
       </div>
       <p class="kata-step-desc">
         Open <a href={FIGMA_URL} target="_blank" rel="noopener noreferrer" class="docs-link-primary docs-link-primary--bold">the Settings / Card frame</a>.
-        The URL already carries <code>?node-id=695-313</code> — that's the node-id you'll
+        The URL already carries <code>?node-id=936-2954</code> — that's the node-id you'll
         pass to Claude. No need to copy it manually.
       </p>
     </section>
@@ -141,9 +158,9 @@ const EXPECTED: Record<Framework, { file: string; cmd: string; port: number }> =
         fetches the Figma spec and Storybook props, then writes the component.
       </p>
       <p class="kata-step-desc" style="margin-top: 0.4rem">
-        On Angular and Vue the <code>storybook-*</code> MCP serves docs and stories only —
-        Claude reads component props from the <code>storybook-react</code> MCP (the spec is
-        identical across frameworks) or from <code>libs/spec</code>.
+        On Angular and Vue the hosted <code>storybook-*</code> MCP answers component
+        lookups from the React manifest — the cross-framework API reference. That's
+        fine: props and variants are identical across frameworks (one shared spec contract).
       </p>
       {FRAMEWORKS.map((fw, i) => (
         <div data-fw-panel={fw} hidden={i !== 0}>
@@ -158,13 +175,20 @@ const EXPECTED: Record<Framework, { file: string; cmd: string; port: number }> =
         <span class="kata-step-num">4</span>
         <h2 class="kata-step-title">Save the output and serve</h2>
       </div>
-      <p class="kata-step-desc">Save the generated component to the path below, then start the dev server:</p>
+      <p class="kata-step-desc">
+        The prompt's step 4 has Claude save the component and wire it into the
+        app shell. Confirm both happened, then start the dev server:
+      </p>
       {FRAMEWORKS.map((fw, i) => (
         <div data-fw-panel={fw} hidden={i !== 0}>
           <ol class="run-steps" style="margin-top: 0.5rem">
             <li>
               <span class="run-step-label">Save as</span>
               <code class="run-step-path">{EXPECTED[fw].file}</code>
+            </li>
+            <li>
+              <span class="run-step-label">Mount</span>
+              <span class="run-step-note">Claude should have done this already — if not, {EXPECTED[fw].mountHint}.</span>
             </li>
             <li>
               <span class="run-step-label">Serve</span>
@@ -189,10 +213,20 @@ const EXPECTED: Record<Framework, { file: string; cmd: string; port: number }> =
       </div>
       <p class="kata-step-desc">
         You should see the card from the <strong style="color: var(--ui-color-text)">"What you'll build"</strong> mockup
-        above — surface-raised background, two labelled inputs, primary button.
+        above — surface-raised background, two labelled inputs, a checked
+        Notifications toggle, and a right-aligned primary Save button.
         Spacing should match the Figma frame because the generated code uses
         <code>--ui-spacing-6</code> and <code>--ui-spacing-4</code> (not pixel values).
       </p>
+      {FRAMEWORKS.map((fw, i) => (
+        <div data-fw-panel={fw} hidden={i !== 0}>
+          <p class="kata-step-desc" style="margin-top: 0.4rem">
+            <strong style="color: var(--ui-color-text)">Still the Nx welcome page?</strong> Nothing
+            imports your component yet — {EXPECTED[fw].mountHint}, save, and the dev
+            server reloads with the card.
+          </p>
+        </div>
+      ))}
       <p class="kata-step-desc" style="margin-top: 0.4rem">
         If the spacing or colors look off — that's a token drift. Run the parity check below.
       </p>
@@ -302,8 +336,37 @@ const EXPECTED: Record<Framework, { file: string; cmd: string; port: number }> =
     font-size: 0.78rem;
     color: var(--ui-color-text);
   }
+  .kata-mock-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.15rem 0.1rem;
+  }
+  .kata-mock-toggle-label {
+    font-size: 0.78rem;
+    color: var(--ui-color-text);
+  }
+  .kata-mock-toggle-track {
+    box-sizing: border-box;
+    width: 26px;
+    height: 15px;
+    padding: 2px;
+    border-radius: 999px;
+    background: var(--ui-color-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .kata-mock-toggle-knob {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--ui-color-surface);
+  }
   .kata-mock-btn {
     margin-top: 0.25rem;
+    align-self: flex-end;
     padding: 0.45rem 0.85rem;
     background: var(--ui-color-primary);
     color: var(--ui-color-surface);
@@ -381,6 +444,10 @@ const EXPECTED: Record<Framework, { file: string; cmd: string; port: number }> =
     font-size: 0.85rem;
   }
   .run-step-link:hover { color: var(--ui-color-primary-hover); }
+  .run-step-note {
+    color: var(--ui-color-text-muted);
+    font-size: 0.8rem;
+  }
 
   /* Step blocks — numbered, large enough to scan */
   .kata-step {

@@ -441,7 +441,25 @@ async function main() {
         lineHeightUnit: s.lineHeight.unit,
         lineHeightValue: s.lineHeight.unit === 'AUTO' ? null : s.lineHeight.value,
       }));
-      return { masters: out, typography: { fontFamilies: fontTally, fontSamples, textStyles }, pageGlyphs };
+      // Kata frames on the Workshop-Templates page. The docs cite their node-ids
+      // (?node-id=..., prose "node-id 936-2954"), and check-docs-sync.js resolves
+      // every citation against this snapshot — the masters alone cannot vouch for
+      // a composed exercise frame on a non-Components page. Captured by walking
+      // the page's SECTIONs rather than by id, so a newly staged kata frame is
+      // known the next time the snapshot is refreshed.
+      const referencedNodes = [];
+      const wtPage = figma.root.children.find((pg) => pg.name.indexOf('Workshop-Templates') >= 0);
+      if (wtPage) {
+        for (const sec of wtPage.children) {
+          if (sec.type !== 'SECTION') continue;
+          for (const child of sec.children) {
+            if (child.type === 'FRAME' || child.type === 'COMPONENT' || child.type === 'COMPONENT_SET' || child.type === 'INSTANCE') {
+              referencedNodes.push({ id: child.id, name: child.name, page: wtPage.name, section: sec.name });
+            }
+          }
+        }
+      }
+      return { masters: out, typography: { fontFamilies: fontTally, fontSamples, textStyles }, pageGlyphs, referencedNodes };
     `;
     const probe = (await call(client, 'figma_execute', { code: probeCode, timeout: 25000 }))?.result ?? {};
 
@@ -652,6 +670,7 @@ async function main() {
       uiTokens,
       typography: probe.typography ?? null,
       pageGlyphs: probe.pageGlyphs ?? [],
+      referencedNodes: probe.referencedNodes ?? [],
       components,
     };
     writeFileSync(OUT, JSON.stringify(snapshot, null, 2) + '\n');

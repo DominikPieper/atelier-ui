@@ -261,7 +261,7 @@ file exports). The Desktop Bridge covers creation and inspection without a token
     return pkg;
   });
 
-  // Write .claude/settings.json with MCP servers for selected frameworks
+  // Write .mcp.json with MCP servers for selected frameworks
   const mcpServers: Record<string, unknown> = {
     'nx-mcp': {
       type: 'stdio',

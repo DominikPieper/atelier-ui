@@ -22,15 +22,16 @@ const stepTag = `Step ${trackStep.step} of ${TRACK_LENGTH}`;
 const EXAMPLE_PROMPT = `I've selected the "Settings / Card" frame in Figma.
 
 1. Use figma-console MCP (figma_get_component_for_development) to read
-   the component spec — I need the boundVariables and the visual reference.
-2. Use storybook-react MCP to look up AtlCard and AtlInput props.
+   the frame's spec — I need the boundVariables and the visual reference.
+2. Use storybook-react MCP to look up AtlCard, AtlInput, AtlToggle,
+   and AtlButton props.
 3. Generate the React component using:
    - The Atelier UI components matched from Storybook
    - The exact token names from boundVariables (they map 1-to-1 to CSS
      custom properties — no conversion needed)`;
 
 const OUTPUT: Record<string, string> = {
-  React: `import { AtlCard, AtlInput, AtlButton } from '@atelier-ui/react';
+  React: `import { AtlCard, AtlInput, AtlToggle, AtlButton } from '@atelier-ui/react';
 
 export function SettingsCard() {
   return (
@@ -39,33 +40,35 @@ export function SettingsCard() {
       style={{ padding: 'var(--ui-spacing-6)', display: 'flex', flexDirection: 'column', gap: 'var(--ui-spacing-4)' }}
     >
       <h2 style={{ fontSize: 'var(--ui-font-size-lg)', fontWeight: 600, color: 'var(--ui-color-text)', margin: 0 }}>
-        Account Settings
+        Settings
       </h2>
-      <AtlInput label="Name" placeholder="Jane Smith" />
-      <AtlInput label="Email" type="email" placeholder="jane@example.com" />
-      <div>
-        <AtlButton variant="primary">Save Changes</AtlButton>
+      <AtlInput label="Name" />
+      <AtlInput label="Email" type="email" />
+      <AtlToggle checked>Notifications</AtlToggle>
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <AtlButton variant="primary">Save</AtlButton>
       </div>
     </AtlCard>
   );
 }`,
 
   Angular: `import { Component } from '@angular/core';
-import { AtlCard, AtlInput, AtlButton } from '@atelier-ui/angular';
+import { AtlCard, AtlInput, AtlToggle, AtlButton } from '@atelier-ui/angular';
 
 @Component({
   selector: 'app-settings-card',
   standalone: true,
-  imports: [AtlCard, AtlInput, AtlButton],
+  imports: [AtlCard, AtlInput, AtlToggle, AtlButton],
   template: \`
     <atl-card variant="elevated" style="padding: var(--ui-spacing-6); display: flex; flex-direction: column; gap: var(--ui-spacing-4)">
       <h2 style="font-size: var(--ui-font-size-lg); font-weight: 600; color: var(--ui-color-text); margin: 0">
-        Account Settings
+        Settings
       </h2>
-      <atl-input label="Name" placeholder="Jane Smith" />
-      <atl-input label="Email" type="email" placeholder="jane@example.com" />
-      <div>
-        <atl-button variant="primary">Save Changes</atl-button>
+      <atl-input label="Name" />
+      <atl-input label="Email" type="email" />
+      <atl-toggle [checked]="true">Notifications</atl-toggle>
+      <div style="display: flex; justify-content: flex-end">
+        <atl-button variant="primary">Save</atl-button>
       </div>
     </atl-card>
   \`,
@@ -73,7 +76,7 @@ import { AtlCard, AtlInput, AtlButton } from '@atelier-ui/angular';
 export class SettingsCardComponent {}`,
 
   Vue: `<script setup lang="ts">
-import { AtlCard, AtlInput, AtlButton } from '@atelier-ui/vue';
+import { AtlCard, AtlInput, AtlToggle, AtlButton } from '@atelier-ui/vue';
 </script>
 
 <template>
@@ -82,12 +85,13 @@ import { AtlCard, AtlInput, AtlButton } from '@atelier-ui/vue';
     style="padding: var(--ui-spacing-6); display: flex; flex-direction: column; gap: var(--ui-spacing-4)"
   >
     <h2 style="font-size: var(--ui-font-size-lg); font-weight: 600; color: var(--ui-color-text); margin: 0">
-      Account Settings
+      Settings
     </h2>
-    <AtlInput label="Name" placeholder="Jane Smith" />
-    <AtlInput label="Email" type="email" placeholder="jane@example.com" />
-    <div>
-      <AtlButton variant="primary">Save Changes</AtlButton>
+    <AtlInput label="Name" />
+    <AtlInput label="Email" type="email" />
+    <AtlToggle :checked="true">Notifications</AtlToggle>
+    <div style="display: flex; justify-content: flex-end">
+      <AtlButton variant="primary">Save</AtlButton>
     </div>
   </AtlCard>
 </template>`,
@@ -96,24 +100,31 @@ import { AtlCard, AtlInput, AtlButton } from '@atelier-ui/vue';
 const PARITY_PROMPT = `Run figma_check_design_parity on the settings card node
 against the component I just generated. Fix any discrepancies.`;
 
-const RUN_IT: Record<string, { path: string; cmd: string; port: number; expected: string }> = {
+// Paths, ports, and mount targets mirror the real scaffold: apps generate at
+// the workspace root (no apps/ prefix), every framework serves on the default
+// port 4200, and each app renders the NxWelcome placeholder until something
+// imports the generated component.
+const RUN_IT: Record<string, { path: string; mount: string; cmd: string; port: number; expected: string }> = {
   React: {
-    path: 'apps/workshop-react/src/components/SettingsCard.tsx',
+    path: 'workshop-react/src/components/SettingsCard.tsx',
+    mount: 'Import SettingsCard in workshop-react/src/app/app.tsx and replace the <NxWelcome /> placeholder with it.',
     cmd: 'npx nx serve workshop-react',
-    port: 4201,
-    expected: 'A card with two text inputs (Name, Email) and a primary "Save Changes" button — surface-raised background, padding from the Figma spacing token.',
+    port: 4200,
+    expected: 'A card with two text inputs (Name, Email), a checked Notifications toggle, and a primary "Save" button — surface-raised background, padding from the Figma spacing token.',
   },
   Angular: {
-    path: 'apps/workshop-angular/src/app/components/settings-card.component.ts',
+    path: 'workshop-angular/src/app/components/settings-card.component.ts',
+    mount: 'Add SettingsCardComponent to the imports array in workshop-angular/src/app/app.ts and replace <app-nx-welcome> with <app-settings-card> in app.html.',
     cmd: 'npx nx serve workshop-angular',
     port: 4200,
-    expected: 'A card with two text inputs (Name, Email) and a primary "Save Changes" button — same surface, padding, and radius as the Figma frame.',
+    expected: 'A card with two text inputs (Name, Email), a checked Notifications toggle, and a primary "Save" button — same surface, padding, and radius as the Figma frame.',
   },
   Vue: {
-    path: 'apps/workshop-vue/src/components/SettingsCard.vue',
+    path: 'workshop-vue/src/components/SettingsCard.vue',
+    mount: 'Import SettingsCard in workshop-vue/src/views/HomeView.vue and replace the <NxWelcome /> placeholder with it.',
     cmd: 'npx nx serve workshop-vue',
-    port: 4202,
-    expected: 'A card with two text inputs (Name, Email) and a primary "Save Changes" button — surface-raised background, identical token-driven spacing.',
+    port: 4200,
+    expected: 'A card with two text inputs (Name, Email), a checked Notifications toggle, and a primary "Save" button — surface-raised background, identical token-driven spacing.',
   },
 };
 
@@ -125,7 +136,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
     "paddingTop":    { "variable": "spacing/6" },               // → --ui-spacing-6
     "paddingLeft":   { "variable": "spacing/6" },               // → --ui-spacing-6
     "itemSpacing":   { "variable": "spacing/4" },               // → --ui-spacing-4
-    "cornerRadius":  { "variable": "radius/lg" }                // → --ui-radius-lg
+    "cornerRadius":  { "variable": "radius/xl" }                // → --ui-radius-xl
   },
   "image": "<2x rendered PNG — included automatically>"
 }`;
@@ -217,7 +228,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           <li>Copy the node-id from the Figma URL</li>
           <li>Send one prompt to Claude Code</li>
         </ol>
-        <pre class="mcp-compare-prompt">"build component for node-id 695-313 using figma-console + storybook-react MCP."</pre>
+        <pre class="mcp-compare-prompt">"build component for node-id 936-2954 using figma-console + storybook-react MCP."</pre>
         <ol class="mcp-compare-list" start="3">
           <li>Token-exact code lands</li>
           <li>Verify: <code>figma_check_design_parity</code></li>
@@ -410,7 +421,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
             <DiagramFigure caption="The node-id is the value after ?node-id= in the Figma URL. Colons (:) appear URL-encoded as %3A or as a single dash.">
               <svg viewBox="0 0 880 160" role="img" aria-labelledby="url-title url-desc" preserveAspectRatio="xMidYMid meet">
                 <title id="url-title">Figma URL with the node-id parameter highlighted</title>
-                <desc id="url-desc">Mockup of a browser URL bar showing a Figma design URL. The node-id=695-313 parameter at the end is highlighted in cyan with a caption arrow pointing to it.</desc>
+                <desc id="url-desc">Mockup of a browser URL bar showing a Figma design URL. The node-id=936-2954 parameter at the end is highlighted in cyan with a caption arrow pointing to it.</desc>
 
                 <defs>
                   <marker id="url-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -433,7 +444,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
                 <!-- Highlight box around the node-id parameter -->
                 <rect x="592" y="44" width="208" height="28" rx="6" ry="6"
                       style="fill: color-mix(in srgb, var(--ui-color-primary) 18%, transparent); stroke: var(--ui-color-primary); stroke-width: 1.5;"/>
-                <text x="600" y="64" font-size="13" font-weight="700" class="diagram-mono" style="fill: var(--ui-color-primary)">?node-id=695-313</text>
+                <text x="600" y="64" font-size="13" font-weight="700" class="diagram-mono" style="fill: var(--ui-color-primary)">?node-id=936-2954</text>
 
                 <!-- Arrow and caption pointing to the node-id -->
                 <path d="M 696 110 L 696 76" class="diagram-connector diagram-connector--accent" marker-end="url(#url-arrow)"/>
@@ -512,7 +523,9 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
     <div class="docs-section">
       <h2 class="docs-section-title">Run it</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
-        Save the generated component, start your dev server, and verify against the Figma frame.
+        Save the generated component, mount it in the app shell — the scaffolded app keeps
+        rendering the Nx welcome page until something imports your component — then start
+        the dev server and verify against the Figma frame.
         The framework tabs above stay in sync with this section.
       </p>
       {FRAMEWORKS.map((fw, i) => (
@@ -521,6 +534,10 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
             <li>
               <span class="run-step-label">Save as</span>
               <code class="run-step-path">{RUN_IT[fw].path}</code>
+            </li>
+            <li>
+              <span class="run-step-label">Mount it</span>
+              <span class="run-step-detail">{RUN_IT[fw].mount} Skip this and the app stays on the Nx welcome page.</span>
             </li>
             <li>
               <span class="run-step-label">Start the dev server</span>

@@ -18,7 +18,7 @@ export const GLOSSARY: Record<string, GlossaryEntry> = {
 
   'node ID': {
     definition:
-      'The unique identifier of a Figma layer, e.g. 695:313. You pass it to the figma-console MCP so Claude can read that exact component.',
+      'The unique identifier of a Figma layer, e.g. 936:2954. You pass it to the figma-console MCP so Claude can read that exact component.',
     hint: 'Find it in the Figma URL after ?node-id= — or right-click a frame → Copy/Paste → Copy link.',
   },
 

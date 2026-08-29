@@ -1774,3 +1774,16 @@ runs without the bridge, and nothing here moves toward one. Secondarily: the ren
 is read from tag names in source text, so a directory that merely *mentions* `<AtlIcon>` in
 a comment counts as rendering it — the forgiving direction, unmeasured beyond "the finding
 count did not move".
+
+## Open — Schulung: after the B1–B4 repairs (2026-08-29)
+
+The four blockers from tasks/schulung-review-2026-08-28.md §3 are fixed in the
+tree (struck through there, each with its fix note).
+
+- [ ] **Ship the worker + re-verify against production**: run `npx wrangler deploy`
+      (rebuilds docs + the three static Storybooks into dist/docs), then re-run
+      `npm run preflight` — all three storybook MCP rows must go green (Angular/Vue
+      now answer component lookups from the React manifest, verified in local
+      workerd but never against deployed Cloudflare). Everything else from the
+      review is untouched: 15 major, 16 minor, 5 presentation-debt findings —
+      see tasks/schulung-review-2026-08-28.md §3/§4 (flows 4, 6, 7 still open).

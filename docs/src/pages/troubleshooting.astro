@@ -20,9 +20,20 @@ const ISSUES: Issue[] = [
     symptom: 'Claude Code says "storybook-angular" (or react/vue) is disconnected, or no component docs are returned.',
     cause: 'Your network blocks outbound HTTPS to atelier.pieper.io, or the server is temporarily down.',
     fix: [
-      'Run `npm run preflight` — it pings each MCP endpoint and reports status codes.',
+      'Run `npm run preflight` — it makes a real MCP call against each endpoint and reports what failed.',
       'Test manually with `curl -I https://atelier.pieper.io/storybook-angular/mcp`. You should see a 200 or 405.',
       'If behind a corporate proxy, set `HTTPS_PROXY=http://your-proxy:port` before starting Claude Code.',
+    ],
+  },
+  {
+    id: 'mcp-tools-error',
+    title: 'MCP connects but every tool errors',
+    symptom: 'Claude Code lists `storybook-angular` (or react/vue) as connected, but every tool call — even `list-all-documentation` — returns an error like "Failed to fetch manifest components.json: 522".',
+    cause: 'The endpoint answers HTTP, but the MCP server behind it is broken — "connected" only proves the URL responds, not that tools work. This is a server-side fault, not your setup.',
+    fix: [
+      'Run `npm run preflight` — its MCP check issues a real JSON-RPC `tools/list` plus one actual tool call per Storybook endpoint, so this failure shows up as a red `MCP:` row with the server\'s error text instead of a green check.',
+      'Verify manually: `curl -X POST -H "content-type: application/json" -H "accept: application/json, text/event-stream" -d \'{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}\' https://atelier.pieper.io/storybook-react/mcp` — a healthy server answers with a tool list.',
+      'If it persists, the server needs a redeploy — nothing to fix on your machine. The framework pages on this site document the same component API in the meantime.',
     ],
   },
   {
