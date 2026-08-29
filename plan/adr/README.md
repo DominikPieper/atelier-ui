@@ -90,6 +90,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0082](0082-a-blocker-the-chain-cannot-clear.md) | A blocker the chain that runs it cannot clear (`check:parity --report`; amends 0024) | Accepted | Recorded |
 | [0083](0083-the-manifest-the-framework-cannot-emit.md) | The manifest the framework cannot emit (hosted Angular/Vue MCP serve React's components manifest as the cross-framework reference) | Accepted | Recorded |
 | [0084](0084-two-environments-one-canonical-per-audience.md) | Two environments, one canonical per audience (clone for the two-day cohort, scaffold for the self-serve reader; both documented, branched per page) | Accepted | Recorded |
+| [0085](0085-the-counting-rule-before-the-count.md) | The counting rule, before the count (rule-of-three adopted; `--ui-type-row`, `--ui-type-row-sm`) | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

@@ -143,6 +143,23 @@
   --ui-type-action: var(--ui-font-weight-semibold) var(--ui-font-size-md) /
     var(--ui-line-height-tight) var(--ui-font-family);
 
+  /* The row roles (ADR-0085). Where `control` is the label ON a control and
+   * `action` is the text of a control that acts, these two are the text IN a
+   * row: a menu item, an option, a table cell, a checkbox or radio label. They
+   * are regular weight, not medium, and they sit at the two default sizes the
+   * row ladder uses — `row` at md for the standard rung, `row-sm` at sm for the
+   * compact one. Same tight leading as the rest of the ladder: a row's height
+   * comes from --ui-row-height-*, so its leading must not grow with the text.
+   *
+   * The ADR-0073 carve-out applies here exactly as it does above: a control's
+   * own VALUE text keeps its longhands. `row` describes what the row DISPLAYS,
+   * not what an input CONTAINS.
+   */
+  --ui-type-row: var(--ui-font-weight-normal) var(--ui-font-size-md) /
+    var(--ui-line-height-tight) var(--ui-font-family);
+  --ui-type-row-sm: var(--ui-font-weight-normal) var(--ui-font-size-sm) /
+    var(--ui-line-height-tight) var(--ui-font-family);
+
   /* ── Colours · light mode (default) ────────────────────────── */
 
   /* Primary — Conciso deep teal */

@@ -1,8 +1,8 @@
 {
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
-    "generatedAt": "2026-08-29T14:09:32.628Z",
-    "gitSha": "cbc93b7",
+    "generatedAt": "2026-08-29T14:18:54.079Z",
+    "gitSha": "996a9cf",
     "totalTextNodes": 566,
     "records": 277,
     "note": "Per-TEXT-node type facts for every master, companion to snapshot.json and written by the same run — `generatedAt` must match it, and a gate that reads one without checking the other is reading two different documents. Records are deduplicated across the variants of a set, so a count of text NODES sums `count` and never `records.length`. ADDRESSING A RECORD: neither `path` nor master + path + chars is unique — `path` collides inside a variant, and 13 master + path + chars keys stand for 2-3 records each (AtlButton draws three different `Button “Button”`). Use master + path + chars + size + weight, which is unique across all records today; check-figma.js builds exactly that address. Only the fontSize variable's collection is captured — a lineHeight binding is invisible here (zero nodes carry one today). Facts only; rules live in check-figma.js and check-typeface.js."

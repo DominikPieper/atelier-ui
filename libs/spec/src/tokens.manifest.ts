@@ -252,6 +252,25 @@ export const tokens: Record<string, TokenAnnotation> = {
       'Not a substitute for body-sm in running text — labels are named, not read.',
     ],
   },
+  '--ui-type-row': {
+    intent:
+      'Row role: regular 1rem, tight. The text IN a row at the standard rung — a menu item, an option, a checkbox or radio label, a table cell at size-lg.',
+    constraints: [
+      'Regular weight, not medium: this is what the row displays, not a label on a control (--ui-type-control) and not the text of a control that acts (--ui-type-action).',
+      'Tight leading because a row takes its height from --ui-row-height-* (ADR-0052) — a normal leading would make the box grow with the text.',
+      "Not a control's own VALUE text — an input's content keeps the longhands (ADR-0073). The style may exist in Figma where the CSS keeps longhand; the carve-out governs the rule, not the node.",
+      'Added under the counting rule ADR-0085 adopts: 7 CSS sites and 11 faithful Figma nodes across 3 masters, counted with nested instances deduplicated and invisible nodes excluded.',
+    ],
+  },
+  '--ui-type-row-sm': {
+    intent:
+      'Compact row role: regular 0.875rem, tight. The same text one rung down — a compact menu, a table cell at size-md, a breadcrumb link.',
+    constraints: [
+      'The compact sibling of --ui-type-row; the pair tracks the two default rungs of the row ladder rather than a free size choice.',
+      'Tight leading, for the same reason as --ui-type-row.',
+      'Added with 3 CSS sites and 10 deduplicated Figma nodes across 3 masters — on the threshold, not above it, which ADR-0085 records rather than rounds up.',
+    ],
+  },
   '--ui-type-control': {
     intent:
       'Control role: medium 0.875rem, tight. The label ON a control — a tab, a page button, a step, a chip, a select label, a chat action.',
