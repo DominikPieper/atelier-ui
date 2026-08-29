@@ -158,12 +158,19 @@ jobs:
           cache: 'npm'
       - run: corepack enable
       - run: npm ci
+      # `build-storybook` is in this list because the Cloudflare deploy runs the
+      # three Storybook builds and nothing else ever did. When cbef32b pruned
+      # `@angular/animations` as a dead dep — true of our source, not of
+      # `@storybook/angular`, which reaches for it — CI stayed green for three
+      # days while every deploy failed, and the failure was only visible in the
+      # Cloudflare build log. A build the deploy depends on has to run where
+      # somebody sees it break.
       - name: Build affected (PR)
         if: github.event_name == 'pull_request'
-        run: npx nx affected -t build --parallel=2
+        run: npx nx affected -t build,build-storybook --parallel=2
       - name: Build all (push to main)
         if: github.event_name != 'pull_request'
-        run: npx nx run-many -t build --parallel=2
+        run: npx nx run-many -t build,build-storybook --parallel=2
       # ---------------------------------------------------------------------
       # Skill packaging — validates that every Claude Code skill in skills/
       # still produces a clean zip. The `lint` target above already validates
