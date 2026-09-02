@@ -338,7 +338,7 @@ export default function McpExplorer() {
     : activeMockTool.params;
 
   return (
-    <div className="docs-inline-page">
+    <div style={{ marginTop: '2.5rem' }}>
       <style>{`
         .mcp-grid { display: grid; grid-template-columns: 210px 1fr; gap: 1.5rem; align-items: start; }
         @media (max-width: 680px) { .mcp-grid { grid-template-columns: 1fr; } }

@@ -1970,3 +1970,117 @@ unchanged, and the config edit is a correctness fix, not a decision. ADR-0084 is
       carry `styles/tokens.css` too. Reason (b) — that editing colours inside `node_modules`
       is a bad workshop experience — carries the decision on its own. Comment-only; the
       generator's behaviour is right and `/install` now documents both paths.
+
+---
+
+## Docs site: unify page alignment — 2026-09-02
+
+### Problem (measured, dev server @ :4300, iframe widths 1024–1600)
+
+`.docs-main--with-toc` is a left-anchored flex row; pages without a TOC centre
+their `.docs-inline-page` inside an uncapped `.docs-main-content`. Same 800px
+column, two different anchors → 233px horizontal jump between page types.
+
+| @1600, offset inside `.docs-main` | left | right |
+|---|---|---|
+| no TOC (20 pages) | 265 | 265 |
+| with TOC (7 pages) | 32 | 497 |
+
+Secondary: TOC rail only hides at 768px, so the text column collapses to 617px
+@1200 and 441px @1024. Third: `/mcp` (1000px) and `/components` (1280px) use
+inline styles instead of the shared class → h1 top at 73px / 89px vs 113px.
+
+### Decision (confirmed with user)
+
+- **Anchor**: reserve the TOC rail on every page. `.docs-main` becomes a grid
+  `[content][rail]`, whole row centred. Content column never moves.
+- **Widths**: shell owns the cap via a `width` prop on `BaseLayout`
+  (`default` 800 / `wide` 1000 / `full` uncapped). `.docs-inline-page` keeps
+  only its padding. Inline styles removed.
+- **Breakpoint**: desktop TOC hides at 1100px, mobile disclosure takes over.
+
+### Steps
+
+- [x] 1. `styles/global.css` — `.docs-main` grid + `--wide` / `--full`,
+      `.docs-main-content` min-width:0, drop `.docs-main--with-toc`
+- [x] 2. `styles/global.css` — `.docs-inline-page` loses max-width/auto margins
+- [x] 3. `styles/global.css` — move `.docs-toc` hide + `.docs-toc-mobile` show
+      from the 768px block into a new **1384px** block (not 1100px — see review)
+- [x] 4. `BaseLayout.astro` — `width` prop, class on `<main>`, drop `--with-toc`
+- [x] 5. `pages/mcp.astro` — `width="wide"`, inline div → `.docs-inline-page`,
+      `<McpExplorer>` moved inside it
+- [x] 6. `components/McpExplorer.tsx` — island drops its own page wrapper
+- [x] 7. `pages/components/index.astro` — `width="full"`, inline div removed
+- [x] 8. `pages/components/[name].astro` + `pages/index.astro` — `width="full"`
+- [x] 9. Re-measure all pages at 1024 / 1200 / 1400 / 1600 — content-column
+      left offset must be identical across every `default` page
+- [x] 10. ADR in `plan/adr/` + index row
+- [x] 11. `nx lint docs` + `nx build docs`
+
+### Review
+
+#### What changed
+
+| File | Change |
+|---|---|
+| `docs/src/styles/global.css` | `.docs-main` is now a two-track grid (`[column][rail]`, `justify-content: center`) with the rail **reserved on every page**. Added `--wide` (1000px, no rail) and `--full` (uncapped, no rail). `.docs-inline-page` lost its `max-width` / auto margins and keeps only padding. `.docs-main--with-toc` is gone. New `@media (max-width: 1383px)` block collapses the rail and shows the in-flow disclosure. |
+| `docs/src/layouts/BaseLayout.astro` | New `width?: 'default' \| 'wide' \| 'full'` prop; `<main>` gets the variant class. |
+| `docs/src/pages/mcp.astro` | `width="wide"`, inline `max-width` div → `.docs-inline-page`, `<McpExplorer>` moved inside it. |
+| `docs/src/components/McpExplorer.tsx` | Island no longer renders `.docs-inline-page`; keeps a spacing-only root. |
+| `docs/src/pages/components/index.astro` | `width="full"`, inline `max-width` div removed. |
+| `docs/src/pages/components/[name].astro`, `docs/src/pages/index.astro` | `width="full"`. |
+| `plan/adr/0086-…md` + `plan/adr/README.md` | Decision recorded. |
+| `tasks/lessons.md` | Five entries, including the breakpoint I mis-derived. |
+
+#### Verified (measured, not assumed)
+
+Content-box offset inside `.docs-main`, `/` and `*` = has TOC:
+
+- **@1600, all 22 `default` pages** — `col=800 L=141 h1L=173`, identical whether
+  or not the page has a TOC. Before: `L=265` vs `L=32`.
+- **Cross-viewport** (420 / 768 / 900 / 1024 / 1200 / 1380 / 1384 / 1390 / 1440 /
+  1600 / 1920): a TOC page and a TOC-less page report the same `col` and `L` at
+  every width. Column is never squeezed by the rail — 800px holds down to a
+  1200px viewport, below which the viewport itself is the limit.
+- `nx lint docs` clean; `nx build docs` builds 60 pages; `npm run check:all`
+  exits 0 (the 44 warnings are pre-existing component-parity / Figma drift).
+- Screenshots at 1600×1000 confirm `/tokens` (TOC) and `/install` (no TOC) put
+  their `h1` on the same pixel column.
+
+#### Assumed, not verified
+
+- Real-browser scrollbar width. The 16px allowance in the 1384px breakpoint was
+  chosen for a classic scrollbar; macOS overlay scrollbars make it 0, so on
+  macOS the rail collapses ~16px earlier than strictly necessary.
+- Only Chrome was measured.
+
+#### Weakest points of this solution
+
+1. **The 124px shift.** Reserving the rail unconditionally is what makes the
+   axis single, and it moves the 20 previously centred pages 124px left. It is
+   the deliberate cost of the chosen option, but it *is* a visible change to
+   pages that had no bug of their own.
+2. **A hard breakpoint still jumps on resize.** Crossing 1384px moves the
+   column (rail appears, track set re-centres). Every page does it identically,
+   so it is a resize artefact rather than an inconsistency — but a container
+   query would have removed it, and one is not expressible here because the
+   tracks live on `.docs-main` itself.
+3. **`wide` is 24px off the `default` axis.** `/mcp` centres 1000px with no
+   rail; `default` centres 800px *with* one. Any width variant costs some
+   misalignment; giving `wide` a rail instead made it 100px.
+4. **Vertical rhythm is still not unified.** Horizontal is now exact, but `h1`
+   top offsets differ: 113px on PageHero pages, 138px on `/skills/*` (a
+   hand-rolled back-link row instead of `PageEyebrow`), 150px where a
+   breadcrumb appears, and 89–164px on the `full` pages that own their frame.
+   Out of scope for the anchor fix, and a separate convention question.
+
+#### Separate bug found, not fixed
+
+`BaseLayout.astro:757–779` binds the scroll-progress bar and the scroll-to-top
+button to `.docs-main`'s `scroll` event. `.docs-main` never scrolls: `.docs-shell`
+is `grid-template-rows: <topbar> 1fr` with `min-height: 100vh`, so the `1fr` row
+grows to content height and the **window** is the scroll container
+(measured: `mainScrollHeight === mainClientHeight === 3083`, `documentElement.scrollHeight = 3292`,
+`innerHeight = 823`). The `else` branch that would bind `window` is unreachable
+because `mainEl` always exists. Pre-existing and unrelated to this change —
+the shell rows are unchanged — so it is reported rather than folded in.

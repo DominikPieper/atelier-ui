@@ -321,28 +321,49 @@ body {
 }
 
 /* ── Main Content ─────────────────────────────────────── */
+/* Two-track grid: the reading column plus a TOC rail that is reserved on
+ * EVERY page, whether or not that page has a table of contents. The rail used
+ * to appear only on `--with-toc` pages, which anchored those pages left while
+ * TOC-less pages centred themselves — the same 800px column landed 233px apart
+ * depending on the page. Reserving the rail unconditionally and centring the
+ * whole track set keeps the reading column on one axis site-wide. See
+ * ADR-0086. Page width is chosen by the shell (`width` prop on BaseLayout),
+ * never by the page's own wrapper. */
 .docs-main {
+  --docs-content-col: 800px;
+  --docs-toc-rail: 200px;
+  --docs-toc-gap: 3rem;
   overflow-y: auto;
   padding: 2rem;
+  display: grid;
+  grid-template-columns: minmax(0, var(--docs-content-col)) var(--docs-toc-rail);
+  column-gap: var(--docs-toc-gap);
+  row-gap: 3rem;
+  align-items: start;
+  justify-content: center;
 }
 
-.docs-main--with-toc {
-  max-width: none;
-  display: flex;
-  align-items: flex-start;
-  gap: 3rem;
-}
-
-.docs-main--with-toc .docs-main-content {
-  flex: 1;
+.docs-main-content {
   min-width: 0;
-  max-width: 800px;
+}
+
+/* Wider reading column for pages whose body is a tool or a wide diagram
+ * (currently /mcp). No rail: a `wide` page carries no desktop TOC, and
+ * reserving one would squeeze the column on anything under a 1568px viewport. */
+.docs-main--wide {
+  --docs-content-col: 1000px;
+  grid-template-columns: minmax(0, var(--docs-content-col));
+}
+
+/* Uncapped, rail-less: gallery and landing pages that lay out their own grid.
+ * A `full` page cannot carry a desktop TOC either. */
+.docs-main--full {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 /* ── TOC Sidebar ─────────────────────────────────────── */
 .docs-toc {
-  width: 200px;
-  flex-shrink: 0;
+  width: var(--docs-toc-rail, 200px);
   position: sticky;
   top: calc(var(--docs-topbar-height, 68px) + 1.5rem);
   max-height: calc(100vh - var(--docs-topbar-height, 68px) - 3rem);
@@ -490,9 +511,9 @@ body {
 }
 
 /* ── Page layout helpers ──────────────────────────────── */
+/* Inset only. The width cap lives on `.docs-main` (see ADR-0086) so a page
+ * cannot drift away from the site-wide reading axis by setting its own. */
 .docs-inline-page {
-  max-width: 800px;
-  margin: 0 auto;
   padding: 2.5rem 2rem;
 }
 
@@ -1846,37 +1867,22 @@ summary:focus-visible,
 }
 
 /* ── Responsive ──────────────────────────────────────── */
-@media (max-width: 768px) {
-  .docs-shell {
-    grid-template-columns: 1fr;
-    grid-template-rows: var(--docs-topbar-height, 68px) 1fr auto;
+/* ── TOC rail → in-flow disclosure ────────────────────── */
+/* 1368px is exactly where the rail stops fitting:
+ *   256 (sidebar) + 64 (.docs-main padding) + 800 (column) + 48 (gap)
+ *   + 200 (rail) = 1368, plus a 16px allowance for a classic (non-overlay)
+ *   scrollbar on `.docs-main` = 1384
+ * Any narrower and the rail eats the reading column instead of the empty
+ * gutter — it measured 617px at a 1200px viewport and 441px at 1024px before
+ * this breakpoint existed. So below 1368px the rail collapses to a zero-width
+ * track and the in-flow `.docs-toc-mobile` disclosure takes over. Zeroing the
+ * two custom properties (rather than restating `grid-template-columns`) leaves
+ * the `--wide` / `--full` variants intact regardless of rule order. */
+@media (max-width: 1383px) {
+  .docs-main {
+    --docs-toc-rail: 0px;
+    --docs-toc-gap: 0px;
   }
-
-  .docs-menu-btn { display: flex; }
-
-  .docs-sidebar {
-    position: fixed;
-    left: -280px;
-    top: var(--docs-topbar-height, 68px);
-    height: calc(100vh - var(--docs-topbar-height, 68px));
-    width: 280px;
-    z-index: 60;
-    transition: left var(--ui-transition-normal);
-    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.35);
-    /* Clear the sticky bottom-nav (≈56px) so the last group (Reference /
-     * Explanation) isn't hidden behind it when the drawer is scrolled to end. */
-    padding-bottom: calc(56px + 1.5rem);
-    /* Bottom fade hints there's more to scroll. mask-image affects only paint
-     * (not layout / the inert toggle, which is pure JS attribute work). */
-    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 2.5rem), transparent 100%);
-    mask-image: linear-gradient(to bottom, #000 calc(100% - 2.5rem), transparent 100%);
-  }
-
-  .docs-sidebar--open { left: 0; }
-  .docs-sidebar-close { display: flex; }
-
-  .docs-main { padding: 1.25rem 1rem; }
-  .docs-main--with-toc { display: block; }
   .docs-toc { display: none; }
 
   /* In-flow mobile TOC disclosure (rendered from `tocItems`). */
@@ -1924,6 +1930,38 @@ summary:focus-visible,
   .docs-toc-mobile-list .docs-toc-link {
     padding-left: 0.75rem;
   }
+}
+
+@media (max-width: 768px) {
+  .docs-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: var(--docs-topbar-height, 68px) 1fr auto;
+  }
+
+  .docs-menu-btn { display: flex; }
+
+  .docs-sidebar {
+    position: fixed;
+    left: -280px;
+    top: var(--docs-topbar-height, 68px);
+    height: calc(100vh - var(--docs-topbar-height, 68px));
+    width: 280px;
+    z-index: 60;
+    transition: left var(--ui-transition-normal);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.35);
+    /* Clear the sticky bottom-nav (≈56px) so the last group (Reference /
+     * Explanation) isn't hidden behind it when the drawer is scrolled to end. */
+    padding-bottom: calc(56px + 1.5rem);
+    /* Bottom fade hints there's more to scroll. mask-image affects only paint
+     * (not layout / the inert toggle, which is pure JS attribute work). */
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 2.5rem), transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 2.5rem), transparent 100%);
+  }
+
+  .docs-sidebar--open { left: 0; }
+  .docs-sidebar-close { display: flex; }
+
+  .docs-main { padding: 1.25rem 1rem; }
 
   .docs-topbar-links { display: none; }
   .docs-topbar-sep { display: none; }

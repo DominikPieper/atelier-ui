@@ -15,6 +15,6 @@ const description = doc?.description
   : `${title} — framework-agnostic UI component with Angular, React, and Vue adapters.`;
 ---
 
-<BaseLayout title={title} description={description} currentPath={`/components/${name}`}>
+<BaseLayout title={title} description={description} currentPath={`/components/${name}`} width="full">
   <ComponentDetail name={name as string} client:load />
 </BaseLayout>

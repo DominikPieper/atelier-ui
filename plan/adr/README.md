@@ -91,6 +91,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0083](0083-the-manifest-the-framework-cannot-emit.md) | The manifest the framework cannot emit (hosted Angular/Vue MCP serve React's components manifest as the cross-framework reference) | Accepted | Recorded |
 | [0084](0084-two-environments-one-canonical-per-audience.md) | Two environments, one canonical per audience (clone for the two-day cohort, scaffold for the self-serve reader; both documented, branched per page) | Accepted | Recorded |
 | [0085](0085-the-counting-rule-before-the-count.md) | The counting rule, before the count (rule-of-three adopted; `--ui-type-row`, `--ui-type-row-sm`) | Accepted | Recorded |
+| [0086](0086-one-reading-axis-the-shell-owns-the-width.md) | One reading axis — the shell owns the page width (`.docs-main` grid with an always-reserved TOC rail; `width` prop replaces per-page `max-width`) | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

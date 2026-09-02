@@ -32,6 +32,17 @@ interface Props {
    * backward compatibility with pages not yet migrated.
    */
   tocItems?: { id: string; label: string }[];
+  /**
+   * Width of the reading column. The shell owns this, not the page — a page
+   * that caps its own wrapper drifts off the site-wide reading axis (ADR-0086).
+   *
+   * - `default` (800px) — prose pages. The overwhelming majority.
+   * - `wide` (1000px) — pages whose body is a tool or a wide table.
+   * - `full` — uncapped and rail-less, for pages that lay out their own grid
+   *   (landing, component gallery, component detail). Cannot carry a desktop
+   *   TOC: there is no rail to put one in.
+   */
+  width?: 'default' | 'wide' | 'full';
 }
 
 const SITE_URL = 'https://atelier.pieper.io';
@@ -51,6 +62,7 @@ const {
   ogImage = defaultOgImage,
   currentPath,
   tocItems,
+  width = 'default',
 } = Astro.props;
 
 // The TOC renders from EITHER the legacy `slot="toc"` markup OR the
@@ -460,7 +472,7 @@ const breadcrumbSchema = {
     </nav>
 
     <!-- Main -->
-    <main id="main" class={`docs-main${hasToc ? ' docs-main--with-toc' : ''}`}>
+    <main id="main" class:list={['docs-main', width !== 'default' && `docs-main--${width}`]}>
       <div class="docs-main-content" data-pagefind-body>
         {showBreadcrumb && (
           <nav class="docs-breadcrumb docs-breadcrumb--page" aria-label="Breadcrumb">
