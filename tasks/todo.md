@@ -2188,28 +2188,112 @@ Full document: `tasks/docs-ux-review-2026-09-02.md` (3 blockers · 13 major ·
 
 ### Open — fixes (order from the review §6)
 
-- [ ] **B1** 375 px: shell is 401 px wide on every page — topbar min-content
+- [x] **B1** 375 px: shell is 401 px wide on every page — topbar min-content
       (`.docs-search` no `min-width:0`, input `padding-right 72px` for the ⌘K
       hint). Fix + add the 375 overflow probe to `check:docs`.
-- [ ] **B3** `html { scroll-padding-top }`; delete dead `.step-row[id]`
+- [x] **B3** `html { scroll-padding-top }`; delete dead `.step-row[id]`
       (`global.css:3010`, templates use `docs-step-row`) + 2 ad-hoc offsets.
-- [ ] **B2** `/` CTA dark mode: `color:#fff` on `#34d8d8→#87efef` (1.3–1.8:1)
+- [x] **B2** `/` CTA dark mode: `color:#fff` on `#34d8d8→#87efef` (1.3–1.8:1)
       → on-primary token (`global.css:2639-2746`).
-- [ ] **M1+M2** props-table scroll wrapper + `overflow-wrap:anywhere` on types
+- [x] **M1+M2** props-table scroll wrapper + `overflow-wrap:anywhere` on types
       (`/components/icon` table 2350 px); scale SVG diagrams, label surfaces
       (axe `scrollable-region-focusable` ×32).
-- [ ] **M6+M7** delete `.docs-search-input:focus` / `.docs-filter-search:focus`
+- [x] **M6+M7** delete `.docs-search-input:focus` / `.docs-filter-search:focus`
       overrides (`:1651`, `:1099`); scroll-top `visibility` + PRM-gated scroll.
-- [ ] **M5+M13** `/mcp` raw link 1.83:1 (`McpExplorer.tsx:28`); hero disclaimer
-      opacity .65 → token; jargon opacity → token.
-- [ ] **M8+M9** drawer `top` below the banner, `bottom` above bottom-nav,
+- [x] **M5** `/mcp` raw link 1.83:1 (`mcp.astro:28`); hero disclaimer opacity .65
+      → token. (M13 withdrawn: the jargon hits were the closed popup's contents.)
+- [x] **M8+M9** drawer `top` below the banner, `bottom` above bottom-nav,
       `inert` + scroll lock; `scroll-padding-bottom` for the sticky bottom nav.
-- [ ] **M3+M4** 16 px body floor on mobile, 72ch measure, 12 px text floor.
-- [ ] **M10** emoji category icons (`components.ts:52-57`) → `IconName`.
-- [ ] **M11** 24 px targets (copy buttons 44 px).
-- [ ] **M12+n8** heading scale on component pages; pattern demo h3 → h2;
+- [x] **M3+M4** 16 px body floor on mobile, 72ch measure, 12 px text floor.
+- [x] **M10** emoji category icons (`components.ts:52-57`) → `IconName`.
+- [x] **M11** 24 px targets (copy buttons 44 px).
+- [x] **M12+n8** heading scale on component pages; pattern demo h3 → h2;
       landmark names.
-- [ ] **n1–n3** z-index tokens, 3 breakpoints, literal-colour gate over
+- [x] **n1–n3** z-index tokens, 3 breakpoints, literal-colour gate over
       `docs/src/styles` — one batch + ADR.
-- [ ] **L1–L3** → component backlog (`AtlSelect` name, `AtlProgress` label,
-      checkbox hit area).
+- [ ] **L1–L4** → component backlog (`AtlSelect` name, `AtlProgress` label,
+      checkbox hit area, `AtlTabs` pills don't wrap/scroll at 375).
+
+### Resume point — 2026-09-02 19:59 (resumed 23:00, done 2026-09-03 ~00:30)
+
+Committed so far: `a8e71b4` B1–B3 · `cd6e93f` review · `bfc4101` M1/M2 ·
+`8484ae5` M5–M7 · `ae70edb` M8–M10. Dev server on `:4300` (background task).
+
+In the working tree, uncommitted, gates not yet run:
+- **M12 + n8** done by agent (heading scale 20/18 px, `Live demo` h2 on
+  pattern pages, landmark labels) — diff reviewed, OK.
+- **M11** (targets ≥ 24 px) agent was still running at 19:59 — review its
+  hunks (`.docs-code-block-copy`, `.docs-cta-cmd-copy`, `.docs-sidebar-version`,
+  `.docs-edit-page-link`, footer links, `.run-step-link`, `.pattern-tag--link`)
+  and its `verify-m11.mjs` output before committing.
+- **Typography analysis** (read-only Explore agent) for Batch E was still
+  running — its report drives M3/M4.
+
+Next steps, in order:
+1. `nx lint docs` · `nx build docs` · `check:docs` · `check:llms` → commit
+   M11 + M12 + n8 as one `fix(docs)` commit.
+2. Batch E (M3 + M4): 4-step docs type scale (12/14/16/18 px), prose 16 px,
+   12 px floor, 70ch prose measure — implement from the analysis mapping,
+   screenshots before/after at 1440 + 375 on 6 pages; **ADR-0088**.
+3. Gates batch (n1–n3): `--ui-z-*` tokens for docs z-index, 3 documented
+   breakpoints, literal-colour gate over `docs/src/styles`, and the 375
+   overflow sweep as `check:docs-layout` (Playwright, static server over
+   `dist/docs`, wired into `check:all`; CI already installs Chromium);
+   **ADR-0089** + README index rows.
+4. Final full sweep (`scratchpad/sweep.mjs` + `summarize.mjs`) to confirm the
+   axe/overflow/target counts moved; update review §"after" and this file;
+   tick remaining boxes; L1–L4 to the component backlog note.
+5. Push once at the end (SSH, direct to main).
+
+**Typography analysis digest (agent, 20:05) — input for Batch E:**
+- ~500 sub-1rem `font-size` declarations: ~150 in `global.css`, ~50 in
+  `components/*.astro`, ~230 page-scoped (`<style>` + inline `style=`), ~55 in
+  `.tsx` inline styles. `docs-theme.css` sets none.
+- **Reuse the library scale, no new tokens:** `--ui-font-size-xs/sm/md/lg` =
+  12/14/16/18 px (`libs/react/src/styles/tokens.css:34-45`); `tokens.astro:75-80`
+  already documents these roles (labels · secondary/table cells · body ·
+  emphasized). Rule: running prose → `md`; secondary/captions/meta/nav/TOC/
+  table cells → `sm`; labels/eyebrows/chips/badges/code-lang/bottom-nav labels
+  → `xs`; CODE/OTH (buttons, card titles, mono) untouched; SVG `<text>` separate.
+- System-layer counts: ~28 RP → md, ~35 SEC/NAV → sm, ~55 LBL → xs, ~35 left.
+  Biggest RP hits: `.docs-page-hero-lede` 0.9rem (20 pages, PageHero.astro:59),
+  `.docs-step-desc` 0.82 (9 pages), `.docs-composition-*`/`.docs-a11y-notes`
+  0.82–0.85 (all 57 component pages), `.checkpoint-body` 0.85, `.objective-list`
+  0.84, `.docs-pagepair-desc` 0.78.
+- **Dead CSS (0 template uses):** `.docs-home-section-sub`, `.docs-feature-card-desc`,
+  `.docs-protocol-step-desc`, `.docs-shortcut-desc`, `.docs-orient-card-desc`,
+  `.docs-help-footer-desc`, `.docs-help-footer-link-desc` — delete, don't remap.
+- Debatable (decide in ADR-0088): uppercase nav headings (`.docs-nav-heading`,
+  `.docs-toc-header`, `.docs-sidebar-title`) xs vs sm; card/tile titles at
+  0.86–0.95rem (leave); `PageHero.astro:71` `code { font-size: .85em }` scales
+  with the lede bump (12.2 → 13.6 px, fine).
+- Measure: default column 800 px ≈ 100 cpl, `--wide` 1000 px ≈ 125 cpl; only
+  `.docs-page-hero-lede` (36rem ≈ 72 cpl) and `.docs-page-description` (600 px)
+  are capped. Decision for E: cap running prose at `max-width: 70ch` inside
+  `.docs-main-content` (p, li, dd in prose contexts; not tables/code/cards).
+- Page-scoped inline sizes (~230) are out of E's first pass — record as a
+  follow-up (n13) with the two RP hot spots `troubleshooting.astro:199,227`
+  and `tutorial.astro:660` / `first-component.astro:413` done in E.
+
+**M11 landed (agent, 20:15) — review at 23:00 before committing:** hunks in
+`global.css` (`.docs-sidebar-version`, `.docs-code-block-copy` 28 px,
+`.docs-cta-cmd-copy` 28 px, and `.docs-code-block-header` padding 0.4 → 0.15rem
+to keep the header height unchanged — check visually), `BaseLayout.astro`
+(`.docs-edit-page-link`), `Footer.astro`, `first-component.astro`,
+`tutorial.astro`, `patterns.astro` (`.pattern-tag--link`). axe target-size
+clean on 6 pages × 2 widths except a pre-existing `input[type=email]` in the
+login-form demo (library, → L-list). Agent's "code block hidden behind the
+bottom nav at initial paint" is content below the fold behind a sticky nav —
+judge whether that is a defect at all.
+
+**20:20 — the `:4300` dev server was stopped (background task killed). Restart at 23:00 first: `npx nx serve docs` in the background, wait for `ready`.**
+
+## Open — component backlog surfaced by the docs review (L1–L4, 2026-09-03)
+
+Not docs CSS; the docs gate allowlists each with a reason pointing here.
+
+- [ ] **L1** `AtlSelect` demo / component: native `<select>` without an accessible name (axe `select-name`, critical) — either the demo omits the label the component needs, or the spec lets it be omitted.
+- [ ] **L2** `AtlProgress`: `role=progressbar` without `aria-label` in 16 demo instances (axe `aria-progressbar-name`) — compare `AtlButton`'s discriminated-union enforcement.
+- [ ] **L3** Checkbox/toggle inputs measure 20×20 / 1×1; login-form demo `input[type=email]` under 24 px when the sticky nav overlaps — confirm the label extends the hit area (WCAG 2.5.8).
+- [ ] **L4** `AtlTabs` `variant="pills"` neither wraps nor scrolls at 375 (+19 px on `/patterns*`) — `chip-collection-reflow`.
+- [ ] `AtlCodeBlock`'s scroller has no focusable content (axe `scrollable-region-focusable` on `/components/code-block`).
