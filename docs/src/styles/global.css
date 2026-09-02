@@ -508,8 +508,9 @@ body {
   justify-content: center;
   opacity: 0;
   pointer-events: none;
+  visibility: hidden;
   transform: translateY(8px);
-  transition: opacity var(--ui-transition-normal), transform var(--ui-transition-normal), border-color var(--ui-transition-fast), color var(--ui-transition-fast);
+  transition: opacity var(--ui-transition-normal), transform var(--ui-transition-normal), visibility var(--ui-transition-normal), border-color var(--ui-transition-fast), color var(--ui-transition-fast);
   z-index: 200;
   box-shadow: 0 4px 16px rgba(0,0,0,0.2);
 }
@@ -527,6 +528,7 @@ body {
 .docs-scroll-top--visible {
   opacity: 1;
   pointer-events: auto;
+  visibility: visible;
   transform: translateY(0);
 }
 
@@ -817,8 +819,8 @@ summary:focus-visible,
  * surrounding muted text in dark mode without relying on color alone
  * (WCAG 1.4.1). Scoped to prose containers to avoid underlining cards,
  * nav links, and CTA buttons that already have their own affordance. */
-.docs-main-content :is(p, li, dd, blockquote) a:not([class]),
-.docs-main-content :is(p, li, dd, blockquote) a.docs-link-primary {
+.docs-main-content :is(p, li, dd, blockquote, aside) a:not([class]),
+.docs-main-content :is(p, li, dd, blockquote, aside) a.docs-link-primary {
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
@@ -1108,13 +1110,11 @@ summary:focus-visible,
   color: var(--ui-color-text);
   font-family: var(--docs-font, inherit);
   font-size: 0.9375rem;
-  outline: none;
   transition: border-color var(--ui-transition-fast), box-shadow var(--ui-transition-fast);
 }
 
 .docs-filter-search:focus {
   border-color: var(--ui-color-primary);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-color-primary) 15%, transparent);
 }
 
 .docs-category-pills { display: flex; gap: 0.5rem; flex-wrap: wrap; }
@@ -1666,11 +1666,6 @@ summary:focus-visible,
 
 .docs-search-input::placeholder { color: var(--ui-color-placeholder, rgba(133, 147, 147, 0.7)); }
 
-.docs-search-input:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px var(--ui-color-primary-light);
-}
-
 [data-theme='light'] .docs-search-input {
   background: var(--ui-color-surface-raised);
   border-color: var(--ui-color-border);
@@ -2155,12 +2150,11 @@ summary:focus-visible,
 
 .docs-hero-disclaimer {
   margin: 0 auto 2rem;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ui-color-text-muted);
-  opacity: 0.65;
   position: relative;
 }
 

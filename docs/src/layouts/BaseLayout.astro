@@ -801,7 +801,8 @@ const breadcrumbSchema = {
       handleScroll();
 
       bindOnce(document.getElementById('scroll-top'), 'click', function() {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        var prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: 0, behavior: prefersReduce ? 'auto' : 'smooth' });
       });
 
       // Mark every nav link with `.active` as the current page so screen
