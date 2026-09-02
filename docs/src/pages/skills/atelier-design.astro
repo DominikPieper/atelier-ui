@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageEyebrow from '../../components/PageEyebrow.astro';
 import { Code } from 'astro-expressive-code/components';
 import BottomNav from '../../components/BottomNav.astro';
 import Callout from '../../components/Callout.astro';
@@ -83,11 +84,7 @@ if (listedReferences !== designReferenceFiles.length) {
   <div class="docs-inline-page">
 
     <div style="margin-bottom: 2.5rem">
-      <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.6rem">
-        <a href="/agent-skills" style="font-size: 0.78rem; color: var(--ui-color-text-muted); text-decoration: none">← Agent Skills</a>
-        <span style="font-size: 0.78rem; color: var(--ui-color-text-muted); opacity: 0.5">/</span>
-        <span style="font-size: 0.78rem; color: var(--ui-color-text-muted); font-family: monospace">{SKILL_NAME}</span>
-      </div>
+      <PageEyebrow kind="reference" />
       <h1 class="docs-page-h1">
         atelier-design
       </h1>

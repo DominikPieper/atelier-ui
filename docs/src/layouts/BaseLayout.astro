@@ -132,13 +132,27 @@ function titleCase(slug: string): string {
   );
 }
 
+// A path segment that groups routes without having a page of its own. The
+// skill pages are rendered from `pages/skills/`, so the trail derived from the
+// URL wants to link `/skills` — which 404s. Their real landing page is
+// `/agent-skills`, which is also where the pages themselves point back to.
+// Mapped here so the visible crumb and the JSON-LD `item` URL agree.
+const SEGMENT_LANDING: Record<string, { name: string; path: string }> = {
+  skills: { name: 'Agent skills', path: '/agent-skills' },
+};
+
 const pathSegments = currentPath.split('/').filter(Boolean);
 const breadcrumbItems = [
   { name: 'Home', url: SITE_URL + '/' },
-  ...pathSegments.map((segment, i) => ({
-    name: titleCase(segment),
-    url: SITE_URL + '/' + pathSegments.slice(0, i + 1).join('/'),
-  })),
+  ...pathSegments.map((segment, i) => {
+    const landing = SEGMENT_LANDING[segment];
+    return landing && i < pathSegments.length - 1
+      ? { name: landing.name, url: SITE_URL + landing.path }
+      : {
+          name: titleCase(segment),
+          url: SITE_URL + '/' + pathSegments.slice(0, i + 1).join('/'),
+        };
+  }),
 ];
 
 // Show the visible trail only when there's a real intermediate crumb
@@ -750,41 +764,44 @@ const breadcrumbSchema = {
       // Set the initial inert state for the current viewport on every page load.
       syncInert();
 
-      // Scroll to top button + top progress bar
-      var scrollTopBtn = document.getElementById('scroll-top');
-      var progressBar = document.getElementById('scroll-progress');
-      var mainEl = document.querySelector('.docs-main');
-
+      // Scroll to top button + top progress bar.
+      //
+      // The WINDOW is the scroll container, never `.docs-main`: `.docs-shell`
+      // is `min-height: 100vh` with a `1fr` content row, so the row grows to
+      // the content and main cannot overflow. This used to bind `scroll` on
+      // `.docs-main` — an element that never scrolls — so the progress bar sat
+      // at 0% and the button never appeared, and the `window` fallback below
+      // was unreachable because `mainEl` always exists (ADR-0087).
+      //
+      // One window listener for the life of the document. It resolves its two
+      // targets by id on every call rather than closing over them: ClientRouter
+      // swaps <body>, and a captured node would keep being updated after the
+      // navigation that detached it.
       function handleScroll() {
-        // `.docs-main` is the scroll container on desktop; the window scrolls
-        // when there's no scrollable main (e.g. short pages / mobile fallback).
-        var scrollY = mainEl ? mainEl.scrollTop : window.scrollY;
+        var scrollTopBtn = document.getElementById('scroll-top');
+        var progressBar = document.getElementById('scroll-progress');
+        var scrollY = window.scrollY;
         if (scrollTopBtn) {
           scrollTopBtn.classList.toggle('docs-scroll-top--visible', scrollY > 400);
         }
         if (progressBar) {
-          var max = mainEl
-            ? mainEl.scrollHeight - mainEl.clientHeight
-            : (document.documentElement.scrollHeight - window.innerHeight);
+          var max = document.documentElement.scrollHeight - window.innerHeight;
           var pct = max > 0 ? Math.min(100, Math.max(0, (scrollY / max) * 100)) : 0;
           progressBar.style.width = pct + '%';
         }
       }
 
-      if (mainEl) {
-        bindOnce(mainEl, 'scroll', handleScroll);
-      } else if (!window.__atelierScrollBound) {
+      if (!window.__atelierScrollBound) {
         window.__atelierScrollBound = true;
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
       }
 
       // Run once on every page load so the progress bar resets to the correct
       // width for the new page (ClientRouter keeps the body around).
       handleScroll();
 
-      bindOnce(scrollTopBtn, 'click', function() {
-        if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
-        else window.scrollTo({ top: 0, behavior: 'smooth' });
+      bindOnce(document.getElementById('scroll-top'), 'click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
 
       // Mark every nav link with `.active` as the current page so screen

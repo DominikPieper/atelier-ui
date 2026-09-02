@@ -2084,3 +2084,68 @@ grows to content height and the **window** is the scroll container
 `innerHeight = 823`). The `else` branch that would bind `window` is unreachable
 because `mainEl` always exists. Pre-existing and unrelated to this change —
 the shell rows are unchanged — so it is reported rather than folded in.
+
+---
+
+## Docs site: the scrollport that never scrolled — 2026-09-02
+
+Follow-up to the alignment pass. `.docs-main` carried `overflow-y: auto` while
+`.docs-shell` is `min-height: 100vh` with a `1fr` row, so main never scrolled
+and the window did. ADR-0087.
+
+### Three dead features, one cause
+
+| | before (scrollY=1200 on `/tokens`) | after |
+|---|---|---|
+| `.docs-toc` sticky | `top: 227 → −973` (scrolls away) | `top: 135 → 92` = `68px + 1.5rem` |
+| scroll-progress bar | `0%` at any position | `20.49%` at y=1000 of 4880 |
+| scroll-to-top button | never visible | visible past 400px |
+| `.docs-sidebar` (sibling, outside the scrollport) | worked | unchanged |
+
+- [x] `.docs-main` loses `overflow-y: auto` → `.docs-toc` sticks to the viewport
+- [x] `.docs-main-content` gains `overflow-x: auto` → wide content stays
+      contained; works because `.docs-toc` is main's grid *sibling*
+- [x] `BaseLayout` scroll handler binds `window`, resolves `#scroll-progress` /
+      `#scroll-top` by id per call (one listener, `ClientRouter` swaps `<body>`)
+- [x] Breadcrumb `/skills` 404 → `SEGMENT_LANDING` maps it to `/agent-skills`
+- [x] `/skills/*` hand-rolled back-link row → `<PageEyebrow kind="reference" />`
+- [x] ADR-0087 + index row + lessons
+
+### Verified
+
+- 116 / 116 page-width combinations (29 pages × 1600/1200/900/420) produce **no**
+  document-level horizontal scrollbar.
+- Sticky / progress / button confirmed with a **real wheel scroll**.
+  `window.scrollTo()` over CDP moves the page but dispatches no scroll event —
+  an earlier "still 0%" reading was that artefact, not a defect.
+- `h1` vertical offsets now split on one fact instead of on header conventions:
+  **113px** without a breadcrumb (20 prose pages), **150px** with one
+  (`/patterns/[id]`, both `/skills/*` — previously 138px). `/404` at 91px and the
+  `full` pages at 89 / 99 / 164 own their own frame by design.
+- Breadcrumb on `/skills/atelier-design` reads "Home / Agent skills / Atelier
+  Design" and links `/agent-skills` (200, was `/skills` → 404).
+- `nx lint docs` clean, `nx build docs` builds 60 pages, `check:all` exits 0.
+
+### Open — pre-existing horizontal overflow, now visible
+
+Removing main's `overflow-y` (which made `overflow-x` compute to `auto`)
+surfaced 16 page/width combinations whose content is wider than the reading
+column. They are **contained** again by `.docs-main-content`, so nothing is cut
+off or pushes the page — but they are real responsive defects, deliberately not
+fixed here to keep the scopes apart:
+
+```
+vw=1200  /storybook +55
+vw=900   /first-component +23, /storybook +323, /components/button +84,
+         /components/table +28, /troubleshooting +28
+vw=420   /workshop +48, /install +9, /mcp +133, /tokens +19,
+         /design-principles +163, /troubleshooting +236, /tutorial +146,
+         /figma +34, /schulung +15, /skills/atelier-design +14
+```
+
+Representative case: `.docs-props-table` has a min-content width of 849px (long
+identifiers in `<code>`), and `width: 100%` cannot shrink a table below that.
+The proper fix is a per-element scroll container on the wide content, so the
+scrollbar sits at the table rather than at the bottom of the whole column.
+There is already a `@media (max-width: 480px)` card transform for these tables;
+the gap is everything between 481px and the reading column's width.

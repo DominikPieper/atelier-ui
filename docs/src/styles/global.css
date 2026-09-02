@@ -328,12 +328,18 @@ body {
  * depending on the page. Reserving the rail unconditionally and centring the
  * whole track set keeps the reading column on one axis site-wide. See
  * ADR-0086. Page width is chosen by the shell (`width` prop on BaseLayout),
- * never by the page's own wrapper. */
+ * never by the page's own wrapper.
+ *
+ * Deliberately NOT a scroll container. It used to carry `overflow-y: auto`,
+ * which never scrolled anything — `.docs-shell` is `min-height: 100vh` with a
+ * `1fr` content row, so the row grows to the content and the window scrolls —
+ * but it did make main the nearest scrollport, which silently disabled
+ * `.docs-toc`'s `position: sticky` and starved the scroll handler in
+ * BaseLayout of events. See ADR-0087. */
 .docs-main {
   --docs-content-col: 800px;
   --docs-toc-rail: 200px;
   --docs-toc-gap: 3rem;
-  overflow-y: auto;
   padding: 2rem;
   display: grid;
   grid-template-columns: minmax(0, var(--docs-content-col)) var(--docs-toc-rail);
@@ -343,8 +349,17 @@ body {
   justify-content: center;
 }
 
+/* Containment for content wider than the reading column (props tables with
+ * long identifiers, wide diagrams) lives HERE and not on `.docs-main`. Main
+ * used to carry `overflow-y: auto`, which makes `overflow-x` compute to `auto`
+ * too — that absorbed the overflow, but it also made main the nearest
+ * scrollport and killed `.docs-toc`'s sticky (ADR-0087). `.docs-toc` is main's
+ * grid SIBLING, not a descendant of this element, so scrolling here contains
+ * the content without touching the rail. Nothing inside the reading column is
+ * `position: sticky`; if something ever is, it will stick to this box. */
 .docs-main-content {
   min-width: 0;
+  overflow-x: auto;
 }
 
 /* Wider reading column for pages whose body is a tool or a wide diagram
