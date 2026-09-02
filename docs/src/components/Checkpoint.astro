@@ -45,9 +45,9 @@ const kicker = eyebrow ?? defaultEyebrow;
     border-radius: var(--ui-radius-md);
   }
   .checkpoint--target .checkpoint-eyebrow {
-    font-size: 0.7rem;
+    font-size: var(--ui-font-size-xs);
     font-weight: 800;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--ui-color-primary);
   }
@@ -79,9 +79,9 @@ const kicker = eyebrow ?? defaultEyebrow;
     margin-bottom: 0.6rem;
   }
   .checkpoint--done .checkpoint-eyebrow {
-    font-size: 0.66rem;
+    font-size: var(--ui-font-size-xs);
     font-weight: 800;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--ui-color-primary);
   }
@@ -94,7 +94,7 @@ const kicker = eyebrow ?? defaultEyebrow;
   }
   .checkpoint--done .checkpoint-body {
     margin: 0;
-    font-size: 0.85rem;
+    font-size: var(--ui-font-size-md);
     color: var(--ui-color-text-muted);
     line-height: 1.6;
   }
@@ -108,7 +108,7 @@ const kicker = eyebrow ?? defaultEyebrow;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    font-size: 0.85rem;
+    font-size: var(--ui-font-size-md);
     color: var(--ui-color-text);
     line-height: 1.4;
   }
@@ -126,7 +126,7 @@ const kicker = eyebrow ?? defaultEyebrow;
     margin-top: 1px;
   }
   .checkpoint-body :global(.checkpoint-checks code) {
-    font-size: 0.78rem;
+    font-size: var(--ui-font-size-sm);
     padding: 0 0.25rem;
     background: var(--ui-color-primary-light);
     border-radius: 3px;

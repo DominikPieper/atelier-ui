@@ -196,17 +196,17 @@ const ISSUES: Issue[] = [
           <h2 style="margin: 0 0 0.75rem; font-size: 1rem; font-weight: 700; color: var(--ui-color-text)">
             {issue.title}
           </h2>
-          <div style="display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.5rem; font-size: 0.85rem; line-height: 1.6; overflow-wrap: anywhere">
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.5rem; font-size: var(--ui-font-size-md); line-height: 1.6; overflow-wrap: anywhere">
             <div>
-              <span style="font-size: 0.7rem; font-weight: 700; color: var(--ui-color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-right: 0.4rem">Symptom</span>
+              <span style="font-size: var(--ui-font-size-xs); font-weight: 700; color: var(--ui-color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-right: 0.4rem">Symptom</span>
               <span style="color: var(--ui-color-text)">{issue.symptom}</span>
             </div>
             <div>
-              <span style="font-size: 0.7rem; font-weight: 700; color: var(--ui-color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-right: 0.4rem">Cause</span>
+              <span style="font-size: var(--ui-font-size-xs); font-weight: 700; color: var(--ui-color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-right: 0.4rem">Cause</span>
               <span style="color: var(--ui-color-text)">{issue.cause}</span>
             </div>
             <div>
-              <div style="font-size: 0.7rem; font-weight: 700; color: var(--ui-color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.4rem">Fix</div>
+              <div style="font-size: var(--ui-font-size-xs); font-weight: 700; color: var(--ui-color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.4rem">Fix</div>
               <ol style="margin: 0; padding-left: 1.2rem; color: var(--ui-color-text)">
                 {issue.fix.map((step) => (
                   <li style="margin-bottom: 0.25rem">{step}</li>
@@ -224,7 +224,7 @@ const ISSUES: Issue[] = [
     </div>
 
     <div style="margin-top: 2rem; padding: 1rem 1.25rem; background: var(--ui-color-primary-light); border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md)">
-      <p style="margin: 0; font-size: 0.85rem; color: var(--ui-color-text); line-height: 1.6">
+      <p style="margin: 0; font-size: var(--ui-font-size-md); color: var(--ui-color-text); line-height: 1.6">
         Still stuck? Run <code>npm run preflight</code> and share its output — every line reports a specific fix.
       </p>
     </div>

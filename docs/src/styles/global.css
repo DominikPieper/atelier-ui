@@ -79,7 +79,7 @@ body {
 }
 
 .docs-logo-attribution {
-  font-size: 0.62rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -103,7 +103,7 @@ body {
 .docs-topbar-link {
   color: var(--ui-color-text-muted);
   text-decoration: none;
-  font-size: 0.875rem;
+  font-size: var(--ui-font-size-sm);
   font-weight: 500;
   padding: 0.375rem 0.75rem;
   border-radius: 6px;
@@ -161,7 +161,7 @@ body {
 .docs-sidebar-title {
   color: var(--ui-color-primary);
   font-weight: 700;
-  font-size: 0.8rem;
+  font-size: var(--ui-font-size-xs);
   letter-spacing: -0.03em;
   text-transform: uppercase;
 }
@@ -172,7 +172,7 @@ body {
   min-height: 24px;
   margin-top: 0.25rem;
   font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.66rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 600;
   padding: 0.1rem 0.45rem;
   border-radius: var(--ui-radius-sm);
@@ -219,10 +219,10 @@ body {
 
 .docs-nav-heading {
   padding: 0.5rem 1.25rem;
-  font-size: 0.68rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--ui-color-text-muted);
   display: flex;
   align-items: center;
@@ -245,7 +245,7 @@ body {
   padding: 9px 1.25rem;
   color: var(--ui-color-text-muted);
   text-decoration: none;
-  font-size: 0.825rem;
+  font-size: var(--ui-font-size-sm);
   font-weight: 500;
   letter-spacing: -0.02em;
   border-left: 2px solid transparent;
@@ -276,7 +276,7 @@ body {
   background: var(--ui-color-primary-light);
   color: var(--ui-color-primary);
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 0.66rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 700;
   margin-left: -0.25rem;
 }
@@ -300,7 +300,7 @@ body {
 
 .docs-nav-link--back {
   opacity: 0.85;
-  font-size: 0.78rem;
+  font-size: var(--ui-font-size-sm);
 }
 
 .docs-nav-link--back:hover { opacity: 1; }
@@ -369,6 +369,12 @@ body {
   overflow-x: auto;
 }
 
+/* Running prose keeps a readable measure inside the 800px column (ADR-0088).
+ * Tables, code, cards and grids own their own width and are not matched. */
+.docs-main-content :is(p, li, dd, blockquote):not(:is(table, pre, .docs-card, .docs-cta, [class*="card"], [class*="grid"], [class*="hero"]) *) {
+  max-width: 70ch;
+}
+
 /* Wider reading column for pages whose body is a tool or a wide diagram
  * (currently /mcp). No rail: a `wide` page carries no desktop TOC, and
  * reserving one would squeeze the column on anything under a 1568px viewport. */
@@ -393,10 +399,10 @@ body {
 }
 
 .docs-toc-header {
-  font-size: 0.68rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--ui-color-text-muted);
   margin-bottom: 0.75rem;
   padding-bottom: 0.5rem;
@@ -405,7 +411,7 @@ body {
 
 .docs-toc-link {
   display: block;
-  font-size: 0.8rem;
+  font-size: var(--ui-font-size-sm);
   color: var(--ui-color-text-muted);
   text-decoration: none;
   padding: 0.3rem 0 0.3rem 0.75rem;
@@ -617,7 +623,7 @@ body {
 
 .docs-step-badge {
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 0.62rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 700;
   color: var(--ui-color-primary);
   background: color-mix(in srgb, var(--ui-color-primary) 12%, transparent);
@@ -630,7 +636,7 @@ body {
 
 .docs-step-desc {
   margin: 0 0 0.75rem;
-  font-size: 0.82rem;
+  font-size: var(--ui-font-size-md);
   color: var(--ui-color-text-muted);
   line-height: 1.6;
 }
@@ -792,7 +798,7 @@ summary:focus-visible,
   display: inline-flex;
   align-items: center;
   font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
-  font-size: 0.6875rem;
+  font-size: var(--ui-font-size-xs);
   padding: 3px 8px;
   background: var(--ui-color-surface-sunken);
   border: 1px solid var(--ui-color-border);
@@ -804,7 +810,7 @@ summary:focus-visible,
   display: inline-flex;
   align-items: center;
   font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
-  font-size: 0.6875rem;
+  font-size: var(--ui-font-size-xs);
   padding: 0.05rem 0.375rem;
   background: var(--ui-color-surface-sunken);
   border: 1px solid var(--ui-color-border);
@@ -838,7 +844,7 @@ summary:focus-visible,
   grid-template-columns: max-content minmax(0, 1fr);
   column-gap: 1.25rem;
   row-gap: 0.625rem;
-  font-size: 0.82rem;
+  font-size: var(--ui-font-size-sm);
 }
 
 .docs-source-dl dt {
@@ -856,7 +862,7 @@ summary:focus-visible,
 
 .docs-code-block-lang {
   font-family: var(--docs-font-code);
-  font-size: 0.68rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 600;
   text-transform: uppercase;
   color: var(--ui-color-primary);
@@ -868,7 +874,7 @@ summary:focus-visible,
   align-items: center;
   min-height: 28px;
   padding: 2px 8px;
-  font-size: 0.72rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 600;
   background: transparent;
   border: 1px solid var(--ui-color-border);
@@ -896,7 +902,7 @@ summary:focus-visible,
 .docs-props-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.875rem;
+  font-size: var(--ui-font-size-sm);
   border: 1px solid var(--ui-color-border);
   border-radius: var(--ui-radius-md, 8px);
   overflow: hidden;
@@ -907,7 +913,7 @@ summary:focus-visible,
   padding: 0.75rem 1rem;
   text-align: left;
   font-weight: 600;
-  font-size: 0.8rem;
+  font-size: var(--ui-font-size-sm);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--ui-color-text-muted);
@@ -955,7 +961,7 @@ summary:focus-visible,
 
 /* ── Status Badges ───────────────────────────────────── */
 .docs-status-badge {
-  font-size: 0.65rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -1042,7 +1048,7 @@ summary:focus-visible,
 .docs-component-card-name { font-weight: 600; font-size: 0.9rem; }
 
 .docs-component-card-desc {
-  font-size: 0.8rem;
+  font-size: var(--ui-font-size-md);
   color: var(--ui-color-text-muted);
   line-height: 1.45;
   flex: 1;
@@ -1160,7 +1166,7 @@ summary:focus-visible,
 }
 
 .docs-count-badge {
-  font-size: 0.78rem;
+  font-size: var(--ui-font-size-sm);
   font-weight: 600;
   color: var(--ui-color-primary);
   background: var(--ui-color-primary-light);
@@ -1183,7 +1189,7 @@ summary:focus-visible,
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
-  font-size: 0.875rem;
+  font-size: var(--ui-font-size-md);
   color: var(--ui-color-text-muted);
 }
 
@@ -1234,7 +1240,7 @@ summary:focus-visible,
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.8rem;
+  font-size: var(--ui-font-size-sm);
   margin-bottom: 1rem;
   color: var(--ui-color-text-muted);
 }
@@ -1304,7 +1310,7 @@ summary:focus-visible,
   align-items: center;
   padding: 2px 10px;
   border-radius: 10px;
-  font-size: 0.72rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -1344,7 +1350,7 @@ summary:focus-visible,
 }
 
 .docs-meta-chip {
-  font-size: 0.68rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -1373,7 +1379,7 @@ summary:focus-visible,
 }
 
 .docs-demo-label {
-  font-size: 0.72rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -1381,7 +1387,7 @@ summary:focus-visible,
 }
 
 .docs-demo-fw-tag {
-  font-size: 0.68rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 700;
   padding: 0.12rem 0.45rem;
   border-radius: var(--ui-radius-sm);
@@ -1401,7 +1407,7 @@ summary:focus-visible,
 /* ── Per-component composition parts ──────────────────── */
 .docs-composition-intro {
   margin: 0 0 1rem;
-  font-size: 0.85rem;
+  font-size: var(--ui-font-size-md);
   color: var(--ui-color-text-muted);
   line-height: 1.65;
 }
@@ -1433,7 +1439,7 @@ summary:focus-visible,
 
 .docs-composition-part-desc {
   margin: 0 0 0.75rem;
-  font-size: 0.82rem;
+  font-size: var(--ui-font-size-md);
   color: var(--ui-color-text-muted);
   line-height: 1.6;
 }
@@ -1448,14 +1454,14 @@ summary:focus-visible,
   align-items: center;
   gap: 0.6rem;
   margin: 0 0 1rem;
-  font-size: 0.82rem;
+  font-size: var(--ui-font-size-sm);
 }
 
 .docs-a11y-role-label {
-  font-size: 0.66rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--ui-color-text-muted);
 }
 
@@ -1473,7 +1479,7 @@ summary:focus-visible,
 .docs-a11y-notes {
   margin: 0 0 1rem;
   padding-left: 1.2rem;
-  font-size: 0.82rem;
+  font-size: var(--ui-font-size-md);
   color: var(--ui-color-text-muted);
   line-height: 1.65;
 }
@@ -1484,7 +1490,7 @@ summary:focus-visible,
 
 .docs-a11y-link {
   margin: 0;
-  font-size: 0.78rem;
+  font-size: var(--ui-font-size-sm);
   color: var(--ui-color-text-muted);
 }
 
@@ -1536,7 +1542,7 @@ summary:focus-visible,
 .docs-ai-list {
   margin: 0;
   padding: 0 0 0 1.25rem;
-  font-size: 0.85rem;
+  font-size: var(--ui-font-size-md);
   color: var(--ui-color-text-muted);
   line-height: 1.6;
 }
@@ -1596,7 +1602,7 @@ summary:focus-visible,
 
 .docs-comparison-label {
   padding: 0.4rem 0.75rem;
-  font-size: 0.7rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -1613,7 +1619,7 @@ summary:focus-visible,
   background: rgba(0, 190, 190, 0.04);
   border: 1px solid rgba(0, 190, 190, 0.15);
   border-radius: var(--ui-radius-sm);
-  font-size: 0.82rem;
+  font-size: var(--ui-font-size-md);
   color: var(--ui-color-text-muted);
   line-height: 1.5;
   margin-top: 0.75rem;
@@ -1686,7 +1692,7 @@ summary:focus-visible,
   background: var(--ui-color-surface);
   border: 1px solid var(--ui-color-border);
   border-radius: 4px;
-  font-size: 0.7rem;
+  font-size: var(--ui-font-size-xs);
   color: var(--ui-color-text-muted);
   font-family: system-ui, sans-serif;
   pointer-events: none;
@@ -1734,13 +1740,13 @@ summary:focus-visible,
 .docs-search-result-content { flex: 1; }
 
 .docs-search-result-name {
-  font-size: 0.875rem;
+  font-size: var(--ui-font-size-sm);
   font-weight: 600;
   color: var(--ui-color-text);
 }
 
 .docs-search-result-category {
-  font-size: 0.75rem;
+  font-size: var(--ui-font-size-sm);
   color: var(--ui-color-text-muted);
 }
 
@@ -1762,10 +1768,10 @@ summary:focus-visible,
 
 .docs-search-group-heading {
   padding: 8px 14px 4px;
-  font-size: 0.65rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--ui-color-text-muted);
 }
 
@@ -1776,7 +1782,7 @@ summary:focus-visible,
 
 .docs-search-empty {
   padding: 14px;
-  font-size: 0.82rem;
+  font-size: var(--ui-font-size-sm);
   color: var(--ui-color-text-muted);
   text-align: center;
 }
@@ -1933,10 +1939,10 @@ summary:focus-visible,
     cursor: pointer;
     list-style: none;
     padding: 0.6rem 0.85rem;
-    font-size: 0.68rem;
+    font-size: var(--ui-font-size-xs);
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     color: var(--ui-color-text-muted);
     display: flex;
     align-items: center;
@@ -2041,7 +2047,7 @@ summary:focus-visible,
     padding: 0.6rem 0;
     text-decoration: none;
     color: var(--ui-color-text-muted);
-    font-size: 0.7rem;
+    font-size: var(--ui-font-size-xs);
     transition: color var(--ui-transition-fast);
   }
 
@@ -2138,10 +2144,10 @@ summary:focus-visible,
   background: var(--ui-color-primary-light);
   border: 1px solid color-mix(in srgb, var(--ui-color-primary) 25%, transparent);
   border-radius: 9999px;
-  font-size: 0.72rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--ui-color-primary);
   margin-bottom: 1.25rem;
   position: relative;
@@ -2173,9 +2179,9 @@ summary:focus-visible,
 
 .docs-hero-disclaimer {
   margin: 0 auto 2rem;
-  font-size: 0.75rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ui-color-text-muted);
   position: relative;
@@ -2253,10 +2259,10 @@ summary:focus-visible,
 }
 
 .docs-framework-card-label {
-  font-size: 0.62rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.06em;
   color: var(--ui-color-text-muted);
 }
 
@@ -2351,9 +2357,9 @@ summary:focus-visible,
 }
 
 .docs-stat-lbl {
-  font-size: 0.72rem;
+  font-size: var(--ui-font-size-xs);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--ui-color-text-muted);
   font-weight: 500;
 }
@@ -2388,7 +2394,7 @@ summary:focus-visible,
 
 .docs-feature-card-num {
   font-family: var(--docs-font-code);
-  font-size: 0.65rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 600;
   color: var(--ui-color-primary);
   background: var(--ui-color-primary-light);
@@ -2400,7 +2406,6 @@ summary:focus-visible,
 }
 
 .docs-feature-card-title { font-size: 0.95rem; font-weight: 700; margin: 0; color: var(--ui-color-text); }
-.docs-feature-card-desc { font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.55; margin: 0; }
 
 .docs-feature-card-code {
   background: var(--ui-color-surface-sunken);
@@ -2484,10 +2489,10 @@ summary:focus-visible,
 }
 
 .docs-quicknav-label {
-  font-size: 0.7rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--ui-color-primary);
   margin-bottom: 0.2rem;
   position: relative;
@@ -2502,9 +2507,9 @@ summary:focus-visible,
 
 /* ── Section heading ──────────────────────────────────── */
 .docs-home-section-heading {
-  font-size: 0.72rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   margin: 0 0 1.25rem;
   color: var(--ui-color-primary);
@@ -2526,19 +2531,6 @@ summary:focus-visible,
   flex: 1;
   height: 1px;
   background: var(--ui-color-border);
-}
-
-.docs-home-section-sub {
-  margin: -0.5rem 0 1.5rem;
-  font-size: 0.875rem;
-  line-height: 1.65;
-  color: var(--ui-color-text-muted);
-  max-width: 38rem;
-}
-
-.docs-home-section-sub strong {
-  color: var(--ui-color-text);
-  font-weight: 600;
 }
 
 /* ── Three pillars ────────────────────────────────────── */
@@ -2571,11 +2563,11 @@ summary:focus-visible,
 
 .docs-pillar-step {
   font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
-  font-size: 0.6875rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 600;
   color: var(--ui-color-text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   margin-bottom: 1.125rem;
 }
 
@@ -2601,7 +2593,7 @@ summary:focus-visible,
 }
 
 .docs-pillar-desc {
-  font-size: 0.875rem;
+  font-size: var(--ui-font-size-md);
   color: var(--ui-color-text-muted);
   line-height: 1.6;
   margin: 0 0 1rem;
@@ -2646,7 +2638,7 @@ summary:focus-visible,
   display: flex;
   gap: 0.625rem;
   align-items: flex-start;
-  font-size: 0.9375rem;
+  font-size: var(--ui-font-size-md);
   color: var(--ui-color-text);
 }
 
@@ -2661,7 +2653,7 @@ summary:focus-visible,
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.6875rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 700;
   margin-top: 1px;
 }
@@ -2700,9 +2692,9 @@ summary:focus-visible,
 
 .docs-cta-eyebrow {
   position: relative;
-  font-size: 0.6875rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: color-mix(in srgb, var(--ui-color-text-on-primary) 80%, transparent);
   margin-bottom: 1rem;
@@ -2767,7 +2759,7 @@ summary:focus-visible,
   color: var(--ui-color-text-on-primary);
   padding: 0.25rem 0.625rem;
   border-radius: var(--ui-radius-sm);
-  font-size: 0.6875rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 600;
   cursor: pointer;
   font-family: var(--docs-font);
@@ -2818,7 +2810,7 @@ summary:focus-visible,
 
 .docs-protocol-step-num {
   font-family: var(--docs-font-code);
-  font-size: 0.65rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 700;
   color: var(--ui-color-primary);
   background: var(--ui-color-primary-light);
@@ -2829,7 +2821,6 @@ summary:focus-visible,
 }
 
 .docs-protocol-step-label { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.35rem; color: var(--ui-color-text); }
-.docs-protocol-step-desc { font-size: 0.78rem; color: var(--ui-color-text-muted); line-height: 1.5; margin: 0; }
 
 /* ─── Page eyebrow (time + tag chips above page h1) ──────────────────────── */
 .page-eyebrow {
@@ -2837,9 +2828,9 @@ summary:focus-visible,
   gap: 0.55rem;
   align-items: center;
   margin-bottom: 0.85rem;
-  font-size: 0.7rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 .page-eyebrow-time {
@@ -2895,9 +2886,9 @@ summary:focus-visible,
 }
 .objective-heading {
   margin: 0 0 0.65rem;
-  font-size: 0.7rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ui-color-text-muted);
 }
@@ -2909,7 +2900,7 @@ summary:focus-visible,
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  font-size: 0.84rem;
+  font-size: var(--ui-font-size-md);
   line-height: 1.5;
   color: var(--ui-color-text);
 }
@@ -2971,9 +2962,9 @@ a.docs-pagepair-card:hover {
   cursor: default;
 }
 .docs-pagepair-eyebrow {
-  font-size: 0.62rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ui-color-text-muted);
 }
@@ -2989,7 +2980,7 @@ a.docs-pagepair-card:hover {
   color: var(--ui-color-text);
 }
 .docs-pagepair-desc {
-  font-size: 0.78rem;
+  font-size: var(--ui-font-size-md);
   color: var(--ui-color-text-muted);
   line-height: 1.5;
 }
@@ -3021,26 +3012,16 @@ a.docs-pagepair-card:hover {
   border-radius: var(--ui-radius-md);
 }
 .docs-shortcut-eyebrow {
-  font-size: 0.66rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 800;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ui-color-primary);
   margin-bottom: 0.35rem;
 }
-.docs-shortcut-desc {
-  margin: 0 0 0.55rem;
-  font-size: 0.82rem;
-  color: var(--ui-color-text-muted);
-  line-height: 1.55;
-}
-.docs-shortcut-desc strong {
-  color: var(--ui-color-text);
-  font-weight: 700;
-}
 .docs-shortcut-link {
   display: inline-block;
-  font-size: 0.82rem;
+  font-size: var(--ui-font-size-sm);
   font-weight: 700;
   color: var(--ui-color-primary);
   text-decoration: none;
@@ -3072,9 +3053,9 @@ a.docs-pagepair-card:hover {
   margin-bottom: 0.7rem;
 }
 .mcp-compare-label {
-  font-size: 0.66rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 800;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   /* Local AA-safe red — the shared --ui-color-danger (#ef4444) is only
    * 3.60:1 on surface-raised in light mode. Scoped overrides keep the
@@ -3082,7 +3063,7 @@ a.docs-pagepair-card:hover {
   color: #b91c1c;
 }
 .mcp-compare-time {
-  font-size: 0.78rem;
+  font-size: var(--ui-font-size-sm);
   font-weight: 700;
   color: #b91c1c;
 }
@@ -3102,7 +3083,7 @@ a.docs-pagepair-card:hover {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  font-size: 0.82rem;
+  font-size: var(--ui-font-size-md);
   line-height: 1.5;
   color: var(--ui-color-text);
 }
@@ -3124,7 +3105,7 @@ a.docs-pagepair-card:hover {
 }
 .mcp-compare-foot {
   margin: 0.85rem 0 0;
-  font-size: 0.78rem;
+  font-size: var(--ui-font-size-md);
   font-style: italic;
   color: var(--ui-color-text-muted);
 }
@@ -3144,16 +3125,16 @@ a.docs-pagepair-card:hover {
   border-radius: var(--ui-radius-md);
 }
 .docs-help-footer-head {
-  font-size: 0.7rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 800;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ui-color-primary);
   margin-bottom: 0.55rem;
 }
 .docs-help-footer-desc {
   margin: 0 0 1rem;
-  font-size: 0.82rem;
+  font-size: var(--ui-font-size-md);
   color: var(--ui-color-text-muted);
   line-height: 1.55;
 }
@@ -3179,9 +3160,9 @@ a.docs-pagepair-card:hover {
   transform: translateY(-1px);
 }
 .docs-help-footer-link-eyebrow {
-  font-size: 0.62rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ui-color-primary);
 }
@@ -3192,7 +3173,7 @@ a.docs-pagepair-card:hover {
   color: var(--ui-color-text);
 }
 .docs-help-footer-link-desc {
-  font-size: 0.76rem;
+  font-size: var(--ui-font-size-sm);
   color: var(--ui-color-text-muted);
   line-height: 1.45;
 }
@@ -3219,9 +3200,9 @@ a.docs-pagepair-card:hover {
   border-radius: var(--ui-radius-md);
 }
 .docs-fw-card-name {
-  font-size: 0.7rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ui-color-primary);
   margin-bottom: 0.55rem;
@@ -3236,7 +3217,7 @@ a.docs-pagepair-card:hover {
 .docs-fw-card-row {
   display: flex;
   gap: 0.65rem;
-  font-size: 0.8rem;
+  font-size: var(--ui-font-size-sm);
   align-items: baseline;
 }
 .docs-fw-card-row dt {
@@ -3266,9 +3247,9 @@ a.docs-pagepair-card:hover {
   padding: 0 1rem;
 }
 .docs-orient-eyebrow {
-  font-size: 0.7rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ui-color-text-muted);
   text-align: center;
@@ -3301,9 +3282,9 @@ a.docs-pagepair-card:hover {
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--ui-color-primary) 18%, transparent);
 }
 .docs-orient-card-time {
-  font-size: 0.66rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ui-color-primary);
 }
@@ -3312,11 +3293,6 @@ a.docs-pagepair-card:hover {
   font-weight: 800;
   color: var(--ui-color-text);
   letter-spacing: -0.01em;
-}
-.docs-orient-card-desc {
-  font-size: 0.82rem;
-  color: var(--ui-color-text-muted);
-  line-height: 1.5;
 }
 .docs-orient-card-link {
   margin-top: auto;
@@ -3378,10 +3354,10 @@ a.docs-pagepair-card:hover {
   width: auto;
 }
 .bottom-nav-label {
-  font-size: 0.68rem;
+  font-size: var(--ui-font-size-xs);
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--ui-color-text-muted);
   margin-bottom: 0.15rem;
 }
