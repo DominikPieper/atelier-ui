@@ -2149,3 +2149,67 @@ The proper fix is a per-element scroll container on the wide content, so the
 scrollbar sits at the table rather than at the bottom of the whole column.
 There is already a `@media (max-width: 480px)` card transform for these tables;
 the gap is everything between 481px and the reading column's width.
+
+## Open — Schulung, second review (2026-09-02)
+
+Full document: `tasks/schulung-review-2026-09-02.md` (4 blockers · 1 immediate · 13 major · 15 minor). Nothing fixed in this pass — review only.
+
+- [x] **I1** — scrubbed two colleagues' names + internal mailbox from `tasks/review-state-2026-08-26.md:168` and `tasks/schulung-review-2026-08-28.md:64` (public repo); role phrasing as in ADR-0032. Working tree only — git history still carries the old lines; rewriting public history is a separate decision (route via the internal DSB).
+- [ ] **B1** — Storybook/docs ports: material says `6006`, clone serves `4400/4401/4402` + docs `4300`. Sweep tutorial/first-component/troubleshooting/storybook/schulung pages, agenda, `CLAUDE.md:53`, ADR-0084:67, `preflight.mjs:361`; add a `check:docs` rule.
+- [ ] **B2** — `AtlInput.label` exists in React/Vue, not in `AtlInputSpec` or Angular; tutorial samples use it. Decide, then add a prop-parity gate.
+- [ ] **B3** — Day-2 gate story: name `npm run sync:generated`; replace Erfolgs item 2 ("preflight weiter grün" cannot fail); state which `check:all` gates go red by design in a one-framework build; fix slide "Drift erkennen — preflight".
+- [ ] **B4** — briefs Toast/TagChip severity `error` → `danger` (code union + tokens).
+- [ ] **M1** — `/claude-design` stale numbers: 29→30 gates, "twenty-four tags"→generated, 17/13 ADRs→16/12.
+- [ ] **M2/M3** — Claude Design trainer run-sheet (product, `/design-login`, prompt, hardcode target, flip value, fallback URL) + participant how-to (image, prompt→canvas, Step-5 example, opener). Both wait on the per-seat test (review §5).
+- [ ] **M4–M6** — clone-first kata prompt + story file; Block 05 exercise page; clone quickstart + local `.mcp.json` snippet on 440x.
+- [ ] **M11/§6.3** — decide trainer-kit location (recommendation: private `atelier-trainer` repo pinned to an atelier SHA); move agenda internals, add `LICENSE`.
+- [ ] **M12** — `solved-*` branches: build or remove the promise (`agenda:81,208`).
+- [ ] **§10** — one rehearsal of the participant path on a non-author machine, timed.
+
+## Docs site: UI/UX review with `ui-ux-pro-max` — 2026-09-02
+
+Scope: the docs app as a *product surface* (visual, interaction, a11y,
+responsive, motion, navigation) — not the training content, which
+`schulung-review-2026-09-02.md` already covers. Environment: local HEAD on
+`:4300`. Review only in this pass — fixes follow in the agreed order.
+
+Full document: `tasks/docs-ux-review-2026-09-02.md` (3 blockers · 13 major ·
+12 minor · 3 library defects surfaced by demos).
+
+- [x] Static scan (subagent): `global.css`, `docs-theme.css`, `BaseLayout.astro`,
+      `components/*.astro` — raw hex, text opacity, focus rules, z-index, PRM,
+      durations, type scale, breakpoints, targets
+- [x] Playwright sweep: 58 pages × 1440/1024/768/375 × dark/light (472 probes),
+      axe-core 4.13 at 1440 + 375 (236 runs), focus walk 4 pages (177 stops),
+      drawer test at 375 — scripts in the session scratchpad
+- [x] Skill queries per finding class (`--domain ux`)
+- [x] `tasks/docs-ux-review-2026-09-02.md` — severity · evidence · fix · rule ·
+      serves; §verified vs assumed; §weakest point
+
+### Open — fixes (order from the review §6)
+
+- [ ] **B1** 375 px: shell is 401 px wide on every page — topbar min-content
+      (`.docs-search` no `min-width:0`, input `padding-right 72px` for the ⌘K
+      hint). Fix + add the 375 overflow probe to `check:docs`.
+- [ ] **B3** `html { scroll-padding-top }`; delete dead `.step-row[id]`
+      (`global.css:3010`, templates use `docs-step-row`) + 2 ad-hoc offsets.
+- [ ] **B2** `/` CTA dark mode: `color:#fff` on `#34d8d8→#87efef` (1.3–1.8:1)
+      → on-primary token (`global.css:2639-2746`).
+- [ ] **M1+M2** props-table scroll wrapper + `overflow-wrap:anywhere` on types
+      (`/components/icon` table 2350 px); scale SVG diagrams, label surfaces
+      (axe `scrollable-region-focusable` ×32).
+- [ ] **M6+M7** delete `.docs-search-input:focus` / `.docs-filter-search:focus`
+      overrides (`:1651`, `:1099`); scroll-top `visibility` + PRM-gated scroll.
+- [ ] **M5+M13** `/mcp` raw link 1.83:1 (`McpExplorer.tsx:28`); hero disclaimer
+      opacity .65 → token; jargon opacity → token.
+- [ ] **M8+M9** drawer `top` below the banner, `bottom` above bottom-nav,
+      `inert` + scroll lock; `scroll-padding-bottom` for the sticky bottom nav.
+- [ ] **M3+M4** 16 px body floor on mobile, 72ch measure, 12 px text floor.
+- [ ] **M10** emoji category icons (`components.ts:52-57`) → `IconName`.
+- [ ] **M11** 24 px targets (copy buttons 44 px).
+- [ ] **M12+n8** heading scale on component pages; pattern demo h3 → h2;
+      landmark names.
+- [ ] **n1–n3** z-index tokens, 3 breakpoints, literal-colour gate over
+      `docs/src/styles` — one batch + ADR.
+- [ ] **L1–L3** → component backlog (`AtlSelect` name, `AtlProgress` label,
+      checkbox hit area).
