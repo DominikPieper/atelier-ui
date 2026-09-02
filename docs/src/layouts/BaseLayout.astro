@@ -526,10 +526,10 @@ const breadcrumbSchema = {
         )}
       </div>
       {hasToc && (
-        <aside class="docs-toc" aria-label="On this page">
+        <aside class="docs-toc">
           <div class="docs-toc-header">On this page</div>
           {hasTocItems ? (
-            <nav>
+            <nav aria-label="On this page">
               {tocItems!.map((item) => (
                 <a href={`#${item.id}`} class="docs-toc-link">{item.label}</a>
               ))}
@@ -544,7 +544,7 @@ const breadcrumbSchema = {
     <Footer />
 
     <!-- Bottom Nav (mobile) -->
-    <nav class="docs-bottom-nav" aria-label="Bottom">
+    <nav class="docs-bottom-nav" aria-label="Primary">
       <a href="/workshop"  class={`docs-bottom-nav-item${isWorkshop ? ' active' : ''}`}>
         <Icon name="build_circle" class="docs-bottom-nav-icon" />
         <span class="docs-bottom-nav-label">Workshop</span>
@@ -979,6 +979,7 @@ const breadcrumbSchema = {
     .docs-edit-page-link {
       display: inline-flex;
       align-items: center;
+      min-height: 24px;
       gap: 0.4rem;
       font-size: 0.85rem;
       color: var(--ui-color-text-muted);

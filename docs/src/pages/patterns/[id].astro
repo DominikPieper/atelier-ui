@@ -48,6 +48,7 @@ function frameworkStorybook(fw: Framework): string {
 }
 
 const sections = [
+  { id: 'live-demo', label: 'Live demo' },
   { id: 'reference', label: 'Visual reference' },
   { id: 'when-to-use', label: 'When to use' },
   { id: 'when-not-to-use', label: 'When not to use' },
@@ -95,6 +96,7 @@ const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
     </div>
 
     {/* Live demo */}
+    <h2 class="docs-section-title" id="live-demo">Live demo</h2>
     <div class="pattern-demo">
       {pattern.id === 'login-form'           && <LoginFormDemo client:idle />}
       {pattern.id === 'settings-page'        && <SettingsPageDemo client:idle />}
@@ -231,7 +233,7 @@ const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
     </section>
 
     {/* Pager */}
-    <nav class="pattern-pager">
+    <nav class="pattern-pager" aria-label="Previous and next pattern">
       {prevPattern ? (
         <a href={`/patterns/${prevPattern.id}`} class="pattern-pager-link">
           <span class="pattern-pager-dir">← Previous</span>
