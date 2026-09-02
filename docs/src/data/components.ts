@@ -48,13 +48,16 @@ export interface ComponentDoc {
   composition?: CompositionPart[];
 }
 
+/* Material icon names (same registry as SECTION_ICONS below). Rendered via
+ * <Icon name={...} /> in BaseLayout. Names must exist in
+ * docs/src/components/Icon.astro's import list. */
 export const CATEGORY_ICONS: Record<string, string> = {
-  Inputs: '✏️',
-  Display: '🎨',
-  Navigation: '🧭',
-  Overlay: '🪟',
-  Layout: '📐',
-  AI: '🤖',
+  Inputs: 'edit_square',
+  Display: 'palette',
+  Navigation: 'explore',
+  Overlay: 'layers',
+  Layout: 'space_dashboard',
+  AI: 'smart_toy',
 };
 
 /* Material icon names. Rendered via <Icon name={...} /> in BaseLayout.

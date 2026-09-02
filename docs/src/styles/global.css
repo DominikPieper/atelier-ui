@@ -1968,18 +1968,31 @@ summary:focus-visible,
 
   .docs-menu-btn { display: flex; }
 
+  html.docs-drawer-open {
+    /* Body-scroll lock while the drawer is open: the WIP banner scrolls
+     * away with the page otherwise, dragging the drawer's --docs-drawer-top
+     * (read once at open time) out of sync. Also stops touch-scroll /
+     * screen-reader browse mode from reaching main behind the drawer (M8). */
+    overflow: hidden;
+  }
+
   .docs-sidebar {
     position: fixed;
     left: -280px;
-    top: var(--docs-topbar-height, 68px);
-    height: calc(100vh - var(--docs-topbar-height, 68px));
+    /* --docs-drawer-top is written by openSidebar() to the topbar's live
+     * getBoundingClientRect().bottom (it varies with the WIP banner, which
+     * is in normal flow above the sticky topbar) and cleared by
+     * closeSidebar(). Falls back to the topbar height alone, matching the
+     * no-banner case. */
+    top: var(--docs-drawer-top, var(--docs-topbar-height, 68px));
+    height: calc(100vh - var(--docs-drawer-top, var(--docs-topbar-height, 68px)));
     width: 280px;
     z-index: 60;
     transition: left var(--ui-transition-normal);
     box-shadow: 4px 0 24px rgba(0, 0, 0, 0.35);
-    /* Clear the sticky bottom-nav (≈56px) so the last group (Reference /
-     * Explanation) isn't hidden behind it when the drawer is scrolled to end. */
-    padding-bottom: calc(56px + 1.5rem);
+    /* Clear the sticky bottom-nav so the last group (Reference / Explanation)
+     * isn't hidden behind it when the drawer is scrolled to end. */
+    padding-bottom: calc(var(--docs-bottom-nav-height, 60px) + 1.5rem);
     /* Bottom fade hints there's more to scroll. mask-image affects only paint
      * (not layout / the inert toggle, which is pure JS attribute work). */
     -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 2.5rem), transparent 100%);
@@ -1989,7 +2002,9 @@ summary:focus-visible,
   .docs-sidebar--open { left: 0; }
   .docs-sidebar-close { display: flex; }
 
-  .docs-main { padding: 1.25rem 1rem; }
+  html { scroll-padding-bottom: calc(var(--docs-bottom-nav-height, 60px) + 1rem); }
+
+  .docs-main { padding: 1.25rem 1rem calc(var(--docs-bottom-nav-height, 60px) + 1.25rem); }
 
   .docs-topbar-links { display: none; }
   .docs-topbar-sep { display: none; }

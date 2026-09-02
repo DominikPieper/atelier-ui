@@ -99,6 +99,10 @@
   --docs-hero-gradient-start: var(--ui-color-primary);
   --docs-hero-gradient-end:   var(--ui-color-primary);
   --docs-topbar-height: 68px;
+  /* Height of the sticky mobile bottom-nav (≤768px only). Used to clear the
+   * drawer's scrollable content and to inset scroll targets / .docs-main so
+   * the sticky nav never obscures the last thing on the page (M8/M9). */
+  --docs-bottom-nav-height: 60px;
 }
 
 /* ----------------------------------------------------------------------

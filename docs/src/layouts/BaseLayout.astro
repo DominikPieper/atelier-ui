@@ -468,7 +468,7 @@ const breadcrumbSchema = {
           {Object.entries(COMPONENT_CATEGORIES).map(([category, components]) => (
             <div class="docs-nav-section">
               <div class="docs-nav-heading">
-                <span class="docs-nav-heading-icon">{CATEGORY_ICONS[category]}</span>
+                <Icon name={CATEGORY_ICONS[category]} class="docs-nav-heading-icon" />
                 {category}
               </div>
               {components.map((name) => {
@@ -666,7 +666,19 @@ const breadcrumbSchema = {
       var sidebar  = document.getElementById('sidebar');
       var backdrop = document.getElementById('sidebar-backdrop');
       var closeBtn = document.getElementById('sidebar-close');
+      var mainEl   = document.getElementById('main');
+      var footerEl = document.querySelector('.docs-footer');
       var mobileMq = window.matchMedia('(max-width: 768px)');
+
+      // A fresh page load (initial, or a ClientRouter swap after tapping a
+      // sidebar link while the drawer was open) never starts with the drawer
+      // open. ClientRouter replaces <head>/<body> but NOT <html> itself, so
+      // the body-scroll-lock class from a page navigated away from — via a
+      // real link click, not Escape/backdrop/close-button — would otherwise
+      // survive onto this page and leave scrolling locked forever. main/
+      // footer/sidebar are fresh body nodes on every navigation and are
+      // never inert by default, so only the <html> class needs resetting.
+      document.documentElement.classList.remove('docs-drawer-open');
 
       function isMobile() { return mobileMq.matches; }
 
@@ -688,13 +700,40 @@ const breadcrumbSchema = {
         ).filter(function (el) { return el.offsetParent !== null; });
       }
 
+      // Lock the page behind the open drawer: body-scroll lock (CSS class on
+      // <html>) plus `inert` on main/footer, so touch scroll and
+      // screen-reader browse mode can't reach content the drawer covers.
+      // Mirrors the sidebar's own inert toggle in syncInert() above.
+      function lockPageForDrawer() {
+        document.documentElement.classList.add('docs-drawer-open');
+        if (mainEl) mainEl.setAttribute('inert', '');
+        if (footerEl) footerEl.setAttribute('inert', '');
+      }
+
+      function unlockPageForDrawer() {
+        document.documentElement.classList.remove('docs-drawer-open');
+        if (mainEl) mainEl.removeAttribute('inert');
+        if (footerEl) footerEl.removeAttribute('inert');
+      }
+
       function openSidebar() {
         if (sidebar && backdrop && menuBtn) {
+          // The WIP banner sits in normal flow above the sticky topbar, so
+          // the topbar's bottom edge (not just its own height) is where the
+          // drawer must start. Read live and cache on the sidebar itself —
+          // body scroll is locked below, so the banner can't move underneath
+          // the drawer while it's open, but its own height keeps shifting
+          // the topbar off-screen as the page scrolls.
+          var topbar = document.querySelector('.docs-topbar');
+          if (topbar) {
+            sidebar.style.setProperty('--docs-drawer-top', topbar.getBoundingClientRect().bottom + 'px');
+          }
           sidebar.classList.add('docs-sidebar--open');
           backdrop.classList.add('docs-sidebar-backdrop--visible');
           menuBtn.classList.add('docs-menu-btn--open');
           menuBtn.setAttribute('aria-expanded', 'true');
           syncInert();
+          if (isMobile()) lockPageForDrawer();
           // Move focus into the drawer so keyboard/SR users land inside it.
           if (isMobile()) {
             var first = closeBtn || getFocusable()[0];
@@ -707,10 +746,12 @@ const breadcrumbSchema = {
         if (sidebar && backdrop && menuBtn) {
           var wasOpen = sidebar.classList.contains('docs-sidebar--open');
           sidebar.classList.remove('docs-sidebar--open');
+          sidebar.style.removeProperty('--docs-drawer-top');
           backdrop.classList.remove('docs-sidebar-backdrop--visible');
           menuBtn.classList.remove('docs-menu-btn--open');
           menuBtn.setAttribute('aria-expanded', 'false');
           syncInert();
+          unlockPageForDrawer();
           // Restore focus to the toggle that opened the drawer.
           if (wasOpen && isMobile()) menuBtn.focus();
         }
@@ -758,6 +799,18 @@ const breadcrumbSchema = {
           var hidden = mobileMq.matches && !sb.classList.contains('docs-sidebar--open');
           if (hidden) sb.setAttribute('inert', '');
           else sb.removeAttribute('inert');
+          // Crossing up past the breakpoint force-closes the drawer concept
+          // entirely (CSS no longer positions it as an overlay) — the page
+          // lock and its geometry override must not survive into desktop,
+          // even if the drawer was open at the moment of the resize.
+          if (!mobileMq.matches) {
+            document.documentElement.classList.remove('docs-drawer-open');
+            sb.style.removeProperty('--docs-drawer-top');
+            var m = document.getElementById('main');
+            var f = document.querySelector('.docs-footer');
+            if (m) m.removeAttribute('inert');
+            if (f) f.removeAttribute('inert');
+          }
         });
       }
 
