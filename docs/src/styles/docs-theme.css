@@ -41,6 +41,12 @@
   --ui-color-placeholder: #94a3b8;
 
   --ui-shadow-card-hover: 0 12px 24px rgba(0, 0, 0, 0.45);
+
+  /* Terminal mockup stays a dark surface regardless of site theme (see the
+   * theme-invariant --docs-term-* block below); these two vary slightly
+   * between themes and so live here instead. */
+  --docs-term-bg: #0b0f16;
+  --docs-term-border: rgba(52, 216, 216, 0.18);
 }
 
 /* ── Light mode: clean white + cool slate (default) ─────────── */
@@ -70,6 +76,9 @@
   --ui-color-text-muted: #475569;
 
   --ui-shadow-card-hover: 0 12px 24px rgba(0, 100, 112, 0.10);
+
+  --docs-term-bg: #0a1116;
+  --docs-term-border: rgba(52, 216, 216, 0.2);
 }
 
 /* ── Docs-specific variables ───────────────────────────────── */
@@ -103,6 +112,60 @@
    * drawer's scrollable content and to inset scroll targets / .docs-main so
    * the sticky nav never obscures the last thing on the page (M8/M9). */
   --docs-bottom-nav-height: 60px;
+
+  /* ── Terminal tokens (ADR-0089 §2) ───────────────────────────
+   * Terminals stay dark in both themes (convention), but the shades are
+   * named tokens — declared once here, a token source Pass A does not
+   * scan — so they stay in sync across the two terminal mockups
+   * (.docs-terminal + .preflight-mock in workshop.astro). --docs-term-bg
+   * and --docs-term-border vary slightly by theme and live in the
+   * [data-theme='dark'/'light'] blocks above; everything else here is
+   * identical regardless of theme. */
+  --docs-term-bar-bg: #1a2031;
+  --docs-term-text: #d1d5db;
+  /* Bumped from #6b7280 (3.27:1 on the bar background — fails AA) to
+   * #8b93a8 (5.14:1) so the preflight terminal mock doesn't stand out
+   * as a serious axe violation while still feeling like dim
+   * terminal output. */
+  --docs-term-muted: #8b93a8;
+  --docs-term-heading: #9ca3af;
+  --docs-term-strong: #f1f5f9;
+  --docs-term-accent: #5ee5e5;
+  --docs-term-accent-strong: #34d8d8;
+  --docs-term-success: #4ade80;
+  --docs-term-warning: #fbbf24;
+  --docs-term-info: #38bdf8;
+  --docs-term-border-soft: rgba(52, 216, 216, 0.08);
+  /* .docs-terminal's own bar/title/body/cmd — distinct from the
+   * .preflight-mock tokens above; both mockups deliberately stay dark. */
+  --docs-term-bar: rgba(255, 255, 255, 0.03);
+  /* Bumped from rgba(255,255,255,0.3) (2.65:1 on the bar bg — fails AA) to
+   * rgba(255,255,255,0.7) (~5.4:1) so the terminal mock title meets AA. */
+  --docs-term-title: rgba(255, 255, 255, 0.7);
+  --docs-term-body: #a8c4d8;
+  --docs-term-cmd: #f1f5f9;
+  /* Muted inline text inside .docs-terminal-body — named distinctly from
+   * --docs-term-muted (the preflight-mock token, a different shade) rather
+   * than reusing that name, so workshop.astro's .pre-muted is untouched.
+   * Bumped from rgba(168,196,216,0.5) (3.26:1 — fails AA) to 0.8 (~5:1). */
+  --docs-term-muted-text: rgba(168, 196, 216, 0.8);
+  --docs-term-dot-red: #ff5f57;
+  --docs-term-dot-yellow: #febc2e;
+  --docs-term-dot-green: #28c840;
+
+  /* ── Framework brand colours (ADR-0089 §2) ───────────────────
+   * Legitimate literals (they identify Angular/React/Vue, not the docs
+   * palette) but declared once here rather than repeated inline. Same
+   * value regardless of theme. */
+  --docs-brand-angular: #dd0031;
+  --docs-brand-react: #61dafb;
+  --docs-brand-vue: #42b883;
+
+  /* Glass chip on the always-teal-gradient CTA banner (ADR-0089 §2). The
+   * banner is never a surface colour — it is the primary/primary-active
+   * gradient regardless of site theme — so this stays a fixed black tint
+   * rather than a theme-following token. */
+  --docs-cta-chip-bg: rgba(0, 0, 0, 0.25);
 }
 
 /* ----------------------------------------------------------------------

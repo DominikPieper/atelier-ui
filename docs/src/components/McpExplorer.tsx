@@ -341,12 +341,12 @@ export default function McpExplorer() {
     <div style={{ marginTop: '2.5rem' }}>
       <style>{`
         .mcp-grid { display: grid; grid-template-columns: 210px 1fr; gap: 1.5rem; align-items: start; }
-        @media (max-width: 680px) { .mcp-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 640px) { .mcp-grid { grid-template-columns: 1fr; } }
         .mcp-protocol-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
         .mcp-protocol-step { padding: 0 1rem; border-left: 1px solid rgba(64,72,93,0.25); }
         .mcp-protocol-step:first-child { padding-left: 0; border-left: none; }
         .mcp-protocol-step:last-child { padding-right: 0; }
-        @media (max-width: 680px) { .mcp-protocol-steps { grid-template-columns: repeat(2, 1fr); gap: 1rem; } .mcp-protocol-step { border-left: none; padding: 0; } }
+        @media (max-width: 640px) { .mcp-protocol-steps { grid-template-columns: repeat(2, 1fr); gap: 1rem; } .mcp-protocol-step { border-left: none; padding: 0; } }
         @keyframes mcp-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
       `}</style>
 

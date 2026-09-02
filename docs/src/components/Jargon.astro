@@ -82,7 +82,7 @@ const hasSlot = Astro.slots.has('default');
       opacity var(--ui-transition-fast),
       transform var(--ui-transition-fast),
       display var(--ui-transition-fast) allow-discrete;
-    z-index: 50;
+    z-index: var(--ui-z-modal);
     flex-direction: column;
     gap: 0.35rem;
   }
@@ -134,24 +134,24 @@ const hasSlot = Astro.slots.has('default');
     border-top: 1px solid var(--ui-color-border);
   }
 
-  /* Below 520px, anchor the popup to the viewport instead of the trigger, as
+  /* Below 480px, anchor the popup to the viewport instead of the trigger, as
      a fixed bottom sheet. Left-aligning to the trigger (the previous
      approach) still let the popup's fixed width run past the right edge for
      terms sitting in the right half of the line; anchoring to the viewport's
      own edges guarantees it fits regardless of where the term sits. */
-  @media (max-width: 520px) {
+  @media (max-width: 480px) {
     .jargon-popup {
       position: fixed;
       left: 1rem;
       right: 1rem;
-      /* Clear the mobile bottom tab bar (.docs-bottom-nav, ~60px, z-index:
-         90) instead of sitting behind/under it. */
+      /* Clear the mobile bottom tab bar (.docs-bottom-nav, ~60px, above the
+         overlay tier) instead of sitting behind/under it. */
       bottom: calc(60px + 1rem);
       top: auto;
       width: auto;
       max-width: none;
       transform: translateY(12px);
-      z-index: 95;
+      z-index: var(--ui-z-modal);
     }
     .jargon:hover .jargon-popup,
     .jargon:focus .jargon-popup,

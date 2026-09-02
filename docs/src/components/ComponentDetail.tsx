@@ -108,7 +108,7 @@ function CodeBlock({ code, lang }: { code: string; lang: string }) {
         <span className="docs-code-block-lang">{lang}</span>
         <button className={`docs-code-block-copy${copied ? ' copied' : ''}`} onClick={copy}>{copied ? 'Copied' : 'Copy'}</button>
       </div>
-      <pre><code>{code}</code></pre>
+      <pre tabIndex={0}><code>{code}</code></pre>
     </div>
   );
 }

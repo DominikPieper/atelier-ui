@@ -632,3 +632,22 @@ const LIMITS: Limit[] = [
 
   </div>
 </BaseLayout>
+
+<style>
+  /* `.docs-rule` (global.css) is `display: flex` with the default
+   * `flex-wrap: nowrap`, and its label carries `flex-shrink: 0`. A plain-text
+   * body shrinks and wraps fine inside the remaining item, but the "Standing
+   * rule" callout in the "review" section puts <code>tokens.css</code>
+   * inline in the body — an inline element that is a direct child of a flex
+   * container becomes its own flex item, and its default min-width:auto is
+   * the unbreakable string "tokens.css" itself. With no flex-wrap, the
+   * label + text + code cannot all shrink onto one line, so the code element
+   * bleeds past .docs-rule's own box and 8px past .docs-main-content's at
+   * 375 (check:docs-layout [COLUMN-SCROLL]). Scoped to this page: the other
+   * two .docs-rule blocks here are plain text and do not need it, and
+   * global.css is shared by pages this fix has nothing to do with.
+   */
+  .docs-rule {
+    flex-wrap: wrap;
+  }
+</style>

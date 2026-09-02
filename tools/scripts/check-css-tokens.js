@@ -38,10 +38,19 @@
  *     practice; the token still drives the value when defined.
  *   - on `box-shadow` / `text-shadow` — shadows legitimately carry rgba alpha
  *     and are an accepted literal (or come from `--ui-shadow-*`).
+ *   - on `mask-image` / `-webkit-mask-image` — a gradient stop like `#000`
+ *     sets the mask's alpha (opaque vs. transparent), not a rendered colour.
  *
- * Pass A scans only the component CSS under each framework lib. The token
- * source-of-truth (styles/tokens.css) is allowed to define literals and is
- * not scanned by Pass A — only by Pass B.
+ * Pass A scans the component CSS under each framework lib, PLUS (ADR-0089
+ * §2) the docs site's own chrome CSS: `docs/src/styles/global.css` and every
+ * `<style>` block inside `docs/src/components/*.astro` (Astro files are not
+ * pure CSS, so only their style blocks are scanned, with line numbers
+ * reported relative to the `.astro` file). Token sources are exempt, same
+ * rule on both sides: each framework's `styles/tokens.css` for the libs,
+ * `docs/src/styles/docs-theme.css` and `docs/src/styles/tokens.css` for the
+ * docs — all four are scanned only by Pass B / Pass C, never Pass A.
+ * A docs-only `DOCS_ALLOW` list (below) covers any literal that is
+ * deliberate and can't be token-ized; each entry carries a one-line reason.
  *
  * Run via:  node tools/scripts/check-css-tokens.js
  *           (or  npm run check:css-tokens)
@@ -59,6 +68,11 @@ const TOKEN_MANIFEST = path.join(ROOT, 'libs/spec/src/tokens.manifest.ts');
 
 const COLOR_LITERAL = /#[0-9a-fA-F]{3,8}\b|rgba?\(|hsla?\(/;
 const SHADOW_PROP = /^-?(webkit-)?(box|text)-shadow$/;
+const MASK_PROP = /^-?(webkit-)?mask-image$/;
+
+const DOCS_GLOBAL_CSS = path.join(ROOT, 'docs/src/styles/global.css');
+const DOCS_COMPONENTS_DIR = path.join(ROOT, 'docs/src/components');
+const DOCS_THEME_CSS = path.join(ROOT, 'docs/src/styles/docs-theme.css');
 
 /** Walk a dir for *.css files. */
 function cssFiles(dir) {
@@ -126,6 +140,94 @@ for (const dir of LIB_DIRS) {
         errors.push(`[RAW-COLOR] ${rel}: ${prop} uses literal '${literal.replace('(', '(…')}' — use a --ui-* token (or var(--token, fallback))`);
       }
     }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Docs scan (ADR-0089 §2) — Pass A extended to the docs site's own CSS.
+//
+// Roster: docs/src/styles/global.css (plain CSS) and every <style> block in
+// docs/src/components/*.astro. docs-theme.css and docs/src/styles/tokens.css
+// are token sources, exactly like tokens.css is for the libs, and stay out
+// of this scan. Reported line numbers are relative to the source file (or,
+// for a style block, the .astro file it lives in) — comments are stripped
+// but their newlines are kept so line numbers don't drift.
+// ---------------------------------------------------------------------------
+
+/** Docs-only allow list: literals that are deliberate and can't be
+ *  token-ized, each with a one-line reason. Matched on the exact file +
+ *  literal pair so an entry can't silently cover a different drift. Kept
+ *  empty on purpose (ADR-0089 §2): the brand colours and terminal dots
+ *  became --docs-* tokens instead of allow-listed literals. */
+const DOCS_ALLOW = [];
+
+const docsConsumedTokens = new Map();
+
+/** Strip /* … *\/ comments while preserving their embedded newlines, so a
+ *  1-based line count taken from the result still matches the source. */
+function stripCommentsKeepLines(src) {
+  return src.replace(/\/\*[\s\S]*?\*\//g, (comment) => comment.replace(/[^\n]/g, ''));
+}
+
+/** Extract <style>…</style> block contents from an .astro file, each paired
+ *  with the 1-based line number (in the FULL file) where the block's
+ *  content starts. Every <style> tag in this repo is attribute-free, so
+ *  the first '>' in the match is always the tag's close. */
+function astroStyleBlocks(fileContent) {
+  const blocks = [];
+  const re = /<style[^>]*>([\s\S]*?)<\/style>/g;
+  let m;
+  while ((m = re.exec(fileContent)) !== null) {
+    const openTagEnd = m.index + m[0].indexOf('>') + 1;
+    const startLine = fileContent.slice(0, openTagEnd).split('\n').length;
+    blocks.push({ content: m[1], startLine });
+  }
+  return blocks;
+}
+
+/** Pass A + Pass C token-consumption scan for one docs CSS chunk. `src` must
+ *  already be comment-stripped (line-preserving); `lineOffset` is the
+ *  1-based line, in the original file, where `src` begins.
+ *
+ *  Pass C here tracks only `--ui-*` reads, same as the lib scan — the
+ *  design-token drift class Pass C exists for. `--docs-*` custom properties
+ *  are docs-local plumbing (a `.docs-main`-scoped layout variable, a value
+ *  BaseLayout's script writes at runtime like `--docs-drawer-top`) and are
+ *  legitimately declared outside docs-theme.css, so they are not tracked. */
+function scanDocsCss(src, rel, lineOffset) {
+  for (const ref of src.matchAll(/var\(\s*(--ui-[a-z0-9-]+)/g)) {
+    if (!docsConsumedTokens.has(ref[1])) docsConsumedTokens.set(ref[1], new Set());
+    docsConsumedTokens.get(ref[1]).add(rel);
+  }
+  const decl = /([\w-]+)\s*:\s*([^;{}]+)/g;
+  let m;
+  while ((m = decl.exec(src)) !== null) {
+    const prop = m[1].toLowerCase();
+    if (SHADOW_PROP.test(prop) || MASK_PROP.test(prop)) continue;
+    const value = stripVarCalls(m[2]);
+    if (!COLOR_LITERAL.test(value)) continue;
+    const literal = value.match(COLOR_LITERAL)[0];
+    if (DOCS_ALLOW.some((a) => a.file === rel && a.literal === literal)) continue;
+    const lineNo = lineOffset + src.slice(0, m.index).split('\n').length - 1;
+    errors.push(
+      `[RAW-COLOR] ${rel}:${lineNo}: ${prop} uses literal '${literal.replace('(', '(…')}' — use a --ui-*/--docs-* token (or var(--token, fallback))`
+    );
+  }
+}
+
+{
+  const rel = DOCS_GLOBAL_CSS.replace(ROOT + '/', '');
+  const src = stripCommentsKeepLines(fs.readFileSync(DOCS_GLOBAL_CSS, 'utf-8'));
+  scanDocsCss(src, rel, 1);
+}
+
+for (const entry of fs.readdirSync(DOCS_COMPONENTS_DIR, { withFileTypes: true })) {
+  if (!entry.isFile() || !entry.name.endsWith('.astro')) continue;
+  const file = path.join(DOCS_COMPONENTS_DIR, entry.name);
+  const rel = file.replace(ROOT + '/', '');
+  const fileContent = fs.readFileSync(file, 'utf-8');
+  for (const block of astroStyleBlocks(fileContent)) {
+    scanDocsCss(stripCommentsKeepLines(block.content), rel, block.startLine);
   }
 }
 
@@ -236,6 +338,33 @@ for (const [name, files] of [...consumedTokens].sort()) {
 }
 
 // ---------------------------------------------------------------------------
+// Pass C (docs) — same rule, wider declared-token set (ADR-0089 §2).
+//
+// Docs CSS reads --docs-* tokens too, not just --ui-*, so the declared set
+// for THIS check is library tokens.css (declaredTokens, above) UNION every
+// --ui-*/--docs-* name docs-theme.css declares (its own tokens plus the
+// --ui-* overrides it makes, e.g. --ui-color-primary-light). This is kept
+// separate from `declaredTokens` itself so Pass B's manifest-coverage
+// source of truth stays exactly libs/angular/src/styles/tokens.css.
+// ---------------------------------------------------------------------------
+
+const docsThemeCssSrc = fs.readFileSync(DOCS_THEME_CSS, 'utf-8');
+const docsDeclaredTokens = new Set(declaredTokens);
+for (const m of docsThemeCssSrc.matchAll(/(--(?:ui|docs)-[a-zA-Z0-9-]+)\s*:/g)) {
+  docsDeclaredTokens.add(m[1]);
+}
+
+for (const [name, files] of [...docsConsumedTokens].sort()) {
+  if (docsDeclaredTokens.has(name)) continue;
+  const where = [...files].sort();
+  const shown = where.slice(0, 3).join(', ') + (where.length > 3 ? `, +${where.length - 3} more` : '');
+  errors.push(
+    `[UNDECLARED] '${name}' is read by ${where.length} docs stylesheet(s) (${shown}) but is declared ` +
+      `in neither libs/angular/src/styles/tokens.css nor docs/src/styles/docs-theme.css.`
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Report.
 // ---------------------------------------------------------------------------
 
@@ -250,5 +379,6 @@ if (errors.length > 0) {
 
 warnings.forEach((w) => console.warn(`⚠ ${w}`));
 console.log(
-  `✓ component CSS uses tokens for colour (no raw literals outside var() fallbacks / shadows); ${annotatedTokens.size}/${declaredTokens.size} tokens annotated; ${consumedTokens.size} token(s) referenced, all declared.`
+  `✓ component CSS uses tokens for colour (no raw literals outside var() fallbacks / shadows); ${annotatedTokens.size}/${declaredTokens.size} tokens annotated; ${consumedTokens.size} token(s) referenced, all declared; ` +
+    `docs CSS clean too — ${docsConsumedTokens.size} token(s) referenced, all declared${DOCS_ALLOW.length ? `, ${DOCS_ALLOW.length} literal(s) allow-listed` : ''}.`
 );

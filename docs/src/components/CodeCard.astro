@@ -48,9 +48,9 @@ const payload = copyText ?? code ?? '';
     )}
   </div>
   {code !== undefined ? (
-    <pre class="docs-code-card-body" id={bodyId}><code>{code}</code></pre>
+    <pre class="docs-code-card-body" id={bodyId} tabindex="0"><code>{code}</code></pre>
   ) : (
-    <pre class="docs-code-card-body" id={bodyId}><code><slot /></code></pre>
+    <pre class="docs-code-card-body" id={bodyId} tabindex="0"><code><slot /></code></pre>
   )}
   {copyable && (
     <span class="docs-code-card-status" id={statusId} aria-live="polite" role="status"></span>

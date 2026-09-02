@@ -2,6 +2,16 @@
    Global layout & component styles for the Astro docs
    ───────────────────────────────────────────────────── */
 
+/* ── Breakpoint scale (ADR-0089) ──────────────────────────
+ * Four `@media` widths, and only these four, across `docs/src`:
+ *   480  — small phones (topbar/search squeeze, single-column grids)
+ *   640  — single-column content (diagrams, cards, tables stack here)
+ *   768  — the mobile shell (drawer, bottom nav; also the value
+ *          BaseLayout.astro reads via matchMedia('(max-width: 768px)'))
+ *   1383 — TOC rail collapse (see the comment at that rule)
+ * `check:docs-layout` fails the build on any `@media` width outside this
+ * set, so a fifth breakpoint is a gate failure, not a style choice. */
+
 *, *::before, *::after { box-sizing: border-box; }
 
 html, body {
@@ -45,7 +55,7 @@ body {
   gap: 1rem;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: var(--ui-z-modal);
   height: var(--docs-topbar-height, 68px);
 }
 
@@ -137,8 +147,8 @@ body {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  z-index: 50;
+  background: var(--ui-color-overlay);
+  z-index: var(--ui-z-overlay);
   backdrop-filter: blur(2px);
 }
 
@@ -519,7 +529,7 @@ body {
   visibility: hidden;
   transform: translateY(8px);
   transition: opacity var(--ui-transition-normal), transform var(--ui-transition-normal), visibility var(--ui-transition-normal), border-color var(--ui-transition-fast), color var(--ui-transition-fast);
-  z-index: 200;
+  z-index: var(--ui-z-overlay);
   box-shadow: 0 4px 16px rgba(0,0,0,0.2);
 }
 
@@ -686,7 +696,7 @@ summary:focus-visible,
   position: fixed;
   top: 0.75rem;
   left: 0.75rem;
-  z-index: 1000;
+  z-index: var(--ui-z-toast);
   padding: 0.625rem 1rem;
   background: var(--ui-color-surface);
   color: var(--ui-color-primary);
@@ -886,7 +896,7 @@ summary:focus-visible,
 }
 
 .docs-code-block-copy:hover { border-color: var(--ui-color-primary); color: var(--ui-color-primary); }
-.docs-code-block-copy.copied { border-color: #22c55e; color: #22c55e; }
+.docs-code-block-copy.copied { border-color: var(--ui-color-success); color: var(--ui-color-success); }
 
 .docs-code-block pre {
   margin: 0;
@@ -940,7 +950,7 @@ summary:focus-visible,
 .docs-prop-type {
   font-family: var(--docs-font-code);
   font-size: 0.75rem;
-  color: #7c3aed;
+  color: var(--ui-color-info-text);
   overflow-wrap: anywhere;
 }
 
@@ -949,15 +959,11 @@ summary:focus-visible,
   max-width: 100%;
 }
 
-[data-theme='dark'] .docs-prop-type { color: #a78bfa; }
-
 .docs-prop-default {
   font-family: var(--docs-font-code);
   font-size: 0.75rem;
-  color: #065f46;
+  color: var(--ui-color-success-text);
 }
-
-[data-theme='dark'] .docs-prop-default { color: #6ee7b7; }
 
 /* ── Status Badges ───────────────────────────────────── */
 .docs-status-badge {
@@ -971,27 +977,21 @@ summary:focus-visible,
 }
 
 .docs-status-badge--new {
-  background: #ecfdf5; color: #065f46; border: 1px solid #10b98140;
+  background: var(--ui-color-success-bg);
+  color: var(--ui-color-success-text);
+  border: 1px solid color-mix(in srgb, var(--ui-color-success) 25%, transparent);
 }
 
 .docs-status-badge--updated {
-  background: #eff6ff; color: #1d4ed8; border: 1px solid #3b82f640;
+  background: var(--ui-color-info-bg);
+  color: var(--ui-color-info-text);
+  border: 1px solid color-mix(in srgb, var(--ui-color-info) 25%, transparent);
 }
 
 .docs-status-badge--stable {
-  background: #f8fafc; color: #475569; border: 1px solid #cbd5e1;
-}
-
-[data-theme='dark'] .docs-status-badge--new {
-  background: rgba(52, 216, 216, 0.1); color: #34d8d8; border-color: rgba(52, 216, 216, 0.3);
-}
-
-[data-theme='dark'] .docs-status-badge--updated {
-  background: rgba(56, 189, 248, 0.12); color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);
-}
-
-[data-theme='dark'] .docs-status-badge--stable {
-  background: var(--ui-color-surface-raised); color: var(--ui-color-text-muted); border-color: var(--ui-color-border);
+  background: var(--ui-color-surface-raised);
+  color: var(--ui-color-text-muted);
+  border: 1px solid var(--ui-color-border);
 }
 
 /* ── Component Grid ──────────────────────────────────── */
@@ -1088,9 +1088,9 @@ summary:focus-visible,
   opacity: 0.7;
 }
 
-.docs-fw-dot--angular { background: #dd0031; }
-.docs-fw-dot--react   { background: #61dafb; }
-.docs-fw-dot--vue     { background: #42b883; }
+.docs-fw-dot--angular { background: var(--docs-brand-angular); }
+.docs-fw-dot--react   { background: var(--docs-brand-react); }
+.docs-fw-dot--vue     { background: var(--docs-brand-vue); }
 
 /* ── Filter bar ──────────────────────────────────────── */
 .docs-filter-bar {
@@ -1391,17 +1391,11 @@ summary:focus-visible,
   font-weight: 700;
   padding: 0.12rem 0.45rem;
   border-radius: var(--ui-radius-sm);
-  background: color-mix(in srgb, #0891b2 14%, transparent);
-  color: #164e63;
-  border: 1px solid color-mix(in srgb, #0891b2 35%, transparent);
+  background: var(--ui-color-primary-light);
+  color: var(--ui-color-primary);
+  border: 1px solid var(--ui-color-primary-border);
   letter-spacing: 0.04em;
   cursor: help;
-}
-
-[data-theme='dark'] .docs-demo-fw-tag {
-  background: color-mix(in srgb, #67e8f9 14%, transparent);
-  color: #67e8f9;
-  border-color: color-mix(in srgb, #67e8f9 30%, transparent);
 }
 
 /* ── Per-component composition parts ──────────────────── */
@@ -1549,7 +1543,7 @@ summary:focus-visible,
 
 .docs-ai-list li + li { margin-top: 0.5rem; }
 .docs-ai-best-practices { border-left: 4px solid var(--ui-color-primary); }
-.docs-ai-hallucinations { border-left: 4px solid #f59e0b; }
+.docs-ai-hallucinations { border-left: 4px solid var(--ui-color-warning); }
 
 .docs-ai-prompt {
   border: 1px dashed var(--ui-color-primary);
@@ -1608,16 +1602,16 @@ summary:focus-visible,
   letter-spacing: 0.06em;
 }
 
-.docs-comparison-bad .docs-comparison-label { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
-.docs-comparison-good .docs-comparison-label { background: rgba(34, 197, 94, 0.1); color: #22c55e; }
+.docs-comparison-bad .docs-comparison-label { background: color-mix(in srgb, var(--ui-color-danger) 12%, transparent); color: var(--ui-color-danger); }
+.docs-comparison-good .docs-comparison-label { background: color-mix(in srgb, var(--ui-color-success) 12%, transparent); color: var(--ui-color-success); }
 
 /* ── Rule callout (design-principles) ────────────────── */
 .docs-rule {
   display: flex;
   gap: 0.6rem;
   padding: 0.5rem 0.75rem;
-  background: rgba(0, 190, 190, 0.04);
-  border: 1px solid rgba(0, 190, 190, 0.15);
+  background: color-mix(in srgb, var(--ui-color-primary) 4%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ui-color-primary) 15%, transparent);
   border-radius: var(--ui-radius-sm);
   font-size: var(--ui-font-size-md);
   color: var(--ui-color-text-muted);
@@ -1710,7 +1704,7 @@ summary:focus-visible,
   box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.25);
   max-height: 400px;
   overflow-y: auto;
-  z-index: 1000;
+  z-index: var(--ui-z-modal);
 }
 
 .docs-search-result {
@@ -1787,37 +1781,11 @@ summary:focus-visible,
   text-align: center;
 }
 
-/* ── Terminal tokens ─────────────────────────────────────
- * Terminals stay dark in both themes (convention), but the
- * shades are tied to tokens so they stay in sync across the
- * two terminal mockups (.docs-terminal + .preflight-mock).
- */
-:root {
-  --docs-term-bg: #0b0f16;
-  --docs-term-bar-bg: #1a2031;
-  --docs-term-text: #d1d5db;
-  /* Bumped from #6b7280 (3.27:1 on the bar background — fails AA) to
-   * #8b93a8 (5.14:1) so the preflight terminal mock doesn't stand out
-   * as a serious axe violation while still feeling like dim
-   * terminal output. */
-  --docs-term-muted: #8b93a8;
-  --docs-term-heading: #9ca3af;
-  --docs-term-strong: #f1f5f9;
-  --docs-term-accent: #5ee5e5;
-  --docs-term-accent-strong: #34d8d8;
-  --docs-term-success: #4ade80;
-  --docs-term-warning: #fbbf24;
-  --docs-term-info: #38bdf8;
-  --docs-term-border: rgba(52, 216, 216, 0.18);
-  --docs-term-border-soft: rgba(52, 216, 216, 0.08);
-}
-
-[data-theme='light'] {
-  --docs-term-bg: #0a1116;
-  --docs-term-border: rgba(52, 216, 216, 0.2);
-}
-
 /* ── Terminal block ──────────────────────────────────── */
+/* --docs-term-* tokens live in docs-theme.css (a token source Pass A
+ * does not scan) — see ADR-0089 §2. They stay in sync across the two
+ * terminal mockups (.docs-terminal here + .preflight-mock in
+ * workshop.astro). */
 .docs-terminal {
   background: var(--docs-term-bg);
   border: 1px solid var(--docs-term-border);
@@ -1833,7 +1801,7 @@ summary:focus-visible,
   align-items: center;
   justify-content: space-between;
   padding: 0.75rem 1rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--docs-term-bar);
   border-bottom: 1px solid var(--docs-term-border-soft);
 }
 
@@ -1845,15 +1813,13 @@ summary:focus-visible,
   border-radius: 50%;
 }
 
-.docs-terminal-dot--red { background: #ff5f57; }
-.docs-terminal-dot--yellow { background: #febc2e; }
-.docs-terminal-dot--green { background: #28c840; }
+.docs-terminal-dot--red { background: var(--docs-term-dot-red); }
+.docs-terminal-dot--yellow { background: var(--docs-term-dot-yellow); }
+.docs-terminal-dot--green { background: var(--docs-term-dot-green); }
 
 .docs-terminal-title {
   font-size: 0.72rem;
-  /* Bumped from rgba(255,255,255,0.3) (2.65:1 on the bar bg — fails AA) to
-   * rgba(255,255,255,0.7) (~5.4:1) so the terminal mock title meets AA. */
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--docs-term-title);
   font-family: var(--docs-font-code);
 }
 
@@ -1862,16 +1828,15 @@ summary:focus-visible,
   font-family: var(--docs-font-code);
   font-size: 0.8rem;
   line-height: 2;
-  color: #a8c4d8;
+  color: var(--docs-term-body);
   display: flex;
   flex-direction: column;
   gap: 0.1rem;
 }
 
 .docs-term-prompt { color: var(--docs-term-accent); margin-right: 0.5rem; }
-.docs-term-cmd { color: #f1f5f9; font-weight: 500; }
-/* Bumped from rgba(168,196,216,0.5) (3.26:1 — fails AA) to 0.8 (~5:1). */
-.docs-term-muted { color: rgba(168, 196, 216, 0.8); }
+.docs-term-cmd { color: var(--docs-term-cmd); font-weight: 500; }
+.docs-term-muted { color: var(--docs-term-muted-text); }
 
 .docs-term-row {
   display: flex;
@@ -2001,7 +1966,7 @@ summary:focus-visible,
     top: var(--docs-drawer-top, var(--docs-topbar-height, 68px));
     height: calc(100vh - var(--docs-drawer-top, var(--docs-topbar-height, 68px)));
     width: 280px;
-    z-index: 60;
+    z-index: calc(var(--ui-z-overlay) + 1);
     transition: left var(--ui-transition-normal);
     box-shadow: 4px 0 24px rgba(0, 0, 0, 0.35);
     /* Clear the sticky bottom-nav so the last group (Reference / Explanation)
@@ -2035,7 +2000,7 @@ summary:focus-visible,
     background: var(--ui-color-surface);
     position: sticky;
     bottom: 0;
-    z-index: 90;
+    z-index: calc(var(--ui-z-overlay) + 2);
   }
 
   .docs-bottom-nav-item {
@@ -2435,7 +2400,7 @@ summary:focus-visible,
 
 @media (max-width: 768px) { .docs-quicknav--four { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 640px) { .docs-quicknav { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 420px) { .docs-quicknav, .docs-quicknav--four { grid-template-columns: 1fr; } }
+@media (max-width: 480px) { .docs-quicknav, .docs-quicknav--four { grid-template-columns: 1fr; } }
 
 .docs-quicknav-card {
   display: flex;
@@ -2611,7 +2576,7 @@ summary:focus-visible,
   flex-wrap: wrap;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 768px) {
   .docs-pillars {
     grid-template-columns: 1fr;
   }
@@ -2658,7 +2623,7 @@ summary:focus-visible,
   margin-top: 1px;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 768px) {
   .docs-mcp-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
@@ -2724,7 +2689,7 @@ summary:focus-visible,
   align-items: center;
   gap: 0.75rem;
   padding: 0.875rem 1.375rem;
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--docs-cta-chip-bg);
   border: 1px solid color-mix(in srgb, var(--ui-color-text-on-primary) 20%, transparent);
   border-radius: var(--ui-radius-md);
   font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
@@ -2779,7 +2744,7 @@ summary:focus-visible,
   box-shadow: 0 0 0 2px var(--ui-color-primary), 0 0 0 4px var(--ui-color-text-on-primary);
 }
 
-@media (max-width: 860px) {
+@media (max-width: 768px) {
   .docs-cta {
     padding: 3rem 1.75rem;
   }
@@ -3057,19 +3022,15 @@ a.docs-pagepair-card:hover {
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  /* Local AA-safe red — the shared --ui-color-danger (#ef4444) is only
-   * 3.60:1 on surface-raised in light mode. Scoped overrides keep the
-   * library token untouched. */
-  color: #b91c1c;
+  /* --ui-color-danger-text is the AA-safe dark-text-on-tinted-bg red
+   * (the plain --ui-color-danger is only 3.60:1 on surface-raised in
+   * light mode); it themes on its own, so no dark-mode override needed. */
+  color: var(--ui-color-danger-text);
 }
 .mcp-compare-time {
   font-size: var(--ui-font-size-sm);
   font-weight: 700;
-  color: #b91c1c;
-}
-[data-theme='dark'] .mcp-compare-label,
-[data-theme='dark'] .mcp-compare-time {
-  color: #fb7185;
+  color: var(--ui-color-danger-text);
 }
 .mcp-compare-card--pos .mcp-compare-label,
 .mcp-compare-card--pos .mcp-compare-time,
@@ -3112,7 +3073,7 @@ a.docs-pagepair-card:hover {
 .mcp-compare-card--pos .mcp-compare-foot {
   color: var(--ui-color-primary);
 }
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   .mcp-compare { grid-template-columns: 1fr; }
 }
 

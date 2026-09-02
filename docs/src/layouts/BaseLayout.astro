@@ -955,8 +955,9 @@ const breadcrumbSchema = {
 
     /* Scroll-progress indicator: a thin fixed bar at the very top of the
      * viewport whose width tracks scroll position (set inline by handleScroll).
-     * Sits above the WIP banner / topbar (z-index 300 > topbar's 100) so it's
-     * never occluded. Positional, not animated — fine under reduced-motion. */
+     * Sits above the WIP banner / topbar (--ui-z-toast > --ui-z-modal) so
+     * it's never occluded. Positional, not animated — fine under
+     * reduced-motion. */
     .docs-scroll-progress {
       position: fixed;
       top: 0;
@@ -964,7 +965,7 @@ const breadcrumbSchema = {
       width: 0;
       height: 3px;
       background: var(--ui-color-primary);
-      z-index: 300;
+      z-index: var(--ui-z-toast);
       pointer-events: none;
     }
 
