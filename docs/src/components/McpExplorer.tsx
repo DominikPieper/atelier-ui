@@ -622,11 +622,11 @@ export default function McpExplorer() {
         <p style={{ fontSize: '0.85rem', color: 'var(--ui-color-text-muted)', marginBottom: '1.75rem', lineHeight: '1.65' }}>
           The MCP servers are live. Add them to your AI tool's config and every tool shown above works directly — Claude, Cursor, and any MCP-compatible host.
         </p>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.25rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: '1.25rem' }}>
           <div>
             <div style={{ marginBottom: '0.6rem' }}>
               <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--ui-color-text)' }}>Claude Desktop</span>
-              <span style={{ marginLeft: '0.5rem', fontFamily: 'monospace', fontSize: '0.7rem', color: 'var(--docs-secondary, #89ceff)' }}>
+              <span style={{ marginLeft: '0.5rem', fontFamily: 'monospace', fontSize: '0.7rem', color: 'var(--docs-secondary, #89ceff)', overflowWrap: 'anywhere' }}>
                 ~/Library/Application Support/Claude/claude_desktop_config.json
               </span>
             </div>
@@ -645,7 +645,7 @@ export default function McpExplorer() {
           <div>
             <div style={{ marginBottom: '0.6rem' }}>
               <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--ui-color-text)' }}>Cursor / VS Code</span>
-              <span style={{ marginLeft: '0.5rem', fontFamily: 'monospace', fontSize: '0.7rem', color: 'var(--docs-secondary, #89ceff)' }}>
+              <span style={{ marginLeft: '0.5rem', fontFamily: 'monospace', fontSize: '0.7rem', color: 'var(--docs-secondary, #89ceff)', overflowWrap: 'anywhere' }}>
                 .cursor/mcp.json · .vscode/mcp.json
               </span>
             </div>

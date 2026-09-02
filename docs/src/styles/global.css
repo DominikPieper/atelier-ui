@@ -631,6 +631,10 @@ body {
   line-height: 1.6;
 }
 
+.docs-step-desc :is(a, code) {
+  overflow-wrap: anywhere;
+}
+
 .docs-step-desc:last-child {
   margin-bottom: 0;
 }
@@ -824,7 +828,7 @@ summary:focus-visible,
 .docs-source-dl {
   margin: 0;
   display: grid;
-  grid-template-columns: max-content 1fr;
+  grid-template-columns: max-content minmax(0, 1fr);
   column-gap: 1.25rem;
   row-gap: 0.625rem;
   font-size: 0.82rem;
@@ -837,6 +841,8 @@ summary:focus-visible,
 
 .docs-source-dl dd {
   margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
   color: var(--ui-color-text-muted);
   line-height: 1.55;
 }
@@ -919,7 +925,12 @@ summary:focus-visible,
   font-family: var(--docs-font-code);
   font-size: 0.75rem;
   color: #7c3aed;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+}
+
+.docs-table-scroll {
+  overflow-x: auto;
+  max-width: 100%;
 }
 
 [data-theme='dark'] .docs-prop-type { color: #a78bfa; }

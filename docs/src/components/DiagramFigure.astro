@@ -15,7 +15,10 @@ const { caption, align = 'center', compact = false, kind = 'diagram' } = Astro.p
 ---
 
 <figure class:list={["diagram-figure", `diagram-figure--${align}`, compact && "diagram-figure--compact", kind === 'mockup' && "diagram-figure--mockup", Astro.slots.has('mobile-fallback') && "diagram-figure--has-fallback"]}>
-  <div class="diagram-figure-surface diagram-figure-surface--svg">
+  <div
+    class="diagram-figure-surface diagram-figure-surface--svg"
+    data-scroll-label={caption ? `${caption} (scrollable diagram)` : 'Diagram, scrollable'}
+  >
     {kind === 'mockup' && <span class="diagram-figure-mockup-tag" aria-hidden="true">Mockup</span>}
     <slot />
   </div>
@@ -26,6 +29,53 @@ const { caption, align = 'center', compact = false, kind = 'diagram' } = Astro.p
   )}
   {caption && <figcaption class="diagram-figure-caption">{caption}</figcaption>}
 </figure>
+
+<script>
+  // Below 640px the SVG surface scrolls horizontally (see the "Mobile
+  // rescue" rule in the <style> block). A scrollable region with no
+  // focusable content can't be reached from the keyboard, so we toggle a
+  // tab stop on/off depending on whether the surface actually overflows —
+  // CSS alone can't express "tabindex only when scrolling". `role="region"`
+  // and `aria-label` are toggled in lockstep with `tabindex`: a landmark is
+  // only correct while the surface is actually a scroll container, and a
+  // static role/label at desktop width (where nothing scrolls) would both
+  // mis-describe the element and add a needless region landmark per
+  // diagram to the a11y tree. The label text itself is static (carried in
+  // `data-scroll-label`, set from the `caption`/fallback in the markup
+  // above) since deriving it needs the component's props, not just the DOM.
+  //
+  // This script is a bundled module, so Astro executes it exactly once for
+  // the whole site (not once per DiagramFigure instance, not once per page
+  // navigation) — see https://docs.astro.build/en/guides/view-transitions/#script-re-execution.
+  // That single run is enough: it wires a resize listener and an
+  // `astro:page-load` listener that both re-scan every
+  // `.diagram-figure-surface--svg` currently in the document, so no extra
+  // once-per-navigation guard is needed here.
+  function evaluateDiagramSurfaces() {
+    document.querySelectorAll<HTMLElement>('.diagram-figure-surface--svg').forEach((surface) => {
+      if (surface.scrollWidth > surface.clientWidth) {
+        surface.setAttribute('tabindex', '0');
+        surface.setAttribute('role', 'region');
+        const label = surface.dataset.scrollLabel;
+        if (label) surface.setAttribute('aria-label', label);
+      } else {
+        surface.removeAttribute('tabindex');
+        surface.removeAttribute('role');
+        surface.removeAttribute('aria-label');
+      }
+    });
+  }
+
+  let resizeTimer: ReturnType<typeof setTimeout>;
+  function scheduleEvaluate() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(evaluateDiagramSurfaces, 150);
+  }
+
+  evaluateDiagramSurfaces();
+  window.addEventListener('resize', scheduleEvaluate);
+  document.addEventListener('astro:page-load', evaluateDiagramSurfaces);
+</script>
 
 <style>
   .diagram-figure {
@@ -63,6 +113,21 @@ const { caption, align = 'center', compact = false, kind = 'diagram' } = Astro.p
     height: auto;
     display: block;
     max-width: 100%;
+  }
+
+  /* Visible focus ring for the scrollable SVG surface — only relevant once
+   * the script above gives it a tab stop (i.e. it actually overflows).
+   * `mask-image` (below, ≤640px) clips anything the element paints outside
+   * its own border box — including an outer box-shadow — because the mask's
+   * painting area is the border box by definition. Without lifting the mask
+   * on focus, the ring would be entirely invisible exactly where it matters
+   * (mobile, where the tab stop is added). The scroll-fade hint is a nicety;
+   * WCAG 2.4.7 visible-focus is not, so it wins while focused. */
+  .diagram-figure-surface--svg:focus-visible {
+    outline: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+    box-shadow: var(--ui-focus-ring);
   }
 
   /* Mockup eyebrow — small italic flag in the top-right corner. */

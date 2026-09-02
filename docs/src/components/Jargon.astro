@@ -26,6 +26,15 @@ const hasSlot = Astro.slots.has('default');
 <style>
   .jargon {
     position: relative;
+    /* Keep the trigger as one unbroken inline box. Without this, a
+       multi-word term that lands on a line break gets fragmented into two
+       boxes, and the browser anchors the absolutely positioned popup to
+       whichever fragment it picks — which can sit near the column's right
+       edge and push the centered popup past the viewport (only reproduces
+       with specific text + column width, e.g. "design tokens" on /figma at
+       1024px). Disallowing the internal wrap removes the fragmentation
+       instead of chasing each width where it shows up. */
+    white-space: nowrap;
     border-bottom: 1px dotted var(--ui-color-primary);
     cursor: help;
     outline: none;
@@ -61,13 +70,30 @@ const hasSlot = Astro.slots.has('default');
     letter-spacing: 0;
     opacity: 0;
     pointer-events: none;
+    /* Closed = display: none, not just opacity: 0 — an absolutely positioned
+       box still occupies its calculated position (and can stick out past the
+       viewport) even at opacity 0, which was inflating the scrollable
+       overflow of `.docs-main-content`. `display` participates in the
+       transition (allow-discrete) so browsers that support it still animate
+       the open/close; browsers that don't just show/hide instantly, which is
+       an acceptable degrade. */
+    display: none;
     transition:
       opacity var(--ui-transition-fast),
-      transform var(--ui-transition-fast);
+      transform var(--ui-transition-fast),
+      display var(--ui-transition-fast) allow-discrete;
     z-index: 50;
-    display: flex;
     flex-direction: column;
     gap: 0.35rem;
+  }
+
+  @starting-style {
+    .jargon:hover .jargon-popup,
+    .jargon:focus .jargon-popup,
+    .jargon:focus-within .jargon-popup {
+      opacity: 0;
+      transform: translateX(-50%) translateY(4px);
+    }
   }
 
   /* Little triangle pointer */
@@ -84,6 +110,7 @@ const hasSlot = Astro.slots.has('default');
   .jargon:hover .jargon-popup,
   .jargon:focus .jargon-popup,
   .jargon:focus-within .jargon-popup {
+    display: flex;
     opacity: 1;
     transform: translateX(-50%) translateY(0);
   }
@@ -107,21 +134,39 @@ const hasSlot = Astro.slots.has('default');
     border-top: 1px solid var(--ui-color-border);
   }
 
-  /* Keep the tooltip inside narrow containers — left align instead of centering
-     when the element sits near a viewport edge. */
+  /* Below 520px, anchor the popup to the viewport instead of the trigger, as
+     a fixed bottom sheet. Left-aligning to the trigger (the previous
+     approach) still let the popup's fixed width run past the right edge for
+     terms sitting in the right half of the line; anchoring to the viewport's
+     own edges guarantees it fits regardless of where the term sits. */
   @media (max-width: 520px) {
     .jargon-popup {
-      left: 0;
-      transform: translateY(4px);
+      position: fixed;
+      left: 1rem;
+      right: 1rem;
+      /* Clear the mobile bottom tab bar (.docs-bottom-nav, ~60px, z-index:
+         90) instead of sitting behind/under it. */
+      bottom: calc(60px + 1rem);
+      top: auto;
+      width: auto;
+      max-width: none;
+      transform: translateY(12px);
+      z-index: 95;
     }
     .jargon:hover .jargon-popup,
     .jargon:focus .jargon-popup,
     .jargon:focus-within .jargon-popup {
       transform: translateY(0);
     }
+    @starting-style {
+      .jargon:hover .jargon-popup,
+      .jargon:focus .jargon-popup,
+      .jargon:focus-within .jargon-popup {
+        transform: translateY(12px);
+      }
+    }
     .jargon-popup::after {
-      left: 1rem;
-      transform: none;
+      display: none;
     }
   }
 </style>

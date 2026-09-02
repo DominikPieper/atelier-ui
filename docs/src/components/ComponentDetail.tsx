@@ -85,6 +85,15 @@ function storybookDocsUrl(framework: Framework, name: string, category: string, 
   return `${base}?path=/docs/components-${cat}-${segment}--docs`;
 }
 
+// Union types like `'success' | 'check' | 'warning'` render as one unbreakable
+// run without a wrap opportunity, which blows out the props table's min-content
+// width. Splitting on the separator and re-joining with <wbr /> lets the union
+// wrap after each `|` while leaving the copy/paste text unchanged.
+function renderType(type: string) {
+  const parts = type.split(' | ');
+  return parts.flatMap((part, i) => (i === 0 ? [part] : [' | ', <wbr key={i} />, part]));
+}
+
 function CodeBlock({ code, lang }: { code: string; lang: string }) {
   const [copied, setCopied] = useState(false);
   function copy() {
@@ -503,24 +512,26 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
       {doc.props.length > 0 && (
         <div className="docs-section">
           <h2 className="docs-section-title">API ({framework.charAt(0).toUpperCase() + framework.slice(1)})</h2>
-          <table className="docs-props-table">
-            <thead>
-              <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-            </thead>
-            <tbody>
-              {doc.props.map((prop) => {
-                const override = prop[framework as keyof typeof prop] as { name?: string; type?: string; default?: string } | undefined;
-                return (
-                  <tr key={prop.name}>
-                    <td><code className="docs-prop-name">{(override as { name?: string } | undefined)?.name ?? prop.name}</code></td>
-                    <td><code className="docs-prop-type">{(override as { type?: string } | undefined)?.type ?? prop.type}</code></td>
-                    <td><code className="docs-prop-default">{(override as { default?: string } | undefined)?.default ?? prop.default}</code></td>
-                    <td>{prop.description}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <div className="docs-table-scroll">
+            <table className="docs-props-table">
+              <thead>
+                <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+              </thead>
+              <tbody>
+                {doc.props.map((prop) => {
+                  const override = prop[framework as keyof typeof prop] as { name?: string; type?: string; default?: string } | undefined;
+                  return (
+                    <tr key={prop.name}>
+                      <td><code className="docs-prop-name">{(override as { name?: string } | undefined)?.name ?? prop.name}</code></td>
+                      <td><code className="docs-prop-type">{renderType((override as { type?: string } | undefined)?.type ?? prop.type)}</code></td>
+                      <td><code className="docs-prop-default">{(override as { default?: string } | undefined)?.default ?? prop.default}</code></td>
+                      <td>{prop.description}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
@@ -538,21 +549,23 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
                 <p className="docs-composition-part-desc">{part.description}</p>
               )}
               {part.props.length > 0 && (
-                <table className="docs-props-table">
-                  <thead>
-                    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-                  </thead>
-                  <tbody>
-                    {part.props.map(prop => (
-                      <tr key={prop.name}>
-                        <td><code className="docs-prop-name">{prop.name}</code></td>
-                        <td><code className="docs-prop-type">{prop.type}</code></td>
-                        <td><code className="docs-prop-default">{prop.default}</code></td>
-                        <td>{prop.description}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <div className="docs-table-scroll">
+                  <table className="docs-props-table">
+                    <thead>
+                      <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                      {part.props.map(prop => (
+                        <tr key={prop.name}>
+                          <td><code className="docs-prop-name">{prop.name}</code></td>
+                          <td><code className="docs-prop-type">{renderType(prop.type)}</code></td>
+                          <td><code className="docs-prop-default">{prop.default}</code></td>
+                          <td>{prop.description}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               )}
             </div>
           ))}
@@ -577,22 +590,24 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
               <code>{doc.a11y.role}</code>
             </p>
           )}
-          <table className="docs-props-table" style={{ marginBottom: doc.a11y.notes ? '1rem' : 0 }}>
-            <thead>
-              <tr>
-                <th style={{ width: '32%' }}>Key</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {doc.a11y.keyboard.map((row, i) => (
-                <tr key={i}>
-                  <td><kbd className="docs-a11y-kbd">{row.key}</kbd></td>
-                  <td>{row.action}</td>
+          <div className="docs-table-scroll" style={{ marginBottom: doc.a11y.notes ? '1rem' : 0 }}>
+            <table className="docs-props-table">
+              <thead>
+                <tr>
+                  <th style={{ width: '32%' }}>Key</th>
+                  <th>Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {doc.a11y.keyboard.map((row, i) => (
+                  <tr key={i}>
+                    <td><kbd className="docs-a11y-kbd">{row.key}</kbd></td>
+                    <td>{row.action}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           {doc.a11y.notes && doc.a11y.notes.length > 0 && (
             <ul className="docs-a11y-notes">
               {doc.a11y.notes.map((note, i) => <li key={i}>{note}</li>)}

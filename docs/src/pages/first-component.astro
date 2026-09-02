@@ -417,6 +417,7 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
   .kata-target-checks li {
     display: flex;
     align-items: flex-start;
+    flex-wrap: wrap;
     gap: 0.55rem;
   }
   .kata-target-checks li :global(svg) {
@@ -433,7 +434,7 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
     border-radius: 3px;
   }
   @media (max-width: 720px) {
-    .kata-target-body { grid-template-columns: 1fr; }
+    .kata-target-body { grid-template-columns: minmax(0, 1fr); }
   }
 
   /* "Run it" three-step list — Save / Serve / Open */

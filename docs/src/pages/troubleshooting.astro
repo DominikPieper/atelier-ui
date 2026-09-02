@@ -196,7 +196,7 @@ const ISSUES: Issue[] = [
           <h2 style="margin: 0 0 0.75rem; font-size: 1rem; font-weight: 700; color: var(--ui-color-text)">
             {issue.title}
           </h2>
-          <div style="display: grid; gap: 0.5rem; font-size: 0.85rem; line-height: 1.6">
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.5rem; font-size: 0.85rem; line-height: 1.6; overflow-wrap: anywhere">
             <div>
               <span style="font-size: 0.7rem; font-weight: 700; color: var(--ui-color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-right: 0.4rem">Symptom</span>
               <span style="color: var(--ui-color-text)">{issue.symptom}</span>
