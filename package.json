@@ -11,7 +11,7 @@
     "check:spec": "node tools/scripts/sync-spec.mjs --check",
     "check:behaviors-gen": "node tools/scripts/gen-behaviors.mjs --check",
     "check:docs": "node tools/scripts/check-docs-sync.js",
-    "check:docs-layout": "node tools/scripts/check-docs-layout.mjs --check",
+    "check:docs-layout": "nx build docs && node tools/scripts/check-docs-layout.mjs --check",
     "check:tokens": "node tools/scripts/sync-tokens.mjs --check",
     "check:behavior": "node tools/parity/behavior-coverage.mjs tools/parity/behavior.config.mjs",
     "check:variants": "node tools/scripts/check-variants.js",

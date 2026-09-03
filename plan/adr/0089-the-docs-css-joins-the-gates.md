@@ -47,10 +47,15 @@ the docs had none.
 Two constraints shaped the gate:
 
 - **It must not need a dev server.** `check:all` runs in CI's "Sync checks"
-  job after `npm ci` with Chromium installed; it does not start Astro. The
-  built `dist/docs` is a complete static site whose only obstacle is absolute
-  `/_astro/` asset paths — a twenty-line `node:http` static server, not a
-  build step, closes that.
+  job and in the release gate, after `npm ci` with Chromium installed; neither
+  starts Astro. The built `dist/docs` is a complete static site whose only
+  obstacle is absolute `/_astro/` asset paths — a twenty-line `node:http`
+  static server, not a dev server, closes that. Neither job *builds* the docs,
+  though, and this ADR's first draft asserted they did: the gate's first push
+  turned both red with `[NO-BUILD]`. So the npm script composes its own input
+  (`nx build docs && node …check-docs-layout.mjs`), which also closes a
+  quieter hole — a stale `dist` would have let the gate pass on markup that no
+  longer exists.
 - **Breakpoints cannot be tokens in CSS.** `@media (max-width: var(--bp))` is
   invalid, and `@custom-media` needs a PostCSS plugin the docs build does not
   have. So the breakpoint rule is a *set*, enforced by a static scan, not a
@@ -68,8 +73,14 @@ Two constraints shaped the gate:
    375 (`scrollable-region-focusable`, `target-size`, `heading-order`,
    `landmark-unique`, `color-contrast`, `page-has-heading-one`, `region`) with
    every allow entry carrying a reason, and `[BREAKPOINT]` — any `@media`
-   width in `docs/src` outside `{480, 640, 768, 1383}`. It refuses to run
-   without a build (`[NO-BUILD]`) rather than building silently.
+   width in `docs/src` outside `{480, 640, 768, 1383}` (a `min-width: N`
+   counts as documented when `N - 1` is in the set). The *script* refuses to
+   run without a build (`[NO-BUILD]`) rather than building silently; the *npm
+   script* builds first, so `check:all` is self-contained wherever it runs.
+   axe's `color-contrast` is measured after the page settles (fonts, two
+   frames, 150 ms), and every violation is re-run once and intersected — a
+   repaint mid-run produced phantom findings on pages a direct probe measured
+   at 7.7 : 1.
 2. **`check:css-tokens` Pass A** scans `docs/src/styles/global.css` and
    `docs/src/components/*.astro` alongside the library libs, with the same two
    allowances (fallbacks inside `var()`, shadows). The docs theme file
@@ -95,8 +106,8 @@ Two constraints shaped the gate:
   the header, or ships a `#hex` in the docs CSS, or adds a fifth breakpoint —
   fails CI. That is the whole point; the review's three blockers were all in
   that class.
-- `check:all` gains roughly two to three minutes (240 page loads, 118 axe
-  runs). Accepted: the library's `check:geometry` already made the browser a
+- `check:all` gains about a minute and a half: a 10 s docs build plus 72 s of
+  gate (240 page loads, 118 axe runs), measured. Accepted: the library's `check:geometry` already made the browser a
   non-optional part of the gate, and the docs are what participants read.
 - Component-library defects that surface through the docs demos (review
   L1–L4: `AtlSelect` accessible name, `AtlProgress` label, checkbox hit area,
