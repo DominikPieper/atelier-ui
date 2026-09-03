@@ -7,7 +7,6 @@ export default defineConfig({
       'libs/angular/vitest.storybook.config.ts',
       'libs/react/vite.config.mts',
       'libs/angular/vite.config.mts',
-      'apps/demo/vite.config.mts',
     ],
   },
 });
