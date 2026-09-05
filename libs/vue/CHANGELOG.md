@@ -1,3 +1,14 @@
+## 0.2.32 (2026-09-05)
+
+### 🚀 Features
+
+- **spec:** a caption three adapters shipped and the contract never had ([a8ab0d2](https://github.com/DominikPieper/atelier-ui/commit/a8ab0d2))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.31 (2026-08-29)
 
 ### 🚀 Features

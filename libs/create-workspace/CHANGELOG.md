@@ -1,3 +1,15 @@
+## 0.2.32 (2026-09-05)
+
+### 🩹 Fixes
+
+- **preflight:** make the sync claim true instead of just writing it down ([b1b52d9](https://github.com/DominikPieper/atelier-ui/commit/b1b52d9))
+- **preflight:** check the ports of the environment you are actually in ([a2ff354](https://github.com/DominikPieper/atelier-ui/commit/a2ff354))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.31 (2026-08-29)
 
 This was a version bump only for create-workspace to align it with other projects, there were no code changes.
