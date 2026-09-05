@@ -32,8 +32,13 @@ const emit = defineEmits<{
 
 const inputRef = ref<HTMLInputElement | null>(null);
 
-const inputId = computed(() => props.id || `checkbox-${Math.random().toString(36).slice(2)}`);
 const errorsId = useId();
+// useId(), not Math.random(): a random id inside a computed() re-rolls on every
+// re-evaluation and differs between server and client render, breaking SSR
+// hydration. useId() is stable per component instance.
+const generatedId = useId();
+
+const inputId = computed(() => props.id || `checkbox-${generatedId}`);
 
 watch(
   () => props.indeterminate,
