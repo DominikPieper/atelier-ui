@@ -413,6 +413,239 @@ const DEAD_SELECTOR_EXEMPT = new Map([
  */
 const HOST_ATTR_GUARD_EXEMPT = new Map();
 
+/**
+ * `<SpecName>:<prop>:<framework>` triples that intentionally diverge between
+ * `libs/spec/src/index.ts` and one adapter's declared prop surface
+ * (check-prop-surface). Same two kinds as the other allowlists here: `design`
+ * is a closed question and stays silent, `gap` is an unresolved, measured
+ * divergence and warns on every run — every entry below is `gap`, seeded when
+ * the gate was built so the backlog nags instead of blocking. Fixing any of
+ * them is a separate task; this Map exists so day one is green.
+ *
+ * An entry naming a triple this gate's current run does not find is itself an
+ * error: allowlists rot, and PROP_SURFACE_EXEMPT is load-bearing.
+ */
+const PROP_SURFACE_EXEMPT = new Map([
+  // `errors` — validation messages — is a real prop on all three adapters of
+  // every form control, but AtlFormFieldSpec never grew one: Angular types it
+  // `WithOptionalFieldTree<ValidationError>[]` (Signal Forms' own error shape),
+  // React and Vue take `string[]`. Agreeing a shared type is a contract
+  // change with its own ADR, not a one-line fix.
+  ...['AtlCheckboxSpec', 'AtlToggleSpec', 'AtlInputSpec', 'AtlTextareaSpec', 'AtlRadioGroupSpec', 'AtlSelectSpec', 'AtlComboboxSpec'].flatMap(
+    (spec) =>
+      ['angular', 'react', 'vue'].map((fw) => [
+        `${spec}:errors:${fw}`,
+        {
+          kind: 'gap',
+          reason:
+            "'errors' is declared by all three adapters but AtlFormFieldSpec has no matching prop — Angular's " +
+            "WithOptionalFieldTree<ValidationError>[] vs React/Vue's string[] means a shared type is a contract " +
+            'change with its own ADR, not this gate. Unresolved: see tasks/todo.md.',
+        },
+      ])
+  ),
+  // AtlDialogSpec never grew aria-label/aria-labelledby, but this is no
+  // longer an allowlist entry: `id`/`aria-label`/`aria-labelledby`/
+  // `aria-describedby`/`type` are native passthrough attributes React
+  // receives for free through `{...rest}` on the native element, so an
+  // Angular `input()` or Vue prop of the same name is the other two adapters
+  // reaching the same public surface, not drift — see NATIVE_PASSTHROUGH in
+  // check-prop-surface.js. Dialog's aria-label/aria-labelledby (Angular,
+  // React) and aria-label (Vue, camelCase `ariaLabel` — Vue hardcodes its own
+  // headerId as the aria-labelledby target instead of exposing a prop for it)
+  // are silenced structurally there now, not here.
+  // Angular computes "is this the last item" internally via a registration
+  // token (ATL_BREADCRUMBS) and never exposes it as a prop — the spec, React,
+  // and Vue all model it as a settable `current`. Making Angular's internal
+  // computation an explicit input (or dropping `current` from the other two
+  // in favour of always-auto-detect) is a real API decision, not this gate.
+  [
+    'AtlBreadcrumbItemSpec:current:angular',
+    {
+      kind: 'gap',
+      reason:
+        'AtlBreadcrumbItem computes "is this the last item" internally via the ATL_BREADCRUMBS registration token ' +
+        'and never exposes it as an input — the spec, React, and Vue all model `current` as a settable prop. ' +
+        'Unresolved: see tasks/todo.md.',
+    },
+  ],
+  // AtlTr.rowId: declared in the spec, and in Angular's own input() (single
+  // occurrence in libs/angular/src/lib/table/atl-table.ts — verified), and
+  // inherited into React's AtlTrProps via `extends AtlTrSpec` but never
+  // destructured, never referenced, and never let through via a `{...rest}`
+  // spread onto the <tr> — inherited-but-dropped. Both are real dead props;
+  // wiring them up (or dropping rowId from the spec) is an implementation
+  // task, not this gate.
+  [
+    'AtlTrSpec:rowId:angular',
+    {
+      kind: 'gap',
+      reason:
+        "rowId is declared ('readonly rowId = input<string | undefined>(undefined);') but referenced nowhere " +
+        'else in atl-table.ts — dead on arrival. Unresolved: see tasks/todo.md.',
+    },
+  ],
+  [
+    'AtlTrSpec:rowId:react',
+    {
+      kind: 'gap',
+      reason:
+        'AtlTrProps extends AtlTrSpec so rowId is part of the type, but AtlTr destructures a fixed prop list with ' +
+        'no `...rest` and never mentions rowId — inherited but never wired to anything, dead on arrival. ' +
+        'Unresolved: see tasks/todo.md.',
+    },
+  ],
+  // AtlChatMessage.id/.content and AtlChatSuggestion.id: the spec models
+  // these as data fields, but all three adapters render content as
+  // children/slot and never take id/content as a prop at all — a spec bug
+  // (the shape doesn't match how any adapter actually renders), not framework
+  // drift, since all three agree with each other.
+  ...['angular', 'react', 'vue'].flatMap((fw) =>
+    ['id', 'content'].map((prop) => [
+      `AtlChatMessageSpec:${prop}:${fw}`,
+      {
+        kind: 'gap',
+        reason:
+          `AtlChatMessageSpec.${prop} is spec-only — all three adapters render message content as ` +
+          "children/slot and never take '" +
+          prop +
+          "' as a prop. A spec bug (the shape doesn't match how any adapter renders), not framework drift. " +
+          'Unresolved: see tasks/todo.md.',
+      },
+    ])
+  ),
+  ...['angular', 'react', 'vue'].map((fw) => [
+    `AtlChatSuggestionSpec:id:${fw}`,
+    {
+      kind: 'gap',
+      reason:
+        "AtlChatSuggestionSpec.id is spec-only — all three adapters key suggestions by label/hint alone and " +
+        "never take 'id' as a prop. A spec bug, not framework drift. Unresolved: see tasks/todo.md.",
+    },
+  ]),
+  // React's radio-group declares its own `orientation` prop with no spec
+  // entry at all; DEAD_SELECTOR_EXEMPT above already records the same open
+  // spec decision (promote to AtlRadioGroupSpec, or drop it from React) from
+  // the CSS side — cross-reference rather than restate it.
+  [
+    'AtlRadioGroupSpec:orientation:react',
+    {
+      kind: 'gap',
+      reason:
+        "React declares 'orientation' in its own AtlRadioGroupProps with no entry in AtlRadioGroupSpec — the same " +
+        'open spec decision DEAD_SELECTOR_EXEMPT already records from the CSS side ' +
+        "('angular:radio-group:orientation-*' / 'vue:radio-group:orientation-*' above). Unresolved: see tasks/todo.md.",
+    },
+  ],
+  // AtlFormFieldSpec declares `onValueChange`, so the contract DOES model
+  // change callbacks — it just models exactly one and leaves every other
+  // component's events undeclared, while all three adapters implement them
+  // consistently anyway (Angular output(), React callback prop, Vue emit).
+  // Deciding the event contract (which components get a declared callback,
+  // and its name) is a spec change with its own ADR, not gate work. One
+  // shared reason for all 13 — this is one decision, not thirteen.
+  ...[
+    ['AtlAlertSpec', 'dismissed', 'angular'],
+    ['AtlAlertSpec', 'onDismissed', 'react'],
+    ['AtlChatSpec', 'onOpenChange', 'react'],
+    ['AtlChatSuggestionSpec', 'selected', 'angular'],
+    ['AtlChatSuggestionSpec', 'onSelected', 'react'],
+    ['AtlDrawerSpec', 'onOpenChange', 'react'],
+    ['AtlMenuItemSpec', 'onTriggered', 'react'],
+    ['AtlPaginationSpec', 'onPageChange', 'react'],
+    ['AtlStepperSpec', 'onActiveStepChange', 'react'],
+    ['AtlThSpec', 'sort', 'angular'],
+    ['AtlThSpec', 'onSort', 'react'],
+    ['AtlTrSpec', 'selectedChange', 'angular'],
+    ['AtlTrSpec', 'onSelectedChange', 'react'],
+  ].map(([spec, prop, fw]) => [
+    `${spec}:${prop}:${fw}`,
+    {
+      kind: 'gap',
+      reason:
+        "AtlFormFieldSpec declares 'onValueChange', so the contract DOES model change callbacks — it just models " +
+        "exactly one and leaves every other component's events undeclared, while all three adapters implement " +
+        'them consistently (Angular output(), React callback prop, Vue emit). Deciding the event contract is a ' +
+        'spec change with its own ADR, not gate work. Unresolved: see tasks/todo.md.',
+    },
+  ]),
+  // AtlButtonSpec REQUIRES 'aria-label' when the button has no visible label
+  // (icon-only buttons) — the spec's own doc comment says Angular and Vue
+  // "log a dev-mode warning" instead of binding a prop. That is the contract
+  // being unmet on two of three adapters, not a spec gap: an icon-only
+  // <atl-button> in Angular or Vue has no compiler-enforced way to require
+  // the accessible name the spec promises.
+  ...['angular', 'vue'].map((fw) => [
+    `AtlButtonSpec:aria-label:${fw}`,
+    {
+      kind: 'gap',
+      reason:
+        "AtlButtonSpec requires 'aria-label' when the button has no visible label — the spec's own doc comment " +
+        'says this adapter only logs a dev-mode warning instead of binding a prop, so an icon-only button here has ' +
+        'no compiler-enforced way to satisfy the requirement. The contract being unmet, not a spec gap. ' +
+        'Unresolved: see tasks/todo.md.',
+    },
+  ]),
+  // AtlTrSpec:rowId, the third framework: cross-reference the angular/react
+  // entries above (dead in Angular, dropped in React) — Vue is the third,
+  // different way to fail the same prop: atl-tr.vue never declares rowId at
+  // all, so it is plain MISSING there rather than dead. All three adapters
+  // are wrong, in three different shapes.
+  [
+    'AtlTrSpec:rowId:vue',
+    {
+      kind: 'gap',
+      reason:
+        'rowId is dead in Angular and dropped in React (see AtlTrSpec:rowId:angular / :react above); Vue is a ' +
+        "third, different failure — atl-tr.vue's Props interface never declares rowId at all, so it is plain " +
+        'MISSING here, not dead. Unresolved: see tasks/todo.md.',
+    },
+  ],
+  [
+    'AtlTbodySpec:emptyContent:react',
+    {
+      kind: 'gap',
+      reason:
+        "React-only convenience prop ('emptyContent', rendered inside the empty-state row) with no entry in " +
+        'AtlTbodySpec. Unresolved: see tasks/todo.md.',
+    },
+  ],
+  [
+    'AtlRadioGroupSpec:name:angular',
+    {
+      kind: 'gap',
+      reason:
+        'declared (`readonly name = input(\'\');`) with a doc comment claiming it is "propagated to all child ' +
+        'radio inputs", but referenced nowhere else in atl-radio-group.ts — the documentation describes behaviour ' +
+        'that was never wired, the second instance of that class of bug today after AtlSelect.required (fixed in ' +
+        'commit 299816d). Unresolved: see tasks/todo.md.',
+    },
+  ],
+  // readOnly (React's own HTML casing) vs the spec's `readonly`
+  // (AtlReadonlySpec, lowercase): Angular and Vue both agree with the spec
+  // ('readonly'); only React's own redeclared interface member spells it
+  // 'readOnly' — and it earns that spelling deliberately, by `Omit`ting the
+  // inherited HTML attribute and redeclaring its own, so it is NOT received
+  // through `{...rest}` the way NATIVE_PASSTHROUGH's other entries are.
+  // `<AtlInput readonly>`, written against the three-source documented
+  // contract, silently does nothing in React. The spec's spelling is
+  // authoritative; the fix is a rename in React, which needs its own ADR
+  // since it is a breaking change to a public prop name. One shared reason —
+  // this is one decision, not three.
+  ...['AtlInputSpec', 'AtlTextareaSpec', 'AtlRadioGroupSpec'].map((spec) => [
+    `${spec}:readOnly:react`,
+    {
+      kind: 'gap',
+      reason:
+        "the spec's 'readonly' (AtlReadonlySpec, lowercase) is authoritative — Angular and Vue both agree with " +
+        "it; only React's own redeclared interface member spells it 'readOnly' (HTML casing), deliberately " +
+        "Omit()-ing the inherited attribute rather than receiving it through {...rest}. '<AtlInput readonly>', " +
+        'written against the documented contract, silently does nothing in React. Fix is a rename in React — a ' +
+        'breaking change to a public prop name, its own ADR. Unresolved: see tasks/todo.md.',
+    },
+  ]),
+]);
+
 module.exports = {
   DEAD_SELECTOR_EXEMPT,
   VARIANT_AXIS_EXCEPTIONS,
@@ -427,4 +660,5 @@ module.exports = {
   PRIMITIVE_EXEMPTIONS,
   TOKEN_BYPASS_EXEMPT,
   HOST_ATTR_GUARD_EXEMPT,
+  PROP_SURFACE_EXEMPT,
 };
