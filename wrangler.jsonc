@@ -7,6 +7,27 @@
   },
   "compatibility_date": "2026-04-30",
   "compatibility_flags": ["nodejs_compat"],
+  // Works around @storybook/mcp@10.6.0's CJS-interop preamble
+  // (node_modules/@storybook/mcp/dist/index.js:5-7):
+  //   var __filename = fileURLToPath(import.meta.url);
+  //   var __dirname = dirname(__filename);
+  //   var require = createRequire(import.meta.url);
+  // `import.meta.url` is `undefined` in workerd (Workers modules have no
+  // script URL), so `fileURLToPath(undefined)` throws
+  // `TypeError: The "path" argument must be of type string or an instance
+  // of URL. Received undefined` at module load — the whole worker fails to
+  // start, not just one request. Verified by grepping the entire dist/index.js:
+  // `__filename`, `__dirname`, and `require` are each referenced exactly once,
+  // at their own definition — this is dead bundler preamble, not consumed
+  // anywhere in the file. This `define` gives `import.meta.url` a harmless
+  // literal `file://` URL wherever esbuild finds that exact expression, which
+  // is enough for `fileURLToPath`/`createRequire` to return without throwing;
+  // since nothing reads `__filename`/`__dirname`/`require` afterwards, the
+  // fake value never surfaces. Delete this once `@storybook/mcp` stops
+  // computing values it does not use (upstream bundler config fix).
+  "define": {
+    "import.meta.url": "\"file:///atelier-ui-worker.js\""
+  },
   "assets": {
     "directory": "./dist/docs",
     "binding": "ASSETS",

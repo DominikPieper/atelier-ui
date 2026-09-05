@@ -1,5 +1,6 @@
 ---
-status: accepted
+status: superseded
+superseded-by: plan/adr/0097-the-manifest-the-framework-can-emit-now.md
 date: 2026-08-29
 sources:
   - tasks/schulung-review-2026-08-28.md (B2, and the workerd reproduction that found the deeper defect)
@@ -12,9 +13,17 @@ sources:
 
 ## Status
 
-Accepted. The hosted Angular and Vue Storybook MCP endpoints serve their own MDX
-docs manifest plus **React's components manifest** as the cross-framework API
-reference. Recorded at decision time.
+**Superseded 2026-09-05 by
+[ADR-0097](0097-the-manifest-the-framework-can-emit-now.md).** Storybook 10.6's
+first-party `@storybook/angular-vite` / `@storybook/vue3-vite` frameworks emit
+real, framework-native `components.json` for Angular and Vue; the worker's
+React-manifest substitution this record describes is deleted, not shrunk. Kept
+below as the historical record of why the substitution existed and what it cost
+to remove.
+
+Originally accepted. The hosted Angular and Vue Storybook MCP endpoints served
+their own MDX docs manifest plus **React's components manifest** as the
+cross-framework API reference. Recorded at decision time.
 
 ## Context
 

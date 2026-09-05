@@ -65,3 +65,5 @@ docs/.astro
 .nx/polygraph
 .nx/self-healing
 .nx/migrate-runs
+# wrangler dev local state (miniflare caches)
+.wrangler/

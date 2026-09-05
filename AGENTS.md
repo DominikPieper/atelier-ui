@@ -121,7 +121,7 @@ File key: `QMnDD8uZQPldPrlCwZZ58T`. Page conventions:
   *pipe's* status, which is always `0` — that silently converts a failure into a
   pass, and has already put a false "all gates green" claim into this repo's
   history.
-- `npm run check:all` runs the full gate chain (34 gates). Every gate in it is
+- `npm run check:all` runs the full gate chain (35 gates). Every gate in it is
   offline and deterministic; that is why `check:release-drift`, which asks the npm
   registry, is deliberately **not** in the chain.
 - Local gates say nothing about the release pipeline. "All gates pass" is a
