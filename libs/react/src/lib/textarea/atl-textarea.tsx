@@ -1,4 +1,4 @@
-import { TextareaHTMLAttributes, useRef, useEffect } from 'react';
+import { TextareaHTMLAttributes, useRef, useEffect, useId } from 'react';
 import type { AtlTextareaSpec } from '../spec';
 import './atl-textarea.css';
 import { AtlIcon } from '../icon/atl-icon';
@@ -53,8 +53,11 @@ export function AtlTextarea({
 }: AtlTextareaProps) {
   const readOnly = reactReadOnly ?? specReadOnly ?? false;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const inputId =
-    id || (label ? `textarea-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined);
+  // useId(), not a slug derived from the label text: two textareas with the
+  // same label used to collide on one id and break the for/id association
+  // (same bug as AtlInput's — see ADR-0091).
+  const generatedId = useId();
+  const inputId = id || (label ? `textarea-${generatedId}` : undefined);
   const classes = [
     'atl-textarea',
     invalid && 'is-invalid',

@@ -1,4 +1,4 @@
-import { ReactNode, SelectHTMLAttributes, OptionHTMLAttributes } from 'react';
+import { ReactNode, SelectHTMLAttributes, OptionHTMLAttributes, useId } from 'react';
 import type {
   AtlSelectSpec,
   AtlOptionSpec,
@@ -55,8 +55,11 @@ export function AtlSelect({
   id,
   ...rest
 }: AtlSelectProps) {
-  const selectId =
-    id || (label ? `select-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined);
+  // useId(), not a slug derived from the label text: two selects with the
+  // same label used to collide on one id and break the for/id association
+  // (same bug as AtlInput's — see ADR-0091).
+  const generatedId = useId();
+  const selectId = id || (label ? `select-${generatedId}` : undefined);
   // Derived from the field id, the same way AtlInput derives its own, so the error
   // text can be pointed at with aria-describedby.
   const errorsId = selectId ? `${selectId}-errors` : undefined;

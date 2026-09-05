@@ -282,6 +282,58 @@ describe('AtlTextarea', () => {
     });
   });
 
+  describe('label', () => {
+    it('renders a label associated with the textarea', async () => {
+      await render('<atl-textarea label="Bio" />', { imports: [AtlTextarea] });
+      expect(screen.getByLabelText('Bio')).toBeInTheDocument();
+    });
+
+    it('does not render a label when omitted', async () => {
+      const { container } = await render('<atl-textarea />', {
+        imports: [AtlTextarea],
+      });
+      expect(container.querySelector('label')).not.toBeInTheDocument();
+    });
+
+    it('lets a caller-supplied id win over the auto-generated one', async () => {
+      await render(
+        '<atl-textarea label="Bio" id="custom-bio-id" />',
+        { imports: [AtlTextarea] }
+      );
+      const textarea = screen.getByLabelText('Bio');
+      expect(textarea).toHaveAttribute('id', 'custom-bio-id');
+    });
+
+    // Regression test — see the identical test on AtlInput for the full
+    // account of the bug: a static `id="…"` attribute on the host also
+    // stays as a literal DOM attribute there, which duplicated onto the
+    // native `<textarea>` too and broke `<label for>` association entirely.
+    it('does not duplicate a static id attribute onto the host, which would break label association', async () => {
+      const { container } = await render(
+        '<atl-textarea label="Bio" id="custom-bio-id" />',
+        { imports: [AtlTextarea] }
+      );
+      expect(container.querySelector('atl-textarea')).not.toHaveAttribute('id');
+      expect(screen.getByLabelText('Bio')).toBeInTheDocument();
+    });
+  });
+
+  describe('aria-label', () => {
+    it('forwards aria-label to the native textarea, not the host', async () => {
+      const { container } = await render(
+        '<atl-textarea aria-label="Notes" />',
+        { imports: [AtlTextarea] }
+      );
+      expect(container.querySelector('textarea')).toHaveAttribute(
+        'aria-label',
+        'Notes'
+      );
+      expect(container.querySelector('atl-textarea')).not.toHaveAttribute(
+        'aria-label'
+      );
+    });
+  });
+
   describe('autoResize input', () => {
     it('applies is-auto-resize class when autoResize is true', async () => {
       const { container } = await render(

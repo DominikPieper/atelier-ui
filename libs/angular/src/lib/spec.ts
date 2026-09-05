@@ -124,15 +124,38 @@ export interface AtlFormFieldSpec {
 export interface AtlReadonlySpec {
   readonly?: boolean;
 }
+
+/**
+ * Visible caption rendered as a `<label>` associated with the control via
+ * `for`/`id`. When omitted, the control renders with no visible caption —
+ * supply an external `<label>` or an `aria-label` at the call site in that
+ * case, or the control has no accessible name.
+ *
+ * Deliberately NOT merged into `AtlFormFieldSpec`. Two of that mixin's
+ * consumers project their caption as CONTENT rather than a string prop —
+ * `AtlCheckboxSpec`/`AtlToggleSpec` take it as `children`/`<ng-content>`/
+ * `<slot>` — so inheriting `label` there would be a second, unused, and
+ * actively misleading way to say the same thing. Two more,
+ * `AtlRadioGroupSpec` and `AtlComboboxSpec`, have no caption prop in any
+ * adapter today, so applying it there would be speculative. Applied only
+ * where a `label` prop actually exists in at least one adapter today —
+ * `AtlInputSpec`, `AtlTextareaSpec`, `AtlSelectSpec` — three occurrences,
+ * which is what justifies pulling it out as its own mixin instead of leaving
+ * it three separate, easy-to-let-drift declarations (see ADR-0091, which
+ * also documents the one-off reading this mixin corrects).
+ */
+export interface AtlCaptionSpec {
+  label?: string;
+}
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
 export type AtlInputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
-export interface AtlInputSpec extends AtlFormFieldSpec, AtlReadonlySpec {
+export interface AtlInputSpec extends AtlFormFieldSpec, AtlReadonlySpec, AtlCaptionSpec {
   type?: AtlInputType;
   placeholder?: string;
 }
 
-export interface AtlTextareaSpec extends AtlFormFieldSpec, AtlReadonlySpec {
+export interface AtlTextareaSpec extends AtlFormFieldSpec, AtlReadonlySpec, AtlCaptionSpec {
   rows?: number;
   placeholder?: string;
   autoResize?: boolean;
@@ -170,7 +193,7 @@ export interface AtlRadioGroupSpec extends AtlFormFieldSpec, AtlReadonlySpec {
 // ---------------------------------------------------------------------------
 // Select / Option
 // ---------------------------------------------------------------------------
-export interface AtlSelectSpec extends AtlFormFieldSpec {
+export interface AtlSelectSpec extends AtlFormFieldSpec, AtlCaptionSpec {
   placeholder?: string;
 }
 

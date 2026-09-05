@@ -19,6 +19,21 @@ describe('AtlInput', () => {
     expect(screen.getByLabelText('Email')).toBeInTheDocument();
   });
 
+  it('does not render a label when omitted', () => {
+    const { container } = render(<AtlInput />);
+    expect(container.querySelector('label')).not.toBeInTheDocument();
+  });
+
+  it('lets a caller-supplied id win over the auto-generated one', () => {
+    render(<AtlInput label="Email" id="custom-email-id" />);
+    expect(screen.getByLabelText('Email')).toHaveAttribute('id', 'custom-email-id');
+  });
+
+  it('forwards aria-label to the native input', () => {
+    render(<AtlInput aria-label="Search" />);
+    expect(screen.getByRole('textbox')).toHaveAttribute('aria-label', 'Search');
+  });
+
   covers('input', 'disabled')('is disabled when disabled prop is true', () => {
     render(<AtlInput disabled />);
     expect(screen.getByRole('textbox')).toBeDisabled();

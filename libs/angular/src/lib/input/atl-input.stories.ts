@@ -22,6 +22,7 @@ const meta: Meta<AtlInput> = {
       control: 'select',
       options: ['text', 'email', 'password', 'number', 'tel', 'url'],
     },
+    label: { control: 'text' },
     placeholder: { control: 'text' },
     disabled: { control: 'boolean' },
     readonly: { control: 'boolean' },
@@ -47,6 +48,10 @@ type Story = StoryObj<AtlInput>;
 
 export const Default: Story = {
   parameters: { design: figmaNode('129-23') },
+};
+
+export const WithLabel: Story = {
+  args: { label: 'Email address', type: 'email', placeholder: 'you@example.com' },
 };
 
 export const Email: Story = {

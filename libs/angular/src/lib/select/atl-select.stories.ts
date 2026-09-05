@@ -27,6 +27,7 @@ const meta: Meta<AtlSelect> = {
     `,
   }),
   argTypes: {
+    label: { control: 'text' },
     disabled: { control: 'boolean' },
     invalid: { control: 'boolean' },
     required: { control: 'boolean' },
@@ -48,6 +49,10 @@ type Story = StoryObj<AtlSelect>;
 
 export const Default: Story = {
   parameters: { design: figmaNode('55-88') },
+};
+
+export const WithLabel: Story = {
+  args: { label: 'Country' },
 };
 
 export const WithSelection: Story = {

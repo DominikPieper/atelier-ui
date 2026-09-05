@@ -14,6 +14,17 @@ interface AtlSelectProps {
   required?: boolean;
   label?: string;
   name?: string;
+  /**
+   * Accessible name for the native select, for when there is no visible
+   * `label`. Declared as an explicit prop (not left to Vue's default
+   * attribute fallthrough) so it lands on the native `<select>` — the
+   * fallthrough target for an undeclared attribute is this component's
+   * root `<div>`, which has no role and would leave the select unnamed.
+   * camelCase here, like every other prop — see AtlInput's identical
+   * `ariaLabel` for why (Vue camelizes both sides of prop-name matching, so
+   * `props['aria-label']` in the script is never populated).
+   */
+  ariaLabel?: string;
 }
 
 const props = withDefaults(defineProps<AtlSelectProps>(), {
@@ -25,6 +36,7 @@ const props = withDefaults(defineProps<AtlSelectProps>(), {
   required: false,
   label: undefined,
   name: undefined,
+  ariaLabel: undefined,
 });
 
 const emit = defineEmits<{
@@ -48,7 +60,7 @@ function onChange(event: Event) {
 
 <template>
   <div :class="wrapperClasses">
-    <label v-if="label" :for="selectId" class="select-label">{{ label }}</label>
+    <label v-if="label" :for="selectId">{{ label }}</label>
     <div class="select-wrapper">
       <select
         :id="selectId"
@@ -56,6 +68,7 @@ function onChange(event: Event) {
         :value="value"
         :disabled="disabled"
         :required="required"
+        :aria-label="ariaLabel || undefined"
         :aria-invalid="invalid || undefined"
         :aria-describedby="errors.length > 0 ? errorsId : undefined"
         class="select-native"

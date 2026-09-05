@@ -22,5 +22,11 @@
         "disabled": true
       }
     }
+  ],
+  "labelled": [
+    {
+      "role": "textbox",
+      "name": "Bio"
+    }
   ]
 }

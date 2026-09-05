@@ -31,6 +31,7 @@ async function capture(): Promise<Record<string, unknown>> {
     invalid: await captureOne('<atl-input placeholder="Your name" [invalid]="true"></atl-input>'),
     disabled: await captureOne('<atl-input placeholder="Your name" [disabled]="true"></atl-input>'),
     required: await captureOne('<atl-input placeholder="Your name" [required]="true"></atl-input>'),
+    labelled: await captureOne('<atl-input label="Full name"></atl-input>'),
   };
 }
 

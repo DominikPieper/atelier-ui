@@ -1,4 +1,4 @@
-import { InputHTMLAttributes } from 'react';
+import { InputHTMLAttributes, useId } from 'react';
 import type { AtlInputSpec } from '../spec';
 import './atl-input.css';
 import { AtlIcon } from '../icon/atl-icon';
@@ -59,8 +59,10 @@ export function AtlInput({
   ...rest
 }: AtlInputProps) {
   const readOnly = reactReadOnly ?? specReadOnly ?? false;
-  const inputId =
-    id || (label ? `input-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined);
+  // useId(), not a slug derived from the label text: two inputs with the same
+  // label used to collide on one id and break the for/id association.
+  const generatedId = useId();
+  const inputId = id || (label ? `input-${generatedId}` : undefined);
   const classes = [
     'atl-input',
     invalid && 'is-invalid',

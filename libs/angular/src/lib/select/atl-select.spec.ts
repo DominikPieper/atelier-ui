@@ -290,6 +290,58 @@ describe('AtlSelect', () => {
     });
   });
 
+  describe('label', () => {
+    it('renders a label associated with the trigger button', async () => {
+      await render(
+        `<atl-select label="Country" placeholder="Choose">
+          <atl-option optionValue="a">A</atl-option>
+        </atl-select>`,
+        { imports: [AtlSelect, AtlOption] }
+      );
+      expect(screen.getByLabelText('Country')).toBeInTheDocument();
+    });
+
+    it('does not render a label when omitted', async () => {
+      const { container } = await render(
+        `<atl-select placeholder="Choose">
+          <atl-option optionValue="a">A</atl-option>
+        </atl-select>`,
+        { imports: [AtlSelect, AtlOption] }
+      );
+      expect(container.querySelector('label')).not.toBeInTheDocument();
+    });
+
+    // The trigger has no accessible name at all without one of label/
+    // aria-label — this is the L1 backlog item (axe select-name).
+    it('gives the trigger button an accessible name when labelled', async () => {
+      await render(
+        `<atl-select label="Country" placeholder="Choose">
+          <atl-option optionValue="a">A</atl-option>
+        </atl-select>`,
+        { imports: [AtlSelect, AtlOption] }
+      );
+      expect(screen.getByRole('button', { name: 'Country' })).toBeInTheDocument();
+    });
+  });
+
+  describe('aria-label', () => {
+    it('forwards aria-label to the trigger button, not the host', async () => {
+      const { container } = await render(
+        `<atl-select aria-label="Country" placeholder="Choose">
+          <atl-option optionValue="a">A</atl-option>
+        </atl-select>`,
+        { imports: [AtlSelect, AtlOption] }
+      );
+      expect(container.querySelector('button.trigger')).toHaveAttribute(
+        'aria-label',
+        'Country'
+      );
+      expect(container.querySelector('atl-select')).not.toHaveAttribute(
+        'aria-label'
+      );
+    });
+  });
+
   describe('ARIA attributes', () => {
     it('sets aria-haspopup="listbox" on trigger', async () => {
       const { container } = await render(SELECT_TEMPLATE, {

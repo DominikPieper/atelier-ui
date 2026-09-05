@@ -19,6 +19,24 @@ describe('AtlTextarea', () => {
     expect(screen.getByLabelText('Description')).toBeInTheDocument();
   });
 
+  it('does not render a label when omitted', () => {
+    const { container } = render(<AtlTextarea />);
+    expect(container.querySelector('label')).not.toBeInTheDocument();
+  });
+
+  it('lets a caller-supplied id win over the auto-generated one', () => {
+    render(<AtlTextarea label="Description" id="custom-description-id" />);
+    expect(screen.getByLabelText('Description')).toHaveAttribute(
+      'id',
+      'custom-description-id'
+    );
+  });
+
+  it('forwards aria-label to the native textarea', () => {
+    render(<AtlTextarea aria-label="Notes" />);
+    expect(screen.getByRole('textbox')).toHaveAttribute('aria-label', 'Notes');
+  });
+
   covers('textarea', 'disabled')('is disabled when disabled prop is true', () => {
     render(<AtlTextarea disabled />);
     expect(screen.getByRole('textbox')).toBeDisabled();

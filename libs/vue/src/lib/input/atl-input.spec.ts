@@ -14,6 +14,26 @@ describe('AtlInput', () => {
     expect(screen.getByLabelText('Email')).toBeInTheDocument();
   });
 
+  it('does not render a label when omitted', () => {
+    const { container } = render(AtlInput, {});
+    expect(container.querySelector('label')).not.toBeInTheDocument();
+  });
+
+  it('lets a caller-supplied id win over the auto-generated one', () => {
+    render(AtlInput, { props: { label: 'Email', id: 'custom-email-id' } });
+    expect(screen.getByLabelText('Email')).toHaveAttribute('id', 'custom-email-id');
+  });
+
+  // Regression test: aria-label used to be an undeclared attribute, which
+  // Vue's default fallthrough applies to this component's ROOT `<div>`
+  // (single-root component) rather than to the native `<input>` that
+  // actually needs the accessible name.
+  it('sets aria-label on the native input, not the wrapper', () => {
+    const { container } = render(AtlInput, { props: { 'aria-label': 'Search' } });
+    expect(screen.getByRole('textbox')).toHaveAttribute('aria-label', 'Search');
+    expect(container.firstElementChild).not.toHaveAttribute('aria-label');
+  });
+
   covers('input', 'updates-value')('emits update:value on input', async () => {
     const user = userEvent.setup();
     const { emitted } = render(AtlInput, { props: { value: '' } });

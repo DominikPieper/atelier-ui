@@ -14,6 +14,27 @@ describe('AtlTextarea', () => {
     expect(screen.getByLabelText('Description')).toBeInTheDocument();
   });
 
+  it('does not render a label when omitted', () => {
+    const { container } = render(AtlTextarea, {});
+    expect(container.querySelector('label')).not.toBeInTheDocument();
+  });
+
+  it('lets a caller-supplied id win over the auto-generated one', () => {
+    render(AtlTextarea, {
+      props: { label: 'Description', id: 'custom-description-id' },
+    });
+    expect(screen.getByLabelText('Description')).toHaveAttribute(
+      'id',
+      'custom-description-id'
+    );
+  });
+
+  it('sets aria-label on the native textarea, not the wrapper', () => {
+    const { container } = render(AtlTextarea, { props: { 'aria-label': 'Notes' } });
+    expect(screen.getByRole('textbox')).toHaveAttribute('aria-label', 'Notes');
+    expect(container.firstElementChild).not.toHaveAttribute('aria-label');
+  });
+
   covers('textarea', 'updates-value')('emits update:value on input', async () => {
     const user = userEvent.setup();
     const { emitted } = render(AtlTextarea, { props: { value: '' } });

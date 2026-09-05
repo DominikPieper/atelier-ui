@@ -28,6 +28,9 @@ function capture() {
   r = render(<AtlInput placeholder="Your name" required />);
   scenarios.required = a11yTree(r.container);
   r.unmount();
+  r = render(<AtlInput label="Full name" />);
+  scenarios.labelled = a11yTree(r.container);
+  r.unmount();
   return scenarios;
 }
 

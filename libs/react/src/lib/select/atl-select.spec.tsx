@@ -111,4 +111,31 @@ describe('AtlSelect', () => {
     );
     expect(screen.getByLabelText('Country')).toBeInTheDocument();
   });
+
+  it('does not render a label when omitted', () => {
+    const { container } = render(
+      <AtlSelect>
+        <AtlOption optionValue="us">United States</AtlOption>
+      </AtlSelect>
+    );
+    expect(container.querySelector('label')).not.toBeInTheDocument();
+  });
+
+  it('lets a caller-supplied id win over the auto-generated one', () => {
+    render(
+      <AtlSelect label="Country" id="custom-country-id">
+        <AtlOption optionValue="us">United States</AtlOption>
+      </AtlSelect>
+    );
+    expect(screen.getByLabelText('Country')).toHaveAttribute('id', 'custom-country-id');
+  });
+
+  it('forwards aria-label to the native select', () => {
+    render(
+      <AtlSelect aria-label="Country">
+        <AtlOption optionValue="us">United States</AtlOption>
+      </AtlSelect>
+    );
+    expect(screen.getByRole('combobox')).toHaveAttribute('aria-label', 'Country');
+  });
 });

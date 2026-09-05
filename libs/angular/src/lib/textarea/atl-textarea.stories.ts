@@ -19,6 +19,7 @@ const meta: Meta<AtlTextarea> = {
   }),
   argTypes: {
     rows: { control: { type: 'number', min: 1, max: 20 } },
+    label: { control: 'text' },
     placeholder: { control: 'text' },
     disabled: { control: 'boolean' },
     readonly: { control: 'boolean' },
@@ -46,6 +47,10 @@ type Story = StoryObj<AtlTextarea>;
 
 export const Default: Story = {
   parameters: { design: figmaNode('55-82') },
+};
+
+export const WithLabel: Story = {
+  args: { label: 'Bio', placeholder: 'Tell us about yourself' },
 };
 
 export const WithPlaceholder: Story = {

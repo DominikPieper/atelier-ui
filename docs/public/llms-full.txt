@@ -116,6 +116,7 @@ Each entry lists:
     onValueChange  (value: string) => void                                   —       Called when the input value changes
     type           'text' | 'email' | 'password' | 'number' | 'tel' | 'url'  'text'  Input type
     placeholder    string                                                    ''      Placeholder text
+    label          string                                                    ''      Visible caption rendered as a <label> associated with the input via for/id. When omitted, the input renders with no visible caption — supply an external <label> or an aria-label at the call site in that case, or the field has no accessible name.
     disabled       boolean                                                   false   Disables the input
     readonly       boolean                                                   false   Makes the input read-only
     invalid        boolean                                                   false   Applies invalid/error styling
@@ -125,16 +126,19 @@ Each entry lists:
   Usage:
     Angular:
       <atl-input type="email" placeholder="you@example.com" [(value)]="email" />
+      <atl-input label="Email" type="email" placeholder="you@example.com" [(value)]="email" />
       <atl-input type="password" placeholder="Password" [(value)]="password" />
       <atl-input [invalid]="true" placeholder="Invalid state" />
       <atl-input [disabled]="true" placeholder="Disabled" />
     React:
       <AtlInput type="email" placeholder="you@example.com" value={email} onValueChange={setEmail} />
+      <AtlInput label="Email" type="email" placeholder="you@example.com" value={email} onValueChange={setEmail} />
       <AtlInput type="password" placeholder="Password" value={password} onValueChange={setPassword} />
       <AtlInput invalid={true} placeholder="Invalid state" />
       <AtlInput disabled={true} placeholder="Disabled" />
     Vue:
       <AtlInput type="email" placeholder="you@example.com" v-model:value="email" />
+      <AtlInput label="Email" type="email" placeholder="you@example.com" v-model:value="email" />
       <AtlInput type="password" placeholder="Password" v-model:value="password" />
       <AtlInput :invalid="true" placeholder="Invalid state" />
       <AtlInput :disabled="true" placeholder="Disabled" />
@@ -164,6 +168,7 @@ Each entry lists:
     onValueChange  (value: string) => void  —      Called when the textarea value changes
     rows           number                   3      Initial number of visible rows
     placeholder    string                   ''     Placeholder text
+    label          string                   ''     Visible caption rendered as a <label> associated with the textarea via for/id. When omitted, the textarea renders with no visible caption — supply an external <label> or an aria-label at the call site in that case, or the field has no accessible name.
     disabled       boolean                  false  Disables the textarea
     readonly       boolean                  false  Makes the textarea read-only
     invalid        boolean                  false  Applies invalid/error styling
@@ -174,14 +179,17 @@ Each entry lists:
   Usage:
     Angular:
       <atl-textarea placeholder="Tell us about yourself" [rows]="4" [(value)]="bio" />
+      <atl-textarea label="Bio" placeholder="Tell us about yourself" [(value)]="bio" />
       <atl-textarea [autoResize]="true" placeholder="Auto-resizes as you type..." />
       <atl-textarea [disabled]="true" placeholder="Disabled" />
     React:
       <AtlTextarea placeholder="Tell us about yourself" rows={4} value={bio} onValueChange={setBio} />
+      <AtlTextarea label="Bio" placeholder="Tell us about yourself" value={bio} onValueChange={setBio} />
       <AtlTextarea autoResize={true} placeholder="Auto-resizes as you type..." />
       <AtlTextarea disabled={true} placeholder="Disabled" />
     Vue:
       <AtlTextarea placeholder="Tell us about yourself" :rows="4" v-model:value="bio" />
+      <AtlTextarea label="Bio" placeholder="Tell us about yourself" v-model:value="bio" />
       <AtlTextarea :autoResize="true" placeholder="Auto-resizes as you type..." />
       <AtlTextarea :disabled="true" placeholder="Disabled" />
 
@@ -329,6 +337,7 @@ Each entry lists:
     value          string                   ''     Currently selected value
     onValueChange  (value: string) => void  —      Called when selection changes
     placeholder    string                   ''     Placeholder text when no option is selected
+    label          string                   ''     Visible caption rendered as a <label> associated with the select via for/id. When omitted, the select renders with no visible caption — supply an external <label> or an aria-label at the call site in that case, or the field has no accessible name.
     disabled       boolean                  false  Disables the select
     invalid        boolean                  false  Applies invalid/error styling
     required       boolean                  false  Marks field as required
@@ -336,19 +345,19 @@ Each entry lists:
 
   Usage:
     Angular:
-      <atl-select placeholder="Select a country" [(value)]="country">
+      <atl-select label="Country" placeholder="Select a country" [(value)]="country">
         <atl-option optionValue="us">United States</atl-option>
         <atl-option optionValue="ca">Canada</atl-option>
         <atl-option optionValue="uk" [disabled]="true">United Kingdom (unavailable)</atl-option>
       </atl-select>
     React:
-      <AtlSelect placeholder="Select a country" value={country} onValueChange={setCountry}>
+      <AtlSelect label="Country" placeholder="Select a country" value={country} onValueChange={setCountry}>
         <AtlOption optionValue="us">United States</AtlOption>
         <AtlOption optionValue="ca">Canada</AtlOption>
         <AtlOption optionValue="uk" disabled={true}>United Kingdom (unavailable)</AtlOption>
       </AtlSelect>
     Vue:
-      <AtlSelect placeholder="Select a country" v-model:value="country">
+      <AtlSelect label="Country" placeholder="Select a country" v-model:value="country">
         <AtlOption optionValue="us">United States</AtlOption>
         <AtlOption optionValue="ca">Canada</AtlOption>
         <AtlOption optionValue="uk" :disabled="true">United Kingdom (unavailable)</AtlOption>

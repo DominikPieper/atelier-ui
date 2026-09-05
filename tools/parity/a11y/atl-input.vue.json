@@ -31,5 +31,11 @@
         "required": true
       }
     }
+  ],
+  "labelled": [
+    {
+      "role": "textbox",
+      "name": "Full name"
+    }
   ]
 }

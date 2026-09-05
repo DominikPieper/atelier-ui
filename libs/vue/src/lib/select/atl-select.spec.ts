@@ -16,6 +16,22 @@ describe('AtlSelect', () => {
     expect(screen.getByText('Country')).toBeInTheDocument();
   });
 
+  it('associates the label with the select via id', () => {
+    render(AtlSelect, { props: { label: 'Country' } });
+    expect(screen.getByLabelText('Country')).toBeInTheDocument();
+  });
+
+  it('does not render a label when omitted', () => {
+    const { container } = render(AtlSelect, {});
+    expect(container.querySelector('label')).not.toBeInTheDocument();
+  });
+
+  it('sets aria-label on the native select, not the wrapper', () => {
+    const { container } = render(AtlSelect, { props: { 'aria-label': 'Country' } });
+    expect(screen.getByRole('combobox')).toHaveAttribute('aria-label', 'Country');
+    expect(container.firstElementChild).not.toHaveAttribute('aria-label');
+  });
+
   covers('select', 'placeholder')('renders placeholder option', () => {
     render(AtlSelect, { props: { placeholder: 'Select a country' } });
     expect(screen.getByText('Select a country')).toBeInTheDocument();

@@ -68,6 +68,10 @@ let nextId = 0;
  * <atl-select [formField]="form.country" placeholder="Select a country">
  *   <atl-option optionValue="us">United States</atl-option>
  * </atl-select>
+ *
+ * <atl-select label="Country" [(value)]="country" placeholder="Select a country">
+ *   <atl-option optionValue="us">United States</atl-option>
+ * </atl-select>
  * ```
  */
 @Component({
@@ -76,6 +80,9 @@ let nextId = 0;
   imports: [AtlIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
+    @if (label()) {
+      <label [attr.for]="triggerId">{{ label() }}</label>
+    }
     <button
       type="button"
       class="trigger"
@@ -84,6 +91,7 @@ let nextId = 0;
       aria-haspopup="listbox"
       [attr.aria-controls]="panelId"
       [attr.aria-activedescendant]="activeOptionId()"
+      [attr.aria-label]="ariaLabel() || null"
       [attr.aria-invalid]="invalid() || null"
       [attr.aria-describedby]="showErrors() ? errorId : null"
       [attr.disabled]="disabled() || null"
@@ -124,6 +132,14 @@ let nextId = 0;
     role: 'combobox',
     '[class]': 'hostClasses()',
     '(keydown)': 'onKeydown($event)',
+    // Same fix as atl-input.ts's `id`: a static `aria-label="…"` attribute
+    // matches the aliased `ariaLabel` input below AND stays on this host
+    // element too. The host already carries `role="combobox"`, so an
+    // aria-label here would actually take effect — as a second, competing
+    // name next to the trigger button's, not as a no-op like on Input's
+    // roleless host. Force it absent so the trigger button (the actual
+    // focusable widget) is the one and only place the name lands.
+    '[attr.aria-label]': 'null',
   },
   providers: [{ provide: ATL_SELECT, useExisting: AtlSelect }],
 })
@@ -136,6 +152,22 @@ export class AtlSelect implements FormValueControl<string>, AtlSelectContext, On
 
   /** Placeholder text shown when no option is selected. */
   readonly placeholder = input('');
+
+  /**
+   * Visible caption rendered as a `<label>` associated with the trigger
+   * button via `for`/`id`. Omit it when the field is captioned some other
+   * way (an external `<label>`, or `aria-label`) — without one of these the
+   * select has no accessible name (this is the L1 backlog item: a select
+   * with neither produces exactly that).
+   */
+  readonly label = input('');
+
+  /**
+   * Accessible name for the trigger button, for when there is no visible
+   * `label`. An aliased input rather than a plain host attribute — see
+   * `atl-input.ts`'s identical `ariaLabel` for why.
+   */
+  readonly ariaLabel = input('', { alias: 'aria-label' });
 
   /** Whether the select is disabled. Bound by [formField] directive. */
   readonly disabled = input(false);

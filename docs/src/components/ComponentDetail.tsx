@@ -221,7 +221,7 @@ function ComponentDemo({ name }: { name: string }) {
     case 'select':
       return (
         <div style={{ width: '100%', maxWidth: '300px' }}>
-          <AtlSelect placeholder="Select a country" value={selectValue} onValueChange={setSelectValue}>
+          <AtlSelect label="Country" placeholder="Select a country" value={selectValue} onValueChange={setSelectValue}>
             <AtlOption optionValue="us">United States</AtlOption>
             <AtlOption optionValue="ca">Canada</AtlOption>
             <AtlOption optionValue="uk">United Kingdom</AtlOption>

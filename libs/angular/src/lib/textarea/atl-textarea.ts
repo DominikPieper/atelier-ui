@@ -19,6 +19,7 @@ let nextId = 0;
  * ```html
  * <atl-textarea placeholder="Enter a description" [(value)]="description" />
  * <atl-textarea [formField]="form.bio" [rows]="4" />
+ * <atl-textarea label="Bio" [(value)]="bio" />
  * ```
  */
 @Component({
@@ -27,8 +28,12 @@ let nextId = 0;
   imports: [TextFieldModule, AtlIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
+    @if (label()) {
+      <label [attr.for]="inputId()">{{ label() }}</label>
+    }
     <div class="textarea-field">
       <textarea
+        [attr.id]="inputId() || null"
         [value]="value()"
         (input)="onInput($event)"
         (blur)="touched.set(true)"
@@ -37,6 +42,7 @@ let nextId = 0;
         [placeholder]="placeholder()"
         [rows]="rows()"
         [attr.name]="name() || null"
+        [attr.aria-label]="ariaLabel() || null"
         [attr.aria-invalid]="invalid() || null"
         [attr.aria-required]="required() || null"
         [attr.aria-describedby]="showErrors() ? errorId : null"
@@ -58,6 +64,15 @@ let nextId = 0;
   styleUrl: './atl-textarea.css',
   host: {
     '[class]': 'hostClasses()',
+    // See atl-input.ts's identical host binding for why: a static `id="…"`
+    // attribute matches the `id` input AND stays on this host element, which
+    // would duplicate the id this component puts on the native `<textarea>`
+    // and break `<label for>` association (the host is not labelable and is
+    // first in document order). Force the host's own `id` attribute to
+    // always be absent.
+    '[attr.id]': 'null',
+    // Same reasoning, same fix, for `aria-label` — see atl-input.ts.
+    '[attr.aria-label]': 'null',
   },
 })
 export class AtlTextarea implements FormValueControl<string> {
@@ -67,8 +82,31 @@ export class AtlTextarea implements FormValueControl<string> {
   /** Number of visible text rows. */
   readonly rows = input(3);
 
+  /**
+   * Visible caption rendered as a `<label>` associated with the textarea via
+   * `for`/`id`. Omit it when the field is captioned some other way (an
+   * external `<label>`, or `aria-label`) — without one of these the textarea
+   * has no accessible name.
+   */
+  readonly label = input('');
+
+  /**
+   * Accessible name for the native textarea, for when there is no visible
+   * `label`. An aliased input rather than a plain host attribute — see
+   * `atl-input.ts`'s identical `ariaLabel` for why.
+   */
+  readonly ariaLabel = input('', { alias: 'aria-label' });
+
   /** Placeholder text shown when the textarea is empty. */
   readonly placeholder = input('');
+
+  /**
+   * Explicit id for the native textarea. Wins over the auto-generated id —
+   * set this when something outside this component (an external
+   * `<label for>`, or `aria-describedby` from elsewhere on the page) needs a
+   * known, stable id to point at.
+   */
+  readonly id = input('');
 
   /** Whether the textarea is disabled. Bound by [formField] directive. */
   readonly disabled = input(false);
@@ -96,6 +134,21 @@ export class AtlTextarea implements FormValueControl<string> {
 
   /** @internal */
   protected readonly errorId = `atl-textarea-errors-${nextId++}`;
+
+  /**
+   * @internal
+   * Fallback id, used only when the caller does not supply one. Same
+   * module-scoped counter idiom as `errorId` above and as every other
+   * Angular form control in this lib — see `atl-input.ts`'s `generatedId`
+   * for the honest account of what guarantee this idiom actually gives
+   * (same-module-instance uniqueness, not `useId()`-equivalent SSR safety).
+   */
+  private readonly generatedId = `atl-textarea-${nextId++}`;
+
+  /** @internal */
+  protected readonly inputId = computed(
+    () => this.id() || (this.label() ? this.generatedId : '')
+  );
 
   /** @internal */
   /**

@@ -27,6 +27,7 @@ function capture() {
     invalid: captureOne({ placeholder: 'Your name', invalid: true }),
     disabled: captureOne({ placeholder: 'Your name', disabled: true }),
     required: captureOne({ placeholder: 'Your name', required: true }),
+    labelled: captureOne({ label: 'Full name' }),
   };
 }
 

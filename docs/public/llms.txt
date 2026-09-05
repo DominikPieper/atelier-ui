@@ -22,12 +22,12 @@ Docs: https://atelier.pieper.io
 ## Components
 
 - [Button](https://atelier.pieper.io/components/button): variant (primary|secondary|outline|danger), size (sm|md|lg), disabled, loading, aria-label
-- [Input](https://atelier.pieper.io/components/input): value, type (text|email|password|number|tel|url), placeholder, disabled, readonly, invalid
-- [Textarea](https://atelier.pieper.io/components/textarea): value, rows, placeholder, disabled, readonly, invalid
+- [Input](https://atelier.pieper.io/components/input): value, type (text|email|password|number|tel|url), placeholder, label, disabled, readonly
+- [Textarea](https://atelier.pieper.io/components/textarea): value, rows, placeholder, label, disabled, readonly
 - [Checkbox](https://atelier.pieper.io/components/checkbox): checked, indeterminate, disabled, invalid, required, name
 - [Toggle](https://atelier.pieper.io/components/toggle): checked, disabled, invalid, required, name
 - [RadioGroup](https://atelier.pieper.io/components/radio-group): value, disabled, readonly, invalid, required, name
-- [Select](https://atelier.pieper.io/components/select): value, placeholder, disabled, invalid, required, name
+- [Select](https://atelier.pieper.io/components/select): value, placeholder, label, disabled, invalid, required
 - [Combobox](https://atelier.pieper.io/components/combobox): value, options, placeholder, disabled, readonly, invalid
 - [Badge](https://atelier.pieper.io/components/badge): variant (default|success|warning|danger|info), size (sm|md)
 - [Icon](https://atelier.pieper.io/components/icon): name (success|check|warning|danger|info|error|chevron-up|chevron-down|chevron-left|chevron-right|sort-asc|sort-desc|arrow-right|arrow-left|copy|paste|add|edit|delete|close|more|person|default-toast), size (sm|md|lg), label

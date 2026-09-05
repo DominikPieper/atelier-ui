@@ -26,6 +26,7 @@ function capture() {
     default: captureOne({ placeholder: 'Tell us about yourself' }),
     invalid: captureOne({ placeholder: 'Tell us about yourself', invalid: true }),
     disabled: captureOne({ placeholder: 'Tell us about yourself', disabled: true }),
+    labelled: captureOne({ label: 'Bio' }),
   };
 }
 

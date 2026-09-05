@@ -272,6 +272,78 @@ describe('AtlInput', () => {
     });
   });
 
+  describe('label', () => {
+    it('renders a label associated with the input', async () => {
+      await render('<atl-input label="Email" />', { imports: [AtlInput] });
+      expect(screen.getByLabelText('Email')).toBeInTheDocument();
+    });
+
+    it('does not render a label when omitted', async () => {
+      const { container } = await render('<atl-input />', {
+        imports: [AtlInput],
+      });
+      expect(container.querySelector('label')).not.toBeInTheDocument();
+    });
+
+    it('lets a caller-supplied id win over the auto-generated one', async () => {
+      await render(
+        '<atl-input label="Email" id="custom-email-id" />',
+        { imports: [AtlInput] }
+      );
+      // getByLabelText resolves the for/id association itself — it throws if
+      // the label does not actually name this control, which a bare string
+      // comparison of two `id` attributes would not catch (see the next
+      // test: both attributes can read "custom-email-id" while pointing at
+      // two different elements).
+      const input = screen.getByLabelText('Email');
+      expect(input).toHaveAttribute('id', 'custom-email-id');
+    });
+
+    // Regression test for a real bug: Angular keeps a static `id="…"`
+    // attribute on the HOST element even though `id` is also a declared
+    // component input (unlike a `[id]="…"` property binding, which does not
+    // reflect to the DOM). `<atl-input label="Email" id="email">` — the
+    // static-attribute form a copy-pasted tutorial sample uses — therefore
+    // put `id="email"` on both `<atl-input>` and the native `<input>`. The
+    // host is not a labelable element and comes first in document order, so
+    // `<label for="email">` resolved to nothing: `input.labels.length` was
+    // 0 even though `container.querySelector('input')` had the "right"
+    // `id` attribute string. Fixed by forcing the host's own `id` attribute
+    // to always be absent (`host: { '[attr.id]': 'null' }`).
+    it('does not duplicate a static id attribute onto the host, which would break label association', async () => {
+      const { container } = await render(
+        '<atl-input label="Email" id="custom-email-id" />',
+        { imports: [AtlInput] }
+      );
+      expect(container.querySelector('atl-input')).not.toHaveAttribute('id');
+      // The real assertion: the label actually names the control. This is
+      // exactly what broke before the fix, while a same-string comparison
+      // of two `id` attributes kept passing.
+      expect(screen.getByLabelText('Email')).toBeInTheDocument();
+    });
+  });
+
+  describe('aria-label', () => {
+    // Regression test: `aria-label="…"` on `<atl-input>` matches the aliased
+    // `ariaLabel` input AND used to stay as a literal attribute on the host
+    // (same class of bug as the static `id` one above) — meaning the actual
+    // native `<input>` stayed unnamed while the roleless host carried a
+    // decoy aria-label nothing reads.
+    it('forwards aria-label to the native input, not the host', async () => {
+      const { container } = await render(
+        '<atl-input aria-label="Search" />',
+        { imports: [AtlInput] }
+      );
+      expect(container.querySelector('input')).toHaveAttribute(
+        'aria-label',
+        'Search'
+      );
+      expect(container.querySelector('atl-input')).not.toHaveAttribute(
+        'aria-label'
+      );
+    });
+  });
+
   describe('name attribute', () => {
     it('sets name attribute on native input', async () => {
       const { container } = await render(

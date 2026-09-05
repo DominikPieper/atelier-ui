@@ -142,6 +142,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'onValueChange', type: '(value: string) => void', default: '—', description: 'Called when the input value changes', angular: { name: '(valueChange)' } },
       { name: 'type', type: "'text' | 'email' | 'password' | 'number' | 'tel' | 'url'", default: "'text'", description: 'Input type' },
       { name: 'placeholder', type: 'string', default: "''", description: 'Placeholder text' },
+      { name: 'label', type: 'string', default: "''", description: 'Visible caption rendered as a <label> associated with the input via for/id. When omitted, the input renders with no visible caption — supply an external <label> or an aria-label at the call site in that case, or the field has no accessible name.' },
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the input' },
       { name: 'readonly', type: 'boolean', default: 'false', description: 'Makes the input read-only' },
       { name: 'invalid', type: 'boolean', default: 'false', description: 'Applies invalid/error styling' },
@@ -150,14 +151,17 @@ export const componentDocs: Record<string, ComponentDoc> = {
     ],
     examples: {
       angular: `<atl-input type="email" placeholder="you@example.com" [(value)]="email" />
+<atl-input label="Email" type="email" placeholder="you@example.com" [(value)]="email" />
 <atl-input type="password" placeholder="Password" [(value)]="password" />
 <atl-input [invalid]="true" placeholder="Invalid state" />
 <atl-input [disabled]="true" placeholder="Disabled" />`,
       react: `<AtlInput type="email" placeholder="you@example.com" value={email} onValueChange={setEmail} />
+<AtlInput label="Email" type="email" placeholder="you@example.com" value={email} onValueChange={setEmail} />
 <AtlInput type="password" placeholder="Password" value={password} onValueChange={setPassword} />
 <AtlInput invalid={true} placeholder="Invalid state" />
 <AtlInput disabled={true} placeholder="Disabled" />`,
       vue: `<AtlInput type="email" placeholder="you@example.com" v-model:value="email" />
+<AtlInput label="Email" type="email" placeholder="you@example.com" v-model:value="email" />
 <AtlInput type="password" placeholder="Password" v-model:value="password" />
 <AtlInput :invalid="true" placeholder="Invalid state" />
 <AtlInput :disabled="true" placeholder="Disabled" />`,
@@ -186,6 +190,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'onValueChange', type: '(value: string) => void', default: '—', description: 'Called when the textarea value changes', angular: { name: '(valueChange)' } },
       { name: 'rows', type: 'number', default: '3', description: 'Initial number of visible rows' },
       { name: 'placeholder', type: 'string', default: "''", description: 'Placeholder text' },
+      { name: 'label', type: 'string', default: "''", description: 'Visible caption rendered as a <label> associated with the textarea via for/id. When omitted, the textarea renders with no visible caption — supply an external <label> or an aria-label at the call site in that case, or the field has no accessible name.' },
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the textarea' },
       { name: 'readonly', type: 'boolean', default: 'false', description: 'Makes the textarea read-only' },
       { name: 'invalid', type: 'boolean', default: 'false', description: 'Applies invalid/error styling' },
@@ -195,12 +200,15 @@ export const componentDocs: Record<string, ComponentDoc> = {
     ],
     examples: {
       angular: `<atl-textarea placeholder="Tell us about yourself" [rows]="4" [(value)]="bio" />
+<atl-textarea label="Bio" placeholder="Tell us about yourself" [(value)]="bio" />
 <atl-textarea [autoResize]="true" placeholder="Auto-resizes as you type..." />
 <atl-textarea [disabled]="true" placeholder="Disabled" />`,
       react: `<AtlTextarea placeholder="Tell us about yourself" rows={4} value={bio} onValueChange={setBio} />
+<AtlTextarea label="Bio" placeholder="Tell us about yourself" value={bio} onValueChange={setBio} />
 <AtlTextarea autoResize={true} placeholder="Auto-resizes as you type..." />
 <AtlTextarea disabled={true} placeholder="Disabled" />`,
       vue: `<AtlTextarea placeholder="Tell us about yourself" :rows="4" v-model:value="bio" />
+<AtlTextarea label="Bio" placeholder="Tell us about yourself" v-model:value="bio" />
 <AtlTextarea :autoResize="true" placeholder="Auto-resizes as you type..." />
 <AtlTextarea :disabled="true" placeholder="Disabled" />`,
     },
@@ -327,23 +335,24 @@ export const componentDocs: Record<string, ComponentDoc> = {
       { name: 'value', type: 'string', default: "''", description: 'Currently selected value', angular: { name: '[(value)]' } },
       { name: 'onValueChange', type: '(value: string) => void', default: '—', description: 'Called when selection changes', angular: { name: '(valueChange)' } },
       { name: 'placeholder', type: 'string', default: "''", description: 'Placeholder text when no option is selected' },
+      { name: 'label', type: 'string', default: "''", description: 'Visible caption rendered as a <label> associated with the select via for/id. When omitted, the select renders with no visible caption — supply an external <label> or an aria-label at the call site in that case, or the field has no accessible name.' },
       { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the select' },
       { name: 'invalid', type: 'boolean', default: 'false', description: 'Applies invalid/error styling' },
       { name: 'required', type: 'boolean', default: 'false', description: 'Marks field as required' },
       { name: 'name', type: 'string', default: "''", description: 'HTML name attribute for form submission' },
     ],
     examples: {
-      angular: `<atl-select placeholder="Select a country" [(value)]="country">
+      angular: `<atl-select label="Country" placeholder="Select a country" [(value)]="country">
   <atl-option optionValue="us">United States</atl-option>
   <atl-option optionValue="ca">Canada</atl-option>
   <atl-option optionValue="uk" [disabled]="true">United Kingdom (unavailable)</atl-option>
 </atl-select>`,
-      react: `<AtlSelect placeholder="Select a country" value={country} onValueChange={setCountry}>
+      react: `<AtlSelect label="Country" placeholder="Select a country" value={country} onValueChange={setCountry}>
   <AtlOption optionValue="us">United States</AtlOption>
   <AtlOption optionValue="ca">Canada</AtlOption>
   <AtlOption optionValue="uk" disabled={true}>United Kingdom (unavailable)</AtlOption>
 </AtlSelect>`,
-      vue: `<AtlSelect placeholder="Select a country" v-model:value="country">
+      vue: `<AtlSelect label="Country" placeholder="Select a country" v-model:value="country">
   <AtlOption optionValue="us">United States</AtlOption>
   <AtlOption optionValue="ca">Canada</AtlOption>
   <AtlOption optionValue="uk" :disabled="true">United Kingdom (unavailable)</AtlOption>

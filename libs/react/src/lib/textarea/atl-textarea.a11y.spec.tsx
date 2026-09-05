@@ -25,6 +25,9 @@ function capture() {
   r = render(<AtlTextarea placeholder="Tell us about yourself" disabled />);
   scenarios.disabled = a11yTree(r.container);
   r.unmount();
+  r = render(<AtlTextarea label="Bio" />);
+  scenarios.labelled = a11yTree(r.container);
+  r.unmount();
   return scenarios;
 }
 
