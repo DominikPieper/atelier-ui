@@ -610,38 +610,78 @@ const PROP_SURFACE_EXEMPT = new Map([
         'AtlTbodySpec. Unresolved: see tasks/todo.md.',
     },
   ],
+  // AtlRadioGroupSpec:name is NOT dead (ADR-0093 fixed the gate's own false
+  // positive here): AtlRadioGroup provides itself as ATL_RADIO_GROUP via
+  // `useExisting`, and AtlRadioGroupContext (atl-radio-group.token.ts)
+  // declares `name` — AtlRadio (a sibling class, atl-radio.ts) reads it via
+  // `this.group?.name()`. check-prop-surface.js now resolves that DI-context
+  // case instead of only reading the providing class's own file, so this
+  // entry no longer triggers and was removed rather than kept as a stale
+  // exemption.
   [
-    'AtlRadioGroupSpec:name:angular',
+    'AtlSelectSpec:name:angular',
     {
       kind: 'gap',
       reason:
-        'declared (`readonly name = input(\'\');`) with a doc comment claiming it is "propagated to all child ' +
-        'radio inputs", but referenced nowhere else in atl-radio-group.ts — the documentation describes behaviour ' +
-        'that was never wired, the second instance of that class of bug today after AtlSelect.required (fixed in ' +
-        'commit 299816d). Unresolved: see tasks/todo.md.',
+        "declared ('readonly name = input('');') and never bound — AtlSelect renders a <button> trigger rather " +
+        "than a native form control, so honouring 'name' means deciding whether to emit a hidden input for form " +
+        'submission. A design question with its own ADR, not a binding to add here. Unresolved: see tasks/todo.md.',
+    },
+  ],
+  // AtlAccordionGroupSpec:multi: found once ADR-0093 switched Angular's [DEAD]
+  // check from a bare-word text match to matching the signal's CALL — the
+  // old bare-word match was satisfied by the string literal 'multi' inside
+  // `hostDirectives: [{ directive: CdkAccordion, inputs: ['multi'] }]`
+  // (atl-accordion.ts), which is real Angular wiring but not a use of THIS
+  // declared signal: hostDirectives forwards the public `multi` binding
+  // straight to CdkAccordion's own `multi` @Input (verified against
+  // node_modules/@angular/cdk's accordion.d.ts — CdkAccordion, not
+  // AtlAccordionGroup, owns the `multi` boolean that actually gates
+  // multi-expand behaviour), so `readonly multi = input(false);` never
+  // receives a value and is never read — 'multi' the FEATURE works
+  // (atl-accordion.spec.ts's multi-expand test proves it), but this specific
+  // declared prop does not. Same class of bug as AtlSelect.name, found by
+  // testing the rule fix rather than reported in the original brief — flagged
+  // here rather than fixed, since fixing it means editing atl-accordion.ts
+  // (out of scope for this gate change) or deciding whether hostDirectives
+  // forwarding should count as its own [DEAD] exemption mechanism (a gate
+  // design question, not a one-line fix). Unresolved: see tasks/todo.md.
+  [
+    'AtlAccordionGroupSpec:multi:angular',
+    {
+      kind: 'gap',
+      reason:
+        "declared ('readonly multi = input(false);') but `hostDirectives: [{ directive: CdkAccordion, inputs: " +
+        "['multi'] }]` forwards the public 'multi' binding straight to CdkAccordion's own 'multi' @Input, which is " +
+        "what actually gates multi-expand behaviour (verified against @angular/cdk's accordion.d.ts and exercised " +
+        "by atl-accordion.spec.ts's multi-expand test) — the class's own input() never receives a value and is " +
+        'never read. Unresolved: see tasks/todo.md.',
     },
   ],
   // readOnly (React's own HTML casing) vs the spec's `readonly`
-  // (AtlReadonlySpec, lowercase): Angular and Vue both agree with the spec
-  // ('readonly'); only React's own redeclared interface member spells it
-  // 'readOnly' — and it earns that spelling deliberately, by `Omit`ting the
-  // inherited HTML attribute and redeclaring its own, so it is NOT received
-  // through `{...rest}` the way NATIVE_PASSTHROUGH's other entries are.
-  // `<AtlInput readonly>`, written against the three-source documented
-  // contract, silently does nothing in React. The spec's spelling is
-  // authoritative; the fix is a rename in React, which needs its own ADR
-  // since it is a breaking change to a public prop name. One shared reason —
-  // this is one decision, not three.
+  // (AtlReadonlySpec, lowercase): NOT a case of the spec spelling doing
+  // nothing in React (that was this entry's original, wrong reason) — all
+  // three of AtlInput/AtlTextarea/AtlRadioGroup destructure BOTH spellings
+  // and merge them (e.g. atl-input.tsx:53-54,61: `readOnly: reactReadOnly`,
+  // `readonly: specReadOnly`, then `const readOnly = reactReadOnly ??
+  // specReadOnly ?? false`), so `<AtlInput readonly>` works today — `readonly`
+  // is a real, working fallback that a passed `readOnly` shadows. Two public
+  // spellings for one prop; the spec's `readonly` is authoritative and only
+  // the React spelling is covered by tests (atl-input.spec.tsx:52-55,
+  // atl-textarea.spec.tsx:55-58 assert the class via `readOnly`, not the DOM
+  // attribute, and nothing exercises the lowercase path at all). Consolidating
+  // to one spelling is a breaking rename with its own ADR, not this gate's
+  // job. One shared reason — this is one decision, not three.
   ...['AtlInputSpec', 'AtlTextareaSpec', 'AtlRadioGroupSpec'].map((spec) => [
     `${spec}:readOnly:react`,
     {
       kind: 'gap',
       reason:
-        "the spec's 'readonly' (AtlReadonlySpec, lowercase) is authoritative — Angular and Vue both agree with " +
-        "it; only React's own redeclared interface member spells it 'readOnly' (HTML casing), deliberately " +
-        "Omit()-ing the inherited attribute rather than receiving it through {...rest}. '<AtlInput readonly>', " +
-        'written against the documented contract, silently does nothing in React. Fix is a rename in React — a ' +
-        'breaking change to a public prop name, its own ADR. Unresolved: see tasks/todo.md.',
+        "two public spellings for one prop: the spec's 'readonly' (AtlReadonlySpec, lowercase) is authoritative, " +
+        "and React destructures BOTH 'readOnly' and 'readonly', merging them with 'readOnly ?? readonly ?? false' " +
+        "— so the spec spelling works as a fallback that a passed 'readOnly' shadows. Only the React spelling " +
+        '(readOnly) is covered by tests; nothing exercises the lowercase path. Consolidating to one spelling is a ' +
+        'breaking rename with its own ADR, not this gate. Unresolved: see tasks/todo.md.',
     },
   ]),
 ]);

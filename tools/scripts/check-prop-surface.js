@@ -57,6 +57,29 @@
  *              present (not [MISSING]) for that component/framework —
  *              extras are out of scope for DEAD.
  *
+ *              Angular is checked differently from React/Vue (ADR-0093):
+ *              input()/model() props are Signals, read only by CALLING them
+ *              (`this.name()` in the class, `name()` in the template) — so
+ *              DEAD requires the call form `member(`, not a bare-word text
+ *              match. A bare-word match both missed real dead code
+ *              (`AtlSelect.name` was "found" via the unrelated attribute
+ *              `<atl-icon name="chevron-down">`) and flagged live code dead
+ *              (`AtlRadioGroup.name` has no in-file call at all — it is read
+ *              by `AtlRadio`, a sibling class in a DIFFERENT file, through
+ *              `AtlRadioGroupContext`, the DI token `AtlRadioGroup` provides
+ *              itself into via `useExisting`). So a signal prop also counts
+ *              as consumed when the class self-provides via `useExisting`
+ *              AND the context interface it hands out (declared inline, like
+ *              `AtlTableContext` in `atl-table.ts`, or in a sibling
+ *              `atl-<x>.token.ts`, like `AtlRadioGroupContext`/
+ *              `AtlSelectContext`) declares that same member — a
+ *              `useFactory` provider (AtlDialog, AtlChat, AtlBreadcrumbs,
+ *              AtlDrawer) does not qualify, since it builds a plain object
+ *              instead of exposing `this`, so there is no context to resolve
+ *              against. `output()` props are EventEmitters, not Signals —
+ *              consumed via `.emit(...)`, never called with bare parens — so
+ *              they keep the original bare-word/occurrence-count check.
+ *
  * Out of scope for v1:
  *   - toast: not name-comparable. Angular takes four flat props
  *     (variant/dismissible/message/toastId) where React and Vue take one
@@ -120,11 +143,17 @@
  *     per-class grading).
  *
  * [DEAD]'s file-scope occurrence count is a plain, comment-stripped text
- * search (mirrors check-host-attr-guards.js's stripComments) rather than an
- * AST identifier count, because spec prop names like `'aria-label'` are not
- * valid JS identifiers (they show up as string literals in one place and JSX
- * attribute names in another) — a literal, word-bounded text search is the
- * one mechanism that counts every shape uniformly.
+ * search (stripComments — same need, same shape, as check-host-attr-guards.js's
+ * helper of the same name; not reused across files here since that script has
+ * no module.exports to import from and is not itself in scope for this gate)
+ * rather than an AST identifier count, because spec prop names like
+ * `'aria-label'` are not valid JS identifiers (they show up as string
+ * literals in one place and JSX attribute names in another) — a literal,
+ * word-bounded text search is the one mechanism that counts every shape
+ * uniformly. Angular's signal-backed (input()/model()) props narrow this
+ * further to the CALL form (`member(`, not a bare `member`) — see the [DEAD]
+ * rule's own entry above (ADR-0093) for why a bare identifier match both
+ * missed and false-flagged real bugs.
  *
  * Run via:  node tools/scripts/check-prop-surface.js
  *           (or  npm run check:props)
@@ -347,13 +376,48 @@ function stripComments(src) {
   return out;
 }
 
+function escapeForRegex(name) {
+  return name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 /** Count literal, word-bounded occurrences of `name` in comment-stripped `src`. */
 function occurrenceCount(src, name) {
-  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const re = new RegExp(`\\b${escaped}\\b`, 'g');
+  const re = new RegExp(`\\b${escapeForRegex(name)}\\b`, 'g');
   const stripped = stripComments(src);
   const m = stripped.match(re);
   return m ? m.length : 0;
+}
+
+/**
+ * Is Angular signal-backed prop `member` (an `input()`/`model()`) actually READ anywhere
+ * in comment-stripped `strippedSrc`? Matches the CALL — `member(` — not the bare
+ * identifier, so a template/JSX ATTRIBUTE of the same name (`<atl-icon
+ * name="chevron-down">`) no longer counts as a use (ADR-0093's false-negative fix:
+ * `AtlSelect.name` is declared and never called, but the bare-word match saw the
+ * `name="…"` attributes on `<atl-icon>` and stopped looking).
+ */
+function signalIsCalled(strippedSrc, member) {
+  return new RegExp(`\\b${escapeForRegex(member)}\\s*\\(`).test(strippedSrc);
+}
+
+/**
+ * Is Angular's `member` (declared on `angular`, resolved kind `signal`|`output`) actually
+ * consumed? Three ways, in order:
+ *   1. Declared on a context interface `angular` hands to its children via a
+ *      self-`useExisting` DI provider (`angular.contextMembers`, resolved once in
+ *      `extractAngular` — ADR-0093's false-positive fix: `AtlRadioGroupContext` declares
+ *      `name`, so `AtlRadio` reading `this.group?.name()` in ITS OWN file is real
+ *      consumption `atl-radio-group.ts` cannot see by reading only itself).
+ *   2. `signal` kind (input()/model(), always a Signal) — called as `member(` anywhere in
+ *      the class's own file (see `signalIsCalled`).
+ *   3. `output` kind (output(), an EventEmitter, not a Signal — consumed via `.emit(...)`,
+ *      never called with bare parens) — the ORIGINAL bare-word/occurrence-count check,
+ *      unchanged: this fix is scoped to signal inputs only (file header, bullet 1).
+ */
+function angularMemberConsumed(angular, member, kind) {
+  if (angular.contextMembers.has(member)) return true;
+  if (kind === 'signal') return signalIsCalled(stripComments(angular.src), member);
+  return occurrenceCount(angular.src, member) > 1;
 }
 
 function propertyNameText(name) {
@@ -503,17 +567,105 @@ function angularCalleeRoot(expr) {
   return null;
 }
 
-function classDecoratorName(node) {
+/** The `@Component(...)`/`@Directive(...)` CallExpression itself (not just its name), or null. */
+function componentDecoratorCallExpr(node) {
   if (!ts.canHaveDecorators(node)) return null;
   for (const dec of ts.getDecorators(node) ?? []) {
-    if (ts.isCallExpression(dec.expression) && ts.isIdentifier(dec.expression.expression)) {
-      return dec.expression.expression.text;
+    if (
+      ts.isCallExpression(dec.expression) &&
+      ts.isIdentifier(dec.expression.expression) &&
+      (dec.expression.expression.text === 'Component' || dec.expression.expression.text === 'Directive')
+    ) {
+      return dec.expression;
     }
   }
   return null;
 }
 
-/** @returns {Map<string, {inputs: Map, models: Map, outputs: Map, file: string, src: string}>} */
+/** Bare interface names (ignoring type arguments) from a class's OWN `implements` clause. */
+function implementsInterfaceNames(classNode) {
+  const names = [];
+  for (const clause of classNode.heritageClauses ?? []) {
+    if (clause.token !== ts.SyntaxKind.ImplementsKeyword) continue;
+    for (const t of clause.types) {
+      if (ts.isIdentifier(t.expression)) names.push(t.expression.text);
+    }
+  }
+  return names;
+}
+
+/**
+ * Does `decoratorCall`'s `providers: [...]` array self-provide `className` into an
+ * injection token via `useExisting` (`{ provide: TOKEN, useExisting: <className> }`)?
+ * `useFactory`-based providers (AtlDialog, AtlChat, AtlBreadcrumbs, AtlDrawer — none of
+ * which `implements` their context interface, since the factory builds a plain object
+ * instead of exposing `this`) deliberately do NOT match: there is no `this`-shaped
+ * context to resolve props against.
+ */
+function isSelfProvidedViaUseExisting(decoratorCall, className) {
+  if (!decoratorCall) return false;
+  const arg = decoratorCall.arguments[0];
+  if (!arg || !ts.isObjectLiteralExpression(arg)) return false;
+  for (const prop of arg.properties) {
+    if (!ts.isPropertyAssignment(prop) || !ts.isIdentifier(prop.name) || prop.name.text !== 'providers') continue;
+    if (!ts.isArrayLiteralExpression(prop.initializer)) continue;
+    for (const el of prop.initializer.elements) {
+      if (!ts.isObjectLiteralExpression(el)) continue;
+      for (const p of el.properties) {
+        if (
+          ts.isPropertyAssignment(p) &&
+          ts.isIdentifier(p.name) &&
+          p.name.text === 'useExisting' &&
+          ts.isIdentifier(p.initializer) &&
+          p.initializer.text === className
+        ) {
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+}
+
+/** Property-signature member names of interfaces named one of `names`, declared in source file `sf`. */
+function interfaceMembersIn(sf, names) {
+  const wanted = new Set(names);
+  const result = new Set();
+  ts.forEachChild(sf, (node) => {
+    if (!ts.isInterfaceDeclaration(node) || !wanted.has(node.name.text)) return;
+    for (const member of node.members) {
+      if (ts.isPropertySignature(member) && member.name) result.add(propertyNameText(member.name));
+    }
+  });
+  return result;
+}
+
+/** Parsed-source cache for sibling `.token.ts` files, keyed by that file's own path. */
+const tokenFileCache = new Map();
+
+/**
+ * Property members of interfaces named one of `implementsNames`, declared in the sibling
+ * `atl-<x>.token.ts` next to `classFile` (same convention as `atl-radio-group.ts` /
+ * `atl-radio-group.token.ts`, `atl-select.ts` / `atl-select.token.ts`). Returns an empty
+ * set if no such sibling file exists (e.g. `atl-table.ts` declares its `AtlTableContext`
+ * inline — that case is covered by `interfaceMembersIn(sf, …)` on the class's own file
+ * instead, see `extractAngular`).
+ */
+function siblingTokenInterfaceMembers(classFile, implementsNames) {
+  const tokenFile = classFile.replace(/\.ts$/, '.token.ts');
+  if (!tokenFileCache.has(tokenFile)) {
+    tokenFileCache.set(
+      tokenFile,
+      fs.existsSync(tokenFile)
+        ? ts.createSourceFile(tokenFile, fs.readFileSync(tokenFile, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TS)
+        : null
+    );
+  }
+  const sf = tokenFileCache.get(tokenFile);
+  return sf ? interfaceMembersIn(sf, implementsNames) : new Set();
+}
+
+/** @returns {Map<string, {inputs: Map, models: Map, outputs: Map, file: string, src: string, contextMembers: Set<string>}>} */
 function extractAngular(dir) {
   const out = new Map();
   for (const file of componentSourceFiles(dir, 'ts')) {
@@ -523,8 +675,8 @@ function extractAngular(dir) {
 
     ts.forEachChild(sf, (node) => {
       if (!ts.isClassDeclaration(node) || !node.name) return;
-      const decorator = classDecoratorName(node);
-      if (decorator !== 'Component' && decorator !== 'Directive') return;
+      const decoratorCall = componentDecoratorCallExpr(node);
+      if (!decoratorCall) return;
 
       const inputs = new Map();
       const models = new Map();
@@ -558,7 +710,24 @@ function extractAngular(dir) {
         else outputs.set(declaredName, propName);
       }
 
-      out.set(node.name.text, { inputs, models, outputs, file, src });
+      // Resolve the "provided into a token via useExisting" case (bullet 3, ADR-0093
+      // fix): a prop this class never itself calls can still be genuinely consumed —
+      // through the context interface it hands out to its children via DI. Only
+      // useExisting counts (a useFactory provider, like AtlDialog/AtlChat/AtlBreadcrumbs/
+      // AtlDrawer, builds a plain object instead of exposing `this`, so there is no
+      // `this`-shaped context to resolve against). Checked in BOTH the class's own file
+      // (AtlTable declares AtlTableContext inline) and its sibling `.token.ts` (AtlSelect/
+      // AtlRadioGroup declare theirs there) — same interface, two possible locations.
+      let contextMembers = new Set();
+      const implementsNames = implementsInterfaceNames(node);
+      if (implementsNames.length > 0 && isSelfProvidedViaUseExisting(decoratorCall, node.name.text)) {
+        contextMembers = new Set([
+          ...interfaceMembersIn(sf, implementsNames),
+          ...siblingTokenInterfaceMembers(file, implementsNames),
+        ]);
+      }
+
+      out.set(node.name.text, { inputs, models, outputs, file, src, contextMembers });
     });
   }
   return out;
@@ -725,28 +894,43 @@ for (const specName of specNames) {
       `[MISSING] ${specName}: no Angular class '${componentName}' found under libs/angular/src/lib/${dir}`
     );
   } else {
-    const anglePresent = new Set();
+    const anglePresent = new Map(); // token -> { member, kind } — see angularMemberConsumed
     for (const prop of props) {
       const change = CHANGE_PROP_RE.exec(prop);
       let present;
       let token;
+      let member;
+      let kind;
       if (change) {
         const x = change[1][0].toLowerCase() + change[1].slice(1);
         if (angular.models.has(x)) {
           present = true;
           token = x;
+          member = angular.models.get(x);
+          kind = 'signal';
         } else if (angular.outputs.has(`${x}Change`)) {
           present = true;
           token = `${x}Change`;
+          member = angular.outputs.get(`${x}Change`);
+          kind = 'output';
         } else {
           present = false;
         }
-      } else {
-        present = angular.inputs.has(prop) || angular.models.has(prop);
+      } else if (angular.inputs.has(prop)) {
+        present = true;
         token = prop;
+        member = angular.inputs.get(prop);
+        kind = 'signal';
+      } else if (angular.models.has(prop)) {
+        present = true;
+        token = prop;
+        member = angular.models.get(prop);
+        kind = 'signal';
+      } else {
+        present = false;
       }
       if (present) {
-        anglePresent.add(token);
+        anglePresent.set(token, { member, kind });
       } else {
         report(
           'MISSING',
@@ -772,15 +956,17 @@ for (const specName of specNames) {
         `${specName}:${name} — Angular's ${componentName} (${path.relative(ROOT, angular.file)}) declares '${name}', which ${specName} does not have.`
       );
     }
-    for (const token of anglePresent) {
-      const count = occurrenceCount(angular.src, token);
-      if (count <= 1) {
-        report(
-          'DEAD',
-          `${specName}:${token}:angular`,
-          `${specName}:${token} — Angular's ${componentName} declares '${token}' in ${path.relative(ROOT, angular.file)} but it appears nowhere else in that file (${count} occurrence(s)).`
-        );
-      }
+    for (const [token, { member, kind }] of anglePresent) {
+      if (angularMemberConsumed(angular, member, kind)) continue;
+      const detail =
+        kind === 'signal'
+          ? `but nothing in that file — or in the context interface it hands out via useExisting — calls '${member}()'`
+          : `but it appears nowhere else in that file (${occurrenceCount(angular.src, member)} occurrence(s))`;
+      report(
+        'DEAD',
+        `${specName}:${token}:angular`,
+        `${specName}:${token} — Angular's ${componentName} declares '${token}' in ${path.relative(ROOT, angular.file)} ${detail}.`
+      );
     }
   }
 
