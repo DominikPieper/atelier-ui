@@ -2150,35 +2150,81 @@ scrollbar sits at the table rather than at the bottom of the whole column.
 There is already a `@media (max-width: 480px)` card transform for these tables;
 the gap is everything between 481px and the reading column's width.
 
-## Open — what the caption fix left unproven (2026-09-05)
+## Open — what the caption fix left unproven (2026-09-05, worked 2026-09-05 pm)
 
 ADR-0091 gave `label` to AtlInput, AtlTextarea and AtlSelect via a new
-`AtlCaptionSpec` mixin, and closed L1. Two things it could not settle, both
-about AtlSelect, both found by cross-checking rather than by a gate.
+`AtlCaptionSpec` mixin, and closed L1. Four follow-ups, all found by
+cross-checking rather than by a gate. Three are closed below; the one that
+remains is the expensive one, and the first item's *premise* turned out to be
+wrong in a way worth reading before trusting a "nothing measures this" claim
+again.
 
-- [ ] **AtlSelect has no a11y baseline in any framework**, so the parity gate
-      never compares the new caption path there. `tools/parity/a11y/` holds
-      snapshots for 25 components; `select` is not among them (nor are
-      `accordion`, `combobox`, `radio` — the same four `plan/design-status.md`
-      already shows with an empty a11y column). The caption was added to three
-      components and is machine-proven identical across adapters for two.
+- [x] **The premise was wrong — closed as answered, not done.** `select` is
+      missing from `tools/parity/a11y/` by decision, not by oversight: it sits in
+      `A11Y_PARITY_EXEMPT` (`tools/scripts/lib/allowlists.js:221-233`) with
+      `kind: 'design'`, citing ADR-0007 — React/Vue render a native `<select>`,
+      Angular a CDK-overlay listbox, so the trees legitimately differ. The gate
+      enforces that in *both* directions: `check-a11y-parity.js:98-107` raises a
+      `[STALE]` **error** if an exempt component has snapshots at all. Writing
+      `atl-select.a11y.spec.*` would therefore break the gate, or force removing
+      the exemption and then fail `[DIVERGE]` — normalized, React/Vue collapse to
+      a single `{role:'combobox'}` node (the normalizer gives `<option>` no role
+      at all) while Angular yields host-combobox + button + listbox + N options.
+      ADR-0091 had already decided this in its Consequences: Select gets
+      framework-local unit coverage instead, including "gives the trigger button
+      an accessible name" (`atl-select.spec.ts:314-324`), which is what actually
+      closed L1. Same reading for `combobox` and `radio` (both `design`). Only
+      `accordion` is a real gap — and it is already a `kind: 'gap'` entry that
+      prints a `[GAP]` warning on every run.
 - [ ] **AtlSelect is the deepest structural divergence in the library, and the
       caption sits right on top of it.** React (`atl-select.tsx:79`) and Vue
       (`atl-select.vue:65`) render a native `<select>`; Angular renders a
       `<button role="combobox">` (`atl-select.ts:86`) and points the `<label>`
       at its `triggerId`. Both are labelable, so both are defensible in
       isolation — but "one spec, three frameworks" is weakest exactly here, and
-      nothing measures it. Writing the a11y spec above is the cheap way to find
-      out whether the three actually agree; deciding whether Angular should be a
-      native control is the expensive question behind it, and wants its own ADR.
-- [ ] Follow-up the implementer flagged: the Angular `host: { '[attr.id]':
-      'null' }` / `'[attr.aria-label]': 'null'` defense is now hand-copied in
-      three components with nothing enforcing it. A fourth captioned Angular
-      component needs someone to remember. A shared host-metadata constant or a
-      gate would make it structural.
-- [ ] Same `Math.random()`-in-a-`computed` id bug the caption work fixed for
-      Input still exists in **Vue's AtlCheckbox** — found while fixing Input,
-      left alone as out of scope. SSR-unsafe by the same argument.
+      nothing measures it. Still open, and **not** answerable by a snapshot (see
+      above). Deciding whether Angular should be a native control is the
+      expensive question behind it, and wants its own ADR.
+- [x] Follow-up the implementer flagged: the Angular `host: { '[attr.id]':
+      'null' }` / `'[attr.aria-label]': 'null'` defense was hand-copied in three
+      components with nothing enforcing it. Made structural as a gate, not as a
+      shared constant — a constant still has to be remembered, and "someone has
+      to remember" was the whole complaint. `check:host-guards` (ADR-0092)
+      grades per `@Component` class, and its first run found two more
+      undefended aliases: `AtlDialog` (`aria-label` + `aria-labelledby`) and
+      `AtlTable` (`aria-label`). Both hosts are roleless today, so both were
+      prevention rather than live defects; both fixed rather than allowlisted.
+- [x] Same `Math.random()`-in-a-`computed` id bug the caption work fixed for
+      Input also existed in **Vue's AtlCheckbox** — SSR-unsafe by the same
+      argument, now on `useId()` like its three siblings.
+
+### What cross-checking the closed item turned up (2026-09-05)
+
+Reading the allowlist instead of writing the spec is what surfaced these. Both
+are things the exemption had been hiding — which is the honest cost of an
+exemption, and worth remembering the next time one looks like a free pass.
+
+- [x] **Angular `AtlSelect.required` reached no DOM at all.**
+      `atl-select.ts:179` declared `readonly required = input(false)` and nothing
+      in the template or host ever read it — `grep -n required` returned exactly
+      the doc comment and the declaration. `AtlInput` renders
+      `[attr.aria-required]` from the *identical* doc comment
+      (`atl-input.ts:46`); React and Vue both set the native `required`
+      attribute. Fixed on the **host**, not the trigger button:
+      `aria-required` is not a global ARIA attribute (allowed on `combobox`,
+      `textbox`, `listbox`, `radiogroup`, `spinbutton`, `gridcell`, `tree`), so
+      on the button's implicit `role="button"` it would be an
+      `aria-allowed-attr` violation. The host is the element carrying
+      `role="combobox"`. (`aria-invalid` already sits on the button and is
+      fine — that one *is* global.)
+- [ ] **Angular Select's `role="combobox"` is on the host while every combobox
+      state and the focus are on the trigger button** — `aria-expanded`,
+      `aria-haspopup`, `aria-controls`, `aria-activedescendant` all sit on the
+      `<button>` (`atl-select.ts:86-99`), which has implicit `role="button"`.
+      The focusable element is not the role holder, which is not the WAI-ARIA
+      1.2 combobox pattern. Bigger than a binding move: it changes the
+      accessible tree and interacts with the open question above about whether
+      Angular should be a native control. Same ADR.
 
 ## Nx 23 migration: closed and verified — 2026-09-05
 
@@ -2231,16 +2277,23 @@ them, which is the whole claim the stamp makes.
 Full document: `tasks/schulung-review-2026-09-02.md` (4 blockers · 1 immediate · 13 major · 15 minor). Nothing fixed in this pass — review only.
 
 - [x] **I1** — scrubbed two colleagues' names + internal mailbox from `tasks/review-state-2026-08-26.md:168` and `tasks/schulung-review-2026-08-28.md:64` (public repo); role phrasing as in ADR-0032. Working tree only — git history still carries the old lines; rewriting public history is a separate decision (route via the internal DSB).
-- [ ] **B1** — Storybook/docs ports: material says `6006`, clone serves `4400/4401/4402` + docs `4300`. Sweep tutorial/first-component/troubleshooting/storybook/schulung pages, agenda, `CLAUDE.md:53`, ADR-0084:67, `preflight.mjs:361`; add a `check:docs` rule.
-- [ ] **B2** — `AtlInput.label` exists in React/Vue, not in `AtlInputSpec` or Angular; tutorial samples use it. Decide, then add a prop-parity gate.
-- [ ] **B3** — Day-2 gate story: name `npm run sync:generated`; replace Erfolgs item 2 ("preflight weiter grün" cannot fail); state which `check:all` gates go red by design in a one-framework build; fix slide "Drift erkennen — preflight".
-- [ ] **B4** — briefs Toast/TagChip severity `error` → `danger` (code union + tokens).
-- [ ] **M1** — `/claude-design` stale numbers: 29→30 gates, "twenty-four tags"→generated, 17/13 ADRs→16/12.
+- [x] **B1** — Storybook/docs ports swept (`7efc0be`) and preflight taught to check the environment it is actually in (`a2ff354`, ADR-0084 amendment). The gate the item asked for exists too: `[PORT-6006]` in `tools/scripts/check-docs-sync.js:357-381`, with its scaffold-context allowlist at `tools/scripts/lib/allowlists.js:87-113`.
+- [~] **B2** — the `label` half is done: ADR-0091 pulled it into a shared `AtlCaptionSpec` mixin and implemented it in Angular for Input, Textarea and Select (`a8ab0d2`, `130057f`). The **prop-parity gate** half is not — ADR-0091's Consequences defer it explicitly as its own task. Promoted to its own item below so it does not vanish under a tick.
+- [x] **B3** — Day-2 gate story repaired (`74a81f4`), then the gate list replaced by a measured one (`7c9a9a2`): a one-framework component makes exactly `check:sync`, `check:a11y-parity` and `check:design-status` red, and the material now says the participant's spec is its own file next to their component, not an edit to the shared master.
+- [x] **B4** — briefs' Toast/TagChip severity `error` → `danger`, matching the code union and the tokens (`46f2ca1`).
+- [ ] **M1** — `/claude-design` stale numbers: gates ("29" on `claude-design.astro:196,209`; `check:all` is **33** as of ADR-0092 — recount rather than copying this line, it drifts every time a gate lands), "twenty-four tags"→generated, 17/13 ADRs→16/12.
 - [ ] **M2/M3** — Claude Design trainer run-sheet (product, `/design-login`, prompt, hardcode target, flip value, fallback URL) + participant how-to (image, prompt→canvas, Step-5 example, opener). Both wait on the per-seat test (review §5).
 - [ ] **M4–M6** — clone-first kata prompt + story file; Block 05 exercise page; clone quickstart + local `.mcp.json` snippet on 440x.
 - [ ] **M11/§6.3** — decide trainer-kit location (recommendation: private `atelier-trainer` repo pinned to an atelier SHA); move agenda internals, add `LICENSE`.
 - [ ] **M12** — `solved-*` branches: build or remove the promise (`agenda:81,208`).
 - [ ] **§10** — one rehearsal of the participant path on a non-author machine, timed.
+- [ ] **Prop-parity gate** (promoted out of B2) — nothing compares the prop
+      surface of a component across the three adapters, which is how
+      `AtlInput.label` shipped in React and Vue while being absent from both the
+      spec and Angular for months. ADR-0091 fixed that instance and deferred the
+      gate. It is the structural half of that fix, and the same gate would also
+      catch an input that is declared and never rendered (Angular's
+      `AtlSelect.required`, found the same way).
 
 ## Docs site: UI/UX review with `ui-ux-pro-max` — 2026-09-02
 
