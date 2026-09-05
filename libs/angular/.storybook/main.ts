@@ -8,7 +8,7 @@ const config: StorybookConfig = {
   addons: [
     // Emits manifests/{docs,components}.json at build time for the hosted
     // @storybook/mcp worker (see the `features` note below); also registers
-    // dev-only tools (preview-stories, run-story-tests,
+    // dev-only tools (stories-preview, test-run,
     // get-storybook-story-instructions) when Storybook runs as a local dev server.
     '@storybook/addon-mcp',
     getAbsolutePath("@storybook/addon-vitest"),
@@ -33,9 +33,11 @@ const config: StorybookConfig = {
     // worker fell back to serving React's manifest on this endpoint too
     // (ADR-0083).
     componentsManifest: true,
-    // Angular's docgen server is opt-in under `@storybook/angular-vite`
-    // (unlike React, which defaults it); without this flag the build still
-    // exits 0 but writes a components.json with only `id`/`name`, no props.
+    // Verified in Wave 1 (removed the flag, rebuilt): `experimentalDocgenServer`
+    // is already the default under `@storybook/angular-vite` — the build wrote
+    // a full manifest (`angular-component-meta`, 32 entries, docgen present)
+    // without it, matching the 10.6 release notes. Kept explicit as insurance
+    // against a future default flip, not because it is load-bearing today.
     experimentalDocgenServer: true,
   },
   viteFinal: async (config: InlineConfig) => {

@@ -48,9 +48,19 @@ Only `get-storybook-story-instructions` survives 10.6.
 
 **Gate:** `npm run check:all` exit 0 · `nx build docs` exit 0 · zero hits for the seven old names outside `tasks/` historical records and `plan/adr/0083`.
 
-## Wave 3 — retire ADR-0083
+## Wave 3 — fix the worker, then retire ADR-0083 — **PUSH BLOCKER**
 
-- [ ] Test the **hosted** path first: does the Cloudflare Worker serve the new sharded `$ref` manifest shape unchanged? Both spike probes were against local dev servers. This is the one unknown that can still block the wave.
+**Raised from cleanup to prerequisite on 2026-09-05, after reading `worker/mcp.ts` and `@storybook/mcp@10.6.0`.**
+
+The substitution is a **404 fallback**, not an active rewrite: `if (response.status === 404 && sb !== "react") response = await fetchAsset("react")`. It fired only *because* Angular and Vue had no `components.json`. Wave 1 gives them one, so the fallback stops firing — and what the worker then serves, it cannot resolve.
+
+`@storybook/mcp@10.6.0` resolves `$ref`s **through the `manifestProvider`** (`fetchRefValue(docgenRef, request, provider, source, …)`, `dist/index.js:1338`). Our manifests carry `docgen.$ref: ../services/core/docgen/<id>.json#/components/<id>`. The provider does `basename(path)` (`worker/mcp.ts:18`) and always fetches `storybook-<fw>/manifests/<basename>`. That directory holds only `components.html`, `components.json`, `docs.json` — so every shard 404s, the React fallback 404s on the same name, and the provider throws.
+
+**Consequence: Waves 1 and 2 must not be pushed without this fix, or the hosted Angular and Vue endpoints break outright — not degrade, break.** Nothing is pushed yet.
+
+- [ ] Fix `manifestProvider` to resolve the ref path relative to the manifest's own directory instead of flattening it with `basename()`. Handle the `#/components/<id>` fragment.
+- [ ] Only then: the React fallback is dead code — remove it.
+- [ ] Add a gate. Nothing today asserts that `components.json` exists and carries real docgen; the whole value of this migration rests on an artefact no check watches, and a silent default flip would degrade the MCP surface with everything green.
 - [ ] Remove the worker's React-manifest substitution for the Angular and Vue endpoints
 - [ ] New ADR superseding ADR-0083; flip ADR-0083 to `status: superseded`, add the row to `plan/adr/README.md`. The new ADR records the framework swap, the animations reversal, and the rename — one decision, three consequences.
 

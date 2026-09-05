@@ -12,7 +12,7 @@ The repo ships:
 - An **Astro 6 docs site** (the workshop itself) deployed to the root domain.
 - Three parallel component libraries — `@atelier-ui/angular` (Angular 22 + Signals), `@atelier-ui/react` (React 19), `@atelier-ui/vue` (Vue 3 + `<script setup>`) — exposing **29 components** with identical APIs (Button, Input, Dialog, Tabs, Combobox, Toast, Table, Stepper, …).
 - A framework-agnostic spec layer `@atelier-ui/spec` — TypeScript interfaces every framework imports so the compiler enforces parity.
-- Three Storybook 10 instances, each with a hosted **MCP endpoint** at `/storybook-{framework}/mcp` (the `docs` toolset only: `list-all-documentation`, `get-documentation`, `get-documentation-for-story`; `preview-stories` and `run-story-tests` exist only on a locally running Storybook).
+- Three Storybook 10 instances, each with a hosted **MCP endpoint** at `/storybook-{framework}/mcp` (the `docs` toolset only: `docs-list`, `docs-show`, `docs-show-story`; `stories-preview` and `test-run` exist only on a locally running Storybook).
 - An `npx create-atelier-ui-workspace` scaffolder that generates a ready-to-run Nx workspace per framework choice.
 
 ### Design system constraints (must respect)

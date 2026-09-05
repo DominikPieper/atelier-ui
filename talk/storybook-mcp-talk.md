@@ -125,7 +125,7 @@ Die KI vergleicht die Design System Truth mit deinem Code:
 
 Das Storybook MCP stellt sicher, dass die KI möglichst keine API halluziniert.
 
-### Discovery API (`list-all-documentation`)
+### Discovery API (`docs-list`)
 Die KI beginnt damit, das gesamte System zu scannen, um etablierte Components zu finden:
 ```text
 - AtlAlert (components-atlalert)
@@ -135,7 +135,7 @@ Die KI beginnt damit, das gesamte System zu scannen, um etablierte Components zu
 ...
 ```
 
-### Documentation API (`get-documentation`)
+### Documentation API (`docs-show`)
 Sobald eine Component ausgewählt ist, liest die KI ihre **Living Specification**:
 ```markdown
 # AtlButton (components-atlbutton)
@@ -175,7 +175,7 @@ Dieses Tool liefert die **Rules of Engagement** (Einsatzregeln). Es verhindert d
 
 ---
 
-## Abschnitt 8: Autonomous Verification Loop (`run-story-tests`)
+## Abschnitt 8: Autonomous Verification Loop (`test-run`)
 
 ![Autonomous Verification Loop](./autonomous-loop.png)
 
@@ -186,7 +186,7 @@ Hör auf, zwischen Fenstern zu wechseln, um zu prüfen, ob es funktioniert.
 
 ---
 
-## Abschnitt 9: Closing the Loop (`preview-stories`)
+## Abschnitt 9: Closing the Loop (`stories-preview`)
 
 Die Feedback Loop gehört in den Chat.
 

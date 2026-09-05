@@ -24,7 +24,7 @@ const GENERATE_PROMPT: Record<string, string> = {
 
 1. figma-console MCP (figma_get_component_for_development) on the node —
    read boundVariables, the component tree, and the rendered preview.
-2. storybook-react MCP (list-all-documentation, then get-documentation)
+2. storybook-react MCP (docs-list, then docs-show)
    to look up AtlCard, AtlInput, AtlToggle, and AtlButton props.
 3. Generate the component with the exact Atelier UI props and the exact
    --ui-* token names from boundVariables. No hardcoded colors or paddings.`,
@@ -33,7 +33,7 @@ const GENERATE_PROMPT: Record<string, string> = {
 
 1. figma-console MCP (figma_get_component_for_development) on the node —
    read boundVariables, the component tree, and the rendered preview.
-2. storybook-angular MCP (list-all-documentation, then get-documentation)
+2. storybook-angular MCP (docs-list, then docs-show)
    to look up AtlCard, AtlInput, AtlToggle, and AtlButton props. The reply
    is React-shaped — use it for names, variants and defaults, then write
    Angular bindings (two-way model(), ng-content instead of children).
@@ -44,7 +44,7 @@ const GENERATE_PROMPT: Record<string, string> = {
 
 1. figma-console MCP (figma_get_component_for_development) on the node —
    read boundVariables, the component tree, and the rendered preview.
-2. storybook-vue MCP (list-all-documentation, then get-documentation)
+2. storybook-vue MCP (docs-list, then docs-show)
    to look up AtlCard, AtlInput, AtlToggle, and AtlButton props. The reply
    is React-shaped — use it for names, variants and defaults, then write
    Vue bindings (update:* emits, <slot /> instead of children).
@@ -54,7 +54,7 @@ const GENERATE_PROMPT: Record<string, string> = {
 
 // Per-framework note for the Generate step: where component docs come from.
 const GENERATE_NOTE: Record<string, string> = {
-  React: 'React exposes component metadata over the hosted Storybook MCP — list-all-documentation gives Claude every prop and variant before it writes a line.',
+  React: 'React exposes component metadata over the hosted Storybook MCP — docs-list gives Claude every prop and variant before it writes a line.',
   Angular: "Storybook 10.4 and 10.5 emit components.json for React only, so the worker serves React's manifest on the Angular endpoint too (ADR-0083) — storybook-angular answers component lookups with real names, variants and defaults. The reply is React-shaped, though: JSX snippets, React story paths, a children prop where Angular projects content, on*Change callbacks where Angular uses a two-way model(). Read it as an API reference, not as code to copy.",
   Vue: "Storybook 10.4 and 10.5 emit components.json for React only, so the worker serves React's manifest on the Vue endpoint too (ADR-0083) — storybook-vue answers component lookups with real names, variants and defaults. The reply is React-shaped, though: JSX snippets, React story paths, a children prop where Vue takes a slot, on*Change callbacks where Vue emits update:*. Read it as an API reference, not as code to copy.",
 };
@@ -164,7 +164,7 @@ the component I just generated. Fix every discrepancy it reports.`;
           <p class="docs-step-desc">
             Those files are in the <strong style="color: var(--ui-color-text)">atelier monorepo</strong>. In a scaffolded
             workshop workspace you read the same contract without them — through the hosted
-            <code>storybook-*</code> MCP (<code>list-all-documentation</code> → <code>get-documentation</code>),
+            <code>storybook-*</code> MCP (<code>docs-list</code> → <code>docs-show</code>),
             or from <a href="/llms-full.txt" class="docs-link-primary">llms-full.txt</a>. The prop tables the
             MCP returns are exact; the code snippets alongside them come back in React syntax on
             all three endpoints (ADR-0083), so read them for the API, not for the bindings.

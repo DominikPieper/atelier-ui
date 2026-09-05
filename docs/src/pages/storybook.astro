@@ -107,22 +107,22 @@ const STORYBOOK_LINKS = [
                 <tr><th>Toolset</th><th>Tool</th><th>Hosted (atelier.pieper.io)</th><th>Local dev (<code>nx storybook &lt;fw&gt;</code>)</th></tr>
               </thead>
               <tbody>
-                <tr><td rowspan="3"><code>docs</code></td><td><code>list-all-documentation</code></td><td>All three: components + docs</td><td>All frameworks</td></tr>
-                <tr><td><code>get-documentation</code></td><td>All three: full (Angular/Vue via React's manifest)</td><td>All frameworks</td></tr>
-                <tr><td><code>get-documentation-for-story</code></td><td>All three: full (Angular/Vue via React's manifest)</td><td>All frameworks</td></tr>
+                <tr><td rowspan="3"><code>docs</code></td><td><code>docs-list</code></td><td>All three: components + docs</td><td>All frameworks</td></tr>
+                <tr><td><code>docs-show</code></td><td>All three: full (Angular/Vue via React's manifest)</td><td>All frameworks</td></tr>
+                <tr><td><code>docs-show-story</code></td><td>All three: full (Angular/Vue via React's manifest)</td><td>All frameworks</td></tr>
                 <tr><td rowspan="5"><code>dev</code></td><td><code>get-storybook-story-instructions</code></td><td>—</td><td>React (preview); Vue/Angular experimental</td></tr>
-                <tr><td><code>preview-stories</code></td><td>—</td><td>React (preview); Vue/Angular experimental</td></tr>
-                <tr><td><code>get-changed-stories</code> <em>(10.4)</em></td><td>—</td><td>Requires <code>features.changeDetection</code></td></tr>
-                <tr><td><code>get-stories-by-component</code></td><td>—</td><td>Requires a builder that exposes the module-graph service</td></tr>
+                <tr><td><code>stories-preview</code></td><td>—</td><td>React (preview); Vue/Angular experimental</td></tr>
+                <tr><td><code>stories-changed</code> <em>(10.4)</em></td><td>—</td><td>Requires <code>features.changeDetection</code></td></tr>
+                <tr><td><code>stories-find-by-component</code></td><td>—</td><td>Requires a builder that exposes the module-graph service</td></tr>
                 <tr><td><code>display-review</code></td><td>—</td><td>Requires <code>features.changeDetection</code> (and <code>experimentalReview</code> not disabled)</td></tr>
-                <tr><td><code>test</code></td><td><code>run-story-tests</code></td><td>—</td><td>Requires <code>@storybook/addon-vitest</code>; a11y via <code>@storybook/addon-a11y</code></td></tr>
+                <tr><td><code>test</code></td><td><code>test-run</code></td><td>—</td><td>Requires <code>@storybook/addon-vitest</code>; a11y via <code>@storybook/addon-a11y</code></td></tr>
               </tbody>
             </table>
             <p class="docs-step-desc" style="margin-top: 0.75rem">
               The hosted endpoint reads <code>manifests/components.json</code>, which the Storybook build writes once <code>@storybook/addon-mcp</code> is installed — the addon switches the <code>componentsManifest</code> feature on through its own preset. As of Storybook 10.4/10.5 only <strong>React</strong> fills that file: <code>@storybook/react</code> is the one framework package that contributes a <code>components</code> entry to the manifest preset. Angular &amp; Vue static builds only emit <code>docs.json</code>, so the worker serves those endpoints their own MDX docs (foundations, tokens) <em>plus</em> React's <code>components.json</code> as the cross-framework API reference — legitimate because the spec contract is identical across the three adapters and the drift gates keep it that way (ADR-0083). An Angular or Vue lookup therefore returns real variants, defaults and state props — but the reply is React-shaped throughout: JSX snippets, React story paths, a <code>children</code> prop where Angular projects content and Vue takes a slot, and <code>on*Change</code> callbacks where Angular uses a two-way <code>model()</code> and Vue an <code>update:*</code> emit. Read it as an API reference, not as code to copy, and open the story in your own framework's Storybook rather than following the served path verbatim.
             </p>
             <p class="docs-step-desc" style="margin-top: 0.5rem">
-              The dev / test toolsets require a running Node.js Storybook dev server and fall under that same React-only preview scope. Their per-tool gates, though, are capability checks rather than framework checks — <code>get-stories-by-component</code> wants a builder that exposes the module graph, <code>get-changed-stories</code> and <code>display-review</code> want <code>features.changeDetection</code>, <code>run-story-tests</code> wants <code>@storybook/addon-vitest</code>. <code>docs</code> tools support a <code>storybookId</code> parameter to scope a request to one source in multi-source (composition) setups; <code>list-all-documentation</code> accepts <code>withStoryIds: true</code> when downstream tools need story IDs.
+              The dev / test toolsets require a running Node.js Storybook dev server and fall under that same React-only preview scope. Their per-tool gates, though, are capability checks rather than framework checks — <code>stories-find-by-component</code> wants a builder that exposes the module graph, <code>stories-changed</code> and <code>display-review</code> want <code>features.changeDetection</code>, <code>test-run</code> wants <code>@storybook/addon-vitest</code>. <code>docs</code> tools support a <code>storybookId</code> parameter to scope a request to one source in multi-source (composition) setups; <code>docs-list</code> accepts <code>withStoryIds: true</code> when downstream tools need story IDs.
             </p>
           </div>
         </div>
@@ -146,7 +146,7 @@ const STORYBOOK_LINKS = [
                   <td><code>experimentalReactComponentMeta: true</code> in <code>.storybook/main.ts</code> (React). <code>@storybook/mcp@0.6.2+</code> reads the new <code>reactComponentMeta</code> payload automatically.</td>
                 </tr>
                 <tr>
-                  <td>Change Review sidebar &amp; <code>get-changed-stories</code></td>
+                  <td>Change Review sidebar &amp; <code>stories-changed</code></td>
                   <td>Storybook tracks <em>new</em>, <em>modified</em>, and <em>affected</em> stories. The MCP tool returns just that subset so agents can scope review to recent edits.</td>
                   <td>Set <code>features.changeDetection: true</code> in <code>.storybook/main.ts</code>. Tool registers automatically.</td>
                 </tr>
@@ -157,12 +157,12 @@ const STORYBOOK_LINKS = [
                 </tr>
                 <tr>
                   <td>MCP Apps preview resource</td>
-                  <td><code>preview-stories</code> exposes a <code>ui://preview-stories/preview.html</code> resource so MCP-Apps-capable hosts render the story preview inline in chat (Cursor, Claude Desktop with MCP Apps). Non-capable hosts get the <code>previewUrl</code> per story instead.</td>
+                  <td><code>stories-preview</code> exposes a <code>ui://stories-preview/preview.html</code> resource so MCP-Apps-capable hosts render the story preview inline in chat (Cursor, Claude Desktop with MCP Apps). Non-capable hosts get the <code>previewUrl</code> per story instead.</td>
                   <td>Automatic when the host advertises MCP Apps support.</td>
                 </tr>
                 <tr>
                   <td>Subcomponent docs</td>
-                  <td><code>get-documentation</code> surfaces subcomponent props for compound components.</td>
+                  <td><code>docs-show</code> surfaces subcomponent props for compound components.</td>
                   <td><code>@storybook/mcp@0.7.0+</code> &amp; <code>@storybook/addon-mcp@0.6.0+</code>. No config.</td>
                 </tr>
                 <tr>
@@ -192,16 +192,16 @@ const config: StorybookConfig = {
       name: '@storybook/addon-mcp',
       options: {
         toolsets: {
-          dev: true,    // preview-stories, get-storybook-story-instructions, get-changed-stories
-          docs: true,   // list-all-documentation, get-documentation, get-documentation-for-story
-          test: false,  // disable run-story-tests for read-only agents
+          dev: true,    // stories-preview, get-storybook-story-instructions, stories-changed
+          docs: true,   // docs-list, docs-show, docs-show-story
+          test: false,  // disable test-run for read-only agents
         },
       },
     },
   ],
   features: {
     componentsManifest: true,             // gates the manifest write + docs toolset
-    changeDetection: true,                // gates get-changed-stories
+    changeDetection: true,                // gates stories-changed
   },
 };
 

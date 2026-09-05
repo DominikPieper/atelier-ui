@@ -61,24 +61,24 @@ their own MCP servers; nothing in this repo does it for them.
 
 | Surface | URL | Toolsets exposed | Frameworks |
 |---|---|---|---|
-| **Hosted** (`@storybook/mcp` via Cloudflare Worker, reads static manifests) | `atelier.pieper.io/storybook-{angular,react,vue}/mcp` | `docs` only: `list-all-documentation`, `get-documentation`, `get-documentation-for-story` | React: components + docs. Angular/Vue: **their own docs (MDX foundation pages) + the React components manifest served as the cross-framework API reference** — Storybook 10.4 and 10.5 emit `components.json` for React only, and `@storybook/mcp` fails every tool on an empty components manifest, so the worker substitutes React's (the spec contract is identical and drift-gated). |
-| **Local dev** (`@storybook/addon-mcp` inside a running Storybook) | `http://localhost:<port>/mcp` (after `nx storybook <fw>` — this repo binds 4400 angular / 4401 react / 4402 vue; read the exact port from the terminal) | `docs` + `dev` (`preview-stories`, `get-storybook-story-instructions`, `get-changed-stories`, plus the conditionally registered `get-stories-by-component` and `display-review`) + `test` (`run-story-tests`) | React only in preview: Storybook's 10.5 docs still scope the MCP server and its manifests to React, with Vue, Angular, Web Components and Svelte announced. |
+| **Hosted** (`@storybook/mcp` via Cloudflare Worker, reads static manifests) | `atelier.pieper.io/storybook-{angular,react,vue}/mcp` | `docs` only: `docs-list`, `docs-show`, `docs-show-story` | React: components + docs. Angular/Vue: **their own docs (MDX foundation pages) + the React components manifest served as the cross-framework API reference** — Storybook 10.4 and 10.5 emit `components.json` for React only, and `@storybook/mcp` fails every tool on an empty components manifest, so the worker substitutes React's (the spec contract is identical and drift-gated). |
+| **Local dev** (`@storybook/addon-mcp` inside a running Storybook) | `http://localhost:<port>/mcp` (after `nx storybook <fw>` — this repo binds 4400 angular / 4401 react / 4402 vue; read the exact port from the terminal) | `docs` + `dev` (`stories-preview`, `get-storybook-story-instructions`, `stories-changed`, plus the conditionally registered `stories-find-by-component` and `display-review`) + `test` (`test-run`) | React only in preview: Storybook's 10.5 docs still scope the MCP server and its manifests to React, with Vue, Angular, Web Components and Svelte announced. |
 
-**Toolset gating** (addon-mcp options, all default `true`): `docs` requires the `componentsManifest` feature flag — addon-mcp's own preset switches it on, and it is the flag core-server reads when writing the manifest — plus an actually emitted `components.json` (React only as of 10.5). Inside `dev`, `preview-stories` and `get-storybook-story-instructions` need nothing extra; `get-changed-stories` and `display-review` need `features.changeDetection` (10.4's Change Review sidebar), and `display-review` additionally needs `experimentalReview` not set to `false`; `get-stories-by-component` needs a builder that exposes the module-graph service. `test` requires `@storybook/addon-vitest`; a11y in `run-story-tests` activates when `@storybook/addon-a11y` is installed.
+**Toolset gating** (addon-mcp options, all default `true`): `docs` requires the `componentsManifest` feature flag — addon-mcp's own preset switches it on, and it is the flag core-server reads when writing the manifest — plus an actually emitted `components.json` (React only as of 10.5). Inside `dev`, `stories-preview` and `get-storybook-story-instructions` need nothing extra; `stories-changed` and `display-review` need `features.changeDetection` (10.4's Change Review sidebar), and `display-review` additionally needs `experimentalReview` not set to `false`; `stories-find-by-component` needs a builder that exposes the module-graph service. `test` requires `@storybook/addon-vitest`; a11y in `test-run` activates when `@storybook/addon-a11y` is installed.
 
 Add a local entry when you need the `dev` / `test` toolsets. **Angular/Vue prop tables come back from their own hosted endpoint — the worker performs the React-manifest substitution that used to be a manual fallback (ADR-0083); `libs/spec/src/index.ts` stays the ground truth inside this repo.**
 
 **When reading component docs (any framework, any surface):**
-1. Call `list-all-documentation` once at session start to get valid IDs (set `withStoryIds: true` if you need story IDs for downstream tools; pass `storybookId` to scope multi-source setups)
-2. Use `get-documentation` with those IDs — never guess IDs or invent props; subcomponent docs are included since `@storybook/mcp@0.7.0`
-3. Call `get-documentation-for-story` only when `get-documentation` lacks the story-level detail you need
+1. Call `docs-list` once at session start to get valid IDs (set `withStoryIds: true` if you need story IDs for downstream tools; pass `storybookId` to scope multi-source setups)
+2. Use `docs-show` with those IDs — never guess IDs or invent props; subcomponent docs are included since `@storybook/mcp@0.7.0`
+3. Call `docs-show-story` only when `docs-show` lacks the story-level detail you need
 4. If a prop isn't documented, say so rather than inventing it
 
 **When creating or editing components/stories (React, local dev only):**
 1. Call `get-storybook-story-instructions` before writing any code (REQUIRED before touching `*.stories.*` files)
-2. After any change, call `preview-stories` and include the returned `previewUrl`s in your final response; in MCP-Apps-capable hosts the addon also exposes a `ui://preview-stories/preview.html` resource that embeds the previews directly
-3. Use `get-changed-stories` to enumerate new/modified/affected stories from the Change Review sidebar before bulk edits
-4. Run `run-story-tests` after each change (pass `{ stories: [...] }` for focused runs, omit for full suite; `a11y: false` to skip accessibility checks) — fix failures before reporting completion
+2. After any change, call `stories-preview` and include the returned `previewUrl`s in your final response; in MCP-Apps-capable hosts the addon also exposes a `ui://stories-preview/preview.html` resource that embeds the previews directly
+3. Use `stories-changed` to enumerate new/modified/affected stories from the Change Review sidebar before bulk edits
+4. Run `test-run` after each change (pass `{ stories: [...] }` for focused runs, omit for full suite; `a11y: false` to skip accessibility checks) — fix failures before reporting completion
 
 For Angular/Vue, the test loop is `nx test <lib>` (Vitest) plus a manual browser preview in the running Storybook.
 

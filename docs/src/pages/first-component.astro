@@ -52,8 +52,8 @@ const prompt = (fw: Framework) => `Build the Settings / Card Figma frame as an A
 1. Use figma-console MCP (figma_get_component_for_development) on
    node-id 936-2954 — read the frame's spec, boundVariables, and
    the rendered preview.
-2. Use the storybook-${fw.toLowerCase()} MCP (list-all-documentation, then
-   get-documentation) to look up AtlCard, AtlInput, AtlToggle, and
+2. Use the storybook-${fw.toLowerCase()} MCP (docs-list, then
+   docs-show) to look up AtlCard, AtlInput, AtlToggle, and
    AtlButton props.
 3. Generate the component using:
    - Atelier UI components matched from Storybook

@@ -8,7 +8,7 @@ const config: StorybookConfig = {
   addons: [
     // Emits manifests/{docs,components}.json at build time for the hosted
     // @storybook/mcp worker (see the `features` note below); also registers
-    // dev-only tools (preview-stories, run-story-tests,
+    // dev-only tools (stories-preview, test-run,
     // get-storybook-story-instructions) when Storybook runs as a local dev server.
     '@storybook/addon-mcp',
     getAbsolutePath("@storybook/addon-vitest"),

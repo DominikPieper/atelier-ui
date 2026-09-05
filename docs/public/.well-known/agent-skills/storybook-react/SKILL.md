@@ -10,9 +10,9 @@ https://atelier.pieper.io/storybook-react/mcp
 HTTP (MCP over HTTP)
 
 ## Available Tools
-- `list-all-documentation` — Lists all available component IDs in the library
-- `get-documentation` — Returns full props, types, defaults, and usage examples for a component by ID
-- `get-documentation-for-story` — Returns documentation for a specific story variant
+- `docs-list` — Lists all available component IDs in the library
+- `docs-show` — Returns full props, types, defaults, and usage examples for a component by ID
+- `docs-show-story` — Returns documentation for a specific story variant
 
 ## MCP Configuration
 ```json
@@ -30,6 +30,6 @@ HTTP (MCP over HTTP)
 25+ React components including AtlButton, AtlCard, AtlInput, AtlTextarea, AtlCheckbox, AtlToggle, AtlBadge, AtlAlert, AtlSelect, AtlDialog, AtlTabGroup, AtlAccordionGroup, AtlMenu, AtlTooltip, AtlToastProvider, useAtlToast, AtlSkeleton, AtlAvatar, AtlAvatarGroup, and more.
 
 ## Usage Pattern
-1. Call `list-all-documentation` to get valid component IDs
-2. Call `get-documentation` with an ID to retrieve the full API
+1. Call `docs-list` to get valid component IDs
+2. Call `docs-show` with an ID to retrieve the full API
 3. Never invent props — only use what is documented

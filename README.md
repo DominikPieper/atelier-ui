@@ -69,10 +69,10 @@ Add these to your Claude Code MCP config to let the model read Storybook directl
 
 | Tool | Returns | Availability |
 |---|---|---|
-| `list-all-documentation` | Every documented component, grouped by category | All frameworks |
-| `get-documentation` | Prop table, types, defaults, usage examples | All frameworks |
-| `preview-stories` | Live preview URLs for component variants | React, Vue |
-| `run-story-tests` | Vitest/Storybook interaction results | React, Vue |
+| `docs-list` | Every documented component, grouped by category | All frameworks |
+| `docs-show` | Prop table, types, defaults, usage examples | All frameworks |
+| `stories-preview` | Live preview URLs for component variants | React, Vue |
+| `test-run` | Vitest/Storybook interaction results | React, Vue |
 | `get-storybook-story-instructions` | Prompt patterns for generating new stories | React, Vue |
 
 Angular MCP currently focuses on documentation and prop discovery; previews and testing are React/Vue only.

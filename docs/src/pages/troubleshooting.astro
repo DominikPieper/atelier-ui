@@ -28,7 +28,7 @@ const ISSUES: Issue[] = [
   {
     id: 'mcp-tools-error',
     title: 'MCP connects but every tool errors',
-    symptom: 'Claude Code lists `storybook-angular` (or react/vue) as connected, but every tool call — even `list-all-documentation` — returns an error like "Failed to fetch manifest components.json: 522".',
+    symptom: 'Claude Code lists `storybook-angular` (or react/vue) as connected, but every tool call — even `docs-list` — returns an error like "Failed to fetch manifest components.json: 522".',
     cause: 'The endpoint answers HTTP, but the MCP server behind it is broken — "connected" only proves the URL responds, not that tools work. This is a server-side fault, not your setup.',
     fix: [
       'Run `npm run preflight` — its MCP check issues a real JSON-RPC `tools/list` plus one actual tool call per Storybook endpoint, so this failure shows up as a red `MCP:` row with the server\'s error text instead of a green check.',

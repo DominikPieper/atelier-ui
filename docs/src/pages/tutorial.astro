@@ -473,7 +473,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           <span class="docs-step-badge">C</span>
           <div style="flex: 1">
             <h3 class="docs-h3">AI matches to Atelier UI components</h3>
-            <p class="docs-step-desc">Claude Code queries the Storybook MCP (<code>list-all-documentation</code> → <code>get-documentation</code>) for the matching component. It gets exact prop names and variants — no guessing.</p>
+            <p class="docs-step-desc">Claude Code queries the Storybook MCP (<code>docs-list</code> → <code>docs-show</code>) for the matching component. It gets exact prop names and variants — no guessing.</p>
             <Callout tone="note" title="All three endpoints answer — but the reply is React-shaped">
               <p style="margin: 0; font-size: 0.82rem; line-height: 1.6; color: var(--ui-color-text-muted)">
                 Storybook 10.4 and 10.5 emit <code>components.json</code> for React only, so the worker serves React's manifest on the Angular and Vue endpoints too (ADR-0083). Your own <code>storybook-&lt;fw&gt;</code> server returns real names, variants and defaults — but in React syntax: JSX snippets, React story paths, a <code>children</code> prop where Angular projects content and Vue takes a slot, <code>on*Change</code> callbacks where Angular uses a two-way <code>model()</code> and Vue an <code>update:*</code> emit. Read it as an API reference, not as code to copy. Inside the atelier monorepo, <code>libs/spec/src/index.ts</code> settles any binding you are unsure of.

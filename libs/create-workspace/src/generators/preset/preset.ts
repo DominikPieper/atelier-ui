@@ -151,9 +151,9 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
       (f) =>
         `### \`storybook-${f}\` MCP
 Before using any component:
-1. Call \`list-all-documentation\` to get valid component IDs
-2. Call \`get-documentation\` with the ID — never invent props
-3. Call \`get-documentation-for-story\` for a specific variant
+1. Call \`docs-list\` to get valid component IDs
+2. Call \`docs-show\` with the ID — never invent props
+3. Call \`docs-show-story\` for a specific variant
 4. Do not use a component that is not in the docs`,
     )
     .join('\n\n');

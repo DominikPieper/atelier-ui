@@ -172,7 +172,7 @@ const DAYS: Day[] = [
         title: 'Spec & Story per Prompt',
         format: 'Prompt-Übung',
         bullets: [
-          'React-Teilnehmer zuerst: nx storybook react parallel starten (Port 4401), dann per claude mcp add --transport http storybook-local http://localhost:4401/mcp verbinden — bewusst lokaler Scope (Default von --scope, nicht project): das gemeinsame .mcp.json bleibt unangetastet, der Working Tree sauber. Client neu verbinden und prüfen, dass die dev/test-Tools (get-storybook-story-instructions, preview-stories, run-story-tests) jetzt gelistet sind — ohne diesen Schritt ist das gleich folgende Pflicht-Tool schlicht nicht vorhanden: „nicht verfügbar" heißt hier „nicht konfiguriert", nicht „Server down". get-storybook-story-instructions ist Pflicht vor jedem *.stories.* Edit. Angular/Vue bekommen dieses Toolset nicht, ihr Loop bleibt nx test <lib> + Browser',
+          'React-Teilnehmer zuerst: nx storybook react parallel starten (Port 4401), dann per claude mcp add --transport http storybook-local http://localhost:4401/mcp verbinden — bewusst lokaler Scope (Default von --scope, nicht project): das gemeinsame .mcp.json bleibt unangetastet, der Working Tree sauber. Client neu verbinden und prüfen, dass die dev/test-Tools (get-storybook-story-instructions, stories-preview, test-run) jetzt gelistet sind — ohne diesen Schritt ist das gleich folgende Pflicht-Tool schlicht nicht vorhanden: „nicht verfügbar" heißt hier „nicht konfiguriert", nicht „Server down". get-storybook-story-instructions ist Pflicht vor jedem *.stories.* Edit. Angular/Vue bekommen dieses Toolset nicht, ihr Loop bleibt nx test <lib> + Browser',
           'Der Prompt entsteht aus dem Handoff-Dokument aus Block 01, nicht aus dem Bild allein — API in Worten beschreiben → von Claude eine Spec (im Stil von libs/spec/src/index.ts) und Story generieren lassen, mit der Behaviour aus dem Dokument, nicht nur der Optik',
           'LLM-optimierte API-Regeln: predictable naming, literal unions, composition über config, keine versteckten Defaults',
           'Eigene Spec als eigene Datei neben der Komponente, nicht in den geteilten Master — das Material sagt „eine Spec im Stil von libs/spec/src/index.ts", im Stil von, nicht hinein',
@@ -190,7 +190,7 @@ const DAYS: Day[] = [
           'Fokus: Prompts schreiben, Output bewerten, korrigieren — nicht selbst tippen',
           'Token-Treue erzwingen: Golden-Prompts verlangen --ui-* Custom Properties',
           'plan/big-picture.md (API-Regeln) + plan/design-principles.md (Surface/Motion/Dark Mode) im Prompt-Kontext',
-          'Test-Loop React: dev + test Toolset über localhost:4401/mcp (preview-stories, run-story-tests mit a11y)',
+          'Test-Loop React: dev + test Toolset über localhost:4401/mcp (stories-preview, test-run mit a11y)',
           'Test-Loop Angular/Vue: nx test <lib> --watch + parallel laufende Storybook im Browser',
           'AI-gestütztes Debugging: Fehlermeldungen per Copy-Paste an Claude zurückgeben statt selbst debuggen',
         ],
@@ -345,7 +345,7 @@ const DAYS: Day[] = [
         <li>Komponente liegt als Component-Set im eigenen Figma-Draft (Duplikat des Atelier-Files) — mit Variants, Properties und Dark-Mode-Variante</li>
         <li><code>npm run sync:generated</code> läuft ohne Diff durch (<code>git status --short</code> danach leer) — der Befehl prüft nur, ob die generierten Kopien (Spec, Behaviors, <code>llms.txt</code>) mit dem geteilten Master synchron sind. Liegt die eigene Spec korrekt außerhalb des Masters (Tag 2, Block 02), hat der Befehl nichts von der eigenen Arbeit zu sehen und läuft trivial durch — die eigene Komponente selbst prüfen die Punkte 3–7</li>
         <li><code>nx storybook &lt;fw&gt;</code> läuft und zeigt die Komponente als Story (Canvas + Docs-Tab)</li>
-        <li>Test-Loop grün: React → <code>run-story-tests</code> MCP-Call passes; Angular/Vue → <code>nx test &lt;lib&gt;</code> passes</li>
+        <li>Test-Loop grün: React → <code>test-run</code> MCP-Call passes; Angular/Vue → <code>nx test &lt;lib&gt;</code> passes</li>
         <li><code>figma_audit_component_accessibility</code> ohne kritische Findings <strong>und</strong> Storybook A11y-Tab ohne axe-core-Findings</li>
         <li>Dark Mode wird durch Token-Override korrekt umgeschaltet</li>
         <li><code>figma_check_design_parity</code> auf den eigenen Figma-Node gegen die generierte Komponente: der Report kommt ohne Abweichungen zurück — das beweist nur etwas, wenn dabei Node, Variant/State und ein vollständiges <code>codeSpec</code> übergeben wurden (siehe Block 04); nicht übergebene Felder werden nicht verglichen, ein knapp befülltes <code>codeSpec</code> kommt ebenso sauber zurück. Findings an Claude zurückgeben und erneut prüfen. Gemeint ist der MCP-Call, nicht <code>npm run check:parity</code>: das Repo-Gate prüft die Atelier-Master aus <code>tools/figma/snapshot.json</code>, in denen die eigene Komponente nicht steht</li>

@@ -269,9 +269,9 @@ describe('preset generator', () => {
     await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
-    expect(md).toContain('list-all-documentation');
-    expect(md).toContain('get-documentation');
-    expect(md).toContain('get-documentation-for-story');
+    expect(md).toContain('docs-list');
+    expect(md).toContain('docs-show');
+    expect(md).toContain('docs-show-story');
   });
 
   it('CLAUDE.md references the correct MCP server name for the framework', async () => {

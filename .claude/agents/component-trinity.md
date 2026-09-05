@@ -43,7 +43,7 @@ CSS is duplicated per framework (intentional — each adapter ships its own bund
    - React enforces required-accessible-name at the type level via discriminated union (see `AtlButtonAccessibleName` for the pattern).
    - Angular and Vue log a dev-mode `console.warn` after mount when an icon-only instance has neither text content nor `aria-label`/`aria-labelledby`.
 6. **Tests**: each adapter ships a `.spec.ts(x)` covering the same behaviors. Use `@testing-library/{angular,react,vue}` — never raw TestBed/render-without-screen. Reuse the existing button's test structure (default render, variants `it.each`, sizes `it.each`, disabled, loading-disables-and-shows-spinner, click handler).
-7. **Stories**: one `.stories.ts(x)` per adapter, same set of stories named identically across frameworks (Default, Variants, Sizes, States, etc.). Storybook MCP servers (`storybook-angular`, `storybook-react`, `storybook-vue`) verify what shipped — call `list-all-documentation` after to confirm.
+7. **Stories**: one `.stories.ts(x)` per adapter, same set of stories named identically across frameworks (Default, Variants, Sizes, States, etc.). Storybook MCP servers (`storybook-angular`, `storybook-react`, `storybook-vue`) verify what shipped — call `docs-list` after to confirm.
 
 # Verification — required before reporting done
 

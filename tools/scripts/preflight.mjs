@@ -155,25 +155,25 @@ async function probeMcp(url) {
   // 3. On an Atelier Storybook MCP, exercise one real tool call: manifests
   //    are only fetched inside tool calls, and a broken manifest fetch comes
   //    back as HTTP 200 + isError — invisible to anything shallower.
-  if (tools.some((t) => t?.name === 'list-all-documentation')) {
+  if (tools.some((t) => t?.name === 'docs-list')) {
     const call = await mcpPost(
       url,
       {
         jsonrpc: '2.0',
         id: 3,
         method: 'tools/call',
-        params: { name: 'list-all-documentation', arguments: {} },
+        params: { name: 'docs-list', arguments: {} },
       },
       session,
     );
-    if (call.error) return { level: 'broken', detail: `list-all-documentation failed (${call.error})` };
-    if (call.status !== 200) return { level: 'broken', detail: `list-all-documentation → HTTP ${call.status}` };
+    if (call.error) return { level: 'broken', detail: `docs-list failed (${call.error})` };
+    if (call.status !== 200) return { level: 'broken', detail: `docs-list → HTTP ${call.status}` };
     const callMsg = parseJsonRpc(call.contentType, call.text, 3);
     if (!callMsg?.result || callMsg.result.isError) {
       const reason =
         callMsg?.result?.content?.[0]?.text ?? callMsg?.error?.message ?? 'no parseable result';
       const oneLine = String(reason).replace(/\s+/g, ' ').trim();
-      return { level: 'broken', detail: `list-all-documentation → ${oneLine.slice(0, 120)}` };
+      return { level: 'broken', detail: `docs-list → ${oneLine.slice(0, 120)}` };
     }
   }
 

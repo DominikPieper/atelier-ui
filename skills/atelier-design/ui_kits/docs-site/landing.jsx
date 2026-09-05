@@ -108,7 +108,7 @@ const McpSection = () => {
           <div className="mcp-text">
             <span className="section-eyebrow">MCP setup</span>
             <h2>Three endpoints. One config.</h2>
-            <p>Drop these into your Claude Code MCP config. Each Storybook instance exposes the same four tools — <span className="ui-mono">list-all-documentation</span>, <span className="ui-mono">get-documentation</span>, <span className="ui-mono">preview-stories</span>, <span className="ui-mono">run-story-tests</span>.</p>
+            <p>Drop these into your Claude Code MCP config. Each Storybook instance exposes the same four tools — <span className="ui-mono">docs-list</span>, <span className="ui-mono">docs-show</span>, <span className="ui-mono">stories-preview</span>, <span className="ui-mono">test-run</span>.</p>
             <ul className="mcp-checklist">
               <li>HTTP transport — no local processes to babysit.</li>
               <li>Hosted alongside the Storybook itself, no extra deploy.</li>
