@@ -354,15 +354,60 @@ async function checkMcpEndpoints() {
   }
 }
 
+// ── Environment detection ───────────────────────────────────────────
+// This file ships identically into two trees (kept in sync by `npm run
+// check:sync`): the atelier monorepo that the two-day cohort clones, and the
+// single-framework workspace `create-workspace` scaffolds for everyone else
+// (ADR-0084). `ROOT` sits at the same relative depth (two levels above
+// tools/scripts) in both, so the ports to check differ by tree even though
+// the code is one file — the environment logic has to live in here, not as
+// a divergence between the two copies.
+//
+// Discriminator: `libs/spec/` is the framework-agnostic spec contract
+// (libs/spec/src/index.ts — see CLAUDE.md) that the Angular/React/Vue libs
+// and the drift gates all depend on. It exists only in the source monorepo;
+// `create-workspace`'s preset generator never writes it into a scaffolded
+// workspace (it writes a single `workshop-<fw>` app instead). That makes it
+// a cheap, single-stat, reliably-present-or-absent signal — no need to shell
+// out or parse the project graph. Fall back to `scaffold` when it's absent:
+// the generated workspace is the copy that ships to strangers, so an
+// undetectable tree should behave exactly as it does today.
+function detectEnvironment() {
+  return existsSync(resolve(ROOT, 'libs/spec')) ? 'clone' : 'scaffold';
+}
+
+const PORTS_BY_ENV = {
+  // The atelier monorepo clone: the docs app and one Storybook per framework
+  // (libs/{angular,react,vue}/project.json's `storybook dev … --port 44xx`,
+  // docs/project.json:21). Nothing in the clone runs on 4200/6006.
+  clone: [
+    { port: 4300, label: 'docs' },
+    { port: 4400, label: 'Storybook (angular)' },
+    { port: 4401, label: 'Storybook (react)' },
+    { port: 4402, label: 'Storybook (vue)' },
+  ],
+  // The scaffolded workspace: 4200 = the dev server (every framework serves
+  // on the @nx/vite default), 6006 = its single local Storybook. Nothing in
+  // the scaffold uses 4201/4202 — the old multi-framework rig did, and
+  // checking them only confused participants.
+  scaffold: [
+    { port: 4200, label: 'dev server' },
+    { port: 6006, label: 'Storybook' },
+  ],
+};
+
 async function checkPorts() {
-  // 4200 = the dev server (every framework serves on the @nx/vite default),
-  // 6006 = local Storybook. Nothing in the scaffold uses 4201/4202 — the old
-  // multi-framework rig did, and checking them only confused participants.
-  const ports = [4200, 6006];
-  for (const p of ports) {
-    const free = await portFree(p);
-    if (free) ok(`Port ${p}`, 'free');
-    else warn(`Port ${p}`, 'in use', `Run \`lsof -ti :${p} | xargs kill\` (macOS/Linux)`);
+  const env = detectEnvironment();
+  ok(
+    'Environment',
+    env === 'clone'
+      ? 'atelier monorepo clone — checking docs (4300) + Storybook (4400/4401/4402)'
+      : 'scaffolded workspace — checking dev server (4200) + Storybook (6006)',
+  );
+  for (const { port, label } of PORTS_BY_ENV[env]) {
+    const free = await portFree(port);
+    if (free) ok(`Port ${port} (${label})`, 'free');
+    else warn(`Port ${port} (${label})`, 'in use', `Run \`lsof -ti :${port} | xargs kill\` (macOS/Linux)`);
   }
 }
 

@@ -95,6 +95,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0087](0087-the-scrollport-that-never-scrolled.md) | The scrollport that never scrolled (`.docs-main` loses `overflow-y`; sticky TOC, progress bar and scroll-to-top restored; containment moves to `.docs-main-content`) | Accepted | Recorded |
 | [0088](0088-one-type-scale-for-the-docs.md) | One type scale for the docs — the library's (`--ui-font-size-xs/sm/md/lg` by role: prose 16, secondary 14, labels 12; 12 px floor; 70ch prose measure; five dead prose classes deleted) | Accepted | Recorded |
 | [0089](0089-the-docs-css-joins-the-gates.md) | The docs CSS joins the gates (`check:docs-layout` renders the built docs at 4 widths — overflow, column scroll, covered anchors, axe rule set, breakpoint set; `check:css-tokens` Pass A covers `docs/src`; z-index on `--ui-z-*`; four breakpoints) | Accepted | Recorded |
+| [0090](0090-one-preflight-branched-inside-not-forked-outside.md) | One preflight, branched inside, not forked outside (`preflight.mjs` detects clone vs. scaffold via `libs/spec/` and checks that environment's ports; the two file copies stay byte-identical) | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 
