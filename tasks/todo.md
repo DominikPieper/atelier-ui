@@ -2287,13 +2287,12 @@ Full document: `tasks/schulung-review-2026-09-02.md` (4 blockers · 1 immediate 
 - [ ] **M11/§6.3** — decide trainer-kit location (recommendation: private `atelier-trainer` repo pinned to an atelier SHA); move agenda internals, add `LICENSE`.
 - [ ] **M12** — `solved-*` branches: build or remove the promise (`agenda:81,208`).
 - [ ] **§10** — one rehearsal of the participant path on a non-author machine, timed.
-- [ ] **Prop-parity gate** (promoted out of B2) — nothing compares the prop
-      surface of a component across the three adapters, which is how
-      `AtlInput.label` shipped in React and Vue while being absent from both the
-      spec and Angular for months. ADR-0091 fixed that instance and deferred the
-      gate. It is the structural half of that fix, and the same gate would also
-      catch an input that is declared and never rendered (Angular's
-      `AtlSelect.required`, found the same way).
+- [x] **Prop-parity gate** (promoted out of B2) — shipped as `check:props`,
+      ADR-0093. Root cause found while building it: **Vue and Angular have no
+      type-level link to the spec at all** — no Angular class implements an
+      `Atl*Spec`, no `.vue` file uses one as its props type. React was the only
+      adapter the compiler held to the contract. The gate ships green with 55
+      `gap` exemptions in 14 groups; each group is an item below.
 
 ## Docs site: UI/UX review with `ui-ux-pro-max` — 2026-09-02
 
@@ -2426,3 +2425,86 @@ Not docs CSS; the docs gate allowlists each with a reason pointing here.
 - [ ] **L3** Checkbox/toggle inputs measure 20×20 / 1×1; login-form demo `input[type=email]` under 24 px when the sticky nav overlaps — confirm the label extends the hit area (WCAG 2.5.8).
 - [ ] **L4** `AtlTabs` `variant="pills"` neither wraps nor scrolls at 375 (+19 px on `/patterns*`) — `chip-collection-reflow`.
 - [ ] `AtlCodeBlock`'s scroller has no focusable content (axe `scrollable-region-focusable` on `/components/code-block`).
+
+## Open — what `check:props` found on its first run (2026-09-05)
+
+ADR-0093 shipped the gate green by recording every pre-existing divergence as
+`kind: 'gap'` — they warn on every run rather than blocking, so the backlog is
+visible instead of silent. 55 exemptions in 14 groups. Two are defects, the rest
+are the spec being incomplete. Fix them by removing the allowlist entry, not by
+editing the gate.
+
+### Defects
+
+- [ ] **React spells it `readOnly`; the spec, Angular and Vue all say
+      `readonly`.** `libs/spec/src/index.ts:121` (`AtlReadonlySpec`), Angular
+      `atl-input.ts:120`, Vue `atl-input.vue:15` — and React `atl-input.tsx:10`
+      explicitly `Omit`s the HTML `readOnly` attribute in order to redeclare it
+      at `:37`. So `<AtlInput readonly>` written against the documented contract
+      silently does nothing in React. Affects Input, Textarea, RadioGroup. The
+      fix is a rename in React, which is a breaking change to a public prop
+      name — its own ADR, and it wants a release note.
+- [ ] **Angular's `AtlRadioGroup.name` is declared and never wired.** Its doc
+      comment says the value is "propagated to all child radio inputs"; the
+      identifier appears nowhere else in the file. The second dead-prop instance
+      of the day after `AtlSelect.required`, and the pattern that justified the
+      gate's `[DEAD]` rule.
+
+### The spec is incomplete (all three adapters agree with each other)
+
+- [ ] **`errors` is implemented by all three adapters on all seven form
+      components and declared by no spec.** Blocked on a type decision: Angular
+      types it `WithOptionalFieldTree<ValidationError>[]`, React and Vue as
+      strings. Agreeing a shared `AtlFieldError` is a contract change across 7
+      components × 3 frameworks — its own ADR, deliberately not folded into the
+      gate task.
+- [ ] **The spec models exactly one event.** `AtlFormFieldSpec.onValueChange`
+      exists; `Alert.dismissed`, `Chat.onOpenChange`, `ChatSuggestion.selected`,
+      `Drawer.onOpenChange`, `MenuItem.onTriggered`, `Pagination.onPageChange`,
+      `Stepper.onActiveStepChange`, `Th.sort` and `Tr.selectedChange` are
+      implemented consistently in all three adapters and declared nowhere. 13
+      exemptions. Deciding the event contract is a spec change with its own ADR.
+- [ ] **`AtlChatMessageSpec` requires `id` and `content`** (both non-optional,
+      `index.ts:489,491`) and **`AtlChatSuggestionSpec` requires `id`** — no
+      adapter implements any of them; content is passed as children/slot
+      everywhere. Not drift: a required contract field that nothing honours.
+- [ ] **`AtlDialogSpec` declares neither `aria-label` nor `aria-labelledby`**
+      while all three adapters expose both.
+
+### Individual divergences
+
+- [ ] **`AtlTrSpec.rowId` is wrong in three different ways**: dead in Angular
+      (`atl-table.ts:235`, single occurrence in the file), inherited-but-never-
+      wired in React (no destructure, and no `{...rest}` on the `<tr>` to let it
+      fall through), and simply absent from Vue's `atl-tr.vue` props.
+- [ ] **`AtlBreadcrumbItem.current`** is a settable prop in the spec, React and
+      Vue; Angular computes "is this the last item" internally via the
+      `ATL_BREADCRUMBS` registration token and never exposes it.
+- [ ] **`AtlButtonSpec` requires `aria-label`** when the button has no visible
+      label; Angular and Vue answer with a dev-mode warning instead of a prop.
+      The contract being unmet, not a spec gap.
+- [ ] **React-only props with no spec entry**: radio-group `orientation` (also
+      recorded in `DEAD_SELECTOR_EXEMPT` as an open spec decision) and tbody
+      `emptyContent`.
+
+### Known blind spots of the gate itself
+
+- [ ] **It is spec-keyed, so it cannot see adapter-vs-adapter divergence where
+      the spec is silent.** Vue's dialog hardcodes its own `headerId` as the
+      `aria-labelledby` target while Angular and React expose the prop — a real
+      divergence `check:props` structurally cannot report, because
+      `AtlDialogSpec` declares neither name. Closing it means completing the
+      spec, not extending the gate.
+- [ ] **Seven components have no spec interface at all** — `AtlCodeBlock`,
+      `AtlAccordionHeader`, `AtlMenuSeparator`, `AtlMenuTrigger`, `AtlChatInput`,
+      `AtlChatTyping`, `AtlThead`. The gate names them as unkeyed in its summary
+      rather than skipping them silently, but nothing checks them.
+- [ ] **`toast` is excluded outright.** Angular takes four flat props where React
+      and Vue take one `data: ToastData` object, and the real API is imperative
+      (`AtlToastService.show()` / `useAtlToast()`). A set comparison cannot
+      express a shape mismatch; allowlisting it would have pretended it was
+      checked.
+- [ ] Worth its own investigation, from ADR-0093's rejected alternatives:
+      **Vue's `defineProps<AtlXSpec>` could give Vue a real type-level link to
+      the contract**, which is the root-cause fix the gate only detects around.
+      Angular cannot — signal inputs are class fields, not a props object.
