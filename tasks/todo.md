@@ -2436,19 +2436,46 @@ editing the gate.
 
 ### Defects
 
-- [ ] **React spells it `readOnly`; the spec, Angular and Vue all say
-      `readonly`.** `libs/spec/src/index.ts:121` (`AtlReadonlySpec`), Angular
-      `atl-input.ts:120`, Vue `atl-input.vue:15` — and React `atl-input.tsx:10`
-      explicitly `Omit`s the HTML `readOnly` attribute in order to redeclare it
-      at `:37`. So `<AtlInput readonly>` written against the documented contract
-      silently does nothing in React. Affects Input, Textarea, RadioGroup. The
-      fix is a rename in React, which is a breaking change to a public prop
-      name — its own ADR, and it wants a release note.
-- [ ] **Angular's `AtlRadioGroup.name` is declared and never wired.** Its doc
-      comment says the value is "propagated to all child radio inputs"; the
-      identifier appears nowhere else in the file. The second dead-prop instance
-      of the day after `AtlSelect.required`, and the pattern that justified the
-      gate's `[DEAD]` rule.
+- [ ] **React carries two public spellings for one prop.** The spec says
+      `readonly` (`libs/spec/src/index.ts:121`), Angular (`atl-input.ts:120`) and
+      Vue (`atl-input.vue:15`) agree; React `Omit`s the HTML attribute
+      (`atl-input.tsx:10`) to redeclare `readOnly` at `:39`. **Correction to what
+      this file said first:** the lowercase prop is *not* inert — all three React
+      components destructure both and merge them (`:53-54`, then `:61`
+      `reactReadOnly ?? specReadOnly ?? false`), so `readonly` works as a
+      fallback that a passed `readOnly` shadows. The real defect is that only the
+      React spelling is tested (`atl-input.spec.tsx:52-55` and
+      `atl-textarea.spec.tsx:55-58` assert the `is-readonly` class, not the DOM
+      attribute; nothing exercises the lowercase path, and RadioGroup has no
+      readonly test at all). Consolidating on the spec's spelling is a breaking
+      rename — its own ADR, and it wants a release note. Affects Input, Textarea,
+      RadioGroup.
+- [x] **Withdrawn — `AtlRadioGroup.name` was a false positive of the gate's own
+      `[DEAD]` rule.** It *is* wired: `atl-radio-group.token.ts:14` declares
+      `name: Signal<string>` on the context, the component is provided as
+      `useExisting: AtlRadioGroup`, and `atl-radio.ts:75,38` reads
+      `group?.name()` into `[attr.name]` — asserted by passing tests in
+      `atl-radio-group.spec.ts:43-51` and `atl-radio.spec.ts:139-159`. Only the
+      file-local claim was true, which is what the rule measured.
+- [ ] **`AtlSelect.name` is the real dead prop, and the rule missed it.**
+      Declared at `atl-select.ts:183`, never bound, absent from
+      `AtlSelectContext`, untested. The gate stayed silent because the file
+      contains "name" in doc comments and in `<atl-icon name="chevron-down">`.
+      Now flagged (rule sharpened: matches the signal's call, strips comments,
+      resolves the injection-token context). Filed as a `gap` rather than fixed:
+      Angular's select renders a `<button>` trigger, not a native control, so
+      honouring `name` means deciding whether to emit a hidden input — a design
+      question with its own ADR.
+- [ ] **`AtlAccordionGroup.multi` is a third dead prop, via a third mechanism.**
+      `atl-accordion.ts:49` declares `readonly multi = input(false)` and nothing
+      calls `multi()`; the public `[multi]` binding is served instead by
+      `hostDirectives: [{ directive: CdkAccordion, inputs: ['multi'] }]` at
+      `:40`, which forwards it to the CDK's own input. Found by the sharpened
+      rule and filed as a `gap`: teaching the gate about `hostDirectives` input
+      forwarding is a fourth mechanism, and one open question first — which
+      input wins when a component declares its own alongside a forwarded one of
+      the same name. That was inferred from the CDK types and a passing
+      `multi-expand` test, not from Angular's compiler behaviour.
 
 ### The spec is incomplete (all three adapters agree with each other)
 
@@ -2508,3 +2535,44 @@ editing the gate.
       **Vue's `defineProps<AtlXSpec>` could give Vue a real type-level link to
       the contract**, which is the root-cause fix the gate only detects around.
       Angular cannot — signal inputs are class fields, not a props object.
+
+## Open — the release pipeline published nothing for a week (2026-09-05)
+
+Found by falling back to `gh` after the Nx MCP's CI tools turned out to need Nx
+Cloud, which this repo does not configure. Not visible to any local gate, and
+nothing in the repo would have shown it.
+
+- npm serves **0.2.27** for all **five** publishable packages (the four scoped
+  `@atelier-ui/*` plus the unscoped `create-atelier-ui-workspace`), last
+  published **2026-08-29**
+  (`npm view @atelier-ui/react time`). The libs' `package.json` say **0.2.33**.
+  Six releases bumped versions, wrote changelogs, committed `chore(release):
+  publish` and pushed without reaching the registry.
+- Every publish run with a real bump fails the same way: `PUT
+  https://registry.npmjs.org/@atelier-ui%2fangular - Not found` … `could not be
+  found or you do not have permission to access it`. A 404 on PUT for a scoped
+  package is npm's mask for missing publish rights. The green Publish runs in
+  between are no-ops — without a bump `nx release --yes` skips publishing and
+  exits 0.
+- [ ] **Rotate `NPM_TOKEN`** (`publish.yml:123`) — the user's action; nothing in
+      this repo can do it. Everything below is blocked on it.
+- [ ] **Republish the six missing versions** once the token works: the workflow
+      already has a `publish-only` input (`publish.yml:117`) that runs
+      `npx nx release publish` against the current tags regardless of bump,
+      written for exactly this recovery.
+- [x] Make the drift visible: `check:release-drift` compares each publishable
+      package's local version against the registry, wired into the publish
+      workflow as a post-publish verification and into CI on `main` so the repo's
+      status stays red while npm is behind. Deliberately **not** in `check:all` —
+      every gate there is offline and deterministic, and a registry call would
+      break that for all 34. (I first justified this by saying `check:figma` is
+      excluded from `check:all` for the same reason. It is not: `check:figma` is
+      the last entry in the chain and runs offline against the committed
+      `tools/figma/snapshot.json`. The live Figma call is the MCP
+      `figma_check_design_parity`, a different thing. The principle stands, the
+      example was wrong.)
+- [ ] Still open, offered and deferred: `nx release --yes` commits and pushes the
+      version bump as part of the same command that publishes, so a failed
+      publish leaves git ahead of npm by construction. Reordering it so the
+      commit only lands after a successful publish is the structural fix, and
+      wants its own ADR.

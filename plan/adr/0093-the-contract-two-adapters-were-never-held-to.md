@@ -25,6 +25,45 @@ interface in all three adapters. Wired into `check:all` after `check:host-guards
 Ships **exit 0 with 55 `gap` exemptions in 14 groups** — every pre-existing
 divergence is recorded and warns on every run; nothing was fixed inline.
 
+## Correction (2026-09-05, same day)
+
+Two statements below were wrong when this record was written, and are corrected
+here rather than edited away — an ADR is a record of what was decided *and* of
+what the deciders believed.
+
+**`readOnly` does not silence the spec's `readonly` in React.** The Decision
+section says `<AtlInput readonly>` "silently does nothing in React". It does
+something: all three components destructure both spellings and merge them —
+`libs/react/src/lib/input/atl-input.tsx:53-54`, then `:61`
+`const readOnly = reactReadOnly ?? specReadOnly ?? false`. The spec-spelled prop
+works as a fallback, shadowed only when a caller also passes `readOnly`. The
+real defect is smaller and still worth fixing: two public spellings for one prop,
+and only the React spelling is exercised by a test. The claim came from reading
+the type declarations without reading the component body.
+
+**`AtlRadioGroup.name` is not dead, and was a false positive of this gate's own
+`[DEAD]` rule.** `atl-radio-group.token.ts:14` declares `name: Signal<string>` on
+`AtlRadioGroupContext`; the component is provided as
+`{ provide: ATL_RADIO_GROUP, useExisting: AtlRadioGroup }`, and
+`atl-radio.ts:75,38` reads `group?.name()` into `[attr.name]`, asserted by
+passing tests in both `atl-radio-group.spec.ts:43-51` and
+`atl-radio.spec.ts:139-159`. Only the file-local claim was true — which is
+exactly what the rule measured.
+
+**The inverse was hiding in the same rule.** `AtlSelect.name` *is* dead —
+declared at `atl-select.ts:183`, never bound, absent from `AtlSelectContext`,
+untested — and the gate did not flag it, because `atl-select.ts` contains the
+string "name" in doc comments and in `<atl-icon name="chevron-down">`, which the
+textual match accepted as a use. A false positive and a false negative from one
+root cause: the rule asked whether an identifier reappears in a file, when the
+question is whether anything consumes the input.
+
+The rule now matches the signal's *call* (`prop()`), strips comments before
+matching, and resolves the cross-file case by reading the injection token's
+context interface — which is precisely what distinguishes `AtlRadioGroupContext`,
+which declares `name`, from `AtlSelectContext`, which does not. The allowlist
+lost the RadioGroup entry and gained `AtlSelectSpec:name:angular`.
+
 ## Context
 
 ADR-0091 fixed `AtlInput.label` shipping in React and Vue while being absent from
