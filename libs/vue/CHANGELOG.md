@@ -1,3 +1,14 @@
+## 0.2.33 (2026-09-05)
+
+### 🩹 Fixes
+
+- **vue:** checkbox ids stop re-rolling on every evaluation ([12b1f44](https://github.com/DominikPieper/atelier-ui/commit/12b1f44))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.32 (2026-09-05)
 
 ### 🚀 Features

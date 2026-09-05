@@ -1,3 +1,18 @@
+## 0.2.33 (2026-09-05)
+
+### 🚀 Features
+
+- **gates:** the host guard was remembered three times, now it is checked ([c8a9bbb](https://github.com/DominikPieper/atelier-ui/commit/c8a9bbb))
+
+### 🩹 Fixes
+
+- **angular:** select accepted `required` and told nobody ([299816d](https://github.com/DominikPieper/atelier-ui/commit/299816d))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.32 (2026-09-05)
 
 ### 🚀 Features
