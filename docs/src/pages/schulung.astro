@@ -57,6 +57,7 @@ const DAYS: Day[] = [
           'Figma-Account mit Draft-Rechten (File → Duplicate to your drafts muss möglich sein) + figma-console Desktop-Bridge-Plugin in der Figma-Desktop-App importiert (Figma → Plugins → Development → Import plugin from manifest…) — die Bridge gated Tag 2, der Access-Token ist technisch optional (nur REST-Reads) und Kohorten-Policy',
           'npm run preflight lokal grün',
           'MCP-Konfig in .mcp.json gemeinsam lesen und verstehen',
+          'Bei Problemen: /troubleshooting (Bridge nicht verbunden, Node-Id löst nicht auf, Port-Konflikte, Node-Version zu alt)',
         ],
       },
       {
@@ -92,10 +93,12 @@ const DAYS: Day[] = [
           'Was ist MCP? Welche Server sind aktiv (storybook-{angular,react,vue}, nx-mcp, figma-console, uianatomy)?',
           'Toolset-Modell (seit 10.4, im Repo läuft 10.5.10): docs / dev / test — hosted vs. lokale Surface, inklusive Toolset-Gating (wann test für Read-Only-Agents deaktiviert wird)',
           'Live-Übung: Claude per Prompt nach Button-Props fragen, Token-Werte ausgeben, Preview im Chat',
+          '~5 min Angular/Vue: dieselbe Live-Übung an einer Komponente mit Change-Handler, libs/spec/src/index.ts daneben geöffnet — die gehosteten Angular/Vue-Endpunkte antworten mit Reacts Manifest (ADR-0083), die Spec löst die Abbildung: children → Content-Projection/Slot, on*Change → model() / update:*',
           'Negativ-Demo: dieselbe Frage im Browser-Chat ohne MCP → Halluzination. Mit MCP → korrekte Antwort',
           'Trainer-Demo Drei Richtungen (~12 min, nur Trainer-Maschine — claude.ai/design braucht ein anderes Login als der Kohorten-API-Key): drei Direction-Artboards für den Toast-Brief in Claude Design, geseedet aus der generierten Palette tools/design/artboard-palette.css — nicht aus dem atelier-design Skill, weil dieses File die Kurznamen trägt, die die Artboards selbst verwenden (--success, --border-hover), und weil genau dieses File gleich rot gemacht wird',
           'Vor dem Zaun die vier Gate-Identitäten in einem Satz benennen (Figma-COMPONENT_SET mit Variant-Achsen, Spec-String-Literal-Union, --ui-*-Token, Figma-Node-Id) — Node-Ids kommen erst in Block 05, Literal-Unions erst an Tag 2, hier also benennen statt voraussetzen. Dann der Zaun: eine Farbe im Artboard hart eintragen und npm run check:artboard-palette laufen lassen — grün, das Gate liest nur das gemeinsame Sheet gegen tokens.css und kein Artboard. Dieselbe Farbe im generierten Sheet ändern: derselbe Befehl wird rot',
           'Checkpoint-Frage an den Raum: welche der vier Gate-Identitäten hat dieses Artboard? Erwartete Antwort: keine. Erst danach die Einordnung — im Repo gilt die Regel „nie Inline-Hex" weiter, sie gilt dort, wo ein Gate sie durchsetzen kann; Claude Design ist kein fünfter Pillar, sondern Schritt 0 (Divergenz) und Schritt 5 (Handoff), nie Schritt 1–4',
+          'Schritt 5 (Handoff) bleibt an diesem Punkt Idee, nicht Vorführung: anders als Schritt 0 gibt es dafür keine Demo und kein Artefakt in diesem Repo — die ausgearbeitete Fassung ist spezifiziert, aber ihr Tooling existiert nicht und hängt am noch unverifizierten Per-Seat-Zugriffstest. Der Raum darf hier nicht den Eindruck mitnehmen, beide Hälften gesehen zu haben',
           'Gegenmittel für die Live-Demo: Artboards in der Kaffeepause 14:30–14:45 vorab erzeugen; Fallback sind die 31 Artboards der Redesign-Phase (tools/design/artboards.json); nach der Rot-Demo git checkout tools/design/artboard-palette.css. Hintergrund für den Trainer: /claude-design',
         ],
       },
@@ -106,7 +109,7 @@ const DAYS: Day[] = [
         format: 'Hands-on, alle synchron',
         bullets: [
           'Das offizielle /tutorial: Figma → MCP → Token-genauer Code in 5 Schritten',
-          'Teilnehmer prompten Claude im gewählten Framework, ändern existierende Komponente (z.B. neuer Button-Tone)',
+          'Teilnehmer prompten Claude im gewählten Framework entlang genau dieser Anleitung: eine Settings Card aus AtlCard / AtlInput / AtlToggle / AtlButton komponieren — keine Änderung an einer bestehenden Komponenten-API, sondern Komposition aus vorhandenen Bausteinen',
           'Wichtig: nicht selbst tippen, sondern prompten',
           'Puffer für Schnelle: die 15-min-Kata /first-component — dieselbe Settings / Card-Frame (Node 936-2954) als zweite Runde auf Zeit, sechs Copy-Paste-Schritte mit demselben figma_check_design_parity am Schluss. Im Klon liegt die Komponente unter libs/<fw>/… und wird über nx storybook <fw> angesehen, nicht über nx serve workshop-<fw> — Schritt 4 der Kata-Seite sagt das',
         ],
@@ -159,6 +162,8 @@ const DAYS: Day[] = [
           '~45 min MCP-Strukturierung (Component Properties, A11y-Audits)',
           'Eigenes Component-Set: ≥2 Variants × 2 States, Properties, korrekte Tokens (--ui-*), Dark-Mode-Variante — die genaue Matrix steht im Komponenten-Brief',
           'Skills als Co-Pilot, hier zum ersten Mal im Einsatz: figma-workspace-architect für Architekturentscheidungen, atelier-design für Brand-Konsistenz',
+          'Bei Problemen: /troubleshooting (Bridge nicht verbunden, Node-Id löst nicht auf, Port-Konflikte, Node-Version zu alt)',
+          'Block endet mit einem kurzen Handoff-Dokument, bevor irgendwer prompted: Draft-URL + Node-Id, gewählte Variants/States, Token-Bindings, Wiederverwendung vs. Neubau, die Behaviour aus dem Brief, explizite Ausschlüsse, Zieldateien, Abnahmekriterien — eine Checkliste, kein Template',
         ],
       },
       {
@@ -168,7 +173,7 @@ const DAYS: Day[] = [
         format: 'Prompt-Übung',
         bullets: [
           'React-Teilnehmer zuerst: nx storybook react parallel starten (Port 4401), dann per claude mcp add --transport http storybook-local http://localhost:4401/mcp verbinden — bewusst lokaler Scope (Default von --scope, nicht project): das gemeinsame .mcp.json bleibt unangetastet, der Working Tree sauber. Client neu verbinden und prüfen, dass die dev/test-Tools (get-storybook-story-instructions, preview-stories, run-story-tests) jetzt gelistet sind — ohne diesen Schritt ist das gleich folgende Pflicht-Tool schlicht nicht vorhanden: „nicht verfügbar" heißt hier „nicht konfiguriert", nicht „Server down". get-storybook-story-instructions ist Pflicht vor jedem *.stories.* Edit. Angular/Vue bekommen dieses Toolset nicht, ihr Loop bleibt nx test <lib> + Browser',
-          'API in Worten beschreiben → von Claude eine Spec (im Stil von libs/spec/src/index.ts) und Story generieren lassen',
+          'Der Prompt entsteht aus dem Handoff-Dokument aus Block 01, nicht aus dem Bild allein — API in Worten beschreiben → von Claude eine Spec (im Stil von libs/spec/src/index.ts) und Story generieren lassen, mit der Behaviour aus dem Dokument, nicht nur der Optik',
           'LLM-optimierte API-Regeln: predictable naming, literal unions, composition über config, keine versteckten Defaults',
           'Eigene Spec als eigene Datei neben der Komponente, nicht in den geteilten Master — das Material sagt „eine Spec im Stil von libs/spec/src/index.ts", im Stil von, nicht hinein',
           'Drei Gates werden dabei erwartungsgemäß rot (kein Fehler an der eigenen Arbeit): check:sync mit [DRIFT] (Komponente fehlt in den anderen Frameworks), check:a11y-parity mit [BLOCKER] [ROSTER], check:design-status. Landet die Spec doch im geteilten Master, kommen drei weitere dazu: check:spec, check:variants mit [UNMAPPED] AtlXVariant … is not in UNION_TO_COMPONENT, check:metadata mit [MISSING-REGISTRY] AtlXSpec: not in COMPONENT_METADATA_REGISTRY — drei rote Gates sind erwartet, sechs heißt: die Spec liegt im Master',
@@ -200,6 +205,7 @@ const DAYS: Day[] = [
           'Befunde von Claude beheben lassen',
           'ARIA-Anforderungen, Fokus-Ring via Tokens, Hover/Active/Disabled-States',
           'Dark-Mode-Toggle via Storybook backgrounds-/theme-Addon — Token-Override-Drift sichtbar machen',
+          'figma_check_design_parity einmal bewusst gegen ein unvollständiges codeSpec testen: Node, Variant/State und die übergebenen codeSpec-Felder (visual, spacing, typography, tokens, componentAPI, accessibility, metadata) genau nachsehen, dann einen Spacing-Wert bewusst verfälschen — nur mit vollständigen Feldern muss der Report die Abweichung melden, nicht übergebene Felder werden nicht verglichen',
         ],
       },
       {
@@ -235,7 +241,7 @@ const DAYS: Day[] = [
 
     <PageHero
       kind="tutorial"
-      time="2 Tage · je ~7–8 h"
+      time="2 Tage · je 09:00–17:30 (6 h 50 min netto)"
       title="2-Tages-Schulung"
       ledeMax="640px"
     >
@@ -280,7 +286,7 @@ const DAYS: Day[] = [
     <div id="format">
     <Callout tone="tip" title="Format pro Tag">
       <p>
-        ~7–8 h netto · 60 min Mittagspause · 2× 15 min Kaffeepausen · kleine Mikro-Pausen. Pre-Workshop-Setup
+        6 h 50 min netto, 09:00–17:30 · 60 min Mittagspause · 2× 15 min Kaffeepausen · 10 min Puffer. Pre-Workshop-Setup
         (Node ≥ 22.12 LTS, Claude Code CLI, Figma-Account mit Draft-Rechten + importiertes Desktop-Bridge-Plugin, <code>npm run preflight</code> grün)
         ist Pflicht-Hausaufgabe — siehe <a href="/workshop" class="docs-link-primary">Workshop Setup</a>.
       </p>
@@ -342,7 +348,7 @@ const DAYS: Day[] = [
         <li>Test-Loop grün: React → <code>run-story-tests</code> MCP-Call passes; Angular/Vue → <code>nx test &lt;lib&gt;</code> passes</li>
         <li><code>figma_audit_component_accessibility</code> ohne kritische Findings <strong>und</strong> Storybook A11y-Tab ohne axe-core-Findings</li>
         <li>Dark Mode wird durch Token-Override korrekt umgeschaltet</li>
-        <li><code>figma_check_design_parity</code> auf den eigenen Figma-Node gegen die generierte Komponente: der Report kommt ohne Abweichungen zurück — Findings an Claude zurückgeben und erneut prüfen. Gemeint ist der MCP-Call, nicht <code>npm run check:parity</code>: das Repo-Gate prüft die Atelier-Master aus <code>tools/figma/snapshot.json</code>, in denen die eigene Komponente nicht steht</li>
+        <li><code>figma_check_design_parity</code> auf den eigenen Figma-Node gegen die generierte Komponente: der Report kommt ohne Abweichungen zurück — das beweist nur etwas, wenn dabei Node, Variant/State und ein vollständiges <code>codeSpec</code> übergeben wurden (siehe Block 04); nicht übergebene Felder werden nicht verglichen, ein knapp befülltes <code>codeSpec</code> kommt ebenso sauber zurück. Findings an Claude zurückgeben und erneut prüfen. Gemeint ist der MCP-Call, nicht <code>npm run check:parity</code>: das Repo-Gate prüft die Atelier-Master aus <code>tools/figma/snapshot.json</code>, in denen die eigene Komponente nicht steht</li>
       </ol>
     </section>
 
