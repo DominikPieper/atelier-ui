@@ -234,6 +234,28 @@ const LIMITS: Limit[] = [
         </svg>
       </DiagramFigure>
 
+      <Callout tone="note" title="Step 0 and step 5 are not at the same stage">
+        <p style="margin: 0 0 0.6rem">
+          Step 0 is demonstrated: the redesign below ran 31 artboards through the canvas, and the
+          one gate that reaches this surface, <code>check:artboard-palette</code>, exists and
+          passes today.
+        </p>
+        <p style="margin: 0 0 0.6rem">
+          Step 5 is not. What it is meant to produce is a single shareable link that shows a
+          finished component completely — variant sheet, dark/light pair, keyboard map — to a
+          viewer with no Figma account and no running Storybook. That is designed and written
+          down, as <strong>&ldquo;Kata 5 — The Handoff Card&rdquo;</strong> in
+          <code>tasks/review-state-2026-08-26.md</code>. It has not been built: its tooling does
+          not exist in this repo, and the kata itself is blocked on the per-seat Claude Design
+          access test that <code>tasks/todo.md</code> and
+          <code>plan/adr/0032-claude-design-as-parallel-track.md</code> both still record as
+          unverified.
+        </p>
+        <p style="margin: 0">
+          Read step 5 in the diagram above as a specified destination, not a working path.
+        </p>
+      </Callout>
+
       <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0">
         This page is an <strong style="color: var(--ui-color-text)">Explanation</strong> chapter and
         deliberately not an eighth step in the numbered workshop track. Adding it to the numbered
