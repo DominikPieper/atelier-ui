@@ -199,3 +199,64 @@ Twice now in this session a fix round introduced a defect that every gate passed
 **Verification of the final state:** `npm run check:all` (34 gates) exit **0**; `npx nx build docs` exit **0**; `npm run check:adr-refs` exit **0**; all seven passages confirmed present in the rendered `dist/docs/schulung/index.html` and `dist/docs/claude-design/index.html`.
 
 Still unverified, and unchanged by this round: nothing here is workshop-verified. No dry run, no live MCP call against a running local Storybook, no Figma action.
+
+---
+
+## 8. What was actually tested, without a room (2026-09-05)
+
+Three of the four "unverified" items from §6 and §7 were testable alone. They were tested. One needs the trainer.
+
+### B2 — the local MCP surface: VERIFIED end to end, no longer inferred
+
+Started `nx storybook react` (HTTP 200 on 4401), then spoke MCP to it directly — `initialize`, `notifications/initialized`, `tools/list` over the streamable-HTTP transport. The endpoint returns eight tools:
+
+```
+get-changed-stories            get-storybook-story-instructions
+get-documentation              list-all-documentation
+get-documentation-for-story    preview-stories
+get-stories-by-component       run-story-tests
+```
+
+The hosted surface in this session exposes **three** — `list-all-documentation`, `get-documentation`, `get-documentation-for-story`. So the five the curriculum depends on, including the mandatory `get-storybook-story-instructions` and Block 03's `run-story-tests`, exist only locally. The premise of B2 — "the mandatory tool is simply absent without the local entry" — is observed, not deduced. (`display-review` is absent, consistent with `AGENTS.md`'s note that it needs `experimentalReview`; `get-changed-stories` is present.)
+
+Then the command the page now prints, run for real and reverted:
+
+```
+claude mcp add --transport http storybook-local http://localhost:4401/mcp
+→ Added ... to local config
+   File modified: ~/.claude.json [project: /Users/…/atelier]
+→ Scope: Local config (private to you in this project)
+   Status: ✔ Connected
+→ git status --short .mcp.json  →  empty
+```
+
+The repo's `.mcp.json` is untouched, the working tree stays clean, and the server connects. **This also settles the defect I introduced in the first fix round**: the CLI route was the right correction, and the evidence is now direct rather than read off `--help`. Entry removed afterwards (`claude mcp remove storybook-local -s local`), Storybook stopped, tree clean.
+
+### M3 — the React-shaped reply: VERIFIED, and sharper than the finding claimed
+
+Asked the **`storybook-angular`** endpoint for `AtlToggle`. It answered:
+
+```
+import { AtlToggle } from "@atelier-ui/react";
+onCheckedChange?: (checked: boolean) => void;
+children?: ReactNode;
+```
+
+React package, JSX snippets, a React callback, `children`. The real bindings, read from the adapters:
+
+| | reply from the Angular endpoint | what the adapter actually has |
+|---|---|---|
+| Angular | `onCheckedChange`, `children` | `checked = model(false)`, `<ng-content />` |
+| Vue | same | `emit('update:checked', …)`, `<slot />` |
+
+Exactly the mapping the new Block 04 bullet teaches — `children` → projection/slot, `on*Change` → `model()` / `update:*`. `libs/spec/src/index.ts:132-133` states it in its own comment ("`AtlCheckboxSpec`/`AtlToggleSpec` take it as `children`/`<ng-content>`/`<slot>`"), which is why the bullet sends participants to the spec.
+
+### M4 — the parity `codeSpec`: NOT tested, and it needs the trainer
+
+`figma_get_status --probe` reports the Desktop Bridge plugin is not connected: the WebSocket server is up on fallback port 9224 (9223 taken by another instance) with no plugin attached, `setup.valid: false`, `failureLayer: 2`. So the one claim that would benefit most from a live call — that a sparse `codeSpec` comes back as clean as a complete one — remains read off `code-sync.md`'s schema rather than observed.
+
+To close it: open the target file in Figma Desktop, run Plugins → Development → Figma Desktop Bridge, then a parity call against an Atelier master node twice — once with all seven fields, once with `spacing` omitted while a spacing value is deliberately wrong. If the sparse run also comes back clean, M4's exercise is proven and the wording stands as written.
+
+### Still out of reach alone
+
+Anything needing a participant's own duplicated Figma draft, per-seat Claude Design access (which is what blocks step 5), or a cohort. Those are dry-run questions, not test questions.
