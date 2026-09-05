@@ -57,7 +57,8 @@
     "figma:sync-inventory": "node tools/scripts/figma-sync-inventory.mjs",
     "gen:artboard-palette": "node tools/scripts/gen-artboard-palette.mjs",
     "check:artboard-palette": "node tools/scripts/gen-artboard-palette.mjs --check",
-    "check:types": "node tools/scripts/check-types.mjs"
+    "check:types": "node tools/scripts/check-types.mjs",
+    "check:release-drift": "node tools/scripts/check-release-drift.mjs"
   },
   "private": true,
   "workspaces": [

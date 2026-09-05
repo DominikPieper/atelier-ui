@@ -211,3 +211,33 @@ jobs:
       # live; without it a hung e2e produces a completely empty log until the
       # job timeout fires.
       - run: npx nx affected -t e2e --parallel=1 --output-style=stream
+
+  # ---------------------------------------------------------------------------
+  # Release drift — the check nothing else in this workflow performs: does the
+  # npm registry actually hold what this branch's package.json files claim?
+  # Publishing broke on 2026-08-29 (a token/scope problem masked as an npm 404)
+  # and stayed broken for six releases. The Publish workflow was red each time;
+  # what was missing is that the breakage left no mark anywhere anyone looks —
+  # `check:all` is deliberately offline, so every gate stayed green locally
+  # while git moved six versions ahead of npm, and publish.yml's own gate only
+  # speaks the moment a release fires. This job is what would have caught it a
+  # week earlier: main-only (a PR branch's versions have not been published
+  # yet, so comparing them means nothing), and on main's status, so it stays
+  # red for every commit after a failed publish — not only the one that
+  # triggered it — until a publish actually lands.
+  # ---------------------------------------------------------------------------
+  release-drift:
+    name: Release drift
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: '.node-version'
+          cache: 'npm'
+      - run: corepack enable
+      - run: npm ci
+      - run: npm run check:release-drift

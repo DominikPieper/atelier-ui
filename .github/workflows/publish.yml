@@ -124,3 +124,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
           NPM_CONFIG_ACCESS: public
+
+      - name: Verify the publish actually reached npm
+        # `nx release --yes` versions, commits, tags and pushes BEFORE it
+        # publishes, so a token/scope failure in the publish half still leaves
+        # the bump in git. Six releases did exactly that starting 2026-08-29.
+        # The step above did fail — this is not about a green run hiding a
+        # problem — but its failure was an npm 404 buried in Nx's output, in a
+        # workflow nobody was watching, while git quietly moved six versions
+        # ahead of the registry. This step restates that failure as what it
+        # actually is: the version in this checkout is not the version npm
+        # serves. See check-release-drift.mjs's header for why an unreachable
+        # registry is reported as skipped rather than as sync.
+        run: npm run check:release-drift
