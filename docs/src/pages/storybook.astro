@@ -222,13 +222,16 @@ export default config;`} lang="ts" />
                 <tr><th>Library</th><th>Hosted URL</th><th>Local dev URL</th></tr>
               </thead>
               <tbody>
-                <tr><td><code>@atelier-ui/react</code></td><td><code>{SITE_URL}/storybook-react/mcp</code></td><td><code>http://localhost:6006/mcp</code></td></tr>
-                <tr><td><code>@atelier-ui/angular</code></td><td><code>{SITE_URL}/storybook-angular/mcp</code></td><td><code>http://localhost:6006/mcp</code></td></tr>
-                <tr><td><code>@atelier-ui/vue</code></td><td><code>{SITE_URL}/storybook-vue/mcp</code></td><td><code>http://localhost:6006/mcp</code></td></tr>
+                <tr><td><code>@atelier-ui/react</code></td><td><code>{SITE_URL}/storybook-react/mcp</code></td><td><code>http://localhost:4401/mcp</code></td></tr>
+                <tr><td><code>@atelier-ui/angular</code></td><td><code>{SITE_URL}/storybook-angular/mcp</code></td><td><code>http://localhost:4400/mcp</code></td></tr>
+                <tr><td><code>@atelier-ui/vue</code></td><td><code>{SITE_URL}/storybook-vue/mcp</code></td><td><code>http://localhost:4402/mcp</code></td></tr>
               </tbody>
             </table>
             <p class="docs-step-desc" style="margin-top: 0.5rem">
-              Only one local Storybook can bind <code>localhost:6006</code> at a time — pick the framework you're actively working in.
+              In a clone of the atelier monorepo, each framework's Storybook binds its own port — angular
+              4400, react 4401, vue 4402 — so all three can run at once; read the exact port from the
+              terminal that started it. A scaffolded workspace ships only one framework, and its Storybook
+              binds the single port <code>6006</code>.
             </p>
           </div>
         </div>

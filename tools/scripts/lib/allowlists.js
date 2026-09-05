@@ -83,6 +83,38 @@ const DEFAULT_PROP_EXCEPTIONS = new Set([
 const STORY_DESCRIPTION_SKIP_DIRS = new Set(['toast', 'code-block', 'showcase']);
 
 /**
+ * `<repo-relative file path>:<line number>` entries that may cite Storybook's
+ * scaffold-only port 6006 inside docs/src/pages/** (check-docs-sync's
+ * [PORT-6006]). ADR-0084 makes the cloned atelier monorepo canonical for the
+ * two-day cohort — its Storybook binds 4400 (angular) / 4401 (react) / 4402
+ * (vue) and the docs app binds 4300 — while 6006 belongs only to the
+ * `create-atelier-ui-workspace` scaffold. A page describing the clone that
+ * still says 6006 is the exact defect the ADR's 2026-09-05 amendment records.
+ *
+ * Keyed by line, not by selector: this allowlist guards prose rather than a
+ * component fact, and a reason has to be re-read whenever the line around it
+ * moves — the same discipline [STALE-EXEMPTION] applies elsewhere.
+ */
+const SCAFFOLD_PORT_EXEMPT = new Map([
+  [
+    'docs/src/pages/workshop.astro:219',
+    "Static preflight terminal mockup for the create-atelier-ui-workspace scaffold — its own Storybook binds 6006, unlike the clone's 4400/4401/4402 (ADR-0084).",
+  ],
+  [
+    'docs/src/pages/workshop.astro:259',
+    'Same scaffold preflight mockup, the "failed run" tab (ADR-0084).',
+  ],
+  [
+    'docs/src/pages/storybook.astro:234',
+    "States, by name, that a scaffolded workspace's single Storybook binds 6006 — the sentence exists to contrast it with the clone's 4400/4401/4402 (ADR-0084).",
+  ],
+  [
+    'docs/src/pages/troubleshooting.astro:145',
+    "Entry title enumerating every port a participant in EITHER environment might find stuck; 6006 is the scaffold's, named beside the clone's 4200/4300/4400–4402 (ADR-0084).",
+  ],
+]);
+
+/**
  * `selector:check:detail` triples that the Figma conformance gate (check-figma)
  * should treat as intentional — a known, justified divergence between the Figma
  * master and the spec. Same exact-string `.has()` idiom as VARIANT_AXIS_EXCEPTIONS.
@@ -368,6 +400,7 @@ module.exports = {
   DEFAULT_IS_BASE,
   DEFAULT_PROP_EXCEPTIONS,
   STORY_DESCRIPTION_SKIP_DIRS,
+  SCAFFOLD_PORT_EXEMPT,
   FIGMA_CONFORMANCE_EXCEPTIONS,
   A11Y_PARITY_EXEMPT,
   METADATA_ROLE_EXCEPTIONS,

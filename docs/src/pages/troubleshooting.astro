@@ -125,7 +125,7 @@ const ISSUES: Issue[] = [
     codeLang: 'shell',
     fix: [
       'Check which environment you are in: `npx nx show projects`. A `workshop-*` entry means scaffold; `angular / react / vue / docs` means clone.',
-      'In the monorepo, mount your component under `libs/<fw>/src/lib/…` and view it with `npx nx storybook <fw>` on port 6006 — there is no app to serve it in.',
+      'In the monorepo, mount your component under `libs/<fw>/src/lib/…` and view it with `npx nx storybook <fw>` — read the port from the terminal it prints (angular 4400, react 4401, vue 4402) — there is no app to serve it in.',
       'In a scaffolded workspace, the app is at the workspace root (no `apps/` prefix) and serves on port 4200.',
     ],
   },
@@ -142,13 +142,14 @@ const ISSUES: Issue[] = [
   },
   {
     id: 'port-in-use',
-    title: 'Port 4200 / 6006 already in use',
-    symptom: '`EADDRINUSE` when running `nx serve` or `storybook`.',
+    title: 'Port 4200 / 4300 / 4400–4402 / 6006 already in use',
+    symptom: '`EADDRINUSE` when running `nx serve`, `nx storybook <fw>`, or `storybook` (scaffold).',
     cause: 'A previous dev server process is still running.',
     fix: [
-      'macOS/Linux: `lsof -ti :4200 | xargs kill`.',
-      'Windows: `netstat -ano | findstr :4200` → then `taskkill /PID <pid> /F`.',
-      'Or run on a different port: `nx serve workshop-angular --port 4300`.',
+      'macOS/Linux: `lsof -ti :<port> | xargs kill` — swap in the port that is stuck.',
+      'Windows: `netstat -ano | findstr :<port>` → then `taskkill /PID <pid> /F`.',
+      'Scaffolded workspace: run the app on a different port with `nx serve workshop-angular --port 4300`.',
+      'Clone: each Storybook already has its own port (angular 4400, react 4401, vue 4402) and docs is 4300 — kill the stuck process rather than reassign, since `.mcp.json` and this documentation both assume those exact numbers.',
     ],
   },
   {

@@ -104,3 +104,14 @@ holds when nobody follows the links is not a rule.
   cohort needs an account with draft rights **and** the figma-console Desktop
   Bridge plugin, while the self-serve reader needs neither. Both pages now say
   which reader they are addressing.
+
+## Amendment, 2026-09-05: the monorepo branch's port was wrong
+
+The Decision's §3 example (`npx nx storybook <fw>`, port 6006) named the
+scaffold's port, not the clone's. The clone serves each framework's Storybook
+on its own port — angular 4400, react 4401, vue 4402 (`libs/{angular,react,vue}/project.json`)
+— and the docs app on 4300 (`docs/project.json`); 6006 is
+`create-atelier-ui-workspace`'s number. Corrected in the citing pages
+(`tutorial.astro`, `first-component.astro`, `storybook.astro`,
+`troubleshooting.astro`, `schulung.astro`, `schulung-2tage-agenda.md`,
+`CLAUDE.md`); this decision text is left as recorded.

@@ -19,6 +19,16 @@
  *                briefs sat outside the
  *                original docs/src scope while citing four node ids — exactly the
  *                failure this check exists to prevent, in an unguarded location.
+ *   [PORT-6006]  A line under docs/src/pages/** cites Storybook's scaffold-only
+ *                port 6006. ADR-0084 makes the cloned atelier monorepo canonical
+ *                for the two-day cohort — its Storybook binds 4400 (angular) /
+ *                4401 (react) / 4402 (vue) and docs binds 4300 — so 6006 is only
+ *                ever correct where a page is explicitly describing the
+ *                `create-atelier-ui-workspace` scaffold. Genuine scaffold
+ *                mentions are named in SCAFFOLD_PORT_EXEMPT
+ *                (tools/scripts/lib/allowlists.js), same allowlist idiom as the
+ *                other gates; an unlisted 6006 is the exact defect the ADR's
+ *                2026-09-05 amendment records.
  *
  * Note: extra props in docs (e.g. callbacks like onValueChange) are intentionally
  * not checked — they are legitimate additions beyond the spec. Likewise, only
@@ -34,12 +44,14 @@
 const fs = require('fs');
 const path = require('path');
 const ts = require('typescript');
+const { SCAFFOLD_PORT_EXEMPT } = require('./lib/allowlists');
 
 const ROOT = path.resolve(__dirname, '../..');
 const SPEC_FILE = path.join(ROOT, 'libs/spec/src/index.ts');
 const DOCS_FILE = path.join(ROOT, 'docs/src/data/components.ts');
 const SNAPSHOT_FILE = path.join(ROOT, 'tools/figma/snapshot.json');
 const DOCS_SRC = path.join(ROOT, 'docs/src');
+const PAGES_DIR = path.join(ROOT, 'docs/src/pages');
 /**
  * Participant-facing material outside docs/src that also cites Figma node ids —
  * today, the Day-2 component briefs, which name the four starter frames by id.
@@ -341,6 +353,39 @@ function checkNodeIdCitations(errors) {
   }
 }
 
+/**
+ * [PORT-6006]: docs/src/pages/** must not cite Storybook's scaffold-only port
+ * 6006 outside a line named in SCAFFOLD_PORT_EXEMPT. ADR-0084 is the record of
+ * why this matters: the cloned monorepo (canonical for the two-day cohort)
+ * binds each framework's Storybook to its own port (4400/4401/4402) and the
+ * docs app to 4300, and the ADR's own decision text shipped with the
+ * scaffold's 6006 in a clone-branch sentence — the same mistake this gate now
+ * catches mechanically.
+ * @param {string[]} errors
+ */
+function checkScaffoldPortCitations(errors) {
+  const used = new Set();
+  for (const file of docsSourceFiles(PAGES_DIR)) {
+    const rel = path.relative(ROOT, file);
+    const lines = fs.readFileSync(file, 'utf8').split('\n');
+    lines.forEach((line, i) => {
+      if (!line.includes('6006')) return;
+      const key = `${rel}:${i + 1}`;
+      if (SCAFFOLD_PORT_EXEMPT.has(key)) {
+        used.add(key);
+        return;
+      }
+      errors.push(
+        `[PORT-6006] ${key} cites port 6006 outside an allowlisted scaffold context. ` +
+          'The clone (this repo) serves Storybook on 4400 (angular) / 4401 (react) / 4402 ' +
+          "(vue) and the docs app on 4300 — 6006 is create-atelier-ui-workspace's port " +
+          '(ADR-0084). If this line genuinely documents the scaffold, add it to ' +
+          'SCAFFOLD_PORT_EXEMPT in tools/scripts/lib/allowlists.js with a reason.'
+      );
+    });
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
@@ -409,18 +454,24 @@ for (const key of Object.keys(docsMap)) {
 // 3. Figma node-id citations ↔ committed snapshot
 checkNodeIdCitations(errors);
 
+// 4. Scaffold-only port 6006 cited outside an allowlisted context
+checkScaffoldPortCitations(errors);
+
 if (errors.length > 0) {
   errors.forEach((e) => console.error(`✗ ${e}`));
   const nodeIdIssues = errors.filter((e) => e.startsWith('[NODE-ID]')).length;
-  const docIssues = errors.length - nodeIdIssues;
+  const portIssues = errors.filter((e) => e.startsWith('[PORT-6006]')).length;
+  const docIssues = errors.length - nodeIdIssues - portIssues;
   console.error(
     `\n${errors.length} issue(s) found.` +
       (docIssues ? ' Update docs/src/data/components.ts to fix the spec/docs drift.' : '') +
-      (nodeIdIssues ? ' Fix the dead node-id citation(s) in the named docs pages.' : '')
+      (nodeIdIssues ? ' Fix the dead node-id citation(s) in the named docs pages.' : '') +
+      (portIssues ? ' Fix the stray port 6006 citation(s), or allowlist genuine scaffold mentions.' : '')
   );
   process.exit(1);
 } else {
   const count = Object.keys(SPEC_TO_DOCS).length;
   console.log(`✓ All ${count} spec interfaces, props, and categories match component-data.ts`);
   console.log('✓ Every Figma node-id cited under docs/src and workshop/ resolves against tools/figma/snapshot.json');
+  console.log('✓ No stray port-6006 citation under docs/src/pages (create-atelier-ui-workspace scaffold only, ADR-0084)');
 }
