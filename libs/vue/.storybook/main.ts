@@ -6,9 +6,9 @@ import type { InlineConfig } from 'vite';
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|ts)'],
   addons: [
-    // Emits manifests/docs.json at build time for the hosted @storybook/mcp worker
-    // (components.json is React-only — see the `features` note below); also
-    // registers dev-only tools (preview-stories, run-story-tests,
+    // Emits manifests/{docs,components}.json at build time for the hosted
+    // @storybook/mcp worker (see the `features` note below); also registers
+    // dev-only tools (preview-stories, run-story-tests,
     // get-storybook-story-instructions) when Storybook runs as a local dev server.
     '@storybook/addon-mcp',
     getAbsolutePath("@storybook/addon-vitest"),
@@ -25,12 +25,18 @@ const config: StorybookConfig = {
   features: {
     // Read by Storybook's core-server at build time (`writeManifests`) and by
     // addon-mcp's docs-toolset gate on a dev server; `@storybook/addon-mcp`
-    // forces it on through its own `features` preset anyway. Only
-    // `@storybook/react` contributes a `components` entry to the
-    // `experimental_manifests` preset, so this build emits manifests/docs.json
-    // and no components.json — measured, and the reason the worker falls back
-    // to React's manifest (ADR-0083).
+    // forces it on through its own `features` preset anyway. Together with
+    // `experimentalDocgenServer` below, this build now emits
+    // manifests/components.json with `meta.docgen: 'vue-component-meta'` —
+    // before Storybook 10.6, only `@storybook/react` contributed a `components`
+    // entry to the `experimental_manifests` preset, which is why the hosted
+    // worker fell back to serving React's manifest on this endpoint too
+    // (ADR-0083).
     componentsManifest: true,
+    // Vue's docgen server is opt-in under `@storybook/vue3-vite` until
+    // Storybook 11, where it becomes the default; without this flag the build
+    // still exits 0 but writes a components.json with only `id`/`name`, no props.
+    experimentalDocgenServer: true,
   },
   viteFinal: async (config: InlineConfig) => {
     if (process.env['CI'] || process.env['BUILD_STORYBOOK']) {

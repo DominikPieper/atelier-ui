@@ -6,9 +6,10 @@ import type { InlineConfig } from 'vite';
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [
-    // Emits manifests/components.json at build time for the hosted @storybook/mcp worker;
-    // also registers dev-only tools (preview-stories, run-story-tests, get-storybook-story-instructions)
-    // when Storybook runs as a local dev server.
+    // Emits manifests/{docs,components}.json at build time for the hosted
+    // @storybook/mcp worker; also registers dev-only tools (preview-stories,
+    // run-story-tests, get-storybook-story-instructions) when Storybook runs
+    // as a local dev server.
     '@storybook/addon-mcp',
     getAbsolutePath("@storybook/addon-vitest"),
     getAbsolutePath("@storybook/addon-a11y"),
@@ -34,8 +35,12 @@ const config: StorybookConfig = {
     // forces it on through its own `features` preset anyway — measured: with
     // this block deleted the manifest is still emitted — but declaring it keeps
     // the manifest off an addon side effect. The `components` entry comes from
-    // `@storybook/react`'s `experimental_manifests` preset, which is why React
-    // is the only adapter that emits one (ADR-0083).
+    // `@storybook/react`'s `experimental_manifests` preset — React defaults its
+    // docgen server, unlike Angular and Vue, which both need
+    // `experimentalDocgenServer: true` in their own `features` block (added in
+    // Storybook 10.6). Before that release, React was the only adapter that
+    // emitted a `components` entry, which is why the hosted worker fell back to
+    // serving React's manifest on the Angular and Vue endpoints too (ADR-0083).
     componentsManifest: true,
   },
   viteFinal: async (config: InlineConfig) => {

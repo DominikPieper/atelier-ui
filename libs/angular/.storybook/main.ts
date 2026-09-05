@@ -1,14 +1,14 @@
 import { fileURLToPath } from "node:url";
 import { dirname } from "node:path";
-import { StorybookConfig } from '@analogjs/storybook-angular';
+import type { StorybookConfig } from '@storybook/angular-vite';
 import type { InlineConfig } from 'vite';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [
-    // Emits manifests/docs.json at build time for the hosted @storybook/mcp worker
-    // (components.json is React-only — see the `features` note below); also
-    // registers dev-only tools (preview-stories, run-story-tests,
+    // Emits manifests/{docs,components}.json at build time for the hosted
+    // @storybook/mcp worker (see the `features` note below); also registers
+    // dev-only tools (preview-stories, run-story-tests,
     // get-storybook-story-instructions) when Storybook runs as a local dev server.
     '@storybook/addon-mcp',
     getAbsolutePath("@storybook/addon-vitest"),
@@ -17,7 +17,7 @@ const config: StorybookConfig = {
     getAbsolutePath("@storybook/addon-docs"),
   ],
   framework: {
-    name: getAbsolutePath("@analogjs/storybook-angular"),
+    name: getAbsolutePath("@storybook/angular-vite"),
     options: {},
   },
   staticDirs: ['../../../images'],
@@ -25,51 +25,23 @@ const config: StorybookConfig = {
   features: {
     // Read by Storybook's core-server at build time (`writeManifests`) and by
     // addon-mcp's docs-toolset gate on a dev server; `@storybook/addon-mcp`
-    // forces it on through its own `features` preset anyway. Only
-    // `@storybook/react` contributes a `components` entry to the
-    // `experimental_manifests` preset, so this build emits manifests/docs.json
-    // and no components.json — measured, and the reason the worker falls back
-    // to React's manifest (ADR-0083).
+    // forces it on through its own `features` preset anyway. Together with
+    // `experimentalDocgenServer` below, this build now emits
+    // manifests/components.json with `meta.docgen: 'angular-component-meta'` —
+    // before Storybook 10.6, only `@storybook/react` contributed a `components`
+    // entry to the `experimental_manifests` preset, which is why the hosted
+    // worker fell back to serving React's manifest on this endpoint too
+    // (ADR-0083).
     componentsManifest: true,
+    // Angular's docgen server is opt-in under `@storybook/angular-vite`
+    // (unlike React, which defaults it); without this flag the build still
+    // exits 0 but writes a components.json with only `id`/`name`, no props.
+    experimentalDocgenServer: true,
   },
   viteFinal: async (config: InlineConfig) => {
     if (process.env['CI'] || process.env['BUILD_STORYBOOK']) {
       config.base = '/storybook-angular/';
     }
-    // `@angular/platform-browser/animations` re-exports from
-    // `@angular/animations/browser` — the package Angular deprecated and this
-    // workspace deliberately does not install. Nothing here imports it, but
-    // `@storybook/angular`'s client does, inside a try/catch, purely to warn
-    // when a story passes `BrowserAnimationsModule`
-    // (dist/_browser-chunks/chunk-FPQDYJYM.js:346). The guard makes it safe at
-    // RUNTIME; it does not help at BUILD time, because Rollup still walks the
-    // dynamic import, resolves the absent optional peer to a stub, and fails
-    // with seven MISSING_EXPORT errors on symbols nothing uses
-    // (NoopAnimationDriver, AnimationDriver, ɵAnimationEngine, …).
-    // `@analogjs/storybook-angular` also names the entry in
-    // optimizeDeps.include (src/lib/preset.js:69), which is why filtering that
-    // list alone changes nothing — measured.
-    //
-    // So resolve the specifier to an empty module. The only consumer compares
-    // `ngModule === animations.BrowserAnimationsModule`; against `undefined`
-    // that is simply false, which is the correct answer in a workspace with no
-    // animations package. Delete this when @storybook/angular stops reaching
-    // for a deprecated entry point.
-    const ANIMATIONS = '@angular/platform-browser/animations';
-    const VIRTUAL = '\0atelier:animations-stub';
-    config.plugins = [
-      ...(config.plugins ?? []),
-      {
-        name: 'atelier:stub-deprecated-angular-animations',
-        enforce: 'pre' as const,
-        resolveId(id: string) {
-          return id === ANIMATIONS ? VIRTUAL : null;
-        },
-        load(id: string) {
-          return id === VIRTUAL ? 'export const BrowserAnimationsModule = undefined;' : null;
-        },
-      },
-    ];
     return config;
   },
 };
