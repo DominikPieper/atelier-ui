@@ -1,175 +1,73 @@
-# Atelier — how to work in this repo
+@AGENTS.md
 
-Atelier teaches **design-to-code with AI**: a Figma design becomes a working,
-verified component. The library is implemented in three frameworks (Angular,
-React, Vue) behind one framework-agnostic spec, but **any given workshop uses
-exactly one framework** — the other two adapters are reference/prep
-infrastructure kept in sync by the drift gates, not something you touch in a
-session. Optimise for the single chosen framework's path.
+# Claude Code — working agreement
 
-## Design-to-Code Workflow
+`AGENTS.md`, imported above, holds the facts about this repo: the design-to-code
+workflow, the spec as source of truth, the MCP servers, the Figma conventions,
+the ADR rules, and how work is proven done. It is shared with every other coding
+agent used here (Codex, the Antigravity CLI), so it must stay free of anything
+that is only true for one of them.
 
-The core loop — Figma → spec → code → verify, in your chosen framework:
+This file holds the part that is specific to how *you* work. Do not duplicate
+`AGENTS.md` content here — a second copy drifts, and there is no gate that would
+catch it.
 
-1. **Inspect** the Figma component: `figma_get_component_for_development`
-   (figma-console-mcp) on the node, or read the master on the Components page of
-   file `QMnDD8uZQPldPrlCwZZ58T`. Note its variants, `--ui-*` tokens, and a11y.
-2. **Spec** is the source of truth: `libs/spec/src/index.ts` (+ `metadata/`,
-   `tokens.manifest.ts`, `behaviors.json`). The same contract drives all three
-   frameworks, so prop/variant names are identical everywhere.
-3. **Generate or edit** the component with Claude, using the Storybook MCP for
-   exact component docs (see the table below). **All three hosted endpoints answer
-   component lookups** — Storybook 10.4 and 10.5 emit `components.json` for React
-   only, so the worker serves React's manifest on the Angular and Vue endpoints too
-   (ADR-0083). Variants, defaults and state props carry across, but the reply is
-   React-shaped throughout — JSX snippets, React story paths, a `children` prop
-   where Angular projects content and Vue takes a slot, and `on*Change` callbacks
-   where Angular uses a two-way `model()` and Vue an `update:*` emit. Treat it as
-   an API reference, not as code to copy; `libs/spec/src/index.ts` settles any
-   binding you are unsure of.
-4. **Verify** — run the story in Storybook, then close the loop with
-   `figma_check_design_parity` to catch padding/colour/variant drift. **Required,
-   not optional.**
-
-Full walkthrough: docs `/design-to-code`; hands-on kata: `/first-component`.
-Run the docs app with `nx serve docs`.
-
-## MCP Servers
-
-Always use the appropriate server for the task:
-
-- **Nx & Workspace Management**: the **Nx MCP server** for project dependencies and workspace tasks.
-- **Angular-Specific CLI**: the **Angular CLI MCP server** for Angular best practices, API searches, examples.
-- **Component Discovery & Docs**: the framework-specific **Storybook MCP servers** for exact component specs. Storybook ships MCP in two layers (added in 10.4, unchanged in the pinned 10.5.10) — be explicit about which surface you're calling.
-- **Component Anatomy & Cross-Framework Mapping**: the **`uianatomy` MCP server** (HTTP at `https://uianatomy.dev/mcp`, 29 tools) for canonical component anatomy, axes, slots, transitions, motion, tokens, events, and library divergences (41 components; per-library `implementations/` audits across radix, headlessui, cdk, react-aria, vaul). Pair with the bundled `uianatomy-mcp` skill at `.claude/skills/uianatomy-mcp/SKILL.md`.
-
-### Storybook MCP Workflows
-
-**Two MCP surfaces (do not conflate):**
-
-| Surface | URL | Toolsets exposed | Frameworks |
-|---|---|---|---|
-| **Hosted** (`@storybook/mcp` via Cloudflare Worker, reads static manifests) | `atelier.pieper.io/storybook-{angular,react,vue}/mcp` | `docs` only: `list-all-documentation`, `get-documentation`, `get-documentation-for-story` | React: components + docs. Angular/Vue: **their own docs (MDX foundation pages) + the React components manifest served as the cross-framework API reference** — Storybook 10.4 and 10.5 emit `components.json` for React only, and `@storybook/mcp` fails every tool on an empty components manifest, so the worker substitutes React's (the spec contract is identical and drift-gated). |
-| **Local dev** (`@storybook/addon-mcp` inside a running Storybook) | `http://localhost:<port>/mcp` (after `nx storybook <fw>` — this repo binds 4400 angular / 4401 react / 4402 vue; read the exact port from the terminal) | `docs` + `dev` (`preview-stories`, `get-storybook-story-instructions`, `get-changed-stories`, plus the conditionally registered `get-stories-by-component` and `display-review`) + `test` (`run-story-tests`) | React only in preview: Storybook's 10.5 docs still scope the MCP server and its manifests to React, with Vue, Angular, Web Components and Svelte announced. |
-
-**Toolset gating** (addon-mcp options, all default `true`): `docs` requires the `componentsManifest` feature flag — addon-mcp's own preset switches it on, and it is the flag core-server reads when writing the manifest — plus an actually emitted `components.json` (React only as of 10.5). Inside `dev`, `preview-stories` and `get-storybook-story-instructions` need nothing extra; `get-changed-stories` and `display-review` need `features.changeDetection` (10.4's Change Review sidebar), and `display-review` additionally needs `experimentalReview` not set to `false`; `get-stories-by-component` needs a builder that exposes the module-graph service. `test` requires `@storybook/addon-vitest`; a11y in `run-story-tests` activates when `@storybook/addon-a11y` is installed.
-
-The `.mcp.json` at the repo root wires the hosted surface for all three frameworks. Add a local entry when you need the `dev` / `test` toolsets. **Angular/Vue prop tables come back from their own hosted endpoint — the worker performs the React-manifest substitution that used to be a manual fallback (ADR-0083); `libs/spec/src/index.ts` stays the ground truth inside this repo.**
-
-**When reading component docs (any framework, any surface):**
-1. Call `list-all-documentation` once at session start to get valid IDs (set `withStoryIds: true` if you need story IDs for downstream tools; pass `storybookId` to scope multi-source setups)
-2. Use `get-documentation` with those IDs — never guess IDs or invent props; subcomponent docs are included since `@storybook/mcp@0.7.0`
-3. Call `get-documentation-for-story` only when `get-documentation` lacks the story-level detail you need
-4. If a prop isn't documented, say so rather than inventing it
-
-**When creating or editing components/stories (React, local dev only):**
-1. Call `get-storybook-story-instructions` before writing any code (REQUIRED before touching `*.stories.*` files)
-2. After any change, call `preview-stories` and include the returned `previewUrl`s in your final response; in MCP-Apps-capable hosts the addon also exposes a `ui://preview-stories/preview.html` resource that embeds the previews directly
-3. Use `get-changed-stories` to enumerate new/modified/affected stories from the Change Review sidebar before bulk edits
-4. Run `run-story-tests` after each change (pass `{ stories: [...] }` for focused runs, omit for full suite; `a11y: false` to skip accessibility checks) — fix failures before reporting completion
-
-For Angular/Vue, the test loop is `nx test <lib>` (Vitest) plus a manual browser preview in the running Storybook.
-
-## Component Documentation
-
-The primary documentation for the component library lives in the `docs/` application and the `libs/spec` library (which defines the framework-agnostic API contract).
-
-**Do not add component API documentation to this file.** Use the following sources instead:
-- **Interactive Docs**: Run the `docs` app (`nx serve docs`) for framework-specific API tables and live demos.
-- **Spec Library**: Refer to `libs/spec/src/index.ts` for the ground-truth API definitions.
-- **Storybook MCP**: See the "Storybook MCP Workflows" table above for the hosted vs. local surfaces and their tools.
-
-## Figma File (Atelier UI)
-
-File key: `QMnDD8uZQPldPrlCwZZ58T`. Page conventions:
-
-- **Components page** = master `COMPONENT_SET`s with full variant matrix. Source of truth.
-- **Inventory page** = condensed catalog. Every tile is an `INSTANCE` of a master on Components — never duplicate by hand.
-- When adding a new master: also add one `INSTANCE` on Inventory and bump the TOC count + date.
-- When removing a master: instance auto-deletes; bump TOC.
-
-## Core Principles
-
-- **Simplicity First**: Make every change as simple as possible. Impact minimal code.
-- **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
-- **Minimal Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
-- **Big Picture**: the project idea / plan docs live in `plan/`.
-
-## Decision Records (ADR)
-
-When a non-trivial decision is made, record it as an ADR so the *why* stays
-traceable and reusable later (blog posts, talks, teaching). `plan/adr/` is the
-canonical decision log.
-
-**Record an ADR when** you choose one approach over alternatives, set a
-convention, change the architecture / spec contract / API shape, the tooling &
-gates, the design-system & tokens, the Figma→code workflow, or build/release —
-i.e. any tradeoff with a rationale worth keeping. **Skip it** for trivial or
-mechanical work (typos, renames, dependency bumps, routine bugfixes).
-
-How:
-1. Create `plan/adr/NNNN-kebab-title.md` with the next sequential number.
-2. Follow the MADR format already in `plan/adr/`: YAML frontmatter
-   (`status: accepted`, `date: <YYYY-MM-DD>`, `sources`, optional
-   `supersedes`/`superseded-by`) + sections `## Status`, `## Context`,
-   `## Decision`, `## Consequences`. New ADRs are recorded-at-the-time, so they
-   need no `confidence` field (that marks the older reconstructed records).
-3. Capture the reasoning richly — the forces/context, the decision, **why**
-   (and which alternatives were rejected and why), and the consequences/
-   tradeoffs. That "why" is the content that gets reused later.
-4. Add a row to the `plan/adr/README.md` index. If the decision reverses an
-   earlier one, set `supersedes` here and flip the old ADR's `status:` to
-   `superseded`.
-5. Write the ADR as part of finishing the decision-bearing task (same bar as
-   "Verification Before Done"), not retroactively.
-
-Deeper rationale lives in `plan/big-picture.md`, `plan/design-principles.md`,
-and `tasks/rationale.md` — cross-link rather than duplicate.
-
----
-
-## Working Agreement (how I want you to work)
-
-### 1. Plan Mode Default
+## 1. Plan Mode Default
 - Enter plan mode for ANY non-trivial task (3+ steps or architectural decisions)
 - If something goes sideways, STOP and re-plan immediately - don't keep pushing
 - Use plan mode for verification steps, not just building
 - Write detailed specs upfront to reduce ambiguity
 
-### 2. Subagent Strategy
+## 2. Subagent Strategy
 - Use subagents liberally to keep main context window clean
 - Offload research, exploration, and parallel analysis to subagents
 - For complex problems, throw more compute at it via subagents
 - One task per subagent for focused execution
+- **Hand a subagent the artefact and the question, never your conclusion.** A
+  brief's "central constraint" is the sentence most worth verifying before you
+  send it, because the agent will build around it instead of questioning it.
 
-### 3. Self-Improvement Loop
+## 3. Second-model cross-check
+- The Codex MCP server is available as a Gegenprobe for judgement-heavy calls:
+  hand it the finished diff and the environment facts, and ask it the question.
+- **Never hand it your reasoning.** Its value is that it does not share your
+  framing — on its first use it found three real defects, two of which *were*
+  my framing. A shared instruction base carrying your interpretation would
+  correlate the blind spots and waste the check.
+- You stay the final judge. Agents also report incorrect results; verify a
+  claim that changes your conclusion before acting on it.
+
+## 4. Self-Improvement Loop
 - After ANY correction from the user: update `tasks/lessons.md` with the pattern
 - Write rules for yourself that prevent the same mistake
 - Ruthlessly iterate on these lessons until mistake rate drops
 - Review lessons at session start for relevant project
 
-### 4. Verification Before Done
-- Never mark a task complete without proving it works
-- Diff behavior between main and your changes when relevant
-- Ask yourself: "Would a staff engineer approve this?"
-- Run tests, check logs, demonstrate correctness
-
-### 5. Demand Elegance (Balanced)
-- For non-trivial changes: pause and ask "is there a more elegant way?"
-- If a fix feels hacky: "Knowing everything I know now, implement the elegant solution"
-- Skip this for simple, obvious fixes - don't over-engineer
-- Challenge your own work before presenting it
-
-### 6. Autonomous Bug Fixing
+## 5. Autonomous Bug Fixing
 - When given a bug report: just fix it. Don't ask for hand-holding
 - Point at logs, errors, failing tests - then resolve them
 - Zero context switching required from the user
 - Go fix failing CI tests without being told how
 
-### Task Management
+## 6. Demand Elegance (Balanced)
+- For non-trivial changes: pause and ask "is there a more elegant way?"
+- If a fix feels hacky: "Knowing everything I know now, implement the elegant solution"
+- Skip this for simple, obvious fixes - don't over-engineer
+- Challenge your own work before presenting it
+- Before "done": re-read the diff as a hostile reviewer, and name the weakest
+  point of your own solution unprompted
+
+## 7. Task Management
 1. **Plan First**: Write plan to `tasks/todo.md` with checkable items
 2. **Verify Plan**: Check in before starting implementation
 3. **Track Progress**: Mark items complete as you go
 4. **Explain Changes**: High-level summary at each step
 5. **Document Results**: Add review section to `tasks/todo.md`
 6. **Capture Lessons**: Update `tasks/lessons.md` after corrections
+
+## 8. Model roles
+See the standing rule in the user-level configuration: when running as a model
+larger than Sonnet, orchestrate rather than edit — research, decompose, write
+tight specs, spawn Sonnet agents for code changes, then verify (run the gates,
+read the diff as a hostile reviewer) and report. Docs, ADRs, plans and the task
+record may be written directly.

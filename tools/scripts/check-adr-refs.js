@@ -26,7 +26,9 @@ const ROOT = path.resolve(__dirname, '../..');
 const ADR_DIR = path.join(ROOT, 'plan/adr');
 const README = path.join(ADR_DIR, 'README.md');
 // Every place that links into plan/adr/ — a broken pointer is as bad from a task file.
-const EXTRA_SOURCES = ['CLAUDE.md', 'plan/figma.md', 'plan/big-picture.md', 'plan/roadmap.md', 'tasks/todo.md', 'tasks/lessons.md'];
+// CLAUDE.md now imports AGENTS.md (`@AGENTS.md`), which holds the ADR conventions text
+// and its references, so AGENTS.md is scanned alongside it — not instead of it.
+const EXTRA_SOURCES = ['AGENTS.md', 'CLAUDE.md', 'plan/figma.md', 'plan/big-picture.md', 'plan/roadmap.md', 'tasks/todo.md', 'tasks/lessons.md'];
 
 const errors = [];
 const fail = (tag, msg) => errors.push(`✗ [${tag}] ${msg}`);

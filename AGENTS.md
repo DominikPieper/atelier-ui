@@ -1,0 +1,181 @@
+# Atelier — how to work in this repo
+
+Read by every coding agent used here: Claude Code (via the `@AGENTS.md` import in
+`CLAUDE.md`), Codex, and the Antigravity CLI. It holds the **facts about this
+repo** — what is true, where the truth lives, and how work is proven done.
+
+How a particular agent should organise its own work does not belong here.
+Claude Code's working agreement lives in `CLAUDE.md` beside the import.
+
+Atelier teaches **design-to-code with AI**: a Figma design becomes a working,
+verified component. The library is implemented in three frameworks (Angular,
+React, Vue) behind one framework-agnostic spec, but **any given workshop uses
+exactly one framework** — the other two adapters are reference/prep
+infrastructure kept in sync by the drift gates, not something you touch in a
+session. Optimise for the single chosen framework's path.
+
+## Design-to-Code Workflow
+
+The core loop — Figma → spec → code → verify, in your chosen framework:
+
+1. **Inspect** the Figma component: `figma_get_component_for_development`
+   (figma-console-mcp) on the node, or read the master on the Components page of
+   file `QMnDD8uZQPldPrlCwZZ58T`. Note its variants, `--ui-*` tokens, and a11y.
+2. **Spec** is the source of truth: `libs/spec/src/index.ts` (+ `metadata/`,
+   `tokens.manifest.ts`, `behaviors.json`). The same contract drives all three
+   frameworks, so prop/variant names are identical everywhere.
+3. **Generate or edit** the component with your agent, using the Storybook MCP for
+   exact component docs (see the table below). **All three hosted endpoints answer
+   component lookups** — Storybook 10.4 and 10.5 emit `components.json` for React
+   only, so the worker serves React's manifest on the Angular and Vue endpoints too
+   (ADR-0083). Variants, defaults and state props carry across, but the reply is
+   React-shaped throughout — JSX snippets, React story paths, a `children` prop
+   where Angular projects content and Vue takes a slot, and `on*Change` callbacks
+   where Angular uses a two-way `model()` and Vue an `update:*` emit. Treat it as
+   an API reference, not as code to copy; `libs/spec/src/index.ts` settles any
+   binding you are unsure of.
+4. **Verify** — run the story in Storybook, then close the loop with
+   `figma_check_design_parity` to catch padding/colour/variant drift. **Required,
+   not optional.**
+
+Full walkthrough: docs `/design-to-code`; hands-on kata: `/first-component`.
+Run the docs app with `nx serve docs`.
+
+## MCP Servers
+
+Always use the appropriate server for the task:
+
+- **Nx & Workspace Management**: the **Nx MCP server**. Note this repo does not
+  configure Nx Cloud, so its `ci_information` / `ci_task_output` tools cannot
+  authenticate; `nx_docs` is the usable one. Reach CI state through `gh` instead.
+- **Angular-Specific CLI**: the **Angular CLI MCP server** for Angular best practices, API searches, examples.
+- **Component Discovery & Docs**: the framework-specific **Storybook MCP servers** for exact component specs. Storybook ships MCP in two layers (added in 10.4, unchanged in the pinned 10.5.10) — be explicit about which surface you're calling.
+- **Component Anatomy & Cross-Framework Mapping**: the **`uianatomy` MCP server** (HTTP at `https://uianatomy.dev/mcp`, 29 tools) for canonical component anatomy, axes, slots, transitions, motion, tokens, events, and library divergences (41 components; per-library `implementations/` audits across radix, headlessui, cdk, react-aria, vaul). Pair with the bundled `uianatomy-mcp` skill at `.claude/skills/uianatomy-mcp/SKILL.md`.
+
+`.mcp.json` at the repo root wires these for Claude Code. Other agents configure
+their own MCP servers; nothing in this repo does it for them.
+
+### Storybook MCP Workflows
+
+**Two MCP surfaces (do not conflate):**
+
+| Surface | URL | Toolsets exposed | Frameworks |
+|---|---|---|---|
+| **Hosted** (`@storybook/mcp` via Cloudflare Worker, reads static manifests) | `atelier.pieper.io/storybook-{angular,react,vue}/mcp` | `docs` only: `list-all-documentation`, `get-documentation`, `get-documentation-for-story` | React: components + docs. Angular/Vue: **their own docs (MDX foundation pages) + the React components manifest served as the cross-framework API reference** — Storybook 10.4 and 10.5 emit `components.json` for React only, and `@storybook/mcp` fails every tool on an empty components manifest, so the worker substitutes React's (the spec contract is identical and drift-gated). |
+| **Local dev** (`@storybook/addon-mcp` inside a running Storybook) | `http://localhost:<port>/mcp` (after `nx storybook <fw>` — this repo binds 4400 angular / 4401 react / 4402 vue; read the exact port from the terminal) | `docs` + `dev` (`preview-stories`, `get-storybook-story-instructions`, `get-changed-stories`, plus the conditionally registered `get-stories-by-component` and `display-review`) + `test` (`run-story-tests`) | React only in preview: Storybook's 10.5 docs still scope the MCP server and its manifests to React, with Vue, Angular, Web Components and Svelte announced. |
+
+**Toolset gating** (addon-mcp options, all default `true`): `docs` requires the `componentsManifest` feature flag — addon-mcp's own preset switches it on, and it is the flag core-server reads when writing the manifest — plus an actually emitted `components.json` (React only as of 10.5). Inside `dev`, `preview-stories` and `get-storybook-story-instructions` need nothing extra; `get-changed-stories` and `display-review` need `features.changeDetection` (10.4's Change Review sidebar), and `display-review` additionally needs `experimentalReview` not set to `false`; `get-stories-by-component` needs a builder that exposes the module-graph service. `test` requires `@storybook/addon-vitest`; a11y in `run-story-tests` activates when `@storybook/addon-a11y` is installed.
+
+Add a local entry when you need the `dev` / `test` toolsets. **Angular/Vue prop tables come back from their own hosted endpoint — the worker performs the React-manifest substitution that used to be a manual fallback (ADR-0083); `libs/spec/src/index.ts` stays the ground truth inside this repo.**
+
+**When reading component docs (any framework, any surface):**
+1. Call `list-all-documentation` once at session start to get valid IDs (set `withStoryIds: true` if you need story IDs for downstream tools; pass `storybookId` to scope multi-source setups)
+2. Use `get-documentation` with those IDs — never guess IDs or invent props; subcomponent docs are included since `@storybook/mcp@0.7.0`
+3. Call `get-documentation-for-story` only when `get-documentation` lacks the story-level detail you need
+4. If a prop isn't documented, say so rather than inventing it
+
+**When creating or editing components/stories (React, local dev only):**
+1. Call `get-storybook-story-instructions` before writing any code (REQUIRED before touching `*.stories.*` files)
+2. After any change, call `preview-stories` and include the returned `previewUrl`s in your final response; in MCP-Apps-capable hosts the addon also exposes a `ui://preview-stories/preview.html` resource that embeds the previews directly
+3. Use `get-changed-stories` to enumerate new/modified/affected stories from the Change Review sidebar before bulk edits
+4. Run `run-story-tests` after each change (pass `{ stories: [...] }` for focused runs, omit for full suite; `a11y: false` to skip accessibility checks) — fix failures before reporting completion
+
+For Angular/Vue, the test loop is `nx test <lib>` (Vitest) plus a manual browser preview in the running Storybook.
+
+## Component Documentation
+
+The primary documentation for the component library lives in the `docs/` application and the `libs/spec` library (which defines the framework-agnostic API contract).
+
+**Do not add component API documentation to this file.** Use the following sources instead:
+- **Interactive Docs**: Run the `docs` app (`nx serve docs`) for framework-specific API tables and live demos.
+- **Spec Library**: Refer to `libs/spec/src/index.ts` for the ground-truth API definitions.
+- **Storybook MCP**: See the "Storybook MCP Workflows" table above for the hosted vs. local surfaces and their tools.
+
+## Figma File (Atelier UI)
+
+File key: `QMnDD8uZQPldPrlCwZZ58T`. Page conventions:
+
+- **Components page** = master `COMPONENT_SET`s with full variant matrix. Source of truth.
+- **Inventory page** = condensed catalog. Every tile is an `INSTANCE` of a master on Components — never duplicate by hand.
+- When adding a new master: also add one `INSTANCE` on Inventory and bump the TOC count + date.
+- When removing a master: instance auto-deletes; bump TOC.
+
+## Testing
+
+- **Angular unit tests use Angular Testing Library** (`@testing-library/angular`) —
+  `render()` and `screen`, never raw `TestBed` / `ComponentFixture`. React and Vue
+  use their Testing Library equivalents.
+- `@testing-library/jest-dom` matchers (`toBeInTheDocument()`, `toHaveAttribute()`)
+  are globally available via each lib's `test-setup.ts`.
+- Runner: Vitest (`@analogjs/vitest-angular` for Angular). Run a library's suite
+  with `nx test <lib>`.
+- Behaviour that matters gets a test that pins it down, written with the code —
+  not afterwards as decoration.
+
+## Verifying that something works
+
+- **Lint through Nx, not the raw binary**: `nx lint <project>`. The project config
+  is stricter than a bare `npx eslint` run, so a clean raw run proves nothing.
+- **A gate's result is its exit code.** Run it as `cmd > /tmp/out 2>&1; echo $?`
+  and read the file afterwards. Piping into `head`/`tail`/`grep` reports the
+  *pipe's* status, which is always `0` — that silently converts a failure into a
+  pass, and has already put a false "all gates green" claim into this repo's
+  history.
+- `npm run check:all` runs the full gate chain (34 gates). Every gate in it is
+  offline and deterministic; that is why `check:release-drift`, which asks the npm
+  registry, is deliberately **not** in the chain.
+- Local gates say nothing about the release pipeline. "All gates pass" is a
+  statement about the checks that exist here, not about what reached npm — check
+  CI and the registry separately (`gh run list`, `npm run check:release-drift`).
+- Never mark a task complete without proving it works. Separate what you
+  *verified* from what you *assumed* when you report.
+
+## Core Principles
+
+- **Simplicity First**: Make every change as simple as possible. Impact minimal code.
+- **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
+- **Minimal Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
+- **Big Picture**: the project idea / plan docs live in `plan/`.
+
+## Decision Records (ADR)
+
+When a non-trivial decision is made, record it as an ADR so the *why* stays
+traceable and reusable later (blog posts, talks, teaching). `plan/adr/` is the
+canonical decision log.
+
+**Record an ADR when** you choose one approach over alternatives, set a
+convention, change the architecture / spec contract / API shape, the tooling &
+gates, the design-system & tokens, the Figma→code workflow, or build/release —
+i.e. any tradeoff with a rationale worth keeping. **Skip it** for trivial or
+mechanical work (typos, renames, dependency bumps, routine bugfixes).
+
+How:
+1. Create `plan/adr/NNNN-kebab-title.md` with the next sequential number.
+2. Follow the MADR format already in `plan/adr/`: YAML frontmatter
+   (`status: accepted`, `date: <YYYY-MM-DD>`, `sources`, optional
+   `supersedes`/`superseded-by`) + sections `## Status`, `## Context`,
+   `## Decision`, `## Consequences`. New ADRs are recorded-at-the-time, so they
+   need no `confidence` field (that marks the older reconstructed records).
+3. Capture the reasoning richly — the forces/context, the decision, **why**
+   (and which alternatives were rejected and why), and the consequences/
+   tradeoffs. That "why" is the content that gets reused later.
+4. Add a row to the `plan/adr/README.md` index. If the decision reverses an
+   earlier one, set `supersedes` here and flip the old ADR's `status:` to
+   `superseded`.
+5. Write the ADR as part of finishing the decision-bearing task (same bar as
+   "verifying that something works"), not retroactively.
+
+An ADR is a record of what was decided *and* of what the deciders believed. When
+a published one turns out to be wrong, add a dated correction note rather than
+editing the error away.
+
+Deeper rationale lives in `plan/big-picture.md`, `plan/design-principles.md`,
+and `tasks/rationale.md` — cross-link rather than duplicate.
+
+## Task record
+
+- `tasks/todo.md` — the running plan and status. Open work is a checkbox item;
+  finished work keeps its reasoning.
+- `tasks/lessons.md` — accumulated correction patterns. Add to it after a
+  correction, so the same mistake gets harder to repeat.
+- Convert relative dates to absolute ones when writing either.
