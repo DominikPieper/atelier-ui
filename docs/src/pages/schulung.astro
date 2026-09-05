@@ -335,7 +335,7 @@ const DAYS: Day[] = [
       </p>
       <ol class="schulung-verify">
         <li>Komponente liegt als Component-Set im eigenen Figma-Draft (Duplikat des Atelier-Files) — mit Variants, Properties und Dark-Mode-Variante</li>
-        <li><code>npm run preflight</code> weiter grün</li>
+        <li><code>npm run sync:generated</code> läuft ohne Diff durch (<code>git status --short</code> danach leer) — anders als <code>preflight</code>, das nie Komponenten-Code liest, prüft das direkt die heutige Arbeit</li>
         <li><code>nx storybook &lt;fw&gt;</code> läuft und zeigt die Komponente als Story (Canvas + Docs-Tab)</li>
         <li>Test-Loop grün: React → <code>run-story-tests</code> MCP-Call passes; Angular/Vue → <code>nx test &lt;lib&gt;</code> passes</li>
         <li><code>figma_audit_component_accessibility</code> ohne kritische Findings <strong>und</strong> Storybook A11y-Tab ohne axe-core-Findings</li>

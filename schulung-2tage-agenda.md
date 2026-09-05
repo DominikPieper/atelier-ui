@@ -91,12 +91,20 @@ Je ein Brief unter `workshop/briefs/` — [`toast.md`](workshop/briefs/toast.md)
 End-to-End-Check am Ende von Tag 2 pro Teilnehmer:
 
 1. Komponente liegt als Component-Set im **eigenen Figma-Draft** (Duplikat des Atelier-Files) — mit Variants, Properties und Dark-Mode-Variante
-2. `npm run preflight` weiter grün
+2. `npm run sync:generated` läuft ohne Diff durch (`git status --short` danach leer) — der Befehl regeneriert die Spec-Kopien in den drei Framework-Libs (`sync-spec.mjs`), die generierten Behavior-Typen (`gen-behaviors.mjs`) und `llms.txt`/`llms-full.txt` (`gen-llms-txt.mjs`) aus ihren jeweiligen Quellen. Ein Diff heißt: eine Quelländerung von heute (Spec, `behaviors.json`, Docs-Daten) ist noch nicht in die generierten Dateien durchgezogen — anders als `preflight`, das nie Komponenten-Code liest, prüft dieser Befehl direkt, ob die heutige Arbeit vollständig ist
 3. `nx storybook <fw>` läuft und zeigt die Komponente als Story (Canvas + Docs-Tab)
 4. Test-Loop grün: React → `run-story-tests` MCP-Call passes; Angular/Vue → `nx test <lib>` passes
 5. `figma_audit_component_accessibility` ohne kritische Findings **und** Storybook A11y-Tab im Browser zeigt keine kritischen axe-core-Findings
 6. Dark Mode wird durch Token-Override korrekt umgeschaltet (`prefers-color-scheme`)
 7. `figma_check_design_parity` auf den eigenen Figma-Node gegen die generierte Komponente: der Report kommt ohne Abweichungen zurück — Findings an Claude zurückgeben und erneut prüfen. Gemeint ist der MCP-Call, nicht `npm run check:parity`: das Repo-Gate liest die Atelier-Master aus `tools/figma/snapshot.json`, in denen die eigene Komponente nicht steht (und meldet über `check:all` im `--report`-Modus ohnehin nur Warnungen, siehe ADR-0082)
+
+**Wenn `npm run check:all` läuft:** ein Teil der Gates vergleicht die drei Framework-Adapter gegeneinander und wird bei einer Ein-Framework-Komponente **by design** rot — kein Fehler an der eigenen Arbeit:
+
+- `check:sync` — verlangt denselben Komponentennamen in `libs/angular`, `libs/react` **und** `libs/vue`; die eigene Komponente existiert nur im gewählten Framework → zwei `[DRIFT]`-Meldungen, garantiert.
+- `check:a11y-parity` — verlangt committete a11y-Snapshots je Framework; ohne `npm run gen:a11y` für die eigene Komponente meldet es `[ROSTER]` (Blocker), unabhängig davon, wie viele Frameworks gebaut wurden.
+- `check:design-status` — schreibt `plan/design-status.md` aus **jedem** gefundenen Komponentenverzeichnis neu; ein zusätzliches Verzeichnis macht das Gate sofort rot, und `npm run sync:generated` behebt das **nicht** (der Generator hängt nicht in dieser Kette).
+
+Diese drei: dem Trainer zeigen statt am eigenen Code zu suchen. Echtes Signal liefern dagegen `check:types`, `check:exports`, `check:css-tokens`, `check:token-bypass`, `check:typeface`, `check:dead-selectors`, `check:iconography`, `check:box-sizing`, `check:primitives` und `check:story-descriptions` — sie laufen jeweils nur über die Dateien im gewählten Framework und melden echte Fehler in der eigenen Komponente.
 
 ---
 
@@ -240,7 +248,7 @@ Bullets als Roh-Material für Deck. Jede Folie ~1–3 Bullets, jeder Block ~6–
 **Folie 5 — Drift erkennen & korrigieren**
 - Spec-Drift: `libs/spec` vs. Implementierung
 - Token-Drift: Hard-coded Werte schleichen sich rein
-- Tool: `npm run preflight` + Storybook A11y-Tab
+- Tool: `npm run check:all` (Drift-Gates, u.a. `check:sync`, `check:variants`, `check:css-tokens`) + Storybook A11y-Tab
 - Component-Trinity Subagent prüft cross-framework
 
 **Folie 6 — Wann Claude scheitert**
