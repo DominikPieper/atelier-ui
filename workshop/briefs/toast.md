@@ -48,7 +48,7 @@ your Figma description; do not invent a variable for it.
 
 ## 2. Axes
 
-**Variant (the severity axis):** `info` · `success` · `warning` · `error`.
+**Variant (the severity axis):** `info` · `success` · `warning` · `danger`.
 
 **Properties (not variants):**
 
@@ -64,7 +64,7 @@ does not restyle the message.
 
 ### Scope for the 90-minute block
 
-**In scope: `success` and `error`, in the `open` and `closing` states.** Those two
+**In scope: `success` and `danger`, in the `open` and `closing` states.** Those two
 severities are the pair that must differ in more than hue (see §4) and the pair whose
 live-region politeness differs — so they carry the whole lesson between them. Model
 `dismissible` and `hasIcon` as booleans if time allows.
@@ -108,7 +108,7 @@ Non-negotiable. Three of these are blocker-severity in the canonical record.
    exits are tabbing to the button or waiting, and the keyboard contract feels broken
    next to every other light-dismiss surface.
 3. **Severity drives live-region politeness.** *(major)* `info` and `success` →
-   `role="status"` (polite). `error` → `role="alert"` (assertive). `warning` is
+   `role="status"` (polite). `danger` → `role="alert"` (assertive). `warning` is
    canonically polite. Marking every toast assertive interrupts the user for every
    "Copied" and trains them to switch notifications off.
 4. **Critical errors are not toasts.** *(blocker)* Anything the user must act on — a
@@ -148,9 +148,9 @@ Each one is worth a sentence in your Figma description.
 
 Beyond the shared bar in [`README.md`](README.md):
 
-- The variant axis is named `variant` with values `success` and `error` — lowercase,
+- The variant axis is named `variant` with values `success` and `danger` — lowercase,
   matching the string-literal union the spec will carry.
-- `success` and `error` are distinguishable with colour removed.
+- `success` and `danger` are distinguishable with colour removed.
 - The description on the master states: the auto-dismiss duration, the hover-pause
   contract, the Escape binding, and that the shadow is CSS-only.
 - The two in-scope states are `open` and `closing`, and the description names the four

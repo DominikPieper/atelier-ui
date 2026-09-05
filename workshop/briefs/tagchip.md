@@ -51,7 +51,7 @@ closer to a tag. This decision *is* the design work.
 ## 2. Axes
 
 **Variant (the severity axis, from `badge`):** `default` · `success` · `warning` ·
-`error` · `info`. A closed enum — the same one the CSS contract maps to token pairs.
+`danger` · `info`. A closed enum — the same one the CSS contract maps to token pairs.
 
 **Properties (not variants):**
 
@@ -73,7 +73,7 @@ release or two.
 makes this a TagChip at all and drags in the whole a11y section.
 
 **Out of scope, and say so in the description rather than silently omitting:**
-`warning`, `error`, `info`, the `sm` size, `hasIcon`, and the selected/keyboard-navigated
+`warning`, `danger`, `info`, the `sm` size, `hasIcon`, and the selected/keyboard-navigated
 state a chip acquires inside a Tag Input.
 
 ---
