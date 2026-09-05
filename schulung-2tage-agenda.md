@@ -104,6 +104,16 @@ End-to-End-Check am Ende von Tag 2 pro Teilnehmer:
 - `check:a11y-parity` — verlangt committete a11y-Snapshots je Framework; ohne `npm run gen:a11y` für die eigene Komponente meldet es `[ROSTER]` (Blocker), unabhängig davon, wie viele Frameworks gebaut wurden.
 - `check:design-status` — schreibt `plan/design-status.md` aus **jedem** gefundenen Komponentenverzeichnis neu; ein zusätzliches Verzeichnis macht das Gate sofort rot, und `npm run sync:generated` behebt das **nicht** (der Generator hängt nicht in dieser Kette).
 
+Diese drei sind am Probelauf gemessen, nicht aus dem Quellcode geraten: eine Probe-Komponente in nur einem Framework macht genau `check:sync`, `check:a11y-parity` und `check:design-status` rot — und sonst nichts.
+
+**Und wenn die eigene Spec doch in `libs/spec/src/index.ts` landet**, kommen drei weitere dazu (ebenfalls gemessen):
+
+- `check:spec` — die Spec wird verbatim in drei Adapter-Kopien gespiegelt; genau dafür ist `npm run sync:generated` da, das ist die eine dieser Reds, die der Teilnehmer selbst grün macht.
+- `check:variants` — jede `Atl<Name>Variant`-Union muss in `UNION_TO_COMPONENT` stehen → `[UNMAPPED]`.
+- `check:metadata` — jedes exportierte `Atl<Name>Spec` muss registriert oder als Nicht-Komponente allowlisted sein → `[MISSING-REGISTRY]`.
+
+Deshalb die klare Anweisung an den Raum: **die eigene Spec als eigene Datei neben der Komponente, nicht in den geteilten Master.** Das Material sagt „eine Spec *im Stil von* `libs/spec/src/index.ts`" — im Stil von, nicht hinein.
+
 Diese drei: dem Trainer zeigen statt am eigenen Code zu suchen. Echtes Signal liefern dagegen `check:types`, `check:exports`, `check:css-tokens`, `check:token-bypass`, `check:typeface`, `check:dead-selectors`, `check:iconography`, `check:box-sizing`, `check:primitives` und `check:story-descriptions` — sie laufen jeweils nur über die Dateien im gewählten Framework und melden echte Fehler in der eigenen Komponente.
 
 ---
