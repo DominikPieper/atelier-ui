@@ -2150,6 +2150,52 @@ scrollbar sits at the table rather than at the bottom of the whole column.
 There is already a `@media (max-width: 480px)` card transform for these tables;
 the gap is everything between 481px and the reading column's width.
 
+## Nx 23 migration: closed and verified — 2026-09-05
+
+The run of 09-03 left `migrations.json` and two `tools/ai-migrations/` prompt
+files in the tree, and from the tree alone there was no way to tell a finished
+run from an interrupted one. Re-running `--run-migrations` answered it and cost
+two commits to learn the mechanism: **it restarts from the top of the file, it
+does not resume.** `strict-safe-navigation-narrow` re-added the very
+`extendedDiagnostics` suppressions that `remove-conflicting-extended-diagnostics`
+had removed, then removed them again one migration later — net diff against
+`a703ba8` empty. The run reported 45 applied and 7 prompt migrations deferred,
+and `.nx/migrate-runs/23.1.0-rc.2` already records all seven as handled by the
+agentic pass on 09-03.
+
+- [x] Both prompt artefacts confirmed moot before deleting: React is on 19.2.4
+      with `@types/react` 19, and the ts-jest migration was a no-op here (classic
+      paths-based tsconfig, no project received `isolatedModules`, no `typecheck`
+      target exists — this repo gates types through `check:types` instead).
+- [x] `migrations.json` + `tools/ai-migrations/` removed (`c410f44`).
+- [x] **Verified on the resulting tree, not assumed:** `check:all` exit 0 (all 31
+      gates) · `nx run-many -t test` exit 0, 7 projects (Vitest 4) · `-t lint`
+      exit 0, 10 projects (flat config) · `-t build` exit 0, 7 projects.
+- Lesson for the next `nx migrate`: delete `migrations.json` when the run ends.
+      A leftover file is indistinguishable from an interrupted run, and re-running
+      it is **not** idempotent across migrations that undo one another.
+- [ ] Two net-zero commits (`98e8755`, `ac3c854`) stay in history — they cancel
+      exactly, and rewriting unpushed history was blocked by the auto-mode
+      classifier. Harmless; squash them if the branch is ever rebased anyway.
+
+## Open — 30 parity records are stale again (2026-09-05)
+
+`check:parity:report` now warns on 30 of 37 masters. Not caused by the migration
+(the tree is byte-identical to `a703ba8`); it is the known `inputsHash` weakness
+below plus real component edits from `6a8ac9f` (29 files), `64277c3` (37) and
+`2072116` (19). Non-blocking by design — `check:all` runs the `--report` variant,
+per ADR-0082 — but "verified after the files last changed" is now false for 30 of
+them, which is the whole claim the stamp makes.
+
+- [ ] Re-verify with the Figma Desktop Bridge open: `figma_check_design_parity`
+      per master, then `npm run parity:record -- --component <Name>`, then
+      `npm run check:parity` (no `--report`, which blocks) to confirm. Needs a
+      human at a Figma session; cannot be done from a script.
+- [ ] Doing the `inputsHash` narrowing FIRST would shrink this list — a
+      `*.spec.tsx` edit should not invalidate a parity record. See the item under
+      "Open — parity drift, after ADR-0082 (2026-08-28)". Decide the order before
+      spending 30 bridge round-trips.
+
 ## Open — Schulung, second review (2026-09-02)
 
 Full document: `tasks/schulung-review-2026-09-02.md` (4 blockers · 1 immediate · 13 major · 15 minor). Nothing fixed in this pass — review only.
