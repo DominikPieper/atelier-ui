@@ -178,3 +178,24 @@ Neither defect was visible to `check:docs` or `check:docs-layout`, which both re
 | Rendered `dist/docs/schulung/index.html` | all four new passages present; `<lib>` correctly escaped to `&lt;lib&gt;`; quote convention (`„…"`, U+0022 closer) matches the page's existing usage |
 
 Still open: M1–M4 and n1–n4 from this review. n1 (`/claude-design` says 29 gates, `check:all` chains 34) is a two-token fix in two places and should not wait.
+
+---
+
+## 7. Second fix round (2026-09-05)
+
+M1–M4 and n2–n4 closed. `tasks/todo.md`-level summary: the page no longer asserts anything it cannot back.
+
+- **M1a** — Day 1 Block 04 now says step 5 is idea, not demonstration: no demo, no artefact, tooling absent, blocked on the per-seat test. `/claude-design` carries the same statement as a callout naming where the specification lives. **The reviewer's proposed fix was rejected.** It suggested writing Kata 5 up as prose with a screenshot; I searched first and found no `seed-canvas.mjs`, no `payload.template.html` and no `.dc.html` anywhere outside `node_modules`. Publishing a how-to for tooling this repo does not contain, behind an access path nobody has verified, would have been the same defect class the review exists to remove.
+- **M1b** — Day 2 Block 01 closes with a written handoff document; Block 02 prompts from it. Recorded as [ADR-0096](../plan/adr/0096-the-handoff-a-picture-cannot-carry.md), which also states what was rejected: a machine-readable schema (it would let participants fill fields instead of making decisions) and a Figma extractor (the behaviour it must carry is precisely what Figma does not hold).
+- **M2** — Block 05 is now the Settings Card composition `/tutorial` actually teaches; the invented `Button-Tone` is gone. Side effect worth noting: the buffer kata bullet ("dieselbe Settings / Card-Frame als zweite Runde auf Zeit") only makes sense now — it had been sitting beside a different exercise.
+- **M3** — ~5 min inside the existing Block 04 MCP demo: one Angular/Vue query with `libs/spec/src/index.ts` open beside it, naming ADR-0083's mapping once.
+- **M4** — a deliberate-mismatch exercise in Block 04, and Erfolgs-Verifizierung item 7 no longer lets a clean report stand as proof on its own.
+- **n2** — `/troubleshooting` in both `risk: true` blocks. **n3** — HelpFooter now says fourteen, not eight. **n4** — `09:00–17:30 (6 h 50 min netto)`, and the plural "kleine Mikro-Pausen" replaced by the single 10-min buffer that actually exists.
+
+**One defect caught in review, again by reading the diff rather than by a gate.** The M4 bullet listed the `codeSpec` fields as `visual, spacing, typography, tokens, api, a11y, metadata`. The schema in `skills/figma-workspace-architect/references/code-sync.md` defines `componentAPI` and `accessibility`; `api` and `a11y` do not exist. That is the same failure as the `Button-Tone` defect being fixed three bullets above it — a plausible identifier the source does not contain — and it would have broken the exercise outright, since the bullet's whole point is that the participant compares the page's field list against what they actually submitted. Corrected before commit.
+
+Twice now in this session a fix round introduced a defect that every gate passed and only diff-reading caught. Both were factual claims about things outside the file being edited: a tracked `.mcp.json`, and a schema in a skill reference. The gates check the page's shape; nothing checks whether its sentences are true.
+
+**Verification of the final state:** `npm run check:all` (34 gates) exit **0**; `npx nx build docs` exit **0**; `npm run check:adr-refs` exit **0**; all seven passages confirmed present in the rendered `dist/docs/schulung/index.html` and `dist/docs/claude-design/index.html`.
+
+Still unverified, and unchanged by this round: nothing here is workshop-verified. No dry run, no live MCP call against a running local Storybook, no Figma action.
