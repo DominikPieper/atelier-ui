@@ -2150,6 +2150,36 @@ scrollbar sits at the table rather than at the bottom of the whole column.
 There is already a `@media (max-width: 480px)` card transform for these tables;
 the gap is everything between 481px and the reading column's width.
 
+## Open — what the caption fix left unproven (2026-09-05)
+
+ADR-0091 gave `label` to AtlInput, AtlTextarea and AtlSelect via a new
+`AtlCaptionSpec` mixin, and closed L1. Two things it could not settle, both
+about AtlSelect, both found by cross-checking rather than by a gate.
+
+- [ ] **AtlSelect has no a11y baseline in any framework**, so the parity gate
+      never compares the new caption path there. `tools/parity/a11y/` holds
+      snapshots for 25 components; `select` is not among them (nor are
+      `accordion`, `combobox`, `radio` — the same four `plan/design-status.md`
+      already shows with an empty a11y column). The caption was added to three
+      components and is machine-proven identical across adapters for two.
+- [ ] **AtlSelect is the deepest structural divergence in the library, and the
+      caption sits right on top of it.** React (`atl-select.tsx:79`) and Vue
+      (`atl-select.vue:65`) render a native `<select>`; Angular renders a
+      `<button role="combobox">` (`atl-select.ts:86`) and points the `<label>`
+      at its `triggerId`. Both are labelable, so both are defensible in
+      isolation — but "one spec, three frameworks" is weakest exactly here, and
+      nothing measures it. Writing the a11y spec above is the cheap way to find
+      out whether the three actually agree; deciding whether Angular should be a
+      native control is the expensive question behind it, and wants its own ADR.
+- [ ] Follow-up the implementer flagged: the Angular `host: { '[attr.id]':
+      'null' }` / `'[attr.aria-label]': 'null'` defense is now hand-copied in
+      three components with nothing enforcing it. A fourth captioned Angular
+      component needs someone to remember. A shared host-metadata constant or a
+      gate would make it structural.
+- [ ] Same `Math.random()`-in-a-`computed` id bug the caption work fixed for
+      Input still exists in **Vue's AtlCheckbox** — found while fixing Input,
+      left alone as out of scope. SSR-unsafe by the same argument.
+
 ## Nx 23 migration: closed and verified — 2026-09-05
 
 The run of 09-03 left `migrations.json` and two `tools/ai-migrations/` prompt
