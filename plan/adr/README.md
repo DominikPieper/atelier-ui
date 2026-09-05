@@ -97,6 +97,7 @@ Each record uses MADR-style YAML frontmatter, so its `status`, `sources` (and `c
 | [0089](0089-the-docs-css-joins-the-gates.md) | The docs CSS joins the gates (`check:docs-layout` renders the built docs at 4 widths — overflow, column scroll, covered anchors, axe rule set, breakpoint set; `check:css-tokens` Pass A covers `docs/src`; z-index on `--ui-z-*`; four breakpoints) | Accepted | Recorded |
 | [0090](0090-one-preflight-branched-inside-not-forked-outside.md) | One preflight, branched inside, not forked outside (`preflight.mjs` detects clone vs. scaffold via `libs/spec/` and checks that environment's ports; the two file copies stay byte-identical) | Accepted | Recorded |
 | [0091](0091-a-caption-two-adapters-shipped-and-the-contract-missed.md) | A caption two adapters shipped and the contract missed (`label` on Input/Textarea/Select pulled into a shared `AtlCaptionSpec` mixin and implemented in Angular for all three, closing L1; id generation unified on `useId()`/`nextId`; a static-`id`-duplicates-onto-host Angular a11y bug found and fixed; `aria-label` now reaches the native control in all three frameworks) | Accepted | Recorded |
+| [0092](0092-a-guard-hand-copied-three-times-now-a-gate.md) | A guard hand-copied three times, now a gate (`check:host-guards` enforces the ADR-0091 `'[attr.id\|aria-label\|aria-labelledby]': 'null'` host defense per `@Component` class; found and fixed two undefended aliases, `AtlDialog` and `AtlTable`) | Accepted | Recorded |
 
 ## Related rationale (do not duplicate — cross-link)
 

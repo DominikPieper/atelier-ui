@@ -67,6 +67,16 @@ let nextId = 0;
   styleUrl: './atl-dialog.css',
   host: {
     '[class]': 'hostClasses()',
+    // Same defect as atl-input.ts's identical guards: a static aria-label="…"
+    // or aria-labelledby="…" attribute on <atl-dialog> matches the aliased
+    // input below AND stays on this host element too (Angular keeps static
+    // attributes even when they also bind an input). The host is roleless
+    // today, so an undefended attribute here is currently a no-op rather than
+    // a live defect — but force it absent anyway so it stays that way once
+    // this host ever gains a role, and so the aliased input unambiguously
+    // means "the inner <dialog>'s accessible name" (ADR-0091).
+    '[attr.aria-label]': 'null',
+    '[attr.aria-labelledby]': 'null',
   },
 })
 export class AtlDialog {

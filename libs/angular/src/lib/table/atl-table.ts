@@ -74,6 +74,15 @@ export const ATL_TABLE = new InjectionToken<AtlTableContext>('ATL_TABLE');
   styleUrl: './atl-table.css',
   host: {
     '[class]': 'hostClasses()',
+    // Same defect as atl-input.ts's identical guard: a static aria-label="…"
+    // attribute on <atl-table> matches the aliased input above AND stays on
+    // this host element too (Angular keeps static attributes even when they
+    // also bind an input). The host is roleless today, so an undefended
+    // attribute here is currently a no-op rather than a live defect — but
+    // force it absent anyway so it stays that way once this host ever gains a
+    // role, and so the aliased input unambiguously means "the scrollable
+    // region's accessible name" (ADR-0091).
+    '[attr.aria-label]': 'null',
   },
   providers: [{ provide: ATL_TABLE, useExisting: AtlTable }],
   // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation

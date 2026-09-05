@@ -394,6 +394,25 @@ const DEAD_SELECTOR_EXEMPT = new Map([
   ],
 ]);
 
+/**
+ * `<ClassName>:<attr>` pairs that intentionally skip the host-attribute guard
+ * (check-host-attr-guards, ADR-0091). Keyed by Angular class, not component
+ * dir — several files declare more than one `@Component` (e.g. `atl-dialog.ts`
+ * holds four), and the gate grades per class, so an exemption must too.
+ *
+ * Same two kinds as the other allowlists here: `design` is a closed question
+ * and stays silent, `gap` is an unresolved instance of the defect and warns
+ * on every run. Empty by design — every alias/id found when this gate was
+ * built (Input, Textarea, Select, Dialog, Table) got the real guard added
+ * instead of an exemption; this Map exists for the next component that earns
+ * one, not as a parking lot for today's backlog.
+ *
+ * An entry naming a class/attr pair that doesn't exist, or one the host now
+ * DOES guard, is itself an error — same [STALE] hygiene rule as the other
+ * allowlists.
+ */
+const HOST_ATTR_GUARD_EXEMPT = new Map();
+
 module.exports = {
   DEAD_SELECTOR_EXEMPT,
   VARIANT_AXIS_EXCEPTIONS,
@@ -407,4 +426,5 @@ module.exports = {
   PRIMITIVE_TOKENS,
   PRIMITIVE_EXEMPTIONS,
   TOKEN_BYPASS_EXEMPT,
+  HOST_ATTR_GUARD_EXEMPT,
 };
