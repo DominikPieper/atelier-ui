@@ -131,6 +131,7 @@ let nextId = 0;
   host: {
     role: 'combobox',
     '[class]': 'hostClasses()',
+    '[attr.aria-required]': 'required() || null',
     '(keydown)': 'onKeydown($event)',
     // Same fix as atl-input.ts's `id`: a static `aria-label="…"` attribute
     // matches the aliased `ariaLabel` input below AND stays on this host

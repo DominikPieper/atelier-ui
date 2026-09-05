@@ -386,5 +386,25 @@ describe('AtlSelect', () => {
       expect(panelId).toBeTruthy();
       expect(container.querySelector(`#${panelId}`)).toBeInTheDocument();
     });
+
+    it('sets aria-required="true" on the host when required', async () => {
+      const { container } = await render(
+        `<atl-select [required]="true" placeholder="Choose">
+          <atl-option optionValue="a">A</atl-option>
+        </atl-select>`,
+        { imports: [AtlSelect, AtlOption] }
+      );
+      expect(container.querySelector('atl-select')).toHaveAttribute('aria-required', 'true');
+    });
+
+    it('does not set aria-required when not required', async () => {
+      const { container } = await render(
+        `<atl-select placeholder="Choose">
+          <atl-option optionValue="a">A</atl-option>
+        </atl-select>`,
+        { imports: [AtlSelect, AtlOption] }
+      );
+      expect(container.querySelector('atl-select')).not.toHaveAttribute('aria-required');
+    });
   });
 });
