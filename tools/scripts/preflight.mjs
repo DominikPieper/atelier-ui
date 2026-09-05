@@ -13,7 +13,7 @@
 
 import { execSync, spawnSync } from 'node:child_process';
 import { createServer } from 'node:net';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, statSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
@@ -324,13 +324,15 @@ async function checkFigmaSetup() {
   ok('FIGMA_ACCESS_TOKEN', `set (${token.length} chars, REST reads enabled)`);
 }
 
-async function checkMcpEndpoints() {
+async function checkMcpEndpoints(env) {
   const endpoints = loadMcpEndpoints();
   if (endpoints.length === 0) {
     warn(
       'MCP endpoints',
       'none configured in .mcp.json',
-      'Scaffold a workspace with `npx create-atelier-ui-workspace`',
+      env === 'clone'
+        ? 'The clone ships .mcp.json at the repo root with these servers — check it was not deleted, renamed, or run from the wrong directory'
+        : 'Scaffold a workspace with `npx create-atelier-ui-workspace`',
     );
     return;
   }
@@ -355,25 +357,54 @@ async function checkMcpEndpoints() {
 }
 
 // ── Environment detection ───────────────────────────────────────────
-// This file ships identically into two trees (kept in sync by `npm run
-// check:sync`): the atelier monorepo that the two-day cohort clones, and the
-// single-framework workspace `create-workspace` scaffolds for everyone else
-// (ADR-0084). `ROOT` sits at the same relative depth (two levels above
-// tools/scripts) in both, so the ports to check differ by tree even though
-// the code is one file — the environment logic has to live in here, not as
-// a divergence between the two copies.
+// This file ships identically into two trees: the atelier monorepo that the
+// two-day cohort clones, and the single-framework workspace `create-workspace`
+// scaffolds for everyone else (ADR-0084). `ROOT` sits at the same relative
+// depth (two levels above tools/scripts) in both, so the ports to check
+// differ by tree even though the code is one file — the environment logic
+// has to live in here, not as a divergence between the two copies. The two
+// copies are kept byte-identical by `npm run check:preflight`
+// (tools/scripts/sync-preflight.mjs --check) — NOT by `check:sync`, which
+// only checks Angular/React/Vue component drift and never looks at
+// `libs/create-workspace/`.
 //
-// Discriminator: `libs/spec/` is the framework-agnostic spec contract
-// (libs/spec/src/index.ts — see CLAUDE.md) that the Angular/React/Vue libs
-// and the drift gates all depend on. It exists only in the source monorepo;
-// `create-workspace`'s preset generator never writes it into a scaffolded
-// workspace (it writes a single `workshop-<fw>` app instead). That makes it
-// a cheap, single-stat, reliably-present-or-absent signal — no need to shell
-// out or parse the project graph. Fall back to `scaffold` when it's absent:
-// the generated workspace is the copy that ships to strangers, so an
-// undetectable tree should behave exactly as it does today.
+// Discriminator: both `libs/spec/` (the framework-agnostic spec contract,
+// libs/spec/src/index.ts — see CLAUDE.md) and `plan/adr/` (the decision log)
+// are directories that exist only in the source monorepo — `create-workspace`'s
+// preset generator provably never writes either one into a scaffolded
+// workspace (it writes a single `workshop-<fw>` app instead; see preset.ts).
+// Requiring both, rather than either alone, is deliberate: a single directory
+// name is something a team could plausibly recreate inside a scaffold they
+// extend (e.g. adding their own `libs/spec` package), and a false "clone"
+// verdict then goes silent — checkPorts skips 4200/6006 entirely and reports
+// an all-clear on ports it never looked at. Two thematically-linked,
+// distinctively-named directories are a much smaller false-positive target,
+// at the cost of one extra `statSync` call — still two stats, not workspace
+// introspection.
+//
+// This does not eliminate the risk, only shrinks it, and there is no cheap
+// way to shrink it further: a tree that genuinely has both directories for
+// unrelated reasons is indistinguishable from a real clone without deeper
+// introspection than this check is willing to pay for. That residual case
+// gets no separate warning branch — a "some checks may be wrong" message
+// with no actionable next step is not worth the extra state. The reported
+// `Environment` line is the mitigation: it prints which verdict was reached
+// so a participant who is not where they expect notices immediately (the
+// motivation for this whole change). Fall back to `scaffold` when neither
+// directory (or only one) is present: the generated workspace is the copy
+// that ships to strangers, so an undetectable or partial-match tree should
+// behave exactly as it did before this change.
+function isDir(path) {
+  try {
+    return statSync(path).isDirectory();
+  } catch {
+    return false;
+  }
+}
+
 function detectEnvironment() {
-  return existsSync(resolve(ROOT, 'libs/spec')) ? 'clone' : 'scaffold';
+  const isClone = isDir(resolve(ROOT, 'libs/spec')) && isDir(resolve(ROOT, 'plan/adr'));
+  return isClone ? 'clone' : 'scaffold';
 }
 
 const PORTS_BY_ENV = {
@@ -396,8 +427,7 @@ const PORTS_BY_ENV = {
   ],
 };
 
-async function checkPorts() {
-  const env = detectEnvironment();
+async function checkPorts(env) {
   ok(
     'Environment',
     env === 'clone'
@@ -422,6 +452,8 @@ async function main() {
   console.log(bold('Atelier UI Preflight'));
   console.log(dim('Checking your environment for the workshop…'));
 
+  const env = detectEnvironment();
+
   header('Runtime');
   checkNode();
   checkNpm();
@@ -434,10 +466,10 @@ async function main() {
   await checkFigmaSetup();
 
   header('MCP reachability');
-  await checkMcpEndpoints();
+  await checkMcpEndpoints(env);
 
   header('Local ports');
-  await checkPorts();
+  await checkPorts(env);
 
   // Summary
   const failures = results.filter((r) => r.level === 'fail').length;
