@@ -104,13 +104,23 @@ export function AtlStepper({
     [children]
   );
 
+  // Whether step `i` can be activated right now: not itself disabled, and — in
+  // linear mode — either at/behind the active step, or ahead of it with every
+  // step before it completed or optional. Drives both goTo()'s guard and the
+  // header button's native `disabled` state, so an unreachable step is also
+  // not focusable — no roving-tabindex bookkeeping needed, since the header is
+  // a list, not a tab widget.
+  const isReachable = (i: number) => {
+    const step = steps[i];
+    if (!step || step.disabled) return false;
+    if (!linear) return true;
+    if (i <= activeStep) return true;
+    return steps.slice(0, i).every((s) => s.completed || s.optional);
+  };
+
   const goTo = (i: number) => {
     if (i < 0 || i >= steps.length) return;
-    if (steps[i]?.disabled) return;
-    if (linear && i > activeStep) {
-      const canAdvance = steps.slice(0, i).every((s) => s.completed || s.optional);
-      if (!canAdvance) return;
-    }
+    if (!isReachable(i)) return;
     setStep(i);
   };
 
@@ -137,7 +147,7 @@ export function AtlStepper({
   return (
     <StepperContext.Provider value={{ activeStep, setActiveStep: setStep, steps, linear, next, prev, goTo }}>
       <div className={classes} {...rest}>
-        <div className="stepper-header" role="tablist">
+        <ol className="stepper-header" role="list" aria-label="Progress">
           {steps.map((step, i) => {
             const isActive = activeStep === i;
             const isCompleted = step.completed && !isActive;
@@ -153,18 +163,14 @@ export function AtlStepper({
 
             return (
               <Fragment key={i}>
-                <div className={itemClass}>
+                <li className={itemClass}>
                   <button
                     type="button"
-                    role="tab"
                     id={`atl-step-${i}`}
                     className="step-circle"
                     aria-label={step.label}
-                    aria-selected={isActive}
-                    aria-controls={`atl-step-panel-${i}`}
-                    aria-disabled={step.disabled || undefined}
-                    tabIndex={isActive ? 0 : -1}
-                    disabled={step.disabled}
+                    aria-current={isActive ? 'step' : undefined}
+                    disabled={!isReachable(i)}
                     onClick={() => goTo(i)}
                   >
                     {step.completed && !step.error ? (
@@ -184,9 +190,10 @@ export function AtlStepper({
                       <span className="step-optional">Optional</span>
                     )}
                   </div>
-                </div>
+                </li>
                 {i < steps.length - 1 && (
-                  <div
+                  <li
+                    aria-hidden="true"
                     className={['step-connector', (activeStep > i || step.completed) && 'is-active']
                       .filter(Boolean)
                       .join(' ')}
@@ -195,17 +202,16 @@ export function AtlStepper({
               </Fragment>
             );
           })}
-        </div>
+        </ol>
         <div className="stepper-content">
           {stepPanels.map((panel, i) => {
             const element = panel as ReactElement<AtlStepProps>;
             return (
               <div
                 key={i}
-                id={`atl-step-panel-${i}`}
-                role="tabpanel"
+                role="region"
+                className="step-panel"
                 aria-labelledby={`atl-step-${i}`}
-                tabIndex={0}
                 hidden={i !== activeStep}
               >
                 {element.props.children}

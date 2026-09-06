@@ -32,8 +32,8 @@ export const metadata: ComponentMetadata = {
     { orientation: 'vertical', linear: false, activeStep: 1 },
   ],
   accessibility: {
-    role: 'tablist',
+    role: 'list',
     keyboardBehavior:
-      'The stepper itself is non-interactive — focus lives on the form controls and navigation buttons inside each step. Interactive step headers (when the flow is non-linear) accept focus via Tab and activate on Enter or Space.',
+      'The header is an ordered list (`role="list"`), not a tab widget, so there is no roving tabindex or arrow-key model to maintain. Each step whose circle is reachable — the active step, completed steps, and (in linear mode) the next pending boundary — is a real `<button>` in normal Tab order, activated with Enter or Space. A step that is not yet reachable (disabled, or blocked by `linear`) is a native `disabled` button and drops out of the tab order entirely.',
   },
 };

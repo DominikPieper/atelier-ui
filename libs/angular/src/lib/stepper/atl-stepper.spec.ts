@@ -15,26 +15,26 @@ const BASIC_TEMPLATE = `
 
 describe('AtlStepper', () => {
   describe('rendering', () => {
-    covers('stepper', 'renders-tablist')('renders a tablist', async () => {
+    covers('stepper', 'renders-list')('renders the header as an ordered list', async () => {
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
-      expect(screen.getByRole('tablist')).toBeInTheDocument();
+      expect(screen.getByRole('list', { name: 'Progress' })).toBeInTheDocument();
     });
 
     it('renders step buttons matching child count', async () => {
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
-      expect(screen.getAllByRole('tab')).toHaveLength(3);
+      expect(screen.getAllByRole('button')).toHaveLength(3);
     });
 
     it('renders step buttons with correct labels', async () => {
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
-      expect(screen.getByRole('tab', { name: /Account/i })).toBeInTheDocument();
-      expect(screen.getByRole('tab', { name: /Profile/i })).toBeInTheDocument();
-      expect(screen.getByRole('tab', { name: /Review/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Account/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Profile/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Review/i })).toBeInTheDocument();
     });
 
     covers('stepper', 'first-panel-default')('shows first step panel by default', async () => {
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
-      expect(screen.getByRole('tabpanel')).toHaveTextContent('Account content');
+      expect(screen.getByRole('region')).toHaveTextContent('Account content');
     });
 
     it('does not render inactive step panels', async () => {
@@ -45,33 +45,26 @@ describe('AtlStepper', () => {
 
     it('renders step numbers', async () => {
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
-      const tabs = screen.getAllByRole('tab');
-      expect(tabs[0].textContent.trim()).toBe('1');
-      expect(tabs[1].textContent.trim()).toBe('2');
-      expect(tabs[2].textContent.trim()).toBe('3');
+      const buttons = screen.getAllByRole('button');
+      expect(buttons[0].textContent.trim()).toBe('1');
+      expect(buttons[1].textContent.trim()).toBe('2');
+      expect(buttons[2].textContent.trim()).toBe('3');
     });
   });
 
   describe('ARIA attributes', () => {
-    covers('stepper', 'aria-selected-active')('sets aria-selected on active step', async () => {
+    covers('stepper', 'aria-current-active')('sets aria-current="step" on active step', async () => {
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
-      const tabs = screen.getAllByRole('tab');
-      expect(tabs[0]).toHaveAttribute('aria-selected', 'true');
-      expect(tabs[1]).toHaveAttribute('aria-selected', 'false');
-      expect(tabs[2]).toHaveAttribute('aria-selected', 'false');
+      const buttons = screen.getAllByRole('button');
+      expect(buttons[0]).toHaveAttribute('aria-current', 'step');
+      expect(buttons[1]).not.toHaveAttribute('aria-current');
+      expect(buttons[2]).not.toHaveAttribute('aria-current');
     });
 
-    it('links step to panel via aria-controls', async () => {
+    it('associates the panel with its step via aria-labelledby', async () => {
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
-      const tab = screen.getAllByRole('tab')[0];
-      const panelId = tab.getAttribute('aria-controls');
-      expect(panelId).toBeTruthy();
-      expect(screen.getByRole('tabpanel').id).toBe(panelId);
-    });
-
-    it('gives active panel tabindex 0', async () => {
-      await render(BASIC_TEMPLATE, { imports: IMPORTS });
-      expect(screen.getByRole('tabpanel')).toHaveAttribute('tabindex', '0');
+      const button = screen.getAllByRole('button')[0];
+      expect(screen.getByRole('region')).toHaveAttribute('aria-labelledby', button.id);
     });
   });
 
@@ -80,10 +73,10 @@ describe('AtlStepper', () => {
       const user = userEvent.setup();
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
 
-      await user.click(screen.getByRole('tab', { name: /Profile/i }));
+      await user.click(screen.getByRole('button', { name: /Profile/i }));
 
-      expect(screen.getByRole('tabpanel')).toHaveTextContent('Profile content');
-      expect(screen.getByRole('tab', { name: /Profile/i })).toHaveAttribute('aria-selected', 'true');
+      expect(screen.getByRole('region')).toHaveTextContent('Profile content');
+      expect(screen.getByRole('button', { name: /Profile/i })).toHaveAttribute('aria-current', 'step');
     });
 
     covers('stepper', 'disabled-step-noop')('clicking a disabled step does nothing', async () => {
@@ -97,9 +90,29 @@ describe('AtlStepper', () => {
         { imports: IMPORTS }
       );
 
-      await user.click(screen.getByRole('tab', { name: /Profile/i }));
-      expect(screen.getByRole('tabpanel')).toHaveTextContent('Account content');
+      const profileButton = screen.getByRole('button', { name: /Profile/i });
+      expect(profileButton).toBeDisabled();
+      await user.click(profileButton);
+      expect(screen.getByRole('region')).toHaveTextContent('Account content');
     });
+
+    covers('stepper', 'future-step-not-focusable')(
+      'a step not yet reachable in linear mode is a disabled, non-focusable button',
+      async () => {
+        await render(
+          `<atl-stepper [linear]="true">
+            <atl-step label="Account">Account content</atl-step>
+            <atl-step label="Profile">Profile content</atl-step>
+            <atl-step label="Review">Review content</atl-step>
+          </atl-stepper>`,
+          { imports: IMPORTS }
+        );
+        const buttons = screen.getAllByRole('button');
+        expect(buttons[0]).not.toBeDisabled(); // active — always reachable
+        expect(buttons[1]).toBeDisabled(); // next pending step, not completed yet
+        expect(buttons[2]).toBeDisabled(); // beyond the incomplete boundary
+      }
+    );
   });
 
   describe('two-way binding', () => {
@@ -114,7 +127,7 @@ describe('AtlStepper', () => {
           componentProperties: { step: 1 },
         }
       );
-      expect(screen.getByRole('tabpanel')).toHaveTextContent('Panel B');
+      expect(screen.getByRole('region')).toHaveTextContent('Panel B');
     });
   });
 

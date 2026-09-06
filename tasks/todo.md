@@ -145,18 +145,28 @@ The ones the owner and I will walk through together.
   - [ ] It has no focus variant, no disabled variant, and no a11y annotations in its
     description (5 of 7 remaining parity findings) — pairs with the role question
     below.
-  - [ ] **Now a three-way disagreement, not two.** The role question below was
-    decided 2026-09-06: metadata now says `tablist`, matching all three code
-    adapters (`tablist`/`tab`/`tabpanel`). The Figma master's own description
-    still claims a fourth-different pattern, `ol` + `aria-current="step"` — code
-    and metadata now agree with each other and disagree with Figma. **Cannot be
-    fixed here**: the Desktop Bridge was disconnected this session
-    (`figma_get_status` → `failureLayer: 2`). Next person with the bridge open:
-    update the master's description (and, if the master literally uses an `<ol>`
-    grouping with `aria-current="step"` rather than a tab strip, its structure)
-    to state the `tablist`/`tab`/`tabpanel` pattern ADR-reasoned in the code —
-    three independent framework implementations choosing the same pattern is the
-    signal that code is right and Figma is stale, not the other way round.
+  - [x] **Was a three-way disagreement, not two — resolved 2026-09-06, the other
+    way round from how this item first framed it.** Earlier the same day,
+    metadata was corrected to say `tablist`, matching all three code adapters
+    (`tablist`/`tab`/`tabpanel`), and this item then read that convergence as
+    the signal that code was right and the Figma master's `ol` +
+    `aria-current="step"` description was stale. That reasoning doesn't
+    survive a check: searching `plan/adr/` turned up no ADR that ever decided
+    the tab-shaped markup — this item's own closing sentence called it
+    "ADR-reasoned in the code," which was never true. It was three independent
+    implementations converging on the same shape without anyone weighing it
+    against what a stepper does. `linear` ("only the active and completed steps are
+    clickable") is a progression model, not a tab model, and the metadata's
+    own anti-pattern already named `AtlTabGroup` as the component for
+    non-sequential switching — implementing the stepper as a tablist
+    duplicated the semantics its own docs point away from. The ARIA tab
+    pattern also requires roving-tabindex arrow-key navigation that no
+    adapter ever implemented, which the tablist role had been quietly
+    obligating without anyone paying it. ADR-0101 reverses the direction:
+    code and metadata now match Figma's `ol`/`aria-current="step"`, and no
+    Figma edit is needed — Figma was right. The other two items above (root
+    padding, missing focus/disabled/a11y-annotation variants) are unrelated
+    and stay open.
 
 - [ ] **Harden Atelier's own design system; Conciso as theme demo.** Plan:
   `tasks/atelier-design-system-plan.md`. ADR-0020 already settled the palette

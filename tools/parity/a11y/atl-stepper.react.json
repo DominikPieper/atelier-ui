@@ -1,26 +1,38 @@
 {
   "default": [
     {
-      "role": "tablist",
-      "name": "1 Account 2 Profile 3 Review"
+      "role": "list",
+      "name": "Progress"
     },
     {
-      "role": "tab",
+      "role": "listitem",
+      "name": "1 Account"
+    },
+    {
+      "role": "button",
       "name": "Account"
     },
     {
-      "role": "tab",
+      "role": "listitem",
+      "name": "2 Profile"
+    },
+    {
+      "role": "button",
       "name": "Profile",
       "states": {
-        "selected": true
+        "current": "step"
       }
     },
     {
-      "role": "tab",
+      "role": "listitem",
+      "name": "3 Review"
+    },
+    {
+      "role": "button",
       "name": "Review"
     },
     {
-      "role": "tabpanel",
+      "role": "region",
       "name": "2"
     }
   ]

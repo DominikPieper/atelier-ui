@@ -474,16 +474,16 @@
   ],
   "stepper": [
     {
-      "id": "renders-tablist",
-      "describe": "renders a tablist"
+      "id": "renders-list",
+      "describe": "renders the header as an ordered list"
     },
     {
       "id": "first-panel-default",
       "describe": "shows the first step panel by default"
     },
     {
-      "id": "aria-selected-active",
-      "describe": "sets aria-selected on the active step"
+      "id": "aria-current-active",
+      "describe": "sets aria-current=\"step\" on the active step"
     },
     {
       "id": "click-navigates",
@@ -492,6 +492,10 @@
     {
       "id": "disabled-step-noop",
       "describe": "clicking a disabled step does nothing"
+    },
+    {
+      "id": "future-step-not-focusable",
+      "describe": "a step not yet reachable in linear mode is a disabled, non-focusable button"
     },
     {
       "id": "completed-class",

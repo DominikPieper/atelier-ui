@@ -28,7 +28,7 @@ export const BEHAVIORS = {
   radio: ['renders-input', 'disabled', 'checked-from-group', 'select-on-click'],
   'radio-group': ['role', 'checks-matching-value', 'value-change', 'invalid', 'errors', 'keyboard-nav'],
   skeleton: ['not-animated', 'circular-height', 'custom-size'],
-  stepper: ['renders-tablist', 'first-panel-default', 'aria-selected-active', 'click-navigates', 'disabled-step-noop', 'completed-class', 'error-class', 'orientation-vertical'],
+  stepper: ['renders-list', 'first-panel-default', 'aria-current-active', 'click-navigates', 'disabled-step-noop', 'future-step-not-focusable', 'completed-class', 'error-class', 'orientation-vertical'],
   table: ['renders-table', 'thead-tbody', 'variant-default', 'sticky-header', 'sort-button', 'no-sort-button', 'checkbox-selectable', 'empty-state'],
   tabs: ['first-tab-default', 'switch-on-click', 'disabled-tab-noop', 'variant-class', 'keyboard-nav', 'home-end', 'wrap', 'skip-disabled'],
   textarea: ['renders-textarea', 'disabled', 'errors', 'updates-value', 'rows'],

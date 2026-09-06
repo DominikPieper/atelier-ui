@@ -33,9 +33,9 @@ let nextId = 0;
   imports: [AtlIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="stepper-header" role="tablist">
+    <ol class="stepper-header" role="list" aria-label="Progress">
       @for (step of steps(); track step.id; let i = $index; let last = $last) {
-        <div
+        <li
           class="step-item"
           [class.is-active]="activeStep() === i"
           [class.is-completed]="step.completed && activeStep() !== i"
@@ -44,15 +44,11 @@ let nextId = 0;
         >
           <button
             type="button"
-            role="tab"
             class="step-circle"
             [id]="'atl-step-' + i"
             [attr.aria-label]="step.label"
-            [attr.aria-selected]="activeStep() === i"
-            [attr.aria-controls]="'atl-step-panel-' + i"
-            [attr.aria-disabled]="step.disabled || null"
-            [attr.tabindex]="activeStep() === i ? 0 : -1"
-            [disabled]="step.disabled || null"
+            [attr.aria-current]="activeStep() === i ? 'step' : null"
+            [disabled]="!isReachable(i)"
             (click)="goTo(i)"
           >
             @if (step.completed && !step.error) {
@@ -72,15 +68,16 @@ let nextId = 0;
               <span class="step-optional">Optional</span>
             }
           </div>
-        </div>
+        </li>
         @if (!last) {
-          <div
+          <li
             class="step-connector"
+            aria-hidden="true"
             [class.is-active]="activeStep() > i || step.completed"
-          ></div>
+          ></li>
         }
       }
-    </div>
+    </ol>
     <div class="stepper-content">
       <ng-content />
     </div>
@@ -129,16 +126,28 @@ export class AtlStepper implements AtlStepperContext {
     );
   }
 
+  /**
+   * Whether step `index` can be activated right now: not itself disabled, and —
+   * in linear mode — either at or behind the active step, or ahead of it with
+   * every step before it completed or optional. Drives both `goTo()`'s guard
+   * and the header button's native `disabled` state, so a step that cannot be
+   * activated is also not focusable (no roving-tabindex bookkeeping needed —
+   * the header is a list, not a tab widget).
+   */
+  protected isReachable(index: number): boolean {
+    const steps = this.steps();
+    const step = steps[index];
+    if (step.disabled) return false;
+    if (!this.linear()) return true;
+    if (index <= this.activeStep()) return true;
+    return steps.slice(0, index).every((s) => s.completed || s.optional);
+  }
+
   /** Navigate to a specific step index. Respects linear mode. */
   goTo(index: number): void {
     const steps = this.steps();
     if (index < 0 || index >= steps.length) return;
-    if (steps[index].disabled) return;
-    if (this.linear()) {
-      // In linear mode, only allow going back or to the next uncompleted step
-      const canGoForward = steps.slice(0, index).every((s) => s.completed || s.optional);
-      if (index > this.activeStep() && !canGoForward) return;
-    }
+    if (!this.isReachable(index)) return;
     this.activeStep.set(index);
   }
 
@@ -172,10 +181,9 @@ export class AtlStepper implements AtlStepperContext {
   template: `
     @if (isActive()) {
       <div
-        role="tabpanel"
-        [id]="'atl-step-panel-' + myIndex()"
+        role="region"
+        class="step-panel"
         [attr.aria-labelledby]="'atl-step-' + myIndex()"
-        tabindex="0"
       >
         <ng-content />
       </div>

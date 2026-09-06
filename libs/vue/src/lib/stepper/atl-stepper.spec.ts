@@ -24,30 +24,30 @@ const Controlled = {
 
 describe('AtlStepper', () => {
   describe('rendering', () => {
-    covers('stepper', 'renders-tablist')('renders a tablist', async () => {
+    covers('stepper', 'renders-list')('renders the header as an ordered list', async () => {
       render(Controlled);
       await flushPromises();
-      expect(screen.getByRole('tablist')).toBeInTheDocument();
+      expect(screen.getByRole('list', { name: 'Progress' })).toBeInTheDocument();
     });
 
     it('renders step buttons matching child count', async () => {
       render(Controlled);
       await flushPromises();
-      expect(screen.getAllByRole('tab')).toHaveLength(3);
+      expect(screen.getAllByRole('button')).toHaveLength(3);
     });
 
     it('renders step buttons with correct labels', async () => {
       render(Controlled);
       await flushPromises();
-      expect(screen.getByRole('tab', { name: /Account/i })).toBeInTheDocument();
-      expect(screen.getByRole('tab', { name: /Profile/i })).toBeInTheDocument();
-      expect(screen.getByRole('tab', { name: /Review/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Account/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Profile/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Review/i })).toBeInTheDocument();
     });
 
     covers('stepper', 'first-panel-default')('shows first step panel by default', async () => {
       render(Controlled);
       await flushPromises();
-      const panels = screen.getAllByRole('tabpanel', { hidden: true });
+      const panels = screen.getAllByRole('region', { hidden: true });
       const visible = panels.find((p) => !(p as HTMLElement).hidden);
       expect(visible).toHaveTextContent('Account content');
     });
@@ -63,23 +63,21 @@ describe('AtlStepper', () => {
   });
 
   describe('ARIA attributes', () => {
-    covers('stepper', 'aria-selected-active')('sets aria-selected on active step', async () => {
+    covers('stepper', 'aria-current-active')('sets aria-current="step" on active step', async () => {
       render(Controlled);
       await flushPromises();
-      const tabs = screen.getAllByRole('tab');
-      expect(tabs[0]).toHaveAttribute('aria-selected', 'true');
-      expect(tabs[1]).toHaveAttribute('aria-selected', 'false');
-      expect(tabs[2]).toHaveAttribute('aria-selected', 'false');
+      const buttons = screen.getAllByRole('button');
+      expect(buttons[0]).toHaveAttribute('aria-current', 'step');
+      expect(buttons[1]).not.toHaveAttribute('aria-current');
+      expect(buttons[2]).not.toHaveAttribute('aria-current');
     });
 
-    it('links step button to panel via aria-controls', async () => {
+    it('associates each panel with its step via aria-labelledby', async () => {
       render(Controlled);
       await flushPromises();
-      const tab = screen.getAllByRole('tab')[0];
-      const panelId = tab.getAttribute('aria-controls');
-      expect(panelId).toBeTruthy();
-      const panel = document.getElementById(panelId as string);
-      expect(panel).not.toBeNull();
+      const button = screen.getAllByRole('button')[0];
+      const panel = screen.getAllByRole('region', { hidden: true }).find((p) => !(p as HTMLElement).hidden);
+      expect(panel).toHaveAttribute('aria-labelledby', button.id);
     });
   });
 
@@ -89,9 +87,9 @@ describe('AtlStepper', () => {
       render(Controlled);
       await flushPromises();
 
-      await user.click(screen.getByRole('tab', { name: /Profile/i }));
+      await user.click(screen.getByRole('button', { name: /Profile/i }));
 
-      expect(screen.getByRole('tab', { name: /Profile/i })).toHaveAttribute('aria-selected', 'true');
+      expect(screen.getByRole('button', { name: /Profile/i })).toHaveAttribute('aria-current', 'step');
     });
 
     covers('stepper', 'disabled-step-noop')('clicking a disabled step does nothing', async () => {
@@ -109,9 +107,32 @@ describe('AtlStepper', () => {
       });
       await flushPromises();
 
-      await user.click(screen.getByRole('tab', { name: /Profile/i }));
+      const profileButton = screen.getByRole('button', { name: /Profile/i });
+      expect(profileButton).toBeDisabled();
+      await user.click(profileButton);
       expect((emitted()['update:activeStep'] ?? []).length).toBe(0);
     });
+
+    covers('stepper', 'future-step-not-focusable')(
+      'a step not yet reachable in linear mode is a disabled, non-focusable button',
+      async () => {
+        render({
+          components: { AtlStepper, AtlStep },
+          template: `
+            <AtlStepper :linear="true" :activeStep="0">
+              <AtlStep label="Account">Account content</AtlStep>
+              <AtlStep label="Profile">Profile content</AtlStep>
+              <AtlStep label="Review">Review content</AtlStep>
+            </AtlStepper>
+          `,
+        });
+        await flushPromises();
+        const buttons = screen.getAllByRole('button');
+        expect(buttons[0]).not.toBeDisabled(); // active — always reachable
+        expect(buttons[1]).toBeDisabled(); // next pending step, not completed yet
+        expect(buttons[2]).toBeDisabled(); // beyond the incomplete boundary
+      }
+    );
   });
 
   describe('v-model emit', () => {
@@ -129,7 +150,7 @@ describe('AtlStepper', () => {
       });
       await flushPromises();
 
-      await user.click(screen.getByRole('tab', { name: /B/i }));
+      await user.click(screen.getByRole('button', { name: /B/i }));
       expect(emitted()['update:activeStep']).toEqual([[1]]);
     });
   });

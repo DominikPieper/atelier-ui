@@ -61,11 +61,10 @@ const isActive = computed(() => myIndex.value === stepper.activeStep.value);
 <template>
   <div
     v-if="myIndex >= 0"
-    :id="`atl-step-panel-${myIndex}`"
-    role="tabpanel"
+    role="region"
+    class="step-panel"
     :aria-labelledby="`atl-step-${myIndex}`"
     :hidden="!isActive"
-    tabindex="0"
   >
     <slot />
   </div>

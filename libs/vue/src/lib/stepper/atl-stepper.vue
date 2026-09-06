@@ -71,13 +71,23 @@ function updateStep(id: string, info: Partial<StepInfo>) {
   }
 }
 
+// Whether step `index` can be activated right now: not itself disabled, and —
+// in linear mode — either at/behind the active step, or ahead of it with every
+// step before it completed or optional. Drives both goTo()'s guard and the
+// header button's native `disabled` state, so an unreachable step is also not
+// focusable — no roving-tabindex bookkeeping needed, since the header is a
+// list, not a tab widget.
+function isReachable(index: number): boolean {
+  const step = steps.value[index];
+  if (!step || step.disabled) return false;
+  if (!props.linear) return true;
+  if (index <= internalStep.value) return true;
+  return steps.value.slice(0, index).every((s) => s.completed || s.optional);
+}
+
 function goTo(index: number) {
   if (index < 0 || index >= steps.value.length) return;
-  if (steps.value[index].disabled) return;
-  if (props.linear && index > internalStep.value) {
-    const canAdvance = steps.value.slice(0, index).every((s) => s.completed || s.optional);
-    if (!canAdvance) return;
-  }
+  if (!isReachable(index)) return;
   internalStep.value = index;
   emit('update:activeStep', index);
 }
@@ -115,9 +125,9 @@ function isConnectorActive(i: number) {
 
 <template>
   <div :class="classes">
-    <div class="stepper-header" role="tablist">
+    <ol class="stepper-header" role="list" aria-label="Progress">
       <template v-for="(step, i) in steps" :key="step.id">
-        <div
+        <li
           class="step-item"
           :class="{
             'is-active': internalStep === i,
@@ -128,15 +138,11 @@ function isConnectorActive(i: number) {
         >
           <button
             type="button"
-            role="tab"
             class="step-circle"
             :id="`atl-step-${i}`"
             :aria-label="step.label"
-            :aria-selected="internalStep === i"
-            :aria-controls="`atl-step-panel-${i}`"
-            :aria-disabled="step.disabled || undefined"
-            :tabindex="internalStep === i ? 0 : -1"
-            :disabled="step.disabled || undefined"
+            :aria-current="internalStep === i ? 'step' : undefined"
+            :disabled="!isReachable(i)"
             @click="goTo(i)"
           >
             <template v-if="step.completed && !step.error">
@@ -152,14 +158,15 @@ function isConnectorActive(i: number) {
             <span v-if="step.description" class="step-description">{{ step.description }}</span>
             <span v-if="step.optional && !step.completed" class="step-optional">Optional</span>
           </div>
-        </div>
-        <div
+        </li>
+        <li
           v-if="i < steps.length - 1"
           class="step-connector"
+          aria-hidden="true"
           :class="{ 'is-active': isConnectorActive(i) }"
         />
       </template>
-    </div>
+    </ol>
     <div class="stepper-content">
       <slot />
     </div>

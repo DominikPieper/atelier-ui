@@ -271,12 +271,13 @@ const A11Y_PARITY_EXEMPT = new Map([
  * appear in the baselines, is an error: the exception has outlived its reason.
  */
 // Empty by design: AtlChat (2026-09-06, added a `log` container around its
-// listitems, matching the metadata's claim), AtlStepper (2026-09-06,
-// metadata corrected from 'progressbar' to 'tablist' — the role all three
-// adapters already rendered) and AtlSkeleton (2026-08-26, commit 57a24b1)
-// were the three components ever exempted here. All three now match their
-// committed a11y baselines, so the hygiene check below would error on a
-// stale entry for any of them.
+// listitems, matching the metadata's claim), AtlStepper (corrected twice the
+// same day: 'progressbar' to 'tablist' to match the code, then — once the
+// markup itself changed to an ol/li/button list, ADR-0101 — 'tablist' to
+// 'list' to match that) and AtlSkeleton (2026-08-26, commit 57a24b1) were the
+// three components ever exempted here. All three now match their committed
+// a11y baselines, so the hygiene check below would error on a stale entry
+// for any of them.
 const METADATA_ROLE_EXCEPTIONS = new Map([]);
 
 /**
