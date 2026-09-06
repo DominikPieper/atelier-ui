@@ -122,9 +122,13 @@ File key: `QMnDD8uZQPldPrlCwZZ58T`. Page conventions:
   *pipe's* status, which is always `0` — that silently converts a failure into a
   pass, and has already put a false "all gates green" claim into this repo's
   history.
-- `npm run check:all` runs the full gate chain (36 gates). Every gate in it is
-  offline and deterministic; that is why `check:release-drift`, which asks the npm
-  registry, is deliberately **not** in the chain.
+- `npm run check:all` runs the full gate chain. Every gate in it is offline
+  and deterministic; that is why `check:release-drift`, which asks the npm
+  registry, is deliberately **not** in the chain. (Its exact gate count is
+  intentionally not stated here — it moves with every gate added or split,
+  and has gone stale in this file four times already; read `check:all` in
+  `package.json`, or the derived count on the `docs/src/pages/claude-design.astro`
+  diagram, if you need the number.)
 - Local gates say nothing about the release pipeline. "All gates pass" is a
   statement about the checks that exist here, not about what reached npm — check
   CI and the registry separately (`gh run list`, `npm run check:release-drift`).

@@ -101,16 +101,16 @@
  *     other place using the real TypeScript checker
  *     (`checker.getPropertiesOfType`) to resolve multi-level `extends` and
  *     `Omit<AtlFormFieldSpec, 'value' | 'onValueChange'>`.
- *   - Registry: tools/scripts/lib/component-map.js's maps().registry
- *     (COMPONENT_METADATA_REGISTRY) gives SpecName -> component directory for
- *     every keyed component. Two specs are keyed here that the metadata
- *     registry deliberately excludes (AtlChatMessageSpec, AtlChatSuggestionSpec
- *     are shared shapes for the metadata gate, NON_COMPONENT_SPECS) — but
- *     their props ARE rendered by concrete `AtlChatMessage`/`AtlChatSuggestion`
- *     components in the `chat` directory in all three frameworks, so this
- *     gate keys them there (see EXTRA_KEYED_SPECS below); the resulting
- *     MISSING findings (id/content passed as children/slot, never a prop) are
- *     seeded in PROP_SURFACE_EXEMPT.
+ *   - Registry: tools/scripts/lib/component-map.js's keyedSpecs() gives
+ *     SpecName -> component directory for every keyed component (built on
+ *     maps().registry / COMPONENT_METADATA_REGISTRY, plus two adjustments —
+ *     AtlChatMessageSpec/AtlChatSuggestionSpec keyed to `chat` despite being
+ *     NON_COMPONENT_SPECS for the metadata gate, and AtlRadioGroupSpec keyed
+ *     to its own `radio-group` directory — documented in that module, shared
+ *     with check-exports.js so the two gates cannot silently disagree on what
+ *     "a component the spec promises" means). The resulting MISSING findings
+ *     for the chat shapes (id/content passed as children/slot, never a prop)
+ *     are seeded in PROP_SURFACE_EXEMPT.
  *   - Discovery: lib/component-discovery.js's FRAMEWORKS list.
  *
  * Per-adapter extraction:
@@ -163,7 +163,7 @@
 const fs = require('fs');
 const path = require('path');
 const ts = require('typescript');
-const { maps } = require('./lib/component-map');
+const { keyedSpecs, componentNameOf } = require('./lib/component-map');
 const { FRAMEWORKS } = require('./lib/component-discovery');
 const { PROP_SURFACE_EXEMPT } = require('./lib/allowlists');
 
@@ -173,38 +173,15 @@ const LIB_DIR = Object.fromEntries(FRAMEWORKS.map((fw) => [fw, path.join(ROOT, `
 
 // ---------------------------------------------------------------------------
 // 1. Keyed specs: SpecName -> component directory.
+//
+// Shared with check-exports.js via lib/component-map.js's keyedSpecs() /
+// componentNameOf() — both gates need the identical "what is a component the
+// spec promises" set, and used to each define it locally (see that module's
+// header for why that drift is exactly the bug class this repo is guarding
+// against here).
 // ---------------------------------------------------------------------------
 
-/**
- * Two specs the metadata registry deliberately excludes as NON_COMPONENT_SPECS
- * (shared message/suggestion shapes, not a standalone metadata module) but
- * which this gate keys anyway — their props are rendered by concrete
- * `AtlChatMessage`/`AtlChatSuggestion` components in all three frameworks'
- * `chat` directory. See the file header for why.
- */
-const EXTRA_KEYED_SPECS = {
-  AtlChatMessageSpec: 'chat',
-  AtlChatSuggestionSpec: 'chat',
-};
-
-/**
- * SpecName -> adapter directory overrides where the registry's metadata
- * MODULE name differs from the adapter SOURCE directory. Only one exists
- * today: `radio.metadata.ts` documents both `AtlRadioSpec` and
- * `AtlRadioGroupSpec` (mirroring how `select.metadata.ts` documents both
- * `AtlSelectSpec` and `AtlOptionSpec`), but unlike select/option — which both
- * live in the `select` adapter directory — radio-group's component lives in
- * its OWN sibling directory, `radio-group` (verified: `ls
- * libs/angular/src/lib` lists both `radio` and `radio-group`).
- * COMPONENT_METADATA_REGISTRY documents metadata modules, not adapter
- * directories, and this is the one place the two names diverge.
- */
-const DIR_OVERRIDES = { AtlRadioGroupSpec: 'radio-group' };
-
-const { registry } = maps();
-const KEYED_SPECS = { ...registry, ...EXTRA_KEYED_SPECS, ...DIR_OVERRIDES };
-
-const componentNameOf = (specName) => specName.replace(/Spec$/, '');
+const KEYED_SPECS = keyedSpecs();
 
 /**
  * Components that render in all three frameworks but have no `Atl*Spec`

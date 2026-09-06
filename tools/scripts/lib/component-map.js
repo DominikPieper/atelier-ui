@@ -66,4 +66,47 @@ function maps() {
   return cache;
 }
 
-module.exports = { maps };
+/**
+ * SpecName -> component directory, for specs the metadata registry does NOT key
+ * on its own. Shared with `keyedSpecs()` below so check-prop-surface.js and
+ * check-exports.js cannot silently disagree on what "a component the spec
+ * promises" means — before this was extracted, each gate could evolve its own
+ * copy of this list unnoticed (the exact boundary-seam failure mode
+ * check-sync.js/check-exports.js already had between directory-existence and
+ * barrel-reachability).
+ *
+ *   - AtlChatMessageSpec/AtlChatSuggestionSpec: NON_COMPONENT_SPECS excludes
+ *     them from the metadata gate (shared message/suggestion shapes, not a
+ *     standalone metadata module), but their props ARE rendered by concrete
+ *     `AtlChatMessage`/`AtlChatSuggestion` components in the `chat` directory
+ *     in all three frameworks — so both consumers key them there.
+ *   - AtlRadioGroupSpec: `radio.metadata.ts` documents both `AtlRadioSpec` and
+ *     `AtlRadioGroupSpec` (mirroring select/option), but radio-group's
+ *     component lives in its OWN sibling directory, `radio-group`, not `radio`.
+ *     COMPONENT_METADATA_REGISTRY documents metadata MODULES, not adapter
+ *     DIRECTORIES, and this is the one place the two names diverge.
+ */
+const EXTRA_KEYED_SPECS = {
+  AtlChatMessageSpec: 'chat',
+  AtlChatSuggestionSpec: 'chat',
+};
+const DIR_OVERRIDES = { AtlRadioGroupSpec: 'radio-group' };
+
+/**
+ * SpecName -> component directory for every spec-keyed component (registry
+ * entries plus the two adjustments above). This is "every component the spec
+ * promises" in the sense both check-prop-surface.js and check-exports.js need:
+ * a spec interface exists, and it names the adapter directory that must
+ * implement it.
+ */
+function keyedSpecs() {
+  const { registry } = maps();
+  return { ...registry, ...EXTRA_KEYED_SPECS, ...DIR_OVERRIDES };
+}
+
+/** `Atl<X>Spec` -> `Atl<X>`, the component identifier the spec name promises. */
+function componentNameOf(specName) {
+  return specName.replace(/Spec$/, '');
+}
+
+module.exports = { maps, keyedSpecs, componentNameOf };

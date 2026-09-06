@@ -2,7 +2,8 @@
 /**
  * check-css-tokens.js
  *
- * Three passes against the design-token layer:
+ * Two passes enforcing CSS token DISCIPLINE — is component/docs CSS actually
+ * built out of `--ui-*` tokens, in both directions:
  *
  *   Pass A (raw-literal pass):
  *     Enforces token discipline in component CSS — a raw color literal
@@ -18,21 +19,19 @@
  *     how every code block ran on the Menlo fallback, and how AtlTooltip's
  *     stacking level was a literal 200 (ADR-0075).
  *
- *   Pass B (manifest-coverage pass):
- *     Every `--ui-*` token declared in the create-workspace preset's
- *     `styles/tokens.css` (the source of truth per `sync-tokens.mjs` —
- *     `check:tokens` enforces the three framework libs' copies stay
- *     byte-identical to it) must have an entry in
- *     `libs/spec/src/tokens.manifest.ts` with a non-empty `intent` and a
- *     non-empty `constraints` array. Every manifest entry must reference
- *     a declared token. This is the AI-readiness annotation layer — see
- *     `plan/ai-readiness.md`.
- *
- *     Pass B is gated by `MANIFEST_COVERAGE_REQUIRED`: while the manifest
- *     is empty (initial rollout) it warns; once an opt-in flag is
- *     flipped, missing entries fail the gate. Today it warns when the
- *     manifest has any entries (so authors get feedback as they fill it)
- *     but only fails when EVERY declared token has been annotated.
+ * A third pass used to live here (manifest-annotation coverage: does every
+ * declared token have a populated `tokens.manifest.ts` entry?) and has been
+ * split out to `check-token-annotations.js` (`check:token-annotations`). That
+ * pass answers a different question — AI-readiness documentation completeness,
+ * not CSS discipline — and shared only a name with these two, not a failure
+ * domain: a manifest-annotation gap said nothing about whether THIS gate's raw
+ * colours or undeclared reads were clean, and vice versa. `declaredTokens`
+ * (what `tokens.css` declares) is still computed here, independently, because
+ * Pass C needs it; `check-token-annotations.js` derives its own copy from the
+ * same file rather than importing this one, so the two gates stay fully
+ * independent processes with separate error collection (this was already true
+ * before the split — see that file's header for why it re-derives rather than
+ * requires this module).
  *
  * Allowances in Pass A (intentional, not drift):
  *   - inside `var(--token, <fallback>)` — a literal fallback is good defensive
@@ -49,7 +48,7 @@
  * reported relative to the `.astro` file). Token sources are exempt, same
  * rule on both sides: each framework's `styles/tokens.css` for the libs,
  * `docs/src/styles/docs-theme.css` and `docs/src/styles/tokens.css` for the
- * docs — all four are scanned only by Pass B / Pass C, never Pass A.
+ * docs — all four are scanned only by Pass C, never Pass A.
  * A docs-only `DOCS_ALLOW` list (below) covers any literal that is
  * deliberate and can't be token-ized; each entry carries a one-line reason.
  *
@@ -60,12 +59,10 @@
 
 const fs = require('fs');
 const path = require('path');
-const { parseExportedVars } = require('./lib/ts-eval');
 
 const ROOT = path.resolve(__dirname, '../..');
 const LIB_DIRS = ['angular', 'react', 'vue'].map((f) => path.join(ROOT, 'libs', f, 'src', 'lib'));
 const TOKEN_CSS = path.join(ROOT, 'libs/create-workspace/src/generators/preset/files/styles/tokens.css');
-const TOKEN_MANIFEST = path.join(ROOT, 'libs/spec/src/tokens.manifest.ts');
 
 const COLOR_LITERAL = /#[0-9a-fA-F]{3,8}\b|rgba?\(|hsla?\(/;
 const SHADOW_PROP = /^-?(webkit-)?(box|text)-shadow$/;
@@ -117,8 +114,8 @@ function stripVarCalls(value) {
 const errors = [];
 
 /** Pass C's evidence: every `var(--ui-…)` a component stylesheet READS, and where.
- *  Collected here because Pass A already walks every file; compared after Pass B
- *  has read the token source. */
+ *  Collected here because Pass A already walks every file; compared after the
+ *  declared-token set (below) has been read. */
 const consumedTokens = new Map();
 
 for (const dir of LIB_DIRS) {
@@ -233,10 +230,10 @@ for (const entry of fs.readdirSync(DOCS_COMPONENTS_DIR, { withFileTypes: true })
 }
 
 // ---------------------------------------------------------------------------
-// Pass B — manifest coverage of every --ui-* token declared in tokens.css.
+// Declared-token set — what Pass C compares reads against. `tokens.css` is
+// the source of truth per `sync-tokens.mjs` (`check:tokens` enforces the
+// three framework libs' copies stay byte-identical to it).
 // ---------------------------------------------------------------------------
-
-const warnings = [];
 
 const tokenCss = fs.readFileSync(TOKEN_CSS, 'utf-8');
 const declaredTokens = new Set();
@@ -251,69 +248,10 @@ const tokenDecl = /(--ui-[a-zA-Z0-9-]+)\s*:/g;
   }
 }
 
-const manifestExports = parseExportedVars(TOKEN_MANIFEST);
-const manifest = manifestExports.tokens && typeof manifestExports.tokens === 'object'
-  ? manifestExports.tokens
-  : {};
-
-const annotatedTokens = new Set(Object.keys(manifest));
-
-// Stale annotations — manifest entries that point at tokens which no longer
-// exist in tokens.css.
-for (const name of annotatedTokens) {
-  if (!declaredTokens.has(name)) {
-    errors.push(
-      `[STALE-MANIFEST] tokens.manifest.ts annotates '${name}' but it is not declared in libs/create-workspace/src/generators/preset/files/styles/tokens.css.`
-    );
-  }
-}
-
-// Validate the shape of every annotation that IS present.
-for (const [name, annot] of Object.entries(manifest)) {
-  if (!annot || typeof annot !== 'object') {
-    errors.push(`[BAD-ANNOTATION] tokens.manifest.ts['${name}']: must be an object.`);
-    continue;
-  }
-  if (typeof annot.intent !== 'string' || !annot.intent.trim()) {
-    errors.push(`[BAD-ANNOTATION] tokens.manifest.ts['${name}']: 'intent' must be a non-empty string.`);
-  }
-  if (!Array.isArray(annot.constraints) || annot.constraints.length === 0) {
-    errors.push(
-      `[BAD-ANNOTATION] tokens.manifest.ts['${name}']: 'constraints' must be a non-empty array of strings.`
-    );
-  } else if (annot.constraints.some((c) => typeof c !== 'string' || !c.trim())) {
-    errors.push(
-      `[BAD-ANNOTATION] tokens.manifest.ts['${name}']: every 'constraints' entry must be a non-empty string.`
-    );
-  }
-  if (annot.darkMode !== undefined && typeof annot.darkMode !== 'string') {
-    errors.push(`[BAD-ANNOTATION] tokens.manifest.ts['${name}']: 'darkMode' must be a string if set.`);
-  }
-}
-
-// Coverage — fail only when the manifest has reached "all declared tokens
-// must be covered" mode. Today: every token must be annotated; missing
-// entries fail. (Initial empty manifest is allowed — see opt-in below.)
-const COVERAGE_REQUIRED = annotatedTokens.size > 0;
-if (COVERAGE_REQUIRED) {
-  for (const name of declaredTokens) {
-    if (!annotatedTokens.has(name)) {
-      errors.push(
-        `[MISSING-ANNOTATION] '${name}' is declared in tokens.css but not annotated in libs/spec/src/tokens.manifest.ts.`
-      );
-    }
-  }
-} else {
-  warnings.push(
-    `tokens.manifest.ts is empty — manifest-coverage check is opt-in until the first annotation lands. See plan/ai-readiness.md.`
-  );
-}
-
 // ---------------------------------------------------------------------------
 // Pass C — every --ui-* token a component READS must be DECLARED.
 //
-// Pass B checks that declared tokens are annotated. Nothing checked the other
-// direction, and the gap was not hypothetical twice over:
+// The gap was not hypothetical twice over:
 //
 //   - all three code-block stylesheets read `var(--ui-font-mono, …)` while nothing
 //     declared it, so every code block silently rendered in the Menlo fallback
@@ -342,11 +280,9 @@ for (const [name, files] of [...consumedTokens].sort()) {
 // Pass C (docs) — same rule, wider declared-token set (ADR-0089 §2).
 //
 // Docs CSS reads --docs-* tokens too, not just --ui-*, so the declared set
-// for THIS check is the preset's tokens.css (declaredTokens, above) UNION every
+// for THIS check is tokens.css (declaredTokens, above) UNION every
 // --ui-*/--docs-* name docs-theme.css declares (its own tokens plus the
-// --ui-* overrides it makes, e.g. --ui-color-primary-light). This is kept
-// separate from `declaredTokens` itself so Pass B's manifest-coverage
-// source of truth stays exactly the create-workspace preset's tokens.css.
+// --ui-* overrides it makes, e.g. --ui-color-primary-light).
 // ---------------------------------------------------------------------------
 
 const docsThemeCssSrc = fs.readFileSync(DOCS_THEME_CSS, 'utf-8');
@@ -371,15 +307,13 @@ for (const [name, files] of [...docsConsumedTokens].sort()) {
 
 if (errors.length > 0) {
   errors.forEach((e) => console.error(`✗ ${e}`));
-  warnings.forEach((w) => console.warn(`⚠ ${w}`));
   console.error(
-    `\n${errors.length} token issue(s). Replace raw colours with --ui-* tokens, or fix the manifest in libs/spec/src/tokens.manifest.ts.`
+    `\n${errors.length} token issue(s). Replace raw colours with --ui-* tokens, or declare the missing token.`
   );
   process.exit(1);
 }
 
-warnings.forEach((w) => console.warn(`⚠ ${w}`));
 console.log(
-  `✓ component CSS uses tokens for colour (no raw literals outside var() fallbacks / shadows); ${annotatedTokens.size}/${declaredTokens.size} tokens annotated; ${consumedTokens.size} token(s) referenced, all declared; ` +
+  `✓ component CSS uses tokens for colour (no raw literals outside var() fallbacks / shadows); ${consumedTokens.size} token(s) referenced, all declared; ` +
     `docs CSS clean too — ${docsConsumedTokens.size} token(s) referenced, all declared${DOCS_ALLOW.length ? `, ${DOCS_ALLOW.length} literal(s) allow-listed` : ''}.`
 );
