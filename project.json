@@ -9,6 +9,13 @@
         "config": ".verdaccio/config.yml",
         "storage": "tmp/local-registry/storage"
       }
+    },
+    "schulung-claims-e2e": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node tools/e2e/schulung-claims.e2e.mjs",
+        "cwd": "{workspaceRoot}"
+      }
     }
   }
 }
