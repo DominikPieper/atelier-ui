@@ -26,14 +26,15 @@ The core loop — Figma → spec → code → verify, in your chosen framework:
    frameworks, so prop/variant names are identical everywhere.
 3. **Generate or edit** the component with your agent, using the Storybook MCP for
    exact component docs (see the table below). **All three hosted endpoints answer
-   component lookups** — Storybook 10.4 and 10.5 emit `components.json` for React
-   only, so the worker serves React's manifest on the Angular and Vue endpoints too
-   (ADR-0083). Variants, defaults and state props carry across, but the reply is
-   React-shaped throughout — JSX snippets, React story paths, a `children` prop
-   where Angular projects content and Vue takes a slot, and `on*Change` callbacks
-   where Angular uses a two-way `model()` and Vue an `update:*` emit. Treat it as
-   an API reference, not as code to copy; `libs/spec/src/index.ts` settles any
-   binding you are unsure of.
+   component lookups natively** — each framework emits its own `components.json`
+   (Angular via `angular-component-meta`, Vue via `vue-component-meta`, React via
+   `react-docgen`; ADR-0097). Variants, defaults and state props come back shaped
+   for the framework you're in: two-way `[(checked)]` bindings and split
+   Inputs/Outputs for Angular, `v-model`/`update:*` events and typed slots for Vue,
+   JSX/`children`/`on*Change` for React. `libs/spec/src/index.ts` is still the
+   contract all three adapters are drift-gated against, so it's still where you
+   settle any binding the docs leave ambiguous — not a translation layer for a
+   workaround, just the shared ground truth.
 4. **Verify** — run the story in Storybook, then close the loop with
    `figma_check_design_parity` to catch padding/colour/variant drift. **Required,
    not optional.**
@@ -49,7 +50,7 @@ Always use the appropriate server for the task:
   configure Nx Cloud, so its `ci_information` / `ci_task_output` tools cannot
   authenticate; `nx_docs` is the usable one. Reach CI state through `gh` instead.
 - **Angular-Specific CLI**: the **Angular CLI MCP server** for Angular best practices, API searches, examples.
-- **Component Discovery & Docs**: the framework-specific **Storybook MCP servers** for exact component specs. Storybook ships MCP in two layers (added in 10.4, unchanged in the pinned 10.5.10) — be explicit about which surface you're calling.
+- **Component Discovery & Docs**: the framework-specific **Storybook MCP servers** for exact component specs. Storybook ships MCP in two layers (added in 10.4, tool surface renamed and manifests made framework-native in the pinned 10.6.0) — be explicit about which surface you're calling.
 - **Component Anatomy & Cross-Framework Mapping**: the **`uianatomy` MCP server** (HTTP at `https://uianatomy.dev/mcp`, 29 tools) for canonical component anatomy, axes, slots, transitions, motion, tokens, events, and library divergences (41 components; per-library `implementations/` audits across radix, headlessui, cdk, react-aria, vaul). Pair with the bundled `uianatomy-mcp` skill at `.claude/skills/uianatomy-mcp/SKILL.md`.
 
 `.mcp.json` at the repo root wires these for Claude Code. Other agents configure
@@ -61,12 +62,12 @@ their own MCP servers; nothing in this repo does it for them.
 
 | Surface | URL | Toolsets exposed | Frameworks |
 |---|---|---|---|
-| **Hosted** (`@storybook/mcp` via Cloudflare Worker, reads static manifests) | `atelier.pieper.io/storybook-{angular,react,vue}/mcp` | `docs` only: `docs-list`, `docs-show`, `docs-show-story` | React: components + docs. Angular/Vue: **their own docs (MDX foundation pages) + the React components manifest served as the cross-framework API reference** — Storybook 10.4 and 10.5 emit `components.json` for React only, and `@storybook/mcp` fails every tool on an empty components manifest, so the worker substitutes React's (the spec contract is identical and drift-gated). |
-| **Local dev** (`@storybook/addon-mcp` inside a running Storybook) | `http://localhost:<port>/mcp` (after `nx storybook <fw>` — this repo binds 4400 angular / 4401 react / 4402 vue; read the exact port from the terminal) | `docs` + `dev` (`stories-preview`, `get-storybook-story-instructions`, `stories-changed`, plus the conditionally registered `stories-find-by-component` and `display-review`) + `test` (`test-run`) | React only in preview: Storybook's 10.5 docs still scope the MCP server and its manifests to React, with Vue, Angular, Web Components and Svelte announced. |
+| **Hosted** (`@storybook/mcp` via Cloudflare Worker, reads static manifests) | `atelier.pieper.io/storybook-{angular,react,vue}/mcp` | `docs` only: `docs-list`, `docs-show`, `docs-show-story` | All three, natively — Angular's `components.json` comes from `angular-component-meta`, Vue's from `vue-component-meta`, React's from `react-docgen` (ADR-0097). Each answers component lookups shaped for its own framework: two-way bindings and split Inputs/Outputs for Angular, `v-model`/`update:*` and typed slots for Vue, unchanged JSX/`children` for React. |
+| **Local dev** (`@storybook/addon-mcp` inside a running Storybook) | `http://localhost:<port>/mcp` (after `nx storybook <fw>` — this repo binds 4400 angular / 4401 react / 4402 vue; read the exact port from the terminal) | `docs` + `dev` (`stories-preview`, `get-storybook-story-instructions`, `stories-changed`, plus the conditionally registered `stories-find-by-component` and `display-review`) + `test` (`test-run`) | All three: under 10.6, `tools/list` against a locally-run Angular or Vue Storybook returns the same eight-tool surface as React — no longer React-only in preview. |
 
-**Toolset gating** (addon-mcp options, all default `true`): `docs` requires the `componentsManifest` feature flag — addon-mcp's own preset switches it on, and it is the flag core-server reads when writing the manifest — plus an actually emitted `components.json` (React only as of 10.5). Inside `dev`, `stories-preview` and `get-storybook-story-instructions` need nothing extra; `stories-changed` and `display-review` need `features.changeDetection` (10.4's Change Review sidebar), and `display-review` additionally needs `experimentalReview` not set to `false`; `stories-find-by-component` needs a builder that exposes the module-graph service. `test` requires `@storybook/addon-vitest`; a11y in `test-run` activates when `@storybook/addon-a11y` is installed.
+**Toolset gating** (addon-mcp options, all default `true`): `docs` requires the `componentsManifest` feature flag — addon-mcp's own preset switches it on, and it is the flag core-server reads when writing the manifest — plus an actually emitted `components.json`. React gets this for free (`react-docgen` is its default docgen path); Angular and Vue need `experimentalDocgenServer` — the default under `@storybook/angular-vite`, opt-in until Storybook 11 for `@storybook/vue3-vite` — and this repo sets it explicitly for both rather than resting on the current default. Inside `dev`, `stories-preview` and `get-storybook-story-instructions` need nothing extra; `stories-changed` and `display-review` need `features.changeDetection` (10.4's Change Review sidebar), and `display-review` additionally needs `experimentalReview` not set to `false`; `stories-find-by-component` needs a builder that exposes the module-graph service. `test` requires `@storybook/addon-vitest`; a11y in `test-run` activates when `@storybook/addon-a11y` is installed.
 
-Add a local entry when you need the `dev` / `test` toolsets. **Angular/Vue prop tables come back from their own hosted endpoint — the worker performs the React-manifest substitution that used to be a manual fallback (ADR-0083); `libs/spec/src/index.ts` stays the ground truth inside this repo.**
+Add a local entry when you need the `dev` / `test` toolsets. **Angular/Vue prop tables come back from their own hosted endpoint, natively — ADR-0097 supersedes ADR-0083's React-manifest fallback, which is deleted, not shrunk; `libs/spec/src/index.ts` stays the ground truth inside this repo.**
 
 **When reading component docs (any framework, any surface):**
 1. Call `docs-list` once at session start to get valid IDs (set `withStoryIds: true` if you need story IDs for downstream tools; pass `storybookId` to scope multi-source setups)

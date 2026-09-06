@@ -100,7 +100,7 @@ const STORYBOOK_LINKS = [
           <div class="docs-step-body">
             <h3 class="docs-h3">Two MCP surfaces, three toolsets</h3>
             <p class="docs-step-desc">
-              Storybook ships MCP in two layers — added in 10.4, unchanged in the 10.5 this repo pins. The <strong>hosted</strong> endpoint serves docs from a static manifest — works for any framework, no install. The <strong>local dev</strong> surface adds dev &amp; test tools while a local Storybook is running, and is still officially React-only: the 10.5 docs scope both the MCP server and the manifests to React projects, with Vue, Angular, Web Components and Svelte planned. Tools are grouped into three <strong>toolsets</strong> (<code>dev</code>, <code>docs</code>, <code>test</code>), each toggleable in the addon options.
+              Storybook ships MCP in two layers — added in 10.4, with the tool surface renamed and the manifests made framework-native at 10.6.0, the version this repo pins. The <strong>hosted</strong> endpoint serves docs from a static manifest — works for any framework, no install. The <strong>local dev</strong> surface adds dev &amp; test tools while a local Storybook is running; under 10.6 it is no longer React-only in practice — a locally-run Angular or Vue Storybook answers the same eight-tool surface React does. Tools are grouped into three <strong>toolsets</strong> (<code>dev</code>, <code>docs</code>, <code>test</code>), each toggleable in the addon options.
             </p>
             <table class="docs-props-table">
               <thead>
@@ -108,10 +108,10 @@ const STORYBOOK_LINKS = [
               </thead>
               <tbody>
                 <tr><td rowspan="3"><code>docs</code></td><td><code>docs-list</code></td><td>All three: components + docs</td><td>All frameworks</td></tr>
-                <tr><td><code>docs-show</code></td><td>All three: full (Angular/Vue via React's manifest)</td><td>All frameworks</td></tr>
-                <tr><td><code>docs-show-story</code></td><td>All three: full (Angular/Vue via React's manifest)</td><td>All frameworks</td></tr>
-                <tr><td rowspan="5"><code>dev</code></td><td><code>get-storybook-story-instructions</code></td><td>—</td><td>React (preview); Vue/Angular experimental</td></tr>
-                <tr><td><code>stories-preview</code></td><td>—</td><td>React (preview); Vue/Angular experimental</td></tr>
+                <tr><td><code>docs-show</code></td><td>All three: full, each framework-native</td><td>All frameworks</td></tr>
+                <tr><td><code>docs-show-story</code></td><td>All three: full, each framework-native</td><td>All frameworks</td></tr>
+                <tr><td rowspan="5"><code>dev</code></td><td><code>get-storybook-story-instructions</code></td><td>—</td><td>All three (10.6)</td></tr>
+                <tr><td><code>stories-preview</code></td><td>—</td><td>All three (10.6)</td></tr>
                 <tr><td><code>stories-changed</code> <em>(10.4)</em></td><td>—</td><td>Requires <code>features.changeDetection</code></td></tr>
                 <tr><td><code>stories-find-by-component</code></td><td>—</td><td>Requires a builder that exposes the module-graph service</td></tr>
                 <tr><td><code>display-review</code></td><td>—</td><td>Requires <code>features.changeDetection</code> (and <code>experimentalReview</code> not disabled)</td></tr>
@@ -119,10 +119,10 @@ const STORYBOOK_LINKS = [
               </tbody>
             </table>
             <p class="docs-step-desc" style="margin-top: 0.75rem">
-              The hosted endpoint reads <code>manifests/components.json</code>, which the Storybook build writes once <code>@storybook/addon-mcp</code> is installed — the addon switches the <code>componentsManifest</code> feature on through its own preset. As of Storybook 10.4/10.5 only <strong>React</strong> fills that file: <code>@storybook/react</code> is the one framework package that contributes a <code>components</code> entry to the manifest preset. Angular &amp; Vue static builds only emit <code>docs.json</code>, so the worker serves those endpoints their own MDX docs (foundations, tokens) <em>plus</em> React's <code>components.json</code> as the cross-framework API reference — legitimate because the spec contract is identical across the three adapters and the drift gates keep it that way (ADR-0083). An Angular or Vue lookup therefore returns real variants, defaults and state props — but the reply is React-shaped throughout: JSX snippets, React story paths, a <code>children</code> prop where Angular projects content and Vue takes a slot, and <code>on*Change</code> callbacks where Angular uses a two-way <code>model()</code> and Vue an <code>update:*</code> emit. Read it as an API reference, not as code to copy, and open the story in your own framework's Storybook rather than following the served path verbatim.
+              The hosted endpoint reads <code>manifests/components.json</code>, which the Storybook build writes once <code>@storybook/addon-mcp</code> is installed — the addon switches the <code>componentsManifest</code> feature on through its own preset. Since Storybook 10.6, all three framework packages fill that file for real: React via <code>react-docgen</code> (its default all along), Angular via <code>@storybook/angular-vite</code>'s <code>angular-component-meta</code>, and Vue via <code>@storybook/vue3-vite</code>'s <code>vue-component-meta</code> — both behind <code>experimentalDocgenServer</code>, which this repo sets explicitly (ADR-0097, superseding the React-manifest fallback ADR-0083 describes). An Angular or Vue lookup now returns real variants, defaults and state props already shaped for that framework: two-way <code>[(checked)]</code> bindings and split Inputs/Outputs for Angular, <code>v-model</code>/<code>update:*</code> events and typed slots for Vue — no more <code>children</code> or <code>onCheckedChange</code> outside the React endpoint. <code>check:manifests</code> gates all three builds so a regression back to a decoy or empty manifest fails offline before it reaches the hosted surface.
             </p>
             <p class="docs-step-desc" style="margin-top: 0.5rem">
-              The dev / test toolsets require a running Node.js Storybook dev server and fall under that same React-only preview scope. Their per-tool gates, though, are capability checks rather than framework checks — <code>stories-find-by-component</code> wants a builder that exposes the module graph, <code>stories-changed</code> and <code>display-review</code> want <code>features.changeDetection</code>, <code>test-run</code> wants <code>@storybook/addon-vitest</code>. <code>docs</code> tools support a <code>storybookId</code> parameter to scope a request to one source in multi-source (composition) setups; <code>docs-list</code> accepts <code>withStoryIds: true</code> when downstream tools need story IDs.
+              The dev / test toolsets require a running Node.js Storybook dev server, and under 10.6 that surface answers on all three frameworks — not the React-only preview scope of earlier versions. Their per-tool gates are capability checks rather than framework checks — <code>stories-find-by-component</code> wants a builder that exposes the module graph, <code>stories-changed</code> and <code>display-review</code> want <code>features.changeDetection</code>, <code>test-run</code> wants <code>@storybook/addon-vitest</code>. <code>docs</code> tools support a <code>storybookId</code> parameter to scope a request to one source in multi-source (composition) setups; <code>docs-list</code> accepts <code>withStoryIds: true</code> when downstream tools need story IDs.
             </p>
           </div>
         </div>
@@ -133,7 +133,7 @@ const STORYBOOK_LINKS = [
           <div class="docs-step-body">
             <h3 class="docs-h3">What Storybook 10.4 added to MCP</h3>
             <p class="docs-step-desc">
-              The 10.4 release — together with the <code>@storybook/mcp</code> versions that shipped alongside it — tightens the agentic loop on six fronts, all still in place at the pinned 10.5.10:
+              The 10.4 release — together with the <code>@storybook/mcp</code> versions that shipped alongside it — tightens the agentic loop on six fronts, all still in place at the pinned 10.6.0:
             </p>
             <table class="docs-props-table">
               <thead>

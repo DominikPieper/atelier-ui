@@ -81,7 +81,7 @@ const DAYS: Day[] = [
           'Was ist Storybook, was sind Stories, Prop-Tables',
           'Hosted Storybooks öffnen — selbe Komponente (Button) in Angular/React/Vue vergleichen',
           'libs/spec als Quelle der Wahrheit — Parität spürbar machen',
-          'Was Storybook 10.4 gebracht hat und im gepinnten 10.5.10 weiterhin aktiv ist: Agentic Setup, experimentalReactComponentMeta (Atelier lässt den Docgen aus — Reacts Prop-Tabellen kommen weiter aus react-docgen), Change Review Sidebar, Subcomponent-Docs',
+          'Was Storybook 10.4 gebracht hat und im gepinnten 10.6.0 weiterhin aktiv ist: Agentic Setup, experimentalReactComponentMeta (Atelier lässt den Docgen aus — Reacts Prop-Tabellen kommen weiter aus react-docgen) — seit 10.6 mit eigenen Geschwistern für Angular und Vue (experimentalDocgenServer, in beiden explizit gesetzt statt sich auf den Default zu verlassen), Change Review Sidebar, Subcomponent-Docs',
         ],
       },
       {
@@ -91,9 +91,9 @@ const DAYS: Day[] = [
         format: 'Hands-on Demo',
         bullets: [
           'Was ist MCP? Welche Server sind aktiv (storybook-{angular,react,vue}, nx-mcp, figma-console, uianatomy)?',
-          'Toolset-Modell (seit 10.4, im Repo läuft 10.5.10): docs / dev / test — hosted vs. lokale Surface, inklusive Toolset-Gating (wann test für Read-Only-Agents deaktiviert wird)',
+          'Toolset-Modell (seit 10.4, im Repo läuft 10.6.0): docs / dev / test — hosted vs. lokale Surface, inklusive Toolset-Gating (wann test für Read-Only-Agents deaktiviert wird)',
           'Live-Übung: Claude per Prompt nach Button-Props fragen, Token-Werte ausgeben, Preview im Chat',
-          '~5 min Angular/Vue: dieselbe Live-Übung an einer Komponente mit Change-Handler, libs/spec/src/index.ts daneben geöffnet — die gehosteten Angular/Vue-Endpunkte antworten mit Reacts Manifest (ADR-0083), die Spec löst die Abbildung: children → Content-Projection/Slot, on*Change → model() / update:*',
+          '~5 min Angular/Vue: dieselbe Live-Übung an einer Komponente mit Change-Handler — die gehosteten Angular/Vue-Endpunkte antworten seit Storybook 10.6 nativ (ADR-0097): checked / model() für Angular, v-model / update:checked für Vue, ohne Umweg über libs/spec/src/index.ts. Kurz danebenlegen genügt als Bestätigung, nicht als Übersetzungsschritt',
           'Negativ-Demo: dieselbe Frage im Browser-Chat ohne MCP → Halluzination. Mit MCP → korrekte Antwort',
           'Trainer-Demo Drei Richtungen (~12 min, nur Trainer-Maschine — claude.ai/design braucht ein anderes Login als der Kohorten-API-Key): drei Direction-Artboards für den Toast-Brief in Claude Design, geseedet aus der generierten Palette tools/design/artboard-palette.css — nicht aus dem atelier-design Skill, weil dieses File die Kurznamen trägt, die die Artboards selbst verwenden (--success, --border-hover), und weil genau dieses File gleich rot gemacht wird',
           'Vor dem Zaun die vier Gate-Identitäten in einem Satz benennen (Figma-COMPONENT_SET mit Variant-Achsen, Spec-String-Literal-Union, --ui-*-Token, Figma-Node-Id) — Node-Ids kommen erst in Block 05, Literal-Unions erst an Tag 2, hier also benennen statt voraussetzen. Dann der Zaun: eine Farbe im Artboard hart eintragen und npm run check:artboard-palette laufen lassen — grün, das Gate liest nur das gemeinsame Sheet gegen tokens.css und kein Artboard. Dieselbe Farbe im generierten Sheet ändern: derselbe Befehl wird rot',

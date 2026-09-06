@@ -35,8 +35,8 @@ const GENERATE_PROMPT: Record<string, string> = {
    read boundVariables, the component tree, and the rendered preview.
 2. storybook-angular MCP (docs-list, then docs-show)
    to look up AtlCard, AtlInput, AtlToggle, and AtlButton props. The reply
-   is React-shaped — use it for names, variants and defaults, then write
-   Angular bindings (two-way model(), ng-content instead of children).
+   is Angular-native — two-way model() bindings and ng-content already
+   spelled out, not React syntax to translate.
 3. Generate the component with the exact Atelier UI props and the exact
    --ui-* token names from boundVariables. No hardcoded colors or paddings.`,
 
@@ -46,8 +46,8 @@ const GENERATE_PROMPT: Record<string, string> = {
    read boundVariables, the component tree, and the rendered preview.
 2. storybook-vue MCP (docs-list, then docs-show)
    to look up AtlCard, AtlInput, AtlToggle, and AtlButton props. The reply
-   is React-shaped — use it for names, variants and defaults, then write
-   Vue bindings (update:* emits, <slot /> instead of children).
+   is Vue-native — update:* emits and <slot /> already spelled out, not
+   React syntax to translate.
 3. Generate the component with the exact Atelier UI props and the exact
    --ui-* token names from boundVariables. No hardcoded colors or paddings.`,
 };
@@ -55,8 +55,8 @@ const GENERATE_PROMPT: Record<string, string> = {
 // Per-framework note for the Generate step: where component docs come from.
 const GENERATE_NOTE: Record<string, string> = {
   React: 'React exposes component metadata over the hosted Storybook MCP — docs-list gives Claude every prop and variant before it writes a line.',
-  Angular: "Storybook 10.4 and 10.5 emit components.json for React only, so the worker serves React's manifest on the Angular endpoint too (ADR-0083) — storybook-angular answers component lookups with real names, variants and defaults. The reply is React-shaped, though: JSX snippets, React story paths, a children prop where Angular projects content, on*Change callbacks where Angular uses a two-way model(). Read it as an API reference, not as code to copy.",
-  Vue: "Storybook 10.4 and 10.5 emit components.json for React only, so the worker serves React's manifest on the Vue endpoint too (ADR-0083) — storybook-vue answers component lookups with real names, variants and defaults. The reply is React-shaped, though: JSX snippets, React story paths, a children prop where Vue takes a slot, on*Change callbacks where Vue emits update:*. Read it as an API reference, not as code to copy.",
+  Angular: "storybook-angular emits and serves its own components.json, via angular-component-meta (ADR-0097) — it answers component lookups with real names, variants and defaults, already in Angular's own shape: two-way model() bindings, split Inputs/Outputs, ng-content instead of children.",
+  Vue: "storybook-vue emits and serves its own components.json, via vue-component-meta (ADR-0097) — it answers component lookups with real names, variants and defaults, already in Vue's own shape: update:* emits, typed slots instead of children.",
 };
 
 const PARITY_PROMPT = `Run figma_check_design_parity on the settings card node against
@@ -166,8 +166,9 @@ the component I just generated. Fix every discrepancy it reports.`;
             workshop workspace you read the same contract without them — through the hosted
             <code>storybook-*</code> MCP (<code>docs-list</code> → <code>docs-show</code>),
             or from <a href="/llms-full.txt" class="docs-link-primary">llms-full.txt</a>. The prop tables the
-            MCP returns are exact; the code snippets alongside them come back in React syntax on
-            all three endpoints (ADR-0083), so read them for the API, not for the bindings.
+            MCP returns are exact, and so are the code snippets alongside them — each endpoint answers
+            in its own framework's syntax (ADR-0097), drift-gated against this same spec, so what you
+            read there is what you'd write here.
           </p>
         </div>
       </div>

@@ -415,13 +415,13 @@ export default function McpExplorer() {
         <p style={{ fontSize: '0.82rem', color: 'var(--ui-color-text-muted)', margin: 0, lineHeight: '1.6' }}>
           <strong style={{ color: 'var(--ui-color-text)' }}>Note:</strong> The hosted endpoints
           expose the docs toolset only — for all three frameworks. Angular and Vue answer
-          component lookups from React's components manifest, which is valid because the spec
-          contract is identical across the adapters. Variants, defaults and state props carry
-          across, but the reply is React-shaped throughout — JSX snippets, React story paths, a
-          children prop where Angular projects content and Vue takes a slot, and on*Change
-          callbacks where Angular uses a two-way model() and Vue an update:* emit. Read it as an
-          API reference, not as code to copy. Story previews and test tools come from the local
-          @storybook/addon-mcp behind a running Storybook — a React-only preview surface today.
+          component lookups from their own components manifest (angular-component-meta,
+          vue-component-meta; ADR-0097), the same as React's (react-docgen). Variants, defaults
+          and state props come back shaped for the framework you asked: two-way [(checked)]
+          bindings and split Inputs/Outputs for Angular, v-model/update:* events and typed slots
+          for Vue, unchanged JSX/children for React. Story previews and test tools come from the
+          local @storybook/addon-mcp behind a running Storybook — all three frameworks, not just
+          React, since Storybook 10.6.
         </p>
       </div>
 
