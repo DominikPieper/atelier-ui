@@ -105,7 +105,11 @@ Ranked; each carries why it's worth doing next rather than later.
 
 - [ ] **One rehearsal of the participant path on a non-author machine, timed**
   (Schulung review §10). Why now: last unverified step — everything else in both
-  Schulung reviews is closed.
+  Schulung reviews is closed. Run it against `tasks/schulung-dry-run-kit.md`
+  (built 2026-09-06): the ordered checkpoint list, known-blocked items,
+  timing tracker and a findings table shaped like the three existing reviews —
+  built so the rehearsal is a one-day job with a comparable result instead of
+  an improvisation.
 
 - [ ] **Schulung M11: trainer-internal tone still on the public page**
   (`tasks/schulung-review-2026-09-02.md` §7). Re-verified 2026-09-06 while
