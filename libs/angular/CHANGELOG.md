@@ -1,3 +1,14 @@
+## 0.2.37 (2026-09-06)
+
+### 🩹 Fixes
+
+- **a11y:** four role claims, and the fix that did not fix anything ([f6bc9cf](https://github.com/DominikPieper/atelier-ui/commit/f6bc9cf))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.36 (2026-09-06)
 
 This was a version bump only for angular to align it with other projects, there were no code changes.
