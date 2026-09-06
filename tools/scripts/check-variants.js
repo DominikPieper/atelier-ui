@@ -53,7 +53,7 @@ function parseSpecUnions() {
   ts.forEachChild(sf, (node) => {
     if (!ts.isTypeAliasDeclaration(node)) return;
     const name = node.name.text;
-    const m = /^Atl.+(Variant|Size|Shape|Position|Orientation)$/.exec(name);
+    const m = /^Atl.+(Variant|Size|Shape|Position|Orientation|Status)$/.exec(name);
     if (!m) return;
     found.push({ union: name, axis: m[1], members: literalsOfAlias(node, checker) });
   });
@@ -81,6 +81,7 @@ function cssClasses(framework, component) {
 
 const unions = parseSpecUnions();
 const errors = [];
+const warnings = [];
 
 for (const { union, axis, members } of unions) {
   const component = UNION_TO_COMPONENT[union];
@@ -98,7 +99,13 @@ for (const { union, axis, members } of unions) {
     for (const member of members) {
       if (!member) continue; // skip '' members
       if (member === 'default' && DEFAULT_IS_BASE.has(union)) continue;
-      if (VARIANT_AXIS_EXCEPTIONS.has(`${framework}:${union}:${member}`)) continue;
+      const exempt = VARIANT_AXIS_EXCEPTIONS.get(`${framework}:${union}:${member}`);
+      if (exempt) {
+        if (exempt.kind === 'gap') {
+          warnings.push(`[GAP] ${framework}/${component}: ${union}:${member} — ${exempt.reason}`);
+        }
+        continue;
+      }
       if (!classes.has(`${prefix}-${member}`)) {
         errors.push(
           `[VARIANT-DRIFT] ${framework}/${component}: spec ${union} allows '${member}' ` +
@@ -110,9 +117,13 @@ for (const { union, axis, members } of unions) {
 }
 
 if (errors.length > 0) {
+  warnings.forEach((w) => console.warn(`⚠ [WARNING] ${w}`));
   errors.forEach((e) => console.error(`✗ ${e}`));
   console.error(`\n${errors.length} variant/size drift issue(s). Add the missing CSS class, or allowlist a non-class axis in tools/scripts/lib/allowlists.js.`);
   process.exit(1);
+} else if (warnings.length > 0) {
+  warnings.forEach((w) => console.warn(`⚠ [WARNING] ${w}`));
+  console.warn(`\n${warnings.length} variant/size warning(s) (non-blocking). variant/size CSS in sync (${unions.length} unions × ${FRAMEWORKS.length} frameworks)`);
 } else {
   console.log(`✓ variant/size CSS in sync (${unions.length} unions × ${FRAMEWORKS.length} frameworks)`);
 }

@@ -7,8 +7,8 @@
  * (ADR-0031): adding a component now means touching the registry file once.
  *
  * The union→component map is DERIVED, not maintained: an axis union named
- * `Atl<Base><Axis>` (Axis ∈ Variant|Size|Shape|Position|Orientation) maps to
- * the registry entry for `Atl<Base>Spec`; the few unions with no spec
+ * `Atl<Base><Axis>` (Axis ∈ Variant|Size|Shape|Position|Orientation|Status) maps
+ * to the registry entry for `Atl<Base>Spec`; the few unions with no spec
  * interface (Toast) come from UNION_COMPONENT_EXCEPTIONS.
  */
 
@@ -21,7 +21,7 @@ const ROOT = path.resolve(__dirname, '../../..');
 const METADATA_INDEX = path.join(ROOT, 'libs/spec/src/metadata/index.ts');
 const SPEC_FILE = path.join(ROOT, 'libs/spec/src/index.ts');
 
-const AXIS_RE = /(Variant|Size|Shape|Position|Orientation)$/;
+const AXIS_RE = /(Variant|Size|Shape|Position|Orientation|Status)$/;
 
 let cache = null;
 function maps() {

@@ -107,6 +107,21 @@ Ranked; each carries why it's worth doing next rather than later.
   (Schulung review §10). Why now: last unverified step — everything else in both
   Schulung reviews is closed.
 
+- [ ] **Schulung M11: trainer-internal tone still on the public page**
+  (`tasks/schulung-review-2026-09-02.md` §7). Re-verified 2026-09-06 while
+  closing the `solved-*`/repo-location item below (see ADR-0103): this finding
+  itself had silently dropped out of this file during today's restructuring —
+  re-added here rather than left untracked. Still exactly as the review found
+  it: `docs/src/pages/schulung.astro:96`'s "nur Trainer-Maschine —
+  claude.ai/design braucht ein anderes Login als der Kohorten-API-Key"
+  credential-class remark (plus the neighboring fence-script/"Gegenmittel"
+  lines the review names at `:97-99`), and `schulung-2tage-agenda.md` Block 4's
+  "Alle Minutenangaben sind Schätzungen … kein Dry-Run … die erste Kohorte
+  mitstoppen" admission. Not personal data or a secret (ADR-0103 confirms this
+  is a different question from I1), so no repo-split rationale — just trim the
+  page to curriculum + prerequisites and move the contingency/tone lines to
+  wherever trainer prep material lives day to day.
+
 - [ ] **Small near-term fixes (grab-bag)** — none blocking, each cheap:
   - [ ] The superseded glyph documentation frame on the Icons page is verified inert
     (1200×1328, 107 nodes, 0 components/instances/external refs) and ready to delete;
@@ -137,7 +152,11 @@ Ranked; each carries why it's worth doing next rather than later.
   - [ ] Schulung M4–M6: clone-first kata prompt + story file; Block 05 exercise page;
     clone quickstart + local `.mcp.json` snippet on 440x.
   - [ ] Schulung M12: `solved-*` branches — build the promise or remove it
-    (`agenda:81,208`).
+    (`agenda:81,208`). Owner decision 2026-09-06: fix in place, not remove — the
+    agenda's two mentions (gap-table row 81, Folie-7 bullet, now ~209) were reworded
+    to say the branches don't exist yet and are trainer prep, not an existing asset;
+    building the four `solved-toast`/`solved-tagchip`/`solved-statcard`/`solved-avatar`
+    branches themselves is still open.
   - [ ] Gate gap: nothing cross-checks `snapshot.json.uiTokens` — its only guard
     asserts prefix counts sum to the total, which a truncated list still satisfies.
     Cheapest close: assert every `color/*`/`spacing/*`/`radius/*` name has a matching
@@ -202,16 +221,19 @@ The ones the owner and I will walk through together.
   The 29 existing parity records stay valid until component CSS migrates onto role
   tokens, at which point the ADR-0024 Phase 0 change becomes blocking.
 
-- [ ] **An axis is owed for `AtlAvatarStatus` and `AtlChatStatus`.** Both unions are
-  illustrated as sibling frames on the Components page rather than as a variant axis
-  — `[NAME]` only derives an axis from a union ending in
-  Variant/Size/Shape/Position/Orientation/Align/Role, so `Status` is never asked
-  about. Two separable questions: draw the axes (design), and should the axis-word
-  list include `Status` at all (gate).
-
-- [ ] **Decide trainer-kit repo location** (Schulung M11/§6.3). Recommendation: a
-  private `atelier-trainer` repo pinned to an Atelier SHA; move agenda internals into
-  it, add a `LICENSE`.
+- [~] **An axis is owed for `AtlAvatarStatus` and `AtlChatStatus`.** Two separable
+  questions, as originally written: draw the axes in Figma (design), and should the
+  gate's axis-word list include `Status` at all (gate). The gate half is done — see
+  "Closed this session" below. (The item as originally written cited `[NAME]`'s
+  seven-word list, Variant/Size/Shape/Position/Orientation/Align/Role — that's
+  `check-figma.js`'s own axis list, and correct for that gate, but it is not why
+  `check:variants`/`check:defaults` never asked about `Status`: those two are driven
+  by `tools/scripts/lib/component-axes.js`'s `axisOf`, a *different*, five-word regex
+  — Variant/Size/Shape/Position/Orientation — that the item conflated with `[NAME]`'s.)
+  - [ ] **Design half, open and blocked**: drawing the `AtlAvatarStatus` axis in
+    Figma (a real `.status-online`/`.status-offline`/`.status-away`/`.status-busy`
+    paint axis, now gate-enforced in code) needs the Desktop Bridge, which is not
+    connected in this environment. Not claimed here.
 
 - [ ] **`check:props`'s own known blind spots** (ADR-0093), worth a decision each:
   - [ ] It's spec-keyed, so it can't see adapter-vs-adapter divergence where the
@@ -640,6 +662,58 @@ Not urgent; fix opportunistically or when touching the same area anyway.
 
 ## Closed this session (2026-09-06)
 
+- [x] **`Status` joins the gate's axis-word list** — `tools/scripts/lib/component-axes.js`'s
+  `axisOf`/`AXIS_PREFIX` (and its two duplicated axis-word regexes,
+  `tools/scripts/lib/component-map.js`'s `AXIS_RE` and `check-variants.js`'s own
+  union-parsing regex) now recognize `Status` alongside
+  Variant/Size/Shape/Position/Orientation. Two unions newly validated:
+  - `AtlAvatarStatus` (`'online' | 'offline' | 'away' | 'busy' | ''`) is a genuine,
+    CSS-backed paint axis — all three frameworks already carry `.status-online` /
+    `.status-offline` / `.status-away` / `.status-busy`, so it now passes
+    `check:variants` and `check:defaults` with zero code changes needed. The empty
+    `''` member ("no status") needed no special handling: `check-variants.js`
+    already skips falsy members (`if (!member) continue;`), so `''` was never going
+    to be misread as a missing `.status-` class.
+  - `AtlChatStatus` (`'idle' | 'streaming' | 'error'`) is behavioural state, not
+    paint — only `.status-streaming` exists in any framework, driving the input
+    footer's Send/Stop button swap (`isStreaming` in `atl-chat.tsx` and the
+    Angular/Vue equivalents). `idle` and `error` legitimately have no CSS class.
+    Exempted per `angular|react|vue:AtlChatStatus:idle|error` (6 entries, one
+    shared reason) in `tools/scripts/lib/allowlists.js`'s `VARIANT_AXIS_EXCEPTIONS`,
+    which was converted from a `Set` to a `Map` of `{kind, reason}` (matching this
+    file's other allowlists) — a drop-in change for `check-variants.js`'s consumer
+    side since `Map.has()` reads identically to `Set.has()`.
+  - Verified: `check:variants` 24→26 unions × 3 frameworks (both new unions passed
+    clean); `check:defaults` 22→24 props (both new prop defaults agree across all
+    three adapters and docs — `avatar.status` defaults `''` everywhere,
+    `chat.status` defaults `'idle'` everywhere). Turning the word on surfaced
+    nothing beyond the two unions described above.
+  - `tools/scripts/check-figma.js`'s own `[NAME]` axis-word regex (Variant/Size/
+    Shape/Position/Orientation/Align/Role — a different, seven-word list, unrelated
+    to this gate pair) was deliberately left untouched — out of scope for this
+    decision; drawing the Figma-side `AtlAvatarStatus` axis is a separate, still-open
+    follow-up above (Needs an owner decision) and needs the Desktop Bridge.
+- [x] **The agenda's `solved-*` branch promise, and the trainer-kit repo-location
+  decision it turned out to be entangled with** — `schulung-2tage-agenda.md`
+  claimed (gap-table row `:81` and a Folie-7 bullet) that four Git branches
+  `solved-toast`/`solved-tagchip`/`solved-statcard`/`solved-avatar` exist as a
+  trainer safety net; `git branch -a` confirms zero `solved-*` branches. Both
+  lines reworded to say the branches are trainer prep, not an existing asset.
+  Searched for the same promise elsewhere: `docs/src/pages/schulung.astro` (no
+  mention), the rest of `tasks/` (only prior review docs *describing* the gap,
+  already phrased accurately — untouched), `plan/adr/*` (two false-positive
+  greps on "unresolved"/"resolved" containing "solved" as a substring — not the
+  same word, untouched). Pulling this thread reopened
+  `tasks/schulung-review-2026-09-02.md` §6.3's still-open recommendation to
+  move trainer material to a private `atelier-trainer` repo — re-checked and
+  closed as **no, not now**: the one sensitive finding it rested on (I1,
+  colleagues' names + internal mailbox) is already fixed to role-only phrasing,
+  and a second, ungated repo would fare worse than this one at exactly the kind
+  of drift the `solved-*` claim itself is an instance of (`plan/ai-readiness.md`
+  needed a full ADR supersession, ADR-0083→ADR-0097, within five months).
+  Recorded as ADR-0103; "Decide trainer-kit repo location" removed from
+  Needs an owner decision above. M12 (building the four branches themselves)
+  stays open — see Near-term work / grab-bag.
 - [x] **No target type-checks the stories** — `check:types`
   (`tools/scripts/check-types.mjs`, commit `6a8ac9f`) runs `tsc --noEmit` over each
   framework's `tsconfig.spec.json`, which globs `*.stories.*`. Gate is wired into

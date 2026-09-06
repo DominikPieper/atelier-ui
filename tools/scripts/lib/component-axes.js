@@ -17,11 +17,12 @@ const AXIS_PREFIX = {
   Shape: 'shape',
   Position: 'position',
   Orientation: 'orientation',
+  Status: 'status',
 };
 
 /** The `Atl<Component><Axis>` suffix for a union type name, or null. */
 function axisOf(unionName) {
-  const m = /(Variant|Size|Shape|Position|Orientation)$/.exec(unionName);
+  const m = /(Variant|Size|Shape|Position|Orientation|Status)$/.exec(unionName);
   return m ? m[1] : null;
 }
 

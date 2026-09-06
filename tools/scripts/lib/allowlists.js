@@ -36,16 +36,41 @@ const TOKEN_BYPASS_EXEMPT = {
 
 /**
  * `framework:union:member` triples that intentionally have no CSS class — the
- * axis is realised by a non-class mechanism in that framework. (check-variants)
+ * axis is realised by a non-class mechanism in that framework, or the member
+ * is not a paint state at all. Same two kinds as the other allowlists here:
+ * `design` is a closed question and stays silent; `gap` would warn on every
+ * run (none needed yet — every entry below is a settled `design` call).
+ * (check-variants)
  */
-const VARIANT_AXIS_EXCEPTIONS = new Set([
+const VARIANT_AXIS_EXCEPTIONS = new Map([
   // Angular tooltip positions via the CDK overlay's flexible-connected
   // position strategy (inline transforms), not .position-* CSS classes.
   // React/Vue use CSS classes, so they stay enforced.
-  'angular:AtlTooltipPosition:above',
-  'angular:AtlTooltipPosition:below',
-  'angular:AtlTooltipPosition:left',
-  'angular:AtlTooltipPosition:right',
+  ...['above', 'below', 'left', 'right'].map((member) => [
+    `angular:AtlTooltipPosition:${member}`,
+    { kind: 'design', reason: "realised via the CDK overlay's inline transforms, not a .position-* class" },
+  ]),
+  // AtlChatStatus.idle/.error carry no paint of their own — status-driven
+  // behaviour swaps the input footer's Send button for a Stop button
+  // (isStreaming in atl-chat.tsx / the Angular and Vue equivalents), it does
+  // not repaint the chat surface. Only 'streaming' has a CSS rule
+  // (.status-streaming) in all three frameworks; idle and error are the
+  // component's resting states and legitimately have no .status-idle /
+  // .status-error rule to match. Unlike AtlAvatarStatus (a genuine,
+  // CSS-backed paint axis, now enforced), this union is behavioural state,
+  // not a variant axis — see tasks/todo.md.
+  ...['angular', 'react', 'vue'].flatMap((fw) =>
+    ['idle', 'error'].map((member) => [
+      `${fw}:AtlChatStatus:${member}`,
+      {
+        kind: 'design',
+        reason:
+          "AtlChatStatus drives a control swap (Send → Stop button), not paint — only 'streaming' has a " +
+          "CSS rule (.status-streaming) in any framework; 'idle' and 'error' are resting states with no class " +
+          'to match.',
+      },
+    ])
+  ),
 ]);
 
 /**

@@ -23,6 +23,18 @@
  *
  * This is the ONE part of the parity loop that depends on a human/agent having run
  * the (bridge-connected) verify; the gate itself is fully offline.
+ *
+ * The record also carries `figmaLastModified` — the Figma file's last-modified
+ * stamp, copied from `tools/figma/snapshot.json`'s `meta.figmaLastModified`
+ * (the same field `figma-snapshot.mjs` and `check-figma.js` already know by that
+ * name; see ADR-0019/ADR-0034). It costs nothing extra here: the snapshot is
+ * already read above to resolve the Figma node id. It is purely informational —
+ * `check-parity.js` stays fully offline and asserts nothing about it — because
+ * no content hash can tell you the Figma *master* itself moved; a record only
+ * ever knew about the code side of parity. Populating the snapshot's own
+ * `figmaLastModified` (still `null` as of this writing — a separate, open gap,
+ * see ADR-0019/ADR-0034) is what would make this field meaningful; until then
+ * it is copied through as whatever the snapshot has, `null` included. ADR-0104.
  */
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { execSync } from 'node:child_process';
@@ -72,11 +84,16 @@ if (args.score !== undefined) {
 }
 
 // Resolve the Figma node id: explicit --node wins, else look it up in the snapshot.
+// Also carry the snapshot's figmaLastModified stamp through — see the header note.
 let figmaNodeId = args.node || null;
-if (!figmaNodeId && existsSync(SNAPSHOT_FILE)) {
+let figmaLastModified = null;
+if (existsSync(SNAPSHOT_FILE)) {
   try {
     const snap = JSON.parse(readFileSync(SNAPSHOT_FILE, 'utf8'));
-    figmaNodeId = (snap.components || []).find((c) => c.selector === selector)?.nodeId || null;
+    if (!figmaNodeId) {
+      figmaNodeId = (snap.components || []).find((c) => c.selector === selector)?.nodeId || null;
+    }
+    figmaLastModified = snap.meta?.figmaLastModified ?? null;
   } catch {
     /* snapshot optional here; --node can supply it */
   }
@@ -91,6 +108,7 @@ parity.components = parity.components || {};
 
 parity.components[selector] = {
   figmaNodeId,
+  figmaLastModified,
   verifiedAt: new Date().toISOString(),
   verifiedSha: gitSha(),
   inputsHash: hash,
