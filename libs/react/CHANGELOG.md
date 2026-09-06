@@ -1,3 +1,14 @@
+## 0.2.35 (2026-09-06)
+
+### 🚀 Features
+
+- **storybook:** 10.6 and the first-party Angular framework ([137042d](https://github.com/DominikPieper/atelier-ui/commit/137042d))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.34 (2026-09-05)
 
 This was a version bump only for react to align it with other projects, there were no code changes.

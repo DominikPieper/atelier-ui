@@ -1,3 +1,14 @@
+## 0.2.35 (2026-09-06)
+
+### 🩹 Fixes
+
+- **deps:** the manifests the sweep left behind, and one it must not touch ([460bdf9](https://github.com/DominikPieper/atelier-ui/commit/460bdf9))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.34 (2026-09-05)
 
 This was a version bump only for create-atelier-ui-workspace to align it with other projects, there were no code changes.
