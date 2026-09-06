@@ -214,13 +214,29 @@ export class AtlChatHeader {
  * `atl-chat-typing`, or `atl-chat-suggestion` children inside. Auto-scrolls
  * to the bottom whenever children are added or content changes — important
  * for streaming responses where new tokens are appended live.
+ *
+ * Renders `role="log"` (named, `aria-label="Conversation"`) with
+ * `aria-live="polite"` on the host — the live region that announces new
+ * messages without interrupting whatever the user is doing. `log` is not
+ * `list`: an element carries exactly one role, so the projected
+ * `atl-chat-message` `listitem`s get their required list parent from a
+ * second, nested element (`.messages-list`, `role="list"`) rather than from
+ * the log host itself. That wrapper is `display: contents` so it never
+ * affects the flex/gap layout of the messages — verified (Chromium, Firefox,
+ * WebKit): the gap between messages is unchanged, and Chromium's native
+ * accessibility tree shows `log "Conversation" > list "Messages" > listitem, listitem`.
  */
 @Component({
   selector: 'atl-chat-messages',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<ng-content />`,
+  template: `<div class="messages-list" role="list" aria-label="Messages"><ng-content /></div>`,
   styleUrl: './atl-chat.css',
+  host: {
+    '[attr.role]': '"log"',
+    '[attr.aria-live]': '"polite"',
+    '[attr.aria-label]': '"Conversation"',
+  },
 })
 export class AtlChatMessages {
   private readonly host: ElementRef<HTMLElement> = inject(ElementRef);

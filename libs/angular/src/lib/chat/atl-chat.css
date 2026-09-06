@@ -215,6 +215,13 @@
   background: var(--ui-color-surface);
 }
 
+/* The role="list" wrapper the log's listitems need (a node has one role, so it
+   can't be the log host itself) — display:contents keeps it invisible to the
+   flex/gap layout above, so the messages still lay out as if it were absent. */
+:host(atl-chat-messages) .messages-list {
+  display: contents;
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════ */
 /* SUB-COMPONENT: message bubble                                               */
 /* ═══════════════════════════════════════════════════════════════════════════ */

@@ -14,7 +14,7 @@ const props = withDefaults(defineProps<{ separator?: string }>(), {
     aria-label="Breadcrumb"
     :style="{ '--atl-separator': `'${props.separator}'` }"
   >
-    <ol class="breadcrumbs-list">
+    <ol role="list" class="breadcrumbs-list">
       <slot />
     </ol>
   </nav>

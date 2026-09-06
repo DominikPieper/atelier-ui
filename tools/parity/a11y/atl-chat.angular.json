@@ -1,6 +1,14 @@
 {
   "inline": [
     {
+      "role": "log",
+      "name": "Conversation"
+    },
+    {
+      "role": "list",
+      "name": "Messages"
+    },
+    {
       "role": "listitem",
       "name": "Hello"
     },

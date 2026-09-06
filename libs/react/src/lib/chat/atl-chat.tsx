@@ -216,6 +216,17 @@ export function AtlChatHeader({
  * `AtlChatSuggestion` children inside. Auto-scrolls to the bottom whenever
  * children are added or content changes — important for streaming responses
  * where new tokens are appended live.
+ *
+ * Renders `role="log"` (named, `aria-label="Conversation"`) with
+ * `aria-live="polite"` on the root — the live region that announces new
+ * messages without interrupting whatever the user is doing. `log` is not
+ * `list`: an element carries exactly one role, so the projected
+ * `AtlChatMessage` `listitem`s get their required list parent from a second,
+ * nested element (`.messages-list`, `role="list"`) rather than from the log
+ * root itself. That wrapper is `display: contents` so it never affects the
+ * flex/gap layout of the messages — verified (Chromium, Firefox, WebKit): the
+ * gap between messages is unchanged, and Chromium's native accessibility tree
+ * shows `log "Conversation" > list "Messages" > listitem, listitem`.
  */
 export function AtlChatMessages({
   children,
@@ -235,10 +246,15 @@ export function AtlChatMessages({
   return (
     <div
       ref={ref}
+      role="log"
+      aria-live="polite"
+      aria-label="Conversation"
       className={['atl-chat-messages', className].filter(Boolean).join(' ')}
       {...rest}
     >
-      {children}
+      <div className="messages-list" role="list" aria-label="Messages">
+        {children}
+      </div>
     </div>
   );
 }

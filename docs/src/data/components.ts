@@ -1464,6 +1464,7 @@ show('Persistent', { duration: 0 });`,
       ],
       notes: [
         'Drawer uses native <dialog> with aria-modal — same accessibility model as AtlDialog and AtlDrawer.',
+        'AtlChatMessages renders role="log" (named, aria-label="Conversation") with aria-live="polite" — the live region that announces new messages as they arrive without interrupting whatever the user is doing (polite, not assertive — an ordinary chat message is not an interruption-worthy event). log and list are two different roles, so the projected AtlChatMessage listitems get their required list parent from a second, nested role="list" wrapper rather than from the log itself — a display:contents element that keeps the message layout unchanged.',
         'Streaming state announces via aria-live="polite" on the typing indicator so screen readers know the assistant is responding.',
         'Stop button uses AtlButton variant="danger" so the destructive intent is communicated by both color and label.',
         'Inline variant has no overlay chrome — the close button is hidden because there is nothing to close.',

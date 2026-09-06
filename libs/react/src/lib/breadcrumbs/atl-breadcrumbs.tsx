@@ -35,7 +35,12 @@ export function AtlBreadcrumbs({ children, separator = '/', className, style, ..
       style={{ '--atl-separator': `'${separator}'`, ...style } as CSSProperties}
       {...rest}
     >
-      <ol className="breadcrumbs-list">
+      {/* eslint-disable-next-line jsx-a11y/no-redundant-roles -- role="list" is
+          NOT redundant here: .breadcrumbs-list sets list-style: none, and an
+          unstyled-marker <ol>/<ul> with no explicit role is the documented
+          Safari/VoiceOver case where the implicit list semantics can be
+          dropped (ADR-0100). */}
+      <ol role="list" className="breadcrumbs-list">
         {enhancedChildren}
       </ol>
     </nav>

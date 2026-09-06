@@ -137,19 +137,6 @@ The ones the owner and I will walk through together.
   install. Run `tools/scripts/relock.sh` with Docker up once; if it's an empty diff,
   close this.
 
-- [ ] **Three a11y-pattern divergences surfaced by the role cross-check**, each
-  recorded in `METADATA_ROLE_EXCEPTIONS` as `kind: 'gap'` (warns every run until
-  resolved) — one original item, three facets, so one checkbox above and plain
-  sub-bullets here (not a merge of separate items):
-  - **AtlStepper** — metadata says `progressbar`; all three adapters render
-    `tablist`/`tab` (+`tabpanel`, Vue missing it while React/Angular have it); the
-    Figma master claims a third pattern (`ol` + `aria-current="step"`). Pick one.
-  - **AtlChat** — metadata says `log`; no adapter renders it, and the `listitem`s
-    have no list container (orphaned). Add the container in code, or drop the claim.
-  - **AtlSkeleton** — metadata says `status`; the component renders
-    `aria-hidden="true"` and both baseline scenarios are empty. Wrong claim, or
-    should a loading skeleton actually announce?
-
 - [ ] **AtlStepper's Figma master has two open gaps** (merged — both block on the
   same "is this component chrome or artboard decoration" judgment):
   - [ ] It pads 16 where the code root pads 0 — decide whether that's component
@@ -157,7 +144,19 @@ The ones the owner and I will walk through together.
     `[ROOT-BOX]` warns until settled.
   - [ ] It has no focus variant, no disabled variant, and no a11y annotations in its
     description (5 of 7 remaining parity findings) — pairs with the role question
-    above.
+    below.
+  - [ ] **Now a three-way disagreement, not two.** The role question below was
+    decided 2026-09-06: metadata now says `tablist`, matching all three code
+    adapters (`tablist`/`tab`/`tabpanel`). The Figma master's own description
+    still claims a fourth-different pattern, `ol` + `aria-current="step"` — code
+    and metadata now agree with each other and disagree with Figma. **Cannot be
+    fixed here**: the Desktop Bridge was disconnected this session
+    (`figma_get_status` → `failureLayer: 2`). Next person with the bridge open:
+    update the master's description (and, if the master literally uses an `<ol>`
+    grouping with `aria-current="step"` rather than a tab strip, its structure)
+    to state the `tablist`/`tab`/`tabpanel` pattern ADR-reasoned in the code —
+    three independent framework implementations choosing the same pattern is the
+    signal that code is right and Figma is stale, not the other way round.
 
 - [ ] **Harden Atelier's own design system; Conciso as theme demo.** Plan:
   `tasks/atelier-design-system-plan.md`. ADR-0020 already settled the palette
@@ -167,12 +166,6 @@ The ones the owner and I will walk through together.
   `_adherence.oxlintrc.json`) and makes Conciso a `[data-brand="conciso"]` theme demo.
   The 29 existing parity records stay valid until component CSS migrates onto role
   tokens, at which point the ADR-0024 Phase 0 change becomes blocking.
-
-- [ ] **The breadcrumb separator is a glyph in CSS `content`.**
-  `.atl-breadcrumb-item::after { content: var(--atl-separator, '›') }` — ADR-0050's
-  rule sends a pictogram to the icon set, but a CSS pseudo-element can't hold an icon
-  component. Either render a `chevron-right` AtlIcon in all three templates, or state
-  the pseudo-element as the one allowed exception.
 
 - [ ] **An axis is owed for `AtlAvatarStatus` and `AtlChatStatus`.** Both unions are
   illustrated as sibling frames on the Components page rather than as a variant axis
@@ -635,3 +628,70 @@ Not urgent; fix opportunistically or when touching the same area anyway.
   (`docs/src/lib/gate-count.ts` derives "33" at build time from `package.json`); the
   "twenty-four tags" / "17/13 ADRs" half is not — carried forward above (Near-term
   work, grab-bag) since we now have the derivation pattern to copy.
+- [x] **Four a11y-role/pictogram questions, decided by the owner** — the three
+  `METADATA_ROLE_EXCEPTIONS` divergences plus the breadcrumb separator, closed
+  together:
+  - **AtlStepper** — metadata corrected `progressbar` → `tablist`, matching all
+    three code adapters. Its `METADATA_ROLE_EXCEPTIONS` entry removed. Vue's
+    `tabpanel` turned out to already exist (`atl-step.vue`, present since the
+    original Vue rename commit) and already matches the committed baseline — the
+    item as written overstated a gap that wasn't there; no Vue code change was
+    needed. The Figma-master disagreement is unrelated and stays open, see
+    AtlStepper's Figma item above.
+  - **AtlChat** — kept `role: 'log'` and added the missing container:
+    `AtlChatMessages` renders `role="log"` (named, `aria-label="Conversation"`)
+    with `aria-live="polite"` in all three adapters. **First pass was wrong,
+    caught by a second-model review before commit**: `role="log"` alone does
+    not give `role="listitem"` a list parent — `listitem` requires an ancestor
+    with `role="list"`, and `log` isn't one; the original fix left the
+    `listitem`s exactly as orphaned as before, while its own comments (and
+    `docs/src/data/components.ts`) claimed otherwise. Fixed by nesting a
+    second, `display:contents` element with `role="list"` inside the log —
+    verified in Chromium/Firefox/WebKit that the `display:contents` wrapper
+    doesn't disturb the messages' flex/gap layout, and confirmed via
+    Chromium's native accessibility tree that the structure now reads `log
+    "Conversation" > list > listitem, listitem`. Politeness is `polite`, not
+    `assertive` — `workshop/briefs/toast.md` §4.3 uses severity to choose
+    (`info`/`success` polite, `danger` assertive) specifically to avoid
+    training users to ignore/disable notifications; an ordinary chat message
+    isn't an interruption-worthy event, and the existing `AtlChatTyping`
+    indicator already sets `aria-live="polite"` for the same reason. The log's
+    accessible name (`"Conversation"`) also had to be added explicitly: without
+    it, the shared `a11y-tree.ts` test helper's visible-text fallback (meant
+    for name-from-content roles like `button`) produced a manufactured name —
+    the concatenated text of every message — for a role (`log`) that is
+    name-from-author-only. Checked whether this is a systemic bug in the
+    shared helper (it would affect every component's snapshot): no — every
+    other name-from-author-only role in the committed baselines
+    (`AtlBreadcrumbs`/`AtlPagination` navigation, `AtlTable` region) already
+    carries an explicit author label, and `AtlAlert`/`AtlBadge`/`AtlToast`'s
+    `alert`/`status` roles have single self-contained message content where
+    the fallback happens to coincide with a reasonable name — `AtlChatMessages`
+    was the only case with genuinely list-shaped children and no label at all.
+    `METADATA_ROLE_EXCEPTIONS` entry removed; a11y baselines regenerated.
+  - **AtlSkeleton** — turned out already done: commit `57a24b1` (2026-08-26)
+    had already corrected the metadata to `role: 'none'` and removed its
+    exception. Verified, not re-fixed; no diff here.
+  - **The breadcrumb separator** — stated as the one allowed exception to "every
+    pictogram is an AtlIcon" rather than becoming an `AtlIcon` in three
+    templates: [ADR-0100](../plan/adr/0100-a-pseudo-element-the-icon-set-cannot-reach.md),
+    with a same-change "Corrected 2026-09-06" paragraph on
+    [ADR-0050](../plan/adr/0050-a-glyph-in-a-string-map-is-still-an-icon.md).
+    Verifying "hidden from assistive tech" found a real defect the pre-existing
+    CSS comment had only assumed away: on Chromium, `CDPSession
+    .getFullAXTree` (the browser's own native accessibility tree) showed the
+    separator glyph reaching the tree as its own text node; Firefox and WebKit
+    were checked with Playwright's `ariaSnapshot()` — its own DOM-based ARIA
+    computation, not those engines' native trees, but consistent with the same
+    finding. Fixed with the CSS Generated Content alt-text pair (`content:
+    <value> / ''`) in all three stylesheets — re-measured, the glyph still
+    renders visually and is gone from Chromium's native tree and all three
+    engines' `ariaSnapshot()`. **Second-model review also caught**: React and
+    Vue's `<ol>` had no explicit `role="list"` (only Angular did) despite both
+    setting `list-style: none` — the documented Safari/VoiceOver case where an
+    unstyled list can lose its implicit list semantics. Added to both; not
+    independently reproduced here (no macOS Safari + VoiceOver access in this
+    environment), applied on the strength of the documented real-world
+    behaviour rather than a local repro.
+  - `check:a11y-parity`, `check:metadata` and `check:adr-refs` all exit 0 after
+    this change.

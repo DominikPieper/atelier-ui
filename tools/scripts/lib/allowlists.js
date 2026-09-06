@@ -270,30 +270,14 @@ const A11Y_PARITY_EXEMPT = new Map([
  * An entry for a module that has no metadata file, or one whose role now DOES
  * appear in the baselines, is an error: the exception has outlived its reason.
  */
-const METADATA_ROLE_EXCEPTIONS = new Map([
-  [
-    'chat',
-    {
-      kind: 'gap',
-      reason:
-        "declares role 'log', but no adapter renders it — the implementations expose dialog / " +
-        'listitem / status only, and the listitems have no list container. Either the log ' +
-        'container is missing from the code or the metadata claims a pattern that was never ' +
-        'built. Unresolved: see tasks/todo.md.',
-    },
-  ],
-  [
-    'stepper',
-    {
-      kind: 'gap',
-      reason:
-        "declares role 'progressbar', all three adapters render tablist/tab(/tabpanel), and the " +
-        "Figma master description claims a third pattern (ol with aria-current=\"step\"). Three " +
-        'sources, three answers — picking one is an ADR, not a typo fix. Unresolved: see ' +
-        'tasks/todo.md.',
-    },
-  ],
-]);
+// Empty by design: AtlChat (2026-09-06, added a `log` container around its
+// listitems, matching the metadata's claim), AtlStepper (2026-09-06,
+// metadata corrected from 'progressbar' to 'tablist' — the role all three
+// adapters already rendered) and AtlSkeleton (2026-08-26, commit 57a24b1)
+// were the three components ever exempted here. All three now match their
+// committed a11y baselines, so the hygiene check below would error on a
+// stale entry for any of them.
+const METADATA_ROLE_EXCEPTIONS = new Map([]);
 
 /**
  * Tokens component CSS must NOT reference directly, and what to use instead

@@ -50,6 +50,21 @@ non-ASCII character. Comments are stripped first, because a rule's own explanati
 may quote the glyph it replaced — this ADR and the gate's own header both do.
 Negative-tested by putting `'ℹ'` back into AtlBadge's map.
 
+**Corrected 2026-09-06** — "every pictogram is an AtlIcon" is not universal.
+[ADR-0100](0100-a-pseudo-element-the-icon-set-cannot-reach.md), recorded the same
+day, states one deliberate exception: `AtlBreadcrumbs`' CSS-generated `::after`
+separator stays a pseudo-element rather than becoming an `AtlIcon`, because a
+pseudo-element has no DOM node a component can mount into — the same structural
+limit ADR-0046's Context section already named ("a Figma master cannot place an
+icon instance where the code renders a text node"). The exception is narrow: it
+holds only because the glyph is purely decorative *and* was made to verifiably
+stop reaching the accessibility tree (a CSS Generated Content alt-text pair,
+verified natively on Chromium's accessibility tree and via Playwright's ARIA
+computation on Firefox/WebKit) — a CSS glyph that carries meaning
+on its own, or that isn't actually hidden, is still exactly the bug this ADR and
+ADR-0046 exist to catch. This note is being added in the same change as
+ADR-0100, not retroactively.
+
 ## Consequences
 
 - **Alerts and badges draw real icons.** Rendered and checked: the four status

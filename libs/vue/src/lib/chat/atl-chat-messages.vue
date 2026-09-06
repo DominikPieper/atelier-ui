@@ -22,7 +22,9 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div ref="root" class="atl-chat-messages">
-    <slot />
+  <div ref="root" class="atl-chat-messages" role="log" aria-live="polite" aria-label="Conversation">
+    <div class="messages-list" role="list" aria-label="Messages">
+      <slot />
+    </div>
   </div>
 </template>

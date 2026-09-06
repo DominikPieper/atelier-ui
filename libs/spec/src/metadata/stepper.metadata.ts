@@ -32,7 +32,7 @@ export const metadata: ComponentMetadata = {
     { orientation: 'vertical', linear: false, activeStep: 1 },
   ],
   accessibility: {
-    role: 'progressbar',
+    role: 'tablist',
     keyboardBehavior:
       'The stepper itself is non-interactive — focus lives on the form controls and navigation buttons inside each step. Interactive step headers (when the flow is non-linear) accept focus via Tab and activate on Enter or Space.',
   },
