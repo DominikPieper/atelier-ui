@@ -104,6 +104,15 @@ Build **`check:figma`** as a committed-snapshot + offline-check gate, in the exi
    into `check:all`/CI today would either go stale silently or require the bridge in CI, which
    does not exist. Run it manually before a Figma-touching release.
 
+   **Corrected 2026-09-06** — item 5 above is no longer current. On 2026-08-26, ADR-0034
+   recorded `check:figma` promoted into the `check:all` chain (alongside `check:parity`),
+   with the precondition this item names — snapshot freshness — still unmet: the gate checks
+   the committed snapshot's existence, parse and non-emptiness, but never its age. This
+   correction note is being added now, eleven days after the fact; it was owed at the time of
+   ADR-0034 and was not written. See ADR-0034 for the promotion record and its open freshness
+   gap. The offline, committed-snapshot design this item and the rest of this ADR describe is
+   unchanged — only where the gate runs has changed.
+
 ## Consequences
 
 - **The CI/bridge dependency is now confined to refresh, not the check.** This is the key

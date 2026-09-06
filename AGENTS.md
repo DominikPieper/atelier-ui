@@ -170,9 +170,19 @@ How:
 5. Write the ADR as part of finishing the decision-bearing task (same bar as
    "verifying that something works"), not retroactively.
 
-An ADR is a record of what was decided *and* of what the deciders believed. When
-a published one turns out to be wrong, add a dated correction note rather than
-editing the error away.
+An ADR is a record of what was decided *and* of what the deciders believed:
+Context/Decision/Consequences stay immutable, corrected only by a dated
+in-place "**Corrected YYYY-MM-DD**" paragraph, never by editing the error away.
+
+That protects the decision, not every sentence inside it. A sentence stating
+**current operational state** — what's in `check:all`, a version pin, a
+feature-flag default — decays on its own schedule, independent of the decision
+that motivated it; point at its live source instead of restating it as prose,
+or it goes stale silently. And a newer ADR that claims to revise, correct or
+supersede §N of an older one has not actually revised it until that correction
+is written *into* the older ADR, **in the same commit** — `check:adr-refs`
+enforces this, so a claim with nothing on the other end fails the build rather
+than sitting unread the way ADR-0019 §5 and ADR-0024 §4 did.
 
 Deeper rationale lives in `plan/big-picture.md`, `plan/design-principles.md`,
 and `tasks/rationale.md` — cross-link rather than duplicate.

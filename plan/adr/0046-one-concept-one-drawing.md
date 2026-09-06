@@ -83,6 +83,14 @@ render an empty svg again. All four are negative-tested. Story files are exempt:
 handing arbitrary markup to a slot to show the slot takes arbitrary markup is
 documentation, not the library drawing an icon.
 
+**Corrected 2026-09-06** — "closes each door" overstated it: there was a fifth door.
+**ADR-0050** (2026-08-26, the same day) found `VARIANT_ICONS` string maps in AtlAlert
+and AtlBadge quoting glyphs directly (`{ info: 'ℹ', success: '✓', … }`) — a glyph in a
+TypeScript string map is neither an `<svg>` element nor a CSS declaration, so none of
+the four rules above saw it. `check:iconography` gained a fifth rule, `[GLYPH-MAP]`,
+to close it. This note is being added now, later than the change it records. See
+ADR-0050 for the finding and the fifth rule.
+
 ## Consequences
 
 - **One definition per shape.** 14 inline svgs and 2 CSS glyphs became AtlIcon

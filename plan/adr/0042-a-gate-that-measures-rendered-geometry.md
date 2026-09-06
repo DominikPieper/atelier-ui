@@ -89,6 +89,14 @@ Alternatives considered:
 - **Coverage is honest and small: four control sizes across two components.**
   Everything else still authors its padding and is not measured — the gate reports
   what it measured rather than implying more.
+
+  **Corrected 2026-09-06** — this coverage figure is stale. **ADR-0043** (2026-08-26,
+  the same day) corrected `check:geometry` "in the same breath" as the box-sizing contract
+  it shipped: coverage grew to twelve measurements across every framework, and the wider
+  net immediately caught a real 60px defect on Angular's button that the four-measurement
+  version had slept through. This note is being added now, later than the change it
+  records. See ADR-0043 for the coverage expansion; ADR-0047 grew the roster further, to
+  36 measurements.
 - **The CI leg works** (verified 2026-08-26, run 32967483005, commit `0ce4fe9`):
   `Sync checks` installs chromium and the gate reports
   `every control renders the height its token claims` in 2.6s. Publish's `verify`

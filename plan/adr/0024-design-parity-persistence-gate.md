@@ -90,6 +90,16 @@ manual record step exactly as ADR-0019 isolated it into `figma:snapshot`.
    release ritual, `check:parity` can join `check:all` — at which point the
    "Required" verify step becomes genuinely enforced, not aspirational.
 
+   **Corrected 2026-09-06** — item 4 above is no longer current, and has not been since
+   2026-08-26: ADR-0034 recorded `check:parity` promoted into the `check:all` chain
+   (alongside `check:figma`), per this Context section's own opening paragraph. That
+   paragraph named the promotion and ADR-0082's later amendment (running `--report`,
+   DRIFT as WARNING) when it was written, but item 4 below it was never updated to
+   match, so a reader stopping at the Decision section saw the stale claim. This note
+   is being added now, eleven days after ADR-0034, later than the change it records.
+   See ADR-0034 for the promotion and ADR-0082 for the amendment; the record/offline
+   `--report` design item 4 describes is otherwise unchanged.
+
 ## Consequences
 
 - **Verify is now a persisted fact, and drift is detectable on demand.** Even

@@ -73,6 +73,16 @@ if the cards drift again despite the command existing.
   the cards hold: **43 masters, 43 cards, 0 would change**. That is a stronger check than
   reading "0 updated" off the script, because it re-derives the answer rather than
   trusting the run.
+
+  **Corrected 2026-09-06** — this claim was weaker than it read. **ADR-0074** (2026-08-27)
+  found `figma:sync-inventory` was not actually idempotent: a preview wider than its card
+  frame gets `layoutSizingHorizontal = 'FILL'`, which changes its width permanently, so the
+  staleness test comparing that width to the master's was *always* true and every run
+  "updated" the same 15 cards. Re-derivation above checked the *data* and found it
+  consistent; it could not see a bug in the *test* that produced churn on every real run.
+  Fixed by skipping the size comparison for a FILL-sized preview. This note is being added
+  now, later than the change it records. See ADR-0074 for the fix and ADR-0075's ledger
+  review, which records the same correction.
 - The script needs the same care as `figma:snapshot`: run it when no other figma-console
   client holds the Desktop Bridge, and run `figma:snapshot` afterwards so the conformance
   gate sees the new state. The connection details matter more than they look — the first

@@ -83,3 +83,12 @@ any gate noticing.
   description because that is where they live. Capturing
   `componentPropertyDefinitions` in `figma-snapshot.mjs` would make them data and the
   check exact; it needs the bridge, which the refresh step already has.
+
+  **Corrected 2026-09-06** — this item closed, and closing it corrected `[BOOL-MISSING]`
+  itself. **ADR-0058** (2026-08-27) added the property-definition probe this bullet asked
+  for, and `[BOOL-MISSING]` reading real property definitions (rather than prose) moved
+  four masters out of it — AtlAlert, AtlProgress, AtlTable and AtlChat do declare their
+  Booleans; the properties were inert, not absent, which ADR-0058's new `[BOOL-INERT]`
+  rule catches instead. This note is being added now, later than the change it records.
+  See ADR-0058 for the probe, the two corrected codes, and the fifth-mechanism finding
+  (`[MASTER-GLYPH]`) it made alongside this one.

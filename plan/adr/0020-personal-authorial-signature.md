@@ -59,6 +59,14 @@ spec literally suggested. Rationale: one font-loading mechanism, free subsetting
 `display: swap`, and a metric-near `Georgia` fallback, which directly satisfies the
 no-layout-shift requirement.
 
+**Corrected 2026-09-06** — the Inter choice above is superseded. **ADR-0035** (2026-08-26)
+revised this section on typeface selection only: the UI face moved from Inter to
+Instrument Sans (paired with Instrument Serif and JetBrains Mono), because Anthropic's own
+system prompt names Inter among the "AI slop tropes … overused fonts" for a repo whose
+stated identity layer *is* typography. The palette/motion split this ADR decided stands
+unrevised; only the specific font named in this paragraph does not. This note is being
+added now, eleven days after ADR-0035, later than the change it records.
+
 **Rejected alternative — share color too.** Giving Atelier pieper.io's warm palette (or
 vice versa) would collapse the deliberate contrast between Atelier-teal (Conciso-anchored)
 and pieper.io-warm. Identity travels through typeface and timing; color stays

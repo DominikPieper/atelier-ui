@@ -108,9 +108,9 @@ For the Component Manifest to carry real context, each component story must:
 
 `check:story-descriptions` — for every story file under `libs/{angular,react,vue}/src/lib/`, verifies that `parameters.docs.description.component` is set AND that the value is sourced from the metadata import (not a string literal).
 
-### Limitation: Angular and Vue
+### Angular and Vue emit their own manifests (ADR-0097)
 
-As of Storybook 10.4 and 10.5, `components.json` (written when the `componentsManifest` feature is on — `experimentalComponentsManifest` is only an alias on addon-mcp's docs-toolset gate, not on the build-time write) is only emitted for React. Angular and Vue component manifests are not yet available via the hosted MCP surface. Stories still get descriptions; downstream agents fall back to the React MCP as cross-framework prop reference (the `libs/spec` contract is identical across the three frameworks).
+As of Storybook 10.6, `@storybook/angular-vite` and `@storybook/vue3-vite` emit real, framework-native `components.json` for Angular and Vue via `experimentalDocgenServer` (backed by `angular-component-meta` / `vue-component-meta`) — the same manifest mechanism React's framework package already produced. The hosted MCP surface now serves each framework's own manifest; the worker's earlier React-manifest substitution (ADR-0083, in force from 2026-08-29 to 2026-09-05) is deleted, not shrunk (ADR-0097). `check:manifests` gates the artefact: it builds all three Storybooks and asserts each framework's `components.json` exists, is non-empty, and carries a resolvable `docgen` reference — closing the hole ADR-0083's context named but did not act on (nothing previously read a Storybook build's manifest output at all).
 
 ---
 
@@ -134,7 +134,7 @@ The full checklist lives at `plan/figma-component-checklist.md` and is reproduce
 
 ### Enforcement
 
-Automated via **`check:figma`** (ADR-0019) plus the PR-template checklist for the items the gate cannot cover (per-variant descriptions, Inventory page). The gate is offline: it reads a committed snapshot (`tools/figma/snapshot.json`), refreshed by `npm run figma:snapshot` over the figma-console Desktop Bridge. It is run manually (not yet in `check:all`/CI) because the snapshot's freshness depends on that bridge-connected refresh — see ADR-0019 for the trade-off.
+Automated via **`check:figma`** (ADR-0019) plus the PR-template checklist for the items the gate cannot cover (per-variant descriptions, Inventory page). The gate is offline: it reads a committed snapshot (`tools/figma/snapshot.json`), refreshed by `npm run figma:snapshot` over the figma-console Desktop Bridge. **`check:figma` runs inside `check:all`** (ADR-0034, 2026-08-26), promoted alongside `check:parity`. The promotion was recorded *with its stated precondition still unmet*: a snapshot-freshness policy (failing or warning past a max age, populating `figmaLastModified`) was never built, so a green `check:figma` proves the committed snapshot is internally consistent, not that it is still fresh against the live Figma file — see ADR-0019 for the original trade-off and ADR-0034 for the promotion record and its open freshness gap.
 
 ---
 
@@ -142,11 +142,11 @@ Automated via **`check:figma`** (ADR-0019) plus the PR-template checklist for th
 
 | Gate | Status | Checks |
 |------|--------|--------|
-| `check:metadata` | **new** | `.metadata.ts` exists for every spec interface; all fields populated; `variantMatrix` covers axis unions |
-| `check:story-descriptions` | **new** | Every story sets `parameters.docs.description.component` and sources it from `metadata.purpose` |
-| `check:css-tokens` | **extend** | (existing) no raw literals + (new) every `--ui-*` token has manifest entry with `intent` + `constraints` |
-| `check:llms` (via `gen-llms-txt --check`) | **extend** | Generator now reads `metadata/` + `tokens.manifest.ts`; existing drift-check covers it |
-| `check:figma` (via `figma-snapshot` + offline check) | **new** (ADR-0019) | Per master: name alignment + variant-matrix (Blocker), token-link coverage + auto-layout (Critical), description congruence (Warning). Runs offline against a committed snapshot; standalone, not in `check:all`. |
+| `check:metadata` | **shipped** | `.metadata.ts` exists for every spec interface; all fields populated; `variantMatrix` covers axis unions |
+| `check:story-descriptions` | **shipped** | Every story sets `parameters.docs.description.component` and sources it from `metadata.purpose` |
+| `check:css-tokens` | **shipped** | (existing) no raw literals + (added) every `--ui-*` token has manifest entry with `intent` + `constraints` |
+| `check:llms` (via `gen-llms-txt --check`) | **shipped** | Generator now reads `metadata/` + `tokens.manifest.ts`; existing drift-check covers it |
+| `check:figma` (via `figma-snapshot` + offline check) | **shipped** (ADR-0019; promoted into `check:all` by ADR-0034) | Per master: name alignment + variant-matrix (Blocker), token-link coverage + auto-layout (Critical), description congruence (Warning). Runs offline against a committed snapshot (now covering all 43 masters); snapshot-freshness policy still open. |
 
 Existing gates unchanged: `check:sync`, `check:variants`, `check:exports`, `check:defaults`, `check:docs`, `check:behavior`, `check:spec`, `check:tokens`, `check:cookbook`, `check:cookbook-manifest`.
 
@@ -154,6 +154,6 @@ Existing gates unchanged: `check:sync`, `check:variants`, `check:exports`, `chec
 
 ## Future work
 
-- ~~**Automated Figma audit**~~ — shipped as `check:figma` (ADR-0019). Remaining follow-ups: expand the committed snapshot from the P0 core to all 27 masters, and add a snapshot-freshness check so the gate can safely join `check:all`/CI.
+- ~~**Automated Figma audit**~~ — shipped as `check:figma` (ADR-0019), covering all 43 masters (the snapshot grew past the original P0 core of 3, and past the 27-master count this section once cited, as new masters were promoted) and promoted into `check:all` (ADR-0034, 2026-08-26). Remaining follow-up: the snapshot-freshness policy ADR-0019 deferred and ADR-0034 promoted around is still unbuilt — nothing yet fails or warns when the committed snapshot has gone stale against the live Figma file.
 - **`llms.json` sidecar** — a machine-readable JSON alongside `llms.txt` for agents that prefer structured input over Markdown.
 - **Three-tier token rename** — `--ui-color-{intent}-{layer}-{state}` taxonomy. Revisit when the annotation layer has been used in anger.

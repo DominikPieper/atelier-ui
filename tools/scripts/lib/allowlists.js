@@ -687,6 +687,34 @@ const PROP_SURFACE_EXEMPT = new Map([
 ]);
 
 /**
+ * `<A>:<B>` ADR-number pairs where B's frontmatter/title claims to revise, correct
+ * or supersede A, but no dated correction belongs on A — because A was never
+ * actually wrong. (check-adr-refs, [ADR-CORRECTION])
+ *
+ * Same two kinds as the other allowlists here: `design` is a closed question and
+ * stays silent; `gap` would be an acknowledged-but-unwritten correction that warns
+ * on every run (none needed yet — every other pair this gate found got a written
+ * correction instead of an entry here).
+ */
+const ADR_CORRECTION_EXEMPT = new Map([
+  [
+    '0047:0060',
+    {
+      kind: 'design',
+      reason: `ADR-0060's own sources line calls ADR-0047 "the gate this corrects — it asks
+whether, not which", but ADR-0060's Consequences say the opposite outright:
+"[TOKEN] was never wrong; it answered exactly the question it was built to
+answer." ADR-0060 adds a new, complementary check ([ROOT-PAINT]) rather than
+fixing a false statement in ADR-0047 — "corrects" in the sources line is a
+looser use of the word than the other pairs this gate found (ADR-0034/0019,
+ADR-0011/0009, ADR-0035/0020, ADR-0043/0042, ADR-0050/0046, ADR-0058/0056,
+ADR-0074/0070), all of which got a written correction. No factual correction
+is owed on ADR-0047.`,
+    },
+  ],
+]);
+
+/**
  * `skills/<name>` directories that deliberately do NOT get mirrored to the
  * public discovery index (docs/public/.well-known/agent-skills/index.json),
  * keyed by skill name with the reason it's held back. Every OTHER directory
@@ -712,4 +740,5 @@ module.exports = {
   HOST_ATTR_GUARD_EXEMPT,
   PROP_SURFACE_EXEMPT,
   UNDISTRIBUTED_SKILLS,
+  ADR_CORRECTION_EXEMPT,
 };
