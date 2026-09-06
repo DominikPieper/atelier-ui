@@ -686,6 +686,16 @@ const PROP_SURFACE_EXEMPT = new Map([
   ]),
 ]);
 
+/**
+ * `skills/<name>` directories that deliberately do NOT get mirrored to the
+ * public discovery index (docs/public/.well-known/agent-skills/index.json),
+ * keyed by skill name with the reason it's held back. Every OTHER directory
+ * under skills/ that ships a SKILL.md must have an index.json entry whose
+ * digest matches a fresh sha256 of that file. Empty today — both skills
+ * currently in the repo are distributed. (check-skill-discovery)
+ */
+const UNDISTRIBUTED_SKILLS = {};
+
 module.exports = {
   DEAD_SELECTOR_EXEMPT,
   VARIANT_AXIS_EXCEPTIONS,
@@ -701,4 +711,5 @@ module.exports = {
   TOKEN_BYPASS_EXEMPT,
   HOST_ATTR_GUARD_EXEMPT,
   PROP_SURFACE_EXEMPT,
+  UNDISTRIBUTED_SKILLS,
 };

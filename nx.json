@@ -119,7 +119,7 @@
         }
       },
       "skills": {
-        "projects": ["figma-workspace-architect"],
+        "projects": ["atelier-design", "figma-workspace-architect"],
         "projectsRelationship": "independent",
         "version": {
           "conventionalCommits": true,
