@@ -1,10 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-// Branded 404 (review 2026-06-12, idea #8). Netlify serves the built
-// dist/docs/404.html for any unknown URL automatically — no _redirects
-// entry needed. The full BaseLayout chrome (topbar, sidebar, search) IS
-// the recovery mechanism; the cards below just shortcut the common paths.
+// Branded 404 (review 2026-06-12, idea #8). The Cloudflare Worker's static
+// assets binding serves the built dist/docs/404.html for any unknown URL
+// automatically (wrangler.jsonc: assets.not_found_handling = "404-page") —
+// no redirect rule needed. The full BaseLayout chrome (topbar, sidebar,
+// search) IS the recovery mechanism; the cards below just shortcut the
+// common paths.
 const recoveryLinks = [
   {
     href: '/',

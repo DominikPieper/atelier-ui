@@ -1947,16 +1947,17 @@ unchanged, and the config edit is a correctness fix, not a decision. ADR-0084 is
       both green. Close it by adding a typecheck target over the three `.storybook`
       projects — and budget for the story-file errors it surfaces, which is why it was not
       done inside a verification pass.
-- [ ] **Decide whether the Netlify deploy target is dead.** `netlify/` + `netlify.toml`
-      carry a second, divergent implementation of everything the Cloudflare worker does —
-      its `markdown-negotiation` edge function converts HTML to Markdown with regexes at
-      the edge and sets the `x-markdown-tokens` header that finding n3 just deleted from
-      the docs as phantom, and `netlify/functions/storybook-*-mcp.mts` duplicate the MCP
-      endpoints. Production is Cloudflare (`wrangler.jsonc`), no workflow under `.github/`
-      references the Netlify config, and no ADR mentions it. Both files now open with a
-      `NETLIFY-ONLY` header so the deleted claim cannot be re-derived from them, but the
-      real answer is delete-or-keep, which is a deployment decision and wants an ADR line
-      either way.
+- [x] **Decide whether the Netlify deploy target is dead.** Decided 2026-09-06: dead,
+      confirmed and removed. The owner confirmed everything runs on Cloudflare
+      (`curl -sI https://atelier.pieper.io/` returns `server: cloudflare` with a `cf-ray`
+      header and no `x-nf-*`). Deleted `netlify.toml` and `netlify/` — the MCP handlers
+      under `netlify/functions/` carried the exact `basename(path)` defect Wave 3 fixed in
+      `worker/mcp.ts`, and `netlify.toml`'s `/storybook-*/mcp` redirects made them look
+      live to anyone debugging that path; `netlify/edge-functions/markdown-negotiation.ts`'s
+      last change only added the `NETLIFY-ONLY` header, no functional work to port.
+      Verified no gate under `tools/scripts/` or CI workflow reads either path before
+      deleting. `README.md`'s repo-structure listing and deploy-target line now point at
+      `wrangler.jsonc` / `worker/` instead.
 - [ ] **The kata and the tutorial still build the same Figma artifact** (n15's second
       half). `tools/figma/snapshot.json`'s `referencedNodes` holds exactly one
       Settings / Card (`936:2954`) beside four `*/Starter` frames, so giving the kata its

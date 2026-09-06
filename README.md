@@ -28,7 +28,7 @@ The repo ships everything needed to run the workshop end-to-end: an Astro-based 
 |---|---|---|
 | **Figma** | Design tokens, component frames, spacing — defined before code. | Figma workspace + token sync (`docs/src/pages/figma.astro`, `figma-token.astro`) |
 | **Storybook** | Per-framework component explorer. Each Storybook exposes a hosted MCP endpoint. | `libs/{angular,react,vue}/.storybook/` → deployed to `/storybook-{angular,react,vue}` |
-| **AI + MCP** | Claude reads both sources, writes design-accurate code. | `@storybook/mcp` + `@storybook/addon-mcp`, hosted via Netlify functions |
+| **AI + MCP** | Claude reads both sources, writes design-accurate code. | `@storybook/mcp` + `@storybook/addon-mcp`, hosted via a Cloudflare Worker (`worker/mcp.ts`) |
 
 The workshop walks through the full loop: **inspect → prompt → ship → iterate.**
 
@@ -152,7 +152,7 @@ Full design guide: [`plan/big-picture.md`](plan/big-picture.md).
 - **Storybook**: Storybook 10 (Angular + React + Vue)
 - **Testing**: Vitest + Angular/React/Vue Testing Library
 - **CI**: GitHub Actions — parallel lint / test / build / sync checks
-- **Deploy**: Netlify (docs + three Storybooks + three MCP endpoints)
+- **Deploy**: Cloudflare Workers (docs + three Storybooks + three MCP endpoints)
 
 ---
 
@@ -205,14 +205,14 @@ npm run check:sync
 │   ├── spec/                       # @atelier-ui/spec — shared TypeScript interfaces
 │   ├── create-atelier-ui-workspace/# npx scaffolder CLI
 │   └── create-workspace/           # @atelier-ui/create-workspace — Nx preset used by the scaffolder
-├── netlify/           # Netlify functions (MCP endpoints, markdown content negotiation)
+├── worker/            # Cloudflare Worker (MCP endpoints, markdown content negotiation)
 ├── talk/              # Conference talk materials (Storybook MCPs: Die Zukunft des Frontend Engineerings)
 ├── plan/              # Design guide, roadmap, Figma notes
 ├── tools/
 │   ├── generators/    # Nx generators (e.g. atl-component, atl-component-react)
 │   └── scripts/       # check-sync.js, check-docs-sync.js, preflight.mjs
 ├── .github/workflows/ # ci.yml, publish.yml
-└── netlify.toml       # Deploy config — docs + 3 Storybooks + MCP redirects
+└── wrangler.jsonc     # Deploy config — docs + 3 Storybooks + MCP endpoints (Cloudflare Worker)
 ```
 
 ---

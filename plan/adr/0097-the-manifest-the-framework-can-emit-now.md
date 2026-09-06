@@ -82,9 +82,9 @@ Getting there cost more than a version bump:
   `components.json`, `docs.json`. Every shard 404'd; the ADR-0083 fallback
   then 404'd again on the same wrong filename, and the provider threw. Traced
   entirely from source (the `@storybook/mcp` dist bundle) and from the
-  deploy config (`netlify.toml:7` builds each Storybook straight into
-  `dist/docs/storybook-<fw>`; `wrangler.jsonc` serves `dist/docs` as the
-  assets directory, so the shards are genuinely deployed) before any fix was
+  deploy config (`wrangler.jsonc:5-6` builds each Storybook straight into
+  `dist/docs/storybook-<fw>`, and the same file's `assets.directory` serves
+  `dist/docs`, so the shards are genuinely deployed) before any fix was
   written — this was a push blocker: Waves 1 and 2 (framework swap, tool
   rename) were already committed and would have broken the hosted Angular and
   Vue endpoints outright, not merely degraded them, if deployed as they
