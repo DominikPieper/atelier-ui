@@ -39,14 +39,14 @@
  * checkout — the same tradeoff `check:docs-layout` already made for
  * `dist/docs` (its own header, and the `nx build docs &&` prefix on
  * `check:docs-layout` in package.json). This gate follows the identical
- * pattern: `check:manifests` in package.json runs `nx run-many -t
- * build-storybook -p angular,react,vue` first, so `npm run check:manifests`
+ * pattern: `check:storybook-manifests` in package.json runs `nx run-many -t
+ * build-storybook -p angular,react,vue` first, so `npm run check:storybook-manifests`
  * (and `check:all`) is self-sufficient; running this file directly without a
  * prior build fails fast with [NO-BUILD] rather than silently reading stale
  * output. Nx caches `build-storybook`'s declared outputs, so a rerun with no
  * source change is fast.
  *
- * Run via:  node tools/scripts/check-manifests.js   (or  npm run check:manifests,
+ * Run via:  node tools/scripts/check-manifests.js   (or  npm run check:storybook-manifests,
  *           which builds Storybook for all three frameworks first)
  */
 'use strict';

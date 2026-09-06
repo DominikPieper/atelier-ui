@@ -363,7 +363,7 @@ async function checkMcpEndpoints(env) {
 // depth (two levels above tools/scripts) in both, so the ports to check
 // differ by tree even though the code is one file — the environment logic
 // has to live in here, not as a divergence between the two copies. The two
-// copies are kept byte-identical by `npm run check:preflight`
+// copies are kept byte-identical by `npm run check:preflight-clone-sync`
 // (tools/scripts/sync-preflight.mjs --check) — NOT by `check:sync`, which
 // only checks Angular/React/Vue component drift and never looks at
 // `libs/create-workspace/`.

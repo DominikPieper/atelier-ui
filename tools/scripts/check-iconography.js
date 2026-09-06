@@ -30,7 +30,7 @@
  * that the slot takes arbitrary markup (AtlTable's `emptyContent` demo does
  * exactly that), which is documentation rather than the library drawing an icon.
  *
- * Run via:  node tools/scripts/check-iconography.js  (or  npm run check:iconography)
+ * Run via:  node tools/scripts/check-iconography.js  (or  npm run check:icon-duplication)
  */
 'use strict';
 

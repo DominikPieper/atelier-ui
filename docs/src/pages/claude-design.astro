@@ -44,7 +44,7 @@ const DEFECTS: Defect[] = [
     quote:
       'Two fields side by side in one form, both invalid, one showing a mark and one not.',
     remedy:
-      'All four fields now state invalid twice, in hue and in shape, and check:iconography gained [TEXT-GLYPH] for the chevron. The instructive part is the gate that did not fire: check:contrast had measured 104 colour pairs and passed all of them — because the defect was not "this colour is too light", it was "colour is the only channel". That is a class of accessibility failure a contrast gate structurally cannot see.',
+      'All four fields now state invalid twice, in hue and in shape, and check:icon-duplication gained [TEXT-GLYPH] for the chevron. The instructive part is the gate that did not fire: check:contrast had measured 104 colour pairs and passed all of them — because the defect was not "this colour is too light", it was "colour is the only channel". That is a class of accessibility failure a contrast gate structurally cannot see.',
   },
   {
     adr: 'ADR-0050',
@@ -54,7 +54,7 @@ const DEFECTS: Defect[] = [
     quote:
       'a gate written from the instances found tends to miss the instance not yet found. … This came out of drawing, not of scanning.',
     remedy:
-      'Both components now render AtlIcon by name, and check:iconography gained [GLYPH-MAP]. ADR-0055 then found a sixth mechanism — the same character as bare element text in a template — which is the point: the escalation is numbered.',
+      'Both components now render AtlIcon by name, and check:icon-duplication gained [GLYPH-MAP]. ADR-0055 then found a sixth mechanism — the same character as bare element text in a template — which is the point: the escalation is numbered.',
   },
 ];
 

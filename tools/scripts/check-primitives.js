@@ -24,7 +24,7 @@
  * primitives (that is its job) and the docs app is a consumer like any other
  * product surface.
  *
- * Run via:  node tools/scripts/check-primitives.js  (or npm run check:primitives)
+ * Run via:  node tools/scripts/check-primitives.js  (or npm run check:token-tiers)
  */
 'use strict';
 

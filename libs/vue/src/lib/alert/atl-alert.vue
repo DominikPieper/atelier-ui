@@ -14,7 +14,7 @@ interface AtlAlertProps {
 }
 
 // Which AtlIcon each variant carries. Names, not glyphs: a glyph in a string map
-// was the fifth way this library drew an icon, and the one check:iconography
+// was the fifth way this library drew an icon, and the one check:icon-duplication
 // missed (ADR-0050).
 const VARIANT_ICON_NAMES: Partial<Record<AtlAlertVariant, AtlIconName>> = {
   info: 'info',

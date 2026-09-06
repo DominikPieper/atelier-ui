@@ -57,7 +57,7 @@ const make = (sb: Storybook, assets: AssetsFetcher): HandlerPromise =>
       // manifest ever regresses (an empty `components` object, or the
       // `id`/`name`-only "decoy" shape `@analogjs/storybook-angular` produced
       // without real docgen), its endpoint must fail loudly, not quietly
-      // answer with a different framework's shape. `npm run check:manifests`
+      // answer with a different framework's shape. `npm run check:storybook-manifests`
       // guards that artifact offline so the regression cannot ship unnoticed.
       if (response.ok) {
         return response.text();

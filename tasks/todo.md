@@ -636,7 +636,7 @@ Decision-bearing quick wins (deferred — not this session's scope):
       are still not an explicit ramp** — surface / border / text form an implicit one and that
       half of this item stands.
 - [x] ~~One gate for "do not reference a primitive from component CSS"~~ — done
-      2026-08-26, ADR-0039: `check:primitives` scans 2654 token references across 88
+      2026-08-26, ADR-0039: `check:token-tiers` scans 2654 token references across 88
       component stylesheets against three primitive patterns. Ramp steps and
       `--ui-font-display` are enforced with zero violations; code-block's
       `--ui-font-mono` is a recorded `gap` until it moves to `--ui-type-code`.
@@ -700,7 +700,7 @@ Decision-bearing quick wins (deferred — not this session's scope):
       ATL_ICON_GEOMETRY, one per AtlIconName, verified identical in both directions.
 - [ ] **Nothing gates the Figma icon set against `AtlIconName`** (ADR-0057). No live
       divergence as of 2026-08-28 — the Icons page holds 25 `Icon/*` components and
-      `check:iconography` counts 25 names, identical sets — so this is gate work against a
+      `check:icon-duplication` counts 25 names, identical sets — so this is gate work against a
       class, not a repair. The comparison was made by hand. `check:figma` reads the snapshot, and the snapshot captures masters from the
       Components page, not the Icons page — so adding an icon to the spec and forgetting Figma is
       invisible. Capture the Icons page in `figma-snapshot.mjs` and cross-check the names.

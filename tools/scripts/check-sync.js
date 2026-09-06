@@ -7,6 +7,14 @@
  *   [NO-STORY]  a directory has a component source but no *.stories.* file
  *               (so it would be invisible in Storybook / the hosted MCP docs)
  *
+ * Scope, stated plainly because it has been assumed wider than this before
+ * (ADR-0043): this gate compares component *directory names* and *story
+ * presence* only. It does not read exports, props, or any component content —
+ * a component's CSS, markup, or spec can differ arbitrarily across frameworks
+ * and this gate will not see it. `check-geometry.mjs` measured React only for
+ * months on the wrongly-assumed grounds that this gate "guarantees the CSS is
+ * mirrored"; it does not.
+ *
  * Run via:  node tools/scripts/check-sync.js
  *           (or  npm run check:sync  /  pnpm check:sync)
  */

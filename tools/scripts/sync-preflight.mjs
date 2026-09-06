@@ -22,9 +22,9 @@
  * this shape: one canonical source, one generated copy.
  *
  * Run via:  node tools/scripts/sync-preflight.mjs [--check]
- *           (or  npm run check:preflight / npm run sync:preflight)
+ *           (or  npm run check:preflight-clone-sync / npm run sync:preflight)
  *
- * --check fails non-zero on drift (used by CI / `check:preflight`, folded
+ * --check fails non-zero on drift (used by CI / `check:preflight-clone-sync`, folded
  * into `check:all`). Without --check, overwrites the preset copy with the
  * canonical one.
  */

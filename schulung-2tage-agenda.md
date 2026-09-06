@@ -114,7 +114,7 @@ Diese drei sind am Probelauf gemessen, nicht aus dem Quellcode geraten: eine Pro
 
 Deshalb die klare Anweisung an den Raum: **die eigene Spec als eigene Datei neben der Komponente, nicht in den geteilten Master.** Das Material sagt „eine Spec *im Stil von* `libs/spec/src/index.ts`" — im Stil von, nicht hinein.
 
-Diese drei: dem Trainer zeigen statt am eigenen Code zu suchen. Echtes Signal liefern dagegen `check:types`, `check:exports`, `check:css-tokens`, `check:token-bypass`, `check:typeface`, `check:dead-selectors`, `check:iconography`, `check:box-sizing`, `check:primitives` und `check:story-descriptions` — sie laufen jeweils nur über die Dateien im gewählten Framework und melden echte Fehler in der eigenen Komponente.
+Diese drei: dem Trainer zeigen statt am eigenen Code zu suchen. Echtes Signal liefern dagegen `check:types`, `check:exports`, `check:css-tokens`, `check:token-bypass`, `check:typeface`, `check:dead-selectors`, `check:icon-duplication`, `check:box-sizing`, `check:token-tiers` und `check:story-descriptions` — sie laufen jeweils nur über die Dateien im gewählten Framework und melden echte Fehler in der eigenen Komponente.
 
 ---
 

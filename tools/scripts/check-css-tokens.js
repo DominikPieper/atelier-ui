@@ -2,7 +2,7 @@
 /**
  * check-css-tokens.js
  *
- * Two passes against the design-token layer:
+ * Three passes against the design-token layer:
  *
  *   Pass A (raw-literal pass):
  *     Enforces token discipline in component CSS — a raw color literal
@@ -19,9 +19,10 @@
  *     stacking level was a literal 200 (ADR-0075).
  *
  *   Pass B (manifest-coverage pass):
- *     Every `--ui-*` token declared in `libs/angular/src/styles/tokens.css`
- *     (the canonical copy — `check:tokens` enforces the three frameworks
- *     stay identical) must have an entry in
+ *     Every `--ui-*` token declared in the create-workspace preset's
+ *     `styles/tokens.css` (the source of truth per `sync-tokens.mjs` —
+ *     `check:tokens` enforces the three framework libs' copies stay
+ *     byte-identical to it) must have an entry in
  *     `libs/spec/src/tokens.manifest.ts` with a non-empty `intent` and a
  *     non-empty `constraints` array. Every manifest entry must reference
  *     a declared token. This is the AI-readiness annotation layer — see
@@ -63,7 +64,7 @@ const { parseExportedVars } = require('./lib/ts-eval');
 
 const ROOT = path.resolve(__dirname, '../..');
 const LIB_DIRS = ['angular', 'react', 'vue'].map((f) => path.join(ROOT, 'libs', f, 'src', 'lib'));
-const TOKEN_CSS = path.join(ROOT, 'libs/angular/src/styles/tokens.css');
+const TOKEN_CSS = path.join(ROOT, 'libs/create-workspace/src/generators/preset/files/styles/tokens.css');
 const TOKEN_MANIFEST = path.join(ROOT, 'libs/spec/src/tokens.manifest.ts');
 
 const COLOR_LITERAL = /#[0-9a-fA-F]{3,8}\b|rgba?\(|hsla?\(/;
@@ -262,7 +263,7 @@ const annotatedTokens = new Set(Object.keys(manifest));
 for (const name of annotatedTokens) {
   if (!declaredTokens.has(name)) {
     errors.push(
-      `[STALE-MANIFEST] tokens.manifest.ts annotates '${name}' but it is not declared in libs/angular/src/styles/tokens.css.`
+      `[STALE-MANIFEST] tokens.manifest.ts annotates '${name}' but it is not declared in libs/create-workspace/src/generators/preset/files/styles/tokens.css.`
     );
   }
 }
@@ -341,11 +342,11 @@ for (const [name, files] of [...consumedTokens].sort()) {
 // Pass C (docs) — same rule, wider declared-token set (ADR-0089 §2).
 //
 // Docs CSS reads --docs-* tokens too, not just --ui-*, so the declared set
-// for THIS check is library tokens.css (declaredTokens, above) UNION every
+// for THIS check is the preset's tokens.css (declaredTokens, above) UNION every
 // --ui-*/--docs-* name docs-theme.css declares (its own tokens plus the
 // --ui-* overrides it makes, e.g. --ui-color-primary-light). This is kept
 // separate from `declaredTokens` itself so Pass B's manifest-coverage
-// source of truth stays exactly libs/angular/src/styles/tokens.css.
+// source of truth stays exactly the create-workspace preset's tokens.css.
 // ---------------------------------------------------------------------------
 
 const docsThemeCssSrc = fs.readFileSync(DOCS_THEME_CSS, 'utf-8');
@@ -360,7 +361,7 @@ for (const [name, files] of [...docsConsumedTokens].sort()) {
   const shown = where.slice(0, 3).join(', ') + (where.length > 3 ? `, +${where.length - 3} more` : '');
   errors.push(
     `[UNDECLARED] '${name}' is read by ${where.length} docs stylesheet(s) (${shown}) but is declared ` +
-      `in neither libs/angular/src/styles/tokens.css nor docs/src/styles/docs-theme.css.`
+      `in neither libs/create-workspace/src/generators/preset/files/styles/tokens.css nor docs/src/styles/docs-theme.css.`
   );
 }
 

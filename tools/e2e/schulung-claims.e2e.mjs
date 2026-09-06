@@ -19,7 +19,7 @@
  *      synthesize a throwaway single-framework component, run the named
  *      gates, and assert the EXACT set that goes red for "spec in its own
  *      file" vs. "spec landed in the shared master". Restores the tree in a
- *      `finally`. Also runs `check:manifests` (added after that review) in
+ *      `finally`. Also runs `check:storybook-manifests` (added after that review) in
  *      both scenarios and reports whether it belongs in either red set —
  *      the curriculum's claimed number depends on the answer.
  *   2. The local Storybook MCP surface Day 2 depends on (B02/B03): starts a
@@ -274,7 +274,7 @@ async function checkGateExpectations() {
   }
   if (failures.length > 0) return failures; // nothing meaningful left to run
 
-  const allGates = [...ownFileGates, ...extraInMasterGates, 'check:manifests'];
+  const allGates = [...ownFileGates, ...extraInMasterGates, 'check:storybook-manifests'];
 
   try {
     writeOwnFileFixture();
@@ -299,14 +299,14 @@ async function checkGateExpectations() {
         ok(`${g} green as expected`);
       }
     }
-    if (resA['check:manifests'].status !== 0) {
+    if (resA['check:storybook-manifests'].status !== 0) {
       failures.push(
-        `[scenario A] check:manifests went RED on a single-framework addition. The curriculum's ` +
-          `"three red gates" claim does not name check:manifests — if it belongs in the red set now, ` +
-          `that claim is stale by one gate:\n${resA['check:manifests'].output.slice(-2000)}`
+        `[scenario A] check:storybook-manifests went RED on a single-framework addition. The curriculum's ` +
+          `"three red gates" claim does not name check:storybook-manifests — if it belongs in the red set now, ` +
+          `that claim is stale by one gate:\n${resA['check:storybook-manifests'].output.slice(-2000)}`
       );
     } else {
-      ok('check:manifests stays green in scenario A (does not belong in the curriculum’s red list)');
+      ok('check:storybook-manifests stays green in scenario A (does not belong in the curriculum’s red list)');
     }
 
     section('Part 1b — scenario B: spec also lands in libs/spec/src/index.ts');
@@ -319,14 +319,14 @@ async function checkGateExpectations() {
         ok(`${g} red as expected (exit ${resB[g].status})`);
       }
     }
-    if (resB['check:manifests'].status !== 0) {
+    if (resB['check:storybook-manifests'].status !== 0) {
       failures.push(
-        `[scenario B] check:manifests went RED once the spec landed in the shared master too. The ` +
-          `curriculum's "six red gates" claim does not name check:manifests — if it belongs in the red ` +
-          `set now, that claim is stale by one gate:\n${resB['check:manifests'].output.slice(-2000)}`
+        `[scenario B] check:storybook-manifests went RED once the spec landed in the shared master too. The ` +
+          `curriculum's "six red gates" claim does not name check:storybook-manifests — if it belongs in the red ` +
+          `set now, that claim is stale by one gate:\n${resB['check:storybook-manifests'].output.slice(-2000)}`
       );
     } else {
-      ok('check:manifests stays green in scenario B too (does not belong in the curriculum’s red list)');
+      ok('check:storybook-manifests stays green in scenario B too (does not belong in the curriculum’s red list)');
     }
   } finally {
     cleanupFixture();

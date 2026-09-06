@@ -149,7 +149,7 @@ while eleven components drew 14 inline `<svg>`s of their own. Counted by shape:
 `close` existed four ways (one shared X, a differently drawn X in AtlStepper,
 `'×'` in AtlIcon, `'✕'` in CSS), `check` three ways, `chevron-down` two. The
 geometry now lives once in `libs/spec/src/icons.ts`, AtlIcon renders it in all
-three frameworks, every component uses it, and `check:iconography` forbids inline
+three frameworks, every component uses it, and `check:icon-duplication` forbids inline
 svgs, literal `content:` glyphs, and any name/geometry mismatch.
 
 <details><summary>The original finding</summary>
