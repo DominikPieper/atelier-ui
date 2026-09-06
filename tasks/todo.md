@@ -65,6 +65,31 @@ Ranked; each carries why it's worth doing next rather than later.
   ADR-0025 cites as its motivating divergence. Why now: most likely place left for a
   real finding; removing the exemption is a one-line follow-up once the specs land.
 
+- [ ] **Scope a real-browser a11y check — proposal only, nothing built.**
+  `check:a11y-parity`'s header (extended 2026-09-06) now names three defect
+  classes it structurally cannot reach, all found by hand this session with
+  Playwright, none catchable by a jsdom-based gate: AtlStepper's
+  keyboard-unreachable headers (no tab order in jsdom), AtlBreadcrumbs'
+  CSS-generated separator leaking into the tree (jsdom never computes
+  `::after` content), and `a11y-tree.ts`'s accessible-name shortcuts
+  disagreeing with real engines (the stepper panel's `"2"` vs `"Profile"`,
+  the chat log's manufactured transcript-as-name). `check:docs-layout`
+  (ADR-0089) already launches Playwright+chromium+axe-core against the built
+  docs site, but its own header deliberately scopes its axe rules away from a
+  general a11y audit and points back at `check:a11y-parity` — which, per the
+  above, can't do this job either, for the opposite reason (jsdom vs. no
+  layout). Two reuse candidates worth comparing before writing a new gate
+  from scratch, not yet costed against each other: (1) add a per-component
+  whole-document Tab-order probe plus a native-tree
+  (`Accessibility.getFullAXTree`) read onto `check-docs-layout.mjs`'s
+  existing browser session, reusing its solved server/settle/retry plumbing;
+  or (2) once the blocked `storybook-test+axe` CI item below is unblocked,
+  its Vitest-browser-mode chromium session is closer to per-component
+  isolation than a full docs-page render and may be the more natural home.
+  Whichever path, a real check would need to assert on live focus order and
+  a native/ARIA-computed tree — exactly what today's three findings had to
+  be measured by hand instead.
+
 - [ ] **`storybook-test+axe` in CI — blocked, with a full repro.** Passes locally (216
   React + 242 Vue, ~11s/lib) but fails identically whenever `CI` is set — a
   `vitest`-browser-provider connection issue, not a runner/chromium issue (ruled out

@@ -20,7 +20,23 @@
  * (like behavior.ts) so the spec import stays intra-project and the file ships no
  * runtime dependency. The accessible-name computation is a pragmatic subset of the
  * WAI spec (aria-label → aria-labelledby → visible text) sufficient for these
- * components. NOTE: kept byte-identical across libs/{angular,react,vue}/src/testing
+ * components. Both ends of that pragmatism have since been measured wrong, on
+ * real components, against real engines — recorded here because a helper this
+ * small has no other place a reader will see the cost:
+ *   - `aria-labelledby` resolves the referenced element's raw `textContent`
+ *     rather than its own computed accessible name. This named AtlStepper's
+ *     panel `"2"` (the labelling button's visible digit) where Chromium's
+ *     native accessibility tree and all three engines' `ariaSnapshot()`
+ *     compute `"Profile"` (the button's own `aria-label`) — ADR-0101.
+ *   - The visible-text fallback fires for any nameless element with text
+ *     descendants, regardless of role. This manufactured AtlChatMessages'
+ *     pre-fix name as the concatenation of every chat message, for a
+ *     `role="log"` that is name-from-author-only, not name-from-content —
+ *     fixed by giving the log an explicit `aria-label`, not by changing the
+ *     fallback (commit `f6bc9cf`; `tasks/todo.md`, 2026-09-06).
+ * Neither is fixed here: both are a shared-helper gap the affected components
+ * worked around, not a defect in this file's contract for the rest.
+ * NOTE: kept byte-identical across libs/{angular,react,vue}/src/testing
  * — the same triplication trade-off as behavior.ts; a shared `type:testing` lib
  * would single-source it (see the audit's 3-framework-maintenance blind spot).
  */

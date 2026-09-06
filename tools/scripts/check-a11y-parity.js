@@ -27,6 +27,54 @@
  * This gate is the *cross-framework* half. Both are deterministic + offline, so
  * unlike check:figma this one is safe in check:all/CI.
  *
+ * WHAT A GREEN RUN PROVES, AND WHAT IT CANNOT. This gate proves the three
+ * adapters' jsdom-rendered, normalized accessibility trees agree with each
+ * other — real cross-framework equivalence, exactly what ADR-0025 built it to
+ * prove. It cannot prove the rendered UI is accessible in a real browser,
+ * because jsdom itself cannot see whole classes of defect — and "the three
+ * adapters agree" is no evidence against a defect all three share. Three such
+ * defects were measured on 2026-09-06, all invisible to this gate the entire
+ * time it stayed green:
+ *   - Layout and focus order. jsdom never lays out or paints, so there is no
+ *     tab order to probe. AtlStepper's three committed snapshots were
+ *     byte-identical — zero divergence reported — while a real Chromium
+ *     whole-document Tab probe on the same markup showed two of three step
+ *     headers were not reachable by keyboard at all
+ *     (`atl-step-1 -> atl-step-panel-1 -> BODY`). Fixed and verified natively
+ *     in ADR-0101; this gate could not have found the defect and cannot
+ *     confirm the fix either, on this input.
+ *   - CSS generated content. jsdom does not compute `::before`/`::after`
+ *     content, so a decorative glyph declared only in CSS is invisible to
+ *     this gate in both directions. AtlBreadcrumbs' `::after` separator was
+ *     exposed as its own accessible text node in Chromium's native
+ *     accessibility tree and in Firefox/WebKit's `ariaSnapshot()` alike,
+ *     despite a code comment claiming otherwise — this gate agreed across
+ *     all three adapters, on the wrong thing, both before and after the fix.
+ *     See ADR-0100.
+ *   - Accessible-name computation. `a11y-tree.ts`'s name algorithm is a
+ *     documented pragmatic subset of the WAI spec, and two of its shortcuts
+ *     have since been measured to diverge from what a real engine computes:
+ *     the committed baseline named AtlStepper's panel `"2"` (a raw
+ *     `textContent` read of the labelling button) where every real engine
+ *     reports `"Profile"` (the button's own computed accessible name), and
+ *     before its fix, AtlChatMessages' `role="log"` baselined as the entire
+ *     concatenated transcript — the visible-text fallback firing for a role
+ *     that is name-from-author-only, not name-from-content. All three
+ *     adapters agreed on both wrong names, because all three ran the same
+ *     simplified algorithm. See ADR-0101 and the header of
+ *     `libs/<fw>/src/testing/a11y-tree.ts`.
+ *
+ * None of this makes the gate wrong — it does exactly what ADR-0025 built it
+ * for. A green `check:a11y-parity` is evidence that the three adapters agree
+ * with EACH OTHER over a normalized, jsdom-derived tree; it is not evidence
+ * that any of them is right, or that the UI works for an actual assistive-
+ * technology user. That question needs a real engine — Playwright driving
+ * Chromium's native `Accessibility.getFullAXTree` (direct evidence) or
+ * `ariaSnapshot()` on Firefox/WebKit (their own ARIA-spec computation, not a
+ * read of either engine's internal tree) — the method ADR-0100 and ADR-0101
+ * used by hand to find all three defects above. Not yet a gate; see
+ * `tasks/todo.md` for the open question of whether one is worth building.
+ *
  * Run via:  node tools/scripts/check-a11y-parity.js   (or  npm run check:a11y-parity)
  */
 'use strict';
