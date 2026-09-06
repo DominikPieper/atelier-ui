@@ -253,40 +253,43 @@
       "figmaNodeId": "55:36",
       "verifiedAt": "2026-08-28T15:06:44.987Z",
       "verifiedSha": "25ac006",
-      "inputsHash": "sha256:061fe994387ee5b7624d2bba8d8f75773a2b80c063701f385023a3ae22037fd3",
+      "inputsHash": "sha256:74aad9a78663836edecccded17a7dc8e99ea8fc2f25ef47ef9a35904c4346398",
       "inputs": [
+        "libs/angular/src/lib/checkbox/atl-checkbox.a11y.spec.ts",
         "libs/angular/src/lib/checkbox/atl-checkbox.css",
+        "libs/angular/src/lib/checkbox/atl-checkbox.spec.ts",
         "libs/angular/src/lib/checkbox/atl-checkbox.stories.ts",
         "libs/angular/src/lib/checkbox/atl-checkbox.ts",
-        "libs/angular/src/styles/tokens.css",
+        "libs/react/src/lib/checkbox/atl-checkbox.a11y.spec.tsx",
         "libs/react/src/lib/checkbox/atl-checkbox.css",
+        "libs/react/src/lib/checkbox/atl-checkbox.spec.tsx",
         "libs/react/src/lib/checkbox/atl-checkbox.stories.tsx",
         "libs/react/src/lib/checkbox/atl-checkbox.tsx",
-        "libs/react/src/styles/tokens.css",
+        "libs/vue/src/lib/checkbox/atl-checkbox.a11y.spec.ts",
         "libs/vue/src/lib/checkbox/atl-checkbox.css",
+        "libs/vue/src/lib/checkbox/atl-checkbox.spec.ts",
         "libs/vue/src/lib/checkbox/atl-checkbox.stories.ts",
-        "libs/vue/src/lib/checkbox/atl-checkbox.vue",
-        "libs/vue/src/styles/tokens.css"
+        "libs/vue/src/lib/checkbox/atl-checkbox.vue"
       ]
     },
     "AtlCombobox": {
       "figmaNodeId": "421:339",
       "verifiedAt": "2026-08-28T15:06:52.291Z",
       "verifiedSha": "25ac006",
-      "inputsHash": "sha256:0db1d7fe59033d3426377f81c752a5227c76ee9b2629710caa29ca77ecacdc66",
+      "inputsHash": "sha256:b9d510d88fb75fa37a2999cf5ab68fe88b9eed32558a7789f39bf210cb56166a",
       "inputs": [
         "libs/angular/src/lib/combobox/atl-combobox.css",
+        "libs/angular/src/lib/combobox/atl-combobox.spec.ts",
         "libs/angular/src/lib/combobox/atl-combobox.stories.ts",
         "libs/angular/src/lib/combobox/atl-combobox.ts",
-        "libs/angular/src/styles/tokens.css",
         "libs/react/src/lib/combobox/atl-combobox.css",
+        "libs/react/src/lib/combobox/atl-combobox.spec.tsx",
         "libs/react/src/lib/combobox/atl-combobox.stories.tsx",
         "libs/react/src/lib/combobox/atl-combobox.tsx",
-        "libs/react/src/styles/tokens.css",
         "libs/vue/src/lib/combobox/atl-combobox.css",
+        "libs/vue/src/lib/combobox/atl-combobox.spec.ts",
         "libs/vue/src/lib/combobox/atl-combobox.stories.ts",
-        "libs/vue/src/lib/combobox/atl-combobox.vue",
-        "libs/vue/src/styles/tokens.css"
+        "libs/vue/src/lib/combobox/atl-combobox.vue"
       ]
     },
     "AtlDialog": {
@@ -341,66 +344,75 @@
       "figmaNodeId": "129:33",
       "verifiedAt": "2026-08-28T15:06:49.326Z",
       "verifiedSha": "25ac006",
-      "inputsHash": "sha256:147b58c3dad4c0691edc33f9c460193b9ecd7a54fe19c427573a363a3c195ba2",
+      "inputsHash": "sha256:0d9d21cdd4d59922902eff38c4b855048de9b5222f09d9ddbd4c99df538d921f",
       "inputs": [
+        "libs/angular/src/lib/input/atl-input.a11y.spec.ts",
         "libs/angular/src/lib/input/atl-input.css",
+        "libs/angular/src/lib/input/atl-input.spec.ts",
         "libs/angular/src/lib/input/atl-input.stories.ts",
         "libs/angular/src/lib/input/atl-input.ts",
-        "libs/angular/src/styles/tokens.css",
+        "libs/react/src/lib/input/atl-input.a11y.spec.tsx",
         "libs/react/src/lib/input/atl-input.css",
+        "libs/react/src/lib/input/atl-input.spec.tsx",
         "libs/react/src/lib/input/atl-input.stories.tsx",
         "libs/react/src/lib/input/atl-input.tsx",
-        "libs/react/src/styles/tokens.css",
+        "libs/vue/src/lib/input/atl-input.a11y.spec.ts",
         "libs/vue/src/lib/input/atl-input.css",
+        "libs/vue/src/lib/input/atl-input.spec.ts",
         "libs/vue/src/lib/input/atl-input.stories.ts",
-        "libs/vue/src/lib/input/atl-input.vue",
-        "libs/vue/src/styles/tokens.css"
+        "libs/vue/src/lib/input/atl-input.vue"
       ]
     },
     "AtlMenu": {
       "figmaNodeId": "55:130",
       "verifiedAt": "2026-08-28T15:06:55.277Z",
       "verifiedSha": "25ac006",
-      "inputsHash": "sha256:3736da6ab0216a4becb60d611970304434085fb8ab305b9ee0849e44348a630b",
+      "inputsHash": "sha256:fb22d836bc9ee429258585c727b254a0789ce83767083cb73ddb0ec7f041059e",
       "inputs": [
+        "libs/angular/src/lib/menu/atl-menu.a11y.spec.ts",
         "libs/angular/src/lib/menu/atl-menu.css",
+        "libs/angular/src/lib/menu/atl-menu.spec.ts",
         "libs/angular/src/lib/menu/atl-menu.stories.ts",
         "libs/angular/src/lib/menu/atl-menu.ts",
-        "libs/angular/src/styles/tokens.css",
+        "libs/react/src/lib/menu/atl-menu.a11y.spec.tsx",
         "libs/react/src/lib/menu/atl-menu.css",
+        "libs/react/src/lib/menu/atl-menu.spec.tsx",
         "libs/react/src/lib/menu/atl-menu.stories.tsx",
         "libs/react/src/lib/menu/atl-menu.tsx",
-        "libs/react/src/styles/tokens.css",
         "libs/vue/src/lib/menu/atl-menu-item.vue",
         "libs/vue/src/lib/menu/atl-menu-separator.vue",
         "libs/vue/src/lib/menu/atl-menu-trigger.vue",
+        "libs/vue/src/lib/menu/atl-menu.a11y.spec.ts",
         "libs/vue/src/lib/menu/atl-menu.css",
+        "libs/vue/src/lib/menu/atl-menu.spec.ts",
         "libs/vue/src/lib/menu/atl-menu.stories.ts",
-        "libs/vue/src/lib/menu/atl-menu.vue",
-        "libs/vue/src/styles/tokens.css"
+        "libs/vue/src/lib/menu/atl-menu.vue"
       ]
     },
     "AtlMenuItem": {
       "figmaNodeId": "911:1056",
       "verifiedAt": "2026-08-28T15:06:56.754Z",
       "verifiedSha": "25ac006",
-      "inputsHash": "sha256:3736da6ab0216a4becb60d611970304434085fb8ab305b9ee0849e44348a630b",
+      "inputsHash": "sha256:fb22d836bc9ee429258585c727b254a0789ce83767083cb73ddb0ec7f041059e",
       "inputs": [
+        "libs/angular/src/lib/menu/atl-menu.a11y.spec.ts",
         "libs/angular/src/lib/menu/atl-menu.css",
+        "libs/angular/src/lib/menu/atl-menu.spec.ts",
         "libs/angular/src/lib/menu/atl-menu.stories.ts",
         "libs/angular/src/lib/menu/atl-menu.ts",
-        "libs/angular/src/styles/tokens.css",
+        "libs/react/src/lib/menu/atl-menu.a11y.spec.tsx",
         "libs/react/src/lib/menu/atl-menu.css",
+        "libs/react/src/lib/menu/atl-menu.spec.tsx",
         "libs/react/src/lib/menu/atl-menu.stories.tsx",
         "libs/react/src/lib/menu/atl-menu.tsx",
-        "libs/react/src/styles/tokens.css",
         "libs/vue/src/lib/menu/atl-menu-item.vue",
         "libs/vue/src/lib/menu/atl-menu-separator.vue",
         "libs/vue/src/lib/menu/atl-menu-trigger.vue",
+        "libs/vue/src/lib/menu/atl-menu.a11y.spec.ts",
         "libs/vue/src/lib/menu/atl-menu.css",
+        "libs/vue/src/lib/menu/atl-menu.spec.ts",
         "libs/vue/src/lib/menu/atl-menu.stories.ts",
-        "libs/vue/src/lib/menu/atl-menu.vue",
-        "libs/vue/src/styles/tokens.css"
+        "libs/vue/src/lib/menu/atl-menu.vue"
       ]
     },
     "AtlOption": {
@@ -431,20 +443,23 @@
       "figmaNodeId": "55:143",
       "verifiedAt": "2026-08-28T15:06:53.788Z",
       "verifiedSha": "25ac006",
-      "inputsHash": "sha256:4618df6d2f70652c80a2de7f1cb2504d53f06bb20b86195e7167636a527a0c2b",
+      "inputsHash": "sha256:4d87fd94e09904467e0985e1f40fb582e1d8645e5a5cd7ccb2b672c0047eb57d",
       "inputs": [
+        "libs/angular/src/lib/pagination/atl-pagination.a11y.spec.ts",
         "libs/angular/src/lib/pagination/atl-pagination.css",
+        "libs/angular/src/lib/pagination/atl-pagination.spec.ts",
         "libs/angular/src/lib/pagination/atl-pagination.stories.ts",
         "libs/angular/src/lib/pagination/atl-pagination.ts",
-        "libs/angular/src/styles/tokens.css",
+        "libs/react/src/lib/pagination/atl-pagination.a11y.spec.tsx",
         "libs/react/src/lib/pagination/atl-pagination.css",
+        "libs/react/src/lib/pagination/atl-pagination.spec.tsx",
         "libs/react/src/lib/pagination/atl-pagination.stories.tsx",
         "libs/react/src/lib/pagination/atl-pagination.tsx",
-        "libs/react/src/styles/tokens.css",
+        "libs/vue/src/lib/pagination/atl-pagination.a11y.spec.ts",
         "libs/vue/src/lib/pagination/atl-pagination.css",
+        "libs/vue/src/lib/pagination/atl-pagination.spec.ts",
         "libs/vue/src/lib/pagination/atl-pagination.stories.ts",
-        "libs/vue/src/lib/pagination/atl-pagination.vue",
-        "libs/vue/src/styles/tokens.css"
+        "libs/vue/src/lib/pagination/atl-pagination.vue"
       ]
     },
     "AtlProgress": {
@@ -471,40 +486,40 @@
       "figmaNodeId": "420:185",
       "verifiedAt": "2026-08-28T15:06:46.436Z",
       "verifiedSha": "25ac006",
-      "inputsHash": "sha256:b5ad7d6e3705d10b101abeddf48dc5067eb3c0bba411f76ddb600bd6e5234fba",
+      "inputsHash": "sha256:9d625d0c569fca218f2c4a0af06b606ee6a7b95f72505eecb40a5ed592a90eb8",
       "inputs": [
         "libs/angular/src/lib/radio/atl-radio.css",
+        "libs/angular/src/lib/radio/atl-radio.spec.ts",
         "libs/angular/src/lib/radio/atl-radio.stories.ts",
         "libs/angular/src/lib/radio/atl-radio.ts",
-        "libs/angular/src/styles/tokens.css",
         "libs/react/src/lib/radio/atl-radio.css",
+        "libs/react/src/lib/radio/atl-radio.spec.tsx",
         "libs/react/src/lib/radio/atl-radio.stories.tsx",
         "libs/react/src/lib/radio/atl-radio.tsx",
-        "libs/react/src/styles/tokens.css",
         "libs/vue/src/lib/radio/atl-radio.css",
+        "libs/vue/src/lib/radio/atl-radio.spec.ts",
         "libs/vue/src/lib/radio/atl-radio.stories.ts",
-        "libs/vue/src/lib/radio/atl-radio.vue",
-        "libs/vue/src/styles/tokens.css"
+        "libs/vue/src/lib/radio/atl-radio.vue"
       ]
     },
     "AtlRadioGroup": {
       "figmaNodeId": "55:137",
       "verifiedAt": "2026-08-28T15:06:47.848Z",
       "verifiedSha": "25ac006",
-      "inputsHash": "sha256:b5ad7d6e3705d10b101abeddf48dc5067eb3c0bba411f76ddb600bd6e5234fba",
+      "inputsHash": "sha256:9d625d0c569fca218f2c4a0af06b606ee6a7b95f72505eecb40a5ed592a90eb8",
       "inputs": [
         "libs/angular/src/lib/radio/atl-radio.css",
+        "libs/angular/src/lib/radio/atl-radio.spec.ts",
         "libs/angular/src/lib/radio/atl-radio.stories.ts",
         "libs/angular/src/lib/radio/atl-radio.ts",
-        "libs/angular/src/styles/tokens.css",
         "libs/react/src/lib/radio/atl-radio.css",
+        "libs/react/src/lib/radio/atl-radio.spec.tsx",
         "libs/react/src/lib/radio/atl-radio.stories.tsx",
         "libs/react/src/lib/radio/atl-radio.tsx",
-        "libs/react/src/styles/tokens.css",
         "libs/vue/src/lib/radio/atl-radio.css",
+        "libs/vue/src/lib/radio/atl-radio.spec.ts",
         "libs/vue/src/lib/radio/atl-radio.stories.ts",
-        "libs/vue/src/lib/radio/atl-radio.vue",
-        "libs/vue/src/styles/tokens.css"
+        "libs/vue/src/lib/radio/atl-radio.vue"
       ]
     },
     "AtlSelect": {
@@ -718,20 +733,23 @@
       "figmaNodeId": "55:87",
       "verifiedAt": "2026-08-28T15:06:50.820Z",
       "verifiedSha": "25ac006",
-      "inputsHash": "sha256:0bf057c45d93b055b9136c9d337c6b8d03d88173d3ec69acfe1b4bec7e96e7ba",
+      "inputsHash": "sha256:ae187019d5391b44fa4b2da59103647ada9ec620ce54a8a0b67e655bf749c1fb",
       "inputs": [
+        "libs/angular/src/lib/textarea/atl-textarea.a11y.spec.ts",
         "libs/angular/src/lib/textarea/atl-textarea.css",
+        "libs/angular/src/lib/textarea/atl-textarea.spec.ts",
         "libs/angular/src/lib/textarea/atl-textarea.stories.ts",
         "libs/angular/src/lib/textarea/atl-textarea.ts",
-        "libs/angular/src/styles/tokens.css",
+        "libs/react/src/lib/textarea/atl-textarea.a11y.spec.tsx",
         "libs/react/src/lib/textarea/atl-textarea.css",
+        "libs/react/src/lib/textarea/atl-textarea.spec.tsx",
         "libs/react/src/lib/textarea/atl-textarea.stories.tsx",
         "libs/react/src/lib/textarea/atl-textarea.tsx",
-        "libs/react/src/styles/tokens.css",
+        "libs/vue/src/lib/textarea/atl-textarea.a11y.spec.ts",
         "libs/vue/src/lib/textarea/atl-textarea.css",
+        "libs/vue/src/lib/textarea/atl-textarea.spec.ts",
         "libs/vue/src/lib/textarea/atl-textarea.stories.ts",
-        "libs/vue/src/lib/textarea/atl-textarea.vue",
-        "libs/vue/src/styles/tokens.css"
+        "libs/vue/src/lib/textarea/atl-textarea.vue"
       ]
     },
     "AtlTh": {
@@ -763,20 +781,23 @@
       "figmaNodeId": "55:41",
       "verifiedAt": "2026-08-28T15:06:43.666Z",
       "verifiedSha": "25ac006",
-      "inputsHash": "sha256:62b6ad2190dcdcaba607cef8f3dc0743d9f516364ab1fff49fa10c7442c3397f",
+      "inputsHash": "sha256:919d5a5026b1a3188b3914b4db252c1a530439b879f79d3c8b84d8b256f2a4ec",
       "inputs": [
+        "libs/angular/src/lib/toggle/atl-toggle.a11y.spec.ts",
         "libs/angular/src/lib/toggle/atl-toggle.css",
+        "libs/angular/src/lib/toggle/atl-toggle.spec.ts",
         "libs/angular/src/lib/toggle/atl-toggle.stories.ts",
         "libs/angular/src/lib/toggle/atl-toggle.ts",
-        "libs/angular/src/styles/tokens.css",
+        "libs/react/src/lib/toggle/atl-toggle.a11y.spec.tsx",
         "libs/react/src/lib/toggle/atl-toggle.css",
+        "libs/react/src/lib/toggle/atl-toggle.spec.tsx",
         "libs/react/src/lib/toggle/atl-toggle.stories.tsx",
         "libs/react/src/lib/toggle/atl-toggle.tsx",
-        "libs/react/src/styles/tokens.css",
+        "libs/vue/src/lib/toggle/atl-toggle.a11y.spec.ts",
         "libs/vue/src/lib/toggle/atl-toggle.css",
+        "libs/vue/src/lib/toggle/atl-toggle.spec.ts",
         "libs/vue/src/lib/toggle/atl-toggle.stories.ts",
-        "libs/vue/src/lib/toggle/atl-toggle.vue",
-        "libs/vue/src/styles/tokens.css"
+        "libs/vue/src/lib/toggle/atl-toggle.vue"
       ]
     },
     "AtlTooltip": {
