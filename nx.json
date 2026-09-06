@@ -133,7 +133,7 @@
     "changelog": {
       "projectChangelogs": true,
       "workspaceChangelog": {
-        "createRelease": "github"
+        "createRelease": false
       },
       "automaticFromRef": true
     },

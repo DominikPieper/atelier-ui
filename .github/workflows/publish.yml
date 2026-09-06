@@ -113,6 +113,22 @@ jobs:
         # tag left unpublished by an earlier failed run can't be republished that
         # way. `publish-only` runs the explicit publish subcommand to push the
         # current tagged versions regardless of bump.
+        #
+        # `nx release --yes` versions, writes changelogs, commits and tags — all
+        # local — then publishes; it does NOT push. Before ADR-0102 it also pushed,
+        # in between tag and publish, which is what let a publish failure leave git
+        # ahead of npm (see the step below). That push was never something this
+        # workflow asked for: it was `nx release`'s own git-push-before-creating-a-
+        # GitHub-release behaviour, forced on by `workspaceChangelog.createRelease`
+        # in nx.json — config that has silently done nothing else since the
+        # `skills` release group made this a multi-release-group workspace on
+        # 2026-04-25 (Nx disables workspace-level changelogs, and with them
+        # `createRelease`, whenever more than one release group exists; `gh release
+        # list` shows no GitHub Release created since that date). ADR-0102 turns
+        # `createRelease` off, which was its only live effect, and pushing is now a
+        # separate, later step that only runs once npm is confirmed to have the
+        # version. `publish-only` never versions/commits/tags at all, so none of
+        # this touches its recovery-path behaviour.
         run: |
           if [ "${{ github.event.inputs.mode }}" = "publish-only" ]; then
             npx nx release publish
@@ -136,6 +152,21 @@ jobs:
         # actually is: the version in this checkout is not the version npm
         # serves. See check-release-drift.mjs's header for why an unreachable
         # registry is reported as skipped rather than as sync.
+        #
+        # ADR-0102 (2026-09-06) removed the push described above — see the
+        # Release and Publish step's comment — and moved it to a step below
+        # this one, gated on this one passing. Keep both: this step is
+        # detection (an independent query against the actual registry, not
+        # just trusting `nx release`'s exit code, and tolerant of the read-
+        # after-write lag handled by the retry loop below); the push step is
+        # prevention (origin cannot advance past what this step confirmed npm
+        # has). Detection alone does not undo a push that already happened —
+        # that is the six-releases failure this step was added for in the
+        # first place — so removing the push step as "redundant" with this
+        # one would silently reopen that exact gap. Removing this step would
+        # leave the push step trusting `nx release`'s own exit code alone,
+        # which the read-after-write-lag incident below already showed is not
+        # always sufficient.
         #
         # Retry added 2026-09-06 after run 34023488530: a `publish-only` run
         # published all five packages successfully, then this step queried npm
@@ -205,3 +236,29 @@ jobs:
 
           echo "check:release-drift still reports drift after $attempts attempts — treating this as a real publish failure, not lag."
           exit "$status"
+
+      - name: Push the release commit and tag(s)
+        if: github.event.inputs.mode != 'publish-only'
+        # The only step in this job that touches the remote. Everything above is
+        # local: `nx release --yes` versions, writes changelogs, commits and tags
+        # on this runner's disposable checkout, and the drift check above queries
+        # npm, not git. If either step failed, this step never runs (GitHub
+        # Actions stops the job at the first failing step, and neither step above
+        # is marked `if: always()`), so the commit and tag(s) this run made are
+        # discarded with the runner — origin never sees them, and can therefore
+        # never run ahead of what npm actually serves. That is the prevention half
+        # of ADR-0102; the step above is the detection half — see its comment for
+        # why both stay.
+        #
+        # `--follow-tags` is exactly the command `nx release`'s own git push used
+        # to run (before ADR-0102 removed it from that step): only the current
+        # branch and the annotated tag(s) reachable from the commit(s) just made,
+        # never an unrelated stray local tag. `--no-verify`/`--atomic` also match
+        # nx's own invocation for the same reason: no local hook surprises, and
+        # every ref in the push either lands together or not at all.
+        #
+        # `publish-only` never versions, commits or tags anything (`nx release
+        # publish` alone does no git operations at all — see its own step's
+        # comment), so it has nothing of its own to push; the `if:` above keeps
+        # its recovery-path behaviour byte-for-byte what it was before ADR-0102.
+        run: git push --follow-tags --no-verify --atomic
