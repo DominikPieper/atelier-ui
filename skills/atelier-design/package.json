@@ -1,6 +1,6 @@
 {
   "name": "@atelier-ui/skill-atelier-design",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Claude Code skill for generating well-branded Atelier interfaces, slides, and assets — voice rules, design tokens, and the Astro docs UI kit.",
   "type": "module",

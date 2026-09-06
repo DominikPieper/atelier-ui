@@ -1,3 +1,7 @@
+## 0.2.36 (2026-09-06)
+
+This was a version bump only for create-workspace to align it with other projects, there were no code changes.
+
 ## 0.2.35 (2026-09-06)
 
 ### 🩹 Fixes

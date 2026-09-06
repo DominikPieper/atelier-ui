@@ -1,3 +1,25 @@
+## 0.1.1 (2026-09-06)
+
+### 🚀 Features
+
+- **tokens:** decide the counting rule, then mint the two roles it earns ([93323ec](https://github.com/DominikPieper/atelier-ui/commit/93323ec))
+- ⚠️  **docs:** rename Llm prefix to Atl across docs, generated artifacts, and tooling docs ([965787d](https://github.com/DominikPieper/atelier-ui/commit/965787d))
+- **docs:** align docs site to atelier-design system ([a0297db](https://github.com/DominikPieper/atelier-ui/commit/a0297db))
+
+### 🩹 Fixes
+
+- **schulung:** the fifteen majors, and a props claim that was too generous ([9de43bf](https://github.com/DominikPieper/atelier-ui/commit/9de43bf))
+
+### ⚠️  Breaking Changes
+
+- **docs:** rename Llm prefix to Atl across docs, generated artifacts, and tooling docs  ([965787d](https://github.com/DominikPieper/atelier-ui/commit/965787d))
+
+### ❤️ Thank You
+
+- Claude Opus 4.7 (1M context)
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.1.0 (2026-05-01)
 
 Initial extraction. Imported from `design-system/` at the repo root and conformed to the workspace skill layout.
