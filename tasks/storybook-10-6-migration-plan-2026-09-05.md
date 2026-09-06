@@ -1,6 +1,6 @@
 # Plan — Storybook 10.6 migration and dependency sweep
 
-**Date:** 2026-09-05 · **Basis:** `tasks/storybook-10-6-spike-2026-09-05.md` (the spike that measured this) · **Prior art:** `tasks/review-state-2026-08-26.md:97` already scoped the framework swap as "Effort: M, own PR, own ADR" · **Working mode:** main branch, one commit per wave, every wave gated green before the next starts.
+**Date:** 2026-09-05 · **Basis:** `tasks/storybook-10-6-spike-2026-09-05.md` (the spike that measured this) · **Prior art:** `tasks/review-state-2026-08-26.md:97` already scoped the framework swap as "Effort: M, own PR, own ADR" · **Status: all five waves complete 2026-09-06** (`137042d`, `028099f`, `d19a2e3`, `63b6014`, `a1c30ec`, `979c1ec`) — not pushed. · **Working mode:** main branch, one commit per wave, every wave gated green before the next starts.
 
 ## Decisions taken up front
 
@@ -18,12 +18,12 @@
 
 The goal. Everything else follows from it.
 
-- [ ] Bump to `10.6.0`: `storybook`, `@storybook/angular`, `@storybook/addon-docs`, `@storybook/addon-a11y`, `@storybook/addon-vitest`, `@storybook/react-vite`, `@storybook/vue3-vite`, `eslint-plugin-storybook`
-- [ ] `@storybook/addon-mcp` `0.7.0` → `10.6.0` and `@storybook/mcp` `0.8.0` → `10.6.0` (their versioning now tracks Storybook's; the old peer ranges exclude 10.6)
-- [ ] Add `@storybook/angular-vite@10.6.0`; remove `@analogjs/storybook-angular` (it is referenced only from `package.json` — verified by grep; `@analogjs/vite-plugin-angular` and `@analogjs/vitest-angular` stay, `libs/angular/src/test-setup.ts` needs them)
-- [ ] `libs/angular/.storybook/main.ts`: `framework` → `@storybook/angular-vite`, add `experimentalDocgenServer: true`, delete the `atelier:stub-deprecated-angular-animations` plugin and its comment block
-- [ ] `libs/vue/.storybook/main.ts`: add `experimentalDocgenServer: true` (not defaulted until Storybook 11)
-- [ ] Check whether `@angular-devkit/build-angular` and `@angular/platform-browser-dynamic` actually leave the tree. `review-state-2026-08-26.md:97` predicts both do; `npm ls` currently shows build-angular pulled by `@nx/angular` and `@analogjs/vite-plugin-angular` as well, and platform-browser-dynamic is a **direct** dependency. Verify rather than assume, and adjust `package.json` to match reality.
+- [x] Bump to `10.6.0`: `storybook`, `@storybook/angular`, `@storybook/addon-docs`, `@storybook/addon-a11y`, `@storybook/addon-vitest`, `@storybook/react-vite`, `@storybook/vue3-vite`, `eslint-plugin-storybook`
+- [x] `@storybook/addon-mcp` `0.7.0` → `10.6.0` and `@storybook/mcp` `0.8.0` → `10.6.0` (their versioning now tracks Storybook's; the old peer ranges exclude 10.6)
+- [x] Add `@storybook/angular-vite@10.6.0`; remove `@analogjs/storybook-angular` (it is referenced only from `package.json` — verified by grep; `@analogjs/vite-plugin-angular` and `@analogjs/vitest-angular` stay, `libs/angular/src/test-setup.ts` needs them)
+- [x] `libs/angular/.storybook/main.ts`: `framework` → `@storybook/angular-vite`, add `experimentalDocgenServer: true`, delete the `atelier:stub-deprecated-angular-animations` plugin and its comment block
+- [x] `libs/vue/.storybook/main.ts`: add `experimentalDocgenServer: true` (not defaulted until Storybook 11)
+- [x] Check whether `@angular-devkit/build-angular` and `@angular/platform-browser-dynamic` actually leave the tree. `review-state-2026-08-26.md:97` predicts both do; `npm ls` currently shows build-angular pulled by `@nx/angular` and `@analogjs/vite-plugin-angular` as well, and platform-browser-dynamic is a **direct** dependency. Verify rather than assume, and adjust `package.json` to match reality.
 
 **Gate:** `npm run check:all` exit 0 · `nx build-storybook angular|react|vue` exit 0 each · `dist/storybook/{angular,vue}/manifests/components.json` present with `meta.docgen` of `angular-component-meta` / `vue-component-meta` · `nx test angular|react|vue` exit 0 · a live MCP `docs-show` on 4400 and 4402 returning framework-native shapes (Angular `[(checked)]`, Vue `v-model:checked`).
 
@@ -41,10 +41,10 @@ Only `get-storybook-story-instructions` survives 10.6.
 | `get-changed-stories` | `stories-changed` |
 | `get-stories-by-component` | `stories-find-by-component` |
 
-- [ ] Sweep the 32 files that name the old tools. Not a blind find-and-replace: several are historical records (`tasks/review-*`, `tasks/schulung-review-*`, `tasks/angular-storybook-vitest-triage-*`) where the old name is what was true at the time and must stay. Change instructions, leave records.
-- [ ] `libs/create-workspace/src/generators/preset/preset.ts` — **ships to npm**. Stale names here would scaffold broken workspaces. `preset.spec.ts` asserts on them, so both move together.
-- [ ] `docs/public/.well-known/agent-skills/storybook-{angular,react,vue}/SKILL.md` — published surface, three files.
-- [ ] `AGENTS.md`, `README.md`, `talk/storybook-mcp-talk.md`, and the docs pages.
+- [x] Sweep the 32 files that name the old tools. Not a blind find-and-replace: several are historical records (`tasks/review-*`, `tasks/schulung-review-*`, `tasks/angular-storybook-vitest-triage-*`) where the old name is what was true at the time and must stay. Change instructions, leave records.
+- [x] `libs/create-workspace/src/generators/preset/preset.ts` — **ships to npm**. Stale names here would scaffold broken workspaces. `preset.spec.ts` asserts on them, so both move together.
+- [x] `docs/public/.well-known/agent-skills/storybook-{angular,react,vue}/SKILL.md` — published surface, three files.
+- [x] `AGENTS.md`, `README.md`, `talk/storybook-mcp-talk.md`, and the docs pages.
 
 **Gate:** `npm run check:all` exit 0 · `nx build docs` exit 0 · zero hits for the seven old names outside `tasks/` historical records and `plan/adr/0083`.
 
@@ -58,11 +58,11 @@ The substitution is a **404 fallback**, not an active rewrite: `if (response.sta
 
 **Consequence: Waves 1 and 2 must not be pushed without this fix, or the hosted Angular and Vue endpoints break outright — not degrade, break.** Nothing is pushed yet.
 
-- [ ] Fix `manifestProvider` to resolve the ref path relative to the manifest's own directory instead of flattening it with `basename()`. Handle the `#/components/<id>` fragment.
-- [ ] Only then: the React fallback is dead code — remove it.
-- [ ] Add a gate. Nothing today asserts that `components.json` exists and carries real docgen; the whole value of this migration rests on an artefact no check watches, and a silent default flip would degrade the MCP surface with everything green.
-- [ ] Remove the worker's React-manifest substitution for the Angular and Vue endpoints
-- [ ] New ADR superseding ADR-0083; flip ADR-0083 to `status: superseded`, add the row to `plan/adr/README.md`. The new ADR records the framework swap, the animations reversal, and the rename — one decision, three consequences.
+- [x] Fix `manifestProvider` to resolve the ref path relative to the manifest's own directory instead of flattening it with `basename()`. Handle the `#/components/<id>` fragment.
+- [x] Only then: the React fallback is dead code — remove it.
+- [x] Add a gate. Nothing today asserts that `components.json` exists and carries real docgen; the whole value of this migration rests on an artefact no check watches, and a silent default flip would degrade the MCP surface with everything green.
+- [x] Remove the worker's React-manifest substitution for the Angular and Vue endpoints
+- [x] New ADR superseding ADR-0083; flip ADR-0083 to `status: superseded`, add the row to `plan/adr/README.md`. The new ADR records the framework swap, the animations reversal, and the rename — one decision, three consequences.
 
 **Gate:** `npm run check:adr-refs` exit 0 · hosted endpoints answer Angular/Vue-shaped for a known component.
 
@@ -70,14 +70,14 @@ The substitution is a **404 fallback**, not an active rewrite: `if (response.sta
 
 Minor and patch only, one batch, one commit.
 
-- [ ] Angular `22.0.7` → `22.1.x` (core, common, compiler, compiler-cli, forms, router, platform-browser, cli, build, devkit/core, devkit/schematics, schematics/angular, language-service, aria, cdk, plus build-angular 22.1.7 and platform-browser-dynamic 22.1.5 if they survive Wave 1)
-- [ ] Nx `23.1.1` → `23.2.0` (all `@nx/*`, `nx`, `create-nx-workspace`)
-- [ ] `@analogjs/vite-plugin-angular` + `@analogjs/vitest-angular` `2.6.3` → `2.7.1`
-- [ ] vite `8.1.5` → `8.2.2`, `@vitejs/plugin-react` `6.1.1`, `@swc/core` `1.16.2`, `@swc-node/register` `1.12.1`
-- [ ] `@playwright/test` `1.63.0`, jest `30.5.1` trio, prettier `3.9.6`, `typescript-eslint` + `@typescript-eslint/utils` `8.69.0`, `angular-eslint` `22.2.0`
-- [ ] vue `3.5.42` + `@vue/compiler-sfc` `3.5.42`, zone.js `0.16.3`, postcss `8.5.28`, autoprefixer `10.5.5`
-- [ ] docs-side: `astro-expressive-code` `0.44.2`, `astro-og-canvas` `0.13.1`, `@astrojs/sitemap` `3.7.4`, `@iconify-json/lucide`, `@material-symbols/svg-400` `0.47.1`, `canvaskit-wasm` `0.42.0`
-- [ ] `verdaccio` `6.10.2`, `tsx` `4.23.13`, `ts-node` `10.9.2`, `@testing-library/react` `16.3.3`, `@types/react-dom` `19.2.7`
+- [x] Angular `22.0.7` → `22.1.x` (core, common, compiler, compiler-cli, forms, router, platform-browser, cli, build, devkit/core, devkit/schematics, schematics/angular, language-service, aria, cdk, plus build-angular 22.1.7 and platform-browser-dynamic 22.1.5 if they survive Wave 1)
+- [x] Nx `23.1.1` → `23.2.0` (all `@nx/*`, `nx`, `create-nx-workspace`)
+- [x] `@analogjs/vite-plugin-angular` + `@analogjs/vitest-angular` `2.6.3` → `2.7.1`
+- [x] vite `8.1.5` → `8.2.2`, `@vitejs/plugin-react` `6.1.1`, `@swc/core` `1.16.2`, `@swc-node/register` `1.12.1`
+- [x] `@playwright/test` `1.63.0`, jest `30.5.1` trio, prettier `3.9.6`, `typescript-eslint` + `@typescript-eslint/utils` `8.69.0`, `angular-eslint` `22.2.0`
+- [x] vue `3.5.42` + `@vue/compiler-sfc` `3.5.42`, zone.js `0.16.3`, postcss `8.5.28`, autoprefixer `10.5.5`
+- [x] docs-side: `astro-expressive-code` `0.44.2`, `astro-og-canvas` `0.13.1`, `@astrojs/sitemap` `3.7.4`, `@iconify-json/lucide`, `@material-symbols/svg-400` `0.47.1`, `canvaskit-wasm` `0.42.0`
+- [x] `verdaccio` `6.10.2`, `tsx` `4.23.13`, `ts-node` `10.9.2`, `@testing-library/react` `16.3.3`, `@types/react-dom` `19.2.7`
 
 **Gate:** `npm run check:all` exit 0 · all three `nx test` exit 0 · `nx build docs` exit 0 · `nx build-storybook` for all three exit 0.
 
@@ -85,10 +85,10 @@ Minor and patch only, one batch, one commit.
 
 Subtraction, mostly.
 
-- [ ] `docs/src/pages/schulung.astro`: the M3 bullet added this morning (Angular/Vue translating a React-shaped reply via the spec) becomes obsolete — the hosted endpoints now answer natively. Remove or reduce to a note about pre-10.6 versions.
-- [ ] `AGENTS.md`: the Storybook MCP section loses its central asymmetry ("the reply is React-shaped throughout") and the ADR-0083 substitution paragraph.
-- [ ] Day 1 Block 03's `experimentalReactComponentMeta` line — revisit next to its now-existing Angular and Vue siblings.
-- [ ] `tasks/schulung-review-2026-09-05.md`: mark M3 closed-by-upstream rather than closed-by-edit.
+- [x] `docs/src/pages/schulung.astro`: the M3 bullet added this morning (Angular/Vue translating a React-shaped reply via the spec) becomes obsolete — the hosted endpoints now answer natively. Remove or reduce to a note about pre-10.6 versions.
+- [x] `AGENTS.md`: the Storybook MCP section loses its central asymmetry ("the reply is React-shaped throughout") and the ADR-0083 substitution paragraph.
+- [x] Day 1 Block 03's `experimentalReactComponentMeta` line — revisit next to its now-existing Angular and Vue siblings.
+- [x] `tasks/schulung-review-2026-09-05.md`: mark M3 closed-by-upstream rather than closed-by-edit.
 
 **Gate:** `npm run check:all` exit 0 · `nx build docs` exit 0.
 
