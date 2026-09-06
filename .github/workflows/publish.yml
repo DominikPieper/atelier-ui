@@ -136,4 +136,72 @@ jobs:
         # actually is: the version in this checkout is not the version npm
         # serves. See check-release-drift.mjs's header for why an unreachable
         # registry is reported as skipped rather than as sync.
-        run: npm run check:release-drift
+        #
+        # Retry added 2026-09-06 after run 34023488530: a `publish-only` run
+        # published all five packages successfully, then this step queried npm
+        # seconds later and got the pre-publish version back — npm's read path
+        # is eventually consistent, and the write hadn't propagated to the
+        # replica this check happened to hit yet. The identical script, run
+        # moments later, saw the correct version. That is read-after-write
+        # lag, not the failure this step exists to catch, so a single query is
+        # too impatient to trust. check-release-drift.mjs already tells the
+        # two failure modes apart — an unreachable registry exits 0 (skipped,
+        # not evidence of sync), so only a real [DRIFT] report (exit 1) drives
+        # a retry here; this loop cannot turn "unreachable" into a failure.
+        # Three attempts, 15s apart (~30s total, plus each script's own
+        # runtime), is comfortably above the lag observed above without
+        # sitting on a genuinely broken publish for long. The last attempt's
+        # exit code is the step's result — if it's still drift after three
+        # tries, this fails, exactly as before.
+        #
+        # Exit 0 is not, by itself, success: check-release-drift.mjs uses it
+        # for two different outcomes — genuinely in sync, or "[SKIP] registry
+        # unreachable" (not evidence of sync, see its header). A single-shot
+        # run never confused these, because there was no earlier finding for
+        # a skip to overwrite. A *loop* changes that: without checking for
+        # "[SKIP]" in the output, a registry hiccup on a later attempt would
+        # read as exit 0 and silently rescue a real [DRIFT] seen on an
+        # earlier attempt — reintroducing exactly the blind spot this step
+        # exists to close. So this loop tracks whether any attempt reported
+        # real drift, and a later skip may only pass when no earlier attempt
+        # did. If no attempt ever saw drift and the last one is a skip, the
+        # repo's existing offline-is-skipped semantics still apply (see
+        # ADR-0094) and the step passes.
+        run: |
+          set +e  # manual exit-code handling below; do not let errexit race ahead of the SKIP/DRIFT inspection
+          attempts=3
+          delay=15
+          drift_seen=false
+          drift_attempt=""
+          status=1
+
+          for attempt in $(seq 1 "$attempts"); do
+            echo "::group::check:release-drift — attempt $attempt of $attempts"
+            output="$(npm run check:release-drift 2>&1)"
+            status=$?
+            echo "$output"
+            echo "::endgroup::"
+
+            if [ "$status" -eq 0 ]; then
+              if echo "$output" | grep -q '\[SKIP\]'; then
+                if [ "$drift_seen" = true ]; then
+                  echo "check:release-drift reported drift on attempt $drift_attempt of $attempts, then the registry stopped answering on attempt $attempt of $attempts — not verified, not a pass. Treating as a failure."
+                  exit 1
+                fi
+                echo "check:release-drift skipped (registry unreachable) on attempt $attempt of $attempts, with no drift observed on any earlier attempt — passing per the repo's existing offline-is-skipped semantics."
+                exit 0
+              fi
+              echo "check:release-drift verified in sync on attempt $attempt of $attempts."
+              exit 0
+            fi
+
+            drift_seen=true
+            drift_attempt=$attempt
+            if [ "$attempt" -lt "$attempts" ]; then
+              echo "check:release-drift reported drift on attempt $attempt of $attempts (likely npm read-after-write lag) — retrying in ${delay}s."
+              sleep "$delay"
+            fi
+          done
+
+          echo "check:release-drift still reports drift after $attempts attempts — treating this as a real publish failure, not lag."
+          exit "$status"
