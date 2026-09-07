@@ -10,7 +10,9 @@
  *   - both files have YAML frontmatter
  *   - input.md frontmatter has a `scenario` field that matches the directory name
  *   - expected.md frontmatter has `mode`, `references`, `first-tool`, `out-of-scope`
- *   - mode value is one of the four supported modes plus Out-of-scope
+ *   - mode value is one of the modes derived from skills/<skill-name>/SKILL.md
+ *     (every `### <Name> mode` heading; sub-mode headings do not count), plus
+ *     the literal `Out-of-scope`, which is always allowed
  *   - every references/*.md path listed in expected.md frontmatter resolves
  *     against the skill's references/ directory
  *
@@ -39,7 +41,34 @@ if (!existsSync(testsDir)) {
   process.exit(0);
 }
 
-const VALID_MODES = new Set(['Build', 'Audit', 'Decide', 'Migrate', 'Out-of-scope']);
+function loadValidModes(skillDirPath) {
+  const skillMdPath = join(skillDirPath, 'SKILL.md');
+  if (!existsSync(skillMdPath)) {
+    console.error(
+      `✗ ${skillMdPath} is missing — cannot derive valid modes (expected headings shaped "### <Name> mode")`,
+    );
+    process.exit(1);
+  }
+
+  const content = readFileSync(skillMdPath, 'utf-8');
+  const modeHeadingRe = /^### (.+?) mode\s*$/gm;
+  const modes = [];
+  let match;
+  while ((match = modeHeadingRe.exec(content)) !== null) {
+    modes.push(match[1]);
+  }
+
+  if (modes.length === 0) {
+    console.error(
+      `✗ ${skillMdPath} yields zero mode headings — expected at least one heading shaped "### <Name> mode"`,
+    );
+    process.exit(1);
+  }
+
+  return new Set([...modes, 'Out-of-scope']);
+}
+
+const VALID_MODES = loadValidModes(skillDir);
 
 const errors = [];
 let scenarioCount = 0;
@@ -126,7 +155,8 @@ for (const scenario of scenarios) {
 
   if (expectedFm.mode && !VALID_MODES.has(expectedFm.mode)) {
     errors.push(
-      `tests/${scenario}/expected.md mode "${expectedFm.mode}" is not one of: ${[...VALID_MODES].join(', ')}`,
+      `tests/${scenario}/expected.md mode "${expectedFm.mode}" is not one of the modes declared in ` +
+        `skills/${skillName}/SKILL.md (${[...VALID_MODES].join(', ')}) — Out-of-scope is always allowed`,
     );
   }
 
