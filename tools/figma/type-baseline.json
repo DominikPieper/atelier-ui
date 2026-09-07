@@ -1,7 +1,7 @@
 {
   "meta": {
     "note": "Per-check RATCHET findings for check:figma. The gate PASSES while a master's findings are exactly the ones recorded here, FAILS when one APPEARS that is not recorded (naming it), and FAILS when a recorded one DISAPPEARS without this file being updated — an improvement nobody records can silently reverse, which is the rule [STALE-EXEMPTION] already applies to allowlist entries. FINDINGS AND NOT COUNTS: a count is blind to substitution, so fixing one node on a master while breaking another kept the number flat and the gate green. Each entry carries its own node multiplicity (×N) where a deduplicated record stands for several nodes. It is a ratchet rather than a plain blocker because the debt cannot be paid today: ADR-0066 rejected a warning nobody can clear, and a blocker would leave check:all red until the wrong-variable-collection problem is decided (tasks/type-role-resolution-2026-08-28.md). This is NOT an allowlist. tools/scripts/lib/allowlists.js answers \"this one is exempt forever\"; this file answers \"this many are owed\". Never record the same defect in both. WHEN A MASTER IS CLEAR: its key disappears on the next update. WHEN A CHECK'S ENTRY IS GONE: delete the ratchet and make that check a plain blocker. An entry whose debt is blocked on another check clearing states that as `clearedWhen: { checkGone: \"<TAG>\" }`, and [STALE-REASON] fails once the condition is satisfied — a prose promise is one nobody can check. Update with `node tools/scripts/check-figma.js --update-baseline` — never by hand, except the `why` and `kind` fields, which the writer preserves. See plan/adr/0079-type-does-not-need-the-painted-box.md and plan/adr/0080-a-guard-that-skips-is-not-a-check.md.",
-    "generatedAt": "2026-09-07T08:58:48.016Z",
+    "generatedAt": "2026-09-07T12:06:32.528Z",
     "updatedBy": "node tools/scripts/check-figma.js --update-baseline"
   },
   "checks": {
@@ -171,9 +171,23 @@
           "atl-accordion-item/accordion-panel/You can request a refund within 30 days of purchase. Contact support to initiate. “You can request a refund within 30 days ” (14px Regular) ×3"
         ],
         "AtlAvatar": [
-          "JS “JS” (10px Bold) ×2",
-          "JS “JS” (16px Medium) ×2",
-          "JS “JS” (18px Medium) ×2"
+          "JS “JS” (10px SemiBold) ×2",
+          "JS “JS” (12px SemiBold) ×2",
+          "JS “JS” (14px SemiBold) ×2"
+        ],
+        "AtlAvatarGroup": [
+          "Frame/+2 “+2” (10px SemiBold)",
+          "Frame/+2 “+2” (12px SemiBold)",
+          "Frame/+2 “+2” (14px SemiBold) ×2",
+          "Frame/AL “AL” (10px SemiBold)",
+          "Frame/AL “AL” (12px SemiBold)",
+          "Frame/AL “AL” (14px SemiBold)",
+          "Frame/JS “JS” (10px SemiBold)",
+          "Frame/JS “JS” (12px SemiBold)",
+          "Frame/JS “JS” (14px SemiBold)",
+          "Frame/MK “MK” (10px SemiBold)",
+          "Frame/MK “MK” (12px SemiBold)",
+          "Frame/MK “MK” (14px SemiBold)"
         ],
         "AtlBreadcrumbItem": [
           "breadcrumb-current/Current “Current” (14px SemiBold)",
