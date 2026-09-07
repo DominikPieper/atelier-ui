@@ -1,3 +1,15 @@
+## 0.2.39 (2026-09-07)
+
+### 🩹 Fixes
+
+- **pagination,stepper:** the active state was bolder than any role allows ([1eea2f0](https://github.com/DominikPieper/atelier-ui/commit/1eea2f0))
+- **breadcrumbs:** the fallback separator named a glyph nothing ships ([910e77c](https://github.com/DominikPieper/atelier-ui/commit/910e77c))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.38 (2026-09-07)
 
 ### 🩹 Fixes
