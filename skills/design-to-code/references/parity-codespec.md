@@ -40,7 +40,11 @@ state, Light and Dark — and say in the report which states you drove.
   anything larger is a real discrepancy.
 - Each discrepancy carries `category`, `property`, `severity`, `designValue`, `codeValue`,
   `suggestion`. Decide per item: fix code, fix master (architect Build/Migrate), or record
-  as intentional in the handoff document. "Understood" is the bar, not "absent".
+  as intentional. "Understood" is the bar for the *report*; for the *record* the bar is
+  "fixed or durably recorded" — durable means the handoff document (Build), a
+  `FIGMA_CONFORMANCE_EXCEPTIONS` entry with a reason, or an open `tasks/todo.md` decision
+  item. A commit message that mentions the gap is not a record; the first eval of this
+  skill re-recorded AtlCard over exactly such a gap.
 - If you want a number for a report, the southleft rubric is
   `100 − critical×15 − major×8 − minor×3 − info×1`. Do not store it.
 

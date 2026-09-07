@@ -71,8 +71,13 @@ participant's duplicate, so resolve the id in the file you are actually reading 
 the recorded one as provenance.
 
 1. `figma_search_components` with the component name. The search also matches
-   description text, so confirm the hit is a `COMPONENT_SET` on the Components page (the
-   Inventory page holds instances of the same name).
+   description text, so confirm the hit is the master on the Components page — a
+   `COMPONENT_SET`, or a single `COMPONENT` when the component has no variant axis
+   (AtlBreadcrumbs `55:139` is one) — not an instance on Inventory or a content sample
+   beside the master. Then compare with `tools/figma/snapshot.json`'s entry for the
+   selector. If the component already exists in the target framework, say so before
+   anything else and offer Review mode; Build on an existing component is a delta, and the
+   handoff document's scope section names the delta.
 2. `figma_get_component_for_development` on the set. Read the variant axes,
    `boundVariables` (these are the `--ui-*` tokens, one-to-one), padding/gap/radius, and
    the description — it names the `Atl*Spec` interface when the master is conformant.
@@ -153,7 +158,11 @@ tool's ceiling: a static tree read reaches only the default state — on AtlSele
 five painted states sit behind pseudo-classes — so for any stateful component also run the
 interactive Light/Dark check in the architect skill's `code-verify` reference. Read every
 discrepancy and decide: fix the code, fix the master (an architect Build/Migrate task), or
-record it as intentional in the handoff document. Then:
+record it as intentional. **Record it durably** — in the handoff document (Build), in
+`FIGMA_CONFORMANCE_EXCEPTIONS` with a reason when it is a standing exception, or as an
+open decision item in `tasks/todo.md` naming the component and the value. A commit
+message or a chat reply is not a record. Then, and only when every discrepancy is fixed or
+durably recorded:
 
 ```
 npm run parity:record -- --component <AtlName> [--node <id>]
@@ -205,7 +214,11 @@ human can answer.
   the set, `figma_audit_component_accessibility` (≥ 85 per `plan/figma.md`). The five
   `check:figma` items (`plan/figma-component-checklist.md`) are what `npm run check:figma`
   reports; run it and quote it rather than re-deriving.
-- **R2.** As Build step 7, without the record unless the review is the verification.
+- **R2.** As Build step 7. Re-record (`parity:record`) only when the user asked for it
+  *and* every discrepancy is fixed or durably recorded — Review has no handoff document,
+  so "intentional" here means an allowlist entry with a reason or an open `tasks/todo.md`
+  decision item; a gap that is merely mentioned in an old commit message is open, not
+  recorded. Say "clean" or "clean except <named, recorded gap>", never just "clean".
 - **R3.** Static parity reaches about a fifth of what Figma paints; a review that skips
   the interactive pass says so explicitly.
 - **R4.** The questions no tool answers, phrased for the reviewer: would a designer new
@@ -228,9 +241,11 @@ stops early. No handoff document. Inspect node `55:141` (AtlBreadcrumbs), fill t
 mechanical half, show it, wait. The prompt-from-a-picture path is the one this skill exists
 to prevent.
 
-**"Does AtlCard still match Figma after the token change?"** → Review, verify slice. Node
-from `tools/figma/snapshot.json`, declared `codeSpec`, parity, compare with
-`tools/figma/parity.json`, re-record only if clean and the user asked.
+**"Does AtlCard still match Figma after the token change?"** → Review, verify slice. Pin,
+node from `tools/figma/snapshot.json`, declared `codeSpec`, parity, compare with
+`tools/figma/parity.json`. Re-record only if the user asked and every discrepancy is
+fixed or durably recorded; a known-but-undecided gap gets a `tasks/todo.md` item first,
+and the report says "clean except …".
 
 **"Review the AtlAlert master before I open the PR"** → Review, full. Pin, R1–R4, report
 with the `wcag-color-only` false positive named up front.
@@ -240,9 +255,21 @@ with the `wcag-color-only` false positive named up front.
 - **Master and spec disagree on an axis value.** Do not pick a side silently. The spec is
   the contract; the master is what `check:figma` reads. Report the mismatch and let the
   owner choose — usually the fix is a rename on the Figma side (architect, Migrate).
-- **Spec exists but there is no master** (AtlPagination as of ADR-0106; AtlBreadcrumbs has
-  items but no container set). Build cannot start without a node — the master is an
-  architect Build task first; record that order in the handoff document and stop.
+- **Spec exists but there is no master.** Compare the spec's interfaces with the
+  `components[].selector` list in `tools/figma/snapshot.json` rather than trusting a plan
+  document — the node table in `plan/figma.md` has been stale before (it still lists
+  `55:141` for AtlBreadcrumbs; the master is `55:139`). Build cannot start without a node:
+  the master is an architect Build task first; record that order in the handoff document
+  and stop.
+- **The node in the URL does not exist.** A pasted link can predate a rebuild. Establish
+  that with one read-only call — `figma_execute` running `await figma.loadAllPagesAsync();
+  return figma.getNodeByIdAsync('<id>')` — before saying anything about what the node
+  *is*. If it returns `null`, say "does not exist", name the master the snapshot records
+  for that component name, ask for a fresh link, and never pick a neighbouring id as a
+  guess. A story's `figmaNode('…')` link or a plan table naming the id is a claim about the
+  past, not evidence the node resolves today; the first eval run of this skill stated a
+  dead id was "a content-sample instance beside the master" on exactly that kind of
+  evidence, and it was false.
 - **The brief demands behaviour Storybook cannot show** (timer pause on hover, Escape to
   close). Test it in the spec file; list it under *verified* only when a test pins it.
 - **Bridge down.** Inspect via REST, but do not run parity or record — the parity call

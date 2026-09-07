@@ -61,9 +61,47 @@ Ranked; each carries why it's worth doing next rather than later.
   count, two mismatches. `gen-design-status` reads the registry, so `plan/design-status.md`
   is stale in the one column it says cannot be derived. Why now: it is the exact staleness
   the file's own header warns about, observed rather than hypothetical.
-- [ ] **`plan/figma.md` § Variable Collections still carries the pre-ADR-0030 table** (flagged
-  stale there since 2026-08-26). Refresh against the live file or replace with a pointer
-  to `tools/figma/snapshot.json` + `check-figma.js`'s collection rule.
+- [ ] **AtlCard header tracking: decide which side moves.** `.atl-card-header` sets
+  `letter-spacing: var(--ui-letter-spacing-tight)` (−0.01em) in all three frameworks; the
+  master's title text sits on the shared `ty/title` style at 0 %. Known and left open in
+  c88a543 (2026-09-07 09:20, "Not changed: the master shows letter-spacing 0% against the
+  code's -0.01em"); both eval runs of 2026-09-07 re-found it independently, one calling
+  it uncaught. Manifest: `--ui-type-display` pairs with the tight tracking; the title role
+  does not say. Decide (tighten the master's style, or drop the tracking from the header)
+  and only then treat AtlCard's parity record as clean rather than "clean except the
+  documented gap".
+- [ ] **Is the `Library Tokens` collection stale against `tokens.css`?** Reported by a
+  baseline eval run on 2026-09-07 (unverified by me): the collection was generated
+  2026-07-22 (`gen-figma-library-tokens.mjs` unchanged since 39f92a4) while `tokens.css`
+  gained the teal/status ramps, `border-width-*` and the `type-*` roles since; the
+  generator's header documents which families it skips, so that part is by design, but no
+  gate compares Figma variable *values* to `tokens.css` (`check-figma.js` checks bindings,
+  not values). Verify with `figma_get_variables` against the current sheet; if stale,
+  re-run `npm run figma:sync-tokens` and decide whether a value-sync gate is worth having.
+- [ ] **Story `figmaNode()` design links are unchecked against the live file.** All three
+  `atl-breadcrumbs.stories.*` point at `55-141`, which no longer exists (live
+  `getNodeByIdAsync` → `null`, 2026-09-07; the master is `55:139`). 91 of the 119
+  distinct ids the stories link are outside what `tools/figma/snapshot.json` records
+  (masters + referencedNodes), so an offline gate cannot yet tell dead from unrecorded.
+  Extend `figma-snapshot.mjs` to resolve every story-linked id (exists / type / master
+  it belongs to) and add a `check:story-designs` gate on that; fix the three Breadcrumbs
+  links now.
+- [ ] **Architect Audit mode recommends deletions without its own Migrate protocol.** In
+  the 2026-09-07 eval run of the token-architecture prompt, `figma-workspace-architect`
+  (Audit) classified findings with severities but never opened
+  `references/migration-playbook.md`, called deleting the `Effects Tokens` STRING
+  variables "zero risk" and offered in-place rebinding — both classified Breaking by its
+  own playbook — and never queried `Docs Brand Tokens` before calling `Primitive Tokens`
+  a dead duplicate (the baseline run did, and found it backs that system, consistent with
+  ADR-0018 → ADR-0030). Fix in the skill: Audit's fix column must route any delete/rebind
+  through Migrate's safety classes, and Token Architecture findings must enumerate every
+  collection's consumers before "unused".
+- [ ] **`plan/figma.md` carries two stale tables.** § Variable Collections is pre-ADR-0030
+  (flagged stale there since 2026-08-26), and the § Components node-id table still says
+  `LlmBreadcrumbs 55:141` / `LlmPagination 55:145` where `tools/figma/snapshot.json`
+  (2026-09-07) has `AtlBreadcrumbs 55:139` / `AtlPagination 55:143` — a baseline eval run
+  spent 35 tool calls on the dead `55:141` (2026-09-07). Replace both tables with pointers
+  to the snapshot and `check-figma.js`, or regenerate them from the snapshot.
 
 - [ ] **Component backlog surfaced by the docs review (L1–L4)** — not docs CSS; the
   docs gate allowlists each with a reason pointing here. Why now: L1 is a critical axe
