@@ -31,6 +31,55 @@ Claude Design was the outlier. Had we run the alignment in the direction first
 proposed — redesign to Figma — we would have imported `Inter` over `Instrument
 Sans` and turned Figma *back*.
 
+**Corrected 2026-09-07 (same day, after the user pointed at the timeline).** The
+paragraph above audits the wrong project and gets the direction backwards.
+
+There are **two** Atelier projects in Claude Design. I read
+`019de217-489c-7441-8275-2efe020086b5` *"Atelier Design System"* and generalised
+from it. The redesign lives in `7a6a2f19-9a3c-4dd9-9828-65c7cc67766c`
+*"Atelier"* — 29 `Atl*.dc.html` component sheets plus `Foundations.dc.html`,
+`Index.dc.html` and `_sheet.css`, written 2026-08-26 09:31 → 2026-08-28 12:10
+UTC. Ten days old, not four months. `Index.dc.html` describes them as canonical:
+"Zustände, Anatomie-Maße und Findings, im Browser gemessen."
+
+Three specific claims above are wrong as a result:
+
+- **"Claude Design was the outlier."** It was the *origin*. ADR-0035's own
+  `sources` field names "Claude Design project *Atelier* —
+  `Typography Directions.dc.html`, turns 1 and 2" as where Instrument Sans was
+  chosen. The CD batch at 09:24 UTC (11:24 CEST) precedes this repo's
+  `69c76f5 feat(tokens): Instrument Sans … (ADR-0035)` at 12:16 local by roughly
+  fifty minutes. The decision flowed CD → repo, and the repo received it.
+- **"Refreshing the token file was the alignment."** The redesign project does
+  not read that file. It reads `_sheet.css`, whose `:root` block is **generated**
+  from `tokens.css` by `tools/scripts/gen-artboard-palette.mjs` under a different
+  namespace (`--text`, `--primary`, `--bw`, `--r-lg`, `--serif`) precisely
+  because an artboard renders standalone. Verified 2026-09-07: that block is
+  identical to the repo's committed `tools/design/artboard-palette.css`, and
+  `check:artboard-palette` is exit 0 at 48 values. **The foundation between the
+  repo and the actual redesign was already in sync, and already gated.**
+- **The Inter/Fira Code sheet was never the redesign's foundation.** It is the
+  *Design System* project's May-01 sheet, which that project's own
+  `preview/*.html` cards link. Those cards were rebuilt 2026-08-26 09:24 from the
+  stale sheet — the same morning the repo moved to Instrument Sans. Two passes,
+  one day, no contact.
+
+What stands from this ADR: the four-way `--ui-*` collision in `019de217` was
+real and the `--ds-*` split is the right fix for it; `SKILL.md`'s `Llm` prefix
+was real and damaging; the per-seat write access is proven. What does not stand
+is the framing that the repo was ahead and Claude Design behind.
+
+Measured the same day, for the record — three-way inventory, 42 components in
+the union: all three surfaces agree on 24. Genuine gaps are `AtlBreadcrumbs`
+(Figma has `AtlBreadcrumbItem` but no container set) and `AtlPagination` (absent
+from Figma) on the Figma side, and `AtlAvatarGroup` on the Claude Design side.
+`AtlIcon` is a judgement call, not a gap: Figma carries 25 individual icon
+components rather than one variant set. Eleven further Figma/repo entries with
+no CD sheet are compositional sub-parts the sheets compose inline, which is not
+drift. `AtlCodeBlock` and `AtlToast` exist in Figma, in CD and in `libs/`, but
+are absent from the keyed spec map the drift gates iterate — a gate-coverage
+question, not a design one.
+
 Refreshing the token file was approved and done (see Decision). What the refresh
 exposed is the actual finding, and it is not a stale-copy problem:
 
