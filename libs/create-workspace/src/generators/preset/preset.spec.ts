@@ -154,7 +154,7 @@ describe('preset generator', () => {
     expect(settings.mcpServers['figma-console'].command).toBe('npx');
     expect(settings.mcpServers['figma-console'].args).toEqual([
       '-y',
-      'figma-console-mcp@latest',
+      'figma-console-mcp@1.40.0',
     ]);
     expect(settings.mcpServers['figma-console'].env.FIGMA_ACCESS_TOKEN).toBe(
       '${FIGMA_ACCESS_TOKEN:-}',

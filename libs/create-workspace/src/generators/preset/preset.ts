@@ -280,7 +280,7 @@ file exports). The Desktop Bridge covers creation and inspection without a token
     // optional — only needed for REST-backed reads. See ${SITE_URL}/figma-token.
     mcpServers['figma-console'] = {
       command: 'npx',
-      args: ['-y', 'figma-console-mcp@latest'],
+      args: ['-y', 'figma-console-mcp@1.40.0'],
       env: {
         FIGMA_ACCESS_TOKEN: '${FIGMA_ACCESS_TOKEN:-}',
         ENABLE_MCP_APPS: 'true',
