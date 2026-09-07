@@ -593,6 +593,37 @@ unblocks when X" rather than deleted.
     prerequisites 2–3 — without weakening it: the demo is trainer-machine-only and
     says so in its first sentence.)_
 
+- [ ] **Work through the Figma parity sweep** — 16 of 43 masters measured
+  2026-09-07, findings and suggested order in
+  `tasks/figma-parity-sweep-2026-09-07.md`. Already fixed: AtlCard
+  `padding=none` (was padding like `md`), the AtlButton label wrap, the
+  block-padding policy (ADR-0107), the card header's leading. Highest-value
+  remaining, in order:
+  - [ ] **AtlDrawer's size variants are placeholders** — inner panel fixed at
+    220×320 across `right/sm|md|lg|full` while only the outer frame resizes;
+    `sm` clips its own button, `lg` leaves a gap; `left`/`top`/`bottom` exist
+    only at `md`. The one finding that makes a master actively misleading.
+  - [ ] **AtlDialog was authored at 1rem = 10px** — every width is the code's px
+    ÷ 1.6, exactly, across sm/md/lg/xl. One systematic correction.
+  - [ ] Code fixes: the two `control`-role weight overrides on
+    `.page-btn.is-active` and `.step-item.is-active .step-label` (against
+    tokens.css's own role table), `.step-description`'s hardcoded `2px` margin,
+    `.breadcrumb-current`'s missing padding.
+  - [ ] AtlCheckbox and AtlRadio to match AtlToggle, which is already correct in
+    the same file (box size, `input-bg` vs `surface`, `border-strong` vs
+    `border`, 1.5px vs 2px, and a real focus variant).
+  - [ ] AtlPagination's `showFirstLast` is declared but unwired — no first/last
+    layers, `componentPropertyReferences` empty on all nine children.
+  - [ ] The decisions, in one pass: the 8-vs-12 label gap across four selection
+    controls, the `color-mix` borders (not expressible as a Figma Variable —
+    same class as ADR-0107's derived padding), AtlCard's asymmetric padding
+    scale, the breadcrumb separator glyph (code ships `/`, Figma draws `›`, and
+    the CSS `'›'` fallback is unreachable), AtlAlert's `dismissible` default,
+    and AtlRadioGroup's master, which does not model a radio group at all.
+  - [ ] 21 masters still unswept, including AtlIcon (25 Figma components vs the
+    sheet's "strict 20-name catalogue") and AtlAvatarGroup (no Claude Design
+    sheet).
+
 - [ ] **The social cards render in Noto Sans, and the docs build phones home for
   it** (found 2026-09-07 while fixing the `--docs-font` fallback; needs a brand
   decision, so not executed). Measured, not inferred:
