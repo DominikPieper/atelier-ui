@@ -462,3 +462,20 @@ Patterns and gotchas captured during implementation. When a mistake repeats, add
 - **Two wrong hypotheses before the right one, and both were plausible.** First I blamed alias variables, because `color/input-bg` is an alias of `color/surface-sunken` — but the same alias rendered correctly on `AtlToggle`'s track. Then I blamed node type (FRAME vs ELLIPSE) — but Toggle's track is a FRAME too. The pattern never resolved into a rule I could state, which is the signal I should have taken sooner: **when two hypotheses both fail against a counter-example, stop theorising and make the failure mode impossible instead.**
 - **The fix is to make the literal and the binding agree.** Resolve the variable's own value first (`Object.values(v.valuesByMode)[0]`) and pass *that* as the paint's literal, then bind. Then it renders correctly whether or not the binding resolves, and the read-back means something. One line of extra work removes a whole class of silent, invisible-until-screenshotted defect.
 - **Only the screenshot caught it.** Every programmatic check I ran — bound-variable ids, stroke weights, resolved hex — came back correct or plausibly correct. The boxes were black in a picture. For a change whose entire purpose is visual, the screenshot is not the last step of verification; it is the only one that tests the thing being changed.
+
+## Counts from a digest are claims until the primary file confirms them (2026-09-07)
+
+Writing the design-skills blueprint I carried numbers and characterisations straight from
+subagent digests into the proposal — "six modes", "three skills hardcode tool names",
+"the whole version-history family unused", "ADR-0106 resolves the per-seat blocker", "31
+vs 30 files". The Codex cross-check, handed the files without my framing, found every one
+of them wrong or overstated within minutes, by reading the same files I had open. The
+digests were not lying; they answered the question I asked, and I then generalised past
+what they had measured (a grep over specific directories became "never referenced
+anywhere"; an owner-seat write became "per-seat access proven").
+
+Rule: before a number or an "already/never/only" enters a plan or ADR, run the one grep or
+open the one file that would falsify it, and cite that file, not the digest. When a claim
+changes a recommendation (here: the skill boundary), the cross-check is not optional — and
+the check found the boundary itself was built on a misread of what the existing skill
+covers, which no amount of my own re-reading had caught.

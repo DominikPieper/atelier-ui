@@ -1,0 +1,29 @@
+{
+  "skill_name": "design-to-code",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I've written the handoff doc for the TagChip brief (workshop/briefs/tagchip.md) — it's in tasks/handoff-tagchip.md. Implement it in React. Draft is a duplicate of the Atelier file, the component set is at node 612:88 in my draft.",
+      "expected_output": "Reads the handoff document before touching Figma; resolves the node via figma_search_components / figma_get_component_for_development; notes TagChip is a composition (tag-input slots + badge) via uianatomy; adds a spec block, runs the React generator, calls storybook-react docs-list/docs-show for AtlBadge, writes component + CSS + Testing Library spec + story with tags: ['autodocs']; runs nx test and nx lint and reports exit codes; runs figma_check_design_parity with all four codeSpec sections and parity:record; final report separates verified from assumed.",
+      "files": ["tasks/handoff-tagchip.md"]
+    },
+    {
+      "id": 2,
+      "prompt": "build this in vue pls https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI?node-id=55-141",
+      "expected_output": "Does NOT start generating code. Inspects node 55:141 (AtlBreadcrumbs), drafts the handoff document (node id, variants/states in scope, exclusions, token bindings, reuse-vs-new, behaviour incl. long-trail handling, target files, acceptance checks) and stops to show it for confirmation.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "After the Instrument Sans token change I'm not sure AtlCard still matches the Figma master. Can you check and update the parity record if it's fine?",
+      "expected_output": "Verify-only path: takes the node id from tools/figma/snapshot.json, builds a full codeSpec (visual, spacing, typography, accessibility), runs figma_check_design_parity, explains each discrepancy, compares with tools/figma/parity.json, runs npm run parity:record only if clean, and does not touch the other two frameworks.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "Our Figma file's token collections are a mess — semantic tokens bound straight to primitives in half the components. Can you go through and fix the architecture?",
+      "expected_output": "Out of scope for design-to-code: routes to figma-workspace-architect (Audit/Migrate) without running the design-to-code checklist.",
+      "files": []
+    }
+  ]
+}

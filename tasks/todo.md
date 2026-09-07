@@ -15,6 +15,43 @@ underneath it._
 
 Ranked; each carries why it's worth doing next rather than later.
 
+- [ ] **Design-workflow skills — build the decided catalog** (decided 2026-09-07).
+  Research and proposal in `plan/design-skills-blueprint.md` (§ 8 carries the six
+  decisions); verbatim digests in `plan/research/design-skills-2026-09-07/`, draft of
+  `design-to-code` under its `drafts/`. Decided shape: **two new skills**
+  (`design-to-code` with a review/verify mode, `artboard-bridge` for Claude Design)
+  **plus architect additions**. Order as decided:
+  - [ ] `skills/figma-workspace-architect/references/plugin-api-gotchas.md` from the Figma
+    section of `tasks/lessons.md`; SKILL.md references list updated; `sync:generated`
+    re-run so the discovery digest matches.
+  - [ ] Fix `tools/scripts/test-skill.mjs`: derive valid modes from the skill's own
+    `### <Mode> mode` headings instead of the hardcoded set that already omits Sync.
+  - [ ] Pin `figma-console-mcp` to 1.40.0 in `.mcp.json` — ADR-0110.
+  - [ ] Record the Code Connect exclusion (toolchain choice) — ADR-0111.
+  - [ ] ADR-0096 dated correction: `design-to-code` may prefill provenance and scope of the
+    handoff document; behaviour, exclusions and reuse decision stay with the author.
+  - [ ] `design-to-code` into `skills/`: `project.json`, `nx.json` release-group entry,
+    `UNDISTRIBUTED_SKILLS`, fixtures under `tests/` converted from `evals/evals.json`;
+    skill-creator with-skill/baseline runs against a scratch Figma draft; description
+    optimisation after the trigger set is reviewed.
+  - [ ] Architect: repo-bound Build recipe (spec block → master bound to `Library Tokens`
+    → description → annotations → ready-for-dev → Inventory tile → snapshot →
+    `check:figma`); tool map + the 30 unreferenced tools; Slots/doc frames in
+    `naming-and-file-structure.md`; southleft rubrics; server-qualified tool names.
+  - [ ] `artboard-bridge` (intake + publish; publish as trainer-machine capability, the
+    Blocked per-seat item below stays open). Must pass `design_system_id` explicitly —
+    Atelier's system is not the account default.
+- [ ] **`tools/design/artboards.json` has drifted from the live Claude Design project**
+  (verified 2026-09-07 via `list_files`): the registry lists 31 artboards including
+  `Typography Directions.dc.html`, which no longer exists in the project; the project has
+  31 `.dc.html` files including `Index.dc.html`, which the registry does not list. Same
+  count, two mismatches. `gen-design-status` reads the registry, so `plan/design-status.md`
+  is stale in the one column it says cannot be derived. Why now: it is the exact staleness
+  the file's own header warns about, observed rather than hypothetical.
+- [ ] **`plan/figma.md` § Variable Collections still carries the pre-ADR-0030 table** (flagged
+  stale there since 2026-08-26). Refresh against the live file or replace with a pointer
+  to `tools/figma/snapshot.json` + `check-figma.js`'s collection rule.
+
 - [ ] **Component backlog surfaced by the docs review (L1–L4)** — not docs CSS; the
   docs gate allowlists each with a reason pointing here. Why now: L1 is a critical axe
   violation and the rest are already root-caused.

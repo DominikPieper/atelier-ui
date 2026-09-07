@@ -1,0 +1,22 @@
+[
+  {"query": "implement AtlToast from the figma master for angular, brief is workshop/briefs/toast.md, i duplicated the file into my drafts so node ids differ", "should_trigger": true},
+  {"query": "build this in vue pls https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI?node-id=55-141", "should_trigger": true},
+  {"query": "here's my handoff doc for the StatCard (tasks/handoff-statcard.md) — go ahead and make the React component, story and test", "should_trigger": true},
+  {"query": "After the Instrument Sans token change I'm not sure AtlCard still matches the Figma master. Can you check and update the parity record if it's fine?", "should_trigger": true},
+  {"query": "the designer moved the padding on the badge master yesterday, make the code match again (angular only)", "should_trigger": true},
+  {"query": "run the first-component kata with me: avatar brief, vue, 15 minutes", "should_trigger": true},
+  {"query": "We have a new Figma component 'AtlPagination' on the Components page but nothing in libs/spec yet. Get it into the library — React.", "should_trigger": true},
+  {"query": "Port the dialog design from Figma to code. I only care about size=md and the default/open states for now.", "should_trigger": true},
+  {"query": "can you generate the component from this screenshot of the figma frame? (attached png)", "should_trigger": true},
+  {"query": "figma_check_design_parity came back with 6 discrepancies on AtlStepper, walk me through what to do with them", "should_trigger": true},
+  {"query": "Our Figma file's token collections are a mess — semantic tokens bound straight to primitives in half the components. Can you go through and fix the architecture?", "should_trigger": false},
+  {"query": "add a 'ghost' variant to AtlButton in the spec and all three frameworks, then update the Figma master to match", "should_trigger": false},
+  {"query": "the AtlTable story doesn't show the Docs tab in storybook, only Canvas — what's wrong?", "should_trigger": false},
+  {"query": "generate an inventory page in figma for all published component sets", "should_trigger": false},
+  {"query": "rename the variable color/primary to color/brand across the figma file and the tokens.css", "should_trigger": false},
+  {"query": "review the AtlAlert master before I open the PR — variant matrix, token binding, a11y, the usual checklist", "should_trigger": false},
+  {"query": "take the Claude Design artboard for AtlDrawer and write the handoff doc from its findings", "should_trigger": false},
+  {"query": "make a landing page hero section in react that looks like our docs site, no figma for this one", "should_trigger": false},
+  {"query": "what changed in the figma file between version 'v0.3 freeze' and now? need release notes", "should_trigger": false},
+  {"query": "the avatar initials render 9px in figma but --ui-font-size-2xs is 10px — fix the master", "should_trigger": false}
+]
