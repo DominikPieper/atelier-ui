@@ -102,3 +102,16 @@ counterpart to step 0.
   agent, outbound to a viewer — with the second honestly marked as not yet
   deliverable. When the per-seat question in ADR-0032 resolves, step 5 slots in
   beside this one rather than replacing it.
+
+**Corrected 2026-09-07.** The Decision above rejects "deriving it from Figma
+automatically" because an extractor would produce a confident document missing what the
+canvas misses. That reasoning holds for the behaviour half and is kept. It was applied too
+broadly to the other half: the draft URL, node id, variant axes, token bindings and
+snapshot stamps are mechanical lookups the master *does* carry, and a participant typing
+them by hand gains nothing but transcription errors. Decided in
+`plan/design-skills-blueprint.md` § 8 (decision 6): the `design-to-code` skill may
+prefill **provenance and scope** from the master; **behaviour, explicit exclusions and
+the reuse-vs-new decision stay author-written blanks** the skill must not fill and must
+not proceed without. The deliverable is unchanged — a checklist, not a schema, reviewed
+by a trainer before code — and "no gate can read a participant's prose" still stands.
+The skill is pending; until it lands, this paragraph records the intent.

@@ -461,6 +461,25 @@ The list below is kept as written before the decisions.
    architect's SKILL.md carries alone — record it in an ADR so it outlives the skill text.
 6. **ADR-0096 narrowing.** If `design-to-code` may fill the mechanical half of the handoff
    document, ADR-0096's "not derived automatically" needs a dated correction paragraph.
+7. **Package the skills into `create-workspace`?** (asked by the owner 2026-09-07, open.)
+   The scaffold preset writes `.mcp.json` (nx, Storybook per framework, figma-console) and
+   `CLAUDE.md`, but ships no `.claude/skills/` and no skill files. Facts that bound the
+   answer: the generic skills (`figma-workspace-architect`, its new
+   `plugin-api-gotchas.md`) already publish at
+   `atelier.pieper.io/.well-known/agent-skills/<name>/SKILL.md` with a digest, so the
+   scaffold can fetch or vendor them without a second source; the repo-bound skill
+   (`design-to-code`) leans on `libs/spec`, `parity:record`, `check:figma` and
+   `tools/figma/snapshot.json`, none of which exist in a scaffolded workspace — its own
+   draft already says "in a scaffolded workspace, stop at the parity report". Options:
+   (a) vendor the generic skills at generate time and add a **scaffold profile** to
+   `design-to-code` (same checklist, gate steps replaced by "run the parity check and
+   read it"; `references/` name which steps are monorepo-only) — one skill, two
+   environments, same pattern as ADR-0084's "one canonical per audience"; (b) generic
+   skills only, `design-to-code` stays monorepo-only and the scaffold's `CLAUDE.md`
+   keeps the prose loop; (c) nothing until a cohort asks. Recommendation: (a), but
+   after `design-to-code` has passed its eval runs in the monorepo — packaging an
+   untested skill into every participant workspace multiplies the untested part.
+   Either way the scaffold's `.mcp.json` gets the same version pin as ADR-0110.
 
 ## 9. Verified vs assumed
 

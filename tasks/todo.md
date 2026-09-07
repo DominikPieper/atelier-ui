@@ -41,6 +41,11 @@ Ranked; each carries why it's worth doing next rather than later.
   - [ ] `artboard-bridge` (intake + publish; publish as trainer-machine capability, the
     Blocked per-seat item below stays open). Must pass `design_system_id` explicitly —
     Atelier's system is not the account default.
+  - [ ] **Decide: package the skills into `create-workspace`** (owner's question,
+    2026-09-07; blueprint § 8 decision 7). Preset ships `.mcp.json` + `CLAUDE.md`, no
+    skills. Recommended: vendor the generic skills at generate time and give
+    `design-to-code` a scaffold profile — but only after its eval runs pass in the
+    monorepo. The preset's own `figma-console-mcp@latest` gets the ADR-0110 pin now.
 - [ ] **`tools/design/artboards.json` has drifted from the live Claude Design project**
   (verified 2026-09-07 via `list_files`): the registry lists 31 artboards including
   `Typography Directions.dc.html`, which no longer exists in the project; the project has
