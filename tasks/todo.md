@@ -44,10 +44,16 @@ Ranked; each carries why it's worth doing next rather than later.
     eval once a scratch Figma draft with a code-less master exists.
   - [ ] Description optimisation (`run_loop.py`) after the owner reviews
     `skills/design-to-code/evals/trigger-eval.json`.
-  - [ ] Architect: repo-bound Build recipe (spec block → master bound to `Library Tokens`
-    → description → annotations → ready-for-dev → Inventory tile → snapshot →
-    `check:figma`); tool map + the 30 unreferenced tools; Slots/doc frames in
-    `naming-and-file-structure.md`; southleft rubrics; server-qualified tool names.
+  - [x] Architect additions (2026-09-07): `references/build-from-code-contract.md` (generic
+    recipe, Atelier worked example — kept generic so the distributed skill stays
+    repo-free); tool map 71 → 100 tool names with Bridge/REST marks and five new sections
+    (token I/O, slots, history/changelog/blame, `ds_*` pipeline, session/multi-file);
+    page taxonomy gains Playground/Deprecated/spacer pages, cover contents, doc frames,
+    split-on-symptom; component-design gains the state → CSS mapping table and the native
+    Slot property; token-architecture gains `codeSyntax.WEB`; audit-checklist gains the
+    two Category-1 rules (enumerate consumers before "unused"; delete/rebind is Migrate)
+    and the report-tool / a11y-weights note; SKILL.md Audit text carries the same rules.
+    Not ported: the southleft lint rule catalog (digest 06 has only its counts).
   - [ ] `artboard-bridge` (intake + publish; publish as trainer-machine capability, the
     Blocked per-seat item below stays open). Must pass `design_system_id` explicitly —
     Atelier's system is not the account default.

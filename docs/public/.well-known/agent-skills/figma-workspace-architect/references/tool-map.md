@@ -1,5 +1,9 @@
 # figma-console-mcp tool map
 
+Tool names in this map are the `figma-console` MCP server's own names. In a client with
+more than one Figma-related MCP server connected, qualify each call as `figma-console:<tool>`
+(e.g. `figma-console:figma_get_variables`) so the right server handles it.
+
 A purpose-organized view of the figma-console-mcp tool surface, with the rule of thumb for when to reach for each one. Source: [southleft/figma-console-mcp](https://github.com/southleft/figma-console-mcp).
 
 > **Mode awareness.** Write tools (anything that creates or mutates Figma content) only work in **Local Mode** (NPX or Local Git installation) with the **Desktop Bridge plugin** running in Figma Desktop. Remote SSE is read-only and exposes ~21 tools. If a write tool returns "not available" or similar, the user is on Remote SSE and must switch to Local Mode for build operations. Audits work in either mode.
@@ -24,6 +28,9 @@ Use these for **discovery** (before any build) and as **inputs to audits**.
 | `figma_get_component_details` | Full metadata by `componentKey` — variant property definitions, descriptions, instance counts. The right read when you have a key from `figma_search_components` but no node ID. |
 | `figma_get_component_image`   | Just the image. Cheap. Useful for spot-checks during a build.                              |
 | `figma_get_library_components` | Browse another file's published library. Cross-file discovery — the Tokens-library + Component-library pattern needs this. |
+| `figma_get_library_component_by_key` | Resolve a library component's props, variants, and visual spec from just its `componentKey` — no source file URL needed. Auto-downgrades to a summary and strips specs over 500KB. (REST) |
+| `figma_get_library_variables` | Inventory Variables published by a subscribed team library, scoped by `libraryName` / `collectionName`. (Bridge) |
+| `figma_import_library_variable` | Import one library Variable into the current file by `variableKey`. Idempotent — safe to call again on the same key. (Bridge) |
 | `figma_search_components`     | Find components by name in current file or a linked library. Discovery before re-creating: search-then-instantiate beats build-from-scratch when the component already exists. |
 | `figma_take_screenshot`       | Full canvas screenshot. Standard post-write check — but note it goes through the REST API and **may be cache-stale immediately after a write**. Prefer `figma_capture_screenshot` (Validate section) for the first screenshot after a write. |
 | `figma_navigate`              | Move the canvas to a node / page. Use to disambiguate "this component" without asking the user. |
@@ -31,6 +38,15 @@ Use these for **discovery** (before any build) and as **inputs to audits**.
 | `figma_list_open_files`       | Multi-file workspaces — which Figma files are open in Desktop. Needed before `figma_navigate` across files. |
 
 **Discovery pattern.** Before a build, this is the typical order: `figma_get_status` → `figma_get_file_data` (or `figma_get_design_system_kit` for a one-call full snapshot) → (if Variables matter) `figma_get_variables` → (if components matter) `figma_search_components` then `figma_get_component` on the relevant ones.
+
+### Session & multi-file
+
+| Tool                          | Use when…                                                                                  |
+|--------------------------------|------------------------------------------------------------------------------------------------|
+| `figma_diagnose`               | Plain-language health check when the Bridge misbehaves — also disambiguates this server from other Figma-related MCP servers the user may have installed (e.g. the official `figma-mcp`). |
+| `figma_execute_across_files`   | Run the same Plugin API JS across every connected file in parallel. Local Mode only — the multi-file counterpart to `figma_execute`. (Bridge) |
+
+`figma_navigate` (above) also accepts `lock: true`, which pins the active file target so a Bridge reconnect or the human clicking elsewhere in Figma can't silently redirect subsequent calls.
 
 ## Create & manage Variables / Tokens — Local Mode only
 
@@ -51,6 +67,18 @@ Variable management is the most common write workflow. Always check existing Col
 | `figma_rename_mode`                   | Renames preserve all variable values in that mode.                       |
 
 **Important — Variable Scopes.** None of these tools expose Scopes directly through their named API. Scopes (`FRAME_FILL`, `TEXT_FILL`, `GAP`, `STROKE_COLOR`, `WIDTH_HEIGHT`, etc.) are set via `figma_execute` running Plugin API code on the variable after creation. Default `ALL_SCOPES` makes Variables show up in every property picker, which destroys the user experience. See `token-architecture.md` for the scope-by-purpose table.
+
+## Token import / export
+
+Round-trips Variables with external token tooling — the equivalent of Style Dictionary / Tokens Studio without leaving the MCP surface.
+
+| Tool                        | Use when…                                                                          |
+|-------------------------------|----------------------------------------------------------------------------------------|
+| `figma_export_tokens`       | Write Variables out to DTCG, CSS, Tailwind, SCSS, TS, or JSON files (10 formats total), with a merge-or-replace strategy. (Bridge) |
+| `figma_import_tokens`       | Diff-and-apply token files back into Variables, alias-aware. **Only DTCG is fully round-trip safe** — Tokens Studio JSON, raw CSS vars, Tailwind v4, SCSS, and Style Dictionary v3 as inputs are scaffolded but return `NotImplementedError`; convert to DTCG first. A `replace` strategy can delete existing variables. (Bridge) |
+| `figma_get_token_values`    | Resolved token values after a `figma_get_design_system_summary` call — cheaper than re-reading the full Variables set for a values-only need. |
+| `figma_browse_tokens`       | Interactive token browser for a human to explore Variables across modes. MCP App — needs `ENABLE_MCP_APPS=true` and client support for the MCP Apps protocol. |
+| `token_browser_refresh`     | Refresh the Token Browser app's data after the underlying Variables changed. MCP App — same `ENABLE_MCP_APPS` requirement as `figma_browse_tokens`. |
 
 ## Targeted node writes — Local Mode only
 
@@ -78,6 +106,7 @@ Components and frames are created via the general-purpose `figma_execute`. There
 | Tool                          | Use when…                                                                          |
 |-------------------------------|------------------------------------------------------------------------------------|
 | `figma_execute`               | The power tool. Any Plugin API JS — create frames, components, set Auto Layout, bind variables, set Variant Properties. Most compound component work goes through this. |
+| `figma_create_component_set`  | Build a variant Component Set from a base component + property definitions, or from a set of existing components, in one call — the programmatic alternative to hand-arranging frames. Hard-capped at 100 variants (timeout auto-scales ~1.2s/variant, 30s floor/2min cap); split any matrix above ~40 variants into multiple calls. (Bridge) |
 | `figma_arrange_component_set` | Take a flat group of variant frames and arrange them into a proper Component Set with the native purple dashed border, row labels, and column headers. **Always use this instead of trying to draw the container manually in `figma_execute`.** Triggers on phrases like "arrange these variants" or "organize as component set". |
 | `figma_set_description`       | Set markdown-formatted descriptions on Components, Component Sets, and Styles. Surfaces in the asset panel tooltip and in Dev Mode. **Set this for every component you create** — undocumented components are invisible. |
 | `figma_instantiate_component` | Place an instance from a local or library component via `componentKey`. Pair with `figma_search_components` for the discovery → place flow. |
@@ -121,6 +150,18 @@ The frame.resize() at the end is non-optional — even with ABSOLUTE children, t
 
 This is the most common single source of corrupted bounds when running a CD9 batch fix across a library.
 
+## Slots (2025 feature, Desktop Bridge)
+
+Slots are open-ended content regions — the Figma-native answer to a `<slot>` / `children` prop. Reach for a Slot instead of a Variant matrix when the region's content is genuinely open-ended (a card's body, a dialog's footer actions, a menu's item list) rather than a fixed set of states — and note that Component Properties cannot be applied to layers *inside* a slot.
+
+| Tool                        | Use when…                                                                          |
+|-------------------------------|----------------------------------------------------------------------------------------|
+| `figma_create_slot`         | Define a new SlotNode on a component/component set, with its linked SLOT property. (Bridge) |
+| `figma_get_slots`           | List the SlotNodes on a component, component set, or instance — read this before appending to or resetting one. (Bridge) |
+| `figma_append_to_slot`      | Clone or create content into an instance's slot — building a populated review/demo instance. (Bridge) |
+| `figma_reset_slot`          | Reset an instance's slot back to its default/empty state. (Bridge) |
+| `figma_add_slot_property`   | Manually bind an existing frame as a SLOT property — the alternative to `figma_create_slot` when the frame already exists. (Bridge) |
+
 ## Validate — both modes
 
 | Tool                          | Use when…                                                                          |
@@ -128,6 +169,7 @@ This is the most common single source of corrupted bounds when running a CD9 bat
 | `figma_capture_screenshot`    | **Plugin-side `exportAsync`** — captures live runtime state. **Prefer this immediately after a write**, because `figma_take_screenshot` (REST) can be cache-stale for several seconds. |
 | `figma_take_screenshot`       | REST-API screenshot. Standard validation step at the end of a sequence, when REST cache has caught up. Look for: cropped text, overlapping elements, placeholder text ("Heading", "Button" still visible), wrong color due to a bad variable alias. |
 | `figma_audit_design_system`   | Whole-file scorecard across six categories (Naming / Tokens / Components / A11y / Consistency / Coverage). Backs the Design System Dashboard MCP App. |
+| `figma_audit_design_system_report` | JSON twin of the MCP-Apps Design System Dashboard — same six-category scorecard as scored, chunked JSON with per-finding fixability, cached ~5 min. Needs no `ENABLE_MCP_APPS`. |
 | `figma_audit_component_accessibility` | Per-component accessibility scorecard with color-blind simulation. Use when the dashboard surfaces a component as A11y-bad and a deeper read is needed. |
 | `figma_lint_design`           | Rule-based linter — 14 WCAG + design-system-hygiene + layout rules, AA-tagged. Complementary to the two audit tools above; a finer-grained pass catches things the scorecards roll up. |
 | `figma_analyze_component_set` | Variant state-machine + cross-variant diffs + CSS pseudo-class mapping. The right tool for CD7 (interactive-state coverage) audits — surfaces which states exist, which are missing, and where the variant diff is purely cosmetic vs. semantic. |
@@ -159,6 +201,21 @@ Annotations are first-class **Dev-Mode handoff markers** — anchored to a node,
 
 **Where annotations belong vs. descriptions.** Component description (`figma_set_description`) explains *what the component is and when to use it*. Annotation explains *the spot-specific implementation note an engineer needs while building*: "focus ring delivered as drop-shadow, not stroke", "this transition uses cubic-bezier(0.4,0,0.2,1)", "tap target extends 8px past the visible edge". One is the big picture; the other is the surgical detail.
 
+## History, changelog, blame, comments
+
+| Tool                              | Use when…                                                                              |
+|--------------------------------------|--------------------------------------------------------------------------------------------|
+| `figma_get_file_versions`          | List labeled version history, paginated (cap 200, default 50, autosaves excluded by default). (REST) |
+| `figma_get_file_at_version`        | Read a file/node snapshot as it existed at a past version. (REST) |
+| `figma_diff_versions`              | Page-level diff always; pass `component_ids` for a deeper node diff. Description/annotation deltas are only captured if the Bridge plugin was connected during the edit. (REST, Bridge improves coverage) |
+| `figma_get_changes_since_version`  | Convenience wrapper around `figma_diff_versions` — since a given version, to current. (REST) |
+| `figma_generate_changelog`         | Wraps `figma_diff_versions` into human-readable release notes (markdown + data). (REST) |
+| `figma_blame_node`                 | Binary-search who/when introduced a change to a node or its property, walking up to 500 versions. (REST) |
+
+Comment tools (`figma_get_comments`, `figma_post_comment`, `figma_delete_comment`) live in the Annotations & Comments section above.
+
+**Coverage gap, inherited by all four version/diff tools above:** REST snapshots never carry description or annotation changes made while the Bridge plugin was disconnected during the edit, and never track variable *value* changes, canvas instances, unbound raw layout/visual props, or style content — see each tool's `scope_coverage` / `notes[]` output.
+
 ## Console & debugging — out of scope for this skill
 
 `figma_get_console_logs`, `figma_watch_console`, `figma_clear_console`, `figma_reload_plugin`, `figma_reconnect` exist for debugging Figma plugins. Not relevant to workspace architecture. Mention them only if the user is actually plugin-debugging.
@@ -166,6 +223,22 @@ Annotations are first-class **Dev-Mode handoff markers** — anchored to a node,
 ## FigJam & Slides — out of scope for this skill
 
 The MCP also exposes ~10 `figjam_*` tools for FigJam boards and ~15 `figma_*_slide` / `figma_list_slides` tools for Figma Slides decks. This skill targets **Figma Design files only** — workspaces, libraries, design systems. If the user asks about FigJam-board architecture or Slides decks, say so and decline rather than improvising.
+
+## Design-system extraction pipeline (`ds_*`, Local Mode only, code → Figma direction)
+
+The reverse of this skill's usual Figma → spec → code flow: reverse-engineers an existing codebase into Figma-importable tokens plus a Storybook workshop. Local Mode only — reads and writes the local filesystem, not the live Figma document. Pipeline order:
+
+| Tool                          | Use when…                                                                          |
+|---------------------------------|------------------------------------------------------------------------------------------|
+| `figma_ds_analyze`            | Scan one or more app codebases: framework, styling approach, component inventory, and a porting-priority rank. Run first. |
+| `figma_ds_extract_tokens`     | Mine design tokens from the analyzed code into DTCG + CSS/Tailwind/SCSS/TS files. |
+| `figma_ds_extract_component`  | Deep single-component extraction — source, props, and a story scaffold. |
+| `figma_ds_scaffold`           | Generate the design-system package skeleton. |
+| `figma_ds_setup_storybook`    | Wire a freshly-initialized Storybook to the extracted tokens and fonts. |
+| `figma_ds_status`             | Read or update porting progress, persisted to disk. |
+| `figma_ds_verify`             | Fidelity-eval gate to run before handoff or before pushing tokens back into Figma. Run last. |
+
+`ds_dashboard_refresh` refreshes the Design System Dashboard MCP App's data after a pipeline run changes the file. MCP App — needs `ENABLE_MCP_APPS=true`, same as the other MCP Apps in this map.
 
 ## MCP Apps — interactive UI
 

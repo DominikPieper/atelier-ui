@@ -100,9 +100,28 @@ Variant property names and values are a contract with engineering. Make them mat
 | `<Input state="error" />`          | `State: error`                      |
 
 Rules of thumb:
-- Property names are **PascalCase or Title Case** in Figma (Figma's own UI uses Title Case).
+- Property names are **PascalCase or Title Case** in Figma (Figma's own UI uses Title Case) — unless the paired codebase's gate compares names as strings, in which case they match the code exactly (`variant`, `size`).
 - Property values match the code value casing exactly (`sm`, not `Sm` or `Small`) — this is what gets read out by code-generation tools.
 - Boolean properties end in a positive (`HasIcon`, `Disabled`, `Loading`) — never negative (`NoIcon`).
+
+### Interaction states map to CSS, not to props
+
+A `State` axis is where variant sets explode (CD1) and where the picture stops matching the code. Hover, focus, active and friends are pseudo-classes in every framework; `disabled`, `loading`, `selected` are attributes or Boolean props. When a master carries a `State` axis, this is what each value becomes in code — and it is the table `figma_analyze_component_set` uses to emit its `cssMapping`:
+
+| Figma state value          | Code                                               |
+|----------------------------|----------------------------------------------------|
+| `hover`                    | `:hover`                                           |
+| `focus`, `focus-visible`   | `:focus-visible`                                   |
+| `active`, `pressed`        | `:active`                                          |
+| `disabled`                 | `:disabled`, `[aria-disabled="true"]` — a Boolean prop, not a variant |
+| `error`, `invalid`         | `[aria-invalid="true"]`                            |
+| `selected`                 | `[aria-selected="true"]`                           |
+| `checked`                  | `:checked`                                         |
+| `loading`                  | `[aria-busy="true"]` — a Boolean prop               |
+| `open` / `closed`          | `[aria-expanded="true|false"]`                     |
+| `filled`                   | `.has-value` (or the codebase's equivalent)        |
+
+Draw the states designers need to *see* (a hover frame is a legitimate documentation artefact), but keep them off the axis the code gate compares — or the gate will look for a `hover` prop that never existed. `figma_analyze_component_set` detects the axis heuristically by name (`state`, `status`, `interaction`); an axis called anything else yields an empty mapping, which is itself a finding.
 
 ## Component Properties via high-level CRUD
 
@@ -140,6 +159,12 @@ Implementation:
 3. Designers using the parent can swap the slot's instance to anything they need.
 
 This is what makes a Card actually reusable for many content shapes without ballooning into a 50-Variant set.
+
+### Native Slot property (Figma, open beta since 2026-03)
+
+Figma now ships a fifth component-property type that does the above without the placeholder dance: a **Slot** is a region inside a component where any layer can be dropped without detaching. Figma's own framing: use it for components that appear on many screens and have accumulated excessive variants — dialogs, menus, modals, cards, panels — where "structure stays consistent but content changes frequently". The payoff the system owner cares about: fewer variants, less maintenance, and the main reason designers detach instances is gone.
+
+Limit to design around: **component properties cannot be applied to layers inside a slot** — an instance dropped into a slot keeps its own properties, but the parent cannot expose new ones on slot contents. `figma_create_slot`, `figma_get_slots`, `figma_append_to_slot`, `figma_reset_slot` and `figma_add_slot_property` drive it (Desktop Bridge). Prefer the native Slot for new work; keep the Instance-Swap pattern above for libraries that must stay compatible with clients that do not have the feature.
 
 ## Don't-do list
 

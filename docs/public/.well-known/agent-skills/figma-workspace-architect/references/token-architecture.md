@@ -134,6 +134,10 @@ Set scopes deliberately for every Variable. Scopes are set via `figma_execute` c
 
 Audit signal: a Primitive that's only ever consumed via a Semantic alias should still be scoped — because the alias inherits the Primitive's scope intersected with its own. A wide-scoped Primitive widens the alias unintentionally.
 
+### `codeSyntax` — the name the agent reads out
+
+Every Variable carries an optional `codeSyntax` map (`WEB`, `ANDROID`, `iOS`). When `WEB` is set — `--ui-color-primary`, `var(--ui-spacing-4)` — an MCP read of a bound node returns the code token, and a coding agent writes `var(--ui-color-primary)`; when it is unset, the same read returns the Figma path or a resolved hex, and the agent writes `#006470`. Practitioners report this as the single most common reason "the agent used raw values although the file is fully tokenised". Set it from the code side in the same pass that creates or syncs the Variables (`figma_execute`: `variable.setVariableCodeSyntax('WEB', '--ui-…')`; `figma_import_tokens` round-trips it through `$extensions`), and treat a semantic Variable without `codeSyntax.WEB` as a TA4-class finding: the token exists, but not for the reader that matters.
+
 ## Naming
 
 The naming convention should match the codebase as closely as possible. Variable paths use `/` as the segment separator (Figma renders it as a folder hierarchy in the picker).

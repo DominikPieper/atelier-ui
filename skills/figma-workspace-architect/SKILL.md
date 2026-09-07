@@ -85,7 +85,7 @@ Triggered by *audit, review, check, assess, what's wrong with, how good is*.
 
 Two layers, run in this order:
 
-1. **Run the built-in Design System Dashboard MCP App** first if the client supports MCP Apps (Claude Desktop with `ENABLE_MCP_APPS=true`). Ask the user something like "audit the design system" — this gives an immediate Lighthouse-style score across Naming, Tokens, Components, A11y, Consistency, and Coverage. Use this as the **breadth** layer; do not duplicate it.
+1. **Run the built-in Design System Dashboard MCP App** first if the client supports MCP Apps (Claude Desktop with `ENABLE_MCP_APPS=true`). Ask the user something like "audit the design system" — this gives an immediate Lighthouse-style score across Naming, Tokens, Components, A11y, Consistency, and Coverage. Without MCP Apps, `figma_audit_design_system_report` returns the same six-category scoring as plain JSON (weights: Naming 25 %, Tokens 20 %, Components 20 %, Consistency 15 %, A11y 10 %, Coverage 10 %; five-minute cache). Use either as the **breadth** layer; do not duplicate it.
 2. **Run the architectural deep-audit** in `references/audit-checklist.md`. This is the **depth** layer: five categories (Token Architecture, Component Design, Naming, File Structure, Engineering-Sync Readiness), each finding tagged with a severity (Blocker / Critical / Warning / Suggestion) and a concrete fix.
 
 The Component Design category enforces four hard requirements every library has to meet — see *Required principles* in `references/component-design.md`:
@@ -96,6 +96,8 @@ The Component Design category enforces four hard requirements every library has 
 - **CD9** Components built with Auto Layout, not fixed frames.
 
 These are the drift-sources an agent-driven workflow notices first. Treat any Critical finding under them as a real fix, not a cosmetic one.
+
+Two rules for the *fix* column of every finding, learned from an audit that called a collection "dead, zero risk to delete" without having read the second file that consumed it: a fix that **deletes, renames or rebinds** a Variable, Collection, Mode or Variant is a Migrate operation and carries the playbook's safety class (Breaking → additive coordination protocol), never "just remove it"; and a Token Architecture finding may say **"unused" or "duplicate" only after enumerating every collection's consumers** — the docs-site collection, a second library file, `codeSyntax` bindings — with the tool call that proved it named in the finding.
 
 Before writing the report, do the two pre-flight passes called out in the checklist's *Inputs* section: **pin the snapshot** (git SHA + Figma `lastModified`) and **cross-source-grep** any Variable / Variant value you're about to flag. Both are cheap and prevent the most common audit failure mode — findings that were already true at audit time but stale by the time someone acts on them, or findings that look bad in Figma but are actually load-bearing in code with subtly different semantics.
 
@@ -170,6 +172,7 @@ Each file is self-contained and loaded only when relevant. Don't load everything
 - **`references/component-design.md`** — Variants vs. Component Properties vs. Instance Swap, atomic composition, slot patterns, Variant Property naming that matches engineering props.
 - **`references/naming-and-file-structure.md`** — slash naming, page layout (Cover / Tokens / Icons / Components / Patterns), `_` and `.` prefixes for unpublished sub-components, library splitting heuristics.
 - **`references/build-workflow.md`** — Build mode in depth: discovery checklist, decide gates, validation steps, documentation requirements.
+- **`references/build-from-code-contract.md`** — Build mode when the code already states the component: prop contract → matrix decision → bound variants → names the gate accepts → description, annotations, ready-for-dev, inventory → the repo's own closing gate. Generic recipe with the Atelier monorepo as the worked example (`libs/spec` → `Library Tokens` → `check:figma`).
 - **`references/audit-checklist.md`** — five architectural categories, severity definitions, per-finding fix template. Includes pre-flight steps for snapshot pinning and cross-source grep.
 - **`references/audit-verify-queries.md`** — Re-verify sub-mode. One verify query per audit category with auto-resolve signals; output format for `still-open / auto-resolved / state-shifted` per finding.
 - **`references/code-verify.md`** — code-side visual verification recipe. Storybook + browser-automation flow to confirm Figma↔code parity in Light + Dark after token/variant changes. Common traps (stale theme decorators, web-component selectors, HMR caching).

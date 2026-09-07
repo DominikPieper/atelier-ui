@@ -74,15 +74,21 @@ The recommended page layout for a library file:
 🧩 Components/DataDisplay — Table, Card, Avatar, List
 🧩 Components/Layout    — Divider, Container, Stack, Grid
 📋 Patterns             — annotated reference designs (NOT publishable components)
+🧪 Playground           — a sandbox for trying compositions; nothing here is published or linked
+🗄 Deprecated           — retired masters kept visible with a "do not use" banner until analytics show zero insertions
 🚧 _Internal            — sub-components prefixed with _ or .; not visible to consumers
 📝 Changelog            — major updates, version notes
+---------------------   — a hyphen-named spacer page divides sections in the page list
 ```
 
 Notes:
 
 - **One page per category** scales well for libraries with 30+ components. A small library can collapse all components onto one `Components` page.
-- **The Cover page** is what shows up as the file thumbnail. Make it informative — at minimum, library name and version. Designers see this in the file browser.
+- **The Cover page** is what shows up as the file thumbnail. Figma's own minimum is name and a one-line description; a cover that earns its place adds version, status (draft / stable / deprecated tiers), owners, last-updated date, and links to the Storybook and docs site. Designers see it in the file browser; agents read it as the file's README.
+- **Pages are a workflow, not a taxonomy.** Figma's guidance keeps signed-off work physically separate from work in flux — a "ready for dev" section or page, so nobody ships the wrong asset — and imposes the hierarchy once the direction has settled, not while exploring.
+- **Documentation frames beside each component** — purpose, anatomy callouts, a properties table with defaults, do/don't, accessibility requirements, the Storybook link. Where the *canonical* doc lives is contested (large orgs run an external site; Figma's Storybook plugin treats the two as co-equal); what every source agrees on is that a doc bound to live objects (descriptions, annotations that reference Variables) decays slower than prose, and that documentation is gated by a linter, not by trust.
 - **Patterns** are not components. They're reference designs (e.g. "how to compose an empty state"). Don't publish them.
+- **Deprecated** keeps the old master where designers will still find it, wearing its warning, until library analytics show zero insertions — deleting on a schedule breaks files; deleting on evidence doesn't.
 - The page emoji is there for human navigability, not Figma's structure. It's optional but appreciated.
 
 ## Sections vs. Frames — when to use which container
@@ -129,10 +135,12 @@ A single Figma file can hold a lot, but at some point splitting helps. Common sp
 - **Web vs. Mobile** components. Different prop APIs, different responsive concerns, different teams.
 - **Brand library separate from product library.** Logo, brand colors, marketing illustrations live in Brand. Product UI components live in the product library. Brand is consumed by both product files and marketing files.
 
-Don't split prematurely. The cost is real: more files to publish, more libraries to enable per project, more drift opportunities. Split only when:
-- The file has crossed the 2GB Figma limit, or
+Don't split prematurely. The cost is real: more files to publish, more libraries to enable per project, more drift opportunities — designers "annoyed by having to enable too many libraries" is the practitioner phrase for it. Split when a concrete symptom appears, never on a schedule:
+- The file has crossed the 2GB Figma limit or canvas rendering has visibly degraded, or
 - Different teams own different parts and need independent publishing cadences, or
 - A clear consumer/dependency boundary exists (foundations consumed by everything, components consumed by product files only).
+
+Whatever you split, **keep every Variable collection in one parent file**: an alias cannot cross a file boundary, so a split that separates a semantic collection from the primitives it aliases breaks the tier model at the seam. Figma's own materials assume a multi-library reality for teams past a certain size (platform libraries, old and new system side by side during a migration); the single well-organised file is the right answer until one of the symptoms above shows up.
 
 ## Audit signals for naming / structure
 

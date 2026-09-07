@@ -363,7 +363,7 @@ move". Zero references today; the REST blind spots (canvas instances, variable v
 historical versions) go in the reference. Trigger: "what changed in Figma since",
 "changelog for the design", "who changed the padding on". Effort: S.
 
-### 5.6 Enhancements to `figma-workspace-architect` (no new skill)
+### 5.6 Enhancements to `figma-workspace-architect` (no new skill) — **landed 2026-09-07**, see `tasks/todo.md`
 
 - `references/naming-and-file-structure.md`: the taxonomy already has Changelog and
   `_Internal`; add Playground and Deprecated, the cover-page contents, documentation

@@ -49,6 +49,20 @@ Treat the grep result as part of the finding's State block — at minimum a coun
 
 ## Category 1 — Token Architecture
 
+Two rules for every finding in this category, learned the expensive way:
+
+- **"Unused" and "duplicate" are claims about consumers, and consumers span files.** Before a
+  finding says a collection or variable is dead, enumerate who binds to it — the
+  docs-site collection, a second library file, `codeSyntax` bindings, aliases from
+  another collection — and name the tool call that proved it (`figma_get_variables`
+  with `resolveAliases`, `figma_get_library_variables`). An audit of this repo's own file
+  once called a primitives collection "a dead duplicate, zero risk to delete" without
+  reading the docs collection it fed.
+- **The fix column never says "delete" or "rebind" alone.** Deleting or renaming a
+  Variable, Collection or Mode, or rebinding consumers, is a Migrate operation with a
+  safety class from `migration-playbook.md` — Breaking ones carry the additive
+  coordination protocol. Write the fix as "Migrate: <recipe>", not as a one-liner.
+
 ### TA1 — Tier separation
 
 Check: are Primitives, Semantics, and (optionally) Component tokens in **separate Collections**?
@@ -384,7 +398,7 @@ The skill doesn't itself integrate Library Analytics — it only flags this as a
 
 ## Audit run order
 
-1. Run the **Design System Dashboard MCP App** (covers breadth incl. A11y, Coverage).
+1. Run the **Design System Dashboard MCP App** (covers breadth incl. A11y, Coverage) — or, without MCP Apps, `figma_audit_design_system_report`, the same six weighted scores as JSON (Naming 25 %, Tokens 20 %, Components 20 %, Consistency 15 %, A11y 10 %, Coverage 10 %). For per-component depth on accessibility, `figma_audit_component_accessibility` scores six categories — state coverage, focus-indicator quality, non-colour differentiation, target size (default 24 px; pass 44 for mobile), annotation completeness, colour-blind simulation — weighted by whether the component is interactive or presentational, so a badge is not penalised for lacking a focus state.
 2. Run the inputs (`figma_get_status`, `figma_get_file_data`, `figma_get_variables`, `figma_get_styles`, sample `figma_get_component`).
 3. Walk through Categories 1–5 above. For each finding, record:
    - Category and check ID (e.g. `TA4`).
