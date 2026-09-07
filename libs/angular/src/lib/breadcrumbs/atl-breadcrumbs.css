@@ -41,9 +41,17 @@
    the CSS Generated Content alt-text pair: an explicit empty alternative
    text, which keeps the glyph out of the accessibility tree in Chromium,
    Firefox and WebKit alike (verified; a bare `content: '…'` is NOT excluded
-   by default — it renders as its own accessible text node). See ADR-0100. */
+   by default — it renders as its own accessible text node). See ADR-0100.
+   The fallback matches the component's own default ('/', not '›'): all
+   three adapters always set --atl-separator inline before first paint (in
+   SSR-rendered markup, not just post-hydration), so this value is unreached
+   in every documented usage — it exists only so a stray '.atl-breadcrumb-
+   item::after' rendered without the component (hand-authored markup that
+   imports the CSS but skips AtlBreadcrumbs/atl-breadcrumbs/AtlBreadcrumbs.vue)
+   degrades to the shipped default rather than to a glyph the spec's
+   `separator` option list ('/', '>') never offers. */
 :host(.atl-breadcrumb-item)::after {
-  content: var(--atl-separator, '›') / '';
+  content: var(--atl-separator, '/') / '';
   margin: 0 var(--ui-spacing-2);
   color: var(--ui-color-border-hover);
   font-size: var(--ui-font-size-md);
@@ -74,7 +82,12 @@ a:focus-visible {
   box-shadow: var(--ui-focus-ring);
 }
 
-/* Current item (plain text look, no href) */
+/* Current item (plain text look, no href). This is the same `a` element as
+   the link rule above — including its padding, cancelled by its own
+   negative margin (a hit/hover-area enlargement, invisible in the flow) —
+   so the current item's text already occupies exactly the box a
+   padding-less element would, at the same offset within its row as any
+   link's text. Nothing extra is needed here to match a link's box. */
 :host(.atl-breadcrumb-item.is-current) a {
   color: var(--ui-color-text);
   font-weight: var(--ui-font-weight-semibold);

@@ -152,8 +152,18 @@ against the code would have caught both on the day they were introduced.
 - **`.step-description` / `.step-optional` hardcode `margin-top: 2px`**, matching
   no token; Figma binds the equivalent gap to `spacing/1` (4px). Code is the
   off-scale side.
-- **`.breadcrumb-current` has no padding** where the master pads it to align with
-  link items (bound to `spacing/2`/`spacing/1`).
+- ~~**`.breadcrumb-current` has no padding** where the master pads it to align with
+  link items.~~ **Wrong — I was, and it was measured wrong out of me 2026-09-07.**
+  `.breadcrumb-link`'s `padding: var(--ui-spacing-1) var(--ui-spacing-2)` is
+  exactly cancelled by `margin: calc(var(--ui-spacing-1) * -1) calc(var(--ui-spacing-2) * -1)`
+  on the next line — a hit/hover-area enlargement with no effect on the flow. Measured
+  in real Chromium: both rows come out 17.5px and the link's text starts at the same
+  offset within its row as the current item's span. Adding matching padding without a
+  compensating negative margin would have made that row 25.5px — the regression, not
+  the fix. Neither side is wrong: the master shows the padding box, the code shows
+  padding plus its cancellation, and a static Figma frame cannot express the
+  cancellation. Fourth member of ADR-0107's expressibility family, alongside derived
+  padding, `100vw`, and (wrongly, at first) `color-mix`.
 
 ### Needs a decision
 
@@ -174,7 +184,7 @@ against the code would have caught both on the day they were introduced.
   off-by-one, and no ADR records an asymmetric intent.
 - **AtlDialog and AtlDrawer content/footer padding** sit one token step below
   code, consistently and bound. Internally coherent enough to look deliberate.
-- **AtlBreadcrumbs' separator.** **[verified]** The code's default is `/`
+- ~~**AtlBreadcrumbs' separator.**~~ Decided and applied 2026-09-07: Figma's three glyph nodes → `/`, and the CSS fallback `'›'` → `'/'` so the two agree. **[verified]** The code's default is `/`
   (`separator = '/'` in the TSX, always written to the inline `--atl-separator`),
   the spec metadata offers `/` and `>`, and Figma draws `›`. Two consequences:
   the master shows a glyph nothing ships, and `atl-breadcrumbs.css:52`'s

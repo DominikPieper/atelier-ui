@@ -47,9 +47,17 @@
    the CSS Generated Content alt-text pair: an explicit empty alternative
    text, which keeps the glyph out of the accessibility tree in Chromium,
    Firefox and WebKit alike (verified; a bare `content: '…'` is NOT excluded
-   by default — it renders as its own accessible text node). See ADR-0100. */
+   by default — it renders as its own accessible text node). See ADR-0100.
+   The fallback matches the component's own default ('/', not '›'): all
+   three adapters always set --atl-separator inline before first paint (in
+   SSR-rendered markup, not just post-hydration), so this value is unreached
+   in every documented usage — it exists only so a stray '.atl-breadcrumb-
+   item::after' rendered without the component (hand-authored markup that
+   imports the CSS but skips AtlBreadcrumbs/atl-breadcrumbs/AtlBreadcrumbs.vue)
+   degrades to the shipped default rather than to a glyph the spec's
+   `separator` option list ('/', '>') never offers. */
 .atl-breadcrumb-item::after {
-  content: var(--atl-separator, '›') / '';
+  content: var(--atl-separator, '/') / '';
   margin: 0 var(--ui-spacing-2);
   color: var(--ui-color-border-hover);
   font-size: var(--ui-font-size-md);
@@ -80,7 +88,15 @@
   box-shadow: var(--ui-focus-ring);
 }
 
-/* Current item (plain text) */
+/* Current item (plain text). Deliberately no padding: `.breadcrumb-link`'s
+   padding is exactly cancelled by its own negative margin (a hit/hover-area
+   enlargement, invisible in the flow), so its text occupies exactly the same
+   box a padding-less element would — measured in a real browser, both items'
+   rows come out the same height and the link's text starts at the same
+   offset within its row as this span's. Adding matching padding here would
+   not reproduce that; without a compensating negative margin it would make
+   this row taller than a link row, which is the regression this note exists
+   to head off. */
 .atl-breadcrumb-item .breadcrumb-current {
   color: var(--ui-color-text);
   font-weight: var(--ui-font-weight-semibold);
