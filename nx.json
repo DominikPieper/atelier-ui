@@ -119,7 +119,11 @@
         }
       },
       "skills": {
-        "projects": ["atelier-design", "figma-workspace-architect"],
+        "projects": [
+          "atelier-design",
+          "figma-workspace-architect",
+          "design-to-code"
+        ],
         "projectsRelationship": "independent",
         "version": {
           "conventionalCommits": true,

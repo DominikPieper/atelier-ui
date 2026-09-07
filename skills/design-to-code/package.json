@@ -1,0 +1,18 @@
+{
+  "name": "@atelier-ui/skill-design-to-code",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Claude Code skill for the Atelier Figma → spec → code → verify loop: builds one component in one framework from a handoff document, or reviews one component across Figma and code.",
+  "type": "module",
+  "files": [
+    "SKILL.md",
+    "references/"
+  ],
+  "keywords": [
+    "claude-code",
+    "skill",
+    "figma",
+    "design-to-code",
+    "atelier-ui"
+  ]
+}

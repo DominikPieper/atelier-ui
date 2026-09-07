@@ -39,6 +39,9 @@ import {
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { discoverSkillNames, digestSkillMd } from './lib/skill-discovery.mjs';
+import allowlists from './lib/allowlists.js';
+
+const { UNDISTRIBUTED_SKILLS } = allowlists;
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const SITE_URL = 'https://atelier.pieper.io';
@@ -119,7 +122,23 @@ function syncOne(skillName) {
 }
 
 const requestedName = process.argv[2];
-const names = requestedName ? [requestedName] : discoverSkillNames(SKILLS_ROOT);
+let names = requestedName ? [requestedName] : discoverSkillNames(SKILLS_ROOT);
+
+// The no-argument, filesystem-derived form must not publish a skill that is
+// deliberately undistributed (tools/scripts/lib/allowlists.js) — an explicit
+// single-name invocation (this skill's own sync-discovery nx target, a
+// targeted local run) still honors that request literally.
+if (!requestedName) {
+  names = names.filter((name) => {
+    if (Object.prototype.hasOwnProperty.call(UNDISTRIBUTED_SKILLS, name)) {
+      console.log(
+        `– ${name} skipped — undistributed (${UNDISTRIBUTED_SKILLS[name].reason})`,
+      );
+      return false;
+    }
+    return true;
+  });
+}
 
 if (names.length === 0) {
   console.error(

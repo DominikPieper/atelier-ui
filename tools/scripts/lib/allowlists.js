@@ -739,10 +739,22 @@ is owed on ADR-0047.`,
  * public discovery index (docs/public/.well-known/agent-skills/index.json),
  * keyed by skill name with the reason it's held back. Every OTHER directory
  * under skills/ that ships a SKILL.md must have an index.json entry whose
- * digest matches a fresh sha256 of that file. Empty today — both skills
- * currently in the repo are distributed. (check-skill-discovery)
+ * digest matches a fresh sha256 of that file. The two generic skills are
+ * distributed; the repo-bound one below is not. (check-skill-discovery,
+ * and sync-skill-discovery's no-argument form skips these names)
  */
-const UNDISTRIBUTED_SKILLS = {};
+const UNDISTRIBUTED_SKILLS = {
+  // Repo-bound: names libs/spec (the framework-agnostic contract), this
+  // repo's gates (parity:record, check:figma), and the Atelier Figma file
+  // (QMnDD8uZQPldPrlCwZZ58T) — none of which exist in a scaffolded
+  // workspace outside this monorepo, unlike the generic skills already on
+  // the discovery endpoint. A scaffolded-workspace profile for it is a
+  // decision deferred to plan/design-skills-blueprint.md § 8 (decision 7).
+  'design-to-code': {
+    reason:
+      'repo-bound — names libs/spec, parity:record, check:figma and the Atelier file key; a scaffolded workspace gets a profile later (plan/design-skills-blueprint.md § 8 decision 7)',
+  },
+};
 
 module.exports = {
   DEAD_SELECTOR_EXEMPT,

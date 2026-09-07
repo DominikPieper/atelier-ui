@@ -1,5 +1,10 @@
 # Skill drafts — skill-creator pass (2026-09-07)
 
+> **Moved 2026-09-07:** `design-to-code/` left this folder for `skills/design-to-code/` once
+> the catalog was decided (restructured into Build and Review modes, six fixtures under
+> `tests/`, `evals/` kept for the skill-creator runs). What remains here is the intent
+> capture for the other candidates and the record of the pass.
+
 Drafts live here, **not** in `skills/`, so the roster gates (`check:skill-discovery`,
 the `skills` release group, `check-skill.mjs`) do not see them until the owner decides
 which ones ship (`plan/design-skills-blueprint.md` § 8). Moving a draft into `skills/`
@@ -14,9 +19,9 @@ The skill-creator method was applied as far as an unattended session allows:
 |---|---|---|
 | Capture intent (enable / trigger / output / test cases) | For all five skills, below | — |
 | Interview | Answers taken from the research and the repo's ADRs | Open questions listed per skill; the owner confirms |
-| Draft SKILL.md | `design-to-code/SKILL.md` — the exemplar, revised after the Codex cross-check (seven codeSpec sections, static-read ceiling, node-id provenance, disabled/loading as props, ADR-0096 narrowing made explicit) | The bridge skill waits for the catalog decision; 2, 3 and 5 fold into design-to-code or the architect (blueprint § 5 preamble) |
-| Test prompts (`evals/evals.json`, no assertions yet) | `design-to-code/evals/evals.json`, 4 prompts incl. one out-of-scope | — |
-| Trigger eval set (20 queries, 10/10) | `design-to-code/evals/trigger-eval.json` | Needs owner review before `run_loop.py` |
+| Draft SKILL.md | `skills/design-to-code/SKILL.md` (moved) — the exemplar, revised after the Codex cross-check (seven codeSpec sections, static-read ceiling, node-id provenance, disabled/loading as props, ADR-0096 narrowing made explicit) | The bridge skill waits for the catalog decision; 2, 3 and 5 fold into design-to-code or the architect (blueprint § 5 preamble) |
+| Test prompts (`evals/evals.json`, no assertions yet) | `skills/design-to-code/evals/evals.json`, 4 prompts incl. one out-of-scope; six repo fixtures under `tests/` | — |
+| Trigger eval set (20 queries, 10/10) | `skills/design-to-code/evals/trigger-eval.json` | Needs owner review before `run_loop.py` |
 | With-skill / baseline runs | — | They call figma-console against the live file and write into `libs/`; not run unattended |
 | Description optimisation loop | — | Depends on the reviewed trigger set; ~15 min of `claude -p` runs |
 
@@ -90,7 +95,7 @@ The skill-creator method was applied as far as an unattended session allows:
 
 ## Trigger-set design notes
 
-The should-not-trigger queries in `design-to-code/evals/trigger-eval.json` are near-misses
+The should-not-trigger queries in `skills/design-to-code/evals/trigger-eval.json` are near-misses
 on purpose: cross-framework changes (`component-trinity`), Figma-side fixes (`spec-to-figma`,
 architect), a Storybook-only defect, the Claude Design intake, the changelog — each shares
 vocabulary with design-to-code and should lose to a sibling skill. Two should-trigger items

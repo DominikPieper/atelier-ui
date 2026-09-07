@@ -1,0 +1,40 @@
+{
+  "name": "design-to-code",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "skills/design-to-code",
+  "projectType": "library",
+  "tags": ["type:skill"],
+  "targets": {
+    "package": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/skills/design-to-code.zip"],
+      "options": {
+        "command": "node tools/scripts/package-skill.mjs design-to-code"
+      }
+    },
+    "sync-discovery": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "echo 'design-to-code is repo-bound and not mirrored to the discovery endpoint (UNDISTRIBUTED_SKILLS)'"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node tools/scripts/check-skill.mjs design-to-code"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node tools/scripts/test-skill.mjs design-to-code"
+      }
+    },
+    "nx-release-publish": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "echo 'design-to-code is a private skill — distributed as a zip via the `package` target, not via npm. Skipping nx-release-publish.'"
+      }
+    }
+  }
+}
