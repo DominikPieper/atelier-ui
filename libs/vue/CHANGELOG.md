@@ -1,3 +1,14 @@
+## 0.2.38 (2026-09-07)
+
+### 🩹 Fixes
+
+- **card:** the header stated three of the title role's four axes ([c88a543](https://github.com/DominikPieper/atelier-ui/commit/c88a543))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.37 (2026-09-06)
 
 ### 🩹 Fixes
