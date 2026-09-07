@@ -2,9 +2,9 @@
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
-    "figmaLastModified": "2026-09-07T07:01:38Z",
-    "generatedAt": "2026-09-07T08:30:01.276Z",
-    "gitSha": "1f9f82e",
+    "figmaLastModified": "2026-09-07T08:31:48Z",
+    "generatedAt": "2026-09-07T08:42:39.654Z",
+    "gitSha": "b76768b",
     "serverVersion": null,
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -3516,14 +3516,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            8,
-            12,
-            8,
-            12
+            16,
+            16,
+            16,
+            16
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 39,
+          "height": 55,
           "width": 240,
           "fontSize": 18,
           "lineHeight": 125
@@ -3574,14 +3574,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            8,
-            12,
-            8,
-            12
+            16,
+            16,
+            16,
+            16
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 56,
+          "height": 72,
           "width": 240,
           "fontSize": 16,
           "lineHeight": null
@@ -3603,44 +3603,44 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            8,
-            12,
-            8,
-            12
+            16,
+            16,
+            16,
+            16
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 82,
+          "width": 240,
+          "fontSize": null,
+          "lineHeight": null
+        },
+        {
+          "variant": "variant=elevated, padding=sm",
+          "count": 1,
+          "layer": "card-inner-group",
+          "type": "FRAME",
+          "fill": "color/primary",
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/sm",
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            16,
+            16,
+            16,
+            16
           ],
           "gap": 0,
           "minHeight": null,
           "height": 50,
-          "width": 240,
-          "fontSize": null,
-          "lineHeight": null
-        },
-        {
-          "variant": "variant=elevated, padding=sm",
-          "count": 1,
-          "layer": "card-inner-group",
-          "type": "FRAME",
-          "fill": "color/primary",
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": "radius/sm",
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            8,
-            12,
-            8,
-            12
-          ],
-          "gap": 0,
-          "minHeight": null,
-          "height": 34,
-          "width": 56,
+          "width": 64,
           "fontSize": 14,
           "lineHeight": 125
         },
@@ -3661,14 +3661,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            8,
-            12,
-            8,
-            12
+            16,
+            16,
+            16,
+            16
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 39,
+          "height": 55,
           "width": 240,
           "fontSize": 18,
           "lineHeight": 125
@@ -3719,14 +3719,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            8,
-            12,
-            8,
-            12
+            16,
+            16,
+            16,
+            16
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 56,
+          "height": 72,
           "width": 240,
           "fontSize": 16,
           "lineHeight": null
@@ -3748,44 +3748,44 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            8,
-            12,
-            8,
-            12
+            16,
+            16,
+            16,
+            16
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 82,
+          "width": 240,
+          "fontSize": null,
+          "lineHeight": null
+        },
+        {
+          "variant": "variant=outlined, padding=sm",
+          "count": 1,
+          "layer": "card-inner-group",
+          "type": "FRAME",
+          "fill": "color/primary",
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/sm",
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            16,
+            16,
+            16,
+            16
           ],
           "gap": 0,
           "minHeight": null,
           "height": 50,
-          "width": 240,
-          "fontSize": null,
-          "lineHeight": null
-        },
-        {
-          "variant": "variant=outlined, padding=sm",
-          "count": 1,
-          "layer": "card-inner-group",
-          "type": "FRAME",
-          "fill": "color/primary",
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": "radius/sm",
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            8,
-            12,
-            8,
-            12
-          ],
-          "gap": 0,
-          "minHeight": null,
-          "height": 34,
-          "width": 56,
+          "width": 64,
           "fontSize": 14,
           "lineHeight": 125
         },
@@ -3806,14 +3806,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            8,
-            12,
-            8,
-            12
+            16,
+            16,
+            16,
+            16
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 39,
+          "height": 55,
           "width": 240,
           "fontSize": 18,
           "lineHeight": 125
@@ -3864,14 +3864,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            8,
-            12,
-            8,
-            12
+            16,
+            16,
+            16,
+            16
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 56,
+          "height": 72,
           "width": 240,
           "fontSize": 16,
           "lineHeight": null
@@ -3893,44 +3893,44 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            8,
-            12,
-            8,
-            12
+            16,
+            16,
+            16,
+            16
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 82,
+          "width": 240,
+          "fontSize": null,
+          "lineHeight": null
+        },
+        {
+          "variant": "variant=flat, padding=sm",
+          "count": 1,
+          "layer": "card-inner-group",
+          "type": "FRAME",
+          "fill": "color/primary",
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/sm",
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            16,
+            16,
+            16,
+            16
           ],
           "gap": 0,
           "minHeight": null,
           "height": 50,
-          "width": 240,
-          "fontSize": null,
-          "lineHeight": null
-        },
-        {
-          "variant": "variant=flat, padding=sm",
-          "count": 1,
-          "layer": "card-inner-group",
-          "type": "FRAME",
-          "fill": "color/primary",
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": "radius/sm",
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            8,
-            12,
-            8,
-            12
-          ],
-          "gap": 0,
-          "minHeight": null,
-          "height": 34,
-          "width": 56,
+          "width": 64,
           "fontSize": 14,
           "lineHeight": 125
         },
@@ -3951,14 +3951,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            12,
-            16,
-            12,
-            16
+            24,
+            24,
+            24,
+            24
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 47,
+          "height": 71,
           "width": 240,
           "fontSize": 18,
           "lineHeight": 125
@@ -4009,14 +4009,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            12,
-            16,
-            12,
-            16
+            24,
+            24,
+            24,
+            24
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 84,
+          "height": 108,
           "width": 240,
           "fontSize": 16,
           "lineHeight": null
@@ -4038,14 +4038,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            12,
-            16,
-            12,
-            16
+            24,
+            24,
+            24,
+            24
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 58,
+          "height": 114,
           "width": 240,
           "fontSize": null,
           "lineHeight": null
@@ -4067,15 +4067,15 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            8,
-            12,
-            8,
-            12
+            24,
+            24,
+            24,
+            24
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 34,
-          "width": 56,
+          "height": 66,
+          "width": 80,
           "fontSize": 14,
           "lineHeight": 125
         },
@@ -4096,14 +4096,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            12,
-            16,
-            12,
-            16
+            24,
+            24,
+            24,
+            24
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 47,
+          "height": 71,
           "width": 240,
           "fontSize": 18,
           "lineHeight": 125
@@ -4154,14 +4154,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            12,
-            16,
-            12,
-            16
+            24,
+            24,
+            24,
+            24
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 84,
+          "height": 108,
           "width": 240,
           "fontSize": 16,
           "lineHeight": null
@@ -4183,14 +4183,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            12,
-            16,
-            12,
-            16
+            24,
+            24,
+            24,
+            24
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 58,
+          "height": 114,
           "width": 240,
           "fontSize": null,
           "lineHeight": null
@@ -4212,15 +4212,15 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            8,
-            12,
-            8,
-            12
+            24,
+            24,
+            24,
+            24
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 34,
-          "width": 56,
+          "height": 66,
+          "width": 80,
           "fontSize": 14,
           "lineHeight": 125
         },
@@ -4241,14 +4241,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            12,
-            16,
-            12,
-            16
+            24,
+            24,
+            24,
+            24
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 47,
+          "height": 71,
           "width": 240,
           "fontSize": 18,
           "lineHeight": 125
@@ -4299,14 +4299,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            12,
-            16,
-            12,
-            16
+            24,
+            24,
+            24,
+            24
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 84,
+          "height": 108,
           "width": 240,
           "fontSize": 16,
           "lineHeight": null
@@ -4328,14 +4328,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            12,
-            16,
-            12,
-            16
+            24,
+            24,
+            24,
+            24
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 58,
+          "height": 114,
           "width": 240,
           "fontSize": null,
           "lineHeight": null
@@ -4357,15 +4357,15 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            8,
-            12,
-            8,
-            12
+            24,
+            24,
+            24,
+            24
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 34,
-          "width": 56,
+          "height": 66,
+          "width": 80,
           "fontSize": 14,
           "lineHeight": 125
         },
@@ -4386,14 +4386,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            20,
-            24,
-            20,
-            24
+            32,
+            32,
+            32,
+            32
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 63,
+          "height": 87,
           "width": 240,
           "fontSize": 18,
           "lineHeight": 125
@@ -4444,14 +4444,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            20,
-            24,
-            20,
-            24
+            32,
+            32,
+            32,
+            32
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 100,
+          "height": 124,
           "width": 240,
           "fontSize": 16,
           "lineHeight": null
@@ -4473,14 +4473,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            20,
-            24,
-            20,
-            24
+            32,
+            32,
+            32,
+            32
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 74,
+          "height": 146,
           "width": 240,
           "fontSize": null,
           "lineHeight": null
@@ -4502,15 +4502,15 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            8,
-            12,
-            8,
-            12
+            32,
+            32,
+            32,
+            32
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 34,
-          "width": 56,
+          "height": 82,
+          "width": 96,
           "fontSize": 14,
           "lineHeight": 125
         },
@@ -4531,14 +4531,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            20,
-            24,
-            20,
-            24
+            32,
+            32,
+            32,
+            32
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 63,
+          "height": 87,
           "width": 240,
           "fontSize": 18,
           "lineHeight": 125
@@ -4589,14 +4589,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            20,
-            24,
-            20,
-            24
+            32,
+            32,
+            32,
+            32
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 100,
+          "height": 124,
           "width": 240,
           "fontSize": 16,
           "lineHeight": null
@@ -4618,14 +4618,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            20,
-            24,
-            20,
-            24
+            32,
+            32,
+            32,
+            32
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 74,
+          "height": 146,
           "width": 240,
           "fontSize": null,
           "lineHeight": null
@@ -4647,15 +4647,15 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            8,
-            12,
-            8,
-            12
+            32,
+            32,
+            32,
+            32
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 34,
-          "width": 56,
+          "height": 82,
+          "width": 96,
           "fontSize": 14,
           "lineHeight": 125
         },
@@ -4676,14 +4676,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            20,
-            24,
-            20,
-            24
+            32,
+            32,
+            32,
+            32
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 63,
+          "height": 87,
           "width": 240,
           "fontSize": 18,
           "lineHeight": 125
@@ -4734,14 +4734,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            20,
-            24,
-            20,
-            24
+            32,
+            32,
+            32,
+            32
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 100,
+          "height": 124,
           "width": 240,
           "fontSize": 16,
           "lineHeight": null
@@ -4763,14 +4763,14 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            20,
-            24,
-            20,
-            24
+            32,
+            32,
+            32,
+            32
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 74,
+          "height": 146,
           "width": 240,
           "fontSize": null,
           "lineHeight": null
@@ -4792,15 +4792,15 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            8,
-            12,
-            8,
-            12
+            32,
+            32,
+            32,
+            32
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 34,
-          "width": 56,
+          "height": 82,
+          "width": 96,
           "fontSize": 14,
           "lineHeight": 125
         }
@@ -4808,10 +4808,10 @@
       "box": {
         "type": "COMPONENT_SET",
         "width": 1056,
-        "height": 774,
+        "height": 894,
         "childrenExtent": {
           "right": 1056,
-          "bottom": 774
+          "bottom": 894
         },
         "clipsContent": true
       },
@@ -4995,7 +4995,7 @@
           "gap": 4,
           "gapBound": "spacing/1",
           "fill": "color/success-bg",
-          "stroke": "color/success-bg",
+          "stroke": "color/success-text",
           "strokeWeight": 1,
           "strokeSides": [
             1,
@@ -5026,7 +5026,7 @@
           "gap": 4,
           "gapBound": "spacing/1",
           "fill": "color/warning-bg",
-          "stroke": "color/warning-bg",
+          "stroke": "color/warning-text",
           "strokeWeight": 1,
           "strokeSides": [
             1,
@@ -5057,7 +5057,7 @@
           "gap": 4,
           "gapBound": "spacing/1",
           "fill": "color/danger-bg",
-          "stroke": "color/danger-bg",
+          "stroke": "color/danger-text",
           "strokeWeight": 1,
           "strokeSides": [
             1,
@@ -5088,7 +5088,7 @@
           "gap": 4,
           "gapBound": "spacing/1",
           "fill": "color/info-bg",
-          "stroke": "color/info-bg",
+          "stroke": "color/info-text",
           "strokeWeight": 1,
           "strokeSides": [
             1,
@@ -5150,7 +5150,7 @@
           "gap": 4,
           "gapBound": "spacing/1",
           "fill": "color/success-bg",
-          "stroke": "color/success-bg",
+          "stroke": "color/success-text",
           "strokeWeight": 1,
           "strokeSides": [
             1,
@@ -5181,7 +5181,7 @@
           "gap": 4,
           "gapBound": "spacing/1",
           "fill": "color/warning-bg",
-          "stroke": "color/warning-bg",
+          "stroke": "color/warning-text",
           "strokeWeight": 1,
           "strokeSides": [
             1,
@@ -5212,7 +5212,7 @@
           "gap": 4,
           "gapBound": "spacing/1",
           "fill": "color/danger-bg",
-          "stroke": "color/danger-bg",
+          "stroke": "color/danger-text",
           "strokeWeight": 1,
           "strokeSides": [
             1,
@@ -5243,7 +5243,7 @@
           "gap": 4,
           "gapBound": "spacing/1",
           "fill": "color/info-bg",
-          "stroke": "color/info-bg",
+          "stroke": "color/info-text",
           "strokeWeight": 1,
           "strokeSides": [
             1,
@@ -7980,7 +7980,7 @@
           "gap": 12,
           "gapBound": "spacing/3",
           "fill": "color/info-bg",
-          "stroke": "color/info-bg",
+          "stroke": "color/info-text",
           "strokeWeight": 1,
           "strokeSides": [
             1,
@@ -8011,7 +8011,7 @@
           "gap": 12,
           "gapBound": "spacing/3",
           "fill": "color/success-bg",
-          "stroke": "color/success-bg",
+          "stroke": "color/success-text",
           "strokeWeight": 1,
           "strokeSides": [
             1,
@@ -8042,7 +8042,7 @@
           "gap": 12,
           "gapBound": "spacing/3",
           "fill": "color/warning-bg",
-          "stroke": "color/warning-bg",
+          "stroke": "color/warning-text",
           "strokeWeight": 1,
           "strokeSides": [
             1,
@@ -8073,7 +8073,7 @@
           "gap": 12,
           "gapBound": "spacing/3",
           "fill": "color/danger-bg",
-          "stroke": "color/danger-bg",
+          "stroke": "color/danger-text",
           "strokeWeight": 1,
           "strokeSides": [
             1,
@@ -8106,7 +8106,7 @@
             38
           ],
           "parentName": "variant=info",
-          "visible": true,
+          "visible": false,
           "boundTo": "dismissible#507:267"
         },
         {
@@ -8126,7 +8126,7 @@
             41
           ],
           "parentName": "variant=success",
-          "visible": true,
+          "visible": false,
           "boundTo": "dismissible#507:267"
         },
         {
@@ -8146,7 +8146,7 @@
             41
           ],
           "parentName": "variant=warning",
-          "visible": true,
+          "visible": false,
           "boundTo": "dismissible#507:267"
         },
         {
@@ -8166,7 +8166,7 @@
             41
           ],
           "parentName": "variant=danger",
-          "visible": true,
+          "visible": false,
           "boundTo": "dismissible#507:267"
         }
       ],
@@ -8197,17 +8197,6 @@
         },
         {
           "name": "info",
-          "type": "INSTANCE",
-          "hasChildren": true,
-          "hidden": false,
-          "layoutMode": "NONE",
-          "rawColors": [],
-          "unboundRadius": 0,
-          "unboundSpacing": [],
-          "nonSemanticTokens": []
-        },
-        {
-          "name": "_dismiss",
           "type": "INSTANCE",
           "hasChildren": true,
           "hidden": false,
@@ -8285,8 +8274,8 @@
             null,
             null
           ],
-          "gap": 8,
-          "gapBound": "spacing/2",
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -8316,8 +8305,8 @@
             null,
             null
           ],
-          "gap": 8,
-          "gapBound": "spacing/2",
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -8347,8 +8336,8 @@
             null,
             null
           ],
-          "gap": 8,
-          "gapBound": "spacing/2",
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -8378,8 +8367,8 @@
             null,
             null
           ],
-          "gap": 8,
-          "gapBound": "spacing/2",
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -8412,8 +8401,8 @@
             null,
             null
           ],
-          "gap": 8,
-          "gapBound": "spacing/2",
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -8444,7 +8433,7 @@
             24
           ],
           "parentBox": [
-            126,
+            130,
             24
           ],
           "parentName": "selection=unchecked, state=default",
@@ -8464,7 +8453,7 @@
             18
           ],
           "parentBox": [
-            126,
+            130,
             24
           ],
           "parentName": "selection=unchecked, state=default",
@@ -8504,7 +8493,7 @@
             24
           ],
           "parentBox": [
-            126,
+            130,
             24
           ],
           "parentName": "selection=checked, state=default",
@@ -8524,7 +8513,7 @@
             18
           ],
           "parentBox": [
-            126,
+            130,
             24
           ],
           "parentName": "selection=checked, state=default",
@@ -8544,7 +8533,7 @@
             24
           ],
           "parentBox": [
-            126,
+            130,
             24
           ],
           "parentName": "selection=indeterminate, state=default",
@@ -8564,7 +8553,7 @@
             18
           ],
           "parentBox": [
-            126,
+            130,
             24
           ],
           "parentName": "selection=indeterminate, state=default",
@@ -8584,7 +8573,7 @@
             24
           ],
           "parentBox": [
-            126,
+            130,
             24
           ],
           "parentName": "selection=unchecked, state=focus",
@@ -8604,7 +8593,7 @@
             18
           ],
           "parentBox": [
-            126,
+            130,
             24
           ],
           "parentName": "selection=unchecked, state=focus",
@@ -8624,7 +8613,7 @@
             24
           ],
           "parentBox": [
-            126,
+            130,
             24
           ],
           "parentName": "selection=unchecked, state=hover",
@@ -8644,7 +8633,7 @@
             18
           ],
           "parentBox": [
-            126,
+            130,
             24
           ],
           "parentName": "selection=unchecked, state=hover",
@@ -8655,10 +8644,10 @@
       "layers": [],
       "box": {
         "type": "COMPONENT_SET",
-        "width": 416,
+        "width": 420,
         "height": 136,
         "childrenExtent": {
-          "right": 416,
+          "right": 420,
           "bottom": 136
         },
         "clipsContent": true
@@ -8739,8 +8728,8 @@
             null,
             null
           ],
-          "gap": 8,
-          "gapBound": "spacing/2",
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -8770,8 +8759,8 @@
             null,
             null
           ],
-          "gap": 8,
-          "gapBound": "spacing/2",
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -8801,8 +8790,8 @@
             null,
             null
           ],
-          "gap": 8,
-          "gapBound": "spacing/2",
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -8835,8 +8824,8 @@
             null,
             null
           ],
-          "gap": 8,
-          "gapBound": "spacing/2",
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -8867,7 +8856,7 @@
             24
           ],
           "parentBox": [
-            146,
+            150,
             24
           ],
           "parentName": "selection=unchecked, state=default",
@@ -8887,7 +8876,7 @@
             24
           ],
           "parentBox": [
-            146,
+            150,
             24
           ],
           "parentName": "selection=unchecked, state=default",
@@ -8907,7 +8896,7 @@
             24
           ],
           "parentBox": [
-            146,
+            150,
             24
           ],
           "parentName": "selection=checked, state=default",
@@ -8927,7 +8916,7 @@
             24
           ],
           "parentBox": [
-            146,
+            150,
             24
           ],
           "parentName": "selection=checked, state=default",
@@ -8947,7 +8936,7 @@
             24
           ],
           "parentBox": [
-            146,
+            150,
             24
           ],
           "parentName": "selection=unchecked, state=focus",
@@ -8967,7 +8956,7 @@
             24
           ],
           "parentBox": [
-            146,
+            150,
             24
           ],
           "parentName": "selection=unchecked, state=focus",
@@ -8987,7 +8976,7 @@
             24
           ],
           "parentBox": [
-            146,
+            150,
             24
           ],
           "parentName": "selection=unchecked, state=hover",
@@ -9007,7 +8996,7 @@
             24
           ],
           "parentBox": [
-            146,
+            150,
             24
           ],
           "parentName": "selection=unchecked, state=hover",
@@ -9259,10 +9248,10 @@
       ],
       "box": {
         "type": "COMPONENT_SET",
-        "width": 478,
+        "width": 482,
         "height": 80,
         "childrenExtent": {
-          "right": 478,
+          "right": 482,
           "bottom": 80
         },
         "clipsContent": true
@@ -9785,8 +9774,8 @@
             null,
             null
           ],
-          "gap": 8,
-          "gapBound": "spacing/2",
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -9816,8 +9805,8 @@
             null,
             null
           ],
-          "gap": 8,
-          "gapBound": "spacing/2",
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -9847,8 +9836,8 @@
             null,
             null
           ],
-          "gap": 8,
-          "gapBound": "spacing/2",
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -9881,8 +9870,8 @@
             null,
             null
           ],
-          "gap": 8,
-          "gapBound": "spacing/2",
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -9913,7 +9902,7 @@
             24
           ],
           "parentBox": [
-            56,
+            60,
             24
           ],
           "parentName": "selection=unselected, state=default",
@@ -9933,7 +9922,7 @@
             18
           ],
           "parentBox": [
-            56,
+            60,
             24
           ],
           "parentName": "selection=unselected, state=default",
@@ -9953,7 +9942,7 @@
             24
           ],
           "parentBox": [
-            49,
+            53,
             24
           ],
           "parentName": "selection=selected, state=default",
@@ -9973,7 +9962,7 @@
             18
           ],
           "parentBox": [
-            49,
+            53,
             24
           ],
           "parentName": "selection=selected, state=default",
@@ -9993,7 +9982,7 @@
             24
           ],
           "parentBox": [
-            56,
+            60,
             24
           ],
           "parentName": "selection=unselected, state=focus",
@@ -10013,7 +10002,7 @@
             18
           ],
           "parentBox": [
-            56,
+            60,
             24
           ],
           "parentName": "selection=unselected, state=focus",
@@ -10033,7 +10022,7 @@
             24
           ],
           "parentBox": [
-            56,
+            60,
             24
           ],
           "parentName": "selection=unselected, state=hover",
@@ -10053,7 +10042,7 @@
             18
           ],
           "parentBox": [
-            56,
+            60,
             24
           ],
           "parentName": "selection=unselected, state=hover",
@@ -10064,10 +10053,10 @@
       "layers": [],
       "box": {
         "type": "COMPONENT_SET",
-        "width": 232,
+        "width": 236,
         "height": 80,
         "childrenExtent": {
-          "right": 232,
+          "right": 236,
           "bottom": 80
         },
         "clipsContent": true
@@ -10148,8 +10137,8 @@
             "spacing/1",
             null
           ],
-          "gap": 8,
-          "gapBound": "spacing/2",
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -10179,8 +10168,8 @@
             "spacing/1",
             null
           ],
-          "gap": 8,
-          "gapBound": "spacing/2",
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -10210,8 +10199,8 @@
             "spacing/1",
             null
           ],
-          "gap": 8,
-          "gapBound": "spacing/2",
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -10244,8 +10233,8 @@
             "spacing/1",
             null
           ],
-          "gap": 8,
-          "gapBound": "spacing/2",
+          "gap": 12,
+          "gapBound": "spacing/3",
           "fill": null,
           "stroke": null,
           "strokeWeight": 1,
@@ -10276,7 +10265,7 @@
             28
           ],
           "parentBox": [
-            118,
+            122,
             28
           ],
           "parentName": "selection=unchecked, state=default",
@@ -10296,7 +10285,7 @@
             20
           ],
           "parentBox": [
-            118,
+            122,
             28
           ],
           "parentName": "selection=unchecked, state=default",
@@ -10316,7 +10305,7 @@
             28
           ],
           "parentBox": [
-            144,
+            148,
             28
           ],
           "parentName": "selection=checked, state=default",
@@ -10336,7 +10325,7 @@
             20
           ],
           "parentBox": [
-            144,
+            148,
             28
           ],
           "parentName": "selection=checked, state=default",
@@ -10356,7 +10345,7 @@
             28
           ],
           "parentBox": [
-            118,
+            122,
             28
           ],
           "parentName": "selection=unchecked, state=focus",
@@ -10376,7 +10365,7 @@
             20
           ],
           "parentBox": [
-            118,
+            122,
             28
           ],
           "parentName": "selection=unchecked, state=focus",
@@ -10396,7 +10385,7 @@
             28
           ],
           "parentBox": [
-            118,
+            122,
             28
           ],
           "parentName": "selection=unchecked, state=hover",
@@ -10416,7 +10405,7 @@
             20
           ],
           "parentBox": [
-            118,
+            122,
             28
           ],
           "parentName": "selection=unchecked, state=hover",
@@ -10639,10 +10628,10 @@
       ],
       "box": {
         "type": "COMPONENT_SET",
-        "width": 444,
+        "width": 448,
         "height": 88,
         "childrenExtent": {
-          "right": 444,
+          "right": 448,
           "bottom": 88
         },
         "clipsContent": true
@@ -12970,11 +12959,11 @@
           "box": [
             56,
             5,
-            22,
+            24,
             16
           ],
           "parentBox": [
-            78,
+            80,
             26
           ],
           "parentName": "atl-breadcrumb-item",
@@ -12990,11 +12979,11 @@
           "box": [
             70,
             5,
-            22,
+            24,
             16
           ],
           "parentBox": [
-            92,
+            94,
             26
           ],
           "parentName": "atl-breadcrumb-item",
@@ -13010,11 +12999,11 @@
           "box": [
             71,
             5,
-            22,
+            24,
             16
           ],
           "parentBox": [
-            93,
+            95,
             26
           ],
           "parentName": "atl-breadcrumb-item",
@@ -13025,7 +13014,7 @@
       "layers": [],
       "box": {
         "type": "COMPONENT",
-        "width": 323,
+        "width": 329,
         "height": 26,
         "childrenExtent": null,
         "clipsContent": false
@@ -21973,7 +21962,7 @@
       "box": {
         "type": "COMPONENT_SET",
         "width": 1262,
-        "height": 356,
+        "height": 357,
         "childrenExtent": {
           "right": 1262,
           "bottom": 357
