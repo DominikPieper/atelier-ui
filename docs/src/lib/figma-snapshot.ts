@@ -45,13 +45,24 @@ export const tokenCensus = (() => {
     color: startsWith('color/'),
     spacing: startsWith('spacing/'),
     radius: startsWith('radius/'),
+    // `control-height/*` (ADR-0041's primitive) and `row-height/*` (ADR-0052's
+    // derived ladder, `control + 2 × --ui-row-inset`) collapse into one bucket:
+    // the Figma variable itself is a plain resolved number either way — the
+    // primitive/derived relationship is a CSS `calc()` fact this collection
+    // can't hold, so the census can't see it and shouldn't claim to.
+    sizing: snapshot.uiTokens.filter((n) => /^(control-height|row-height)\//.test(n)).length,
     typography: snapshot.uiTokens.filter((n) =>
       /^(font|font-size|font-weight|line-height)\//.test(n),
     ).length,
     opacity: startsWith('opacity/'),
   };
   const covered =
-    census.color + census.spacing + census.radius + census.typography + census.opacity;
+    census.color +
+    census.spacing +
+    census.radius +
+    census.sizing +
+    census.typography +
+    census.opacity;
   if (covered !== census.total) {
     throw new Error(
       `figma-snapshot: the token census covers ${covered} of ${census.total} variables — ` +

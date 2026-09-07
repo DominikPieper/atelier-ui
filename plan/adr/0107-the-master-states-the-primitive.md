@@ -95,6 +95,23 @@ for a gate to encode and re-opens the question for every new component.
   updated to expect block padding 0 and to compare only the inline axis, those
   six warnings are noise that will teach the next reader to ignore the gate.
   This ADR is not finished until that rule changes.
+
+  **Corrected 2026-09-07:** the rule changed. `tools/scripts/check-figma.js`
+  now names the six masters in a `BLOCK_HEIGHT_DERIVED` set and, for the BLOCK
+  (top/bottom) axis only, no longer compares them to the CSS's `calc()`-resolved
+  number — it asserts the axis is exactly 0, aggregated across every checked
+  variant so a regression on one cannot be masked by another that still reads
+  0 (still tagged `[ROOT-BOX]`, still WARNING — unchanged severity). The INLINE axis is
+  untouched in mechanism, per this ADR's own §Decision, and its "not on the
+  spacing scale" message was reworded to stop blaming ADR-0041's arithmetic for
+  a value that was never a `calc()` in the first place. Verified against the
+  committed snapshot: the six warnings are gone and none appeared in their
+  place (14 → 8 total). One of the "Three things this surfaced" below —
+  AtlButton's raw, off-scale `sm`/`md` inline padding — turned out to be a
+  second, independent gap the same fix exposed once the block axis stopped
+  swallowing it every run; it is now `AtlButton:root-paint:padding-off-scale`
+  in `FIGMA_CONFORMANCE_EXCEPTIONS`, not silently absorbed, and stays open
+  until the "Left open" choice below is made.
 - Masters keep an explicit height, which is now the only thing they say about
   their own box. That is a real reduction in what a designer can adjust in
   Figma, and it is deliberate: the adjustable value lives in `tokens.css`.

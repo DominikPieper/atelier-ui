@@ -204,6 +204,14 @@ const FIGMA_CONFORMANCE_EXCEPTIONS = new Set([
   // in the CSS (the off-scale spacing sweep in tasks/todo.md), not in Figma: drawing
   // 4px here to satisfy the gate would make the master diverge from the component.
   'AtlStep:token:spacing:step-text',
+  // AtlButton's sm/md inline padding is a raw 0.875rem/1.125rem (14px/18px) — off
+  // the 0.25rem scale itself, so no spacing/* Variable can hold it. The master is
+  // NOT stale: it is bound to spacing/4 and spacing/5, the nearest steps that
+  // actually exist (16/20px). Left open by ADR-0107 ("Three things this surfaced"):
+  // bring the code onto the scale, or accept the off-scale value and say so.
+  // Delete this entry the day that decision lands — [STALE-EXEMPTION] will flag it
+  // unused the moment either happens.
+  'AtlButton:root-paint:padding-off-scale',
   'AtlChat:token:radius:Rectangle',
   // The Chat drawer variant embeds a miniature APP MOCKUP (page header,
   // content blocks, dividers, message bubbles) as illustrative context.

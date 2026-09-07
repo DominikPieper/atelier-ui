@@ -148,11 +148,14 @@ const padWarnings = new Map();
  *    - AtlToast pads 16/20 via --ui-spacing-4 / -5, and the master pads 12/16 via
  *      spacing/3 and spacing/4. Bound, one step off, and Figma can hold the right
  *      one. That is a blocker.
- *    - AtlButton's padding is DERIVED (ADR-0041): 6.25px is
- *      `(control-height - line-height x font-size) / 2`. No spacing token holds it
- *      and no Figma Variable can express the arithmetic, so the master can only
- *      carry a resolved number that drifts by construction. That is a warning about
- *      a structural limit, not a value to correct.
+ *    - AtlButton's INLINE padding (`sm`/`md`) is a raw 14px/18px, off the 0.25rem
+ *      scale itself — no spacing token holds it and no Figma Variable can, so
+ *      Figma is not stale here, the code is unexpressible. That is a warning about
+ *      a code-side limit, not a master defect to correct (ADR-0107).
+ *
+ *  The BLOCK axis of a height-derived control used to be judged the same way
+ *  (compared against the CSS's `calc()`-resolved number) and is not any more —
+ *  see BLOCK_HEIGHT_DERIVED below, which ADR-0107 carved out on its own terms.
  */
 const SPACING_PX = (() => {
   const css = fs.readFileSync(TOKENS_FILE, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
@@ -162,6 +165,28 @@ const SPACING_PX = (() => {
   }
   return out;
 })();
+
+/** Masters where the control HEIGHT is the primitive and the CSS derives
+ *  `padding-block` from it via ADR-0041's recipe — AtlBadge included, whose block
+ *  padding is a resolved literal rather than a literal `calc()`, but is the same
+ *  recipe's output (ADR-0107). For these six, and ONLY the block (top/bottom)
+ *  axis, [ROOT-BOX] no longer compares the master's padding to the CSS's derived
+ *  number: ADR-0107 decided the master states the height and nothing else, so the
+ *  right expectation is that the block axis is exactly 0 — not the resolved
+ *  number, which drifts the moment the font size, leading or height token moves.
+ *
+ *  Deliberately NOT every master [ROOT-BOX] checks. A row (ADR-0052) also pads
+ *  its block axis 0, but for a different reason — it CENTRES a control that
+ *  already carries its own padding, and its CSS states `padding-block: 0`
+ *  directly rather than deriving it from a height formula, so the general
+ *  bindable/derived comparison below already reads it correctly with no special
+ *  case. A card or a toast STATES its block padding as a spacing token, which is
+ *  exactly the "bindable" case that comparison already handles. Only a control
+ *  whose CSS padding-block is a function of its own height belongs here.
+ *
+ *  The INLINE axis is unaffected: ADR-0107 is explicit that inline padding stays
+ *  a stated design value, bound to a Figma Variable like any other. */
+const BLOCK_HEIGHT_DERIVED = new Set(['AtlButton', 'AtlInput', 'AtlBadge', 'AtlTextarea', 'AtlSelect', 'AtlTab']);
 function allowed(selector, check, detail) {
   const key = `${selector}:${check}:${detail}`;
   if (FIGMA_CONFORMANCE_EXCEPTIONS.has(key)) {
@@ -1176,6 +1201,18 @@ function checkRootPaint() {
       if (!grouped.has(key)) grouped.set(key, []);
       grouped.get(key).push(variant);
     };
+    // [ROOT-BOX]'s block-axis half, for a height-derived control: `top px` `bottom
+    // px` -> variants. Collected across every checked variant (never overwritten),
+    // so a regression on one variant cannot be masked by a later variant that
+    // still reads 0 — see BLOCK_HEIGHT_DERIVED. Emitted under the same [ROOT-BOX]
+    // tag as the rest of this rule, not a tag of its own.
+    const blockPad = new Map();
+    // The off-scale half of [ROOT-BOX]: message -> variants. Same aggregation
+    // shape as `grouped` above (accumulate, never overwrite) rather than the
+    // single-slot `padWarnings` Map — a size that mismatches on one variant and
+    // matches on another (AtlButton's lg does, sm/md do not) must not have its
+    // finding depend on which variant the loop happens to visit last.
+    const offScale = new Map();
     // A `state` axis other than `default` is painted by rules a static selector
     // table cannot resolve — `:hover`, `:focus-visible`, `:active`, `.is-invalid`,
     // `.is-open` — and comparing those variants against the base rule reported the
@@ -1231,9 +1268,20 @@ function checkRootPaint() {
       // would be inventing a rule. Where the CSS says nothing at all and Figma pads
       // anyway, that is the AtlStepper conversation (component chrome or artboard
       // breathing room?) — a warning, because the gate cannot decide it.
+      //
+      // A height-derived control (BLOCK_HEIGHT_DERIVED) is the deliberate exception
+      // on the BLOCK axis: its CSS padding-block IS stated, but ADR-0107 decided the
+      // master must not restate the number that formula resolves to, so the block
+      // sides are pulled out of `stated` here and asserted against 0 separately,
+      // below. The INLINE axis is untouched — ADR-0107 is explicit that inline
+      // padding stays a stated design value.
+      const isHeightDerivedBlock = BLOCK_HEIGHT_DERIVED.has(entry.label);
       if (got.pad) {
         const SIDES = ['top', 'right', 'bottom', 'left'];
-        const stated = SIDES.filter((sd) => want.padding[sd] !== null && want.padding[sd] !== undefined);
+        const stated = SIDES.filter((sd) => {
+          if (isHeightDerivedBlock && (sd === 'top' || sd === 'bottom')) return false;
+          return want.padding[sd] !== null && want.padding[sd] !== undefined;
+        });
         if (stated.length === 0) {
           const nonZero = got.pad.some((p) => p > 0.5);
           if (nonZero) {
@@ -1260,15 +1308,30 @@ function checkRootPaint() {
               : ` Bind ${tokens.join(', ')}.`;
             note('padding', `root padding is ${bindable.map(fmt).join(', ')} (the CSS root).${how}`, variant);
           }
-          if (derived.length) {
-            padWarnings.set(
-              `${entry.label}:derived`,
-              `${entry.label}: root padding is ${derived.map(fmt).join(', ')}. The CSS DERIVES those ` +
-                `values from the control recipe (ADR-0041), so no spacing token holds them and no Figma ` +
-                `Variable can express the arithmetic — the master can only carry a resolved number. Keep ` +
-                `the number in step, or decide the master should not pad at all and let the stated height ` +
-                `do the work.`
-            );
+          if (derived.length && !allowed(entry.label, 'root-paint', 'padding-off-scale')) {
+            const msg =
+              `root padding is ${derived.map(fmt).join(', ')}. That value sits off the 0.25rem spacing ` +
+              `scale, so no spacing/* token holds it and no Figma Variable can bind it — the master is not ` +
+              `stale here, the code states a value Figma cannot express. Bring the code onto the scale, or ` +
+              `record why the off-scale value stands and accept the mismatch (ADR-0107).`;
+            if (!offScale.has(msg)) offScale.set(msg, []);
+            offScale.get(msg).push(variant);
+          }
+        }
+        // [ROOT-BOX]'s block-axis half: the block axis of a height-derived
+        // control, asserted against 0 rather than compared to the CSS's
+        // calc()-resolved number (ADR-0107 §Decision — "carries no block
+        // padding"). A master that drifts back to a resolved number is wrong
+        // now in a way it was not before this decision, so this fires on ANY
+        // nonzero reading, not only a mismatch against some expected value —
+        // there is no expected value but 0.
+        if (isHeightDerivedBlock) {
+          const top = Math.round(got.pad[SIDES.indexOf('top')] * 100) / 100;
+          const bottom = Math.round(got.pad[SIDES.indexOf('bottom')] * 100) / 100;
+          if (Math.abs(top) > 0.5 || Math.abs(bottom) > 0.5) {
+            const key = top + '#' + bottom;
+            if (!blockPad.has(key)) blockPad.set(key, []);
+            blockPad.get(key).push(variant);
           }
         }
         if (want.gap !== null && want.gap !== undefined && got.gap !== null && Math.abs(got.gap - want.gap) > 0.5) {
@@ -1284,9 +1347,23 @@ function checkRootPaint() {
         }
       }
     }
-    for (const key of [entry.label, `${entry.label}:derived`]) {
-      const pw = padWarnings.get(key);
+    {
+      const pw = padWarnings.get(entry.label);
       if (pw) warning('ROOT-BOX', pw);
+    }
+    for (const [msg, vs] of offScale) {
+      const scope = vs.length === checkable.length ? 'every checked variant' : vs.length > 3 ? `${vs.length} variants (${vs.slice(0, 2).join('; ')}; …)` : vs.join('; ');
+      warning('ROOT-BOX', `${entry.label} [${scope}]: ${msg}`);
+    }
+    for (const [key, vs] of blockPad) {
+      const [top, bottom] = key.split('#');
+      const scope = vs.length === checkable.length ? 'every checked variant' : vs.length > 3 ? `${vs.length} variants (${vs.slice(0, 2).join('; ')}; …)` : vs.join('; ');
+      warning(
+        'ROOT-BOX',
+        `${entry.label} [${scope}]: root block padding is top ${top}px, bottom ${bottom}px. ADR-0107 decided ` +
+          `this master's height alone states the box — the CSS derives padding-block from it, so the master ` +
+          `carries none. Zero it, or record why this master needs to keep the block axis.`
+      );
     }
     for (const [key, vs] of grouped) {
       const msg = key.split('\u0000')[1];
@@ -2326,6 +2403,37 @@ function checkLayerPaint() {
       const derivedBlock = /calc\(/.test(String(decl('padding') || '')) && box.minHeight !== null;
       const centred = L.padding && L.padding[0] === 0 && L.padding[2] === 0 && L.minHeight !== null && Math.abs(L.minHeight - box.minHeight) <= 0.5;
       if (derivedBlock && centred) { box.padding.top = null; box.padding.bottom = null; }
+      // [ROOT-BOX]'s height-derived carve-out (BLOCK_HEIGHT_DERIVED, ADR-0107) has a
+      // layer-level twin: one of the same six masters, encountered here as a `layer`
+      // entry instead of a component root. `centred` above already reads a 0 block
+      // axis as correct with no comparison at all — the gap was the NOT-centred case,
+      // which fell through to the general `cmp()` below and matched a stale resolved
+      // number by coincidence (exactly the defect ADR-0107 retired at the root). Any
+      // nonzero reading is now asserted wrong outright, not compared against the
+      // CSS's calc()-resolved value — there is no expected value but 0.
+      //
+      // Scoped to BLOCK_HEIGHT_DERIVED itself, not every height-derived layer:
+      // AtlMenu's item, AtlTabGroup's tab and AtlCombobox's input reuse the identical
+      // CSS recipe (`min-height` + a `calc()` block padding) but are not masters
+      // ADR-0107 named, and extending its decision to them is a separate call this
+      // fix does not make.
+      if (derivedBlock && L.padding && BLOCK_HEIGHT_DERIVED.has(comp.selector)) {
+        const top = Math.round(L.padding[0] * 100) / 100;
+        const bottom = Math.round(L.padding[2] * 100) / 100;
+        if (Math.abs(top) > 0.5 || Math.abs(bottom) > 0.5) {
+          note(
+            'block-padding:' + L.layer,
+            `${L.layer} block padding is top ${top}px, bottom ${bottom}px. ADR-0107 decided a height-derived ` +
+              `control's master carries no block padding — zero it, or record why this layer needs to keep ` +
+              `the block axis.`,
+            where
+          );
+        }
+        // Handled above, on its own terms — the general comparison below must not
+        // ALSO judge it against the derived number.
+        box.padding.top = null;
+        box.padding.bottom = null;
+      }
       if (L.padding) {
         cmp('padding-top', L.padding[0], box.padding.top);
         cmp('padding-right', L.padding[1], box.padding.right);
