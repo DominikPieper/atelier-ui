@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": "2026-09-07T07:01:38Z",
-    "generatedAt": "2026-09-07T07:08:13.963Z",
-    "gitSha": "e7c4941",
+    "generatedAt": "2026-09-07T08:30:01.276Z",
+    "gitSha": "1f9f82e",
     "serverVersion": null,
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -5946,19 +5946,19 @@
       "layers": [],
       "box": {
         "type": "COMPONENT_SET",
-        "width": 2648,
+        "width": 4288,
         "height": 205,
         "childrenExtent": {
-          "right": 2648,
+          "right": 4288,
           "bottom": 205
         },
         "clipsContent": true
       },
       "glyphTextNodes": [],
-      "sampledVariant": "55:93",
+      "sampledVariant": "73:334",
       "nodes": [
         {
-          "name": "size=md",
+          "name": "size=sm",
           "type": "COMPONENT",
           "hasChildren": true,
           "hidden": false,
@@ -13587,8 +13587,8 @@
           "padding": null,
           "gap": null,
           "minHeight": null,
-          "height": 320,
-          "width": 440,
+          "height": 480,
+          "width": 720,
           "fontSize": null,
           "lineHeight": null
         },
@@ -13618,8 +13618,8 @@
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 320,
-          "width": 220,
+          "height": 480,
+          "width": 448,
           "fontSize": null,
           "lineHeight": null
         },
@@ -13648,7 +13648,7 @@
           "gap": 12,
           "minHeight": null,
           "height": 52,
-          "width": 220,
+          "width": 448,
           "fontSize": 16,
           "lineHeight": null
         },
@@ -13705,8 +13705,8 @@
           ],
           "gap": 8,
           "minHeight": null,
-          "height": 204,
-          "width": 220,
+          "height": 364,
+          "width": 448,
           "fontSize": 14,
           "lineHeight": null
         },
@@ -13735,7 +13735,7 @@
           "gap": 8,
           "minHeight": null,
           "height": 64,
-          "width": 220,
+          "width": 448,
           "fontSize": null,
           "lineHeight": null
         },
@@ -13758,8 +13758,8 @@
           "padding": null,
           "gap": null,
           "minHeight": null,
-          "height": 320,
-          "width": 440,
+          "height": 480,
+          "width": 720,
           "fontSize": null,
           "lineHeight": null
         },
@@ -13789,8 +13789,8 @@
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 320,
-          "width": 220,
+          "height": 480,
+          "width": 448,
           "fontSize": null,
           "lineHeight": null
         },
@@ -13819,7 +13819,7 @@
           "gap": 12,
           "minHeight": null,
           "height": 52,
-          "width": 220,
+          "width": 448,
           "fontSize": 16,
           "lineHeight": null
         },
@@ -13854,6 +13854,177 @@
         },
         {
           "variant": "position=left, size=md",
+          "count": 1,
+          "layer": "content",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "VERTICAL",
+          "padding": [
+            20,
+            20,
+            20,
+            20
+          ],
+          "gap": 8,
+          "minHeight": null,
+          "height": 364,
+          "width": 448,
+          "fontSize": 14,
+          "lineHeight": null
+        },
+        {
+          "variant": "position=left, size=md",
+          "count": 1,
+          "layer": "footer",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": "color/border",
+          "strokeSides": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            16,
+            20,
+            16,
+            20
+          ],
+          "gap": 8,
+          "minHeight": null,
+          "height": 64,
+          "width": 448,
+          "fontSize": null,
+          "lineHeight": null
+        },
+        {
+          "variant": "position=top, size=md",
+          "count": 1,
+          "layer": "backdrop",
+          "type": "RECTANGLE",
+          "fill": "color/overlay",
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "NONE",
+          "padding": null,
+          "gap": null,
+          "minHeight": null,
+          "height": 480,
+          "width": 720,
+          "fontSize": null,
+          "lineHeight": null
+        },
+        {
+          "variant": "position=top, size=md",
+          "count": 1,
+          "layer": "dialog",
+          "type": "FRAME",
+          "fill": "color/surface",
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [
+            "DROP_SHADOW"
+          ],
+          "layoutMode": "VERTICAL",
+          "padding": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 320,
+          "width": 720,
+          "fontSize": null,
+          "lineHeight": null
+        },
+        {
+          "variant": "position=top, size=md",
+          "count": 1,
+          "layer": "header",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": "color/border",
+          "strokeSides": [
+            0,
+            0,
+            1,
+            0
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            16,
+            20,
+            16,
+            20
+          ],
+          "gap": 12,
+          "minHeight": null,
+          "height": 52,
+          "width": 720,
+          "fontSize": 16,
+          "lineHeight": null
+        },
+        {
+          "variant": "position=top, size=md",
+          "count": 1,
+          "layer": "close",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/sm",
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 28,
+          "width": 16,
+          "fontSize": null,
+          "lineHeight": null
+        },
+        {
+          "variant": "position=top, size=md",
           "count": 1,
           "layer": "content",
           "type": "FRAME",
@@ -13877,178 +14048,7 @@
           "gap": 8,
           "minHeight": null,
           "height": 204,
-          "width": 220,
-          "fontSize": 14,
-          "lineHeight": null
-        },
-        {
-          "variant": "position=left, size=md",
-          "count": 1,
-          "layer": "footer",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": "color/border",
-          "strokeSides": [
-            1,
-            0,
-            0,
-            0
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            16,
-            20,
-            16,
-            20
-          ],
-          "gap": 8,
-          "minHeight": null,
-          "height": 64,
-          "width": 220,
-          "fontSize": null,
-          "lineHeight": null
-        },
-        {
-          "variant": "position=top, size=md",
-          "count": 1,
-          "layer": "backdrop",
-          "type": "RECTANGLE",
-          "fill": "color/overlay",
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "NONE",
-          "padding": null,
-          "gap": null,
-          "minHeight": null,
-          "height": 320,
-          "width": 440,
-          "fontSize": null,
-          "lineHeight": null
-        },
-        {
-          "variant": "position=top, size=md",
-          "count": 1,
-          "layer": "dialog",
-          "type": "FRAME",
-          "fill": "color/surface",
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [
-            "DROP_SHADOW"
-          ],
-          "layoutMode": "VERTICAL",
-          "padding": [
-            0,
-            0,
-            0,
-            0
-          ],
-          "gap": 0,
-          "minHeight": null,
-          "height": 220,
-          "width": 440,
-          "fontSize": null,
-          "lineHeight": null
-        },
-        {
-          "variant": "position=top, size=md",
-          "count": 1,
-          "layer": "header",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": "color/border",
-          "strokeSides": [
-            0,
-            0,
-            1,
-            0
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            16,
-            20,
-            16,
-            20
-          ],
-          "gap": 12,
-          "minHeight": null,
-          "height": 52,
-          "width": 440,
-          "fontSize": 16,
-          "lineHeight": null
-        },
-        {
-          "variant": "position=top, size=md",
-          "count": 1,
-          "layer": "close",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": "radius/sm",
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            0,
-            0,
-            0,
-            0
-          ],
-          "gap": 0,
-          "minHeight": null,
-          "height": 28,
-          "width": 16,
-          "fontSize": null,
-          "lineHeight": null
-        },
-        {
-          "variant": "position=top, size=md",
-          "count": 1,
-          "layer": "content",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "VERTICAL",
-          "padding": [
-            20,
-            20,
-            20,
-            20
-          ],
-          "gap": 8,
-          "minHeight": null,
-          "height": 104,
-          "width": 440,
+          "width": 720,
           "fontSize": 14,
           "lineHeight": null
         },
@@ -14077,7 +14077,7 @@
           "gap": 8,
           "minHeight": null,
           "height": 64,
-          "width": 440,
+          "width": 720,
           "fontSize": null,
           "lineHeight": null
         },
@@ -14100,8 +14100,8 @@
           "padding": null,
           "gap": null,
           "minHeight": null,
-          "height": 320,
-          "width": 440,
+          "height": 480,
+          "width": 720,
           "fontSize": null,
           "lineHeight": null
         },
@@ -14131,8 +14131,8 @@
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 220,
-          "width": 440,
+          "height": 320,
+          "width": 720,
           "fontSize": null,
           "lineHeight": null
         },
@@ -14161,7 +14161,7 @@
           "gap": 12,
           "minHeight": null,
           "height": 52,
-          "width": 440,
+          "width": 720,
           "fontSize": 16,
           "lineHeight": null
         },
@@ -14196,177 +14196,6 @@
         },
         {
           "variant": "position=bottom, size=md",
-          "count": 1,
-          "layer": "content",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "VERTICAL",
-          "padding": [
-            20,
-            20,
-            20,
-            20
-          ],
-          "gap": 8,
-          "minHeight": null,
-          "height": 104,
-          "width": 440,
-          "fontSize": 14,
-          "lineHeight": null
-        },
-        {
-          "variant": "position=bottom, size=md",
-          "count": 1,
-          "layer": "footer",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": "color/border",
-          "strokeSides": [
-            1,
-            0,
-            0,
-            0
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            16,
-            20,
-            16,
-            20
-          ],
-          "gap": 8,
-          "minHeight": null,
-          "height": 64,
-          "width": 440,
-          "fontSize": null,
-          "lineHeight": null
-        },
-        {
-          "variant": "position=right, size=sm",
-          "count": 1,
-          "layer": "backdrop",
-          "type": "RECTANGLE",
-          "fill": "color/overlay",
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "NONE",
-          "padding": null,
-          "gap": null,
-          "minHeight": null,
-          "height": 320,
-          "width": 440,
-          "fontSize": null,
-          "lineHeight": null
-        },
-        {
-          "variant": "position=right, size=sm",
-          "count": 1,
-          "layer": "dialog",
-          "type": "FRAME",
-          "fill": "color/surface",
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": null,
-          "effects": [
-            "DROP_SHADOW"
-          ],
-          "layoutMode": "VERTICAL",
-          "padding": [
-            0,
-            0,
-            0,
-            0
-          ],
-          "gap": 0,
-          "minHeight": null,
-          "height": 320,
-          "width": 220,
-          "fontSize": null,
-          "lineHeight": null
-        },
-        {
-          "variant": "position=right, size=sm",
-          "count": 1,
-          "layer": "header",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": "color/border",
-          "strokeSides": [
-            0,
-            0,
-            1,
-            0
-          ],
-          "radius": null,
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            16,
-            20,
-            16,
-            20
-          ],
-          "gap": 12,
-          "minHeight": null,
-          "height": 52,
-          "width": 220,
-          "fontSize": 16,
-          "lineHeight": null
-        },
-        {
-          "variant": "position=right, size=sm",
-          "count": 1,
-          "layer": "close",
-          "type": "FRAME",
-          "fill": null,
-          "stroke": null,
-          "strokeSides": [
-            1,
-            1,
-            1,
-            1
-          ],
-          "radius": "radius/sm",
-          "effects": [],
-          "layoutMode": "HORIZONTAL",
-          "padding": [
-            0,
-            0,
-            0,
-            0
-          ],
-          "gap": 0,
-          "minHeight": null,
-          "height": 28,
-          "width": 16,
-          "fontSize": null,
-          "lineHeight": null
-        },
-        {
-          "variant": "position=right, size=sm",
           "count": 1,
           "layer": "content",
           "type": "FRAME",
@@ -14390,7 +14219,178 @@
           "gap": 8,
           "minHeight": null,
           "height": 204,
-          "width": 220,
+          "width": 720,
+          "fontSize": 14,
+          "lineHeight": null
+        },
+        {
+          "variant": "position=bottom, size=md",
+          "count": 1,
+          "layer": "footer",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": "color/border",
+          "strokeSides": [
+            1,
+            0,
+            0,
+            0
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            16,
+            20,
+            16,
+            20
+          ],
+          "gap": 8,
+          "minHeight": null,
+          "height": 64,
+          "width": 720,
+          "fontSize": null,
+          "lineHeight": null
+        },
+        {
+          "variant": "position=right, size=sm",
+          "count": 1,
+          "layer": "backdrop",
+          "type": "RECTANGLE",
+          "fill": "color/overlay",
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "NONE",
+          "padding": null,
+          "gap": null,
+          "minHeight": null,
+          "height": 480,
+          "width": 720,
+          "fontSize": null,
+          "lineHeight": null
+        },
+        {
+          "variant": "position=right, size=sm",
+          "count": 1,
+          "layer": "dialog",
+          "type": "FRAME",
+          "fill": "color/surface",
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [
+            "DROP_SHADOW"
+          ],
+          "layoutMode": "VERTICAL",
+          "padding": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 480,
+          "width": 320,
+          "fontSize": null,
+          "lineHeight": null
+        },
+        {
+          "variant": "position=right, size=sm",
+          "count": 1,
+          "layer": "header",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": "color/border",
+          "strokeSides": [
+            0,
+            0,
+            1,
+            0
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            16,
+            20,
+            16,
+            20
+          ],
+          "gap": 12,
+          "minHeight": null,
+          "height": 52,
+          "width": 320,
+          "fontSize": 16,
+          "lineHeight": null
+        },
+        {
+          "variant": "position=right, size=sm",
+          "count": 1,
+          "layer": "close",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": "radius/sm",
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 28,
+          "width": 16,
+          "fontSize": null,
+          "lineHeight": null
+        },
+        {
+          "variant": "position=right, size=sm",
+          "count": 1,
+          "layer": "content",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "VERTICAL",
+          "padding": [
+            20,
+            20,
+            20,
+            20
+          ],
+          "gap": 8,
+          "minHeight": null,
+          "height": 364,
+          "width": 320,
           "fontSize": 14,
           "lineHeight": null
         },
@@ -14419,7 +14419,7 @@
           "gap": 8,
           "minHeight": null,
           "height": 64,
-          "width": 220,
+          "width": 320,
           "fontSize": null,
           "lineHeight": null
         },
@@ -14442,8 +14442,8 @@
           "padding": null,
           "gap": null,
           "minHeight": null,
-          "height": 320,
-          "width": 440,
+          "height": 480,
+          "width": 720,
           "fontSize": null,
           "lineHeight": null
         },
@@ -14473,8 +14473,8 @@
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 320,
-          "width": 220,
+          "height": 480,
+          "width": 640,
           "fontSize": null,
           "lineHeight": null
         },
@@ -14503,7 +14503,7 @@
           "gap": 12,
           "minHeight": null,
           "height": 52,
-          "width": 220,
+          "width": 640,
           "fontSize": 16,
           "lineHeight": null
         },
@@ -14560,8 +14560,8 @@
           ],
           "gap": 8,
           "minHeight": null,
-          "height": 204,
-          "width": 220,
+          "height": 364,
+          "width": 640,
           "fontSize": 14,
           "lineHeight": null
         },
@@ -14590,7 +14590,7 @@
           "gap": 8,
           "minHeight": null,
           "height": 64,
-          "width": 220,
+          "width": 640,
           "fontSize": null,
           "lineHeight": null
         },
@@ -14613,8 +14613,8 @@
           "padding": null,
           "gap": null,
           "minHeight": null,
-          "height": 320,
-          "width": 440,
+          "height": 480,
+          "width": 720,
           "fontSize": null,
           "lineHeight": null
         },
@@ -14644,8 +14644,8 @@
           ],
           "gap": 0,
           "minHeight": null,
-          "height": 320,
-          "width": 220,
+          "height": 480,
+          "width": 720,
           "fontSize": null,
           "lineHeight": null
         },
@@ -14674,7 +14674,7 @@
           "gap": 12,
           "minHeight": null,
           "height": 52,
-          "width": 220,
+          "width": 720,
           "fontSize": 16,
           "lineHeight": null
         },
@@ -14731,8 +14731,8 @@
           ],
           "gap": 8,
           "minHeight": null,
-          "height": 204,
-          "width": 220,
+          "height": 364,
+          "width": 720,
           "fontSize": 14,
           "lineHeight": null
         },
@@ -14761,26 +14761,26 @@
           "gap": 8,
           "minHeight": null,
           "height": 64,
-          "width": 220,
+          "width": 720,
           "fontSize": null,
           "lineHeight": null
         }
       ],
       "box": {
         "type": "COMPONENT_SET",
-        "width": 2856,
-        "height": 1376,
+        "width": 3024,
+        "height": 2064,
         "childrenExtent": {
-          "right": 2856,
-          "bottom": 1376
+          "right": 3024,
+          "bottom": 2064
         },
         "clipsContent": true
       },
       "glyphTextNodes": [],
-      "sampledVariant": "421:342",
+      "sampledVariant": "507:4013",
       "nodes": [
         {
-          "name": "position=right, size=md",
+          "name": "position=right, size=sm",
           "type": "COMPONENT",
           "hasChildren": true,
           "hidden": false,
