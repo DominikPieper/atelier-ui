@@ -86,6 +86,7 @@ let nextId = 0;
     <button
       type="button"
       class="trigger"
+      role="combobox"
       [id]="triggerId"
       [attr.aria-expanded]="isOpen()"
       aria-haspopup="listbox"
@@ -94,6 +95,7 @@ let nextId = 0;
       [attr.aria-label]="ariaLabel() || null"
       [attr.aria-invalid]="invalid() || null"
       [attr.aria-describedby]="showErrors() ? errorId : null"
+      [attr.aria-required]="required() || null"
       [attr.disabled]="disabled() || null"
       (click)="onTriggerClick()"
       (blur)="onTriggerBlur()"
@@ -129,17 +131,20 @@ let nextId = 0;
   `,
   styleUrl: './atl-select.css',
   host: {
-    role: 'combobox',
     '[class]': 'hostClasses()',
-    '[attr.aria-required]': 'required() || null',
     '(keydown)': 'onKeydown($event)',
     // Same fix as atl-input.ts's `id`: a static `aria-label="…"` attribute
     // matches the aliased `ariaLabel` input below AND stays on this host
-    // element too. The host already carries `role="combobox"`, so an
-    // aria-label here would actually take effect — as a second, competing
-    // name next to the trigger button's, not as a no-op like on Input's
-    // roleless host. Force it absent so the trigger button (the actual
-    // focusable widget) is the one and only place the name lands.
+    // element too. The host itself carries no `role` (moved to the trigger
+    // button below — see ADR-0109, which also moved `role="combobox"` and
+    // `aria-required` off this host for the same reason: they describe the
+    // combobox widget, and the button, not this host, is that widget). So an
+    // undefended aria-label here is a harmless no-op today — exactly Dialog's
+    // and Table's roleless-host situation — but stays defended anyway per
+    // ADR-0092/check:host-guards: silently useless today, silently wrong the
+    // day this host ever gains a role again. Force it absent so the trigger
+    // button (the actual focusable widget) is the one and only place the
+    // name lands.
     '[attr.aria-label]': 'null',
   },
   providers: [{ provide: ATL_SELECT, useExisting: AtlSelect }],

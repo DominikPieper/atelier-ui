@@ -43,6 +43,18 @@ describe('AtlSelect', () => {
     expect(container.querySelector('[role="combobox"]')).toBeInTheDocument();
   });
 
+  // role="combobox" belongs on the trigger button — the actual focusable
+  // widget that also carries aria-expanded/aria-activedescendant/etc — not
+  // on the (unfocusable) host. See ADR-0109.
+  it('puts role="combobox" on the trigger button, not the host', async () => {
+    const { container } = await render(SELECT_TEMPLATE, {
+      imports: [AtlSelect, AtlOption],
+      componentProperties: { value: '' },
+    });
+    expect(container.querySelector('button.trigger')).toHaveAttribute('role', 'combobox');
+    expect(container.querySelector('atl-select')).not.toHaveAttribute('role');
+  });
+
   it('renders a trigger button', async () => {
     const { container } = await render(SELECT_TEMPLATE, {
       imports: [AtlSelect, AtlOption],
@@ -312,7 +324,10 @@ describe('AtlSelect', () => {
     });
 
     // The trigger has no accessible name at all without one of label/
-    // aria-label — this is the L1 backlog item (axe select-name).
+    // aria-label — this is the L1 backlog item (axe select-name). Queried by
+    // role "combobox", not "button" — the trigger's explicit role="combobox"
+    // (ADR-0109) is what Testing Library now resolves, matching what a real
+    // accessibility tree exposes.
     it('gives the trigger button an accessible name when labelled', async () => {
       await render(
         `<atl-select label="Country" placeholder="Choose">
@@ -320,7 +335,7 @@ describe('AtlSelect', () => {
         </atl-select>`,
         { imports: [AtlSelect, AtlOption] }
       );
-      expect(screen.getByRole('button', { name: 'Country' })).toBeInTheDocument();
+      expect(screen.getByRole('combobox', { name: 'Country' })).toBeInTheDocument();
     });
   });
 
@@ -387,14 +402,14 @@ describe('AtlSelect', () => {
       expect(container.querySelector(`#${panelId}`)).toBeInTheDocument();
     });
 
-    it('sets aria-required="true" on the host when required', async () => {
+    it('sets aria-required="true" on the trigger button when required', async () => {
       const { container } = await render(
         `<atl-select [required]="true" placeholder="Choose">
           <atl-option optionValue="a">A</atl-option>
         </atl-select>`,
         { imports: [AtlSelect, AtlOption] }
       );
-      expect(container.querySelector('atl-select')).toHaveAttribute('aria-required', 'true');
+      expect(container.querySelector('button.trigger')).toHaveAttribute('aria-required', 'true');
     });
 
     it('does not set aria-required when not required', async () => {
@@ -404,7 +419,7 @@ describe('AtlSelect', () => {
         </atl-select>`,
         { imports: [AtlSelect, AtlOption] }
       );
-      expect(container.querySelector('atl-select')).not.toHaveAttribute('aria-required');
+      expect(container.querySelector('button.trigger')).not.toHaveAttribute('aria-required');
     });
   });
 });

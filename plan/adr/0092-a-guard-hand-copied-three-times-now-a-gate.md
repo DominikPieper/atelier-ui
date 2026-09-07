@@ -145,3 +145,14 @@ component.
   other combobox ARIA state — a pre-existing, separately tracked structural
   question (`tasks/todo.md`), not something this gate's guard requirement
   takes a position on either way.
+
+  **Corrected 2026-09-07**: This question is now closed — see ADR-0109. The
+  host's `role="combobox"` was a real ARIA violation (missing its own
+  required `aria-expanded` state; the button that carried the states instead
+  had an implicit `button` role that does not support
+  `aria-activedescendant`), not a stylistic choice. `role="combobox"` and
+  `aria-required` both moved to the trigger button; the host is now roleless.
+  This gate's own guard requirement is unaffected — it fires on the
+  `aria-label` alias existing, unconditionally, exactly as this ADR
+  documented for the already-roleless `AtlDialog`/`AtlTable` — and ADR-0109
+  confirmed that in writing before touching any code.
