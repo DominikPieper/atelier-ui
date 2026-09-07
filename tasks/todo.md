@@ -35,11 +35,13 @@ Ranked; each carries why it's worth doing next rather than later.
   - [x] `design-to-code` into `skills/` with Build and Review modes, four references, six
     fixtures, `project.json`, explicit `nx.json` entry, `UNDISTRIBUTED_SKILLS` (the
     no-argument `sync-skill-discovery` now skips undistributed names) — d6273ce.
-  - [ ] skill-creator iteration 1: three evals (URL-only → handoff doc; AtlCard verify;
-    out-of-scope token architecture) run with and without the skill in worktrees off
-    HEAD / pre-skill HEAD; grade, benchmark, viewer; revise SKILL.md from the findings.
-    The Build-from-handoff eval needs a scratch Figma draft with a master that has no code
-    yet — none exists in the Atelier file today (ADR-0106: all gaps are Figma-side).
+  - [x] skill-creator iteration 1 (2026-09-07): three evals × with/without skill in
+    worktrees; graded; with-skill 86 % vs 59 % pass rate, +44k tokens, same wall time.
+    Record and critique in `skills/design-to-code/evals/iteration-1.md`; revisions in
+    bde4432.
+  - [ ] skill-creator iteration 2: neutral run names in the prompts, the split/added
+    assertions from iteration-1.md, a live-id variant of eval 0, and a Build-from-handoff
+    eval once a scratch Figma draft with a code-less master exists.
   - [ ] Description optimisation (`run_loop.py`) after the owner reviews
     `skills/design-to-code/evals/trigger-eval.json`.
   - [ ] Architect: repo-bound Build recipe (spec block → master bound to `Library Tokens`
