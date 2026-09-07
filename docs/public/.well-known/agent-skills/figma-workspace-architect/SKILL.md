@@ -30,7 +30,7 @@ Also load it **before** any of these `figma-console-mcp` write tools, because ea
 
 To keep scope sharp, this skill **does not** cover:
 
-- **Plugin API mechanics for `figma_execute`** — colors as 0–1, `await figma.loadFontAsync`, `appendChild` ordering, etc. Use general Plugin API knowledge for the payload itself.
+- **Plugin API mechanics for `figma_execute`** — colors as 0–1, `await figma.loadFontAsync`, `appendChild` ordering, etc. Use general Plugin API knowledge for the payload itself. The exception is `references/plugin-api-gotchas.md`: the sizing, section, text and instance traps that general knowledge gets wrong and that cost this library real sessions — read it before any payload that creates, resizes, re-parents or edits text.
 - **Figma → code translation** — generating React/Vue/Swift from a design. That is downstream of this skill.
 - **Code Connect or Figma's official Dev-Mode MCP server.** Explicit user constraint: the toolchain is figma-console-mcp only. The bridge to code in this skill is **naming alignment** alone — Component names, Variant Property names/values, and Variable names matching the codebase exactly. If the user asks about Code Connect / Dev-Mode MCP, say it's out of scope here and don't pretend either is being recommended.
 - **FigJam boards and Figma Slides decks.** The MCP exposes `figjam_*` and `figma_*_slide` tools; this skill targets Figma Design files only.
@@ -165,6 +165,7 @@ If the diff turns out to include adds / removes / renames rather than only value
 Each file is self-contained and loaded only when relevant. Don't load everything up front.
 
 - **`references/tool-map.md`** — figma-console-mcp tools grouped by purpose (read, create-tokens, create-components, validate, document). Read first time the agent isn't sure which tool to use. Includes ready-to-use `figma_execute` and `figma_setup_design_tokens` payloads.
+- **`references/plugin-api-gotchas.md`** — the `figma_execute` traps that bit this repo: `resize()` flips sizing to FIXED, `layoutMode` after `resize()` reverts to AUTO, `SPACE_BETWEEN` centres a lone child, sections leave their children behind, text needs `textAutoResize='HEIGHT'` to wrap, instance text edits fail silently, REST 403s, batch caps. Load before any frame-creating or text-editing payload.
 - **`references/token-architecture.md`** — three-tier token model (Primitive / Semantic / Component), Modes, Variable Scopes (this is where most setups go wrong), naming, anti-patterns.
 - **`references/component-design.md`** — Variants vs. Component Properties vs. Instance Swap, atomic composition, slot patterns, Variant Property naming that matches engineering props.
 - **`references/naming-and-file-structure.md`** — slash naming, page layout (Cover / Tokens / Icons / Components / Patterns), `_` and `.` prefixes for unpublished sub-components, library splitting heuristics.
