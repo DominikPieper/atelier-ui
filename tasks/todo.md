@@ -578,7 +578,13 @@ unblocks when X" rather than deleted.
 
 - [ ] **Claude Design participant katas, and the trainer run-sheet + participant
   how-to that go with them** — blocked, unblocks when: the per-seat Claude Design
-  access test (review §5) is widened past the trainer machine.
+  access test (review §5) is widened past the trainer machine. **Narrowed
+  2026-09-07:** the *owner* seat is now proven to write — `write_files` landed a
+  27203-byte `libs/react/src/styles/tokens.css` into project
+  `019de217-489c-7441-8275-2efe020086b5` via `finalize_plan` → `plan_token`
+  (ADR-0106). That is the trainer machine, so this stays blocked: what is still
+  untested is whether a *participant's* seat can write to a project shared with
+  them, which is the actual precondition here.
   - [ ] The katas themselves.
   - [ ] Schulung M2/M3 — trainer run-sheet (product, `/design-login`, prompt,
     hardcode target, flip value, fallback URL) + participant how-to (image,
@@ -611,11 +617,26 @@ unblocks when X" rather than deleted.
     beside the palette it links, and nothing reads those 31 files. The blocker is
     reach — a gate needs the artboards in-repo or an authenticated client. Katas 2
     and 5 want this.
-  - [ ] `/design-sync`'s manifest is still wrong (Inter/Fira Code, two real
-    phantom tokens) and still can't be re-checked from this repo — it lives in the
-    external Claude Design project.
-  - [ ] Re-syncing the Atelier design system in Claude Design is blocked on the
-    same interactively-authenticated MCP — no script can drive it.
+  - [~] `/design-sync`'s manifest — **half done 2026-09-07 (ADR-0106).** The
+    *source* of the Inter/Fira Code claim is fixed: `colors_and_type.css` no
+    longer declares them and `SKILL.md` no longer instructs them. The manifest
+    itself (`_ds_manifest.json`) is app-generated (`"source":"spa"`) and is
+    therefore stale rather than wrong — it still names Inter and Fira Code, and
+    no MCP tool triggers a rebuild. Re-read it after the project's design system
+    next rebuilds, and settle the two phantom tokens then; they were not
+    identifiable from the current manifest.
+  - [x] ~~Re-syncing the Atelier design system in Claude Design is blocked on the
+    same interactively-authenticated MCP — no script can drive it.~~ **Done
+    2026-09-07 (ADR-0106).** The premise was wrong: the MCP is reachable from a
+    normal session and no script is needed. Foundation re-synced — the repo's
+    `tokens.css` is now `@import`ed by `colors_and_type.css`, which restates
+    nothing from it, and the seven genuinely page-level values moved to `--ds-*`.
+    Found on the way: four files in that project declared `--ui-*`, two of them
+    the same names with different values, so `_ds_manifest.json` was resolving
+    collisions by scan order; and `SKILL.md` was telling agents to use the `Llm`
+    prefix, which names nothing that exists (9944 `Atl*` in `libs/`, zero
+    `Llm*`). **Not verified: the render** — no browser tooling in that session,
+    so someone still has to look at the preview cards.
   - [ ] The kata and the tutorial still build the same Figma artifact (one
     Settings/Card + four `*/Starter` frames in `snapshot.json`) — giving the kata
     its own target is a Figma write. Both pages now say plainly it's the same
