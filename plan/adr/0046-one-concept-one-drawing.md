@@ -11,9 +11,10 @@ sources:
 
 ## Status
 
-Accepted. `libs/spec/src/icons.ts` holds the geometry for all 23 icons, AtlIcon
-renders it in each framework, every component uses AtlIcon, and
-`check:iconography` (gate 24) keeps it that way.
+Accepted. `libs/spec/src/icons.ts` holds the geometry for every icon in
+`AtlIconName` (`libs/spec/src/index.ts` — 23 at the time of this decision, the
+roster has grown since), AtlIcon renders it in each framework, every component
+uses AtlIcon, and `check:iconography` keeps it that way.
 
 ## Context
 

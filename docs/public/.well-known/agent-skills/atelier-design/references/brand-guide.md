@@ -124,13 +124,16 @@ This is the rhythm to copy across the brand: three actions, three tools, one ver
 
 ## Iconography
 
-The repo's component library defines a small, *strict* icon set as a string-literal union in `@atelier-ui/spec` — so the API is the icon catalog. The 20 names:
+The repo's component library defines a small, *strict* icon set as a string-literal union in `@atelier-ui/spec` — so the API is the icon catalog. `AtlIconName` in `libs/spec/src/index.ts` is the canonical, always-current list; this file is a static mirror with no build step to keep it in sync, so treat the snapshot below as a convenience, not the source of truth, and check the union type if a name you need is missing here:
 
 ```
-success · warning · danger · info · error
+success · check · warning · danger · error · info
 chevron-up · chevron-down · chevron-left · chevron-right
-sort-asc · sort-desc · arrow-right · arrow-left
-copy · paste · add · edit · delete · close · more · default-toast
+chevron-double-left · chevron-double-right
+arrow-left · arrow-right
+sort-asc · sort-desc
+close · add · more · copy · paste · edit · delete
+person · default-toast
 ```
 
 **Style.** Line glyphs, 1.5–2px stroke, 24px nominal box, `currentColor` so they inherit text colour. Closest CDN match is **Lucide** (same outlined geometry, same stroke weight) — used here as substitute since the original SVG sources weren't extracted.

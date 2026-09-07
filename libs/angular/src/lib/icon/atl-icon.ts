@@ -9,10 +9,10 @@ import { ATL_ICON_GEOMETRY, ATL_ICON_STROKE_WIDTH, ATL_ICON_VIEWBOX } from '../i
 
 
 /**
- * Vector icon. 23 named variants, drawn from the geometry in `icons.ts` so the
- * same shape is used everywhere it appears. Matches the Figma `AtlIcon`
- * component set. Decorative by default; pass `label` to announce a meaning
- * to assistive tech.
+ * Vector icon. Renders whichever `AtlIconName` variant is passed, drawn from
+ * the geometry in `icons.ts` so the same shape is used everywhere it appears.
+ * Matches the Figma `AtlIcon` component set. Decorative by default; pass
+ * `label` to announce a meaning to assistive tech.
  *
  * Usage:
  * ```html
