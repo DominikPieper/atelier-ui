@@ -593,6 +593,37 @@ unblocks when X" rather than deleted.
     prerequisites 2–3 — without weakening it: the demo is trainer-machine-only and
     says so in its first sentence.)_
 
+- [ ] **The social cards render in Noto Sans, and the docs build phones home for
+  it** (found 2026-09-07 while fixing the `--docs-font` fallback; needs a brand
+  decision, so not executed). Measured, not inferred:
+  - `docs/src/pages/og/[...slug].ts` passes `families: ['Inter', 'sans-serif']`
+    and `weight: 'ExtraBold'`. **Both are inert.** `astro-og-canvas` takes the
+    font *name* from `font.*.families` but the font *data* from a separate
+    top-level `fonts:` option, which that file never passes — so it falls through
+    to the library default, one Noto Sans TTF at weight 400. Proven by rendering
+    twice through `generateOpenGraphImage` with `['Inter',…]` and
+    `['NotARealFace',…]`: byte-identical PNGs, same sha256, `cmp` exit 0. The
+    build's own log agrees — `Loaded 1 font families: Noto Sans`.
+  - So all 23 emitted cards (`dist/docs/og/`, from 24 `OG_PAGES` entries) have
+    always been Noto Sans 400. Not a regression; never worked.
+  - **Second, separate finding: `nx build docs` fetches
+    `https://api.fontsource.org/v1/fonts/noto-sans/latin-400-normal.ttf` at build
+    time.** An undeclared network dependency on a third-party font API, in a repo
+    whose gates are deliberately offline. A Fontsource outage breaks the docs
+    build, and nothing declares or pins that.
+  - Options: (a) `fonts:` pointing at a Fontsource Instrument Sans URL — brand
+    face, keeps the network call; (b) vendor an Instrument Sans TTF and reference
+    it by local path — offline and deterministic, adds a binary plus its OFL
+    licence, and would remove the network call too; (c) leave Noto Sans and say
+    so in the file. **(b) is the recommendation** — it fixes the brand and the
+    build dependency in one move, and matches how the rest of this repo verifies
+    things. Note for any of them: CanvasKit's `FontMgr.FromData` wants TTF/OTF,
+    not woff2, so Astro's own self-hosted woff2 files cannot be reused; and
+    `weight: 'ExtraBold'` must become Bold/700 because Instrument Sans is a
+    400–700 family with no heavier cut.
+  - Interim, zero-risk: the file's header comment names the route
+    `src/pages/og/[...slug].png.ts`; the file is `[...slug].ts`.
+
 - [ ] **Presentation-debt p1 and p2** — blocked, unblocks when: real screen
   captures exist. p1 wants photographs of Figma's plugin menu, token dialog and
   inspect panel to replace placeholder SVGs (interim: the retired `#00BEBE` in
@@ -641,6 +672,17 @@ unblocks when X" rather than deleted.
     Settings/Card + four `*/Starter` frames in `snapshot.json`) — giving the kata
     its own target is a Figma write. Both pages now say plainly it's the same
     frame and the kata is a timed second lap, which is the honest interim state.
+
+- [ ] **No typeface gate reaches `docs/`.** `check:typeface`
+  (`check-typeface.js:133`) scans `libs/{fw}/src/lib` only, which is why the
+  `--docs-font` Inter fallback (fixed 2026-09-07, `a90556f`) and the OG-image
+  `families: ['Inter']` above both survived. Also uncovered: 14 bare
+  `font-family: monospace` declarations across seven `docs/src/pages/*.astro`
+  files and `docs/src/components/McpExplorer.tsx`, which bypass
+  `--ui-font-mono` rather than name a stale face — a lower-severity smell in the
+  same blind spot. Decide whether the gate widens to `docs/` or whether `docs/`
+  gets its own rule; a generic keyword is not the same violation as a retired
+  brand name, so one rule may not fit both.
 
 ## Optional / low priority
 
