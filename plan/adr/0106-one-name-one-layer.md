@@ -80,6 +80,34 @@ drift. `AtlCodeBlock` and `AtlToast` exist in Figma, in CD and in `libs/`, but
 are absent from the keyed spec map the drift gates iterate — a gate-coverage
 question, not a design one.
 
+**Corrected 2026-09-07, second note — the `--ds-*` rename broke a consumer, and
+"changes no pixel" below is false.** Verified in a browser once Chrome
+reconnected (this ADR's Consequences said nobody had looked; now someone has):
+
+- `ui_kits/docs-site/landing.css` — a 103-rule file from 2026-05-01 that I never
+  opened — read `var(--ui-font-size-5xl)` for `.hero-title`. Renaming that value
+  to `--ds-font-size-display` left the name undefined, so the `<h1>` "Atelier"
+  fell from `clamp(3.5rem, 10vw, 6rem)` to the inherited **16px** while keeping
+  `font-weight: 900`, rendering as a small bold teal label where the gradient
+  hero belongs. One undefined custom property across every loaded stylesheet,
+  and it was mine.
+- The opposite error in the same file: `.section-title`, `.mcp-text h2` and
+  `.cta-title` read `var(--ui-font-size-3xl)`, which I did *not* rename. It still
+  resolves — but from the repo at `2.25rem` instead of this page's `2rem`, so
+  three headings had silently grown **32px → 36px**. A name that keeps resolving
+  is the more dangerous half: nothing looks broken.
+
+Both now read `--ds-*`; measured after the fix as 96px / 32px / 32px with zero
+undefined properties. The decision in §2 stands — the error was in executing it.
+
+**The check I actually ran was the wrong one.** Before writing, I verified that
+the repo's `tokens.css` *declared* every one of the 98 names the old
+`colors_and_type.css` declared. That is a statement about declarations. I then
+*removed* seven declarations by renaming them, and updated only the `.ui-*`
+classes inside the file I was editing. A superset check over declarations says
+nothing about consumers in other files. The question was "who reads this name",
+and the answer was one `grep` away in a sibling stylesheet.
+
 Refreshing the token file was approved and done (see Decision). What the refresh
 exposed is the actual finding, and it is not a stale-copy problem:
 
