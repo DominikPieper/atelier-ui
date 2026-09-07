@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": "2026-09-07T08:31:48Z",
-    "generatedAt": "2026-09-07T08:47:18.381Z",
-    "gitSha": "1bd192f",
+    "generatedAt": "2026-09-07T08:58:19.093Z",
+    "gitSha": "d4806e4",
     "serverVersion": null,
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -6275,7 +6275,7 @@
           "gap": 0,
           "minHeight": 40,
           "height": 44,
-          "width": 114,
+          "width": 116,
           "fontSize": 14,
           "lineHeight": null
         },
@@ -6304,7 +6304,7 @@
           "gap": 0,
           "minHeight": 40,
           "height": 44,
-          "width": 72,
+          "width": 73,
           "fontSize": 14,
           "lineHeight": null
         },
@@ -6391,7 +6391,7 @@
           "gap": 0,
           "minHeight": 40,
           "height": 44,
-          "width": 87,
+          "width": 88,
           "fontSize": 14,
           "lineHeight": null
         },
@@ -6473,7 +6473,7 @@
           "gap": 0,
           "minHeight": 40,
           "height": 44,
-          "width": 72,
+          "width": 73,
           "fontSize": 14,
           "lineHeight": null
         },
@@ -6592,7 +6592,7 @@
           "gap": 0,
           "minHeight": 32,
           "height": 36,
-          "width": 114,
+          "width": 116,
           "fontSize": 14,
           "lineHeight": null
         },
@@ -6621,7 +6621,7 @@
           "gap": 0,
           "minHeight": 32,
           "height": 36,
-          "width": 72,
+          "width": 73,
           "fontSize": 14,
           "lineHeight": null
         },

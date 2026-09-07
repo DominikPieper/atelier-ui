@@ -1,7 +1,7 @@
 {
   "meta": {
     "note": "Per-check RATCHET findings for check:figma. The gate PASSES while a master's findings are exactly the ones recorded here, FAILS when one APPEARS that is not recorded (naming it), and FAILS when a recorded one DISAPPEARS without this file being updated — an improvement nobody records can silently reverse, which is the rule [STALE-EXEMPTION] already applies to allowlist entries. FINDINGS AND NOT COUNTS: a count is blind to substitution, so fixing one node on a master while breaking another kept the number flat and the gate green. Each entry carries its own node multiplicity (×N) where a deduplicated record stands for several nodes. It is a ratchet rather than a plain blocker because the debt cannot be paid today: ADR-0066 rejected a warning nobody can clear, and a blocker would leave check:all red until the wrong-variable-collection problem is decided (tasks/type-role-resolution-2026-08-28.md). This is NOT an allowlist. tools/scripts/lib/allowlists.js answers \"this one is exempt forever\"; this file answers \"this many are owed\". Never record the same defect in both. WHEN A MASTER IS CLEAR: its key disappears on the next update. WHEN A CHECK'S ENTRY IS GONE: delete the ratchet and make that check a plain blocker. An entry whose debt is blocked on another check clearing states that as `clearedWhen: { checkGone: \"<TAG>\" }`, and [STALE-REASON] fails once the condition is satisfied — a prose promise is one nobody can check. Update with `node tools/scripts/check-figma.js --update-baseline` — never by hand, except the `why` and `kind` fields, which the writer preserves. See plan/adr/0079-type-does-not-need-the-painted-box.md and plan/adr/0080-a-guard-that-skips-is-not-a-check.md.",
-    "generatedAt": "2026-08-29T15:37:01.279Z",
+    "generatedAt": "2026-09-07T08:58:48.016Z",
     "updatedBy": "node tools/scripts/check-figma.js --update-baseline"
   },
   "checks": {
@@ -78,11 +78,11 @@
           "dialog/header/Settings “Settings” (16px Regular) ×4"
         ],
         "AtlPagination": [
-          "ellipsis/... “...” (14px Regular) ×2",
-          "page-btn/1 “1” (14px Regular)",
-          "page-btn/10 “10” (14px Regular)",
-          "page-btn/4 “4” (14px Regular)",
-          "page-btn/6 “6” (14px Regular)"
+          "ellipsis/... “...” (14px Medium) ×2",
+          "page-btn/1 “1” (14px Medium)",
+          "page-btn/10 “10” (14px Medium)",
+          "page-btn/4 “4” (14px Medium)",
+          "page-btn/6 “6” (14px Medium)"
         ],
         "AtlStepper": [
           "header/step-1/circle-active/1 “1” (14px Regular) ×6",
@@ -91,9 +91,9 @@
           "header/step-3/circle-default/3 “3” (14px Regular) ×8"
         ],
         "AtlTabGroup": [
-          "tablist/tab/Account “Account” (14px Regular)",
-          "tablist/tab/Billing “Billing” (14px Regular) ×3",
-          "tablist/tab/Notifications “Notifications” (14px Regular) ×2",
+          "tablist/tab/Account “Account” (14px Medium)",
+          "tablist/tab/Billing “Billing” (14px Medium) ×3",
+          "tablist/tab/Notifications “Notifications” (14px Medium) ×2",
           "tabpanel/Content for the \"Account\" tab goes here. “Content for the \"Account\" tab goes here.” (14px Regular) ×2",
           "tabpanel/Content for the \"Notifications\" tab goes here. “Content for the \"Notifications\" tab goes” (14px Regular)"
         ],
@@ -263,11 +263,11 @@
           "Option label “Option label” (16px Regular) ×3"
         ],
         "AtlPagination": [
-          "ellipsis/... “...” (14px Regular) ×2",
-          "page-btn/1 “1” (14px Regular)",
-          "page-btn/10 “10” (14px Regular)",
-          "page-btn/4 “4” (14px Regular)",
-          "page-btn/6 “6” (14px Regular)"
+          "ellipsis/... “...” (14px Medium) ×2",
+          "page-btn/1 “1” (14px Medium)",
+          "page-btn/10 “10” (14px Medium)",
+          "page-btn/4 “4” (14px Medium)",
+          "page-btn/6 “6” (14px Medium)"
         ],
         "AtlRadio": [
           "Option label “Option label” (16px Regular) ×3",
@@ -292,9 +292,9 @@
           "header/step-3/circle-default/3 “3” (14px Regular) ×8"
         ],
         "AtlTabGroup": [
-          "tablist/tab/Account “Account” (14px Regular)",
-          "tablist/tab/Billing “Billing” (14px Regular) ×3",
-          "tablist/tab/Notifications “Notifications” (14px Regular) ×2",
+          "tablist/tab/Account “Account” (14px Medium)",
+          "tablist/tab/Billing “Billing” (14px Medium) ×3",
+          "tablist/tab/Notifications “Notifications” (14px Medium) ×2",
           "tabpanel/Content for the \"Account\" tab goes here. “Content for the \"Account\" tab goes here.” (14px Regular) ×2",
           "tabpanel/Content for the \"Notifications\" tab goes here. “Content for the \"Notifications\" tab goes” (14px Regular)"
         ],

@@ -65,12 +65,14 @@
   box-shadow: var(--ui-focus-ring);
 }
 
-/* Active (current) page — primary fill */
+/* Active (current) page — primary fill. Weight stays the resting --ui-type-control
+ * medium (ADR-0074): the Figma master renders this label Medium in every state, and
+ * .atl-tab-group's own .is-active — the other stateful member of the same six-rule
+ * consumer list — changes only colour, never weight, on its current item. */
 .page-btn.is-active {
   background-color: var(--ui-color-primary);
   border-color: var(--ui-color-primary);
   color: var(--ui-color-text-on-primary);
-  font-weight: var(--ui-font-weight-semibold);
 }
 
 .page-btn.is-active:hover {

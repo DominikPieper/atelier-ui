@@ -99,14 +99,14 @@
 .step-description {
   font-size: var(--ui-font-size-xs);
   color: var(--ui-color-text-muted);
-  margin-top: 2px;
+  margin-top: var(--ui-spacing-1);
 }
 
 .step-optional {
   font-size: var(--ui-font-size-xs);
   color: var(--ui-color-text-muted);
   font-style: italic;
-  margin-top: 2px;
+  margin-top: var(--ui-spacing-1);
 }
 
 /* ─── Content ─── */
@@ -125,8 +125,11 @@
 }
 
 .step-item.is-active .step-label {
+  /* Weight stays the resting --ui-type-control medium (ADR-0074): the Figma master
+   * renders this label Medium in every state, and .atl-tab-group's own .is-active —
+   * the other stateful member of the same six-rule consumer list — changes only
+   * colour, never weight, on its current item. */
   color: var(--ui-color-text);
-  font-weight: var(--ui-font-weight-semibold);
 }
 
 /* ─── Completed state ─── */
