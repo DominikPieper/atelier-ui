@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": "2026-09-07T08:31:48Z",
-    "generatedAt": "2026-09-07T08:42:39.654Z",
-    "gitSha": "b76768b",
+    "generatedAt": "2026-09-07T08:47:18.381Z",
+    "gitSha": "1bd192f",
     "serverVersion": null,
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -8433,7 +8433,7 @@
             24
           ],
           "parentBox": [
-            130,
+            132,
             24
           ],
           "parentName": "selection=unchecked, state=default",
@@ -8449,11 +8449,11 @@
           "box": [
             0,
             3,
-            18,
-            18
+            20,
+            20
           ],
           "parentBox": [
-            130,
+            132,
             24
           ],
           "parentName": "selection=unchecked, state=default",
@@ -8473,8 +8473,8 @@
             10
           ],
           "parentBox": [
-            18,
-            18
+            20,
+            20
           ],
           "parentName": "Frame",
           "visible": true,
@@ -8493,7 +8493,7 @@
             24
           ],
           "parentBox": [
-            130,
+            132,
             24
           ],
           "parentName": "selection=checked, state=default",
@@ -8509,11 +8509,11 @@
           "box": [
             0,
             3,
-            18,
-            18
+            20,
+            20
           ],
           "parentBox": [
-            130,
+            132,
             24
           ],
           "parentName": "selection=checked, state=default",
@@ -8533,7 +8533,7 @@
             24
           ],
           "parentBox": [
-            130,
+            132,
             24
           ],
           "parentName": "selection=indeterminate, state=default",
@@ -8549,11 +8549,11 @@
           "box": [
             0,
             3,
-            18,
-            18
+            20,
+            20
           ],
           "parentBox": [
-            130,
+            132,
             24
           ],
           "parentName": "selection=indeterminate, state=default",
@@ -8573,7 +8573,7 @@
             24
           ],
           "parentBox": [
-            130,
+            132,
             24
           ],
           "parentName": "selection=unchecked, state=focus",
@@ -8589,11 +8589,11 @@
           "box": [
             0,
             3,
-            18,
-            18
+            20,
+            20
           ],
           "parentBox": [
-            130,
+            132,
             24
           ],
           "parentName": "selection=unchecked, state=focus",
@@ -8613,7 +8613,7 @@
             24
           ],
           "parentBox": [
-            130,
+            132,
             24
           ],
           "parentName": "selection=unchecked, state=hover",
@@ -8629,11 +8629,11 @@
           "box": [
             0,
             3,
-            18,
-            18
+            20,
+            20
           ],
           "parentBox": [
-            130,
+            132,
             24
           ],
           "parentName": "selection=unchecked, state=hover",
@@ -8644,10 +8644,10 @@
       "layers": [],
       "box": {
         "type": "COMPONENT_SET",
-        "width": 420,
+        "width": 422,
         "height": 136,
         "childrenExtent": {
-          "right": 420,
+          "right": 422,
           "bottom": 136
         },
         "clipsContent": true
@@ -9902,7 +9902,7 @@
             24
           ],
           "parentBox": [
-            60,
+            62,
             24
           ],
           "parentName": "selection=unselected, state=default",
@@ -9918,11 +9918,11 @@
           "box": [
             0,
             3,
-            18,
-            18
+            20,
+            20
           ],
           "parentBox": [
-            60,
+            62,
             24
           ],
           "parentName": "selection=unselected, state=default",
@@ -9942,7 +9942,7 @@
             24
           ],
           "parentBox": [
-            53,
+            55,
             24
           ],
           "parentName": "selection=selected, state=default",
@@ -9958,11 +9958,11 @@
           "box": [
             0,
             3,
-            18,
-            18
+            20,
+            20
           ],
           "parentBox": [
-            53,
+            55,
             24
           ],
           "parentName": "selection=selected, state=default",
@@ -9982,7 +9982,7 @@
             24
           ],
           "parentBox": [
-            60,
+            62,
             24
           ],
           "parentName": "selection=unselected, state=focus",
@@ -9998,11 +9998,11 @@
           "box": [
             0,
             3,
-            18,
-            18
+            20,
+            20
           ],
           "parentBox": [
-            60,
+            62,
             24
           ],
           "parentName": "selection=unselected, state=focus",
@@ -10022,7 +10022,7 @@
             24
           ],
           "parentBox": [
-            60,
+            62,
             24
           ],
           "parentName": "selection=unselected, state=hover",
@@ -10038,11 +10038,11 @@
           "box": [
             0,
             3,
-            18,
-            18
+            20,
+            20
           ],
           "parentBox": [
-            60,
+            62,
             24
           ],
           "parentName": "selection=unselected, state=hover",
@@ -10053,10 +10053,10 @@
       "layers": [],
       "box": {
         "type": "COMPONENT_SET",
-        "width": 236,
+        "width": 238,
         "height": 80,
         "childrenExtent": {
-          "right": 236,
+          "right": 238,
           "bottom": 80
         },
         "clipsContent": true
@@ -10449,7 +10449,7 @@
           "layer": "circle",
           "type": "ELLIPSE",
           "fill": "color/surface-sunken",
-          "stroke": "color/border",
+          "stroke": "color/border-strong",
           "strokeSides": null,
           "radius": null,
           "effects": [],
@@ -10564,7 +10564,7 @@
           "layer": "circle",
           "type": "ELLIPSE",
           "fill": "color/surface-sunken",
-          "stroke": "color/border",
+          "stroke": "color/primary",
           "strokeSides": null,
           "radius": null,
           "effects": [],
@@ -10612,7 +10612,7 @@
           "layer": "circle",
           "type": "ELLIPSE",
           "fill": "color/surface-sunken",
-          "stroke": "color/border-hover",
+          "stroke": "color/primary",
           "strokeSides": null,
           "radius": null,
           "effects": [],
@@ -26825,7 +26825,7 @@
             24
           ],
           "parentBox": [
-            18,
+            20,
             24
           ],
           "parentName": "AtlCheckbox",
@@ -26841,11 +26841,11 @@
           "box": [
             0,
             3,
-            18,
-            18
+            20,
+            20
           ],
           "parentBox": [
-            18,
+            20,
             24
           ],
           "parentName": "AtlCheckbox",
@@ -26865,7 +26865,7 @@
             24
           ],
           "parentBox": [
-            18,
+            20,
             24
           ],
           "parentName": "AtlCheckbox",
@@ -26881,11 +26881,11 @@
           "box": [
             0,
             3,
-            18,
-            18
+            20,
+            20
           ],
           "parentBox": [
-            18,
+            20,
             24
           ],
           "parentName": "AtlCheckbox",
@@ -27076,7 +27076,7 @@
             24
           ],
           "parentBox": [
-            18,
+            20,
             24
           ],
           "parentName": "AtlCheckbox",
@@ -27092,11 +27092,11 @@
           "box": [
             0,
             3,
-            18,
-            18
+            20,
+            20
           ],
           "parentBox": [
-            18,
+            20,
             24
           ],
           "parentName": "AtlCheckbox",
@@ -27116,7 +27116,7 @@
             24
           ],
           "parentBox": [
-            18,
+            20,
             24
           ],
           "parentName": "AtlCheckbox",
@@ -27132,11 +27132,11 @@
           "box": [
             0,
             3,
-            18,
-            18
+            20,
+            20
           ],
           "parentBox": [
-            18,
+            20,
             24
           ],
           "parentName": "AtlCheckbox",
