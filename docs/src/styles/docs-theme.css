@@ -83,8 +83,12 @@
 
 /* ── Docs-specific variables ───────────────────────────────── */
 :root {
-  --docs-font: var(--font-sans), 'Inter', system-ui, sans-serif;
-  --docs-font-code: var(--font-mono), 'Fira Code', 'Menlo', monospace;
+  /* Fallback is --ui-font-family/--ui-font-mono (tokens.css), not a hand-named
+   * face: 'Inter'/'Fira Code' were the pre-ADR-0035 typefaces and went stale
+   * here when ADR-0035 moved the brand to Instrument Sans/JetBrains Mono —
+   * the ADR only repointed --font-sans itself, not this fallback chain. */
+  --docs-font: var(--font-sans), var(--ui-font-family);
+  --docs-font-code: var(--font-mono), var(--ui-font-mono);
   /* Authorial-signature accent — serif italic for one emphasised keyword in a
    * heading (rendered in teal --ui-color-primary via .docs-accent). Shared
    * brand DNA with pieper.io; Georgia is a metric-near fallback for swap. */
