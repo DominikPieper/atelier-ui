@@ -2,9 +2,9 @@
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
-    "figmaLastModified": "2026-08-29T17:21:06Z",
-    "generatedAt": "2026-09-07T03:53:44.735Z",
-    "gitSha": "b11648b",
+    "figmaLastModified": "2026-09-07T03:59:35Z",
+    "generatedAt": "2026-09-07T06:57:56.007Z",
+    "gitSha": "e8c9642",
     "serverVersion": null,
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -414,15 +414,15 @@
         "variant=primary, size=sm, state=default": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            8,
+            0,
             16,
-            8,
+            0,
             16
           ],
           "padBound": [
-            "spacing/2",
+            null,
             "spacing/4",
-            "spacing/2",
+            null,
             "spacing/4"
           ],
           "gap": 8,
@@ -445,15 +445,15 @@
         "variant=primary, size=md, state=default": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            8,
+            0,
             20,
-            8,
+            0,
             20
           ],
           "padBound": [
-            "spacing/2",
+            null,
             "spacing/5",
-            "spacing/2",
+            null,
             "spacing/5"
           ],
           "gap": 8,
@@ -476,15 +476,15 @@
         "variant=primary, size=lg, state=default": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            12,
+            0,
             24,
-            12,
+            0,
             24
           ],
           "padBound": [
-            "spacing/3",
+            null,
             "spacing/6",
-            "spacing/3",
+            null,
             "spacing/6"
           ],
           "gap": 8,
@@ -507,15 +507,15 @@
         "variant=secondary, size=sm, state=default": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            8,
+            0,
             16,
-            8,
+            0,
             16
           ],
           "padBound": [
-            "spacing/2",
+            null,
             "spacing/4",
-            "spacing/2",
+            null,
             "spacing/4"
           ],
           "gap": 8,
@@ -538,15 +538,15 @@
         "variant=secondary, size=md, state=default": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            8,
+            0,
             20,
-            8,
+            0,
             20
           ],
           "padBound": [
-            "spacing/2",
+            null,
             "spacing/5",
-            "spacing/2",
+            null,
             "spacing/5"
           ],
           "gap": 8,
@@ -569,15 +569,15 @@
         "variant=secondary, size=lg, state=default": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            12,
+            0,
             24,
-            12,
+            0,
             24
           ],
           "padBound": [
-            "spacing/3",
+            null,
             "spacing/6",
-            "spacing/3",
+            null,
             "spacing/6"
           ],
           "gap": 8,
@@ -600,15 +600,15 @@
         "variant=outline, size=sm, state=default": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            8,
+            0,
             16,
-            8,
+            0,
             16
           ],
           "padBound": [
-            "spacing/2",
+            null,
             "spacing/4",
-            "spacing/2",
+            null,
             "spacing/4"
           ],
           "gap": 8,
@@ -631,15 +631,15 @@
         "variant=outline, size=md, state=default": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            8,
+            0,
             20,
-            8,
+            0,
             20
           ],
           "padBound": [
-            "spacing/2",
+            null,
             "spacing/5",
-            "spacing/2",
+            null,
             "spacing/5"
           ],
           "gap": 8,
@@ -662,15 +662,15 @@
         "variant=outline, size=lg, state=default": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            12,
+            0,
             24,
-            12,
+            0,
             24
           ],
           "padBound": [
-            "spacing/3",
+            null,
             "spacing/6",
-            "spacing/3",
+            null,
             "spacing/6"
           ],
           "gap": 8,
@@ -693,15 +693,15 @@
         "variant=primary, size=md, state=focus": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            8,
+            0,
             20,
-            8,
+            0,
             20
           ],
           "padBound": [
-            "spacing/2",
+            null,
             "spacing/5",
-            "spacing/2",
+            null,
             "spacing/5"
           ],
           "gap": 8,
@@ -727,15 +727,15 @@
         "variant=primary, size=md, state=hover": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            8,
+            0,
             20,
-            8,
+            0,
             20
           ],
           "padBound": [
-            "spacing/2",
+            null,
             "spacing/5",
-            "spacing/2",
+            null,
             "spacing/5"
           ],
           "gap": 8,
@@ -758,15 +758,15 @@
         "variant=primary, size=md, state=active": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            8,
+            0,
             20,
-            8,
+            0,
             20
           ],
           "padBound": [
-            "spacing/2",
+            null,
             "spacing/5",
-            "spacing/2",
+            null,
             "spacing/5"
           ],
           "gap": 8,
@@ -791,15 +791,15 @@
         "variant=danger, size=sm, state=default": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            8,
+            0,
             16,
-            8,
+            0,
             16
           ],
           "padBound": [
-            "spacing/2",
+            null,
             "spacing/4",
-            "spacing/2",
+            null,
             "spacing/4"
           ],
           "gap": 8,
@@ -824,15 +824,15 @@
         "variant=danger, size=md, state=default": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            8,
+            0,
             20,
-            8,
+            0,
             20
           ],
           "padBound": [
-            "spacing/2",
+            null,
             "spacing/5",
-            "spacing/2",
+            null,
             "spacing/5"
           ],
           "gap": 8,
@@ -857,15 +857,15 @@
         "variant=danger, size=lg, state=default": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            12,
+            0,
             24,
-            12,
+            0,
             24
           ],
           "padBound": [
-            "spacing/3",
+            null,
             "spacing/6",
-            "spacing/3",
+            null,
             "spacing/6"
           ],
           "gap": 8,
@@ -890,15 +890,15 @@
         "variant=danger, size=md, state=hover": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            8,
+            0,
             20,
-            8,
+            0,
             20
           ],
           "padBound": [
-            "spacing/2",
+            null,
             "spacing/5",
-            "spacing/2",
+            null,
             "spacing/5"
           ],
           "gap": 8,
@@ -923,15 +923,15 @@
         "variant=danger, size=md, state=active": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            8,
+            0,
             20,
-            8,
+            0,
             20
           ],
           "padBound": [
-            "spacing/2",
+            null,
             "spacing/5",
-            "spacing/2",
+            null,
             "spacing/5"
           ],
           "gap": 8,
@@ -956,15 +956,15 @@
         "variant=danger, size=md, state=focus": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            8,
+            0,
             20,
-            8,
+            0,
             20
           ],
           "padBound": [
-            "spacing/2",
+            null,
             "spacing/5",
-            "spacing/2",
+            null,
             "spacing/5"
           ],
           "gap": 8,
@@ -991,15 +991,15 @@
         "variant=secondary, size=md, state=hover": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            8,
+            0,
             20,
-            8,
+            0,
             20
           ],
           "padBound": [
-            "spacing/2",
+            null,
             "spacing/5",
-            "spacing/2",
+            null,
             "spacing/5"
           ],
           "gap": 8,
@@ -1022,15 +1022,15 @@
         "variant=secondary, size=md, state=active": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            8,
+            0,
             20,
-            8,
+            0,
             20
           ],
           "padBound": [
-            "spacing/2",
+            null,
             "spacing/5",
-            "spacing/2",
+            null,
             "spacing/5"
           ],
           "gap": 8,
@@ -1055,15 +1055,15 @@
         "variant=secondary, size=md, state=focus": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            8,
+            0,
             20,
-            8,
+            0,
             20
           ],
           "padBound": [
-            "spacing/2",
+            null,
             "spacing/5",
-            "spacing/2",
+            null,
             "spacing/5"
           ],
           "gap": 8,
@@ -1089,15 +1089,15 @@
         "variant=outline, size=md, state=hover": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            8,
+            0,
             20,
-            8,
+            0,
             20
           ],
           "padBound": [
-            "spacing/2",
+            null,
             "spacing/5",
-            "spacing/2",
+            null,
             "spacing/5"
           ],
           "gap": 8,
@@ -1120,15 +1120,15 @@
         "variant=outline, size=md, state=active": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            8,
+            0,
             20,
-            8,
+            0,
             20
           ],
           "padBound": [
-            "spacing/2",
+            null,
             "spacing/5",
-            "spacing/2",
+            null,
             "spacing/5"
           ],
           "gap": 8,
@@ -1153,15 +1153,15 @@
         "variant=outline, size=md, state=focus": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            8,
+            0,
             20,
-            8,
+            0,
             20
           ],
           "padBound": [
-            "spacing/2",
+            null,
             "spacing/5",
-            "spacing/2",
+            null,
             "spacing/5"
           ],
           "gap": 8,
@@ -2220,15 +2220,15 @@
         "state=default": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            12,
+            0,
             16,
-            12,
+            0,
             16
           ],
           "padBound": [
-            "spacing/3",
+            null,
             "spacing/4",
-            "spacing/3",
+            null,
             "spacing/4"
           ],
           "gap": 0,
@@ -2251,15 +2251,15 @@
         "state=filled": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            12,
+            0,
             16,
-            12,
+            0,
             16
           ],
           "padBound": [
-            "spacing/3",
+            null,
             "spacing/4",
-            "spacing/3",
+            null,
             "spacing/4"
           ],
           "gap": 0,
@@ -2282,15 +2282,15 @@
         "state=focus": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            12,
+            0,
             16,
-            12,
+            0,
             16
           ],
           "padBound": [
-            "spacing/3",
+            null,
             "spacing/4",
-            "spacing/3",
+            null,
             "spacing/4"
           ],
           "gap": 0,
@@ -2313,15 +2313,15 @@
         "state=invalid": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            12,
+            0,
             16,
-            12,
+            0,
             16
           ],
           "padBound": [
-            "spacing/3",
+            null,
             "spacing/4",
-            "spacing/3",
+            null,
             "spacing/4"
           ],
           "gap": 0,
@@ -2344,15 +2344,15 @@
         "state=hover": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            12,
+            0,
             16,
-            12,
+            0,
             16
           ],
           "padBound": [
-            "spacing/3",
+            null,
             "spacing/4",
-            "spacing/3",
+            null,
             "spacing/4"
           ],
           "gap": 0,
@@ -4950,15 +4950,15 @@
         "variant=default, size=md": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            4,
+            0,
             12,
-            4,
+            0,
             12
           ],
           "padBound": [
-            "spacing/1",
+            null,
             "spacing/3",
-            "spacing/1",
+            null,
             "spacing/3"
           ],
           "gap": 0,
@@ -4981,15 +4981,15 @@
         "variant=success, size=md": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            4,
+            0,
             12,
-            4,
+            0,
             12
           ],
           "padBound": [
-            "spacing/1",
+            null,
             "spacing/3",
-            "spacing/1",
+            null,
             "spacing/3"
           ],
           "gap": 4,
@@ -5012,15 +5012,15 @@
         "variant=warning, size=md": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            4,
+            0,
             12,
-            4,
+            0,
             12
           ],
           "padBound": [
-            "spacing/1",
+            null,
             "spacing/3",
-            "spacing/1",
+            null,
             "spacing/3"
           ],
           "gap": 4,
@@ -5043,15 +5043,15 @@
         "variant=danger, size=md": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            4,
+            0,
             12,
-            4,
+            0,
             12
           ],
           "padBound": [
-            "spacing/1",
+            null,
             "spacing/3",
-            "spacing/1",
+            null,
             "spacing/3"
           ],
           "gap": 4,
@@ -5074,15 +5074,15 @@
         "variant=info, size=md": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            4,
+            0,
             12,
-            4,
+            0,
             12
           ],
           "padBound": [
-            "spacing/1",
+            null,
             "spacing/3",
-            "spacing/1",
+            null,
             "spacing/3"
           ],
           "gap": 4,
@@ -5105,15 +5105,15 @@
         "variant=default, size=sm": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            4,
+            0,
             8,
-            4,
+            0,
             8
           ],
           "padBound": [
-            "spacing/1",
+            null,
             "spacing/2",
-            "spacing/1",
+            null,
             "spacing/2"
           ],
           "gap": 0,
@@ -5136,15 +5136,15 @@
         "variant=success, size=sm": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            4,
+            0,
             8,
-            4,
+            0,
             8
           ],
           "padBound": [
-            "spacing/1",
+            null,
             "spacing/2",
-            "spacing/1",
+            null,
             "spacing/2"
           ],
           "gap": 4,
@@ -5167,15 +5167,15 @@
         "variant=warning, size=sm": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            4,
+            0,
             8,
-            4,
+            0,
             8
           ],
           "padBound": [
-            "spacing/1",
+            null,
             "spacing/2",
-            "spacing/1",
+            null,
             "spacing/2"
           ],
           "gap": 4,
@@ -5198,15 +5198,15 @@
         "variant=danger, size=sm": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            4,
+            0,
             8,
-            4,
+            0,
             8
           ],
           "padBound": [
-            "spacing/1",
+            null,
             "spacing/2",
-            "spacing/1",
+            null,
             "spacing/2"
           ],
           "gap": 4,
@@ -5229,15 +5229,15 @@
         "variant=info, size=sm": {
           "layoutMode": "HORIZONTAL",
           "pad": [
-            4,
+            0,
             8,
-            4,
+            0,
             8
           ],
           "padBound": [
-            "spacing/1",
+            null,
             "spacing/2",
-            "spacing/1",
+            null,
             "spacing/2"
           ],
           "gap": 4,
