@@ -21,19 +21,27 @@ Ranked; each carries why it's worth doing next rather than later.
   `design-to-code` under its `drafts/`. Decided shape: **two new skills**
   (`design-to-code` with a review/verify mode, `artboard-bridge` for Claude Design)
   **plus architect additions**. Order as decided:
-  - [ ] `skills/figma-workspace-architect/references/plugin-api-gotchas.md` from the Figma
-    section of `tasks/lessons.md`; SKILL.md references list updated; `sync:generated`
-    re-run so the discovery digest matches.
-  - [ ] Fix `tools/scripts/test-skill.mjs`: derive valid modes from the skill's own
-    `### <Mode> mode` headings instead of the hardcoded set that already omits Sync.
-  - [ ] Pin `figma-console-mcp` to 1.40.0 in `.mcp.json` — ADR-0110.
-  - [ ] Record the Code Connect exclusion (toolchain choice) — ADR-0111.
-  - [ ] ADR-0096 dated correction: `design-to-code` may prefill provenance and scope of the
-    handoff document; behaviour, exclusions and reuse decision stay with the author.
-  - [ ] `design-to-code` into `skills/`: `project.json`, `nx.json` release-group entry,
-    `UNDISTRIBUTED_SKILLS`, fixtures under `tests/` converted from `evals/evals.json`;
-    skill-creator with-skill/baseline runs against a scratch Figma draft; description
-    optimisation after the trigger set is reviewed.
+  - [x] `skills/figma-workspace-architect/references/plugin-api-gotchas.md` from the Figma
+    section of `tasks/lessons.md`; SKILL.md references list updated; discovery re-synced
+    (3a8035d).
+  - [x] Fix `tools/scripts/test-skill.mjs`: valid modes derived from the skill's own
+    `### <Mode> mode` headings (3d118e8).
+  - [x] Pin `figma-console-mcp` to 1.40.0 in `.mcp.json` and in the scaffold preset —
+    ADR-0110 (20efda2, 6b23b2b).
+  - [x] Record the Code Connect exclusion (toolchain choice) — ADR-0111 (20efda2).
+  - [x] ADR-0096 dated correction: `design-to-code` may prefill provenance and scope of the
+    handoff document; behaviour, exclusions and reuse decision stay with the author
+    (20efda2).
+  - [x] `design-to-code` into `skills/` with Build and Review modes, four references, six
+    fixtures, `project.json`, explicit `nx.json` entry, `UNDISTRIBUTED_SKILLS` (the
+    no-argument `sync-skill-discovery` now skips undistributed names) — d6273ce.
+  - [ ] skill-creator iteration 1: three evals (URL-only → handoff doc; AtlCard verify;
+    out-of-scope token architecture) run with and without the skill in worktrees off
+    HEAD / pre-skill HEAD; grade, benchmark, viewer; revise SKILL.md from the findings.
+    The Build-from-handoff eval needs a scratch Figma draft with a master that has no code
+    yet — none exists in the Atelier file today (ADR-0106: all gaps are Figma-side).
+  - [ ] Description optimisation (`run_loop.py`) after the owner reviews
+    `skills/design-to-code/evals/trigger-eval.json`.
   - [ ] Architect: repo-bound Build recipe (spec block → master bound to `Library Tokens`
     → description → annotations → ready-for-dev → Inventory tile → snapshot →
     `check:figma`); tool map + the 30 unreferenced tools; Slots/doc frames in
