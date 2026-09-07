@@ -1,3 +1,14 @@
+## 0.2.49 (2026-09-07)
+
+### 🚀 Features
+
+- **skills:** plugin-api-gotchas reference in figma-workspace-architect ([3a8035d](https://github.com/DominikPieper/atelier-ui/commit/3a8035d))
+
+### ❤️ Thank You
+
+- Claude Fable 5.1
+- Dominik Pieper @DominikPieper
+
 ## 0.2.48 (2026-09-06)
 
 This was a version bump only for figma-workspace-architect to align it with other projects, there were no code changes.

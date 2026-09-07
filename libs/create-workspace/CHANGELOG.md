@@ -1,3 +1,14 @@
+## 0.2.41 (2026-09-07)
+
+### 🚀 Features
+
+- **create-workspace:** pin figma-console-mcp in the scaffolded .mcp.json ([6b23b2b](https://github.com/DominikPieper/atelier-ui/commit/6b23b2b))
+
+### ❤️ Thank You
+
+- Claude Fable 5.1
+- Dominik Pieper @DominikPieper
+
 ## 0.2.40 (2026-09-07)
 
 This was a version bump only for create-workspace to align it with other projects, there were no code changes.
