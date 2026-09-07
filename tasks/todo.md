@@ -733,6 +733,17 @@ unblocks when X" rather than deleted.
   gets its own rule; a generic keyword is not the same violation as a retired
   brand name, so one rule may not fit both.
 
+- [ ] **`check:release-drift`'s diagnosis assumes one direction.** Seen
+  2026-09-07: with the registry at 0.2.39 and the working tree at 0.2.38 (a
+  `chore(release)` commit fetched but not yet rebased onto), it printed
+  `✗ [DRIFT] local 0.2.38 vs published 0.2.39` followed by *"A publish did not
+  reach the registry — check the token/scope … and republish"*. The numbers said
+  the opposite: published was AHEAD, the publish had fully succeeded, and the
+  fix was `git rebase origin/main` — after which the same gate reported 5 of 5
+  in sync. The advice it gives for local-behind is actively wrong and points at
+  a republish that would be a no-op at best. It should compare the direction
+  first and say "your tree is behind the release commit" when local < published.
+
 ## Optional / low priority
 
 Not urgent; fix opportunistically or when touching the same area anyway.
