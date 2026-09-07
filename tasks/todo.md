@@ -603,12 +603,26 @@ unblocks when X" rather than deleted.
     (`0cca35b`), rebuilt on a 720×480 viewport, 1:1 with the code.
   - [x] ~~**AtlDialog was authored at 1rem = 10px**~~ — done 2026-09-07
     (`0cca35b`), now 384/576/768/1024 and 1280 for `full`.
-  - [ ] **A gate that measures master geometry.** `snapshot.json` records paint,
-    overlays, layers and properties but NOT frame dimensions, so `check:figma`
-    cannot see a master's width. That is why the 1.6× dialog scale error and the
-    drawer's single shared panel both survived every green run — both were found
-    by looking at a screenshot. Highest-leverage gate left to build: compare each
-    master's resolved geometry against the code's computed values.
+  - [x] ~~**A gate that measures master geometry**~~ — done 2026-09-07
+    (ADR-0108). `rootPaint` gains per-variant `width`/`height`;
+    `[ROOT-SIZE]`/`[LAYER-SIZE]` (BLOCKER) compare them against the CSS,
+    resolving `min(Xrem, Yvw)`-shaped viewport clamps by taking the fixed
+    operand. Proven against the historical bug numbers (AtlDialog ÷1.6,
+    AtlDrawer forced to 220×320) and silent against the real, fixed file,
+    twice, independently. Found a third, real defect on its first live run:
+    **AtlAvatar's `size=xl` is 56×56 against a plain `64px` literal** on both
+    `shape=circle` and `shape=square` — xs/sm/md/lg all match exactly
+    (24/32/40/48), so this is one size 8px small, not a systemic error.
+    **Fixed the same day rather than allowlisted:** resized to 64×64 on both
+    shapes and the two `root-size` allowlist entries deleted, so the gate is
+    green on its own merits rather than on an exemption. 64 is also the
+    on-scale value (`--ui-spacing-16`); 56 is not a step at all.
+    - [ ] **AtlAvatarGroup's own frame heights** (24/32/36/44/52 for
+      xs/sm/md/lg/xl) do not follow the avatar ladder (24/32/40/48/64) from `md`
+      up. Noticed while fixing the avatar; not chased, and the new rule does not
+      reach it (AtlAvatarGroup is outside `ROOT_PAINT`'s table). May be
+      legitimate — a group frame carries overlap and ring offsets, so its height
+      is not required to equal one avatar — but nothing records that either way.
   - [ ] Code fixes: the two `control`-role weight overrides on
     `.page-btn.is-active` and `.step-item.is-active .step-label` (against
     tokens.css's own role table), `.step-description`'s hardcoded `2px` margin,

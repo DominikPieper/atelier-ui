@@ -24,8 +24,9 @@
  * and fail the probe. Run it when no other figma-console client is connected.
  *
  * The snapshot stores Figma *facts* only (names, variant axes, descriptions,
- * layoutMode, and bound/unbound/raw determinations per node). All rule logic and
- * severities live in check-figma.js.
+ * layoutMode, bound/unbound/raw determinations per node, and — since ADR-0108 —
+ * each variant's own resolved width/height). All rule logic and severities live
+ * in check-figma.js.
  */
 import { writeFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
@@ -260,6 +261,18 @@ async function main() {
           };
           rootPaint[v.name] = {
             layoutMode: v.layoutMode,
+            // The variant's OWN resolved size. Every other fact here is chrome — padding,
+            // gap, fill, stroke, radius, type — and none of it is the frame's width or
+            // height, so a master's SIZE was invisible to every gate. Two real bugs lived
+            // exactly there: AtlDialog's five widths were each the code's px ÷ 1.6 (a
+            // 10px-per-rem construction error, wrong across every size), and AtlDrawer's
+            // seven variants shared ONE 220×320 panel — only the outer demo frame had been
+            // resized per size, so three of four advertised sizes clipped or rendered blank.
+            // Both survived every green check:figma run for months and were found by a
+            // human reading a screenshot (tasks/figma-parity-sweep-2026-09-07.md). Checked
+            // by check-figma.js's [ROOT-SIZE].
+            width: Math.round(v.width * 100) / 100,
+            height: Math.round(v.height * 100) / 100,
             pad: v.layoutMode === 'NONE'
               ? null
               : [v.paddingTop, v.paddingRight, v.paddingBottom, v.paddingLeft],

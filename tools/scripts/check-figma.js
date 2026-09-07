@@ -598,7 +598,20 @@ const ROOT_PAINT = [
   { label: 'AtlMenu', file: 'menu/atl-menu.css', cascade: ['.atl-menu'] },
   { label: 'AtlTabGroup', file: 'tabs/atl-tabs.css', cascade: ['.atl-tab-group', '.atl-tab-group.variant-{variant}'] },
   { label: 'AtlTooltip', file: 'tooltip/atl-tooltip.css', cascade: ['.atl-tooltip'] },
-  { label: 'AtlDialog', file: 'dialog/atl-dialog.css', cascade: ['.atl-dialog'] },
+  // The second cascade member exists ONLY for [ROOT-SIZE] — it states no fill/stroke/
+  // radius of its own (size-full's `border-radius: 0` is the one exception, and a
+  // literal '0' does not match cssToVariable's `var(--ui-radius-*)` pattern, so it
+  // resolves to `undefined` and [ROOT-PAINT] skips it exactly as it already skips any
+  // non-token-expressible value — verified against the committed snapshot, not merely
+  // reasoned about). AtlDialog's Figma ROOT is the dialog panel itself, so its size
+  // cascade belongs here. AtlDrawer's Figma ROOT is a fixed 720×480 viewport MOCKUP —
+  // every position/size variant measures the same (verified against the refreshed
+  // snapshot) — and the panel that actually resizes per variant is the `dialog`
+  // descendant, so ITS size cascade lives in SIZE_LAYER_CASCADES below, not here:
+  // appending `.atl-drawer-host.position-{position}.size-{size} dialog` to THIS table
+  // would have compared a descendant's width against the constant-720 root and fired
+  // on every variant — a false positive discovered before it shipped, not after.
+  { label: 'AtlDialog', file: 'dialog/atl-dialog.css', cascade: ['.atl-dialog', '.atl-dialog.size-{size}'] },
   { label: 'AtlDrawer', file: 'drawer/atl-drawer.css', cascade: ['.atl-drawer-host dialog'] },
   { label: 'AtlToast', file: 'toast/atl-toast.css', cascade: ['.atl-toast', '.atl-toast.variant-{variant}'] },
   { label: 'AtlAlert', file: 'alert/atl-alert.css', cascade: ['.atl-alert', '.atl-alert.variant-{variant}'] },
@@ -706,6 +719,35 @@ const LAYER_ALIASES = {
   AtlDrawer: { dialog: '.atl-drawer-host dialog' },
 };
 
+/** Root/layer WIDTH+HEIGHT cascades that a named DESCENDANT states, for masters where
+ *  [ROOT-SIZE] is the wrong depth entirely — the whole reason (a) of this check's own
+ *  design asked "per-variant width/height, or the set's… what depth". AtlDrawer's
+ *  Figma root is a fixed 720×480 viewport MOCKUP: every position and size variant
+ *  measures the same (verified against the refreshed snapshot), because only the
+ *  `dialog` panel one layer down actually resizes. [LAYER-PAINT] already reads
+ *  `comp.layers[]` for this exact layer and already carries its width/height per
+ *  variant — figma-snapshot.mjs's 2b probe has recorded a layer's box, width
+ *  included, since before this check existed — but its cascade-builder only ever
+ *  constructs a single-axis `.is-<value>` class from a non-size axis (checkLayerPaint's
+ *  own comment on why `size` is skipped there), never the COMPOUND
+ *  `.position-<p>.size-<s>` selector AtlDrawer's CSS actually uses. Teaching the
+ *  general engine a second selector shape for one component was the wrong trade
+ *  against a five-line dedicated table, the same call ROOT_PAINT's own comment makes
+ *  for why this cascade does not live there either.
+ *
+ *  `layer` addresses `comp.layers[].layer` (post-ADR-0077, the drawer's inner
+ *  wrapper is named `dialog`, not `panel`). Add a master here the day its bug looks
+ *  like AtlDrawer's: right master, right variant, wrong descendant.
+ */
+const SIZE_LAYER_CASCADES = [
+  {
+    label: 'AtlDrawer',
+    layer: 'dialog',
+    file: 'drawer/atl-drawer.css',
+    cascade: ['.atl-drawer-host.position-{position}.size-{size} dialog'],
+  },
+];
+
 /** The reason each ratcheted tag's count is not zero, used ONLY to seed a tag the
  *  baseline does not yet carry. Once the tag is in the file, the file's `why` is
  *  authoritative and --update-baseline preserves it — otherwise a human's correction
@@ -802,6 +844,8 @@ const TEXT_UNSTYLED_PENDING = {
 checkTypography();
 checkRootPaint();
 checkRootType();
+checkRootSize();
+checkLayerSize();
 checkTextNodes();
 checkOverlays();
 checkLayerPaint();
@@ -1319,6 +1363,172 @@ function checkRootType() {
   }
 }
 
+/** 7c. Root SIZE — a variant's own resolved width/height against the CSS.
+ *
+ *  Every other ROOT_PAINT/ROOT_TYPE comparison is chrome: fill, stroke, radius,
+ *  shadow, padding, gap, font size, leading. None of them is the frame's own width or
+ *  height, and neither `variantAxes`, `variants`, `properties`, `rootPaint`,
+ *  `overlays` nor `layers` carried it before ADR-0108 — so a master's SIZE, as
+ *  opposed to its decoration, was invisible to every gate. Two real bugs lived
+ *  exactly there and both survived every green check:figma run for months, found
+ *  only by a human reading a screenshot (tasks/figma-parity-sweep-2026-09-07.md):
+ *
+ *    - AtlDialog's five size variants were each the code's px ÷ 1.6 — the master had
+ *      been authored at 1rem = 10px instead of 16, wrong across every size.
+ *    - AtlDrawer's seven variants shared ONE 220×320 panel; only the outer demo frame
+ *      had been resized per size, so three of four advertised sizes clipped or
+ *      rendered blank.
+ *
+ *  Reuses ROOT_PAINT's own table and `resolveRootPaint()` rather than a second
+ *  table: `[ROOT-SIZE]` needs exactly the same (file, cascade) pairs [ROOT-PAINT]
+ *  already states, plus — for AtlDialog and AtlDrawer only — one extra cascade
+ *  member naming the axis-scoped rule that actually carries the width/height (see
+ *  ROOT_PAINT's own comment on why appending it there was safe for the paint checks
+ *  too). A label with no size-bearing member in its cascade resolves `want.width` and
+ *  `want.height` to null for every variant and is silently never compared — the same
+ *  "skip, do not report" contract every other expressibility gap in this file uses.
+ *
+ *  Not ratcheted: unlike [ROOT-TYPE]'s wrong-variable-collection debt, a wrong
+ *  dimension has no structural blocker standing between "found" and "fixed" — Figma
+ *  lets a frame's width/height be typed directly. So this is a plain BLOCKER, the
+ *  same severity as [SET-CLIPS]: both are the master actively misrepresenting its own
+ *  geometry to whoever opens the file next, not a decoration gap [ROOT-BOX]-style.
+ */
+function checkRootSize() {
+  const bySelector = new Map(snapshot.components.map((c) => [c.selector, c]));
+  let noFacts = 0;
+  for (const entry of ROOT_PAINT) {
+    const comp = bySelector.get(entry.label);
+    if (!comp) continue; // [ROOT-PAINT] already reports a listed-but-absent master
+    const variants = Object.keys(comp.rootPaint || {});
+    if (!variants.length) continue; // [ROOT-PAINT] already reports missing root facts
+    // Old snapshots (pre-ADR-0108) carry no width/height at all — every variant reads
+    // `undefined`, not `null`. Warn once, in aggregate, rather than once per variant.
+    if (variants.some((v) => comp.rootPaint[v].width === undefined)) {
+      noFacts++;
+      continue;
+    }
+    const checkable = variants.filter((v) => {
+      const st = parseAxisName(v).state;
+      return st === undefined || st === 'default';
+    });
+    const grouped = new Map(); // prop+message -> variants
+    const note = (prop, msg, variant) => {
+      if (allowed(entry.label, 'root-size', prop)) return;
+      const key = `${prop} ${msg}`;
+      if (!grouped.has(key)) grouped.set(key, []);
+      grouped.get(key).push(variant);
+    };
+    for (const variant of checkable) {
+      const got = comp.rootPaint[variant];
+      const want = resolveRootPaint(entry, parseAxisName(variant));
+      if (!want) break; // resolveRootPaint has already reported why
+      for (const dim of ['width', 'height']) {
+        const w = want[dim];
+        const g = got[dim];
+        if (w === null || w === undefined) continue; // not one fixed px — nothing to compare
+        if (g === null || g === undefined || Math.abs(g - w) <= 1) continue; // 1px: float rounding
+        note(
+          dim,
+          `root ${dim} is ${g}px, but ${want.from[dim] || entry.cascade[entry.cascade.length - 1]} states ${Math.round(w * 100) / 100}px. Resize the variant to match, or fix the CSS if the master is the one that is right.`,
+          variant
+        );
+      }
+    }
+    for (const [key, vs] of grouped) {
+      const msg = key.split(' ')[1];
+      const scope = vs.length > 3 ? `${vs.length} variants (${vs.slice(0, 3).join('; ')}; …)` : vs.join('; ');
+      blocker('ROOT-SIZE', `${entry.label} [${scope}]: ${msg}`);
+    }
+  }
+  if (noFacts > 0) {
+    warning('ROOT-SIZE', `${noFacts} master(s) carry no root size facts. Re-run npm run figma:snapshot.`);
+  }
+}
+
+/** 7d. Layer SIZE — a named descendant's own resolved width/height against the CSS.
+ *
+ *  [ROOT-SIZE]'s sibling, one depth down, and BLOCKER for the identical reason: the
+ *  master is drawing the wrong size, not merely missing a style. This is where
+ *  AtlDrawer's own bug is actually caught — three of its four advertised sizes
+ *  clipped or rendered blank, and every one of them was invisible to [ROOT-SIZE]
+ *  because the root frame was never wrong; the panel inside it was.
+ */
+function checkLayerSize() {
+  const bySelector = new Map(snapshot.components.map((c) => [c.selector, c]));
+  for (const entry of SIZE_LAYER_CASCADES) {
+    const comp = bySelector.get(entry.label);
+    if (!comp) continue;
+    const file = path.join(ROOT, 'libs', entry.lib || 'react', 'src/lib', entry.file);
+    if (!fs.existsSync(file)) {
+      warning('LAYER-SIZE', `${entry.label}: ${entry.file} not found under libs/${entry.lib || 'react'}; cannot resolve the expected size.`);
+      continue;
+    }
+    const rules = cssRules(file);
+    // Keyed by variant — dedup in figma-snapshot.mjs keys on variant name + fact
+    // together, so two variants that happen to share an identical box (right,md and
+    // left,md both are 448×480 today) still produce two distinct `layers[]` entries,
+    // not one collapsed into the other (verified against the refreshed snapshot).
+    const byVariant = new Map();
+    for (const L of comp.layers || []) {
+      if (L.layer === entry.layer) byVariant.set(L.variant, L);
+    }
+    if (!byVariant.size) {
+      warning(
+        'LAYER-SIZE',
+        `${entry.label}: no \`${entry.layer}\` layer in the snapshot. Re-run npm run figma:snapshot, or the layer was renamed.`
+      );
+      continue;
+    }
+    const grouped = new Map();
+    const note = (dim, msg, variant) => {
+      if (allowed(entry.label, 'layer-size', dim)) return;
+      const key = `${dim} ${msg}`;
+      if (!grouped.has(key)) grouped.set(key, []);
+      grouped.get(key).push(variant);
+    };
+    for (const [variant, L] of byVariant) {
+      const axes = parseAxisName(variant);
+      if (axes.state !== undefined && axes.state !== 'default') continue; // as in [ROOT-PAINT]
+      let joined = '';
+      let matched = 0;
+      // The SUBSTITUTED selector that actually stated width/height, per dimension —
+      // later cascade member wins, mirroring resolveRootPaint's own `from` tracking —
+      // so the message names `.position-right.size-md dialog`, not the raw
+      // `{position}`/`{size}` template.
+      const from = { width: null, height: null };
+      for (const template of entry.cascade) {
+        const selector = template.replace(/\{(\w+)\}/g, (_, axis) => axes[axis] ?? ' ');
+        if (selector.includes(' ')) continue; // this variant has no such axis
+        const body = rules.get(selector);
+        if (body === undefined) continue;
+        joined += ';' + body;
+        matched++;
+        if (/(?:^|;)\s*width\s*:/.test(body)) from.width = selector;
+        if (/(?:^|;)\s*height\s*:/.test(body)) from.height = selector;
+      }
+      if (!matched) continue; // e.g. size=full's 100vw has no selector this table names
+      const box = boxFromDeclarations(joined);
+      for (const dim of ['width', 'height']) {
+        const w = box[dim];
+        const g = L[dim];
+        if (w === null || w === undefined) continue; // not one fixed px — nothing to compare
+        if (g === null || g === undefined || Math.abs(g - w) <= 1) continue; // 1px: float rounding
+        note(
+          dim,
+          `${entry.layer} ${dim} is ${g}px, but ${from[dim] || entry.cascade[entry.cascade.length - 1]} states ${Math.round(w * 100) / 100}px. Resize the layer to match, or fix the CSS if the master is the one that is right.`,
+          variant
+        );
+      }
+    }
+    for (const [key, vs] of grouped) {
+      const msg = key.split(' ')[1];
+      const scope = vs.length > 3 ? `${vs.length} variants (${vs.slice(0, 3).join('; ')}; …)` : vs.join('; ');
+      blocker('LAYER-SIZE', `${entry.label} [${scope}]: ${msg}`);
+    }
+  }
+}
+
 /** "variant=primary, size=sm, state=default" -> { variant:'primary', size:'sm', ... } */
 function parseAxisName(name) {
   const out = {};
@@ -1422,6 +1632,11 @@ function resolveRootPaint(entry, axes) {
       want.shadow = /var\(--ui-shadow-([a-z0-9-]+)/.exec(shadow)?.[1] ?? 'raw';
       want.from.shadow = selector;
     }
+    // [ROOT-SIZE]'s "from": the SUBSTITUTED selector (`.atl-dialog.size-md`), not the
+    // raw `{size}` template — later cascade member wins, same as every other `from`
+    // here, so a variant-scoped rule that restates width overrides the base rule's.
+    if (decl('width') !== null) want.from.width = selector;
+    if (decl('height') !== null) want.from.height = selector;
   }
   // Nothing in the cascade paints -> the root must paint nothing.
   for (const prop of ['fill', 'stroke', 'radius']) if (!(prop in want)) want[prop] = null;
@@ -1433,6 +1648,13 @@ function resolveRootPaint(entry, axes) {
   // against 4/8, both invisible to every gate (ADR-0076).
   want.padding = box.padding;
   want.gap = box.gap;
+  // The root's own SIZE, [ROOT-SIZE]'s half of this same box read. `null` when
+  // nothing in the cascade states a fixed width/height — `100vw`, `100dvh`, and a
+  // `min(Xrem, Yvw)` whose fixed operand didn't resolve either (resolveSizeValue
+  // already returns null for all three; see its own comment for why that is not a
+  // finding to report, only one to skip).
+  want.width = box.width;
+  want.height = box.height;
   return want;
 }
 
@@ -2162,6 +2384,7 @@ function boxFromDeclarations(body) {
   const out = {
     minHeight: null,
     height: null,
+    width: null,
     gap: null,
     fontSize: null,
     lineHeight: null,
@@ -2174,7 +2397,14 @@ function boxFromDeclarations(body) {
     const value = m[2].trim();
     switch (prop) {
       case 'min-height': out.minHeight = lengthOf(value); break;
-      case 'height': out.height = lengthOf(value); break;
+      // `resolveSizeValue` rather than `lengthOf`: a strict superset (identical result
+      // for every value `lengthOf` already handled) that additionally resolves a
+      // two-argument `min()`/`max()` whose one fixed operand is the design value behind
+      // a viewport-relative clamp — `width: min(36rem, 90vw)`, [ROOT-SIZE]'s reason for
+      // existing. Applied to `width` for the same reason, and to `height` for symmetry;
+      // no `height: min()/max()` exists in the library today, so this is a no-op there.
+      case 'height': out.height = resolveSizeValue(value); break;
+      case 'width': out.width = resolveSizeValue(value); break;
       case 'gap': out.gap = lengthOf(value); break;
       // `inherit` is not a length — it is "keep whatever the ancestor computed".
       // The cascade is joined ancestor-first, so the value already in `out` IS the
@@ -2263,6 +2493,37 @@ function lengthOf(expr) {
   if (/^(auto|inherit|initial|unset)$/.test(e)) return null;
   if (/%\s*$/.test(e)) return null;
   return resolveLength(e);
+}
+
+/** A CSS width/height value -> px, or null when Figma has nothing fixed to compare
+ *  against — the same "skip, do not report" contract `lengthOf` already has for
+ *  `auto`/`%`, one shape wider.
+ *
+ *  A two-argument `min()`/`max()` is ADR-0107's expressibility family, one property
+ *  over from the padding that ADR named: `width: min(36rem, 90vw)` clamps a design
+ *  width to the viewport on small screens, and a static Figma canvas has no way to
+ *  draw "whichever is smaller" — it can only draw ONE number. When exactly one
+ *  operand resolves to a fixed length and the other does not (a viewport unit or a
+ *  percentage), the fixed operand IS the design value the master should show — the
+ *  vw/dvh/% operand is a runtime floor, not a second design intent — so that operand
+ *  is returned. `100vw` alone (no min/max, nothing fixed) still resolves to null, same
+ *  as before this function existed: there is no design width to compare, only a
+ *  viewport fraction, and ADR-0107's Dialog `size=full` / Drawer's cross-axis are
+ *  exactly this case (verified against the current CSS, not assumed).
+ */
+function resolveSizeValue(expr) {
+  const e = String(expr).trim();
+  const m = /^(min|max)\(\s*([^,]+?)\s*,\s*([^,]+?)\s*\)$/i.exec(e);
+  if (m) {
+    const [, fn, a, b] = m;
+    const av = lengthOf(a);
+    const bv = lengthOf(b);
+    if (av !== null && bv !== null) return fn.toLowerCase() === 'min' ? Math.min(av, bv) : Math.max(av, bv);
+    if (av !== null) return av;
+    if (bv !== null) return bv;
+    return null;
+  }
+  return lengthOf(e);
 }
 
 /** tokens.css declaration for a custom property, unresolved. */

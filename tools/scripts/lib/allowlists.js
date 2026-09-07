@@ -144,13 +144,15 @@ const SCAFFOLD_PORT_EXEMPT = new Map([
  * should treat as intentional — a known, justified divergence between the Figma
  * master and the spec. Same exact-string `.has()` idiom as VARIANT_AXIS_EXCEPTIONS.
  *
- * `check` is one of: name | variant | token | autolayout | desc. `detail` is the
- * gate's per-finding key:
+ * `check` is one of: name | variant | token | autolayout | desc | root-paint |
+ * root-type | root-size | layer-size. `detail` is the gate's per-finding key:
  *   name      → `<axisProp>=<value>`        (e.g. 'AtlButton:name:size=xl')
  *   variant   → comma-joined axis row       (e.g. 'AtlDialog:variant:size=full')
  *   token     → `color:<node>` | `radius:<node>` | `spacing:<node>` | `nonsemantic:<token>`
  *   autolayout→ `<node name>`
  *   desc      → 'spec-ref'
+ *   root-paint/root-type → the property name (`fill` | `stroke` | `radius` | ...)
+ *   root-size/layer-size → `width` | `height`
  *
  * Empty by design — the gate is meant to surface the real backlog of unbound
  * spacing/radii in the Figma library, not pre-suppress it. Add an entry only
