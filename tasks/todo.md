@@ -733,6 +733,50 @@ unblocks when X" rather than deleted.
   gets its own rule; a generic keyword is not the same violation as a retired
   brand name, so one rule may not fit both.
 
+- [ ] **Three decisions the 2026-09-07 sweep named rather than took.** Each is
+  recorded in a commit message and nowhere a reader would look, which is why
+  they are here.
+  - [ ] **There is no SemiBold below 16px** — no `--ui-type-*` role and no Figma
+    text style. `.atl-avatar` states `font-weight: semibold` at font sizes
+    2xs/xs/sm (10/12/14px), so following the code faithfully leaves those text
+    nodes unbindable; they were bound before only because they carried the wrong
+    weight, which happened to match `ty/label` (12 Medium) and `ty/control`
+    (14 Medium). Cost 12 findings of type-baseline debt on 2026-09-07. Same
+    shape as ADR-0074, which added `control` and `action` because two
+    combinations were unspanned — this is a third. Decide: give the small-end
+    semibold combination a role, or accept it as off-role and say so.
+  - [ ] **AtlCombobox's `input` layer passes the block-padding check by
+    coincidence.** It carries `padding: [9, 56, 9, 16]` against `minHeight: 40`,
+    and 9px is exactly what `.atl-combobox-input`'s ADR-0041 recipe derives — so
+    it reads as correct while being the same false-pass ADR-0107 retired at the
+    root. `checkLayerPaint`'s ADR-0107 treatment was deliberately scoped to the
+    six masters that ADR names, so this is untouched. Decide: fix the master's
+    padding data, or extend the height-derived treatment to AtlCombobox with its
+    own ADR.
+  - [ ] **Three parent masters hand-draw their children instead of instancing
+    them** — AtlAvatarGroup, AtlTable and AtlAccordionGroup all have
+    `compositionDependencies` null and redraw their parts as plain frames.
+    `AtlTr`, `AtlTd` and `AtlTbody` compose real instances two levels deep, so
+    the discipline exists below the parents but not in them. This is the root
+    cause of three separate drifts fixed on 2026-09-07 — including AtlTable's
+    thead diverging from its own child master, which renders correctly — and of
+    having patched AtlAvatarGroup's numbers twice in one hour. Patching numbers
+    on a hand-drawn copy is symptom treatment; the fix is instancing, and it
+    needs care because the parents' boolean properties are wired to their own
+    hand-drawn helper layers.
+
+- [ ] **An automated parity pass validates about a fifth of what Figma paints.**
+  Measured 2026-09-07 from AtlSelect's own `cssMapping`: four of its five
+  painted states are gated behind pseudo-classes (`.has-value`,
+  `[aria-expanded]`, `:hover`, `:focus-visible`), and a static component-tree
+  read can never trigger any of them. `figma_check_design_parity` therefore
+  only ever validates the resting state. Every defect the two sweep waves found
+  came from opening painted variants by hand. Not a bug to fix — a coverage
+  fact that should shape how much a green parity score is trusted, and it is
+  why `tasks/figma-parity-sweep-2026-09-07.md` records what the score cannot
+  see. Consider whether an interactive pass (Storybook + real hover/focus, or
+  per-variant screenshot review) belongs in the workshop's own verify loop.
+
 - [ ] **`check:release-drift`'s diagnosis assumes one direction.** Seen
   2026-09-07: with the registry at 0.2.39 and the working tree at 0.2.38 (a
   `chore(release)` commit fetched but not yet rebased onto), it printed
