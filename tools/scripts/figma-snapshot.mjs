@@ -124,8 +124,37 @@ async function main() {
       process.exit(2);
     }
     const serverVersion = status?.serverVersion ?? status?.details?.serverVersion ?? null;
-    const figmaLastModified =
-      status?.details?.lastModified ?? status?.lastModified ?? null;
+
+    // 1b. The file's own last-modified stamp. figma_get_status carries connection
+    // facts (connectedAt, lastPongAt) but never a `lastModified` field anywhere in
+    // its response — the two-deep lookup below was searching a place that never had
+    // the value, which is why this field has been `null` since it was added
+    // (ADR-0019/ADR-0034/ADR-0104). figma_get_file_versions returns the file's real
+    // version history, `created_at` newest-first — verified empirically, not
+    // assumed: two separate calls (one spanning 2026-08-27..08-29, one spanning
+    // 2026-04..07-12) both came back strictly descending by `created_at`, and
+    // `pagination.next_cursor` only ever pages further BACK in time, so the first
+    // element of an unpaged call is reliably the newest. The newest
+    // entry is routinely an unlabeled autosave (by a synthetic "Figma" user, not a
+    // person), so `include_autosaves: true` is required — the default (labelled-only)
+    // query skipped 48 days of autosaves here and would have landed on a stale
+    // "Ready for dev" label instead. Only the first (newest) record is needed, so
+    // `max_versions: 1` keeps this a one-row fetch; a failure here (scope, rate
+    // limit, transient network) degrades to the old status-based lookup and then to
+    // null, loudly, rather than aborting a refresh that otherwise succeeded — this
+    // field is informational, not gated (ADR-0104).
+    let figmaLastModified = null;
+    try {
+      const versions = await call(client, 'figma_get_file_versions', {
+        include_autosaves: true,
+        max_versions: 1,
+      });
+      figmaLastModified = versions?.versions?.[0]?.created_at ?? null;
+    } catch (err) {
+      console.warn(`⚠ figma_get_file_versions failed (${err?.message ?? err}); falling back.`);
+    }
+    figmaLastModified =
+      figmaLastModified ?? status?.details?.lastModified ?? status?.lastModified ?? null;
 
     // 2. Library Tokens collection — the semantic tier mirroring tokens.css (--ui-*).
     //    figma_get_variables paginates at 50 by default and says nothing when it
