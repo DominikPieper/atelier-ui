@@ -1,3 +1,14 @@
+## 0.2.40 (2026-09-07)
+
+### 🩹 Fixes
+
+- **select:** a role with none of its own required state ([8fa452d](https://github.com/DominikPieper/atelier-ui/commit/8fa452d))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.39 (2026-09-07)
 
 ### 🩹 Fixes

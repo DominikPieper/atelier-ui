@@ -1,3 +1,7 @@
+## 0.2.40 (2026-09-07)
+
+This was a version bump only for create-atelier-ui-workspace to align it with other projects, there were no code changes.
+
 ## 0.2.39 (2026-09-07)
 
 This was a version bump only for create-atelier-ui-workspace to align it with other projects, there were no code changes.
