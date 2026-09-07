@@ -82,8 +82,9 @@ Facts a skill author needs (from the docs, verified):
   over `figma_take_screenshot` (REST) right after a mutation.
 - Caps: `figma_execute` 5 s default / 30 s max; batch variable calls 100/batch;
   `figma_create_component_set` 100 variants; responses > 500 KB auto-compressed.
-- `.mcp.json` pins `figma-console-mcp@latest`. The architect's SKILL.md and references
-  hardcode ~70 tool names against a server that added seven tools in its last minor.
+- `.mcp.json` ran `figma-console-mcp@latest` until ADR-0110 pinned it to 1.40.0 the same
+  day. The architect's SKILL.md and references hardcode ~70 tool names against a server
+  that added seven tools in its last minor.
 - Traps the tool descriptions themselves name (full list in research digest 01 § c):
   text edits on an INSTANCE via `figma_execute` **fail silently** — use
   `figma_set_instance_properties`; `figma_import_tokens` is round-trip safe for DTCG
