@@ -599,12 +599,16 @@ unblocks when X" rather than deleted.
   `padding=none` (was padding like `md`), the AtlButton label wrap, the
   block-padding policy (ADR-0107), the card header's leading. Highest-value
   remaining, in order:
-  - [ ] **AtlDrawer's size variants are placeholders** — inner panel fixed at
-    220×320 across `right/sm|md|lg|full` while only the outer frame resizes;
-    `sm` clips its own button, `lg` leaves a gap; `left`/`top`/`bottom` exist
-    only at `md`. The one finding that makes a master actively misleading.
-  - [ ] **AtlDialog was authored at 1rem = 10px** — every width is the code's px
-    ÷ 1.6, exactly, across sm/md/lg/xl. One systematic correction.
+  - [x] ~~**AtlDrawer's size variants are placeholders**~~ — done 2026-09-07
+    (`0cca35b`), rebuilt on a 720×480 viewport, 1:1 with the code.
+  - [x] ~~**AtlDialog was authored at 1rem = 10px**~~ — done 2026-09-07
+    (`0cca35b`), now 384/576/768/1024 and 1280 for `full`.
+  - [ ] **A gate that measures master geometry.** `snapshot.json` records paint,
+    overlays, layers and properties but NOT frame dimensions, so `check:figma`
+    cannot see a master's width. That is why the 1.6× dialog scale error and the
+    drawer's single shared panel both survived every green run — both were found
+    by looking at a screenshot. Highest-leverage gate left to build: compare each
+    master's resolved geometry against the code's computed values.
   - [ ] Code fixes: the two `control`-role weight overrides on
     `.page-btn.is-active` and `.step-item.is-active .step-label` (against
     tokens.css's own role table), `.step-description`'s hardcoded `2px` margin,

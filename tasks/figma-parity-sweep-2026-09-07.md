@@ -89,16 +89,42 @@ almost entirely on paradigm noise, AtlSkeleton 90/100 with zero real findings.
   `textAutoResize: HEIGHT` with a stale 51px fixed width. Commit `eb4fce7`.
 - **Block padding policy** applied to AtlButton/AtlInput/AtlBadge. ADR-0107.
 
+### Fixed 2026-09-07 (`0cca35b`)
+
+- **AtlDrawer** rebuilt on a 720×480 viewport — the size that makes every
+  existing variant exactly 1:1 with the code (right sm 320 / md 448 / lg 640 /
+  full 720, left md 448, top and bottom md 320 tall). Backdrop fills the
+  viewport; `header` and `footer` now STRETCH, having been FIXED-width.
+- **AtlDialog** widths corrected to 384/576/768/1024; `full` takes 1280, since
+  `100vw` has no fixed equivalent and that is the only value keeping
+  sm<md<lg<xl<full true. Its two 1px dividers had also been FIXED at the old
+  width and stopped short of the edge.
+- Housekeeping the resizes forced: `figma_arrange_component_set` is **wrong for
+  this file** — it wraps the set in a generic "Component Container" four frames
+  deep and lifts it out of its component-named frame, leaving that frame as a
+  husk. Every other set here sits directly inside a frame named after the
+  component. Reverted by hand. The taller Drawer then overlapped AtlToast, both
+  masters overflowed the Overlay section, and Overlay then overlapped Feedback;
+  the section's five children and the page's nine sections were re-stacked.
+
+**And the finding that outlasts both fixes: no gate covers master geometry.**
+`snapshot.json` records `variantAxes`, `variants`, `properties`, `rootPaint`,
+`overlays` and `layers` — not frame dimensions. `check:figma` cannot see a
+master's width at all, which is why a 1.6× scale error across five variants and
+a drawer with one panel for seven sizes both survived every green run. Both were
+found by reading a screenshot. A gate that measures a master's resolved geometry
+against the code would have caught both on the day they were introduced.
+
 ### Master needs fixing — unambiguous
 
-- **AtlDrawer's size variants are placeholders.** The inner `dialog` panel is
+- ~~**AtlDrawer's size variants are placeholders.**~~ Fixed above. The inner `dialog` panel is
   fixed at 220×320 in `right,sm`, `right,md`, `right,lg` and `right,full`; only
   the outer demo frame changes (320/440/720/1280), and both children are
   `layoutPositioning: ABSOLUTE` with `clipsContent: true`. Screenshot-verified by
   the agent: `sm` clips the panel and truncates its own button, `lg` leaves a
   blank gap. `left`, `top` and `bottom` exist only at `md`. Three of four
   advertised sizes for the one position that has them do not work.
-- **AtlDialog's widths** — the 10px/rem bug above.
+- ~~**AtlDialog's widths** — the 10px/rem bug above.~~ Fixed above.
 - **AtlPagination `showFirstLast`** is declared with `defaultValue: true` but
   `componentPropertyReferences` is `{}` on all nine children and there are no
   first/last layers at all. Toggling it in Figma does nothing.
