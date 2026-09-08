@@ -59,9 +59,18 @@ Ranked; each carries why it's worth doing next rather than later.
     Iteration-1 evals (Intake ×2, governance ×1): 87 % vs 43 %; record and critique in
     `skills/artboard-bridge/evals/iteration-1.md`. Publish mode not yet exercised — needs
     a scratch project (`create_project` with the Atelier `design_system_id`), owner's go.
-  - [ ] `artboard-bridge` iteration 2: fix the eval-2 premise (design system ≠ project),
-    seed a scratch project with an instructive comment, add the snapshot-cross-check
-    assertion, run Publish against the scratch project.
+  - [x] `artboard-bridge` iteration 2 (2026-09-08): Intake 7/7 vs 1/7, governance 2/5 vs
+    3/5, Publish 2/8 vs 3/8 — record and the reading of those numbers in
+    `skills/artboard-bridge/evals/iteration-2.md`. Publish ran for the first time, against
+    scratch project `44481d29-1041-4aa0-adf0-cf59028016d7`; the skill correctly refused
+    (AtlBadge DRIFT) while the baseline published unverified code. Revisions: description
+    carve-out for third-party artboards, P0 refusal as a successful run, P0a repo-wide
+    DRIFT case.
+  - [ ] `artboard-bridge` iteration 3: the write path (P1–P7) is still unexercised —
+    needs one component with a fresh parity record (Desktop Bridge re-verify +
+    `parity:record`, or a marked synthetic fixture). Also: re-run the governance eval
+    against the fixed description, add an assertion that penalises publishing over a
+    DRIFT row, lift the `list_projects`-only cap, require the correct decider roles.
   - [ ] **Decide: package the skills into `create-workspace`** (owner's question,
     2026-09-07; blueprint § 8 decision 7). Preset ships `.mcp.json` + `CLAUDE.md`, no
     skills. Recommended: vendor the generic skills at generate time and give
@@ -109,6 +118,23 @@ Ranked; each carries why it's worth doing next rather than later.
   ADR-0018 → ADR-0030). Fix in the skill: Audit's fix column must route any delete/rebind
   through Migrate's safety classes, and Token Architecture findings must enumerate every
   collection's consumers before "unused".
+- [ ] **All 37 parity records are DRIFT after the token change** (measured 2026-09-08,
+  `npm run check:parity` exit 1, 37 blockers, 0 critical). Expected by ADR-0104 — the
+  shared `tokens.css` is part of every component's `inputsHash` — but it means the whole
+  gate is red until a re-verify sweep, and `artboard-bridge` Publish is blocked repo-wide
+  because its P0 refuses on DRIFT. The sweep needs the Desktop Bridge
+  (`figma_check_design_parity` per component, then `parity:record`); the interactive
+  Light/Dark pass is only needed for the stateful ones. Decide whether the sweep runs
+  per component on demand or as one session.
+- [ ] **`AtlDrawer.dc.html`'s finding 4 is wrong and should be corrected in the sheet.**
+  It claims `closeOnBackdrop` is a visible Boolean on AtlDrawer's master but code-only on
+  AtlDialog. `tools/figma/snapshot.json` says otherwise for both: AtlDrawer's `properties`
+  are `{position, size}` only, and each component's own description cites ADR-0056 —
+  "Boolean `closeOnBackdrop`: not modelled — behaviour only, as on AtlDialog." Two
+  independent eval runs (2026-09-07, 2026-09-08) reported the finding as fact from the
+  sheet; a third caught it only because the skill made it cross-check. Fix the sheet in
+  the redesign project (an `artboard-bridge` Publish-style edit) so the next reader does
+  not inherit it.
 - [ ] **`plan/figma.md` carries two stale tables.** § Variable Collections is pre-ADR-0030
   (flagged stale there since 2026-08-26), and the § Components node-id table still says
   `LlmBreadcrumbs 55:141` / `LlmPagination 55:145` where `tools/figma/snapshot.json`

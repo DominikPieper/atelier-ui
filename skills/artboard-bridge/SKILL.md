@@ -1,6 +1,6 @@
 ---
 name: artboard-bridge
-description: Bridges Claude Design artboards and the Atelier repo in both directions without letting an artboard become a source of truth — Intake reads a .dc.html sheet, its findings and comments out of a claude.ai/design project and writes the ADR-0096 handoff document from it (stamped "from Claude Design, unverified against Figma") so design-to-code or the architect can take over; Publish turns a gate-verified component into a .dc.html sheet in the Atelier project (finalize_plan → write_files → render_preview → registry → design-status gate). Use whenever a claude.ai/design URL, "artboard", "Claude Design sheet", "the redesign canvas" or ".dc.html" appears next to a component — "take this artboard into code", "what does the Claude Design sheet for AtlDrawer say", "share AtlBadge as an artboard", "update the sheet for AtlSelect", "publish the redesign for X". Do NOT use to build code from a Figma master (design-to-code), to build or audit a Figma file (figma-workspace-architect), or to sync a whole design system with /design-sync.
+description: Bridges Claude Design artboards and the Atelier repo in both directions without letting an artboard become a source of truth — Intake reads a .dc.html sheet, its findings and comments out of a claude.ai/design project and writes the ADR-0096 handoff document from it (stamped "from Claude Design, unverified against Figma") so design-to-code or the architect can take over; Publish turns a gate-verified component into a .dc.html sheet in the Atelier project (finalize_plan → write_files → render_preview → registry → design-status gate). Use whenever a claude.ai/design URL, "artboard", "Claude Design sheet", "the redesign canvas" or ".dc.html" appears next to a component — "take this artboard into code", "what does the Claude Design sheet for AtlDrawer say", "share AtlBadge as an artboard", "update the sheet for AtlSelect", "publish the redesign for X". Use it also when the artboards or the design system in Claude Design belong to a **client, an employer or any third party**, and whatever the target library is — "nimm die Artboards vom Kunden-Designsystem und bau daraus deren Komponenten", "build the client's library from their Claude Design project": that case is exactly the governance stop this skill carries, and the wrong move is to treat it as an ordinary code task because the target is not Atelier. Do NOT use to build code from a Figma master (design-to-code), to build or audit a Figma file (figma-workspace-architect), or to sync a whole design system with /design-sync.
 ---
 
 # Artboard bridge
@@ -16,6 +16,13 @@ directions and says so, once, each time.
 Repo-bound: it names the Atelier projects, the palette generator, the registry and the
 gates. Publish is a **trainer-machine capability**: the owner seat is proven to write
 (ADR-0106); per-seat access for a room is the open item ADR-0032 keeps blocked.
+
+**The governance half is not repo-bound.** `references/governance.md` applies to any
+Claude Design project in this account, whoever owns it and whatever library the work
+targets. A request to build a *client's* components from a *client's* artboards is
+in scope precisely because it must stop — reading it as "not an Atelier task, so this
+skill does not apply" is the failure mode an eval run of this skill produced on
+2026-09-08.
 
 ## Mode routing
 
@@ -112,7 +119,16 @@ Figma account and no running Storybook can open.
 
 - **P0.** Publish shows finished work. `npm run check:parity > /tmp/p.out 2>&1; echo $?`
   and read the component's row; a `DRIFT` means the code moved since it was verified —
-  run `design-to-code` Review first, then come back. No story, no sheet.
+  run `design-to-code` Review first, then come back. No story, no sheet. **Refusing here
+  is a successful run, not a failure**: say which commits moved the component's inputs,
+  what the re-verify needs (the Desktop Bridge for `figma_check_design_parity`, then
+  `parity:record`), and stop. Do not compose the sheet "so it is ready".
+- **P0a — the repo-wide case.** `check:parity` hashes the shared `tokens.css` into every
+  component's inputs (ADR-0104), so a single token change puts **every** component in
+  DRIFT at once (37 of 37 on 2026-09-08). Then Publish is blocked repo-wide until a
+  re-verify sweep, not just for the component in front of you. Say that plainly rather
+  than reporting it as this component's problem, and check whether the sweep is already
+  an open item in `tasks/todo.md`.
 - **P2.** Read `_sheet.css` from the project and diff its `:root` block against
   `tools/design/artboard-palette.css` (generated, gated by `check:artboard-palette`). If
   they differ, the project copy is behind: replace the block (it is a `write_files` of
@@ -149,10 +165,12 @@ Figma account and no running Storybook can open.
 `AtlDrawer.dc.html`, comments, palette mapping, snapshot check (master `421:398`), handoff
 document with the sheet's findings as claims, hand to `design-to-code` Review.
 
-**"Share AtlBadge as an artboard for the client call"** → Publish. `check:parity` row for
-AtlBadge, prompt loaded, `_sheet.css` palette diffed, sheet measured from the story,
-plan → write → preview → gate, registry entry (`covers: ["AtlBadge"]`),
-`gen:design-status`, report the `open_url`.
+**"Share AtlBadge as an artboard for the client call"** → Publish, and it ends one of two
+ways. Clean row: prompt loaded, `_sheet.css` palette diffed, sheet measured from the
+story, plan → write → preview → gate, registry entry (`covers: ["AtlBadge"]`),
+`gen:design-status`, report the `open_url`. DRIFT row: name the commits that moved the
+inputs, say whether the whole repo is in DRIFT (P0a), point at the re-verify, write
+nothing. Both are complete answers.
 
 **"Nimm die Artboards vom Kunden-Designsystem und bau daraus die Komponenten"** → stop at
 governance. A client's design system in a Claude Design project is a data-processing

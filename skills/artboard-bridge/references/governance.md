@@ -13,6 +13,11 @@
 
 - **Atelier's own OSS library is the safe case.** Its components, tokens and previews may
   be read from and written into Claude Design.
+- **This section applies whatever the target is.** The question is never "is the output
+  an Atelier component?" but "whose design data is being read out of Claude Design, and
+  into what?". Building a client's own library from the client's own artboards is the
+  case this section exists for; the target being someone else's repo makes the stop more
+  necessary, not less.
 - **A client's or an employer's design system is not.** Anthropic's admin guide (as
   recorded in ADR-0032) states uploaded assets are stored persistently under enterprise
   retention with no data-residency support, and Claude Design is default-off on
