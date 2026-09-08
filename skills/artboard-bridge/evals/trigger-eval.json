@@ -1,0 +1,22 @@
+[
+  {"query": "was sagt das claude design sheet zu AtlDrawer? danach will ich die vue impl gegen die findings prüfen", "should_trigger": true},
+  {"query": "take this artboard into code please: https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c — it's the AtlSelect one", "should_trigger": true},
+  {"query": "share AtlBadge as an artboard for tomorrow's client call, put it in the Atelier Claude Design project", "should_trigger": true},
+  {"query": "update the .dc.html sheet for AtlTable after the sticky-header change", "should_trigger": true},
+  {"query": "the redesign canvas has an open finding on AtlAvatar initials being 10px — is that still true in code, and what does the sheet actually claim?", "should_trigger": true},
+  {"query": "publish the redesign sheet for AtlCombobox, parity was recorded yesterday", "should_trigger": true},
+  {"query": "Index.dc.html lists 29 sheets but design-status.md says something else, which components have an artboard and which don't?", "should_trigger": true},
+  {"query": "read the comments on the AtlToast artboard and tell me which ones are actionable", "should_trigger": true},
+  {"query": "Wir haben die Artboards vom Kunden-Designsystem in Claude Design — nimm die und bau daraus die Komponenten für deren Library.", "should_trigger": true},
+  {"query": "step 5 for AtlStepper — the trainer demo needs a shareable link without figma", "should_trigger": true},
+  {"query": "implement AtlToast in Angular from the Figma master, node 55:47", "should_trigger": false},
+  {"query": "audit the token collections in the Atelier Figma file, half the components bind primitives directly", "should_trigger": false},
+  {"query": "run /design-sync so the React library shows up as a design system in Claude Design", "should_trigger": false},
+  {"query": "regenerate tools/design/artboard-palette.css after the teal ramp change and make check:artboard-palette pass", "should_trigger": false},
+  {"query": "the storybook story for AtlDrawer shows Canvas but no Docs tab — fix it", "should_trigger": false},
+  {"query": "create the AtlFormField master in Figma from the spec, it has no master yet", "should_trigger": false},
+  {"query": "design three directions for a toast component in Claude Design for the workshop demo", "should_trigger": false},
+  {"query": "does AtlCard still match the Figma master after the Instrument Sans change? update the parity record if fine", "should_trigger": false},
+  {"query": "fix the stale entries in tools/design/artboards.json — Typography Directions is gone and Index.dc.html is missing", "should_trigger": false},
+  {"query": "write a blog post about how we use Claude Design at step 0 and step 5 of the loop", "should_trigger": false}
+]

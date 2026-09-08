@@ -478,3 +478,22 @@ open the one file that would falsify it, and cite that file, not the digest. Whe
 changes a recommendation (here: the skill boundary), the cross-check is not optional — and
 the check found the boundary itself was built on a misread of what the existing skill
 covers, which no amount of my own re-reading had caught.
+
+## The trigger-optimisation loop is not a background job while Figma is in use (2026-09-08)
+
+I started skill-creator's `run_loop.py` (description optimisation: 5 iterations × 20
+queries × 3 runs of `claude -p`) in the background and, in the same minute, eight eval
+agents that needed the figma-console Desktop Bridge. Within a minute the parent session's
+`figma-console` MCP disconnected and its 125 tools vanished; a process listing showed two
+dozen `figma-console-mcp` servers spawned by the loop's headless sessions, each starting
+the repo's `.mcp.json` servers and competing for the one Desktop Bridge plugin. The loop
+also registered its temporary skill copies (`design-to-code-skill-<hash>`) into the
+parent's skill list, which the baseline eval agents then had to ignore as "injected fake
+entries". Eight agents stopped, all partial outputs discarded, the user asked to
+reconnect the server by hand.
+
+Rule: the loop runs **alone**, after every Figma- or Claude-Design-dependent task in the
+session is finished, and ideally with an MCP config that gives its headless sessions no
+servers at all (`claude -p --strict-mcp-config --mcp-config <empty>` if the runner exposes
+it; otherwise from a cwd with no `.mcp.json`). Anything that spawns many `claude -p`
+sessions is a resource event for the interactive session, not a background job.
