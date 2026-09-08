@@ -15,6 +15,11 @@ underneath it._
 
 Ranked; each carries why it's worth doing next rather than later.
 
+> **Picking this up in a new session?** Read
+> `tasks/handover-design-skills-2026-09-08.md` first — it carries what is blocked
+> (figma-console reconnect, 37/37 parity DRIFT), the agreed order of next steps, the
+> scratch Claude Design project, and the eval-harness facts.
+
 - [ ] **Design-workflow skills — build the decided catalog** (decided 2026-09-07).
   Research and proposal in `plan/design-skills-blueprint.md` (§ 8 carries the six
   decisions); verbatim digests in `plan/research/design-skills-2026-09-07/`, draft of
