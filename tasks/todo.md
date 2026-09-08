@@ -54,9 +54,14 @@ Ranked; each carries why it's worth doing next rather than later.
     two Category-1 rules (enumerate consumers before "unused"; delete/rebind is Migrate)
     and the report-tool / a11y-weights note; SKILL.md Audit text carries the same rules.
     Not ported: the southleft lint rule catalog (digest 06 has only its counts).
-  - [ ] `artboard-bridge` (intake + publish; publish as trainer-machine capability, the
-    Blocked per-seat item below stays open). Must pass `design_system_id` explicitly —
-    Atelier's system is not the account default.
+  - [x] `artboard-bridge` landed 2026-09-08 (9c38317 + revisions): Intake + Publish
+    modes, three references (sheet shape, palette mapping, governance), five fixtures.
+    Iteration-1 evals (Intake ×2, governance ×1): 87 % vs 43 %; record and critique in
+    `skills/artboard-bridge/evals/iteration-1.md`. Publish mode not yet exercised — needs
+    a scratch project (`create_project` with the Atelier `design_system_id`), owner's go.
+  - [ ] `artboard-bridge` iteration 2: fix the eval-2 premise (design system ≠ project),
+    seed a scratch project with an instructive comment, add the snapshot-cross-check
+    assertion, run Publish against the scratch project.
   - [ ] **Decide: package the skills into `create-workspace`** (owner's question,
     2026-09-07; blueprint § 8 decision 7). Preset ships `.mcp.json` + `CLAUDE.md`, no
     skills. Recommended: vendor the generic skills at generate time and give

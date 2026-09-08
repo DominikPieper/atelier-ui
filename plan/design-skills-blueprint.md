@@ -323,7 +323,7 @@ master `COMPONENT_SET` on the Components page, tile on Inventory, snapshot refre
   code to Figma"; this fills that hole and calls the architect for decisions. Effort: M
   (the reference is S and can ship alone, inside the architect, today).
 
-### 5.4 `artboard-bridge` — repo-bound, two modes
+### 5.4 `artboard-bridge` — repo-bound, two modes — **landed 2026-09-08**, see `skills/artboard-bridge/evals/iteration-1.md`
 
 (Named without "claude" — skill names may not contain "claude" or "anthropic".) Both
 directions ADR-0032 names. ADR-0106 proved the owner-seat write path; per-seat access for
