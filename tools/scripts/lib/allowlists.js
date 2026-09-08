@@ -754,6 +754,19 @@ const UNDISTRIBUTED_SKILLS = {
     reason:
       'repo-bound — names libs/spec, parity:record, check:figma and the Atelier file key; a scaffolded workspace gets a profile later (plan/design-skills-blueprint.md § 8 decision 7)',
   },
+  // Repo-bound: names the two Atelier Claude Design project ids
+  // (7a6a2f19-9a3c-4dd9-9828-65c7cc67766c "Atelier" and
+  // 019de217-489c-7441-8275-2efe020086b5 "Atelier Design System"), the
+  // artboard registry (tools/design/artboards.json), the palette generator
+  // (tools/scripts/gen-artboard-palette.mjs), and the design-status gate
+  // (check:design-status) — none of which exist in a scaffolded workspace
+  // outside this monorepo. Carries ADR-0032 governance specific to this
+  // organisation (trainer-machine-only Publish; DSB/ISB stop rule for
+  // client/employer design systems).
+  'artboard-bridge': {
+    reason:
+      'repo-bound — names the two Atelier Claude Design project ids, the artboard registry (tools/design/artboards.json), the palette generator and the design-status gate; carries ADR-0032 governance specific to this organisation',
+  },
 };
 
 module.exports = {

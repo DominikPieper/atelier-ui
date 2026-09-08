@@ -122,7 +122,8 @@
         "projects": [
           "atelier-design",
           "figma-workspace-architect",
-          "design-to-code"
+          "design-to-code",
+          "artboard-bridge"
         ],
         "projectsRelationship": "independent",
         "version": {

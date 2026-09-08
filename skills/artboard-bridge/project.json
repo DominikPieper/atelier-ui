@@ -1,0 +1,40 @@
+{
+  "name": "artboard-bridge",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "skills/artboard-bridge",
+  "projectType": "library",
+  "tags": ["type:skill"],
+  "targets": {
+    "package": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/skills/artboard-bridge.zip"],
+      "options": {
+        "command": "node tools/scripts/package-skill.mjs artboard-bridge"
+      }
+    },
+    "sync-discovery": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "echo 'artboard-bridge is repo-bound and not mirrored to the discovery endpoint (UNDISTRIBUTED_SKILLS)'"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node tools/scripts/check-skill.mjs artboard-bridge"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node tools/scripts/test-skill.mjs artboard-bridge"
+      }
+    },
+    "nx-release-publish": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "echo 'artboard-bridge is a private skill — distributed as a zip via the `package` target, not via npm. Skipping nx-release-publish.'"
+      }
+    }
+  }
+}

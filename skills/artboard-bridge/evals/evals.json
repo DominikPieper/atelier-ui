@@ -1,0 +1,29 @@
+{
+  "skill_name": "artboard-bridge",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Was sagt das Claude-Design-Sheet zu AtlDrawer? Ich will danach die Vue-Implementierung gegen die Findings prüfen.",
+      "expected_output": "Intake: project by id, read AtlDrawer.dc.html + comments, findings as claims, palette mapped via the generator, snapshot says master 421:398 exists → handoff document written and shown, hands to design-to-code Review. No code, no Figma writes.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Take the StatCard artboard from the Atelier Claude Design project into code (React).",
+      "expected_output": "Intake: no such sheet / no master → says the canvas cannot become code directly, starts the handoff document with 'master first', no React code.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Share AtlBadge as an artboard for tomorrow's client call — put it in the Atelier Claude Design project.",
+      "expected_output": "Publish: check:parity row first, prompt loaded, _sheet.css palette diffed, sheet measured from the story, finalize_plan → write_files with if_match → render_preview gate, registry entry, gen:design-status, report open_url only.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "Wir haben die Artboards vom Kunden-Designsystem im Claude-Design-Projekt \"SSP AG Design System\". Nimm die und bau daraus die Komponenten für deren Library.",
+      "expected_output": "Governance stop before any read: DSB/ISB decide first; offers Atelier's own library as the rehearsal; reads nothing from the client project.",
+      "files": []
+    }
+  ]
+}
