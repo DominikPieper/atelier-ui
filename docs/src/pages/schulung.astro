@@ -26,7 +26,7 @@ const DAYS: Day[] = [
   {
     day: 'Tag 1',
     title: 'Werkzeuge verstehen & Workflow end-to-end',
-    goal: 'Jeder Teilnehmer hat ein laufendes Setup, kennt alle vier Pillars (Figma · Storybook · MCP · Claude Code) und hat einmal end-to-end eine existierende Atelier-Komponente per Prompt verändert.',
+    goal: 'Jeder Teilnehmer hat ein laufendes Setup, kennt alle vier Pillars (Figma · Storybook · MCP · Claude Code) und hat einmal end-to-end eine Settings Card aus vorhandenen Atelier-Komponenten (AtlCard / AtlInput / AtlToggle / AtlButton) per Prompt komponiert — keine Änderung an einer bestehenden Komponenten-API.',
     result: [
       'Laufendes Atelier-Workspace mit grünem preflight',
       'Mindestens ein erfolgreicher Prompt-zu-Code-Roundtrip',
@@ -55,7 +55,8 @@ const DAYS: Day[] = [
           'Node ≥ 22.12 LTS aktiv (preflight prüft hart auf 22.12), npm-Version aus package.json#packageManager',
           'Atelier-Repo geklont (kanonische Schulungsumgebung), Claude Code CLI eingeloggt mit eigenem API-Key',
           'Figma-Account mit Draft-Rechten (File → Duplicate to your drafts muss möglich sein) + figma-console Desktop-Bridge-Plugin in der Figma-Desktop-App importiert (Figma → Plugins → Development → Import plugin from manifest…) — die Bridge gated Tag 2, der Access-Token ist technisch optional (nur REST-Reads) und Kohorten-Policy',
-          'npm run preflight lokal grün',
+          'npm run preflight lokal grün — prüft aber nur Node/npm, dass die CLI vorhanden ist (which claude + claude --version), die Figma-Bridge, MCP-Erreichbarkeit und Ports. Nicht, ob der API-Key gültig ist: preflight schickt keine Modell-Anfrage',
+          'Modellzugriff getrennt bestätigen: claude auth login --console (oder ANTHROPIC_API_KEY gesetzt), dann claude -p "Antworte mit: PREFLIGHT-OK" — kommt eine Antwort statt eines Auth-Fehlers, ist der Zugriff echt. Installierte CLI, verbundene MCP und nutzbarer Modellzugriff sind drei verschiedene Dinge',
           'MCP-Konfig in .mcp.json gemeinsam lesen und verstehen',
           'Bei Problemen: /troubleshooting (Bridge nicht verbunden, Node-Id löst nicht auf, Port-Konflikte, Node-Version zu alt)',
         ],
@@ -98,7 +99,7 @@ const DAYS: Day[] = [
           'Trainer-Demo Drei Richtungen (~12 min, nur Trainer-Maschine — claude.ai/design braucht ein anderes Login als der Kohorten-API-Key): drei Direction-Artboards für den Toast-Brief in Claude Design, geseedet aus der generierten Palette tools/design/artboard-palette.css — nicht aus dem atelier-design Skill, weil dieses File die Kurznamen trägt, die die Artboards selbst verwenden (--success, --border-hover), und weil genau dieses File gleich rot gemacht wird',
           'Vor dem Zaun die vier Gate-Identitäten in einem Satz benennen (Figma-COMPONENT_SET mit Variant-Achsen, Spec-String-Literal-Union, --ui-*-Token, Figma-Node-Id) — Node-Ids kommen erst in Block 05, Literal-Unions erst an Tag 2, hier also benennen statt voraussetzen. Dann der Zaun: eine Farbe im Artboard hart eintragen und npm run check:artboard-palette laufen lassen — grün, das Gate liest nur das gemeinsame Sheet gegen tokens.css und kein Artboard. Dieselbe Farbe im generierten Sheet ändern: derselbe Befehl wird rot',
           'Checkpoint-Frage an den Raum: welche der vier Gate-Identitäten hat dieses Artboard? Erwartete Antwort: keine. Erst danach die Einordnung — im Repo gilt die Regel „nie Inline-Hex" weiter, sie gilt dort, wo ein Gate sie durchsetzen kann; Claude Design ist kein fünfter Pillar, sondern Schritt 0 (Divergenz) und Schritt 5 (Handoff), nie Schritt 1–4',
-          'Schritt 5 (Handoff) bleibt an diesem Punkt Idee, nicht Vorführung: anders als Schritt 0 gibt es dafür keine Demo und kein Artefakt in diesem Repo — die ausgearbeitete Fassung ist spezifiziert, aber ihr Tooling existiert nicht und hängt am noch unverifizierten Per-Seat-Zugriffstest. Der Raum darf hier nicht den Eindruck mitnehmen, beide Hälften gesehen zu haben',
+          'Schritt 5 (Handoff) bleibt an diesem Punkt ohne Live-Vorführung, aber nicht mehr Idee: anders als Schritt 0 gibt es dafür keine Demo im Raum — sein Tooling existiert seit 2026-09-08 als Skill (artboard-bridge, Publish-Modus) und ist bereits einmal gelaufen, gegen ein Scratch-Projekt, und hat korrekt verweigert (die Komponente stand auf DRIFT), während ein skill-loser Ansatz ungeprüften Code veröffentlicht hätte — genau die Verweigerung, für die der Zaun weiter oben zwei Abschnitte lang argumentiert. Der Schreibpfad selbst (P1–P7) ist noch unerprobt, weil aktuell jeder Parity-Record im Repo auf DRIFT steht (repo-weit blockiert, nicht an dieser einen Komponente), und Zugriff für einzelne Teilnehmer-Seats bleibt eine eigene, offene Frage (ADR-0106 beweist bislang nur den Owner-Seat). Der Raum darf hier nicht den Eindruck mitnehmen, eine Live-Vorführung gesehen zu haben',
           'Gegenmittel für die Live-Demo: Artboards in der Kaffeepause 14:30–14:45 vorab erzeugen; Fallback sind die 31 Artboards der Redesign-Phase (tools/design/artboards.json); nach der Rot-Demo git checkout tools/design/artboard-palette.css. Hintergrund für den Trainer: /claude-design',
         ],
       },
@@ -146,7 +147,7 @@ const DAYS: Day[] = [
         bullets: [
           'Tag-1-Recap',
           'Komponenten-Brief vorstellen — Anatomie, Axes, States, A11y-Anforderungen. Ein Brief je Komponente liegt im Repo unter workshop/briefs/{toast,tagchip,statcard,avatar}.md',
-          'uianatomy MCP als Hilfsmittel zeigen — und daran das Skills-Konzept: ein Skill ist eine Anleitung, die Claude lädt, wenn die Aufgabe passt (uianatomy-mcp triggert hier automatisch)',
+          'uianatomy MCP als Hilfsmittel zeigen — und daran das Skills-Konzept: ein Skill ist eine Anleitung, die Claude lädt, wenn die Aufgabe passt. Fünf sind für diese Schulung relevant, nicht drei: uianatomy-mcp triggert hier automatisch; figma-workspace-architect und atelier-design begleiten gleich Block 01; design-to-code trägt ab Block 02 den ganzen Rest des Tages — das Routing zwischen eigener Spec-Datei und geteiltem Master läuft bereits durch ihn (siehe Block 02 unten); artboard-bridge bindet die Schritt-0/Schritt-5-Artefakte aus /claude-design ein, mit Publish bislang trainer-only',
         ],
       },
       {
@@ -172,13 +173,13 @@ const DAYS: Day[] = [
         title: 'Spec & Story per Prompt',
         format: 'Prompt-Übung',
         bullets: [
-          'React-Teilnehmer zuerst: nx storybook react parallel starten (Port 4401), dann per claude mcp add --transport http storybook-local http://localhost:4401/mcp verbinden — bewusst lokaler Scope (Default von --scope, nicht project): das gemeinsame .mcp.json bleibt unangetastet, der Working Tree sauber. Client neu verbinden und prüfen, dass die dev/test-Tools (get-storybook-story-instructions, stories-preview, test-run) jetzt gelistet sind — ohne diesen Schritt ist das gleich folgende Pflicht-Tool schlicht nicht vorhanden: „nicht verfügbar" heißt hier „nicht konfiguriert", nicht „Server down". get-storybook-story-instructions ist Pflicht vor jedem *.stories.* Edit. Angular/Vue bekommen dieses Toolset nicht, ihr Loop bleibt nx test <lib> + Browser',
+          'Alle Teilnehmer, unabhängig vom Framework: nx storybook <fw> parallel starten (Port aus dem Terminal — Angular 4400, React 4401, Vue 4402), dann per claude mcp add --transport http storybook-local http://localhost:<port>/mcp verbinden — bewusst lokaler Scope (Default von --scope, nicht project): das gemeinsame .mcp.json bleibt unangetastet, der Working Tree sauber. Client neu verbinden und prüfen, dass die dev/test-Tools (get-storybook-story-instructions, stories-preview, test-run) jetzt gelistet sind — seit 10.6.0 identisch für alle drei Frameworks. Ohne diesen Schritt ist das gleich folgende Pflicht-Tool schlicht nicht vorhanden: „nicht verfügbar" heißt hier „nicht konfiguriert", nicht „Server down". get-storybook-story-instructions ist Pflicht vor jedem *.stories.* Edit',
           'Der Prompt entsteht aus dem Handoff-Dokument aus Block 01, nicht aus dem Bild allein — API in Worten beschreiben → von Claude eine Spec (im Stil von libs/spec/src/index.ts) und Story generieren lassen, mit der Behaviour aus dem Dokument, nicht nur der Optik',
           'LLM-optimierte API-Regeln: predictable naming, literal unions, composition über config, keine versteckten Defaults',
-          'Eigene Spec als eigene Datei neben der Komponente, nicht in den geteilten Master — das Material sagt „eine Spec im Stil von libs/spec/src/index.ts", im Stil von, nicht hinein',
+          'Eigene Spec bleibt automatisch außerhalb des geteilten Masters: der design-to-code-Skill liest im Handoff-Dokument aus Block 01, ob die Quelle das Original-File oder ein Duplikat ist, und legt die Spec im zweiten Fall als eigene Datei neben der Komponente an statt als Block in libs/spec/src/index.ts — das Material sagt „eine Spec im Stil von libs/spec/src/index.ts", im Stil von, nicht hinein',
           'Drei Gates werden dabei erwartungsgemäß rot (kein Fehler an der eigenen Arbeit): check:sync mit [DRIFT] (Komponente fehlt in den anderen Frameworks), check:a11y-parity mit [BLOCKER] [ROSTER], check:design-status. Landet die Spec doch im geteilten Master, kommen drei weitere dazu: check:spec, check:variants mit [UNMAPPED] AtlXVariant … is not in UNION_TO_COMPONENT, check:metadata mit [MISSING-REGISTRY] AtlXSpec: not in COMPONENT_METADATA_REGISTRY — drei rote Gates sind erwartet, sechs heißt: die Spec liegt im Master; check:all bricht aber beim ersten Fehler ab, die sechs also einzeln laufen lassen, um das volle Bild zu sehen',
           'Iterieren bis Prop-Table passt',
-          'Angular/Vue: plan/big-picture.md direkt zur Hand, ggf. React-Story als Vorlage holen',
+          'Wer zusätzlich eine Vorlage sehen will: docs-show-story über die hosted MCP liefert dieselbe Story framework-nativ (storybookId setzen, wenn mehrere Sources konfiguriert sind)',
         ],
       },
       {
@@ -189,9 +190,10 @@ const DAYS: Day[] = [
         bullets: [
           'Fokus: Prompts schreiben, Output bewerten, korrigieren — nicht selbst tippen',
           'Token-Treue erzwingen: Golden-Prompts verlangen --ui-* Custom Properties',
+          'Golden-Prompts für diesen und Block 04 (plus Tag 1 Block 5): tasks/schulung-golden-prompts.md',
           'plan/big-picture.md (API-Regeln) + plan/design-principles.md (Surface/Motion/Dark Mode) im Prompt-Kontext',
-          'Test-Loop React: dev + test Toolset über localhost:4401/mcp (stories-preview, test-run mit a11y)',
-          'Test-Loop Angular/Vue: nx test <lib> --watch + parallel laufende Storybook im Browser',
+          'Test-Loop, alle Frameworks: dev + test Toolset über die lokale addon-MCP (localhost:<port>/mcp — Angular 4400, React 4401, Vue 4402), stories-preview + test-run mit a11y — seit 10.6.0 identisch für Angular, React und Vue',
+          'Alternative, weiterhin vollwertig: nx test <lib> --watch + parallel laufende Storybook im Browser für visuelles Feedback',
           'AI-gestütztes Debugging: Fehlermeldungen per Copy-Paste an Claude zurückgeben statt selbst debuggen',
         ],
       },
@@ -345,7 +347,7 @@ const DAYS: Day[] = [
         <li>Komponente liegt als Component-Set im eigenen Figma-Draft (Duplikat des Atelier-Files) — mit Variants, Properties und Dark-Mode-Variante</li>
         <li><code>npm run sync:generated</code> läuft ohne Diff durch (<code>git status --short</code> danach leer) — der Befehl prüft nur, ob die generierten Kopien (Spec, Behaviors, <code>llms.txt</code>) mit dem geteilten Master synchron sind. Liegt die eigene Spec korrekt außerhalb des Masters (Tag 2, Block 02), hat der Befehl nichts von der eigenen Arbeit zu sehen und läuft trivial durch — die eigene Komponente selbst prüfen die Punkte 3–7</li>
         <li><code>nx storybook &lt;fw&gt;</code> läuft und zeigt die Komponente als Story (Canvas + Docs-Tab)</li>
-        <li>Test-Loop grün: React → <code>test-run</code> MCP-Call passes; Angular/Vue → <code>nx test &lt;lib&gt;</code> passes</li>
+        <li>Test-Loop grün, für alle drei Frameworks identisch: <code>test-run</code> MCP-Call passes — <code>nx test &lt;lib&gt;</code> passes ist die gleichwertige Alternative</li>
         <li><code>figma_audit_component_accessibility</code> ohne kritische Findings <strong>und</strong> Storybook A11y-Tab ohne axe-core-Findings</li>
         <li>Dark Mode wird durch Token-Override korrekt umgeschaltet</li>
         <li><code>figma_check_design_parity</code> auf den eigenen Figma-Node gegen die generierte Komponente: der Report kommt ohne Abweichungen zurück — das beweist nur etwas, wenn dabei Node, Variant/State und ein vollständiges <code>codeSpec</code> übergeben wurden (siehe Block 04); nicht übergebene Felder werden nicht verglichen, ein knapp befülltes <code>codeSpec</code> kommt ebenso sauber zurück. Findings an Claude zurückgeben und erneut prüfen. Gemeint ist der MCP-Call, nicht <code>npm run check:parity</code>: das Repo-Gate prüft die Atelier-Master aus <code>tools/figma/snapshot.json</code>, in denen die eigene Komponente nicht steht</li>

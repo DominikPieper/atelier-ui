@@ -71,11 +71,26 @@ Add these to your Claude Code MCP config to let the model read Storybook directl
 |---|---|---|
 | `docs-list` | Every documented component, grouped by category | All frameworks |
 | `docs-show` | Prop table, types, defaults, usage examples | All frameworks |
-| `stories-preview` | Live preview URLs for component variants | React, Vue |
-| `test-run` | Vitest/Storybook interaction results | React, Vue |
-| `get-storybook-story-instructions` | Prompt patterns for generating new stories | React, Vue |
+| `docs-show-story` | Story-level detail beyond `docs-show` | All frameworks |
 
-Angular MCP currently focuses on documentation and prop discovery; previews and testing are React/Vue only.
+The hosted endpoints answer natively per framework: Angular's manifest comes from `angular-component-meta`, Vue's from `vue-component-meta`, React's from `react-docgen`. Props, defaults and usage examples already come back shaped for the framework you asked about — two-way `[(checked)]` bindings and split Inputs/Outputs for Angular, `v-model`/`update:*` events and typed slots for Vue, JSX/`children` for React.
+
+### Local dev MCP (all three frameworks)
+
+Run `nx storybook <angular|react|vue>` and point Claude Code at the printed port (`http://localhost:<port>/mcp` — Angular `4400`, React `4401`, Vue `4402`) to get the full local toolset. A local endpoint serves the same three `docs-*` tools listed above, plus `dev`/`test`; measured via `tools/list`, it is eight tools, identical across frameworks:
+
+| Tool | Returns | Availability |
+|---|---|---|
+| `docs-list` | Every documented component, grouped by category | All frameworks |
+| `docs-show` | Prop table, types, defaults, usage examples | All frameworks |
+| `docs-show-story` | Story-level detail beyond `docs-show` | All frameworks |
+| `stories-preview` | Live preview URLs for component variants | All frameworks |
+| `get-storybook-story-instructions` | Prompt patterns for generating new stories | All frameworks |
+| `stories-changed` | New/modified/affected stories from the Change Review sidebar | All frameworks |
+| `stories-find-by-component` | Locate the story/stories backing a given component | All frameworks |
+| `test-run` | Vitest/Storybook interaction results | All frameworks |
+
+Hosted vs. local dev is a surface split, not a per-framework one: a hosted endpoint serves only the three `docs-*` tools; a local endpoint serves those same three plus the `dev`/`test` toolset above — for any of the three frameworks.
 
 ---
 
@@ -94,13 +109,14 @@ Angular MCP currently focuses on documentation and prop discovery; previews and 
 
 ## Components
 
-31 components ship in all three libraries with identical prop names, identical variant unions, and the same `--ui-*` CSS token system.
+28 components are catalogued in the docs site — one entry per composite API, per `COMPONENT_CATEGORIES` in [`docs/src/data/components.ts`](docs/src/data/components.ts) — and ship in all three libraries with identical prop names, identical variant unions, and the same `--ui-*` CSS token system.
 
 **Inputs** — Button · Input · Textarea · Checkbox · Toggle · Radio / RadioGroup · Select · Combobox
 **Display** — Badge · Icon · Card · Avatar · Skeleton · Progress · Table · CodeBlock
 **Navigation** — Breadcrumbs · Tabs · Pagination · Menu · Stepper
 **Overlay** — Dialog · Drawer · Tooltip · Toast
 **Feedback** — Accordion · Alert
+**AI** — Chat
 
 Authoritative list: [`libs/angular/src/index.ts`](libs/angular/src/index.ts), [`libs/react/src/index.ts`](libs/react/src/index.ts), [`libs/vue/src/index.ts`](libs/vue/src/index.ts).
 
