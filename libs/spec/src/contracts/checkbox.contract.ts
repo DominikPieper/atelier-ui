@@ -18,4 +18,15 @@ export const contract = {
       reason: 'Same axis as the checked mapping above — the other half of the checked/indeterminate pair.',
     },
   ],
+  probes: [
+    {
+      part: 'box',
+      selector: "input[type='checkbox']",
+      reason:
+        'the .atl-checkbox root only sets typography and line-height for the row it wraps — the ' +
+        "box's border/background/radius are painted on the native input[type='checkbox'] " +
+        "(a bare-element rule in all three frameworks' CSS, unprefixed even in React/Vue, so one " +
+        'relative selector resolves under every framework\'s component root).',
+    },
+  ],
 } satisfies ComponentContract;

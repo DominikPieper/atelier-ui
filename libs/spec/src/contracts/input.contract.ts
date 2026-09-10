@@ -23,4 +23,16 @@ export const contract = {
       reason: "AtlFormFieldSpec.invalid is a real boolean prop (libs/spec/src/index.ts) — the master's 'invalid' state value maps to it directly.",
     },
   ],
+  probes: [
+    {
+      part: 'control',
+      selector: 'input',
+      reason:
+        "the .atl-input root only sets display/font/line-height — background-color, border and " +
+        "border-radius are painted on the nested <input> ('.atl-input input' in React/Vue's " +
+        "atl-input.css; Angular's :host-scoped stylesheet needs no '.atl-input' prefix, so its " +
+        "own rule is the bare 'input' selector — the same relative selector resolves in all three " +
+        "once queried under each framework's own component root).",
+    },
+  ],
 } satisfies ComponentContract;

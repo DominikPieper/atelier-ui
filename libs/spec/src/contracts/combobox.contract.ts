@@ -27,4 +27,17 @@ export const contract = {
       reason: "AtlFormFieldSpec.invalid is a real boolean prop (libs/spec/src/index.ts) — the master's 'invalid' state value maps to it directly.",
     },
   ],
+  probes: [
+    {
+      part: 'control',
+      selector: "input[role='combobox']",
+      reason:
+        'the .atl-combobox root only sets display/font/line-height — background-color, border ' +
+        "and border-radius are painted on the nested text input. Its class name is NOT shared " +
+        "across frameworks ('atl-combobox-input' in React/Vue, 'combobox-input' in Angular, " +
+        "whose :host-scoped stylesheet drops the 'atl-' prefix), so the selector uses the one " +
+        "attribute all three set explicitly on that element instead: role='combobox' " +
+        '(atl-combobox.tsx / .vue / .ts all set it verbatim, not left to an implicit ARIA role).',
+    },
+  ],
 } satisfies ComponentContract;
