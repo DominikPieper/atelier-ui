@@ -30,14 +30,14 @@ Source line puts this in the **workshop case** (SKILL.md §0a): own micro-contra
    `@atelier-ui/spec/contracts/*`), never a block added to `libs/spec/src/index.ts` —
    because Source names a duplicate draft, not the Atelier file; the component's own
    prop types declare the union, no separate interface file. Then the React generator
-   (`atl-component --framework=react`) — it scaffolds boilerplate and never reads
-   `libs/spec`, so this step is unaffected by the branch — then
-   `storybook-react:docs-list` / `docs-show` for `AtlBadge`.
+   (`npx nx g @atelier-ui/generators:atl-component tag-chip --framework=react`) — it
+   scaffolds boilerplate and never reads `libs/spec`, so this step is unaffected by the
+   branch — then `storybook-react:docs-list` / `docs-show` for `AtlBadge`.
 5. **One framework only.** No edits under `libs/angular` or `libs/vue`.
 6. Component + CSS via `--ui-*` only + Testing Library spec + one story per variant value
    and Boolean state, `args`-based, a `play` per behaviour line from the handoff document,
    `tags: ['autodocs']`.
-7. `nx test react`, `nx lint react` and `nx run react:storybook-test` with exit codes read
+7. `nx test react`, `nx lint react` and `nx storybook-test react` with exit codes read
    from redirected output.
 8. `node tools/scripts/check-contracts.mjs --fw react --contracts
    libs/react/src/lib/tagchip --stories libs/react/src/lib/tagchip` (no `--snapshot` if
@@ -53,13 +53,15 @@ Source line puts this in the **workshop case** (SKILL.md §0a): own micro-contra
 ## Regressions to flag
 
 - Generates code before reading the handoff document → **Blocker**.
-- Adds the spec block to `libs/spec/src/index.ts`, or writes a hand-rolled `Atl*Spec`
-  interface in an `atl-<name>.contract.ts` file → **Critical** — this is the workshop
-  case; the spec-block mistake is exactly what turns three expected red gates
-  (`check:sync`, `check:a11y-parity`, `check:design-status`) into six by adding
-  `check:spec`, `check:variants` (`[UNMAPPED]`) and `check:metadata`
-  (`[MISSING-REGISTRY]`); the `Atl*Spec`-interface mistake is ADR-0113's retired shape,
-  superseded by ADR-0121's micro-contract.
+- Adds the spec block to `libs/spec/src/index.ts`, or places the micro-contract under
+  `libs/spec/src/contracts/` instead of beside the component, or writes a hand-rolled
+  `Atl*Spec` interface in an `atl-<name>.contract.ts` file → **Critical** — this is the
+  workshop case; the branch only decides where the contract and the snapshot go and
+  whether `parity:record` closes the run, not which legacy gates fire (SKILL.md §0a). A
+  contract wrongly placed under `libs/spec/src/contracts/` for a node absent from
+  `tools/figma/snapshot.json` makes `check:contracts` report `[CONTRACT-ORPHAN]`. The
+  `Atl*Spec`-interface mistake is ADR-0113's retired shape, superseded by ADR-0121's
+  micro-contract.
 - Runs `npm run parity:record` anyway → **Critical** — the node is not, and will never
   be, in `tools/figma/snapshot.json`.
 - Touches a second framework → **Blocker** (ADR-0014).

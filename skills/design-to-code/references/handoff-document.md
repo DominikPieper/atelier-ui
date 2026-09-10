@@ -52,15 +52,23 @@ micro-contract beside the component, typed via `@atelier-ui/spec/contracts/*` �
 the union directly; there is no separate `Atl*Spec` interface file in either case any
 more.
 
-**Acceptance.** nx test, nx lint exit 0; `nx run <fw>:storybook-test` green (every story
-rendered in Chromium, axe clean); `check:contracts` exit 0 — repo case: the default run;
-workshop case: `--fw <fw> --contracts libs/<fw>/src/lib/<name> --stories
-libs/<fw>/src/lib/<name> --snapshot libs/<fw>/src/lib/<name>/figma.snapshot.json` (or the
-same without `--snapshot` if the Bridge is down — then it reports `[NO-MASTER]` instead of
-failing); parity run with a `codeSpec` assembled from `check:contracts --emit` (componentAPI,
-metadata, tokens) plus `figma_scan_code_accessibility` (accessibility), and sections
-<visual, spacing, typography> if you assembled them yourself; discrepancies listed and
-decided. Repo case: `parity:record` written. Workshop case: no `parity:record` — the node
+**Acceptance.** nx test, nx lint exit 0; `nx storybook-test <fw>` green (every story
+rendered in Chromium, axe clean); `check:contracts` exit 0 — repo case: the default run,
+then re-run with `--emit dist/codespec`; workshop case: `--fw <fw> --contracts
+libs/<fw>/src/lib/<name> --stories libs/<fw>/src/lib/<name> --snapshot
+libs/<fw>/src/lib/<name>/figma.snapshot.json` (or the same without `--snapshot` if the
+Bridge is down — then it reports `[NO-MASTER]` instead of failing), then re-run with
+`--emit libs/<fw>/src/lib/<name>/codespec`. `figma_check_design_parity` needs the Desktop
+Bridge; without it the loop stops after `check:contracts` and `storybook-test` — a
+degraded run, not something to continue past. Otherwise: parity run with a `codeSpec`
+assembled from `check:contracts --emit` (`componentAPI`, `metadata`, `tokens` — the parity
+call is complete for exactly those three sections) plus `figma_scan_code_accessibility`
+(`accessibility` — copy the story root's `outerHTML` from DevTools in the running
+Storybook and pass it as `html`), and sections <visual, spacing, typography> only where
+you measured them yourself via the architect skill's `code-verify` recipe; a section never
+assembled is never sent and is not compared (ADR-0024) — name in the report exactly which
+sections were passed, never assume all seven; discrepancies listed and decided. Repo
+case: `parity:record` written. Workshop case: no `parity:record` — the node
 is not, and will never be, in `tools/figma/snapshot.json`; the ad-hoc
 `figma_check_design_parity` result above is the closing check.
 ```

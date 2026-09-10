@@ -303,6 +303,31 @@ async function main() {
         ? `${declaredServerVersion} (declared in .mcp.json; server did not report)`
         : null);
 
+    // ─── Verify --file actually names the open file ────────────────────────
+    // The Bridge reads whichever file is open in Figma Desktop, regardless of
+    // what --file claims — figma-snapshot.mjs never had to check this because it
+    // always targets the hardcoded Atelier FILE_KEY, but this script's whole
+    // point is a participant's own duplicate, so the open file cannot be
+    // assumed to match. figma.fileKey is the ground truth reported from inside
+    // the plugin sandbox itself.
+    const openFile = (
+      await call(client, 'figma_execute', {
+        code: `
+          await figma.loadAllPagesAsync();
+          return { fileKey: figma.fileKey ?? null, fileName: figma.root.name };
+        `,
+        timeout: 10000,
+      })
+    )?.result;
+    if (openFile?.fileKey && openFile.fileKey !== args.file) {
+      console.error(
+        `✗ --file ${args.file} does not match the file open in Figma Desktop ` +
+          `(${openFile.fileKey}, "${openFile.fileName}"). Open the file you meant to ` +
+          `snapshot, or pass --file ${openFile.fileKey}, and re-run.`,
+      );
+      process.exit(2);
+    }
+
     const components = [];
     for (const { selector, nodeId } of roster) {
       const result = (

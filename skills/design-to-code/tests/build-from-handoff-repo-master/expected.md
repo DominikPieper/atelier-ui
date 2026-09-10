@@ -30,13 +30,13 @@ canon, docs, generation, gates — runs the same way.
 4. **Both artefacts the repo case still needs (until ADR-0121 S6):** adds the spec block
    to `libs/spec/src/index.ts` and writes the micro-contract at
    `libs/spec/src/contracts/tag-chip.contract.ts` — first, then the Angular generator
-   (`atl-component --framework=angular`), then `storybook-angular:docs-list` / `docs-show`
-   for `AtlBadge`.
+   (`npx nx g @atelier-ui/generators:atl-component tag-chip --framework=angular`), then
+   `storybook-angular:docs-list` / `docs-show` for `AtlBadge`.
 5. **One framework only.** No edits under `libs/react` or `libs/vue`.
 6. Component + CSS via `--ui-*` only + Testing Library spec (Angular Testing Library) +
    one story per variant value and Boolean state, `args`-based, a `play` per behaviour
    line from the handoff document, `tags: ['autodocs']`.
-7. `nx test angular`, `nx lint angular` and `nx run angular:storybook-test` with exit
+7. `nx test angular`, `nx lint angular` and `nx storybook-test angular` with exit
    codes read from redirected output.
 8. `npm run check:contracts` (default run, all three frameworks) exits 0, then
    `figma_check_design_parity` with a `codeSpec` assembled from `check:contracts --emit`

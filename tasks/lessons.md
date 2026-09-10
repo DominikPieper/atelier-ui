@@ -623,3 +623,25 @@ package's own `tsc` unless it carries the `.template` suffix.** The contracts te
 disappeared from the packed tarball (`ENOENT` inside the real e2e), exactly the trap the
 Storybook templates' comment in `preset.ts` already warned about for another directory.
 A warning in a comment two directories away is not a gate; the e2e was.
+
+## Review the material as the participant, not as the author (2026-09-10)
+
+The S5a rewrite of the Day-2 curriculum and the design-to-code skill passed every gate
+the repo has — docs build, layout, ADR refs, skill checks, the offline fixture runner — and
+read correctly to me, its author. A second model, asked only "can a Day-2 participant
+execute this loop as written, step by step?", found twenty things in one pass, five of them
+blockers: Block 02 had participants write stories that import a component Block 03 would
+generate; the generator invocation in the skill and its fixtures named an executable that
+does not exist (they are Nx generators under `@atelier-ui/generators`, with a required
+positional name); every `check:contracts` command line omitted the `--emit` flag whose
+output the next step depended on; the parity step needs the Desktop Bridge and the text
+said "continue"; and the "full `codeSpec`" acceptance named sections no command produces.
+None of those is a factual error a gate could catch — each sentence was true — they are
+sequencing and executability errors that only appear when someone *walks* the text.
+
+Rule: **material that tells a person what to do gets a walk-through review, not a fact
+review.** Hand the reviewer the role (a participant, in that environment, with that
+toolset) and the question "run it; where do you stop?", not the diff and "is this
+correct?". The same pass also caught the Vue generator's broken import a second time and a
+`--file` flag that records a key without checking the Bridge has that file open — both
+"correct" sentences describing code that would fail the person following them.

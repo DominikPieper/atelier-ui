@@ -18,7 +18,7 @@ const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
 
 // Step 3 — a representative "generate" prompt per framework. The only
 // difference between them is the framework name and which Storybook MCP
-// surface (or spec fallback) Claude reads for component docs.
+// surface (or contract) Claude reads for component docs.
 const GENERATE_PROMPT: Record<string, string> = {
   React: `Build the Settings / Card Figma frame as a React Atelier UI component.
 
@@ -65,7 +65,7 @@ the component I just generated. Fix every discrepancy it reports.`;
 
 <BaseLayout
   title="Design to code"
-  description="From a Figma component to a verified, framework-native component — the Atelier loop. Inspect, spec, generate, verify in one signposted walkthrough."
+  description="From a Figma component to a verified, framework-native component — the Atelier loop. Inspect, contract, generate, verify in one signposted walkthrough."
   currentPath="/design-to-code"
 >
   <div class="docs-inline-page">

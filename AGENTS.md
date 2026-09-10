@@ -85,7 +85,7 @@ Add a local entry when you need the `dev` / `test` toolsets. **Angular/Vue prop 
 3. Call `docs-show-story` only when `docs-show` lacks the story-level detail you need
 4. If a prop isn't documented, say so rather than inventing it
 
-**When creating or editing components/stories (React, local dev only):**
+**When creating or editing components/stories (local dev, any framework — the chosen framework's Storybook running):**
 1. Call `get-storybook-story-instructions` before writing any code (REQUIRED before touching `*.stories.*` files)
 2. After any change, call `stories-preview` and include the returned `previewUrl`s in your final response; in MCP-Apps-capable hosts the addon also exposes a `ui://stories-preview/preview.html` resource that embeds the previews directly
 3. Use `stories-changed` to enumerate new/modified/affected stories from the Change Review sidebar before bulk edits
@@ -99,7 +99,9 @@ The primary documentation for the component library lives in the `docs/` applica
 
 **Do not add component API documentation to this file.** Use the following sources instead:
 - **Interactive Docs**: Run the `docs` app (`nx serve docs`) for framework-specific API tables and live demos.
-- **Spec Library**: Refer to `libs/spec/src/index.ts` for the ground-truth API definitions.
+- **Spec Library**: `libs/spec/src/index.ts` is the cross-framework join key the legacy
+  gates read (`check:props`, `check:variants`, `check:metadata`); the API reference is
+  each framework's own manifest (`docs-show`).
 - **Storybook MCP**: See the "Storybook MCP Workflows" table above for the hosted vs. local surfaces and their tools.
 
 ## Figma File (Atelier UI)
@@ -144,7 +146,7 @@ File key: `QMnDD8uZQPldPrlCwZZ58T`. Page conventions:
   libraries in Chromium through `@storybook/addon-vitest`, runs each `play` function's
   assertions, and runs axe with `parameters.a11y.test: 'error'`. A story that stops
   rendering, a `play` that stops holding, or a new axe violation is a red build. Run one
-  framework with `nx run <fw>:storybook-test`; the three share Vitest's browser port, so
+  framework with `nx storybook-test <fw>`; the three share Vitest's browser port, so
   never run two at once. The hosted base path is set by `BUILD_STORYBOOK=1` only — never
   key anything in `.storybook/main.ts` on `CI`, the test server is also CI (ADR-0122).
 - Local gates say nothing about the release pipeline. "All gates pass" is a

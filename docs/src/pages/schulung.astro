@@ -30,7 +30,7 @@ const DAYS: Day[] = [
     result: [
       'Laufendes Atelier-Workspace mit grünem preflight',
       'Mindestens ein erfolgreicher Prompt-zu-Code-Roundtrip',
-      'Verständnis: Figma = Quelle, Storybook = Spec, MCP = Verbindung, Claude = Ausführung',
+      'Verständnis: Figma = Quelle, Storybook = Manifest (die API), MCP = Verbindung, Claude = Ausführung',
     ],
     blocks: [
       {
@@ -97,7 +97,7 @@ const DAYS: Day[] = [
           '~5 min Angular/Vue: dieselbe Live-Übung an einer Komponente mit Change-Handler — die gehosteten Angular/Vue-Endpunkte antworten seit Storybook 10.6 nativ (ADR-0097): checked / model() für Angular, v-model / update:checked für Vue, ohne Umweg über libs/spec/src/index.ts. Kurz danebenlegen genügt als Bestätigung, nicht als Übersetzungsschritt',
           'Negativ-Demo: dieselbe Frage im Browser-Chat ohne MCP → Halluzination. Mit MCP → korrekte Antwort',
           'Trainer-Demo Drei Richtungen (~12 min, nur Trainer-Maschine — claude.ai/design braucht ein anderes Login als der Kohorten-API-Key): drei Direction-Artboards für den Toast-Brief in Claude Design, geseedet aus der generierten Palette tools/design/artboard-palette.css — nicht aus dem atelier-design Skill, weil dieses File die Kurznamen trägt, die die Artboards selbst verwenden (--success, --border-hover), und weil genau dieses File gleich rot gemacht wird',
-          'Vor dem Zaun die vier Gate-Identitäten in einem Satz benennen (Figma-COMPONENT_SET mit Variant-Achsen, Spec-String-Literal-Union, --ui-*-Token, Figma-Node-Id) — Node-Ids kommen erst in Block 05, Literal-Unions erst an Tag 2, hier also benennen statt voraussetzen. Dann der Zaun: eine Farbe im Artboard hart eintragen und npm run check:artboard-palette laufen lassen — grün, das Gate liest nur das gemeinsame Sheet gegen tokens.css und kein Artboard. Dieselbe Farbe im generierten Sheet ändern: derselbe Befehl wird rot',
+          'Vor dem Zaun die vier Gate-Identitäten in einem Satz benennen (Figma-COMPONENT_SET mit Variant-Achsen, Literal-Union der Komponente, --ui-*-Token, Figma-Node-Id) — Node-Ids kommen erst in Block 05, Literal-Unions erst an Tag 2, hier also benennen statt voraussetzen. Dann der Zaun: eine Farbe im Artboard hart eintragen und npm run check:artboard-palette laufen lassen — grün, das Gate liest nur das gemeinsame Sheet gegen tokens.css und kein Artboard. Dieselbe Farbe im generierten Sheet ändern: derselbe Befehl wird rot',
           'Checkpoint-Frage an den Raum: welche der vier Gate-Identitäten hat dieses Artboard? Erwartete Antwort: keine. Erst danach die Einordnung — im Repo gilt die Regel „nie Inline-Hex" weiter, sie gilt dort, wo ein Gate sie durchsetzen kann; Claude Design ist kein fünfter Pillar, sondern Schritt 0 (Divergenz) und Schritt 5 (Handoff), nie Schritt 1–4',
           'Schritt 5 (Handoff) bleibt an diesem Punkt ohne Live-Vorführung, aber nicht mehr Idee: anders als Schritt 0 gibt es dafür keine Demo im Raum — sein Tooling existiert seit 2026-09-08 als Skill (artboard-bridge, Publish-Modus) und ist bereits einmal gelaufen, gegen ein Scratch-Projekt, und hat korrekt verweigert (die Komponente stand auf DRIFT), während ein skill-loser Ansatz ungeprüften Code veröffentlicht hätte — genau die Verweigerung, für die der Zaun weiter oben zwei Abschnitte lang argumentiert. Der Schreibpfad selbst (P1–P7) ist noch unerprobt, weil aktuell jeder Parity-Record im Repo auf DRIFT steht (repo-weit blockiert, nicht an dieser einen Komponente), und Zugriff für einzelne Teilnehmer-Seats bleibt eine eigene, offene Frage (ADR-0106 beweist bislang nur den Owner-Seat). Der Raum darf hier nicht den Eindruck mitnehmen, eine Live-Vorführung gesehen zu haben',
           'Gegenmittel für die Live-Demo: Artboards in der Kaffeepause 14:30–14:45 vorab erzeugen; Fallback sind die 31 Artboards der Redesign-Phase (tools/design/artboards.json); nach der Rot-Demo git checkout tools/design/artboard-palette.css. Hintergrund für den Trainer: /claude-design',
@@ -134,7 +134,7 @@ const DAYS: Day[] = [
     goal: 'Jeder Teilnehmer hat eine selbst gestaltete Komponente durchgängig produziert: Figma-Spec mit Variants & Tokens, generierte Story, generierter Code im gewählten Framework, A11y-Check bestanden, Dark Mode funktioniert.',
     result: [
       'Eigene Komponente im eigenen Figma-Draft (Component-Set mit Variants + Properties + Dark-Mode)',
-      'Contract + Stories im eigenen Workspace',
+      'Contract + Komponente + Stories im eigenen Workspace',
       'Funktionierende Implementierung im gewählten Framework',
       'A11y-Audit bestanden',
     ],
@@ -170,15 +170,15 @@ const DAYS: Day[] = [
       {
         num: '02',
         time: '11:15–12:30 · 75 min',
-        title: 'Contract & Stories per Prompt',
+        title: 'Contract, Komponente & Stories per Prompt',
         format: 'Prompt-Übung',
         bullets: [
           'Alle Teilnehmer, unabhängig vom Framework: nx storybook <fw> parallel starten (Port aus dem Terminal — Angular 4400, React 4401, Vue 4402), dann per claude mcp add --transport http storybook-local http://localhost:<port>/mcp verbinden — bewusst lokaler Scope (Default von --scope, nicht project): das gemeinsame .mcp.json bleibt unangetastet, der Working Tree sauber. Client neu verbinden und prüfen, dass die dev/test-Tools (get-storybook-story-instructions, stories-preview, test-run) jetzt gelistet sind — seit 10.6.0 identisch für alle drei Frameworks. Ohne diesen Schritt ist das gleich folgende Pflicht-Tool schlicht nicht vorhanden: „nicht verfügbar" heißt hier „nicht konfiguriert", nicht „Server down". get-storybook-story-instructions ist Pflicht vor jedem *.stories.* Edit',
-          'Der Prompt entsteht aus dem Handoff-Dokument aus Block 01, nicht aus dem Bild allein — Behaviour und Ausschlüsse aus dem Dokument, nicht nur die Optik → von Claude einen Contract (getypt über das ComponentContract-Schema aus libs/spec/src/contracts/types.ts, importiert via @atelier-ui/spec/contracts/*) und Stories generieren lassen: eine Story je Variantenwert und Boolean-State, mit play für jede Behaviour-Zeile des Dokuments',
+          'Der Prompt entsteht aus dem Handoff-Dokument aus Block 01, nicht aus dem Bild allein — Behaviour und Ausschlüsse aus dem Dokument, nicht nur die Optik → von Claude in einem Schritt Contract (getypt über das ComponentContract-Schema aus libs/spec/src/contracts/types.ts, importiert via @atelier-ui/spec/contracts/*), Komponente (inkl. Test) und Stories generieren lassen: eine Story je Variantenwert und Boolean-State, mit play für jede Behaviour-Zeile des Dokuments. Ein Schritt, nicht drei — Stories importieren die Komponente und kompilieren ohne sie nicht; design-to-code Schritt 5 behandelt das ohnehin als einen Schritt',
           'LLM-optimierte API-Regeln: predictable naming, literal unions, composition über config, keine versteckten Defaults',
           'Der eigene Contract bleibt automatisch außerhalb des geteilten Masters: der design-to-code-Skill liest im Handoff-Dokument aus Block 01, ob die Quelle das Original-File oder ein Duplikat ist, und legt den Contract im zweiten Fall als eigene Datei neben der Komponente an statt als Block in libs/spec/src/index.ts — die Komponente selbst deklariert ihre Prop-Typen direkt, keine separate Atl*Spec-Interface-Datei mehr',
           'Der eigene Figma-Node landet nie in tools/figma/snapshot.json — stattdessen ein eigenes Snapshot-Fragment, mit verbundener Bridge: node tools/scripts/figma-snapshot-contracts.mjs --file <eigener Duplikat-Key> --contracts libs/<fw>/src/lib/<name> --out libs/<fw>/src/lib/<name>/figma.snapshot.json — immer mit explizitem --out, sonst überschreibt der Default Ateliers eigenen Snapshot',
-          'Geprüft wird mit node tools/scripts/check-contracts.mjs --fw <fw> --contracts libs/<fw>/src/lib/<name> --stories libs/<fw>/src/lib/<name> --snapshot libs/<fw>/src/lib/<name>/figma.snapshot.json — ohne verbundene Bridge dasselbe ohne --snapshot: der Check fällt dann auf den geteilten Master-Snapshot zurück, in dem die eigene Komponente nicht steht, und meldet [NO-MASTER] statt zu scheitern',
+          'Geprüft wird mit node tools/scripts/check-contracts.mjs --fw <fw> --contracts libs/<fw>/src/lib/<name> --stories libs/<fw>/src/lib/<name> --snapshot libs/<fw>/src/lib/<name>/figma.snapshot.json --emit libs/<fw>/src/lib/<name>/codespec — ohne verbundene Bridge dasselbe ohne --snapshot: der Check fällt dann auf den geteilten Master-Snapshot zurück, in dem die eigene Komponente nicht steht, und meldet [NO-MASTER] statt zu scheitern. --emit schreibt das codeSpec-Fragment (componentAPI, metadata, tokens) für Block 04',
           'Drei Gates werden dabei erwartungsgemäß rot (kein Fehler an der eigenen Arbeit): check:sync mit [DRIFT] (Komponente fehlt in den anderen Frameworks), check:a11y-parity mit [BLOCKER] [ROSTER], check:design-status. check:contracts bleibt in der Standardausführung (npm run check:contracts) grün — für die eigene Komponente meldet es nur eine Warnung, [NO-MASTER], weil sie keinen Atelier-Master hat; rot wird der Check nur, wenn ihr ihn mit euren eigenen Flags gegen euren eigenen Contract und Snapshot laufen lasst und dabei einen echten Mismatch findet — check:all bricht aber beim ersten Fehler ab, die drei also einzeln laufen lassen, um das volle Bild zu sehen',
           'Iterieren bis Prop-Table passt',
           'Wer zusätzlich eine Vorlage sehen will: docs-show-story über die hosted MCP liefert dieselbe Story framework-nativ (storybookId setzen, wenn mehrere Sources konfiguriert sind)',
@@ -195,7 +195,7 @@ const DAYS: Day[] = [
           'Golden-Prompts für diesen und Block 04 (plus Tag 1 Block 5): tasks/schulung-golden-prompts.md',
           'plan/big-picture.md (API-Regeln) + plan/design-principles.md (Surface/Motion/Dark Mode) im Prompt-Kontext',
           'Test-Loop, alle Frameworks: dev + test Toolset über die lokale addon-MCP (localhost:<port>/mcp — Angular 4400, React 4401, Vue 4402), stories-preview + test-run mit a11y — seit 10.6.0 identisch für Angular, React und Vue',
-          'Alternative, weiterhin vollwertig: nx test <lib> --watch + parallel laufende Storybook im Browser für visuelles Feedback',
+          'Ergänzend, nicht gleichwertig: nx test <lib> --watch deckt nur die Unit-Hälfte ab; das Äquivalent zu test-run ist nx storybook-test <fw> (jede Story in Chromium, play-Assertions, axe) — dazu parallel laufende Storybook im Browser für visuelles Feedback',
           'AI-gestütztes Debugging: Fehlermeldungen per Copy-Paste an Claude zurückgeben statt selbst debuggen',
         ],
       },
@@ -209,7 +209,8 @@ const DAYS: Day[] = [
           'Befunde von Claude beheben lassen',
           'ARIA-Anforderungen, Fokus-Ring via Tokens, Hover/Active/Disabled-States',
           'Dark-Mode-Toggle via Storybook backgrounds-/theme-Addon — Token-Override-Drift sichtbar machen',
-          'figma_check_design_parity einmal bewusst gegen ein unvollständiges codeSpec testen: Node, Variant/State und die übergebenen codeSpec-Felder (visual, spacing, typography, tokens, componentAPI, accessibility, metadata) genau nachsehen, dann einen Spacing-Wert bewusst verfälschen — nur mit vollständigen Feldern muss der Report die Abweichung melden, nicht übergebene Felder werden nicht verglichen',
+          'Eigenes codeSpec zusammensetzen, bevor parity läuft: check:contracts --emit libs/<fw>/src/lib/<name>/codespec (aus Block 02) liefert componentAPI, metadata, tokens — mehr nicht. Für accessibility die Story im laufenden Storybook öffnen, im DevTools das outerHTML des Story-Root-Elements kopieren und als html mit mapToCodeSpec: true an figma_scan_code_accessibility übergeben. figma_check_design_parity braucht dafür die verbundene Desktop Bridge — ohne sie endet der Loop nach check:contracts + storybook-test (kein Snapshot, [NO-MASTER], kein Parity-Call), das ist ein degradierter Lauf und kein "einfach weitermachen"',
+          'figma_check_design_parity einmal bewusst gegen ein unvollständiges codeSpec testen: Node, Variant/State und die übergebenen codeSpec-Felder (visual, spacing, typography, tokens, componentAPI, accessibility, metadata) genau nachsehen, dann einen Spacing-Wert bewusst verfälschen — nur mit vollständigen Feldern muss der Report die Abweichung melden, nicht übergebene Felder werden nicht verglichen; ein knapp befülltes codeSpec (typischerweise nur componentAPI + metadata + tokens + accessibility) ist der Normalfall, kein vollständiges',
         ],
       },
       {
@@ -343,16 +344,19 @@ const DAYS: Day[] = [
     <section class="docs-section" aria-labelledby="verify-title">
       <h2 class="docs-section-title" id="verify-title">Erfolgs-Verifizierung</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1rem; font-size: 0.85rem">
-        End-to-End-Check am Ende von Tag 2 pro Teilnehmer:
+        End-to-End-Check am Ende von Tag 2 pro Teilnehmer. Drei Gates bleiben auf einem
+        Teilnehmer-Tree erwartungsgemäß rot (<code>check:sync</code>, <code>check:a11y-parity</code>,
+        <code>check:design-status</code> — Tag 2, Block 02); die Abnahme sind die folgenden
+        Punkte, nicht ein grünes <code>check:all</code>:
       </p>
       <ol class="schulung-verify">
         <li>Komponente liegt als Component-Set im eigenen Figma-Draft (Duplikat des Atelier-Files) — mit Variants, Properties und Dark-Mode-Variante</li>
-        <li><code>npm run sync:generated</code> läuft ohne Diff durch (<code>git status --short</code> danach leer) — der Befehl prüft nur, ob die generierten Kopien (Spec, Behaviors, <code>llms.txt</code>) mit dem geteilten Master synchron sind. Liegt der eigene Contract korrekt neben der Komponente (Tag 2, Block 02), hat der Befehl nichts von der eigenen Arbeit zu sehen und läuft trivial durch — die eigene Komponente selbst prüfen die Punkte 3–8</li>
+        <li><code>npm run sync:generated</code> ändert keine generierte Datei: <code>git status --short -- libs/*/src/lib/spec.ts libs/*/src/lib/icons.ts libs/spec/src/behaviors.generated.ts docs/public/llms.txt docs/public/llms-full.txt</code> gibt danach nichts aus. Liegt der eigene Contract korrekt neben der Komponente (Tag 2, Block 02), hat der Befehl nichts von der eigenen Arbeit zu sehen — die eigene Komponente selbst prüfen die Punkte 3–8</li>
         <li><code>nx storybook &lt;fw&gt;</code> läuft und zeigt die Komponente als Story (Canvas + Docs-Tab)</li>
-        <li>Test-Loop grün, für alle drei Frameworks identisch: <code>test-run</code> MCP-Call passes — <code>nx test &lt;lib&gt;</code> passes ist die gleichwertige Alternative</li>
+        <li>Test-Loop grün: <code>test-run</code> MCP-Call passes bzw. äquivalent <code>nx storybook-test &lt;fw&gt;</code> passes (jede Story in Chromium, play-Assertions, axe) — <code>nx test &lt;lib&gt;</code> deckt nur die Unit-Hälfte ab und ist kein Ersatz dafür</li>
         <li><code>figma_audit_component_accessibility</code> ohne kritische Findings <strong>und</strong> Storybook A11y-Tab ohne axe-core-Findings</li>
         <li>Dark Mode wird durch Token-Override korrekt umgeschaltet</li>
-        <li><code>figma_check_design_parity</code> auf den eigenen Figma-Node gegen die generierte Komponente: der Report kommt ohne Abweichungen zurück — das beweist nur etwas, wenn dabei Node, Variant/State und ein vollständiges <code>codeSpec</code> übergeben wurden (siehe Block 04), zusammengesetzt aus dem <code>codeSpec</code>-Fragment von <code>check:contracts --emit</code> (componentAPI, metadata, tokens) plus der Accessibility-Sektion aus <code>figma_scan_code_accessibility</code>; nicht übergebene Felder werden nicht verglichen, ein knapp befülltes <code>codeSpec</code> kommt ebenso sauber zurück. Findings an Claude zurückgeben und erneut prüfen. Gemeint ist der MCP-Call, nicht <code>npm run check:parity</code>: das Repo-Gate prüft die Atelier-Master aus <code>tools/figma/snapshot.json</code>, in denen die eigene Komponente nicht steht</li>
+        <li><code>figma_check_design_parity</code> (braucht die verbundene Desktop Bridge) auf den eigenen Figma-Node gegen die generierte Komponente: der Report kommt ohne Abweichungen zurück — das beweist etwas für genau die Sektionen, die übergeben wurden (siehe Block 04): <code>componentAPI</code>, <code>metadata</code>, <code>tokens</code> aus <code>check:contracts --emit</code> plus <code>accessibility</code> aus <code>figma_scan_code_accessibility</code>; nicht übergebene Felder werden nicht verglichen — ein knapp befülltes <code>codeSpec</code> mit nur diesen vier Sektionen ist der Normalfall, kein Sonderfall, solange der Report nennt, welche Sektionen es waren. Findings an Claude zurückgeben und erneut prüfen. Gemeint ist der MCP-Call, nicht <code>npm run check:parity</code>: das Repo-Gate prüft die Atelier-Master aus <code>tools/figma/snapshot.json</code>, in denen die eigene Komponente nicht steht</li>
         <li><code>check:contracts</code> mit den eigenen Flags (<code>--fw</code>, <code>--contracts</code>, <code>--stories</code>, <code>--snapshot</code>) exit 0, und <code>nx storybook-test &lt;fw&gt;</code> grün — jede Story rendert in Chromium und besteht axe</li>
       </ol>
     </section>

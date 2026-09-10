@@ -17,7 +17,8 @@ Storybook (`nx storybook <fw>`; this repo binds 4400 Angular / 4401 React / 4402
 the port from the terminal) adds the `dev` and `test` toolsets.
 
 `AGENTS.md` § Storybook MCP Workflows makes these **required** when creating or editing
-components or stories against a local React Storybook:
+components or stories against the chosen framework's local Storybook — since Storybook
+10.6 all three local Storybooks expose the same tool surface, not React only:
 
 1. `get-storybook-story-instructions` before writing any code that touches a
    `*.stories.*` file.
@@ -27,8 +28,8 @@ components or stories against a local React Storybook:
 4. `test-run` after each change (`{ stories: [...] }` for a focused run; fix failures
    before reporting completion).
 
-For Angular and Vue the loop is `nx test <lib>` (Vitest) plus a manual browser preview in
-the running Storybook. In every framework, autodocs is per-story: `tags: ['autodocs']`.
+`nx test <lib>` (Vitest) remains the unit half in every framework, run alongside the above,
+not instead of it. In every framework, autodocs is per-story: `tags: ['autodocs']`.
 
 ## Shared across frameworks
 

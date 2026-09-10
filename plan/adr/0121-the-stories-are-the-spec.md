@@ -309,3 +309,19 @@ Part 1 did not execute end to end — its clean-tree precondition met the same d
 uncommitted work — and was reproduced by hand gate by gate; it runs on the next clean
 tree. Still open from Decision 3: the Storybook docs block that displays the contract and,
 with it, the story-meta import (S5b).
+
+The same day a second model walked the rewritten material as a Day-2 participant and
+stopped twenty times, five of them blockers that no gate could see because every
+sentence was true on its own: stories written before the component they import existed;
+a generator invoked as an executable that does not exist (the real form is
+`npx nx g @atelier-ui/generators:atl-component <name> --framework=<fw>`); every
+`check:contracts` command line missing the `--emit` the next step consumed; parity taught
+as "continue" without the Desktop Bridge it needs; a "full `codeSpec`" acceptance that no
+command produces (`--emit` fills `componentAPI`, `metadata` and token names; a11y comes
+from the story's rendered HTML through `figma_scan_code_accessibility`; paint and geometry
+only where measured). Fixed the same day, with two code defects the walk exposed: the Vue
+generator's templates imported `./<ClassName>.vue` for a file written as
+`atl-<name>.vue`, and `figma-snapshot-contracts.mjs` stamped `--file`'s key onto whatever
+file the Bridge had open — it now refuses a mismatch. `nx test` is the unit half, not the
+equivalent of `test-run`; `nx storybook-test <fw>` is. The lesson is in `tasks/lessons.md`
+under this date: material that tells a person what to do gets a walk-through review.

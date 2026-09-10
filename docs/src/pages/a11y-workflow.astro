@@ -55,8 +55,8 @@ claude --chrome
 #   mcp__claude-in-chrome__read_console_messages
 # … which is what powers the axe injection in Lane 1 above.`;
 
-const SPEC_AUDIT = `// Static spec-side audit — read libs/spec/src/index.ts plus one
-// implementation per component. Look for components where the
+const SPEC_AUDIT = `// Static API audit — read the framework's docgen manifest (docs-show)
+// and each component's own types. Look for components where the
 // public API doesn't enforce a11y by default.
 //
 // Bad: optional aria-label on an icon-only-capable button.
@@ -292,7 +292,7 @@ export type AtlButtonProps =
         axe said it was broken; the spec told us why and where to fix.
       </p>
 
-      <DiagramFigure caption="Each lane tells a different part of the same story. The fix lands in the spec; all three turn green.">
+      <DiagramFigure caption="Each lane tells a different part of the same story. The fix lands in the component and its story, with index.ts updated for the legacy gates; all three turn green.">
         <svg viewBox="0 0 880 280" role="img" aria-labelledby="case-title case-desc" preserveAspectRatio="xMidYMid meet">
           <title id="case-title">AtlProgress drilldown across the three audit lanes</title>
           <desc id="case-desc">Four stacked panels showing the AtlProgress audit story. Figma reports 100/100. axe reports aria-progressbar-name violations. The spec audit shows label prop is missing. After the fix, all three lanes are green.</desc>
@@ -334,7 +334,7 @@ export type AtlButtonProps =
             <text x="720" y="100" font-size="36" font-weight="800" style="fill: var(--ui-color-success, #34d399)">✓</text>
             <text x="720" y="120" font-size="11" class="diagram-muted">all green</text>
             <text x="720" y="148" font-size="10" class="diagram-mono diagram-muted">label?: string</text>
-            <text x="720" y="166" font-size="10" class="diagram-muted">spec + 3 impls</text>
+            <text x="720" y="166" font-size="10" class="diagram-muted">component + index.ts</text>
             <text x="720" y="184" font-size="10" class="diagram-muted">36 tests pass</text>
             <text x="720" y="208" font-size="10" font-style="italic" style="fill: var(--ui-color-primary)">1 prop, 1 day</text>
 
@@ -372,7 +372,7 @@ export type AtlButtonProps =
           <div class="case-stack__panel case-stack__panel--accent">
             <span class="case-stack__eyebrow case-stack__eyebrow--fix">Fix</span>
             <span class="case-stack__score case-stack__score--ok">✓</span>
-            <p class="case-stack__body">all green · <code>label?: string</code> · spec + 3 impls · 36 tests pass</p>
+            <p class="case-stack__body">all green · <code>label?: string</code> · component + index.ts · 36 tests pass</p>
             <p class="case-stack__quote case-stack__quote--accent">1 prop, 1 day</p>
           </div>
         </div>
@@ -539,7 +539,7 @@ export type AtlButtonProps =
           </tr>
           <tr>
             <td><strong>Spec change</strong> (add/edit a11y prop)</td>
-            <td>Spec audit + types compile</td>
+            <td>Contract + manifest audit, types compile</td>
             <td>Make sure the API enforces a11y by default, not by consumer discipline. Catch missing discriminated unions.</td>
           </tr>
           <tr>

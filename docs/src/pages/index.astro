@@ -125,7 +125,7 @@ const SCAFFOLD_CMD = 'npx create-atelier-ui-workspace';
         <ul class="docs-mcp-checklist">
           <li>HTTP transport — no local processes to babysit.</li>
           <li>Hosted alongside the Storybook itself, no extra deploy.</li>
-          <li>Spec-aware — Claude knows which props exist before suggesting code.</li>
+          <li>Manifest-aware — Claude reads each framework's component manifest before suggesting code.</li>
         </ul>
       </div>
       <CodeCard lang=".mcp.json" code={MCP_CONFIG} id="home-mcp-config" />

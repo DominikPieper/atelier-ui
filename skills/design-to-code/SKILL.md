@@ -48,7 +48,7 @@ Copy this checklist into your working notes and tick it as you go:
 - [ ] 4. Docs: storybook-<fw> docs-list → docs-show (local dev: story instructions first)
 - [ ] 5. Generate: one framework; one story per variant value and Boolean state,
         args-based where possible, a play per behaviour line, tags: ['autodocs']
-- [ ] 6. Gates: nx test <lib>, nx lint <lib>, nx run <fw>:storybook-test — exit codes
+- [ ] 6. Gates: nx test <lib>, nx lint <lib>, nx storybook-test <fw> — exit codes
         read, not tails
 - [ ] 7. Contract & parity: check:contracts (default for repo case, flags for workshop
         case) proves coverage and emits the codeSpec fragment; figma_check_design_parity
@@ -79,14 +79,18 @@ document in thirty seconds and sees the missing behaviour before any code exists
 `tools/figma/snapshot.json`, which only ever indexes the Atelier file. This is not a new
 question to ask; `references/handoff-document.md`'s two Source examples already show
 both, and its worked example (Toast) is the workshop case throughout. The branch changes
-exactly two later steps — step 3 (where the spec goes) and step 7 (whether to close with
+exactly two later steps — step 3 (where the contract and, for the repo case, the legacy
+spec block go) and step 7 (where the snapshot comes from and whether the run closes with
 `parity:record`) — and nothing else: inspection, canon, docs, generation and gates run
 identically in both cases, because both are real code in this repo, checked by the same
-gates. Get the branch wrong in the workshop direction and three gates that are expected
-red for any single-framework addition (`check:sync`, `check:a11y-parity`,
-`check:design-status`) become six, because the shared master now also runs `check:spec`,
-`check:variants` (`[UNMAPPED]`) and `check:metadata` (`[MISSING-REGISTRY]`) against a
-component that has no place in the roster those gates describe.
+gates. There is no shared spec block for a workshop-case component to land any more
+(ADR-0121, corrected 2026-09-10) — its own types are the API — so getting the branch
+wrong no longer turns three expected-red gates into six; the three (`check:sync`,
+`check:a11y-parity`, `check:design-status`) stay three. What the wrong branch actually
+breaks is narrower and gate-visible on its own: a micro-contract placed under the repo
+path (`libs/spec/src/contracts/`) for a node absent from `tools/figma/snapshot.json` — the
+workshop node never reaches that file — makes `check:contracts` report
+`[CONTRACT-ORPHAN]` for it.
 
 #### 1. Inspect the master
 
@@ -105,10 +109,13 @@ the recorded one as provenance.
    handoff document's scope section names the delta.
 2. `figma_get_component_for_development` on the set. Read the variant axes,
    `boundVariables` (these are the `--ui-*` tokens, one-to-one), padding/gap/radius, and
-   the description — it names the `Atl*Spec` interface when the master is conformant.
+   the description — for a repo master, `check:figma` expects it to name the `Atl*Spec`
+   interface (a fact about that gate, not about where the agent looks up props); the API
+   reference for the agent is the framework's own manifest, read in step 4.
 3. `figma_analyze_component_set` for the state machine. Hover, focus and active are CSS
    pseudo-classes — not variants, not props. `disabled` and `loading` are boolean props in
-   the spec (`AtlButtonSpec` declares both) and Figma Booleans on the master; what the
+   the manifest (`AtlButtonSpec` still declares both in `libs/spec/src/index.ts` today) and
+   Figma Booleans on the master; what the
    briefs forbid is putting any of these into the *variant matrix*
    (`variant-explosion-from-states`).
 
@@ -144,8 +151,11 @@ binding those gates leave ambiguous is still settled there, not in the adapter. 
 micro-contract, `libs/spec/src/contracts/<name>.contract.ts` (drop the `Atl` prefix,
 kebab-case the rest: `AtlToggle` → `toggle.contract.ts`). For a new component, add the
 spec block first, then run the generator from `tools/generators/`:
-`atl-component --framework=angular|react` for Angular or React, `atl-component-vue` for
-Vue (see `tools/generators/generators.json`), then write the contract. Variant property
+`npx nx g @atelier-ui/generators:atl-component <name> --framework=angular|react` for
+Angular or React (`<name>` in kebab-case, e.g. `tag-chip` — the `atl-` file prefix and the
+`Atl` class prefix are added automatically), `npx nx g
+@atelier-ui/generators:atl-component-vue <name>` for Vue (see
+`tools/generators/generators.json`), then write the contract. Variant property
 names and values must equal the Figma axis names and values verbatim —
 `variant=primary`, not `Type=Primary` — because `check:figma` and `check:contracts` both
 compare them as strings.
@@ -167,7 +177,10 @@ S6 — a name added there without a matching Atelier master still fails `[UNMAPP
 `check:design-status`) any single-framework addition already trips. Same
 verbatim-against-the-Figma-axis rule for variant names and values — now also read by
 `check:contracts` once step 7's flags point it at your own contract, stories and
-snapshot.
+snapshot. When you generate that snapshot (step 7), `figma-snapshot-contracts.mjs`
+connects to whichever file Figma Desktop currently has open, checks it against `--file`,
+and exits 2 naming both keys on a mismatch — pass your own duplicate's key, not the
+Atelier file's.
 
 #### 4. Read the framework's own docs
 
@@ -175,12 +188,13 @@ Call the chosen framework's hosted Storybook MCP once: `storybook-<fw>:docs-list
 `docs-show` for the component and for any `Atl*` part you compose. Each framework's
 manifest is native (ADR-0097): two-way `[(checked)]` and split Inputs/Outputs for Angular,
 `v-model`/`update:*` and typed slots for Vue, JSX `children`/`on*Change` for React. If a
-prop is not documented there and not in the spec, it does not exist — say so rather than
-inventing it. With a local Storybook running (React), `AGENTS.md` makes three more calls
-required: `get-storybook-story-instructions` before touching any `*.stories.*` file,
+prop is not documented there and not in the manifest and not in the component's types, it
+does not exist — say so rather than inventing it. With the chosen framework's local
+Storybook running, `AGENTS.md` makes three more calls required:
+`get-storybook-story-instructions` before touching any `*.stories.*` file,
 `stories-preview` after each change (include the `previewUrl`s in the report), and
-`test-run` after each change. For Angular and Vue the equivalent is `nx test <lib>` plus
-a manual preview in the running Storybook. Details in `references/framework-notes.md`.
+`test-run` after each change — since Storybook 10.6 all three frameworks expose the same
+local tool surface, not React only. Details in `references/framework-notes.md`.
 
 #### 5. Generate
 
@@ -205,7 +219,7 @@ panel.
 ```
 nx test <lib> > /tmp/test.out 2>&1; echo $?
 nx lint <lib> > /tmp/lint.out 2>&1; echo $?
-nx run <fw>:storybook-test > /tmp/storybook-test.out 2>&1; echo $?
+nx storybook-test <fw> > /tmp/storybook-test.out 2>&1; echo $?
 ```
 
 `storybook-test` renders every story in a real Chromium and runs axe against it
@@ -255,14 +269,42 @@ the manifest and, with `--emit <dir>`, still writes the codeSpec fragment below.
 findings (`NO-MASTER`, `FIGMA-ONLY`, `FW-ONLY`, `NO-STORY-META`, `CONTRACT-ORPHAN`,
 `COVERAGE-BOOL`, `UNMIRRORED`, `UNRESOLVED-ARGS`) are read, not necessarily cleared.
 
-**Then assemble the parity `codeSpec`.** `check:contracts --emit <dir>` writes
-`<dir>/<fw>/<Name>.codespec.json` with `componentAPI`, `metadata` and `tokens.usedTokens`
-— derived from the manifest and a token scan, not hand-typed. `figma_scan_code_accessibility`
-with `mapToCodeSpec: true` adds the `accessibility` section from the rendered story. Of
-the seven `codeSpec` sections (`references/parity-codespec.md`), `visual`, `spacing` and
-`typography` are not yet derived this way — ADR-0121's stage 2 (rendered paint against the
-snapshot) is not built — so declare them only if you assemble them from the rendered story
-yourself, and remember a thin spec comes back clean and proves nothing.
+**Then assemble the parity `codeSpec`.** Re-run `check:contracts` with `--emit` added —
+repo case:
+
+```
+npm run check:contracts -- --emit dist/codespec
+```
+
+workshop case, the same command as above with one flag added:
+
+```
+node tools/scripts/check-contracts.mjs --fw <fw> \
+  --contracts libs/<fw>/src/lib/<name> \
+  --stories libs/<fw>/src/lib/<name> \
+  --snapshot libs/<fw>/src/lib/<name>/figma.snapshot.json \
+  --emit libs/<fw>/src/lib/<name>/codespec
+```
+
+It writes `<dir>/<fw>/<Name>.codespec.json` with `componentAPI`, `metadata` and `tokens.usedTokens`
+— derived from the manifest and a token scan, not hand-typed. **The parity call is
+complete for exactly those three sections.** `figma_scan_code_accessibility` adds the
+fourth, `accessibility`: open the story in the running Storybook, in DevTools select the
+story root element and copy its `outerHTML`, then pass that string as `html` with
+`mapToCodeSpec: true` — no Figma connection needed for this call. Of the seven `codeSpec`
+sections (`references/parity-codespec.md`), the remaining three — `visual`, `spacing`,
+`typography` — are not derived this way at all; ADR-0121's stage 2 (rendered paint against
+the snapshot) is not built, so declare them only where the architect skill's
+`code-verify` recipe measured them from the rendered story yourself. A section you never
+assemble is never sent, and `figma_check_design_parity` does not compare what it was not
+given (ADR-0024) — a thin `codeSpec` comes back clean and proves nothing for the sections
+it omits, so name in the report exactly which sections you passed; do not imply a
+fully-populated `codeSpec` is the default outcome, because for most runs it is not.
+
+`figma_check_design_parity` needs the Desktop Bridge connected. Without it the loop stops
+after `check:contracts` and `storybook-test` — that is a degraded run (no snapshot,
+`check:contracts` reporting `[NO-MASTER]`, no parity call at all), not something to
+"continue" past.
 
 `figma_check_design_parity` then compares that codeSpec against the node. Know the tool's
 ceiling: a static tree read reaches only the default state — on AtlSelect four of
@@ -334,7 +376,9 @@ human can answer.
   (max_versions: 1)` (ADR-0105), refresh if needed, and write both stamps into the
   report header.
 - **R1.** `figma_analyze_component_set` gives axes and values — compare verbatim with the
-  spec's `variantMatrix`; any axis outside the spec is either an interaction state drawn
+  framework's manifest enum props and the micro-contract; `variantMatrix` is the legacy
+  metadata `check:figma` still reads for a repo master, so check that stays aligned too.
+  Any axis outside the union is either an interaction state drawn
   as a variant (finding) or a documented exception in `FIGMA_CONFORMANCE_EXCEPTIONS`
   (`tools/scripts/lib/allowlists.js` — read it before flagging). `figma_lint_design` on
   the set, `figma_audit_component_accessibility` (≥ 85 per `plan/figma.md`). The five
@@ -395,8 +439,9 @@ with the `wcag-color-only` false positive named up front.
   component.
   Promoting it later is a fresh Build against the real master and its own node, not
   editing this run's files or records in place.
-- **Master and spec disagree on an axis value.** Do not pick a side silently. The spec is
-  the contract; the master is what `check:figma` reads. Report the mismatch and let the
+- **Master and spec disagree on an axis value.** Do not pick a side silently. The contract
+  names the master; the manifest is the API; `check:contracts` compares them, and the
+  master is what `check:figma` reads. Report the mismatch and let the
   owner choose — usually the fix is a rename on the Figma side (architect, Migrate).
 - **Contract without a master.** Compare against the `components[].selector` list in
   `tools/figma/snapshot.json` rather than trusting a plan document — the node table in
@@ -415,7 +460,8 @@ with the `wcag-color-only` false positive named up front.
   dead id was "a content-sample instance beside the master" on exactly that kind of
   evidence, and it was false.
 - **The brief demands behaviour Storybook cannot show** (timer pause on hover, Escape to
-  close). Test it in the spec file; list it under *verified* only when a test pins it.
+  close). Test it in a `play` function or the component's test file; list it under
+  *verified* only when a test pins it.
 - **Bridge down.** Inspect via REST, but do not run parity or record — the parity call
   needs the live plugin, and a record without a real run is worse than none.
 - **Colour is the only signal for a status variant.** Stop; that is a WCAG 1.4.1 finding

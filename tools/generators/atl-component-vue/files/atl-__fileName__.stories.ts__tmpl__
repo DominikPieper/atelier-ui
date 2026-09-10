@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
-import <%= className %> from './<%= className %>.vue';
+import <%= className %> from './atl-<%= fileName %>.vue';
 
 const meta: Meta<typeof <%= className %>> = {
   title: 'Components/<%= className %>',

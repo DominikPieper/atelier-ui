@@ -16,13 +16,19 @@ Schema as the architect's `references/code-sync.md` records it:
 | `spacing` | padding, gap, margins | CSS plus the rendered story — measure; do not trust the stylesheet alone for heights |
 | `typography` | font family, size, weight, line-height, letter-spacing | CSS; ADR-0048 (leading stated explicitly), ADR-0035 (Instrument Sans / Serif, JetBrains Mono) |
 | `tokens` | expected Variable bindings | the `--ui-*` names the CSS uses, mapped to `Library Tokens` variable names |
-| `componentAPI` | prop names and values | the spec block in `libs/spec/src/index.ts` — axis names and values verbatim |
-| `accessibility` | roles, labels, contrast minimums | `figma_scan_code_accessibility({ mapToCodeSpec: true })` on the story HTML |
-| `metadata` | description text, slash-name shape | the master's description should name the `Atl*Spec` interface (`check:figma` Warning otherwise) |
+| `componentAPI` | prop names and values | `check:contracts --emit` (the docgen manifest) — axis names and values verbatim |
+| `accessibility` | roles, labels, contrast minimums | `figma_scan_code_accessibility({ mapToCodeSpec: true })` on the story HTML — copy the story root's `outerHTML` from DevTools in the running Storybook and pass it as `html` |
+| `metadata` | description text, slash-name shape | the component's own JSDoc / the manifest's description field (the master's description should still name the `Atl*Spec` interface for a repo master — `check:figma` Warning otherwise) |
 
-Declare all seven for a first verification. For a re-verify after a scoped change,
-declare the sections the change touched **and** `visual` and `tokens` — the shared token
-sheet moves every component (ADR-0104).
+`check:contracts --emit` fills `componentAPI`, `metadata` and `tokens.usedTokens` only —
+the parity call is complete for those three sections without further assembly.
+`figma_scan_code_accessibility` fills the fourth. `visual`, `spacing` and `typography`
+are not derived by any script; declare them only where you measured them yourself via the
+architect skill's `code-verify` recipe. A section you never assemble is never sent, and
+the tool does not compare what it was not given (ADR-0024) — name in the report exactly
+which sections you passed. Declare all seven where you can for a first verification. For
+a re-verify after a scoped change, declare the sections the change touched **and**
+`visual` and `tokens` — the shared token sheet moves every component (ADR-0104).
 
 ## The ceiling of a static read
 

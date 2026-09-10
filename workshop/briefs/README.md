@@ -59,7 +59,10 @@ than a dedicated `state` axis, and Atelier's own library uses one routinely: `At
 today (`grep -o '"state=[a-z]*' tools/figma/snapshot.json | sort | uniq -c` — 45×
 `state=default`, 29× `hover`, 23× `focus`, 12× `active`, plus data-flavoured values like
 `open`, `filled`, `invalid`). **What must never happen is that axis reaching the code
-contract.** Every `Atl*Variant` union in `libs/spec/src/index.ts` holds only structural
+contract.** The boundary is the *component's own* `variant` union — for a repo component
+that union is also declared as `Atl*Variant` in `libs/spec/src/index.ts`, for the
+monorepo's legacy gates; a workshop participant declares it directly on their own
+component, with no separate spec file. Either way it holds only structural
 values — `AtlButtonVariant = 'primary' | 'secondary' | 'outline' | 'danger'` — never a
 state; in code, hover/focus/active/disabled stay CSS pseudo-classes and `disabled`/`aria-*`
 attributes. `AtlButton`'s own master marks the boundary explicitly in its description:
