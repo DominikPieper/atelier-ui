@@ -1,3 +1,14 @@
+## 0.1.2 (2026-09-10)
+
+### 🚀 Features
+
+- **skills:** design-to-code routes the workshop case on its own ([e015844](https://github.com/DominikPieper/atelier-ui/commit/e015844))
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Dominik Pieper @DominikPieper
+
 ## 0.1.1 (2026-09-07)
 
 ### 🚀 Features

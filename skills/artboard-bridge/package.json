@@ -1,6 +1,6 @@
 {
   "name": "@atelier-ui/skill-artboard-bridge",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Claude Code skill bridging Claude Design artboards and the Atelier repo: Intake reads a .dc.html sheet into the handoff document; Publish turns a gate-verified component into a sheet.",
   "type": "module",

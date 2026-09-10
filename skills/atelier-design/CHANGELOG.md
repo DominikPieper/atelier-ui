@@ -1,3 +1,14 @@
+## 0.1.3 (2026-09-10)
+
+### 🚀 Features
+
+- **gates:** four gates for the drift nothing was watching ([2e116f7](https://github.com/DominikPieper/atelier-ui/commit/2e116f7))
+
+### ❤️ Thank You
+
+- Claude Opus 5
+- Dominik Pieper @DominikPieper
+
 ## 0.1.2 (2026-09-07)
 
 This was a version bump only for atelier-design to align it with other projects, there were no code changes.

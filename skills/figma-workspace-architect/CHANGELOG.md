@@ -1,3 +1,14 @@
+## 0.2.50 (2026-09-10)
+
+### 🚀 Features
+
+- **skills:** figma-workspace-architect — build-from-contract recipe, full tool map, audit rules ([07620e4](https://github.com/DominikPieper/atelier-ui/commit/07620e4))
+
+### ❤️ Thank You
+
+- Claude Fable 5.1
+- Dominik Pieper @DominikPieper
+
 ## 0.2.49 (2026-09-07)
 
 ### 🚀 Features
