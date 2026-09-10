@@ -137,9 +137,55 @@ Ranked; each carries why it's worth doing next rather than later.
     statically through `storybook/internal/csf-tools` (`createStoryArgsResolver`, 85 ms,
     meta merged, `unresolved` reported). Whole roster ≈ 6 s per framework in one process.
     No fallback needed. Rule for S3: render-only stories are demos, not variant claims.
-  - [ ] S2 conventions (JSDoc tags, story-per-state rule, the block's schema) · S3 the
-    joining check with three negative tests · S4 scaffold · S5 skill + curriculum · S6
-    monorepo retirements — as ADR-0121 Decision 6.
+  - [x] **S2 — the micro-contract layer — done 2026-09-10.** `libs/spec/src/contracts/`:
+    `types.ts` (schema, `satisfies`-guarded — an extra key is TS2353), `README.md`, 43
+    contracts, one per snapshot master, derived from the snapshot, `index.ts`,
+    `FIGMA_CONFORMANCE_EXCEPTIONS` and the master descriptions. Codex Gegenprobe on the
+    schema found five real gaps (state-axis data values, cross-component `axisMap`,
+    `null` values, Toggle's wrong keys, exemptions unmirrored in the master) — all folded
+    into the check's rules and the contracts; recorded as the "Refined 2026-09-10"
+    paragraph in ADR-0121. Not yet done from Decision 3: the story metas do not import
+    the contract (no consumer yet — lands with the docs block in S5).
+  - [x] **S3 stage 1 — `check:contracts` — done 2026-09-10.** `tools/scripts/check-contracts.mjs`,
+    in `check:all` before `check:stories`. Offline, ≈ 4 s per framework: docgen via the
+    Storybook workers, story args via csf-tools, snapshot, contracts. Rules `[AXIS]`,
+    `[BOOLEAN]`, `[ENUM-UNDRAWN]`, `[COVERAGE]`, `[STALE-EXEMPTION]`, `[CONTRACT-*]`,
+    `[DOCGEN-EMPTY]` (errors) and `[COVERAGE-BOOL]`, `[FIGMA-ONLY]`, `[UNMIRRORED]`,
+    `[NO-STORY-META]`, `[NO-MASTER]`, `[FW-ONLY]`, `[UNRESOLVED-ARGS]` (warnings);
+    `--emit` writes the parity `codeSpec` sections it can fill. Three negative tests red
+    then restored. Closing the roster's real coverage gaps took **26 new stories**
+    (Angular 5, React 10, Vue 11), all rendered and axe-clean in the browser suite.
+    Exit 0 with 93 warnings — the visible debt below.
+  - [ ] **Debt `check:contracts` made visible** (93 warnings, 2026-09-10):
+    - [ ] `[COVERAGE-BOOL]` ×31 — booleans never `true` in any story (Combobox
+      `required`/`readonly`, Progress `indeterminate`, Radio `disabled`, Stepper
+      `linear`, Table `stickyHeader`, Textarea `required`/`readonly`, plus React-only
+      Checkbox/Input/Pagination/RadioGroup/Select). Under S every Boolean state gets a
+      story; promote to error once the stories exist.
+    - [ ] `[NO-STORY-META]` ×46 — 15–16 child masters per framework (Th, Td, Tr, Tbody,
+      Tab, Step, Option, MenuItem, MenuSeparator, AccordionItem, BreadcrumbItem,
+      ChatMessage, ChatSuggestion, ChatTyping, AvatarGroup in Angular, Toast in
+      React/Vue) have no story meta of their own — their shape and coverage are stage 2
+      (nested-arg evidence).
+    - [ ] `[FIGMA-ONLY]` ×7 UNEXPLAINED — Combobox `state=filtered`/`selected`, Input and
+      Textarea `state=filled`, Select `state=filled`/`open`, Table `error`. Each needs a
+      decision: draw it in code, drop it from the master, or give it a sourced reason.
+    - [ ] `[NO-MASTER]` — AtlIcon has no snapshot master (its glyphs are on the Icons page
+      the snapshot does not index; ADR-0057). Decide: index the Icons page into the
+      snapshot, or record AtlIcon as code-only by design.
+    - [ ] `[FW-ONLY]` ×2 — AtlButton `type` exists in Vue only; AtlRadioGroup
+      `orientation` in React only. `check:props` territory (ADR-0093); the React
+      `react-docgen` importer also drops props resolved only through `node_modules` types,
+      so React's `type` absence may be tooling, not code — verify before fixing.
+    - [ ] `[UNMIRRORED]` ×2 — the same two `codeOnly` entries are not named in their
+      masters' descriptions; add the line on the Figma side when the Bridge is connected.
+  - [ ] **S3 stage 2** — rendered paint vs. snapshot root paint per variant and state (a
+    measurement hook in the browser suite writing computed styles, compared against
+    `rootPaint`), interaction-state stories, child masters. Codex named the probe gap:
+    AtlChat's snapshot root is a 1080×720 mockup, the comparable layers are per-variant
+    (`drawer-panel`, `popup-bg`, `chat-card`) — `probes` must name Figma layers, not labels.
+  - [ ] S4 scaffold · S5 skill + curriculum (+ the contract docs block and the story-meta
+    import) · S6 monorepo retirements — as ADR-0121 Decision 6.
   - [ ] Background for the decision — `tasks/spec-rethink-2026-09-10.md`: the greenfield
     pass the owner asked for. Inventories what a machine can test
     without massive effort (26 rows; 19 need no authored artefact), what figma-console-mcp
