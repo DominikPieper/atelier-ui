@@ -209,9 +209,24 @@ Ranked; each carries why it's worth doing next rather than later.
     - [ ] The scaffold's `figma:snapshot` script carries a `<YOUR_FIGMA_FILE_KEY>`
       placeholder because the preset has only a boolean `figmaMcp` option. Consider a
       `figmaFile` option so the workshop duplicate's key lands at scaffold time.
-  - [ ] S5 skill + curriculum (design-to-code step 3 → contract file + stories; the
-    contract docs block and the story-meta import; `schulung.astro` wording) · S6 monorepo
-    retirements — as ADR-0121 Decision 6.
+  - [x] **S5a — skill and curriculum — done 2026-09-10** (ADR-0121 "S5a done"; ADR-0113
+    corrected). `design-to-code` steps 3/5/6/7 on contract + stories + `check:contracts`;
+    handoff template and three fixtures; `schulung.astro` Tag 2 (new gate claim, Block 02
+    "Contract & Stories per Prompt", verify list); `design-to-code.astro` step 2 "Contract";
+    `first-component`, `workshop`, `claude-design`, `agent-skills` pages; `AGENTS.md`
+    steps 2–4; briefs "done when" 5; `@atelier-ui/spec/contracts/*` alias;
+    `schulung-claims.e2e.mjs` rewritten (wsdemo fixture, no `index.ts` scenario). Gates:
+    docs build, docs-layout, adr-refs, skill-discovery, llms, contracts, lint docs,
+    check-skill, test-skill (offline) all 0.
+  - [ ] **S5a follow-up:** run `node tools/e2e/schulung-claims.e2e.mjs` on a clean tree —
+    Part 1 (the gate claim) was reproduced gate by gate but not executed by the script,
+    because its `assertCleanTree` met the day's uncommitted work.
+  - [ ] **S5b — the contract docs block + story-meta import**: a docs block in all three
+    Storybooks that renders `parameters.contract` (node id, mismatches with reasons) on the
+    Docs tab; every story meta imports its contract via `@atelier-ui/spec/contracts/<name>.contract`;
+    a gate that every component story file does so (the `check:story-descriptions`
+    pattern). Closes the last open item of ADR-0121 Decision 3.
+  - [ ] S6 monorepo retirements — as ADR-0121 Decision 6.
   - [ ] Background for the decision — `tasks/spec-rethink-2026-09-10.md`: the greenfield
     pass the owner asked for. Inventories what a machine can test
     without massive effort (26 rows; 19 need no authored artefact), what figma-console-mcp
