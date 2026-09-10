@@ -44,18 +44,41 @@ a Figma Variable in the `Library Tokens` collection — the semantic tier that m
 `--ui-*` custom properties. This is what `check:figma` calls "token-linked styles", and
 it is a Critical finding when it fails (`plan/figma-component-checklist.md`).
 
-**Elevation is a CSS-only token.** `Library Tokens` carries 78 variables — 50 colour, 10
-spacing, 5 radius, 12 typography, 1 opacity — and **no shadow**. `--ui-shadow-*` exists
-only in `tokens.css`. A component whose design depends on a drop shadow (Toast, an
-elevated StatCard) has to state the shadow in the brief and in code, because Figma cannot
-bind it. Notice this rather than inventing a shadow variable.
+**Elevation is a CSS-only token.** `Library Tokens` carries 84 variables — 50 colour, 10
+spacing, 6 sizing (`control-height/*` + `row-height/*`), 5 radius, 12 typography, 1
+opacity — and **no shadow**. `--ui-shadow-*` exists only in `tokens.css`. A component
+whose design depends on a drop shadow (Toast, an elevated StatCard) has to state the
+shadow in the brief and in code, because Figma cannot bind it. Notice this rather than
+inventing a shadow variable.
 
-**Interaction states are not variants.** hover / focus / active / disabled are CSS
-pseudo-classes and attributes, not entries in the variant matrix. The canonical `card`
-record names this explicitly (`variant-explosion-from-states`): 3 variants × 4 states ×
-2 orientations is 24+ frames, none of which maps to a pseudo-class without a hand
-translation. Structural differences (severity, shape, elevation) are variants;
-everything else is a property or a state.
+**States get a Figma axis; the code's `variant` union never does.** Figma has exactly one
+primitive for a mutually-exclusive option — a Component Property of type Variant — so a
+master that needs to *draw* hover, focus, active or disabled has no other way to do it
+than a dedicated `state` axis, and Atelier's own library uses one routinely: `AtlButton`,
+`AtlInput`, `AtlSelect`, `AtlCheckbox`, `AtlToggle` and ten more all carry a `state` axis
+today (`grep -o '"state=[a-z]*' tools/figma/snapshot.json | sort | uniq -c` — 45×
+`state=default`, 29× `hover`, 23× `focus`, 12× `active`, plus data-flavoured values like
+`open`, `filled`, `invalid`). **What must never happen is that axis reaching the code
+contract.** Every `Atl*Variant` union in `libs/spec/src/index.ts` holds only structural
+values — `AtlButtonVariant = 'primary' | 'secondary' | 'outline' | 'danger'` — never a
+state; in code, hover/focus/active/disabled stay CSS pseudo-classes and `disabled`/`aria-*`
+attributes. `AtlButton`'s own master marks the boundary explicitly in its description:
+every other property line reads "→ maps to AtlButtonSpec.X"; the `state` line reads only
+"interaction state", with no arrow — nothing on the code side consumes it.
+
+The canonical `card` record names the failure mode this protects against
+(`variant-explosion-from-states`, severity minor): crossing a `state` axis against every
+other axis multiplies frames — 3 variants × 4 states × 2 orientations is 24+ — **not**
+that a `state` axis is forbidden. Keep it to one axis, and keep it curated rather than
+fully crossed: Atelier draws 24 of `AtlButton`'s 48 possible `variant`×`size`×`state`
+combinations, not all of them. Some masters skip the axis entirely and describe
+interaction states in prose instead — `AtlCard`, `AtlBadge`, `AtlToast` and `AtlAvatar`
+(the four components behind this workshop's own briefs) have no `state` axis, because
+their own interactive affordance, where they have one at all, sits on a nested control
+that already carries its own. Either choice is legitimate; what decides it is whether the
+component itself is the interactive element. Structural differences (severity, shape,
+elevation) are always the code's `variant`; everything else — a Figma `state` axis when
+you draw one, prose when you don't — is a property, a state, or CSS.
 
 **Colour is never the only signal.** Every severity, status or state that a sighted user
 can see must also be available without colour — an icon, a word, or an accessible name.
@@ -64,8 +87,13 @@ can see must also be available without colour — an icon, a word, or an accessi
 
 The same bar for all four, and the one the trainer verifies in the closing block:
 
-1. The Figma component set carries ≥ 2 variants × 2 states, with the variant axis named
-   exactly as the code union will be (`variant`, not `Variant`; `success`, not `Success`).
+1. The Figma component set carries ≥ 2 variants on a `variant` axis named exactly as the
+   code union will be (`variant`, not `Variant`; `success`, not `Success`), **and** the
+   second axis your brief's scope line names — a lifecycle pair (`open` / `closing`), a
+   data pair (`image-loaded` / `initials-fallback`), or a curated interaction pair — drawn
+   as a `state` axis. If your component is not itself the interactive element, it does not
+   get an interaction axis at all: write those states into the master's description
+   instead, per the states rule above, and the closing check reads the description.
 2. Every fill, radius, padding and gap is bound to a `Library Tokens` variable.
 3. Every frame with children uses Auto Layout.
 4. A dark-mode variant renders correctly through the collection's `Dark` mode — no
@@ -77,8 +105,12 @@ The same bar for all four, and the one the trainer verifies in the closing block
    inherits the tag from the file it was modelled on; usually is not always, and without it
    the component renders a Canvas and no Docs tab, failing the closing check for a reason
    that has nothing to do with the participant's component.
-7. The a11y obligations in the brief's own section are met, and the blocker-severity
-   mistakes it names are not present.
+7. The a11y obligations tagged **(this block)** in the brief's own section are met, and
+   any blocker-severity mistakes among them are not present. Obligations tagged **(full
+   component)** describe the shipped component for later — each one depends on a state,
+   a scenario or a property this exercise's scope section puts out of scope to build, so
+   the closing check does not evaluate it; write it into the master's description instead
+   of building it.
 8. `figma_check_design_parity` runs in report mode against the component and the
    discrepancies it reports are understood, not merely absent.
 

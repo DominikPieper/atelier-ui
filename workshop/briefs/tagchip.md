@@ -68,13 +68,18 @@ release or two.
 
 ### Scope for the 90-minute block
 
-**In scope: `default` and `success`, in the `idle` and `hover` states, with
-`removable: true`.** Two severities prove the token pairing; `removable: true` is what
-makes this a TagChip at all and drags in the whole a11y section.
+**In scope: `default` and `success`, with `removable: true`.** Two severities prove the
+token pairing; `removable: true` is what makes this a TagChip at all and drags in the
+whole a11y section. The chip is not itself the interactive element — the remove button
+is (§3) — so per [`README.md` item 1](README.md#done-when) it draws no `state` axis at
+all: hover and focus-visible on the × go into the master's description, exactly like the
+states listed as out of scope below.
 
 **Out of scope, and say so in the description rather than silently omitting:**
-`warning`, `danger`, `info`, the `sm` size, `hasIcon`, and the selected/keyboard-navigated
-state a chip acquires inside a Tag Input.
+`warning`, `danger`, `info`, the `sm` size, `hasIcon`, Badge's own data states (`idle`,
+`updated`, `max`, `hidden` — §3), the remove button's `hover`/`focus-visible` states, and
+the selected/keyboard-navigated state a chip acquires inside a Tag Input — none of these
+draws as a chip-level `state` axis; document them in the master's description instead.
 
 ---
 
@@ -83,6 +88,9 @@ state a chip acquires inside a Tag Input.
 **Interactive:** `hover`, `focus-visible` — on the **remove button**, not on the chip.
 The chip itself is not a button. `badge`'s canonical record lists *no* interactive states
 at all, which is the honest starting point: the only focusable thing here is the ×.
+Neither is drawn as a chip-level `state` axis — the chip is not the interactive element,
+so per [`README.md` item 1](README.md#done-when) these go into the master's description
+instead.
 
 **Data (from `badge`):** `idle`, `updated`, `max`, `hidden`.
 
@@ -98,31 +106,47 @@ removal is the most common way this component breaks for keyboard users.
 
 ## 4. Accessibility requirements
 
-The blocker here is the one people are most surprised by.
+The blocker here is the one people are most surprised by. Each item is also tagged
+**(this block)** — checkable on the `default`/`success` frame with `removable: true` you
+draw — or **(full component)** — real, and one of them blocker-severity, but dependent on
+a behaviour (removal itself, multiple chips, `hasIcon`) this brief's scope puts out of
+reach for the 90 minutes (see [`README.md` item 7](README.md#done-when)). A **(full
+component)** tag is not permission to skip it — it is why the closing check does not fail
+you for not having built it.
 
-1. **The hit target is at least 24 × 24 px.** *(blocker — WCAG 2.5.8)* A remove button
-   sized to look right inside a compact chip is routinely 16px. Extend the activation
-   region with padding or an `::after` overlay so the *visible* chip stays compact while
-   the *target* meets the threshold. The canonical record's own advice is blunter: if
-   the design genuinely needs an interactive badge, reach for Tag Input or Button
-   instead — this component exists in the seam between them, and that is worth knowing
-   before you draw it.
-2. **Chips are removable by keyboard, not only by pointer.** *(blocker)* Inside a field,
-   the canonical model is: Backspace at an empty input *selects* the last chip;
-   a second Backspace removes it; ArrowLeft / ArrowRight navigate between selected
+1. **The hit target is at least 24 × 24 px.** *(blocker — WCAG 2.5.8 · this block)* A
+   remove button sized to look right inside a compact chip is routinely 16px. Extend the
+   activation region with padding or an `::after` overlay so the *visible* chip stays
+   compact while the *target* meets the threshold. The canonical record's own advice is
+   blunter: if the design genuinely needs an interactive badge, reach for Tag Input or
+   Button instead — this component exists in the seam between them, and that is worth
+   knowing before you draw it. `removable: true` is in scope — the target size is
+   measurable directly on the frame.
+2. **Chips are removable by keyboard, not only by pointer.** *(blocker · full component)*
+   Inside a field, the canonical model is: Backspace at an empty input *selects* the last
+   chip; a second Backspace removes it; ArrowLeft / ArrowRight navigate between selected
    chips. Standalone, the minimum is that the remove button is a real `<button>` in the
-   tab order. Mouse-only removal is a hard fail.
-3. **Chips carry list structure.** *(blocker)* A row of chips is a `<ul>` (or
-   `role="list"`) with each chip an `<li>` — not a `<div>` of styled spans. Without it a
-   screen reader hears an undifferentiated run of text and cannot tell chip from chrome.
-4. **Severity is never colour alone.** *(blocker)* Pair the variant with an icon, a
-   textual prefix, or a visually hidden severity word. Colour is reinforcement.
-5. **The remove button names its target.** `aria-label="Remove <label>"` — not
-   "Remove", not "Close". The user needs to know *which* one they are about to delete.
-6. **The remove icon announces nothing.** *(major)* `aria-hidden="true"` on the glyph.
-   Naming both the icon and the button double-announces.
-7. **The leading icon announces nothing either.** *(major)* Decorative whenever a
-   visible label is present.
+   tab order. Mouse-only removal is a hard fail. **Removal is explicitly out of scope to
+   build here (§3)** — a static Figma frame has no keyboard to fail with, so this cannot
+   be demonstrated in the 90-minute close. Draw the transition (§3) and write the keyboard
+   contract into the description; build it when you write the code.
+3. **Chips carry list structure.** *(blocker · full component)* A row of chips is a
+   `<ul>` (or `role="list"`) with each chip an `<li>` — not a `<div>` of styled spans.
+   Without it a screen reader hears an undifferentiated run of text and cannot tell chip
+   from chrome. Depends on a row of chips; the starter frame is one chip.
+4. **Severity is never colour alone.** *(blocker · this block)* Pair the variant with an
+   icon, a textual prefix, or a visually hidden severity word. Colour is reinforcement.
+   `default` and `success` are exactly the pair you draw — checkable directly.
+5. **The remove button names its target.** *(this block)* `aria-label="Remove <label>"`
+   — not "Remove", not "Close". The user needs to know *which* one they are about to
+   delete. `remove-label` is an anatomy slot (§1) present whenever `removable: true` —
+   checkable on the frame.
+6. **The remove icon announces nothing.** *(major · this block)* `aria-hidden="true"` on
+   the glyph. Naming both the icon and the button double-announces. `remove-icon` is an
+   anatomy slot (§1), marked decorative — checkable on the frame.
+7. **The leading icon announces nothing either.** *(major · full component)* Decorative
+   whenever a visible label is present. `hasIcon` — and with it `icon-leading` — is out of
+   scope (§2); nothing built here has a leading icon to mark.
 
 ---
 
@@ -145,6 +169,8 @@ Beyond the shared bar in [`README.md`](README.md):
   not two components.
 - The remove button's activation region measures ≥ 24 × 24 px even where the chip is
   smaller, and the description says how that is achieved.
+- The master's description states the remove button's `hover`/`focus-visible` styling and
+  the selected/keyboard-navigated model — neither is drawn as a chip-level axis (§2, §3).
 - The description records **which** source you followed for radius and type (badge or
   tag), and why.
 - `default` and `success` are distinguishable with colour removed.

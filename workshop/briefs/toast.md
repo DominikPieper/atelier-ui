@@ -97,36 +97,54 @@ is still sliding in announces content the user cannot yet read.
 
 ## 4. Accessibility requirements
 
-Non-negotiable. Three of these are blocker-severity in the canonical record.
+Non-negotiable. Three of these are blocker-severity in the canonical record. Each is also
+tagged **(this block)** — checkable against the frame and description you actually build
+in the 90 minutes — or **(full component)** — true of Toast in production, worth writing
+into the master's description, but dependent on the `paused` state, a multi-toast
+scenario, or a runtime mechanism this exercise's scope does not build (see [`README.md`
+item 7](README.md#done-when)).
 
-1. **Timers pause on hover and focus.** *(blocker — WCAG 2.2.1 Timing Adjustable)*
-   Pause on pointer-enter **and** focus-into the viewport; resume only when both are
-   out. Pause at viewport level, not per toast, so a user can move between adjacent
-   toasts. Without this, a slow reader loses the message mid-sentence.
-2. **Escape dismisses.** *(blocker)* With focus inside the toast region, Escape closes
-   the focused toast — or the most recent one if none is focused. Otherwise the only
-   exits are tabbing to the button or waiting, and the keyboard contract feels broken
-   next to every other light-dismiss surface.
-3. **Severity drives live-region politeness.** *(major)* `info` and `success` →
-   `role="status"` (polite). `danger` → `role="alert"` (assertive). `warning` is
-   canonically polite. Marking every toast assertive interrupts the user for every
-   "Copied" and trains them to switch notifications off.
-4. **Critical errors are not toasts.** *(blocker)* Anything the user must act on — a
-   network failure, a data-loss warning — is an Alert or a Modal. Toast is for what can
-   be missed without consequence. Getting this wrong is a content decision that no
-   amount of correct markup repairs.
-5. **The region is a landmark, not a live region.** `role="region"` with
-   `aria-label="Notifications"` on the viewport; the live-region roles sit on the
-   individual toasts.
-6. **The close control announces once.** `aria-label="Dismiss"` **or** a visually hidden
-   span — never both. The `close-icon` is `aria-hidden="true"` and never carries a name
-   of its own.
-7. **The icon is never the severity.** `aria-hidden="true"` on the glyph; severity
-   reaches assistive tech through the role and the visible text.
-8. **Stack depth is capped.** *(major)* Three visible toasts; queue the rest. An
-   unbounded stack floods the screen and the screen reader alike.
-9. **The action is a button.** Reachable by Tab after the dismiss button, with a real
-   accessible name.
+1. **Timers pause on hover and focus.** *(blocker — WCAG 2.2.1 Timing Adjustable · full
+   component)* Pause on pointer-enter **and** focus-into the viewport; resume only when
+   both are out. Pause at viewport level, not per toast, so a user can move between
+   adjacent toasts. Without this, a slow reader loses the message mid-sentence. Depends on
+   the `paused` state, which is out of scope here — document the contract in the
+   description; you are not building the pause itself.
+2. **Escape dismisses.** *(blocker · full component)* With focus inside the toast region,
+   Escape closes the focused toast — or the most recent one if none is focused. Otherwise
+   the only exits are tabbing to the button or waiting, and the keyboard contract feels
+   broken next to every other light-dismiss surface. Keydown handling is code; document
+   the binding.
+3. **Severity drives live-region politeness.** *(major · full component)* `info` and
+   `success` → `role="status"` (polite). `danger` → `role="alert"` (assertive). `warning`
+   is canonically polite. Marking every toast assertive interrupts the user for every
+   "Copied" and trains them to switch notifications off. The role split is a code
+   attribute with no Figma equivalent — state the mapping in the description; `success`
+   and `danger` are exactly the pair you draw, so this is the one place the description
+   carries real weight.
+4. **Critical errors are not toasts.** *(blocker · this block)* Anything the user must act
+   on — a network failure, a data-loss warning — is an Alert or a Modal. Toast is for what
+   can be missed without consequence. Getting this wrong is a content decision that no
+   amount of correct markup repairs, and it is checkable directly on what you draw: neither
+   `success` nor `danger` should represent something un-missable.
+5. **The region is a landmark, not a live region.** *(full component)* `role="region"`
+   with `aria-label="Notifications"` on the viewport; the live-region roles sit on the
+   individual toasts. Both are ARIA roles with no Figma representation — document them.
+6. **The close control announces once.** *(this block)* `aria-label="Dismiss"` **or** a
+   visually hidden span — never both. The `close-icon` is `aria-hidden="true"` and never
+   carries a name of its own. `close-icon` and `close-label` are anatomy slots (§1) —
+   checkable directly on the frame if you build `dismissible`.
+7. **The icon is never the severity.** *(this block)* `aria-hidden="true"` on the glyph;
+   severity reaches assistive tech through the role and the visible text. The `icon` slot
+   is marked decorative in the anatomy table (§1) — checkable on the frame you draw for
+   both in-scope severities.
+8. **Stack depth is capped.** *(major · full component)* Three visible toasts; queue the
+   rest. An unbounded stack floods the screen and the screen reader alike. Requires
+   multiple live toasts, which the stacking behaviour this brief puts out of scope (§2)
+   makes undemonstrable here — document the cap, do not build the queue.
+9. **The action is a button.** *(this block)* Reachable by Tab after the dismiss button,
+   with a real accessible name. Tab order is runtime, but "a button, not a styled span" is
+   a composition choice checkable on the frame if you build `hasAction` (§2).
 
 ---
 

@@ -75,10 +75,14 @@ what exists.
 
 ### Scope for the 90-minute block
 
-**In scope: `elevated` and `outlined`, in the `idle` and `hover` states, with
+**In scope: `elevated` and `outlined`, in the `delta-up` and `delta-down` states, with
 `hasDelta: true`.** The two variants differ in exactly one dimension — border versus
 shadow — which makes the Figma-cannot-bind-a-shadow lesson concrete rather than
-theoretical. `hasDelta` pulls in the Badge composition and its colour-alone rule.
+theoretical. `delta-up` and `delta-down` are this composition's own `state` axis (§3) — a
+data pair, not an interaction pair, since a static StatCard has no interaction states to
+draw (see below) — and drawing both is what makes item 3's colour-alone blocker (§4)
+checkable directly on the frame rather than merely asserted in prose. `hasDelta: true` is
+what pulls the axis, and the Badge composition, into scope at all.
 
 **Out of scope, and say so in the description rather than silently omitting:** `flat`,
 both `orientation` values (build `vertical`), `density`, `interactive`, and the
@@ -103,37 +107,57 @@ card shows before the number arrives.
 background" duplicates the treatment in two places and blocks the combination
 `selected + disabled` outright.
 
+**Data (composition-specific): `delta-up`, `delta-down`.** `card` carries no delta of its
+own — this pair belongs to the `delta` slot's composition, not to `card` — and it is the
+one `state` axis this brief actually draws (§2). A `hasDelta: true` card renders as
+`delta-up` (the Badge `success` pairing) or `delta-down` (the Badge `danger` pairing);
+both frames are in scope precisely because the direction has to survive without colour
+(§4 item 3).
+
 ---
 
 ## 4. Accessibility requirements
 
+Each item is tagged **(this block)** — checkable on the `elevated`/`outlined` frames,
+drawn in both `delta-up` and `delta-down`, with `hasDelta: true` — or **(full
+component)** — real, but dependent on `interactive`, a live data feed, or an optional
+slot this brief's scope puts out of reach (see [`README.md` item 7](README.md#done-when)).
+
 1. **An interactive card is one activator, and nested controls need the overlay
-   pattern.** *(blocker)* Wrapping the whole card in an `<a>` makes it a single tab stop
-   and traps anything focusable inside it — a screen reader then reads the nested
-   controls as part of the link's name. The canonical fix: keep the card a plain
-   container, give the `value` (or `label`) a real `<a>` whose `::before` covers the
-   card, and lift genuinely separate controls onto a higher stacking context.
-2. **A clickable card has a real focusable activator.** *(blocker)* A click handler on a
-   `<div>` is unreachable by keyboard and unannounced. `<a href>` for navigation,
-   `<button>` for in-page actions — never `role="button"` on the card div.
-3. **The delta is never colour alone.** *(blocker, from `badge`)* Green-up / red-down is
-   invisible to a large group of users. Pair it with a sign (`+` / `−`), an arrow glyph
-   *plus* text, or a visually hidden word. The number's direction must survive
-   greyscale.
-4. **A live-updating value announces politely.** *(major, from `badge`)* If the number
-   changes without a navigation, wrap it in `aria-live="polite"` with
+   pattern.** *(blocker · full component)* Wrapping the whole card in an `<a>` makes it a
+   single tab stop and traps anything focusable inside it — a screen reader then reads the
+   nested controls as part of the link's name. The canonical fix: keep the card a plain
+   container, give the `value` (or `label`) a real `<a>` whose `::before` covers the card,
+   and lift genuinely separate controls onto a higher stacking context. `interactive` is
+   out of scope (§2) — nothing built here is clickable.
+2. **A clickable card has a real focusable activator.** *(blocker · full component)* A
+   click handler on a `<div>` is unreachable by keyboard and unannounced. `<a href>` for
+   navigation, `<button>` for in-page actions — never `role="button"` on the card div.
+   Same dependency on `interactive` as item 1.
+3. **The delta is never colour alone.** *(blocker, from `badge` · this block)* Green-up /
+   red-down is invisible to a large group of users. Pair it with a sign (`+` / `−`), an
+   arrow glyph *plus* text, or a visually hidden word. The number's direction must survive
+   greyscale. `delta-up` and `delta-down` are both in scope (§2, §3) — checkable directly
+   by comparing the two drawn frames in greyscale, not merely asserted of a single one.
+4. **A live-updating value announces politely.** *(major, from `badge` · full component)*
+   If the number changes without a navigation, wrap it in `aria-live="polite"` with
    `aria-atomic="true"` so the whole new value reads rather than a fragment — and
-   throttle it, or a fast-moving metric floods the screen reader.
-5. **The label is not a heading.** Card's canonical guidance: the eyebrow is metadata.
-   If the value and label need to be announced as a unit, associate them with
-   `aria-labelledby` rather than promoting the label to `<h3>`.
-6. **Value and label are announced together.** "1,284" alone is meaningless. Whichever
-   mechanism you pick — DOM order, `aria-labelledby`, or a visually hidden combined
-   string — write it into the description.
-7. **A decorative delta icon is hidden.** *(major)* `aria-hidden="true"` on the arrow
-   glyph when a textual sign is already present; otherwise it double-announces.
-8. **Media alt never repeats the label.** *(minor)* If you add a sparkline or an icon,
-   its alt adds what the text does not say ("Chart showing 12% growth"), or it is `alt=""`.
+   throttle it, or a fast-moving metric floods the screen reader. Requires an actual data
+   feed, which a static frame does not have — document the contract instead.
+5. **The label is not a heading.** *(this block)* Card's canonical guidance: the eyebrow
+   is metadata. If the value and label need to be announced as a unit, associate them
+   with `aria-labelledby` rather than promoting the label to `<h3>`. The `label` slot's
+   text style is a drawn choice, checkable on the frame.
+6. **Value and label are announced together.** *(this block)* "1,284" alone is
+   meaningless. Whichever mechanism you pick — DOM order, `aria-labelledby`, or a
+   visually hidden combined string — write it into the description.
+7. **A decorative delta icon is hidden.** *(major · this block)* `aria-hidden="true"` on
+   the arrow glyph when a textual sign is already present; otherwise it double-announces.
+   The `delta` badge instance is in scope (`hasDelta: true`) — checkable on the frame.
+8. **Media alt never repeats the label.** *(minor · full component)* If you add a
+   sparkline or an icon, its alt adds what the text does not say ("Chart showing 12%
+   growth"), or it is `alt=""`. Media is not part of this composition's anatomy (§1) — it
+   applies only if you add one later.
 
 ---
 
@@ -158,6 +182,10 @@ Beyond the shared bar in [`README.md`](README.md):
   the `elevated` shadow is a CSS-only token, and what the card shows while the number is
   loading.
 - The delta's direction is readable in greyscale.
+- The `state` axis is `delta-up` / `delta-down` — the composition's own data pair, not a
+  `card` state — and the description names the `card` states
+  (`hover`/`focus-visible`/`active`/`disabled`, `selected`, `loading`) this brief does not
+  build.
 - The `delta` slot is an **instance** of your Badge (or of `Display/AtlBadge`), not a
   hand-drawn pill — the composition has to be a real composition, or the next token
   change breaks it silently.

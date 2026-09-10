@@ -92,29 +92,39 @@ so developers have a reference for the case the mock never shows.
 
 ## 4. Accessibility requirements
 
-Two of these are blocker-severity. Both are about the name, not the picture.
+Two of these are blocker-severity. Both are about the name, not the picture. Each item is
+also tagged **(this block)** — checkable on the `image-loaded` / `initials-fallback`
+frames you draw and the description you write — or **(full component)** — real, but
+dependent on the `status` axis, which §2 puts out of scope (see [`README.md` item
+7](README.md#done-when)).
 
-1. **Every rung has an accessible name.** *(blocker)* The initials and icon rungs set
-   `role="img"` plus `aria-label` on the container. The image rung uses
+1. **Every rung has an accessible name.** *(blocker · this block)* The initials and icon
+   rungs set `role="img"` plus `aria-label` on the container. The image rung uses
    `<img alt="…">`. An avatar that renders "AB" with no label is meaningless to
-   assistive tech.
-2. **The fallback order is fixed.** *(blocker)* image → initials → icon, always. An
-   implementation that falls back differently depending on environment or library
-   version gives the same person a different identity on different screens.
-3. **The name is the full name, never the initials.** *(major)* `aria-label="Alex Black"`,
-   not `aria-label="AB"`. The initials are visual shorthand; the accessible name is the
-   source of truth.
-4. **`alt` is always present on the image rung.** *(major)* `alt=""` for a decorative
-   avatar whose host already carries the name; `alt="<entity name>"` otherwise. Never
-   *undefined* — some screen readers then announce the file path.
-5. **The status dot carries a label.** *(major)* `aria-label="online"` / `"offline"` /
-   `"away"` / `"busy"`. A coloured dot alone is sighted-only information.
-6. **Decorative avatars opt out entirely.** When a visible name sits beside the avatar,
-   set `aria-hidden="true"` and let the host's name carry it — announcing the name twice
-   is worse than not announcing it here at all.
-7. **The status dot anchors with logical properties.** `inset-inline-end` /
-   `inset-block-end`, so it mirrors under RTL instead of stranding itself on the wrong
-   edge.
+   assistive tech. Both in-scope frames exist for the same entity — write the shared
+   accessible name into the description (§6 requires this).
+2. **The fallback order is fixed.** *(blocker · this block)* image → initials → icon,
+   always. An implementation that falls back differently depending on environment or
+   library version gives the same person a different identity on different screens. The
+   two frames you draw are two points on this order — checkable directly.
+3. **The name is the full name, never the initials.** *(major · this block)*
+   `aria-label="Alex Black"`, not `aria-label="AB"`. The initials are visual shorthand;
+   the accessible name is the source of truth. Same description requirement as item 1.
+4. **`alt` is always present on the image rung.** *(major · this block)* `alt=""` for a
+   decorative avatar whose host already carries the name; `alt="<entity name>"`
+   otherwise. Never *undefined* — some screen readers then announce the file path. The
+   `image-loaded` frame is in scope — state the `alt` value in its description.
+5. **The status dot carries a label.** *(major · full component)* `aria-label="online"` /
+   `"offline"` / `"away"` / `"busy"`. A coloured dot alone is sighted-only information.
+   The `status` axis and `hasStatusIndicator` are both out of scope (§2) — nothing built
+   here has a status dot to label.
+6. **Decorative avatars opt out entirely.** *(this block)* When a visible name sits
+   beside the avatar, set `aria-hidden="true"` and let the host's name carry it —
+   announcing the name twice is worse than not announcing it here at all. A content
+   decision, independent of which fallback rung is showing — state it in the description.
+7. **The status dot anchors with logical properties.** *(full component)* `inset-inline-end`
+   / `inset-block-end`, so it mirrors under RTL instead of stranding itself on the wrong
+   edge. Depends on the status indicator, which is out of scope (§2).
 
 ---
 
