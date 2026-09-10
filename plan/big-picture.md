@@ -461,10 +461,12 @@ apply directly to React and Vue. Identical prop names (`variant`, `size`, `disab
 `loading`), identical variant unions, and the same `--ui-*` CSS token system mean an
 LLM can transfer knowledge between all three libraries without additional context.
 
-Both frameworks import the same `libs/spec` contract Angular does
-(`@atelier-ui/spec`), so the compiler enforces parity: a prop renamed in the spec is a
-type error in all three adapters, not a note someone has to remember to apply three
-times.
+Both frameworks are held to the same `libs/spec` contract Angular is — by the gate
+chain, not the compiler. Only React's props interfaces extend the spec at the type level;
+Angular's signal inputs and Vue's hand-written props are compared against it by
+`check:props` (ADR-0093), and the axis literals by `check:variants` and `check:defaults`.
+A prop renamed in the spec is therefore a red gate in all three adapters — not a type
+error in all three, and not a note someone has to remember to apply three times either.
 
 ### Framework Differences and How They Are Handled
 

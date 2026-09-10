@@ -172,7 +172,7 @@ the component I just generated. Fix every discrepancy it reports.`;
         <div style="flex: 1">
           <h2 class="docs-h3">Spec — the framework-agnostic contract</h2>
           <p class="docs-step-desc">
-            The API contract lives in <code>libs/spec/src/index.ts</code> (plus <code>metadata/</code> and <code>tokens.manifest.ts</code>). It is the <strong style="color: var(--ui-color-text)">same contract across all three frameworks</strong>: identical prop names, identical variant unions, identical token names. Whichever framework you pick, the props you'll write are defined here.
+            The API contract lives in <code>libs/spec/src/index.ts</code> (plus <code>metadata/</code> and <code>tokens.manifest.ts</code>). It is the <strong style="color: var(--ui-color-text)">same naming contract across all three frameworks</strong>: identical prop names, identical variant unions, identical token names — held there by the drift gates (<code>check:props</code>, <code>check:variants</code>, <code>check:figma</code>), not by the compiler, which binds only the React adapter (ADR-0093). It carries names and unions, not defaults, events, slots or behaviour: those come from your framework's own Storybook manifest and from the handoff document you wrote in step 1.
           </p>
           <p class="docs-step-desc">
             Those files are in the <strong style="color: var(--ui-color-text)">atelier monorepo</strong>. In a scaffolded
@@ -180,8 +180,11 @@ the component I just generated. Fix every discrepancy it reports.`;
             <code>storybook-*</code> MCP (<code>docs-list</code> → <code>docs-show</code>),
             or from <a href="/llms-full.txt" class="docs-link-primary">llms-full.txt</a>. The prop tables the
             MCP returns are exact, and so are the code snippets alongside them — each endpoint answers
-            in its own framework's syntax (ADR-0097), drift-gated against this same spec, so what you
-            read there is what you'd write here.
+            in its own framework's syntax (ADR-0097), generated from that adapter's source by docgen, so what you
+            read there is what the adapter actually does — and <code>check:props</code> keeps the adapter within the spec's names.
+          </p>
+          <p class="docs-step-desc">
+            <strong style="color: var(--ui-color-text)">Building for one framework?</strong> That is the normal case for a team taking this home, and today the spec file is not the artefact that transfers. What does: your component's own input types are the shape contract and the framework's docgen manifest derives the prop table from them; the handoff document is the contract for what a picture cannot carry (behaviour, exclusions, provenance); the parity call is the check. The spec file in this repo exists to keep three adapters on one vocabulary — a one-framework repo has nothing to keep in sync with it. The review behind this paragraph, and the open decision about the format: <code>tasks/spec-format-review-2026-09-10.md</code>.
           </p>
         </div>
       </div>

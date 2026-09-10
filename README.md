@@ -103,7 +103,7 @@ Hosted vs. local dev is a surface split, not a per-framework one: a hosted endpo
 | `@atelier-ui/angular` | Angular 22 component library (teaching artifact) |
 | `@atelier-ui/react` | React 19 component library (teaching artifact) |
 | `@atelier-ui/vue` | Vue 3 component library (teaching artifact) |
-| `@atelier-ui/spec` | Framework-agnostic TypeScript interfaces — enforces API parity across all three libraries |
+| `@atelier-ui/spec` | Framework-agnostic TypeScript interfaces — the naming contract the three libraries are drift-gated against (internal, not published) |
 
 ---
 
@@ -124,22 +124,24 @@ Authoritative list: [`libs/angular/src/index.ts`](libs/angular/src/index.ts), [`
 
 ## The spec layer
 
-`@atelier-ui/spec` contains one TypeScript interface per component. All three framework libraries import from it so the compiler enforces parity.
+`@atelier-ui/spec` contains one TypeScript interface per component. It carries prop names and string-literal unions — not defaults, descriptions, events, slots or behaviour. The three libraries are held to it by offline gates (`check:props`, `check:variants`, `check:defaults`, `check:figma`), not by the compiler: only the React adapter extends the spec interfaces at the type level; Angular's signal inputs and Vue's props objects are compared against it by `check:props`, with every known divergence recorded as an exemption (ADR-0093). The review that measured this, and the open decision about the format: `tasks/spec-format-review-2026-09-10.md`.
 
 ```typescript
 export interface AtlButtonSpec {
-  variant?: 'primary' | 'secondary' | 'outline';
+  variant?: 'primary' | 'secondary' | 'outline' | 'danger';
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   loading?: boolean;
+  /** Accessible name — required when the button has no visible text. */
+  'aria-label'?: string;
 }
 ```
 
-- Angular uses the union types as `input<T>()` type parameters.
-- React extends the spec from framework-specific props types.
-- Vue uses `defineProps<T>()`.
+- React: each props interface `extends` its spec interface — compiler-checked.
+- Angular: a few components import the axis unions for `input<T>()`; most re-declare them; no class implements a spec interface.
+- Vue: `defineProps` points at a hand-written local interface; five components import an axis union.
 
-`npm run check:docs` validates that every prop in the spec is documented in `component-data.ts`. CI fails on drift.
+`npm run check:docs` validates that every prop in the spec is documented in `docs/src/data/components.ts`. CI fails on drift.
 
 ---
 

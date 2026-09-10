@@ -21,9 +21,13 @@ The core loop — Figma → spec → code → verify, in your chosen framework:
 1. **Inspect** the Figma component: `figma_get_component_for_development`
    (figma-console-mcp) on the node, or read the master on the Components page of
    file `QMnDD8uZQPldPrlCwZZ58T`. Note its variants, `--ui-*` tokens, and a11y.
-2. **Spec** is the source of truth: `libs/spec/src/index.ts` (+ `metadata/`,
-   `tokens.manifest.ts`, `behaviors.json`). The same contract drives all three
-   frameworks, so prop/variant names are identical everywhere.
+2. **Spec** is the naming contract: `libs/spec/src/index.ts` (+ `metadata/`,
+   `tokens.manifest.ts`, `behaviors.json`). It carries prop names, string-literal
+   unions and intent — not defaults, descriptions, events beyond `on*Change`, slots or
+   behaviour; those live in the adapters, the stories, `docs/src/data/components.ts`
+   and the handoff document. All three adapters are drift-gated against it
+   (`check:props`, with recorded exemptions), which is what keeps prop and variant
+   names identical; the compiler binds only React (ADR-0093).
 3. **Generate or edit** the component with your agent, using the Storybook MCP for
    exact component docs (see the table below). **All three hosted endpoints answer
    component lookups natively** — each framework emits its own `components.json`
@@ -32,9 +36,12 @@ The core loop — Figma → spec → code → verify, in your chosen framework:
    for the framework you're in: two-way `[(checked)]` bindings and split
    Inputs/Outputs for Angular, `v-model`/`update:*` events and typed slots for Vue,
    JSX/`children`/`on*Change` for React. `libs/spec/src/index.ts` is still the
-   contract all three adapters are drift-gated against, so it's still where you
-   settle any binding the docs leave ambiguous — not a translation layer for a
-   workaround, just the shared ground truth.
+   contract all three adapters are drift-gated against, so a prop *name* or *axis
+   value* the docs leave ambiguous is settled there. It cannot settle binding
+   *shape* — two-way vs. one-way, slot vs. prop, an event's payload — because the
+   format does not express those; for shape the framework's own manifest is the
+   answer, and `check:props` maps `on<X>Change` to Angular `model()` / Vue
+   `update:*` for you.
 4. **Verify** — run the story in Storybook, then close the loop with
    `figma_check_design_parity` to catch padding/colour/variant drift. **Required,
    not optional.**
@@ -67,7 +74,7 @@ their own MCP servers; nothing in this repo does it for them.
 
 **Toolset gating** (addon-mcp options, all default `true`): `docs` requires the `componentsManifest` feature flag — addon-mcp's own preset switches it on, and it is the flag core-server reads when writing the manifest — plus an actually emitted `components.json`. React gets this for free (`react-docgen` is its default docgen path); Angular and Vue need `experimentalDocgenServer` — the default under `@storybook/angular-vite`, opt-in until Storybook 11 for `@storybook/vue3-vite` — and this repo sets it explicitly for both rather than resting on the current default. Inside `dev`, `stories-preview` and `get-storybook-story-instructions` need nothing extra; `stories-changed` and `display-review` need `features.changeDetection` (10.4's Change Review sidebar), and `display-review` additionally needs `experimentalReview` not set to `false`; `stories-find-by-component` needs a builder that exposes the module-graph service. `test` requires `@storybook/addon-vitest`; a11y in `test-run` activates when `@storybook/addon-a11y` is installed.
 
-Add a local entry when you need the `dev` / `test` toolsets. **Angular/Vue prop tables come back from their own hosted endpoint, natively — ADR-0097 supersedes ADR-0083's React-manifest fallback, which is deleted, not shrunk; `libs/spec/src/index.ts` stays the ground truth inside this repo.**
+Add a local entry when you need the `dev` / `test` toolsets. **Angular/Vue prop tables come back from their own hosted endpoint, natively — ADR-0097 supersedes ADR-0083's React-manifest fallback, which is deleted, not shrunk; `libs/spec/src/index.ts` stays the naming contract inside this repo.**
 
 **When reading component docs (any framework, any surface):**
 1. Call `docs-list` once at session start to get valid IDs (set `withStoryIds: true` if you need story IDs for downstream tools; pass `storybookId` to scope multi-source setups)

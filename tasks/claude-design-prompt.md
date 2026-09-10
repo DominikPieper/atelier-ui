@@ -11,7 +11,7 @@ I'm working on **Atelier** — an open-source AI workshop that teaches component
 The repo ships:
 - An **Astro 6 docs site** (the workshop itself) deployed to the root domain.
 - Three parallel component libraries — `@atelier-ui/angular` (Angular 22 + Signals), `@atelier-ui/react` (React 19), `@atelier-ui/vue` (Vue 3 + `<script setup>`) — exposing **29 components** with identical APIs (Button, Input, Dialog, Tabs, Combobox, Toast, Table, Stepper, …).
-- A framework-agnostic spec layer `@atelier-ui/spec` — TypeScript interfaces every framework imports so the compiler enforces parity.
+- A framework-agnostic spec layer `@atelier-ui/spec` — TypeScript interfaces of prop names and variant unions that the three libraries are drift-gated against (`check:props`); only the React adapter binds to them at compile time.
 - Three Storybook 10 instances, each with a hosted **MCP endpoint** at `/storybook-{framework}/mcp` (the `docs` toolset only: `docs-list`, `docs-show`, `docs-show-story`; `stories-preview` and `test-run` exist only on a locally running Storybook).
 - An `npx create-atelier-ui-workspace` scaffolder that generates a ready-to-run Nx workspace per framework choice.
 
