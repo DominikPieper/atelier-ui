@@ -21,6 +21,11 @@
       "type": "boolean",
       "description": "Add the figma-console-mcp server (Figma Desktop Bridge) to .mcp.json",
       "default": false
+    },
+    "skills": {
+      "type": "boolean",
+      "description": "Install the storybookjs/mcp agent skills (stories, storybook-init, storybook-setup, storybook-upgrade) via the skills CLI during scaffolding. Requires network access; disable for CI or offline runs.",
+      "default": true
     }
   },
   "required": ["name"]

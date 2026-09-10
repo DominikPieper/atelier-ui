@@ -64,6 +64,10 @@ export async function main() {
   let name = argv.find((arg) => !arg.startsWith('-'));
   let framework = parseFlag(argv, 'framework') as Framework | undefined;
   let figmaMcp = parseBooleanFlag(argv, 'figma');
+  // Unlike figma (a personal preference worth asking about), skills installs
+  // a network-dependent, non-interactive default — no prompt, just a flag to
+  // opt out for CI/offline runs, matching the preset schema's own default.
+  const skillsEnabled = parseBooleanFlag(argv, 'skills') ?? true;
 
   if (framework && !VALID_FRAMEWORKS.includes(framework)) {
     throw new Error(
@@ -135,6 +139,7 @@ export async function main() {
     packageManager: 'npm',
     frameworks: framework,
     figmaMcp,
+    skills: skillsEnabled,
   });
 
   const appName = `workshop-${framework}`;

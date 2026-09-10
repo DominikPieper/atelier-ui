@@ -199,13 +199,17 @@ jobs:
 
   # ---------------------------------------------------------------------------
   # CLI e2e — spins up local verdaccio, publishes the preset + CLI tarballs,
-  # scaffolds a workspace per framework and builds it. Slow (~5 min) so it is
-  # only gated when create-workspace or create-atelier-ui-workspace is affected.
+  # scaffolds a workspace per framework and builds it. Each framework now also
+  # installs Storybook 10.6 (a framework Storybook package + three addons)
+  # through verdaccio's npmjs uplink and runs a real `nx build-storybook` —
+  # that's what pushed this from ~5 min to ~7 min per framework, ~20+ min
+  # total. Only gated when create-workspace or create-atelier-ui-workspace is
+  # affected.
   # ---------------------------------------------------------------------------
   cli-e2e:
     name: CLI e2e
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v5
         with:
@@ -217,11 +221,12 @@ jobs:
           cache: 'npm'
       - run: corepack enable
       - run: npm ci
-      # Always use `affected` — e2e is slow (~5 min per framework) so skipping
-      # unrelated commits matters even on main. `--output-style=stream` disables
-      # Nx's terminal collation so the child-process output lands in the CI log
-      # live; without it a hung e2e produces a completely empty log until the
-      # job timeout fires.
+      # Always use `affected` — e2e is slow (~7 min per framework, since it now
+      # also installs Storybook and runs a Storybook build per framework) so
+      # skipping unrelated commits matters even on main. `--output-style=stream`
+      # disables Nx's terminal collation so the child-process output lands in
+      # the CI log live; without it a hung e2e produces a completely empty log
+      # until the job timeout fires.
       - run: npx nx affected -t e2e --parallel=1 --output-style=stream
 
   # ---------------------------------------------------------------------------

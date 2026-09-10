@@ -232,6 +232,57 @@ describe('create-atelier-ui-workspace CLI', () => {
     expect(logged).not.toContain('atelier.pieper.io/figma-token');
   });
 
+  // ─── storybookjs/mcp skills install flag ───────────────────────────────────
+
+  it('defaults skills to true when no flag is passed', async () => {
+    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular', '--no-figma'];
+
+    await main();
+
+    expect(mockCreateWorkspace).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({ skills: true }),
+    );
+  });
+
+  it('accepts --skills flag and passes skills=true explicitly', async () => {
+    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular', '--no-figma', '--skills'];
+
+    await main();
+
+    expect(mockCreateWorkspace).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({ skills: true }),
+    );
+  });
+
+  it('accepts --no-skills flag and passes skills=false', async () => {
+    process.argv = [
+      'node',
+      'index.js',
+      'test-ws',
+      '--framework=angular',
+      '--no-figma',
+      '--no-skills',
+    ];
+
+    await main();
+
+    expect(mockCreateWorkspace).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({ skills: false }),
+    );
+  });
+
+  it('does not prompt for skills — it is a flag-only, non-interactive option', async () => {
+    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular', '--no-figma'];
+
+    await main();
+
+    const promptNames = enquirer.prompt.mock.calls.map((c: [{ name: string }]) => c[0].name);
+    expect(promptNames).not.toContain('skills');
+  });
+
   it('aborts with controlled message when target directory already exists', async () => {
     const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'atelier-cli-'));
     fs.mkdirSync(path.join(tmp, 'taken'));

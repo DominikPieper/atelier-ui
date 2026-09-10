@@ -1,0 +1,34 @@
+import type { Meta, StoryObj } from '@storybook/vue3';
+import { AtlButton } from '@atelier-ui/vue';
+
+// A working pattern to copy: duplicate this file for another component from
+// @atelier-ui/vue, or add more `args`/`argTypes` below.
+const meta: Meta<typeof AtlButton> = {
+  title: 'AtlButton',
+  component: AtlButton,
+  tags: ['autodocs'],
+  render: (args) => ({
+    components: { AtlButton },
+    setup() {
+      return { args };
+    },
+    template: '<AtlButton v-bind="args">Button</AtlButton>',
+  }),
+  argTypes: {
+    variant: { control: 'select', options: ['primary', 'secondary', 'outline', 'danger'] },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
+    disabled: { control: 'boolean' },
+    loading: { control: 'boolean' },
+  },
+  args: {
+    variant: 'primary',
+    size: 'md',
+    disabled: false,
+    loading: false,
+  },
+};
+
+export default meta;
+type Story = StoryObj<typeof AtlButton>;
+
+export const Default: Story = {};

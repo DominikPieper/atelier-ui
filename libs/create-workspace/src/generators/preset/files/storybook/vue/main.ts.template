@@ -1,0 +1,37 @@
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
+import type { StorybookConfig } from '@storybook/vue3-vite';
+
+const config: StorybookConfig = {
+  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|ts)'],
+  addons: [
+    // Emits manifests/{docs,components}.json, which is what lets the
+    // storybookjs/mcp skills' docs-list/docs-show tools and dev tools
+    // (stories-preview, get-storybook-story-instructions) work against this
+    // workspace's own components. Not `test-run` — that's a separate `test`
+    // toolset tool gated on Storybook's Vitest addon, which this scaffold
+    // deliberately does not install (see CLAUDE.md).
+    '@storybook/addon-mcp',
+    getAbsolutePath('@storybook/addon-a11y'),
+    getAbsolutePath('@storybook/addon-docs'),
+  ],
+  framework: {
+    name: getAbsolutePath('@storybook/vue3-vite'),
+    options: {},
+  },
+  docs: {},
+  features: {
+    // Read by Storybook's core-server at build time and by addon-mcp's
+    // docs-toolset gate on a dev server.
+    componentsManifest: true,
+    // Vue's docgen server is opt-in under `@storybook/vue3-vite` until
+    // Storybook 11 — without this flag components.json has no props.
+    experimentalDocgenServer: true,
+  },
+};
+
+export default config;
+
+function getAbsolutePath(value: string): string {
+  return dirname(fileURLToPath(import.meta.resolve(`${value}/package.json`)));
+}

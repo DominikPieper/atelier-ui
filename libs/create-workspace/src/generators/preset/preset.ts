@@ -8,6 +8,7 @@ import {
   updateJson,
   writeJson,
 } from '@nx/devkit';
+import { spawn, type SpawnOptions } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { PresetGeneratorSchema } from './schema';
@@ -20,13 +21,284 @@ const SITE_URL = 'https://atelier.pieper.io';
 
 type Framework = 'angular' | 'react' | 'vue';
 
+// Pinned to the exact version this monorepo runs (root package.json
+// devDependencies) — the workshop needs the same Storybook every attendee's
+// neighbour has, not whatever `latest` resolves to on the day of the cohort.
+const STORYBOOK_VERSION = '10.6.0';
+
+// Storybook's `framework.name` package per scaffolded app, and the exact
+// devDependency set each one needs beyond the common addons below.
+const STORYBOOK_FRAMEWORK_PACKAGE: Record<Framework, string> = {
+  angular: '@storybook/angular-vite',
+  react: '@storybook/react-vite',
+  vue: '@storybook/vue3-vite',
+};
+
+// Templates that contain literal TypeScript source (not JSX) are suffixed
+// `.template` in files/storybook/<fw>/ so that neither tsc nor the asset-copy
+// glob touches them before this generator ships: tsconfig.lib.json's
+// `include: ["src/**/*.ts"]` would otherwise compile them as part of this
+// package's own build, and project.json's build `assets` glob
+// (`**/!(*.ts)`) explicitly excludes `.ts` files from the verbatim asset
+// copy — between the two, a template literally named `main.ts` would be
+// transpiled away and never reach dist/ under a name this generator's
+// `readTemplate()` can find at runtime. `.tsx` files (no literal `.ts`
+// suffix) hit neither rule and are stored under their real name.
+function storybookTemplateName(framework: Framework, base: 'main.ts' | 'preview' | 'atl-button.stories') {
+  if (base === 'main.ts') return `storybook/${framework}/main.ts.template`;
+  const ext = framework === 'react' ? 'tsx' : 'ts.template';
+  return `storybook/${framework}/${base}.${ext}`;
+}
+
+// The destination filename written into the scaffolded workspace — a plain,
+// correct `.ts`/`.tsx` extension regardless of the source template's name.
+function storybookOutputExt(framework: Framework) {
+  return framework === 'react' ? 'tsx' : 'ts';
+}
+
+// The four storybookjs/mcp skills this generator installs post-scaffold (S2).
+// Pinned the same way ADR-0110 pins figma-console-mcp: a skill install is a
+// remote pull of skill *text*, and an un-pinned CLI could silently change what
+// gets written into an attendee's .claude/skills/ between one workshop and the
+// next.
+const SKILLS_CLI_VERSION = '1.5.25';
+const SKILLS_ADD_ARGV = [
+  '-y',
+  `skills@${SKILLS_CLI_VERSION}`,
+  'add',
+  'storybookjs/mcp',
+  '--skill',
+  '*',
+  '--agent',
+  'claude-code',
+  '--yes',
+  '--copy',
+];
+// Kept in sync with SKILLS_ADD_ARGV by hand — this is the string shown to a
+// human (the failure warning, CLAUDE.md, README.md), quoted the way a real
+// shell needs it. It is unrelated to how SKILLS_ADD_ARGV itself reaches the
+// child process below: on POSIX it goes straight to `spawn` as an argv array
+// with no shell involved (so nothing there needs quoting at all), and on
+// Windows it is re-quoted for cmd.exe by `quoteForCmdExe` — this constant
+// exists only for the text a person reads and re-types by hand.
+const SKILLS_ADD_COMMAND_FOR_HUMANS = `npx -y skills@${SKILLS_CLI_VERSION} add storybookjs/mcp --skill "*" --agent claude-code --yes --copy`;
+// Bounds the CLI's own git clone (it reads this env var itself) so a bad
+// conference network fails fast with a clear message instead of hanging.
+const SKILLS_CLONE_TIMEOUT_MS = 60_000;
+// Hard kill for the whole child process — a backstop above the CLI's own
+// clone timeout, covering the install/copy phase after the clone too.
+const SKILLS_INSTALL_TIMEOUT_MS = 120_000;
+
+// `execFile` (and its promisified form) never actually spawns a shell — it
+// forwards only a fixed allowlist of options to the underlying `spawn` call,
+// and `stdio` is not on that list. Measured: `promisify(execFile)(...,
+// { stdio: 'inherit' })` still resolves with the child's stdout captured in
+// `result.stdout`, and nothing is written to this process's own stdout in
+// the meantime — the attendee would see a silent multi-minute pause (the
+// CLI's own clone can take that long over a bad conference network) and then
+// either a success or failure with no progress in between. `spawn` (used
+// below) genuinely honours `stdio: 'inherit'`, wiring the child's streams to
+// this process's own so the CLI's progress reaches the terminal live.
+//
+// `process.platform` is read live inside `runSkillsAddCommand` (rather than
+// cached in a module-level constant) so a test can stub it per-case without
+// having to reset and re-import the module.
+
+// `spawn`'s `shell: true` mode does not escape an `args` array for you — it
+// just space-joins `[command, ...args]` before handing the result to the
+// shell (this is exactly what Node's DEP0190 deprecation warns about:
+// "Passing args to a child process with shell option true ... arguments are
+// not escaped, only concatenated"). So this is not a general-purpose Windows
+// command-line escaper — every token in SKILLS_ADD_ARGV is a fixed literal
+// (a package specifier, a flag name, or the bare `*`) with no embedded quotes
+// of its own, and wrapping a token in quotes whenever it contains whitespace
+// or a metacharacter is sufficient for that fixed, known argv. `*`/`?` are
+// included even though cmd.exe itself does not glob-expand them (unlike a
+// POSIX shell, wildcard expansion on Windows is the invoked program's own
+// job, not the shell's) — quoting them anyway is the belt-and-suspenders
+// match for the POSIX side's guarantee, so `--skill "*"` reaches npx as a
+// literal one-character string on both platforms by construction, not by
+// relying on cmd.exe's particular behaviour.
+function quoteForCmdExe(token: string): string {
+  return /[\s"^&|<>()*?]/.test(token) ? `"${token.replace(/"/g, '\\"')}"` : token;
+}
+
+// Runs `npx <SKILLS_ADD_ARGV...>` with the child's stdio wired to this
+// process's own, resolving on a clean exit and rejecting with a descriptive
+// error otherwise (non-zero exit, the install timeout killing the child, or
+// the child never starting at all) — installSkills' catch block below turns
+// any of those into the same non-fatal warning.
+function runSkillsAddCommand(cwd: string, env: NodeJS.ProcessEnv): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const isWindows = process.platform === 'win32';
+    let settled = false;
+    // Set only by the Windows timeout backstop below — the `exit` handler
+    // needs it because a `taskkill /F` termination is not guaranteed to show
+    // up as a `signal` on the `exit` event the way POSIX's SIGTERM does.
+    let timedOut = false;
+    const settle = (fn: () => void) => {
+      if (settled) return;
+      settled = true;
+      fn();
+    };
+
+    const spawnOptions: SpawnOptions = {
+      cwd,
+      env,
+      stdio: 'inherit',
+      // POSIX only. Bounds the whole install/copy phase (a backstop above the
+      // CLI's own SKILLS_CLONE_TIMEOUT_MS-bounded clone) — `spawn` honours
+      // `timeout` + `killSignal` natively, and on POSIX the process this
+      // `child` refers to below IS `npx` itself (no shell in between), so the
+      // signal reaches the right process. Deliberately not set on Windows —
+      // see the `windowsTimeoutHandle` backstop after the child is spawned.
+      ...(isWindows ? {} : { timeout: SKILLS_INSTALL_TIMEOUT_MS, killSignal: 'SIGTERM' }),
+    };
+
+    const child = isWindows
+      ? // Windows can only execute a `.cmd` file (npx resolves to npx.cmd
+        // there) through cmd.exe, and Node no longer shells out to run one
+        // implicitly — a hardening in the Node 18.20 / 20.12 lines now
+        // requires the caller to opt in with `shell: true`, or the spawn
+        // never starts at all. That is exactly the platform `--copy` above
+        // was chosen for, so this path has to work. `shell: true` (rather
+        // than hardcoding the `npx.cmd` binary name) is enough on its own:
+        // once cmd.exe is in the loop it resolves the bare `npx` via its own
+        // PATHEXT lookup, the same as typing `npx` at a Windows prompt.
+        // Because `shell: true` does not escape an args array (see
+        // quoteForCmdExe above), the whole command line is built and quoted
+        // by hand instead of passing SKILLS_ADD_ARGV as a separate array.
+        spawn(['npx', ...SKILLS_ADD_ARGV].map(quoteForCmdExe).join(' '), {
+          ...spawnOptions,
+          shell: true,
+        })
+      : // POSIX: no shell is spawned at all, so nothing is in a position to
+        // glob-expand the literal `*` in `--skill *` — `npx` is exec'd
+        // directly with SKILLS_ADD_ARGV as its argv.
+        spawn('npx', SKILLS_ADD_ARGV, spawnOptions);
+
+    // Windows-only backstop for SKILLS_INSTALL_TIMEOUT_MS. `spawn`'s own
+    // `timeout` + `killSignal` (used above for POSIX) only terminates the
+    // process `child` actually refers to — under `shell: true` that is
+    // cmd.exe, not `npx`. cmd.exe does not propagate termination to the
+    // `npx`/npm/git descendants it launched, so relying on the same option
+    // here would kill the shell while the clone it kicked off kept running
+    // in the background — orphaned, and still writing into the scaffolded
+    // workspace after this function had already rejected. `taskkill /T`
+    // kills the whole process tree rooted at cmd.exe's pid instead of just
+    // cmd.exe itself.
+    //
+    // UNVERIFIED ON WINDOWS: reasoned through from documented cmd.exe/
+    // taskkill behaviour, but there is no Windows machine or CI runner
+    // available in this environment to actually exercise it. Verify on a
+    // real Windows box before relying on it.
+    let windowsTimeoutHandle: ReturnType<typeof setTimeout> | undefined;
+    if (isWindows) {
+      windowsTimeoutHandle = setTimeout(() => {
+        if (settled) return;
+        timedOut = true;
+        if (typeof child.pid === 'number') {
+          // `taskkill` is a stock Windows binary, so this should never itself
+          // fail to spawn — but an unhandled `error` event on a ChildProcess
+          // throws, and there is nothing more useful to do here than swallow
+          // it: the `exit` handler above has already been told (`timedOut`)
+          // and will reject with the real, readable timeout message either way.
+          spawn('taskkill', ['/pid', String(child.pid), '/T', '/F'], { stdio: 'ignore' }).on(
+            'error',
+            () => undefined,
+          );
+        }
+      }, SKILLS_INSTALL_TIMEOUT_MS);
+    }
+
+    child.on('error', (error) => {
+      // The child never started (e.g. `npx` not found on PATH).
+      clearTimeout(windowsTimeoutHandle);
+      settle(() => reject(error));
+    });
+
+    child.on('exit', (code, signal) => {
+      clearTimeout(windowsTimeoutHandle);
+      if (signal || timedOut) {
+        settle(() =>
+          reject(
+            new Error(
+              `npx was killed${signal ? ` by ${signal}` : ''} before finishing — most likely the ` +
+                `${SKILLS_INSTALL_TIMEOUT_MS}ms install timeout on a slow or unreachable network`,
+            ),
+          ),
+        );
+        return;
+      }
+      if (code !== 0) {
+        settle(() => reject(new Error(`npx exited with code ${code}`)));
+        return;
+      }
+      settle(resolve);
+    });
+  });
+}
+
+// Exported (rather than inlined into the returned post-generator task) so it
+// can be exercised directly in tests without also invoking the real
+// `npm install` that `installTask`/`removePresetTask` run when called.
+export async function installSkills(tree: Tree, skillsEnabled: boolean): Promise<void> {
+  if (!skillsEnabled) return;
+
+  console.log(
+    `\n◇ Installing storybookjs/mcp skills (stories, storybook-init, storybook-setup, storybook-upgrade)…`,
+  );
+  try {
+    // Runs in the scaffolded workspace's real root: by the time the
+    // post-generator task calls this, Nx has already flushed the virtual Tree
+    // to disk (that's what lets installTask run a real `npm install`).
+    // `--copy` (not the CLI's default symlink farm) because an attendee on
+    // Windows without developer mode cannot create symlinks. `--agent
+    // claude-code` (not `--all`) so the scaffold doesn't also grow
+    // `.cursor/`, `.codex/`, etc.
+    const env: NodeJS.ProcessEnv = {
+      ...process.env,
+      DO_NOT_TRACK: '1',
+      SKILLS_CLONE_TIMEOUT_MS: String(SKILLS_CLONE_TIMEOUT_MS),
+    };
+    await runSkillsAddCommand(tree.root, env);
+  } catch (error) {
+    // Non-fatal by design: a scaffold that dies on this last step because a
+    // conference network can't reach GitHub is a ruined workshop morning; a
+    // workspace merely missing its skills is a nuisance the attendee (or
+    // facilitator) can fix with the command below.
+    console.warn(
+      `\n⚠ Could not install the storybookjs/mcp skills automatically (${
+        error instanceof Error ? error.message : String(error)
+      }).`,
+    );
+    console.warn(`  Run this by hand once you have network access:\n`);
+    console.warn(`    ${SKILLS_ADD_COMMAND_FOR_HUMANS}\n`);
+  }
+}
+
 export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema) {
   const frameworks = (options.frameworks ?? 'angular')
     .split(',')
     .map((f) => f.trim())
     .filter(Boolean) as Framework[];
 
+  const skillsEnabled = options.skills ?? true;
+
   const deps: Record<string, string> = {};
+
+  // Every scaffolded workspace gets a local Storybook — not behind a flag
+  // (2026-09-10 owner decision, tasks/todo.md "Storybook + the storybookjs/mcp
+  // skills in the scaffolded workspace"). It exists so the storybookjs/mcp
+  // skills installed below have a Storybook ≥ 10.5 with `@storybook/addon-mcp`
+  // to talk to; without it, the `stories` skill's own first move on any UI task
+  // would be to propose installing one.
+  const storybookDevDeps: Record<string, string> = {
+    storybook: STORYBOOK_VERSION,
+    '@storybook/addon-mcp': STORYBOOK_VERSION,
+    '@storybook/addon-a11y': STORYBOOK_VERSION,
+    '@storybook/addon-docs': STORYBOOK_VERSION,
+  };
 
   for (const framework of frameworks) {
     const appName = `workshop-${framework}`;
@@ -114,6 +386,79 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
     const stylesPath = `${appName}/src/styles.css`;
     const existing = tree.exists(stylesPath) ? (tree.read(stylesPath, 'utf-8') ?? '') : '';
     tree.write(stylesPath, `@import './styles/tokens.css';\n\n${existing}`);
+
+    // Storybook config: mirrors libs/{angular,react,vue}/.storybook/main.ts
+    // minus staticDirs, the BUILD_STORYBOOK viteFinal block (hosted-path-only),
+    // @storybook/addon-vitest (no test runner in the scaffold) and
+    // @storybook/addon-designs (no Figma handoff doc to link from here).
+    tree.write(`${appName}/.storybook/main.ts`, readTemplate(storybookTemplateName(framework, 'main.ts')));
+    tree.write(
+      `${appName}/.storybook/preview.${storybookOutputExt(framework)}`,
+      readTemplate(storybookTemplateName(framework, 'preview')),
+    );
+    if (framework === 'angular') {
+      // The only framework that needs its own Storybook-scoped tsconfig — see
+      // libs/angular/.storybook/tsconfig.json, which this mirrors against the
+      // tsconfig.json the Angular application generator actually writes (both
+      // shapes verified: `files: []`, `include: []`, `references` to app/spec).
+      tree.write(
+        `${appName}/.storybook/tsconfig.json`,
+        readTemplate('storybook/angular/tsconfig.json'),
+      );
+    }
+
+    // One example story per app: small on purpose — it exists so Storybook
+    // isn't empty and the attendee has a working pattern to copy, not as a
+    // second component showcase.
+    tree.write(
+      `${appName}/src/atl-button.stories.${storybookOutputExt(framework)}`,
+      readTemplate(storybookTemplateName(framework, 'atl-button.stories')),
+    );
+
+    // The application generator (@nx/{angular,react,vue}:application, above)
+    // guarantees `${appName}/project.json` exists at this point — updateJson
+    // reads it first and throws `Cannot find ${path}` if it doesn't, which is
+    // exactly the loud failure we want: a workshop app with a Storybook config
+    // directory but no way to start it is worse than a generator that stops.
+    const storybookPort = 6006 + frameworks.indexOf(framework);
+    updateJson(tree, `${appName}/project.json`, (config) => {
+      config.targets ??= {};
+      config.targets['storybook'] = {
+        executor: 'nx:run-commands',
+        options: {
+          command: `npx storybook dev --config-dir ${appName}/.storybook --port ${storybookPort}`,
+        },
+      };
+      config.targets['build-storybook'] = {
+        executor: 'nx:run-commands',
+        outputs: [`{workspaceRoot}/dist/storybook/${appName}`],
+        options: {
+          command: `npx storybook build --config-dir ${appName}/.storybook --output-dir dist/storybook/${appName}`,
+        },
+      };
+      return config;
+    });
+
+    storybookDevDeps[STORYBOOK_FRAMEWORK_PACKAGE[framework]] = STORYBOOK_VERSION;
+    // @storybook/react-vite and @storybook/vue3-vite each carry their
+    // non-vite renderer counterpart as a plain (non-peer) `dependency`, not
+    // something npm/pnpm is told the app needs directly — but the story and
+    // preview templates import straight from '@storybook/react' /
+    // '@storybook/vue3' for the `Meta`/`StoryObj`/`Preview` types. That
+    // resolves today only because npm hoists it; pnpm's stricter, non-hoisted
+    // layout would leave the import unresolved. Angular has no matching case:
+    // '@storybook/angular-vite' has no such counterpart to hoist, and the
+    // angular templates import their types from '@storybook/angular-vite'
+    // itself (see files/storybook/angular/*.template) — adding
+    // '@storybook/angular' back here would reintroduce exactly the ERESOLVE
+    // this generator now avoids (its peer on @angular-devkit/build-angular is
+    // not satisfiable by a freshly scaffolded Angular 22 app).
+    if (framework === 'react') {
+      storybookDevDeps['@storybook/react'] = STORYBOOK_VERSION;
+    }
+    if (framework === 'vue') {
+      storybookDevDeps['@storybook/vue3'] = STORYBOOK_VERSION;
+    }
   }
 
   console.log(`\n◇ Writing project files (CLAUDE.md, README, .mcp.json)…`);
@@ -204,6 +549,67 @@ Key tokens:
 
 ${frameworks.map((f) => `- \`workshop-${f}\` — run with \`npx nx serve workshop-${f}\``).join('\n')}
 
+## Storybook
+
+Every app has its own local Storybook, started per framework:
+
+${frameworks.map((f, i) => `- \`workshop-${f}\` — \`npx nx storybook workshop-${f}\` — http://localhost:${6006 + i}`).join('\n')}
+
+Build a static Storybook (CI, hosting) with \`npx nx build-storybook workshop-<fw>\`.
+
+## Agent Skills
+
+${
+  skillsEnabled
+    ? `The scaffold attempted to install four \`storybookjs/mcp\` skills for Claude
+Code (\`.claude/skills/\`) during setup — a failed clone (offline, unreachable
+registry) does not stop the workspace from being created, so this file can't
+promise they actually landed. Check \`.claude/skills/\` for the four directories
+below; re-run the command further down if any are missing:
+
+- **stories** — invoke first, before creating, editing, or deleting components, stories, styles, CSS, themes, colors, or design tokens
+- **storybook-init** — adding Storybook to a project that does not have it configured yet
+- **storybook-setup** — Storybook is installed and you want a working \`preview\` file and stories for real components
+- **storybook-upgrade** — Storybook exists but needs an upgrade
+
+Re-run or update the install at any time:
+
+\`\`\`bash
+${SKILLS_ADD_COMMAND_FOR_HUMANS}
+\`\`\`
+
+**Which MCP tools these skills can reach depends on \`.mcp.json\`, not just on the
+skills being present.** \`.mcp.json\` wires only the *hosted* Storybook MCP servers
+(\`storybook-<fw>\` → ${SITE_URL}/storybook-<fw>/mcp), which serve the \`docs\`
+toolset — \`docs-list\`, \`docs-show\`, \`docs-show-story\` all work out of the box.
+The skills' \`dev\`-toolset tools (\`stories-preview\`, \`get-storybook-story-instructions\`)
+instead come from \`@storybook/addon-mcp\` inside a *running local* Storybook
+(already configured in every app's \`.storybook/main.ts\`) — that local endpoint is
+deliberately not wired into \`.mcp.json\` by default, the same as this repo's own
+root \`.mcp.json\`, because a fixed \`localhost\` entry would fail to connect on
+every Claude Code session started without that Storybook already running. To use
+the \`dev\` toolset: start \`npx nx storybook workshop-<fw>\` (see Storybook below),
+then add this to \`.mcp.json\`'s \`mcpServers\` (only while that Storybook is up):
+
+\`\`\`json
+"storybook-<fw>-local": {
+  "type": "http",
+  "url": "http://localhost:<port>/mcp"
+}
+\`\`\`
+
+(\`<port>\` is the one listed for that app under Storybook below.) \`test-run\`
+stays unavailable either way — this scaffold has no test runner
+(\`@storybook/addon-vitest\` is deliberately not installed).`
+    : `Skipped for this workspace (\`skills: false\`). Install the four \`storybookjs/mcp\`
+skills for Claude Code by hand:
+
+\`\`\`bash
+${SKILLS_ADD_COMMAND_FOR_HUMANS}
+\`\`\`
+`
+}
+
 ## Troubleshooting
 
 Run the preflight self-check to verify your environment:
@@ -237,8 +643,9 @@ file exports). The Desktop Bridge covers creation and inspection without a token
 `,
   );
 
-  // Install selected @atelier-ui/* packages
-  const installTask = addDependenciesToPackageJson(tree, deps, {});
+  // Install selected @atelier-ui/* packages (dependencies) and Storybook
+  // (devDependencies, exact pins — see STORYBOOK_VERSION above)
+  const installTask = addDependenciesToPackageJson(tree, deps, storybookDevDeps);
 
   // Remove the preset package itself — create-nx-workspace adds it automatically
   // but it's a build-time tool and should not be in the workspace's dependencies
@@ -305,6 +712,32 @@ npm install
 npx nx serve workshop-${frameworks[0]}
 \`\`\`
 
+## Storybook
+
+${frameworks.map((f, i) => `- \`workshop-${f}\` — \`npx nx storybook workshop-${f}\` — http://localhost:${6006 + i}`).join('\n')}
+
+## Agent Skills
+
+${
+  skillsEnabled
+    ? `The scaffold attempted to install the four \`storybookjs/mcp\` skills (\`stories\`,
+\`storybook-init\`, \`storybook-setup\`, \`storybook-upgrade\`) for Claude Code under
+\`.claude/skills/\` — check that directory, since a failed clone doesn't stop the
+workspace from being created. Re-run or update them with:
+
+\`\`\`bash
+${SKILLS_ADD_COMMAND_FOR_HUMANS}
+\`\`\`
+
+Note: \`test-run\` is not available in this scaffold — there is no test runner
+(\`@storybook/addon-vitest\`) installed. See CLAUDE.md for details.`
+    : `Skipped (\`skills: false\`). Install by hand:
+
+\`\`\`bash
+${SKILLS_ADD_COMMAND_FOR_HUMANS}
+\`\`\``
+}
+
 ## MCP
 
 Claude Code MCP servers are pre-configured in \`.mcp.json\`.
@@ -323,6 +756,7 @@ Browse components at ${SITE_URL}
     await installTask();
     console.log(`\n◇ Cleaning up preset package…`);
     await removePresetTask();
+    await installSkills(tree, skillsEnabled);
   };
 }
 

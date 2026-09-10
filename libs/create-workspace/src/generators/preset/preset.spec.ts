@@ -1,15 +1,89 @@
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 import { Tree, readJson } from '@nx/devkit';
-import { presetGenerator } from './preset';
+import { EventEmitter } from 'node:events';
+import { spawn } from 'node:child_process';
+import { installSkills, presetGenerator } from './preset';
+
+// The real @nx/{angular,react,vue}:application generators write
+// `<appName>/project.json` — the preset's Storybook step (S1) reads and
+// updates it via `updateJson`, which throws if the file is missing. The mocks
+// below stand in for the real generator, so they need to do this one thing
+// the real one does, or every test hits that throw.
+function mockAppGenerator() {
+  return jest.fn().mockImplementation((tree: Tree, options: { name: string }) => {
+    // A non-empty `targets` (a placeholder `build`, standing in for the real
+    // generator's build/serve/test/etc.) so the "storybook targets get merged
+    // in, not swapped in wholesale" test below actually exercises the merge —
+    // an empty object would pass even if the preset replaced `targets`
+    // outright instead of adding two keys to it.
+    tree.write(
+      `${options.name}/project.json`,
+      JSON.stringify({ name: options.name, targets: { build: { executor: 'fake:build' } } }),
+    );
+    return Promise.resolve(undefined);
+  });
+}
 
 // Capture the framework application-generator mocks at module scope so tests
 // can assert on the options object the preset hands to each generator (in
 // particular, that `e2eTestRunner: 'none'` is always passed — otherwise the
 // generator spawns `npm install @nx/playwright` mid-preset, which is the
 // failure mode that crashed `npx create-atelier-ui-workspace`).
-const angularAppMock = jest.fn().mockResolvedValue(undefined);
-const reactAppMock = jest.fn().mockResolvedValue(undefined);
-const vueAppMock = jest.fn().mockResolvedValue(undefined);
+const angularAppMock = mockAppGenerator();
+const reactAppMock = mockAppGenerator();
+const vueAppMock = mockAppGenerator();
+
+// The skills post-generator task (S2) shells out via node:child_process —
+// mock only `spawn` so the test suite never actually spawns `npx
+// skills@... add`. Everything else (exec, execFile, execSync, …) stays real:
+// @nx/devkit's own dependency chain (nx's package-manager utilities) uses
+// other child_process exports internally, and replacing the whole module
+// leaves those `undefined`.
+jest.mock('node:child_process', () => ({
+  ...jest.requireActual('node:child_process'),
+  spawn: jest.fn(),
+}));
+// Loosely typed on purpose: spawn's real type is a dense set of overloads
+// (command-only, command+args, command+options, …) that a single
+// mockImplementation can't match cleanly — the tests only need to inspect
+// call args and control the fake child's events, not reproduce that overload
+// set.
+const spawnMock = spawn as unknown as jest.Mock;
+
+// A minimal stand-in for the real ChildProcess: `runSkillsAddCommand` only
+// ever calls `.on('error', ...)` and `.on('exit', ...)` on what `spawn`
+// returns, so a plain EventEmitter is a faithful fake. Events are emitted on
+// a microtask tick, same as the real child_process would (the promise
+// executor above has already attached its listeners by the time this runs).
+function fakeChildProcess(emit: (child: EventEmitter) => void): EventEmitter {
+  const child = new EventEmitter();
+  queueMicrotask(() => emit(child));
+  return child;
+}
+
+function mockSkillsCliSuccess() {
+  spawnMock.mockImplementation(() => fakeChildProcess((child) => child.emit('exit', 0, null)));
+}
+
+function mockSkillsCliFailure(message: string) {
+  spawnMock.mockImplementation(() =>
+    fakeChildProcess((child) => child.emit('error', new Error(message))),
+  );
+}
+
+function mockSkillsCliNonZeroExit(code: number) {
+  spawnMock.mockImplementation(() => fakeChildProcess((child) => child.emit('exit', code, null)));
+}
+
+// Simulates `spawn`'s own `timeout` + `killSignal` machinery: on timeout, Node
+// kills the child and reports `exit` with a null code and the kill signal —
+// exactly what SKILLS_INSTALL_TIMEOUT_MS should surface as a distinct,
+// readable error rather than a bare "exited with code null".
+function mockSkillsCliTimeoutKill(signal: NodeJS.Signals = 'SIGTERM') {
+  spawnMock.mockImplementation(() =>
+    fakeChildProcess((child) => child.emit('exit', null, signal)),
+  );
+}
 
 jest.mock('@nx/angular/generators', () => {
   const real = jest.requireActual('@nx/angular/generators');
@@ -19,28 +93,48 @@ jest.mock('@nx/angular/generators', () => {
   return { applicationGenerator: angularAppMock };
 });
 
-jest.mock('@nx/devkit', () => ({
-  ...jest.requireActual('@nx/devkit'),
-  ensurePackage: jest.fn().mockImplementation((packageName: string) => {
-    if (packageName === '@nx/react') {
-      return Promise.resolve({ applicationGenerator: reactAppMock });
-    }
-    if (packageName === '@nx/vue') {
-      return Promise.resolve({ applicationGenerator: vueAppMock });
-    }
-    try {
-      const real = jest.requireActual(packageName);
-      const mocked: Record<string, unknown> = { ...real };
-      if (typeof real.applicationGenerator === 'function') {
-        mocked['applicationGenerator'] = jest.fn().mockResolvedValue(undefined);
+jest.mock('@nx/devkit', () => {
+  const real = jest.requireActual('@nx/devkit');
+  return {
+    ...real,
+    ensurePackage: jest.fn().mockImplementation((packageName: string) => {
+      if (packageName === '@nx/react') {
+        return Promise.resolve({ applicationGenerator: reactAppMock });
       }
-      return Promise.resolve(mocked);
-    } catch {
-      // Package not installed in dev workspace — fall back to plain mock
-      return Promise.resolve({ applicationGenerator: jest.fn().mockResolvedValue(undefined) });
-    }
-  }),
-}));
+      if (packageName === '@nx/vue') {
+        return Promise.resolve({ applicationGenerator: vueAppMock });
+      }
+      try {
+        const realPkg = jest.requireActual(packageName);
+        const mocked: Record<string, unknown> = { ...realPkg };
+        if (typeof realPkg.applicationGenerator === 'function') {
+          mocked['applicationGenerator'] = jest.fn().mockResolvedValue(undefined);
+        }
+        return Promise.resolve(mocked);
+      } catch {
+        // Package not installed in dev workspace — fall back to plain mock
+        return Promise.resolve({ applicationGenerator: jest.fn().mockResolvedValue(undefined) });
+      }
+    }),
+    // Run the real (synchronous) dependency-writing behaviour so tests can
+    // still assert on package.json content, but replace the *returned* task
+    // with a no-op — the real one shells out to a real `npm install` via
+    // execSync, which a unit test must never trigger (particularly since a
+    // couple of the new S2 tests below invoke the preset's returned
+    // post-generator task directly, to prove the `skills` gate is wired to
+    // it end-to-end).
+    addDependenciesToPackageJson: jest.fn().mockImplementation((...args: unknown[]) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (real.addDependenciesToPackageJson as (...a: any[]) => unknown)(...args);
+      return () => Promise.resolve();
+    }),
+    removeDependenciesFromPackageJson: jest.fn().mockImplementation((...args: unknown[]) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (real.removeDependenciesFromPackageJson as (...a: any[]) => unknown)(...args);
+      return () => Promise.resolve();
+    }),
+  };
+});
 
 describe('preset generator', () => {
   let tree: Tree;
@@ -50,6 +144,8 @@ describe('preset generator', () => {
     angularAppMock.mockClear();
     reactAppMock.mockClear();
     vueAppMock.mockClear();
+    spawnMock.mockClear();
+    mockSkillsCliSuccess();
   });
 
   // ─── MCP settings ──────────────────────────────────────────────────────────
@@ -399,5 +495,334 @@ describe('preset generator', () => {
       expect.anything(),
       expect.objectContaining({ e2eTestRunner: 'none' }),
     );
+  });
+
+  // ─── Storybook (S1) ────────────────────────────────────────────────────────
+
+  it('writes .storybook/main.ts per selected framework, naming the right framework package', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular,react,vue' });
+
+    const angularMain = tree.read('workshop-angular/.storybook/main.ts', 'utf-8') ?? '';
+    const reactMain = tree.read('workshop-react/.storybook/main.ts', 'utf-8') ?? '';
+    const vueMain = tree.read('workshop-vue/.storybook/main.ts', 'utf-8') ?? '';
+
+    expect(angularMain).toContain('@storybook/angular-vite');
+    expect(reactMain).toContain('@storybook/react-vite');
+    expect(vueMain).toContain('@storybook/vue3-vite');
+  });
+
+  it('main.ts keeps addon-mcp/a11y/docs but drops addon-vitest and addon-designs', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
+
+    const main = tree.read('workshop-angular/.storybook/main.ts', 'utf-8') ?? '';
+    expect(main).toContain('@storybook/addon-mcp');
+    expect(main).toContain('@storybook/addon-a11y');
+    expect(main).toContain('@storybook/addon-docs');
+    expect(main).not.toContain('addon-vitest');
+    expect(main).not.toContain('addon-designs');
+    expect(main).not.toContain('staticDirs');
+    expect(main).not.toContain('BUILD_STORYBOOK');
+  });
+
+  it('writes a preview file per framework, .tsx for react and .ts otherwise', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular,react,vue' });
+
+    expect(tree.exists('workshop-angular/.storybook/preview.ts')).toBe(true);
+    expect(tree.exists('workshop-react/.storybook/preview.tsx')).toBe(true);
+    expect(tree.exists('workshop-vue/.storybook/preview.ts')).toBe(true);
+
+    const reactPreview = tree.read('workshop-react/.storybook/preview.tsx', 'utf-8') ?? '';
+    expect(reactPreview).toContain("../src/styles/tokens.css");
+  });
+
+  it('does not import @angular/cdk/overlay-prebuilt.css in the angular preview', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
+
+    const preview = tree.read('workshop-angular/.storybook/preview.ts', 'utf-8') ?? '';
+    expect(preview).not.toContain('overlay-prebuilt.css');
+  });
+
+  it('writes a Storybook-scoped tsconfig.json only for the angular app', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular,react,vue' });
+
+    expect(tree.exists('workshop-angular/.storybook/tsconfig.json')).toBe(true);
+    expect(tree.exists('workshop-react/.storybook/tsconfig.json')).toBe(false);
+    expect(tree.exists('workshop-vue/.storybook/tsconfig.json')).toBe(false);
+  });
+
+  it('writes one example AtlButton story per app, importing from @atelier-ui/<fw>', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular,react,vue' });
+
+    const angularStory = tree.read('workshop-angular/src/atl-button.stories.ts', 'utf-8') ?? '';
+    const reactStory = tree.read('workshop-react/src/atl-button.stories.tsx', 'utf-8') ?? '';
+    const vueStory = tree.read('workshop-vue/src/atl-button.stories.ts', 'utf-8') ?? '';
+
+    expect(angularStory).toContain("from '@atelier-ui/angular'");
+    expect(reactStory).toContain("from '@atelier-ui/react'");
+    expect(vueStory).toContain("from '@atelier-ui/vue'");
+  });
+
+  it('adds the pinned Storybook devDependencies, common and per-framework', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular,react,vue' });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.devDependencies['storybook']).toBe('10.6.0');
+    expect(pkg.devDependencies['@storybook/addon-mcp']).toBe('10.6.0');
+    expect(pkg.devDependencies['@storybook/addon-a11y']).toBe('10.6.0');
+    expect(pkg.devDependencies['@storybook/addon-docs']).toBe('10.6.0');
+    expect(pkg.devDependencies['@storybook/angular-vite']).toBe('10.6.0');
+    expect(pkg.devDependencies['@storybook/react-vite']).toBe('10.6.0');
+    expect(pkg.devDependencies['@storybook/vue3-vite']).toBe('10.6.0');
+    // @storybook/react-vite and @storybook/vue3-vite carry their non-vite
+    // renderer as a plain `dependency`, not a peer — but the React/Vue story
+    // and preview templates import types straight from '@storybook/react' /
+    // '@storybook/vue3'. That only resolves via npm's hoisting today; a
+    // pnpm-managed scaffold needs it declared directly.
+    expect(pkg.devDependencies['@storybook/react']).toBe('10.6.0');
+    expect(pkg.devDependencies['@storybook/vue3']).toBe('10.6.0');
+    // '@storybook/angular' is deliberately NOT installed: its peer on
+    // @angular-devkit/build-angular is not optional, and a freshly scaffolded
+    // Angular 22 app's own build-angular peer (^21) collides with it — the
+    // angular templates use '@storybook/angular-vite' for their types instead
+    // (it has no such peer).
+    expect(pkg.devDependencies['@storybook/angular']).toBeUndefined();
+    // Deliberately not installed: the scaffold has no test runner (S1).
+    expect(pkg.devDependencies['@storybook/addon-vitest']).toBeUndefined();
+    expect(pkg.devDependencies['@storybook/addon-designs']).toBeUndefined();
+  });
+
+  it('adds storybook/build-storybook targets on port 6006 for a single framework', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
+
+    const project = readJson(tree, 'workshop-angular/project.json');
+    expect(project.targets.storybook.executor).toBe('nx:run-commands');
+    expect(project.targets.storybook.options.command).toBe(
+      'npx storybook dev --config-dir workshop-angular/.storybook --port 6006',
+    );
+    expect(project.targets['build-storybook'].outputs).toEqual([
+      '{workspaceRoot}/dist/storybook/workshop-angular',
+    ]);
+    expect(project.targets['build-storybook'].options.command).toBe(
+      'npx storybook build --config-dir workshop-angular/.storybook --output-dir dist/storybook/workshop-angular',
+    );
+  });
+
+  it('assigns sequential ports (6006, 6007) to two frameworks in selection order', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'react,vue' });
+
+    const reactProject = readJson(tree, 'workshop-react/project.json');
+    const vueProject = readJson(tree, 'workshop-vue/project.json');
+    expect(reactProject.targets.storybook.options.command).toContain('--port 6006');
+    expect(vueProject.targets.storybook.options.command).toContain('--port 6007');
+  });
+
+  it("preserves the application generator's own targets (e.g. build) alongside storybook", async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
+
+    // mockAppGenerator seeds a placeholder `build` target standing in for the
+    // real generator's build/serve/test/etc. — asserting it survives proves
+    // the preset merges the storybook targets in rather than replacing
+    // `targets` wholesale.
+    const project = readJson(tree, 'workshop-angular/project.json');
+    expect(project.targets.build).toEqual({ executor: 'fake:build' });
+    expect(project.targets.storybook).toBeDefined();
+    expect(project.targets['build-storybook']).toBeDefined();
+  });
+
+  it('fails loudly if the app has no project.json when Storybook targets are added', async () => {
+    // Simulate a framework application generator that, unlike the real one,
+    // does not write project.json — the preset must not silently skip adding
+    // the storybook targets.
+    angularAppMock.mockImplementationOnce(() => Promise.resolve(undefined));
+
+    await expect(
+      presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' }),
+    ).rejects.toThrow('workshop-angular/project.json');
+  });
+
+  // ─── CLAUDE.md / README mention Storybook + skills (S3) ────────────────────
+
+  it('CLAUDE.md documents the storybook dev command and port', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
+
+    const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+    expect(md).toContain('npx nx storybook workshop-angular');
+    expect(md).toContain('6006');
+  });
+
+  it('CLAUDE.md mentions all four storybookjs/mcp skills by name', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
+
+    const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+    expect(md).toContain('stories');
+    expect(md).toContain('storybook-init');
+    expect(md).toContain('storybook-setup');
+    expect(md).toContain('storybook-upgrade');
+    expect(md).toContain('storybookjs/mcp');
+  });
+
+  it('CLAUDE.md notes that test-run is unavailable in the scaffold', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
+
+    const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+    expect(md).toContain('test-run');
+    expect(md).toContain('addon-vitest');
+  });
+
+  it('CLAUDE.md prints the re-run command when skills are enabled', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
+
+    const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+    expect(md).toContain('npx -y skills@1.5.25 add storybookjs/mcp');
+  });
+
+  it('README mentions the skills and the storybook command', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
+
+    const readme = tree.read('README.md', 'utf-8') ?? '';
+    expect(readme).toContain('storybookjs/mcp');
+    expect(readme).toContain('npx nx storybook workshop-angular');
+  });
+
+  // ─── Skills install as a post-generator task (S2) ──────────────────────────
+
+  // Stubs process.platform for the duration of `fn`, restoring it afterwards
+  // — `runSkillsAddCommand` reads `process.platform` live on every call
+  // specifically so tests can flip it per-case without resetting modules.
+  async function withPlatform(platform: NodeJS.Platform, fn: () => Promise<void>) {
+    const original = Object.getOwnPropertyDescriptor(process, 'platform');
+    if (!original) throw new Error('process.platform has no property descriptor');
+    Object.defineProperty(process, 'platform', { value: platform, configurable: true });
+    try {
+      await fn();
+    } finally {
+      Object.defineProperty(process, 'platform', original);
+    }
+  }
+
+  it('invokes the pinned skills CLI with the expected argv and env on POSIX', async () => {
+    await withPlatform('darwin', async () => {
+      await installSkills(tree, true);
+    });
+
+    expect(spawnMock).toHaveBeenCalledTimes(1);
+    const [file, args, options] = spawnMock.mock.calls[0];
+    // POSIX: no shell involved, so `spawn` gets the command and its argv as
+    // two separate arguments — nothing here is in a position to glob-expand
+    // the literal `*` in `--skill *`.
+    expect(file).toBe('npx');
+    expect(args).toEqual([
+      '-y',
+      'skills@1.5.25',
+      'add',
+      'storybookjs/mcp',
+      '--skill',
+      '*',
+      '--agent',
+      'claude-code',
+      '--yes',
+      '--copy',
+    ]);
+    expect(options.shell).toBeUndefined();
+    expect(options.stdio).toBe('inherit');
+    expect(options.cwd).toBe(tree.root);
+    expect(options.env.DO_NOT_TRACK).toBe('1');
+    expect(options.env.SKILLS_CLONE_TIMEOUT_MS).toEqual(expect.any(String));
+    expect(Number(options.env.SKILLS_CLONE_TIMEOUT_MS)).toBeGreaterThan(0);
+    expect(typeof options.timeout).toBe('number');
+    expect(options.timeout).toBeGreaterThan(0);
+    expect(options.killSignal).toBe('SIGTERM');
+  });
+
+  it('on Windows, runs the install through cmd.exe with the literal * quoted', async () => {
+    await withPlatform('win32', async () => {
+      await installSkills(tree, true);
+    });
+
+    expect(spawnMock).toHaveBeenCalledTimes(1);
+    const [commandLine, options] = spawnMock.mock.calls[0];
+    // Windows: npx resolves to npx.cmd, which Node can only run through
+    // cmd.exe — that requires `shell: true`, which in turn means the whole
+    // command line has to be built (and quoted) by hand rather than handed
+    // to `spawn` as a separate args array.
+    expect(typeof commandLine).toBe('string');
+    expect(options.shell).toBe(true);
+    expect(commandLine).toContain('npx');
+    expect(commandLine).toContain('skills@1.5.25');
+    expect(commandLine).toContain('storybookjs/mcp');
+    // The one token that must survive as a literal, unexpandable `*`.
+    expect(commandLine).toContain('--skill "*"');
+  });
+
+  it('does not invoke the skills CLI when skills is disabled', async () => {
+    await installSkills(tree, false);
+
+    expect(spawnMock).not.toHaveBeenCalled();
+  });
+
+  it('skips the skills install entirely when skills: false is passed to the generator', async () => {
+    const task = await presetGenerator(tree, {
+      name: 'my-workspace',
+      frameworks: 'angular',
+      skills: false,
+    });
+    await task();
+
+    expect(spawnMock).not.toHaveBeenCalled();
+  });
+
+  it('does not throw when the skills command fails to spawn — non-fatal by design', async () => {
+    mockSkillsCliFailure('network unreachable');
+
+    await expect(installSkills(tree, true)).resolves.toBeUndefined();
+  });
+
+  it('prints the manual re-run command when the skills install fails to spawn', async () => {
+    mockSkillsCliFailure('network unreachable');
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+
+    await installSkills(tree, true);
+
+    const warnings = warnSpy.mock.calls.map((call) => call.join(' ')).join('\n');
+    expect(warnings).toContain('network unreachable');
+    expect(warnings).toContain('npx -y skills@1.5.25 add storybookjs/mcp');
+    warnSpy.mockRestore();
+  });
+
+  it('does not throw when npx exits with a non-zero code — non-fatal by design', async () => {
+    mockSkillsCliNonZeroExit(1);
+
+    await expect(installSkills(tree, true)).resolves.toBeUndefined();
+  });
+
+  it('warns with the exit code when npx exits with a non-zero code', async () => {
+    mockSkillsCliNonZeroExit(1);
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+
+    await installSkills(tree, true);
+
+    const warnings = warnSpy.mock.calls.map((call) => call.join(' ')).join('\n');
+    expect(warnings).toContain('exited with code 1');
+    expect(warnings).toContain('npx -y skills@1.5.25 add storybookjs/mcp');
+    warnSpy.mockRestore();
+  });
+
+  it('does not throw when the install timeout kills the child — non-fatal by design', async () => {
+    mockSkillsCliTimeoutKill('SIGTERM');
+
+    await expect(installSkills(tree, true)).resolves.toBeUndefined();
+  });
+
+  it('warns about the timeout, not a bare signal, when the install is killed after SKILLS_INSTALL_TIMEOUT_MS', async () => {
+    mockSkillsCliTimeoutKill('SIGTERM');
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+
+    await installSkills(tree, true);
+
+    const warnings = warnSpy.mock.calls.map((call) => call.join(' ')).join('\n');
+    expect(warnings).toContain('SIGTERM');
+    expect(warnings).toContain('timeout');
+    expect(warnings).toContain('npx -y skills@1.5.25 add storybookjs/mcp');
+    warnSpy.mockRestore();
   });
 });

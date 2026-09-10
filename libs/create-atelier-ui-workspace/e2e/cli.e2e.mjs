@@ -5,8 +5,14 @@
  * Spins up a local verdaccio npm registry, publishes the locally-built
  * preset and CLI to it, installs the CLI into a scratch directory like a
  * real user would, then runs it with --framework=<fw>. Verifies the
- * scaffolded workspace contains expected files and that `nx build`
- * actually compiles the generated app.
+ * scaffolded workspace contains expected files (including the per-app
+ * Storybook config and an example story) and that `nx build` and
+ * `nx build-storybook` both actually compile the generated app. Also
+ * reports, non-fatally, whether the storybookjs/mcp skills got installed —
+ * for exactly one framework (see SKILLS_TEST_FRAMEWORK below), the only one
+ * for which the CLI is run with the network install actually enabled; the
+ * others pass `--no-skills` so they don't each pay for an uncontrolled
+ * GitHub clone that nothing here would check anyway.
  *
  * verdaccio is fetched on-demand via `npx -y verdaccio`; the first run
  * downloads it (~50 MB, cached afterwards). Uplinks to npmjs.org so any
@@ -30,6 +36,7 @@ import {
   existsSync,
   mkdirSync,
   mkdtempSync,
+  readdirSync,
   readFileSync,
   rmSync,
   statSync,
@@ -53,12 +60,75 @@ const FRAMEWORKS = (process.env.E2E_FRAMEWORKS || 'angular,react,vue')
 
 const KEEP_SCRATCH = process.env.E2E_KEEP_SCRATCH === 'true';
 
+// Only one framework should exercise the storybookjs/mcp skills' real network
+// install (`--skills`, the CLI flag added alongside this) — the rest run with
+// `--no-skills` so a full three-framework e2e costs one GitHub clone instead
+// of three, and the frameworks that skip it aren't checked for something they
+// never installed (checkSkillsInstalled was previously called for all three
+// regardless of whether the install was even attempted, which proved nothing
+// and just risked three uncontrolled network calls per run). Taking the first
+// entry of the (possibly `E2E_FRAMEWORKS`-filtered) list keeps exactly one
+// data point regardless of which subset is under test, rather than hardcoding
+// a name that might not even be in a restricted run.
+const SKILLS_TEST_FRAMEWORK = FRAMEWORKS[0];
+
 function section(msg) {
   console.log(`\n=== ${msg} ===`);
 }
 
 function ok(msg) {
   console.log(`  ✓ ${msg}`);
+}
+
+function warn(msg) {
+  console.log(`  ⚠ ${msg}`);
+}
+
+// Recursively finds *.stories.(ts|tsx|js|jsx) files under `dir`. The S1 brief
+// (tasks/todo.md, "Storybook + the storybookjs/mcp skills in the scaffolded
+// workspace", 2026-09-10) says the preset writes "one example story per app"
+// but does not nail down a filename, so this searches rather than asserting
+// one hardcoded path.
+function findStoryFiles(dir) {
+  const results = [];
+  const walk = (current) => {
+    for (const entry of readdirSync(current, { withFileTypes: true })) {
+      if (entry.name === 'node_modules' || entry.name.startsWith('.')) continue;
+      const full = join(current, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else if (/\.stories\.[jt]sx?$/.test(entry.name)) results.push(full);
+    }
+  };
+  if (existsSync(dir)) walk(dir);
+  return results;
+}
+
+// The preset installs the storybookjs/mcp skills over the network at scaffold
+// time (`npx skills add storybookjs/mcp ...`, S2 in the same brief) and
+// deliberately treats a failed install as non-fatal — a bad conference
+// network must not fail the whole scaffold. Mirror that leniency here: report
+// what we find, never throw. A hard assertion would make this entire e2e
+// depend on GitHub being reachable from CI, which is exactly what the
+// preset's own non-fatal handling was designed to avoid.
+// Only called for SKILLS_TEST_FRAMEWORK — the other frameworks run with
+// `--no-skills` and never attempt the install, so checking them here would
+// just report a predetermined "NOT installed" for something never asked for.
+function checkSkillsInstalled(wsPath) {
+  const skillNames = ['stories', 'storybook-init', 'storybook-setup', 'storybook-upgrade'];
+  // The CLI's `--copy` mode is observed (in this repo's own root, added ahead
+  // of this preset change) to land skills under both `.claude/skills/` and
+  // `.agents/skills/` — check both rather than assuming one.
+  const skillDirs = ['.claude/skills', '.agents/skills'];
+  for (const name of skillNames) {
+    const hit = skillDirs
+      .map((dir) => join(wsPath, dir, name, 'SKILL.md'))
+      .find((p) => existsSync(p));
+    if (hit) {
+      ok(`skill installed: ${name} (${hit.slice(wsPath.length + 1)})`);
+    } else {
+      warn(`skill NOT installed: ${name} — non-fatal (network/CLI dependent), continuing`);
+    }
+  }
 }
 
 function run(cmd, opts = {}) {
@@ -251,6 +321,7 @@ function publishToRegistry(tarballPath, registryUrl, npmrcPath) {
 
 function testFramework(framework, registryUrl, npmrcPath) {
   section(`Framework: ${framework}`);
+  const exerciseSkills = framework === SKILLS_TEST_FRAMEWORK;
   const scratch = mkdtempSync(join(tmpdir(), `atelier-e2e-${framework}-`));
   console.log(`  scratch: ${scratch}`);
   let passed = false;
@@ -268,7 +339,11 @@ function testFramework(framework, registryUrl, npmrcPath) {
     // --no-figma keeps the CLI non-interactive (the figma MCP prompt would
     // otherwise hang because stdio is inherited). The opt-in path is covered
     // by unit tests in preset.spec.ts and index.spec.ts.
-    const res = spawnSync(cliBin, [wsName, `--framework=${framework}`, '--no-figma'], {
+    // --skills / --no-skills: only SKILLS_TEST_FRAMEWORK runs the real
+    // storybookjs/mcp network install here — see the constant's definition
+    // for why exactly one framework carries it.
+    const skillsFlag = exerciseSkills ? '--skills' : '--no-skills';
+    const res = spawnSync(cliBin, [wsName, `--framework=${framework}`, '--no-figma', skillsFlag], {
       cwd: scratch,
       stdio: 'inherit',
       env: {
@@ -288,6 +363,10 @@ function testFramework(framework, registryUrl, npmrcPath) {
     if (!statSync(wsPath).isDirectory()) throw new Error(`workspace dir missing: ${wsPath}`);
     ok(`workspace at ${wsPath}`);
 
+    // preview.ts for Angular/Vue, preview.tsx for React — this is the
+    // contract stated in the S1 brief (tasks/todo.md, 2026-09-10), not yet
+    // confirmed against the preset's actual output as of writing this e2e.
+    const previewFile = framework === 'react' ? 'preview.tsx' : 'preview.ts';
     const mustExist = [
       'package.json',
       'CLAUDE.md',
@@ -295,11 +374,19 @@ function testFramework(framework, registryUrl, npmrcPath) {
       `workshop-${framework}/src/styles.css`,
       `workshop-${framework}/src/styles/tokens.css`,
       'tools/scripts/preflight.mjs',
+      `workshop-${framework}/.storybook/main.ts`,
+      `workshop-${framework}/.storybook/${previewFile}`,
     ];
     for (const rel of mustExist) {
       if (!existsSync(join(wsPath, rel))) throw new Error(`missing: ${rel}`);
     }
-    ok('scaffolded files present (including local tokens.css)');
+    ok('scaffolded files present (including local tokens.css and .storybook config)');
+
+    const storyFiles = findStoryFiles(join(wsPath, `workshop-${framework}/src`));
+    if (storyFiles.length === 0) {
+      throw new Error(`no example story (*.stories.*) found under workshop-${framework}/src`);
+    }
+    ok(`example story present: ${storyFiles[0].slice(wsPath.length + 1)}`);
 
     const stylesPath = join(wsPath, `workshop-${framework}/src/styles.css`);
     const styles = readFileSync(stylesPath, 'utf-8');
@@ -347,6 +434,23 @@ function testFramework(framework, registryUrl, npmrcPath) {
 
     run(`npx nx build workshop-${framework} --skip-nx-cache`, { cwd: wsPath });
     ok(`nx build workshop-${framework} green`);
+
+    // This is the point of the whole exercise: nothing else in the repo
+    // proves that the Storybook config the preset writes actually compiles
+    // in a scaffolded workspace (the Angular tsconfig wiring for
+    // `experimentalDocgenServer` in particular is unverified anywhere else).
+    // Costs a couple of minutes per framework — worth it, since a broken
+    // `.storybook/main.ts` would otherwise only surface when an attendee
+    // runs it live at a workshop.
+    run(`npx nx build-storybook workshop-${framework} --skip-nx-cache`, { cwd: wsPath });
+    ok(`build-storybook workshop-${framework} green`);
+
+    if (exerciseSkills) {
+      checkSkillsInstalled(wsPath);
+    } else {
+      ok('skills install skipped (--no-skills) — real install exercised by another framework in this run');
+    }
+
     passed = true;
   } finally {
     if (KEEP_SCRATCH) {

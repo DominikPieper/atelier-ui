@@ -129,4 +129,58 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    // This is a publishable library: its package.json's own dependency
+    // sections are what a consumer installs from, not the workspace root's.
+    // `@nx/dependency-checks` catches an import with nothing declared for
+    // it (the `@angular/cdk` defect this block closes) and a declared
+    // dependency nothing in source imports any more.
+    files: ['package.json'],
+    rules: {
+      '@nx/dependency-checks': [
+        'error',
+        {
+          ignoredFiles: [
+            // These two live at the project root (not under src/), so the
+            // shared `production` named input in nx.json — which the
+            // `build` target's inputs resolve to and which this rule reads
+            // to pick the file set — does not already exclude them the way
+            // it does `*.spec.ts`, `*.stories.ts` and `.storybook/**`.
+            // Both are dev-loop tooling for `nx test`/`storybook-test`,
+            // never present in the published `dist/libs/angular` output,
+            // so their imports (vite, vitest, @nx/vite,
+            // @analogjs/vite-plugin-angular, @storybook/addon-vitest,
+            // @vitest/browser-playwright) are not a runtime dependency of
+            // the package.
+            '{projectRoot}/vite.config.mts',
+            '{projectRoot}/vitest.storybook.config.ts',
+            // `covers()` in here binds a behaviors.json id to a spec — it is
+            // imported only by `*.spec.ts` files and is explicitly "NOT
+            // exported from the package barrel" (see its own doc comment),
+            // but it lives directly under src/ so the filename-suffix-based
+            // exclusions above (spec/stories/storybook/test-setup) don't
+            // reach it. ng-packagr's entry point is src/index.ts, which
+            // never imports this directory, so it is absent from
+            // dist/libs/angular — confirmed by grepping the built fesm2022
+            // bundle and the emitted .d.ts files.
+            '{projectRoot}/src/testing/**',
+          ],
+          // @atelier-ui/spec is workspace-private (see its package.json:
+          // "private": true) and is inlined into this library's bundle at
+          // build time — ng-packagr resolves the `@atelier-ui/spec/*`
+          // path-mapped imports and emits their compiled output directly
+          // into fesm2022/atelier-ui-angular.mjs, so it is never an
+          // external import a consumer's npm install needs to satisfy.
+          // The rule otherwise expects every buildable workspace
+          // dependency to be a declared package.json dependency, which is
+          // the right default for a dependency left external — just not
+          // the shape this monorepo's inlining build produces for it.
+          ignoredDependencies: ['@atelier-ui/spec'],
+        },
+      ],
+    },
+    languageOptions: {
+      parser: await import('jsonc-eslint-parser'),
+    },
+  },
 );
