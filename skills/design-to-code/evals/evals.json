@@ -4,7 +4,7 @@
     {
       "id": 1,
       "prompt": "I've written the handoff doc for the TagChip brief (workshop/briefs/tagchip.md) — it's in tasks/handoff-tagchip.md. Implement it in React. Draft is a duplicate of the Atelier file, the component set is at node 612:88 in my draft.",
-      "expected_output": "Reads the handoff document before touching Figma; resolves the node via figma_search_components / figma_get_component_for_development; notes TagChip is a composition (tag-input slots + badge) via uianatomy; adds a spec block, runs the React generator, calls storybook-react docs-list/docs-show for AtlBadge, writes component + CSS + Testing Library spec + story with tags: ['autodocs']; runs nx test and nx lint and reports exit codes; runs figma_check_design_parity with all four codeSpec sections and parity:record; final report separates verified from assumed.",
+      "expected_output": "Reads the handoff document before touching Figma; resolves the node via figma_search_components / figma_get_component_for_development; notes TagChip is a composition (tag-input slots + badge) via uianatomy; the Source line names a duplicate, so this is the workshop case (SKILL.md §0a) — writes the spec as its own file beside the component (never a block in libs/spec/src/index.ts), runs the React generator, calls storybook-react docs-list/docs-show for AtlBadge, writes component + CSS + Testing Library spec + story with tags: ['autodocs']; runs nx test and nx lint and reports exit codes; runs figma_check_design_parity with all four codeSpec sections but does NOT run parity:record, since the node is not and will never be in tools/figma/snapshot.json; final report separates verified from assumed.",
       "files": ["tasks/handoff-tagchip.md"]
     },
     {

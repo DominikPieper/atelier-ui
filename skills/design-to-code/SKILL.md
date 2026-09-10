@@ -37,15 +37,18 @@ Tool names below are the `figma-console` server's unless prefixed otherwise
 Copy this checklist into your working notes and tick it as you go:
 
 ```
-- [ ] 0. Handoff document exists; mechanical half filled, decisions written by the author
+- [ ] 0. Handoff document exists; mechanical half filled, decisions written by the author;
+        Source line read for repo vs. workshop case (§0a)
 - [ ] 1. Inspect: search → component-for-development → analyze_component_set
 - [ ] 2. Canon: uianatomy bridge view read; composition vs canonical decided and recorded
-- [ ] 3. Spec: block read/written in libs/spec; new vs extend decided
+- [ ] 3. Spec: repo case → block read/written in libs/spec; workshop case → own file
+        beside the component, libs/spec untouched; new vs extend decided
 - [ ] 4. Docs: storybook-<fw> docs-list → docs-show (local dev: story instructions first)
 - [ ] 5. Generate: one framework, story with tags: ['autodocs'], every value via --ui-*
 - [ ] 6. Gates: nx test <lib>, nx lint <lib> — exit codes read, not tails
 - [ ] 7. Parity: figma_check_design_parity with the relevant of seven sections;
-        interactive Light/Dark check for stateful components; parity:record
+        interactive Light/Dark check for stateful components; repo case → parity:record,
+        workshop case → stop after the check, no record
 - [ ] 8. Report: verified vs assumed; framework, states and sections named
 ```
 
@@ -62,6 +65,22 @@ show it**. ADR-0096's 2026-09-07 correction allows exactly this split and no mor
 extractor that also wrote the behaviour would produce a confident document missing what
 the canvas misses. The review point is the cheapest in the loop — a trainer reads the
 document in thirty seconds and sees the missing behaviour before any code exists.
+
+**§0a — repo case or workshop case: read it off the Source line.** The document's
+**Source** field already names the file: the Atelier file itself (key
+`QMnDD8uZQPldPrlCwZZ58T`) is the **repo case**; a duplicate in someone's own drafts is the
+**workshop case**, no matter who is building it — that node will never reach
+`tools/figma/snapshot.json`, which only ever indexes the Atelier file. This is not a new
+question to ask; `references/handoff-document.md`'s two Source examples already show
+both, and its worked example (Toast) is the workshop case throughout. The branch changes
+exactly two later steps — step 3 (where the spec goes) and step 7 (whether to close with
+`parity:record`) — and nothing else: inspection, canon, docs, generation and gates run
+identically in both cases, because both are real code in this repo, checked by the same
+gates. Get the branch wrong in the workshop direction and three gates that are expected
+red for any single-framework addition (`check:sync`, `check:a11y-parity`,
+`check:design-status`) become six, because the shared master now also runs `check:spec`,
+`check:variants` (`[UNMAPPED]`) and `check:metadata` (`[MISSING-REGISTRY]`) against a
+component that has no place in the roster those gates describe.
 
 #### 1. Inspect the master
 
@@ -103,15 +122,26 @@ a strong prior, not scripture.
 
 #### 3. Settle the contract
 
-Read the component's block in `libs/spec/src/index.ts` (and `metadata/`,
-`tokens.manifest.ts`, `behaviors.json`). The spec is the ground truth all three adapters
-and the hosted Storybook manifests are drift-gated against, so any binding the docs leave
-ambiguous is settled here, not in the adapter. For a new component, add the spec block
-first, then run the generator from `tools/generators/`: `atl-component
---framework=angular|react` for Angular or React, `atl-component-vue` for Vue (see
-`tools/generators/generators.json`). Variant property names and values must equal the
-Figma axis names and values verbatim — `variant=primary`, not `Type=Primary` — because
-`check:figma` compares them as strings.
+**Repo case** (§0a — Source is the Atelier file). Read the component's block in
+`libs/spec/src/index.ts` (and `metadata/`, `tokens.manifest.ts`, `behaviors.json`). The
+spec is the ground truth all three adapters and the hosted Storybook manifests are
+drift-gated against, so any binding the docs leave ambiguous is settled here, not in the
+adapter. For a new component, add the spec block first, then run the generator from
+`tools/generators/`: `atl-component --framework=angular|react` for Angular or React,
+`atl-component-vue` for Vue (see `tools/generators/generators.json`). Variant property
+names and values must equal the Figma axis names and values verbatim —
+`variant=primary`, not `Type=Primary` — because `check:figma` compares them as strings.
+
+**Workshop case** (§0a — Source is a duplicate). The generator step is identical — it
+scaffolds boilerplate and never reads `libs/spec` — but the interfaces themselves go in
+their own file beside the generated component, never a block in the shared
+`libs/spec/src/index.ts`: e.g. `libs/angular/src/lib/tagchip/atl-tagchip.contract.ts`.
+`check:variants` and `check:metadata` read the shared `UNION_TO_COMPONENT` and
+`COMPONENT_METADATA_REGISTRY` registries, both keyed off `libs/spec/src/index.ts` — a
+name added there without a matching Atelier master fails `[UNMAPPED]` /
+`[MISSING-REGISTRY]`, on top of the three gates (`check:sync`, `check:a11y-parity`,
+`check:design-status`) any single-framework addition already trips. Same
+verbatim-against-the-Figma-axis rule for variant names and values.
 
 #### 4. Read the framework's own docs
 
@@ -161,8 +191,10 @@ discrepancy and decide: fix the code, fix the master (an architect Build/Migrate
 record it as intentional. **Record it durably** — in the handoff document (Build), in
 `FIGMA_CONFORMANCE_EXCEPTIONS` with a reason when it is a standing exception, or as an
 open decision item in `tasks/todo.md` naming the component and the value. A commit
-message or a chat reply is not a record. Then, and only when every discrepancy is fixed or
-durably recorded:
+message or a chat reply is not a record. This much is identical in both cases (§0a). Then,
+once every discrepancy is fixed or durably recorded, the two cases end differently:
+
+**Repo case** (Source is the Atelier file):
 
 ```
 npm run parity:record -- --component <AtlName> [--node <id>]
@@ -172,7 +204,19 @@ The score is deliberately not stored (ADR-0024); the record's hash lets `check:p
 flag the component when its inputs change later. The hash covers all three frameworks'
 inputs and the record stores no framework, state list or declared sections — so the
 report, not the record, says which framework, which states and which sections were
-compared. In a scaffolded workspace, stop at the parity report.
+compared.
+
+**Workshop case** (Source is a duplicate): stop here — **no `parity:record`**. The node
+lives only in the participant's duplicate; `tools/figma/snapshot.json` indexes the
+Atelier file, so `check:parity`'s hash would have nothing of the repo's to watch, and a
+record written against a component absent from the roster is worse than none — the same
+reasoning ADR-0024 gives for a moved node applies here to a node that was never in the
+file the gate reads. The ad-hoc `figma_check_design_parity` call above — run, read,
+decided and reported — is the closing check; `schulung.astro`'s Erfolgs-Verifizierung
+already draws this exact line between the MCP call and the repo gate.
+
+In a scaffolded workspace (outside the monorepo, no gates at all), stop at the parity
+report regardless of case.
 
 Optional last check: `uianatomy:validate_implementation` with the component source. Treat
 `missing` entries as a checklist — substring search has false negatives.
@@ -232,9 +276,12 @@ human can answer.
 ## Examples
 
 **"Implement TagChip in React from my handoff doc"** → Build. Read the document, confirm the
-node id resolves and the composition claim (tag-input slots + badge), spec block, generator,
-React docs for `AtlBadge`, component + story + test, gates, parity with the declared
-sections, `parity:record`, report.
+node id resolves and the composition claim (tag-input slots + badge). If the document's
+Source names a duplicate (this is the workshop `tagchip.md` brief in its usual shape) —
+own `atl-tagchip.contract.ts`, `libs/spec/src/index.ts` untouched, generator, React docs
+for `AtlBadge`, component + story + test, gates, parity with the declared sections,
+**no `parity:record`**. If Source instead names the Atelier file, the same steps run with
+the spec block added to `libs/spec/src/index.ts` and the run closing on `parity:record`.
 
 **"Build this in Vue: figma.com/design/QMnDD8uZQPldPrlCwZZ58T/...?node-id=55-141"** → Build,
 stops early. No handoff document. Inspect node `55:141` (AtlBreadcrumbs), fill the
@@ -252,6 +299,11 @@ with the `wcag-color-only` false positive named up front.
 
 ## Common edge cases
 
+- **The handoff document's Source names a duplicate, not the Atelier file.** That is the
+  workshop case (§0a, step 3, step 7) — own spec file, no `parity:record` — regardless of
+  who is building it or whether it might one day become a real Atelier component.
+  Promoting it later is a fresh Build against the real master and its own node, not
+  editing this run's files or records in place.
 - **Master and spec disagree on an axis value.** Do not pick a side silently. The spec is
   the contract; the master is what `check:figma` reads. Report the mismatch and let the
   owner choose — usually the fix is a rename on the Figma side (architect, Migrate).
