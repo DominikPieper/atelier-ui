@@ -184,8 +184,34 @@ Ranked; each carries why it's worth doing next rather than later.
     `rootPaint`), interaction-state stories, child masters. Codex named the probe gap:
     AtlChat's snapshot root is a 1080×720 mockup, the comparable layers are per-variant
     (`drawer-panel`, `popup-bg`, `chat-card`) — `probes` must name Figma layers, not labels.
-  - [ ] S4 scaffold · S5 skill + curriculum (+ the contract docs block and the story-meta
-    import) · S6 monorepo retirements — as ADR-0121 Decision 6.
+  - [x] **S4 — the scaffold ships the loop — done 2026-09-10** (ADR-0121 "S4 done"
+    paragraph; ADR-0123 corrected: addon-vitest ships after all, owner decision).
+    Per scaffold: `<app>/src/contracts/` (types, README, AtlButton example),
+    `tools/scripts/{check-contracts, lib/ts-eval, figma-snapshot-contracts}` as synced
+    copies, a projected AtlButton snapshot (`check:scaffold-snapshot`), `contracts.config.json`,
+    `check:contracts` / `check:stories` / `figma:snapshot`, per-app `vitest.config.ts` +
+    `vitest.setup.ts`, `a11y.test: 'error'`, `storybook-test` target; Chromium via
+    `npx playwright install chromium` (preflight warns). React e2e green in 176 s through
+    verdaccio incl. `check:contracts` and `check:stories`; `nx test create-workspace` 78.
+  - [ ] **S4 follow-ups** (facts the proof surfaced, not smoothed over):
+    - [ ] `check:contracts` is **vacuously green on the scaffold's example**: `AtlButton`
+      is imported from `@atelier-ui/<fw>` in `node_modules`, where local docgen cannot
+      follow a bare specifier → no component, only `[NO-STORY-META]`. Real work happens on
+      the attendee's own components. Give the check a `--manifest <components.json|url>`
+      input so library components are compared through the hosted Storybook manifest
+      (ADR-0097) — then the example proves something. CLAUDE.md says so today.
+    - [ ] Angular and Vue scaffolds not run through a real install (one framework per e2e
+      run, ADR-0123 precedent); their `vitest.config.ts`/`main.ts` templates are verified
+      by build, lint and unit test only. Run `E2E_FRAMEWORKS=angular` and `vue` once.
+    - [ ] `figma-snapshot-contracts.mjs` verified in `--dry-run` only — the connect path
+      needs the Desktop Bridge. First Bridge session: run it against the Atelier file and
+      diff its AtlButton entry with `tools/figma/snapshot.json`'s.
+    - [ ] The scaffold's `figma:snapshot` script carries a `<YOUR_FIGMA_FILE_KEY>`
+      placeholder because the preset has only a boolean `figmaMcp` option. Consider a
+      `figmaFile` option so the workshop duplicate's key lands at scaffold time.
+  - [ ] S5 skill + curriculum (design-to-code step 3 → contract file + stories; the
+    contract docs block and the story-meta import; `schulung.astro` wording) · S6 monorepo
+    retirements — as ADR-0121 Decision 6.
   - [ ] Background for the decision — `tasks/spec-rethink-2026-09-10.md`: the greenfield
     pass the owner asked for. Inventories what a machine can test
     without massive effort (26 rows; 19 need no authored artefact), what figma-console-mcp
