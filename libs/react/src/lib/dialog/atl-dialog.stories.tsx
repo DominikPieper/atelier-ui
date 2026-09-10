@@ -62,9 +62,17 @@ export const SmallSize: Story = {
   parameters: { design: figmaNode('73-334') },
 };
 
+export const SizeMd: Story = {
+  render: () => <DialogDemo size="md" />,
+};
+
 export const LargeSize: Story = {
   render: () => <DialogDemo size="lg" />,
   parameters: { design: figmaNode('73-347') },
+};
+
+export const SizeXl: Story = {
+  render: () => <DialogDemo size="xl" />,
 };
 
 export const FullSize: Story = {

@@ -44,6 +44,27 @@ export const Default: Story = {
   parameters: { design: figmaNode('55-128') },
 };
 
+export const VariantDefault: Story = {
+  render: () => (
+    <AtlMenuTrigger
+      menu={
+        <AtlMenu variant="default">
+          <AtlMenuItem onTriggered={() => alert('Copy')}>Copy</AtlMenuItem>
+          <AtlMenuItem onTriggered={() => alert('Paste')}>Paste</AtlMenuItem>
+          <AtlMenuSeparator />
+          <AtlMenuItem disabled>Delete</AtlMenuItem>
+        </AtlMenu>
+      }
+    >
+      {({ onClick, ref }) => (
+        <AtlButton ref={ref as React.RefObject<HTMLButtonElement>} onClick={onClick}>
+          Actions
+        </AtlButton>
+      )}
+    </AtlMenuTrigger>
+  ),
+};
+
 export const Compact: Story = {
   render: () => (
     <AtlMenuTrigger

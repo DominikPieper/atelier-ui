@@ -77,6 +77,24 @@ export const NoPadding: Story = {
   parameters: { design: figmaNode('55-53') },
 };
 
+export const PaddingSm: Story = {
+  render: (args) => (
+    <AtlCard {...args} padding="sm">
+      <AtlCardHeader>Small Padding Card</AtlCardHeader>
+      <AtlCardContent>Content with small padding.</AtlCardContent>
+    </AtlCard>
+  ),
+};
+
+export const PaddingLg: Story = {
+  render: (args) => (
+    <AtlCard {...args} padding="lg">
+      <AtlCardHeader>Large Padding Card</AtlCardHeader>
+      <AtlCardContent>Content with large padding.</AtlCardContent>
+    </AtlCard>
+  ),
+};
+
 export const AllVariants: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>

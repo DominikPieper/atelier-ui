@@ -96,6 +96,38 @@ export const WithOptionalStep: Story = {
   parameters: { design: figmaNode('421-465') },
 };
 
+export const OrientationHorizontal: Story = {
+  render: () => ({
+    components: { AtlStepper, AtlStep, AtlButton },
+    setup() {
+      const step = ref(0);
+      return { step };
+    },
+    template: `
+      <AtlStepper orientation="horizontal" v-model:activeStep="step">
+        <AtlStep label="Account" description="Basic info">
+          <p>Fill in your account details.</p>
+          <AtlButton variant="primary" size="sm" style="margin-top:8px" @click="step++">Next</AtlButton>
+        </AtlStep>
+        <AtlStep label="Profile">
+          <p>Set up your profile.</p>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <AtlButton variant="outline" size="sm" @click="step--">Back</AtlButton>
+            <AtlButton variant="primary" size="sm" @click="step++">Next</AtlButton>
+          </div>
+        </AtlStep>
+        <AtlStep label="Review">
+          <p>Review and confirm.</p>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <AtlButton variant="outline" size="sm" @click="step--">Back</AtlButton>
+            <AtlButton variant="primary" size="sm">Submit</AtlButton>
+          </div>
+        </AtlStep>
+      </AtlStepper>
+    `,
+  }),
+};
+
 export const Vertical: Story = {
   render: () => ({
     components: { AtlStepper, AtlStep, AtlButton },

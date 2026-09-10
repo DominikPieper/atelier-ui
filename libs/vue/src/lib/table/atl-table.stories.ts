@@ -107,6 +107,48 @@ export const Bordered: Story = {
   }),
 };
 
+export const SizeSm: Story = {
+  render: () => ({
+    components: { AtlTable, AtlThead, AtlTbody, AtlTr, AtlTh, AtlTd },
+    setup() { return { data: sampleData }; },
+    template: `
+      <AtlTable size="sm">
+        <AtlThead>
+          <AtlTr><AtlTh>Name</AtlTh><AtlTh>Role</AtlTh><AtlTh>Status</AtlTh></AtlTr>
+        </AtlThead>
+        <AtlTbody>
+          <AtlTr v-for="row in data" :key="row.name">
+            <AtlTd>{{ row.name }}</AtlTd>
+            <AtlTd>{{ row.role }}</AtlTd>
+            <AtlTd>{{ row.status }}</AtlTd>
+          </AtlTr>
+        </AtlTbody>
+      </AtlTable>
+    `,
+  }),
+};
+
+export const SizeLg: Story = {
+  render: () => ({
+    components: { AtlTable, AtlThead, AtlTbody, AtlTr, AtlTh, AtlTd },
+    setup() { return { data: sampleData }; },
+    template: `
+      <AtlTable size="lg">
+        <AtlThead>
+          <AtlTr><AtlTh>Name</AtlTh><AtlTh>Role</AtlTh><AtlTh>Status</AtlTh></AtlTr>
+        </AtlThead>
+        <AtlTbody>
+          <AtlTr v-for="row in data" :key="row.name">
+            <AtlTd>{{ row.name }}</AtlTd>
+            <AtlTd>{{ row.role }}</AtlTd>
+            <AtlTd>{{ row.status }}</AtlTd>
+          </AtlTr>
+        </AtlTbody>
+      </AtlTable>
+    `,
+  }),
+};
+
 export const Sortable: Story = {
   parameters: { design: figmaNode('421-884') },
   render: () => ({

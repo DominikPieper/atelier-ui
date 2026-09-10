@@ -165,6 +165,78 @@ export const SizeVariants: Story = {
   }),
 };
 
+export const SizeLg: Story = {
+  args: { size: 'lg' },
+  render: (args) => ({
+    components: { AtlDialog, AtlDialogHeader, AtlDialogContent, AtlDialogFooter, AtlButton },
+    setup() {
+      const isOpen = ref(false);
+      return { args, isOpen };
+    },
+    template: `
+      <div>
+        <AtlButton variant="primary" @click="isOpen = true">Open Dialog</AtlButton>
+        <AtlDialog v-bind="args" v-model:open="isOpen">
+          <AtlDialogHeader>Large Dialog</AtlDialogHeader>
+          <AtlDialogContent><p>This is a large dialog.</p></AtlDialogContent>
+          <AtlDialogFooter>
+            <AtlButton variant="outline" @click="isOpen = false">Cancel</AtlButton>
+            <AtlButton variant="primary" @click="isOpen = false">Confirm</AtlButton>
+          </AtlDialogFooter>
+        </AtlDialog>
+      </div>
+    `,
+  }),
+};
+
+export const SizeXl: Story = {
+  args: { size: 'xl' },
+  render: (args) => ({
+    components: { AtlDialog, AtlDialogHeader, AtlDialogContent, AtlDialogFooter, AtlButton },
+    setup() {
+      const isOpen = ref(false);
+      return { args, isOpen };
+    },
+    template: `
+      <div>
+        <AtlButton variant="primary" @click="isOpen = true">Open Dialog</AtlButton>
+        <AtlDialog v-bind="args" v-model:open="isOpen">
+          <AtlDialogHeader>Extra Large Dialog</AtlDialogHeader>
+          <AtlDialogContent><p>This is an extra large dialog.</p></AtlDialogContent>
+          <AtlDialogFooter>
+            <AtlButton variant="outline" @click="isOpen = false">Cancel</AtlButton>
+            <AtlButton variant="primary" @click="isOpen = false">Confirm</AtlButton>
+          </AtlDialogFooter>
+        </AtlDialog>
+      </div>
+    `,
+  }),
+};
+
+export const SizeFull: Story = {
+  args: { size: 'full' },
+  render: (args) => ({
+    components: { AtlDialog, AtlDialogHeader, AtlDialogContent, AtlDialogFooter, AtlButton },
+    setup() {
+      const isOpen = ref(false);
+      return { args, isOpen };
+    },
+    template: `
+      <div>
+        <AtlButton variant="primary" @click="isOpen = true">Open Dialog</AtlButton>
+        <AtlDialog v-bind="args" v-model:open="isOpen">
+          <AtlDialogHeader>Full-Size Dialog</AtlDialogHeader>
+          <AtlDialogContent><p>This is a full-size dialog.</p></AtlDialogContent>
+          <AtlDialogFooter>
+            <AtlButton variant="outline" @click="isOpen = false">Cancel</AtlButton>
+            <AtlButton variant="primary" @click="isOpen = false">Confirm</AtlButton>
+          </AtlDialogFooter>
+        </AtlDialog>
+      </div>
+    `,
+  }),
+};
+
 export const WithForm: Story = {
   render: (args) => ({
     components: { AtlDialog, AtlDialogHeader, AtlDialogContent, AtlDialogFooter, AtlButton, AtlInput },

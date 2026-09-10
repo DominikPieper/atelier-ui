@@ -95,6 +95,10 @@ export const Vertical: Story = {
   parameters: { design: figmaNode('421-485') },
 };
 
+export const OrientationHorizontal: Story = {
+  render: () => <NavigableStepper orientation="horizontal" />,
+};
+
 function StepWithHook({ label, children }: { label: string; children: React.ReactNode }) {
   const { next, prev } = useAtlStepper();
   return (

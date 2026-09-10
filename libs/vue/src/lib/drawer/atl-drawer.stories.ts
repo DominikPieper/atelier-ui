@@ -166,6 +166,54 @@ export const SizeVariants: Story = {
   parameters: { design: figmaNode('421-398') },
 };
 
+export const SizeLg: Story = {
+  args: { size: 'lg' },
+  render: (args) => ({
+    components: { AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter, AtlButton },
+    setup() {
+      const isOpen = ref(false);
+      return { args, isOpen };
+    },
+    template: `
+      <div>
+        <AtlButton variant="primary" @click="isOpen = true">Open Large Drawer</AtlButton>
+        <AtlDrawer v-bind="args" v-model:open="isOpen">
+          <AtlDrawerHeader>Large Drawer</AtlDrawerHeader>
+          <AtlDrawerContent><p>This is a large drawer.</p></AtlDrawerContent>
+          <AtlDrawerFooter>
+            <AtlButton variant="outline" @click="isOpen = false">Cancel</AtlButton>
+            <AtlButton variant="primary" @click="isOpen = false">Save</AtlButton>
+          </AtlDrawerFooter>
+        </AtlDrawer>
+      </div>
+    `,
+  }),
+};
+
+export const SizeFull: Story = {
+  args: { size: 'full' },
+  render: (args) => ({
+    components: { AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter, AtlButton },
+    setup() {
+      const isOpen = ref(false);
+      return { args, isOpen };
+    },
+    template: `
+      <div>
+        <AtlButton variant="primary" @click="isOpen = true">Open Full-Size Drawer</AtlButton>
+        <AtlDrawer v-bind="args" v-model:open="isOpen">
+          <AtlDrawerHeader>Full-Size Drawer</AtlDrawerHeader>
+          <AtlDrawerContent><p>This is a full-size drawer.</p></AtlDrawerContent>
+          <AtlDrawerFooter>
+            <AtlButton variant="outline" @click="isOpen = false">Cancel</AtlButton>
+            <AtlButton variant="primary" @click="isOpen = false">Save</AtlButton>
+          </AtlDrawerFooter>
+        </AtlDrawer>
+      </div>
+    `,
+  }),
+};
+
 export const WithForm: Story = {
   render: (args) => ({
     components: { AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter, AtlButton, AtlInput },

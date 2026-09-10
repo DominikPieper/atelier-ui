@@ -137,6 +137,38 @@ export const Bordered: Story = {
 };
 
 // ---------------------------------------------------------------------------
+// Size Lg
+// ---------------------------------------------------------------------------
+export const SizeLg: Story = {
+  render: () => ({
+    moduleMetadata: { imports: TABLE_IMPORTS },
+    template: `
+      <atl-table size="lg">
+        <atl-thead>
+          <atl-tr>
+            <atl-th>Name</atl-th>
+            <atl-th>Role</atl-th>
+            <atl-th>Email</atl-th>
+          </atl-tr>
+        </atl-thead>
+        <atl-tbody>
+          <atl-tr>
+            <atl-td>Alice Müller</atl-td>
+            <atl-td>Engineer</atl-td>
+            <atl-td>alice@example.com</atl-td>
+          </atl-tr>
+          <atl-tr>
+            <atl-td>Bob Schmidt</atl-td>
+            <atl-td>Designer</atl-td>
+            <atl-td>bob@example.com</atl-td>
+          </atl-tr>
+        </atl-tbody>
+      </atl-table>
+    `,
+  }),
+};
+
+// ---------------------------------------------------------------------------
 // Sortable
 // ---------------------------------------------------------------------------
 export const Sortable: Story = {

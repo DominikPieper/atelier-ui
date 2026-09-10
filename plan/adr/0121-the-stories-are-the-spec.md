@@ -190,3 +190,56 @@ Vue 3.5 s / 93 ms, React 0.56 s / 40 ms via `react-docgen` directly — with out
 to the built shards, and story `args` resolve statically through `storybook/internal/csf-tools`
 in about 85 ms per file. The fallback branch in Decision 6 (`storybook build --test`, local
 `docs-show`) is not needed. Record: `tasks/docgen-spike-2026-09-10.md`.
+
+**Refined 2026-09-10 (S2 and S3, stage 1).** Building the contract layer and the check
+against the real data sharpened Decision 3 and 4 in seven places; an independent Codex
+review of the schema and eight contracts found five of them. Recorded here so the
+Decision text stays what was decided and this paragraph says what the data taught.
+
+1. **The code → Figma direction checks enum props only.** A string-literal-union prop
+   with no Figma axis needs a `codeOnly` entry; booleans, strings, numbers, callbacks and
+   events never do. Without this domain rule every contract would re-enumerate the prop
+   list — the regrowth Decision 3 forbids. `types.ts` states it.
+2. **The `state` axis is not ignored wholesale.** Only its interaction values (`default`,
+   `hover`, `focus`, `focus-visible`, `active`, `pressed`) are pseudo-classes by
+   convention (ADR-0114). Its data values — `filled`, `invalid`, `open`, `selected`,
+   `completed`, `error`, `optional`, `filtered`, measured on nine masters — must map
+   through `axisMap` (`state=invalid` → `invalid`) or be excused as `figmaOnly`
+   `state=<value>`. Known imprecision: `active` is the pressed pseudo-class on AtlButton
+   and the selected item on AtlTab, AtlStep, AtlOption; stage 1 skips both.
+3. **`axisMap` reaches child components and `null`.** `codeProp` may be dotted
+   (`AtlStep.completed` for AtlStepper's `state` axis; `AtlToastContainer.position`),
+   several entries may share one `figmaAxis`, and `values` may map to `null`
+   (AtlTh `sortDirection`: `none → null`). Without `values` the mapping is identity and
+   the value sets must be equal verbatim.
+4. **An exemption for something that no longer exists is an error**; one whose name the
+   master's description does not mention is a warning (`[UNMIRRORED]`); one whose reason
+   says `UNEXPLAINED` is a warning that nags every run — the ADR-0093 shape, kept against
+   the review's preference for rejecting sentinels, because visible debt beats a red gate
+   nobody can clear.
+5. **Coverage reads what a story actually renders**, not only its `args`: literal prop
+   assignments in JSX, Angular templates and Vue templates, `.map` over a literal array,
+   the object-literal idiom of imperative APIs (AtlToast's `show(msg, { variant })`), and
+   a `render` that forwards `args` is a claim of the meta's args, not a demo. The
+   manifest default counts as covered when a story omits the prop. Pure demos
+   (`AllVariants`, `Playground`) count for nothing.
+6. **Child masters are visible, not compared.** AtlTh, AtlStep, AtlOption and thirteen
+   more have no story meta of their own; the check lists them as `[NO-STORY-META]` and
+   defers their shape and coverage to stage 2, which needs nested-arg evidence.
+   Components with no master at all (AtlIcon, whose glyphs live on a page the snapshot
+   does not index) are `[NO-MASTER]`, not errors.
+7. **A `codeOnly` prop present in one framework only is a cross-framework fact**
+   (`[FW-ONLY]` warning; AtlButton `type` in Vue only, AtlRadioGroup `orientation` in
+   React only), owned by `check:props`, not a stale exemption.
+
+Stage 1 is offline and takes about four seconds per framework; it emits the parity
+tool's `componentAPI`, `metadata` and `tokens.usedTokens` sections per component. One
+deviation from Decision 3, deliberate: the contracts are **not yet imported by the story
+metas**. The check reads them by selector, and an import with no consumer would be dead
+weight in 87 files; the import lands with the Storybook docs block that displays the
+block (S5), which is its first consumer. Closing the roster's coverage gaps under rule 5
+took 26 new stories (Angular 5, React 10, Vue 11), all rendered and axe-clean. Stage 2
+— rendered paint against the snapshot's per-variant root paint, interaction states,
+children — is not built. What the review found that this stage does not answer: the
+snapshot carries no Figma defaults and no child node ids, so defaults stay
+`check:defaults`' job and story design links stay unverified.

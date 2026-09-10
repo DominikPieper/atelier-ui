@@ -126,6 +126,64 @@ export const Bordered: Story = {
 };
 
 // ---------------------------------------------------------------------------
+// Size Sm
+// ---------------------------------------------------------------------------
+export const SizeSm: Story = {
+  render: () => (
+    <AtlTable size="sm">
+      <AtlThead>
+        <AtlTr>
+          <AtlTh>Name</AtlTh>
+          <AtlTh>Role</AtlTh>
+          <AtlTh>Email</AtlTh>
+        </AtlTr>
+      </AtlThead>
+      <AtlTbody>
+        <AtlTr>
+          <AtlTd>Alice Müller</AtlTd>
+          <AtlTd>Engineer</AtlTd>
+          <AtlTd>alice@example.com</AtlTd>
+        </AtlTr>
+        <AtlTr>
+          <AtlTd>Bob Schmidt</AtlTd>
+          <AtlTd>Designer</AtlTd>
+          <AtlTd>bob@example.com</AtlTd>
+        </AtlTr>
+      </AtlTbody>
+    </AtlTable>
+  ),
+};
+
+// ---------------------------------------------------------------------------
+// Size Lg
+// ---------------------------------------------------------------------------
+export const SizeLg: Story = {
+  render: () => (
+    <AtlTable size="lg">
+      <AtlThead>
+        <AtlTr>
+          <AtlTh>Name</AtlTh>
+          <AtlTh>Role</AtlTh>
+          <AtlTh>Email</AtlTh>
+        </AtlTr>
+      </AtlThead>
+      <AtlTbody>
+        <AtlTr>
+          <AtlTd>Alice Müller</AtlTd>
+          <AtlTd>Engineer</AtlTd>
+          <AtlTd>alice@example.com</AtlTd>
+        </AtlTr>
+        <AtlTr>
+          <AtlTd>Bob Schmidt</AtlTd>
+          <AtlTd>Designer</AtlTd>
+          <AtlTd>bob@example.com</AtlTd>
+        </AtlTr>
+      </AtlTbody>
+    </AtlTable>
+  ),
+};
+
+// ---------------------------------------------------------------------------
 // Sortable
 // ---------------------------------------------------------------------------
 function SortableStory() {

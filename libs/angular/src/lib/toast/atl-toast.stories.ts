@@ -164,6 +164,38 @@ export const AllVariants: Story = {
   }),
 };
 
+export const Success: Story = {
+  render: () => ({
+    props: {},
+    template: `<toast-story-wrapper [variant]="'success'" />`,
+    moduleMetadata: { imports: [ToastStoryWrapper] },
+  }),
+};
+
+export const Warning: Story = {
+  render: () => ({
+    props: {},
+    template: `<toast-story-wrapper [variant]="'warning'" />`,
+    moduleMetadata: { imports: [ToastStoryWrapper] },
+  }),
+};
+
+export const Danger: Story = {
+  render: () => ({
+    props: {},
+    template: `<toast-story-wrapper [variant]="'danger'" />`,
+    moduleMetadata: { imports: [ToastStoryWrapper] },
+  }),
+};
+
+export const Info: Story = {
+  render: () => ({
+    props: {},
+    template: `<toast-story-wrapper [variant]="'info'" />`,
+    moduleMetadata: { imports: [ToastStoryWrapper] },
+  }),
+};
+
 export const AutoDismiss: Story = {
   render: () => ({
     props: {},

@@ -47,6 +47,45 @@ export const Default: Story = {
   parameters: { design: figmaNode('507-6305') },
 };
 
+export const SizeXs: Story = {
+  render: () => ({
+    components: { AtlAvatarGroup, AtlAvatar },
+    template: `
+      <AtlAvatarGroup :max="3" size="xs">
+        <AtlAvatar name="Alice Smith" size="xs" />
+        <AtlAvatar name="Bob Jones" size="xs" />
+        <AtlAvatar name="Carol Davis" size="xs" />
+      </AtlAvatarGroup>
+    `,
+  }),
+};
+
+export const SizeSm: Story = {
+  render: () => ({
+    components: { AtlAvatarGroup, AtlAvatar },
+    template: `
+      <AtlAvatarGroup :max="3" size="sm">
+        <AtlAvatar name="Alice Smith" size="sm" />
+        <AtlAvatar name="Bob Jones" size="sm" />
+        <AtlAvatar name="Carol Davis" size="sm" />
+      </AtlAvatarGroup>
+    `,
+  }),
+};
+
+export const SizeXl: Story = {
+  render: () => ({
+    components: { AtlAvatarGroup, AtlAvatar },
+    template: `
+      <AtlAvatarGroup :max="3" size="xl">
+        <AtlAvatar name="Alice Smith" size="xl" />
+        <AtlAvatar name="Bob Jones" size="xl" />
+        <AtlAvatar name="Carol Davis" size="xl" />
+      </AtlAvatarGroup>
+    `,
+  }),
+};
+
 export const AllVariants: Story = {
   render: () => ({
     components: { AtlAvatarGroup, AtlAvatar },

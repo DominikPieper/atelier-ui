@@ -97,6 +97,16 @@ export const LargeSize: Story = {
   parameters: { design: figmaNode('421-342') },
 };
 
+export const SizeMd: Story = {
+  render: () => <DrawerDemo size="md" label="Open Medium Drawer" />,
+  parameters: { design: figmaNode('421-342') },
+};
+
+export const SizeFull: Story = {
+  render: () => <DrawerDemo size="full" label="Open Full Drawer" />,
+  parameters: { design: figmaNode('421-342') },
+};
+
 export const NoBackdropClose: Story = {
   render: () => (
     <DrawerDemo closeOnBackdrop={false} label="Open (no backdrop close)" />
