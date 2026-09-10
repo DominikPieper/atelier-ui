@@ -115,3 +115,16 @@ the reuse-vs-new decision stay author-written blanks** the skill must not fill a
 not proceed without. The deliverable is unchanged — a checklist, not a schema, reviewed
 by a trainer before code — and "no gate can read a participant's prose" still stands.
 The skill is pending; until it lands, this paragraph records the intent.
+
+**Corrected 2026-09-10.** The Decision's "deliverable" framing is narrowed, not reversed.
+ADR-0121 (`plan/adr/0121-the-stories-are-the-spec.md`) makes the stories the component's
+spec: behaviour is a `play` assertion or a test whose title names it, and exclusions and
+intentional Figma ↔ code mismatches are entries in a micro-contract block on the story
+meta. The handoff document remains exactly what this record argued for — a checklist the
+author fills in their own words before code exists, reviewed by a trainer — but it is now
+the **thinking step whose lines have machine-checked destinations**, not a durable
+artefact: each behaviour line is meant to become a `play` or test title, each exclusion a
+block entry, and the closing check reads those, not the document. "Nothing enforces it"
+in the Consequences therefore changes meaning: the document itself is still ungated, and
+that is fine, because what it produces is gated. The rejection of a machine-readable
+*format for the document* stands.

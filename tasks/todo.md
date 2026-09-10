@@ -76,8 +76,32 @@ Ranked; each carries why it's worth doing next rather than later.
     `check:docs-layout`, `check:llms` exit 0. The scaffold half of A (contract example,
     handoff template) is **not** done here — its shape is the workflow decision, so it
     moved to S2/S4 of the plan.
-  - [ ] **Decide the target shape** — `tasks/spec-rethink-2026-09-10.md` (same day,
-    later): the greenfield pass the owner asked for. Inventories what a machine can test
+  - [x] **Target shape decided 2026-09-10 — S, "the stories are the spec" — ADR-0121.**
+    Owner answers to the rethink's § 5: S as target (T stays the additive fallback); the
+    micro-contract block is **hoisted** to one file per component under
+    `libs/spec/src/contracts/`, imported by the three story metas via the
+    `@atelier-ui/spec/...` alias the stories already use for `metadata.purpose`, and sits
+    beside the component in a one-framework repo; the snapshot generator is pinned to the
+    `.mcp.json` version (see below); `index.ts` retires **after** the three-manifest diff
+    is green on the whole roster (S6), each retirement with its own ADR and the matching
+    correction on ADR-0006/0010/0011. ADR-0096 corrected the same day (handoff document =
+    thinking step whose lines have machine-checked destinations).
+  - [ ] **S0 — switch the instruments on** (next; no spec decision depends on it): find
+    why the browser-mode suite fails under `CI=1` (`.github/workflows/ci.yml:122-135`),
+    wire `nx run-many -t storybook-test` into CI, add Angular's missing `storybook-test`
+    target and `addon-a11y` preview/vitest wiring, set `parameters.a11y.test: 'error'` in
+    all three previews. Done when every story is a render + axe test in CI and a
+    deliberately broken `play` assertion turns the job red.
+  - [ ] **S1 — standalone docgen spike** (the feasibility gate for S3): print `AtlButton`'s
+    inputs with defaults and JSDoc for Angular (`angular-component-meta`) and Vue
+    (`vue-component-meta`) without `storybook build`, in under five seconds. If it fails:
+    `storybook build --test` or the local `docs-show`, and re-read the complexity budget in
+    `tasks/spec-workflow-plan-2026-09-10.md` § 4.
+  - [ ] S2 conventions (JSDoc tags, story-per-state rule, the block's schema) · S3 the
+    joining check with three negative tests · S4 scaffold · S5 skill + curriculum · S6
+    monorepo retirements — as ADR-0121 Decision 6.
+  - [ ] Background for the decision — `tasks/spec-rethink-2026-09-10.md`: the greenfield
+    pass the owner asked for. Inventories what a machine can test
     without massive effort (26 rows; 19 need no authored artefact), what figma-console-mcp
     1.40 and Storybook 10.6 extract and verify, and derives the thinnest spec: **S —
     stories are the spec** (component JSDoc + one story per variant/state with a Figma link
