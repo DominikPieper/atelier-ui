@@ -56,7 +56,7 @@ export const CATEGORY_ICONS: Record<string, string> = {
   Display: 'palette',
   Navigation: 'explore',
   Overlay: 'layers',
-  Layout: 'space_dashboard',
+  Feedback: 'feedback',
   AI: 'smart_toy',
 };
 
@@ -81,7 +81,7 @@ export const COMPONENT_CATEGORIES: Record<string, string[]> = {
   Display: ['badge', 'icon', 'card', 'table', 'avatar', 'skeleton', 'progress', 'code-block'],
   Navigation: ['breadcrumbs', 'tabs', 'stepper', 'pagination', 'menu'],
   Overlay: ['dialog', 'drawer', 'tooltip', 'toast'],
-  Layout: ['accordion', 'alert'],
+  Feedback: ['accordion', 'alert'],
   AI: ['chat'],
 };
 
@@ -1245,7 +1245,7 @@ show('Persistent', { duration: 0 });`,
     name: 'Accordion',
     selector: 'AtlAccordionGroup + AtlAccordionItem',
     description: 'Expandable/collapsible sections. Supports multi-expand mode and smooth CSS grid animations.',
-    category: 'Layout',
+    category: 'Feedback',
     props: [
       { name: 'multi', type: 'boolean', default: 'false', description: 'Allow multiple items expanded simultaneously' },
       { name: 'variant', type: "'default' | 'bordered' | 'separated'", default: "'default'", description: 'Visual style of the group' },
@@ -1313,7 +1313,7 @@ show('Persistent', { duration: 0 });`,
     name: 'Alert',
     selector: 'AtlAlert',
     description: 'Inline status messages for feedback, warnings, and errors. Optionally dismissible.',
-    category: 'Layout',
+    category: 'Feedback',
     props: [
       { name: 'variant', type: "'info' | 'success' | 'warning' | 'danger'", default: "'info'", description: 'Color scheme and icon' },
       { name: 'dismissible', type: 'boolean', default: 'false', description: 'Show a close button' },

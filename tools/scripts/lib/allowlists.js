@@ -108,36 +108,106 @@ const DEFAULT_PROP_EXCEPTIONS = new Set([
 const STORY_DESCRIPTION_SKIP_DIRS = new Set(['toast', 'code-block', 'showcase']);
 
 /**
- * `<repo-relative file path>:<line number>` entries that may cite Storybook's
- * scaffold-only port 6006 inside docs/src/pages/** (check-docs-sync's
- * [PORT-6006]). ADR-0084 makes the cloned atelier monorepo canonical for the
- * two-day cohort — its Storybook binds 4400 (angular) / 4401 (react) / 4402
- * (vue) and the docs app binds 4300 — while 6006 belongs only to the
- * `create-atelier-ui-workspace` scaffold. A page describing the clone that
- * still says 6006 is the exact defect the ADR's 2026-09-05 amendment records.
+ * Builds a content-addressed key for SCAFFOLD_PORT_EXEMPT (ADR-0119): the
+ * repo-relative file path, the trimmed text of the non-blank source line
+ * immediately before a 6006 citation, and the trimmed text of the citing
+ * line itself — not a line number.
  *
- * Keyed by line, not by selector: this allowlist guards prose rather than a
- * component fact, and a reason has to be re-read whenever the line around it
- * moves — the same discipline [STALE-EXEMPTION] applies elsewhere.
+ * Two lines of context, not one, because a single citing line is not always
+ * unique within a file: docs/src/pages/workshop.astro renders the exact same
+ * `Port 6006 ... free` span in two different preflight-mockup panels ("the
+ * successful run" and "the failed run"). What differs between them is the
+ * line just above — port 4200 reads free in one panel and in-use (with a fix
+ * hint) in the other — so that line is what disambiguates.
+ *
+ * Why content instead of `file:line`: a line number shifts on any edit above
+ * it anywhere in the file, including one made by someone else entirely. That
+ * turns an unrelated, purely additive edit into a false [PORT-6006] failure
+ * that names the file holding the (unmoved, still-correct) citation, not the
+ * file whose edit actually moved it — the citation itself never changed. A
+ * content key does not have this failure mode: it keeps matching regardless
+ * of how many lines move above it. It intentionally breaks when the citing
+ * line or its immediate predecessor is itself edited — that is exactly the
+ * case where a human should re-read the exemption, per the same
+ * re-verify-on-change discipline [STALE-EXEMPTION] applies elsewhere.
+ *
+ * @param {string} file repo-relative path, e.g. 'docs/src/pages/workshop.astro'
+ * @param {string} prevLine the non-blank line immediately above the citation
+ * @param {string} line the citing line itself
+ * @returns {string}
  */
-const SCAFFOLD_PORT_EXEMPT = new Map([
+function scaffoldPortKey(file, prevLine, line) {
+  return `${file}\n${prevLine.trim()}\n${line.trim()}`;
+}
+
+/**
+ * Lines that may cite Storybook's scaffold-only port 6006 inside
+ * docs/src/pages/** (check-docs-sync's [PORT-6006]). ADR-0084 makes the
+ * cloned atelier monorepo canonical for the two-day cohort — its Storybook
+ * binds 4400 (angular) / 4401 (react) / 4402 (vue) and the docs app binds
+ * 4300 — while 6006 belongs only to the `create-atelier-ui-workspace`
+ * scaffold. A page describing the clone that still says 6006 is the exact
+ * defect the ADR's 2026-09-05 amendment records.
+ *
+ * Keyed by content via scaffoldPortKey() (ADR-0119), not by line number —
+ * see that function's doc comment for why.
+ */
+const SCAFFOLD_PORT_EXEMPT_ENTRIES = [
   [
-    'docs/src/pages/workshop.astro:219',
+    scaffoldPortKey(
+      'docs/src/pages/workshop.astro',
+      '<span class="pre-ok">✓</span> Port 4200<span class="pre-muted"> — free</span>',
+      '<span class="pre-ok">✓</span> Port 6006<span class="pre-muted"> — free</span>',
+    ),
     "Static preflight terminal mockup for the create-atelier-ui-workspace scaffold — its own Storybook binds 6006, unlike the clone's 4400/4401/4402 (ADR-0084).",
   ],
   [
-    'docs/src/pages/workshop.astro:259',
+    scaffoldPortKey(
+      'docs/src/pages/workshop.astro',
+      '<span class="pre-muted">→</span> Run <span class="pre-cmd">`lsof -ti :4200 | xargs kill`</span> (macOS/Linux)',
+      '<span class="pre-ok">✓</span> Port 6006<span class="pre-muted"> — free</span>',
+    ),
     'Same scaffold preflight mockup, the "failed run" tab (ADR-0084).',
   ],
   [
-    'docs/src/pages/storybook.astro:234',
+    scaffoldPortKey(
+      'docs/src/pages/storybook.astro',
+      'terminal that started it. A scaffolded workspace ships only one framework, and its Storybook',
+      'binds the single port <code>6006</code>.',
+    ),
     "States, by name, that a scaffolded workspace's single Storybook binds 6006 — the sentence exists to contrast it with the clone's 4400/4401/4402 (ADR-0084).",
   ],
   [
-    'docs/src/pages/troubleshooting.astro:145',
+    scaffoldPortKey(
+      'docs/src/pages/troubleshooting.astro',
+      "id: 'port-in-use',",
+      "title: 'Port 4200 / 4300 / 4400–4402 / 6006 already in use',",
+    ),
     "Entry title enumerating every port a participant in EITHER environment might find stuck; 6006 is the scaffold's, named beside the clone's 4200/4300/4400–4402 (ADR-0084).",
   ],
-]);
+];
+
+// A `new Map([...])` literal silently keeps the LAST entry on a duplicate
+// key — two exemptions that happen to compute the same scaffoldPortKey()
+// (identical file, identical two lines of context) would drop the first one
+// with no error, no warning, just one exemption quietly gone. Guard it here
+// so that collision is a loud crash at require-time, not a mysteriously
+// unexempted citation discovered later by a gate run.
+{
+  const seen = new Set();
+  for (const [key] of SCAFFOLD_PORT_EXEMPT_ENTRIES) {
+    if (seen.has(key)) {
+      throw new Error(
+        'SCAFFOLD_PORT_EXEMPT: two entries computed the same scaffoldPortKey() — same file, same ' +
+          'two lines of context. The Map literal would silently keep only the later one. Add more ' +
+          "distinguishing context, or merge the two entries if they're genuinely the same citation.\n" +
+          `Colliding key:\n${key}`
+      );
+    }
+    seen.add(key);
+  }
+}
+const SCAFFOLD_PORT_EXEMPT = new Map(SCAFFOLD_PORT_EXEMPT_ENTRIES);
 
 /**
  * `selector:check:detail` triples that the Figma conformance gate (check-figma)
@@ -707,6 +777,28 @@ const PROP_SURFACE_EXEMPT = new Map([
 ]);
 
 /**
+ * `<component-id>:figma` entries exempt from check-category-alignment.js's
+ * [FIGMA-CATEGORY] — components.ts's category disagreeing with the section its
+ * Figma master sits in.
+ *
+ * Empty by design (2026-09-10, ADR-0120). The eight entries that lived here
+ * (button, input, textarea, checkbox, toggle, radio-group, select, combobox)
+ * carried a real three-way disagreement discovered while building this gate
+ * (2026-09-09): Figma filed Button under its own `Action` Section and the
+ * other seven form controls under `Form`, while docs/src/data/components.ts
+ * and every Storybook `title:` agreed on one flat `Inputs` category. The
+ * owner resolved it the direction ADR-0118's tie-break dictates (two
+ * agreeing sources outrank one): Figma's `Action` and `Form` Sections were
+ * merged into one `Inputs` Section, and all nine masters (AtlButton plus the
+ * eight Form controls, AtlRadio included for consistency) were renamed from
+ * their old `Action/` / `Form/` prefix to `Inputs/`. [FIGMA-CATEGORY] now
+ * agrees for all eight without an exemption; deleting them here — rather
+ * than leaving them unused — is the proof the split is closed, per
+ * [STALE-EXEMPTION] hygiene.
+ */
+const CATEGORY_ALIGNMENT_EXEMPT = new Map([]);
+
+/**
  * `<A>:<B>` ADR-number pairs where B's frontmatter/title claims to revise, correct
  * or supersede A, but no dated correction belongs on A — because A was never
  * actually wrong. (check-adr-refs, [ADR-CORRECTION])
@@ -769,6 +861,133 @@ const UNDISTRIBUTED_SKILLS = {
   },
 };
 
+/**
+ * Builds a content-addressed key for COMPONENT_COUNT_EXEMPT: the repo-relative
+ * file path, the trimmed text of the non-blank source line immediately above
+ * a hand-typed component-count citation, and the trimmed text of the citing
+ * line itself — not a line number. Same idiom as scaffoldPortKey() above
+ * (ADR-0119) and for the same reason: a line number shifts on any edit above
+ * it anywhere in the file, including one made by someone else entirely, and a
+ * content key does not have that failure mode.
+ *
+ * @param {string} file repo-relative path, e.g. 'README.md'
+ * @param {string} prevLine the non-blank line immediately above the citation
+ * @param {string} line the citing line itself
+ * @returns {string}
+ */
+function componentCountKey(file, prevLine, line) {
+  return `${file}\n${prevLine.trim()}\n${line.trim()}`;
+}
+
+/**
+ * Lines in participant-facing material that cite a bare, hand-typed
+ * "<number> component(s)" with no matching COMPONENT_COUNT_EXEMPT entry
+ * (check-component-count's [BARE-COUNT]). Four different numbers — 31, 29,
+ * 28, 8 — were each correct for a different thing (README's directory count
+ * including foundation/showcase, design-status.md's Figma-master count, the
+ * docs catalog's composite-API count, its Inputs category) and nothing said
+ * which was which; this gate and allowlist are the fix (tasks/todo.md,
+ * 2026-09-10).
+ *
+ * Keyed by content via componentCountKey(), not file:line — see that
+ * function's doc comment for why. Every entry here is one of two legitimate
+ * cases, stated in its own reason:
+ *   - a DATED historical record (a past event, not a live claim — must not be
+ *     "corrected" when the current catalog count changes), or
+ *   - a number LABELLED with what it counts and a citation to the live
+ *     source, where the citing file has no build step of its own to derive
+ *     the number instead (verified per-entry, not assumed).
+ * A generated file (one that opens with a "GENERATED by" marker, e.g.
+ * plan/design-status.md) is not in this Map at all — check-component-count.js
+ * skips such files outright rather than allowlisting every line in them; see
+ * its own header comment.
+ */
+const COMPONENT_COUNT_EXEMPT_ENTRIES = [
+  [
+    componentCountKey(
+      'README.md',
+      '## Components',
+      '28 components are catalogued in the docs site — one entry per composite API, per `COMPONENT_CATEGORIES` in [`docs/src/data/components.ts`](docs/src/data/components.ts) — and ship in all three libraries with identical prop names, identical variant unions, and the same `--ui-*` CSS token system.',
+    ),
+    "This task's own fix (2026-09-10): states what it counts (COMPONENT_CATEGORIES in docs/src/data/components.ts, one entry per composite API) and cites the source inline, rather than a bare number. README.md has no build step of its own to derive it live (verified: nothing under tools/scripts/ or package.json references README.md), so a labelled bare number — not a derived one — is the correct, permanent outcome here.",
+  ],
+  [
+    componentCountKey(
+      'docs/src/pages/accessibility.astro',
+      'detail:',
+      "'Median Figma component-a11y score 94 → 100, worst 77 → 92, 22 of 28 component-sets now perfect. Triangulated audit across axe-core (DOM-time), figma_audit_component_accessibility (design-time), and a static spec read (API-time); 8 P-critical findings landed across 4 phases. Headlines: AtlProgress gained a label prop, AtlAccordionItem gained headingLevel, AtlButton gained a discriminated-union aria-label requirement, AtlTable wrapper got tabindex=0 + role=region, --ui-color-text-muted darkened past the protanopia AA threshold, and AtlButton danger picked up a 1px darker border for non-color differentiation.',",
+    ),
+    "Dated historical record: one entry in RECENT_A11Y tagged release: '2026-04-26 audit' — a snapshot of that day's Figma audit score, not a live claim about today's catalog size. Must not be updated when the current component count changes.",
+  ],
+  [
+    componentCountKey(
+      'docs/src/pages/claude-design.astro',
+      'Claude Design turns a prompt into a canvas of artboards. On 2026-08-26 and 27, this',
+      'library’s own 29 components were redesigned through 31 of them over two days, and those',
+    ),
+    'Dated historical record: the 2026-08-26/27 Claude Design exercise — the same event the Proof section below restates with its own date. The 2026-09-10 fix added the date inline to this sentence, making explicit what was already true (this is a record of that exercise, not a live claim about the current catalog size).',
+  ],
+  [
+    componentCountKey(
+      'docs/src/pages/claude-design.astro',
+      'On 2026-08-26 and 27 this library was redesigned <em>through</em> the canvas.',
+      '<strong style="color: var(--ui-color-text)">31 artboards</strong> — 29 component sheets plus',
+    ),
+    'Dated historical record: same 2026-08-26/27 exercise, dated by the sentence immediately above in the same paragraph.',
+  ],
+  [
+    componentCountKey(
+      'docs/src/pages/claude-design.astro',
+      '<strong style="color: var(--ui-color-text)">31 artboards</strong> — 29 component sheets plus',
+      'two studies — covering <strong style="color: var(--ui-color-text)">29 of 29 components</strong>.',
+    ),
+    'Dated historical record: continuation of the same 2026-08-26/27 paragraph as the entry above.',
+  ],
+  [
+    componentCountKey(
+      'skills/atelier-design/references/brand-guide.md',
+      '3. **AI + MCP** — Claude reads both via Model Context Protocol and writes the code',
+      'The repo ships an Astro 5 docs site + three parallel component libraries (`@atelier-ui/{angular,react,vue}`) of 28 catalogued components each (`docs/src/data/components.ts`) with identical APIs, all enforced by a framework-agnostic `@atelier-ui/spec` TypeScript layer.',
+    ),
+    "This task's own fix (2026-09-10): replaced a stale '~27' with the docs catalog's real count, stated with what it counts and a citation — same reasoning as the README.md entry above. This skill's references/ have no build step of their own either (only sync-skill-discovery.mjs mirrors the file verbatim to docs/public).",
+  ],
+  [
+    componentCountKey(
+      'skills/atelier-design/ui_kits/docs-site/README.md',
+      '4. **MCP setup** — split row. Left: copy + checklist. Right: full `claude_desktop_config.json` snippet with copy button.',
+      '5. **Components grid** — category pills (All / Inputs / Display / Navigation / Overlay), framework switcher (Angular / React / Vue), 27 component cards each tagged with three framework dots.',
+    ),
+    "Verified accurate, not stale (2026-09-10): describes a self-contained static mockup (landing.jsx in the same directory), whose own hardcoded card array has exactly 27 entries — verified by counting its 'name:' entries. Several of those (AtlSwitch, AtlPopover, AtlDropdown, AtlSlider, AtlDivider) are not even real Atelier components. This documents the mockup's own fixed content, not a live claim about Atelier's catalog size, so it does not drift with the real count and there is nothing to derive it from.",
+  ],
+  [
+    componentCountKey(
+      'plan/big-picture.md',
+      '# Atelier UI — Full API Reference',
+      '> Complete component API for LLM consumption. 28 accessible components for Angular,',
+    ),
+    'Quoted excerpt of the generated docs/public/llms-full.txt inside a fenced code block. The surrounding prose, two lines above the excerpt, already explicitly caveats this: "component count and package version inside this quote are the file\'s own words as of this rewrite, not a fact this document is asserting on its own account." Already labelled by the document itself.',
+  ],
+];
+
+// Same collision guard as SCAFFOLD_PORT_EXEMPT above: a `new Map([...])`
+// literal silently keeps the LAST entry on a duplicate key, which would drop
+// an earlier exemption with no error. Fail loudly at require-time instead.
+{
+  const seen = new Set();
+  for (const [key] of COMPONENT_COUNT_EXEMPT_ENTRIES) {
+    if (seen.has(key)) {
+      throw new Error(
+        'COMPONENT_COUNT_EXEMPT: two entries computed the same componentCountKey() — same file, same ' +
+          'two lines of context. The Map literal would silently keep only the later one. Add more ' +
+          "distinguishing context, or merge the two entries if they're genuinely the same citation.\n" +
+          `Colliding key:\n${key}`
+      );
+    }
+    seen.add(key);
+  }
+}
+const COMPONENT_COUNT_EXEMPT = new Map(COMPONENT_COUNT_EXEMPT_ENTRIES);
+
 module.exports = {
   DEAD_SELECTOR_EXEMPT,
   VARIANT_AXIS_EXCEPTIONS,
@@ -776,6 +995,7 @@ module.exports = {
   DEFAULT_PROP_EXCEPTIONS,
   STORY_DESCRIPTION_SKIP_DIRS,
   SCAFFOLD_PORT_EXEMPT,
+  scaffoldPortKey,
   FIGMA_CONFORMANCE_EXCEPTIONS,
   A11Y_PARITY_EXEMPT,
   METADATA_ROLE_EXCEPTIONS,
@@ -786,4 +1006,7 @@ module.exports = {
   PROP_SURFACE_EXEMPT,
   UNDISTRIBUTED_SKILLS,
   ADR_CORRECTION_EXEMPT,
+  CATEGORY_ALIGNMENT_EXEMPT,
+  COMPONENT_COUNT_EXEMPT,
+  componentCountKey,
 };

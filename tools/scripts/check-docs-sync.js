@@ -28,7 +28,10 @@
  *                mentions are named in SCAFFOLD_PORT_EXEMPT
  *                (tools/scripts/lib/allowlists.js), same allowlist idiom as the
  *                other gates; an unlisted 6006 is the exact defect the ADR's
- *                2026-09-05 amendment records.
+ *                2026-09-05 amendment records. Keyed on content, not `file:line`
+ *                (scaffoldPortKey — the citing line plus the non-blank line
+ *                above it): a purely additive edit anywhere else in the file
+ *                cannot desync the exemption (ADR-0119).
  *
  * Note: extra props in docs (e.g. callbacks like onValueChange) are intentionally
  * not checked — they are legitimate additions beyond the spec. Likewise, only
@@ -44,7 +47,7 @@
 const fs = require('fs');
 const path = require('path');
 const ts = require('typescript');
-const { SCAFFOLD_PORT_EXEMPT } = require('./lib/allowlists');
+const { SCAFFOLD_PORT_EXEMPT, scaffoldPortKey } = require('./lib/allowlists');
 
 const ROOT = path.resolve(__dirname, '../..');
 const SPEC_FILE = path.join(ROOT, 'libs/spec/src/index.ts');
@@ -361,6 +364,13 @@ function checkNodeIdCitations(errors) {
  * docs app to 4300, and the ADR's own decision text shipped with the
  * scaffold's 6006 in a clone-branch sentence — the same mistake this gate now
  * catches mechanically.
+ *
+ * The exemption match is content-addressed (scaffoldPortKey, ADR-0119): the
+ * citing line's own trimmed text plus the trimmed text of the non-blank line
+ * immediately above it, never a line number. That means a citation keeps its
+ * exemption through any edit elsewhere in the file — this function cannot
+ * mistake "a concurrent edit shifted an unrelated exempt line" for "this
+ * citation is new."
  * @param {string[]} errors
  */
 function checkScaffoldPortCitations(errors) {
@@ -370,17 +380,34 @@ function checkScaffoldPortCitations(errors) {
     const lines = fs.readFileSync(file, 'utf8').split('\n');
     lines.forEach((line, i) => {
       if (!line.includes('6006')) return;
-      const key = `${rel}:${i + 1}`;
+      let prevLine = '';
+      for (let j = i - 1; j >= 0; j -= 1) {
+        if (lines[j].trim() !== '') {
+          prevLine = lines[j];
+          break;
+        }
+      }
+      const key = scaffoldPortKey(rel, prevLine, line);
       if (SCAFFOLD_PORT_EXEMPT.has(key)) {
         used.add(key);
         return;
       }
       errors.push(
-        `[PORT-6006] ${key} cites port 6006 outside an allowlisted scaffold context. ` +
-          'The clone (this repo) serves Storybook on 4400 (angular) / 4401 (react) / 4402 ' +
-          "(vue) and the docs app on 4300 — 6006 is create-atelier-ui-workspace's port " +
-          '(ADR-0084). If this line genuinely documents the scaffold, add it to ' +
-          'SCAFFOLD_PORT_EXEMPT in tools/scripts/lib/allowlists.js with a reason.'
+        `[PORT-6006] ${rel}:${i + 1} cites port 6006 with no matching SCAFFOLD_PORT_EXEMPT entry. ` +
+          "This key is content-addressed (this line's text plus the non-blank line above it), not a line " +
+          'number, so a purely additive edit elsewhere in the file cannot have caused this: either the ' +
+          'citation is genuinely new, or the citing line (or the one immediately above it) was itself just ' +
+          "edited and the exemption needs a matching update. The clone (this repo) serves Storybook on " +
+          '4400 (angular) / 4401 (react) / 4402 (vue) and the docs app on 4300 — 6006 is ' +
+          "create-atelier-ui-workspace's port (ADR-0084). If this line genuinely documents the scaffold, " +
+          'add an entry to SCAFFOLD_PORT_EXEMPT in tools/scripts/lib/allowlists.js with a reason, keyed like ' +
+          'this:\n' +
+          `      scaffoldPortKey(\n` +
+          `        ${JSON.stringify(rel)},\n` +
+          `        ${JSON.stringify(prevLine.trim())},\n` +
+          `        ${JSON.stringify(line.trim())},\n` +
+          `      )\n` +
+          "    Otherwise, fix the citation to reference the clone's ports (4300/4400/4401/4402)."
       );
     });
   }

@@ -121,7 +121,7 @@ const MOCK_RESPONSES: Record<string, (params: Record<string, string>, fw: Framew
       Display: ['badge', 'card', 'avatar', 'skeleton', 'progress', 'table', 'code-block'],
       Navigation: ['breadcrumbs', 'tabs', 'pagination', 'menu', 'stepper'],
       Overlay: ['dialog', 'drawer', 'tooltip', 'toast'],
-      Layout: ['accordion', 'alert'],
+      Feedback: ['accordion', 'alert'],
     },
   }),
   search_components: (params) => {

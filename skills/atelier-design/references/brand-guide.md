@@ -9,7 +9,7 @@ This folder is the design-system extract for **Atelier** — a hands-on workshop
 2. **Storybook 10** — per-framework live explorer, each Storybook exposes a hosted MCP endpoint
 3. **AI + MCP** — Claude reads both via Model Context Protocol and writes the code
 
-The repo ships an Astro 5 docs site + three parallel component libraries (`@atelier-ui/{angular,react,vue}`) of ~27 components each with identical APIs, all enforced by a framework-agnostic `@atelier-ui/spec` TypeScript layer.
+The repo ships an Astro 5 docs site + three parallel component libraries (`@atelier-ui/{angular,react,vue}`) of 28 catalogued components each (`docs/src/data/components.ts`) with identical APIs, all enforced by a framework-agnostic `@atelier-ui/spec` TypeScript layer.
 
 > **Atelier is not a production UI library.** It's a teaching artifact — no semver guarantees, not maintained for third-party use. For real work the project explicitly points seekers at shadcn/ui, Angular Material, or PrimeNG.
 

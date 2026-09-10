@@ -77,5 +77,19 @@ if (errors > 0) {
   );
   process.exit(1);
 } else {
-  console.log(`✓ All libraries are in sync (${allComponents.size} components each, stories present)`);
+  // Wording only, per the task that added this comment: allComponents is every
+  // directory name (getComponentDirs does not filter), so it includes
+  // `foundation` and `showcase` alongside real components. Split the count for
+  // the summary line instead of calling the whole set "components" — that
+  // wrong claim is what shipped in README.md's hand-typed "31" for a long time
+  // (foundation + showcase are two of these directories, not components).
+  const realComponents = [...allComponents].filter((name) =>
+    isComponentDir(path.join(ANGULAR_LIB, name))
+  );
+  const nonComponentCount = allComponents.size - realComponents.length;
+  console.log(
+    `✓ All libraries are in sync (${allComponents.size} directories each: ` +
+      `${realComponents.length} components + ${nonComponentCount} non-component dirs ` +
+      `(foundation, showcase); stories present for every component)`
+  );
 }

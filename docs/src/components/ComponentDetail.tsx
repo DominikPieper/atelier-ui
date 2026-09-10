@@ -16,7 +16,7 @@ const CATEGORY_TONE: Record<string, string> = {
   Display: 'info',
   Navigation: 'success',
   Overlay: 'warning',
-  Layout: 'danger',
+  Feedback: 'danger',
 };
 
 const IMPORT_MAP: Record<string, string[]> = {
@@ -62,13 +62,13 @@ const EXAMPLE_LANG: Record<Framework, string> = {
 };
 
 // Docs-site categories → Storybook title categories (lowercased path segments).
-// They match 1:1 except "Layout" (accordion, alert), which Storybook files under "Feedback".
+// Now a straight lowercase of the docs-site name for every category.
 const STORYBOOK_CATEGORY: Record<string, string> = {
   Inputs: 'inputs',
   Display: 'display',
   Navigation: 'navigation',
   Overlay: 'overlay',
-  Layout: 'feedback',
+  Feedback: 'feedback',
   AI: 'ai',
 };
 
