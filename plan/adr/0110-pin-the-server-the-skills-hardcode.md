@@ -58,3 +58,18 @@ Alternatives considered:
   local `npx` transport only.
 - The version string in `.mcp.json` is operational state; this ADR records the rule, not
   the number, so the number is read from the file, not from here.
+
+**Corrected 2026-09-10.** The pin did not reach the one place that produces a committed
+artefact from the server. `tools/scripts/figma-snapshot.mjs` started its own client with
+`figma-console-mcp@latest` — the exact string this record removed from `.mcp.json` — so
+every `check:figma` run compared the spec against facts an unpinned server had read, and
+`tools/figma/snapshot.json` recorded `meta.serverVersion: null` because
+`figma_get_status` does not report one. Found by the Codex Gegenprobe during the
+2026-09-10 spec rethink (`tasks/spec-rethink-2026-09-10.md`). Fixed the same day: the
+generator now resolves the package spec from `.mcp.json`'s `figma-console` entry (one
+source; a missing entry is exit 2, and `@latest` is deliberately not a fallback), and
+records the version the server reports through the MCP SDK's `getServerVersion()`, with
+the declared version marked as such if the server stays silent. The snapshot itself is
+unchanged until the next Bridge-connected refresh, so `serverVersion` reads `null` until
+then. The Consequences above missed a fourth line: **every script that starts the server
+must read the pin from `.mcp.json`**, or the pin protects the skills and not the gates.

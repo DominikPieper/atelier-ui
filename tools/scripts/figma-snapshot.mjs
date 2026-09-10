@@ -28,7 +28,7 @@
  * each variant's own resolved width/height). All rule logic and severities live
  * in check-figma.js.
  */
-import { writeFileSync } from 'node:fs';
+import { writeFileSync, readFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
@@ -38,6 +38,7 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '../..');
 const OUT = resolve(ROOT, 'tools/figma/snapshot.json');
+const MCP_CONFIG_PATH = resolve(ROOT, '.mcp.json');
 // Per-TEXT-node type facts, written by the same run as snapshot.json. A sibling
 // rather than another key in snapshot.json because the records key on `chars`, so
 // every copy edit in Figma would churn the file the paint gates are reviewed in —
@@ -90,6 +91,41 @@ const MASTERS = [
   { nodeId: '911:1546' }, // Data/AtlTbody
 ];
 
+/**
+ * Resolve the exact `figma-console-mcp@<version>` npm spec to spawn via npx.
+ * Read from .mcp.json's own `mcpServers['figma-console'].args` — the ONE place
+ * this repo pins the server version (ADR-0110: pin the server the skills
+ * hardcode) — rather than hardcoding a package spec here, which is exactly how
+ * this script drifted from the pin: it ran `figma-console-mcp@latest` while
+ * `.mcp.json` said `@1.40.0`, so the committed snapshot's `meta.serverVersion`
+ * could never be attributed to the pinned server. `@latest` is deliberately
+ * not a fallback when the entry is missing — a silent fallback would recreate
+ * the same drift, just quietly.
+ */
+function resolveFigmaConsolePackageSpec() {
+  let config;
+  try {
+    config = JSON.parse(readFileSync(MCP_CONFIG_PATH, 'utf8'));
+  } catch (err) {
+    throw new Error(`could not read/parse ${MCP_CONFIG_PATH}: ${err?.message ?? err}`);
+  }
+  const args = config?.mcpServers?.['figma-console']?.args;
+  const spec = Array.isArray(args) ? args.find((a) => /^figma-console-mcp@/.test(a)) : undefined;
+  if (!spec) {
+    throw new Error(
+      `${MCP_CONFIG_PATH} has no mcpServers['figma-console'].args entry matching ` +
+        `/^figma-console-mcp@/ — refusing to fall back to @latest (ADR-0110 pins this server).`
+    );
+  }
+  return spec;
+}
+
+/** "figma-console-mcp@1.40.0" -> "1.40.0" (text after the last "@"). */
+function versionFromPackageSpec(spec) {
+  const idx = String(spec).lastIndexOf('@');
+  return idx > 0 ? String(spec).slice(idx + 1) : null;
+}
+
 main().catch((err) => {
   console.error(`✗ figma:snapshot failed: ${err?.message ?? err}`);
   process.exit(2);
@@ -97,12 +133,21 @@ main().catch((err) => {
 
 async function main() {
   const client = new Client({ name: 'atelier-figma-snapshot', version: '1.0.0' }, { capabilities: {} });
+  // The npx package spec is read from .mcp.json (ADR-0110: pin the server the
+  // skills hardcode) rather than hardcoded here, so there is one source for the
+  // pinned version; `@latest` is deliberately not a fallback (see the resolver
+  // above).
+  const figmaConsolePackageSpec = resolveFigmaConsolePackageSpec();
   const transport = new StdioClientTransport({
     command: 'npx',
-    args: ['-y', 'figma-console-mcp@latest'],
+    args: ['-y', figmaConsolePackageSpec],
     env: { ...process.env },
   });
   await client.connect(transport);
+  // Prefer the SDK's own handshake data (the server's declared name/version)
+  // over figma_get_status, whose payload has never actually carried a version
+  // (see the serverVersion derivation below).
+  const reportedServerVersion = client.getServerVersion?.();
 
   try {
     // 1. Probe the bridge — fail loud if the plugin is not connected.
@@ -124,7 +169,14 @@ async function main() {
       );
       process.exit(2);
     }
-    const serverVersion = status?.serverVersion ?? status?.details?.serverVersion ?? null;
+    const declaredServerVersion = versionFromPackageSpec(figmaConsolePackageSpec);
+    const serverVersion =
+      reportedServerVersion?.version ??
+      status?.serverVersion ??
+      status?.details?.serverVersion ??
+      (declaredServerVersion
+        ? `${declaredServerVersion} (declared in .mcp.json; server did not report)`
+        : null);
 
     // 1b. The file's own last-modified stamp. figma_get_status carries connection
     // facts (connectedAt, lastPongAt) but never a `lastModified` field anywhere in

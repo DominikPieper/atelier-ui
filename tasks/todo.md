@@ -113,10 +113,14 @@ Ranked; each carries why it's worth doing next rather than later.
     `a11y.test: 'error'`** — the largest verification gain available, needs no spec.
     Five decision points in its § 5; S1 (standalone docgen spike) stays the feasibility gate.
   - [ ] **Side findings from the rethink, each independent of the shape decision:**
-    - [ ] `tools/scripts/figma-snapshot.mjs:101` starts `figma-console-mcp@latest` while
-      `.mcp.json:35` pins `1.40.0` (ADR-0110); `tools/figma/snapshot.json` records
-      `serverVersion: null`. Pin the generator to the same version and write the version
-      into `meta` (Codex finding, verified 2026-09-10).
+    - [x] **Done 2026-09-10** — `tools/scripts/figma-snapshot.mjs` started
+      `figma-console-mcp@latest` while `.mcp.json` pins `1.40.0` (ADR-0110);
+      `tools/figma/snapshot.json` recorded `serverVersion: null`. The generator now
+      resolves the package spec from `.mcp.json`'s `figma-console` entry (missing entry =
+      exit 2, no `@latest` fallback) and records `client.getServerVersion()`, marking the
+      declared version if the server stays silent. ADR-0110 carries the dated correction.
+      The snapshot stays `serverVersion: null` until the next Bridge-connected refresh
+      (Codex finding, verified 2026-09-10).
     - [ ] The Storybook browser-mode suite (interaction + axe, ~11 s per lib) is `# NOT
       WIRED` in `.github/workflows/ci.yml:122-135` because it fails under `CI=1` for an
       unfound reason; `parameters.a11y.test` is `'todo'` (React, Vue) and unset (Angular),
