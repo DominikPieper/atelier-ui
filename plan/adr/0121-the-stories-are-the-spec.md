@@ -183,3 +183,10 @@ Alternatives considered:
   a small script (precedent: `check-geometry.mjs`); that the block's schema stays small
   under use. The claim that S is *thinner* rests on counting authored artefacts, not yet
   on a timed cohort.
+
+**Verified 2026-09-10 (S1).** The first assumption held: docgen without a Storybook build
+runs through the framework workers Storybook itself uses — Angular 3.7 s cold / 83 ms warm,
+Vue 3.5 s / 93 ms, React 0.56 s / 40 ms via `react-docgen` directly — with output identical
+to the built shards, and story `args` resolve statically through `storybook/internal/csf-tools`
+in about 85 ms per file. The fallback branch in Decision 6 (`storybook build --test`, local
+`docs-show`) is not needed. Record: `tasks/docgen-spike-2026-09-10.md`.

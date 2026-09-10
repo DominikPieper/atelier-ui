@@ -128,11 +128,15 @@ Ranked; each carries why it's worth doing next rather than later.
       header cell has no text.
     - [ ] `landmark-unique` (moderate) — Vue ×2: Accordion panel, Pagination.
     - [ ] `aria-allowed-attr` (critical) — Vue ×1: tooltip-wrapped menu trigger.
-  - [ ] **S1 — standalone docgen spike** (the feasibility gate for S3): print `AtlButton`'s
-    inputs with defaults and JSDoc for Angular (`angular-component-meta`) and Vue
-    (`vue-component-meta`) without `storybook build`, in under five seconds. If it fails:
-    `storybook build --test` or the local `docs-show`, and re-read the complexity budget in
-    `tasks/spec-workflow-plan-2026-09-10.md` § 4.
+  - [x] **S1 — standalone docgen spike — feasible, done 2026-09-10**
+    (`tasks/docgen-spike-2026-09-10.md`). Call the docgen workers Storybook itself uses
+    (`@storybook/angular-vite/internal/docgen-worker`, `@storybook/vue3/internal/docgen-worker`;
+    React through `react-docgen` `parse()` directly — its worker export drives a different
+    engine that this repo does not enable). Cold 3.7 s / 3.5 s / 0.56 s, warm 83 / 93 / 40 ms;
+    output identical to the built shards for AtlButton and AtlDialog. Story `args` resolve
+    statically through `storybook/internal/csf-tools` (`createStoryArgsResolver`, 85 ms,
+    meta merged, `unresolved` reported). Whole roster ≈ 6 s per framework in one process.
+    No fallback needed. Rule for S3: render-only stories are demos, not variant claims.
   - [ ] S2 conventions (JSDoc tags, story-per-state rule, the block's schema) · S3 the
     joining check with three negative tests · S4 scaffold · S5 skill + curriculum · S6
     monorepo retirements — as ADR-0121 Decision 6.
