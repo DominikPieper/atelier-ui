@@ -343,3 +343,55 @@ project's resolution was judged the larger change. 83 story metas (28 Angular, 2
 and served, Playwright read "Contract", `129:20` and `hasIcon` off AtlButton's docs page;
 the three browser suites (234 / 226 / 253) and the Angular and Vue Storybook builds pass
 with the changed previews.
+
+**S3 stage 2 done 2026-09-10 — rendered paint against the master, ratcheted.**
+`tools/scripts/check-paint.mjs` (`check:paint`, in `check:all` right after the Storybook
+builds it reads) serves each built Storybook, opens every story of every contracted
+component in Chromium, and compares what renders with the snapshot's `rootPaint` row for
+that story's variant: background and border against **the resolved value of the token the
+master binds** (`--ui-<group>-<rest>`, read live from the page, so Dark mode is the same
+comparison under `--theme dark`), height, padding, gap, radius and stroke width within
+2 px, font size and leading; `state=hover` and `state=focus` rows are compared after a
+real hover and a keyboard `Tab`. The story → row key comes from the same resolved `args`
+the coverage rule uses; render-only demos are skipped. Findings are ratcheted against
+`tools/figma/paint-baseline.json` in the ADR-0079 shape: a new finding is an error, a
+recorded one that stops reproducing is `[STALE-BASELINE]`, and the file's note says what
+an entry means and that fixing one means re-recording, not deleting. Two artefact classes
+had to be removed before the baseline meant anything: the six form-field components whose
+`.atl-*` element is an unpainted wrapper now carry `probes` in their contracts (`input`,
+`textarea`, `.track`, `input[type='checkbox']`, `input[role='combobox']`, `select` —
+resolved inside the component root; Angular's Select trigger has no shared selector and is
+a stated `[NO-PROBE]`), and stories whose probe is `display: none`, zero-sized or an
+unopened `<dialog>` (Dialog, Drawer, Chat) report `[NOT-RENDERED]` and are not compared —
+measuring a closed box is the wrong lifecycle state, not drift. The baseline went from
+1525 to **755** entries (GEOMETRY 497, PAINT 105, NO-VARIANT 82, TYPE 71); the one shape
+root-caused by hand, AtlInput's height (40 px rendered, 44 px in the master, colours and
+padding exact) is the token change `tasks/todo.md` already records as 37/37 parity DRIFT.
+The gate takes about 220 s for the roster; the parity call's `visual`/`spacing`/
+`typography` sections now have a mechanical source. Not proven: the other nine frequent
+shapes (Checkbox and Toggle geometry and type, Card and Badge height) are recorded, not
+root-caused; React's Select stories are classified as demos by the literal-scan heuristic
+(three `optionValue` literals) and have never been measured; overlays need an open-state
+recipe before their paint can be compared.
+
+**S6a done 2026-09-10 — the three manifests, diffed.** `tools/scripts/check-manifest-parity.mjs`
+(`check:manifest-parity`, in `check:all` right after `check:props`) normalises each
+framework's public surface from its docgen (the shared `tools/scripts/lib/docgen.mjs`,
+which `check:contracts` now imports too) and diffs the frameworks pairwise: `[NAME]`,
+`[MEMBERS]`, `[DEFAULT]`, `[KIND]`, with `check:props`' equivalences (`on<X>Change` ↔
+`model()`/`output()` ↔ `update:*`, native passthroughs) and its `PROP_SURFACE_EXEMPT`
+honoured as `[GAP]`. Its first run found six divergences `check:props` structurally
+cannot see, the first of them the one ADR-0093 predicted: Vue's dialog has no
+`aria-labelledby` (it hardcodes `headerId`); Angular's button has no `type`; Angular's
+checkbox and toggle take no `id`; the alert's `dismissed`/`onDismissed` split on the
+React–Vue side. Recorded as `gap` entries (with a narrow exception in `check:props`' stale
+sweep for entries its spec-keyed comparison can never reach), backlog in `tasks/todo.md`.
+Four false positives were a `react-docgen` limit — a string prop inherited two levels
+through `Omit<AtlFormFieldSpec, …>` returns no entry — closed by a fallback scoped to
+exactly that class after the wider variant produced twelve unrelated findings. The
+retirement evidence (`--compare-props`): 8 findings both gates share, **22 only the
+manifest diff sees**, **48 only `check:props` sees** — `[DEAD]` inputs (a manifest cannot
+see consumption) and the 21-key `errors` family, which is spec-incompleteness, not
+cross-framework drift. Decision 5's condition — retire `index.ts` when the diff is green —
+is met for the diff; retiring `check:props` additionally needs a home for `[DEAD]`, so
+S6(b) is not yet due.
