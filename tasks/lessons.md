@@ -599,3 +599,27 @@ Two rules:
   eighty milliseconds; a `curl` of one of them returned the cause as prose. Timeouts,
   parallelism and sandbox flags are the last hypotheses, not the first, when the failure
   is "connected to nothing" rather than "connected slowly".
+
+## A green gate on a fixture proves the wiring, not the fixture (2026-09-10)
+
+The scaffold's `check:contracts` came back green on its example story in the CLI e2e, and
+the brief had a contingency for the red case ("if `[COVERAGE]` fires, add stories"). The
+agent building it did not stop at green: it asked *why* green, and found that the example
+renders `AtlButton` from `@atelier-ui/react` in `node_modules`, where the check's local
+docgen cannot follow a bare specifier — so it found no component, compared nothing, and
+reported only `[NO-STORY-META]`. Zero errors because zero comparisons. The generated
+`CLAUDE.md` now says exactly that, and the follow-up (feed the hosted manifest for library
+components) is recorded instead of the green being reported as proof.
+
+Rule: **when a check passes on the fixture that was built to exercise it, read the
+summary counts, not the exit code.** "components: 0" next to "errors: 0" is a vacuous
+truth. A new gate's first green run on its own example needs one more question — *what
+did it compare?* — before it counts as verification. Same shape as the 2026-09-05 lesson
+that a new check's first green run proves nothing until its output is read against the
+source it describes; this time the check was right and the fixture was hollow.
+
+Second, smaller: **a `.ts` file under a generator's `files/` is compiled away by the
+package's own `tsc` unless it carries the `.template` suffix.** The contracts templates
+disappeared from the packed tarball (`ENOENT` inside the real e2e), exactly the trap the
+Storybook templates' comment in `preset.ts` already warned about for another directory.
+A warning in a comment two directories away is not a gate; the e2e was.

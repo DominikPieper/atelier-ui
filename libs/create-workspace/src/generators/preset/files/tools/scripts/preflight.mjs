@@ -13,7 +13,7 @@
 
 import { execSync, spawnSync } from 'node:child_process';
 import { createServer } from 'node:net';
-import { readFileSync, existsSync, statSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
@@ -485,6 +485,45 @@ const PORTS_BY_ENV = {
   ],
 };
 
+// ── Playwright Chromium (scaffold only) ─────────────────────────────
+// The scaffold's `npm run check:stories` runs every story headless in
+// Chromium via @storybook/addon-vitest + @vitest/browser-playwright — a
+// browser Playwright manages itself, downloaded by `npx playwright install
+// chromium` (never as a postinstall hook: a workshop attendee's first
+// `npm install` should not silently spend minutes downloading a browser).
+// This is a best-effort, dependency-free heuristic (no `require('playwright')`
+// here — this script has zero non-builtin imports and should keep working
+// even before `npm install` has finished) — it looks for a `chromium-*`
+// directory in Playwright's own browser cache, respecting
+// `PLAYWRIGHT_BROWSERS_PATH` the same way Playwright itself does. A warning,
+// not a hard failure: this only blocks `check:stories`, not the workshop.
+function playwrightBrowsersDir() {
+  if (process.env.PLAYWRIGHT_BROWSERS_PATH) return process.env.PLAYWRIGHT_BROWSERS_PATH;
+  const home = homedir();
+  if (process.platform === 'darwin') return join(home, 'Library', 'Caches', 'ms-playwright');
+  if (process.platform === 'win32') return join(home, 'AppData', 'Local', 'ms-playwright');
+  return join(home, '.cache', 'ms-playwright');
+}
+
+function checkPlaywrightChromium() {
+  const dir = playwrightBrowsersDir();
+  let hasChromium = false;
+  try {
+    hasChromium = existsSync(dir) && readdirSync(dir).some((name) => name.startsWith('chromium'));
+  } catch {
+    hasChromium = false;
+  }
+  if (hasChromium) {
+    ok('Playwright Chromium', 'installed');
+  } else {
+    warn(
+      'Playwright Chromium',
+      'not found',
+      'Run `npx playwright install chromium` — needed for `npm run check:stories`',
+    );
+  }
+}
+
 async function checkPorts(env) {
   ok(
     'Environment',
@@ -528,6 +567,11 @@ async function main() {
 
   header('Local ports');
   await checkPorts(env);
+
+  if (env === 'scaffold') {
+    header('Storybook browser tests');
+    checkPlaywrightChromium();
+  }
 
   // Summary
   const failures = results.filter((r) => r.level === 'fail').length;

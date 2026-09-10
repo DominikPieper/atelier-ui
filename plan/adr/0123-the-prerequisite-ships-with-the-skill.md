@@ -153,3 +153,23 @@ now explains, rather than papers over, that the skills' `dev`-toolset tools need
 `localhost` entry would fail on every session started without that Storybook running —
 the same call this repo's own root `.mcp.json` makes); it ships the exact snippet to add
 instead.
+
+**Corrected 2026-09-10 (same day).** The Decision's "`@storybook/addon-vitest` is
+deliberately left out: the scaffold has no test runner, so the skills' `test-run` tool is
+unavailable there" is reversed by the owner. The sentence reasoned in a circle — no test
+runner because none was shipped — and it was written without ADR-0121
+(`plan/adr/0121-the-stories-are-the-spec.md`), decided earlier the same day, under which
+**the stories are the component's spec and every story is a render, interaction and axe
+test**. A scaffold that ships Storybook but cannot run its stories as tests would hand
+attendees the spec without the check. The scaffold now also ships `@storybook/addon-vitest`,
+Vitest browser mode on Playwright Chromium (`<app>/vitest.config.ts`, named so the addon's
+`test-run` discovery finds it — ADR-0112), the a11y preview annotations, a
+`storybook-test` target and `check:stories`, with `parameters.a11y.test: 'error'` as in the
+monorepo (ADR-0122). Chromium is installed by the attendee (`npx playwright install
+chromium`, checked by `preflight.mjs`), not by a postinstall — a conference network should
+not decide whether `npm install` completes. The generated `CLAUDE.md` says `test-run`
+works once a local Storybook with `addon-mcp` is running, instead of saying it is
+unavailable. Cost accepted: Playwright plus Chromium on top of the download this record
+already measured; the CLI e2e installs Chromium and runs the scaffolded suite once per run.
+The rest of this record — Storybook always ships, the skills install post-generator, the
+unpinned-skill-text cost — stands.

@@ -8,10 +8,11 @@ const config: StorybookConfig = {
     // Emits manifests/{docs,components}.json, which is what lets the
     // storybookjs/mcp skills' docs-list/docs-show tools and dev tools
     // (stories-preview, get-storybook-story-instructions) work against this
-    // workspace's own components. Not `test-run` — that's a separate `test`
-    // toolset tool gated on Storybook's Vitest addon, which this scaffold
-    // deliberately does not install (see CLAUDE.md).
+    // workspace's own components. addon-vitest below is what makes the
+    // skills' `test-run` tool work too, once a local Storybook is running —
+    // see vitest.config.ts and CLAUDE.md's "The contract loop".
     '@storybook/addon-mcp',
+    getAbsolutePath('@storybook/addon-vitest'),
     getAbsolutePath('@storybook/addon-a11y'),
     getAbsolutePath('@storybook/addon-docs'),
   ],

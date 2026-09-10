@@ -3,6 +3,7 @@ import {
   ensurePackage,
   formatFiles,
   NX_VERSION,
+  readJson,
   removeDependenciesFromPackageJson,
   Tree,
   updateJson,
@@ -43,9 +44,20 @@ const STORYBOOK_FRAMEWORK_PACKAGE: Record<Framework, string> = {
 // copy — between the two, a template literally named `main.ts` would be
 // transpiled away and never reach dist/ under a name this generator's
 // `readTemplate()` can find at runtime. `.tsx` files (no literal `.ts`
-// suffix) hit neither rule and are stored under their real name.
-function storybookTemplateName(framework: Framework, base: 'main.ts' | 'preview' | 'atl-button.stories') {
+// suffix) hit neither rule and are stored under their real name. Verified the
+// hard way once already: `contracts/types.ts` and `contracts/button.contract.ts`
+// (no `.template` suffix) threw `ENOENT` from inside a packed npm tarball —
+// see sync-preflight.mjs's comment on those two entries.
+function storybookTemplateName(
+  framework: Framework,
+  base: 'main.ts' | 'preview' | 'atl-button.stories' | 'vitest.config' | 'vitest.setup',
+) {
   if (base === 'main.ts') return `storybook/${framework}/main.ts.template`;
+  // vitest.config.ts and .storybook/vitest.setup.ts are always written out
+  // as plain `.ts` regardless of framework — unlike main.ts/preview/the
+  // example story, react does NOT get a `.tsx` variant for these (neither
+  // file contains JSX), so both need the `.template` dodge on every framework.
+  if (base === 'vitest.config' || base === 'vitest.setup') return `storybook/${framework}/${base}.ts.template`;
   const ext = framework === 'react' ? 'tsx' : 'ts.template';
   return `storybook/${framework}/${base}.${ext}`;
 }
@@ -85,6 +97,46 @@ const SKILLS_ADD_COMMAND_FOR_HUMANS = `npx -y skills@${SKILLS_CLI_VERSION} add s
 // Bounds the CLI's own git clone (it reads this env var itself) so a bad
 // conference network fails fast with a clear message instead of hanging.
 const SKILLS_CLONE_TIMEOUT_MS = 60_000;
+
+// The contract loop (ADR-0121 S4): figma-snapshot-contracts.mjs imports the
+// MCP SDK directly (the same client figma-snapshot.mjs uses), pinned to the
+// exact version this monorepo runs (root package.json devDependencies) so
+// the scaffold's copy behaves the same as the canonical script.
+const MCP_SDK_VERSION = '^1.29.0';
+// ts-eval.js (shared by check-contracts.mjs and figma-snapshot-contracts.mjs)
+// needs `typescript` at runtime. Every framework's Nx application generator
+// already adds it, so this is a safety net, not the primary source — see the
+// conditional add near the end of presetGenerator, which only includes this
+// constant in the devDependencies write when `typescript` isn't already
+// present.
+const TYPESCRIPT_VERSION = '6.0.3';
+
+// Browser-mode Storybook tests (owner correction, 2026-09-10, to ADR-0123's
+// "no test runner" decision — see the dated correction on that record).
+// Every scaffolded app gets its own vitest.config.ts + storybook-test target,
+// mirroring libs/{angular,react,vue}/vitest.storybook.config.ts. Versions are
+// copied verbatim from the monorepo's own root package.json — most are exact
+// pins there; `vitest` and `@vitest/browser-playwright` are themselves caret
+// ranges in root package.json, so they stay caret ranges here too, rather
+// than inventing an exact pin root itself doesn't have.
+const VITEST_VERSION = '^4.0.8';
+const VITEST_BROWSER_PLAYWRIGHT_VERSION = '^4.1.0';
+// @vitest/browser-playwright declares a PEER (not transitive) dependency on
+// `playwright` itself (peerDependencies: { playwright: "*" }). Root
+// package.json has no bare `playwright` entry — only `@playwright/test`
+// (^1.36.0), whose own dependency on `playwright` satisfies the peer there
+// via monorepo-wide hoisting. A standalone scaffold gets no such hoist, so
+// the bare peer is pinned here directly, at the same range @playwright/test
+// itself uses — there is no "exact version root package.json has" for the
+// bare package to copy, since root never names it.
+const PLAYWRIGHT_VERSION = '^1.36.0';
+const VITE_PLUGIN_REACT_VERSION = '6.1.1';
+const VITE_PLUGIN_VUE_VERSION = '^6.0.5';
+const ANALOGJS_VITE_PLUGIN_ANGULAR_VERSION = '2.7.1';
+// Only Vue's vitest.setup.ts.template imports this (custom jest-dom
+// matchers), mirroring libs/vue/.storybook/vitest.setup.ts exactly — React
+// and Angular's setup files don't use it.
+const TESTING_LIBRARY_JEST_DOM_VERSION = '^6.9.1';
 // Hard kill for the whole child process — a backstop above the CLI's own
 // clone timeout, covering the install/copy phase after the clone too.
 const SKILLS_INSTALL_TIMEOUT_MS = 120_000;
@@ -298,6 +350,15 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
     '@storybook/addon-mcp': STORYBOOK_VERSION,
     '@storybook/addon-a11y': STORYBOOK_VERSION,
     '@storybook/addon-docs': STORYBOOK_VERSION,
+    // Browser-mode Storybook tests (owner correction 2026-09-10 to ADR-0123) —
+    // shared regardless of how many frameworks are selected; the
+    // framework-specific Vite plugin is added conditionally, after the
+    // frameworks loop below, once every app generator has had a chance to
+    // bring its own in.
+    '@storybook/addon-vitest': STORYBOOK_VERSION,
+    vitest: VITEST_VERSION,
+    '@vitest/browser-playwright': VITEST_BROWSER_PLAYWRIGHT_VERSION,
+    playwright: PLAYWRIGHT_VERSION,
   };
 
   for (const framework of frameworks) {
@@ -389,8 +450,9 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
 
     // Storybook config: mirrors libs/{angular,react,vue}/.storybook/main.ts
     // minus staticDirs, the BUILD_STORYBOOK viteFinal block (hosted-path-only),
-    // @storybook/addon-vitest (no test runner in the scaffold) and
-    // @storybook/addon-designs (no Figma handoff doc to link from here).
+    // and @storybook/addon-designs (no Figma handoff doc to link from here).
+    // @storybook/addon-vitest DOES ship (owner correction 2026-09-10 to
+    // ADR-0123's original "no test runner" call).
     tree.write(`${appName}/.storybook/main.ts`, readTemplate(storybookTemplateName(framework, 'main.ts')));
     tree.write(
       `${appName}/.storybook/preview.${storybookOutputExt(framework)}`,
@@ -415,6 +477,19 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
       readTemplate(storybookTemplateName(framework, 'atl-button.stories')),
     );
 
+    // Browser-mode Storybook tests (owner correction 2026-09-10 to ADR-0123 —
+    // storybook-test / check:stories ship with the scaffold after all).
+    // `vitest.config.ts` is always plain `.ts`, never `.tsx` — see
+    // storybookTemplateName()'s comment. The literal filename matters:
+    // @storybook/addon-vitest's `test-run` tool walks up from a story's
+    // .storybook directory looking for the nearest vitest/vite config by
+    // this standard name.
+    tree.write(`${appName}/vitest.config.ts`, readTemplate(storybookTemplateName(framework, 'vitest.config')));
+    tree.write(
+      `${appName}/.storybook/vitest.setup.ts`,
+      readTemplate(storybookTemplateName(framework, 'vitest.setup')),
+    );
+
     // The application generator (@nx/{angular,react,vue}:application, above)
     // guarantees `${appName}/project.json` exists at this point — updateJson
     // reads it first and throws `Cannot find ${path}` if it doesn't, which is
@@ -434,6 +509,17 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
         outputs: [`{workspaceRoot}/dist/storybook/${appName}`],
         options: {
           command: `npx storybook build --config-dir ${appName}/.storybook --output-dir dist/storybook/${appName}`,
+        },
+      };
+      // Mirrors libs/{angular,react,vue}/project.json's own "storybook-test"
+      // target exactly, modulo the config filename (vitest.config.ts here,
+      // vitest.storybook.config.ts there — see storybookTemplateName()'s
+      // comment on why the scaffold uses the standard name instead).
+      config.targets['storybook-test'] = {
+        executor: 'nx:run-commands',
+        options: {
+          command: 'npx vitest run --config vitest.config.ts',
+          cwd: appName,
         },
       };
       return config;
@@ -460,6 +546,47 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
       storybookDevDeps['@storybook/vue3'] = STORYBOOK_VERSION;
     }
   }
+
+  // ─── The contract loop (ADR-0121 S4) ─────────────────────────────────────
+  // Ships once, scoped to the FIRST selected framework — a contracts.config.json
+  // names exactly one framework, the same "the workshop uses one framework"
+  // precedent frameworks[0] already sets elsewhere in this generator (the
+  // README's "Getting started" nx serve command).
+  const primaryFramework = frameworks[0];
+  const primaryApp = `workshop-${primaryFramework}`;
+
+  console.log(`\n◇ Writing the contract loop (check:contracts, the example AtlButton contract, the Figma snapshot projection)…`);
+
+  // .ts.template, not .ts — see the comment on storybookTemplateName() above:
+  // a literal `.ts` file under files/ is compiled away by this package's own
+  // tsconfig.lib.json (`include: ["src/**/*.ts"]`) and never reaches dist/
+  // under a name readTemplate() can find at runtime. The OUTPUT filenames
+  // below stay plain `.ts` — only the template source needs the suffix.
+  tree.write(`${primaryApp}/src/contracts/types.ts`, readTemplate('contracts/types.ts.template'));
+  tree.write(`${primaryApp}/src/contracts/README.md`, readTemplate('contracts/README.md'));
+  tree.write(
+    `${primaryApp}/src/contracts/button.contract.ts`,
+    readTemplate('contracts/button.contract.ts.template'),
+  );
+
+  tree.write('tools/scripts/check-contracts.mjs', readTemplate('tools/scripts/check-contracts.mjs'));
+  tree.write('tools/scripts/lib/ts-eval.js', readTemplate('tools/scripts/lib/ts-eval.js'));
+  tree.write(
+    'tools/scripts/figma-snapshot-contracts.mjs',
+    readTemplate('tools/scripts/figma-snapshot-contracts.mjs'),
+  );
+  // The AtlButton-only projection of this repo's own tools/figma/snapshot.json
+  // (gen-scaffold-snapshot.mjs) — gives check:contracts a Figma side for the
+  // example contract + story on day one, before the attendee ever runs
+  // figma:snapshot themselves.
+  tree.write('tools/figma/snapshot.json', readTemplate('figma/snapshot.json'));
+
+  writeJson(tree, 'contracts.config.json', {
+    framework: primaryFramework,
+    contracts: `${primaryApp}/src/contracts`,
+    stories: [`${primaryApp}/src`],
+    snapshot: 'tools/figma/snapshot.json',
+  });
 
   console.log(`\n◇ Writing project files (CLAUDE.md, README, .mcp.json)…`);
 
@@ -557,6 +684,19 @@ ${frameworks.map((f, i) => `- \`workshop-${f}\` — \`npx nx storybook workshop-
 
 Build a static Storybook (CI, hosting) with \`npx nx build-storybook workshop-<fw>\`.
 
+Every story is also a browser-mode test (\`@storybook/addon-vitest\`). One-time setup
+after \`npm install\`:
+
+\`\`\`bash
+npx playwright install chromium
+\`\`\`
+
+Then run every app's stories headless in Chromium with axe checks:
+
+\`\`\`bash
+npm run check:stories
+\`\`\`
+
 ## Agent Skills
 
 ${
@@ -599,8 +739,9 @@ then add this to \`.mcp.json\`'s \`mcpServers\` (only while that Storybook is up
 \`\`\`
 
 (\`<port>\` is the one listed for that app under Storybook below.) \`test-run\`
-stays unavailable either way — this scaffold has no test runner
-(\`@storybook/addon-vitest\` is deliberately not installed).`
+works too, once that local Storybook is running — every story here IS a
+render + accessibility test (\`@storybook/addon-vitest\`, run offline via
+\`npm run check:stories\`; see "The Contract Loop" below).`
     : `Skipped for this workspace (\`skills: false\`). Install the four \`storybookjs/mcp\`
 skills for Claude Code by hand:
 
@@ -609,6 +750,38 @@ ${SKILLS_ADD_COMMAND_FOR_HUMANS}
 \`\`\`
 `
 }
+
+## The Contract Loop
+
+A contract (\`${primaryApp}/src/contracts/<name>.contract.ts\`) is the one hand-authored
+spec file per component: the Figma master's node id, plus intentional Figma ↔ code
+mismatches (\`figmaOnly\`, \`codeOnly\`, \`axisMap\`) — never props, defaults, or
+descriptions; those live in the component's own types/JSDoc and its stories.
+
+Order: read the Figma handoff → write the contract → write one story per variant and
+interaction state → \`npm run check:contracts\` → \`figma_check_design_parity\` in Storybook.
+
+\`check:contracts\` joins the contract, the component's docgen, and \`tools/figma/snapshot.json\`
+offline — no browser, no Storybook build — and reports one line per finding:
+- \`[CONTRACT-MISSING]\` / \`[CONTRACT-NODE]\` — no contract file, or its node id disagrees
+- \`[AXIS]\` / \`[BOOLEAN]\` / \`[ENUM-UNDRAWN]\` — a Figma property has no matching code prop
+- \`[COVERAGE]\` / \`[COVERAGE-BOOL]\` — a variant value or boolean is never rendered by a story
+- \`[FIGMA-ONLY]\` / \`[STALE-EXEMPTION]\` / \`[UNMIRRORED]\` — an exemption is missing, stale, or unexplained
+- \`[NO-STORY-META]\` / \`[NO-MASTER]\` — a contract with nothing yet to check it against
+
+Refresh \`tools/figma/snapshot.json\` from the real master with the Figma Desktop Bridge
+connected: edit the \`--file\` placeholder in \`package.json\`'s \`figma:snapshot\` script to
+your own Figma file key, then run \`npm run figma:snapshot\`.
+
+\`check:contracts\` proves shape and story coverage; \`npm run check:stories\` (every story,
+rendered headless in Chromium via \`@storybook/addon-vitest\`, with axe) proves rendering
+and accessibility. It does so for components whose source lives in this workspace. For
+components imported from \`@atelier-ui/${primaryFramework}\` — the example \`AtlButton\`
+included — local docgen cannot read into \`node_modules\`, so the check has nothing to
+compare and reports only \`[NO-STORY-META]\`; their prop tables come from the hosted
+Storybook MCP (\`docs-show\`) instead. A green \`check:contracts\` on the example story
+therefore proves the wiring, not the example. Run \`npx playwright install chromium\`
+once after \`npm install\` — see Storybook below.
 
 ## Troubleshooting
 
@@ -643,9 +816,52 @@ file exports). The Desktop Bridge covers creation and inspection without a token
 `,
   );
 
-  // Install selected @atelier-ui/* packages (dependencies) and Storybook
-  // (devDependencies, exact pins — see STORYBOOK_VERSION above)
-  const installTask = addDependenciesToPackageJson(tree, deps, storybookDevDeps);
+  // The contract loop's own devDependencies (ADR-0121 S4): the MCP SDK
+  // figma-snapshot-contracts.mjs imports directly, always; `typescript` only
+  // when the framework application generator (above) didn't already add it —
+  // read from the tree's package.json as it stands right now, after every
+  // framework's generator has run and before this generator's own writes
+  // below it.
+  const pkgSoFar = readJson(tree, 'package.json');
+  const existingDeps: Record<string, string> = {
+    ...(pkgSoFar.dependencies ?? {}),
+    ...(pkgSoFar.devDependencies ?? {}),
+  };
+  const hasTypescript = Boolean(existingDeps.typescript);
+  const contractLoopDevDeps: Record<string, string> = {
+    '@modelcontextprotocol/sdk': MCP_SDK_VERSION,
+  };
+  if (!hasTypescript) {
+    contractLoopDevDeps.typescript = TYPESCRIPT_VERSION;
+  }
+
+  // Browser-mode Storybook tests (owner correction 2026-09-10 to ADR-0123):
+  // each selected framework needs its own Vite plugin for the vitest browser
+  // pipeline, added only when the framework's own application generator
+  // (above) didn't already bring it in. React and Vue's vite-based app
+  // generators typically already do; Angular's esbuild-based one never does.
+  const viteFrameworkDevDeps: Record<string, string> = {};
+  if (frameworks.includes('react') && !existingDeps['@vitejs/plugin-react']) {
+    viteFrameworkDevDeps['@vitejs/plugin-react'] = VITE_PLUGIN_REACT_VERSION;
+  }
+  if (frameworks.includes('vue') && !existingDeps['@vitejs/plugin-vue']) {
+    viteFrameworkDevDeps['@vitejs/plugin-vue'] = VITE_PLUGIN_VUE_VERSION;
+  }
+  if (frameworks.includes('angular') && !existingDeps['@analogjs/vite-plugin-angular']) {
+    viteFrameworkDevDeps['@analogjs/vite-plugin-angular'] = ANALOGJS_VITE_PLUGIN_ANGULAR_VERSION;
+  }
+  if (frameworks.includes('vue') && !existingDeps['@testing-library/jest-dom']) {
+    viteFrameworkDevDeps['@testing-library/jest-dom'] = TESTING_LIBRARY_JEST_DOM_VERSION;
+  }
+
+  // Install selected @atelier-ui/* packages (dependencies) and Storybook +
+  // the contract loop's own tools + the vitest browser-mode tooling
+  // (devDependencies, exact pins — see the *_VERSION constants above)
+  const installTask = addDependenciesToPackageJson(tree, deps, {
+    ...storybookDevDeps,
+    ...contractLoopDevDeps,
+    ...viteFrameworkDevDeps,
+  });
 
   // Remove the preset package itself — create-nx-workspace adds it automatically
   // but it's a build-time tool and should not be in the workspace's dependencies
@@ -665,6 +881,18 @@ file exports). The Desktop Bridge covers creation and inspection without a token
   updateJson(tree, 'package.json', (pkg) => {
     pkg.scripts = pkg.scripts ?? {};
     pkg.scripts.preflight = 'node tools/scripts/preflight.mjs';
+    // The contract loop (ADR-0121 S4). `figma:snapshot` ships with a literal
+    // placeholder rather than the Atelier file key — this preset has no
+    // "which Figma file is yours" schema option (only the boolean
+    // `figmaMcp`), and QMnDD8uZQPldPrlCwZZ58T is THIS repo's own file, not
+    // the attendee's. CLAUDE.md's "The contract loop" section spells out how
+    // to fill it in.
+    pkg.scripts['check:contracts'] = 'node tools/scripts/check-contracts.mjs';
+    pkg.scripts['figma:snapshot'] =
+      'node tools/scripts/figma-snapshot-contracts.mjs --file <YOUR_FIGMA_FILE_KEY>';
+    // Browser-mode Storybook tests (owner correction 2026-09-10 to ADR-0123).
+    // Identical to the monorepo's own root package.json script.
+    pkg.scripts['check:stories'] = 'nx run-many -t storybook-test --parallel=1';
     return pkg;
   });
 
@@ -709,12 +937,16 @@ ${frameworks.map((f) => `- \`workshop-${f}\` — \`@atelier-ui/${f}\``).join('\n
 
 \`\`\`bash
 npm install
+npx playwright install chromium   # one-time — needed by npm run check:stories
 npx nx serve workshop-${frameworks[0]}
 \`\`\`
 
 ## Storybook
 
 ${frameworks.map((f, i) => `- \`workshop-${f}\` — \`npx nx storybook workshop-${f}\` — http://localhost:${6006 + i}`).join('\n')}
+
+Every story is also a browser-mode test — run them all headless in Chromium with
+\`npm run check:stories\`.
 
 ## Agent Skills
 
@@ -729,8 +961,9 @@ workspace from being created. Re-run or update them with:
 ${SKILLS_ADD_COMMAND_FOR_HUMANS}
 \`\`\`
 
-Note: \`test-run\` is not available in this scaffold — there is no test runner
-(\`@storybook/addon-vitest\`) installed. See CLAUDE.md for details.`
+Note: \`test-run\` works once a local Storybook is running — every story here is a
+render + accessibility test (\`@storybook/addon-vitest\`, also runnable offline via
+\`npm run check:stories\`). See CLAUDE.md for details.`
     : `Skipped (\`skills: false\`). Install by hand:
 
 \`\`\`bash

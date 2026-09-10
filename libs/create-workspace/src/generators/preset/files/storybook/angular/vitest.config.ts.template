@@ -1,0 +1,40 @@
+import { defineConfig } from 'vitest/config';
+import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
+// Same plugin libs/angular/vite.config.mts uses in the monorepo. Without it,
+// `@angular/common`'s partially-Ivy-compiled `PlatformLocation` factory has no
+// linker/JIT compiler wired up in this Vite pipeline, and merely importing
+// `@storybook/angular-vite` in vitest.setup.ts throws "The injectable
+// 'PlatformLocation' needs to be compiled using the JIT compiler, but
+// '@angular/compiler' is not available" before a single story loads.
+// React/Vue don't need an equivalent because their frameworks ship no such
+// partially-compiled npm packages.
+import angular from '@analogjs/vite-plugin-angular';
+import { playwright } from '@vitest/browser-playwright';
+
+// Named `vitest.config.ts` (not `vitest.storybook.config.ts`, the name the
+// monorepo's own libs/angular uses) so `@storybook/addon-vitest`'s `test-run`
+// tool finds it directly: its VitestManager walks up from a story's
+// `.storybook` directory looking for the nearest vitest/vite config, and
+// this is the standard filename it looks for first. The monorepo needs a
+// root `vitest.config.mjs` with an explicit `projects: [...]` list because
+// each library's own file has a non-standard name; a single-app scaffold
+// doesn't need that indirection.
+export default defineConfig({
+  plugins: [
+    angular(),
+    storybookTest({
+      configDir: new URL('./.storybook', import.meta.url).pathname,
+    }),
+  ],
+  test: {
+    name: 'storybook:angular',
+    globals: true,
+    browser: {
+      enabled: true,
+      headless: true,
+      provider: playwright(),
+      instances: [{ browser: 'chromium' }],
+    },
+    setupFiles: ['.storybook/vitest.setup.ts'],
+  },
+});

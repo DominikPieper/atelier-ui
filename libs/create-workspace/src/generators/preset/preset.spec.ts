@@ -511,14 +511,16 @@ describe('preset generator', () => {
     expect(vueMain).toContain('@storybook/vue3-vite');
   });
 
-  it('main.ts keeps addon-mcp/a11y/docs but drops addon-vitest and addon-designs', async () => {
+  it('main.ts keeps addon-mcp/vitest/a11y/docs but drops addon-designs', async () => {
     await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
 
     const main = tree.read('workshop-angular/.storybook/main.ts', 'utf-8') ?? '';
     expect(main).toContain('@storybook/addon-mcp');
+    // Owner correction 2026-09-10 to ADR-0123's original "no test runner"
+    // call: addon-vitest ships after all.
+    expect(main).toContain('@storybook/addon-vitest');
     expect(main).toContain('@storybook/addon-a11y');
     expect(main).toContain('@storybook/addon-docs');
-    expect(main).not.toContain('addon-vitest');
     expect(main).not.toContain('addon-designs');
     expect(main).not.toContain('staticDirs');
     expect(main).not.toContain('BUILD_STORYBOOK');
@@ -586,9 +588,75 @@ describe('preset generator', () => {
     // angular templates use '@storybook/angular-vite' for their types instead
     // (it has no such peer).
     expect(pkg.devDependencies['@storybook/angular']).toBeUndefined();
-    // Deliberately not installed: the scaffold has no test runner (S1).
-    expect(pkg.devDependencies['@storybook/addon-vitest']).toBeUndefined();
+    // Owner correction 2026-09-10 to ADR-0123's original "no test runner"
+    // call: the browser-mode test runner ships after all.
+    expect(pkg.devDependencies['@storybook/addon-vitest']).toBe('10.6.0');
+    expect(pkg.devDependencies['vitest']).toBe('^4.0.8');
+    expect(pkg.devDependencies['@vitest/browser-playwright']).toBe('^4.1.0');
+    expect(pkg.devDependencies['playwright']).toBe('^1.36.0');
     expect(pkg.devDependencies['@storybook/addon-designs']).toBeUndefined();
+  });
+
+  it('adds each selected framework its own Vite plugin for vitest browser mode', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular,react,vue' });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.devDependencies['@vitejs/plugin-react']).toBe('6.1.1');
+    expect(pkg.devDependencies['@vitejs/plugin-vue']).toBe('^6.0.5');
+    expect(pkg.devDependencies['@analogjs/vite-plugin-angular']).toBe('2.7.1');
+    // Only Vue's vitest.setup.ts.template imports jest-dom's custom matchers.
+    expect(pkg.devDependencies['@testing-library/jest-dom']).toBe('^6.9.1');
+  });
+
+  it('does not add a framework Vite plugin already present in package.json', async () => {
+    tree.write(
+      'package.json',
+      JSON.stringify({ name: 'my-workspace', devDependencies: { '@vitejs/plugin-react': '5.0.0' } }),
+    );
+
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'react' });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.devDependencies['@vitejs/plugin-react']).toBe('5.0.0');
+  });
+
+  it('writes vitest.config.ts and .storybook/vitest.setup.ts per app', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular,react,vue' });
+
+    for (const fw of ['angular', 'react', 'vue']) {
+      const config = tree.read(`workshop-${fw}/vitest.config.ts`, 'utf-8') ?? '';
+      expect(config).toContain('storybookTest');
+      expect(config).toContain(`'storybook:${fw}'`);
+      const setup = tree.read(`workshop-${fw}/.storybook/vitest.setup.ts`, 'utf-8') ?? '';
+      expect(setup).toContain('setProjectAnnotations');
+    }
+    // Angular's setup imports from '@storybook/angular-vite', never the
+    // peer-incompatible '@storybook/angular' the monorepo itself uses.
+    const angularSetup = tree.read('workshop-angular/.storybook/vitest.setup.ts', 'utf-8') ?? '';
+    expect(angularSetup).toContain("from '@storybook/angular-vite'");
+    expect(angularSetup).not.toContain("from '@storybook/angular'");
+  });
+
+  it('adds a storybook-test target per app and a root check:stories script', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'react' });
+
+    const project = readJson(tree, 'workshop-react/project.json');
+    expect(project.targets['storybook-test'].executor).toBe('nx:run-commands');
+    expect(project.targets['storybook-test'].options.command).toBe(
+      'npx vitest run --config vitest.config.ts',
+    );
+    expect(project.targets['storybook-test'].options.cwd).toBe('workshop-react');
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.scripts['check:stories']).toBe('nx run-many -t storybook-test --parallel=1');
+  });
+
+  it('preview templates set parameters.a11y.test to error', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular,react,vue' });
+
+    expect(tree.read('workshop-angular/.storybook/preview.ts', 'utf-8')).toContain("test: 'error'");
+    expect(tree.read('workshop-react/.storybook/preview.tsx', 'utf-8')).toContain("test: 'error'");
+    expect(tree.read('workshop-vue/.storybook/preview.ts', 'utf-8')).toContain("test: 'error'");
   });
 
   it('adds storybook/build-storybook targets on port 6006 for a single framework', async () => {
@@ -640,6 +708,101 @@ describe('preset generator', () => {
     ).rejects.toThrow('workshop-angular/project.json');
   });
 
+  // ─── The contract loop (ADR-0121 S4) ───────────────────────────────────────
+
+  it('writes the example contract files under the first selected framework app', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular,react,vue' });
+
+    expect(tree.exists('workshop-angular/src/contracts/types.ts')).toBe(true);
+    expect(tree.exists('workshop-angular/src/contracts/README.md')).toBe(true);
+    expect(tree.exists('workshop-angular/src/contracts/button.contract.ts')).toBe(true);
+    // Not duplicated into the other selected frameworks' apps — the contract
+    // loop is scoped to the first ("primary") framework only.
+    expect(tree.exists('workshop-react/src/contracts/types.ts')).toBe(false);
+    expect(tree.exists('workshop-vue/src/contracts/types.ts')).toBe(false);
+  });
+
+  it('example contract file references AtlButton and its Figma node id', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'react' });
+
+    const contract = tree.read('workshop-react/src/contracts/button.contract.ts', 'utf-8') ?? '';
+    expect(contract).toContain("component: 'AtlButton'");
+    expect(contract).toContain("figmaNodeId: '129:20'");
+  });
+
+  it('writes the shared contract-loop scripts under tools/scripts', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
+
+    expect(tree.exists('tools/scripts/check-contracts.mjs')).toBe(true);
+    expect(tree.exists('tools/scripts/lib/ts-eval.js')).toBe(true);
+    expect(tree.exists('tools/scripts/figma-snapshot-contracts.mjs')).toBe(true);
+  });
+
+  it('writes the AtlButton-only Figma snapshot projection', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
+
+    const snapshot = readJson(tree, 'tools/figma/snapshot.json');
+    expect(snapshot.components).toHaveLength(1);
+    expect(snapshot.components[0].selector).toBe('AtlButton');
+    expect(snapshot.components[0].nodeId).toBe('129:20');
+  });
+
+  it('writes contracts.config.json naming the first selected framework', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'vue,react' });
+
+    const config = readJson(tree, 'contracts.config.json');
+    expect(config.framework).toBe('vue');
+    expect(config.contracts).toBe('workshop-vue/src/contracts');
+    expect(config.stories).toEqual(['workshop-vue/src']);
+    expect(config.snapshot).toBe('tools/figma/snapshot.json');
+  });
+
+  it('adds check:contracts and a placeholder figma:snapshot script to package.json', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.scripts['check:contracts']).toBe('node tools/scripts/check-contracts.mjs');
+    expect(pkg.scripts['figma:snapshot']).toBe(
+      'node tools/scripts/figma-snapshot-contracts.mjs --file <YOUR_FIGMA_FILE_KEY>',
+    );
+  });
+
+  it('adds @modelcontextprotocol/sdk as a devDependency', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.devDependencies['@modelcontextprotocol/sdk']).toBe('^1.29.0');
+  });
+
+  it('adds typescript as a devDependency when the workspace does not already have it', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.devDependencies['typescript']).toBe('6.0.3');
+  });
+
+  it('does not override an existing typescript devDependency', async () => {
+    tree.write(
+      'package.json',
+      JSON.stringify({ name: 'my-workspace', devDependencies: { typescript: '5.4.0' } }),
+    );
+
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.devDependencies['typescript']).toBe('5.4.0');
+  });
+
+  it('CLAUDE.md contains "The Contract Loop" section', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
+
+    const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+    expect(md).toContain('## The Contract Loop');
+    expect(md).toContain('check:contracts');
+    expect(md).toContain('figma:snapshot');
+    expect(md).toContain('addon-vitest');
+  });
+
   // ─── CLAUDE.md / README mention Storybook + skills (S3) ────────────────────
 
   it('CLAUDE.md documents the storybook dev command and port', async () => {
@@ -661,12 +824,14 @@ describe('preset generator', () => {
     expect(md).toContain('storybookjs/mcp');
   });
 
-  it('CLAUDE.md notes that test-run is unavailable in the scaffold', async () => {
+  it('CLAUDE.md documents that test-run and check:stories both work', async () => {
     await presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
     expect(md).toContain('test-run');
     expect(md).toContain('addon-vitest');
+    expect(md).toContain('check:stories');
+    expect(md).toContain('playwright install chromium');
   });
 
   it('CLAUDE.md prints the re-run command when skills are enabled', async () => {

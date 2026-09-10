@@ -1,0 +1,14 @@
+/// <reference types="vitest/globals" />
+// '@storybook/angular-vite', not '@storybook/angular' (which the monorepo's
+// own libs/angular/.storybook/vitest.setup.ts imports): this scaffold
+// deliberately never installs '@storybook/angular' — its peer on
+// @angular-devkit/build-angular collides with a freshly scaffolded Angular
+// app's own build tooling (see the STORYBOOK_FRAMEWORK_PACKAGE comment in
+// preset.ts). '@storybook/angular-vite' re-exports the same
+// setProjectAnnotations.
+import { setProjectAnnotations } from '@storybook/angular-vite';
+import * as projectAnnotations from './preview';
+
+const project = setProjectAnnotations([projectAnnotations]);
+
+beforeAll(project.beforeAll);

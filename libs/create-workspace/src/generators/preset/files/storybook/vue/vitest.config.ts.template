@@ -1,0 +1,32 @@
+import { defineConfig } from 'vitest/config';
+import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
+import vue from '@vitejs/plugin-vue';
+import { playwright } from '@vitest/browser-playwright';
+
+// Named `vitest.config.ts` (not `vitest.storybook.config.ts`, the name the
+// monorepo's own libs/vue uses) so `@storybook/addon-vitest`'s `test-run`
+// tool finds it directly: its VitestManager walks up from a story's
+// `.storybook` directory looking for the nearest vitest/vite config, and
+// this is the standard filename it looks for first. The monorepo needs a
+// root `vitest.config.mjs` with an explicit `projects: [...]` list because
+// each library's own file has a non-standard name; a single-app scaffold
+// doesn't need that indirection.
+export default defineConfig({
+  plugins: [
+    vue(),
+    storybookTest({
+      configDir: new URL('./.storybook', import.meta.url).pathname,
+    }),
+  ],
+  test: {
+    name: 'storybook:vue',
+    globals: true,
+    browser: {
+      enabled: true,
+      headless: true,
+      provider: playwright(),
+      instances: [{ browser: 'chromium' }],
+    },
+    setupFiles: ['.storybook/vitest.setup.ts'],
+  },
+});

@@ -376,6 +376,11 @@ function testFramework(framework, registryUrl, npmrcPath) {
       'tools/scripts/preflight.mjs',
       `workshop-${framework}/.storybook/main.ts`,
       `workshop-${framework}/.storybook/${previewFile}`,
+      `workshop-${framework}/vitest.config.ts`,
+      `workshop-${framework}/.storybook/vitest.setup.ts`,
+      'tools/scripts/check-contracts.mjs',
+      'tools/figma/snapshot.json',
+      'contracts.config.json',
     ];
     for (const rel of mustExist) {
       if (!existsSync(join(wsPath, rel))) throw new Error(`missing: ${rel}`);
@@ -444,6 +449,26 @@ function testFramework(framework, registryUrl, npmrcPath) {
     // runs it live at a workshop.
     run(`npx nx build-storybook workshop-${framework} --skip-nx-cache`, { cwd: wsPath });
     ok(`build-storybook workshop-${framework} green`);
+
+    // The contract loop (ADR-0121 S4): the example AtlButton contract, the
+    // projected tools/figma/snapshot.json, and the example story must be
+    // consistent with each other in a REAL scaffolded workspace — where, unlike
+    // the monorepo, the story imports the published @atelier-ui/<fw> package
+    // from node_modules rather than a sibling source file. Nothing else in the
+    // repo proves that combination actually works.
+    run(`npm run check:contracts`, { cwd: wsPath });
+    ok('check:contracts green (example AtlButton contract + projected snapshot + example story)');
+
+    // Browser-mode Storybook tests (owner correction 2026-09-10 to ADR-0123 —
+    // @storybook/addon-vitest ships with the scaffold after all). Chromium is
+    // never a postinstall hook (a workshop attendee's first `npm install`
+    // should not silently spend minutes downloading a browser), so the e2e
+    // installs it explicitly here, the same one-time step CLAUDE.md and the
+    // README tell an attendee to run.
+    run(`npx playwright install chromium`, { cwd: wsPath });
+    ok('playwright chromium installed');
+    run(`npm run check:stories`, { cwd: wsPath });
+    ok('check:stories green (every story rendered headless in Chromium, with axe)');
 
     if (exerciseSkills) {
       checkSkillsInstalled(wsPath);

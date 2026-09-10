@@ -1,0 +1,164 @@
+{
+  "meta": {
+    "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
+    "figmaLastModified": "2026-09-10T04:18:29Z",
+    "projectedFrom": "tools/figma/snapshot.json"
+  },
+  "components": [
+    {
+      "selector": "AtlButton",
+      "nodeId": "129:20",
+      "name": "Inputs/AtlButton",
+      "description": "Action button. Maps to AtlButtonSpec in libs/spec.\n\nUse when: a user-initiated action — submit, save, delete, navigate. Pick the visual based on hierarchy: `primary` for the screen's main action (one per screen), `secondary` for supporting actions, `outline` for tertiary/inline, `danger` for destructive actions (delete, irreversible).\n\nDon't use when: the action is a navigation link (use a real `<a>` element, not a styled button), the choice is between two states (use Form/AtlToggle), or the user is filling a form field (use Form/AtlInput / Form/AtlSelect).\n\nAPI surface (Figma → spec):\n- Variant `variant`: primary | secondary | outline | danger — maps to AtlButtonSpec.variant\n- Variant `size`: sm | md | lg — maps to AtlButtonSpec.size\n- Variant `state`: default | hover | focus | active — interaction state\n- Boolean `disabled`: maps to AtlButtonSpec.disabled\n- Boolean `loading`: maps to AtlButtonSpec.loading — shows spinner, disables interaction\n- Boolean `hasIcon`: toggles the leading icon slot (Instance Swap → Icon library)\n\nA11y: native HTML <button>. When the button has no visible label (icon-only), supply `aria-label` — required by spec. Disabled state uses HTML `disabled` (not aria-disabled) for buttons since they're never expected to remain in the tab order.\n\nStatus: structural restructure 2026-04-27 — `state` enum slimmed to interaction (default/hover/focus/active); `loading` and `disabled` moved out as Booleans matching AtlButtonSpec; `hasIcon` Boolean added for icon-slot toggle.\n\nDeclared Boolean properties that reference no layer (2026-08-27, ADR-0058). check:figma reads these lines, so the reason is stated where a designer opening the master sees it:\n- Boolean `hasIcon`: declared but unbound — and it maps to nothing: `AtlButtonSpec` has no `hasIcon`. It is a Figma-side slot toggle for placing an Icon instance, which is a legitimate authoring affordance but not part of the component contract. Bind it to the icon slot layer when that slot exists, or drop it.",
+      "variantAxes": {
+        "variant": [
+          "primary",
+          "secondary",
+          "outline",
+          "danger"
+        ],
+        "size": [
+          "sm",
+          "md",
+          "lg"
+        ],
+        "state": [
+          "default",
+          "focus",
+          "hover",
+          "active"
+        ]
+      },
+      "properties": {
+        "disabled#507:192": "BOOLEAN",
+        "loading#507:217": "BOOLEAN",
+        "hasIcon#507:242": "BOOLEAN",
+        "variant": "VARIANT",
+        "size": "VARIANT",
+        "state": "VARIANT"
+      },
+      "variants": [
+        {
+          "variant": "primary",
+          "size": "sm",
+          "state": "default"
+        },
+        {
+          "variant": "primary",
+          "size": "md",
+          "state": "default"
+        },
+        {
+          "variant": "primary",
+          "size": "lg",
+          "state": "default"
+        },
+        {
+          "variant": "secondary",
+          "size": "sm",
+          "state": "default"
+        },
+        {
+          "variant": "secondary",
+          "size": "md",
+          "state": "default"
+        },
+        {
+          "variant": "secondary",
+          "size": "lg",
+          "state": "default"
+        },
+        {
+          "variant": "outline",
+          "size": "sm",
+          "state": "default"
+        },
+        {
+          "variant": "outline",
+          "size": "md",
+          "state": "default"
+        },
+        {
+          "variant": "outline",
+          "size": "lg",
+          "state": "default"
+        },
+        {
+          "variant": "primary",
+          "size": "md",
+          "state": "focus"
+        },
+        {
+          "variant": "primary",
+          "size": "md",
+          "state": "hover"
+        },
+        {
+          "variant": "primary",
+          "size": "md",
+          "state": "active"
+        },
+        {
+          "variant": "danger",
+          "size": "sm",
+          "state": "default"
+        },
+        {
+          "variant": "danger",
+          "size": "md",
+          "state": "default"
+        },
+        {
+          "variant": "danger",
+          "size": "lg",
+          "state": "default"
+        },
+        {
+          "variant": "danger",
+          "size": "md",
+          "state": "hover"
+        },
+        {
+          "variant": "danger",
+          "size": "md",
+          "state": "active"
+        },
+        {
+          "variant": "danger",
+          "size": "md",
+          "state": "focus"
+        },
+        {
+          "variant": "secondary",
+          "size": "md",
+          "state": "hover"
+        },
+        {
+          "variant": "secondary",
+          "size": "md",
+          "state": "active"
+        },
+        {
+          "variant": "secondary",
+          "size": "md",
+          "state": "focus"
+        },
+        {
+          "variant": "outline",
+          "size": "md",
+          "state": "hover"
+        },
+        {
+          "variant": "outline",
+          "size": "md",
+          "state": "active"
+        },
+        {
+          "variant": "outline",
+          "size": "md",
+          "state": "focus"
+        }
+      ]
+    }
+  ]
+}

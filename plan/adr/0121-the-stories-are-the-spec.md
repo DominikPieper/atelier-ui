@@ -243,3 +243,46 @@ took 26 new stories (Angular 5, React 10, Vue 11), all rendered and axe-clean. S
 children — is not built. What the review found that this stage does not answer: the
 snapshot carries no Figma defaults and no child node ids, so defaults stay
 `check:defaults`' job and story design links stay unverified.
+
+**S4 done 2026-09-10 — the scaffold ships the loop.** `create-workspace` now writes, per
+scaffolded workspace: `<app>/src/contracts/{types.ts, README.md, button.contract.ts}`
+(outside `libs/spec/`, which `preflight.mjs` uses to tell a clone from a scaffold),
+`tools/scripts/{check-contracts.mjs, lib/ts-eval.js, figma-snapshot-contracts.mjs}` as
+byte-identical copies gated by the generalised `sync-preflight.mjs`, a projection of the
+AtlButton master as `tools/figma/snapshot.json` (`check:scaffold-snapshot` keeps it equal
+to the real snapshot's entry), a root `contracts.config.json`, and the scripts
+`check:contracts`, `check:stories`, `figma:snapshot`. Three facts fixed here:
+
+- **The check is portable**: flags → `contracts.config.json` → monorepo defaults, and the
+  docgen packages resolve from the *cwd's* `node_modules`, so a scaffold uses its own
+  Storybook. The monorepo run is unchanged (0 errors, 93 warnings).
+- **The snapshot generator's roster is the contracts.** `figma-snapshot-contracts.mjs`
+  reads every contract's `figmaNodeId` and `--file <key>`, and writes exactly the fields
+  the check consumes; the Atelier-specific `figma-snapshot.mjs` (hardcoded masters, token
+  census, type census) stays the monorepo's. Verified only in `--dry-run` — there is no
+  Desktop Bridge in the environment that built it.
+- **addon-vitest ships after all.** ADR-0123 had left it out the same morning; the owner
+  reversed that once ADR-0121 was on the table (ADR-0123 carries the dated correction).
+  Per app: `vitest.config.ts` — that literal name, so `test-run`'s walk-up finds it
+  (ADR-0112) — with the framework's Vite plugin, `.storybook/vitest.setup.ts`,
+  `a11y.test: 'error'`, a `storybook-test` target; Chromium is the attendee's
+  `npx playwright install chromium`, checked by `preflight.mjs`, never a postinstall.
+
+Proven: React end to end through local verdaccio in 176 s — install, `nx build`,
+`build-storybook`, `check:contracts`, Chromium install, `check:stories` green, skills
+installed; `nx test create-workspace` 78 passing; the projection gate red on a corrupted
+node id, then restored. Not proven: Angular and Vue through a real install (one framework
+per e2e run, ADR-0123's precedent); the Bridge path of the generator.
+
+**What the proof does not say, recorded rather than smoothed over:** on the example story
+`check:contracts` is green *vacuously*. The example renders `AtlButton` from
+`@atelier-ui/<fw>` in `node_modules`, where local docgen cannot follow a bare specifier,
+so the check finds no component to compare and reports only `[NO-STORY-META]`. It proves
+the wiring, not the example. The check does its real work on components whose source is
+in the workspace — the attendee's — and for library components the prop source is the
+hosted Storybook manifest (ADR-0097), which a `--manifest` input could feed the check in a
+later step. The generated `CLAUDE.md` says so. Two smaller traps for the record: `.ts`
+files under the preset's `files/` must carry the `.template` suffix or the package's own
+`tsc` compiles them away (found by an `ENOENT` inside the packed tarball, not by a
+gate), and `@vitest/browser-playwright` has a bare `playwright` peer this repo's root
+never named — the scaffold pins it at `@playwright/test`'s range.
