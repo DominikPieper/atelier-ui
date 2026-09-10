@@ -56,11 +56,11 @@ const SCAFFOLD: Record<Framework, { file: string; cmd: string; port: number; mou
 // libs/<fw>/src/lib/cookbook.stories.* (all three frameworks) and Angular's
 // kitchen-sink.stories.ts. That placement matters, not just the directory:
 // check-story-descriptions.js only walks *directories* under src/lib/, so a
-// loose top-level file needs no libs/spec metadata wiring — putting it in
-// its own subdirectory instead would trip that gate for no metadata a kata
-// component has any business owning (the same class of mistake the
-// design-to-code skill's workshop branch was built to avoid for the spec
-// file itself). Storybook auto-discovers the story via the
+// loose top-level file needs no libs/spec metadata wiring and no contract —
+// putting it in its own subdirectory instead would trip that gate for no
+// metadata a kata component has any business owning (the same class of
+// mistake the design-to-code skill's workshop branch was built to avoid for
+// the contract file itself). Storybook auto-discovers the story via the
 // `../src/**/*.stories.*` glob in each framework's .storybook/main.ts — no
 // mount step, no app to serve.
 const CLONE_STORY_TITLE = 'Showcase/Settings Card';
@@ -205,9 +205,9 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
       </p>
       <p class="kata-step-desc" style="margin-top: 0.4rem">
         On Angular and Vue the hosted <code>storybook-*</code> MCP answers component
-        lookups natively, already in that framework's own shape (ADR-0097) — and either
-        way props and variants are identical across frameworks, because all three share
-        one spec contract.
+        lookups natively, already in that framework's own shape (ADR-0097) — each
+        framework's own docgen manifest is where its props and variants come from, and
+        the component's micro-contract names the master those variants have to match.
       </p>
       {FRAMEWORKS.map((fw, i) => (
         <div data-fw-panel={fw} hidden={i !== 0}>

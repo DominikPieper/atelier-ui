@@ -8,10 +8,12 @@ out-of-scope: false
 
 # Build mode — spec exists, master does not: stop and hand the first step to the architect
 
-`AtlFormFieldSpec` exists in `libs/spec/src/index.ts`; `tools/figma/snapshot.json` (43
-masters) has no `AtlFormField` — it is one of four spec interfaces without a master
-(AtlCaption, AtlFormField, AtlIcon, AtlReadonly as of 2026-09-07). Build cannot start
-without a node.
+`AtlFormFieldSpec` exists in `libs/spec/src/index.ts` (the legacy spec block, still
+required in the repo case until ADR-0121 S6); `tools/figma/snapshot.json` (43 masters) has
+no `AtlFormField` — it is one of four spec interfaces without a master (AtlCaption,
+AtlFormField, AtlIcon, AtlReadonly as of 2026-09-07). With no node id there is also
+nothing to put in a micro-contract's `figmaNodeId` — this is SKILL.md's "Contract without
+a master" edge case. Build cannot start without a node.
 
 ## Required surface
 
@@ -20,9 +22,10 @@ without a node.
    or a look-alike master (AtlInput) as a stand-in.
 2. Says plainly: the master is missing; creating it is `figma-workspace-architect` Build
    work; this skill resumes once a node exists.
-3. Starts the handoff document anyway with what *is* known (spec block, that it composes
-   AtlInput/AtlCaption-style parts, target files) and records the order "master first,
-   then this".
+3. Starts the handoff document anyway with what *is* known (the existing spec block, that
+   it composes AtlInput/AtlCaption-style parts, target files) and records the order
+   "master first, then this" — the micro-contract cannot be written either, for the same
+   reason.
 4. Does not generate React code.
 
 ## Regressions to flag

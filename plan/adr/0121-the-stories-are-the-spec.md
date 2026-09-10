@@ -286,3 +286,26 @@ files under the preset's `files/` must carry the `.template` suffix or the packa
 `tsc` compiles them away (found by an `ENOENT` inside the packed tarball, not by a
 gate), and `@vitest/browser-playwright` has a bare `playwright` peer this repo's root
 never named — the scaffold pins it at `@playwright/test`'s range.
+
+**S5a done 2026-09-10 — the skill and the curriculum teach the loop.** `design-to-code`
+Build step 3 is "Contract": in the repo case two artefacts, both required until S6 retires
+the legacy gates — the `Atl*Spec` block and metadata module as the cross-framework join
+key, and the micro-contract under `libs/spec/src/contracts/`; in the workshop case the
+micro-contract alone, beside the component, typed through a new `@atelier-ui/spec/contracts/*`
+alias, with the participant's own snapshot written by `figma-snapshot-contracts.mjs` to an
+explicit `--out` and the check run with `--fw --contracts --stories --snapshot`. Step 5 is
+stories as claims, step 6 adds `storybook-test`, step 7 opens with `check:contracts` and
+assembles the parity `codeSpec` from `--emit`. ADR-0113's workshop artefact — a
+hand-written `Atl*Spec` interface in `atl-<name>.contract.ts` — is superseded and ADR-0113
+says so; the participant's component declares its own input types. The Day-2 curriculum's
+gate claim changed with it: three gates red by design for a single-framework addition
+(`check:sync`, `check:a11y-parity`, `check:design-status`), `check:contracts` warns
+`[NO-MASTER]` in its default run and is red only with the participant's flags on a real
+mismatch; the "spec landed in the shared master" scenario is retired because there is no
+spec to land, and `schulung-claims.e2e.mjs` asserts the new claim with a `wsdemo` fixture
+that never touches `index.ts`. Docs pages, AGENTS.md, the briefs and the skill fixtures
+follow; the loop's step 2 is now named Contract everywhere. Not proven here: the e2e's
+Part 1 did not execute end to end — its clean-tree precondition met the same day's
+uncommitted work — and was reproduced by hand gate by gate; it runs on the next clean
+tree. Still open from Decision 3: the Storybook docs block that displays the contract and,
+with it, the story-meta import (S5b).

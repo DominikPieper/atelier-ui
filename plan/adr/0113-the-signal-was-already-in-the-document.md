@@ -132,3 +132,19 @@ hand. Both files were checked to still agree after the edit.
 - The curriculum change is a documentation convention, not a gate: nothing stops a future
   edit to `schulung.astro` or the agenda from reintroducing a standalone workaround
   instruction if this ADR is not read first.
+
+**Corrected 2026-09-10.** Step 3's workshop artefact is superseded, not its branch.
+ADR-0121 (`plan/adr/0121-the-stories-are-the-spec.md`) retires the hand-written
+`Atl*Spec` interface this record's step 3 described — `atl-<name>.contract.ts` beside the
+generated component — in favour of a micro-contract, `<name>.contract.ts` (an object
+literal typed by `ComponentContract`, not an interface: the master's node id and only
+intentional Figma ↔ code mismatches), and the participant's component now declares its
+own input types directly rather than importing them from that file. The branch itself —
+the Source line deciding repo case vs. workshop case — is unchanged, and §0a of
+`design-to-code`'s `SKILL.md` still reads it the same way; the branch now additionally
+decides where the participant's Figma snapshot is written (`figma-snapshot-contracts.mjs
+--out`, always explicit, never the tool's own default). Step 7's branch (whether the run
+closes on `parity:record`) is likewise unchanged. `tools/e2e/schulung-claims.e2e.mjs`'s
+"spec in the shared master" scenario — appending a spec block to
+`libs/spec/src/index.ts` and asserting three more red gates — is retired along with it:
+there is no spec left to land there, so the scenario has nothing left to reproduce.

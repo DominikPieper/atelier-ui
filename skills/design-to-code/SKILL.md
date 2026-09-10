@@ -1,13 +1,13 @@
 ---
 name: design-to-code
-description: Turns a Figma component into a verified, framework-native Atelier component in one framework, running the repo's Figma → spec → code → verify loop as a checklist that starts from a written handoff document and ends in the parity gate; also reviews one existing component across Figma and code. Use whenever the user wants to implement, build, generate or port a component from a Figma design, master, node or URL — "implement AtlToast from Figma", "build this design in Vue", a pasted figma.com/design link plus a framework, the /first-component kata, a workshop brief, "make the code match the master" — and for review or verification of one component: "review the AtlAlert master before the PR", "does AtlCard still match Figma", "design QA on X", "explain these parity discrepancies", "why does check:figma fail on X". Do NOT use for auditing or restructuring the Figma file as a whole, or for creating a Figma master from the spec (both figma-workspace-architect), for cross-framework spec changes (component-trinity), or for pure Storybook/docs edits.
+description: Turns a Figma component into a verified, framework-native Atelier component in one framework, running the repo's Figma → contract → code → verify loop as a checklist that starts from a written handoff document and ends in the parity gate; also reviews one existing component across Figma and code. Use whenever the user wants to implement, build, generate or port a component from a Figma design, master, node or URL — "implement AtlToast from Figma", "build this design in Vue", a pasted figma.com/design link plus a framework, the /first-component kata, a workshop brief, "make the code match the master" — and for review or verification of one component: "review the AtlAlert master before the PR", "does AtlCard still match Figma", "design QA on X", "explain these parity discrepancies", "why does check:figma fail on X". Do NOT use for auditing or restructuring the Figma file as a whole, or for creating a Figma master from the spec (both figma-workspace-architect), for cross-framework spec changes (component-trinity), or for pure Storybook/docs edits.
 ---
 
 # Design to code
 
 Take one Figma component to a verified component in **one** framework, or review one
 component across both surfaces. The loop is the one `AGENTS.md` describes — Inspect,
-Spec, Generate, Verify — run as a checklist that begins with a written handoff document
+Contract, Generate, Verify — run as a checklist that begins with a written handoff document
 and ends in a gate, because the two places this loop fails are the two ends: prompting
 from a picture (behaviour never gets written down) and stopping at "looks right" (nothing
 records that it was checked).
@@ -41,12 +41,18 @@ Copy this checklist into your working notes and tick it as you go:
         Source line read for repo vs. workshop case (§0a)
 - [ ] 1. Inspect: search → component-for-development → analyze_component_set
 - [ ] 2. Canon: uianatomy bridge view read; composition vs canonical decided and recorded
-- [ ] 3. Spec: repo case → block read/written in libs/spec; workshop case → own file
-        beside the component, libs/spec untouched; new vs extend decided
+- [ ] 3. Contract: repo case → micro-contract in libs/spec/src/contracts (plus the legacy
+        Atl*Spec block/metadata, required until ADR-0121 S6); workshop case →
+        micro-contract beside the component, libs/spec/src/index.ts untouched; new vs
+        extend decided
 - [ ] 4. Docs: storybook-<fw> docs-list → docs-show (local dev: story instructions first)
-- [ ] 5. Generate: one framework, story with tags: ['autodocs'], every value via --ui-*
-- [ ] 6. Gates: nx test <lib>, nx lint <lib> — exit codes read, not tails
-- [ ] 7. Parity: figma_check_design_parity with the relevant of seven sections;
+- [ ] 5. Generate: one framework; one story per variant value and Boolean state,
+        args-based where possible, a play per behaviour line, tags: ['autodocs']
+- [ ] 6. Gates: nx test <lib>, nx lint <lib>, nx run <fw>:storybook-test — exit codes
+        read, not tails
+- [ ] 7. Contract & parity: check:contracts (default for repo case, flags for workshop
+        case) proves coverage and emits the codeSpec fragment; figma_check_design_parity
+        with that plus figma_scan_code_accessibility and the relevant of seven sections;
         interactive Light/Dark check for stateful components; repo case → parity:record,
         workshop case → stop after the check, no record
 - [ ] 8. Report: verified vs assumed; framework, states and sections named
@@ -122,26 +128,46 @@ a strong prior, not scripture.
 
 #### 3. Settle the contract
 
-**Repo case** (§0a — Source is the Atelier file). Read the component's block in
-`libs/spec/src/index.ts` (and `metadata/`, `tokens.manifest.ts`, `behaviors.json`). The
-spec is the ground truth all three adapters and the hosted Storybook manifests are
-drift-gated against, so any binding the docs leave ambiguous is settled here, not in the
-adapter. For a new component, add the spec block first, then run the generator from
-`tools/generators/`: `atl-component --framework=angular|react` for Angular or React,
-`atl-component-vue` for Vue (see `tools/generators/generators.json`). Variant property
-names and values must equal the Figma axis names and values verbatim —
-`variant=primary`, not `Type=Primary` — because `check:figma` compares them as strings.
+Under ADR-0121 the hand-authored artefact is a **micro-contract** (`ComponentContract`):
+the master's node id, and only intentional Figma ↔ code mismatches (`figmaOnly`,
+`codeOnly`, `axisMap`, `probes`) — never props, defaults, unions, variant matrices or
+prose; those live in the component's own types and JSDoc, or in a story. See
+`libs/spec/src/contracts/README.md` and `types.ts` for the schema and a worked example
+(`toggle.contract.ts`).
 
-**Workshop case** (§0a — Source is a duplicate). The generator step is identical — it
-scaffolds boilerplate and never reads `libs/spec` — but the interfaces themselves go in
-their own file beside the generated component, never a block in the shared
-`libs/spec/src/index.ts`: e.g. `libs/angular/src/lib/tagchip/atl-tagchip.contract.ts`.
-`check:variants` and `check:metadata` read the shared `UNION_TO_COMPONENT` and
-`COMPONENT_METADATA_REGISTRY` registries, both keyed off `libs/spec/src/index.ts` — a
-name added there without a matching Atelier master fails `[UNMAPPED]` /
+**Repo case** (§0a — Source is the Atelier file). **Two artefacts, both required until
+ADR-0121 S6 retires the legacy gates.** (a) The component's block in
+`libs/spec/src/index.ts` (and `metadata/`, `tokens.manifest.ts`, `behaviors.json`) — this
+is not the component's spec any more, but it is still the monorepo's cross-framework
+**join key**: `check:props`, `check:variants` and `check:metadata` still read it, so any
+binding those gates leave ambiguous is still settled there, not in the adapter. (b) The
+micro-contract, `libs/spec/src/contracts/<name>.contract.ts` (drop the `Atl` prefix,
+kebab-case the rest: `AtlToggle` → `toggle.contract.ts`). For a new component, add the
+spec block first, then run the generator from `tools/generators/`:
+`atl-component --framework=angular|react` for Angular or React, `atl-component-vue` for
+Vue (see `tools/generators/generators.json`), then write the contract. Variant property
+names and values must equal the Figma axis names and values verbatim —
+`variant=primary`, not `Type=Primary` — because `check:figma` and `check:contracts` both
+compare them as strings.
+
+**Workshop case** (§0a — Source is a duplicate). ADR-0113's old artefact here — a
+hand-written `Atl*Spec` interface in `atl-<name>.contract.ts` — is superseded (ADR-0121,
+corrected 2026-09-10): the generated component's own input types are the API, declared
+directly on the component (a literal-union type beside it, no separate interface file),
+and the only hand-authored artefact is the micro-contract, beside the generated component
+and never a block in the shared `libs/spec/src/index.ts`: `libs/<fw>/src/lib/<name>/
+<name>.contract.ts`, typed via the `@atelier-ui/spec/contracts/*` path alias
+(`import type { ComponentContract } from '@atelier-ui/spec/contracts/types';`) — e.g.
+`libs/angular/src/lib/tagchip/tag-chip.contract.ts`. The generator step is identical
+either way — it scaffolds boilerplate and never reads `libs/spec`. `check:variants` and
+`check:metadata` still read the shared `UNION_TO_COMPONENT` and
+`COMPONENT_METADATA_REGISTRY` registries, both keyed off `libs/spec/src/index.ts` until
+S6 — a name added there without a matching Atelier master still fails `[UNMAPPED]` /
 `[MISSING-REGISTRY]`, on top of the three gates (`check:sync`, `check:a11y-parity`,
 `check:design-status`) any single-framework addition already trips. Same
-verbatim-against-the-Figma-axis rule for variant names and values.
+verbatim-against-the-Figma-axis rule for variant names and values — now also read by
+`check:contracts` once step 7's flags point it at your own contract, stories and
+snapshot.
 
 #### 4. Read the framework's own docs
 
@@ -158,33 +184,88 @@ a manual preview in the running Storybook. Details in `references/framework-note
 
 #### 5. Generate
 
-Write the component, its CSS, its spec test (Testing Library, never raw `TestBed`) and its
-story in the one framework. The story declares `tags: ['autodocs']` — autodocs is not on
-globally in any of the three Storybooks, and a story without it renders a Canvas and no
-Docs tab, which fails the closing check for a reason unrelated to the component. Bind every
-colour, spacing, radius and font value to a `--ui-*` custom property; `check:css-tokens`
-and `check:token-bypass` catch literals, but catching them yourself is cheaper. Elevation is
-CSS-only (`Library Tokens` carries no shadow variable) — state it, do not invent one.
+Write the component — its own types and JSDoc are the API, no separate spec interface —
+its CSS, its test (Testing Library, never raw `TestBed`), and its stories in the one
+framework. Bind every colour, spacing, radius and font value to a `--ui-*` custom
+property; `check:css-tokens` and `check:token-bypass` catch literals, but catching them
+yourself is cheaper. Elevation is CSS-only (`Library Tokens` carries no shadow variable) —
+state it, do not invent one.
+
+**The stories are the claims** (ADR-0121): one story per variant value and per Boolean
+state, `args`-based wherever the story can express it that way, a `play` function for
+every behaviour line the handoff document names (the `play` title names the behaviour it
+proves), and `tags: ['autodocs']` on every story — autodocs is not on globally in any of
+the three Storybooks, and a story without it renders a Canvas and no Docs tab, which
+fails the closing check for a reason unrelated to the component. `parameters.a11y.test`
+is `'error'` globally, so a story that fails axe fails the suite in step 6, not just the
+panel.
 
 #### 6. Run the gates and read the exit codes
 
 ```
 nx test <lib> > /tmp/test.out 2>&1; echo $?
 nx lint <lib> > /tmp/lint.out 2>&1; echo $?
+nx run <fw>:storybook-test > /tmp/storybook-test.out 2>&1; echo $?
 ```
 
-Piping into `tail` or `grep` reports the pipe's status, always `0`; this repo has already
-recorded a false "all green" from exactly that. Lint through Nx, not the raw binary — the
-project config is stricter.
+`storybook-test` renders every story in a real Chromium and runs axe against it
+(`parameters.a11y.test: 'error'`) — this is where the `play` functions from step 5
+actually execute; an assertion-free `play` passes it and proves nothing. Piping into
+`tail` or `grep` reports the pipe's status, always `0`; this repo has already recorded a
+false "all green" from exactly that. Lint through Nx, not the raw binary — the project
+config is stricter.
 
-#### 7. Prove parity, then record it
+#### 7. Prove coverage, then parity, then record it
 
-`figma_check_design_parity` compares only the `codeSpec` sections you declare — there are
-seven: visual, spacing, typography, tokens, componentAPI, accessibility, metadata
-(`references/parity-codespec.md`). Declare every section the handoff document touches; a
-thin spec comes back clean and proves nothing. `figma_scan_code_accessibility` with
-`mapToCodeSpec: true` builds the accessibility slice from the rendered story. Know the
-tool's ceiling: a static tree read reaches only the default state — on AtlSelect four of
+**`check:contracts` first.** It joins the micro-contract, the framework's docgen manifest
+and the stories' `args` (plus the Figma snapshot, when one is available) and reports drift
+by tag — `libs/spec/src/contracts/README.md` and the header of
+`tools/scripts/check-contracts.mjs` carry the full tag table. **Repo case:** the default
+run, unchanged by any flag —
+
+```
+npm run check:contracts
+```
+
+**Workshop case:** your own files, none of them on the default paths —
+
+```
+node tools/scripts/check-contracts.mjs --fw <fw> \
+  --contracts libs/<fw>/src/lib/<name> \
+  --stories libs/<fw>/src/lib/<name> \
+  --snapshot libs/<fw>/src/lib/<name>/figma.snapshot.json
+```
+
+That snapshot is generated once, with the Bridge connected, before this call:
+
+```
+node tools/scripts/figma-snapshot-contracts.mjs --file <duplicate file key> \
+  --contracts libs/<fw>/src/lib/<name> \
+  --out libs/<fw>/src/lib/<name>/figma.snapshot.json
+```
+
+Always give an explicit `--out` — the bare default is Atelier's own
+`tools/figma/snapshot.json`, and writing there would corrupt the repo's real roster.
+**Without the Bridge**, drop `--snapshot` and run the check anyway: it falls back to the
+monorepo's own snapshot, which has no entry for a workshop component, so it reports
+`[NO-MASTER]` for it rather than failing — the check still proves story coverage against
+the manifest and, with `--emit <dir>`, still writes the codeSpec fragment below. Fix every
+`error`-level finding (`AXIS`, `BOOLEAN`, `ENUM-UNDRAWN`, `COVERAGE`, `CONTRACT-NODE`,
+`CONTRACT-MISSING`, `DOCGEN-EMPTY`, `STALE-EXEMPTION`) before moving on; `warning`-level
+findings (`NO-MASTER`, `FIGMA-ONLY`, `FW-ONLY`, `NO-STORY-META`, `CONTRACT-ORPHAN`,
+`COVERAGE-BOOL`, `UNMIRRORED`, `UNRESOLVED-ARGS`) are read, not necessarily cleared.
+
+**Then assemble the parity `codeSpec`.** `check:contracts --emit <dir>` writes
+`<dir>/<fw>/<Name>.codespec.json` with `componentAPI`, `metadata` and `tokens.usedTokens`
+— derived from the manifest and a token scan, not hand-typed. `figma_scan_code_accessibility`
+with `mapToCodeSpec: true` adds the `accessibility` section from the rendered story. Of
+the seven `codeSpec` sections (`references/parity-codespec.md`), `visual`, `spacing` and
+`typography` are not yet derived this way — ADR-0121's stage 2 (rendered paint against the
+snapshot) is not built — so declare them only if you assemble them from the rendered story
+yourself, and remember a thin spec comes back clean and proves nothing.
+
+`figma_check_design_parity` then compares that codeSpec against the node. Know the tool's
+ceiling: a static tree read reaches only the default state — on AtlSelect four of
 five painted states sit behind pseudo-classes — so for any stateful component also run the
 interactive Light/Dark check in the architect skill's `code-verify` reference. Read every
 discrepancy and decide: fix the code, fix the master (an architect Build/Migrate task), or
@@ -241,7 +322,8 @@ human can answer.
 - [ ] R0. Pin: git SHA + Figma lastModified (npm run figma:snapshot if the master moved)
 - [ ] R1. Figma side: analyze_component_set vs variantMatrix; lint; a11y audit;
          the five check:figma items; description names Atl*Spec; Inventory tile is INSTANCE
-- [ ] R2. Code side: parity with declared sections; scan_code_accessibility; check:parity
+- [ ] R2. Code side: check:contracts (repo default, or workshop flags); parity with
+         declared sections; scan_code_accessibility; check:parity
 - [ ] R3. Interactive: each state, Light and Dark (code-verify.md) for stateful components
 - [ ] R4. Human prompts: detach test, non-colour signal, leading, behaviour the brief names
 - [ ] R5. Report: Blockers first; known false positives named, not re-fixed
@@ -258,11 +340,15 @@ human can answer.
   the set, `figma_audit_component_accessibility` (≥ 85 per `plan/figma.md`). The five
   `check:figma` items (`plan/figma-component-checklist.md`) are what `npm run check:figma`
   reports; run it and quote it rather than re-deriving.
-- **R2.** As Build step 7. Re-record (`parity:record`) only when the user asked for it
-  *and* every discrepancy is fixed or durably recorded — Review has no handoff document,
-  so "intentional" here means an allowlist entry with a reason or an open `tasks/todo.md`
-  decision item; a gap that is merely mentioned in an old commit message is open, not
-  recorded. Say "clean" or "clean except <named, recorded gap>", never just "clean".
+- **R2.** Run `check:contracts` first — repo case: the default `npm run check:contracts`;
+  workshop case: Build step 7's flags against the component's own contract, stories and
+  snapshot. Its `error`-level findings are review findings, not merely reported. Then as
+  Build step 7 for the parity `codeSpec` and the call itself. Re-record (`parity:record`)
+  only when the user asked for it *and* every discrepancy is fixed or durably recorded —
+  Review has no handoff document, so "intentional" here means an allowlist entry with a
+  reason or an open `tasks/todo.md` decision item; a gap that is merely mentioned in an
+  old commit message is open, not recorded. Say "clean" or "clean except <named, recorded
+  gap>", never just "clean".
 - **R3.** Static parity reaches about a fifth of what Figma paints; a review that skips
   the interactive pass says so explicitly.
 - **R4.** The questions no tool answers, phrased for the reviewer: would a designer new
@@ -278,10 +364,14 @@ human can answer.
 **"Implement TagChip in React from my handoff doc"** → Build. Read the document, confirm the
 node id resolves and the composition claim (tag-input slots + badge). If the document's
 Source names a duplicate (this is the workshop `tagchip.md` brief in its usual shape) —
-own `atl-tagchip.contract.ts`, `libs/spec/src/index.ts` untouched, generator, React docs
-for `AtlBadge`, component + story + test, gates, parity with the declared sections,
-**no `parity:record`**. If Source instead names the Atelier file, the same steps run with
-the spec block added to `libs/spec/src/index.ts` and the run closing on `parity:record`.
+own `tag-chip.contract.ts` beside the component (typed via `@atelier-ui/spec/contracts/*`),
+`libs/spec/src/index.ts` untouched, generator, React docs for `AtlBadge`, component with
+its own prop types + stories with a `play` per behaviour line, gates including
+`storybook-test`, `check:contracts` with the workshop flags, parity with the declared
+sections, **no `parity:record`**. If Source instead names the Atelier file, the same steps
+run with both the legacy spec block added to `libs/spec/src/index.ts` and a
+`libs/spec/src/contracts/tag-chip.contract.ts` micro-contract (until ADR-0121 S6 retires
+the former), the default `check:contracts` run, and the run closing on `parity:record`.
 
 **"Build this in Vue: figma.com/design/QMnDD8uZQPldPrlCwZZ58T/...?node-id=55-141"** → Build,
 stops early. No handoff document. Inspect node `55:141` (AtlBreadcrumbs), fill the
@@ -300,19 +390,21 @@ with the `wcag-color-only` false positive named up front.
 ## Common edge cases
 
 - **The handoff document's Source names a duplicate, not the Atelier file.** That is the
-  workshop case (§0a, step 3, step 7) — own spec file, no `parity:record` — regardless of
-  who is building it or whether it might one day become a real Atelier component.
+  workshop case (§0a, step 3, step 7) — own micro-contract, no `parity:record` —
+  regardless of who is building it or whether it might one day become a real Atelier
+  component.
   Promoting it later is a fresh Build against the real master and its own node, not
   editing this run's files or records in place.
 - **Master and spec disagree on an axis value.** Do not pick a side silently. The spec is
   the contract; the master is what `check:figma` reads. Report the mismatch and let the
   owner choose — usually the fix is a rename on the Figma side (architect, Migrate).
-- **Spec exists but there is no master.** Compare the spec's interfaces with the
-  `components[].selector` list in `tools/figma/snapshot.json` rather than trusting a plan
-  document — the node table in `plan/figma.md` has been stale before (it still lists
-  `55:141` for AtlBreadcrumbs; the master is `55:139`). Build cannot start without a node:
-  the master is an architect Build task first; record that order in the handoff document
-  and stop.
+- **Contract without a master.** Compare against the `components[].selector` list in
+  `tools/figma/snapshot.json` rather than trusting a plan document — the node table in
+  `plan/figma.md` has been stale before (it still lists `55:141` for AtlBreadcrumbs; the
+  master is `55:139`) — and expect `check:contracts` to say the same thing itself, as
+  `[NO-MASTER]`, once a contract and a story exist with nothing to compare against. Build
+  cannot start without a node: the master is an architect Build task first; record that
+  order in the handoff document and stop.
 - **The node in the URL does not exist.** A pasted link can predate a rebuild. Establish
   that with one read-only call — `figma_execute` running `await figma.loadAllPagesAsync();
   return figma.getNodeByIdAsync('<id>')` — before saying anything about what the node

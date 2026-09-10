@@ -81,7 +81,7 @@ const DAYS: Day[] = [
         bullets: [
           'Was ist Storybook, was sind Stories, Prop-Tables',
           'Hosted Storybooks öffnen — selbe Komponente (Button) in Angular/React/Vue vergleichen',
-          'libs/spec als Quelle der Wahrheit — Parität spürbar machen',
+          'Die Komponente ist die Quelle der Form, der Contract die Quelle der Absicht — Parität mit check:contracts sichtbar machen',
           'Was Storybook 10.4 gebracht hat und im gepinnten 10.6.0 weiterhin aktiv ist: Agentic Setup, experimentalReactComponentMeta (Atelier lässt den Docgen aus — Reacts Prop-Tabellen kommen weiter aus react-docgen) — seit 10.6 mit eigenen Geschwistern für Angular und Vue (experimentalDocgenServer, in beiden explizit gesetzt statt sich auf den Default zu verlassen), Change Review Sidebar, Subcomponent-Docs',
         ],
       },
@@ -134,7 +134,7 @@ const DAYS: Day[] = [
     goal: 'Jeder Teilnehmer hat eine selbst gestaltete Komponente durchgängig produziert: Figma-Spec mit Variants & Tokens, generierte Story, generierter Code im gewählten Framework, A11y-Check bestanden, Dark Mode funktioniert.',
     result: [
       'Eigene Komponente im eigenen Figma-Draft (Component-Set mit Variants + Properties + Dark-Mode)',
-      'Generierte Spec + Story im eigenen Workspace',
+      'Contract + Stories im eigenen Workspace',
       'Funktionierende Implementierung im gewählten Framework',
       'A11y-Audit bestanden',
     ],
@@ -147,7 +147,7 @@ const DAYS: Day[] = [
         bullets: [
           'Tag-1-Recap',
           'Komponenten-Brief vorstellen — Anatomie, Axes, States, A11y-Anforderungen. Ein Brief je Komponente liegt im Repo unter workshop/briefs/{toast,tagchip,statcard,avatar}.md',
-          'uianatomy MCP als Hilfsmittel zeigen — und daran das Skills-Konzept: ein Skill ist eine Anleitung, die Claude lädt, wenn die Aufgabe passt. Fünf sind für diese Schulung relevant, nicht drei: uianatomy-mcp triggert hier automatisch; figma-workspace-architect und atelier-design begleiten gleich Block 01; design-to-code trägt ab Block 02 den ganzen Rest des Tages — das Routing zwischen eigener Spec-Datei und geteiltem Master läuft bereits durch ihn (siehe Block 02 unten); artboard-bridge bindet die Schritt-0/Schritt-5-Artefakte aus /claude-design ein, mit Publish bislang trainer-only',
+          'uianatomy MCP als Hilfsmittel zeigen — und daran das Skills-Konzept: ein Skill ist eine Anleitung, die Claude lädt, wenn die Aufgabe passt. Fünf sind für diese Schulung relevant, nicht drei: uianatomy-mcp triggert hier automatisch; figma-workspace-architect und atelier-design begleiten gleich Block 01; design-to-code trägt ab Block 02 den ganzen Rest des Tages — das Routing zwischen eigenem Contract und geteiltem Master läuft bereits durch ihn (siehe Block 02 unten); artboard-bridge bindet die Schritt-0/Schritt-5-Artefakte aus /claude-design ein, mit Publish bislang trainer-only',
         ],
       },
       {
@@ -170,14 +170,16 @@ const DAYS: Day[] = [
       {
         num: '02',
         time: '11:15–12:30 · 75 min',
-        title: 'Spec & Story per Prompt',
+        title: 'Contract & Stories per Prompt',
         format: 'Prompt-Übung',
         bullets: [
           'Alle Teilnehmer, unabhängig vom Framework: nx storybook <fw> parallel starten (Port aus dem Terminal — Angular 4400, React 4401, Vue 4402), dann per claude mcp add --transport http storybook-local http://localhost:<port>/mcp verbinden — bewusst lokaler Scope (Default von --scope, nicht project): das gemeinsame .mcp.json bleibt unangetastet, der Working Tree sauber. Client neu verbinden und prüfen, dass die dev/test-Tools (get-storybook-story-instructions, stories-preview, test-run) jetzt gelistet sind — seit 10.6.0 identisch für alle drei Frameworks. Ohne diesen Schritt ist das gleich folgende Pflicht-Tool schlicht nicht vorhanden: „nicht verfügbar" heißt hier „nicht konfiguriert", nicht „Server down". get-storybook-story-instructions ist Pflicht vor jedem *.stories.* Edit',
-          'Der Prompt entsteht aus dem Handoff-Dokument aus Block 01, nicht aus dem Bild allein — API in Worten beschreiben → von Claude eine Spec (im Stil von libs/spec/src/index.ts) und Story generieren lassen, mit der Behaviour aus dem Dokument, nicht nur der Optik',
+          'Der Prompt entsteht aus dem Handoff-Dokument aus Block 01, nicht aus dem Bild allein — Behaviour und Ausschlüsse aus dem Dokument, nicht nur die Optik → von Claude einen Contract (getypt über das ComponentContract-Schema aus libs/spec/src/contracts/types.ts, importiert via @atelier-ui/spec/contracts/*) und Stories generieren lassen: eine Story je Variantenwert und Boolean-State, mit play für jede Behaviour-Zeile des Dokuments',
           'LLM-optimierte API-Regeln: predictable naming, literal unions, composition über config, keine versteckten Defaults',
-          'Eigene Spec bleibt automatisch außerhalb des geteilten Masters: der design-to-code-Skill liest im Handoff-Dokument aus Block 01, ob die Quelle das Original-File oder ein Duplikat ist, und legt die Spec im zweiten Fall als eigene Datei neben der Komponente an statt als Block in libs/spec/src/index.ts — das Material sagt „eine Spec im Stil von libs/spec/src/index.ts", im Stil von, nicht hinein',
-          'Drei Gates werden dabei erwartungsgemäß rot (kein Fehler an der eigenen Arbeit): check:sync mit [DRIFT] (Komponente fehlt in den anderen Frameworks), check:a11y-parity mit [BLOCKER] [ROSTER], check:design-status. Landet die Spec doch im geteilten Master, kommen drei weitere dazu: check:spec, check:variants mit [UNMAPPED] AtlXVariant … is not in UNION_TO_COMPONENT, check:metadata mit [MISSING-REGISTRY] AtlXSpec: not in COMPONENT_METADATA_REGISTRY — drei rote Gates sind erwartet, sechs heißt: die Spec liegt im Master; check:all bricht aber beim ersten Fehler ab, die sechs also einzeln laufen lassen, um das volle Bild zu sehen',
+          'Der eigene Contract bleibt automatisch außerhalb des geteilten Masters: der design-to-code-Skill liest im Handoff-Dokument aus Block 01, ob die Quelle das Original-File oder ein Duplikat ist, und legt den Contract im zweiten Fall als eigene Datei neben der Komponente an statt als Block in libs/spec/src/index.ts — die Komponente selbst deklariert ihre Prop-Typen direkt, keine separate Atl*Spec-Interface-Datei mehr',
+          'Der eigene Figma-Node landet nie in tools/figma/snapshot.json — stattdessen ein eigenes Snapshot-Fragment, mit verbundener Bridge: node tools/scripts/figma-snapshot-contracts.mjs --file <eigener Duplikat-Key> --contracts libs/<fw>/src/lib/<name> --out libs/<fw>/src/lib/<name>/figma.snapshot.json — immer mit explizitem --out, sonst überschreibt der Default Ateliers eigenen Snapshot',
+          'Geprüft wird mit node tools/scripts/check-contracts.mjs --fw <fw> --contracts libs/<fw>/src/lib/<name> --stories libs/<fw>/src/lib/<name> --snapshot libs/<fw>/src/lib/<name>/figma.snapshot.json — ohne verbundene Bridge dasselbe ohne --snapshot: der Check fällt dann auf den geteilten Master-Snapshot zurück, in dem die eigene Komponente nicht steht, und meldet [NO-MASTER] statt zu scheitern',
+          'Drei Gates werden dabei erwartungsgemäß rot (kein Fehler an der eigenen Arbeit): check:sync mit [DRIFT] (Komponente fehlt in den anderen Frameworks), check:a11y-parity mit [BLOCKER] [ROSTER], check:design-status. check:contracts bleibt in der Standardausführung (npm run check:contracts) grün — für die eigene Komponente meldet es nur eine Warnung, [NO-MASTER], weil sie keinen Atelier-Master hat; rot wird der Check nur, wenn ihr ihn mit euren eigenen Flags gegen euren eigenen Contract und Snapshot laufen lasst und dabei einen echten Mismatch findet — check:all bricht aber beim ersten Fehler ab, die drei also einzeln laufen lassen, um das volle Bild zu sehen',
           'Iterieren bis Prop-Table passt',
           'Wer zusätzlich eine Vorlage sehen will: docs-show-story über die hosted MCP liefert dieselbe Story framework-nativ (storybookId setzen, wenn mehrere Sources konfiguriert sind)',
         ],
@@ -345,12 +347,13 @@ const DAYS: Day[] = [
       </p>
       <ol class="schulung-verify">
         <li>Komponente liegt als Component-Set im eigenen Figma-Draft (Duplikat des Atelier-Files) — mit Variants, Properties und Dark-Mode-Variante</li>
-        <li><code>npm run sync:generated</code> läuft ohne Diff durch (<code>git status --short</code> danach leer) — der Befehl prüft nur, ob die generierten Kopien (Spec, Behaviors, <code>llms.txt</code>) mit dem geteilten Master synchron sind. Liegt die eigene Spec korrekt außerhalb des Masters (Tag 2, Block 02), hat der Befehl nichts von der eigenen Arbeit zu sehen und läuft trivial durch — die eigene Komponente selbst prüfen die Punkte 3–7</li>
+        <li><code>npm run sync:generated</code> läuft ohne Diff durch (<code>git status --short</code> danach leer) — der Befehl prüft nur, ob die generierten Kopien (Spec, Behaviors, <code>llms.txt</code>) mit dem geteilten Master synchron sind. Liegt der eigene Contract korrekt neben der Komponente (Tag 2, Block 02), hat der Befehl nichts von der eigenen Arbeit zu sehen und läuft trivial durch — die eigene Komponente selbst prüfen die Punkte 3–8</li>
         <li><code>nx storybook &lt;fw&gt;</code> läuft und zeigt die Komponente als Story (Canvas + Docs-Tab)</li>
         <li>Test-Loop grün, für alle drei Frameworks identisch: <code>test-run</code> MCP-Call passes — <code>nx test &lt;lib&gt;</code> passes ist die gleichwertige Alternative</li>
         <li><code>figma_audit_component_accessibility</code> ohne kritische Findings <strong>und</strong> Storybook A11y-Tab ohne axe-core-Findings</li>
         <li>Dark Mode wird durch Token-Override korrekt umgeschaltet</li>
-        <li><code>figma_check_design_parity</code> auf den eigenen Figma-Node gegen die generierte Komponente: der Report kommt ohne Abweichungen zurück — das beweist nur etwas, wenn dabei Node, Variant/State und ein vollständiges <code>codeSpec</code> übergeben wurden (siehe Block 04); nicht übergebene Felder werden nicht verglichen, ein knapp befülltes <code>codeSpec</code> kommt ebenso sauber zurück. Findings an Claude zurückgeben und erneut prüfen. Gemeint ist der MCP-Call, nicht <code>npm run check:parity</code>: das Repo-Gate prüft die Atelier-Master aus <code>tools/figma/snapshot.json</code>, in denen die eigene Komponente nicht steht</li>
+        <li><code>figma_check_design_parity</code> auf den eigenen Figma-Node gegen die generierte Komponente: der Report kommt ohne Abweichungen zurück — das beweist nur etwas, wenn dabei Node, Variant/State und ein vollständiges <code>codeSpec</code> übergeben wurden (siehe Block 04), zusammengesetzt aus dem <code>codeSpec</code>-Fragment von <code>check:contracts --emit</code> (componentAPI, metadata, tokens) plus der Accessibility-Sektion aus <code>figma_scan_code_accessibility</code>; nicht übergebene Felder werden nicht verglichen, ein knapp befülltes <code>codeSpec</code> kommt ebenso sauber zurück. Findings an Claude zurückgeben und erneut prüfen. Gemeint ist der MCP-Call, nicht <code>npm run check:parity</code>: das Repo-Gate prüft die Atelier-Master aus <code>tools/figma/snapshot.json</code>, in denen die eigene Komponente nicht steht</li>
+        <li><code>check:contracts</code> mit den eigenen Flags (<code>--fw</code>, <code>--contracts</code>, <code>--stories</code>, <code>--snapshot</code>) exit 0, und <code>nx storybook-test &lt;fw&gt;</code> grün — jede Story rendert in Chromium und besteht axe</li>
       </ol>
     </section>
 

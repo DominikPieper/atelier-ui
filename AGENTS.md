@@ -21,13 +21,13 @@ The core loop — Figma → spec → code → verify, in your chosen framework:
 1. **Inspect** the Figma component: `figma_get_component_for_development`
    (figma-console-mcp) on the node, or read the master on the Components page of
    file `QMnDD8uZQPldPrlCwZZ58T`. Note its variants, `--ui-*` tokens, and a11y.
-2. **Spec** is the naming contract: `libs/spec/src/index.ts` (+ `metadata/`,
-   `tokens.manifest.ts`, `behaviors.json`). It carries prop names, string-literal
-   unions and intent — not defaults, descriptions, events beyond `on*Change`, slots or
-   behaviour; those live in the adapters, the stories, `docs/src/data/components.ts`
-   and the handoff document. All three adapters are drift-gated against it
-   (`check:props`, with recorded exemptions), which is what keeps prop and variant
-   names identical; the compiler binds only React (ADR-0093).
+2. **Contract**: `libs/spec/src/contracts/<name>.contract.ts` — the master's node id and
+   only the Figma ↔ code mismatches you chose on purpose (`figmaOnly`, `codeOnly`,
+   `axisMap`, `probes`); never props, defaults, unions or prose (ADR-0121). The
+   component's own types and JSDoc are the API; the docgen manifest projects them.
+   `libs/spec/src/index.ts` (+ `metadata/`) stays the join key the cross-framework
+   gates (`check:props`, `check:variants`, `check:metadata`) read until ADR-0121 S6
+   retires them — a repo component still needs both today.
 3. **Generate or edit** the component with your agent, using the Storybook MCP for
    exact component docs (see the table below). **All three hosted endpoints answer
    component lookups natively** — each framework emits its own `components.json`
@@ -35,16 +35,19 @@ The core loop — Figma → spec → code → verify, in your chosen framework:
    `react-docgen`; ADR-0097). Variants, defaults and state props come back shaped
    for the framework you're in: two-way `[(checked)]` bindings and split
    Inputs/Outputs for Angular, `v-model`/`update:*` events and typed slots for Vue,
-   JSX/`children`/`on*Change` for React. `libs/spec/src/index.ts` is still the
-   contract all three adapters are drift-gated against, so a prop *name* or *axis
-   value* the docs leave ambiguous is settled there. It cannot settle binding
-   *shape* — two-way vs. one-way, slot vs. prop, an event's payload — because the
-   format does not express those; for shape the framework's own manifest is the
-   answer, and `check:props` maps `on<X>Change` to Angular `model()` / Vue
-   `update:*` for you.
-4. **Verify** — run the story in Storybook, then close the loop with
-   `figma_check_design_parity` to catch padding/colour/variant drift. **Required,
-   not optional.**
+   JSX/`children`/`on*Change` for React. The stories are the claims (ADR-0121): one
+   story per variant value and Boolean state, `args`-based where possible, a `play`
+   per behaviour line, so a prop *name* or *axis value* the docs leave ambiguous is
+   settled by the contract and the stories, not the adapter. Binding *shape* — two-way
+   vs. one-way, slot vs. prop, an event's payload — is not expressible in either
+   format; for shape the framework's own manifest is the answer, and `check:props`
+   maps `on<X>Change` to Angular `model()` / Vue `update:*` for you.
+4. **Verify** — `check:contracts` (joins the contract, the manifest and the stories'
+   `args` against the Figma snapshot) and `storybook-test` (every story in a real
+   browser, axe-checked) run first; then close the loop with
+   `figma_check_design_parity`, its `codeSpec` assembled from `check:contracts --emit`
+   plus `figma_scan_code_accessibility`, to catch padding/colour/variant drift.
+   **Required, not optional.**
 
 Full walkthrough: docs `/design-to-code`; hands-on kata: `/first-component`.
 Run the docs app with `nx serve docs`.

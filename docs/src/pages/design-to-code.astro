@@ -94,10 +94,10 @@ the component I just generated. Fix every discrepancy it reports.`;
         Four steps turn a design into shipped code. Each one hands concrete data to the next — no screenshots, no copy-paste guessing.
       </p>
 
-      <DiagramFigure caption="The four-step loop. Inspect reads the design, Spec is the shared contract, Generate writes framework-native code, Verify proves parity against Figma.">
+      <DiagramFigure caption="The four-step loop. Inspect reads the design, Contract is the micro-contract and stories, Generate writes framework-native code, Verify proves parity against Figma.">
         <svg viewBox="0 0 940 200" role="img" aria-labelledby="d2c-title d2c-desc" preserveAspectRatio="xMidYMid meet">
           <title id="d2c-title">Design-to-code four-step loop</title>
-          <desc id="d2c-desc">Four boxes left to right: Inspect in Figma, Spec in libs/spec, Generate with Claude and the Storybook MCP, Verify in Storybook with figma_check_design_parity. Accent arrows connect each step forward; the Generate step is highlighted as the AI step.</desc>
+          <desc id="d2c-desc">Four boxes left to right: Inspect in Figma, Contract in libs/spec/src/contracts, Generate with Claude and the Storybook MCP, Verify in Storybook with figma_check_design_parity. Accent arrows connect each step forward; the Generate step is highlighted as the AI step.</desc>
 
           <defs>
             <marker id="d2c-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
@@ -111,11 +111,11 @@ the component I just generated. Fix every discrepancy it reports.`;
           <text x="120" y="110" text-anchor="middle" font-size="11" class="diagram-muted">Figma component</text>
           <text x="120" y="128" text-anchor="middle" font-size="10" class="diagram-mono diagram-muted">figma-console MCP</text>
 
-          <!-- Step 2: Spec -->
+          <!-- Step 2: Contract -->
           <rect x="260" y="56" width="200" height="88" rx="12" ry="12" class="diagram-node"/>
-          <text x="360" y="88"  text-anchor="middle" font-size="14" font-weight="700">2 · Spec</text>
-          <text x="360" y="110" text-anchor="middle" font-size="11" class="diagram-muted">shared API contract</text>
-          <text x="360" y="128" text-anchor="middle" font-size="10" class="diagram-mono diagram-muted">libs/spec</text>
+          <text x="360" y="88"  text-anchor="middle" font-size="14" font-weight="700">2 · Contract</text>
+          <text x="360" y="110" text-anchor="middle" font-size="11" class="diagram-muted">micro-contract + stories</text>
+          <text x="360" y="128" text-anchor="middle" font-size="10" class="diagram-mono diagram-muted">libs/spec/src/contracts</text>
 
           <!-- Step 3: Generate (accent — AI step) -->
           <rect x="500" y="52" width="200" height="96" rx="12" ry="12" class="diagram-node diagram-node--accent"/>
@@ -165,26 +165,29 @@ the component I just generated. Fix every discrepancy it reports.`;
       </div>
     </div>
 
-    <!-- Step 2 — Spec -->
+    <!-- Step 2 — Contract -->
     <div class="docs-section">
       <div class="docs-step-row" data-step="2">
         <span class="docs-step-badge">2</span>
         <div style="flex: 1">
-          <h2 class="docs-h3">Spec — the framework-agnostic contract</h2>
+          <h2 class="docs-h3">Contract — what the picture cannot carry</h2>
           <p class="docs-step-desc">
-            The API contract lives in <code>libs/spec/src/index.ts</code> (plus <code>metadata/</code> and <code>tokens.manifest.ts</code>). It is the <strong style="color: var(--ui-color-text)">same naming contract across all three frameworks</strong>: identical prop names, identical variant unions, identical token names — held there by the drift gates (<code>check:props</code>, <code>check:variants</code>, <code>check:figma</code>), not by the compiler, which binds only the React adapter (ADR-0093). It carries names and unions, not defaults, events, slots or behaviour: those come from your framework's own Storybook manifest and from the handoff document you wrote in step 1.
+            Under ADR-0121, the one hand-authored artefact is a <strong style="color: var(--ui-color-text)">micro-contract</strong> (<code>libs/spec/src/contracts/&lt;name&gt;.contract.ts</code>): the master's node id, and only the Figma ↔ code mismatches you chose on purpose — never props, defaults, unions or prose. Those live in the component's own types and JSDoc instead, which <em>are</em> the API — your framework's docgen manifest derives the prop table from them directly, so there is nothing left to keep in sync by hand.
+          </p>
+          <p class="docs-step-desc">
+            <strong style="color: var(--ui-color-text)">The stories are the claims.</strong> One story per variant value and per Boolean state, with a <code>play</code> for every behaviour line from the handoff document you wrote in step 1 — that is where behaviour, not just appearance, gets checked. <code>check:contracts</code> joins the contract, the manifest and the stories' <code>args</code> against the Figma snapshot and reports drift; <code>storybook-test</code> renders every story in a real browser with axe. Together they replace what a hand-typed spec used to promise but never checked.
           </p>
           <p class="docs-step-desc">
             Those files are in the <strong style="color: var(--ui-color-text)">atelier monorepo</strong>. In a scaffolded
-            workshop workspace you read the same contract without them — through the hosted
+            workshop workspace you read the equivalent framework docs without them — through the hosted
             <code>storybook-*</code> MCP (<code>docs-list</code> → <code>docs-show</code>),
             or from <a href="/llms-full.txt" class="docs-link-primary">llms-full.txt</a>. The prop tables the
             MCP returns are exact, and so are the code snippets alongside them — each endpoint answers
             in its own framework's syntax (ADR-0097), generated from that adapter's source by docgen, so what you
-            read there is what the adapter actually does — and <code>check:props</code> keeps the adapter within the spec's names.
+            read there is what the adapter actually does.
           </p>
           <p class="docs-step-desc">
-            <strong style="color: var(--ui-color-text)">Building for one framework?</strong> That is the normal case for a team taking this home, and today the spec file is not the artefact that transfers. What does: your component's own input types are the shape contract and the framework's docgen manifest derives the prop table from them; the handoff document is the contract for what a picture cannot carry (behaviour, exclusions, provenance); the parity call is the check. The spec file in this repo exists to keep three adapters on one vocabulary — a one-framework repo has nothing to keep in sync with it. The review behind this paragraph, and the open decision about the format: <code>tasks/spec-format-review-2026-09-10.md</code>.
+            <strong style="color: var(--ui-color-text)">Building for one framework?</strong> That is the normal case for a team taking this home, and the artefacts that transfer are exactly the ones above: the contract file, the stories, and the two checks that read them — <code>check:contracts</code> and <code>check:stories</code>. The <code>create-workspace</code> scaffold ships all four (ADR-0121 S4), so a one-framework repo starts with the same loop this monorepo runs, nothing translated. What does <em>not</em> transfer is <code>libs/spec/src/index.ts</code>: in this repo it is still the cross-framework join key a handful of drift gates (<code>check:props</code>, <code>check:variants</code>, <code>check:metadata</code>) read, kept there only until ADR-0121's S6 retires them — a one-framework repo has nothing to keep those gates in sync with. The review behind this shape, and the retirement order: <code>tasks/spec-format-review-2026-09-10.md</code> and <code>plan/adr/0121-the-stories-are-the-spec.md</code>.
           </p>
         </div>
       </div>

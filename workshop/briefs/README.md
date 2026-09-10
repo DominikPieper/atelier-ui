@@ -98,7 +98,8 @@ The same bar for all four, and the one the trainer verifies in the closing block
 3. Every frame with children uses Auto Layout.
 4. A dark-mode variant renders correctly through the collection's `Dark` mode — no
    second component, no hardcoded value.
-5. The generated spec's prop names match the Figma property names one-for-one.
+5. The component's prop names and values match the Figma property names one-for-one —
+   `check:contracts` with your flags reports no `[AXIS]`/`[BOOLEAN]`.
 6. The generated story file declares `tags: ['autodocs']`. Autodocs is not on globally in
    any of the three Storybooks (`.storybook/main.ts` sets `docs: {}` and no preview file
    sets a global tag) — every existing story opts in per file. A generated story usually

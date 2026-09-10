@@ -16,12 +16,16 @@
  * not silently checked against a stale copy:
  *
  *   1. The Day-2 gate-count claim (B02): reproduces the review's method —
- *      synthesize a throwaway single-framework component, run the named
- *      gates, and assert the EXACT set that goes red for "spec in its own
- *      file" vs. "spec landed in the shared master". Restores the tree in a
- *      `finally`. Also runs `check:storybook-manifests` (added after that review) in
- *      both scenarios and reports whether it belongs in either red set —
- *      the curriculum's claimed number depends on the answer.
+ *      synthesize a throwaway single-framework component with its own
+ *      ADR-0121 micro-contract beside it (never touching
+ *      libs/spec/src/index.ts — there is no shared-master scenario any
+ *      more, since there is no spec to land there), run the named gates,
+ *      and assert the EXACT set that goes red for a workshop-case addition,
+ *      plus that `check:contracts`' default run stays green with a
+ *      `[NO-MASTER]` line naming the component. Restores the tree in a
+ *      `finally`. Also runs `check:storybook-manifests` (added after the
+ *      original review) and reports whether it belongs in the red set —
+ *      the curriculum's claimed gate count depends on the answer.
  *   2. The local Storybook MCP surface Day 2 depends on (B02/B03): starts a
  *      real local Storybook per framework, speaks MCP to it over HTTP
  *      (streamable-HTTP: initialize → notifications/initialized →
@@ -130,16 +134,16 @@ function runNpmScript(name) {
 // =============================================================================
 
 const BULLET_START = 'Drei Gates werden dabei erwartungsgemäß rot';
-const BULLET_MID = 'kommen drei weitere dazu';
-const BULLET_END = 'die Spec liegt im Master';
+const BULLET_MID = 'check:contracts bleibt in der Standardausführung';
+const BULLET_END = 'die drei also einzeln laufen lassen, um das volle Bild zu sehen';
 
 /**
  * Parse the gate-count claim straight out of the page: the three gates that
- * go red for an own-file spec, and the three MORE that go red once the spec
- * also lands in the shared master. Throws (rather than falling back to a
- * hard-coded list) if the anchors don't match the current wording — a test
- * that quietly asserts yesterday's claim against today's code is exactly the
- * failure mode this script exists to close.
+ * go red for a workshop-case addition, and the gate (`check:contracts`) the
+ * same bullet claims stays green in its default run. Throws (rather than
+ * falling back to a hard-coded list) if the anchors don't match the current
+ * wording — a test that quietly asserts yesterday's claim against today's
+ * code is exactly the failure mode this script exists to close.
  */
 function extractGateClaim(astroText) {
   const startIdx = astroText.indexOf(BULLET_START);
@@ -160,49 +164,59 @@ function extractGateClaim(astroText) {
   if (midIdx === -1) {
     throw new Error(
       `found the gate-count claim but not the middle anchor ("${BULLET_MID}") that separates the ` +
-        `"own file" gates from the "in the shared master" gates.`
+        `expected-red gates from the check:contracts claim.`
     );
   }
   const partA = bullet.slice(0, midIdx);
   const partB = bullet.slice(midIdx);
   const extract = (s) => [...new Set([...s.matchAll(/check:[a-zA-Z0-9-]+/g)].map((m) => m[0]))];
-  const ownFileGates = extract(partA);
-  const extraInMasterGates = extract(partB);
-  if (ownFileGates.length === 0) {
+  const redGates = extract(partA);
+  const contractsGates = extract(partB);
+  if (redGates.length === 0) {
     throw new Error(`parsed the gate-count claim but found zero 'check:*' names before the split.`);
   }
-  if (extraInMasterGates.length === 0) {
-    throw new Error(`parsed the gate-count claim but found zero 'check:*' names after the split.`);
+  if (!contractsGates.includes('check:contracts')) {
+    throw new Error(
+      `parsed the gate-count claim but did not find 'check:contracts' named after the split — the claim no ` +
+        `longer names the gate this test asserts stays green.`
+    );
   }
-  return { ownFileGates, extraInMasterGates };
+  return { redGates, contractsGate: 'check:contracts' };
 }
 
 const WSDEMO_DIR = join(ROOT, 'libs/angular/src/lib/wsdemo');
-const SPEC_FILE = join(ROOT, 'libs/spec/src/index.ts');
 
-// Reproduces the exact fixture from tasks/schulung-review-2026-09-05.md (B1):
-// a single-framework component (Angular only) with its spec in its own file
-// next to it — the Day-2 participant's starting state.
-const WSDEMO_CONTRACT = `// Throwaway "own-file" component contract for the schulung gate-count e2e
-// (tools/e2e/schulung-claims.e2e.mjs). Reproduces the Day-2 participant
-// scenario from tasks/schulung-review-2026-09-05.md (B1): a spec that lives
-// next to the component, NOT inside the shared libs/spec/src/index.ts master.
-export type AtlWsdemoVariant = 'solid' | 'outline';
+// Reproduces the Day-2 participant's workshop-case starting state under
+// ADR-0121: a single-framework component (Angular only) whose own input
+// types are the API, with a micro-contract beside it — never a block in
+// the shared libs/spec/src/index.ts, which this fixture never touches.
+const WSDEMO_CONTRACT = `// Throwaway micro-contract for the schulung gate-count e2e
+// (tools/e2e/schulung-claims.e2e.mjs). Reproduces the Day-2 participant's
+// workshop-case contract (ADR-0121 Decision 3): beside the component, typed
+// via the @atelier-ui/spec/contracts/* alias, never a block in the shared
+// libs/spec/src/index.ts.
+import type { ComponentContract } from '@atelier-ui/spec/contracts/types';
 
-export interface AtlWsdemoSpec {
-  variant?: AtlWsdemoVariant;
-}
+export const contract = {
+  component: 'AtlWsdemo',
+  // Made up — this component has no Atelier master, so nothing in
+  // tools/figma/snapshot.json will ever match this id.
+  figmaNodeId: '9999:1',
+} satisfies ComponentContract;
 `;
 
 const WSDEMO_COMPONENT = `import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import type { AtlWsdemoVariant } from './wsdemo.contract';
 
 /**
  * Throwaway component synthesized by the schulung gate-count e2e
  * (tools/e2e/schulung-claims.e2e.mjs). Not a real Atelier component; it
- * exists only to reproduce the participant scenario from
- * tasks/schulung-review-2026-09-05.md (B1) and is deleted after the run.
+ * exists only to reproduce the Day-2 participant scenario from
+ * tasks/schulung-review-2026-09-05.md (B1), updated for ADR-0121's contract
+ * shape, and is deleted after the run. Its own literal-union type is the
+ * API — no separate spec interface file.
  */
+export type AtlWsdemoVariant = 'solid' | 'outline';
+
 @Component({
   selector: 'atl-wsdemo',
   standalone: true,
@@ -220,37 +234,22 @@ import { AtlWsdemo } from './atl-wsdemo';
 const meta: Meta<AtlWsdemo> = {
   title: 'Workshop/AtlWsdemo',
   component: AtlWsdemo,
+  tags: ['autodocs'],
 };
 export default meta;
 type Story = StoryObj<AtlWsdemo>;
-export const Default: Story = {};
+export const Solid: Story = { args: { variant: 'solid' } };
+export const Outline: Story = { args: { variant: 'outline' } };
 `;
 
-const MASTER_APPEND = `
-// --- Throwaway scenario-B addition for the schulung gate-count e2e ---
-// (tools/e2e/schulung-claims.e2e.mjs). Reproduces landing a participant's
-// spec inside the shared master instead of its own file. Reverted via
-// \`git checkout -- libs/spec/src/index.ts\` after the run.
-export type AtlWsdemoVariant = 'solid' | 'outline';
-
-export interface AtlWsdemoSpec {
-  variant?: AtlWsdemoVariant;
-}
-`;
-
-function writeOwnFileFixture() {
+function writeWsdemoFixture() {
   mkdirSync(WSDEMO_DIR, { recursive: true });
   writeFileSync(join(WSDEMO_DIR, 'wsdemo.contract.ts'), WSDEMO_CONTRACT);
   writeFileSync(join(WSDEMO_DIR, 'atl-wsdemo.ts'), WSDEMO_COMPONENT);
   writeFileSync(join(WSDEMO_DIR, 'atl-wsdemo.stories.ts'), WSDEMO_STORY);
 }
-function appendSpecToMaster() {
-  const original = readFileSync(SPEC_FILE, 'utf8');
-  writeFileSync(SPEC_FILE, original + MASTER_APPEND);
-}
 function cleanupFixture() {
   if (existsSync(WSDEMO_DIR)) rmSync(WSDEMO_DIR, { recursive: true, force: true });
-  spawnSync('git', ['checkout', '--', 'libs/spec/src/index.ts'], { cwd: ROOT });
 }
 
 async function checkGateExpectations() {
@@ -260,73 +259,63 @@ async function checkGateExpectations() {
   assertCleanTree('before Part 1 — refusing to run against an already-dirty tree');
 
   const astroText = readAstro();
-  const { ownFileGates, extraInMasterGates } = extractGateClaim(astroText);
+  const { redGates, contractsGate } = extractGateClaim(astroText);
   ok(
-    `extracted claim: own-file → {${ownFileGates.join(', ')}} red; ` +
-      `shared-master → +{${extraInMasterGates.join(', ')}} red`
+    `extracted claim: {${redGates.join(', ')}} red; '${contractsGate}' green (default run) with a ` +
+      `[NO-MASTER] warning`
   );
 
   const pkg = readPkg();
-  for (const gate of [...ownFileGates, ...extraInMasterGates]) {
+  for (const gate of [...redGates, contractsGate]) {
     if (!(gate in (pkg.scripts || {}))) {
-      failures.push(`curriculum names '${gate}' as an expected-red gate, but package.json has no such script`);
+      failures.push(`curriculum names '${gate}' as a gate, but package.json has no such script`);
     }
   }
   if (failures.length > 0) return failures; // nothing meaningful left to run
 
-  const allGates = [...ownFileGates, ...extraInMasterGates, 'check:storybook-manifests'];
+  const allGates = [...redGates, contractsGate, 'check:storybook-manifests'];
 
   try {
-    writeOwnFileFixture();
-    ok('wrote throwaway libs/angular/src/lib/wsdemo/ (atl-wsdemo.ts, story, wsdemo.contract.ts)');
+    writeWsdemoFixture();
+    ok('wrote throwaway libs/angular/src/lib/wsdemo/ (atl-wsdemo.ts, story, wsdemo.contract.ts) — libs/spec/src/index.ts untouched');
 
-    section('Part 1a — scenario A: spec in its own file');
-    const resA = Object.fromEntries(allGates.map((g) => [g, runNpmScript(g)]));
-    for (const g of ownFileGates) {
-      if (resA[g].status === 0) {
-        failures.push(`[scenario A] expected '${g}' to fail (own-file spec) but it exited 0`);
+    const res = Object.fromEntries(allGates.map((g) => [g, runNpmScript(g)]));
+
+    for (const g of redGates) {
+      if (res[g].status === 0) {
+        failures.push(`expected '${g}' to fail (single-framework workshop-case addition) but it exited 0`);
       } else {
-        ok(`${g} red as expected (exit ${resA[g].status})`);
+        ok(`${g} red as expected (exit ${res[g].status})`);
       }
     }
-    for (const g of extraInMasterGates) {
-      if (resA[g].status !== 0) {
+
+    if (res[contractsGate].status !== 0) {
+      failures.push(
+        `expected '${contractsGate}' to PASS in its default run (curriculum: it only warns [NO-MASTER] for a ` +
+          `component with no Atelier master, it does not fail) but it exited ${res[contractsGate].status}:\n` +
+          `${res[contractsGate].output.slice(-2000)}`
+      );
+    } else {
+      const hasNoMasterLine = /\[NO-MASTER\][^\n]*AtlWsdemo/.test(res[contractsGate].output);
+      if (!hasNoMasterLine) {
         failures.push(
-          `[scenario A] expected '${g}' to PASS (curriculum: only goes red once the spec lands in the ` +
-            `shared master) but it exited ${resA[g].status}:\n${resA[g].output.slice(-2000)}`
+          `'${contractsGate}' exited 0 as expected but printed no '[NO-MASTER] ... AtlWsdemo' line — the ` +
+            `curriculum's claim that it warns (rather than silently ignoring the component) no longer holds:\n` +
+            `${res[contractsGate].output.slice(-2000)}`
         );
       } else {
-        ok(`${g} green as expected`);
+        ok(`${contractsGate} green with a [NO-MASTER] line naming AtlWsdemo, exactly as the curriculum claims`);
       }
-    }
-    if (resA['check:storybook-manifests'].status !== 0) {
-      failures.push(
-        `[scenario A] check:storybook-manifests went RED on a single-framework addition. The curriculum's ` +
-          `"three red gates" claim does not name check:storybook-manifests — if it belongs in the red set now, ` +
-          `that claim is stale by one gate:\n${resA['check:storybook-manifests'].output.slice(-2000)}`
-      );
-    } else {
-      ok('check:storybook-manifests stays green in scenario A (does not belong in the curriculum’s red list)');
     }
 
-    section('Part 1b — scenario B: spec also lands in libs/spec/src/index.ts');
-    appendSpecToMaster();
-    const resB = Object.fromEntries(allGates.map((g) => [g, runNpmScript(g)]));
-    for (const g of [...ownFileGates, ...extraInMasterGates]) {
-      if (resB[g].status === 0) {
-        failures.push(`[scenario B] expected '${g}' to fail (spec in shared master) but it exited 0`);
-      } else {
-        ok(`${g} red as expected (exit ${resB[g].status})`);
-      }
-    }
-    if (resB['check:storybook-manifests'].status !== 0) {
+    if (res['check:storybook-manifests'].status !== 0) {
       failures.push(
-        `[scenario B] check:storybook-manifests went RED once the spec landed in the shared master too. The ` +
-          `curriculum's "six red gates" claim does not name check:storybook-manifests — if it belongs in the red ` +
-          `set now, that claim is stale by one gate:\n${resB['check:storybook-manifests'].output.slice(-2000)}`
+        `check:storybook-manifests went RED on a single-framework workshop-case addition. The curriculum's ` +
+          `red-gate list does not name check:storybook-manifests — if it belongs there now, that claim is stale ` +
+          `by one gate:\n${res['check:storybook-manifests'].output.slice(-2000)}`
       );
     } else {
-      ok('check:storybook-manifests stays green in scenario B too (does not belong in the curriculum’s red list)');
+      ok('check:storybook-manifests stays green (does not belong in the curriculum’s red list)');
     }
   } finally {
     cleanupFixture();

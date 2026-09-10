@@ -22,6 +22,7 @@
         "libs/spec/src/behaviors.generated.ts"
       ],
       "@atelier-ui/spec/metadata/*": ["libs/spec/src/metadata/*"],
+      "@atelier-ui/spec/contracts/*": ["libs/spec/src/contracts/*"],
       "@atelier-ui/vue": ["libs/vue/src/index.ts"],
       "@atelier-ui/create-workspace": ["libs/create-workspace/src/index.ts"]
     },
