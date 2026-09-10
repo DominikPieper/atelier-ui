@@ -74,7 +74,7 @@ Das Model Context Protocol (MCP) ist der **"USB-C-Anschluss für AI Context"**. 
 
 - **Stdio Transport:** Lokale Kommunikation ohne Netzwerk.
 - **JSON-RPC 2.0:** Deterministisches, strukturiertes Messaging.
-- **Local-First:** Dein Source Code verlässt niemals deinen Rechner.
+- **Local-First, nur der Transport:** MCP läuft ohne Netzwerk zwischen Host und Server — der Code selbst verlässt den Rechner trotzdem, sobald er als Kontext ans Modell geht.
 
 ---
 

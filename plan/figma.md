@@ -6,6 +6,18 @@
 
 ---
 
+> **Corrected 2026-09-09** (ADR-0116): the whole-document staleness note that stood here —
+> `Llm*` component names, the "27 component sets" count, both `COMPONENT_SET` node-id
+> tables, and the `Inter` font-family references in the Text Styles table — is resolved.
+> Names are `Atl*` throughout, the node-id tables were replaced with a pointer to
+> `tools/figma/snapshot.json` rather than transcribed a third time, and the Text Styles
+> table now states the `ty/<role>` ↔ `--ui-type-*` mapping rule instead of a role list
+> that has already grown three times (ADR-0059, ADR-0074, ADR-0085). The **Variable
+> Collections** table below is a separate, narrower staleness case — it carries its own
+> note (ADR-0030) and was not in scope for this pass. Token *value* ownership — which
+> file to edit, what propagates where — is mapped by axis in ADR-0115 and applied in the
+> Design Token Change workflow below.
+
 ## File Structure
 
 ### Pages
@@ -17,21 +29,46 @@
 | 3 | `Spacing & Radius` | Visual documentation of spacing and radius tokens. |
 | 4 | `Cookbook` | Worked examples composing multiple components (forms, dashboards, dialogs). |
 | 5 | `Icons` | Catalogue of pictogram glyphs used in components (status, navigation, action). |
-| 6 | `Components` | 27 component sets grouped into 5 category Sections that mirror the Storybook sidebar (`Inputs`, `Display`, `Navigation`, `Overlay`, `Feedback`). |
+| 6 | `Components` | One `COMPONENT_SET` per master, grouped into category Sections that mirror the Storybook sidebar (`Inputs`, `Display`, `Navigation`, `Overlay`, `Feedback`, `AI` — six as of the `AtlChat` addition). The count moves as components ship; read it from `tools/figma/snapshot.json` (`components.length`, 43 masters as of the last snapshot, including sub-components like `AtlTab` and `AtlMenuItem` that are not top-level Storybook entries) rather than from a number transcribed here. |
 
 > **Note:** When a single category grows past ~15 components, promote it to its own page (e.g. split `Inputs` off first). The current single-page-with-category-Sections layout preserves "all components at a glance" while matching Storybook structure 1:1.
 
 ### Components — Category Layout
 
-Category Sections are stacked top-to-bottom in the same order as `storySort.order` in `libs/{angular,react,vue}/.storybook/preview.{ts,tsx}`. Each has a subtle tinted background and a `Inter Semi Bold 64` heading. Per-component Sections are nested unchanged inside, preserving every `COMPONENT_SET` nodeId (so existing Storybook `addon-designs` links keep resolving).
+Category Sections are stacked top-to-bottom in the same order as `storySort.order` in `libs/{angular,react,vue}/.storybook/preview.{ts,tsx}`. Each has a subtle tinted background and a heading in the `ty/headline` text style (Instrument Sans SemiBold — see Text Styles below; the previous `Inter Semi Bold 64` description predates ADR-0035/ADR-0059). Per-component Sections are nested unchanged inside, preserving every `COMPONENT_SET` nodeId (so existing Storybook `addon-designs` links keep resolving).
 
-| Category Section | Members (in sidebar order) |
-|---|---|
-| `Inputs` | LlmButton · LlmInput · LlmTextarea · LlmSelect · LlmCombobox · LlmCheckbox · LlmRadio · LlmRadioGroup · LlmToggle |
-| `Display` | LlmBadge · LlmAvatar + LlmAvatarGroup · LlmCard · LlmSkeleton · LlmProgress · LlmTable · LlmCodeBlock |
-| `Navigation` | LlmBreadcrumbs · LlmMenu · LlmTabGroup · LlmPagination · LlmStepper |
-| `Overlay` | LlmTooltip · LlmDialog · LlmDrawer · LlmToast |
-| `Feedback` | LlmAlert · LlmAccordionGroup |
+Members are generated, not transcribed here: the live category → component mapping is
+`COMPONENT_CATEGORIES` in `docs/src/data/components.ts`, and the live per-category
+Storybook order is every story's `title: 'Components/<Category>/<Name>'` prefix under
+`libs/react/src/lib/**/*.stories.tsx`. As of this pass the six categories are `Inputs`,
+`Display`, `Navigation`, `Overlay`, `Feedback`, `AI` — verified against those
+`title:` prefixes, e.g. `Inputs` currently covers `AtlButton`, `AtlInput`,
+`AtlTextarea`, `AtlSelect`, `AtlCombobox`, `AtlCheckbox`, `AtlRadio`,
+`AtlRadioGroup`, `AtlToggle`, and `AI` covers `AtlChat` alone.
+
+**Resolved 2026-09-09 (ADR-0118).** This passage previously recorded an unresolved split:
+`docs/src/data/components.ts` filed `AtlAccordionGroup` and `AtlAlert` under `Layout`
+while Storybook and the Figma masters both said `Feedback`. Two agreeing sources outrank
+one, so `components.ts` follows — and `check:category-alignment` now holds it, comparing
+each component's category against both its Figma master name and its story title.
+
+**Resolved 2026-09-10 (ADR-0120).** A different split in the same place — recorded here as
+still open as of the previous pass — was the mirror image of the case above: the Figma
+masters filed `AtlButton` under its own `Action` Section and the other seven Inputs
+controls under `Form`, while `components.ts` and Storybook both said one flat `Inputs`,
+with Figma as the outlier. Unlike the Feedback/Layout case, the owner did not apply
+ADR-0118's tie-break here — moving the *code* side (splitting eight Storybook story
+titles) would have changed story IDs and broken saved links, `docs-show-story` calls and
+`figmaNode()` references, while merging Figma's two Sections renames and reparents frames
+without touching any `COMPONENT_SET` node id. So Figma was brought to match code instead:
+`Action` and `Form` are now one Section, `Inputs`, in the same position the `storySort`
+order puts it (first). All nine masters (`AtlButton` plus the eight `Form` controls,
+`AtlRadio` included for consistency) were renamed from their old `Action/` / `Form/`
+prefix to `Inputs/` — node ids unchanged, verified against `tools/figma/snapshot.json`
+before and after. The eight `gap` exemptions in `CATEGORY_ALIGNMENT_EXEMPT` are deleted;
+`check:category-alignment` passes with none in use. See ADR-0120 for the general rule
+this collision resolved (which side moves when Figma-as-structural-source-of-truth and
+ADR-0118's tie-break disagree).
 
 ---
 
@@ -46,6 +83,9 @@ The file uses a three-tier token architecture (primitives → semantic → compo
 > (Figma Desktop + the figma-console Desktop Bridge), which the committed snapshot cannot supply because
 > `tools/figma/snapshot.json` records no collection data. Treat `check-figma.js` and
 > `figma-snapshot.mjs` as authoritative on which collections count as semantic until then.
+> See the whole-document note above for what else here is stale, and ADR-0115 for the
+> token-*value* ownership map this table doesn't cover — it records the Figma-side
+> collection layout, not which file owns a token's value.
 
 | Collection | ID | Modes | Variables | Purpose |
 |---|---|---|---|---|
@@ -58,19 +98,25 @@ The file uses a three-tier token architecture (primitives → semantic → compo
 
 ### Text Styles
 
-Text styles bind to `font-size/*` variables and lock concrete `Inter` weights so component text uses consistent typography tokens.
+ADR-0059 replaced Figma's text styles with exactly one per `--ui-type-*` composite
+role in the canonical `tokens.css`, named `ty/<role>` — role name to role name, not a
+separate Figma-side taxonomy, and each style's family/weight/size/leading is generated
+to match its role (gated by `check:figma`'s `[TEXT-STYLE]`, ADR-0059). The role list has
+grown twice since (ADR-0074 added `control`/`action`; ADR-0085 added `row`/`row-sm`), so
+treat any specific count as of-the-last-check rather than transcribe it here — read the
+current list from `--ui-type-*` in
+`libs/create-workspace/src/generators/preset/files/styles/tokens.css`. What stays true
+regardless of how many roles exist is the architecture (ADR-0035):
 
-| Style | Font | Size (bound to) | Usage |
-|---|---|---|---|
-| `text/heading-lg` | Inter Semi Bold | `font-size/2xl` (24) | Page/section headings |
-| `text/heading-md` | Inter Semi Bold | `font-size/xl` (20) | Card titles, dialog headers |
-| `text/heading-sm` | Inter Semi Bold | `font-size/lg` (18) | Sub-section headings |
-| `text/body-md` | Inter Regular | `font-size/md` (16) | Prose |
-| `text/body-sm` | Inter Regular | `font-size/sm` (14) | Input text, table cells, card body |
-| `text/label-lg` | Inter Medium | `font-size/md` (16) | Button (lg) |
-| `text/label-md` | Inter Medium | `font-size/sm` (14) | Button (md), Badge (md) |
-| `text/label-sm` | Inter Medium | `font-size/xs` (12) | Button (sm), Badge (sm) |
-| `text/code-sm` | JetBrains Mono Regular | `font-size/sm` (14) | Code blocks, inline code |
+| Font stack | Roles that use it | Notes |
+|---|---|---|
+| `--ui-font-display` (Instrument Serif) | `display` only | The single largest line on a surface — wordmark, hero, section opener. Never bolded (Instrument Serif ships one weight). |
+| `--ui-font-family` (Instrument Sans) | Every other role — `headline`, `title`, `body-*`, `label`, `control`, `action`, `row`, `row-sm` | Everything interactive and everything read at body length. Weight varies by role; the face does not. |
+| `--ui-font-mono` (JetBrains Mono) | `code` only | Code blocks, inline code, tokens. |
+
+The `Inter` family previously named in this table predates ADR-0035 (Instrument
+pair) and ADR-0059 (the sweep that applied it to every Figma text node); no current
+text style uses it.
 
 ### Color Tokens — UI Tokens (selected)
 
@@ -141,59 +187,50 @@ Text styles bind to `font-size/*` variables and lock concrete `Inter` weights so
 
 ## Components — COMPONENT_SET node IDs
 
-Node IDs below point to the actual `COMPONENT_SET` nodes (the parent of all variants). Use these IDs with `figma_get_component`, `figma_analyze_component_set`, and `figma_audit_component_accessibility`.
+Node IDs point to the actual `COMPONENT_SET` nodes (the parent of all variants), used
+with `figma_get_component`, `figma_analyze_component_set`, and
+`figma_audit_component_accessibility`. **This section used to be a static table and
+went stale twice** — `skills/design-to-code/SKILL.md` calls out the exact case by name:
+this table listed `AtlBreadcrumbs` at `55:141`; the live master is `55:139` (the
+Figma-side rebuild moved it). `AtlPagination` drifted the same way, `55:145` → `55:143`.
+A third hand transcription would only go stale again.
 
-### P0 — Core
-
-| Component | nodeId | Variants | Properties |
-|---|---|---|---|
-| `LlmButton` | `129:20` | 13 | variant (primary/secondary/outline/danger) · size (sm/md/lg) · state (default/hover/active/focus/loading) |
-| `LlmInput` | `129:33` | 5 | type (text/email/password) · state (default/filled/focus/invalid/disabled) |
-| `LlmCard` | `55:65` | 12 | variant (elevated/outlined/flat) · padding (none/sm/md/lg) |
-| `LlmBadge` | `55:22` | 10 | variant (default/success/warning/danger/info) · size (sm/md) |
-
-### P1 — Extended
-
-| Component | nodeId | Variants | Properties |
-|---|---|---|---|
-| `LlmSelect` | `55:92` | 5 | state (default/filled/open/disabled/invalid) |
-| `LlmDialog` | `55:94` | 5 | size (sm/md/lg/xl/full) |
-| `LlmTabGroup` | `55:123` | 4 | variant (default/pills) · selected index states |
-| `LlmAccordionGroup` | `55:127` | 3 | variant (default/bordered/separated) |
-| `LlmMenu` | `55:130` | 2 | variant (default/compact) |
-| `LlmTooltip` | `55:52` | 4 | position (above/below/left/right) |
-
-### P2 — Full Library
-
-| Component | nodeId | Variants | Properties |
-|---|---|---|---|
-| `LlmAlert` | `55:31` | 8 | variant × dismissible |
-| `LlmCheckbox` | `55:36` | 5 | state (unchecked/checked/indeterminate/disabled/focus) |
-| `LlmToggle` | `55:41` | 5 | state (off/on/disabled-off/disabled-on/focus) |
-| `LlmTextarea` | `55:87` | 5 | state (default/filled/focus/invalid/disabled) |
-| `LlmRadioGroup` | `55:137` | 4 | selection states |
-| `LlmRadio` | `420:185` | 5 | state (unchecked/checked/disabled/invalid/focus) |
-| `LlmSkeleton` | `55:102` | 3 | variant (text/circular/rectangular) |
-| `LlmProgress` | `420:153` | 12 | variant × size + `indeterminate` boolean component property |
-| `LlmAvatar` | `55:151` | 10 | size × shape × status |
-| `LlmToast` | `55:47` | 5 | variant |
-| `LlmBreadcrumbs` | `55:141` | 3 | path-length variants |
-| `LlmPagination` | `55:145` | 3 | page position (first/middle/last) |
-| `LlmDrawer` | `421:398` | 4 | position (right/left/bottom) |
-| `LlmTable` | `421:1183` | 7 | variant × size × state (default/empty/focus) + `sortable` · `selectable` · `stickyHeader` boolean props |
-| `LlmCodeBlock` | `420:286` | 4 | variants + copy/line-number flags |
-| `LlmCombobox` | `421:339` | 6 | state (default/open/filled/invalid/disabled) |
-| `LlmStepper` | `421:505` | 5 | orientation + step states (active/completed/error/optional/disabled) |
+**Current node IDs live in `tools/figma/snapshot.json`**, one entry per master:
+`components[].nodeId`, keyed by `components[].selector` (e.g. `"selector": "AtlButton",
+"nodeId": "129:20"`). That file is regenerated from the live Figma file and is the
+freshest list this repo carries; a fresh `figma_get_component_for_development` call on
+a selector's known-recent nodeId is the freshest possible if the snapshot itself is
+older than the change you're chasing. Two node IDs are stable enough to use directly in
+examples because they are the oldest, least-restructured masters in the file:
+`AtlButton` → `129:20`, `AtlCard` → `55:65` — verify either against the snapshot before
+relying on it for anything that isn't a passing example.
 
 ---
 
 ## Workflow
 
 ### Design Token Change
-1. Update value in Figma: `figma_update_variable` with the variable ID.
-2. Copy the new value to `libs/angular/src/styles/tokens.css`.
-3. Mirror to `libs/react/src/styles/tokens.css`.
-4. Screenshot key Storybook stories to confirm no visual regression.
+
+Token *values* are owned in code, not in Figma (ADR-0115). The canonical file is
+`libs/create-workspace/src/generators/preset/files/styles/tokens.css`; every other
+`tokens.css`-shaped file in the repo is a generated projection of it.
+
+1. Edit the value in the canonical file above.
+2. `npm run sync:tokens` — regenerates `libs/{angular,react,vue}/src/styles/tokens.css`
+   and `skills/atelier-design/assets/colors_and_type.css` from it in one step, all three
+   frameworks together. `docs/src/styles/tokens.css` needs no step of its own — it
+   `@import`s the React copy live.
+3. `npm run check:tokens` to confirm the copies match (also runs inside `check:all`).
+4. If the value feeds an artboard palette: `node tools/scripts/gen-artboard-palette.mjs`
+   regenerates `tools/design/artboard-palette.css` (`npm run check:artboard-palette`
+   verifies it matches), then hand the new block to `artboard-bridge` Publish (step P2)
+   for any live Claude Design sheet.
+5. Optional, one-way, and **not** gated by `check:all`: `npm run figma:sync-tokens` pushes
+   the new value into Figma's `Library Tokens` Variable collection (ADR-0030), so the
+   visual reference in Figma matches. Requires Figma Desktop with the Bridge plugin open.
+   Nothing pulls a Figma-side edit back into code — editing the Variable directly in
+   Figma is drift, not a valid entry point.
+6. Screenshot key Storybook stories to confirm no visual regression.
 
 ### New Component
 1. Create a new Section nested inside the matching category Section (`Inputs` / `Display` / `Navigation` / `Overlay` / `Feedback`) on the `Components` page. The category must match the Storybook `title:` prefix (`Components/<Category>/<Name>`).
@@ -201,19 +238,19 @@ Node IDs below point to the actual `COMPONENT_SET` nodes (the parent of all vari
 3. Apply text styles (`text/*`) and variables — never raw hex/px.
 4. Write a component description (variants · sizes · states · a11y). It becomes the Assets-panel tooltip and the Dev Mode spec.
 5. **Run the [Figma component pre-release checklist](./figma-component-checklist.md)** before merging the matching PR. The PR template reproduces it as a required section.
-5. Run generator: `nx generate @atelier-ui/generators:llm-component --name=<name>`.
-6. Implement Angular + React simultaneously, referencing Figma values.
+5. Run generator: `nx generate @atelier-ui/generators:atl-component --name=<name>` (scaffolds Angular + React + Vue together by default; `--framework=` to target one).
+6. Implement all three frameworks, referencing Figma values.
 7. Verify parity with Storybook screenshot.
 
 ### Changing a Component's Visual Design
 1. Update the Figma variant first.
 2. Screenshot and confirm it looks right.
 3. Update `.css` file in Angular lib (`:host` selector).
-4. Mirror to React lib (`.llm-<name>` selector).
+4. Mirror to React and Vue libs (`.atl-<name>` class selector — both frameworks use the same class-based convention, see `plan/big-picture.md`'s Framework Differences table).
 5. Final parity check.
 
 ### Accessibility hygiene
-- Any color-coded variant (success/warning/danger/info) **must** include a non-color differentiator: an icon, label prefix, pattern, or border. This is WCAG 1.4.1. `LlmBadge` uses glyph text layers (`✓ ⚠ ✕ ℹ`) matching the CSS `::before` in both frameworks.
+- Any color-coded variant (success/warning/danger/info) **must** include a non-color differentiator: an icon, label prefix, pattern, or border. This is WCAG 1.4.1. `AtlBadge` renders an `AtlIcon` instance per variant (`libs/react/src/lib/badge/atl-badge.tsx`) — the earlier glyph-text-layer / CSS `::before` technique this line described was replaced by real Icon-component instances, on both the Figma side (ADR-0057) and the code side.
 - Run `figma_audit_component_accessibility` after each component change; target ≥ 85 overall.
 
 ---
@@ -230,8 +267,8 @@ padding: var(--ui-spacing-4);
 /* Figma: radius/md = 8 */
 border-radius: var(--ui-radius-md);
 
-/* Figma text style: text/label-md → Inter Medium 14 */
-font: var(--ui-font-weight-medium) var(--ui-font-size-sm) / 1 'Inter', sans-serif;
+/* Figma text style: ty/label → Instrument Sans Medium 12 (ADR-0059/ADR-0035) */
+font: var(--ui-type-label);
 ```
 
 ---

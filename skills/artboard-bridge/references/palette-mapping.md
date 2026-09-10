@@ -1,5 +1,8 @@
 # Palette mapping — `_sheet.css` short names ↔ `--ui-*` tokens
 
+> Token *value* ownership across Figma, the framework libs, and this artboard copy is
+> mapped by axis in ADR-0115; this file is that map's artboard-projection axis in detail.
+
 An artboard renders standalone in Claude Design, where the library's `tokens.css` is
 not loaded. So `_sheet.css` opens with a `:root { … }` block that carries the light-mode
 palette as **literals under short names** — `--text`, `--muted`, `--primary`, `--border`,

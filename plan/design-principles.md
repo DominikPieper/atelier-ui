@@ -1,8 +1,9 @@
 # Design Principles
 
 ## 1. Physical Authenticity
-Interactive elements behave as if in physical space. Hover = lift (translateY + shadow increase). Active/press = compress (scale down). Disabled = faded/unreachable.
-- **Rule:** Use `scale(0.97)` for active states. Pair shadow changes with transforms.
+Interactive elements signal state through color and elevation, not motion. Hover and active/press swap to a dedicated `-hover` / `-active` color token; disabled = faded/unreachable.
+- **Rule:** No `transform` on hover or press for a standard control — no shrink, no lift, no inset shadow. A color/border-color token swap is the only state signal. Confirmed across all three framework libs (`libs/{angular,react,vue}/src/lib/**/*.css`, 2026-09-09: no component scales on `:active`, none lifts on `:hover`); matches `skills/atelier-design/references/brand-guide.md`'s Press-states section ("No shrink, no inset shadow"). This corrects the prior `scale(0.97)` / lift rule, which no implementation ever carried out.
+- **The one live exception, so nobody "fixes" it:** the Chat popup's floating action button grows on hover (`.atl-chat.variant-popup .fab-bubble:hover { transform: scale(1.05) }`, `libs/react/src/lib/chat/atl-chat.css:138`). A FAB is a persistent floating affordance, not an inline control, and the growth is its hit-target invitation. Read the rule above as governing inline controls; a new floating affordance may follow the FAB, and nothing else may.
 
 ## 2. Purposeful Motion
 Every animation serves exactly one purpose: (a) confirm action, (b) orient spatial relationship, or (c) smooth visual transition. No decorative animation.

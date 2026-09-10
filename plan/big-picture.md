@@ -14,17 +14,17 @@ Design for a developer who has perfect pattern recognition but zero ability to l
 
 ## 1. Maximally Predictable API Surface
 
-Every component must follow identical patterns. If `LlmButton` takes `[variant]`, `[size]`, and `[disabled]`, then `LlmCard`, `LlmAlert`, and `LlmBadge` must use the same property names for the same concepts.
+Every component must follow identical patterns. If `AtlButton` takes `[variant]`, `[size]`, and `[disabled]`, then `AtlCard`, `AtlAlert`, and `AtlBadge` must use the same property names for the same concepts.
 
 **Rules:**
 
 - Use the same input name for the same concept across all components (`variant`, `size`, `disabled`).
 - Use string literal union types everywhere — never enums, never numeric codes.
-- Provide sensible defaults for every input so bare usage always works: `<llm-button>Click</llm-button>`.
+- Provide sensible defaults for every input so bare usage always works: `<atl-button>Click</atl-button>`.
 
 ```typescript
 // Good: predictable, narrow, self-documenting
-variant = input<'primary' | 'secondary' | 'outline'>('primary');
+variant = input<'primary' | 'secondary' | 'outline' | 'danger'>('primary');
 size = input<'sm' | 'md' | 'lg'>('md');
 disabled = input(false);
 
@@ -49,16 +49,13 @@ Use Angular 22 signal primitives exclusively. No `@Input()` / `@Output()` decora
 
 ```typescript
 @Component({
-  selector: 'llm-toggle',
+  selector: 'atl-toggle',
   standalone: true,
   template: `...`,
 })
-export class LlmToggle implements FormCheckboxControl {
+export class AtlToggle implements FormCheckboxControl {
   /** Whether the toggle is on. Bound by [formField] directive. */
   checked = model(false);
-
-  /** Visual variant. */
-  variant = input<'default' | 'success' | 'danger'>('default');
 
   /** Form state: disabled by the form system. */
   disabled = input(false);
@@ -67,6 +64,10 @@ export class LlmToggle implements FormCheckboxControl {
   invalid = input(false);
 }
 ```
+
+*(The real `AtlToggle` has no `variant` input — `AtlToggleSpec` in `libs/spec/src/index.ts`
+carries only `checked`/`onCheckedChange` plus the shared form-field state. An earlier
+draft of this example invented one; cut rather than carried forward.)*
 
 ---
 
@@ -102,16 +103,16 @@ Prefer content projection and structural composition over config objects. LLMs a
 
 ```html
 <!-- Good: composition via content projection -->
-<llm-card>
-  <llm-card-header>Title</llm-card-header>
-  <llm-card-content>Body text here.</llm-card-content>
-  <llm-card-footer>
-    <llm-button variant="primary">Save</llm-button>
-  </llm-card-footer>
-</llm-card>
+<atl-card>
+  <atl-card-header>Title</atl-card-header>
+  <atl-card-content>Body text here.</atl-card-content>
+  <atl-card-footer>
+    <atl-button variant="primary">Save</atl-button>
+  </atl-card-footer>
+</atl-card>
 
 <!-- Bad: opaque config object -->
-<llm-card [config]="{ header: { title: '...' }, footer: { actions: [...] } }" />
+<atl-card [config]="{ header: { title: '...' }, footer: { actions: [...] } }" />
 ```
 
 ---
@@ -127,43 +128,36 @@ Components consume a design token layer internally. Users (human or LLM) don't t
 - Theming is done by overriding token values, not by passing Tailwind classes.
 - Layout around components (page structure, spacing) is the consumer's responsibility.
 
-```css
-/* Token layer (provided by the library) */
-:root {
-  --ui-color-primary: #3b82f6;
-  --ui-color-primary-hover: #2563eb;
-  --ui-color-secondary: #64748b;
-  --ui-color-danger: #ef4444;
-  --ui-color-surface: #ffffff;
-  --ui-color-border: #e2e8f0;
-  --ui-color-text: #0f172a;
-  --ui-color-text-muted: #64748b;
+Token *names* are the stable part of this API and are safe to memorize; token *values*
+are not — they have already changed once (the "Direction A" teal rebrand moved
+`--ui-color-primary` off blue, and the radius scale moved with it), so this example
+shows names and purpose only. Read current values from the one canonical file
+(`libs/create-workspace/src/generators/preset/files/styles/tokens.css`, ADR-0115) —
+every other `tokens.css` in the repo is a generated projection of it via
+`npm run sync:tokens`.
 
-  --ui-radius-sm: 0.25rem;
-  --ui-radius-md: 0.375rem;
-  --ui-radius-lg: 0.5rem;
+| Token name | Purpose |
+|---|---|
+| `--ui-color-primary`, `--ui-color-primary-hover` | Brand accent, and its hover state |
+| `--ui-color-secondary`, `--ui-color-danger` | Secondary actions; destructive actions |
+| `--ui-color-surface`, `--ui-color-border` | Card/dialog background; decorative borders |
+| `--ui-color-text`, `--ui-color-text-muted` | Body text; secondary text |
+| `--ui-radius-sm` / `-md` / `-lg` | Small controls, chips / default control radius / cards, dialogs |
+| `--ui-spacing-1` … `-8` | 4px base-unit ladder; `-4` is the most common gap/padding |
+| `--ui-font-size-sm` / `-md` / `-lg` | Type scale; `-md` is body text |
+| `--ui-shadow-sm` / `-md` | Subtle elevation / raised surfaces (dialogs, popovers) |
+| `--ui-transition-fast` / `-normal` | Hover/focus feedback timing |
 
-  --ui-spacing-1: 0.25rem;
-  --ui-spacing-2: 0.5rem;
-  --ui-spacing-3: 0.75rem;
-  --ui-spacing-4: 1rem;
-  --ui-spacing-6: 1.5rem;
-  --ui-spacing-8: 2rem;
-
-  --ui-font-size-sm: 0.875rem;
-  --ui-font-size-md: 1rem;
-  --ui-font-size-lg: 1.125rem;
-
-  --ui-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --ui-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
-
-  --ui-transition-fast: 150ms ease;
-  --ui-transition-normal: 200ms ease;
-}
-```
+(Deliberately not shown as a `:root { }` block with literal values — a copy-pasted
+value here would be wrong the moment the brand changes again, and an agent generating
+code from this document should read a real value from the canonical file, not from a
+number that was accurate on 2026-09-09.)
 
 ```css
-/* Inside a component's styles — consumes tokens only */
+/* Inside a component's styles — consumes tokens only. Angular selects on
+   :host; React and Vue use a class on the component's root element instead
+   (see the Framework Differences table below) — both patterns are real,
+   verified against libs/angular/src/lib/button/atl-button.css. */
 :host {
   display: inline-flex;
   border-radius: var(--ui-radius-md);
@@ -189,16 +183,16 @@ Every component must be standalone and directly importable. No `NgModule` indire
 **Rules:**
 
 - Every component sets `standalone: true`.
-- Imports are granular: `import { LlmButton } from '@atelier-ui/angular'`.
+- Imports are granular: `import { AtlButton } from '@atelier-ui/angular'`.
 - No barrel re-exports that pull in the entire library.
 
 ```typescript
 // Good: direct, granular import
-import { LlmButton, LlmCard, LlmCardHeader, LlmCardContent } from '@atelier-ui/angular';
+import { AtlButton, AtlCard, AtlCardHeader, AtlCardContent } from '@atelier-ui/angular';
 
 @Component({
   standalone: true,
-  imports: [LlmButton, LlmCard, LlmCardHeader, LlmCardContent],
+  imports: [AtlButton, AtlCard, AtlCardHeader, AtlCardContent],
   // ...
 })
 export class MyPage {}
@@ -216,34 +210,42 @@ When the LLM has access to source (via LSP, context file, or pasted types), JSDo
 - Every public `input()`, `output()`, and `model()` gets a one-line JSDoc description.
 - Examples use realistic, minimal templates — not abstract placeholders.
 
+The example below is copied verbatim (rules only) from the real `AtlDialog`
+(`libs/angular/src/lib/dialog/atl-dialog.ts`) rather than invented — the same class,
+props and defaults it ships today.
+
 ```typescript
 /**
- * Accessible dialog/modal overlay.
+ * Accessible modal dialog using the native `<dialog>` element.
+ * Includes focus trap, Escape to close, backdrop click to close, and animation.
+ * Compose with `atl-dialog-header`, `atl-dialog-content`, and `atl-dialog-footer`.
  *
  * Usage:
  * ```html
- * <llm-dialog [(open)]="showDialog">
- *   <llm-dialog-header>Confirm Action</llm-dialog-header>
- *   <llm-dialog-content>Are you sure?</llm-dialog-content>
- *   <llm-dialog-footer>
- *     <llm-button variant="secondary" (click)="showDialog.set(false)">Cancel</llm-button>
- *     <llm-button variant="primary" (click)="confirm()">Confirm</llm-button>
- *   </llm-dialog-footer>
- * </llm-dialog>
+ * <atl-dialog [(open)]="isOpen">
+ *   <atl-dialog-header>Dialog Title</atl-dialog-header>
+ *   <atl-dialog-content>Dialog body content.</atl-dialog-content>
+ *   <atl-dialog-footer>
+ *     <atl-button variant="primary" (click)="isOpen = false">Confirm</atl-button>
+ *   </atl-dialog-footer>
+ * </atl-dialog>
  * ```
  */
 @Component({ ... })
-export class LlmDialog {
-  /** Controls dialog visibility. Supports two-way binding via [(open)]. */
+export class AtlDialog {
+  /** Whether the dialog is open. Two-way bindable via [(open)]. */
   open = model(false);
 
   /** Whether clicking the backdrop closes the dialog. */
   closeOnBackdrop = input(true);
 
-  /** Whether pressing Escape closes the dialog. */
-  closeOnEscape = input(true);
+  /** Dialog size. */
+  size = input<'sm' | 'md' | 'lg' | 'xl' | 'full'>('md');
 }
 ```
+
+*(There is no `closeOnEscape` input — Escape-to-close is unconditional native `<dialog>`
+behavior, not a configurable prop. An earlier draft of this example showed one; cut.)*
 
 ---
 
@@ -263,7 +265,7 @@ Form controls integrate with Angular 22's Signal Forms (`@angular/forms/signals`
 ```typescript
 // Value control pattern
 @Component({
-  selector: 'llm-input',
+  selector: 'atl-input',
   standalone: true,
   template: `
     <input
@@ -276,7 +278,7 @@ Form controls integrate with Angular 22's Signal Forms (`@angular/forms/signals`
     />
   `,
 })
-export class LlmInput implements FormValueControl<string> {
+export class AtlInput implements FormValueControl<string> {
   value = model('');
   type = input<'text' | 'email' | 'password' | 'number' | 'tel' | 'url'>('text');
   disabled = input(false);
@@ -288,7 +290,7 @@ export class LlmInput implements FormValueControl<string> {
 
 // Checkbox control pattern
 @Component({
-  selector: 'llm-checkbox',
+  selector: 'atl-checkbox',
   standalone: true,
   template: `
     <label>
@@ -297,7 +299,7 @@ export class LlmInput implements FormValueControl<string> {
     </label>
   `,
 })
-export class LlmCheckbox implements FormCheckboxControl {
+export class AtlCheckbox implements FormCheckboxControl {
   checked = model(false);
   disabled = input(false);
   touched = model(false);
@@ -308,10 +310,10 @@ export class LlmCheckbox implements FormCheckboxControl {
 
 ```typescript
 @Component({
-  imports: [FormField, LlmInput, LlmCheckbox],
+  imports: [FormField, AtlInput, AtlCheckbox],
   template: `
-    <llm-input [formField]="loginForm.email" placeholder="Email" />
-    <llm-checkbox [formField]="loginForm.rememberMe">Remember me</llm-checkbox>
+    <atl-input [formField]="loginForm.email" placeholder="Email" />
+    <atl-checkbox [formField]="loginForm.rememberMe">Remember me</atl-checkbox>
   `,
 })
 export class LoginPage {
@@ -337,65 +339,80 @@ The LLM has deep familiarity with ARIA roles, keyboard interactions, and accessi
 - Use `aria-label` or `aria-labelledby` explicitly when the purpose is not visually clear from the context.
 - Never invent custom interaction models.
 
-| Component       | ARIA Pattern            | Key Behaviors                           |
-|-----------------|-------------------------|-----------------------------------------|
-| `LlmDialog`     | Dialog (modal)          | Focus trap, Escape to close, backdrop   |
-| `LlmTabs`       | Tabs                    | Arrow keys to switch, roving tabindex   |
-| `LlmMenu`       | Menu / Menubar          | Arrow keys, Enter to select, Escape     |
-| `LlmTooltip`    | Tooltip                 | Focus/hover trigger, `role="tooltip"`   |
-| `LlmAccordion`  | Accordion               | Enter/Space to toggle, `aria-expanded`  |
-| `LlmSelect`     | Listbox                 | Arrow keys, type-ahead, `aria-selected` |
-| `LlmToggle`     | Switch                  | Space to toggle, `role="switch"`        |
-| `LlmInput`      | Textbox                 | Native `<input>`, `aria-invalid`        |
-| `LlmCheckbox`   | Checkbox                | Space to toggle, `aria-checked`         |
-| `LlmRadio`      | Radio Group             | Arrow keys within group, `aria-checked` |
+Every row below is verified against the real component template (`role="…"` attributes
+in `libs/angular/src/lib/**/*.ts`), not carried forward from description alone:
+
+| Component       | ARIA Pattern                | Key Behaviors                           |
+|-----------------|------------------------------|------------------------------------------|
+| `AtlDialog`     | Dialog (modal)               | Focus trap, Escape to close, backdrop   |
+| `AtlTabGroup`   | Tabs                         | Arrow keys to switch, roving tabindex   |
+| `AtlMenu`       | Menu / Menubar               | Arrow keys, Enter to select, Escape     |
+| `AtlTooltip`    | Tooltip                      | Focus/hover trigger, `role="tooltip"`   |
+| `AtlAccordionGroup` | Accordion                | Enter/Space to toggle, `aria-expanded`  |
+| `AtlSelect`     | Combobox (listbox popup)     | Arrow keys, type-ahead, `aria-selected`, `aria-expanded` on the trigger (`role="combobox"` + `role="listbox"`, ADR-0109) |
+| `AtlToggle`     | Switch                       | Space to toggle, `role="switch"`        |
+| `AtlInput`      | Textbox                      | Native `<input>`, `aria-invalid`        |
+| `AtlCheckbox`   | Checkbox                     | Space to toggle, native `<input type="checkbox">` |
+| `AtlRadioGroup` | Radio Group                  | Arrow keys within group, `role="radiogroup"` |
 
 ---
 
-## 10. LLM Context File (CLAUDE.md / llm-context.md)
+## 10. LLM Context File — generated, not hand-maintained
 
-Ship a compressed API reference file designed to be dropped into a system prompt or Claude Code's project context. This is the single most impactful artifact for LLM code generation quality.
+Ship a compressed API reference file designed to be dropped into a system prompt or an
+agent's project context. This is the single most impactful artifact for LLM code
+generation quality — and, unlike everything else on this page, it is not a principle
+to apply by hand. It is already built: `npm run gen:llms`
+(`tools/scripts/gen-llms-txt.mjs`) generates `docs/public/llms-full.txt` from the same
+component data the docs site renders (props, defaults, descriptions, per-framework
+usage), and `check:llms` — part of both `check:all` and `sync:generated` — fails the
+build the moment the checked-in file and a fresh generator run disagree. A hand-copied
+context file cannot make that promise; a generated, gated one can.
 
 **Rules:**
 
-- List every component with its selector, inputs (with types and defaults), outputs, and one minimal template example.
-- Keep it under 4000 tokens.
-- Update it as part of the release process — it's a first-class artifact, not an afterthought.
+- Generate it from the same source the docs site reads (`docs/src/data/components.ts`)
+  — never hand-author or hand-edit it. A generator run is one command away; a forgotten
+  manual edit is not detectable until someone notices the drift.
+- Cover every framework's calling convention in one file, not one framework's syntax
+  assumed to generalize — the generated file opens with a "Framework Syntax
+  Cheatsheet" translating JSX-as-lingua-franca into Angular and Vue idioms before the
+  first component entry.
+- Gate it (`check:llms`) so a docs change that isn't reflected in the generated file
+  fails CI instead of silently drifting.
 
-**Example format:**
+**Excerpt of the real generated file** (`docs/public/llms-full.txt`, trimmed —
+component count and package version inside this quote are the file's own words as of
+this rewrite, not a fact this document is asserting on its own account):
 
 ````markdown
-## LlmButton
+# Atelier UI — Full API Reference
 
-Selector: `llm-button`
+> Complete component API for LLM consumption. 28 accessible components for Angular,
+> React, and Vue with consistent prop naming across all frameworks.
+> Version 0.2.41 | https://atelier.pieper.io
 
-| Input      | Type                                      | Default     |
-|------------|-------------------------------------------|-------------|
-| `variant`  | `'primary' \| 'secondary' \| 'outline'`  | `'primary'` |
-| `size`     | `'sm' \| 'md' \| 'lg'`                   | `'md'`      |
-| `disabled` | `boolean`                                 | `false`     |
-| `loading`  | `boolean`                                 | `false`     |
+### AtlButton
 
-```html
-<llm-button variant="primary" size="md" (click)="save()">Save</llm-button>
-```
+  A versatile button component with multiple variants and sizes. Supports loading and disabled states.
 
-## LlmCard
+  Props:
+    variant     'primary' | 'secondary' | 'outline' | 'danger'  'primary'  Visual style variant
+    size        'sm' | 'md' | 'lg'                              'md'       Size of the button
+    disabled    boolean                                         false      Disables the button
+    loading     boolean                                         false      Shows a loading spinner, disables interaction
+    aria-label  string                                          —          Accessible name. Required for icon-only buttons (no children).
 
-Selector: `llm-card`
-Sub-components: `llm-card-header`, `llm-card-content`, `llm-card-footer`
-
-| Input     | Type                                       | Default     |
-|-----------|--------------------------------------------|-------------|
-| `variant` | `'elevated' \| 'outlined' \| 'flat'`      | `'elevated'`|
-| `padding` | `'none' \| 'sm' \| 'md' \| 'lg'`         | `'md'`      |
-
-```html
-<llm-card variant="elevated">
-  <llm-card-header>Title</llm-card-header>
-  <llm-card-content>Content goes here.</llm-card-content>
-</llm-card>
-```
+  Usage:
+    Angular:
+      <atl-button variant="primary">Primary</atl-button>
+      <atl-button [loading]="true">Loading</atl-button>
+    React:
+      <AtlButton variant="primary">Primary</AtlButton>
+      <AtlButton loading={true}>Loading</AtlButton>
+    Vue:
+      <AtlButton variant="primary">Primary</AtlButton>
+      <AtlButton :loading="true">Loading</AtlButton>
 ````
 
 ---
@@ -411,7 +428,7 @@ Ordered by impact on LLM code generation quality:
 5. **Composition via content projection** (no config objects)
 6. **Standalone imports** (no NgModule indirection)
 7. **Inline JSDoc with examples** on every public member
-8. **LLM context cheat sheet file** (compressed API reference)
+8. **Generated LLM context file** (`llms-full.txt`, gated by `check:llms` — not hand-maintained)
 9. **CSS custom properties** for theming (design tokens, not utility classes)
 10. **ARIA-based behavior** (familiar, standards-aligned interaction patterns)
 
@@ -435,95 +452,159 @@ Ordered by impact on LLM code generation quality:
 
 ---
 
-## React Library (`libs/llm-components-react`)
+## Framework Adapters: React and Vue
 
 ### Rationale
 
-The same LLM-optimized design principles that make the Angular library predictable apply directly to React. Identical prop names (`variant`, `size`, `disabled`, `loading`), identical variant unions (`'primary' | 'secondary' | 'outline'`), and the same `--ui-*` CSS token system mean LLMs can transfer knowledge between the two libraries without additional context.
+The same LLM-optimized design principles that make the Angular library predictable
+apply directly to React and Vue. Identical prop names (`variant`, `size`, `disabled`,
+`loading`), identical variant unions, and the same `--ui-*` CSS token system mean an
+LLM can transfer knowledge between all three libraries without additional context.
 
-React represents the other dominant frontend framework. Providing a parallel library enables AI-generated apps to use the same design system regardless of whether the user picked Angular or React.
+Both frameworks import the same `libs/spec` contract Angular does
+(`@atelier-ui/spec`), so the compiler enforces parity: a prop renamed in the spec is a
+type error in all three adapters, not a note someone has to remember to apply three
+times.
 
 ### Framework Differences and How They Are Handled
 
-| Angular pattern | React equivalent |
-|---|---|
-| `input()` / `model()` signals | Regular props with optional callback (`onValueChange`) |
-| Angular injection tokens | React Context (`createContext` / `useContext`) |
-| `Injectable` service (`LlmToastService`) | Custom hook (`useLlmToast()`) + `LlmToastProvider` |
-| `FormValueControl` / `FormCheckboxControl` | Props with controlled/uncontrolled pattern |
-| CDK `Overlay` for tooltip/select | `useState` + `useRef` + `useEffect` |
-| CDK Menu keyboard nav | Custom keyboard handler in `LlmMenuTrigger` |
-| `:host` CSS selector | `.llm-<component>` class on the root element |
-| Content projection (`<ng-content>`) | `children: ReactNode` prop |
-| Sub-components as Angular elements | Named function exports (`LlmCardHeader`, `LlmCardContent`, etc.) |
+Verified against `libs/angular/src/lib/toast/atl-toast.ts` (`AtlToastService`),
+`libs/react/src/lib/toast/atl-toast.tsx` (`useAtlToast`, `AtlToastProvider`) and
+`libs/vue/src/lib/toast/atl-toast.ts` + `atl-toast-provider.vue`
+(`useAtlToast`, `AtlToastProvider`, Vue `provide`/`inject`) as the representative case
+for dependency injection, plus the button, card and dialog components for the rest.
+
+| Angular pattern | React equivalent | Vue equivalent |
+|---|---|---|
+| `input()` / `model()` signals | Regular props with optional callback (`onValueChange`) | Typed `defineProps<...>()` + `v-model`-style prop/`update:*` emit pair |
+| Angular injection tokens (`ATL_DIALOG`, `ATL_TAB_GROUP`, …) | React Context (`createContext` / `useContext`) | Vue `provide`/`inject` with a typed `InjectionKey` (e.g. `AtlToastKey`) |
+| `Injectable` service (`AtlToastService`) | Custom hook (`useAtlToast()`) + `AtlToastProvider` | Composable (`useAtlToast()`) + `AtlToastProvider` component, same `provide`/`inject` pair |
+| `FormValueControl` / `FormCheckboxControl` | Controlled props (`value`/`onValueChange`, `checked`/`onCheckedChange`) | Controlled props + `v-model` emits (`value`/`update:value`, `checked`/`update:checked`) |
+| CDK `A11y` (focus trap in `AtlDialog`) | `useRef` + manual focus management | `ref` + `onMounted`/composable — no CDK equivalent; Vue has no CDK dependency |
+| CDK Menu keyboard nav | Custom keyboard handler in the component (`AtlMenuTrigger`) | Custom keyboard handler in the component (`AtlMenuTrigger`) |
+| `:host` CSS selector | `.atl-<component>` class on the root element | `.atl-<component>` class on the root element (same convention as React, not scoped `<style scoped>`) |
+| Content projection (`<ng-content>`) | `children: ReactNode` prop | Default `<slot />` |
+| Sub-components as Angular elements | Named function exports (`AtlCardHeader`, `AtlCardContent`, etc.) | Named SFC exports (`AtlCardHeader.vue`, etc.), same one-component-per-file split |
 
 ### CSS Sharing Strategy
 
-The CSS files in `libs/llm-components-react` are adapted copies of the Angular CSS. The only transformation applied is replacing `:host` selectors with class-based equivalents:
+The CSS files in `libs/react` and `libs/vue` are adapted copies of the Angular CSS. The
+only transformation applied is replacing `:host` selectors with class-based
+equivalents on the component's root element — verified identical in both frameworks
+(`libs/react/src/lib/button/atl-button.css`, `libs/vue/src/lib/button/atl-button.css`):
 
 ```css
 /* Angular */
 :host(.variant-primary) { ... }
 
-/* React */
-.llm-button.variant-primary { ... }
+/* React and Vue */
+.atl-button.variant-primary { ... }
 ```
 
-All design tokens (`--ui-*`) are identical — both libraries import from their own copy of `tokens.css`, which is a mirror of the same file.
+Design tokens (`--ui-*`) are not hand-copied between frameworks: every library's
+`styles/tokens.css` is a generated projection of one canonical file, regenerated
+together by `npm run sync:tokens` (ADR-0115). Editing a value in the canonical file
+and running that one script keeps all three in sync; editing a framework's copy
+directly is drift.
 
 ### Import Pattern
 
 ```typescript
-import { LlmButton, LlmCard, LlmCardHeader, LlmCardContent, LlmCardFooter,
-         LlmBadge, LlmInput, LlmTextarea, LlmCheckbox, LlmToggle,
-         LlmRadio, LlmRadioGroup, LlmAlert, LlmSelect, LlmOption,
-         LlmDialog, LlmDialogHeader, LlmDialogContent, LlmDialogFooter,
-         LlmTabGroup, LlmTab, LlmAccordionGroup, LlmAccordionItem, LlmAccordionHeader,
-         LlmMenu, LlmMenuItem, LlmMenuSeparator, LlmMenuTrigger,
-         LlmTooltip, LlmToast, LlmToastContainer, LlmToastProvider, useLlmToast,
-         LlmSkeleton, LlmAvatar, LlmAvatarGroup, LlmProgress,
-         LlmBreadcrumbs, LlmBreadcrumbItem, LlmPagination,
-         LlmDrawer, LlmDrawerHeader, LlmDrawerContent, LlmDrawerFooter }
-  from '@atelier-ui/react';
+// React — libs/react/src/index.ts re-exports every component below.
+// Vue equivalents have the same names; import from '@atelier-ui/vue' instead.
+import {
+  AtlButton, AtlCard, AtlCardHeader, AtlCardContent, AtlCardFooter,
+  AtlBadge, AtlIcon, AtlInput, AtlTextarea, AtlCheckbox, AtlToggle,
+  AtlRadio, AtlRadioGroup, AtlAlert, AtlSelect, AtlOption, AtlCombobox,
+  AtlDialog, AtlDialogHeader, AtlDialogContent, AtlDialogFooter,
+  AtlTabGroup, AtlTab, AtlAccordionGroup, AtlAccordionItem, AtlAccordionHeader,
+  AtlMenu, AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger,
+  AtlTooltip, AtlToastProvider, AtlToastContainer, useAtlToast,
+  AtlSkeleton, AtlAvatar, AtlAvatarGroup, AtlProgress,
+  AtlBreadcrumbs, AtlBreadcrumbItem, AtlPagination,
+  AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter,
+  AtlTable, AtlThead, AtlTbody, AtlTr, AtlTh, AtlTd,
+  AtlStepper, AtlStep, AtlCodeBlock,
+  AtlChat, AtlChatHeader, AtlChatMessages, AtlChatMessage,
+  AtlChatTyping, AtlChatSuggestion, AtlChatInput,
+} from '@atelier-ui/react';
 ```
 
 ```css
 @import '@atelier-ui/react/styles/tokens.css';
+/* or: @import '@atelier-ui/vue/styles/tokens.css'; */
 ```
 
 ### Toast Hook Pattern
 
-Because React has no dependency injection, the toast service is replaced by a hook:
+React has no dependency injection, so the toast service becomes a hook; Vue reaches
+the same shape through its own native `provide`/`inject`, not through a service class
+either:
 
 ```tsx
-// In your app root
-<LlmToastProvider>
+// React — in your app root
+<AtlToastProvider>
   <App />
-  <LlmToastContainer position="bottom-right" />
-</LlmToastProvider>
+  <AtlToastContainer position="bottom-right" />
+</AtlToastProvider>
 
 // Anywhere inside the tree
-const { show, dismiss, clear } = useLlmToast();
+const { show, dismiss, clear } = useAtlToast();
 show('Saved!', { variant: 'success' });
 ```
 
-### Scaffold New React Components
-
-```bash
-nx generate @atelier-ui/generators:llm-component-react --name=<name>
-# e.g.: nx generate @atelier-ui/generators:llm-component-react --name=date-picker
+```vue
+<!-- Vue — in your app root -->
+<AtlToastProvider>
+  <App />
+  <AtlToastContainer position="bottom-right" />
+</AtlToastProvider>
+```
+```typescript
+// Anywhere inside the tree
+import { useAtlToast } from '@atelier-ui/vue';
+const { show, dismiss, clear } = useAtlToast();
+show('Saved!', { variant: 'success' });
 ```
 
-Generated files: `llm-<name>.tsx`, `llm-<name>.css`, `llm-<name>.spec.tsx`, `llm-<name>.stories.tsx`
-Auto-exports from `libs/llm-components-react/src/index.ts`.
+### Scaffold New Components
+
+```bash
+# Scaffolds Angular + React + Vue together by default:
+nx generate @atelier-ui/generators:atl-component --name=<name>
+# Target one framework: --framework=angular|react|vue|both|all
+
+# Or the framework-specific generators directly:
+nx generate @atelier-ui/generators:atl-component-react --name=<name>
+nx generate @atelier-ui/generators:atl-component-vue --name=<name>
+```
+
+Generated files (verified against `libs/react/src/lib/button/` and
+`libs/vue/src/lib/button/`):
+
+- React: `atl-<name>.tsx`, `atl-<name>.css`, `atl-<name>.spec.tsx`, `atl-<name>.stories.tsx`
+- Vue: `atl-<name>.vue`, `atl-<name>.css`, `atl-<name>.spec.ts`, `atl-<name>.stories.ts`
+
+Each generator appends the new export to the target library's own `index.ts`
+automatically (`libs/{angular,react,vue}/src/index.ts` — verified in
+`tools/generators/{atl-component,atl-component-react,atl-component-vue}/index.ts`); no
+manual export step needed.
 
 ---
 
-## LlmChat
+## AtlChat
 
-A new top-level library category, **AI**, sits alongside the existing five categories (`Inputs`, `Display`, `Navigation`, `Overlay`, `Layout`). It is reserved for AI-surface components — chat panels, prompt cards, agent traces, tool-call indicators, etc. — that don't fit cleanly into the existing taxonomy.
+A top-level library category, **AI**, sits alongside the existing five Storybook
+sidebar categories (`Inputs`, `Display`, `Navigation`, `Overlay`, `Feedback` —
+verified against `storySort.order` and every story's `title:` prefix in
+`libs/{angular,react,vue}/.storybook/preview.*`). It is reserved for AI-surface
+components — chat panels, prompt cards, agent traces, tool-call indicators, etc. —
+that don't fit cleanly into the existing taxonomy.
 
-Its first component is **`LlmChat`**, an AI assistant surface. Implementation is **provider-agnostic** — wrapper takes `variant` / `status` / `open`; everything else is composed via slots. Wiring to CopilotKit, Vercel AI SDK, or a custom backend is a thin downstream adapter on top of the `(send)` / `(stop)` events.
+Its first component is **`AtlChat`**, an AI assistant surface. Implementation is
+**provider-agnostic** — wrapper takes `variant` / `status` / `open`; everything else is
+composed via slots. Wiring to CopilotKit, Vercel AI SDK, or a custom backend is a thin
+downstream adapter on top of the `(send)` / `(stop)` events.
 
 ### Variants and States
 
@@ -531,38 +612,52 @@ Its first component is **`LlmChat`**, an AI assistant surface. Implementation is
 |---|---|---|
 | `drawer` | Right-anchored slide-in panel, full viewport height. Built on native `<dialog>` + CDK A11y focus trap (Angular). | idle · streaming · error |
 | `popup` | Floating bubble (bottom-right) that opens a compact 380×560 chat window. | idle · streaming · error |
-| `inline` | Embedded as a regular page surface — uses `LlmCard` chrome, no overlay, no close button. | idle · streaming · error |
+| `inline` | Embedded as a regular page surface — uses `AtlCard` chrome, no overlay, no close button. | idle · streaming · error |
 
-All states use only existing design tokens — primary teal for the user bubble, `brand-ai` lime for the assistant accent, `surface-sunken` for assistant bubbles, `danger` for connection errors and the Stop button.
+All states use only existing design tokens — primary teal for the user bubble,
+`brand-ai` lime for the assistant accent, `surface-sunken` for assistant bubbles,
+`danger` for connection errors and the Stop button.
+
+*(`AtlChatSpec.status` is `'idle' | 'streaming' | 'error'` — three values. The fourth
+frame per variant below, "Empty", is a content state — zero messages rendered — not a
+fourth `status` value; verified against `libs/spec/src/index.ts` and the real Storybook
+stories: `DrawerDefault` / `DrawerEmpty` / `DrawerStreaming` / `DrawerError`, same
+pattern × 3 variants.)*
 
 ### Sub-component composition
 
+Verified against `libs/react/src/index.ts` — Vue and Angular export the same set:
+
 ```
-LlmChat                   – Wrapper, holds variant / status / open
-├── LlmChatHeader         – Title block + auto close button (hidden on inline)
-├── LlmChatMessages       – Scrollable message list
-│   ├── LlmChatMessage    – role: 'user' | 'assistant' | 'system', + failed flag
-│   ├── LlmChatTyping     – three animated dots, prefers-reduced-motion aware
-│   └── LlmChatSuggestion – tappable starter chip with label + hint
-└── LlmChatInput          – textarea + Send button, swaps to danger Stop while streaming
+AtlChat                   – Wrapper, holds variant / status / open
+├── AtlChatHeader          – Title block + auto close button (hidden on inline)
+├── AtlChatMessages        – Scrollable message list
+│   ├── AtlChatMessage     – role: 'user' | 'assistant' | 'system', + failed flag
+│   ├── AtlChatTyping      – three animated dots, prefers-reduced-motion aware
+│   └── AtlChatSuggestion  – tappable starter chip with label + hint
+└── AtlChatInput           – textarea + Send button, swaps to danger Stop while streaming
 ```
 
 ### Figma reference
 
-File: `Atelier` (key `QMnDD8uZQPldPrlCwZZ58T`), page `Components`, top-level section **AI**. Three variant sub-sections (`LlmChat / drawer`, `LlmChat / popup`, `LlmChat / inline`) each contain four state frames. All Atelier components inside the mockups are real instances (not detached primitives) so design changes propagate automatically.
+File: `Atelier` (key `QMnDD8uZQPldPrlCwZZ58T`), page `Components`, top-level section
+**AI**. Three variant sub-sections (`AtlChat / drawer`, `AtlChat / popup`, `AtlChat /
+inline`) each contain four state frames — 12 in total, matching the 12 Storybook
+stories per framework below. All Atelier components inside the mockups are real
+instances (not detached primitives) so design changes propagate automatically.
 
 ### Implementation status
 
 | Area | Status |
 |---|---|
-| Figma mockups (12 frames) | ✅ shipped |
-| `LlmButton` `danger` variant (used by Stop button) | ✅ shipped (`d46dc94`) |
-| Spec types in `libs/spec/src/index.ts` | ✅ shipped |
-| Angular implementation (`libs/angular/src/lib/chat/`) | ✅ shipped (`fc01c4b`) |
-| React implementation (`libs/react/src/lib/chat/`) | ✅ shipped (`02d7e94`) |
-| Vue implementation (`libs/vue/src/lib/chat/`) | ✅ shipped (`9cb1fdc`) |
-| Storybook stories (12 per framework, mirroring Figma) | ✅ shipped |
-| Tests (Angular 18, React 17, Vue 19) | ✅ shipped |
-| Docs entry in `docs/src/data/components.ts` + AI category | ✅ shipped (`104ff47`) |
-| CopilotKit adapter | ⏸ deferred — visual surface only for now |
-| Vercel AI SDK adapter | ⏸ not on the roadmap |
+| Figma mockups (12 frames) | shipped |
+| `AtlButton` `danger` variant (used by Stop button) | shipped (`d46dc94`) |
+| Spec types in `libs/spec/src/index.ts` | shipped |
+| Angular implementation (`libs/angular/src/lib/chat/`) | shipped (`fc01c4b`) |
+| React implementation (`libs/react/src/lib/chat/`) | shipped (`02d7e94`) |
+| Vue implementation (`libs/vue/src/lib/chat/`) | shipped (`9cb1fdc`) |
+| Storybook stories (12 per framework, mirroring Figma) | shipped |
+| Tests (Angular, React, Vue) | shipped |
+| Docs entry in `docs/src/data/components.ts` + AI category | shipped (`104ff47`) |
+| CopilotKit adapter | deferred — visual surface only for now |
+| Vercel AI SDK adapter | not on the roadmap |

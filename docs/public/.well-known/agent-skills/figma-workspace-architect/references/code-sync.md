@@ -183,17 +183,28 @@ Add these to the Audit checklist's "Engineering-Sync Readiness" category — the
 
 ## Project-level notes for this Atelier UI repo
 
-The Atelier UI workspace currently maintains tokens in two places:
+Token *value* ownership across Figma, the framework libs, and the artboard/skill copies is
+mapped by axis in ADR-0115 — read that first for the full picture. This section is that
+map's instance of the "pick a direction" question above, for this repo specifically. (An
+earlier version of this section named the pre-ADR-0030 state — the superseded `UI Tokens`
+collection, a bidirectional/manual model — and has been corrected below.)
 
-- **Figma:** `Atelier UI` file (key `QMnDD8uZQPldPrlCwZZ58T`) → `UI Tokens` Variable Collection with `Light` and `Dark` modes.
-- **Code:** `libs/{angular,react,vue}/src/styles/tokens.css` (one CSS file per framework, currently kept in sync manually). `docs/src/styles/tokens.css` re-imports from the React copy.
-
-State of sync at time of writing: manually maintained. Figma was bootstrapped from the original code-side tokens; ongoing changes happen on whichever side the contributor is in, with PR review as the reconciliation point. This works because the change rate is low (token additions are rare) — but it is the "very small scale" case from §1, and will need formalization the moment that changes.
-
-When that day comes, the recommended path is approach **#4 (custom export via figma-console-mcp)** because:
-
-- The token shape is straightforward (3-tier semantic, two modes, ~140 variables) — Style Dictionary's transformation layer is overkill.
-- Three CSS files to write per export, all near-identical (the React copy is the master, Angular/Vue mirror it). A 50-LOC script handles this.
-- A CI check that runs the export and fails on drift fits the existing `tools/scripts/check-*.js` family naturally.
-
-Until then: any token change must update Figma + all three `tokens.css` files explicitly, and the PR description should call out which side was the source.
+- **Code owns the value.** The canonical file is
+  `libs/create-workspace/src/generators/preset/files/styles/tokens.css`. Every other
+  `tokens.css`-shaped file — `libs/{angular,react,vue}/src/styles/tokens.css`,
+  `skills/atelier-design/assets/colors_and_type.css` — is a generated, byte-identical
+  projection of it (`tools/scripts/sync-tokens.mjs`, gated by `npm run check:tokens`).
+  `docs/src/styles/tokens.css` isn't a copy at all; it `@import`s the React projection
+  live.
+- **Figma's `Library Tokens` Variable Collection is also a generated projection, not an
+  independent source** (ADR-0030 — the docs site's own brand system is a separate
+  collection, renamed `Docs Brand Tokens` in that same decision, and out of scope here).
+  `tools/scripts/gen-figma-library-tokens.mjs` parses the canonical file above into
+  variable definitions, and `npm run figma:sync-tokens` pushes them into Figma — one-way,
+  code → Figma. Editing the Variable directly in Figma is drift by definition (ADR-0030's
+  Decision §1), not a legitimate entry point.
+- What genuinely stays a manual, PR-reconciled step — the "very small scale" case from §1
+  above — is *triggering* that push: `figma:sync-tokens` needs Figma Desktop with the
+  Bridge plugin open, so it is not part of `check:all`, and nothing pulls a Figma-side edit
+  back into code at all. Approach #4's export half already shipped this way; its CI-checked
+  half (`check:tokens`) only watches the code-side copies, not the Figma side.
