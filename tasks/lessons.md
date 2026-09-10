@@ -563,3 +563,39 @@ have the agents run only gates whose inputs they own, or tell them that a failur
 file they do not own is probably a concurrent edit and must be reported, not diagnosed.
 Reserve the full chain for the orchestrator, after the last agent has finished; a green
 run mid-flight proves nothing, and a red one accuses the wrong file.
+
+## "CI" is not a deploy target, and a page that loads but never connects has a network tab (2026-09-10)
+
+The Storybook browser-mode suite (addon-vitest, real Chromium, interaction + axe) passed
+locally and failed under `CI=1` for weeks with "Failed to connect to the browser session
+… within the timeout / Tests no tests". The CI workflow comment recorded a thorough
+diagnosis that had ruled out the browser binary, sandbox flags, file parallelism, the
+connect timeout, and "any CI branch in this repo's .storybook config" — and then left the
+job unwired. All of that was true and none of it was the cause.
+
+The cause was one line in each `libs/<fw>/.storybook/main.ts`:
+`if (process.env['CI'] || process.env['BUILD_STORYBOOK']) config.base = '/storybook-<fw>/'`.
+`viteFinal` shapes not only the production build but also the Vite server the vitest
+plugin starts for browser tests, so under `CI=1` that server ran with a `/storybook-vue/`
+base while Vitest's orchestrator HTML fetched `/__vitest_browser__/orchestrator-*.js` at
+the root. The server answered 404 with the sentence "did you mean to visit
+`/storybook-vue/__vitest_browser__/…`" — a complete diagnosis, sitting in the response body
+of a request nobody had made by hand. The `CI` half of the condition was redundant the
+whole time: `wrangler.jsonc` already sets `BUILD_STORYBOOK=1` for the deploy's own build.
+
+Two rules:
+
+- **An environment flag that means "automated environment" must not be used to mean
+  "building for the hosted path".** The test runner is also an automated environment. A
+  deploy target is an explicit opt-in (`BUILD_STORYBOOK=1`), set where the deploy is
+  defined, and nowhere inferred. The earlier diagnosis wrote "ruled out any CI branch in
+  this repo's .storybook config" because it was looking for a branch that changes the
+  *test* path; the branch it found changed the *build* path and was dismissed as unrelated.
+- **When a page loads and then nothing happens, fetch what the page fetches before
+  tuning timeouts.** `page.goto` succeeded, `load` fired, and the pw:api trace looked
+  healthy — because Playwright only reports the navigation, not the sub-resources. Twenty
+  lines of Playwright (`page.on('console' | 'pageerror' | 'requestfailed' | 'response'
+  ≥ 400 | 'websocket')`) against the live orchestrator URL found three 404s in the first
+  eighty milliseconds; a `curl` of one of them returned the cause as prose. Timeouts,
+  parallelism and sandbox flags are the last hypotheses, not the first, when the failure
+  is "connected to nothing" rather than "connected slowly".

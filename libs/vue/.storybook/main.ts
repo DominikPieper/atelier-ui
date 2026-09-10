@@ -39,7 +39,14 @@ const config: StorybookConfig = {
     experimentalDocgenServer: true,
   },
   viteFinal: async (config: InlineConfig) => {
-    if (process.env['CI'] || process.env['BUILD_STORYBOOK']) {
+    // The hosted path (atelier.pieper.io/storybook-vue/) is opted into by the
+    // deploy's own build command (wrangler.jsonc sets BUILD_STORYBOOK=1), never
+    // inferred from CI. `viteFinal` also shapes the Vite server that
+    // @storybook/addon-vitest starts for browser-mode tests; with the base set
+    // there, the Vitest orchestrator's root-relative /__vitest_browser__/ scripts
+    // 404 and every session times out — which is exactly what happened under
+    // CI=1 for weeks. See plan/adr/0122 (S0 of ADR-0121).
+    if (process.env['BUILD_STORYBOOK']) {
       config.base = '/storybook-vue/';
     }
     return config;
