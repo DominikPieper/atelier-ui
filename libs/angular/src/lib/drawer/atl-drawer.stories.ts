@@ -6,6 +6,7 @@ import { AtlInput } from '../input/atl-input';
 import { AtlDrawer, AtlDrawerContent, AtlDrawerFooter, AtlDrawerHeader } from './atl-drawer';
 
 import { metadata } from '@atelier-ui/spec/metadata/drawer.metadata';
+import { contract } from '@atelier-ui/spec/contracts/drawer.contract';
 const ALL_IMPORTS = [AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter, AtlButton];
 
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
@@ -34,7 +35,7 @@ const meta: Meta<AtlDrawer> = {
     size: 'md',
     closeOnBackdrop: true,
   },
-  parameters: { design: figmaNode('421-398'), docs: { description: { component: metadata.purpose } } },
+  parameters: { design: figmaNode('421-398'), docs: { description: { component: metadata.purpose } }, contract },
 };
 
 export default meta;

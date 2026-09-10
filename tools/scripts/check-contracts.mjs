@@ -18,6 +18,11 @@
  *
  * Rules, tags, and the CLI surface are documented in `libs/spec/src/contracts/README.md`
  * and this file's own comments above each check. Run via `npm run check:contracts`.
+ *
+ * [CONTRACT-IMPORT] (S5b): a component story file whose component has a contract
+ * must import it (`@atelier-ui/spec/contracts/<name>.contract`) and set `contract`
+ * in the meta's `parameters` — a textual check, the same heuristic
+ * `check-story-descriptions.js` uses for `component: metadata.purpose`.
  */
 'use strict';
 
@@ -84,6 +89,7 @@ const TAG_LEVEL = {
   'UNRESOLVED-ARGS': 'warning',
   UNMIRRORED: 'warning',
   'NO-STORY-META': 'warning',
+  'CONTRACT-IMPORT': 'error',
 };
 
 // ─── CLI args ───────────────────────────────────────────────────────────────
@@ -360,6 +366,73 @@ function findStoryFiles(fw) {
 
 function toRepoImportPath(absPath) {
   return './' + path.relative(ROOT, absPath).split(path.sep).join('/');
+}
+
+// ─── CONTRACT-IMPORT (S5b) ──────────────────────────────────────────────────
+// The Storybook docs page's `ContractBlock` (`libs/spec/src/contracts/docs-
+// block.ts`) reads `parameters.contract` off the current story meta — it has
+// nothing to render unless the story file imports the component's contract
+// and wires it in. Textual, not AST: the same convention-following heuristic
+// `check-story-descriptions.js` uses for `component: metadata.purpose`. Every
+// story file in this repo follows one shape (`const meta ... export default
+// meta;`), so a lexical scan for that shape is enough.
+
+/** The `const meta = {...}; export default meta;` slice, or `null` if the file
+ * doesn't follow that convention (treated as "not wired" below, not a crash). */
+function extractMetaBlock(source) {
+  const metaStart = source.indexOf('\nconst meta');
+  if (metaStart === -1) return null;
+  const exportIdx = source.indexOf('\nexport default meta;', metaStart);
+  if (exportIdx === -1) return null;
+  return source.slice(metaStart, exportIdx);
+}
+
+/** The text strictly inside the `parameters: { ... }` object of a meta block,
+ * found by brace-depth matching (the object nests, e.g. `docs: { description:
+ * { ... } }`, so a single-level `[^}]*` regex would stop too early). */
+function extractParamsBody(metaBlock) {
+  const paramsKeyIdx = metaBlock.indexOf('parameters:');
+  if (paramsKeyIdx === -1) return null;
+  const openBraceIdx = metaBlock.indexOf('{', paramsKeyIdx);
+  if (openBraceIdx === -1) return null;
+  let depth = 0;
+  for (let i = openBraceIdx; i < metaBlock.length; i++) {
+    if (metaBlock[i] === '{') depth++;
+    else if (metaBlock[i] === '}') {
+      depth--;
+      if (depth === 0) return metaBlock.slice(openBraceIdx + 1, i);
+    }
+  }
+  return null;
+}
+
+/** Reports [CONTRACT-IMPORT] when `name`'s contract exists but `storyFile`
+ * neither imports it from the expected specifier nor sets `contract` in the
+ * meta's `parameters`. No-op when `name` has no contract. */
+function checkContractImport(fw, storyFile, source, name, contract) {
+  if (!contract) return;
+  const expectedBase = contract.__file.replace(/\.ts$/, '');
+  const expectedSpecifier = `@atelier-ui/spec/contracts/${expectedBase}`;
+  const importRe = new RegExp(
+    `from ['"]${escapeRegExp(expectedSpecifier)}['"]`,
+  );
+  const hasImport = importRe.test(source);
+
+  const metaBlock = extractMetaBlock(source);
+  const paramsBody = metaBlock ? extractParamsBody(metaBlock) : null;
+  const hasContractParam =
+    paramsBody != null &&
+    /(^|[{,\s])contract(\s*[,}]|\s*:|\s*$)/.test(paramsBody);
+
+  if (!hasImport || !hasContractParam) {
+    report(
+      'CONTRACT-IMPORT',
+      fw,
+      `${path.relative(ROOT, storyFile)}: ${name} has a contract but its story meta ` +
+        `does not wire it in — add "import { contract } from '${expectedSpecifier}';" ` +
+        `and set 'contract' in the meta's parameters.`,
+    );
+  }
 }
 
 // --- Angular / Vue: the Storybook framework worker, story file as entry point ---
@@ -1472,6 +1545,13 @@ async function runFramework(fw) {
     }
 
     reachedMeta.add(docgenResult.name);
+    checkContractImport(
+      fw,
+      storyFile,
+      source,
+      docgenResult.name,
+      contractsBySelector.get(docgenResult.name),
+    );
     let entry = byComponent.get(docgenResult.name);
     if (!entry) {
       entry = { docgenResult, contextDir, files: [] };

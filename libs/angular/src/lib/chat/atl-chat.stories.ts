@@ -15,6 +15,7 @@ import { AtlAlert } from '../alert/atl-alert';
 import { AtlCodeBlock } from '../code-block/atl-code-block';
 
 import { metadata } from '@atelier-ui/spec/metadata/chat.metadata';
+import { contract } from '@atelier-ui/spec/contracts/chat.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
@@ -53,6 +54,7 @@ const meta: Meta<AtlChat> = {
   parameters: {
     design: figmaNode('507-2953'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

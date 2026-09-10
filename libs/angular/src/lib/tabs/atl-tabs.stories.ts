@@ -6,6 +6,7 @@ import { AtlBadge } from '../badge/atl-badge';
 import { AtlCard, AtlCardContent } from '../card/atl-card';
 
 import { metadata } from '@atelier-ui/spec/metadata/tabs.metadata';
+import { contract } from '@atelier-ui/spec/contracts/tab-group.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -28,6 +29,7 @@ const meta: Meta<AtlTabGroup> = {
   parameters: {
     design: figmaNode('55-123'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

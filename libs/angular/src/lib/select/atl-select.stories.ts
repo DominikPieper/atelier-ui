@@ -4,6 +4,7 @@ import { AtlOption } from './atl-option';
 import { AtlSelect } from './atl-select';
 
 import { metadata } from '@atelier-ui/spec/metadata/select.metadata';
+import { contract } from '@atelier-ui/spec/contracts/select.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -41,6 +42,7 @@ const meta: Meta<AtlSelect> = {
   parameters: {
     design: figmaNode('55-92'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

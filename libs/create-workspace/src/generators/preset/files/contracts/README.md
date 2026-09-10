@@ -10,6 +10,11 @@ The planned check reads each `<name>.contract.ts` statically with
 `tools/scripts/lib/ts-eval.js`'s `parseExportedVars`, so a contract must stay a plain
 object literal (no imports of values, no computed members).
 
+Every component story meta whose component has a contract must import it and set
+`contract` in its `parameters` (`docs-block.ts`'s `ContractBlock` reads
+`parameters.contract` to render the "Contract" section on the docs page); a story file
+that has a contract but doesn't wire it in is `[CONTRACT-IMPORT]` (error).
+
 To add one: create `<kebab-selector-without-atl-prefix>.contract.ts` in the contracts
 directory (`AtlButton` → `button.contract.ts`), `import type { ComponentContract } from
 './types';`, and `export const contract = { ... } satisfies ComponentContract;` —

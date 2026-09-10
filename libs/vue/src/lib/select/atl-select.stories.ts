@@ -4,6 +4,7 @@ import AtlSelect from './atl-select.vue';
 import AtlOption from './atl-option.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/select.metadata';
+import { contract } from '@atelier-ui/spec/contracts/select.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -52,6 +53,7 @@ const meta: Meta<typeof AtlSelect> = {
         ],
       },
     },
+    contract,
   },
 };
 

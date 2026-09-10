@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { AtlDialog, AtlDialogHeader, AtlDialogContent, AtlDialogFooter } from './atl-dialog';
 
 import { metadata } from '@atelier-ui/spec/metadata/dialog.metadata';
+import { contract } from '@atelier-ui/spec/contracts/dialog.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -22,6 +23,7 @@ const meta: Meta<typeof AtlDialog> = {
   parameters: {
     design: figmaNode('55-94'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

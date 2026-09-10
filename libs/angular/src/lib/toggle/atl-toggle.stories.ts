@@ -3,6 +3,7 @@ import { argsToTemplate } from '@storybook/angular';
 import { AtlToggle } from './atl-toggle';
 
 import { metadata } from '@atelier-ui/spec/metadata/toggle.metadata';
+import { contract } from '@atelier-ui/spec/contracts/toggle.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -32,6 +33,7 @@ const meta: Meta<AtlToggle> = {
   parameters: {
     design: figmaNode('55-41'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

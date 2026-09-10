@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
 import { AtlCodeBlock } from './atl-code-block';
+import { contract } from '@atelier-ui/spec/contracts/code-block.contract';
 
 const SAMPLE_TS = `import { AtlButton } from '@atelier-ui/angular';
 
@@ -40,6 +41,7 @@ const meta: Meta<AtlCodeBlock> = {
   },
   parameters: {
     design: figmaNode('420-286'),
+    contract,
   },
 };
 

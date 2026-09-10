@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { AtlTabGroup, AtlTab } from './atl-tabs';
 
 import { metadata } from '@atelier-ui/spec/metadata/tabs.metadata';
+import { contract } from '@atelier-ui/spec/contracts/tab-group.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -21,6 +22,7 @@ const meta: Meta<typeof AtlTabGroup> = {
   parameters: {
     design: figmaNode('55-123'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

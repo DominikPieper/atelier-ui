@@ -12,6 +12,7 @@ import AtlAlert from '../alert/atl-alert.vue';
 import AtlCodeBlock from '../code-block/atl-code-block.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/chat.metadata';
+import { contract } from '@atelier-ui/spec/contracts/chat.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 const figmaNode = (nodeId: string) => ({ type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` });
 
@@ -45,6 +46,7 @@ const meta: Meta<typeof AtlChat> = {
         ],
       },
     },
+    contract,
   },
 };
 

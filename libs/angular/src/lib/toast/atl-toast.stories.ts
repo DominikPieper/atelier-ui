@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { AtlToast, AtlToastContainer, AtlToastService, ToastVariant } from './atl-toast';
 import { AtlButton } from '../button/atl-button';
+import { contract } from '@atelier-ui/spec/contracts/toast.contract';
 
 /* ── Wrapper component for stories that need the service ── */
 @Component({
@@ -141,6 +142,7 @@ const meta: Meta<AtlToast> = {
   },
   parameters: {
     design: figmaNode('55-47'),
+    contract,
   },
 };
 

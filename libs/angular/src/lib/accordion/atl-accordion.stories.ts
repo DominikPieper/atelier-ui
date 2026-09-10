@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 import { AtlAccordionGroup, AtlAccordionItem, AtlAccordionHeader } from './atl-accordion';
 
 import { metadata } from '@atelier-ui/spec/metadata/accordion.metadata';
+import { contract } from '@atelier-ui/spec/contracts/accordion-group.contract';
 const IMPORTS = [AtlAccordionGroup, AtlAccordionItem, AtlAccordionHeader];
 
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
@@ -26,6 +27,7 @@ const meta: Meta<AtlAccordionGroup> = {
   parameters: {
     design: figmaNode('55-127'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

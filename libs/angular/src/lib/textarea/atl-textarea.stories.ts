@@ -3,6 +3,7 @@ import { argsToTemplate } from '@storybook/angular';
 import { AtlTextarea } from './atl-textarea';
 
 import { metadata } from '@atelier-ui/spec/metadata/textarea.metadata';
+import { contract } from '@atelier-ui/spec/contracts/textarea.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -39,6 +40,7 @@ const meta: Meta<AtlTextarea> = {
   parameters: {
     design: figmaNode('55-87'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

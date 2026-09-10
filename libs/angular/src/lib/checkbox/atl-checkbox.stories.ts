@@ -3,6 +3,7 @@ import { argsToTemplate } from '@storybook/angular';
 import { AtlCheckbox } from './atl-checkbox';
 
 import { metadata } from '@atelier-ui/spec/metadata/checkbox.metadata';
+import { contract } from '@atelier-ui/spec/contracts/checkbox.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -34,6 +35,7 @@ const meta: Meta<AtlCheckbox> = {
   parameters: {
     design: figmaNode('55-36'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

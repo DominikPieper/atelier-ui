@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AtlCodeBlock } from './atl-code-block';
+import { contract } from '@atelier-ui/spec/contracts/code-block.contract';
 
 const SAMPLE_TS = `import { AtlButton } from '@atelier-ui/react';
 
@@ -48,6 +49,7 @@ const meta: Meta<typeof AtlCodeBlock> = {
         ],
       },
     },
+    contract,
   },
 };
 

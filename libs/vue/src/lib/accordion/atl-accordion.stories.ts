@@ -5,6 +5,7 @@ import AtlAccordionItem from './atl-accordion-item.vue';
 import AtlAccordionHeader from './atl-accordion-header.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/accordion.metadata';
+import { contract } from '@atelier-ui/spec/contracts/accordion-group.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -26,6 +27,7 @@ const meta: Meta<typeof AtlAccordionGroup> = {
   parameters: {
     design: figmaNode('55-127'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

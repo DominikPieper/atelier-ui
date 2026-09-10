@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { AtlSelect, AtlOption } from './atl-select';
 
 import { metadata } from '@atelier-ui/spec/metadata/select.metadata';
+import { contract } from '@atelier-ui/spec/contracts/select.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -24,6 +25,7 @@ const meta: Meta<typeof AtlSelect> = {
         ],
       },
     },
+    contract,
   },
 };
 

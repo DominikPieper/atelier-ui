@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AtlButton } from './atl-button';
 
 import { metadata } from '@atelier-ui/spec/metadata/button.metadata';
+import { contract } from '@atelier-ui/spec/contracts/button.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -22,6 +23,7 @@ const meta: Meta<typeof AtlButton> = {
   parameters: {
     design: figmaNode('129-20'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

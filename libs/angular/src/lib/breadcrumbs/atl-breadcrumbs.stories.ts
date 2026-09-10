@@ -3,6 +3,7 @@ import { signal } from '@angular/core';
 import { AtlBreadcrumbs, AtlBreadcrumbItem } from './atl-breadcrumbs';
 
 import { metadata } from '@atelier-ui/spec/metadata/breadcrumbs.metadata';
+import { contract } from '@atelier-ui/spec/contracts/breadcrumbs.contract';
 const ALL_IMPORTS = [AtlBreadcrumbs, AtlBreadcrumbItem];
 
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
@@ -18,6 +19,7 @@ const meta: Meta<AtlBreadcrumbs> = {
   parameters: {
     design: figmaNode('55-141'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

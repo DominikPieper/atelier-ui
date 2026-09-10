@@ -4,6 +4,7 @@ import { AtlRadio } from './atl-radio';
 import { AtlRadioGroup } from '../radio-group/atl-radio-group';
 
 import { metadata } from '@atelier-ui/spec/metadata/radio.metadata';
+import { contract } from '@atelier-ui/spec/contracts/radio.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -17,6 +18,7 @@ const meta: Meta<typeof AtlRadio> = {
   parameters: {
     design: figmaNode('420-185'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

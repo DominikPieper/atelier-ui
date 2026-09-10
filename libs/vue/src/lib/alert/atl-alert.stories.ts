@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import AtlAlert from './atl-alert.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/alert.metadata';
+import { contract } from '@atelier-ui/spec/contracts/alert.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -28,6 +29,7 @@ const meta: Meta<typeof AtlAlert> = {
   parameters: {
     design: figmaNode('55-31'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

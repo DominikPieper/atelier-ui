@@ -6,6 +6,7 @@ import { AtlButton } from '../button/atl-button';
 import { AtlCheckbox } from '../checkbox/atl-checkbox';
 
 import { metadata } from '@atelier-ui/spec/metadata/table.metadata';
+import { contract } from '@atelier-ui/spec/contracts/table.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
@@ -26,7 +27,7 @@ const meta: Meta<typeof AtlTable> = {
     size: 'md',
     stickyHeader: false,
   },
-  parameters: { design: figmaNode('421-1183'), docs: { description: { component: metadata.purpose } } },
+  parameters: { design: figmaNode('421-1183'), docs: { description: { component: metadata.purpose } }, contract },
 };
 
 export default meta;

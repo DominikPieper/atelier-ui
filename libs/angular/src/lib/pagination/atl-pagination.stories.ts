@@ -4,6 +4,7 @@ import { expect, userEvent } from 'storybook/test';
 import { AtlPagination } from './atl-pagination';
 
 import { metadata } from '@atelier-ui/spec/metadata/pagination.metadata';
+import { contract } from '@atelier-ui/spec/contracts/pagination.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -29,6 +30,7 @@ const meta: Meta<AtlPagination> = {
   parameters: {
     design: figmaNode('55-145'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

@@ -3,6 +3,7 @@ import AtlAvatar from './atl-avatar.vue';
 import AtlAvatarGroup from './atl-avatar-group.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/avatar.metadata';
+import { contract } from '@atelier-ui/spec/contracts/avatar.contract';
 const SAMPLE_SRC = 'https://i.pravatar.cc/150?img=1';
 
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
@@ -36,6 +37,7 @@ const meta: Meta<typeof AtlAvatar> = {
   parameters: {
     design: figmaNode('55-151'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

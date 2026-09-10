@@ -9,6 +9,7 @@ function figmaNode(nodeId: string) {
 import AtlAvatar from './atl-avatar.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/avatar.metadata';
+import { contract } from '@atelier-ui/spec/contracts/avatar-group.contract';
 const meta: Meta<typeof AtlAvatarGroup> = {
   title: 'Components/Display/AtlAvatarGroup',
   component: AtlAvatarGroup,
@@ -24,6 +25,7 @@ const meta: Meta<typeof AtlAvatarGroup> = {
   parameters: {
     design: figmaNode('508-7221'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

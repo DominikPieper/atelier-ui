@@ -4,6 +4,7 @@ import AtlBreadcrumbs from './atl-breadcrumbs.vue';
 import AtlBreadcrumbItem from './atl-breadcrumb-item.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/breadcrumbs.metadata';
+import { contract } from '@atelier-ui/spec/contracts/breadcrumbs.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -17,6 +18,7 @@ const meta: Meta<typeof AtlBreadcrumbs> = {
   parameters: {
     design: figmaNode('55-141'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

@@ -325,3 +325,21 @@ generator's templates imported `./<ClassName>.vue` for a file written as
 file the Bridge had open — it now refuses a mismatch. `nx test` is the unit half, not the
 equivalent of `test-run`; `nx storybook-test <fw>` is. The lesson is in `tasks/lessons.md`
 under this date: material that tells a person what to do gets a walk-through review.
+
+**S5b done 2026-09-10 — Decision 3 is now fully executed.** `libs/spec/src/contracts/docs-block.ts`
+renders the contract on every component's Docs tab: `ContractBlock` reads
+`parameters.contract` through addon-docs' `useOf('meta')` and draws the master's node id
+as a Figma link and the `figmaOnly` / `codeOnly` / `axisMap` / `probes` entries with their
+reasons, marking `UNEXPLAINED` ones; `contractDocsPage` is Storybook's default autodocs
+composition plus that block, set as `parameters.docs.page` in all three previews. It is
+plain TypeScript with `createElement` — the Angular and Vue Storybooks have no JSX
+transform — and one `@ts-ignore` on the `@storybook/addon-docs/blocks` import, because
+`libs/spec`'s classic `moduleResolution` rejects the package's `exports` subpath while
+the framework tsconfigs that also reach the file resolve it fine; widening the spec
+project's resolution was judged the larger change. 83 story metas (28 Angular, 27 React,
+28 Vue — React's and Vue's Toast stories set no `component`) import their contract from
+`@atelier-ui/spec/contracts/<name>.contract` and carry it as `parameters.contract`;
+`check:contracts` enforces it as `[CONTRACT-IMPORT]`. Proven: the React Storybook built
+and served, Playwright read "Contract", `129:20` and `hasIcon` off AtlButton's docs page;
+the three browser suites (234 / 226 / 253) and the Angular and Vue Storybook builds pass
+with the changed previews.

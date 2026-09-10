@@ -3,6 +3,7 @@ import { AtlMenu, AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger } from './atl-me
 import { AtlButton } from '../button/atl-button';
 
 import { metadata } from '@atelier-ui/spec/metadata/menu.metadata';
+import { contract } from '@atelier-ui/spec/contracts/menu.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -16,6 +17,7 @@ const meta: Meta<typeof AtlMenu> = {
   parameters: {
     design: figmaNode('55-130'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

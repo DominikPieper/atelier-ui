@@ -3,6 +3,7 @@ import { argsToTemplate } from '@storybook/angular';
 import { AtlCombobox } from './atl-combobox';
 
 import { metadata } from '@atelier-ui/spec/metadata/combobox.metadata';
+import { contract } from '@atelier-ui/spec/contracts/combobox.contract';
 const FRUITS = [
   { value: 'apple', label: 'Apple' },
   { value: 'banana', label: 'Banana' },
@@ -40,7 +41,7 @@ const meta: Meta<AtlCombobox> = {
     required: { control: 'boolean' },
     placeholder: { control: 'text' },
   },
-  parameters: { design: figmaNode('421-339'), docs: { description: { component: metadata.purpose } } },
+  parameters: { design: figmaNode('421-339'), docs: { description: { component: metadata.purpose } }, contract },
 };
 
 export default meta;

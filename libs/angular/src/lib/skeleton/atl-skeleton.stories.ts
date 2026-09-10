@@ -3,6 +3,7 @@ import { argsToTemplate } from '@storybook/angular';
 import { AtlSkeleton } from './atl-skeleton';
 
 import { metadata } from '@atelier-ui/spec/metadata/skeleton.metadata';
+import { contract } from '@atelier-ui/spec/contracts/skeleton.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -35,6 +36,7 @@ const meta: Meta<AtlSkeleton> = {
   parameters: {
     design: figmaNode('55-102'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

@@ -3,6 +3,7 @@ import { argsToTemplate } from '@storybook/angular';
 import { AtlBadge } from './atl-badge';
 
 import { metadata } from '@atelier-ui/spec/metadata/badge.metadata';
+import { contract } from '@atelier-ui/spec/contracts/badge.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -34,6 +35,7 @@ const meta: Meta<AtlBadge> = {
   parameters: {
     design: figmaNode('55-22'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

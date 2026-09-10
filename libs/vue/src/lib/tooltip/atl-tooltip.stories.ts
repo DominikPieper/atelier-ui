@@ -3,6 +3,7 @@ import AtlTooltip from './atl-tooltip.vue';
 import AtlButton from '../button/atl-button.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/tooltip.metadata';
+import { contract } from '@atelier-ui/spec/contracts/tooltip.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -29,6 +30,7 @@ const meta: Meta<typeof AtlTooltip> = {
   parameters: {
     design: figmaNode('55-52'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

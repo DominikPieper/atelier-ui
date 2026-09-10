@@ -4,6 +4,7 @@ import AtlRadio from './atl-radio.vue';
 import AtlRadioGroup from '../radio-group/atl-radio-group.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/radio.metadata';
+import { contract } from '@atelier-ui/spec/contracts/radio.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
@@ -22,7 +23,7 @@ const meta: Meta<typeof AtlRadio> = {
     radioValue: 'option',
     disabled: false,
   },
-  parameters: { design: figmaNode('420-185'), docs: { description: { component: metadata.purpose } } },
+  parameters: { design: figmaNode('420-185'), docs: { description: { component: metadata.purpose } }, contract },
 };
 
 export default meta;

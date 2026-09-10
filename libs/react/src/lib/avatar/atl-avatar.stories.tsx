@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AtlAvatar, AtlAvatarGroup } from './atl-avatar';
 
 import { metadata } from '@atelier-ui/spec/metadata/avatar.metadata';
+import { contract } from '@atelier-ui/spec/contracts/avatar.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -21,6 +22,7 @@ const meta: Meta<typeof AtlAvatar> = {
   parameters: {
     design: figmaNode('55-151'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

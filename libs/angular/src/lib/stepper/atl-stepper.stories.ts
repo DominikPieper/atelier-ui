@@ -3,6 +3,7 @@ import { AtlStepper, AtlStep } from './atl-stepper';
 import { AtlButton } from '../button/atl-button';
 
 import { metadata } from '@atelier-ui/spec/metadata/stepper.metadata';
+import { contract } from '@atelier-ui/spec/contracts/stepper.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
@@ -26,7 +27,7 @@ const meta: Meta<AtlStepper> = {
     linear: false,
     activeStep: 0,
   },
-  parameters: { design: figmaNode('421-505'), docs: { description: { component: metadata.purpose } } },
+  parameters: { design: figmaNode('421-505'), docs: { description: { component: metadata.purpose } }, contract },
 };
 
 export default meta;

@@ -1,8 +1,13 @@
 import type { Preview } from '@storybook/react';
 import '../src/styles/tokens.css';
 
+import { contractDocsPage } from '@atelier-ui/spec/contracts/docs-block';
+
 const preview: Preview = {
   parameters: {
+    docs: {
+      page: contractDocsPage,
+    },
     backgrounds: {
       options: {
         light: { name: 'light', value: '#ffffff' },

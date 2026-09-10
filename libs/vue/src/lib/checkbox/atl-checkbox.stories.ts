@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import AtlCheckbox from './atl-checkbox.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/checkbox.metadata';
+import { contract } from '@atelier-ui/spec/contracts/checkbox.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
@@ -35,6 +36,7 @@ const meta: Meta<typeof AtlCheckbox> = {
   parameters: {
     design: figmaNode('55-36'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

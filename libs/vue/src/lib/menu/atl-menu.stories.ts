@@ -11,6 +11,7 @@ import AtlMenuItem from './atl-menu-item.vue';
 import AtlMenuSeparator from './atl-menu-separator.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/menu.metadata';
+import { contract } from '@atelier-ui/spec/contracts/menu.contract';
 const meta: Meta<typeof AtlMenu> = {
   title: 'Components/Navigation/AtlMenu',
   component: AtlMenu,
@@ -24,6 +25,7 @@ const meta: Meta<typeof AtlMenu> = {
   parameters: {
     design: figmaNode('55-130'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

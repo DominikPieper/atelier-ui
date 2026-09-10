@@ -8,6 +8,7 @@ import { AtlSelect } from '../select/atl-select';
 import { AtlDialog, AtlDialogContent, AtlDialogFooter, AtlDialogHeader } from './atl-dialog';
 
 import { metadata } from '@atelier-ui/spec/metadata/dialog.metadata';
+import { contract } from '@atelier-ui/spec/contracts/dialog.contract';
 const ALL_IMPORTS = [
   AtlDialog,
   AtlDialogHeader,
@@ -40,6 +41,7 @@ const meta: Meta<AtlDialog> = {
   parameters: {
     design: figmaNode('55-94'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

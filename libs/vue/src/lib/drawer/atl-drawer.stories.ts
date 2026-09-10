@@ -8,6 +8,7 @@ import AtlButton from '../button/atl-button.vue';
 import AtlInput from '../input/atl-input.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/drawer.metadata';
+import { contract } from '@atelier-ui/spec/contracts/drawer.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
@@ -29,7 +30,7 @@ const meta: Meta<typeof AtlDrawer> = {
     size: 'md',
     closeOnBackdrop: true,
   },
-  parameters: { design: figmaNode('421-398'), docs: { description: { component: metadata.purpose } } },
+  parameters: { design: figmaNode('421-398'), docs: { description: { component: metadata.purpose } }, contract },
 };
 
 export default meta;

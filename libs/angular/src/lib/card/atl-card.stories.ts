@@ -4,6 +4,7 @@ import { AtlCard, AtlCardContent, AtlCardFooter, AtlCardHeader } from './atl-car
 import { AtlButton } from '../button/atl-button';
 
 import { metadata } from '@atelier-ui/spec/metadata/card.metadata';
+import { contract } from '@atelier-ui/spec/contracts/card.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -62,6 +63,7 @@ const meta: Meta<AtlCard> = {
   parameters: {
     design: figmaNode('55-65'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 

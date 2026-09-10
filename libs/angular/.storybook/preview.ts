@@ -5,8 +5,13 @@ import '../src/styles/tokens.css';
 // CDK overlay container styles (required for AtlMenu, AtlTooltip)
 import '@angular/cdk/overlay-prebuilt.css';
 
+import { contractDocsPage } from '@atelier-ui/spec/contracts/docs-block';
+
 const preview: Preview = {
   parameters: {
+    docs: {
+      page: contractDocsPage,
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,

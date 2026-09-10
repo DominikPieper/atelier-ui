@@ -3,6 +3,7 @@ import { argsToTemplate } from '@storybook/angular';
 import { AtlInput } from './atl-input';
 
 import { metadata } from '@atelier-ui/spec/metadata/input.metadata';
+import { contract } from '@atelier-ui/spec/contracts/input.contract';
 const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: "figma"; url: string } {
@@ -40,6 +41,7 @@ const meta: Meta<AtlInput> = {
   parameters: {
     design: figmaNode('129-33'),
     docs: { description: { component: metadata.purpose } },
+    contract,
   },
 };
 
