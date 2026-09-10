@@ -50,6 +50,44 @@ Ranked; each carries why it's worth doing next rather than later.
 > handoff document missing from the English learner path — is the part with the most
 > leverage.
 
+> **Spec-format review, 2026-09-10:** `tasks/spec-format-review-2026-09-10.md` — the
+> first review of `libs/spec` as a *format* (five repo agents, one web scan, Codex
+> Gegenprobe). Verdict: the spec is a naming key for the drift gates, not a component
+> contract; the compiler binds only React (Angular 1/29, Vue 0/29 import an interface);
+> 27 of its exports are referenced by no adapter; defaults, descriptions, events, slots,
+> states, tokens-per-part and Figma provenance live in three to seven hand-written copies
+> elsewhere, none derived. The scaffold ships no contract infrastructure, and no page
+> states what the spec does for a one-framework team. Twenty findings, two blockers
+> (F1 false compiler-parity claim in README/big-picture/ADR-0006; F12 the scaffold ships
+> no contract infrastructure, so "run the same steps" is not held). Decision open — § 6
+> there: **A** honesty pass
+> now regardless; **B** one authored contract record with everything else projected as
+> the direction, its own ADR naming ADR-0006/0010/0096 as revised.
+- [ ] **Spec-format review follow-ups** (owner decided 2026-09-10: A first, then plan
+  the workflow — `tasks/spec-workflow-plan-2026-09-10.md`):
+  - [x] **Option A, honesty pass — done 2026-09-10.** Dated "Corrected" paragraphs on
+    ADR-0006 (compiler claim) and ADR-0013 (Angular/Vue "read the spec" fallback);
+    `README.md` spec section rewritten (gates, not compiler; example brought to the real
+    `AtlButtonSpec`; docs path fixed); `plan/big-picture.md:464` (agent prompt context,
+    ADR-0116) and `tasks/claude-design-prompt.md:14` corrected; `AGENTS.md` step 2 says
+    "naming contract" and step 3 says what the spec can and cannot settle;
+    `/design-to-code` step 2 carries the same plus a "Building for one framework?"
+    paragraph; `/tutorial` callout softened the same way. Gates: `check:adr-refs`,
+    `check:docs-layout`, `check:llms` exit 0. The scaffold half of A (contract example,
+    handoff template) is **not** done here — its shape is the workflow decision, so it
+    moved to S2/S4 of the plan.
+  - [ ] **Confirm the workflow plan** — `tasks/spec-workflow-plan-2026-09-10.md` § 7 has
+    six owner questions (contract file location, check distribution, S6 timing, scaffold
+    test runner, ADR-0096 stance on `[b:id]` markers, `schulung.astro:84` wording). Then
+    S1 (docgen-without-Storybook spike) is the first step and the feasibility gate for the
+    rest; § 4 names the fallback if it fails.
+  - [ ] Review Option B (derive `index.ts` unions from a contract record) stays open as
+    plan S6(c) — after one cohort has used S2–S5, not before.
+  - [ ] Side finding (Codex, verified): Vue generator writes `atl-<fileName>.vue` while
+    its test template imports `./<className>.vue`
+    (`tools/generators/atl-component-vue/files/atl-__fileName__.spec.ts__tmpl__:2`).
+    Fix independent of the decision above.
+
 - [ ] **Design-workflow skills — build the decided catalog** (decided 2026-09-07).
   Research and proposal in `plan/design-skills-blueprint.md` (§ 8 carries the six
   decisions); verbatim digests in `plan/research/design-skills-2026-09-07/`, draft of
