@@ -64,6 +64,10 @@ const FILES = [
     target: `${PRESET_FILES_DIR}/tools/scripts/lib/ts-eval.js`,
   },
   {
+    source: 'tools/scripts/lib/docgen.mjs',
+    target: `${PRESET_FILES_DIR}/tools/scripts/lib/docgen.mjs`,
+  },
+  {
     source: 'tools/scripts/figma-snapshot-contracts.mjs',
     target: `${PRESET_FILES_DIR}/tools/scripts/figma-snapshot-contracts.mjs`,
   },

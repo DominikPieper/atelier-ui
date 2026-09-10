@@ -483,7 +483,7 @@ function extractReact(dir) {
     ts.forEachChild(sf, (node) => {
       let componentName = null;
       let referencesSpec = false;
-      let ownMembers = new Set();
+      const ownMembers = new Set();
 
       if (ts.isInterfaceDeclaration(node) && /^Atl\w+Props$/.test(node.name.text)) {
         componentName = node.name.text.replace(/Props$/, '');
@@ -1052,10 +1052,32 @@ for (const specName of specNames) {
 
 // ---------------------------------------------------------------------------
 // 9. Allowlist hygiene: an entry naming something that no longer diverges.
+//
+// One exception to "must be triggered": a `gap` entry whose `<prop>` segment
+// is not itself in that spec's OWN declared prop set can never be triggered
+// by this gate at all, by construction — check:props is spec-keyed (ADR-0093
+// Consequences), so every one of its three rules only ever asks a question
+// about a prop the SPEC declares: `[MISSING]` walks the spec's own prop list;
+// `[EXTRA]`/`[DEAD]` fire for a prop an adapter has that the spec does not,
+// which is the OPPOSITE of an entry recording that a prop the spec never
+// declared is missing from ONE PARTICULAR adapter while another adapter has
+// it. That is an adapter-vs-adapter divergence (Vue's dialog hardcoding
+// `headerId` instead of exposing `aria-labelledby` at all, say) — exactly the
+// class ADR-0093 Consequences documents this gate as structurally unable to
+// see. check-manifest-parity.mjs is what actually keeps such an entry live,
+// by diffing the adapters against EACH OTHER instead of against the spec.
+// Skipping the stale check for these is still real hygiene, not a silent
+// pass-through: the one fact this gate CAN verify cheaply is that the spec
+// really does stay silent on `<prop>` — if a later spec change ADDS it, the
+// entry stops matching this exception and falls back under the ordinary
+// stale check above.
 // ---------------------------------------------------------------------------
 
 for (const key of PROP_SURFACE_EXEMPT.keys()) {
-  if (!triggeredKeys.has(key)) {
+  if (triggeredKeys.has(key)) continue;
+  const [specName, prop] = key.split(':');
+  const specDeclaresProp = specProps[specName] && specProps[specName].has(prop);
+  if (specDeclaresProp) {
     errors.push(`[STALE] PROP_SURFACE_EXEMPT carries '${key}' but this run found no such divergence. Remove the entry.`);
   }
 }

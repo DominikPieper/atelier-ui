@@ -571,6 +571,7 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
 
   tree.write('tools/scripts/check-contracts.mjs', readTemplate('tools/scripts/check-contracts.mjs'));
   tree.write('tools/scripts/lib/ts-eval.js', readTemplate('tools/scripts/lib/ts-eval.js'));
+  tree.write('tools/scripts/lib/docgen.mjs', readTemplate('tools/scripts/lib/docgen.mjs'));
   tree.write(
     'tools/scripts/figma-snapshot-contracts.mjs',
     readTemplate('tools/scripts/figma-snapshot-contracts.mjs'),

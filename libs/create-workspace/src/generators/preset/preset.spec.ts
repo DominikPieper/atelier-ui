@@ -735,6 +735,7 @@ describe('preset generator', () => {
 
     expect(tree.exists('tools/scripts/check-contracts.mjs')).toBe(true);
     expect(tree.exists('tools/scripts/lib/ts-eval.js')).toBe(true);
+    expect(tree.exists('tools/scripts/lib/docgen.mjs')).toBe(true);
     expect(tree.exists('tools/scripts/figma-snapshot-contracts.mjs')).toBe(true);
   });
 

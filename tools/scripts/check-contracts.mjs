@@ -28,9 +28,18 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { loadCsf, createStoryArgsResolver } from 'storybook/internal/csf-tools';
+import {
+  findStoryFiles,
+  resolveWithExtensions,
+  makeWorkerDocgen,
+  normalizeAngular,
+  normalizeVue,
+  makeReactDocgenTools,
+  normalizeReactDocgen,
+} from './lib/docgen.mjs';
 
 // ts-eval.js is always required relative to THIS script's own directory
 // (`lib/ts-eval.js` beside it, via createRequire(import.meta.url) — not the
@@ -55,6 +64,7 @@ const ROOT = path.resolve(__dirname, '../..');
 // CWD is the explicit, unambiguous contract).
 const CWD = process.cwd();
 const cwdRequire = createRequire(path.join(CWD, 'package.json'));
+const { reactParseFile } = makeReactDocgenTools(cwdRequire);
 const FRAMEWORKS = ['angular', 'react', 'vue'];
 
 // Interaction values on a `state` axis (ADR-0114): CSS pseudo-classes, not code-modelled
@@ -333,40 +343,9 @@ function runGlobalChecks() {
 }
 
 // ─── Per-framework docgen ───────────────────────────────────────────────────
-
-/** Recursively collect `**\/*.stories.{ts,tsx}` under `dir`, excluding `node_modules`. */
-function collectStoryFilesUnder(dir) {
-  const out = [];
-  if (!fs.existsSync(dir)) return out;
-  (function walk(d) {
-    for (const entry of fs.readdirSync(d, { withFileTypes: true })) {
-      if (entry.name === 'node_modules') continue;
-      const full = path.join(d, entry.name);
-      if (entry.isDirectory()) walk(full);
-      else if (entry.isFile() && /\.stories\.(ts|tsx)$/.test(entry.name))
-        out.push(full);
-    }
-  })(dir);
-  return out;
-}
-
-function findStoryFiles(fw) {
-  // A --stories/config override is framework-agnostic (a scaffold has one
-  // roster for its one framework) — walk it directly rather than the
-  // monorepo's per-framework libs/<fw>/src/lib convention.
-  if (STORIES_DIRS) {
-    const out = new Set();
-    for (const dir of STORIES_DIRS)
-      for (const f of collectStoryFilesUnder(dir)) out.add(f);
-    return [...out].sort();
-  }
-  const base = path.join(ROOT, 'libs', fw, 'src', 'lib');
-  return collectStoryFilesUnder(base).sort();
-}
-
-function toRepoImportPath(absPath) {
-  return './' + path.relative(ROOT, absPath).split(path.sep).join('/');
-}
+// collectStoryFilesUnder / findStoryFiles / toRepoImportPath now live in
+// ./lib/docgen.mjs (ADR-0121 §5 / S6(a)), shared with check-manifest-parity.mjs.
+// findStoryFiles(fw) here is always findStoryFiles(fw, { root: ROOT, storiesDirs: STORIES_DIRS }).
 
 // ─── CONTRACT-IMPORT (S5b) ──────────────────────────────────────────────────
 // The Storybook docs page's `ContractBlock` (`libs/spec/src/contracts/docs-
@@ -435,246 +414,12 @@ function checkContractImport(fw, storyFile, source, name, contract) {
   }
 }
 
-// --- Angular / Vue: the Storybook framework worker, story file as entry point ---
-
-async function makeWorkerDocgen(fw) {
-  const spec =
-    fw === 'angular'
-      ? '@storybook/angular-vite/internal/docgen-worker'
-      : '@storybook/vue3/internal/docgen-worker';
-  // Resolved from the CWD's node_modules (not this script's own directory) —
-  // see the CWD/cwdRequire comment near the top of the file.
-  const mod = await import(pathToFileURL(cwdRequire.resolve(spec)).href);
-  const middleware =
-    fw === 'angular'
-      ? mod.createDocgenProvider({ propsTable: 'api' })
-      : mod.createDocgenProvider();
-  const provider = middleware(async () => undefined);
-  return async (storyFilePath, csf) => {
-    const entry = {
-      type: 'story',
-      subtype: 'story',
-      id: `${path.basename(storyFilePath)}--docgen`,
-      name: 'Docgen',
-      title: csf._meta.title,
-      importPath: toRepoImportPath(storyFilePath),
-      tags: [],
-    };
-    let payload;
-    try {
-      payload = await provider({ entry });
-    } catch {
-      return null;
-    }
-    if (!payload || payload.error) return null;
-    return payload;
-  };
-}
-
-function normalizeAngular(payload) {
-  const out = [];
-  for (const [key, at] of Object.entries(payload.argTypes || {})) {
-    const category = at.table && at.table.category;
-    if (category !== 'inputs' && category !== 'outputs') continue;
-    const isOutput = category === 'outputs';
-    let kind = 'other';
-    let members;
-    const typeName = at.type && at.type.name;
-    if (typeName === 'enum' && Array.isArray(at.type.value)) {
-      kind = 'enum';
-      members = at.type.value;
-    } else if (typeName === 'boolean') {
-      kind = 'boolean';
-    }
-    out.push({
-      name: key,
-      kind,
-      members,
-      default:
-        at.table && at.table.defaultValue
-          ? at.table.defaultValue.summary
-          : undefined,
-      description: at.description,
-      required: undefined,
-      isOutput,
-      typeText: at.table && at.table.type ? at.table.type.summary : undefined,
-    });
-  }
-  return { props: out, description: payload.description, slots: undefined };
-}
-
-function normalizeVue(payload) {
-  const out = [];
-  const meta = payload.vueComponentMeta;
-  for (const p of (meta && meta.props) || []) {
-    if (p.global) continue;
-    let kind = 'other';
-    let members;
-    const schema = p.schema;
-    if (schema && schema.kind === 'enum' && Array.isArray(schema.schema)) {
-      const raw = schema.schema.filter((v) => v !== 'undefined');
-      const isBoolSet =
-        raw.length > 0 && raw.every((v) => v === 'true' || v === 'false');
-      const isStringEnum =
-        raw.length > 0 &&
-        raw.every(
-          (v) => typeof v === 'string' && v.startsWith('"') && v.endsWith('"'),
-        );
-      if (isBoolSet) kind = 'boolean';
-      else if (isStringEnum) {
-        kind = 'enum';
-        members = raw.map((v) => v.slice(1, -1));
-      }
-    }
-    let defaultValue;
-    if (p.default !== undefined) {
-      try {
-        defaultValue = JSON.parse(p.default);
-      } catch {
-        defaultValue = p.default;
-      }
-    }
-    out.push({
-      name: p.name,
-      kind,
-      members,
-      default: defaultValue,
-      description: p.description || undefined,
-      required: p.required,
-      isOutput: false,
-      typeText: p.type,
-    });
-  }
-  for (const e of (meta && meta.events) || []) {
-    out.push({
-      name: e.name,
-      kind: 'other',
-      description: e.description || undefined,
-      isOutput: true,
-      typeText: e.type,
-    });
-  }
-  const slots = ((meta && meta.slots) || []).map((s) => ({
-    name: s.name,
-    description: s.description || undefined,
-  }));
-  return { props: out, description: payload.description, slots };
-}
-
-// --- React: react-docgen's own parse(), mirroring @storybook/react's non-worker path ---
-// Required lazily (only when the 'react' framework is actually requested) and
-// from the CWD's node_modules, not this script's own directory — an
-// Angular-only or Vue-only scaffold never installs react-docgen at all, and a
-// top-level `require('react-docgen')` would throw before a single component
-// of the requested framework was ever processed.
-let _reactDocgen = null;
-function getReactDocgen() {
-  if (!_reactDocgen) _reactDocgen = cwdRequire('react-docgen');
-  return _reactDocgen;
-}
-
-function resolveWithExtensions(base) {
-  const candidates = [
-    base,
-    `${base}.tsx`,
-    `${base}.ts`,
-    path.join(base, 'index.tsx'),
-    path.join(base, 'index.ts'),
-  ];
-  for (const c of candidates) {
-    if (fs.existsSync(c) && fs.statSync(c).isFile()) return c;
-  }
-  return null;
-}
-
-function makeReactImporter() {
-  const { makeFsImporter } = getReactDocgen();
-  return makeFsImporter((filename, basedir) => {
-    if (!filename.startsWith('.'))
-      throw new Error(`non-relative import '${filename}'`);
-    const resolved = resolveWithExtensions(path.resolve(basedir, filename));
-    if (!resolved)
-      throw new Error(`cannot resolve '${filename}' from '${basedir}'`);
-    return resolved;
-  });
-}
-
-function reactParseFile(filePath) {
-  const {
-    parse: rdParse,
-    builtinResolvers,
-    defaultHandlers,
-  } = getReactDocgen();
-  const code = fs.readFileSync(filePath, 'utf-8');
-  const resolver = new builtinResolvers.FindExportedDefinitionsResolver();
-  const importer = makeReactImporter();
-  return rdParse(code, {
-    resolver,
-    handlers: defaultHandlers,
-    importer,
-    filename: filePath,
-  });
-}
-
-function normalizeReactDocgen(d) {
-  const out = [];
-  for (const [propName, info] of Object.entries(d.props || {})) {
-    const tsType = info.tsType;
-    let kind = 'other';
-    let members;
-    if (tsType) {
-      if (
-        tsType.name === 'union' &&
-        Array.isArray(tsType.elements) &&
-        tsType.elements.every((e) => e.name === 'literal')
-      ) {
-        const raw = tsType.elements.map((e) =>
-          typeof e.value === 'string'
-            ? e.value.replace(/^['"]|['"]$/g, '')
-            : e.value,
-        );
-        if (raw.every((v) => v === 'true' || v === 'false')) kind = 'boolean';
-        else {
-          kind = 'enum';
-          members = raw;
-        }
-      } else if (tsType.name === 'boolean') {
-        kind = 'boolean';
-      }
-    } else if (
-      info.defaultValue &&
-      (info.defaultValue.value === 'true' ||
-        info.defaultValue.value === 'false')
-    ) {
-      // react-docgen sometimes resolves a prop inherited through a multi-level interface
-      // chain (AtlCheckboxSpec extends AtlFormFieldSpec) without a tsType at all — seen
-      // on 'disabled'/'required' here, though the sibling 'invalid' (declared one level
-      // shallower) resolves fine. A literal true/false default is otherwise only ever a
-      // boolean prop in this codebase, so infer the kind from it rather than losing the
-      // prop to 'other' and under-reporting a real BOOLEAN drift.
-      kind = 'boolean';
-    }
-    let defaultValue;
-    if (info.defaultValue && !info.defaultValue.computed) {
-      const raw = info.defaultValue.value;
-      if (raw === 'true') defaultValue = true;
-      else if (raw === 'false') defaultValue = false;
-      else if (typeof raw === 'string')
-        defaultValue = raw.replace(/^['"]|['"]$/g, '');
-    }
-    out.push({
-      name: propName,
-      kind,
-      members,
-      default: defaultValue,
-      description: info.description || undefined,
-      required: !!info.required,
-      isOutput: /^on[A-Z]/.test(propName),
-      typeText: (tsType && (tsType.raw || tsType.name)) || undefined,
-    });
-  }
-  return out;
-}
+// --- Angular/Vue worker docgen, React's react-docgen parse(), and both
+// frameworks' normalizers now live in ./lib/docgen.mjs (ADR-0121 §5 / S6(a)) —
+// makeWorkerDocgen(fw, cwdRequire, ROOT), normalizeAngular, normalizeVue,
+// makeReactDocgenTools(cwdRequire).reactParseFile, normalizeReactDocgen —
+// shared with check-manifest-parity.mjs so the two scripts read one framework
+// payload the same way.
 
 // ─── Dotted child-prop resolution (R2) ──────────────────────────────────────
 // `axisMap[].codeProp` may be `Child.prop`: the prop lives on a CHILD component's own
@@ -1462,8 +1207,8 @@ function processComponent(
 
 async function runFramework(fw) {
   const t0 = performance.now();
-  const storyFiles = findStoryFiles(fw);
-  const workerDocgen = fw !== 'react' ? await makeWorkerDocgen(fw) : null;
+  const storyFiles = findStoryFiles(fw, { root: ROOT, storiesDirs: STORIES_DIRS });
+  const workerDocgen = fw !== 'react' ? await makeWorkerDocgen(fw, cwdRequire, ROOT) : null;
 
   const byComponent = new Map(); // name -> { docgenResult, contextDir, files: [csf...] }
   const reachedMeta = new Set();

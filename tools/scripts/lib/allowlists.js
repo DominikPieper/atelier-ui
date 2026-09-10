@@ -513,7 +513,16 @@ const HOST_ATTR_GUARD_EXEMPT = new Map();
  * them is a separate task; this Map exists so day one is green.
  *
  * An entry naming a triple this gate's current run does not find is itself an
- * error: allowlists rot, and PROP_SURFACE_EXEMPT is load-bearing.
+ * error: allowlists rot, and PROP_SURFACE_EXEMPT is load-bearing — EXCEPT for
+ * a `<prop>` the spec never declares at all (see check-prop-surface.js § 9's
+ * own comment): that class is structurally invisible to check:props (spec-
+ * keyed, ADR-0093 Consequences) and is instead kept honest by
+ * check-manifest-parity.mjs, which reads this SAME map (its own header
+ * comment) but diffs the three adapters against EACH OTHER rather than
+ * against the spec. Those entries are tagged below with the fact and a
+ * pointer at tasks/todo.md's "Cross-framework gaps found by
+ * check:manifest-parity" entry rather than at a check:props rule, since
+ * check:props never asks the question they answer.
  */
 const PROP_SURFACE_EXEMPT = new Map([
   // `errors` — validation messages — is a real prop on all three adapters of
@@ -774,6 +783,77 @@ const PROP_SURFACE_EXEMPT = new Map([
         'breaking rename with its own ADR, not this gate. Unresolved: see tasks/todo.md.',
     },
   ]),
+  // Cross-framework gaps `check:manifest-parity` found and `check:props`
+  // structurally cannot: the spec declares NEITHER side of each prop below,
+  // so check:props' spec-keyed rules — [MISSING] walks the spec's own prop
+  // list, [EXTRA]/[DEAD] only fire for a prop an adapter has that the spec
+  // does not — have no question to ask about a prop absent from ONE adapter
+  // while another adapter has it. ADR-0093 Consequences named the AtlDialog
+  // instance of this blind spot when the gate shipped; the rest were found
+  // the same way, once check-manifest-parity.mjs existed to look. See
+  // tasks/todo.md, "Cross-framework gaps found by check:manifest-parity (S6a,
+  // 2026-09-10)" for the full list and next steps.
+  [
+    'AtlDialogSpec:aria-labelledby:vue',
+    {
+      kind: 'gap',
+      reason:
+        "AtlDialogSpec declares no 'aria-labelledby' at all. Vue's AtlDialog hardcodes its own headerId " +
+        "(useId()) as the aria-labelledby target and exposes no prop to override it, while Angular " +
+        "('aria-labelledby' input alias, atl-dialog.ts:96) and React ('aria-labelledby' prop, atl-dialog.tsx:52, " +
+        'falling back to headerId) both accept one. ADR-0093 Consequences named exactly this blind spot when the ' +
+        "gate shipped. Unresolved: see tasks/todo.md, 'Cross-framework gaps found by check:manifest-parity (S6a, " +
+        "2026-09-10)'.",
+    },
+  ],
+  [
+    'AtlButtonSpec:type:angular',
+    {
+      kind: 'gap',
+      reason:
+        "AtlButtonSpec declares no 'type' at all. Angular's <atl-button> (atl-button.ts) renders a custom " +
+        'role="button" element with no `type` input and no native-attribute passthrough to receive one, while ' +
+        "React ('type' reaches the underlying <button> via {...rest}) and Vue (its own 'type' prop, " +
+        "atl-button.vue) both let a caller ask for a submit button — impossible in Angular today. Unresolved: " +
+        "see tasks/todo.md, 'Cross-framework gaps found by check:manifest-parity (S6a, 2026-09-10)'.",
+    },
+  ],
+  [
+    'AtlCheckboxSpec:id:angular',
+    {
+      kind: 'gap',
+      reason:
+        "AtlCheckboxSpec declares no 'id' at all. Angular's AtlCheckbox generates its own internal id " +
+        "('atl-checkbox-${nextId++}', atl-checkbox.ts:85) with no public input to override it, while React and " +
+        "Vue both accept an 'id' prop — matters for an external <label for>. Unresolved: see tasks/todo.md, " +
+        "'Cross-framework gaps found by check:manifest-parity (S6a, 2026-09-10)'.",
+    },
+  ],
+  [
+    'AtlToggleSpec:id:angular',
+    {
+      kind: 'gap',
+      reason:
+        "AtlToggleSpec declares no 'id' at all. Angular's AtlToggle generates its own internal id " +
+        "('atl-toggle-${nextId++}', atl-toggle.ts:85) with no public input to override it, while React and Vue " +
+        "both accept an 'id' prop — matters for an external <label for>. Unresolved: see tasks/todo.md, " +
+        "'Cross-framework gaps found by check:manifest-parity (S6a, 2026-09-10)'.",
+    },
+  ],
+  [
+    'AtlAlertSpec:dismissed:vue',
+    {
+      kind: 'gap',
+      reason:
+        "the react-vs-vue side of the same fact AtlAlertSpec:dismissed:angular and :onDismissed:react (above) " +
+        "already record: AtlAlertSpec models no dismiss event at all, so Vue's own 'dismissed' emit " +
+        "(atl-alert.vue) is exactly as unkeyed as Angular's 'dismissed' output — it was simply never flagged " +
+        'here, because check:props never compares Vue emits for EXTRA at all (GENERIC_EXTRA_IGNORE above has no ' +
+        "Vue entry for exactly this reason — see that constant's own comment). Same fact, now recorded on the " +
+        "side check:props cannot see. Unresolved: see tasks/todo.md, 'Cross-framework gaps found by " +
+        "check:manifest-parity (S6a, 2026-09-10)'.",
+    },
+  ],
 ]);
 
 /**
