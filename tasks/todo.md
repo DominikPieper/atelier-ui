@@ -179,11 +179,30 @@ Ranked; each carries why it's worth doing next rather than later.
       so React's `type` absence may be tooling, not code — verify before fixing.
     - [ ] `[UNMIRRORED]` ×2 — the same two `codeOnly` entries are not named in their
       masters' descriptions; add the line on the Figma side when the Bridge is connected.
-  - [ ] **S3 stage 2** — rendered paint vs. snapshot root paint per variant and state (a
-    measurement hook in the browser suite writing computed styles, compared against
-    `rootPaint`), interaction-state stories, child masters. Codex named the probe gap:
-    AtlChat's snapshot root is a 1080×720 mockup, the comparable layers are per-variant
-    (`drawer-panel`, `popup-bg`, `chat-card`) — `probes` must name Figma layers, not labels.
+  - [x] **S3 stage 2 — `check:paint` — done 2026-09-10** (ADR-0121 "S3 stage 2 done").
+    Playwright over the built Storybooks, rendered values vs the resolved `--ui-*` token
+    the master binds, hover/focus rows, ratchet `tools/figma/paint-baseline.json` (755
+    entries after probes and `[NOT-RENDERED]`), six `probes` in contracts. ~220 s in
+    `check:all` after the Storybook builds.
+  - [ ] **`check:paint` follow-ups:**
+    - [ ] Root-cause the nine frequent shapes not yet examined (Checkbox/Toggle gap,
+      radius, font-size; Card/Badge/Textarea height). AtlInput's height (40 vs 44) is the
+      2026-09-08 token change — decide code or master per shape, then re-record.
+    - [ ] React `AtlSelect` stories are classified as demos (three `optionValue`
+      literals trip the literal-scan heuristic) and have never been measured. Teach the
+      heuristic that repeated literals on *child* elements are not a variant claim.
+    - [ ] Overlays (Dialog, Drawer, Chat) are `[NOT-RENDERED]` closed; an open-state
+      recipe per component (click the trigger, then measure) is needed before their paint
+      counts. Codex's AtlChat probe finding (per-variant `drawer-panel`/`popup-bg`/
+      `chat-card` layers) lives here too.
+    - [ ] `--theme dark` works but is not in `check:all`; decide whether the chain runs both.
+    - [ ] The baseline is a ratchet on 755 recorded drifts. It is only worth its 220 s if
+      the backlog above shrinks it; review the count monthly.
+  - [x] **S6a — `check:manifest-parity` — done 2026-09-10** (ADR-0121 "S6a done"): the
+    three-manifest diff with `check:props`' equivalences and allowlist; six real
+    divergences recorded (list above); `--compare-props` evidence in
+    `scratchpad`/the ADR paragraph — 22 findings only the diff sees, 48 only `check:props`
+    (`[DEAD]`, `errors`). Shared `tools/scripts/lib/docgen.mjs` now feeds both checks.
   - [x] **S4 — the scaffold ships the loop — done 2026-09-10** (ADR-0121 "S4 done"
     paragraph; ADR-0123 corrected: addon-vitest ships after all, owner decision).
     Per scaffold: `<app>/src/contracts/` (types, README, AtlButton example),
@@ -238,7 +257,27 @@ Ranked; each carries why it's worth doing next rather than later.
     - [ ] The participant walk-through (Codex, 2026-09-10) still lists: `AGENTS.md`'s local
       MCP calls heading fixed, but the e2e's Part 1 remains unexecuted until the tree is
       clean (the other session's untracked skill files count).
-  - [ ] S6 monorepo retirements — as ADR-0121 Decision 6.
+  - [ ] **Cross-framework gaps found by `check:manifest-parity` (S6a, 2026-09-10)** —
+    recorded as `kind: 'gap'` in `PROP_SURFACE_EXEMPT` so the gate ships green; each is a
+    real divergence `check:props` could not see because the spec is silent there
+    (ADR-0093 Consequences predicted the first):
+    - [ ] `AtlDialog` — Vue exposes no `aria-labelledby`; it hardcodes its own `headerId`
+      while Angular and React accept the prop. Decide the contract (prop in all three, or
+      derived in all three) and make the spec say it.
+    - [ ] `AtlButton` — Angular's `<atl-button>` has no `type` binding or passthrough;
+      React (via `...rest`) and Vue (`type` prop) do. A `submit` button is impossible in
+      Angular today.
+    - [ ] `AtlCheckbox`, `AtlToggle` — Angular offers no way to pass a custom `id`; React
+      and Vue do. Matters for external `<label for>`.
+    - [ ] `AtlAlert` — `dismissed` (Angular, Vue) vs `onDismissed` (React): the
+      react-vs-vue side was never in the allowlist because `check:props` never compares
+      Vue emits. Same fact, now recorded on both sides.
+  - [ ] S6 monorepo retirements — as ADR-0121 Decision 6. S6a (`check:manifest-parity`,
+    the three-manifest diff) is built; `--compare-props` evidence in the S6a report: 28
+    findings only the manifest diff sees, 48 only `check:props` sees (`[DEAD]` inputs —
+    a manifest cannot see consumption — and the 21-key `errors` family, which is a
+    spec-incompleteness finding, not a cross-framework one). Retiring `check:props` needs
+    a home for `[DEAD]` first.
   - [ ] Background for the decision — `tasks/spec-rethink-2026-09-10.md`: the greenfield
     pass the owner asked for. Inventories what a machine can test
     without massive effort (26 rows; 19 need no authored artefact), what figma-console-mcp
