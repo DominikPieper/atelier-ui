@@ -95,6 +95,19 @@ const ISSUES: Issue[] = [
     ],
   },
   {
+    id: 'claude-cli-not-authenticated',
+    title: 'Claude Code CLI installed but not authenticated',
+    symptom: '`claude --version` prints a version number and `npm run preflight` shows a green "Claude Code CLI" line, but a real prompt fails — an interactive session asks you to sign in, or `claude -p "…"` exits with an authentication error instead of a response.',
+    cause: '`preflight` only checks that the binary is on `PATH` and answers `--version` — it never sends a request to a model, so it cannot see whether you are logged in or your key is valid. Installed, connected (MCP), and authenticated (model access) are three separate things; a green preflight proves only the first.',
+    codeFix: `# Set your own API key (see console setup at docs.claude.com/en/docs/claude-code/setup)\nexport ANTHROPIC_API_KEY=sk-ant-...\n\n# Prove model access — not just installation\nclaude -p "Reply with exactly: PREFLIGHT-OK"`,
+    codeLang: 'shell',
+    fix: [
+      'Get a key from the Anthropic Console and set it: `export ANTHROPIC_API_KEY=sk-ant-...` — persist it in your shell rc file the same way as `FIGMA_ACCESS_TOKEN` (see that entry below).',
+      'Have a Claude subscription instead of an API key? Run `claude auth login` and finish the browser sign-in (add `--console` to sign in with API-key billing specifically).',
+      'Verify with a real request, not `--version`: `claude -p "Reply with exactly: PREFLIGHT-OK"`. An auth failure surfaces here even when `--version` and `preflight` both looked fine.',
+    ],
+  },
+  {
     id: 'node-too-old',
     title: 'Node.js version too old',
     symptom: '`npx create-atelier-ui-workspace` exits with `engines` or `Unsupported engine` errors.',
@@ -227,6 +240,11 @@ const ISSUES: Issue[] = [
     <div style="margin-top: 2rem; padding: 1rem 1.25rem; background: var(--ui-color-primary-light); border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md)">
       <p style="margin: 0; font-size: var(--ui-font-size-md); color: var(--ui-color-text); line-height: 1.6">
         Still stuck? Run <code>npm run preflight</code> and share its output — every line reports a specific fix.
+      </p>
+      <p style="margin: 0.75rem 0 0; font-size: var(--ui-font-size-md); color: var(--ui-color-text); line-height: 1.6">
+        Not a specific symptom — more like &ldquo;how do I update the plugin&rdquo; or &ldquo;why are there orphaned server
+        instances&rdquo;? Those are running-the-setup questions, and they live in the
+        <a href="/runbook" class="docs-link-primary">runbook</a>.
       </p>
     </div>
 

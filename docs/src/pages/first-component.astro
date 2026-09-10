@@ -10,18 +10,23 @@ import { getTrackStep, TRACK_LENGTH } from '../data/workshop-track';
 const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI?node-id=936-2954';
 const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
 type Framework = typeof FRAMEWORKS[number];
+type Env = 'scaffold' | 'clone';
 
 // Step indicator for the hero — derived from the workshop track so it tracks
 // any reordering in workshop-track.ts rather than being hardcoded here.
 const step = getTrackStep('/first-component');
 const stepTag = step ? `Step ${step.step} of ${TRACK_LENGTH}` : undefined;
 
-// Paths, serve commands, and mount targets match what the scaffold really
-// generates: apps live at the workspace ROOT (preset.ts passes
+// Two environments, both first-class (the two-day cohort is 100% clone —
+// schulung-2tage-agenda.md:14 — so this can't be a footnote under a
+// scaffold-only default). Paths, serve commands, and mount targets match
+// what each environment really has:
+
+// Scaffold — apps live at the workspace ROOT (preset.ts passes
 // `directory: appName`), every framework serves on the default port 4200,
 // and each app ships rendering the NxWelcome placeholder until something
 // imports the generated component — the mountHint names the exact file.
-const EXPECTED: Record<Framework, { file: string; cmd: string; port: number; mountHint: string }> = {
+const SCAFFOLD: Record<Framework, { file: string; cmd: string; port: number; mountHint: string }> = {
   Angular: {
     file: 'workshop-angular/src/app/components/settings-card.component.ts',
     cmd:  'npx nx serve workshop-angular',
@@ -42,12 +47,37 @@ const EXPECTED: Record<Framework, { file: string; cmd: string; port: number; mou
   },
 };
 
-// The prompt is rendered once per framework with the participant's framework
-// already substituted into `storybook-{framework}`, so the copied text contains
-// a concrete token (storybook-angular / -react / -vue). The global
-// framework-pref-init script toggles which [data-fw-panel] is visible, keeping
-// the shown prompt in sync with the tabs the same way step 4 already works.
-const prompt = (fw: Framework) => `Build the Settings / Card Figma frame as an Atelier UI component.
+// Clone — the atelier monorepo has no workshop-* app, so there is nothing to
+// mount into (npx nx show projects lists angular/react/vue/docs, not a
+// workshop-* target — see /troubleshooting#nx-project-not-found). A loose
+// `<name>.stories.*` file directly under `src/lib/` — NOT inside its own
+// libs/spec-registered component subdirectory — is this repo's own
+// convention for a composed demo that isn't a shipped library atom: see
+// libs/<fw>/src/lib/cookbook.stories.* (all three frameworks) and Angular's
+// kitchen-sink.stories.ts. That placement matters, not just the directory:
+// check-story-descriptions.js only walks *directories* under src/lib/, so a
+// loose top-level file needs no libs/spec metadata wiring — putting it in
+// its own subdirectory instead would trip that gate for no metadata a kata
+// component has any business owning (the same class of mistake the
+// design-to-code skill's workshop branch was built to avoid for the spec
+// file itself). Storybook auto-discovers the story via the
+// `../src/**/*.stories.*` glob in each framework's .storybook/main.ts — no
+// mount step, no app to serve.
+const CLONE_STORY_TITLE = 'Showcase/Settings Card';
+const CLONE: Record<Framework, { file: string; cmd: string; port: number }> = {
+  Angular: { file: 'libs/angular/src/lib/settings-card.stories.ts', cmd: 'npx nx storybook angular', port: 4400 },
+  React:   { file: 'libs/react/src/lib/settings-card.stories.tsx',  cmd: 'npx nx storybook react',   port: 4401 },
+  Vue:     { file: 'libs/vue/src/lib/settings-card.stories.ts',     cmd: 'npx nx storybook vue',     port: 4402 },
+};
+
+// The prompt is rendered once per framework × environment, with the
+// participant's framework already substituted into `storybook-{framework}`,
+// so the copied text contains a concrete token (storybook-angular / -react /
+// -vue). The global framework-pref-init script toggles which [data-fw-panel]
+// is visible, keeping the shown prompt in sync with the tabs the same way
+// step 4 already works; the environment axis has no JS toggle — both blocks
+// render statically so a reader who is unsure which they are can compare.
+const prompt = (fw: Framework, env: Env) => `Build the Settings / Card Figma frame as an Atelier UI component.
 
 1. Use figma-console MCP (figma_get_component_for_development) on
    node-id 936-2954 — read the frame's spec, boundVariables, and
@@ -60,9 +90,13 @@ const prompt = (fw: Framework) => `Build the Settings / Card Figma frame as an A
    - The exact CSS custom property names from the boundVariables
      (no manual conversion — they're identical to the Figma variables)
    - No hardcoded hex colors, no hardcoded padding values
-4. Save it as ${EXPECTED[fw].file}, then mount it so
+4. ${env === 'scaffold' ? `Save it as ${SCAFFOLD[fw].file}, then mount it so
    the app renders the card instead of the Nx welcome page:
-   ${EXPECTED[fw].mountHint}.`;
+   ${SCAFFOLD[fw].mountHint}.` : `Save it as ${CLONE[fw].file} — a Storybook
+   story, not an app component. Match the shape of this repo's own
+   libs/${fw.toLowerCase()}/src/lib/cookbook.stories.* in the same directory:
+   a Meta/StoryObj default export titled '${CLONE_STORY_TITLE}', composed
+   from real Atl* imports. No mount step — Storybook auto-discovers it.`}`;
 
 const PARITY_PROMPT = `Run figma_check_design_parity on node-id 936-2954 against
 the SettingsCard component I just generated. Fix any discrepancies.`;
@@ -148,6 +182,14 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
           <button class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`} data-fw-btn={fw} type="button">{fw}</button>
         ))}
       </div>
+      <p class="kata-step-desc" style="margin-top: 0.6rem">
+        Every step from here shows <strong style="color: var(--ui-color-text)">two versions</strong> —
+        <strong style="color: var(--ui-color-text)">scaffolded workspace</strong> (<code>npx
+        create-atelier-ui-workspace</code>, Setup's default path) and <strong style="color: var(--ui-color-text)">clone
+        of the atelier repo</strong> (the two-day training's environment). Not sure which is
+        you? Run <code>npx nx show projects</code> — a <code>workshop-*</code> entry means
+        scaffold, <code>angular / react / vue / docs</code> means clone.
+      </p>
     </section>
 
     <!-- Step 3 -->
@@ -157,9 +199,9 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
         <h2 class="kata-step-title">Paste this prompt into Claude Code</h2>
       </div>
       <p class="kata-step-desc">
-        Copy it verbatim — the prompt below is already set to the framework you
-        picked in Step 2 (the <code>storybook-*</code> MCP name is filled in). Claude
-        fetches the Figma spec and Storybook props, then writes the component.
+        Copy the block that matches your setup verbatim — both are already set to the
+        framework you picked in Step 2 (the <code>storybook-*</code> MCP name is filled in).
+        Claude fetches the Figma spec and Storybook props, then writes the component.
       </p>
       <p class="kata-step-desc" style="margin-top: 0.4rem">
         On Angular and Vue the hosted <code>storybook-*</code> MCP answers component
@@ -169,12 +211,19 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
       </p>
       {FRAMEWORKS.map((fw, i) => (
         <div data-fw-panel={fw} hidden={i !== 0}>
-          <Code code={prompt(fw)} lang="text" title="prompt — paste into Claude Code" />
+          <div class="kata-env-block">
+            <div class="kata-env-label">Scaffolded workspace</div>
+            <Code code={prompt(fw, 'scaffold')} lang="text" title="prompt — paste into Claude Code (scaffold)" />
+          </div>
+          <div class="kata-env-block">
+            <div class="kata-env-label">Clone of the atelier repo</div>
+            <Code code={prompt(fw, 'clone')} lang="text" title="prompt — paste into Claude Code (clone)" />
+          </div>
         </div>
       ))}
       <p class="kata-step-desc" style="margin-top: 0.6rem">
         <strong style="color: var(--ui-color-text)">Checkpoint:</strong> the file exists at the
-        path Step 4 names, it imports <code>Atl*</code> components from the Atelier UI package,
+        path Step 4 names for your environment, it imports <code>Atl*</code> components from the Atelier UI package,
         and it contains <strong style="color: var(--ui-color-text)">zero hex colours and zero
         pixel paddings</strong> — every value is a <code>--ui-*</code> custom property. If Claude
         wrote <code>#ffffff</code> or <code>24px</code> anywhere, say so and have it redo that
@@ -186,44 +235,67 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
     <section data-step="4" class="kata-step">
       <div class="kata-step-head">
         <span class="kata-step-num">4</span>
-        <h2 class="kata-step-title">Save the output and serve</h2>
+        <h2 class="kata-step-title">Save the output and view it</h2>
       </div>
       <p class="kata-step-desc">
-        The prompt's step 4 has Claude save the component and wire it into the
-        app shell. Confirm both happened, then start the dev server:
-      </p>
-      <p class="kata-step-desc" style="margin-top: 0.4rem">
-        <strong style="color: var(--ui-color-text)">Working in a clone of the atelier
-        monorepo?</strong> The paths below belong to a scaffolded workspace — a clone has no
-        <code>workshop-*</code> app to serve. Put the component under
-        <code>libs/&lt;fw&gt;/src/lib/…</code> and view it with <code>npx nx storybook &lt;fw&gt;</code>
-        instead — read the port from the terminal it prints (angular 4400, react 4401, vue 4402).
-        Everything else in this kata is identical. (See
-        <a href="/troubleshooting#nx-project-not-found" class="docs-link-primary">Cannot find project
-        'workshop-angular'</a>.)
+        The prompt's step 4 already told Claude where to save the file, and — for the
+        scaffold only — how to wire it into the app shell. Confirm that happened, then
+        follow the block for your environment:
       </p>
       {FRAMEWORKS.map((fw, i) => (
         <div data-fw-panel={fw} hidden={i !== 0}>
-          <ol class="run-steps" style="margin-top: 0.5rem">
-            <li>
-              <span class="run-step-label">Save as</span>
-              <code class="run-step-path">{EXPECTED[fw].file}</code>
-            </li>
-            <li>
-              <span class="run-step-label">Mount</span>
-              <span class="run-step-note">Claude should have done this already — if not, {EXPECTED[fw].mountHint}.</span>
-            </li>
-            <li>
-              <span class="run-step-label">Serve</span>
-              <Code code={EXPECTED[fw].cmd} lang="shell" title="start dev server" />
-            </li>
-            <li>
-              <span class="run-step-label">Open</span>
-              <a href={`http://localhost:${EXPECTED[fw].port}`} target="_blank" rel="noopener noreferrer" class="run-step-link">
-                http://localhost:{EXPECTED[fw].port}
-              </a>
-            </li>
-          </ol>
+          <div class="kata-env-block">
+            <div class="kata-env-label">Scaffolded workspace</div>
+            <ol class="run-steps" style="margin-top: 0.5rem">
+              <li>
+                <span class="run-step-label">Save as</span>
+                <code class="run-step-path">{SCAFFOLD[fw].file}</code>
+              </li>
+              <li>
+                <span class="run-step-label">Mount</span>
+                <span class="run-step-note">Claude should have done this already — if not, {SCAFFOLD[fw].mountHint}.</span>
+              </li>
+              <li>
+                <span class="run-step-label">Serve</span>
+                <Code code={SCAFFOLD[fw].cmd} lang="shell" title="start dev server" />
+              </li>
+              <li>
+                <span class="run-step-label">Open</span>
+                <a href={`http://localhost:${SCAFFOLD[fw].port}`} target="_blank" rel="noopener noreferrer" class="run-step-link">
+                  http://localhost:{SCAFFOLD[fw].port}
+                </a>
+              </li>
+            </ol>
+          </div>
+          <div class="kata-env-block">
+            <div class="kata-env-label">Clone of the atelier repo</div>
+            <ol class="run-steps" style="margin-top: 0.5rem">
+              <li>
+                <span class="run-step-label">Save as</span>
+                <code class="run-step-path">{CLONE[fw].file}</code>
+              </li>
+              <li>
+                <span class="run-step-label">View</span>
+                <Code code={CLONE[fw].cmd} lang="shell" title="start Storybook" />
+                <span class="run-step-note" style="display: block; margin-top: 0.3rem">
+                  No mount step — it's a Storybook story, not an app component. Storybook
+                  auto-discovers any <code>*.stories.*</code> file under
+                  <code>libs/{fw.toLowerCase()}/src/lib/</code>; find it under
+                  "{CLONE_STORY_TITLE}" in the sidebar. (See
+                  <a href="/troubleshooting#nx-project-not-found" class="docs-link-primary">Cannot find
+                  project 'workshop-angular'</a> if <code>nx serve workshop-{fw.toLowerCase()}</code> is
+                  what you tried instead.)
+                </span>
+              </li>
+              <li>
+                <span class="run-step-label">Open</span>
+                <a href={`http://localhost:${CLONE[fw].port}`} target="_blank" rel="noopener noreferrer" class="run-step-link">
+                  http://localhost:{CLONE[fw].port}
+                </a>
+                <span class="run-step-note" style="display: block; margin-top: 0.2rem">port read from the terminal — angular 4400, react 4401, vue 4402</span>
+              </li>
+            </ol>
+          </div>
         </div>
       ))}
     </section>
@@ -244,9 +316,13 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
       {FRAMEWORKS.map((fw, i) => (
         <div data-fw-panel={fw} hidden={i !== 0}>
           <p class="kata-step-desc" style="margin-top: 0.4rem">
-            <strong style="color: var(--ui-color-text)">Still the Nx welcome page?</strong> Nothing
-            imports your component yet — {EXPECTED[fw].mountHint}, save, and the dev
+            <strong style="color: var(--ui-color-text)">Scaffold, still the Nx welcome page?</strong> Nothing
+            imports your component yet — {SCAFFOLD[fw].mountHint}, save, and the dev
             server reloads with the card.
+            <strong style="color: var(--ui-color-text); margin-left: 0.3rem">Clone, not in the Storybook
+            sidebar?</strong> Confirm the file sits directly under <code>libs/{fw.toLowerCase()}/src/lib/</code>
+            (not inside a component subdirectory) and ends in <code>.stories.{fw === 'React' ? 'tsx' : 'ts'}</code>
+            — Storybook only watches that glob, and won't pick up a running Storybook started before the file existed (restart it).
           </p>
         </div>
       ))}
@@ -481,6 +557,23 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
   .run-step-note {
     color: var(--ui-color-text-muted);
     font-size: 0.8rem;
+  }
+
+  /* Environment blocks — scaffold vs. clone, presented as equal-weight
+   * siblings (not a default + a footnote) since the training cohort is
+   * 100% clone while the self-serve site default is the scaffold. */
+  .kata-env-block + .kata-env-block {
+    margin-top: 1.1rem;
+    padding-top: 1.1rem;
+    border-top: 1px dashed var(--ui-color-border);
+  }
+  .kata-env-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ui-color-primary);
+    margin-bottom: 0.4rem;
   }
 
   /* Step blocks — numbered, large enough to scan */

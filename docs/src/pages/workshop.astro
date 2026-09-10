@@ -25,9 +25,9 @@ const SERVE_CMD = {
 };
 
 const PREREQ_CMD = {
-  macOS: `# 1. Node 22+ (use Homebrew or nvm)\nnode --version   # need v22.12 or newer\n\n# 2. Claude Code CLI\nnpm install -g @anthropic-ai/claude-code\nclaude --version\n\n# 3. Figma access token (or use the demo token)\nexport FIGMA_ACCESS_TOKEN=figd_...`,
-  Linux: `# 1. Node 22+ (nvm recommended)\nnode --version   # need v22.12 or newer\n\n# 2. Claude Code CLI\nnpm install -g @anthropic-ai/claude-code\nclaude --version\n\n# 3. Figma access token (or use the demo token)\nexport FIGMA_ACCESS_TOKEN=figd_...`,
-  Windows: `# Run in PowerShell (or use WSL for the macOS/Linux steps)\n\n# 1. Node 22+ (winget or nvm-windows)\nnode --version   # need v22.12 or newer\n\n# 2. Claude Code CLI\nnpm install -g @anthropic-ai/claude-code\nclaude --version\n\n# 3. Figma access token\n$env:FIGMA_ACCESS_TOKEN = "figd_..."`,
+  macOS: `# 1. Node 22+ (use Homebrew or nvm)\nnode --version   # need v22.12 or newer\n\n# 2. Claude Code CLI\nnpm install -g @anthropic-ai/claude-code\nclaude --version   # only proves it's installed, not logged in\n\n# 3. Authenticate with your own API key (console.anthropic.com)\nexport ANTHROPIC_API_KEY=sk-ant-...\nclaude -p "Reply with exactly: PREFLIGHT-OK"   # proves model access\n\n# 4. Figma access token (or use the demo token)\nexport FIGMA_ACCESS_TOKEN=figd_...`,
+  Linux: `# 1. Node 22+ (nvm recommended)\nnode --version   # need v22.12 or newer\n\n# 2. Claude Code CLI\nnpm install -g @anthropic-ai/claude-code\nclaude --version   # only proves it's installed, not logged in\n\n# 3. Authenticate with your own API key (console.anthropic.com)\nexport ANTHROPIC_API_KEY=sk-ant-...\nclaude -p "Reply with exactly: PREFLIGHT-OK"   # proves model access\n\n# 4. Figma access token (or use the demo token)\nexport FIGMA_ACCESS_TOKEN=figd_...`,
+  Windows: `# Run in PowerShell (or use WSL for the macOS/Linux steps)\n\n# 1. Node 22+ (winget or nvm-windows)\nnode --version   # need v22.12 or newer\n\n# 2. Claude Code CLI\nnpm install -g @anthropic-ai/claude-code\nclaude --version   # only proves it's installed, not logged in\n\n# 3. Authenticate with your own API key (console.anthropic.com)\n$env:ANTHROPIC_API_KEY = "sk-ant-..."\nclaude -p "Reply with exactly: PREFLIGHT-OK"   # proves model access\n\n# 4. Figma access token\n$env:FIGMA_ACCESS_TOKEN = "figd_..."`,
 };
 
 // What the preset actually scaffolds, per framework. One framework is
@@ -148,6 +148,17 @@ const mcpConfig = (fw: string) => `{
           <Code code={cmd} lang="shell" />
         </div>
       ))}
+      <p style="margin: 0.85rem 0 0; color: var(--ui-color-text-muted); font-size: 0.8rem; line-height: 1.55">
+        <strong style="color: var(--ui-color-text)">Installed, connected, and authenticated are three
+        different things.</strong> <code>claude --version</code> only proves the binary is on your
+        <code>PATH</code> — it says nothing about whether Claude Code can reach a model. Get your own
+        key from the Anthropic Console (see the
+        <a href="https://docs.claude.com/en/docs/claude-code/setup" class="docs-link-primary" target="_blank" rel="noopener noreferrer">Claude Code setup guide</a>
+        for the exact steps), set <code>ANTHROPIC_API_KEY</code>, then run the <code>claude -p "…"</code>
+        line above — a real prompt-and-response round trip is the only thing that actually proves model
+        access. No key yet and you have a Claude subscription instead? Run <code>claude auth login</code>
+        and sign in through the browser.
+      </p>
     </div>
 
     <ol class="docs-step-list" style="margin-bottom: 2.5rem">
@@ -176,8 +187,12 @@ const mcpConfig = (fw: string) => `{
           <p class="docs-step-desc">Navigate into your workspace, install deps, and verify your environment:</p>
           <Code code={`cd my-workshop\nnpm install\nnpm run preflight`} lang="shell" />
           <p class="docs-step-desc" style="margin-top: 0.75rem">
-            <code>preflight</code> checks Node, Claude Code CLI, the Figma token, MCP reachability,
-            and port availability. If anything fails, each line prints a one-step fix.
+            <code>preflight</code> checks Node, npm, git, that the Claude Code CLI is installed and on
+            <code>PATH</code> (presence only — it never sends a request, so it cannot tell whether you
+            are authenticated), the Figma token, MCP reachability, and port availability. If anything
+            fails, each line prints a one-step fix. A green "Claude Code CLI" row here is not proof of
+            model access — that's what the <code>claude -p "…"</code> command in Prerequisites above is
+            for.
           </p>
 
           <div class="docs-multi-code-tabs" style="border-radius: 8px 8px 0 0; margin: 0.85rem 0 0">
@@ -407,6 +422,7 @@ const mcpConfig = (fw: string) => `{
     <Checkpoint variant="done" title="Your workspace is ready">
       <ul class="checkpoint-checks">
         <li><Icon name="check_circle" /> <code>npm run preflight</code> reports all checks green</li>
+        <li><Icon name="check_circle" /> <code>claude -p "…"</code> returned a real response, not an auth error — <code>preflight</code> only confirms the CLI is installed, not logged in</li>
         <li><Icon name="check_circle" /> Dev server running on <code>http://localhost:4200</code> — every framework's app serves on port <code>4200</code></li>
         <li><Icon name="check_circle" /> Claude Code open in the workspace with the MCP servers connected</li>
       </ul>

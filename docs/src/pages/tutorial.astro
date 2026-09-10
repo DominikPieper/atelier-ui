@@ -542,11 +542,15 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
       </p>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
         These paths are a <strong style="color: var(--ui-color-text)">scaffolded workspace</strong>'s.
-        In a clone of the atelier monorepo there is no <code>workshop-*</code> app: put the component
-        under <code>libs/&lt;fw&gt;/src/lib/…</code> and view it with
-        <code>npx nx storybook &lt;fw&gt;</code> — read the port from the terminal it prints
-        (angular 4400, react 4401, vue 4402). Same loop, different host — see
-        <a href="/troubleshooting#nx-project-not-found" class="docs-link-primary">Cannot find project
+        In a clone of the atelier monorepo there is no <code>workshop-*</code> app: save the component
+        as a Storybook story instead — <code>libs/&lt;fw&gt;/src/lib/settings-card.stories.ts</code>
+        (<code>.tsx</code> for React), a loose file directly under <code>src/lib/</code>, not inside a
+        component subdirectory — the same convention as this repo's own
+        <code>libs/&lt;fw&gt;/src/lib/cookbook.stories.*</code>. No mount step: Storybook
+        auto-discovers any <code>*.stories.*</code> file there and lists it under "Showcase/Settings
+        Card" in the sidebar. View it with <code>npx nx storybook &lt;fw&gt;</code> — read the port
+        from the terminal it prints (angular 4400, react 4401, vue 4402). Same loop, different host —
+        see <a href="/troubleshooting#nx-project-not-found" class="docs-link-primary">Cannot find project
         'workshop-angular'</a>.
       </p>
       {FRAMEWORKS.map((fw, i) => (

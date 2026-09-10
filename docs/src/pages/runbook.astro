@@ -1,0 +1,234 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Code } from 'astro-expressive-code/components';
+import PageHero from '../components/PageHero.astro';
+import Callout from '../components/Callout.astro';
+import HelpFooter from '../components/HelpFooter.astro';
+import BottomNav from '../components/BottomNav.astro';
+
+const LESSONS_URL = 'https://github.com/DominikPieper/atelier-ui/blob/main/tasks/lessons.md';
+---
+
+<BaseLayout
+  title="Runbook"
+  description="Operational notes for running the Atelier setup day to day — how the Figma Desktop Bridge plugin updates, how stale server instances happen, and how to clear them."
+  currentPath="/runbook"
+>
+  <div class="docs-inline-page">
+
+    <PageHero kind="howto" title="Runbook" ledeMax="680px">
+      <a href="/figma-token" class="docs-link-primary">/figma-token</a> gets the Desktop Bridge
+      running once. <a href="/troubleshooting" class="docs-link-primary">/troubleshooting</a> fixes
+      one specific symptom. This page is neither — it collects what stays true about running the
+      setup <em>afterward</em>: what refreshes itself, what doesn't, and the housekeeping that keeps
+      the Bridge usable across a long session. It grows by adding entries, not by redesigning them.
+    </PageHero>
+
+    <!-- In this runbook — an index, and the extension point: a third entry
+         gets one <li> here and one <section id="…"> below. -->
+    <nav aria-label="Runbook entries" style="margin: 0 0 2.25rem; padding: 1rem 1.25rem; background: var(--ui-color-surface-raised); border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md)">
+      <div style="font-size: var(--ui-font-size-xs); font-weight: 700; color: var(--ui-color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.6rem">In this runbook</div>
+      <ol style="margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.35rem; font-size: var(--ui-font-size-md)">
+        <li><a href="#plugin-update" class="docs-link-primary">Updating the Figma Desktop Bridge plugin</a></li>
+        <li><a href="#stale-instances" class="docs-link-primary">Stale server instances competing for the Bridge</a></li>
+      </ol>
+    </nav>
+
+    <!-- Entry 1 -->
+    <section id="plugin-update" style="margin-bottom: 2.75rem">
+      <h2 class="docs-section-title">Updating the Figma Desktop Bridge plugin</h2>
+      <p style="color: var(--ui-color-text-muted); font-size: 0.9rem; margin: 0 0 1.25rem; line-height: 1.65">
+        "The plugin" is really two things, and only one of them updates itself. Confusing the two
+        is the entire failure mode this entry exists to prevent.
+      </p>
+
+      <Callout tone="tip" title="Refreshes itself, on every server start">
+        <p>
+          Every time a <code>figma-console-mcp</code> server starts, its <code>setupStablePluginDir()</code>
+          function (in the package's <code>dist/local.js</code>) copies <code>manifest.json</code>,
+          <code>code.js</code>, and <code>ui.html</code> out of the npx cache into
+          <code>~/.figma-console-mcp/plugin/</code> and rewrites <code>.version</code> there —
+          unconditionally, not only when something changed. In the package's own words, that stable
+          directory exists as "a permanent, predictable path to import from instead of the volatile
+          npx cache path that changes between updates."
+        </p>
+      </Callout>
+
+      <Callout tone="warning" title="Does not refresh itself: Figma Desktop's already-open plugin">
+        <p>
+          Figma only reads a plugin's <code>code.js</code> and <code>ui.html</code> when you run
+          it — from <strong>Plugins → Development</strong>, or automatically if
+          <strong>Hot Reloading Plugin</strong> is on and Figma notices <code>manifest.json</code>'s
+          file-modification time changed. Until one of those happens, whatever Figma loaded last
+          keeps running — even once the files under <code>~/.figma-console-mcp/plugin/</code> are
+          already current.
+        </p>
+      </Callout>
+
+      <h3 class="docs-h3 docs-h3--spaced">Check which version you have</h3>
+      <p class="docs-step-desc">Three different signals answer "which version," and each answers a different question:</p>
+      <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1rem; font-size: var(--ui-font-size-md); color: var(--ui-color-text); line-height: 1.6">
+        <div>
+          <code>.version</code> — the npm package version <code>setupStablePluginDir()</code> last
+          wrote to <code>~/.figma-console-mcp/plugin/.version</code>, refreshed on every server
+          start. Read it with <code>cat ~/.figma-console-mcp/plugin/.version</code>.
+        </div>
+        <div>
+          <code>figma_get_status</code>'s <code>bundledPluginVersion</code> — parsed from the
+          <code>PLUGIN_VERSION</code> constant inside the <code>code.js</code> <em>this running
+          server ships</em>. The package's own source describes it as "what a manifest re-import
+          installs" and deliberately not the npm package version, since a server-only release can
+          bump one without touching the plugin bundle. A mismatch against <code>.version</code> is
+          not drift — they are two different counters by design.
+        </div>
+        <div>
+          <code>figma_get_status</code>'s per-file <code>pluginVersion</code> (with
+          <code>pluginUpdateAvailable</code>) — the version the plugin panel <em>currently open
+          inside Figma Desktop</em> reports about itself, live, over the WebSocket. This is the only
+          one of the three that tells you what's actually loaded right now.
+          <code>pluginUpdateAvailable: true</code> means it differs from
+          <code>bundledPluginVersion</code> — that's the real "go re-run or re-import" signal, not a
+          disagreement with <code>.version</code>.
+        </div>
+      </div>
+      <p class="docs-step-desc">
+        For the version this repo currently pins, read the <code>figma-console</code> entry's
+        <code>args</code> in <code>.mcp.json</code> rather than trusting a number written here — the
+        pin moves independently of this page.
+      </p>
+
+      <h3 class="docs-h3 docs-h3--spaced">Update steps</h3>
+      <div class="docs-step-list">
+        <div class="docs-step-row">
+          <span class="docs-step-badge">01</span>
+          <div>
+            <p class="docs-step-desc">
+              <strong>Code or UI changed, <code>manifest.json</code> did not:</strong> just close
+              and re-run the plugin — <strong>Plugins → Development → Figma Desktop Bridge</strong>
+              again, or restart Figma Desktop. Re-running re-reads <code>code.js</code> and
+              <code>ui.html</code> from disk; no re-import needed.
+            </p>
+          </div>
+        </div>
+        <div class="docs-step-row">
+          <span class="docs-step-badge">02</span>
+          <div>
+            <p class="docs-step-desc">
+              <strong><code>manifest.json</code> itself changed</strong> (a wider port range, a new
+              permission, anything else in that file): re-import —
+              <strong>Plugins → Development → Import plugin from manifest…</strong> and pick the same
+              <code>~/.figma-console-mcp/plugin/manifest.json</code> again. See the callout below for
+              why this is the safe default rather than a confirmed requirement.
+            </p>
+          </div>
+        </div>
+        <div class="docs-step-row">
+          <span class="docs-step-badge">03</span>
+          <div>
+            <p class="docs-step-desc">
+              Verify: call <code>figma_get_status</code> and check the connected file's
+              <code>pluginUpdateAvailable</code> — absent or <code>false</code> means Figma is now
+              running what's on disk.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <Callout tone="note" title="What Figma's own docs settle — and what they don't">
+        <p>
+          Figma's plugin docs confirm that re-running a plugin re-reads its code: the
+          <a href="https://developers.figma.com/docs/plugins/plugin-quickstart-guide/" target="_blank" rel="noopener noreferrer" class="docs-link-primary">quickstart guide</a>
+          describes <strong>Hot Reloading Plugin</strong> restarting the plugin "with the latest
+          changes" as you rebuild, and requiring a manual restart otherwise — either way, a restart
+          re-reads <code>code.js</code>/<code>ui.html</code> from disk.
+        </p>
+        <p>
+          What neither that guide, the
+          <a href="https://developers.figma.com/docs/plugins/manifest/" target="_blank" rel="noopener noreferrer" class="docs-link-primary">manifest reference</a>,
+          nor the <a href="https://developers.figma.com/docs/plugins/how-plugins-run/" target="_blank" rel="noopener noreferrer" class="docs-link-primary">how-plugins-run</a>
+          page says is whether a <code>manifest.json</code> change alone — like this plugin's port
+          range — is picked up by that same restart, or needs a full re-import. Step 02 above
+          re-imports whenever <code>manifest.json</code> changed and just re-runs otherwise: the
+          procedure that is safe under either reading, at the cost of a few extra seconds.
+        </p>
+      </Callout>
+
+      <p style="color: var(--ui-color-text-muted); font-size: 0.8rem; margin-top: 1rem; line-height: 1.6">
+        You may also see <code>ui-full.html</code> next to <code>ui.html</code> in that directory.
+        It isn't part of <code>setupStablePluginDir()</code>'s copy list (<code>manifest.json</code>,
+        <code>code.js</code>, <code>ui.html</code> only), and <code>manifest.json</code>'s
+        <code>ui</code> field points at <code>ui.html</code>, not it — a leftover from an older
+        build, inert either way.
+      </p>
+    </section>
+
+    <!-- Entry 2 -->
+    <section id="stale-instances" style="margin-bottom: 1rem">
+      <h2 class="docs-section-title">Stale server instances competing for the Bridge</h2>
+      <p class="docs-step-desc">
+        Every launch of <code>figma-console-mcp</code> — a Claude Code session, a subagent, a
+        background eval loop — starts its own server process. Each one opens a WebSocket and binds
+        a port in <code>9223–9232</code>, falling back down the range if its preferred port is
+        already taken. But Figma Desktop runs exactly one Desktop Bridge plugin instance, and it
+        connects to exactly one of those servers. Every other running process is orphaned: alive,
+        listening, reported under <code>figma_get_status</code>'s <code>otherInstances</code> — and
+        never getting the plugin's attention.
+      </p>
+
+      <h3 class="docs-h3 docs-h3--spaced">Why it matters</h3>
+      <p class="docs-step-desc">
+        <a href={LESSONS_URL} target="_blank" rel="noopener noreferrer" class="docs-link-primary">tasks/lessons.md</a>
+        has the record of this actually costing a session (2026-09-08): a background
+        trigger-optimisation loop and eight Figma-dependent eval agents ran in the same minute, and
+        "within a minute the parent session's <code>figma-console</code> MCP disconnected and its
+        125 tools vanished" as roughly two dozen orphaned servers competed for the one Desktop
+        Bridge connection. All eight agents stopped, every partial output was discarded, and the
+        session had to be reconnected by hand. The lesson's own rule: background or bulk Figma work
+        runs <strong>alone</strong>, after every Figma-dependent task in the session is finished.
+      </p>
+      <p class="docs-step-desc">
+        As of this writing, <code>figma_get_status</code> lists seven such orphaned instances on
+        ports 9224–9230 in this environment, left over from parallel eval runs. That count is a
+        snapshot, not a fact this page should keep current — call <code>figma_get_status</code> for
+        the live number.
+      </p>
+
+      <h3 class="docs-h3 docs-h3--spaced">Cleanup</h3>
+      <Code code={`pkill -f figma-console-mcp`} lang="shell" />
+      <p class="docs-step-desc">
+        This is the same command the package's own diagnostics suggest: <code>figma_get_status</code>'s
+        recovery steps for an unconnected bridge include "Kill stale processes if needed:
+        <code>pkill -f figma-console-mcp</code>." It matches by process name, so it also stops a
+        legitimate server your current session depends on — safe to run, since your AI client starts
+        a fresh one automatically on its next tool call, but worth a beat if you're mid-task rather
+        than cleaning up between them.
+      </p>
+
+      <h3 class="docs-h3 docs-h3--spaced">Prevention</h3>
+      <p class="docs-step-desc">
+        Run background or bulk Figma-dependent work (eval loops, trigger-optimisation runs, anything
+        that spawns several headless sessions) alone — after every other Figma- or
+        Claude-Design-dependent task in the session has finished — and, where the runner supports
+        it, with an MCP config that gives those headless sessions no servers of their own at all.
+      </p>
+    </section>
+
+    <div style="margin-top: 0.5rem; padding: 1rem 1.25rem; background: var(--ui-color-primary-light); border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md)">
+      <p style="margin: 0; font-size: var(--ui-font-size-md); color: var(--ui-color-text); line-height: 1.6">
+        First-time Figma setup lives at <a href="/figma-token" class="docs-link-primary">/figma-token</a>;
+        a specific symptom you're chasing right now probably has a faster answer at
+        <a href="/troubleshooting" class="docs-link-primary">/troubleshooting</a>. This page is for
+        the operational facts in between.
+      </p>
+    </div>
+
+    <HelpFooter page="runbook" />
+
+    <BottomNav items={[
+      { to: '/figma-token', label: 'Setup', title: 'Figma access', icon: 'palette' },
+      { to: '/troubleshooting', label: 'Fix', title: 'Troubleshooting', icon: 'help' },
+      { to: '/mcp', label: 'Reference', title: 'MCP playground', icon: 'smart_toy' },
+    ]} />
+
+  </div>
+</BaseLayout>

@@ -151,6 +151,7 @@ const skills = [
       <h2 class="docs-section-title">Workspace skills</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.75rem; font-size: 0.85rem">
         Multi-file Claude Code skills that ship architectural and brand playbooks — references and assets loaded on demand. Distinct from the MCP Skills below: these run in Claude Code itself, not as a remote MCP server.
+        Two of the five below are <strong style="color: var(--ui-color-text)">repo-bound</strong>: they name this repo's own gates, files and Claude Design project ids, so they are deliberately not mirrored to the discovery endpoint (<code>UNDISTRIBUTED_SKILLS</code> in <code>tools/scripts/lib/allowlists.js</code>, enforced by <code>check:skill-discovery</code>) — their cards below say so instead of linking to a URL that would 404. Neither has a detail page in <code>/skills/</code> yet; that is a deferred decision, not an oversight (see ADR-0117).
       </p>
       <div style="display: flex; flex-direction: column; gap: 1.5rem">
         <div class="docs-step-row">
@@ -172,6 +173,39 @@ const skills = [
               Generates well-branded Atelier interfaces, slides, and mocks — voice rules, the {designTokenCount}-token <code>--ui-*</code> sheet ({designTypefaces.ui} / {designTypefaces.display} / {designTypefaces.mono}), the logo, and a docs-site UI kit. The brand-consistency co-pilot to figma-workspace-architect's architecture.
             </p>
             <span style="font-size: 0.75rem; font-family: monospace; color: var(--ui-color-text-muted)">repo only — no discovery URL</span>
+          </div>
+        </div>
+
+        <div class="docs-step-row">
+          <span class="docs-step-badge">γ</span>
+          <div style="flex: 1">
+            <h3 class="docs-h3">design-to-code</h3>
+            <p class="docs-step-desc" style="margin-bottom: 0.5rem">
+              Runs the repo's Figma → spec → code → verify loop as a nine-step checklist, gated on a written handoff document (ADR-0096) and ending in the parity gate. Also reviews one existing component across Figma and code, at PR time. Four references loaded on demand.
+            </p>
+            <span style="font-size: 0.75rem; font-family: monospace; color: var(--ui-color-text-muted)">repo-bound, not distributed — names libs/spec, parity:record, check:figma and the Atelier Figma file key; see skills/design-to-code/SKILL.md</span>
+          </div>
+        </div>
+
+        <div class="docs-step-row">
+          <span class="docs-step-badge">δ</span>
+          <div style="flex: 1">
+            <h3 class="docs-h3">artboard-bridge</h3>
+            <p class="docs-step-desc" style="margin-bottom: 0.5rem">
+              Bridges Claude Design artboards and this repo in both directions without letting an artboard become a source of truth — Intake reads a <code>.dc.html</code> sheet into the ADR-0096 handoff document; Publish turns a gate-verified component into a sheet (owner seat only, ADR-0106). Three references loaded on demand.
+            </p>
+            <span style="font-size: 0.75rem; font-family: monospace; color: var(--ui-color-text-muted)">repo-bound, not distributed — names the two Atelier Claude Design project ids, the artboard registry and the design-status gate; carries ADR-0032 governance; see skills/artboard-bridge/SKILL.md</span>
+          </div>
+        </div>
+
+        <div class="docs-step-row">
+          <span class="docs-step-badge">ε</span>
+          <div style="flex: 1">
+            <h3 class="docs-h3">uianatomy-mcp</h3>
+            <p class="docs-step-desc" style="margin-bottom: 0.5rem">
+              Wires the UI Anatomy MCP server (22 tools) for canonical component anatomy, axes, slots, tokens, motion and cross-framework mapping — demoed in Day 2 of the training. External: hosted at uianatomy.dev, not one of this repo's own skills, so its discovery URL is its own rather than this site's.
+            </p>
+            <a href="https://uianatomy.dev/.well-known/agent-skills/uianatomy-mcp/SKILL.md" target="_blank" rel="noopener noreferrer" style="font-size: 0.75rem; font-family: monospace; color: var(--ui-color-text-muted); text-decoration: none">https://uianatomy.dev/.well-known/agent-skills/uianatomy-mcp/SKILL.md</a>
           </div>
         </div>
       </div>

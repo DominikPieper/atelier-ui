@@ -103,14 +103,14 @@ const LIMITS: Limit[] = [
       'The three adherence regexes already exist (raw hex should be a token via var(), a raw px value should be a spacing token, font-family outside the design-system list). Nothing in the repo can open files that live outside it. Treat token discipline inside an artboard as a review habit, not a checked property.',
   },
   {
-    limit: 'Importing Figma links into the canvas is confirmed; exporting out of the canvas is not.',
+    limit: 'Importing Figma links into the canvas is confirmed; exporting Figma-native content out of it is not.',
     means:
-      'The hifi-design skill points users at Claude Design’s Import menu on claude.ai/design, "where they can link a codebase, provide screenshots or Figma links" — that direction is first-party. Export out of the canvas is recorded here as unverified. Do not plan a workflow around it.',
+      'The hifi-design skill points users at Claude Design’s Import menu on claude.ai/design, "where they can link a codebase, provide screenshots or Figma links" — that direction is first-party. Reading content back out, on a narrower claim than "export", is now confirmed too: the artboard-bridge skill’s Intake mode routinely reads a sheet, its findings, and its comments out of a project (list_files, read_file, list_comments) and writes them into the design-to-code handoff document. What is still unverified is turning that content back into Figma-native form — a COMPONENT_SET, a plugin-side import. Do not plan a workflow around that narrower shape.',
   },
   {
-    limit: 'The chain canvas → Figma → code is forbidden in this repo, not merely untested.',
+    limit: 'The chain canvas → Figma → code is forbidden in this repo, not merely untested — one specific shape of it.',
     means:
-      'Imported artboards arrive as frames, not COMPONENT_SETs with variant axes and bound Variables — which would make check:figma and check:parity assert nothing. No diagram on this page draws that arrow, deliberately.',
+      'Importing an artboard file directly as a master is forbidden: imported artboards arrive as frames, not COMPONENT_SETs with variant axes and bound Variables — which would make check:figma and check:parity assert nothing. No diagram on this page draws that arrow, deliberately. A narrower path is supported and is not the same chain: when artboard-bridge’s Intake finds no master for a component, it routes to a plain Figma build — a properly built COMPONENT_SET, informed by the artboard’s recorded decisions (or by a code contract, via figma-workspace-architect’s build-from-code-contract.md, when one exists) — which then re-enters this loop at Inspect like any other master. The artboard never becomes the master; it can only inform whoever builds one.',
   },
   {
     limit: 'The Claude Design MCP is interactively authenticated.',
@@ -147,11 +147,12 @@ const LIMITS: Limit[] = [
   <div class="docs-inline-page">
 
     <PageHero kind="explanation" title="Claude Design, beside Figma" titleAccent="beside" ledeMax="620px">
-      Claude Design turns a prompt into a canvas of artboards. This library’s own 29 components
-      were redesigned through 31 of them over two days, and those artboards surfaced four defect
-      families that every gate in this repo had passed. And an artboard still cannot be the source
-      of truth — not because it is worse, but because <strong>no gate can address it</strong>.
-      That asymmetry is the most useful thing the tool teaches, so this page is built around it.
+      Claude Design turns a prompt into a canvas of artboards. On 2026-08-26 and 27, this
+      library’s own 29 components were redesigned through 31 of them over two days, and those
+      artboards surfaced four defect families that every gate in this repo had passed. And an
+      artboard still cannot be the source of truth — not because it is worse, but because
+      <strong>no gate can address it</strong>. That asymmetry is the most useful thing the tool
+      teaches, so this page is built around it.
     </PageHero>
 
     <!-- 1 — What it is, where it sits -->
@@ -167,6 +168,9 @@ const LIMITS: Limit[] = [
           Claude drafts <code>.dc.html</code> artboards, lays them out on one pan-and-zoom canvas,
           and publishes it as an Artifact. Where saving is enabled for that account, the artboards
           can then be refined visually; where it is not, the same page is view-and-export only.
+          The <code>artboard-bridge</code> skill calls the same file a <em>sheet</em> — same
+          <code>.dc.html</code>, inverted emphasis: this page for the canvas and its visual
+          refinement, that skill for the findings and comments the file carries.
         </li>
         <li>
           <strong style="color: var(--ui-color-text)"><code>/design-sync</code>.</strong>
@@ -185,13 +189,13 @@ const LIMITS: Limit[] = [
         The reason reads the same from either chair. For a designer, the canvas is where four
         credible directions cost ten minutes and no Figma knowledge — divergence is cheap there
         precisely because nothing gates it. For a developer, an artboard is a rendering, not a
-        contract: nothing downstream can read it, name it, or diff against it. Steps 1 to 4 are
+        contract: no gate downstream can read it, name it, or diff against it. Steps 1 to 4 are
         exactly the stretch where something downstream <em>has</em> to read the design. So they are
         exactly the stretch the canvas cannot occupy — and the ends, where nothing has to read it
         yet or ever again, are exactly where it is best.
       </p>
 
-      <DiagramFigure caption="Steps 1 to 4 sit inside check:all. Claude Design sits outside it at both ends. There is deliberately no arrow between the canvas and the loop: no machine-readable handoff exists in either direction, and this repo forbids the canvas → Figma → code chain outright.">
+      <DiagramFigure caption="Steps 1 to 4 sit inside check:all. Claude Design sits outside it at both ends. There is deliberately no arrow between the canvas and the loop — no gate compares an artboard against anything. What crosses now is skill-mediated, not machine-readable: artboard-bridge reads a sheet into a handoff document, and writes a verified component back out as one. It does not shortcut Figma, and it does not make the canvas a source of truth.">
         <svg viewBox="0 0 940 300" role="img" aria-labelledby="cd-place-title cd-place-desc" preserveAspectRatio="xMidYMid meet">
           <title id="cd-place-title">Where Claude Design sits relative to the gated loop</title>
           <desc id="cd-place-desc">A box labelled Step 0, divergence in Claude Design, sits above and outside a dashed container. The dashed container is labelled check:all, {gateCount} gates, and holds four connected steps: Inspect, Spec, Generate, Verify. A second box labelled Step 5, handoff, sits below and outside the container. No line connects either outer box to the container.</desc>
@@ -242,18 +246,35 @@ const LIMITS: Limit[] = [
           passes today.
         </p>
         <p style="margin: 0 0 0.6rem">
-          Step 5 is not. What it is meant to produce is a single shareable link that shows a
-          finished component completely — variant sheet, dark/light pair, keyboard map — to a
-          viewer with no Figma account and no running Storybook. That is designed and written
-          down, as <strong>&ldquo;Kata 5 — The Handoff Card&rdquo;</strong> in
-          <code>tasks/review-state-2026-08-26.md</code>. It has not been built: its tooling does
-          not exist in this repo, and the kata itself is blocked on the per-seat Claude Design
-          access test that <code>tasks/todo.md</code> and
-          <code>plan/adr/0032-claude-design-as-parallel-track.md</code> both still record as
-          unverified.
+          Step 5 is not fully demonstrated — but it is no longer nothing. What it is meant to
+          produce is a single shareable link that shows a finished component completely — variant
+          sheet, dark/light pair, keyboard map — to a viewer with no Figma account and no running
+          Storybook. That is designed and written down, as <strong>&ldquo;Kata 5 — The Handoff
+          Card&rdquo;</strong> in <code>tasks/review-state-2026-08-26.md</code>, and its tooling
+          now exists: the <code>artboard-bridge</code> skill’s Publish mode
+          (<code>finalize_plan → write_files → render_preview →</code> registry →
+          <code>check:design-status</code>).
+        </p>
+        <p style="margin: 0 0 0.6rem">
+          It has run once, against a scratch project, and it correctly refused: the component’s
+          parity record was <code>DRIFT</code>, so it named the commits that moved the inputs and
+          wrote nothing — the same behaviour this page’s fence argues for, where a skill-less
+          baseline published unverified code anyway. Its write path is still unexercised end to
+          end, because every one of this repo’s tracked parity records is currently
+          <code>DRIFT</code> after a shared-token change (ADR-0104) — Publish is blocked
+          repo-wide right now, not for this one component. And per-seat access — anyone but the
+          trainer machine writing to a project shared with them — is a separate, still-open
+          question (ADR-0106 proves only that the owner seat can write).
+        </p>
+        <p style="margin: 0 0 0.6rem">
+          This is a different handoff from the one <code>design-to-code</code> names: ADR-0096’s
+          is inbound and agent-facing — the checklist that gates that skill’s Build mode before
+          any code is written. This one is outbound and human-facing — the link step 5 produces
+          after code is verified. Same word, opposite ends of the loop.
         </p>
         <p style="margin: 0">
-          Read step 5 in the diagram above as a specified destination, not a working path.
+          Read step 5 in the diagram above as: specified, its tool built and run once, not yet
+          demonstrated end to end for a room.
         </p>
       </Callout>
 
@@ -429,11 +450,16 @@ const LIMITS: Limit[] = [
       <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 1rem">
         That gate reads exactly two files: the token source and the generated palette sheet. It never
         opens a <code>.dc.html</code>. <strong style="color: var(--ui-color-text)">No script in this repo opens one</strong> —
-        outside prose, the only file that names one is a hand-maintained registry of filenames, and
-        the two scripts that read that registry take a single flag and a list of names out of it.
-        Neither ever resolves a name to a file. So a hardcoded colour sitting in an artboard, right beside the palette that
-        artboard links, is <strong style="color: var(--ui-color-text)">invisible</strong>. The gate
-        does not warn. It has no way to know the file exists.
+        and still doesn't; that has not changed. What changed is that a <em>skill</em> now can, on
+        request, not as a gate: <code>artboard-bridge</code>'s Intake mode reads a sheet's findings
+        and comments over the Claude Design MCP when a person invokes it, and stops at a handoff
+        document — it does not audit the sheet's CSS for token compliance, so it closes none of the
+        gap this paragraph is about. Outside that one deliberate, human-triggered read, the only
+        file that names a <code>.dc.html</code> is a hand-maintained registry of filenames, and the
+        two scripts that read that registry take a single flag and a list of names out of it.
+        Neither ever resolves a name to a file. So a hardcoded colour sitting in an artboard, right
+        beside the palette that artboard links, is <strong style="color: var(--ui-color-text)">invisible</strong>
+        to every gate. The gate does not warn. It has no way to know the file exists.
       </p>
 
       <DiagramFigure caption="One gated hop, one manual hop, stated rather than hidden. The shared palette sheet is generated and checked; each artboard's own file sits outside the repo, where no gate can reach it. The manual hop exists because the Claude Design MCP is interactively authenticated — a spawned script cannot reach it.">

@@ -148,6 +148,19 @@ the component I just generated. Fix every discrepancy it reports.`;
             <a href="https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI" target="_blank" rel="noopener noreferrer" class="docs-link-primary">Atelier UI Figma file</a>.
             Note the <strong style="color: var(--ui-color-text)">variants</strong>, the <code>--ui-*</code> tokens bound to each property (<code>boundVariables</code>), and any accessibility annotations. These map one-to-one to CSS custom properties — no conversion needed.
           </p>
+          <Callout tone="note" title="Write it down before you generate">
+            <p style="margin: 0; font-size: 0.85rem; line-height: 1.6; color: var(--ui-color-text-muted)">
+              A picture cannot carry behaviour, scope, or the reuse-vs-new decision — that is what a
+              <strong style="color: var(--ui-color-text)">written handoff document</strong> is for, and the
+              <code>design-to-code</code> skill gates its Build mode on one before any code exists.
+              Fill the provenance from what you just inspected (file, node id, axes, bindings, snapshot
+              stamp), then leave behaviour, exclusions, and reuse-vs-new as visible blanks for you to
+              decide and write — not inferred from the picture. Template:
+              <code>skills/design-to-code/references/handoff-document.md</code>. This is the checkpoint
+              <a href="https://github.com/DominikPieper/atelier-ui/blob/main/plan/adr/0096-the-handoff-a-picture-cannot-carry.md" target="_blank" rel="noopener noreferrer" class="docs-link-primary">ADR-0096</a>
+              exists to force: prompting straight from a screenshot is the failure mode this step prevents.
+            </p>
+          </Callout>
         </div>
       </div>
     </div>

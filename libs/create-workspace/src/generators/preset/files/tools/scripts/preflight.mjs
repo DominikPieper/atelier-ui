@@ -205,6 +205,31 @@ function loadMcpEndpoints() {
   }
 }
 
+/**
+ * Reads the exact `figma-console-mcp@<version>` pin off the `figma-console`
+ * server's `args` in `.mcp.json` — the same file `loadMcpEndpoints()` reads,
+ * just a different server shape (`command: npx`, not `type: http`). Returns
+ * null when `.mcp.json` is missing, has no `figma-console` entry, or that
+ * entry isn't pinned to an exact version (e.g. `@latest`) — every caller
+ * treats null as "nothing to compare against," not as a failure.
+ */
+function getPinnedFigmaConsoleVersion() {
+  const mcpPath = resolve(ROOT, '.mcp.json');
+  if (!existsSync(mcpPath)) return null;
+  try {
+    const config = JSON.parse(readFileSync(mcpPath, 'utf8'));
+    const args = config.mcpServers?.['figma-console']?.args;
+    if (!Array.isArray(args)) return null;
+    for (const arg of args) {
+      const match = /^figma-console-mcp@(\d+\.\d+\.\d+)$/.exec(arg);
+      if (match) return match[1];
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 // ── Checks ───────────────────────────────────────────────────────────
 function checkNode() {
   const required = { major: 22, minor: 12, patch: 0 };
@@ -275,14 +300,47 @@ function checkClaudeCli() {
 async function checkFigmaSetup() {
   // 1. Desktop Bridge plugin manifest — the primary channel.
   const manifestPath = join(homedir(), '.figma-console-mcp', 'plugin', 'manifest.json');
+  const pinnedVersion = getPinnedFigmaConsoleVersion();
+  const pinnedSpec = pinnedVersion ? `figma-console-mcp@${pinnedVersion}` : 'figma-console-mcp@latest';
   if (existsSync(manifestPath)) {
     ok('Figma Desktop Bridge plugin', `manifest at ${manifestPath}`);
   } else {
     warn(
       'Figma Desktop Bridge plugin',
       'manifest not found',
-      'Run `npx -y figma-console-mcp@latest --help` once, then Figma → Plugins → Development → Import plugin from manifest…',
+      `Run \`npx -y ${pinnedSpec} --help\` once, then Figma → Plugins → Development → Import plugin from manifest…`,
     );
+  }
+
+  // 1b. .version marker vs. the exact version .mcp.json pins. The package
+  // writes this file (setupStablePluginDir(), dist/local.js) specifically so
+  // staleness between "what the npm package installed on disk" and "what
+  // this workspace is pinned to" can be detected — nothing read it back
+  // until now. This is a warning, not a hard failure: a stale on-disk build
+  // does not block the workshop (the Bridge still connects and runs), and
+  // the files self-heal on the next `figma-console-mcp` server start anyway
+  // — treating it as fatal would fail preflight over something that fixes
+  // itself the moment Claude Code (re)starts the MCP.
+  if (existsSync(manifestPath)) {
+    const versionPath = join(homedir(), '.figma-console-mcp', 'plugin', '.version');
+    if (!existsSync(versionPath)) {
+      warn(
+        'Plugin files .version marker',
+        'manifest exists but no .version file next to it',
+        `Run \`npx -y ${pinnedSpec} --help\` once to refresh ~/.figma-console-mcp/plugin/ with a current build`,
+      );
+    } else if (pinnedVersion) {
+      const diskVersion = readFileSync(versionPath, 'utf8').trim();
+      if (diskVersion === pinnedVersion) {
+        ok('Plugin files vs. .mcp.json pin', `both ${diskVersion}`);
+      } else {
+        warn(
+          'Plugin files vs. .mcp.json pin',
+          `on-disk .version is ${diskVersion}, .mcp.json pins ${pinnedVersion}`,
+          `Run \`npx -y ${pinnedSpec} --help\` once to refresh the files, then re-run (or re-import) the plugin in Figma Desktop — see https://atelier.pieper.io/runbook#plugin-update`,
+        );
+      }
+    }
   }
 
   // 2. Bridge WebSocket port range — at least one port must be usable.
