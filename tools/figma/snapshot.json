@@ -2,9 +2,9 @@
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
-    "figmaLastModified": "2026-09-07T11:45:59Z",
-    "generatedAt": "2026-09-07T12:06:26.925Z",
-    "gitSha": "034db0c",
+    "figmaLastModified": "2026-09-10T04:18:29Z",
+    "generatedAt": "2026-09-10T04:22:44.802Z",
+    "gitSha": "4b0fcff",
     "serverVersion": null,
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -97,7 +97,7 @@
   ],
   "typography": {
     "fontFamilies": {
-      "Instrument Sans": 1675,
+      "Instrument Sans": 1674,
       "Instrument Serif": 1,
       "JetBrains Mono": 81
     },
@@ -258,7 +258,7 @@
   ],
   "components": [
     {
-      "name": "Action/AtlButton",
+      "name": "Inputs/AtlButton",
       "selector": "AtlButton",
       "nodeId": "129:20",
       "description": "Action button. Maps to AtlButtonSpec in libs/spec.\n\nUse when: a user-initiated action — submit, save, delete, navigate. Pick the visual based on hierarchy: `primary` for the screen's main action (one per screen), `secondary` for supporting actions, `outline` for tertiary/inline, `danger` for destructive actions (delete, irreversible).\n\nDon't use when: the action is a navigation link (use a real `<a>` element, not a styled button), the choice is between two states (use Form/AtlToggle), or the user is filling a form field (use Form/AtlInput / Form/AtlSelect).\n\nAPI surface (Figma → spec):\n- Variant `variant`: primary | secondary | outline | danger — maps to AtlButtonSpec.variant\n- Variant `size`: sm | md | lg — maps to AtlButtonSpec.size\n- Variant `state`: default | hover | focus | active — interaction state\n- Boolean `disabled`: maps to AtlButtonSpec.disabled\n- Boolean `loading`: maps to AtlButtonSpec.loading — shows spinner, disables interaction\n- Boolean `hasIcon`: toggles the leading icon slot (Instance Swap → Icon library)\n\nA11y: native HTML <button>. When the button has no visible label (icon-only), supply `aria-label` — required by spec. Disabled state uses HTML `disabled` (not aria-disabled) for buttons since they're never expected to remain in the tab order.\n\nStatus: structural restructure 2026-04-27 — `state` enum slimmed to interaction (default/hover/focus/active); `loading` and `disabled` moved out as Booleans matching AtlButtonSpec; `hasIcon` Boolean added for icon-slot toggle.\n\nDeclared Boolean properties that reference no layer (2026-08-27, ADR-0058). check:figma reads these lines, so the reason is stated where a designer opening the master sees it:\n- Boolean `hasIcon`: declared but unbound — and it maps to nothing: `AtlButtonSpec` has no `hasIcon`. It is a Figma-side slot toggle for placing an Icon instance, which is a legitimate authoring affordance but not part of the component contract. Bind it to the icon slot layer when that slot exists, or drop it.",
@@ -2229,7 +2229,7 @@
       ]
     },
     {
-      "name": "Form/AtlInput",
+      "name": "Inputs/AtlInput",
       "selector": "AtlInput",
       "nodeId": "129:33",
       "description": "Single-line text input. Maps to AtlInputSpec in libs/spec.\n\nUse when: a user needs to enter a short string (text, email, password, number, tel, url). For multi-line use Form/AtlTextarea. For options use Form/AtlSelect or Form/AtlCombobox.\n\nDon't use when: input is binary (use Form/AtlCheckbox or Form/AtlToggle), the value is one-of-many (use Form/AtlRadioGroup), or the user is choosing from a set (use Form/AtlSelect).\n\nAPI surface (Figma → spec):\n- Variant `state`: default | hover | focus | invalid | filled — interaction + form state\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Boolean `readonly`: maps to AtlReadonlySpec.readonly\n- Boolean `required`: maps to AtlFormFieldSpec.required\n- (code-only props on AtlInputSpec: `type`, `placeholder`, `value`, `onValueChange`, `name`)\n\nA11y: native HTML <input>; ARIA roles and keyboard come from the browser. Disabled state uses aria-disabled (not HTML disabled) so screen readers still announce it — pair with a tooltip/helper text explaining why. The invalid state is carried by an AtlIcon `danger` inside the field as well as by the border colour, so it does not depend on colour perception (WCAG 1.4.1); the error message is a polite live region the field points at with aria-describedby.\n\nStatus: structural restructure 2026-04-27 — old `state` enum (default/filled/focus/invalid/disabled/hover/active/loading) replaced by interaction Variant + orthogonal Booleans matching libs/spec. 2026-08-27 — `readonly` re-pointed from AtlFormFieldSpec to AtlReadonlySpec, where ADR-0045 moved it; the old mapping was caught by check:figma's [BOOL-CLAIM].\n\nDeclared Boolean properties that reference no layer (2026-08-27, ADR-0058). check:figma reads these lines, so the reason is stated where a designer opening the master sees it:\n- Boolean `required`: declared but unbound — `required` renders nothing in any of the five form fields. It is passed to the DOM as the HTML attribute and that is all: no class, no CSS rule, no asterisk. The asterisk a designer expects comes from the label text the consumer writes, so there is no component-owned layer for this property to toggle. If the library should render one, that is a code change first.",
@@ -5395,7 +5395,7 @@
       ]
     },
     {
-      "name": "Form/AtlSelect",
+      "name": "Inputs/AtlSelect",
       "selector": "AtlSelect",
       "nodeId": "55:92",
       "description": "Dropdown selector. Maps to AtlSelectSpec in libs/spec.\n\nUse when: user picks one value from a fixed list of <50 options. For searchable lists use Form/AtlCombobox. For 2–7 visible options use Form/AtlRadioGroup. For multi-select use a Combobox or stacked Form/AtlCheckbox.\n\nDon't use when: options are dynamic / fetched (use Form/AtlCombobox), the choice is binary (use Form/AtlToggle), or users benefit from seeing all options simultaneously (use Form/AtlRadioGroup).\n\nAPI surface (Figma → spec):\n- Variant `state`: default | hover | focus | open | filled\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Boolean `invalid`: maps to AtlFormFieldSpec.invalid\n- Boolean `required`: maps to AtlFormFieldSpec.required\n- Text `placeholder`: maps to AtlSelectSpec.placeholder\n\nA11y: native popover via the HTML Popover API. Keyboard: ArrowUp/Down navigate, Enter selects, Escape closes. Disabled state uses aria-disabled (not HTML disabled).\n\nStatus: structural restructure 2026-04-27 — `state` enum slimmed to interaction + open + filled; disabled/invalid/required moved to Booleans matching spec.\n\nDeclared Boolean properties that reference no layer (2026-08-27, ADR-0058). check:figma reads these lines, so the reason is stated where a designer opening the master sees it:\n- Boolean `required`: declared but unbound — `required` renders nothing in any of the five form fields. It is passed to the DOM as the HTML attribute and that is all: no class, no CSS rule, no asterisk. The asterisk a designer expects comes from the label text the consumer writes, so there is no component-owned layer for this property to toggle. If the library should render one, that is a code change first.",
@@ -8369,7 +8369,7 @@
       ]
     },
     {
-      "name": "Form/AtlCheckbox",
+      "name": "Inputs/AtlCheckbox",
       "selector": "AtlCheckbox",
       "nodeId": "55:36",
       "description": "Boolean form control for opt-in selections. Maps to AtlCheckboxSpec in libs/spec.\n\nUse when: user opts in to one or more independent options (Accept terms, Subscribe to newsletter, parent rows in a tree). Indeterminate state represents a partially-selected parent of mixed children.\n\nDon't use when: choice is mutually exclusive (use Form/AtlRadio + Form/AtlRadioGroup) or binary settings toggle (use Form/AtlToggle — feels more like a switch than a form input).\n\nAPI surface (Figma → spec):\n- Variant `selection`: unchecked | checked | indeterminate — maps to `checked` + `indeterminate` Booleans\n- Variant `state`: default | hover | focus — interaction state\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Boolean `invalid`: maps to AtlFormFieldSpec.invalid\n- Boolean `required`: maps to AtlFormFieldSpec.required\n- Text `Label`: REMOVED 2026-08-27 (ADR-0067). The label is content projection, not a prop; AtlCheckboxSpec has no such field.\n\nA11y: native HTML <input type=\"checkbox\">. Indeterminate set via JS property (not HTML attribute). Disabled state uses aria-disabled.\n\nStatus: structural restructure 2026-04-27 — single `state` enum split into orthogonal `selection` (unchecked/checked/indeterminate) + `state` (default/hover/focus) Variant Properties; disabled moved to Boolean.\n\nDeclared Boolean properties that reference no layer (2026-08-27, ADR-0058). check:figma reads these lines, so the reason is stated where a designer opening the master sees it:\n- Boolean `required`: declared but unbound — `required` renders nothing in any of the five form fields. It is passed to the DOM as the HTML attribute and that is all: no class, no CSS rule, no asterisk. The asterisk a designer expects comes from the label text the consumer writes, so there is no component-owned layer for this property to toggle. If the library should render one, that is a code change first.",
@@ -8839,7 +8839,7 @@
       ]
     },
     {
-      "name": "Form/AtlToggle",
+      "name": "Inputs/AtlToggle",
       "selector": "AtlToggle",
       "nodeId": "55:41",
       "description": "On/off switch control. Maps to AtlToggleSpec in libs/spec.\n\nUse when: a binary setting takes effect immediately (notifications on/off, dark mode, sync). Visually distinct from Checkbox — the switch metaphor implies \"this changes a setting now\", not \"this opts into a form value on submit\".\n\nDon't use when: the binary is part of a form submission (use Form/AtlCheckbox), the setting requires a confirmation step (use Form/AtlCheckbox plus Action/AtlButton), or the choice is one-of-three (use Form/AtlRadioGroup).\n\nAPI surface (Figma → spec):\n- Variant `selection`: off | on — maps to AtlToggleSpec.checked (false/true)\n- Variant `state`: default | hover | focus — interaction state\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Text `Label`: REMOVED 2026-08-27 (ADR-0067). The label is content projection, not a prop; AtlToggleSpec has no such field.\n\nA11y: native HTML <input type=\"checkbox\"> with role=\"switch\" wrapper. The label should describe the setting being toggled, not \"Off/On\". Disabled state uses aria-disabled.\n\nStatus: structural restructure 2026-04-27 — collapsed Cartesian (`disabled-off`/`disabled-on`) into orthogonal `selection` Variant + `disabled` Boolean. Old `state` enum (off/on/disabled-off/disabled-on/focus/hover/active/loading) replaced.\n\nSpec flags deliberately not modelled (2026-08-27, ADR-0058):\n- Boolean `required`: not modelled — `required` renders nothing in any Atelier form field. It is passed to the DOM as the HTML attribute and stops there.",
@@ -9462,7 +9462,7 @@
       ]
     },
     {
-      "name": "Form/AtlTextarea",
+      "name": "Inputs/AtlTextarea",
       "selector": "AtlTextarea",
       "nodeId": "55:87",
       "description": "Multi-line text input. Maps to AtlTextareaSpec in libs/spec.\n\nUse when: user enters a paragraph or block of text (comment, description, message body). For single-line use Form/AtlInput.\n\nDon't use when: input is a small fixed-shape value (use Form/AtlInput) or a one-of-many choice (use Form/AtlSelect).\n\nAPI surface (Figma → spec):\n- Variant `state`: default | hover | focus | invalid | filled\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Boolean `readonly`: maps to AtlReadonlySpec.readonly\n- Boolean `required`: maps to AtlFormFieldSpec.required\n- Boolean `autoResize`: maps to AtlTextareaSpec.autoResize — grow to fit content\n- Text `placeholder`: maps to AtlTextareaSpec.placeholder\n\nA11y: native HTML <textarea>. Disabled state uses aria-disabled (not HTML disabled) so the element remains focusable and is announced by screen readers — pair with helper text or aria-describedby explaining why. The invalid state is carried by an AtlIcon `danger` inside the field as well as by the border colour, so it does not depend on colour perception (WCAG 1.4.1); the error message is a polite live region the field points at with aria-describedby.\n\nStatus: structural restructure 2026-04-27 — old `state` enum collapsed; orthogonal Booleans now match AtlFormFieldSpec. 2026-08-27 — `readonly` re-pointed from AtlFormFieldSpec to AtlReadonlySpec, where ADR-0045 moved it; the old mapping was caught by check:figma's [BOOL-CLAIM].\n\nDeclared Boolean properties that reference no layer (2026-08-27, ADR-0058). check:figma reads these lines, so the reason is stated where a designer opening the master sees it:\n- Boolean `required`: declared but unbound — `required` renders nothing in any of the five form fields. It is passed to the DOM as the HTML attribute and that is all: no class, no CSS rule, no asterisk. The asterisk a designer expects comes from the label text the consumer writes, so there is no component-owned layer for this property to toggle. If the library should render one, that is a code change first.\n- Boolean `autoResize`: declared but unbound — `.is-auto-resize textarea` sets `resize: none; overflow: hidden`, which removes the browser's resize grabber. That grabber is chrome Figma does not draw in the first place, so there is no difference here to toggle.",
@@ -9903,7 +9903,7 @@
       ]
     },
     {
-      "name": "Form/AtlRadioGroup",
+      "name": "Inputs/AtlRadioGroup",
       "selector": "AtlRadioGroup",
       "nodeId": "55:137",
       "description": "Mutually exclusive option selector. Maps to AtlRadioGroupSpec in libs/spec.\n\nUse when: user picks exactly one of 2–7 visible options where seeing every option is valuable. Wrap Form/AtlRadio children inside the group — the group manages keyboard navigation (arrow keys move selection) and value binding.\n\nDon't use when: option count exceeds ~7 (use Form/AtlSelect or Form/AtlCombobox), choices are independent (use Form/AtlCheckbox), or the choice is binary (use Form/AtlToggle).\n\nAPI surface (Figma → spec):\n- Variant `selection`: unselected | selected — group-level selection state for the gallery\n- Variant `state`: default | hover | focus — interaction state\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled — disables every contained Radio\n- (code-only: `value: string` — the selected radio's `radioValue`)\n\nA11y: ARIA radiogroup pattern with roving tabindex. Arrow keys move selection inside the group. Wrap in a fieldset + legend if the group has a visible label.\n\nStatus: structural restructure 2026-04-27 — single `state` enum split into orthogonal `selection` (unselected/selected) + `state` (default/hover/focus); disabled moved to Boolean.\n\nSpec flags deliberately not modelled (2026-08-27, ADR-0058):\n- Boolean `required`: not modelled — `required` renders nothing in any Atelier form field. It is passed to the DOM as the HTML attribute and stops there: no class, no CSS rule, no mark.\n- Boolean `readonly`: not modelled — the component emits an `is-readonly` class and NO stylesheet in any of the three frameworks has a rule for it, so nothing renders differently. That dead class is the same shape ADR-0045 removed from AtlSelect and is recorded as a code finding.",
@@ -10274,7 +10274,7 @@
       ]
     },
     {
-      "name": "Form/AtlRadio",
+      "name": "Inputs/AtlRadio",
       "selector": "AtlRadio",
       "nodeId": "420:185",
       "description": "Individual radio button. Maps to AtlRadioSpec in libs/spec.\n\nUse when: a single option among a mutually-exclusive set. Always wrap in Form/AtlRadioGroup — the group manages keyboard navigation, focus, and value binding.\n\nDon't use when: option is independent (use Form/AtlCheckbox), the choice is binary (use Form/AtlToggle), or the option set is long enough to need search (use Form/AtlCombobox).\n\nAPI surface (Figma → spec):\n- Variant `selection`: unchecked | checked\n- Variant `state`: default | hover | focus\n- Boolean `disabled`: maps to AtlRadioSpec.disabled\n- Boolean `invalid`: inherited from AtlRadioGroupSpec.invalid — not a prop on this component\n- (code-only: `radioValue: string`)\n\nA11y: native HTML <input type=\"radio\"> participating in a roving-tabindex group via the parent AtlRadioGroup.\n\nStatus: structural restructure 2026-04-27 — single `state` enum split into orthogonal `selection` (unchecked/checked) + `state` (default/hover/focus); disabled/invalid moved to Booleans. 2026-08-27 — the `invalid` Boolean removed, property and prose both, per ADR-0056.\n\nWhy `invalid` is here although AtlRadioSpec does not declare it: the radio reads it from the group. `atl-radio.tsx` computes its class list with `ctx.invalid && 'is-invalid'`, and `atl-radio.css` has three `.atl-radio.is-invalid` rules, so an invalid radio is a real rendered state — it is just owned by AtlRadioGroup rather than by this component. The Boolean drives the `_invalid-border` overlay.\n\nThis property was deleted on 2026-08-27 and restored the same day: check:figma reported the old mapping to `AtlFormFieldSpec.invalid` as [BOOL-CLAIM], correctly — AtlRadioSpec extends nothing — and deleting the property was the wrong repair, because it orphaned the overlay layer that draws the state. The mapping was wrong; the property was not (ADR-0058).",
@@ -18505,7 +18505,7 @@
       ]
     },
     {
-      "name": "Form/AtlCombobox",
+      "name": "Inputs/AtlCombobox",
       "selector": "AtlCombobox",
       "nodeId": "421:339",
       "description": "Combobox — searchable select. Maps to AtlComboboxSpec in libs/spec.\n\nUse when: user picks one value from a long or dynamic list (50+ options, fetched data, type-ahead). For short fixed lists use Form/AtlSelect.\n\nDon't use when: list is short and known up-front (use Form/AtlSelect), or user must compare options side by side (use Form/AtlRadioGroup).\n\nAPI surface (Figma → spec):\n- Variant `state`: default | hover | focus | open | filtered | selected\n- Boolean `disabled`: maps to AtlFormFieldSpec.disabled\n- Boolean `invalid`: maps to AtlFormFieldSpec.invalid\n- Boolean `required`: maps to AtlFormFieldSpec.required\n- (code-only: `options: AtlComboboxOption[]`, `placeholder`)\n\nA11y: combines a text input with a dropdown list. Arrow keys navigate, Enter selects, Escape closes. Disabled state uses aria-disabled.\n\nStatus: structural restructure 2026-04-27 — `state` enum slimmed to interaction + open + filtered + selected; disabled/invalid/required moved to Booleans matching spec.\n\nDeclared Boolean properties that reference no layer (2026-08-27, ADR-0058). check:figma reads these lines, so the reason is stated where a designer opening the master sees it:\n- Boolean `required`: declared but unbound — `required` renders nothing in any of the five form fields. It is passed to the DOM as the HTML attribute and that is all: no class, no CSS rule, no asterisk. The asterisk a designer expects comes from the label text the consumer writes, so there is no component-owned layer for this property to toggle. If the library should render one, that is a code change first.",
@@ -25760,7 +25760,7 @@
       ]
     },
     {
-      "name": "Form/AtlOption",
+      "name": "Inputs/AtlOption",
       "selector": "AtlOption",
       "nodeId": "911:1086",
       "description": "One row inside AtlSelect's list. Maps to AtlOptionSpec.\n\nDIVERGENCE, stated rather than hidden: only Angular renders this row. React and Vue emit a native `<select>`, where the operating system draws the list and no option element exists to style (ADR-0028).\n\nAxis `state`: default | hover | active | selected. hover paints `--ui-color-surface-sunken`; active paints `--ui-color-primary-light` and recolours the text; selected only changes the weight to semibold.\n\n- Boolean `disabled`: maps to AtlOptionSpec.disabled.\n- `optionValue` is data, not state.\n\nGeometry: a row-sm (40px) that centres — `padding-block: 0`, `padding-inline: var(--ui-spacing-4)`, `justify-content: space-between`, `--ui-font-size-md`.",
