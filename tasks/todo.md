@@ -221,11 +221,23 @@ Ranked; each carries why it's worth doing next rather than later.
   - [ ] **S5a follow-up:** run `node tools/e2e/schulung-claims.e2e.mjs` on a clean tree —
     Part 1 (the gate claim) was reproduced gate by gate but not executed by the script,
     because its `assertCleanTree` met the day's uncommitted work.
-  - [ ] **S5b — the contract docs block + story-meta import**: a docs block in all three
-    Storybooks that renders `parameters.contract` (node id, mismatches with reasons) on the
-    Docs tab; every story meta imports its contract via `@atelier-ui/spec/contracts/<name>.contract`;
-    a gate that every component story file does so (the `check:story-descriptions`
-    pattern). Closes the last open item of ADR-0121 Decision 3.
+  - [x] **S5b — the contract docs block + story-meta import — done 2026-09-10** (ADR-0121
+    "S5b done"). `libs/spec/src/contracts/docs-block.ts` (`ContractBlock`,
+    `contractDocsPage`, `createElement` only), `parameters.docs.page` in all three
+    previews, 83 story metas import their contract, `[CONTRACT-IMPORT]` in
+    `check:contracts`. Playwright read "Contract / 129:20 / hasIcon" off AtlButton's built
+    React docs page; suites 234/226/253; Angular and Vue Storybook builds green.
+  - [ ] **S5 follow-ups:**
+    - [ ] `docs-block.ts` carries one `@ts-ignore` on `@storybook/addon-docs/blocks`
+      (`libs/spec/tsconfig.json` uses classic `moduleResolution`, which rejects the
+      `exports` subpath; the framework tsconfigs resolve it). Decide: move the spec project
+      to `bundler` resolution, or keep the ignore with its comment.
+    - [ ] React's and Vue's Toast story metas set no `component`, so they carry no contract
+      import and `check:contracts` cannot key them (`[NO-STORY-META]` for AtlToast there).
+      Give them a `component` (the container) so the contract reaches their Docs tab.
+    - [ ] The participant walk-through (Codex, 2026-09-10) still lists: `AGENTS.md`'s local
+      MCP calls heading fixed, but the e2e's Part 1 remains unexecuted until the tree is
+      clean (the other session's untracked skill files count).
   - [ ] S6 monorepo retirements — as ADR-0121 Decision 6.
   - [ ] Background for the decision — `tasks/spec-rethink-2026-09-10.md`: the greenfield
     pass the owner asked for. Inventories what a machine can test
