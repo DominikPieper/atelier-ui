@@ -84,6 +84,16 @@ export const WithErrors: Story = {
     },
     template: '<AtlInput v-bind="args" :errors="errors" />',
   }),
+  parameters: {
+    a11y: {
+      config: {
+        rules: [
+          // a11y debt (S0, 2026-09-10): label-title-only — input's accessible name comes from title only — tasks/todo.md "a11y backlog"; fix, then remove.
+          { id: 'label-title-only', enabled: false },
+        ],
+      },
+    },
+  },
 };
 
 export const AllTypes: Story = {
@@ -124,6 +134,16 @@ export const AllVariants: Story = {
       </div>
     `,
   }),
+  parameters: {
+    a11y: {
+      config: {
+        rules: [
+          // a11y debt (S0, 2026-09-10): label-title-only — "With error" field has no visible label, only a placeholder — tasks/todo.md "a11y backlog"; fix, then remove.
+          { id: 'label-title-only', enabled: false },
+        ],
+      },
+    },
+  },
 };
 
 export const Playground: Story = {

@@ -200,6 +200,16 @@ export const Variants: Story = {
       </div>
     `,
   }),
+  parameters: {
+    a11y: {
+      config: {
+        rules: [
+          // a11y debt (S0, 2026-09-10): landmark-unique — three demo groups reuse the same panel labels — tasks/todo.md "a11y backlog"; fix, then remove.
+          { id: 'landmark-unique', enabled: false },
+        ],
+      },
+    },
+  },
 };
 
 export const ControlledExpanded: Story = {

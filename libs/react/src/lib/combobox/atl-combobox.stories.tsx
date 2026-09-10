@@ -91,6 +91,16 @@ export const Invalid: Story = {
     errors: ['Please select a fruit'],
     placeholder: 'Search fruit…',
   },
+  parameters: {
+    a11y: {
+      config: {
+        rules: [
+          // a11y debt (S0, 2026-09-10): label-title-only — combobox input's accessible name comes from title only — tasks/todo.md "a11y backlog"; fix, then remove.
+          { id: 'label-title-only', enabled: false },
+        ],
+      },
+    },
+  },
 };
 
 export const WithDisabledOption: Story = {

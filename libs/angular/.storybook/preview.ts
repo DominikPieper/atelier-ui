@@ -29,6 +29,13 @@ const preview: Preview = {
         ],
       },
     },
+
+    a11y: {
+      // 'error' - fail CI on a11y violations (chosen — ADR-0121 S0)
+      // 'todo' - show a11y violations in the test UI only
+      // 'off' - skip a11y checks entirely
+      test: 'error',
+    },
   },
 
   decorators: [

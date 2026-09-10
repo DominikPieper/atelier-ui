@@ -44,6 +44,14 @@ const meta: Meta<typeof AtlSelect> = {
   parameters: {
     design: figmaNode('55-92'),
     docs: { description: { component: metadata.purpose } },
+    a11y: {
+      config: {
+        rules: [
+          // a11y debt (S0, 2026-09-10): select-name — native <select> rendered without an accessible name — tasks/todo.md "a11y backlog"; fix, then remove.
+          { id: 'select-name', enabled: false },
+        ],
+      },
+    },
   },
 };
 
@@ -101,6 +109,20 @@ export const WithErrors: Story = {
       </AtlSelect>
     `,
   }),
+  parameters: {
+    a11y: {
+      config: {
+        // Story-level `rules` replaces (not merges with) the meta-level array below,
+        // so the file's select-name exemption has to be repeated here too.
+        rules: [
+          // a11y debt (S0, 2026-09-10): select-name — native <select> rendered without an accessible name — tasks/todo.md "a11y backlog"; fix, then remove.
+          { id: 'select-name', enabled: false },
+          // a11y debt (S0, 2026-09-10): label-title-only — select's accessible name comes from title only — tasks/todo.md "a11y backlog"; fix, then remove.
+          { id: 'label-title-only', enabled: false },
+        ],
+      },
+    },
+  },
 };
 
 export const WithDisabledOption: Story = {

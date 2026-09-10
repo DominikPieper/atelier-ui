@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { signal } from '@angular/core';
-import { userEvent, expect } from 'storybook/test';
+import { userEvent, expect, waitFor } from 'storybook/test';
 import { AtlButton } from '../button/atl-button';
 import { AtlInput } from '../input/atl-input';
 import { AtlOption } from '../select/atl-option';
@@ -67,7 +67,12 @@ export const Default: Story = {
   play: async ({ canvas }) => {
     await userEvent.click(canvas.getByRole('button', { name: 'Open Dialog' }));
     const dialog = canvas.getByRole('dialog');
-    await expect(dialog).toBeVisible();
+    // showModal() opens synchronously, but the fade-in transition (atl-dialog.css)
+    // starts each newly-open dialog at `opacity: 0` via @starting-style; jest-dom's
+    // toBeVisible() treats opacity: 0 as not visible, and computed style read here
+    // (same tick as the click) still reflects that starting frame. Poll instead of
+    // asserting once — the transition (--ui-duration-slow, 300ms) clears it quickly.
+    await waitFor(() => expect(dialog).toBeVisible());
     await userEvent.click(canvas.getByRole('button', { name: 'Cancel' }));
     await expect(dialog).not.toHaveAttribute('open');
   },
@@ -113,7 +118,12 @@ export const CloseButtonDismiss: Story = {
   play: async ({ canvas }) => {
     await userEvent.click(canvas.getByRole('button', { name: 'Open Dialog' }));
     const dialog = canvas.getByRole('dialog');
-    await expect(dialog).toBeVisible();
+    // showModal() opens synchronously, but the fade-in transition (atl-dialog.css)
+    // starts each newly-open dialog at `opacity: 0` via @starting-style; jest-dom's
+    // toBeVisible() treats opacity: 0 as not visible, and computed style read here
+    // (same tick as the click) still reflects that starting frame. Poll instead of
+    // asserting once — the transition (--ui-duration-slow, 300ms) clears it quickly.
+    await waitFor(() => expect(dialog).toBeVisible());
     await userEvent.click(canvas.getByRole('button', { name: 'Close dialog' }));
     await expect(dialog).not.toHaveAttribute('open');
   },
@@ -141,9 +151,19 @@ export const EscapeToClose: Story = {
   play: async ({ canvas }) => {
     await userEvent.click(canvas.getByRole('button', { name: 'Open Dialog' }));
     const dialog = canvas.getByRole('dialog');
-    await expect(dialog).toBeVisible();
+    // showModal() opens synchronously, but the fade-in transition (atl-dialog.css)
+    // starts each newly-open dialog at `opacity: 0` via @starting-style; jest-dom's
+    // toBeVisible() treats opacity: 0 as not visible, and computed style read here
+    // (same tick as the click) still reflects that starting frame. Poll instead of
+    // asserting once — the transition (--ui-duration-slow, 300ms) clears it quickly.
+    await waitFor(() => expect(dialog).toBeVisible());
+    // dispatchEvent() is synchronous, unlike userEvent.click() above (which already
+    // yields several ticks internally). The (cancel) handler's `open.set(false)`
+    // closes the dialog from atl-dialog.ts's effect(), which Angular's reactivity
+    // scheduler flushes asynchronously — the `open` attribute is still present in
+    // the same synchronous stack as dispatchEvent(), so poll rather than assert once.
     dialog.dispatchEvent(new Event('cancel', { cancelable: true }));
-    await expect(dialog).not.toHaveAttribute('open');
+    await waitFor(() => expect(dialog).not.toHaveAttribute('open'));
   },
 };
 

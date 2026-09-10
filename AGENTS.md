@@ -136,6 +136,14 @@ File key: `QMnDD8uZQPldPrlCwZZ58T`. Page conventions:
   and has gone stale in this file four times already; read `check:all` in
   `package.json`, or the derived count on the `docs/src/pages/claude-design.astro`
   diagram, if you need the number.)
+- **Every story is a test.** `npm run check:stories` (`nx run-many -t storybook-test`,
+  also the last gate in `check:all` and its own CI job) renders every story of all three
+  libraries in Chromium through `@storybook/addon-vitest`, runs each `play` function's
+  assertions, and runs axe with `parameters.a11y.test: 'error'`. A story that stops
+  rendering, a `play` that stops holding, or a new axe violation is a red build. Run one
+  framework with `nx run <fw>:storybook-test`; the three share Vitest's browser port, so
+  never run two at once. The hosted base path is set by `BUILD_STORYBOOK=1` only — never
+  key anything in `.storybook/main.ts` on `CI`, the test server is also CI (ADR-0122).
 - Local gates say nothing about the release pipeline. "All gates pass" is a
   statement about the checks that exist here, not about what reached npm — check
   CI and the registry separately (`gh run list`, `npm run check:release-drift`).

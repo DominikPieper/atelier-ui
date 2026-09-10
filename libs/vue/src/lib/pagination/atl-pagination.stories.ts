@@ -98,4 +98,14 @@ export const AllVariants: Story = {
       </div>
     `,
   }),
+  parameters: {
+    a11y: {
+      config: {
+        rules: [
+          // a11y debt (S0, 2026-09-10): landmark-unique — three demo instances share the same "Pagination" nav label — tasks/todo.md "a11y backlog"; fix, then remove.
+          { id: 'landmark-unique', enabled: false },
+        ],
+      },
+    },
+  },
 };

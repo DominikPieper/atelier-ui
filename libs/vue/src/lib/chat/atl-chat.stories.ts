@@ -34,7 +34,18 @@ const meta: Meta<typeof AtlChat> = {
     open: { control: 'boolean' },
   },
   args: { variant: 'drawer', status: 'idle', open: true },
-  parameters: { design: figmaNode('507-2953'), docs: { description: { component: metadata.purpose } } },
+  parameters: {
+    design: figmaNode('507-2953'),
+    docs: { description: { component: metadata.purpose } },
+    a11y: {
+      config: {
+        rules: [
+          // a11y debt (S0, 2026-09-10): aria-required-children — role=list carries a non-listitem empty-state child — tasks/todo.md "a11y backlog"; fix, then remove.
+          { id: 'aria-required-children', enabled: false },
+        ],
+      },
+    },
+  },
 };
 
 export default meta;

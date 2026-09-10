@@ -119,26 +119,38 @@ jobs:
         run: npx nx run-many -t test --parallel=2
 
   # ---------------------------------------------------------------------------
-  # Storybook tests — NOT WIRED. The story-level interaction suite plus the
-  # addon-a11y axe scan (216 React + 242 Vue) passes locally in ~11s per lib,
-  # but every run with `CI` set fails identically:
-  #
-  #   Error: Failed to connect to the browser session "<id>" [storybook:<fw>
-  #   (chromium)] within the timeout.   ->  "Test Files (32) / Tests no tests"
-  #
-  # Reproducible locally, without Nx and without this workflow:
-  #   cd libs/vue && CI=1 npx vitest run --config vitest.storybook.config.ts
-  # while the same command with CI unset passes. Playwright launches the
-  # headless shell and exits 0 (`DEBUG=pw:browser`), so the browser is fine —
-  # the served page never connects back to the Vitest server. Ruled out:
-  # missing browser binary (both chromium and chromium-headless-shell install
-  # on the runner), --no-sandbox / --disable-dev-shm-usage, --no-file-
-  # parallelism, --browser.connectTimeout=180000, and any CI branch in this
-  # repo's .storybook config or in vitest's own connect path.
-  #
-  # Left out rather than made non-blocking: a permanently red or yellow job
-  # asserts nothing. Tracked as B4 in tasks/todo.md with this repro.
+  # Storybook tests — the addon-vitest browser-mode suite (Chromium via
+  # Playwright) for all three libraries: every story must render, every
+  # `play` interaction assertion must hold, and axe must find no violation
+  # at `a11y.test: 'error'`. `--parallel=1` because the three libraries'
+  # dev servers all bind Vitest's browser-mode port (63315) and cannot run
+  # concurrently. The previous version of this comment blamed a browser
+  # connection timeout under `CI` on an unfound cause; the real cause was
+  # `.storybook/main.ts`'s `viteFinal` keying the Vite `base` path off `CI`
+  # instead of the deploy's own `BUILD_STORYBOOK` flag, breaking the
+  # orchestrator's root-relative asset requests — fixed there (ADR-0122).
   # ---------------------------------------------------------------------------
+  storybook-test:
+    name: Storybook tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: nrwl/nx-set-shas@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: '.node-version'
+          cache: 'npm'
+      - run: corepack enable
+      - run: npm ci
+      - run: npx playwright install chromium --with-deps
+      - name: Storybook tests affected (PR)
+        if: github.event_name == 'pull_request'
+        run: npx nx affected -t storybook-test --parallel=1
+      - name: Storybook tests all (push to main)
+        if: github.event_name != 'pull_request'
+        run: npx nx run-many -t storybook-test --parallel=1
 
   # ---------------------------------------------------------------------------
   # Build — library packaging + docs site. Validates that every project still

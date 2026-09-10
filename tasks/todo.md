@@ -86,12 +86,48 @@ Ranked; each carries why it's worth doing next rather than later.
     is green on the whole roster (S6), each retirement with its own ADR and the matching
     correction on ADR-0006/0010/0011. ADR-0096 corrected the same day (handoff document =
     thinking step whose lines have machine-checked destinations).
-  - [ ] **S0 — switch the instruments on** (next; no spec decision depends on it): find
-    why the browser-mode suite fails under `CI=1` (`.github/workflows/ci.yml:122-135`),
-    wire `nx run-many -t storybook-test` into CI, add Angular's missing `storybook-test`
-    target and `addon-a11y` preview/vitest wiring, set `parameters.a11y.test: 'error'` in
-    all three previews. Done when every story is a render + axe test in CI and a
-    deliberately broken `play` assertion turns the job red.
+  - [x] **S0 — switch the instruments on — done 2026-09-10, ADR-0122.** The `CI=1`
+    failure was `viteFinal` in the three `.storybook/main.ts` setting the hosted base
+    `/storybook-<fw>/` on `process.env.CI`, which the addon-vitest plugin also applies to
+    the test server, so the orchestrator's root-relative scripts 404'd (found by fetching
+    what the page fetches; `tasks/lessons.md` 2026-09-10). Base now keyed on
+    `BUILD_STORYBOOK` alone (`wrangler.jsonc` already sets it). Suite wired as the CI job
+    `storybook-test` and as `check:stories` at the end of `check:all`; Angular got its
+    `storybook-test` target, a11y wiring, project name and the `@analogjs/vite-plugin-angular`
+    plugin its browser config lacked (the suite had never been runnable); its dialog story
+    asserted a synchronous answer to an asynchronous state (`@starting-style` fade,
+    `cancel` → `effect()`), fixed in the story with `waitFor`. `a11y.test: 'error'` in
+    all three previews. Negative test: a broken `play` assertion named the story and
+    turned `check:stories` red; restored from a copy. Verified: Vue 242, React 216,
+    Angular 229 under `CI=1`. Real CI proof lands with the next push.
+  - [ ] **a11y backlog from S0** (measured 2026-09-10 with `a11y.test: 'error'`, before
+    exemptions: **Angular 0 · React 28 · Vue 36 failing stories**). Recorded as
+    `parameters.a11y.config.rules` exemptions at file or story scope, each rule id and
+    reason in a comment pointing here; remove the exemption when the component or story
+    is fixed. That Angular is clean where React and Vue are not is a cross-framework
+    finding in its own right. Per rule (impact) → where; the per-story list is in the
+    exemption comments themselves:
+    - [ ] `select-name` (critical) — React ×6, Vue ×9: native `<select>` without an
+      accessible name (Select stories, Settings Page, Showcase). Same defect as L1 above.
+    - [ ] `aria-progressbar-name` (serious) — React ×11, Vue ×9: `role=progressbar`
+      without `aria-label` when `label` is omitted. Same as L2 above; the spec leaves
+      `label` optional — decide whether the component requires it (React's Button-style
+      discriminated union) or every story passes one.
+    - [ ] `aria-required-children` (critical) — React ×6, Vue ×4: AtlChat's
+      `.messages-list[role="list"]` carries the empty-state icon/button or the
+      error-state `[role=alert]` as children. Component defect; Angular renders it
+      differently — compare before fixing.
+    - [ ] `label` (critical) — React ×4, Vue ×2: Table Kitchen Sink / Selectable
+      checkbox cells, React Input Disabled / Read Only.
+    - [ ] `scrollable-region-focusable` (serious) — React ×1, Vue ×5: AtlCodeBlock's
+      `.code-block-body` scroll container is not focusable. Already open above
+      (docs review); now measured in stories too.
+    - [ ] `label-title-only` (serious) — React ×1, Vue ×6: Combobox / Input / Select /
+      Textarea error-state inputs named by `title` only.
+    - [ ] `empty-table-header` (minor) — React ×2, Vue ×2: the select-all checkbox
+      header cell has no text.
+    - [ ] `landmark-unique` (moderate) — Vue ×2: Accordion panel, Pagination.
+    - [ ] `aria-allowed-attr` (critical) — Vue ×1: tooltip-wrapped menu trigger.
   - [ ] **S1 — standalone docgen spike** (the feasibility gate for S3): print `AtlButton`'s
     inputs with defaults and JSDoc for Angular (`angular-component-meta`) and Vue
     (`vue-component-meta`) without `storybook build`, in under five seconds. If it fails:

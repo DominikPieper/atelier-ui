@@ -41,10 +41,30 @@ export const WithLabel: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true, value: 'Disabled value', placeholder: '' },
+  parameters: {
+    a11y: {
+      config: {
+        rules: [
+          // a11y debt (S0, 2026-09-10): label — story omits the `label` prop, input has no accessible name — tasks/todo.md "a11y backlog"; fix, then remove.
+          { id: 'label', enabled: false },
+        ],
+      },
+    },
+  },
 };
 
 export const ReadOnly: Story = {
   args: { readOnly: true, value: 'Read-only value', placeholder: '' },
+  parameters: {
+    a11y: {
+      config: {
+        rules: [
+          // a11y debt (S0, 2026-09-10): label — story omits the `label` prop, input has no accessible name — tasks/todo.md "a11y backlog"; fix, then remove.
+          { id: 'label', enabled: false },
+        ],
+      },
+    },
+  },
 };
 
 export const Invalid: Story = {
