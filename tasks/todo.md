@@ -20,6 +20,36 @@ Ranked; each carries why it's worth doing next rather than later.
 > (figma-console reconnect, 37/37 parity DRIFT), the agreed order of next steps, the
 > scratch Claude Design project, and the eval-harness facts.
 
+> **Cross-model plausibility review, 2026-09-08:**
+> `tasks/review-plausibility-2026-09-08.md` — 30+ findings across the docs site, the
+> four skills, the newest ADRs and this file's companion handover, with what was
+> verified and what is single-reader. Nothing fixed yet; the four that change
+> behaviour are A1 (mcp.astro still shows the pre-ADR-0097 "via React" model), A2 (28
+> vs 29 components, `radio` missing from the docs catalog), A5 (the MCP playground
+> POSTs invented tool names at the live endpoint) and C1–C3 (`artboard-bridge`
+> governance ordering, the confirmation carve-out, and the Publish etag window).
+
+> **Training-content review, 2026-09-08:**
+> `tasks/schulung-content-review-2026-09-08.md` — the first pass over the *whole*
+> teaching surface (agenda, docs site, briefs, talk, the `plan/` files the curriculum
+> injects into prompts), asking whether the material teaches rather than whether it is
+> accurate. Ran without a second model (Codex quota, agy quota) — a Codex Gegenprobe is
+> ran at 00:25 on 2026-09-09 and is recorded in that file (ten new findings; **G1** is a
+> defect in the fix § B recommends — the `design-to-code` skill's handoff template sends
+> the participant's spec into the shared master that the curriculum warns them off).
+> **Second round, same day: § B, § C, G5, G8, G9 and G10 closed too** (ADR-0116 cite the
+> source not the value — `big-picture.md` is prompt context and is now on the real API,
+> with fictional props cut rather than replaced; ADR-0117 the silence was not the
+> decision — both new skills named in participant material, `claude-design.astro`'s
+> absolutes narrowed without weakening its fence argument). **G1–G4, G6 and G7 were fixed on 2026-09-09** (ADR-0113 the workshop branch, ADR-0114
+> the state axis, ADR-0115 the token ownership map); **G5, G8, G9, G10 stay open**, as do
+> § B and § C. Both § A blockers were
+> fixed the same day — the 10.6 curriculum sweep, and the `test-run` workspace-discovery
+> regression (ADR-0112, now gated by `check:vitest-discovery`). The rest is
+> open, and § B — the two new skills being invisible to the material, and the ADR-0096
+> handoff document missing from the English learner path — is the part with the most
+> leverage.
+
 - [ ] **Design-workflow skills — build the decided catalog** (decided 2026-09-07).
   Research and proposal in `plan/design-skills-blueprint.md` (§ 8 carries the six
   decisions); verbatim digests in `plan/research/design-skills-2026-09-07/`, draft of
@@ -293,12 +323,74 @@ Ranked; each carries why it's worth doing next rather than later.
     to say the branches don't exist yet and are trainer prep, not an existing asset;
     building the four `solved-toast`/`solved-tagchip`/`solved-statcard`/`solved-avatar`
     branches themselves is still open.
-  - [ ] Gate gap: nothing cross-checks `snapshot.json.uiTokens` — its only guard
-    asserts prefix counts sum to the total, which a truncated list still satisfies.
-    Cheapest close: assert every `color/*`/`spacing/*`/`radius/*` name has a matching
-    `--ui-*` family.
-  - [ ] Gate gap: the two `preflight.mjs` copies are in sync by hand only
-    (byte-identical today, re-verified, gated by nothing).
+  - [x] ~~Gate gap: nothing cross-checks `snapshot.json.uiTokens`.~~ Closed 2026-09-09:
+    `check:figma-token-names` asserts every `color/*` / `spacing/*` / `radius/*` name in
+    the snapshot has a matching `--ui-*` declaration in the canonical token file
+    (ADR-0115), and fails loudly when it finds zero relevant entries — which is what the
+    old prefix-sum guard let a truncated list slip through. One-directional by design:
+    code may carry a token before Figma catches up, which is lag, not drift. It cannot
+    prove value equality (that is `figma_check_design_parity`'s job) and is silent on the
+    other token groups.
+  - [x] ~~**Category split: Figma `Action` + `Form` vs code `Inputs`.**~~ Closed 2026-09-10,
+    ADR-0120. Figma moved: `Action` merged into `Form`, the Section renamed `Inputs`, and
+    all ten masters re-prefixed (`AtlOption` included, which the first pass missed). Every
+    `COMPONENT_SET` node id verified unchanged live, before and after — the only way this
+    change could have been expensive. `CATEGORY_ALIGNMENT_EXEMPT` is empty and
+    `check:category-alignment` passes with no exemption in use. The rule the collision
+    produced — the side carrying no downstream identity moves — is ADR-0120, with the
+    matching dated correction written into ADR-0118.
+  - [ ] **Figma: `AtlButton` has no card wrapper while the other nine Inputs masters do.**
+    Fallout of the merge above: `Action` laid its component directly on the Section, `Form`
+    wrapped each in a white card frame. Merging kept each container "as is", so Button now
+    sits bare on the tinted background — visible asymmetry in a file that is itself teaching
+    material. Cosmetic only; building the wrapper is a larger mutation than the merge was.
+    Owner decision pending.
+  - [ ] **A `figma-console-mcp@latest` instance is running unpinned** (pid seen 2026-09-10).
+    `.mcp.json` pins `1.40.0` (ADR-0110); this process was started as `@latest`, most likely
+    by following `preflight.mjs`'s old fix hint, which has since been corrected to derive the
+    pin. Nothing detects an unpinned *running* server — preflight now compares the on-disk
+    `.version` against the pin, which is a different thing. Restart it against the pin, and
+    decide whether the running-version case is worth catching too.
+  - [ ] **Gate gap: `check:category-alignment`'s selector→master heuristic has no gate of
+    its own.** It resolves a `components.ts` entry to its Figma master by taking the first
+    `Atl[A-Za-z]+` token in the `selector` field, with a hand-maintained override table for
+    the two entries whose `selector` is prose (`tooltip`, `toast`). A ninth odd selector
+    hits `[SELECTOR-UNRESOLVED]` — loud, verified, not a silent mis-map — but nothing
+    checks that the override table is complete. Also: the gate assumes one flat category
+    string per component and has no vocabulary for a master that genuinely spans two
+    Sections.
+  - [x] ~~**Category name split: `Feedback` vs `Layout`.**~~ Resolved 2026-09-09,
+    ADR-0118: two agreeing sources (Figma master names + story titles) outrank one, so
+    `components.ts` follows and now says `Feedback`. Three further hardcoded `Layout` keys
+    turned up outside the file the finding named — `ComponentDetail.tsx`'s `CATEGORY_TONE`
+    and `STORYBOOK_CATEGORY` (the latter a workaround map whose own comment cited this
+    bug as its reason for existing) and `McpExplorer.tsx`'s mock data. Held by
+    `check:category-alignment` from now on. Original finding, for the record: Storybook's own sidebar groups
+    `AtlAccordionGroup` / `AtlAlert` under `Feedback` (`storySort.order` in all three
+    `.storybook/preview.*`, and the story `title:` prefixes agree);
+    `docs/src/data/components.ts` calls the same grouping `Layout`. Two sources, two
+    names, neither obviously wrong — and `tasks/schulung-content-review-2026-09-08.md`
+    § E2 asserted `Layout` was simply "the actual name", which is now corrected in place.
+    Surfaced by the ADR-0116 work, which hit it from the `plan/figma.md` side and
+    correctly declined to pick a side from outside `docs/src/**`. Decide which name wins,
+    then make the other follow — and check whether a gate can hold it, since nothing
+    currently compares the two.
+  - [x] ~~**Gate design: `SCAFFOLD_PORT_EXEMPT` is keyed by `file:line`.**~~ Closed
+    2026-09-09, ADR-0119: re-keyed on content (`scaffoldPortKey(file, prevLine, line)`),
+    two lines of context because `workshop.astro` renders the identical citing line in
+    two preflight panels, plus a require-time duplicate-key guard — a `new Map([...])`
+    literal silently keeps only the last entry on a collision, which would have been a
+    quieter version of the same bug. Proven by reproducing the original line shift and
+    confirming the gate stays green. Remaining limit: the two-line key is a heuristic, and
+    a third occurrence sharing both lines would need a hand-picked context line (the guard
+    throws rather than dropping it silently).
+  - [x] ~~Gate gap: the two `preflight.mjs` copies are in sync by hand only.~~ **Stale
+    entry, not open work** — `tools/scripts/sync-preflight.mjs` plus
+    `check:preflight-clone-sync` landed in `b1b52d9` (2026-09-05) and are in the
+    `check:all` chain; re-verified 2026-09-09 (exit 0 clean, `[DRIFT]` naming both paths
+    when one copy is tampered with, exit 0 again after restore). The two copies are
+    required to be byte-identical: the clone-vs-scaffold branching lives inside the single
+    file's own `detectEnvironment()`, so there is no legitimate per-copy divergence.
   - [ ] Gate gap: nothing stops a new page hardcoding `workshop-<fw>` again with no
     monorepo branch beside it.
   - [ ] _(Bonus, spawned by ticking L2285 above, not one of the original 130):_

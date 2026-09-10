@@ -1,0 +1,86 @@
+# Plausibility review — docs site, skills, ADRs and task record, 2026-09-08
+
+Cross-model review of what the repo currently *claims*, run after the design-skills
+work landed. Four readers: three Sonnet research agents (skills, docs facts,
+ADR/plan coherence), Codex twice (adversarial review of the unpushed branch diff
+against `origin/main`; read-only review of `docs/src`), and a manual verification
+pass over every finding that would change what someone does next.
+
+Nothing was fixed here. Findings only, with what was verified and by whom.
+
+**Verification legend.** `verified` = re-checked in this session against the repo,
+a gate's exit code, a tool schema or the rendered page. `reported` = one reader's
+finding, plausible and specific, not independently re-checked.
+
+## A — Docs site: what the site says about the repo
+
+| # | Sev | Finding | State |
+|---|---|---|---|
+| A1 | high | `docs/src/pages/mcp.astro:87,107` — the storybook-angular and storybook-vue nodes in the diagram read `docs · props (via React) · stories`, the pre-ADR-0097 model. The caption of the same figure (`:31`) states the opposite, correctly. Only place on the site still showing the superseded architecture. | verified |
+| A2 | high | Component count disagrees with itself, visibly. `plan/design-status.md` (generated) counts **29** and lists `radio` and `radio-group` as separate rows; `/claude-design` prose says 29; `docs/src/data/components.ts:80-86` totals **28** — no `radio` entry — so the `/components` badge renders "28 of 28". `AtlRadio` is a real exported component (`libs/react/src/lib/radio/atl-radio.tsx` + spec + stories), so it has no catalog page and cannot be filtered or searched. | verified |
+| A3 | high | `docs/src/pages/claude-design.astro:348-352` — "Both `check:figma` and `check:parity` run inside `check:all`" and therefore "a Claude-Design-first component can never pass" is presented as a CI fact. `check:all` runs `check:parity:report`, which downgrades DRIFT to a warning and exits 0 (`tools/scripts/check-parity.js:36-41`, ADR-0082). Live proof today: 37/37 records DRIFT while `check:all` exits 0. The blocking claim holds for the *default* mode a human runs, not for the release gate. | verified |
+| A4 | high | `docs/src/components/ComponentDetail.tsx:42` supplies the toast symbols `AtlToastProvider, AtlToastContainer, useAtlToast`; `MultiCodeBlock` (`:116-124`) swaps only the package name per framework. React and Vue export those three; Angular exports `AtlToast, AtlToastContainer, AtlToastService` (`libs/angular/src/index.ts:53-56`). The generated Angular snippet cannot compile. `install.astro:71` has the correct form. | verified |
+| A5 | high | The MCP playground teaches tool names that do not exist. `McpExplorer.tsx` `TOOL_DEFS` are `get_component_docs, list_components, search_components, get_stories, get_theming_guide`; the hosted surface is `docs-list, docs-show, docs-show-story`. Worse, `invokeMcpTool` (`:201`) POSTs the selected name to the real endpoint `${SITE_URL}/storybook-<fw>/mcp` as `tools/call` when discovery succeeded, and the discovery result never corrects the selection. Mock fallbacks also fabricate contracts: button props are returned for every component (`:75`), and `list_components` reports `total: 24` while listing 28. No "conceptual demo" disclaimer found in `mcp.astro` or the component. | verified |
+| A6 | med | `docs/src/pages/install.astro:247` hand-types "25+ components" — a third value for a number that has a generated source. Exactly the restate-a-live-number anti-pattern `AGENTS.md` names. | reported |
+| A7 | med | Page-to-page contradictions: `storybook.astro:231` says the scaffold ships its own Storybook on port 6006, `design-to-code.astro:208` says it does not (the preset generates apps only); `schulung.astro:175` still says Angular/Vue get no local toolset, which `storybook.astro:103` and `AGENTS.md` contradict; `troubleshooting.astro:152` describes a clone `.mcp.json` with local Storybook ports while `.mcp.json:21` configures hosted endpoints. | reported |
+| A8 | med | `claude-design.astro:188,194` — "nothing downstream can read or name an artboard", "no machine-readable handoff in either direction" — is stale since `artboard-bridge` shipped Intake and Publish. The page's *point* survives (an artboard is still not a source of truth), the absolute claim does not. | reported |
+| A9 | low–med | Smaller factual overstatements Codex named: Figma and CSS token names called literally identical (`figma.astro:90`, `first-component.astro:60`, `tutorial.astro:35`, `claude-md.astro:102`) when the mapping is `color/primary` → `--ui-color-primary`; "every gate" reduced to four design-system identities (`claude-design.astro:272`, `schulung.astro:99`) when the chain includes e.g. `check:adr-refs`; `figma-token.astro:204` says no `figma_*` tool runs without the Bridge, while REST-backed tools exist per the skill's own tool map; `design-to-code.astro:57` attributes props/variants to `docs-list` instead of `docs-show`; `first-component.astro:264` uses "zero discrepancies" as a checkpoint without establishing codeSpec coverage, the limitation `parity-codespec.md:3` warns about and `schulung.astro:208` teaches correctly. | reported |
+
+## B — Docs site: design and markup
+
+| # | Sev | Finding | State |
+|---|---|---|---|
+| B1 | med | `docs/src/pages/skills/figma-workspace-architect.astro:181` — `style="margin: 0 0 {mode.subModes.length ? '0.75rem' : '0'}; …"`. Astro does not interpolate an expression inside a quoted attribute; the literal braces make the `margin` declaration invalid. Measured in the browser: computed margin `13.28px 0px` (the UA default) instead of the intended `0 0 .75rem`. Every mode card on that page is spaced wrong. | verified |
+| B2 | med | `docs/src/layouts/BaseLayout.astro:191` hardcodes `lang="en"`; the German `/schulung` page sets no override, so its content is announced to assistive tech as English. | verified |
+| B3 | med | Docs app bypasses its own token discipline: `McpExplorer.tsx:402,404,602` hardcode `#34d399` (elsewhere the codebase uses `var(--ui-color-success, #34d399)`). Codex computes ≈1.75:1 against the light sunken surface for the small status/result text, and ≈2.94:1 / 2.77:1 for the danger/primary tokens used inside the permanently dark terminal at `workshop.astro:472` — all below 4.5:1, and against the blanket assurance at `accessibility.astro:128`. Ratios not recomputed here. | hex verified, ratios reported |
+| B4 | low | Heading scale has no single source: `global.css:577` defines `.docs-section-title` at `1.25rem/700`, `SectionHead.astro:69` overrides the same class with `clamp(1.5rem,…,2rem)/800`, `prompts.astro:162` uses `.95rem`, `troubleshooting.astro:197` `1rem`, and `design-to-code.astro:145` styles an `h2` with `docs-h3`. | reported |
+| B5 | low | Focus indicator is `box-shadow`-only with outlines removed (`global.css:681`) and no forced-colours fallback, which undermines the unconditional claim at `accessibility.astro:183`. | reported |
+| B6 | low | Interaction semantics diverge for equivalent controls: `FwSwitcher.astro:30` declares tabs without `aria-selected`, panel wiring or tab-key handling, `first-component.astro:148` uses plain buttons, `ComponentDetail.tsx:129` uses `aria-pressed`. `Jargon.astro` exposes a focusable `role="button"` with no activation handler, no Escape dismissal, and `pointer-events: none` on the popup. | reported |
+| B7 | low | Callout/comparison patterns were copied and then diverged — `design-principles.astro:185` redeclares the shared treatments with different sizes, a different positive colour and raw RGBA; `install.astro:213`, `claude-md.astro:163`, `McpExplorer.tsx:411` each implement their own callout instead of `Callout.astro`. | reported |
+| B8 | low | Accessibility claims outrun the implementations: `accessibility.astro:171,197` promise universal `label`/`hint`/`error` slots and a universal `label` prop the spec does not define; `:173` says error toasts use `role="alert"` while the React toast uses `status`; `:16` promises Enter activation for Toggle (native checkbox, Space only); `patterns.astro:56` promises a DOM landmark per card section while `AtlCard` renders plain `div`s. Docs examples themselves ship controlled-but-frozen toggles (`tutorial.astro:52,97`, `PatternsPage.tsx:79`), labels without `htmlFor`/`id` (`PatternsPage.tsx:37,68,87`) and unlabelled progress bars (`ComponentDetail.tsx:297`). | reported |
+| B9 | low | `first-component.astro:238` states the kata target as raised surface + spacing 6/4; its own mock CSS (`:334`) renders ordinary surface, `1.25rem`/`.75rem` (spacing 5/3) and a different radius, so the written contract and the shown target cannot both be met. | reported |
+| B10 | note | `nx serve docs` warns: Vite 8.2.2 installed, Astro 6.4.8 expects Vite 7 ("add an override"). Not a review finding as such — an unresolved toolchain mismatch that surfaces on every dev start. | verified |
+
+Visual pass (light and dark, `/`, `/components`, `/mcp`, `/agent-skills`, `/claude-design`,
+`/skills/figma-workspace-architect`): layout, sidebar rhythm, badge/card patterns and both
+themes read as one system. The design defects above are local, not systemic.
+
+## C — Skills
+
+| # | Sev | Finding | State |
+|---|---|---|---|
+| C1 | high | **Governance ordering in `artboard-bridge`.** Preflight step 2 calls `get_claude_design_prompt(project_id)` — which returns the project's design-system guide — *before* step 3 does the governance check, and the routing table sends Intake straight to `list_files`. `references/governance.md` says the skill "does not open, read or create the project" for a client's or employer's system. Following the numbered procedure therefore reads third-party project content before the stop it is meant to hit. Fix direction: governance becomes the first decision after identification; only metadata discovery is allowed before it passes. | verified |
+| C2 | high | **The stop has a textual bypass.** `SKILL.md:181-182` (edge cases): a non-Atelier project is refused "unless the user confirms it is theirs to read". A client's own employee can truthfully give that confirmation, which routes around the DSB/ISB decision the governance section requires — while the `governance-client-design-system` fixture expects refusal. Fix direction: state that such confirmation establishes identity and access only, never the governance decision, and name what evidence resumes Intake. | verified |
+| C3 | med | **Lost-update window in Publish, and two references disagreeing about which etag to use.** P2 reads `_sheet.css`, P3 composes, P4 calls `finalize_plan`, whose `base_etags` are *current at plan time* (confirmed in the tool schema). A human edit landing between the read and the plan is therefore invisible: the fresh etag passes `if_match` and the older-derived replacement overwrites it. `references/dc-html-shape.md:85-86` already prescribes the safe rule (keep the etag you read, pass that), which contradicts `SKILL.md:146`. Fix direction: compare read-time etag against the plan's `base_etag`, and on mismatch re-read and merge before writing. | verified |
+| C4 | med | `SKILL.md:199` attributes `needs_project_grant` to `finalize_plan`. Per the tool schemas it is `write_files` *without* a `plan_token` that triggers the one-time grant; `governance.md` states it correctly. Under the flow this skill prescribes (always `finalize_plan` → `plan_token`), the documented edge case cannot fire as written. | verified |
+| C5 | high | `skills/README.md` is stale and no gate covers it: the table lists 2 of 4 skills, and both rows carry `0.1.0` against actual `atelier-design` 0.1.2 and `figma-workspace-architect` 0.2.49; the Layout block omits `CHANGELOG.md`, `evals/` and `tests/`, which the shipped skills have. Last touched 2026-05-01. | verified |
+| C6 | med | All three large skill descriptions exceed the 1024-character frontmatter limit the blueprint records as verified (`plan/design-skills-blueprint.md:194`): `figma-workspace-architect` 1404, `artboard-bridge` 1494, `design-to-code` 1056 (`atelier-design` 366 is fine). `tools/scripts/check-skill.mjs` checks the field's presence, never its length — so nothing catches this, and nothing would catch a further overrun. | verified |
+| C7 | med | `skills/figma-workspace-architect/tests/README.md` documents a fixture schema without `out-of-scope` (which `test-skill.mjs:150` requires and all 8 fixtures carry) and a scenario table listing 5 of the 8 fixtures. | reported |
+| C8 | low | One-way seam: `artboard-bridge` names `design-to-code` seven times; `design-to-code` never mentions `artboard-bridge`, Claude Design or `.dc.html`, so a Figma-first request with a Claude-Design aside has no handoff from that side. | verified (grep) |
+| C9 | low | `AGENTS.md` states the `uianatomy` server has 29 tools; 20 are exposed on the live connection. | reported |
+| C10 | note | The two new skills being absent from `/.well-known/agent-skills/` is **deliberate**, not drift: both are listed in `UNDISTRIBUTED_SKILLS` (`tools/scripts/lib/allowlists.js:746-770`) with repo-bound reasons, and `check:skill-discovery` exits 0 saying so. What is *not* a recorded decision is the human-facing silence: `agent-skills.astro` does not mention either skill and neither has a docs page, while the other two do. Editorial call, worth making explicitly. | verified |
+
+## D — ADRs, plan, task record
+
+| # | Sev | Finding | State |
+|---|---|---|---|
+| D1 | high | `tasks/handover-design-skills-2026-09-08.md:20-21` says "**Four commits unpushed**" and then lists five hashes — one of which (`20ec1a8`) is already on `origin/main`, while the genuinely unpushed `07620e4` is missing. `git log origin/main..HEAD` returns six (`4b0fcff f807ebc 7607e00 946f853 9c38317 07620e4`). A cold-pickup document getting its own push state wrong is the one error that document cannot afford. | verified |
+| D2 | med | ADR-0110 states the pin "`1.40.0` today" in its Decision (`:38`) and then, in Consequences (`:59-60`), states that the number must be read from `.mcp.json` and not from the ADR. Correct today; stale the first time the pin moves. | reported |
+| D3 | low | `libs/create-workspace/src/generators/preset/files/tools/scripts/preflight.mjs:284` still calls `figma-console-mcp@latest` while the preset it ships with pins `1.40.0` (`preset.ts:283`) — same drift class ADR-0110 exists to prevent, one file over. | reported |
+| D4 | low | Relative dates left in place: "this morning" in `tasks/lessons.md` (2026-08-27 entry) and in `tasks/schulung-review-2026-09-05.md:23`. | reported |
+
+### Held up under checking
+
+- `check:adr-refs` exit 0 — 111 ADRs, 118 sources; index statuses match frontmatter 1:1; every supersedes/correction pair has the correction written into the older record.
+- Blueprint § 8: decisions 1–6 built with evidence; decision 7 (create-workspace packaging) consistently open in all three places that mention it.
+- `npm run check:all` exit 0 at `f807ebc`, reproduced in an isolated worktree. `check:parity` exit 1 with 37 blockers, reproduced. Eval numbers (86 %/59 %, 87 %/43 %, the iteration-2 fractions), reference and fixture counts, the two Atelier project ids and the separate scratch id, all correct as quoted.
+- Skill mode headings vs `test-skill.mjs`: all three skills pass their fixtures (6 / 5 / 8 scenarios).
+- ADR citations inside the skills say what the skills claim they say; no invented MCP tool names in any of the three skills.
+- Internal link crawl over `docs/src` (109 hrefs): no broken route, no dangling anchor. No non-English prose outside `/schulung`.
+
+## Weakest points of this review
+
+- Roughly half of section A/B is single-reader (`reported`): plausible and specific, but not re-verified. The contrast ratios in B3 are Codex's arithmetic, not a measured render.
+- Several B8 items may already be tracked by the a11y audit records in `tasks/`; check there before opening work.
+- Scope was the docs site, the four skills, the newest ADRs and the task record. `libs/**`, `apps/**`, `worker/`, `workshop/`, `talk/` and `docs-old/` were not reviewed.
+- C1–C3 are text defects in a skill whose write path has never been exercised end to end (iteration 3, still blocked on the Bridge), so they are cheap to fix now and expensive to leave.

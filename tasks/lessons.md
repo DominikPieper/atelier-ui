@@ -497,3 +497,69 @@ session is finished, and ideally with an MCP config that gives its headless sess
 servers at all (`claude -p --strict-mcp-config --mcp-config <empty>` if the runner exposes
 it; otherwise from a cwd with no `.mcp.json`). Anything that spawns many `claude -p`
 sessions is a resource event for the interactive session, not a background job.
+
+## Hand the subagent the disconfirming case, not just the artefact (2026-09-08)
+
+Fixing the Storybook `test-run` regression, I had two hypotheses from my own diagnosis:
+the vitest project name (`storybook:react`) not matching the filter the addon builds
+(`"storybook:" + STORYBOOK_CONFIG_DIR`), and Vue's config never being registered in
+`vitest.config.mjs#projects`. The second was a real defect; the first was wrong, and it
+was the plausible one — it fit the error message exactly.
+
+What kept the agent off it was one sentence in the brief: Angular declares **no** `name`
+at all and fails identically, "so 'just delete the name' is a hypothesis the Angular case
+already argues against. Find out what actually happens." The agent instrumented
+`VitestManager.startVitest()` in the dist bundle instead of reasoning from the configs,
+and found the real mechanism — a walk-up that content-sniffs each candidate config file
+for the literal `storybookTest` / `@storybook/addon-vitest`. Neither of my hypotheses
+would have produced a working fix.
+
+Rule: `CLAUDE.md §2` says hand over the artefact and the question, never the conclusion.
+The refinement: when you *do* have a hypothesis, hand over the evidence that
+**disconfirms** it rather than the hypothesis itself. Withholding my framing was not
+enough here — the wrong answer was reachable from the error message alone, and only the
+counter-example closed that path. Same move on the report side: require the fix be proven
+by running the tool, not by argument, and the "no projects matched" class of bug tends to
+live in the resolver, not in the config it resolves.
+
+## A review's own recommendations are the part nobody reviews (2026-09-09)
+
+The 2026-09-08 content review found that the `design-to-code` skill was invisible to the
+teaching material and recommended, in two places, wiring Day 2 Block 01 at
+`skills/design-to-code/references/handoff-document.md`. Four framed readers and my own
+verification pass all treated that artefact as the *fix* and never opened it against the
+curriculum. The unframed Codex seat did, the next night, and found its template says
+"spec block in `libs/spec/src/index.ts`" — precisely the placement `schulung.astro:178`
+spends a bullet warning participants off, and which the same curriculum documents as
+costing three extra red gates.
+
+The finding sections of that review were checked from four angles. The recommendation
+section was checked from none — findings get verified because they are claims about the
+repo, recommendations slip through because they are claims about the future.
+
+Rule: a recommendation that says "point A at B" is a claim that B is fit for A, and it
+needs the same verification as a finding — open B and read it as the reader you are about
+to send there. When a second-model seat is available, hand it the recommendations too, not
+only the artefact the findings came from. Cheapest version: before writing "wire X to Y",
+grep Y for the instruction X forbids.
+
+## A repo-wide gate plus concurrent agents produces a misattributed failure (2026-09-09)
+
+I ran three agents in parallel on disjoint file sets and told each to run its own targeted
+gates. One reported `check:docs` exit 1 with `[PORT-6006]` findings in two files it did not
+own, checked `git show HEAD` to see whether it had caused them, found they were not in the
+committed state, and concluded they "pre-date this session". They did not: a concurrent
+agent was mid-edit on exactly those two files. Minutes later the same gate exited 0.
+
+The agent's reasoning was sound and its evidence was real. The flaw was mine: file
+ownership was disjoint, but `check:docs` scans all of `docs/src/pages`, so its *inputs*
+were not. A gate that reads a directory sees every agent's half-finished state, and
+`git show HEAD` cannot distinguish "someone else's uncommitted edit" from "pre-existing",
+because both are absent from HEAD.
+
+Rule: when splitting work across concurrent agents, partition by what the *gates* read,
+not only by what the agents write. Where that is impossible — a repo-wide gate — either
+have the agents run only gates whose inputs they own, or tell them that a failure in a
+file they do not own is probably a concurrent edit and must be reported, not diagnosed.
+Reserve the full chain for the orchestrator, after the last agent has finished; a green
+run mid-flight proves nothing, and a red one accuses the wrong file.
