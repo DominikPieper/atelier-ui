@@ -6,6 +6,14 @@ one-framework team can take home, with every promise it makes backed by a check 
 that turns out too heavy, the smaller shape we fall back to. Nothing here is built. The
 decomposition and the open questions at the end are what the owner is asked to confirm._
 
+> **Amended the same day by `tasks/spec-rethink-2026-09-10.md`.** That document starts
+> from the tools rather than from the existing spec and arrives at a thinner shape: no
+> contract document; the stories are the spec, with a micro-contract block in the story
+> meta. It supersedes § 2 here and changes S2 and S3 (see its § 3d); S0 (wire the idle
+> browser-mode suite into CI) is added ahead of S1. The two-source model, the promises
+> table, the complexity budget and S1/S4/S5/S6 stand. Shape T below remains the additive
+> fallback. Read that document first; this one is kept for the reasoning it carries.
+
 ## 1. What the workflow has to promise
 
 Written as claims a customer would repeat, each with the check that would make it true.

@@ -76,11 +76,30 @@ Ranked; each carries why it's worth doing next rather than later.
     `check:docs-layout`, `check:llms` exit 0. The scaffold half of A (contract example,
     handoff template) is **not** done here — its shape is the workflow decision, so it
     moved to S2/S4 of the plan.
-  - [ ] **Confirm the workflow plan** — `tasks/spec-workflow-plan-2026-09-10.md` § 7 has
-    six owner questions (contract file location, check distribution, S6 timing, scaffold
-    test runner, ADR-0096 stance on `[b:id]` markers, `schulung.astro:84` wording). Then
-    S1 (docgen-without-Storybook spike) is the first step and the feasibility gate for the
-    rest; § 4 names the fallback if it fails.
+  - [ ] **Decide the target shape** — `tasks/spec-rethink-2026-09-10.md` (same day,
+    later): the greenfield pass the owner asked for. Inventories what a machine can test
+    without massive effort (26 rows; 19 need no authored artefact), what figma-console-mcp
+    1.40 and Storybook 10.6 extract and verify, and derives the thinnest spec: **S —
+    stories are the spec** (component JSDoc + one story per variant/state with a Figma link
+    and `play` + a micro-contract block in the story meta for master id, intentional
+    mismatches and parity probes; everything else derived from the manifest, the rendered
+    story and the snapshot). Codex converged on the same shape independently. It amends
+    the morning plan's § 2 and steps S2/S3 (no contract document; T stays as the additive
+    fallback) and adds **S0: wire the idle browser-mode suite into CI and set
+    `a11y.test: 'error'`** — the largest verification gain available, needs no spec.
+    Five decision points in its § 5; S1 (standalone docgen spike) stays the feasibility gate.
+  - [ ] **Side findings from the rethink, each independent of the shape decision:**
+    - [ ] `tools/scripts/figma-snapshot.mjs:101` starts `figma-console-mcp@latest` while
+      `.mcp.json:35` pins `1.40.0` (ADR-0110); `tools/figma/snapshot.json` records
+      `serverVersion: null`. Pin the generator to the same version and write the version
+      into `meta` (Codex finding, verified 2026-09-10).
+    - [ ] The Storybook browser-mode suite (interaction + axe, ~11 s per lib) is `# NOT
+      WIRED` in `.github/workflows/ci.yml:122-135` because it fails under `CI=1` for an
+      unfound reason; `parameters.a11y.test` is `'todo'` (React, Vue) and unset (Angular),
+      so axe gates nothing today.
+    - [ ] `AGENTS.md` names an addon-mcp tool `display-review`; the wire name is
+      `review-create` (`node_modules/@storybook/addon-mcp/dist/preset.js:193`,
+      `toMcpToolName("review.create")`).
   - [ ] Review Option B (derive `index.ts` unions from a contract record) stays open as
     plan S6(c) — after one cohort has used S2–S5, not before.
   - [ ] Side finding (Codex, verified): Vue generator writes `atl-<fileName>.vue` while
