@@ -95,6 +95,18 @@ Ranked; each carries why it's worth doing next rather than later.
         inside the 2px tolerance, so it has never flipped a finding and nothing noticed. Find
         out whether it is layout timing, font loading or a measurement race before anyone
         narrows the tolerances or reads a 1px paint finding as real.
+        **Sharpened 2026-09-11 after writing the above:** the risk is a nondeterministically RED
+        gate, not a cosmetic wobble. ADR-0080 §2 puts a finding's own measured text into its
+        identity, and these AtlAlert heights are _recorded_ findings — so a run measuring 56px
+        where the baseline says 55px yields an unrecorded finding and a stale one at once, two
+        blockers on a gate that was green the run before. Then measured: two consecutive unscoped
+        runs, both exit 0, neither producing an AtlAlert height finding. The drift has been seen
+        only in `--update-baseline` runs and does not reproduce on demand. Not reproducible, not
+        explained, not currently firing — the worst of the three states to leave a gate in. Find
+        the mechanism (layout timing, font loading, a measurement race); do not widen a tolerance
+        around it. Clearing it by hand-editing the baseline was done once today, under review, for
+        five entries known to be this noise; the file's own header forbids hand edits and that was
+        a deliberate exception, not a precedent.
   - [ ] **The ADR-0124 `[ROSTER]` floor is cross-framework.** It fires when a component has
         zero measurements in _every_ framework, so one framework silently losing all coverage of
         a component — someone breaks `meta.component` in just the Vue story — is caught by

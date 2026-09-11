@@ -1,8 +1,8 @@
 {
   "meta": {
     "note": "Per-finding RATCHET for check:paint (ADR-0121 Decision 4 stage 2; convention reused from ADR-0079/ADR-0066). An entry recorded here means: this story, in this state, paints or sizes one field DIFFERENTLY from the master's rootPaint row — background-color or border-color against the resolved value of the Figma-bound token ([PAINT]); height, padding, gap, radius or border-width against the row's own numbers ([GEOMETRY]); font-size or line-height against the same row ([TYPE]); or a story whose resolved args produced no matching rootPaint row at all ([NO-VARIANT]). Fix the code or the master and re-record — never delete the entry by hand — because a recorded defect that just disappears from the file is indistinguishable from one that was fixed; the gate needs to see it happen. The gate PASSES while a story's findings are EXACTLY the ones recorded here, FAILS when one APPEARS that is not recorded, and FAILS when a recorded one DISAPPEARS without this file being updated — an improvement nobody records can silently reverse (that disappearance is reported as [STALE-BASELINE], and a --component/--fw run only evaluates staleness over the entries in scope for that run, so a partial run cannot report the rest of the roster as stale). This is NOT an allowlist: it does not excuse a defect, it dates it.\n\n[NOT-RENDERED] and [NO-PROBE] are NOT recorded here, on purpose — neither is a paint/geometry/type comparison a fix could even target. [NOT-RENDERED] means the probe element exists but is not drawn in this lifecycle state (display:none, zero width/height, or a <dialog> without [open] — a closed AtlDialog/AtlDrawer/AtlChat popover, most often): there is nothing painted to compare yet, so measuring it would compare Figma to a box that is not there. [NO-PROBE] means this gate does not know which descendant is the painted layer for this component: either no contract probe is declared and neither the '.atl-<kebab>' class nor the bare custom element tag was found under #storybook-root, or a probe IS declared and its selector did not resolve for this framework (see AtlSelect's contract for a worked example — Angular's button trigger shares no selector with React/Vue's native <select>). Both print as a warning on every run rather than failing the gate, because recording either would either freeze a bug that just needs a probe, or a story lifecycle state that changes on its own — see the header comment in tools/scripts/check-paint.mjs (\"NOT RENDERED\" / \"THE PROBE ELEMENT\") for the full reasoning. To add a probe: add `probes: [{ part, selector, reason }]` to the component's `.contract.ts` (libs/spec/src/contracts/); `selector` is relative to the resolved component root (the '.atl-<kebab>' element, or the bare custom-element tag on Angular's :host-only components) — verify it with `--component <Selector> --report`, which prints the matched tag+class for the component's Default story in every framework the probe is expected to cover.\n\nUpdate with `node tools/scripts/check-paint.mjs --update-baseline` — never by hand. See plan/adr/0121-the-stories-are-the-spec.md (Decision 4), plan/adr/0079-type-does-not-need-the-painted-box.md and plan/adr/0066-a-warning-nobody-can-clear.md.",
-    "generatedAt": "2026-09-10T19:47:05.041Z",
-    "gitSha": "41bc12b2682ef35d4446bd04e4282032873b2f0e"
+    "generatedAt": "2026-09-11T17:40:22.349Z",
+    "gitSha": "4c98f6d09f0d09c8acaa00073eb4b0e8bf1f0653"
   },
   "findings": [
     {
@@ -1304,6 +1304,16 @@
       "state": "default",
       "field": "height",
       "detail": "rendered 258px, figma 205px"
+    },
+    {
+      "key": "angular|AtlDrawer|PreOpened|default|height",
+      "tag": "GEOMETRY",
+      "fw": "angular",
+      "component": "AtlDrawer",
+      "story": "PreOpened",
+      "state": "default",
+      "field": "height",
+      "detail": "rendered 700px, figma 480px"
     },
     {
       "key": "angular|AtlInput|Default|default|height",

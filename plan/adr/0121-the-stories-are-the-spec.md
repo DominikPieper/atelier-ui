@@ -184,6 +184,23 @@ Alternatives considered:
   under use. The claim that S is _thinner_ rests on counting authored artefacts, not yet
   on a timed cohort.
 
+**Corrected 2026-09-11 (the `play` count).** Two numbers in this record are wrong, and they
+are the same number: the Context's "62 of 68 story files that carry a `play` carry no
+assertion" and the Consequences' "today's 62 assertion-free `play` functions are the measure
+of the distance". Both come from an unanchored grep for `play:`, which also matches
+**`display:`** — 68 story files match it, and 62 of those match only through `display:` in a
+CSS-bearing line. Measured with an anchored pattern on 2026-09-11: **6 of 91 story files
+carry a `play`, 23 in total, and all 23 carry assertions.** There is no assertion-free-`play`
+population. There is a missing-`play` population, it is 85 story files rather than 62, and
+the remedy is writing behaviour tests rather than adding `expect` to tests that already run.
+The Decision is unaffected — a `play` per behaviour line is still what Decision 2 asks for.
+What changes is the stated distance to it, and one consequence this record could not have
+drawn from a wrong number: `check:paint` measures a story at mount and never waits for its
+`play` (measured 2026-09-11; see ADR-0128's context), which is harmless today only because
+none of the 319 stories it measures carries a `play`. Giving stories `play` functions makes
+that wait load-bearing, so the two are coupled, and the gate has to learn to wait before the
+stories arrive rather than after.
+
 **Verified 2026-09-10 (S1).** The first assumption held: docgen without a Storybook build
 runs through the framework workers Storybook itself uses — Angular 3.7 s cold / 83 ms warm,
 Vue 3.5 s / 93 ms, React 0.56 s / 40 ms via `react-docgen` directly — with output identical

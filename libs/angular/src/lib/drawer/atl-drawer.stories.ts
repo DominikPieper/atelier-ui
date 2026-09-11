@@ -85,6 +85,23 @@ export const Default: Story = {
   parameters: { design: figmaNode('421-342') },
 };
 
+export const PreOpened: Story = {
+  name: 'Pre-opened (no trigger)',
+  render: (args) => ({
+    props: { ...args, open: signal(true) },
+    moduleMetadata: { imports: ALL_IMPORTS },
+    template: `
+      <atl-drawer [(open)]="open" [position]="position" [size]="size">
+        <atl-drawer-header>Pre-opened Drawer</atl-drawer-header>
+        <atl-drawer-content><p>This drawer is open on load.</p></atl-drawer-content>
+        <atl-drawer-footer>
+          <atl-button variant="primary" (click)="open.set(false)">Close</atl-button>
+        </atl-drawer-footer>
+      </atl-drawer>
+    `,
+  }),
+};
+
 export const Left: Story = {
   render: (args) => ({
     props: { ...args, open: signal(false) },

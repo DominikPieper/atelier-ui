@@ -535,11 +535,25 @@ const PAINT_ROSTER_EXEMPT = new Map([
     {
       kind: 'gap',
       why:
-        'every Drawer/Popup/Inline story (all three frameworks) renders the chat surface CLOSED by default — ' +
-        '`[NOT-RENDERED]` fires for all 12 react/vue stories and all 12 angular ones (zero width) — so the ' +
-        'probe element exists but is never drawn. Needs either an open-by-default story variant or a ' +
-        "different measurement approach for a closed-by-default overlay; not a fix this gate's contract alone " +
-        'can make.',
+        '`[NOT-RENDERED]` (zero width) fires for all 12 stories in all three frameworks, but NOT because the ' +
+        'stories render closed — every one of the 36 sets `open: true` explicitly in its own `args` ' +
+        '(verified 2026-09-11). The cause is the same wrong-element shape as AtlDrawer: `.atl-chat` is ' +
+        'deliberately `display: contents` in all three frameworks (so the wrapper never affects the layout ' +
+        'it sits in), which makes its own box 0×0 regardless of open state — the painted panel is the ' +
+        'shared `.surface` descendant (`.drawer-surface`/`.popup-surface`/`.inline-surface`). A declared ' +
+        'probe on `.surface` does fix the wrong-element symptom (verified), but it also surfaces 24 GEOMETRY ' +
+        'findings per framework (height + border-radius) that compare three structurally different panels ' +
+        '(a 448-wide drawer, a 380×560 popup, a ~720×540 inline surface) against one identical Figma row ' +
+        "(height: 720, radius: 10) shared by all three variants — almost certainly the master's per-variant " +
+        'frame being a full mockup canvas rather than a crop of the panel (its own description already notes ' +
+        'leftover mockup frames from an earlier merge), not real code drift. Recording those would be ' +
+        'recording noise, so the probe is deliberately NOT declared in chat.contract.ts pending a Figma-side ' +
+        "decision. Separately (found and fixed 2026-09-11): Vue's four drawer-variant stories were ALSO " +
+        'blocked by a real product bug, unrelated to this gate — atl-chat.vue never called showModal() for ' +
+        'an initial open=true prop (only a non-immediate post-flush watcher, no onMounted, unlike ' +
+        "atl-drawer.vue's own working pattern); fixed, and pinned with a spec. Angular and React do not have " +
+        'that bug (both already call showModal() on initial mount, verified). None of this is fixable by a ' +
+        'story change alone.',
     },
   ],
   [
@@ -550,17 +564,6 @@ const PAINT_ROSTER_EXEMPT = new Map([
         "has its own single-instance stories, but every story's resolved args produce a variant key with no " +
         'matching `rootPaint` row (NO-VARIANT ×6, verified via `--component AtlCodeBlock --fw react --report` ' +
         '— already recorded in the baseline). Same shape as AtlBreadcrumbs above.',
-    },
-  ],
-  [
-    'AtlDrawer',
-    {
-      kind: 'gap',
-      why:
-        'every story (all three frameworks) reports `[NO-PROBE]`: "no contract probe, no .atl-drawer ' +
-        'element and no bare atl-drawer tag under #storybook-root" — the drawer.contract.ts declares no ' +
-        '`probes` entry, so nothing under #storybook-root is ever identified as the painted layer. Needs a ' +
-        "declared probe (same fix AtlSelect already has), which is a contract change outside this file's scope.",
     },
   ],
   [

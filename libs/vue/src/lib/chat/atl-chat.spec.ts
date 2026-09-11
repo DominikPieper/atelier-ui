@@ -101,6 +101,16 @@ describe('AtlChat', () => {
     expect(document.querySelector('dialog')).toHaveAttribute('open');
   });
 
+  it('drawer variant opens the dialog immediately when open starts true', () => {
+    // Regression: the `open` watcher alone only fires on a CHANGE — a component
+    // mounted with open=true already (no prior render() to transition from)
+    // must also call showModal() on mount, the way AtlDrawer's onMounted does.
+    render(ChatFixture, {
+      props: { variant: 'drawer', status: 'idle', open: true },
+    });
+    expect(document.querySelector('dialog')).toHaveAttribute('open');
+  });
+
   describe('AtlChatMessage', () => {
     it.each(['user', 'assistant', 'system'] as const)(
       'applies role-%s class',

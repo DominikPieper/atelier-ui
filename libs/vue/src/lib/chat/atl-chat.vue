@@ -22,6 +22,7 @@ export interface AtlChatProps {
 import {
   computed,
   nextTick,
+  onMounted,
   provide,
   ref,
   toRef,
@@ -60,6 +61,15 @@ provide(AtlChatKey, {
   status: statusRef,
   close,
   toggle,
+});
+
+// Mirrors atl-drawer.vue: the `open` watch below only fires on a CHANGE, so a
+// chat mounted with open=true already (no prior render to transition from —
+// e.g. every drawer-variant story) needs its own showModal() on mount too.
+onMounted(() => {
+  if (props.variant === 'drawer' && props.open && dialogRef.value) {
+    dialogRef.value.showModal();
+  }
 });
 
 watch(

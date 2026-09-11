@@ -130,6 +130,24 @@ Alternatives considered:
     finding, which is why nothing noticed until now. The skip ratchet is keyed on structural
     facts and cannot inherit it, but any future tightening of the paint tolerances rests on
     this being understood first.
+    **Refined 2026-09-11 (the `AtlAlert` drift is sharper than this record says).** The
+    Consequences above call the 55px → 56px drift harmless because it stays "inside the 2px
+    tolerance so it never flips a finding". That is true of the _comparison_ and false of the
+    _record_. ADR-0080 §2 puts the finding's own measured text into its identity, and these
+    AtlAlert heights are recorded findings — so a run that measures 56px where the baseline says
+    55px produces an unrecorded finding and a stale one at once: two blockers, on a gate that was
+    green the run before. The risk is therefore a nondeterministically red `check:paint`, not a
+    cosmetic wobble.
+
+Measured after writing that: two consecutive unscoped runs, both exit 0, neither producing an
+AtlAlert height finding. The drift has so far been seen only in `--update-baseline` runs, and
+it does not reproduce on demand. So it is not reproducible, not explained, and not currently
+firing — which is the worst of the three states to leave a gate in, and the reason the
+`tasks/todo.md` item asks for the mechanism rather than a tolerance change. One further note
+for whoever picks it up: clearing it by hand-editing the baseline is what was done once today,
+under review, for five entries known to be this noise — and the file's own header forbids hand
+edits for good reason. That was a deliberate exception, not a precedent.
+
 - **Verified as of this record:** the counts and their per-component breakdown, from a real
   run; the ratchet blocking on a rise, on a drop, and on a substitution that leaves the count
   unchanged; `check:paint` exit 0 with the baseline seeded. **Assumed:** that the story-level
