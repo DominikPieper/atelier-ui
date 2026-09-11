@@ -645,3 +645,29 @@ toolset) and the question "run it; where do you stop?", not the diff and "is thi
 correct?". The same pass also caught the Vue generator's broken import a second time and a
 `--file` flag that records a key without checking the Bridge has that file open — both
 "correct" sentences describing code that would fail the person following them.
+
+## The engine you did not run is the one that differs (2026-09-11)
+
+The scaffold's `check:contracts` was proven green on one framework (React e2e, 176 s) and
+the other two were left as a recorded follow-up: "Angular and Vue scaffolds not run through
+a real install — run `E2E_FRAMEWORKS=angular` and `vue` once." CI ran them on the first
+push. Vue was green. Angular failed with five errors on the example story: its docgen
+engine (`angular-component-meta`, a real TypeScript program) follows `@atelier-ui/angular`
+into the installed package's `.d.ts` and returns a component with zero inputs, where
+React's resolver and Vue's worker had returned nothing at all. The promise "local docgen
+cannot read into `node_modules`, so only `[NO-STORY-META]` is reported" was true twice by
+accident and false once — and the generated `CLAUDE.md` stated it as a rule.
+
+Two rules:
+
+- **A promise implemented by three engines is proven on each engine, not on one.** Where
+  the same behaviour is expected from `react-docgen`, `vue-component-meta` and
+  `angular-component-meta`, one green run says nothing about the other two — their
+  failure modes are not correlated. The fix that holds is the one that takes the decision
+  away from the engines: the check now skips a component whose import resolves into an
+  installed package *before* calling any docgen, so the promise is true by construction.
+- **A "not run yet" follow-up on a shipped artefact is a known-red, not a follow-up.** The
+  todo item named exactly the run that would fail. When the run costs three minutes and the
+  artefact ships to attendees, run it before the push or gate it in CI — do not record it
+  and move on. Same shape as the 2026-09-10 "fixture proves the wiring" lesson, one step
+  earlier: there the green was read too generously; here the missing run was.

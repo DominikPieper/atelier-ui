@@ -450,14 +450,42 @@ function testFramework(framework, registryUrl, npmrcPath) {
     run(`npx nx build-storybook workshop-${framework} --skip-nx-cache`, { cwd: wsPath });
     ok(`build-storybook workshop-${framework} green`);
 
-    // The contract loop (ADR-0121 S4): the example AtlButton contract, the
-    // projected tools/figma/snapshot.json, and the example story must be
-    // consistent with each other in a REAL scaffolded workspace — where, unlike
-    // the monorepo, the story imports the published @atelier-ui/<fw> package
-    // from node_modules rather than a sibling source file. Nothing else in the
-    // repo proves that combination actually works.
-    run(`npm run check:contracts`, { cwd: wsPath });
-    ok('check:contracts green (example AtlButton contract + projected snapshot + example story)');
+    // The contract loop (ADR-0121 S4): this proves the SHIPPED check-contracts.mjs
+    // + lib/docgen.mjs run against a REAL scaffolded workspace, through the
+    // framework's own Storybook docgen worker — where, unlike the monorepo, the
+    // story imports the published @atelier-ui/<fw> package from node_modules
+    // rather than a sibling source file. That import is exactly the
+    // package-import skip docgen.mjs's findExternalPackageDir exists for, and
+    // this is where we prove the skip actually holds in a real install: the
+    // example AtlButton component is classed as external and excluded before
+    // any contract/snapshot/story comparison runs — which makes the gate
+    // vacuous by design for AtlButton, not a proof the contract stays wired.
+    // The pair it DOES still compare — the example's contract.ts and the
+    // projected tools/figma/snapshot.json entry — produces exactly the one
+    // expected warning: [NO-STORY-META], because the only story's component
+    // was just skipped as external, so nothing reaches the contract. Making
+    // the example itself non-vacuous needs a
+    // `--manifest` follow-up — tracked in tasks/todo.md.
+    let contractsOutput;
+    try {
+      contractsOutput = runCapture(`npm run check:contracts`, { cwd: wsPath });
+    } catch (e) {
+      if (e.stdout) console.log(e.stdout);
+      if (e.stderr) console.error(e.stderr);
+      throw e;
+    }
+    console.log(contractsOutput);
+    const assertContains = (needle) => {
+      if (!contractsOutput.includes(needle)) {
+        throw new Error(
+          `check:contracts output missing ${JSON.stringify(needle)} — see the captured output above`,
+        );
+      }
+    };
+    assertContains('(no-component: 0, external: 1)');
+    assertContains('[NO-STORY-META]');
+    assertContains('total: 0 error(s)');
+    ok('check:contracts exits 0 on the example — vacuous by design: the library AtlButton is skipped as external (external: 1), only [NO-STORY-META] remains');
 
     // Browser-mode Storybook tests (owner correction 2026-09-10 to ADR-0123 —
     // @storybook/addon-vitest ships with the scaffold after all). Chromium is

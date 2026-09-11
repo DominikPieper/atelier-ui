@@ -769,6 +769,9 @@ offline — no browser, no Storybook build — and reports one line per finding:
 - \`[COVERAGE]\` / \`[COVERAGE-BOOL]\` — a variant value or boolean is never rendered by a story
 - \`[FIGMA-ONLY]\` / \`[STALE-EXEMPTION]\` / \`[UNMIRRORED]\` — an exemption is missing, stale, or unexplained
 - \`[NO-STORY-META]\` / \`[NO-MASTER]\` — a contract with nothing yet to check it against
+- \`[CONTRACT-IMPORT]\` — a story meta doesn't import its component's contract and set
+  \`contract\` in \`parameters\` (a warning here, until this workspace ships a docs block
+  that renders it)
 
 Refresh \`tools/figma/snapshot.json\` from the real master with the Figma Desktop Bridge
 connected: edit the \`--file\` placeholder in \`package.json\`'s \`figma:snapshot\` script to
@@ -778,8 +781,9 @@ your own Figma file key, then run \`npm run figma:snapshot\`.
 rendered headless in Chromium via \`@storybook/addon-vitest\`, with axe) proves rendering
 and accessibility. It does so for components whose source lives in this workspace. For
 components imported from \`@atelier-ui/${primaryFramework}\` — the example \`AtlButton\`
-included — local docgen cannot read into \`node_modules\`, so the check has nothing to
-compare and reports only \`[NO-STORY-META]\`; their prop tables come from the hosted
+included — the check recognises that the import resolves into \`node_modules\` and skips
+docgen for it — the same rule in every framework — so it has nothing to compare and
+reports only \`[NO-STORY-META]\`; their prop tables come from the hosted
 Storybook MCP (\`docs-show\`) instead. A green \`check:contracts\` on the example story
 therefore proves the wiring, not the example. Run \`npx playwright install chromium\`
 once after \`npm install\` — see Storybook below.

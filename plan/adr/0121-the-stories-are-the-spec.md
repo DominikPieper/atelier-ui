@@ -287,6 +287,29 @@ files under the preset's `files/` must carry the `.template` suffix or the packa
 gate), and `@vitest/browser-playwright` has a bare `playwright` peer this repo's root
 never named — the scaffold pins it at `@playwright/test`'s range.
 
+**Corrected 2026-09-11 (S4, "what the proof does not say").** The paragraph above
+explains the example's green as "local docgen cannot follow a bare specifier into
+`node_modules`". That was true of React's resolver and of Vue's worker, and false of
+Angular's: `angular-component-meta` runs a real TypeScript program, follows
+`@atelier-ui/angular` into the installed package's `.d.ts`, and returns a nameful payload
+with zero inputs — which `check:contracts` read as a workspace component with no props.
+The first Angular scaffold ever run through the CLI e2e (CI run 34562307047, the push of
+2026-09-11) failed with five errors on the example. Since 2026-09-11 the check decides this
+itself: a story whose `component` import is a bare specifier that resolves to an installed
+package (a `node_modules/<pkg>` walk up from the story file, real path outside the
+workspace — a workspace symlink is not external) is skipped before any docgen call, in
+every framework, and counted as `external` in the summary; `[NO-STORY-META]` is then the
+only finding, by construction rather than by each engine's accident. The skip keys on
+csf-tools' `_rawComponentPath`, which exists only for a directly imported identifier — a
+namespace or aliased component bypasses it; the templates use direct imports. Two scaffold
+facts came with it: `[CONTRACT-IMPORT]` accepts a relative import of the contracts directory
+(a scaffold has no `@atelier-ui/spec` alias, so the alias is accepted only in this repo) and
+is a warning where no `docs-block.ts` ships beside the contracts — the scaffold does not
+ship the block yet, so an attendee's unwired story has nothing to render into. That
+severity switch is keyed on the file's presence, a proxy for the preview's wiring, not a
+check of it; the honest completion is to ship the block or make the severity an explicit
+config field (`tasks/todo.md`, S4 follow-ups). The `--manifest` follow-up stands.
+
 **S5a done 2026-09-10 — the skill and the curriculum teach the loop.** `design-to-code`
 Build step 3 is "Contract": in the repo case two artefacts, both required until S6 retires
 the legacy gates — the `Atl*Spec` block and metadata module as the cross-framework join

@@ -214,20 +214,51 @@ Ranked; each carries why it's worth doing next rather than later.
     verdaccio incl. `check:contracts` and `check:stories`; `nx test create-workspace` 78.
   - [ ] **S4 follow-ups** (facts the proof surfaced, not smoothed over):
     - [ ] `check:contracts` is **vacuously green on the scaffold's example**: `AtlButton`
-      is imported from `@atelier-ui/<fw>` in `node_modules`, where local docgen cannot
-      follow a bare specifier → no component, only `[NO-STORY-META]`. Real work happens on
-      the attendee's own components. Give the check a `--manifest <components.json|url>`
+      is imported from `@atelier-ui/<fw>` in `node_modules`. Since 2026-09-11 the check
+      skips such a component itself, before any docgen call, in every framework (summary
+      `external: N`) — until then only React's resolver and Vue's worker happened to return
+      nothing, while Angular's followed the package's `.d.ts` and returned a zero-prop
+      payload (first Angular e2e, CI run 34562307047, red). Only `[NO-STORY-META]`
+      remains. Real work happens on the attendee's own components. Give the check a `--manifest <components.json|url>`
       input so library components are compared through the hosted Storybook manifest
       (ADR-0097) — then the example proves something. CLAUDE.md says so today.
-    - [ ] Angular and Vue scaffolds not run through a real install (one framework per e2e
-      run, ADR-0123 precedent); their `vitest.config.ts`/`main.ts` templates are verified
-      by build, lint and unit test only. Run `E2E_FRAMEWORKS=angular` and `vue` once.
+    - [x] Angular and Vue scaffolds not run through a real install — **CI ran both on
+      2026-09-11** (run 34562307047): Vue green; Angular red on `check:contracts` (the
+      item above). Fixed the same day; `E2E_FRAMEWORKS=angular` locally green in 3 m 15 s
+      with `external: 1` and only `[NO-STORY-META]`. Lesson recorded (`tasks/lessons.md`,
+      2026-09-11): a "not run" follow-up on a shipped artefact is a known-red, not a follow-up.
+    - [ ] The scaffold ships no `docs-block.ts`, so `[CONTRACT-IMPORT]` is a **warning**
+      there (severity keyed on that file's presence beside the contracts — a proxy for the
+      preview's wiring, not a check of it) and an attendee's `parameters.contract` renders
+      nothing. Decide: ship the block into `<app>/src/contracts/` + `docs.page` in the
+      scaffold preview (needs `react` resolvable in the Angular/Vue scaffolds via
+      addon-docs), or make the severity an explicit `contracts.config.json` field.
+    - [ ] `findExternalPackageDir` keys on `_rawComponentPath`, which csf-tools sets only
+      for a directly imported identifier; `import * as UI` + `component: UI.AtlButton` or
+      `const C = AtlButton` bypass the skip (Codex, 2026-09-11). The templates use direct
+      imports; note, not fix.
     - [ ] `figma-snapshot-contracts.mjs` verified in `--dry-run` only — the connect path
       needs the Desktop Bridge. First Bridge session: run it against the Atelier file and
       diff its AtlButton entry with `tools/figma/snapshot.json`'s.
     - [ ] The scaffold's `figma:snapshot` script carries a `<YOUR_FIGMA_FILE_KEY>`
       placeholder because the preset has only a boolean `figmaMcp` option. Consider a
       `figmaFile` option so the workshop duplicate's key lands at scaffold time.
+  - [ ] **CI after the 2026-09-11 push (`bd28fe0`, run 34562307047 / publish 34562307018).**
+    Storybook tests, Build, Test, Lint, Release drift green on the runner; CLI e2e red
+    (Angular `check:contracts`, fixed above). **Open:** `npm run check:all` on both the
+    Sync checks job and the Publish "Verify (release gate)" job ran > 60 min (started
+    04:30 UTC) against 5 min for the previous green run (34439209706); no per-gate log is
+    readable while the step runs. Gates new to the runner since that run: `check:contracts`,
+    `check:manifest-parity` (exits cleanly locally, watchdog-tested), `check:scaffold-snapshot`,
+    `check:paint`, `check:stories`. Prime suspect `check:paint`: per story a 15 s
+    `waitForFunction` and a 30 s `hover()` actionability wait, both swallowed — hundreds
+    of stories × either = hours, red only at the end. Neither job has `timeout-minutes`.
+    Read the log when the step ends; then either add explicit short action timeouts +
+    a per-gate duration line, or gate the browser gates on a `timeout-minutes`.
+    Local note from the same day: `cli.e2e.mjs` preserves its scratch (`$TMPDIR/atelier-e2e-*`,
+    ~0.5–1 GB each incl. the verdaccio storage) on failure or kill; two memory-killed runs
+    plus one kept run filled the disk (`ENOSPC` in the Vue e2e) — clean with
+    `rm -rf "$TMPDIR"atelier-e2e-*` before re-running, one framework per invocation.
   - [x] **S5a — skill and curriculum — done 2026-09-10** (ADR-0121 "S5a done"; ADR-0113
     corrected). `design-to-code` steps 3/5/6/7 on contract + stories + `check:contracts`;
     handoff template and three fixtures; `schulung.astro` Tag 2 (new gate claim, Block 02

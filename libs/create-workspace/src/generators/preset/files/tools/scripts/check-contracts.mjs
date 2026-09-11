@@ -20,8 +20,10 @@
  * and this file's own comments above each check. Run via `npm run check:contracts`.
  *
  * [CONTRACT-IMPORT] (S5b): a component story file whose component has a contract
- * must import it (`@atelier-ui/spec/contracts/<name>.contract`) and set `contract`
- * in the meta's `parameters` — a textual check, the same heuristic
+ * must import it — by the `@atelier-ui/spec/contracts/<name>.contract` alias here,
+ * or by a relative path to the contracts directory in a scaffold — and set
+ * `contract` in the meta's `parameters`; error where `docs-block.ts` ships beside
+ * the contracts, warning otherwise — a textual check, the same heuristic
  * `check-story-descriptions.js` uses for `component: metadata.purpose`.
  */
 'use strict';
@@ -39,6 +41,7 @@ import {
   normalizeVue,
   makeReactDocgenTools,
   normalizeReactDocgen,
+  findExternalPackageDir,
 } from './lib/docgen.mjs';
 
 // ts-eval.js is always required relative to THIS script's own directory
@@ -99,7 +102,9 @@ const TAG_LEVEL = {
   'UNRESOLVED-ARGS': 'warning',
   UNMIRRORED: 'warning',
   'NO-STORY-META': 'warning',
-  'CONTRACT-IMPORT': 'error',
+  // 'CONTRACT-IMPORT' is set below, once CONTRACTS_DIR is resolved — its
+  // severity (error vs. warning) depends on whether this tree ships
+  // `docs-block.ts` beside its contracts (see the assignment near CONTRACTS_DIR).
 };
 
 // ─── CLI args ───────────────────────────────────────────────────────────────
@@ -208,6 +213,32 @@ const CONTRACTS_DIR = args.contracts
   : fileConfig?.contracts
     ? path.resolve(CWD, fileConfig.contracts)
     : path.join(ROOT, 'libs/spec/src/contracts');
+
+// Whether CONTRACTS_DIR is this repo's own monorepo contracts directory — the
+// only place the `@atelier-ui/spec/contracts/<base>` path alias actually
+// resolves (a scaffold neither ships nor depends on a `@atelier-ui/spec`
+// package). Named once here so `hasContractImport` (accepting the alias) and
+// `suggestedContractSpecifier` (suggesting it) read the same test rather than
+// each re-deriving it and risking drift.
+const CONTRACTS_DIR_IS_MONOREPO =
+  CONTRACTS_DIR === path.join(ROOT, 'libs/spec/src/contracts');
+
+// [CONTRACT-IMPORT] exists because `libs/spec/src/contracts/docs-block.ts`'s
+// `ContractBlock` reads `parameters.contract` off the story meta and renders
+// it — an unwired story is a real gap in THIS repo (error) because that block
+// ships here. A fresh `create-atelier-ui-workspace` scaffold doesn't ship
+// `docs-block.ts` yet (S5b's "block that displays it" is monorepo-only so
+// far), so the identical finding has nothing to render into there — downgrade
+// to a warning rather than fail a scaffold's `check:contracts` over wiring
+// with no visible effect yet. Set once here (CONTRACTS_DIR is resolved by
+// this point) rather than in the TAG_LEVEL literal above.
+const CONTRACT_IMPORT_HAS_DOCS_BLOCK = fs.existsSync(
+  path.join(CONTRACTS_DIR, 'docs-block.ts'),
+);
+TAG_LEVEL['CONTRACT-IMPORT'] = CONTRACT_IMPORT_HAS_DOCS_BLOCK
+  ? 'error'
+  : 'warning';
+
 const contractFiles = fs
   .readdirSync(CONTRACTS_DIR)
   .filter((f) => f.endsWith('.contract.ts'))
@@ -385,17 +416,72 @@ function extractParamsBody(metaBlock) {
   return null;
 }
 
+/** Every raw import specifier (`from '...'` / `from "..."`) appearing anywhere in
+ * `source` — a lexical scan, not an AST walk, matching this file's other
+ * story-meta heuristics (`extractMetaBlock`, `extractParamsBody`). */
+function findImportSpecifiers(source) {
+  return [...source.matchAll(/from\s+['"]([^'"]+)['"]/g)].map((m) => m[1]);
+}
+
+/**
+ * Whether `contract` is imported by any specifier in `source`, accepting
+ * EITHER of two forms: the monorepo's `@atelier-ui/spec/contracts/<base>`
+ * path alias — only accepted when `CONTRACTS_DIR_IS_MONOREPO`, since that
+ * alias only ever resolves inside this repo; a scaffold neither ships nor
+ * depends on a `@atelier-ui/spec` package, so the identical string in a
+ * scaffold's story would be a specifier that can never resolve there, not a
+ * valid wiring — or a RELATIVE specifier that, resolved from `storyFile`'s own
+ * directory (a trailing `.js` stripped first — a NodeNext-style
+ * `./contracts/button.contract.js` import resolves to the `.ts` source file
+ * under bundler/NodeNext resolution — then `.ts` appended when the resolved
+ * path doesn't already end in it), lands on the exact file `CONTRACTS_DIR`
+ * holds this contract at. The relative form is what a scaffold's own contract
+ * import looks like — `CONTRACTS_DIR` there is `<app>/src/contracts`, not a
+ * workspace alias.
+ */
+function hasContractImport(storyFile, source, contract) {
+  const expectedBase = contract.__file.replace(/\.ts$/, '');
+  const aliasSpecifier = `@atelier-ui/spec/contracts/${expectedBase}`;
+  const targetFile = path.join(CONTRACTS_DIR, contract.__file);
+  return findImportSpecifiers(source).some((spec) => {
+    if (CONTRACTS_DIR_IS_MONOREPO && spec === aliasSpecifier) return true;
+    if (!spec.startsWith('.')) return false;
+    let resolved = path.resolve(path.dirname(storyFile), spec);
+    if (resolved.endsWith('.js')) resolved = resolved.slice(0, -3);
+    if (!resolved.endsWith('.ts')) resolved += '.ts';
+    return resolved === targetFile;
+  });
+}
+
+/**
+ * The specifier suggested in the [CONTRACT-IMPORT] message: the monorepo's
+ * path alias when `CONTRACTS_DIR_IS_MONOREPO` (the only place that alias
+ * resolves), otherwise a relative path from `storyFile`'s directory to the
+ * contract file — extensionless, forward slashes, `./`-prefixed unless it
+ * already climbs upward with `../` — i.e. exactly the form `hasContractImport`
+ * above accepts, so following the suggestion always clears the finding.
+ */
+function suggestedContractSpecifier(storyFile, contract) {
+  const expectedBase = contract.__file.replace(/\.ts$/, '');
+  if (CONTRACTS_DIR_IS_MONOREPO) {
+    return `@atelier-ui/spec/contracts/${expectedBase}`;
+  }
+  const rel = path
+    .relative(path.dirname(storyFile), path.join(CONTRACTS_DIR, expectedBase))
+    .split(path.sep)
+    .join('/');
+  return rel.startsWith('.') ? rel : `./${rel}`;
+}
+
 /** Reports [CONTRACT-IMPORT] when `name`'s contract exists but `storyFile`
- * neither imports it from the expected specifier nor sets `contract` in the
- * meta's `parameters`. No-op when `name` has no contract. */
+ * neither imports it (see `hasContractImport`) nor sets `contract` in the
+ * meta's `parameters`. No-op when `name` has no contract. Severity is decided
+ * once, near `CONTRACTS_DIR` (`TAG_LEVEL['CONTRACT-IMPORT']`): error in this
+ * repo (docs-block.ts renders the wiring), warning in a scaffold that doesn't
+ * ship that block yet. */
 function checkContractImport(fw, storyFile, source, name, contract) {
   if (!contract) return;
-  const expectedBase = contract.__file.replace(/\.ts$/, '');
-  const expectedSpecifier = `@atelier-ui/spec/contracts/${expectedBase}`;
-  const importRe = new RegExp(
-    `from ['"]${escapeRegExp(expectedSpecifier)}['"]`,
-  );
-  const hasImport = importRe.test(source);
+  const hasImport = hasContractImport(storyFile, source, contract);
 
   const metaBlock = extractMetaBlock(source);
   const paramsBody = metaBlock ? extractParamsBody(metaBlock) : null;
@@ -404,12 +490,16 @@ function checkContractImport(fw, storyFile, source, name, contract) {
     /(^|[{,\s])contract(\s*[,}]|\s*:|\s*$)/.test(paramsBody);
 
   if (!hasImport || !hasContractParam) {
+    const suggestion = suggestedContractSpecifier(storyFile, contract);
+    const suffix = CONTRACT_IMPORT_HAS_DOCS_BLOCK
+      ? ''
+      : ' (warning here: no docs-block.ts beside the contracts, so nothing renders the wiring yet)';
     report(
       'CONTRACT-IMPORT',
       fw,
       `${path.relative(ROOT, storyFile)}: ${name} has a contract but its story meta ` +
-        `does not wire it in — add "import { contract } from '${expectedSpecifier}';" ` +
-        `and set 'contract' in the meta's parameters.`,
+        `does not wire it in — add "import { contract } from '${suggestion}';" ` +
+        `and set 'contract' in the meta's parameters.${suffix}`,
     );
   }
 }
@@ -1213,6 +1303,7 @@ async function runFramework(fw) {
   const byComponent = new Map(); // name -> { docgenResult, contextDir, files: [csf...] }
   const reachedMeta = new Set();
   let noComponentCount = 0;
+  let externalCount = 0;
 
   for (const storyFile of storyFiles) {
     const source = fs.readFileSync(storyFile, 'utf-8');
@@ -1232,6 +1323,27 @@ async function runFramework(fw) {
       typeof csf._meta.component === 'string' ? csf._meta.component : null;
     if (!metaComponent) {
       noComponentCount++;
+      continue;
+    }
+
+    // A component imported from an installed PACKAGE (a real scaffold's
+    // `@atelier-ui/<fw>`, not this monorepo's tsconfig path alias of the same
+    // name — that alias has no `node_modules` entry and so never matches
+    // here) gets skipped before any docgen call, uniformly across all three
+    // frameworks. Left to each engine's own accident, the three frameworks
+    // disagree on what "can't read into node_modules" means: React's relative-
+    // path-only resolver and Vue's worker both simply return nothing for a
+    // bare specifier, but Angular's worker (`angular-component-meta` over a
+    // real TS program) happily follows the import into the package's `.d.ts`
+    // and returns a real, nameful payload with zero inputs/outputs — which
+    // this script would otherwise mistake for a workspace component with no
+    // props and fail on ([DOCGEN-EMPTY], [AXIS], [BOOLEAN], ...). Skipping the
+    // call here — rather than filtering its result afterwards — is what makes
+    // the scaffold's promise ("local docgen cannot read into node_modules, so
+    // the check has nothing to compare and reports only [NO-STORY-META]")
+    // actually true for Angular too, by construction, instead of by luck.
+    if (findExternalPackageDir(storyFile, csf._rawComponentPath)) {
+      externalCount++;
       continue;
     }
 
@@ -1378,7 +1490,7 @@ async function runFramework(fw) {
   const warningsAfter = findings.filter((f) => f.level === 'warning').length;
   console.log(
     `[${fw}] components: ${byComponent.size}, contracts: ${contractsBySelector.size}, stories: ${storyFiles.length} ` +
-      `(no-component: ${noComponentCount}), warnings: ${warningsAfter - warningsBefore}, errors: ${errorsAfter - errorsBefore}, ${(t1 - t0).toFixed(0)} ms`,
+      `(no-component: ${noComponentCount}, external: ${externalCount}), warnings: ${warningsAfter - warningsBefore}, errors: ${errorsAfter - errorsBefore}, ${(t1 - t0).toFixed(0)} ms`,
   );
 }
 

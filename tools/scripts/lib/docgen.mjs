@@ -60,6 +60,66 @@ export function toRepoImportPath(absPath, root) {
   return './' + path.relative(root, absPath).split(path.sep).join('/');
 }
 
+/**
+ * Whether `rawSpecifier` — a story meta's `component:` import path, csf-tools'
+ * `_rawComponentPath` (set for ANY framework whose meta resolves `component` to
+ * a statically-imported identifier, not just React) — is a BARE package
+ * specifier (`@scope/name[/sub]` or `name[/sub]`, never `./`, `../` or `/`)
+ * that a real install answers, walked up from `storyFile`'s own directory the
+ * same way Node's own `node_modules` resolution does (parent directories,
+ * `node_modules/<pkg>/package.json` at each). Returns that `node_modules/<pkg>`
+ * directory, or `null` when `rawSpecifier` is missing/relative/absolute, when
+ * the walk finds no matching install (e.g. a workspace tsconfig path alias
+ * like this monorepo's own `@atelier-ui/*`, which has no real `node_modules`
+ * entry at all), or when the matching `node_modules/<pkg>` entry is an
+ * npm-workspaces SYMLINK back into the repo's own source (e.g. this repo's own
+ * `node_modules/@atelier-ui/generators -> tools/generators`) — resolved via
+ * `fs.realpathSync` and classed as external only when the REAL path still
+ * contains a `node_modules` path segment; a workspace symlink's real path
+ * doesn't, so it's workspace code and must be docgen'd, not skipped.
+ *
+ * Deliberately NOT `require.resolve`: a package's `exports` map makes that
+ * throw for a subpath it doesn't list and for an ESM-only package resolved
+ * through a CJS `createRequire` — exactly the packages this check exists to
+ * catch (`@atelier-ui/angular` et al. in a real scaffold install). The
+ * directory walk sidesteps both failure modes because it only needs to know
+ * the package is INSTALLED, not import anything from it.
+ */
+export function findExternalPackageDir(storyFile, rawSpecifier) {
+  if (!rawSpecifier) return null;
+  if (
+    rawSpecifier.startsWith('./') ||
+    rawSpecifier.startsWith('../') ||
+    rawSpecifier.startsWith('/')
+  )
+    return null;
+
+  const segments = rawSpecifier.split('/');
+  const pkg = rawSpecifier.startsWith('@')
+    ? segments.slice(0, 2).join('/')
+    : segments[0];
+  if (!pkg) return null;
+
+  let dir = path.dirname(storyFile);
+  for (;;) {
+    const candidate = path.join(dir, 'node_modules', pkg);
+    if (fs.existsSync(path.join(candidate, 'package.json'))) {
+      let real;
+      try {
+        real = fs.realpathSync(candidate);
+      } catch {
+        real = candidate;
+      }
+      return real.includes(`${path.sep}node_modules${path.sep}`)
+        ? candidate
+        : null;
+    }
+    const parent = path.dirname(dir);
+    if (parent === dir) return null;
+    dir = parent;
+  }
+}
+
 /** First of `base`, `base.tsx`, `base.ts`, `base/index.tsx`, `base/index.ts` that exists as a file. */
 export function resolveWithExtensions(base) {
   const candidates = [
